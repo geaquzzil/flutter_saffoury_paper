@@ -5,9 +5,9 @@
 import 'dart:core';
 import 'package:flutter_view_controller/models/view_abstract_api.dart'
     as prefix0;
-import 'package:flutter_view_controller/screens/web/models/tests/products.dart'
+import '../../lib/models/products/products.dart'
     as prefix1;
-import 'package:flutter_view_controller/screens/web/models/tests/sizes.dart'
+import '../../lib/models/products/sizes.dart'
     as prefix2;
 
 // ignore_for_file: prefer_adjacent_string_concatenation

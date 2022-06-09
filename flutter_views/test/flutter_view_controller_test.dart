@@ -1,4 +1,4 @@
-import 'package:flutter_view_controller/screens/web/models/tests/products.dart';
+import '../../lib/models/products/products.dart';
 import 'package:reflectable/reflectable.dart';
 
 import 'flutter_view_controller_test.reflectable.dart';

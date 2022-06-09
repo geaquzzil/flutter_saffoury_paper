@@ -88,18 +88,17 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
             }));
   }
 
-  SizedBox _body() {
+  SizedBox _body(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: SizeConfig.screenHeight,
       child: Column(
         children: [
           Hero(
-            tag: object.iD,
-            child: Image.asset(
-              "",
-              width: SizeConfig.getScreenPropotionWidth(250),
-              height: SizeConfig.getScreenPropotionWidth(250),
+            tag: object,
+            child: CircleAvatar(
+              radius: 28,
+              backgroundImage: object.getCardLeadingImageProvider(context),
             ),
           ),
           Expanded(
@@ -194,7 +193,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   @override
   Widget? getBodyActionView(BuildContext context) {
     // TODO: implement getBodyActionView
-    return _body();
+    return _body(context);
   }
 
   @override

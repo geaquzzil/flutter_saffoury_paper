@@ -278,7 +278,7 @@ packages:
   flutter_view_controller:
     dependency: "direct main"
     description:
-      path: flutter_view_controler
+      path: flutter_views
       relative: true
     source: path
     version: "0.0.1"

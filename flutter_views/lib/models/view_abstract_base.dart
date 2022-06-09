@@ -27,10 +27,12 @@ abstract class ViewAbstractBase<T> {
   }
 
   Widget getCardLeading(BuildContext context) {
-    return CircleAvatar(
-      radius: 28,
-      backgroundImage: getCardLeadingImageProvider(context),
-    );
+    return Hero(
+        tag: this,
+        child: CircleAvatar(
+          radius: 28,
+          backgroundImage: getCardLeadingImageProvider(context),
+        ));
   }
 
   Widget getCardLeadingImage(BuildContext context) {

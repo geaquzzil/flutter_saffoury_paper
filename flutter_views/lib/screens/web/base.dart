@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
 
 abstract class BaseWebPage extends StatelessWidget {
-  Widget getContentWidget(BuildContext context);
+  Widget? getContentWidget(BuildContext context);
   const BaseWebPage({Key? key}) : super(key: key);
 
   @override
@@ -68,7 +68,7 @@ abstract class BaseWebPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Header(),
-            getContentWidget(context),
+            getContentWidget(context)!,
             const Footer(),
           ],
         ),

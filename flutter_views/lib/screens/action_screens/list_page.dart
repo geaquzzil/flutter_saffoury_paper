@@ -5,8 +5,8 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:loadmore/loadmore.dart';
 
 class ListPage<T extends ViewAbstract> extends StatefulWidget {
-  final T view_abstract;
-  const ListPage({Key? key, required this.view_abstract}) : super(key: key);
+   T? view_abstract;
+  ListPage({Key? key, this.view_abstract}) : super(key: key);
 
   @override
   State<ListPage> createState() => _ListPageState();
@@ -23,7 +23,7 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
       child: RefreshIndicator(
         onRefresh: _refresh,
         child: LoadMore(
-          isFinish: count >= 60,
+          isFinish: count >= 10,
           onLoadMore: _loadMore,
           whenEmptyLoad: true,
           delegate: const DefaultLoadMoreDelegate(),

@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_view_controller:
-    path: ./flutter_view_controler
+    path: ./flutter_views
   json_annotation: ^4.0.1
   reflectable: ^3.0.2
   cupertino_icons: ^1.0.2
