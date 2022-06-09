@@ -1,2 +1,5 @@
-2022/06/09-13:34:40.386 36d8 Creating DB C:\Users\QUSSAI~1\AppData\Local\Temp\flutter_tools.c00fef9c\flutter_tools_chrome_device.1ba8c1b5\Default\File System\Origins since it was missing.
-2022/06/09-13:34:40.393 36d8 Reusing MANIFEST C:\Users\QUSSAI~1\AppData\Local\Temp\flutter_tools.c00fef9c\flutter_tools_chrome_device.1ba8c1b5\Default\File System\Origins/MANIFEST-000001
+2022/06/10-00:36:03.725 4adc Log #3: 5 ops saved to Table #4 OK
+2022/06/10-00:36:03.727 4adc Archiving C:\Users\QUSSAI~1\AppData\Local\Temp\flutter_tools.a75bfd76\flutter_tools_chrome_device.4c90fd31\Default\File System\Origins/000003.log: OK
+2022/06/10-00:36:03.727 4adc Table #4: 5 entries OK
+2022/06/10-00:36:03.728 4adc Archiving C:\Users\QUSSAI~1\AppData\Local\Temp\flutter_tools.a75bfd76\flutter_tools_chrome_device.4c90fd31\Default\File System\Origins/MANIFEST-000001: OK
+2022/06/10-00:36:03.736 4adc **** Repaired leveldb C:\Users\QUSSAI~1\AppData\Local\Temp\flutter_tools.a75bfd76\flutter_tools_chrome_device.4c90fd31\Default\File System\Origins; recovered 1 files; 210 bytes. Some data may have been lost. ****
