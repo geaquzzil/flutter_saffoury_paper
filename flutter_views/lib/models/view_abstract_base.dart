@@ -87,9 +87,9 @@ abstract class ViewAbstractBase<T> {
   }
 
   dynamic getFieldValue(String label) {
-    try{
-    return getInstanceMirror().invokeGetter(label);\
-    }catch(e){
+    try {
+      return getInstanceMirror().invokeGetter(label);
+    } catch (e) {
       return e.toString();
     }
   }
