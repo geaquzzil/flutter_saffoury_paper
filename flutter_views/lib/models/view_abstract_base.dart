@@ -90,7 +90,7 @@ abstract class ViewAbstractBase<T> {
     try {
       return getInstanceMirror().invokeGetter(label);
     } catch (e) {
-      return e.toString();
+      return "${label} ${e.toString()}";
     }
   }
 

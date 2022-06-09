@@ -14,16 +14,13 @@ class ProductImages<T extends ViewAbstract> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: SizeConfig.getScreenPropotionHeight(80.0),
+      height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(right: 30),
-            child: Image.asset(
-              "",
-            ),
-          );
+              padding: const EdgeInsets.only(right: 30),
+              child: Image.network(product.getImageUrl(context) ?? ""));
         },
         itemCount: 3,
       ),

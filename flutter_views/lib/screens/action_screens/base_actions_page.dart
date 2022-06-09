@@ -35,7 +35,7 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
             },
-            icon: 'assets/icons/arrow.svg',
+            icon: Icons.arrow_back,
           ),
         ),
       ],

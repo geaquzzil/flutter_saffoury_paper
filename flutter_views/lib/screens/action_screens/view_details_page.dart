@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/components/normal_card_view.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
+import 'package:flutter_view_controller/screens/components/product_images.dart';
 
 import '../../components/main_body.dart';
 import '../../models/view_abstract.dart';
@@ -75,35 +76,39 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
           Expanded(
               child: Hero(
                   tag: object, child: object.getCardLeadingImage(context))),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: fields.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String label = fields[index];
-                    dynamic fieldValue = object.getFieldValue(label);
-                    if (fieldValue == null) {
-                      return NormalCardView(
-                          title: label, description: "null", icon: Icons.abc);
-                    }
-                    if (fieldValue is ViewAbstract) {
-                      return NormalCardView(
-                          title: "",
-                          description: "",
-                          icon: Icons.abc,
-                          object: fieldValue);
-                    } else {
-                      return NormalCardView(
-                          title: object.getFieldLabel(label, context),
-                          description: fieldValue,
-                          icon: object.getIconDataField(label, context));
-                    }
-                  })),
+          Expanded(child: getViewLoop(fields)),
         ],
       ),
     );
   }
 
+  ListView getViewLoop(List<String> fields) {
+    return ListView.builder(
+        itemCount: fields.length,
+        itemBuilder: (BuildContext context, int index) {
+          String label = fields[index];
+          print("builder ${label}");
+          dynamic fieldValue = object.getFieldValue(label);
+          if (fieldValue == null) {
+            return NormalCardView(
+                title: label, description: "null", icon: Icons.abc);
+          } else if (fieldValue is ViewAbstract) {
+            return NormalCardView(
+                title: "",
+                description: "",
+                icon: Icons.abc,
+                object: fieldValue);
+          } else {
+            return NormalCardView(
+                title: object.getFieldLabel(label, context),
+                description: fieldValue,
+                icon: object.getIconDataField(label, context));
+          }
+        });
+  }
+
   SizedBox _body(BuildContext context) {
+    List<String> fields = getFields();
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -126,9 +131,9 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'object.price',
-                          style: TextStyle(
+                        Text(
+                          object.getHeaderTextOnly(context),
+                          style: const TextStyle(
                             color: kPrimaryColor,
                             fontSize: 28.0,
                             fontWeight: FontWeight.bold,
@@ -152,7 +157,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                     const SizedBox(
                       height: 10,
                     ),
-                    //TODO ProductImages(product: product),
+                    ProductImages(product: object),
                     const SizedBox(
                       height: 10,
                     ),
@@ -186,6 +191,11 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                         fontSize: 14.0,
                       ),
                     ),
+                    SizedBox(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: getViewLoop(fields),
+                    )
                   ],
                 ),
               ),
@@ -204,7 +214,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   @override
   Widget? getBodyActionView(BuildContext context) {
     // TODO: implement getBodyActionView
-    return getBody(context);
+    return _body(context);
   }
 
   @override

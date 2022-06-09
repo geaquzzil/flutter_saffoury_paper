@@ -51,7 +51,7 @@ class SearchBar extends StatelessWidget {
           ),
           RoundedIconButton(
             onTap: () {},
-            icon: 'assets/icons/filter.svg',
+            icon: Icons.arrow_back,
           )
         ],
       ),

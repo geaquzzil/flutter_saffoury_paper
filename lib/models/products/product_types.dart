@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -23,42 +24,42 @@ class ProductType extends ViewAbstract<ProductType> {
   @override
   ProductType fromJsonViewAbstract(Map<String, dynamic> json) {
     // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
+    return ProductType.fromJson(json);
   }
 
   @override
   String getFieldLabel(String label, BuildContext context) {
     // TODO: implement getFieldLabel
-    throw UnimplementedError();
+    return label;
   }
 
   @override
   List<String> getFields() {
     // TODO: implement getFields
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   IconData getIconData(BuildContext context) {
     // TODO: implement getIconData
-    throw UnimplementedError();
+    return Icons.type_specimen_outlined;
   }
 
   @override
   IconData getIconDataField(String label, BuildContext context) {
     // TODO: implement getIconDataField
-    throw UnimplementedError();
+    return Icons.type_specimen_outlined;
   }
 
   @override
   String? getTableNameApi() {
     // TODO: implement getTableNameApi
-    throw UnimplementedError();
+    return "products_types";
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
+    return toJson();
   }
 }
