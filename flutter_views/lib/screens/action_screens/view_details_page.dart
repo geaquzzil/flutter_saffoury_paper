@@ -65,27 +65,42 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   //   );
   // }
 
-  Expanded getBody(BuildContext context) {
+  Widget getBody(BuildContext context) {
     List<String> fields = getFields();
-    return Expanded(
-        child: ListView.builder(
-            itemCount: fields.length,
-            itemBuilder: (BuildContext context, int index) {
-              String label = fields[index];
-              dynamic fieldValue = object.getFieldValue(label);
-              if (fieldValue is ViewAbstract) {
-                return NormalCardView(
-                    title: "",
-                    description: "",
-                    icon: Icons.abc,
-                    object: fieldValue);
-              } else {
-                return NormalCardView(
-                    title: object.getFieldLabel(label, context),
-                    description: fieldValue,
-                    icon: object.getIconDataField(label, context));
-              }
-            }));
+    return SizedBox(
+      width: double.infinity,
+      height: double.infinity,
+      child: Column(
+        children: [
+          Expanded(
+              child: Hero(
+                  tag: object, child: object.getCardLeadingImage(context))),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: fields.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String label = fields[index];
+                    dynamic fieldValue = object.getFieldValue(label);
+                    if (fieldValue == null) {
+                      return NormalCardView(
+                          title: label, description: "null", icon: Icons.abc);
+                    }
+                    if (fieldValue is ViewAbstract) {
+                      return NormalCardView(
+                          title: "",
+                          description: "",
+                          icon: Icons.abc,
+                          object: fieldValue);
+                    } else {
+                      return NormalCardView(
+                          title: object.getFieldLabel(label, context),
+                          description: fieldValue,
+                          icon: object.getIconDataField(label, context));
+                    }
+                  })),
+        ],
+      ),
+    );
   }
 
   SizedBox _body(BuildContext context) {
@@ -189,7 +204,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   @override
   Widget? getBodyActionView(BuildContext context) {
     // TODO: implement getBodyActionView
-    return _body(context);
+    return getBody(context);
   }
 
   @override

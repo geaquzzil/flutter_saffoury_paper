@@ -84,9 +84,9 @@ class Product extends ViewAbstract<Product> {
   List<String> getFields() {
     // TODO: implement getFields
     return [
-      "id",
+      "iD",
       "sizes",
-      "product_types",
+      "products_types",
       "comments",
       "barcode",
       "products_count",

@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sizes.g.dart';
+
 @JsonSerializable()
 @reflector
 class Size extends ViewAbstract<Size> {
@@ -11,6 +12,12 @@ class Size extends ViewAbstract<Size> {
   String? length;
 
   Size() : super();
+
+  @override
+  String getHeaderTextOnly(BuildContext context) {
+    // TODO: implement getHeaderTextOnly
+    return "${width}x${length}";
+  }
 
   @override
   Size fromJsonViewAbstract(Map<String, dynamic> json) {
@@ -43,7 +50,7 @@ class Size extends ViewAbstract<Size> {
 
   @override
   IconData getIconData(BuildContext context) {
-    return Icons.add_card_rounded;
+    return Icons.border_all;
   }
 
   @override
