@@ -5,10 +5,8 @@
 import 'dart:core';
 import 'package:flutter_view_controller/models/view_abstract_api.dart'
     as prefix0;
-import '../../lib/models/products/products.dart'
-    as prefix1;
-import '../../lib/models/products/sizes.dart'
-    as prefix2;
+import '../../lib/models/products/products.dart' as prefix1;
+import '../../lib/models/products/sizes.dart' as prefix2;
 
 // ignore_for_file: prefer_adjacent_string_concatenation
 // ignore_for_file: prefer_collection_literals
@@ -623,7 +621,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'getCardLeadingImage': (dynamic instance) =>
             instance.getCardLeadingImage,
         r'getCardLeadingImageProvider': (dynamic instance) =>
-            instance.getCardLeadingImageProvider,
+            instance.getImageUrl,
         r'getSubtitleHeaderText': (dynamic instance) =>
             instance.getSubtitleHeaderText,
         r'getSubtitleHeaderTextOnly': (dynamic instance) =>

@@ -98,7 +98,8 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
             tag: object,
             child: CircleAvatar(
               radius: 28,
-              backgroundImage: object.getCardLeadingImageProvider(context),
+              child: object.getCardLeadingImage(context),
+              // backgroundImage: object.getCardLeadingImage(context),
             ),
           ),
           Expanded(

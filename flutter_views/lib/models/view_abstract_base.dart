@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:reflectable/mirrors.dart';
@@ -29,23 +30,27 @@ abstract class ViewAbstractBase<T> {
   Widget getCardLeading(BuildContext context) {
     return Hero(
         tag: this,
-        child: CircleAvatar(
-          radius: 28,
-          backgroundImage: getCardLeadingImageProvider(context),
-        ));
+        child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)!));
   }
 
   Widget getCardLeadingImage(BuildContext context) {
-    return Container(
+    return CachedNetworkImage(
+      imageUrl: getImageUrl(context)!,
+      imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
-            color: Colors.green,
-            image: DecorationImage(
-                image: getCardLeadingImageProvider(
-                    context)! // convert Image object to ImageProvider
-                )));
+          image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              colorFilter:
+                  const ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+        ),
+      ),
+      placeholder: (context, url) => const CircularProgressIndicator(),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
   }
 
-  ImageProvider? getCardLeadingImageProvider(BuildContext context) {
+  String? getImageUrl(BuildContext context) {
     return null;
   }
 

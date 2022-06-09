@@ -12,7 +12,7 @@ part 'products.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Product extends ViewAbstract<Product> {
-  ProductType? products_type;
+  ProductType? products_types;
   String? thisIsATest;
 
   Size? sizes;
@@ -47,8 +47,8 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
-  ImageProvider? getCardLeadingImageProvider(BuildContext context) {
-    return null;
+  String? getImageUrl(BuildContext context) {
+    return products_type?.image;
   }
 
   @override
@@ -86,6 +86,7 @@ class Product extends ViewAbstract<Product> {
     return [
       "id",
       "sizes",
+      "product_types",
       "comments",
       "barcode",
       "products_count",

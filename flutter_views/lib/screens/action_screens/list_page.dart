@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:loadmore/loadmore.dart';
 
 class ListPage<T extends ViewAbstract> extends StatefulWidget {
-   T? view_abstract;
+  T? view_abstract;
   ListPage({Key? key, this.view_abstract}) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
   Future<bool> _loadMore() async {
     print("onLoadMore");
     bool result = true;
-    List? c = await widget.view_abstract.listCall(5, page,
+    List? c = await widget.view_abstract?.listCall(5, page,
         onResponse: OnResponseCallback(onServerNoMoreItems: () {
           result = false;
           return;
