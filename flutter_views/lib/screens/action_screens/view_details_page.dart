@@ -91,17 +91,12 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   SizedBox _body(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: SizeConfig.screenHeight,
+      height: double.infinity,
       child: Column(
         children: [
-          Hero(
-            tag: object,
-            child: CircleAvatar(
-              radius: 28,
-              child: object.getCardLeadingImage(context),
-              // backgroundImage: object.getCardLeadingImage(context),
-            ),
-          ),
+          Expanded(
+              child: Hero(
+                  tag: object, child: object.getCardLeadingImage(context))),
           Expanded(
             child: MainBody(
               padding: const EdgeInsets.only(

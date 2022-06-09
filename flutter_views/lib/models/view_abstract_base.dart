@@ -38,11 +38,7 @@ abstract class ViewAbstractBase<T> {
       imageUrl: getImageUrl(context)!,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
-              colorFilter:
-                  const ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
       ),
       placeholder: (context, url) => const CircularProgressIndicator(),
@@ -51,7 +47,7 @@ abstract class ViewAbstractBase<T> {
   }
 
   String? getImageUrl(BuildContext context) {
-    return null;
+    return "https://";
   }
 
   Text? getSubtitleHeaderText(BuildContext context) {

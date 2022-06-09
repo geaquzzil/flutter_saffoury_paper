@@ -48,7 +48,7 @@ class Product extends ViewAbstract<Product> {
 
   @override
   String? getImageUrl(BuildContext context) {
-    return products_type?.image;
+    return "https://${products_types?.image}";
   }
 
   @override
