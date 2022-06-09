@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'sizes.dart';
 
@@ -43,7 +44,7 @@ class Product extends ViewAbstract<Product> {
 
   @override
   Text? getLabelText(BuildContext context) {
-    return Text(iD.toString());
+    return Text(AppLocalizations.of(context)!.appTitles);
   }
 
   @override

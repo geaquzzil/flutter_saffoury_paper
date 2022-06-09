@@ -21,7 +21,9 @@ class NormalCardView extends StatelessWidget {
       onLongPress: () => object?.onCardLongClickedView(context),
       title: (object?.getLabelText(context) ?? Text(title)),
       subtitle: (object?.getHeaderText(context) ?? Text(description)),
-      leading: Icon(object?.getIconData(context) ?? icon),
+      leading: object != null
+          ? Hero(tag: object!, child: Icon(object?.getIconData(context)))
+          : Icon(icon),
       trailing: object != null
           ? InkWell(
               onTap: () => object?.onCardTrailingClickedView(context),

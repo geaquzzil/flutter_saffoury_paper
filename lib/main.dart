@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/screens/base_home_page_widget.dart';
 
 void main() {
   initializeReflectable();
 
   runApp(BaseHomePage(
-    drawerItems: [Product()],
+    drawerItems: [Product(),Size()],
   ));
 }
 

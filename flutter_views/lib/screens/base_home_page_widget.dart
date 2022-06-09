@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_view_controller/l10n/l10n.dart';
 
 import '../app_theme.dart';
 import '../models/view_abstract.dart';
 import 'base_home_responsive_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
   List<T> drawerItems;
@@ -55,13 +58,20 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //   );
     // }
     return MaterialApp(
+      supportedLocales: L10n.all,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
       title: 'Flutter UI',
       debugShowCheckedModeBanner: false,
+      restorationScopeId: 'root',
       theme: ThemeData(
         useMaterial3: true,
         primarySwatch: Colors.blue,
         textTheme: AppTheme.textTheme,
-        platform: TargetPlatform.iOS,
       ),
       home: ResponsivePage(drawerItems: (drawerItems)),
     );

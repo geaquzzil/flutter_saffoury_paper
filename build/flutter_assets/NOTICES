@@ -7571,6 +7571,7 @@ google_fonts
 
 --------------------------------------------------------------------------------
 flutter_lints
+palette_generator
 path_provider
 path_provider_android
 path_provider_ios

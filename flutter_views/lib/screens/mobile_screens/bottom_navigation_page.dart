@@ -45,11 +45,13 @@ class _NavigationPageState<T extends ViewAbstract>
   }
 
   Widget getView() {
-    if (_currentIndex == 0) {
-      return ListPage(view_abstract: widget.view_abstract);
-    }
-    return const Center(
-      child: Text("test page"),
+    return IndexedStack(
+      index: _currentIndex,
+      children: [
+        ListPage(view_abstract: widget.view_abstract),
+        Text("TEST $_currentIndex"),
+        Text("TEST $_currentIndex")
+      ],
     );
   }
 

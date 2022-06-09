@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/components/normal_card_view.dart';
+import 'package:flutter_view_controller/components/primary_button.dart';
+import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 import 'package:flutter_view_controller/screens/components/product_images.dart';
 
@@ -50,37 +52,23 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   //       ],
   //     ),
   //     extendBody: true,
-  //     bottomNavigationBar: Container(
-  //       color: Colors.transparent,
-  //       padding: const EdgeInsets.only(
-  //         left: 50,
-  //         right: 37,
-  //         bottom: 30,
-  //       ),
-  //       child: PrimaryButton(
-  //         onTap: () {},
-  //         text: "Buy Now",
-  //       ),
-  //     ),
-  //     body: _body(),
-  //   );
   // }
 
-  Widget getBody(BuildContext context) {
-    List<String> fields = getFields();
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: Column(
-        children: [
-          Expanded(
-              child: Hero(
-                  tag: object, child: object.getCardLeadingImage(context))),
-          Expanded(child: getViewLoop(fields)),
-        ],
-      ),
-    );
-  }
+  // Widget getBody(BuildContext context) {
+  //   List<String> fields = getFields();
+  //   return SizedBox(
+  //     width: double.infinity,
+  //     height: double.infinity,
+  //     child: Column(
+  //       children: [
+  //         Expanded(
+  //             child: Hero(
+  //                 tag: object, child: object.getCardLeadingImage(context))),
+  //         Expanded(child: getViewLoop(fields)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   ListView getViewLoop(List<String> fields) {
     return ListView.builder(
@@ -208,18 +196,59 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
 
   @override
   List<Widget>? getAppBarActionsView(BuildContext context) {
-    return object.getAppBarActionsView(context);
+    return [
+      InkWell(
+        onTap: () {},
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            child: RoundedIconButton(onTap: () => null, icon: Icons.print)),
+      )
+    ];
   }
 
   @override
   Widget? getBodyActionView(BuildContext context) {
-    // TODO: implement getBodyActionView
-    return _body(context);
+    List<String> fields = getFields();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          String label = fields[index];
+          print("builder ${label}");
+          dynamic fieldValue = object.getFieldValue(label);
+          if (fieldValue == null) {
+            return NormalCardView(
+                title: label, description: "null", icon: Icons.abc);
+          } else if (fieldValue is ViewAbstract) {
+            return NormalCardView(
+                title: "",
+                description: "",
+                icon: Icons.abc,
+                object: fieldValue);
+          } else {
+            return NormalCardView(
+                title: object.getFieldLabel(label, context),
+                description: fieldValue,
+                icon: object.getIconDataField(label, context));
+          }
+        },
+        childCount: fields.length,
+      ),
+    );
   }
 
   @override
   Widget? getBottomNavigationBar(BuildContext context) {
     // TODO: implement getBottomNavigationBar
-    return null;
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 50,
+        right: 37,
+        bottom: 30,
+      ),
+      child: PrimaryButton(
+        onTap: () {},
+        text: "Buy Now",
+      ),
+    );
   }
 }

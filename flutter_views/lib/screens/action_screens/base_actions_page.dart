@@ -12,16 +12,50 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatelessWidget {
   Widget? getBodyActionView(BuildContext context);
   List<Widget>? getAppBarActionsView(BuildContext context);
 
+  Widget getBody(BuildContext context) {
+    return CustomScrollView(slivers: [
+      SliverAppBar(
+          pinned: true,
+          snap: true,
+          floating: true,
+          expandedHeight: 200.0,
+          flexibleSpace: FlexibleSpaceBar(
+              title: Text(object.getHeaderTextOnly(context)),
+              background: Hero(
+                  tag: object, child: object.getCardLeadingImage(context))),
+          actions: getAppBarActionsView(context)),
+      const SliverToBoxAdapter(
+        child: SizedBox(
+          height: 20,
+          child: Center(
+            child: Text('Scroll to see the SliverAppBar in effect.'),
+          ),
+        ),
+      ),
+      // SliverList(
+      //   delegate: SliverChildBuilderDelegate(
+      //     (BuildContext context, int index) {
+      //       return Container(
+      //         color: index.isOdd ? Colors.white : Colors.black12,
+      //         height: 100.0,
+      //         child: Center(
+      //           child: Text('$index', textScaleFactor: 5),
+      //         ),
+      //       );
+      //     },
+      //     childCount: 20,
+      //   ),
+      // ),
+      getBodyActionView(context)!
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildAppBar(
-          title: getTitle(context),
-          actions: getAppBarActionsView(context),
-        ),
         extendBody: true,
         bottomNavigationBar: getBottomNavigationBar(context),
-        body: getBodyActionView(context));
+        body: getBody(context));
   }
 
   Row getTitle(BuildContext context) {
