@@ -52,7 +52,7 @@ abstract class ViewAbstractGenerator<T> extends ViewAbstractApi<T> {
     return ListTile(
       subtitle: const Text('tst'),
       leading: getIcon(context),
-      title: getHeaderText(context),
+      title: getLabelText(context),
       onTap: () => onDrawerItemClicked(context),
     );
   }

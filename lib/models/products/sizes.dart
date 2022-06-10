@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'sizes.g.dart';
 
 @JsonSerializable()
@@ -12,6 +12,12 @@ class Size extends ViewAbstract<Size> {
   String? length;
 
   Size() : super();
+
+  @override
+  String? getLabelTextOnly(BuildContext context) {
+    // TODO: implement getLabelTextOnly
+    return AppLocalizations.of(context)?.appTitles;
+  }
 
   @override
   String getHeaderTextOnly(BuildContext context) {
@@ -26,7 +32,7 @@ class Size extends ViewAbstract<Size> {
 
   @override
   String? getTableNameApi() {
-    throw UnimplementedError();
+    return "sizes";
   }
 
   @override

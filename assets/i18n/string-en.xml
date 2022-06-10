@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Saffoury Paper</string>
+    <string name="app_id">ca-app-pub-4658218924549085~6259254114</string>
+    <string name="ad_unit_id">ca-app-pub-4658218924549085/3360384762</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="dollarSymbol">$</string>
+
+    <!--Menu-->
+
+    <!--Date-->
+    <string name="welcome_message" translatable="false">مرحبًا %1$s.\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على %2$s\nاسم المستخدم:%3$s\nكلمة المرور:%4$s\nرصيدك الحالي:%5$s\n</string>
+    <string name="welcome_message_employees" translatable="false">مرحبًا %1$s.\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على %2$s\nاسم المستخدم:%3$s\nكلمة المرور:%4$s\n</string>
+
+
+    <!--Search Other-->
+
+    <string name="today">Today</string>
+    <!--Units-->
+
+
+    <string name="cant_connect">Can not connect, try again later</string>
+
+
+    <string name="syp">SYP</string>
+    <string name="dollar_format">%1$s $</string>
+    <string name="syp_format">%1$s SYP</string>
+    <string name="sellPriceFormat">Sell price for 1$ is equals to </string>
+    <string name="buyPriceFormat">Buy price for 1$ is equals to </string>
+
+
+
+    <!--Product-->
+
+
+    <string name="product_name">Name</string>
+    <string name="product_width">Width (MM)</string>
+    <string name="product_length">Length (MM)</string>
+    <string name="product_bill">Bill No</string>
+    <string name="product_size_f">Size: %1$d ✗ %2$d</string>
+
+
+    <string name="unit">Unit</string>
+
+    <string name="product_size_roll_f">Width: %1$d</string>
+    <string name="product_size_roll_f_string">Width: %1$s</string>
+
+    <!--Product Type-->
+    <string name="product_notes_format">Notes:\n•%1$s</string>
+
+
+    <!--Supplier-->
+
+    <string name="city">City</string>
+
+    <!--Manufacture-->
+    <string name="error_invalid_retail_price">Invalid price</string>
+    <string name="errFieldNotSelected">(%1$s) is not selected!</string>
+
+
+    <!--Validation-->
+    <string name="error_already_exists">Product already exists on cart!</string>
+
+    <!--Manage-->
+    <string name="edit">Edit</string>
+
+
+    <string name="description">Description</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+
+    <!-- Example settings for Data & Sync -->
+
+
+    <!-- Example settings for Notifications -->
+
+    <string name="password">Password</string>
+
+
+    <!-- Strings related to login -->
+    <string name="action_sign_in">LOG IN</string>
+    <string name="guest">GUEST</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_phone">Username is invalid</string>
+    <string name="show_pwd">Show Password</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">Incorrect Username or password</string>
+    <string name="error_login_failed">Login Failed!</string>
+    <string name="error_field_required">This field is required</string>
+
+
+    <!--Search-->
+
+    <!--All Time Last Hour Today This week this mounth this year-->
+    <string name="add_to_cart">Add to cart</string>
+    <string name="print">Print</string>
+
+    <string name="error_empty">No items to show</string>
+
+    <!--Popup-->
+    <string name="success_upload">Upload was successful!</string>
+
+    <!--ERROR-->
+    <!--<string name="error_edit">Could not edit this type of permission!</string>-->
+
+
+    <!--Success-->
+    <string name="price_dollar">Price: %1$s $</string>
+
+
+    <!--Title-->
+
+
+    <!--Order-->
+
+    <string name="kg">(KG)</string>
+    <string name="total">Total</string>
+    <string name="gsm">GSM</string>
+    <string name="size">Size</string>
+    <string name="size_tow_dots">Size:</string>
+    <string name="permission">Permissions</string>
+    <string name="Communicate">Communicate</string>
+
+
+    <!--OrderDetails-->
+
+    <string name="product_origin">Product Origin</string>
+    <string name="kg_format">%1$s (KG)</string>
+    <!--Permission-->
+    <string name="date_format_and_by">Date: %1$s • %2$s</string>
+
+
+    <!--Print-->
+    <!--Formats-->
+
+    <string name="order_format">Orders: %1$d</string>
+    <string name="activated">Activated</string>
+    <string name="last_payment_format_with_d">Last Credit: %1$s • %2$s</string>
+    <string name="last_spend_format">Last expense: %1$s • %2$s</string>
+    <string name="balanceFormat">Balance: %1$s</string>
+    <string name="level_f">Level: %1$s</string>
+    <string name="last_payment_with_date">%1$s on %2$s</string>
+    <string name="details">Details</string>
+
+
+    <string name="customers">Customers</string>
+    <string name="orders">Order(s)</string>
+    <string name="receipts">Receipt(s)</string>
+
+
+    <string name="date">Date</string>
+    <string name="country">Country</string>
+    <string name="product_unit">Unit</string>
+    <string name="value">Value</string>
+    <string name="equality">Exchange Rate</string>
+    <string name="no_content">No content to show</string>
+    <string name="delete">Delete</string>
+
+    <string name="add">Add</string>
+    <string name="cap_new">NEW</string>
+    <string name="calculations">Calculations</string>
+    <string name="incomes">Incomes</string>
+    <string name="account_name">Account Name</string>
+    <string name="title_activity_product_movement">Product(s) movements</string>
+    <string name="remaining_weight_label">Remaining weight</string>
+    <string name="share">Share app</string>
+    <string name="employee">Employee(s)</string>
+    <string name="manufacture">Manufactures</string>
+    <string name="product">Product(s)</string>
+    <string name="filter">Filter</string>
+    <string name="product_type">Product Type</string>
+    <string name="total_roll">Roll(s) Count</string>
+    <string name="noti_message_1">I look forward to receiving your payment this week.</string>
+    <string name="noti_message_2">Thank you in advance for your prompt payment.</string>
+    <string name="noti_message_3">This is a friendly reminder that your invoice [#] payment is due next week</string>
+    <string name="noti_message_4">Please let me know if you have any questions about the invoice or if there’s anything I can do for you.</string>
+    <string name="noti_message_1_F">I look forward to receiving your payment this week, knowing that your last payment was: %1$s\nThe remaining balance is %2$s</string>
+
+
+    <string name="noti_message_2_F">Thank you in advance for your prompt payment, i want to let you know that your last payment was: %1$s\nThe remaining balance is %2$s</string>
+
+
+    <string name="noti_message_3_F">This is a friendly reminder that your invoice [#] payment is due to be paid next week, knowing that your last payment was: %1$s\nThe remaining balance is %2$s</string>
+    <string name="noti_message_4_F">Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: %1$s\n
+The remaining balance is %2$s</string>
+    <string name="fb_new_product_1">SaffouryPaper is pleased to announce a new line of products just arrived . Click to learn more</string>
+
+
+    <string name="fb_new_product_2">SaffouryPaper, your exclusive source for high quality products, The new load includes new sizes and gsms just for you deserve , Click To Learn More Now.</string>
+    <string name="fb_new_product_3">A load of new goods just arrived just available in our company</string>
+    <string name="this_day">This day</string>
+
+
+    <string name="money_fund">Money Fund</string>
+    <string name="spendings">Expense(s)</string>
+
+
+    <string name="retry_connection">No Internet Connection</string>
+    <string name="retry_connection_message">Sorry, no Internet connectivity detected. Please reconnect and try again.</string>
+
+    <string name="total_incomes">Total income(s)</string>
+    <string name="purchases">Purchases</string>
+    <string name="balance_due">Balance due</string>
+
+    <string name="clickToFormat">Click to %1$s</string>
+    <string name="balance">Balance</string>
+    <string name="BUY">Buy</string>
+    <string name="SELL">Sell</string>
+    <string name="quality">Quality</string>
+    <string name="grade">Grade</string>
+    <string name="forget_get_account">Forget password ?</string>
+    <string name="unit_price">Unit price</string>
+    <string name="quantity">Quantity</string>
+    <string name="movments">Movements</string>
+    <string name="sheets">(Sheets)</string>
+    <string name="sheets_string_f">%1$s Sheet(s)</string>
+    <string name="dollar_and_syp_format">%1$s $ • %2$s SYP</string>
+    <string name="dollar_and_kg_format">%1$s $ • %2$s KG</string>
+    <string name="tryToSearchBySizeAnalyzer">Click here, To search for (%1$s) by size analyzer</string>
+    <string name="not_payed_format">You have %1$s customers who have not paid for a long time, with %2$s overdue bill(s)</string>
+    <string name="print_options">Print and download options</string>
+    <string name="copies">Copies</string>
+
+    <string name="printerName">Printer Name</string>
+    <string name="language">Language</string>
+    <string name="server_name">Server Name</string>
+    <string name="shipment_price">Shipment Price</string>
+    <string name="sellDollar_format" translatable="false">شراء %1$s طبق لاصق بسعر %2$s</string>
+    <!--    <string name="sellDollar_format">%1$s $ مقابل: %2$s ل.س سعر الصرف: %3$s</string>-->
+    <string name="sellDollar">العملات</string>
+    <string name="error_server_not_connected">Can not connect to the server!</string>
+    <string name="size_analyzer">Size analyzer</string>
+    <string name="wastSize_f">Waste size: %1$d ✗ %2$d</string>
+    <string name="wastSizeFlip_f">Waste size: %1$d ✗ %2$d</string>
+    <string name="size_roll_res">Cut the roller on %1$d ≈ %2$d (Sheets)</string>
+    <string name="size_roll_res_with_width">Cut the roller on %1$d then %2$d </string>
+    <string name="wastSize_f2">Waste size: %1$d ✗ %2$d • %3$d ✗ %4$d</string>
+    <string name="wastSizeFlip_f2">Waste size: %1$d ✗ %2$d • %3$d ✗ %4$d</string>
+    <string name="size_res_f">%1$s %2$s (KG) • %3$s </string>
+    <string name="requestedSizeLabel">Requested sizes</string>
+    <string name="size_res_f_without_dollar">%1$s %2$s (KG) %3$s</string>
+    <string name="size_res_flip_f">%1$s %2$s (KG) • %3$s </string>
+    <string name="maxWaste">Max possible waste</string>
+    <string name="tow_strings">%1$s %2$s</string>
+
+    <string name="error_sheet_zero">Sheets can not be zero!</string>
+    <string name="errDuplicatedEntery">Error duplicate entry!</string>
+    <string name="asc_ordering">Enable ascending order</string>
+    <string name="sortBy">Sort by</string>
+    <string name="print_guide">Print client guide</string>
+    <string name="transfer_to_another">Transfer to another account</string>
+    <string name="total_quantity">Total quantity</string>
+    <string name="block">Block</string>
+    <string name="block_des">Block the current account</string>
+    <string name="confirm_send_message_title">Confirm send a message to the selected account</string>
+    <string name="cofirm_send_message">This may result charges on your phone bill ?</string>
+    <string name="total_price">Total price</string>
+    <string name="transfer_account">Transferring account</string>
+
+    <string name="send">Send</string>
+    <string name="title">Report title</string>
+    <string name="sales_analysis">Sales Analysis</string>
+    <string name="profit_analysis">Profit And Loss Analysis</string>
+    <string name="best_selling_GSM">Best selling GSM</string>
+    <string name="best_selling_size">Best selling size</string>
+    <string name="best_profitable_product">Best profitable product(s)</string>
+    <string name="best_selling_category">Best selling category</string>
+    <string name="total_sales">Total sales</string>
+    <string name="overView_best_selling">Best selling overview</string>
+    <string name="overview_sales_quantity">Overview of sales quantity</string>
+    <string name="total_sales_Revenue">Total sales revenue(s)</string>
+    <string name="total_expenses">Total expense(s)</string>
+    <string name="dashboard_and_rep">Dashboard And Reporting</string>
+
+    <string name="brief_details">Print product in brief details</string>
+    <string name="messsaging">Messaging And Notifications</string>
+    <string name="compose_hint">Write a message to send it to all clients</string>
+
+    <string name="messaging">Messaging</string>
+
+
+    <string name="err_permission">You do not have permission to complete the action</string>
+    <string name="user_name">Username</string>
+    <string name="app_fo">≈ %1$s</string>
+    <string name="approx" translatable="false">≈</string>
+    <string name="single_sheet_weight">1Sheet Weight</string>
+    <string name="send_account_info">Send account Info (SMS)</string>
+    <string name="send_account_info_des">Send the current account username, password and other information via (SMS)</string>
+    <string name="log_in">Sign in</string>
+    <string name="terms_and_conditions">I agree to the Terms and Conditions and the Privacy Policy</string>
+    <string name="publish">Publish phone number</string>
+
+    <string name="view">View</string>
+    <string name="nextPayment">Next payment(s)</string>
+
+
+    <string name="agree_terms_and_condition">Terms and Conditions and the Privacy Policy</string>
+    <string name="about">About</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="more_app">More Apps</string>
+    <string name="feedback">Feedback And Suggestions</string>
+    <string name="facebook">Facebook</string>
+    <string name="open_license">Open-Source Licenses</string>
+    <string name="rate">Rate</string>
+    <string name="subment">Submit</string>
+    <string name="selling_policy">Selling Policies</string>
+
+    <string name="phone_number">Phone number</string>
+
+    <string name="printing_settings">Printing settings</string>
+    <string name="report_footer">Report footer</string>
+
+    <string name="cash_box">Cash box</string>
+    <string name="install_facebook">Install Facebook to continue</string>
+    <string name="error">Error</string>
+
+    <string name="previousBalance">Previous balance</string>
+    <string name="total_net_profit">Total net profit(s)</string>
+    <string name="add_new">Add new</string>
+    <string name="warehouse">Warehouse</string>
+    <string name="purchases_price">Purchases price</string>
+    <string name="returnedProduct">Returned Product</string>
+    <string name="hideInvoiceUnitAndTotalPrice">Hide invoice unit and total price</string>
+    <string name="hideAccountBalance">Hide account balance</string>
+    <string name="printInvoiceLabel">Print Invoice label</string>
+    <string name="printInvoiceLabelDes">Set the invoice label printer from the pc. Otherwise, the label may print in the main printer</string>
+    <string name="hidePaymentAmount">Hide payment amount</string>
+    <string name="customs_clearnces">Customs Clearances</string>
+    <string name="totalWaste">Total waste</string>
+    <string name="reams">(Reams)</string>
+
+    <string name="not_now">Not now</string>
+    <string name="never">Never</string>
+    <string name="write_review_tow">Write</string>
+    <!--<string name="pref_description_social_recommendations"></string>-->
+    <!--<string name="pref_title_social_recommendations"></string>-->
+    <!--<string name="pref_default_display_name"></string>-->
+    <!--<string name="pref_title_display_name"></string>-->
+    <!--<string name="pref_title_add_friends_to_messages"></string>-->
+
+
+    <string name="youHaveToAgreeterms"><![CDATA[You have to agree with our terms & conditions]]></string>
+    <string name="from">From</string>
+    <string name="showSubTotlas">Show subtotals</string>
+    <string name="hideAccountAddressAndPhone">Hide account phone and address</string>
+    <string name="hideCurrency">Hide currency</string>
+    <string name="fillChangedProduct">Fill product(s) that changed its original status to another color</string>
+    <string name="showProductStatus">Show the current product(s) status</string>
+    <string name="allClintes">All Clients Notebook</string>
+
+    <string name="address1">Address</string>
+    <string name="email">Email</string>
+    <string name="scan">Scan</string>
+    <string name="viewAsLedger">View as ledger</string>
+    <string name="showTotalCount">Show total count</string>
+    <string name="showReporting">View summary reports in detailed mode</string>
+
+    <string name="canceled">Canceled</string>
+    <string name="pending">Pending</string>
+    <string name="processing">Processing</string>
+    <string name="sellPrice">Sell price</string>
+    <string name="comments">Comment(s)</string>
+    <string name="name">Name</string>
+    <string name="customer">Customer</string>
+    <string name="undefined">Undefined</string>
+    <string name="barcode">Barcode</string>
+    <string name="paymentMethod">Payment method</string>
+    <string name="status">Status</string>
+    <string name="pay1">Payment in advance</string>
+    <string name="pay2">Payment in the end of the week after invoice date</string>
+    <string name="pay3">Payment seven days after invoice date</string>
+    <string name="pay4">Payment ten days after invoice date</string>
+    <string name="pay5">Payment 30 days after invoice date</string>
+    <string name="pay6">End of month</string>
+    <string name="pay7">Cash on delivery</string>
+    <string name="pay8">Payment of agreed amounts at stage</string>
+
+
+    <string name="waste1">10 (mm)</string>
+    <string name="waste2">20 (mm)</string>
+    <string name="waste3">30 (mm)</string>
+    <string name="waste4">40 (mm)</string>
+    <string name="waste5">50 (mm)</string>
+    <string name="waste6">60 (mm)</string>
+    <string name="waste7">70 (mm)</string>
+    <string name="waste8">80 (mm)</string>
+    <string name="waste9">90 (mm)</string>
+    <string name="waste10">100 (mm)</string>
+    <string name="none">None</string>
+    <!--    <string name="processing">Processing</string>-->
+    <!--    <string name="canceled">Canceled</string>-->
+    <string name="approved">Approved</string>
+    <string name="to">To</string>
+    <string name="thisWeek">This week</string>
+    <string name="thisMonth">This month</string>
+    <string name="thisYear">This year</string>
+    <string name="pallet">Pallet(s)</string>
+    <string name="palletOne">Pallet</string>
+    <string name="reel">Reel(s)</string>
+    <string name="wasted">Wasted</string>
+    <string name="termsDate">Payment Date</string>
+    <string name="cutRequest">Cut request(s)</string>
+    <string name="cutRequestResult">Cut request(s) result(s)</string>
+    <string name="productsInput">Product(s) input</string>
+    <string name="productsOutput">Product(s) output</string>
+    <string name="transfers">Transfer(s)</string>
+    <string name="purchasesRefund">Purchase(s) refund</string>
+    <string name="ordersRefund">Order(s) refund</string>
+    <string name="addToFormat">Add to %1$s</string>
+    <string name="toFormat">to %1$s</string>
+    <string name="addFormat">Add %1$s</string>
+
+    <string name="cart">Cart</string>
+    <string name="openingStock">Opening stock</string>
+    <string name="advanced">Advanced</string>
+    <string name="threeZeroPrice">"Three zeros "</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="printAndDownload">Print and download</string>
+    <string name="download">Download</string>
+    <string name="showOnly">Show only</string>
+    <string name="printOptionsEnum">Print options</string>
+    <string name="show">Show</string>
+    <string name="saveOnly">Save only</string>
+    <string name="printerLabelName">Label printer name</string>
+    <string name="reportOption">Report options</string>
+    <string name="reportHeader">Report header</string>
+    <string name="custom">Custom</string>
+    <string name="users">Users</string>
+    <string name="products">Product(s)</string>
+    <string name="invoices">Invoice(s)</string>
+    <string name="invoice">Invoice</string>
+    <string name="credits">Credit(s)</string>
+    <string name="debits">Debits</string>
+    <string name="productLabel">Product label</string>
+    <string name="printType">Print type</string>
+    <string name="invoiceLabel">Invoice label</string>
+    <string name="instock">Instock</string>
+    <string name="discount">Discount</string>
+    <string name="call">Call</string>
+    <string name="contact">Contact</string>
+    <string name="cantAddMoreItem">Can not add more items</string>
+    <string name="outOfStock">Out of stock</string>
+    <string name="warning">Warning</string>
+    <string name="errCantEditCutRequest">Can not edit cut request because it\'s generated from cut request result</string>
+    <string name="errCantEditFormatFromTo">Can not edit %1$s because it\'s generated from %2$s</string>
+    <string name="errCantEditJournalVoucher">Can not edit this record because it\'s generated from journal voucher record</string>
+    <string name="journalVoucher">Journal Voucher</string>
+    <string name="journalAccount">Journal account</string>
+    <string name="directPayment">Direct payment</string>
+    <string name="oneDashOneCredits">1–1 Credit/Debit</string>
+    <string name="oneDashOneDebits">1–1 Debit</string>
+    <string name="remainingBalance">Remaining balance</string>
+    <string name="payemntAmount">Payment amount</string>
+    <string name="contactInfo">Contact info</string>
+    <string name="addressInfo">Address info</string>
+    <string name="errorWarehouseIsEquals">Please select different  from to warehouse</string>
+    <string name="errorOneOrMoreWarehouseIsNotSelected">Error, one or the both warehouses is not selected!</string>
+    <string name="printerSetting">Printer settings</string>
+    <string name="priceInfo">Price info</string>
+    <string name="total_sales_refunds">Total sales refund(s)</string>
+    <string name="pendingCutRequest">Pending Cut Request(s)</string>
+    <string name="viewParents">View parents</string>
+    <string name="productParents">Parents</string>
+    <string name="errSelectAnotherJournalAccount">"Please select another journal account "</string>
+    <string name="sendToClient">Send to a client</string>
+    <string name="findSimilar">Find similar product(s)</string>
+    <string name="accountType">Account(s) type</string>
+    <string name="customerContacts">Customer contacts</string>
+    <string name="total_count">Total count</string>
+    <string name="addAllToCart">Add all to cart</string>
+    <string name="printAsCatalog">Print as catalog</string>
+    <string name="collectSimilarProducts">Collect similar products</string>
+    <string name="hideQuantity">Hide quantity</string>
+    <string name="totalInput">Total input</string>
+    <string name="totalOutput">Total output</string>
+    <string name="customerRequestSizes">Customer request(s)</string>
+    <string name="sheetsPerReam">Sheets per ream</string>
+
+
+    <string name="action_settings">Settings</string>
+    <string name="currency">Currency</string>
+    <string name="set_exchange_rate_buy">Exchange rate (BUY)</string>
+    <string name="set_exchange_rate_sell">Exchange rate (SELL)</string>
+    <string name="old_exchange_rate_sell">Old exchange rate (SELL)</string>
+    <string name="old_exchange_rate_buy">Old exchange rate (BUY)</string>
+    <string name="disable_notifications_title">Disable Notifications</string>
+    <string name="enable_server_title">Enable SaffouryPaper Server</string>
+    <string name="sypDots">S.Y.P</string>
+    <string name="errOnlyAdminsCanBlockEmployee">Only admins can block employees</string>
+    <string name="exchange">Exchange</string>
+    <string name="setCustomsDeclarationToProduct">Customs declaration to products</string>
+    <string name="forLabel">For</string>
+    <string name="restToDefault">Reset to default</string>
+    <string name="backup">Backup server</string>
+    <string name="newRecord">This is a new record</string>
+    <string name="enableMultiEditing">Enable editing by multiple employees</string>
+    <string name="errWidthNotEqualsToProduct">The sum of the width of the required sizes is (not equal) to the width of the original product</string>
+    <string name="errQuantityNotEqualsToProduct">The sum of total request sizes quantity are (not equal) to the request quantity</string>
+    <string name="reservationInvoice">Reservation</string>
+    <string name="mustBePaidBefore">This invoice must be paid before</string>
+    <string name="money_fund_dashboard">Money fund dashboard</string>
+    <string name="pendingReservationInvoices">Pending reservation invoice(s)</string>
+    <string name="newProduct">New product(s)</string>
+    <string name="openApp">Open app</string>
+    <string name="notDueYet">Not due yet</string>
+    <string name="overDue">Overdue</string>
+    <string name="before">Before</string>
+    <string name="until">Until</string>
+    <string name="blockMood">Block mood</string>
+    <string name="totalSheetNumberByReams">Total sheet(s)</string>
+    <string name="weightPerSheet">Weight per one sheet</string>
+    <string name="pricePerSheet">Price per one sheet</string>
+    <string name="sheetsInNotPrac">Sheet(s)</string>
+    <string name="per_each">Per each</string>
+    <string name="nameInArabic">Name in arabic</string>
+    <string name="token">Notification token</string>
+    <string name="profile">Profile</string>
+    <string name="products_type">Product(s) type</string>
+    <string name="improterInfo">Supplier Company Information</string>
+    <string name="customsNumber">Customs clearance number</string>
+    <string name="grain">Grain</string>
+    <string name="numOfOverdues">Num of overdues</string>
+    <string name="interimInvoice">Interim invoice(s)</string>
+    <string name="type">Type</string>
+    <string name="itemCount">Item count</string>
+    <string name="untilEndOf">Until end of</string>
+    <string name="expencesThenIncomes">Expense(s) then income(s)</string>
+    <string name="incomesThenExpences">Income(s) then Expense(s)</string>
+    <string name="pendingFirst">Pending first</string>
+    <string name="valueInDollar">Value in (Dollar)</string>
+    <string name="a3ProductLabel">Print as A3 size (29.7 x 42.0)</string>
+    <string name="a4ProductLabel">Print as A4 size (21.0 x 29.7)</string>
+    <string name="a5ProductLabel">Print as A5 size (14.8 x 21.0)</string>
+    <string name="tenByTwintyProductLabel">Print as (20 x 10) size</string>
+    <string name="swipeUpToLogin">Swipe up to login</string>
+    <string name="employeesWarehouse">Employee\'s warehouse</string>
+    <string name="width">Width</string>
+    <string name="length">Length</string>
+    <string name="anotherScanCodeDetected">Skipped! Another scan code detected</string>
+    <string name="undo">Undo</string>
+    <string name="customerRequestSizesDetails">Customer request(s) size details</string>
+    <string name="startEndPage">Pages</string>
+    <string name="startEndPageHint">e.g. 1, 1–8 , 6</string>
+    <string name="calculationsDes">Find a specific measurement calculation within the product specifications</string>
+    <string name="simialrProducts">Similar Product(s)</string>
+    <string name="sorting">Sorting</string>
+    <string name="broadcast">Broadcast</string>
+    <string name="showInvoiceRefund">Show invoice refund(s)</string>
+    <string name="switchProductType">Switch product type name</string>
+    <string name="changeAll">Change all</string>
+    <string name="changeOnlyCutRoll">Change only cutted product(s)</string>
+    <string name="originalProductType">Original product type</string>
+    <string name="totalIncomesAndExpences">Total incoming and outgoing</string>
+    <string name="threeZeroPriceDes">Multiply the original value by 1000</string>
+    <string name="asc_orderingDes">Sort in asc order</string>
+    <string name="printAsCatalogDes">Show the first page as company profile</string>
+    <string name="hideQuantityDes">Hide product quantities available</string>
+    <string name="adminSetting">Administration</string>
+    <string name="logout">Logout</string>
+    <string name="logoutMessage">Are you sure you want to logout?</string>
+    <string name="customQuanitity">Custom quantity</string>
+    <string name="dontPrintWasteProductLabel">Do not print the wasted product</string>
+    <string name="hideCustomerName">Hide customer name</string>
+    <string name="deletePcSoftware">Delete pc software</string>
+    <string name="defaultReportSize">Default report size</string>
+    <string name="completed">Completed</string>
+    <string name="hideTerms">Hide terms</string>
+    <string name="send_cut_request_info">Send cut request(s) info</string>
+    <string name="sendViaSMS">Send Via SMS</string>
+    <string name="sendViaWhatsapp">Send Via Whatsapp</string>
+    <string name="shareContent">Share content</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="grainOnTheLengthOfCut">Grain according to the length of the cut</string>
+    <string name="grainOn">Grain on</string>
+    <string name="availableIn">Available in</string>
+    <string name="cantConnectConnectToRetry">Can not connect to server, Click here to reconnect!</string>
+    <string name="mr">Mr/Mrs</string>
+    <string name="changeQuantity">Change quantity</string>
+    <string name="customerBalance">Customer balance</string>
+    <string name="showBarcodes">Show barcodes</string>
+    <string name="showBarcodesDes">Show all product barcodes details</string>
+    <string name="hideEmployee">Hide employee name</string>
+    <string name="errLaunchApp">Action not launching correctly</string>
+    <string name="accountStatement">Account statement</string>
+    <string name="errServerNotAvailable">Unfortunately, we are currently unable to connect you to our servers\n
+Please contact the administrator …</string>
+    <string name="contactUs">Contact us</string>
+    <string name="last">Last</string>
+    <string name="title_activity_test_to_remove">test_to_remove</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="trySizeAnalyzer">Try size analyzer</string>
+    <string name="trySizeAnalyzerDes">Try Volume Analyzer to find the closest possible size through the options you want</string>
+    <string name="inventory">Inventory</string>
+    <string name="justArrived">Just arrived</string>
+    <string name="basedOnYourSearch">Based on your search</string>
+    <string name="quantityShortCut">QTY</string>
+    <string name="unitPriceShortCut">U.P</string>
+    <string name="warehouseShortCut">W.R.C</string>
+    <string name="productWithoutS">Product</string>
+    <string name="chooseBrand">Choose brand</string>
+    <string name="errorCantTransferringToSameAccount">Can not transferring to same account, please select another account</string>
+    <string name="activeCurrentAccount">Allow this account to use the app</string>
+    <string name="cargoTransporters">Cargo transporter(s)</string>
+    <string name="governorates">Governorate(s)</string>
+    <string name="carNumber">Car number</string>
+    <string name="productsColors">Product color(s)</string>
+    <string name="adsImages">Ads image(s)</string>
+    <string name="endDate">End date</string>
+    <string name="hi">Hi</string>
+    <string name="there">There</string>
+    <string name="productsWithSimilarSize">Product(s) with similar size</string>
+    <string name="mostPopular">Most popular</string>
+    <string name="dashboard_and_repCheck">Check out your dashboard and reports</string>
+    <string name="lifetime">Life time</string>
+    <string name="notDisposited">Not deposited</string>
+    <string name="desposited">Deposited</string>
+    <string name="paid">Paid</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="customerBalances">Customer balances</string>
+    <string name="seeMore">See more</string>
+    <string name="hideCargoInfo">Hide transporter information</string>
+    <string name="featuresMayBeUnAv">Some features may be unavailable. Please check that you have enable all permissions</string>
+    <string name="hiThere">Hi, There</string>
+    <string name="signInWithYourAccount">Sign in with your account</string>
+</resources>
