@@ -39,7 +39,9 @@ class Product extends ViewAbstract<Product> {
 
   @override
   Text? getHeaderText(BuildContext context) {
-    return Text("${sizes?.width?.toString()}");
+    String? productType = products_types?.getHeaderTextOnly(context);
+    String? size = sizes?.getHeaderTextOnly(context);
+    return Text("$productType $size");
   }
 
   @override

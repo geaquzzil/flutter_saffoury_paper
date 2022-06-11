@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:flutter_view_controller/components/app_bar.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/bottom_navigation_page.dart';
 
 import '../../models/view_abstract.dart';
@@ -39,26 +40,23 @@ class _HomeMobilePage extends State<HomeMobilePage> {
         ),
         drawer: ViewHelper.getDrawerSafeArea(context, widget.drawerItems),
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: const Text(''),
-            leading: IconButton(
-              onPressed: _handleMenuButtonPressed,
-              icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                valueListenable: _advancedDrawerController,
-                builder: (_, value, __) {
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    child: Icon(
-                      value.visible ? Icons.clear : Icons.menu,
-                      key: ValueKey<bool>(value.visible),
-                    ),
-                  );
-                },
-              ),
+          appBar: buildAppBar(
+            
+              leading: IconButton(
+            onPressed: _handleMenuButtonPressed,
+            icon: ValueListenableBuilder<AdvancedDrawerValue>(
+              valueListenable: _advancedDrawerController,
+              builder: (_, value, __) {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: Icon(
+                    value.visible ? Icons.clear : Icons.menu,
+                    key: ValueKey<bool>(value.visible),
+                  ),
+                );
+              },
             ),
-          ),
+          )),
           body: NavigationPage(view_abstract: widget.drawerItems[0]),
         ));
   }

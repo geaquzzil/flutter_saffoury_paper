@@ -21,16 +21,17 @@ class _ResponsivePage extends State<ResponsivePage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        return HomeMobilePage(drawerItems: widget.drawerItems);
         // if (kIsWeb) {
         //   return const HomeWebPage();
         // } else
-        if (SizeConfig.isMobile(context)) {
-          return HomeMobilePage(drawerItems: widget.drawerItems);
-        } else if (SizeConfig.isTablet(context)) {
-          return HomeSmallTabletPage(drawerItems: widget.drawerItems);
-        } else {
-          return HomeLargeTabletPage(drawerItems: widget.drawerItems);
-        }
+        // if (SizeConfig.isMobile(context)) {
+
+        // } else if (SizeConfig.isTablet(context)) {
+        //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
+        // } else {
+        //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
+        // }
       },
     );
   }
