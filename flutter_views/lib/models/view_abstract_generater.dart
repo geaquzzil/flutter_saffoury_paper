@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/normal_card_list.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/list_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
+import 'package:provider/provider.dart';
 
 import 'view_abstract_api.dart';
 
@@ -44,6 +46,7 @@ abstract class ViewAbstractGenerator<T> extends ViewAbstractApi<T> {
 
   void onDrawerItemClicked(BuildContext context) {
     //Navigator.of(context).pop();
+    context.read<ViewAbstractProvider>().change(this as ViewAbstract);
 
     print('onDrawerItemClicked=> ${getHeaderText(context)?.data}');
   }

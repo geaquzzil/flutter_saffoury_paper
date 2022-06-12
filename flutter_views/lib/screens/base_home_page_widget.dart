@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
+import 'package:flutter_view_controller/providers/list_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../app_theme.dart';
 import '../models/view_abstract.dart';
@@ -14,6 +16,7 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ViewAbstractProvider>().change(drawerItems[0]);
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarColor: Colors.transparent,
     //   statusBarIconBrightness: Brightness.dark,

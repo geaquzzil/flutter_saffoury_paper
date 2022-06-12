@@ -48,7 +48,7 @@ class _NavigationPageState<T extends ViewAbstract>
     return IndexedStack(
       index: _currentIndex,
       children: [
-        ListPage(view_abstract: widget.view_abstract),
+        ListPage(),
         Text("TEST $_currentIndex"),
         Text("TEST $_currentIndex")
       ],

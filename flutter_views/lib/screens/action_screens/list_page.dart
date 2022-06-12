@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/list_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:loadmore/loadmore.dart';
+import 'package:provider/provider.dart';
 
-class ListPage<T extends ViewAbstract> extends StatefulWidget {
-  T? view_abstract;
-  ListPage({Key? key, this.view_abstract}) : super(key: key);
+class ListPage extends StatefulWidget {
+  const ListPage({Key? key}) : super(key: key);
 
   @override
   State<ListPage> createState() => _ListPageState();
@@ -43,7 +44,8 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
   Future<bool> _loadMore() async {
     print("onLoadMore");
     bool result = true;
-    List? c = await widget.view_abstract?.listCall(5, page,
+    ViewAbstract viewAbstract = context.watch<ViewAbstractProvider>().getObject;
+    List? c = await viewAbstract?.listCall(5, page,
         onResponse: OnResponseCallback(onServerNoMoreItems: () {
           result = false;
           return;
@@ -58,7 +60,6 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
     if (c != null) {
       list.addAll(List<T>.from(c));
     }
-    setState(() {});
     return result;
   }
 

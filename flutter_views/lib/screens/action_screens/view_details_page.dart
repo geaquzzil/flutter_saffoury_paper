@@ -4,8 +4,10 @@ import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/components/normal_card_view.dart';
 import 'package:flutter_view_controller/components/primary_button.dart';
 import 'package:flutter_view_controller/components/rounded_icon_button.dart';
+import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 import 'package:flutter_view_controller/screens/components/product_images.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/main_body.dart';
 import '../../models/view_abstract.dart';
@@ -246,7 +248,9 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
         bottom: 30,
       ),
       child: PrimaryButton(
-        onTap: () {},
+        onTap: () {
+          context.read<CartProvider>().addProduct(object);
+        },
         text: "Buy Now",
       ),
     );
