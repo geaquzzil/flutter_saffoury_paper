@@ -63,7 +63,7 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     // }
     Widget widget = MaterialApp(
         supportedLocales: L10n.all,
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
