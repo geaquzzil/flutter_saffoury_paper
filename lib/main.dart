@@ -30,10 +30,35 @@ import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 //   // );
 // }
 
+// void main() {
+//   BlocOverrides.runZoned(
+//     () => runApp(const PostPage()),
+//     blocObserver: AppBlocObserver(),
+//   );
+// }
+
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print(error);
+    super.onError(bloc, error, stackTrace);
+  }
+}
+
+class App extends MaterialApp {
+  App() : super(home: PostsPage());
+}
+
 void main() {
   BlocOverrides.runZoned(
-    () => runApp(const PostPage()),
-    blocObserver: AppBlocObserver(),
+    () => runApp(App()),
+    blocObserver: SimpleBlocObserver(),
   );
 }
 
@@ -49,25 +74,6 @@ class AppBlocObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print(transition);
-  }
-}
-
-/// {@template app}
-/// A [StatelessWidget] that:
-/// * uses [bloc](https://pub.dev/packages/bloc) and
-/// [flutter_bloc](https://pub.dev/packages/flutter_bloc)
-/// to manage the state of a counter and the app theme.
-/// {@endtemplate}
-class App extends StatelessWidget {
-  /// {@macro app}
-  const App({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ThemeCubit(),
-      child: const AppView(),
-    );
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
+import 'package:flutter_view_controller/screens/action_screens/list_page.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 
 import '../app_theme.dart';
@@ -77,27 +78,27 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
 
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PostPage(),
+      home: ListPage(),
     );
   }
 
-  LayoutBuilder getLayoutBuilder() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return const PostPage();
-        // if (kIsWeb) {
-        //   return const HomeWebPage();
-        // } else
-        // if (SizeConfig.isMobile(context)) {
+  // LayoutBuilder getLayoutBuilder() {
+  //   return LayoutBuilder(
+  //     builder: (context, constraints) {
+  //       return const PostPage();
+  //       // if (kIsWeb) {
+  //       //   return const HomeWebPage();
+  //       // } else
+  //       // if (SizeConfig.isMobile(context)) {
 
-        // } else if (SizeConfig.isTablet(context)) {
-        //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
-        // } else {
-        //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
-        // }
-      },
-    );
-  }
+  //       // } else if (SizeConfig.isTablet(context)) {
+  //       //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
+  //       // } else {
+  //       //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
+  //       // }
+  //     },
+  //   );
+  // }
 }
 
 class HexColor extends Color {

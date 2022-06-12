@@ -38,6 +38,7 @@ dependencies:
   shimmer: ^2.0.0
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  bloc_concurrency: ^0.2.0
   
 dev_dependencies:
   # mockito: ^5.0.16
