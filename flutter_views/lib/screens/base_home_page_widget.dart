@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/providers/list_provider.dart';
+import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 import 'package:provider/provider.dart';
 
 import '../app_theme.dart';
 import '../models/view_abstract.dart';
-import 'base_home_responsive_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
@@ -14,9 +14,10 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
 
   BaseHomePage({Key? key, required this.drawerItems}) : super(key: key);
 
+
+  
   @override
   Widget build(BuildContext context) {
-    context.read<ViewAbstractProvider>().change(drawerItems[0]);
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarColor: Colors.transparent,
     //   statusBarIconBrightness: Brightness.dark,
@@ -60,23 +61,42 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //     home: const HomeWebPage(),
     //   );
     // }
-    return MaterialApp(
-      supportedLocales: L10n.all,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      title: 'Flutter UI',
-      debugShowCheckedModeBanner: false,
-      restorationScopeId: 'root',
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-        textTheme: AppTheme.textTheme,
-      ),
-      home: ResponsivePage(drawerItems: (drawerItems)),
+    Widget widget = MaterialApp(
+        supportedLocales: L10n.all,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        title: 'Flutter UI',
+        debugShowCheckedModeBanner: false,
+        restorationScopeId: 'root',
+        theme: ThemeData(
+          useMaterial3: true,
+          primarySwatch: Colors.blue,
+          textTheme: AppTheme.textTheme,
+        ),
+        home: getLayoutBuilder());
+
+    return widget;
+  }
+
+  LayoutBuilder getLayoutBuilder() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return HomeMobilePage(drawerItems: drawerItems);
+        // if (kIsWeb) {
+        //   return const HomeWebPage();
+        // } else
+        // if (SizeConfig.isMobile(context)) {
+
+        // } else if (SizeConfig.isTablet(context)) {
+        //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
+        // } else {
+        //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
+        // }
+      },
     );
   }
 }

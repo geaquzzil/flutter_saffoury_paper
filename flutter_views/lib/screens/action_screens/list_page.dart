@@ -45,7 +45,7 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
     print("onLoadMore");
     bool result = true;
     ViewAbstract viewAbstract = context.watch<ViewAbstractProvider>().getObject;
-    List? c = await viewAbstract?.listCall(5, page,
+    List? c = await viewAbstract.listCall(5, page,
         onResponse: OnResponseCallback(onServerNoMoreItems: () {
           result = false;
           return;
