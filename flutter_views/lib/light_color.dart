@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class LightColor {
   static const Color background = Color(0XFFFFFFFF);
 
-  static const Color titleTextColor = const Color(0xff1d2635);
-  static const Color subTitleTextColor = const Color(0xff797878);
+  static const Color titleTextColor = Color(0xff1d2635);
+  static const Color subTitleTextColor = Color(0xff797878);
 
   static const Color skyBlue = Color(0xff2890c8);
   static const Color lightBlue = Color(0xff5c3dff);

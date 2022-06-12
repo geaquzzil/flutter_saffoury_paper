@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';

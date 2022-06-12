@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/size_config.dart';
 
 class ProductImages<T extends ViewAbstract> extends StatelessWidget {
   const ProductImages({

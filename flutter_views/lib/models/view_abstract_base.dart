@@ -30,7 +30,7 @@ abstract class ViewAbstractBase<T> {
   Widget getCardLeading(BuildContext context) {
     return Hero(
         tag: this,
-        child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)!));
+        child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
   }
 
   Widget getCardLeadingImage(BuildContext context) {
@@ -90,7 +90,7 @@ abstract class ViewAbstractBase<T> {
     try {
       return getInstanceMirror().invokeGetter(label);
     } catch (e) {
-      return "${label} ${e.toString()}";
+      return "$label ${e.toString()}";
     }
   }
 

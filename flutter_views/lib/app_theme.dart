@@ -96,13 +96,13 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
       backgroundColor: LightColor.background,
       primaryColor: LightColor.background,
-      cardTheme: CardTheme(color: LightColor.background),
-      textTheme: TextTheme(bodyText1: TextStyle(color: LightColor.black)),
+      cardTheme: const CardTheme(color: LightColor.background),
+      textTheme: const TextTheme(bodyText1: TextStyle(color: LightColor.black)),
       iconTheme: const IconThemeData(color: LightColor.iconColor),
       bottomAppBarColor: LightColor.background,
       dividerColor: LightColor.lightGrey,
       primaryTextTheme:
-          TextTheme(bodyText1: TextStyle(color: LightColor.titleTextColor)));
+          const TextTheme(bodyText1: TextStyle(color: LightColor.titleTextColor)));
 
   static TextStyle titleStyle =
       const TextStyle(color: LightColor.titleTextColor, fontSize: 16);
@@ -118,7 +118,7 @@ class AppTheme {
   static TextStyle h6Style = const TextStyle(fontSize: 14);
 
   static List<BoxShadow> shadow = <BoxShadow>[
-    BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 15),
+    const BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 15),
   ];
 
   static EdgeInsets padding =

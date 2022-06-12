@@ -22,7 +22,7 @@ class Size extends ViewAbstract<Size> {
   @override
   String getHeaderTextOnly(BuildContext context) {
     // TODO: implement getHeaderTextOnly
-    return "${width}x${length}";
+    return "${width}x$length";
   }
 
   @override

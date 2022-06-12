@@ -19,7 +19,7 @@ class ShoppingCartPage extends StatelessWidget {
   }
 
   Widget _item(BuildContext context, ViewAbstract model) {
-    return Container(
+    return SizedBox(
       height: 80,
       child: Row(
         children: <Widget>[
@@ -29,7 +29,7 @@ class ShoppingCartPage extends StatelessWidget {
               children: <Widget>[
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Container(
+                  child: SizedBox(
                     height: 70,
                     width: 70,
                     child: Stack(
@@ -62,7 +62,7 @@ class ShoppingCartPage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                   subtitle: Row(
-                    children: <Widget>[
+                    children: const <Widget>[
                       TitleText(
                         text: '\$ ',
                         color: LightColor.red,
@@ -147,12 +147,12 @@ class ShoppingCartPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _cartItems(context),
-            Divider(
+            const Divider(
               thickness: 1,
               height: 70,
             ),
             _price(context),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             _submitButton(context),
           ],
         ),

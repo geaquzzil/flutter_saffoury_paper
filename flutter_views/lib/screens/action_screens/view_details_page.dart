@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 
 import '../../components/main_body.dart';
 import '../../models/view_abstract.dart';
-import '../../size_config.dart';
 
 import 'package:flutter_view_controller/constants.dart';
 
@@ -77,7 +76,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
         itemCount: fields.length,
         itemBuilder: (BuildContext context, int index) {
           String label = fields[index];
-          print("builder ${label}");
+          print("builder $label");
           dynamic fieldValue = object.getFieldValue(label);
           if (fieldValue == null) {
             return NormalCardView(
@@ -215,7 +214,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           String label = fields[index];
-          print("builder ${label}");
+          print("builder $label");
           dynamic fieldValue = object.getFieldValue(label);
           if (fieldValue == null) {
             return NormalCardView(

@@ -909,7 +909,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
       [])
 };
 
-final _memberSymbolMap = null;
+const _memberSymbolMap = null;
 
 void initializeReflectable() {
   r.data = _data;

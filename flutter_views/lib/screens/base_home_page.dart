@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 
 import '../app_theme.dart';
 import '../models/view_abstract.dart';
@@ -14,8 +12,6 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
 
   BaseHomePage({Key? key, required this.drawerItems}) : super(key: key);
 
-
-  
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -61,31 +57,34 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //     home: const HomeWebPage(),
     //   );
     // }
-    Widget widget = MaterialApp(
-        supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
-        ],
-        title: 'Flutter UI',
-        debugShowCheckedModeBanner: false,
-        restorationScopeId: 'root',
-        theme: ThemeData(
-          useMaterial3: true,
-          primarySwatch: Colors.blue,
-          textTheme: AppTheme.textTheme,
-        ),
-        home: getLayoutBuilder());
+    // Widget widget = MaterialApp(
+    //     supportedLocales: L10n.all,
+    //     localizationsDelegates: const [
+    //       AppLocalizations.delegate,
+    //       GlobalMaterialLocalizations.delegate,
+    //       GlobalCupertinoLocalizations.delegate,
+    //       GlobalWidgetsLocalizations.delegate
+    //     ],
+    //     title: 'Flutter UI',
+    //     debugShowCheckedModeBanner: false,
+    //     restorationScopeId: 'root',
+    //     theme: ThemeData(
+    //       useMaterial3: true,
+    //       primarySwatch: Colors.blue,
+    //       textTheme: AppTheme.textTheme,
+    //     ),
+    //     home: const PostPage());
 
-    return widget;
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: PostPage(),
+    );
   }
 
   LayoutBuilder getLayoutBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return HomeMobilePage(drawerItems: drawerItems);
+        return const PostPage();
         // if (kIsWeb) {
         //   return const HomeWebPage();
         // } else

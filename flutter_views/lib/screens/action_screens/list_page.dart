@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/components/loading_list.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +19,7 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
   int page = 0;
   @override
   Widget build(BuildContext context) {
-    return Text("TEST");
+    return const Text("TEST");
 
     // SizedBox(
     //   height: double.maxFinite,

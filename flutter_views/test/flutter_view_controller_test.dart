@@ -1,5 +1,4 @@
 import '../../lib/models/products/products.dart';
-import 'package:reflectable/reflectable.dart';
 
 import 'flutter_view_controller_test.reflectable.dart';
 
@@ -8,5 +7,5 @@ void main() {
   // any reflective features can be used.
   initializeReflectable();
   
-  Product p = new Product();
+  Product p = Product();
 }

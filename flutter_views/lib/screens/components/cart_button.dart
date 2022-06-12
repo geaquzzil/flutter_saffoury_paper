@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:icon_badge/icon_badge.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
 class CartButton extends StatefulWidget {
@@ -16,7 +15,7 @@ class _CartButtonState extends State<CartButton> {
   @override
   Widget build(BuildContext context) {
     return IconBadge(
-      icon: Icon(Icons.shopping_cart_outlined),
+      icon: const Icon(Icons.shopping_cart_outlined),
       itemCount: context.watch<CartProvider>().count,
       badgeColor: Colors.red,
       itemColor: Colors.white,
@@ -26,7 +25,7 @@ class _CartButtonState extends State<CartButton> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ShoppingCartPage(),
+            builder: (context) => const ShoppingCartPage(),
           ),
         );
       },
