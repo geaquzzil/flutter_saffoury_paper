@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/loading_list.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/list_provider.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
@@ -19,26 +20,28 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
   int page = 0;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.maxFinite,
-      child: RefreshIndicator(
-        onRefresh: _refresh,
-        child: LoadMore(
-          isFinish: count >= 10,
-          onLoadMore: _loadMore,
-          whenEmptyLoad: true,
-          delegate: const DefaultLoadMoreDelegate(),
-          textBuilder: DefaultLoadMoreTextBuilder.english,
-          child: ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return list[index].getCardView(context);
-            },
-            itemCount: count,
-          ),
-        ),
-      ),
-    );
+    return Text("TEST");
+
+    // SizedBox(
+    //   height: double.maxFinite,
+    //   child: RefreshIndicator(
+    //     onRefresh: _refresh,
+    //     child: LoadMore(
+    //       isFinish: count >= 10,
+    //       onLoadMore: _loadMore,
+    //       whenEmptyLoad: true,
+    //       delegate: const DefaultLoadMoreDelegate(),
+    //       textBuilder: DefaultLoadMoreTextBuilder.english,
+    //       child: ListView.builder(
+    //         physics: const AlwaysScrollableScrollPhysics(),
+    //         itemBuilder: (BuildContext context, int index) {
+    //           return list[index].getCardView(context);
+    //         },
+    //         itemCount: count,
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Future<bool> _loadMore() async {
@@ -86,25 +89,7 @@ class CustomLoadMoreDelegate extends LoadMoreDelegate {
       return Text(text);
     }
     if (status == LoadMoreStatus.loading) {
-      return Container(
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(
-              width: _loadmoreIndicatorSize,
-              height: _loadmoreIndicatorSize,
-              child: CircularProgressIndicator(
-                  // backgroundColor: Colors.blue,
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(text),
-            ),
-          ],
-        ),
-      );
+      return const LoadingListPage();
     }
     if (status == LoadMoreStatus.nomore) {
       return Text(text);

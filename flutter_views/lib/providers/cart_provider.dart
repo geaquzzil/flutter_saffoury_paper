@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/view_abstract.dart';
 
 class CartProvider with ChangeNotifier {
+  
   List<ViewAbstract> products = [];
 
   List<ViewAbstract> get getProducts => products;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
-import 'package:flutter_view_controller/providers/list_provider.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 import 'package:provider/provider.dart';
 

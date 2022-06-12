@@ -5,7 +5,8 @@ import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/providers/list_provider.dart';
-import 'package:flutter_view_controller/screens/base_home_page_widget.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/screens/base_home_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,6 +18,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => ViewAbstractProvider()),
+        ChangeNotifierProvider(create: (_) => ListProvider()),
       ],
       child: BaseHomePage(
         drawerItems: views,

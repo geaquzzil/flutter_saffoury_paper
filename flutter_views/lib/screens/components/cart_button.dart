@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
+import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:icon_badge/icon_badge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +23,12 @@ class _CartButtonState extends State<CartButton> {
       maxCount: 99,
       hideZero: true,
       onTap: () {
-        //todo show cart page
-        print('test');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ShoppingCartPage(),
+          ),
+        );
       },
     );
   }
