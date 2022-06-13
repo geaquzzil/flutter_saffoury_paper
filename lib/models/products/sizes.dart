@@ -14,12 +14,6 @@ class Size extends ViewAbstract<Size> {
   Size() : super();
 
   @override
-  String? getLabelTextOnly(BuildContext context) {
-    // TODO: implement getLabelTextOnly
-    return AppLocalizations.of(context)?.appTitles;
-  }
-
-  @override
   String getHeaderTextOnly(BuildContext context) {
     // TODO: implement getHeaderTextOnly
     return "${width}x$length";

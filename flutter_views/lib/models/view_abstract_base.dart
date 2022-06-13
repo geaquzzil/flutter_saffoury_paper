@@ -69,10 +69,20 @@ abstract class ViewAbstractBase<T> {
   }
 
   Text? getLabelText(BuildContext context) {
-    return null;
+    return Text(getLabelTextOnly(context),
+        style: const TextStyle(color: kTextLightColor));
   }
 
-  String? getLabelTextOnly(BuildContext context) {
+  Text? getLabelSubtitleText(BuildContext context) {
+    return Text(getLabelSubtitleTextOnly(context),
+        style: const TextStyle(color: kTextLightColor));
+  }
+
+  String getLabelSubtitleTextOnly(BuildContext context) {
+    return "null";
+  }
+
+  String getLabelTextOnly(BuildContext context) {
     return "null";
   }
 

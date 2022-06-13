@@ -46,11 +46,13 @@ class ShoppingCartPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  left: -20,
-                  bottom: -20,
-                  child: model.getCardLeadingImage(context),
-                )
+                // Positioned(
+                //   left: -20,
+                //   bottom: -20,
+                //   child: model.getCardLeading(context),
+                // )
+
+                model.getCardLeading(context)
               ],
             ),
           ),
@@ -141,7 +143,8 @@ class ShoppingCartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+        body: Container(
       padding: AppTheme.padding,
       child: SingleChildScrollView(
         child: Column(
@@ -157,6 +160,6 @@ class ShoppingCartPage extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

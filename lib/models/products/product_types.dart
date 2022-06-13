@@ -19,6 +19,13 @@ class ProductType extends ViewAbstract<ProductType> {
   String? comments;
 
   ProductType() : super();
+
+  @override
+  String getHeaderTextOnly(BuildContext context) {
+    // TODO: implement getHeaderTextOnly
+    return name ?? "";
+  }
+
   @override
   ProductType fromJsonViewAbstract(Map<String, dynamic> json) {
     // TODO: implement fromJsonViewAbstract

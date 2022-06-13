@@ -59,28 +59,28 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //     home: const HomeWebPage(),
     //   );
     // }
-    // Widget widget = MaterialApp(
-    //     supportedLocales: L10n.all,
-    //     localizationsDelegates: const [
-    //       AppLocalizations.delegate,
-    //       GlobalMaterialLocalizations.delegate,
-    //       GlobalCupertinoLocalizations.delegate,
-    //       GlobalWidgetsLocalizations.delegate
-    //     ],
-    //     title: 'Flutter UI',
-    //     debugShowCheckedModeBanner: false,
-    //     restorationScopeId: 'root',
-    //     theme: ThemeData(
-    //       useMaterial3: true,
-    //       primarySwatch: Colors.blue,
-    //       textTheme: AppTheme.textTheme,
-    //     ),
-    //     home: const PostPage());
+    Widget widget = MaterialApp(
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        title: 'Flutter UI',
+        debugShowCheckedModeBanner: false,
+        restorationScopeId: 'root',
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: HomeMobilePage(drawerItems: drawerItems));
+    return widget;
 
     // return HomeMobilePage(drawerItems: drawerItems);
     // return Scaffold(body: HomeMobilePage(drawerItems: drawerItems));
-    return Scaffold(body: getLayoutBuilder());
+    // return Scaffold(body: getLayoutBuilder());
     // return NavigationPage();
+    // return getLayoutBuilder();
 
     // PostsPage();
   }

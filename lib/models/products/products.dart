@@ -38,15 +38,10 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
-  Text? getHeaderText(BuildContext context) {
+  String getHeaderTextOnly(BuildContext context) {
     String? productType = products_types?.getHeaderTextOnly(context);
     String? size = sizes?.getHeaderTextOnly(context);
-    return Text("$productType $size");
-  }
-
-  @override
-  Text? getLabelText(BuildContext context) {
-    return Text(AppLocalizations.of(context)!.appTitles);
+    return "$productType $size";
   }
 
   @override
@@ -68,7 +63,6 @@ class Product extends ViewAbstract<Product> {
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
     return toJson();
   }
 

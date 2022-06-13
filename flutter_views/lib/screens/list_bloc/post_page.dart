@@ -5,16 +5,20 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_list.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class PostsPage extends StatelessWidget {
   PostsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final viewAbstractProvider =
+        Provider.of<ViewAbstractProvider>(context, listen: false);
+
     return BlocProvider(
       create: (_) => PostBloc(
           httpClient: http.Client(),
-          viewAbstract: context.watch<ViewAbstractProvider>().getObject)
+          viewAbstract: viewAbstractProvider.getObject)
         ..add(PostFetched()),
       child: const PostsList(),
     );

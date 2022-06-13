@@ -59,16 +59,12 @@ void main() {
   initializeReflectable();
   List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
 
-  runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CartProvider()),
-        ChangeNotifierProvider(
-            create: (_) => ViewAbstractProvider(object: Product())),
-        ChangeNotifierProvider(create: (_) => ListProvider()),
-      ],
-      child: MaterialApp(
-        home: BaseHomePage(drawerItems: views),
-      )
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => CartProvider()),
+    ChangeNotifierProvider(
+        create: (_) => ViewAbstractProvider(object: Product())),
+    ChangeNotifierProvider(create: (_) => ListProvider()),
+  ], child: BaseHomePage(drawerItems: views)
 
       //  App(),
       ));

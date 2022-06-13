@@ -45,15 +45,14 @@ abstract class ViewAbstractGenerator<T> extends ViewAbstractApi<T> {
   }
 
   void onDrawerItemClicked(BuildContext context) {
+    print('onDrawerItemClicked=> ${getHeaderText(context)?.data}');
     //Navigator.of(context).pop();
     context.read<ViewAbstractProvider>().change(this as ViewAbstract);
-
-    print('onDrawerItemClicked=> ${getHeaderText(context)?.data}');
   }
 
   ListTile getDrawerListTitle(BuildContext context) {
     return ListTile(
-      subtitle: const Text('tst'),
+      subtitle: getLabelSubtitleText(context),
       leading: getIcon(context),
       title: getLabelText(context),
       onTap: () => onDrawerItemClicked(context),

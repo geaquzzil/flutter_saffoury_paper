@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'models/view_abstract.dart';
 
 class ViewHelper {
-  static SafeArea getDrawerSafeArea<T extends ViewAbstract>(
-      BuildContext context, List<T> list) {
+  static SafeArea getDrawerSafeArea(
+      BuildContext context, List<ViewAbstract> list) {
     return SafeArea(
         child: Container(
+            width: double.maxFinite,
             constraints: const BoxConstraints.expand(height: double.infinity),
             child: ListTileTheme(
               // textColor: Colors.white,
@@ -56,17 +57,15 @@ class ViewHelper {
     );
   }
 
-  static List<Widget> getDrawableListTile<T extends ViewAbstract>(
-      BuildContext context, List<T> list) {
+  static List<Widget> getDrawableListTile(
+      BuildContext context, List<ViewAbstract> list) {
     return List<Widget>.from(
         list.map((model) => model.getDrawerListTitle(context)));
   }
 
-  static ListView getDrawableListView<T extends ViewAbstract>(
-      BuildContext context, List<T> list) {
+  static ListView getDrawableListView(
+      BuildContext context, List<ViewAbstract> list) {
     return ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        children: getDrawableListTile(context, list));
+        padding: EdgeInsets.zero, children: getDrawableListTile(context, list));
   }
 }

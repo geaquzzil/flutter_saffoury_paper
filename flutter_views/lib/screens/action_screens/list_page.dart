@@ -21,26 +21,26 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
   Widget build(BuildContext context) {
     return const Text("TEST");
 
-    // SizedBox(
-    //   height: double.maxFinite,
-    //   child: RefreshIndicator(
-    //     onRefresh: _refresh,
-    //     child: LoadMore(
-    //       isFinish: count >= 10,
-    //       onLoadMore: _loadMore,
-    //       whenEmptyLoad: true,
-    //       delegate: const DefaultLoadMoreDelegate(),
-    //       textBuilder: DefaultLoadMoreTextBuilder.english,
-    //       child: ListView.builder(
-    //         physics: const AlwaysScrollableScrollPhysics(),
-    //         itemBuilder: (BuildContext context, int index) {
-    //           return list[index].getCardView(context);
-    //         },
-    //         itemCount: count,
-    //       ),
-    //     ),
-    //   ),
-    // );
+    SizedBox(
+      height: double.maxFinite,
+      child: RefreshIndicator(
+        onRefresh: _refresh,
+        child: LoadMore(
+          isFinish: count >= 10,
+          onLoadMore: _loadMore,
+          whenEmptyLoad: true,
+          delegate: const DefaultLoadMoreDelegate(),
+          textBuilder: DefaultLoadMoreTextBuilder.english,
+          child: ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return list[index].getCardView(context);
+            },
+            itemCount: count,
+          ),
+        ),
+      ),
+    );
   }
 
   Future<bool> _loadMore() async {

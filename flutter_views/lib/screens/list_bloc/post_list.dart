@@ -20,7 +20,7 @@ class _PostsListState extends State<PostsList> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    _scrollController.addListener(() => _onScroll());
     //    = Provider.of<ViewAbstractProvider>(context, listen = false);
     //object = context.watch<ViewAbstractProvider>().getObject;
   }
@@ -42,18 +42,23 @@ class _PostsListState extends State<PostsList> {
             if (state.posts.isEmpty) {
               return const Center(child: Text('no posts'));
             }
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return index >= state.posts.length
-                    ? BottomLoader()
-                    : state.posts[index].getCardView(context);
-              },
-              itemCount: state.hasReachedMax
-                  ? state.posts.length
-                  : state.posts.length + 1,
-              controller: _scrollController,
+            return Container(
+              height: MediaQuery.of(context).size.height - 80,
+              child: ListView.builder(
+                controller: _scrollController,
+
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return index >= state.posts.length
+                      ? BottomLoader()
+                      : state.posts[index].getCardView(context);
+                },
+                itemCount: state.hasReachedMax
+                    ? state.posts.length
+                    : state.posts.length + 1,
+
+                // physics: const PageScrollPhysics(),
+              ),
             );
           default:
             return const Center(child: CircularProgressIndicator());
