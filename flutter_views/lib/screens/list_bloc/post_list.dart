@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_view_controller/bloc/post_bloc.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/bottom_loader.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_list_item.dart';
+import 'package:provider/provider.dart';
 
 class PostsList extends StatefulWidget {
-  ViewAbstract object;
-  PostsList({Key? key, required this.object}) : super(key: key);
+  const PostsList({Key? key}) : super(key: key);
 
   @override
   State<PostsList> createState() => _PostsListState();
@@ -20,6 +21,8 @@ class _PostsListState extends State<PostsList> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    //    = Provider.of<ViewAbstractProvider>(context, listen = false);
+    //object = context.watch<ViewAbstractProvider>().getObject;
   }
 
   @override
@@ -28,12 +31,19 @@ class _PostsListState extends State<PostsList> {
       builder: (context, state) {
         switch (state.status) {
           case PostStatus.failure:
-            return const Center(child: Text('failed to fetch posts'));
+            if (state.posts.isEmpty) {
+              return const Center(
+                  child: Text('failed to fetchis emppty posts'));
+            } else {
+              return const Center(
+                  child: Text('failed to fetch not empyy posts'));
+            }
           case PostStatus.success:
             if (state.posts.isEmpty) {
               return const Center(child: Text('no posts'));
             }
             return ListView.builder(
+              shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.posts.length
                     ? BottomLoader()

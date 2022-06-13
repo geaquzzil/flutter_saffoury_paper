@@ -7,18 +7,16 @@ import 'package:flutter_view_controller/screens/list_bloc/post_list.dart';
 import 'package:http/http.dart' as http;
 
 class PostsPage extends StatelessWidget {
-  ViewAbstract object;
-  PostsPage({Key? key, required this.object}) : super(key: key);
+  PostsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Posts')),
-      body: BlocProvider(
-        create: (_) => PostBloc(httpClient: http.Client(), viewAbstract: object)
-          ..add(PostFetched()),
-        child: PostsList(object: object),
-      ),
+    return BlocProvider(
+      create: (_) => PostBloc(
+          httpClient: http.Client(),
+          viewAbstract: context.watch<ViewAbstractProvider>().getObject)
+        ..add(PostFetched()),
+      child: const PostsList(),
     );
   }
 }

@@ -46,7 +46,7 @@ class PostBloc extends Bloc<PostEvent, ViewAbstractState> {
         ));
       }
       page++;
-      viewAbstract.setPageIndex(page);
+      viewAbstract.setPageIndex = page;
       final posts = await _fetchPosts();
       posts.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
@@ -70,7 +70,8 @@ class PostBloc extends Bloc<PostEvent, ViewAbstractState> {
     if (response == null) throw Exception('error fetching posts');
     if (response.statusCode == 200) {
       Iterable l = convert.jsonDecode(response.body);
-      return List<T>.from(l.map((model) => viewAbstract.fromJsonViewAbstract(model)));
+      return List<T>.from(
+          l.map((model) => viewAbstract.fromJsonViewAbstract(model)));
     } else if (response.statusCode == 401) {
       return throw Exception('error fetching posts');
     } else {

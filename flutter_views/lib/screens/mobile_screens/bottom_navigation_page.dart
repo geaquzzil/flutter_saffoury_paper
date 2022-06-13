@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/screens/action_screens/list_page.dart';
+import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 
 import '../../models/view_abstract.dart';
 
-class NavigationPage<T extends ViewAbstract> extends StatefulWidget {
-  final T view_abstract;
-  const NavigationPage({Key? key, required this.view_abstract})
-      : super(key: key);
+class NavigationPage extends StatefulWidget {
+  const NavigationPage({Key? key}) : super(key: key);
 
   @override
-  _NavigationPageState createState() => _NavigationPageState();
+  State<NavigationPage> createState() => _NavigationPageState();
 }
 
 class _NavigationPageState<T extends ViewAbstract>
@@ -48,7 +47,8 @@ class _NavigationPageState<T extends ViewAbstract>
     return IndexedStack(
       index: _currentIndex,
       children: [
-        const ListPage(),
+        PostsPage(),
+        //Text("TEST $_currentIndex"),
         Text("TEST $_currentIndex"),
         Text("TEST $_currentIndex")
       ],

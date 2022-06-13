@@ -8,8 +8,8 @@ import '../../models/view_abstract.dart';
 import '../../view_generator_helper.dart';
 
 class HomeMobilePage extends StatefulWidget {
-  final List<ViewAbstract> drawerItems;
-  const HomeMobilePage({Key? key, required this.drawerItems}) : super(key: key);
+  List<ViewAbstract> drawerItems;
+  HomeMobilePage({Key? key, required this.drawerItems}) : super(key: key);
 
   @override
   State<HomeMobilePage> createState() => _HomeMobilePage();
@@ -19,7 +19,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   final _advancedDrawerController = AdvancedDrawerController();
   @override
   Widget build(BuildContext context) {
-    return AdvancedDrawer(
+    return   AdvancedDrawer(
         backdropColor: Colors.blueGrey,
         controller: _advancedDrawerController,
         animationCurve: Curves.easeInOut,
@@ -58,7 +58,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                   },
                 ),
               )),
-          body: NavigationPage(view_abstract: widget.drawerItems[0]),
+          body: const NavigationPage(),
         ));
   }
 

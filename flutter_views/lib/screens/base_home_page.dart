@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/screens/action_screens/list_page.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
+import 'package:flutter_view_controller/screens/mobile_screens/bottom_navigation_page.dart';
+import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 
 import '../app_theme.dart';
 import '../models/view_abstract.dart';
@@ -10,7 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
   List<T> drawerItems;
-
   BaseHomePage({Key? key, required this.drawerItems}) : super(key: key);
 
   @override
@@ -76,13 +77,15 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //     ),
     //     home: const PostPage());
 
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ListPage(),
-    );
+    // return HomeMobilePage(drawerItems: drawerItems);
+    // return Scaffold(body: HomeMobilePage(drawerItems: drawerItems));
+    return Scaffold(body: NavigationPage());
+    // return NavigationPage();
+
+    // PostsPage();
   }
 
-  // LayoutBuilder getLayoutBuilder() {
+  // LayoutBuilder getLayoutBuilder() {81:15
   //   return LayoutBuilder(
   //     builder: (context, constraints) {
   //       return const PostPage();

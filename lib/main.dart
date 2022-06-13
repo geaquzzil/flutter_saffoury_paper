@@ -62,11 +62,12 @@ void main() {
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
-        ChangeNotifierProvider(create: (_) => ViewAbstractProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ViewAbstractProvider(object: Product())),
         ChangeNotifierProvider(create: (_) => ListProvider()),
       ],
       child: MaterialApp(
-        home: PostsPage(object: views[0]),
+        home: BaseHomePage(drawerItems: views),
       )
 
       //  App(),
