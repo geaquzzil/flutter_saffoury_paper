@@ -4,8 +4,12 @@ import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/cart_provider.dart';
+import 'package:flutter_view_controller/providers/list_provider.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_home_page.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
+import 'package:provider/provider.dart';
 
 // void main() {
 //   initializeReflectable();
@@ -51,16 +55,32 @@ class SimpleBlocObserver extends BlocObserver {
   }
 }
 
-class App extends MaterialApp {
-  App() : super(home: PostsPage());
+void main() {
+  initializeReflectable();
+  List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
+
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => ViewAbstractProvider()),
+        ChangeNotifierProvider(create: (_) => ListProvider()),
+      ],
+      child: MaterialApp(
+        home: PostsPage(object: views[0]),
+      )
+
+      //  App(),
+      ));
+
+  // BlocOverrides.runZoned(
+  //   () => runApp(App()),
+  //   blocObserver: SimpleBlocObserver(),
+  // );
 }
 
-void main() {
-  BlocOverrides.runZoned(
-    () => runApp(App()),
-    blocObserver: SimpleBlocObserver(),
-  );
-}
+// class App extends MaterialApp {
+//   App() : super(home: PostsPage());
+// }
 
 /// Custom [BlocObserver] that observes all bloc and cubit state changes.
 class AppBlocObserver extends BlocObserver {
@@ -74,29 +94,6 @@ class AppBlocObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print(transition);
-  }
-}
-
-/// {@template app_view}
-/// A [StatelessWidget] that:
-/// * reacts to state changes in the [ThemeCubit]
-/// and updates the theme of the [MaterialApp].
-/// * renders the [CounterPage].
-/// {@endtemplate}
-class AppView extends StatelessWidget {
-  /// {@macro app_view}
-  const AppView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, ThemeData>(
-      builder: (_, theme) {
-        return MaterialApp(
-          theme: theme,
-          home: const CounterPage(),
-        );
-      },
-    );
   }
 }
 

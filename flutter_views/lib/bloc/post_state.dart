@@ -2,23 +2,23 @@ part of 'post_bloc.dart';
 
 enum PostStatus { initial, success, failure }
 
-class PostState extends Equatable {
-  const PostState({
+class ViewAbstractState extends Equatable {
+  const ViewAbstractState({
     this.status = PostStatus.initial,
-    this.posts = const <Post>[],
+    this.posts = const <ViewAbstract>[],
     this.hasReachedMax = false,
   });
 
   final PostStatus status;
-  final List<Post> posts;
+  final List<ViewAbstract> posts;
   final bool hasReachedMax;
 
-  PostState copyWith({
+  ViewAbstractState copyWith({
     PostStatus? status,
-    List<Post>? posts,
+    List<ViewAbstract>? posts,
     bool? hasReachedMax,
   }) {
-    return PostState(
+    return ViewAbstractState(
       status: status ?? this.status,
       posts: posts ?? this.posts,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,

@@ -19,10 +19,22 @@ class Reflector extends Reflectable {
 const reflector = Reflector();
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
+  int _page = 0;
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
 
   String? getTableNameApi();
+
+  set setPageIndex(int page) {
+    _page = page;
+  }
+
+  int get getPageIndex => _page;
+
+  int getPageItemCount() {
+    return 10;
+  }
+
   String? getCustomAction() {
     return null;
   }
@@ -154,8 +166,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         break;
       case ServerActions.list:
         mainBody.addAll(getBodyCurrentActionASC(action));
-        mainBody['start'] = 10.toString();
-        mainBody['end'] = 0.toString();
+        mainBody['start'] = getPageItemCount().toString();
+        mainBody['end'] = getPageIndex.toString();
         break;
       default:
         break;
