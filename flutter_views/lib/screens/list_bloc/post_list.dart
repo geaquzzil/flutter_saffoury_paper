@@ -44,6 +44,7 @@ class _PostsListState extends State<PostsList> {
             }
             return ListView.builder(
               shrinkWrap: true,
+              physics: const AlwaysScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.posts.length
                     ? BottomLoader()

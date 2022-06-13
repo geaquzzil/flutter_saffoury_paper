@@ -19,7 +19,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   final _advancedDrawerController = AdvancedDrawerController();
   @override
   Widget build(BuildContext context) {
-    return   AdvancedDrawer(
+    return AdvancedDrawer(
         backdropColor: Colors.blueGrey,
         controller: _advancedDrawerController,
         animationCurve: Curves.easeInOut,
@@ -63,7 +63,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   }
 
   List<Widget> getBaseActions(BuildContext context) {
-    return [const CartButton()];
+    return [];
   }
 
   void _handleMenuButtonPressed() {

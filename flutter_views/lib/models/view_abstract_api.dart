@@ -31,9 +31,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   int get getPageIndex => _page;
 
-  int getPageItemCount() {
-    return 20;
-  }
+  int get getPageItemCount => 20;
 
   String? getCustomAction() {
     return null;
@@ -166,7 +164,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         break;
       case ServerActions.list:
         mainBody.addAll(getBodyCurrentActionASC(action));
-        mainBody['start'] = getPageItemCount().toString();
+        mainBody['start'] = getPageItemCount.toString();
         mainBody['end'] = getPageIndex.toString();
         break;
       default:

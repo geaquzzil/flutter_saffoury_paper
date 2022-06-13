@@ -5,9 +5,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class ViewAbstractProvider with ChangeNotifier {
   ViewAbstract object;
+  ViewAbstractProvider({required this.object});
 
   ViewAbstract get getObject => object;
-  ViewAbstractProvider({required this.object});
+
   void change(ViewAbstract object) {
     this.object = object;
     notifyListeners();

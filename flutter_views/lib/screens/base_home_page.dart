@@ -79,29 +79,29 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
 
     // return HomeMobilePage(drawerItems: drawerItems);
     // return Scaffold(body: HomeMobilePage(drawerItems: drawerItems));
-    return Scaffold(body: NavigationPage());
+    return Scaffold(body: getLayoutBuilder());
     // return NavigationPage();
 
     // PostsPage();
   }
 
-  // LayoutBuilder getLayoutBuilder() {81:15
-  //   return LayoutBuilder(
-  //     builder: (context, constraints) {
-  //       return const PostPage();
-  //       // if (kIsWeb) {
-  //       //   return const HomeWebPage();
-  //       // } else
-  //       // if (SizeConfig.isMobile(context)) {
+  LayoutBuilder getLayoutBuilder() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return HomeMobilePage(drawerItems: drawerItems);
+        // if (kIsWeb) {
+        //   return const HomeWebPage();
+        // } else
+        // if (SizeConfig.isMobile(context)) {
 
-  //       // } else if (SizeConfig.isTablet(context)) {
-  //       //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
-  //       // } else {
-  //       //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
-  //       // }
-  //     },
-  //   );
-  // }
+        // } else if (SizeConfig.isTablet(context)) {
+        //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
+        // } else {
+        //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
+        // }
+      },
+    );
+  }
 }
 
 class HexColor extends Color {
