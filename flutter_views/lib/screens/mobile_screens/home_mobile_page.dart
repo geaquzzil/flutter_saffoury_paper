@@ -32,8 +32,8 @@ class _HomeMobilePage extends State<HomeMobilePage> {
     return IndexedStack(
       index: _currentIndex,
       children: [
-        PostsPage(viewAbstract: context.read<ViewAbstractProvider>().getObject),
-        Text("TEST $_currentIndex"),
+        // PostsPage(viewAbstract: context.read<ViewAbstractProvider>().getObject),
+        MyHomePage(),
         ProfileScreen(),
         ProfileScreen()
       ],
@@ -327,7 +327,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                         switchOutCurve: Curves.easeOutBack,
                         child: Align(
                             alignment: Alignment.topCenter,
-                            child: MyHomePage()),
+                            child: getView(context)),
                       ),
                     )
                   ],
