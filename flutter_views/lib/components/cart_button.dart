@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 
 class CartButton extends StatelessWidget {
-  const CartButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
-
-  final GestureTapCallback onTap;
+  const CartButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ShoppingCartPage(),
+          ),
+        );
+      },
       child: SizedBox(
         width: 100.0,
         height: 40.0,

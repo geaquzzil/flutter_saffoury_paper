@@ -128,9 +128,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        CartButton(
-                          onTap: () {},
-                        )
+                        CartButton()
                       ],
                     ),
                     const SizedBox(
