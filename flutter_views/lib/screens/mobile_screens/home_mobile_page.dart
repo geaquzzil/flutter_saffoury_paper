@@ -7,9 +7,12 @@ import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/light_color.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
+import 'package:provider/provider.dart';
 import '../../models/view_abstract.dart';
 import '../../view_generator_helper.dart';
 
@@ -24,40 +27,11 @@ class HomeMobilePage extends StatefulWidget {
 class _HomeMobilePage extends State<HomeMobilePage> {
   final _advancedDrawerController = AdvancedDrawerController();
   int _currentIndex = 0;
-  _buildTextAndSearchBody() {
-    return getView();
-    // return ListView(
-    //   children: [
-    //     Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: 16),
-    //       child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           Text(
-    //             getTextLabel(),
-    //             style:
-    //                 const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-    //           ),
-    //           IconButton(
-    //               icon: const Icon(Icons.search),
-    //               color: Colors.black26,
-    //               onPressed: () {}),
-    //         ],
-    //       ),
-    //     ),
-    //     Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: 16),
-    //       child: getView(),
-    //     )
-    //   ],
-    // );
-  }
-
-  Widget getView() {
+  Widget getView(BuildContext context) {
     return IndexedStack(
       index: _currentIndex,
       children: [
-        PostsPage(),
+        PostsPage(viewAbstract: context.read<ViewAbstractProvider>().getObject),
         Text("TEST $_currentIndex"),
         Text("TEST $_currentIndex"),
         ShoppingCartPage()
@@ -206,11 +180,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
           getBottomNavigationBarItem(Icons.search_outlined, Icons.search,
               AppLocalizations.of(context)!.search),
           getBottomNavigationBarItem(Icons.account_circle_outlined,
-              Icons.account_circle, AppLocalizations.of(context)!.profile),
-          getBottomNavigationBarItem(
-              Icons.shopping_cart,
-              Icons.shopping_cart_outlined,
-              AppLocalizations.of(context)!.profile),
+              Icons.account_circle, AppLocalizations.of(context)!.profile)
         ]);
   }
 
@@ -252,7 +222,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                       spreadRadius: 10),
                 ],
               ),
-              child: Image.asset("assets/user.png"),
+              child: _icon(Icons.sort, color: Colors.black54),
             ),
           ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)))
         ],
@@ -325,6 +295,8 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: getBottomNavigationBar(),
+      drawer: ViewHelper.getDrawer(context, widget.drawerItems),
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,
@@ -347,29 +319,20 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                   children: <Widget>[
                     _appBar(),
                     _title(),
-                    
                     Expanded(
                       child: AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
                         switchInCurve: Curves.easeInToLinear,
                         switchOutCurve: Curves.easeOutBack,
                         child: Align(
-                          alignment: Alignment.topCenter,
-                          child: ShoppingCartPage(),
-                        ),
+                            alignment: Alignment.topCenter,
+                            child: MyHomePage()),
                       ),
                     )
                   ],
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: CustomBottomNavigationBar(
-                onIconPresedCallback: onBottomIconPressed,
-              ),
-            )
           ],
         ),
       ),
