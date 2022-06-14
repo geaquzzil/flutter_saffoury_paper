@@ -10,7 +10,6 @@ import 'package:flutter_view_controller/light_color.dart';
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
 
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -106,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     hintText: "Search Products",
                     hintStyle: TextStyle(fontSize: 12),
                     contentPadding:
-                        EdgeInsets.only(left: 10, right: 10, bottom: 0, top: 5),
+                        EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
                     prefixIcon: Icon(Icons.search, color: Colors.black54)),
               ),
             ),

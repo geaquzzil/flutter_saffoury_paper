@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class Category {
   int? id;
   String? name;
-  String? image;
+  IconData? image;
   bool isSelected;
   Category(
       { this.id,

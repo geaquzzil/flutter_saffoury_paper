@@ -1,4 +1,4 @@
-
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/helper_model/category.dart';
 import 'package:flutter_view_controller/helper_model/product.dart';
 
@@ -62,13 +62,10 @@ class AppData {
   static List<Category> categoryList = [
     Category(),
     Category(
-        id: 1,
-        name: "Sneakers",
-        image: 'assets/shoe_thumb_2.png',
-        isSelected: true),
-    Category(id: 2, name: "Jacket", image: 'assets/jacket.png'),
-    Category(id: 3, name: "Watch", image: 'assets/watch.png'),
-    Category(id: 4, name: "Watch", image: 'assets/watch.png'),
+        id: 1, name: "Sneakers", image: Icons.access_alarms, isSelected: true),
+    Category(id: 2, name: "Jacket", image:  Icons.ac_unit),
+    Category(id: 3, name: "Watch", image:  Icons.dns_sharp),
+    Category(id: 4, name: "Watch", image: Icons.dangerous),
   ];
   static List<String> showThumbnailList = [
     "assets/shoe_thumb_5.png",

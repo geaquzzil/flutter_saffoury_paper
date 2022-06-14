@@ -41,9 +41,7 @@ class ProductIcon extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
-                  model.image != null
-                      ? Image.asset(model.image ?? " ")
-                      : SizedBox(),
+                  model.image != null ? Icon(model.image) : SizedBox(),
                   model.name == null
                       ? Container()
                       : Container(
