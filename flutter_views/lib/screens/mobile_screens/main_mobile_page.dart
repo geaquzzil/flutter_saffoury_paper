@@ -6,6 +6,9 @@ import 'package:flutter_view_controller/components/product_icon.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/helper_model/data.dart';
 import 'package:flutter_view_controller/light_color.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -130,6 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             _search(),
             _categoryWidget(),
+            PostsPage(
+                viewAbstract: context.read<ViewAbstractProvider>().getObject),
             _productWidget(),
           ],
         ),
