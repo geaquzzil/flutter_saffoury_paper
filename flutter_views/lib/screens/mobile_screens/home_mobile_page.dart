@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/components/app_bar.dart';
 import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/bottom_navigation_page.dart';
-import 'package:flutter_view_controller/flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../models/view_abstract.dart';
 import '../../view_generator_helper.dart';
 
