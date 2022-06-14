@@ -1,6 +1,10 @@
 {
-    "appTitles": "SaffouryPaper",
-    "@appTitles":{
+    "appTitle": "SaffouryPaper",
+    "@appTitle":{
         "description": "Paper And board trading company"
-    }
+    },
+    "home": "Home",
+    "notification": "Notification",
+    "profile": "Profile",
+    "search": "Search"
 }

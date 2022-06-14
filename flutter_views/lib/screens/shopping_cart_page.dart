@@ -52,7 +52,7 @@ class ShoppingCartPage extends StatelessWidget {
                 //   child: model.getCardLeading(context),
                 // )
 
-                model.getCardLeading(context)
+                // model.getCardLeading(context)
               ],
             ),
           ),
@@ -64,14 +64,14 @@ class ShoppingCartPage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                   subtitle: Row(
-                    children: const <Widget>[
+                    children: <Widget>[
                       TitleText(
                         text: '\$ ',
                         color: LightColor.red,
                         fontSize: 12,
                       ),
                       TitleText(
-                        text: " model.price.toString()",
+                        text: "${model.getCartItemPrice()}",
                         fontSize: 14,
                       ),
                     ],
@@ -84,7 +84,7 @@ class ShoppingCartPage extends StatelessWidget {
                         color: LightColor.lightGrey.withAlpha(150),
                         borderRadius: BorderRadius.circular(10)),
                     child: TitleText(
-                      text: 'x${model.iD}',
+                      text: 'x${model.getCartItemQuantity()}',
                       fontSize: 12,
                     ),
                   )))

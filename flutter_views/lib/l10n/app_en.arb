@@ -1,3 +1,7 @@
 {
-    "appTitle": "SaffouryPaper"
+  "appTitle": "SaffouryPaper",
+  "home": "Home",
+  "notification": "Notification",
+  "profile": "Profile",
+  "search": "Search"
 }

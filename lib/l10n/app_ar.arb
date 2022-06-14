@@ -1,6 +1,10 @@
 {
-    "appTitles": "شركة الصفوري",
-    "@appTitles":{
+    "appTitle": "شركة الصفوري",
+    "@appTitle":{
         "description": "لتجارة وتداول الورق والكرتون"
-    }
+    },
+    "home": "الصفحة الرئيسية",
+    "notification": "الإشعارات",
+    "profile": "الصفحة الشخصية",
+    "search": "البحث"
 }

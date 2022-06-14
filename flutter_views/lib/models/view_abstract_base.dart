@@ -6,10 +6,14 @@ import 'package:reflectable/mirrors.dart';
 import 'view_abstract_api.dart';
 
 abstract class ViewAbstractBase<T> {
+  String iD = "-1";
   List<String> getFields();
   String getFieldLabel(String label, BuildContext context);
   IconData getIconData(BuildContext context);
   IconData getIconDataField(String label, BuildContext context);
+
+  double getCartItemPrice() => 0;
+  double getCartItemQuantity() => 0;
 
   Icon getFieldIcon(String label, BuildContext context) {
     return Icon(getIconDataField(label, context));
@@ -19,7 +23,33 @@ abstract class ViewAbstractBase<T> {
     return Icon(getIconData(context));
   }
 
-  String iD = "-1";
+  Text? getSubtitleHeaderText(BuildContext context) {
+    return Text(
+      getSubtitleHeaderTextOnly(context),
+      // style: const TextStyle(color: kTextLightColor)
+    );
+  }
+
+  Text? getHeaderText(BuildContext context) {
+    return Text(
+      getHeaderTextOnly(context),
+      // style: const TextStyle(color: kTextLightColor)
+    );
+  }
+
+  Text? getLabelText(BuildContext context) {
+    return Text(
+      getLabelTextOnly(context),
+      // style: const TextStyle(color: kTextLightColor)
+    );
+  }
+
+  Text? getLabelSubtitleText(BuildContext context) {
+    return Text(
+      getLabelSubtitleTextOnly(context),
+      // style: const TextStyle(color: kTextLightColor)
+    );
+  }
 
   Color getColor(BuildContext context) => Colors.red;
 
@@ -50,32 +80,12 @@ abstract class ViewAbstractBase<T> {
     return "https://";
   }
 
-  Text? getSubtitleHeaderText(BuildContext context) {
-    return Text(getSubtitleHeaderTextOnly(context),
-        style: const TextStyle(color: kTextLightColor));
-  }
-
   String getSubtitleHeaderTextOnly(BuildContext context) {
     return "null";
   }
 
-  Text? getHeaderText(BuildContext context) {
-    return Text(getHeaderTextOnly(context),
-        style: const TextStyle(color: kTextLightColor));
-  }
-
   String getHeaderTextOnly(BuildContext context) {
     return "null";
-  }
-
-  Text? getLabelText(BuildContext context) {
-    return Text(getLabelTextOnly(context),
-        style: const TextStyle(color: kTextLightColor));
-  }
-
-  Text? getLabelSubtitleText(BuildContext context) {
-    return Text(getLabelSubtitleTextOnly(context),
-        style: const TextStyle(color: kTextLightColor));
   }
 
   String getLabelSubtitleTextOnly(BuildContext context) {
