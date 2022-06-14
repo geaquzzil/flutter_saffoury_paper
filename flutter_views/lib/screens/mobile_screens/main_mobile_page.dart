@@ -133,8 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             _search(),
             _categoryWidget(),
-            PostsPage(
-                viewAbstract: context.read<ViewAbstractProvider>().getObject),
+            // PostsPage(
+            //     viewAbstract: context.read<ViewAbstractProvider>().getObject),
             _productWidget(),
           ],
         ),

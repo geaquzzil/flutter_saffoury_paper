@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
+import 'package:flutter_view_controller/screens/profile_page.dart';
 import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:provider/provider.dart';
 import '../../models/view_abstract.dart';
@@ -33,8 +34,8 @@ class _HomeMobilePage extends State<HomeMobilePage> {
       children: [
         PostsPage(viewAbstract: context.read<ViewAbstractProvider>().getObject),
         Text("TEST $_currentIndex"),
-        Text("TEST $_currentIndex"),
-        ShoppingCartPage()
+        ProfileScreen(),
+        ProfileScreen()
       ],
     );
   }
