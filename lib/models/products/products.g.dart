@@ -9,6 +9,7 @@ part of 'products.dart';
 Product _$ProductFromJson(Map<String, dynamic> json) {
   return Product()
     ..iD = json['iD'] as String
+    
     ..products_types = json['products_types'] == null
         ? null
         : ProductType.fromJson(json['products_types'] as Map<String, dynamic>)

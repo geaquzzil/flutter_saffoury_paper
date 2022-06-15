@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_view_controller/bloc/post_bloc.dart';
+import 'package:flutter_view_controller/helper_model/product.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/bottom_loader.dart';
@@ -16,11 +17,14 @@ class PostsList extends StatefulWidget {
 
 class _PostsListState extends State<PostsList> {
   final _scrollController = ScrollController();
-
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() => _onScroll());
+    Provider.of<ViewAbstractProvider>(context, listen: false).addListener(() {
+      print("ViewAbstractProvider CHANGED");
+      context.read<PostBloc>().clearList();
+    });
     //    = Provider.of<ViewAbstractProvider>(context, listen = false);
     //object = context.watch<ViewAbstractProvider>().getObject;
   }

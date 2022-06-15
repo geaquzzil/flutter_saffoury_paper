@@ -32,6 +32,11 @@ class PostBloc extends Bloc<PostEvent, ViewAbstractState> {
       transformer: throttleDroppable(throttleDuration),
     );
   }
+  void clearList() {
+    page = 0;
+    state.posts.clear();
+    add(PostFetched());
+  }
 
   Future<void> _onPostFetched(
       PostFetched event, Emitter<ViewAbstractState> emit) async {

@@ -13,9 +13,6 @@ class PostsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final viewAbstractProvider =
-    //     Provider.of<ViewAbstractProvider>(context, listen: false);
-
     return BlocProvider(
       create: (_) => PostBloc(
           httpClient: http.Client(),

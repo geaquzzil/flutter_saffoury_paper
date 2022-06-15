@@ -26,6 +26,7 @@ class HomeMobilePage extends StatefulWidget {
 }
 
 class _HomeMobilePage extends State<HomeMobilePage> {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final _advancedDrawerController = AdvancedDrawerController();
   int _currentIndex = 0;
   Widget getView(BuildContext context) {
@@ -201,15 +202,35 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   }
 
   bool isHomePageSelected = true;
-  Widget _appBar() {
+  Widget _appBar(BuildContext buildContext) {
     return Container(
       padding: AppTheme.padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          RotatedBox(
-            quarterTurns: 4,
-            child: _icon(Icons.sort, color: Colors.black54),
+          IconButton(
+              onPressed: () {
+                print("TAPED");
+                if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
+                  scaffoldKey.currentState?.openDrawer();
+                } else {
+                  scaffoldKey.currentState?.openEndDrawer();
+                }
+              },
+              icon: RotatedBox(
+                quarterTurns: 4,
+                child: _icon(Icons.sort, color: Colors.red),
+              )),
+          GestureDetector(
+            onTap: () {
+              print("TAPED");
+              if (scaffoldKey.currentState?.isEndDrawerOpen == false) {
+                scaffoldKey.currentState?.openDrawer();
+              } else {
+                scaffoldKey.currentState?.openEndDrawer();
+              }
+            },
+            child: Icon(Icons.abc),
           ),
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(13)),
@@ -296,6 +317,8 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawerEnableOpenDragGesture: true,
       bottomNavigationBar: getBottomNavigationBar(),
       drawer: ViewHelper.getDrawer(context, widget.drawerItems),
       body: SafeArea(
@@ -318,7 +341,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _appBar(),
+                    _appBar(context),
                     _title(),
                     Expanded(
                       child: AnimatedSwitcher(
