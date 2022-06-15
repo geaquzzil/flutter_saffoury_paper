@@ -3,13 +3,13 @@ part of 'post_bloc.dart';
 enum PostStatus { initial, success, failure }
 
 class ViewAbstractState extends Equatable {
-  const ViewAbstractState({
+  ViewAbstractState({
     this.status = PostStatus.initial,
     this.posts = const <ViewAbstract>[],
     this.hasReachedMax = false,
   });
 
-  final PostStatus status;
+  PostStatus status;
   final List<ViewAbstract> posts;
   final bool hasReachedMax;
 

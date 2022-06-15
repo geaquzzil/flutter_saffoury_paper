@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/light_color.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page_drawer.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 import 'package:flutter_view_controller/screens/profile_page.dart';
 import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
@@ -30,6 +31,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   final _advancedDrawerController = AdvancedDrawerController();
   int _currentIndex = 0;
   Widget getView(BuildContext context) {
+    return NavigationHomeScreen();
     return IndexedStack(
       index: _currentIndex,
       children: [

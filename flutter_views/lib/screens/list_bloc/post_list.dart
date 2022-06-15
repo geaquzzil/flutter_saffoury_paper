@@ -23,7 +23,9 @@ class _PostsListState extends State<PostsList> {
     _scrollController.addListener(() => _onScroll());
     Provider.of<ViewAbstractProvider>(context, listen: false).addListener(() {
       print("ViewAbstractProvider CHANGED");
-      context.read<PostBloc>().clearList();
+      context
+          .read<PostBloc>()
+          .clearList(context.read<ViewAbstractProvider>().getObject);
     });
     //    = Provider.of<ViewAbstractProvider>(context, listen = false);
     //object = context.watch<ViewAbstractProvider>().getObject;

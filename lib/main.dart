@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
+import 'package:flutter_saffoury_paper/tests.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/providers/list_provider.dart';
@@ -57,6 +58,10 @@ class SimpleBlocObserver extends BlocObserver {
 
 void main() {
   initializeReflectable();
+
+  runApp(AnimatedListSample());
+
+  return;
   List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
 
   runApp(MultiProvider(providers: [

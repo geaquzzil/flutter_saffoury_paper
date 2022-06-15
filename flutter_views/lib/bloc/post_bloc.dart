@@ -24,17 +24,21 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class PostBloc extends Bloc<PostEvent, ViewAbstractState> {
   int page = 0;
   final http.Client httpClient;
-  final ViewAbstract viewAbstract;
+  ViewAbstract viewAbstract;
   PostBloc({required this.httpClient, required this.viewAbstract})
-      : super(const ViewAbstractState()) {
+      : super(ViewAbstractState()) {
     on<PostFetched>(
       _onPostFetched,
       transformer: throttleDroppable(throttleDuration),
     );
   }
-  void clearList() {
+  void clearList(ViewAbstract viewAbstract) {
+    this.viewAbstract = viewAbstract;
+
     page = 0;
+    this.viewAbstract.setPageIndex = 0;
     state.posts.clear();
+    state.status = PostStatus.initial;
     add(PostFetched());
   }
 
