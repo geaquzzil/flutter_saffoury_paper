@@ -43,6 +43,8 @@ dependencies:
   icon_badge: ^1.0.0
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  flutter_zoom_drawer: ^3.0.2
+  easy_localization: ^3.0.1
 
 dev_dependencies:
   flutter_test:
