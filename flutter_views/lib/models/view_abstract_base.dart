@@ -99,8 +99,6 @@ abstract class ViewAbstractBase<T> {
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 
-
-
   InstanceMirror getInstanceMirror() {
     return reflector.reflect(this);
   }
@@ -113,8 +111,5 @@ abstract class ViewAbstractBase<T> {
     }
   }
 
-  void setFieldValue(String label, Object value) {
-    // set the value
-    getInstanceMirror().invokeSetter(label, value);
-  }
+
 }

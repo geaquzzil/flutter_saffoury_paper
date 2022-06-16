@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/providers/list_provider.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
@@ -64,6 +65,7 @@ void main() {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartProvider()),
+    ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(
         create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),

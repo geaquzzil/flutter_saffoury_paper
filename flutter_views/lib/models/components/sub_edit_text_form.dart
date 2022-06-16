@@ -12,11 +12,11 @@ class SubEditTextField extends StatefulWidget {
 }
 
 class _SubEditTextFieldState extends State<SubEditTextField> {
-  late ViewAbstract viewAbstract;
+  late ViewAbstract parentViewAbstract;
   @override
   void initState() {
     super.initState();
-    viewAbstract = context.read<ActionViewAbstractProvider>().getObject;
+    parentViewAbstract = context.read<ActionViewAbstractProvider>().getObject;
   }
 
   @override
@@ -24,27 +24,28 @@ class _SubEditTextFieldState extends State<SubEditTextField> {
     return Column(
       children: [
         TextFormField(
+            initialValue: parentViewAbstract.getFieldValue(widget.field),
             textCapitalization:
-                viewAbstract.getTextInputCapitalization(widget.field),
+                parentViewAbstract.getTextInputCapitalization(widget.field),
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
               filled: true,
-              icon: viewAbstract.getTextInputIcon(widget.field),
-              hintText: viewAbstract.getTextInputHint(context, widget.field),
-              labelText: viewAbstract.getTextInputLabel(context, widget.field),
+              icon: parentViewAbstract.getTextInputIcon(widget.field),
+              hintText: parentViewAbstract.getTextInputHint(context, widget.field),
+              labelText: parentViewAbstract.getTextInputLabel(context, widget.field),
               prefixText:
-                  viewAbstract.getTextInputPrefix(context, widget.field),
+                  parentViewAbstract.getTextInputPrefix(context, widget.field),
             ),
-            keyboardType: viewAbstract.getTextInputType(widget.field),
-            enabled: viewAbstract.getTextInputIsEnabled(widget.field),
+            keyboardType: parentViewAbstract.getTextInputType(widget.field),
+            enabled: parentViewAbstract.getTextInputIsEnabled(widget.field),
             validator: (String? value) {
-              return viewAbstract.getTextInputValidator(
+              return parentViewAbstract.getTextInputValidator(
                   context, widget.field, value);
             },
             onSaved: (String? value) {
               print('onSave=   $value');
             },
-            inputFormatters: viewAbstract.getTextInputFormatter(widget.field)),
+            inputFormatters: parentViewAbstract.getTextInputFormatter(widget.field)),
         const SizedBox(height: 24.0)
       ],
     );

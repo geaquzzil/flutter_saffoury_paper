@@ -23,14 +23,26 @@ class _EditTextFieldState extends State<EditTextField> {
   @override
   Widget build(BuildContext context) {
     List<String> fields = viewAbstract.getFields();
-    return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const SizedBox(height: 24.0),
-              for (String field in fields) SubEditTextField(field: field)
-            ]));
+
+    return Scaffold(
+        body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const SizedBox(height: 24.0),
+                  ...fields.map((e) => buildWidget(e)).toList(),
+                ])));
+  }
+
+  Widget buildWidget(String field) {
+    dynamic fieldValue = viewAbstract.getFieldValue(field);
+
+    if (fieldValue is ViewAbstract) {
+      return Text(field);
+    } else {
+      return SubEditTextField(field: field);
+    }
   }
 }
