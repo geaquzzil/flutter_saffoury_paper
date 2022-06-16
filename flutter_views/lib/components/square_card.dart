@@ -30,7 +30,7 @@ class SquareCard<T extends ViewAbstract> extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Hero(
-                tag: "product.id",
+                tag: object,
                 child: object.getCardLeadingImage(context),
               ),
             ),

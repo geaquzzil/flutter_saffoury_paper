@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'view_abstract_api.dart';
 
-abstract class ViewAbstractGenerator<T> extends ViewAbstractApi<T> {
+abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onCardTrailingClickedView(BuildContext context) {
     onCardTrailingClicked(context);
   }
@@ -47,7 +47,7 @@ abstract class ViewAbstractGenerator<T> extends ViewAbstractApi<T> {
   void onDrawerItemClicked(BuildContext context) {
     print('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
-    context.read<ViewAbstractProvider>().change(this as ViewAbstract);
+    context.read<DrawerViewAbstractProvider>().change(this as ViewAbstract);
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

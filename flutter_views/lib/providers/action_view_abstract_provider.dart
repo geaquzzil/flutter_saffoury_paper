@@ -1,11 +1,10 @@
-//create product cart provider class
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
-class DrawerViewAbstractProvider with ChangeNotifier {
+class ActionViewAbstractProvider  with ChangeNotifier {
   ViewAbstract object;
-  DrawerViewAbstractProvider({required this.object});
+  ActionViewAbstractProvider({required this.object});
 
   ViewAbstract get getObject => object;
 

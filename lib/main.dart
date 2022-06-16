@@ -59,15 +59,15 @@ class SimpleBlocObserver extends BlocObserver {
 void main() {
   initializeReflectable();
 
-  runApp(AnimatedListSample());
+  // runApp(AnimatedListSample());
 
-  return;
+  // return;
   List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(
-        create: (_) => ViewAbstractProvider(object: Product())),
+        create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),
   ], child: BaseHomePage(drawerItems: views)
 

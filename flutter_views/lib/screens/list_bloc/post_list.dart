@@ -21,11 +21,12 @@ class _PostsListState extends State<PostsList> {
   void initState() {
     super.initState();
     _scrollController.addListener(() => _onScroll());
-    Provider.of<ViewAbstractProvider>(context, listen: false).addListener(() {
+    Provider.of<DrawerViewAbstractProvider>(context, listen: false)
+        .addListener(() {
       print("ViewAbstractProvider CHANGED");
       context
           .read<PostBloc>()
-          .clearList(context.read<ViewAbstractProvider>().getObject);
+          .clearList(context.read<DrawerViewAbstractProvider>().getObject);
     });
     //    = Provider.of<ViewAbstractProvider>(context, listen = false);
     //object = context.watch<ViewAbstractProvider>().getObject;

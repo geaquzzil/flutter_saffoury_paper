@@ -134,7 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
             _search(),
             _categoryWidget(),
             PostsPage(
-                viewAbstract: context.watch<ViewAbstractProvider>().getObject),
+                viewAbstract:
+                    context.watch<DrawerViewAbstractProvider>().getObject),
             // _productWidget(),
           ],
         ),
