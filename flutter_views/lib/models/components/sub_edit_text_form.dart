@@ -46,12 +46,15 @@ class _EditTextFieldState extends State<EditTextField> {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         filled: true,
-        icon:  viewAbstract.getTextInputTypeIcon(widget.field),
-        hintText: 'Where can we reach you?',
-        labelText: 'Phone Number *',
-        prefixText: viewAbstract.getTextInputPrefix(widget.field),
+        icon: viewAbstract.getTextInputTypeIcon(widget.field),
+        hintText: viewAbstract.getTextInputTypeHint(context,widget.field),
+        labelText: viewAbstract.getTextInputTypeLabel(context,widget.field),
+        
+        'Phone Number *',
+        prefixText: viewAbstract.getTextInputPrefix(context,widget.field),
       ),
       keyboardType: viewAbstract.getTextInputType(widget.field),
+      validator: ,
       onSaved: (String? value) {
         this._phoneNumber = value;
         print('phoneNumber=$_phoneNumber');

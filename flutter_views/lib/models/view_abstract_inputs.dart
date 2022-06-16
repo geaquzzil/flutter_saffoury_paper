@@ -7,11 +7,11 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 
-  String? getTextInputPrefix(String? field) {
+  String? getTextInputPrefix(BuildContext context, String? field) {
     return null;
   }
 
-  String? getTextInputSuffix(String? field) {
+  String? getTextInputSuffix(BuildContext context, String? field) {
     return null;
   }
 
@@ -23,7 +23,31 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 
-  String? getTextInputTypeHint(String? field) {
+  String? getTextInputTypeHint(BuildContext context, String? field) {
+    return null;
+  }
+
+  String? getTextInputTypeLabel(BuildContext context, String? field) {
+    return getFieldLabel(field ?? "", context);
+  }
+
+  bool isFieldRequired(String? field) {
+    return false;
+  }
+
+  bool isFieldCanBeNullable(BuildContext context, String? field) {
+    return false;
+  }
+
+  String? getTextInputValidator(
+      BuildContext context, String? field, String? value) {
+    if (isFieldRequired(field) && (value?.isEmpty ?? false)) {
+      return 'Name is required.';
+    }
+    final RegExp nameExp = RegExp(r'^[A-Za-z ]+$');
+    if (!nameExp.hasMatch(value!)) {
+      return 'Please enter only alphabetical characters.';
+    }
     return null;
   }
 }
