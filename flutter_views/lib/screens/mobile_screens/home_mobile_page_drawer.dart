@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/app_theme.dart';
 import 'package:flutter_view_controller/components/custom_drawer/drawer_user_controller.dart';
 import 'package:flutter_view_controller/components/custom_drawer/home_drawer.dart';
-import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 import 'package:flutter_view_controller/screens/profile_page.dart';
 
@@ -18,7 +17,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   @override
   void initState() {
     drawerIndex = DrawerIndex.HOME;
-    screenView = MyHomePage();
+    screenView = const MyHomePage();
     super.initState();
   }
 
@@ -52,7 +51,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
       switch (drawerIndex) {
         case DrawerIndex.HOME:
           setState(() {
-            screenView = MyHomePage();
+            screenView = const MyHomePage();
           });
           break;
         case DrawerIndex.Help:

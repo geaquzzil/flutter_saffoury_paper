@@ -53,7 +53,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   ListTile getDrawerListTitle(BuildContext context) {
     return ListTile(
       subtitle: getLabelSubtitleText(context),
-      leading: getIcon(context),
+      leading: getIcon(),
       title: getLabelText(context),
       onTap: () => onDrawerItemClicked(context),
     );

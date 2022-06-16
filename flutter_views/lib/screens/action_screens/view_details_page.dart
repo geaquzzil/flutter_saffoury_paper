@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/components/normal_card_view.dart';
 import 'package:flutter_view_controller/components/primary_button.dart';
 import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
-import 'package:flutter_view_controller/screens/components/cart_button.dart';
 import 'package:flutter_view_controller/screens/components/product_images.dart';
 import 'package:provider/provider.dart';
 
@@ -92,7 +90,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
             return NormalCardView(
                 title: object.getFieldLabel(label, context),
                 description: fieldValue,
-                icon: object.getIconDataField(label, context));
+                icon: object.getFieldIconData(label));
           }
         });
   }
@@ -227,7 +225,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
             return NormalCardView(
                 title: object.getFieldLabel(label, context),
                 description: fieldValue,
-                icon: object.getIconDataField(label, context));
+                icon: object.getFieldIconData(label));
           }
         },
         childCount: fields.length,

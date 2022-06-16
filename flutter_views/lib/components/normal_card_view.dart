@@ -22,7 +22,7 @@ class NormalCardView extends StatelessWidget {
       title: (object?.getLabelText(context) ?? Text(title)),
       subtitle: (object?.getHeaderText(context) ?? Text(description)),
       leading: object != null
-          ? Hero(tag: object!, child: Icon(object?.getIconData(context)))
+          ? Hero(tag: object!, child: Icon(object?.getIconData()))
           : Icon(icon),
       trailing: object != null
           ? InkWell(

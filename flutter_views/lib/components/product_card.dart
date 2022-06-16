@@ -8,7 +8,7 @@ import 'package:flutter_view_controller/light_color.dart';
 class ProductCard extends StatelessWidget {
   final Product product;
   final ValueChanged<Product> onSelected;
-  ProductCard({Key ?key,required this.product,required this.onSelected}) : super(key: key);
+  const ProductCard({Key ?key,required this.product,required this.onSelected}) : super(key: key);
 
 //   @override
 //   _ProductCardState createState() => _ProductCardState();
@@ -25,7 +25,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: LightColor.background,
         borderRadius: BorderRadius.all(Radius.circular(20)),
         boxShadow: <BoxShadow>[
@@ -34,7 +34,7 @@ class ProductCard extends StatelessWidget {
       ),
       margin: EdgeInsets.symmetric(vertical: !product.isSelected ? 20 : 0),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -88,7 +88,7 @@ class ProductCard extends StatelessWidget {
       ).ripple(() {
         Navigator.of(context).pushNamed('/detail');
         onSelected(product);
-      }, borderRadius: BorderRadius.all(Radius.circular(20))),
+      }, borderRadius: const BorderRadius.all(Radius.circular(20))),
     );
   }
 }

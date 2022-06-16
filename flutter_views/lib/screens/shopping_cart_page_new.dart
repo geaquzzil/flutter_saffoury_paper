@@ -65,7 +65,7 @@ class ShoppingCartPageNew extends StatelessWidget {
                   ),
                   subtitle: Row(
                     children: <Widget>[
-                      TitleText(
+                      const TitleText(
                         text: '\$ ',
                         color: LightColor.red,
                         fontSize: 12,

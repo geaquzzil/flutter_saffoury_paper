@@ -1,9 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/config.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:provider/provider.dart';
 
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -185,16 +183,16 @@ class _TwoPanelsState extends State<TwoPanels> with TickerProviderStateMixin {
   late TabController tabController = TabController(length: 3, vsync: this);
 
   Animation<RelativeRect> getPanelAnimation(BoxConstraints constraints) {
-    final _height = constraints.biggest.height;
-    final _backPanelHeight = _height - _headerHeight;
-    const _frontPanelHeight = -_headerHeight;
+    final height = constraints.biggest.height;
+    final backPanelHeight = height - _headerHeight;
+    const frontPanelHeight = -_headerHeight;
 
     return RelativeRectTween(
       begin: RelativeRect.fromLTRB(
         0.0,
-        _backPanelHeight,
+        backPanelHeight,
         0.0,
-        _frontPanelHeight,
+        frontPanelHeight,
       ),
       end: const RelativeRect.fromLTRB(0.0, 100, 0.0, 0.0),
     ).animate(

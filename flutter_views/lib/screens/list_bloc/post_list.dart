@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_view_controller/bloc/post_bloc.dart';
-import 'package:flutter_view_controller/helper_model/product.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/list_bloc/bottom_loader.dart';
-import 'package:flutter_view_controller/screens/list_bloc/post_list_item.dart';
 import 'package:provider/provider.dart';
 
 class PostsList extends StatefulWidget {
@@ -49,7 +46,7 @@ class _PostsListState extends State<PostsList> {
             if (state.posts.isEmpty) {
               return const Center(child: Text('no posts'));
             }
-            return Container(
+            return SizedBox(
               height: MediaQuery.of(context).size.height - 80,
               child: ListView.builder(
                 controller: _scrollController,

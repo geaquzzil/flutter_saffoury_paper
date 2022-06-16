@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_inputs.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:provider/provider.dart';
 
-class EditTextField extends StatefulWidget {
-  String? field;
-  EditTextField({Key? key}) : super(key: key);
+class SubEditTextField extends StatefulWidget {
+  String field;
+  SubEditTextField({Key? key, required this.field}) : super(key: key);
 
   @override
-  State<EditTextField> createState() => _EditTextFieldState();
+  State<SubEditTextField> createState() => _SubEditTextFieldState();
 }
 
-class _EditTextFieldState extends State<EditTextField> {
-  final GlobalKey<FormFieldState<String>> _passwordFieldKey =
-      GlobalKey<FormFieldState<String>>();
-
+class _SubEditTextFieldState extends State<SubEditTextField> {
   late ViewAbstract viewAbstract;
   @override
   void initState() {
@@ -24,99 +19,34 @@ class _EditTextFieldState extends State<EditTextField> {
     viewAbstract = context.read<ActionViewAbstractProvider>().getObject;
   }
 
-  String? _name;
-  String? _phoneNumber;
-  String? _email;
-  String? _password;
-
-  String? _validateName(String? value) {
-    if (value?.isEmpty ?? false) {
-      return 'Name is required.';
-    }
-    final RegExp nameExp = RegExp(r'^[A-Za-z ]+$');
-    if (!nameExp.hasMatch(value!)) {
-      return 'Please enter only alphabetical characters.';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        filled: true,
-        icon: viewAbstract.getTextInputTypeIcon(widget.field),
-        hintText: viewAbstract.getTextInputTypeHint(context,widget.field),
-        labelText: viewAbstract.getTextInputTypeLabel(context,widget.field),
-        
-        'Phone Number *',
-        prefixText: viewAbstract.getTextInputPrefix(context,widget.field),
-      ),
-      keyboardType: viewAbstract.getTextInputType(widget.field),
-      validator: ,
-      onSaved: (String? value) {
-        this._phoneNumber = value;
-        print('phoneNumber=$_phoneNumber');
-      },
-      // TextInputFormatters are applied in sequence.
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
+    return Column(
+      children: [
+        TextFormField(
+            textCapitalization:
+                viewAbstract.getTextInputCapitalization(widget.field),
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              filled: true,
+              icon: viewAbstract.getTextInputIcon(widget.field),
+              hintText: viewAbstract.getTextInputHint(context, widget.field),
+              labelText: viewAbstract.getTextInputLabel(context, widget.field),
+              prefixText:
+                  viewAbstract.getTextInputPrefix(context, widget.field),
+            ),
+            keyboardType: viewAbstract.getTextInputType(widget.field),
+            enabled: viewAbstract.getTextInputIsEnabled(widget.field),
+            validator: (String? value) {
+              return viewAbstract.getTextInputValidator(
+                  context, widget.field, value);
+            },
+            onSaved: (String? value) {
+              print('onSave=   $value');
+            },
+            inputFormatters: viewAbstract.getTextInputFormatter(widget.field)),
+        const SizedBox(height: 24.0)
       ],
-    );
-  }
-}
-
-class PasswordField extends StatefulWidget {
-  const PasswordField({
-    this.fieldKey,
-    this.hintText,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
-  });
-
-  final Key? fieldKey;
-  final String? hintText;
-  final String? labelText;
-  final String? helperText;
-  final FormFieldSetter<String>? onSaved;
-  final FormFieldValidator<String>? validator;
-  final ValueChanged<String>? onFieldSubmitted;
-
-  @override
-  _PasswordFieldState createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      key: widget.fieldKey,
-      obscureText: _obscureText,
-      maxLength: 8,
-      onSaved: widget.onSaved,
-      validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
-      decoration: InputDecoration(
-        border: const UnderlineInputBorder(),
-        filled: true,
-        hintText: widget.hintText,
-        labelText: widget.labelText,
-        helperText: widget.helperText,
-        suffixIcon: GestureDetector(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-        ),
-      ),
     );
   }
 }

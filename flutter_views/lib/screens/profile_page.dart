@@ -12,11 +12,11 @@ class ProfileScreen extends StatelessWidget {
 
 Body() {
   return SingleChildScrollView(
-    padding: EdgeInsets.symmetric(vertical: 20),
+    padding: const EdgeInsets.symmetric(vertical: 20),
     child: Column(
       children: [
-        ProfilePic(),
-        SizedBox(height: 20),
+        const ProfilePic(),
+        const SizedBox(height: 20),
         ProfileMenu(
           text: "My Account",
           icon: "assets/icons/User Icon.svg",

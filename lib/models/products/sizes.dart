@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'sizes.g.dart';
 
 @JsonSerializable()
@@ -49,12 +48,14 @@ class Size extends ViewAbstract<Size> {
   }
 
   @override
-  IconData getIconData(BuildContext context) {
+  IconData getIconData() {
     return Icons.border_all;
   }
 
+
+  
   @override
-  IconData getIconDataField(String label, BuildContext context) {
+  IconData getFieldIconData(String label) {
     switch (label) {
       case "width":
         return Icons.border_left_outlined;

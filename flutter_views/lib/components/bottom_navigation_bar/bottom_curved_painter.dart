@@ -24,7 +24,7 @@ class BackgroundCurvePainter extends CustomPainter {
   @override
   void paint(canvas, size) {
     // Paint two cubic bezier curves using various linear interpolations based off of the `_normalizedY` value
-    final norm = LinearPointCurve(0.5, 2.0).transform(_normalizedY) / 5;
+    final norm = const LinearPointCurve(0.5, 2.0).transform(_normalizedY) / 5;
 
     final radius =
         Tween<double>(begin: _radiusTop, end: _radiusBottom).transform(norm);
@@ -32,15 +32,15 @@ class BackgroundCurvePainter extends CustomPainter {
     final anchorControlOffset = Tween<double>(
             begin: radius * _horizontalControlTop,
             end: radius * _horizontalControlBottom)
-        .transform(LinearPointCurve(0.5, 0.75).transform(norm));
+        .transform(const LinearPointCurve(0.5, 0.75).transform(norm));
     // Point that slides up and down depending on distance for the target x position
     final dipControlOffset = Tween<double>(
             begin: radius * _pointControlTop, end: radius * _pointControlBottom)
-        .transform(LinearPointCurve(0.5, 0.8).transform(norm));
+        .transform(const LinearPointCurve(0.5, 0.8).transform(norm));
     final y = Tween<double>(begin: _topY, end: _bottomY)
-        .transform(LinearPointCurve(0.2, 0.7).transform(norm));
+        .transform(const LinearPointCurve(0.2, 0.7).transform(norm));
     final dist = Tween<double>(begin: _topDistance, end: _bottomDistance)
-        .transform(LinearPointCurve(0.5, 0.0).transform(norm));
+        .transform(const LinearPointCurve(0.5, 0.0).transform(norm));
     final x0 = _x - dist / 2;
     final x1 = _x + dist / 2;
 

@@ -11,7 +11,7 @@ import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -20,21 +20,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(13)),
+          borderRadius: const BorderRadius.all(Radius.circular(13)),
           color: Theme.of(context).backgroundColor,
           boxShadow: AppTheme.shadow),
       child: Icon(
         icon,
         color: color,
       ),
-    ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
+    ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)));
   }
 
   Widget _categoryWidget() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       width: AppTheme.fullWidth(context),
       height: 80,
       child: ListView(
@@ -45,9 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 model: category,
                 onSelected: (model) {
                   setState(() {
-                    AppData.categoryList.forEach((item) {
+                    for (var item in AppData.categoryList) {
                       item.isSelected = false;
-                    });
+                    }
                     model.isSelected = true;
                   });
                 },
@@ -60,16 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _productWidget() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       width: AppTheme.fullWidth(context),
       height: AppTheme.fullWidth(context) * .7,
       child: GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
             childAspectRatio: 4 / 3,
             mainAxisSpacing: 30,
             crossAxisSpacing: 20),
-        padding: EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 20),
         scrollDirection: Axis.horizontal,
         children: AppData.productList
             .map(
@@ -77,9 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 product: product,
                 onSelected: (model) {
                   setState(() {
-                    AppData.productList.forEach((item) {
+                    for (var item in AppData.productList) {
                       item.isSelected = false;
-                    });
+                    }
                     model.isSelected = true;
                   });
                 },
@@ -101,8 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: LightColor.lightGrey.withAlpha(100),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: TextField(
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              child: const TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search Products",
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           _icon(Icons.filter_list, color: Colors.black54)
         ],
       ),
@@ -122,10 +122,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height - 210,
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         dragStartBehavior: DragStartBehavior.down,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

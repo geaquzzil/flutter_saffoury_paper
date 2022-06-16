@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CenteredElasticOutCurve extends Curve {
   final double period;
 
-  CenteredElasticOutCurve([this.period = 0.4]);
+  const CenteredElasticOutCurve([this.period = 0.4]);
 
   @override
   double transform(double x) {
@@ -18,7 +18,7 @@ class CenteredElasticOutCurve extends Curve {
 class CenteredElasticInCurve extends Curve {
   final double period;
 
-  CenteredElasticInCurve([this.period = 0.4]);
+  const CenteredElasticInCurve([this.period = 0.4]);
 
   @override
   double transform(double x) {
@@ -33,7 +33,7 @@ class LinearPointCurve extends Curve {
   final double pIn;
   final double pOut;
 
-  LinearPointCurve(this.pIn, this.pOut);
+  const LinearPointCurve(this.pIn, this.pOut);
 
   @override
   double transform(double x) {

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:reflectable/mirrors.dart';
 
 import 'view_abstract_api.dart';
@@ -9,18 +8,18 @@ abstract class ViewAbstractBase<T> {
   String iD = "-1";
   List<String> getFields();
   String getFieldLabel(String label, BuildContext context);
-  IconData getIconData(BuildContext context);
-  IconData getIconDataField(String label, BuildContext context);
+  IconData getFieldIconData(String label);
+  IconData getIconData();
 
   double getCartItemPrice() => 0;
   double getCartItemQuantity() => 0;
 
-  Icon getFieldIcon(String label, BuildContext context) {
-    return Icon(getIconDataField(label, context));
+  Icon getFieldIcon(String label) {
+    return Icon(getFieldIconData(label));
   }
 
-  Icon getIcon(BuildContext context) {
-    return Icon(getIconData(context));
+  Icon getIcon() {
+    return Icon(getIconData());
   }
 
   Text? getSubtitleHeaderText(BuildContext context) {
@@ -72,7 +71,7 @@ abstract class ViewAbstractBase<T> {
         ),
       ),
       placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(getIconData(context)),
+      errorWidget: (context, url, error) => Icon(getIconData()),
     );
   }
 
@@ -100,7 +99,7 @@ abstract class ViewAbstractBase<T> {
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 
-  List<Widget>? getPopupActionsList(BuildContext context) => null;
+
 
   InstanceMirror getInstanceMirror() {
     return reflector.reflect(this);

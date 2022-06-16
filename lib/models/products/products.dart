@@ -3,7 +3,6 @@ import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'sizes.dart';
 
@@ -27,10 +26,6 @@ class Product extends ViewAbstract<Product> {
 
   Product() : super();
 
-  @override
-  Icon getIcon(BuildContext context) {
-    return const Icon(Icons.add_card_rounded);
-  }
 
   @override
   Text getSubtitleHeaderText(BuildContext context) {
@@ -93,15 +88,14 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
-  IconData getIconData(BuildContext context) {
-    // TODO: implement getIconData
+  IconData getIconData() {
     return Icons.account_balance_wallet_sharp;
   }
 
+  
   @override
-  IconData getIconDataField(String label, BuildContext context) {
-    // TODO: implement getIconDataField
-    switch (label) {
+  IconData getFieldIconData(String label) {
+  switch (label) {
       case "id":
         return Icons.account_balance_wallet_sharp;
       case "sizes":

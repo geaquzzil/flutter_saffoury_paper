@@ -59,12 +59,12 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   }
 
   @override
-  IconData getIconData(BuildContext context) {
+  IconData getIconData() {
     return Icons.security;
   }
 
   @override
-  IconData getIconDataField(String label, BuildContext context) {
+  IconData getFieldIconData(String label) {
     return Icons.security;
   }
 }

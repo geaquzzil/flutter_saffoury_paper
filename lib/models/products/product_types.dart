@@ -45,15 +45,22 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
-  IconData getIconData(BuildContext context) {
+  IconData getIconData() {
     // TODO: implement getIconData
     return Icons.type_specimen_outlined;
   }
 
   @override
-  IconData getIconDataField(String label, BuildContext context) {
-    // TODO: implement getIconDataField
-    return Icons.type_specimen_outlined;
+  IconData getFieldIconData(String label) {
+  switch (label) {
+      case "id":
+        return Icons.account_balance_wallet_sharp;
+      case "sizes":
+        return Icons.sanitizer;
+      case "comments":
+        return Icons.comment;
+    }
+    return Icons.account_balance_wallet_sharp;
   }
 
   @override

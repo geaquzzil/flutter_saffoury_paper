@@ -10,19 +10,20 @@ class ProductIcon extends StatelessWidget {
   // final String text;
   final ValueChanged<Category> onSelected;
   final Category model;
-  ProductIcon({Key? key, required this.model, required this.onSelected})
+  const ProductIcon({Key? key, required this.model, required this.onSelected})
       : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return model.id == null
         ? Container(width: 5)
         : Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: Container(
               padding: AppTheme.hPadding,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 color: model.isSelected
                     ? LightColor.background
                     : Colors.transparent,
@@ -32,16 +33,16 @@ class ProductIcon extends StatelessWidget {
                 ),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: model.isSelected ? Color(0xfffbf2ef) : Colors.white,
+                    color: model.isSelected ? const Color(0xfffbf2ef) : Colors.white,
                     blurRadius: 10,
                     spreadRadius: 5,
-                    offset: Offset(5, 5),
+                    offset: const Offset(5, 5),
                   ),
                 ],
               ),
               child: Row(
                 children: <Widget>[
-                  model.image != null ? Icon(model.image) : SizedBox(),
+                  model.image != null ? Icon(model.image) : const SizedBox(),
                   model.name == null
                       ? Container()
                       : Container(
@@ -57,7 +58,7 @@ class ProductIcon extends StatelessWidget {
               () {
                 onSelected(model);
               },
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
           );
   }

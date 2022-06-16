@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/light_color.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onIconPresedCallback;
-  CustomBottomNavigationBar({Key? key, required this.onIconPresedCallback})
+  const CustomBottomNavigationBar({Key? key, required this.onIconPresedCallback})
       : super(key: key);
 
   @override
@@ -63,25 +63,25 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   Widget _icon(IconData icon, bool isEnable, int index) {
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.all(Radius.circular(50)),
+        borderRadius: const BorderRadius.all(Radius.circular(50)),
         onTap: () {
           _handlePressed(index);
         },
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           alignment: isEnable ? Alignment.topCenter : Alignment.center,
           child: AnimatedContainer(
               height: isEnable ? 40 : 20,
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: isEnable ? LightColor.orange : Colors.white,
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: isEnable ? Color(0xfffeece2) : Colors.white,
+                      color: isEnable ? const Color(0xfffeece2) : Colors.white,
                       blurRadius: 10,
                       spreadRadius: 5,
-                      offset: Offset(5, 5),
+                      offset: const Offset(5, 5),
                     ),
                   ],
                   shape: BoxShape.circle),
@@ -98,7 +98,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   }
 
   Widget _buildBackground() {
-    final inCurve = ElasticOutCurve(0.38);
+    const inCurve = ElasticOutCurve(0.38);
     return CustomPaint(
       painter: BackgroundCurvePainter(
           _xController.value * MediaQuery.of(context).size.width,
@@ -128,21 +128,21 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     _yController.value = 1.0;
     _xController.animateTo(
         _indexToPosition(index) / MediaQuery.of(context).size.width,
-        duration: Duration(milliseconds: 620));
+        duration: const Duration(milliseconds: 620));
     Future.delayed(
-      Duration(milliseconds: 500),
+      const Duration(milliseconds: 500),
       () {
-        _yController.animateTo(1.0, duration: Duration(milliseconds: 1200));
+        _yController.animateTo(1.0, duration: const Duration(milliseconds: 1200));
       },
     );
-    _yController.animateTo(0.0, duration: Duration(milliseconds: 300));
+    _yController.animateTo(0.0, duration: const Duration(milliseconds: 300));
   }
 
   @override
   Widget build(BuildContext context) {
     final appSize = MediaQuery.of(context).size;
-    final height = 60.0;
-    return Container(
+    const height = 60.0;
+    return SizedBox(
       width: appSize.width,
       height: 60,
       child: Stack(

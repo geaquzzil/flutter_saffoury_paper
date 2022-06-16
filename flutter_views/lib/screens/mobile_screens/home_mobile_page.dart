@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_view_controller/app_theme.dart';
-import 'package:flutter_view_controller/components/app_bar.dart';
-import 'package:flutter_view_controller/components/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'package:flutter_view_controller/components/cart_button.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/light_color.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/screens/list_bloc/post_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page_drawer.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 import 'package:flutter_view_controller/screens/profile_page.dart';
-import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
-import 'package:provider/provider.dart';
 import '../../models/view_abstract.dart';
 import '../../view_generator_helper.dart';
 
@@ -36,7 +30,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
       index: _currentIndex,
       children: [
         // PostsPage(viewAbstract: context.read<ViewAbstractProvider>().getObject),
-        MyHomePage(),
+        const MyHomePage(),
         ProfileScreen(),
         ProfileScreen()
       ],
@@ -194,7 +188,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
           icon: Icon(icon), activeIcon: Icon(activeIcon), label: label);
 
   List<Widget> getBaseActions(BuildContext context) {
-    return [CartButton()];
+    return [const CartButton()];
   }
 
   void _handleMenuButtonPressed() {
@@ -232,14 +226,14 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                 scaffoldKey.currentState?.openEndDrawer();
               }
             },
-            child: Icon(Icons.abc),
+            child: const Icon(Icons.abc),
           ),
           ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+            borderRadius: const BorderRadius.all(Radius.circular(13)),
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
-                boxShadow: <BoxShadow>[
+                boxShadow: const <BoxShadow>[
                   BoxShadow(
                       color: Color(0xfff8f8f8),
                       blurRadius: 10,
@@ -248,7 +242,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
               ),
               child: _icon(Icons.sort, color: Colors.black54),
             ),
-          ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)))
+          ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)))
         ],
       ),
     );
@@ -256,16 +250,16 @@ class _HomeMobilePage extends State<HomeMobilePage> {
 
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(13)),
+          borderRadius: const BorderRadius.all(Radius.circular(13)),
           color: Theme.of(context).backgroundColor,
           boxShadow: AppTheme.shadow),
       child: Icon(
         icon,
         color: color,
       ),
-    ).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(13)));
+    ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)));
   }
 
   Widget _title() {
@@ -289,17 +283,17 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             !isHomePageSelected
                 ? Container(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(
+                    padding: const EdgeInsets.all(10),
+                    child: const Icon(
                       Icons.delete_outline,
                       color: LightColor.orange,
                     ),
                   ).ripple(() {},
-                    borderRadius: BorderRadius.all(Radius.circular(13)))
-                : SizedBox()
+                    borderRadius: const BorderRadius.all(Radius.circular(13)))
+                : const SizedBox()
           ],
         ));
   }
@@ -330,7 +324,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
             SingleChildScrollView(
               child: Container(
                 height: AppTheme.fullHeight(context) - 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
                       Color(0xfffbfbfb),
@@ -347,7 +341,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                     _title(),
                     Expanded(
                       child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         switchInCurve: Curves.easeInToLinear,
                         switchOutCurve: Curves.easeOutBack,
                         child: Align(
