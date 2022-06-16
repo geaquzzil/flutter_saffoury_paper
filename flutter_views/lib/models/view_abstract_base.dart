@@ -55,7 +55,9 @@ abstract class ViewAbstractBase<T> {
   Widget? getCardTrailing(BuildContext context) {
     return const Icon(Icons.more_vert_outlined);
   }
-
+  Widget getCardLeadingEditCard(BuildContext context){
+    return  Icon(getIconData());
+  }
   Widget getCardLeading(BuildContext context) {
     return Hero(
         tag: this,

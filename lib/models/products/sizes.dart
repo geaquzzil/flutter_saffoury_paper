@@ -52,8 +52,16 @@ class Size extends ViewAbstract<Size> {
     return Icons.border_all;
   }
 
+  @override
+  int? getTextInputMaxLength(String field) {
+    return 4;
+  }
 
-  
+  @override
+  bool isFieldRequired(String field) {
+    return field == "width";
+  }
+
   @override
   IconData getFieldIconData(String label) {
     switch (label) {

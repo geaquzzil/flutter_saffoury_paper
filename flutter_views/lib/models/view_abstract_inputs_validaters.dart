@@ -51,7 +51,6 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   TextCapitalization getTextInputCapitalization(String field) {
-    
     return TextCapitalization.none;
   }
 
@@ -68,9 +67,10 @@ abstract class ViewAbstractInputAndValidater<T>
 
   String? getTextInputValidator(
       BuildContext context, String field, String? value) {
-    if (isFieldRequired(field) && (value?.isEmpty ?? false)) {
-      //todo this field is required
-      return 'Name is required.';
+    if (isFieldRequired(field)) {
+      if (value?.isEmpty ?? false) {
+        return getFieldLabel(field, context) + " is required";
+      }
     }
     // final RegExp nameExp = RegExp(r'^[A-Za-z ]+$');
     // if (!nameExp.hasMatch(value!)) {

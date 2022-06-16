@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/components/edit_text_form.dart';
+import 'package:flutter_view_controller/models/components/master_edit_form.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
@@ -78,11 +78,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
     if (result.icon == Icons.print) {
     } else if (result.icon == Icons.edit) {
-      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
+      // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const EditTextField(),
+          builder: (context) => MasterEditForm(
+            parent: this as ViewAbstract,
+          ),
         ),
       );
     }
