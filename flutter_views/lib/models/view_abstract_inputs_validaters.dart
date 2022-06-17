@@ -6,7 +6,11 @@ import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
   TextInputType? getTextInputType(String field) {
-    return null;
+    return getMap()[field];
+  }
+
+  Map<String, TextInputType?> getMap() {
+    return {};
   }
 
   bool? getTextInputIsEnabled(String field) {

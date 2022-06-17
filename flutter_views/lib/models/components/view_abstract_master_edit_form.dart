@@ -19,7 +19,6 @@ class SubViewAbstractEditForm extends StatefulWidget {
 
 class _SubViewAbstractEditFormState extends State<SubViewAbstractEditForm> {
   late ViewAbstract currentValue;
-  final _formKey = GlobalKey<FormBuilderState>();
 
   @override
   void initState() {
@@ -40,10 +39,10 @@ class _SubViewAbstractEditFormState extends State<SubViewAbstractEditForm> {
             fontSize: 27,
             fontWeight: FontWeight.w400,
           ),
+          leading: currentValue.getCardLeadingEditCard(context),
           children: [
             FormBuilder(
-                
-                key: _formKey,
+                key: widget.key,
                 child: Column(
                   children: [
                     const SizedBox(height: 24.0),
@@ -51,7 +50,6 @@ class _SubViewAbstractEditFormState extends State<SubViewAbstractEditForm> {
                   ],
                 ))
           ],
-          leading: currentValue.getCardLeadingEditCard(context),
         ),
         const SizedBox(height: 24.0)
       ],
@@ -76,31 +74,28 @@ class _SubViewAbstractEditFormState extends State<SubViewAbstractEditForm> {
     return Column(
       children: [
         FormBuilderTextField(
-            name: field,
-            initialValue: currentValue.getFieldValue(widget.field),
-            maxLength: currentValue.getTextInputMaxLength(widget.field),
-            textCapitalization:
-                currentValue.getTextInputCapitalization(widget.field),
+            name: currentValue.getTag(field),
+            initialValue: currentValue.getFieldValue(field),
+            maxLength: currentValue.getTextInputMaxLength(field),
+            textCapitalization: currentValue.getTextInputCapitalization(field),
             decoration: InputDecoration(
               border: const UnderlineInputBorder(),
               filled: true,
-              icon: currentValue.getTextInputIcon(widget.field),
-              hintText: currentValue.getTextInputHint(context, widget.field),
-              labelText: currentValue.getTextInputLabel(context, widget.field),
-              prefixText:
-                  currentValue.getTextInputPrefix(context, widget.field),
+              icon: currentValue.getTextInputIcon(field),
+              hintText: currentValue.getTextInputHint(context, field),
+              labelText: currentValue.getTextInputLabel(context, field),
+              prefixText: currentValue.getTextInputPrefix(context, field),
             ),
-            keyboardType: currentValue.getTextInputType(widget.field),
+            keyboardType: currentValue.getTextInputType(field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: widget.parent.getTextInputIsEnabled(widget.field),
             validator: (String? value) {
-              return currentValue.getTextInputValidator(
-                  context, widget.field, value);
+              return currentValue.getTextInputValidator(context, field, value);
             },
             onSaved: (String? value) {
               print('onSave=   $value');
             },
-            inputFormatters: currentValue.getTextInputFormatter(widget.field)),
+            inputFormatters: currentValue.getTextInputFormatter(field)),
         const SizedBox(height: 24.0)
       ],
     );

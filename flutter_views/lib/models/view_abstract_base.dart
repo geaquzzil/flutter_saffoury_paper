@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:reflectable/mirrors.dart';
 
 import 'view_abstract_api.dart';
@@ -55,9 +56,11 @@ abstract class ViewAbstractBase<T> {
   Widget? getCardTrailing(BuildContext context) {
     return const Icon(Icons.more_vert_outlined);
   }
-  Widget getCardLeadingEditCard(BuildContext context){
-    return  Icon(getIconData());
+
+  Widget getCardLeadingEditCard(BuildContext context) {
+    return Icon(getIconData());
   }
+
   Widget getCardLeading(BuildContext context) {
     return Hero(
         tag: this,
@@ -113,5 +116,15 @@ abstract class ViewAbstractBase<T> {
     }
   }
 
+  String getTag(String label) {
+    return "${T}_$label";
+  }
 
+  DateTime? getDateTimeFromField(String? value) {
+    if (value == null) {
+      return null;
+    }
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    return dateFormat.parse(value);
+  }
 }

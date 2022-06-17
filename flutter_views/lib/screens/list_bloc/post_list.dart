@@ -20,6 +20,7 @@ class _PostsListState extends State<PostsList> {
     _scrollController.addListener(() => _onScroll());
     Provider.of<DrawerViewAbstractProvider>(context, listen: false)
         .addListener(() {
+          
       print("ViewAbstractProvider CHANGED");
       context
           .read<PostBloc>()

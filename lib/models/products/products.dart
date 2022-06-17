@@ -16,6 +16,7 @@ class Product extends ViewAbstract<Product> {
   String? thisIsATest;
 
   Size? sizes;
+  String? date;
 
   String? comments;
   String? barcode;
@@ -25,7 +26,6 @@ class Product extends ViewAbstract<Product> {
   double? cut_request_quantity;
 
   Product() : super();
-
 
   @override
   Text getSubtitleHeaderText(BuildContext context) {
@@ -78,6 +78,7 @@ class Product extends ViewAbstract<Product> {
     return [
       "iD",
       "sizes",
+      "date",
       "products_types",
       "comments",
       "barcode",
@@ -92,17 +93,31 @@ class Product extends ViewAbstract<Product> {
     return Icons.account_balance_wallet_sharp;
   }
 
-  
   @override
   IconData getFieldIconData(String label) {
-  switch (label) {
+    switch (label) {
       case "id":
         return Icons.account_balance_wallet_sharp;
       case "sizes":
         return Icons.sanitizer;
       case "comments":
         return Icons.comment;
+      case "date":
+        return Icons.date_range;
     }
     return Icons.account_balance_wallet_sharp;
   }
+
+  @override
+  Map<String, TextInputType?> getMap() => {
+        "id": TextInputType.number,
+        "sizes": TextInputType.number,
+        "date": TextInputType.datetime,
+        "products_types": TextInputType.number,
+        "comments": TextInputType.multiline,
+        "barcode": TextInputType.text,
+        "products_count": TextInputType.number,
+        "pending_reservation_invoice": TextInputType.phone,
+        "cut_request_quantity": TextInputType.number,
+      };
 }
