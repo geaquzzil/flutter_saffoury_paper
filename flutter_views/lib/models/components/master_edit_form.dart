@@ -31,7 +31,6 @@ class _MasterEditFormState extends State<MasterEditForm> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: FormBuilder(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                
                 onChanged: () => print("form isChanging"),
                 key: _formKey,
                 child: Column(
@@ -40,16 +39,71 @@ class _MasterEditFormState extends State<MasterEditForm> {
                     children: <Widget>[
                       const SizedBox(height: 24.0),
                       ...fields.map((e) => buildWidget(e)).toList(),
+                      ElevatedButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          final validationSuccess =
+                              _formKey.currentState!.validate();
+                          if (validationSuccess) {
+                            _formKey.currentState!.save();
+                            final formData = _formKey.currentState?.value;
+
+                            print(formData);
+                            // widget.parent.setFieldValue(
+                            //     _formKey.currentState!.value);
+                            // Provider.of<ActionViewAbstractProvider>(
+                            //     context,
+                            //     listen: false)
+                            //     .save();
+                            // Navigator.pop(context);
+
+                          }
+                        },
+                        child: Text('Subment'),
+                      )
                     ]))));
   }
 
   Widget buildWidget(String field) {
     dynamic fieldValue = widget.parent.getFieldValue(field);
-
     if (fieldValue is ViewAbstract) {
       return SubViewAbstractEditForm(parent: widget.parent, field: field);
     } else {
-      return SubEditTextField(parent: widget.parent, field: field);
+      return getFormText(field);
     }
+  }
+
+  Widget getFormText(String field) {
+    return Column(
+      children: [
+        FormBuilderTextField(
+            valueTransformer: (value) {
+              return value?.trim();
+            },
+            name: field,
+            initialValue: widget.parent.getFieldValue(field),
+            maxLength: widget.parent.getTextInputMaxLength(field),
+            textCapitalization: widget.parent.getTextInputCapitalization(field),
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              filled: true,
+              icon: widget.parent.getTextInputIcon(field),
+              hintText: widget.parent.getTextInputHint(context, field),
+              labelText: widget.parent.getTextInputLabel(context, field),
+              prefixText: widget.parent.getTextInputPrefix(context, field),
+            ),
+            keyboardType: widget.parent.getTextInputType(field),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            //TODO enabled: widget.parent.getTextInputIsEnabled(widget.field),
+            validator: (String? value) {
+              return widget.parent.getTextInputValidator(context, field, value);
+            },
+            onSaved: (String? value) {
+              print('onSave=   $value');
+            },
+            inputFormatters: widget.parent.getTextInputFormatter(field)),
+        const SizedBox(height: 24.0)
+      ],
+    );
   }
 }
