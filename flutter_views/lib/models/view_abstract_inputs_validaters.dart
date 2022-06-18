@@ -69,17 +69,38 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
+  int? getTextInputValidatorMaxValue(String field) {
+    return null;
+  }
+
+  int? getTextInputValidatorMinValue(String field) {
+    return null;
+  }
+
   String? getTextInputValidator(
       BuildContext context, String field, String? value) {
+    String fieldLabel = getFieldLabel(field, context);
     if (isFieldRequired(field)) {
       if (value?.isEmpty ?? false) {
-        return getFieldLabel(field, context) + " is required";
+        return fieldLabel + " is required";
       }
     }
-    // final RegExp nameExp = RegExp(r'^[A-Za-z ]+$');
-    // if (!nameExp.hasMatch(value!)) {
-    //   return 'Please enter only alphabetical characters.';
-    // }
+    if (getTextInputValidatorMaxValue(field) != null) {
+      if (value != null &&
+          int.parse(value) > getTextInputValidatorMaxValue(field)!) {
+        return fieldLabel +
+            " must be less than or equal to " +
+            getTextInputValidatorMaxValue(field).toString();
+      }
+    }
+    if (getTextInputValidatorMinValue(field) != null) {
+      if (value != null &&
+          int.parse(value) < getTextInputValidatorMinValue(field)!) {
+        return fieldLabel +
+            " must be greater than or equal to " +
+            getTextInputValidatorMinValue(field).toString();
+      }
+    }
     return null;
   }
 }

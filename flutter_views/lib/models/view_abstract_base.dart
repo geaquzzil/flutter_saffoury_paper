@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:reflectable/mirrors.dart';
 
 import 'view_abstract_api.dart';
@@ -58,7 +60,10 @@ abstract class ViewAbstractBase<T> {
   }
 
   Widget getCardLeadingEditCard(BuildContext context) {
-    return Icon(getIconData());
+    return Icon(getIconData(),
+        color: context.watch<ErrorFieldsProvider>().errorFieldsCount > 0
+            ? Colors.red
+            : Colors.black54);
   }
 
   Widget getCardLeading(BuildContext context) {

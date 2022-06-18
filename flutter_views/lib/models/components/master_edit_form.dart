@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/components/view_abstract_master_e
 import 'package:flutter_view_controller/models/components/sub_text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
 import 'package:provider/provider.dart';
 
 class MasterEditForm extends StatefulWidget {
@@ -24,6 +25,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
   @override
   void initState() {
     super.initState();
+    context.read<ErrorFieldsProvider>().change(_formValidationManager);
   }
 
   @override
@@ -35,7 +37,18 @@ class _MasterEditFormState extends State<MasterEditForm> {
   void showMaterialBanner() => ScaffoldMessenger.of(context).showMaterialBanner(
         MaterialBanner(
           leading: Icon(Icons.error),
-          content: Text(_formValidationManager.erroredFields.toString()),
+          content: Expanded(
+            child: ListView.builder(
+              itemCount: _formValidationManager.erroredFields.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () => _formValidationManager
+                    .erroredFields[index].focusNode
+                    .requestFocus(),
+                child: Text(_formValidationManager.erroredFields[index]
+                    .getErrorMessage(context)!),
+              ),
+            ),
+          ),
           actions: <Widget>[
             FlatButton(
               child: Text('DISMISS'),
@@ -56,7 +69,11 @@ class _MasterEditFormState extends State<MasterEditForm> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: FormBuilder(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: () => print("form isChanging"),
+                onChanged: () => {
+                      context
+                          .read<ErrorFieldsProvider>()
+                          .change(_formValidationManager)
+                    },
                 key: _formKey,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,9 +118,22 @@ class _MasterEditFormState extends State<MasterEditForm> {
   Widget buildViewAbstractMasterWidget(
       ViewAbstract currentViewAbstract, String field) {
     List<String> fields = currentViewAbstract.getFields();
+
     return Column(
       children: [
         ExpansionTile(
+          collapsedIconColor: context
+                  .watch<ErrorFieldsProvider>()
+                  .formValidationManager
+                  .hasError(currentViewAbstract)
+              ? Colors.red
+              : Colors.black54,
+          collapsedTextColor: context
+                  .watch<ErrorFieldsProvider>()
+                  .formValidationManager
+                  .hasError(currentViewAbstract)
+              ? Colors.red
+              : Colors.black54,
           childrenPadding: const EdgeInsets.all(30),
           subtitle: currentViewAbstract.getSubtitleHeaderText(context),
           title: TitleText(
@@ -187,10 +217,10 @@ class _MasterEditFormState extends State<MasterEditForm> {
             keyboardType: viewAbstract.getTextInputType(field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-            focusNode: _formValidationManager
-                .getFocusNodeForField(viewAbstract.getTag(field)),
-            validator: _formValidationManager
-                .wrapValidator(viewAbstract.getTag(field), (value) {
+            focusNode: _formValidationManager.getFocusNodeForField(
+                viewAbstract.getTag(field), viewAbstract, field),
+            validator: _formValidationManager.wrapValidator(
+                viewAbstract.getTag(field), viewAbstract, field, (value) {
               return viewAbstract.getTextInputValidator(context, field, value);
             }),
             onSaved: (String? value) {
