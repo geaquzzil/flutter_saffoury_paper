@@ -76,6 +76,38 @@ abstract class ViewAbstractBase<T> {
         child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
   }
 
+  DismissDirection getDismissibleDirection() {
+    return DismissDirection.horizontal;
+  }
+
+  void onCardDismissedView(BuildContext context, DismissDirection direction) {
+    print("onDismissed {$this} => direction: $direction");
+  }
+
+  Widget getDismissibleSecondaryBackground(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      alignment: Alignment.centerRight,
+      color: Colors.green,
+      child: const Icon(
+        Icons.add_shopping_cart,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget getDismissibleBackground(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      alignment: Alignment.centerLeft,
+      color: Colors.red,
+      child: const Icon(
+        Icons.delete_outlined,
+        color: Colors.white,
+      ),
+    );
+  }
+
   Widget getCardLeadingImage(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: getImageUrl(context)!,

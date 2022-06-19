@@ -13,9 +13,9 @@ class ListProviderWidget extends StatefulWidget {
 
 class _ListProviderWidgetState extends State<ListProviderWidget> {
   final _scrollController = ScrollController();
-  var taskItemsProvider;
   int counter = 0;
   // late DynamicList listClass;
+
   @override
   void initState() {
     super.initState();
@@ -27,22 +27,39 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
       //     .read<PostBloc>()
       //     .clearList(context.read<DrawerViewAbstractProvider>().getObject);
     });
-    taskItemsProvider = Provider.of<ListProvider>(context, listen: false);
+    listProvider
+        .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
     // listClass = DynamicList(taskItems.list);
     //    = Provider.of<ViewAbstractProvider>(context, listen = false);
     //object = context.watch<ViewAbstractProvider>().getObject;
   }
 
+  final ListProvider listProvider = ListProvider();
+  Widget _listItems(List<ViewAbstract> data) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 80,
+      child: ListView.builder(
+        shrinkWrap: true,
+        controller: _scrollController,
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          return data[index].getCardView(context);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ListProvider>(builder: (context, provider, listTile) {
-      return Expanded(
-        child: ListView.builder(
-          itemCount: provider.getCount,
-          itemBuilder: buildList,
-        ),
-      );
-    });
+    return ChangeNotifierProvider.value(
+      value: listProvider,
+      child: Consumer<ListProvider>(builder: (context, provider, listTile) {
+        if (provider.getCount == 0) {
+          return Center(child: Icon(Icons.search));
+        }
+        return _listItems(listProvider.getObjects);
+      }),
+    );
   }
 
   @override
@@ -54,9 +71,14 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
   }
 
   void _onScroll() {
+    print(" IS _onScroll $_isBottom");
     if (_isBottom) {
-      taskItemsProvider
-          .callList(context.read<DrawerViewAbstractProvider>().getObject);
+      print(" IS BOTTOM $_isBottom");
+      listProvider
+          .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
+      // context
+      //     .read<ListProvider>()
+      //     .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
     }
   }
 
@@ -69,19 +91,23 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
 
   Widget buildList(BuildContext context, int index) {
     counter++;
-    return Dismissible(
-        key: Key(counter.toString()),
-        direction: DismissDirection.startToEnd,
-        onDismissed: (direction) {
-          taskItemsProvider.deleteItem(index);
-        },
-        child: Container(
-          margin: EdgeInsets.all(4),
-          decoration: BoxDecoration(
-              border: Border(left: BorderSide(color: Colors.blue, width: 2)),
-              borderRadius: BorderRadius.circular(10)),
-          child: context.read<ListProvider>().objects[index].getCardView(context)
-        ));
+    return context.read<ListProvider>().objects[index].getCardView(context);
+
+    // Dismissible(
+    //     key: Key(counter.toString()),
+    //     direction: DismissDirection.startToEnd,
+    //     onDismissed: (direction) {
+    //       taskItemsProvider.deleteItem(index);
+    //     },
+    //     child: Container(
+    //         margin: EdgeInsets.all(4),
+    //         decoration: BoxDecoration(
+    //             border: Border(left: BorderSide(color: Colors.blue, width: 2)),
+    //             borderRadius: BorderRadius.circular(10)),
+    //         child: context
+    //             .read<ListProvider>()
+    //             .objects[index]
+    //             .getCardView(context)));
   }
 }
 

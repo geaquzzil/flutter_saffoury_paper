@@ -36,7 +36,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         index: DrawerIndex.Help,
         labelName: 'Help',
         isAssetsImage: true,
-        imageName: 'assets/images/supportIcon.png',
+        // imageName: 'assets/images/supportIcon.png',
       ),
       DrawerList(
         index: DrawerIndex.FeedBack,
@@ -105,10 +105,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               ],
                             ),
                             child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/images/userImage.png'),
-                            ),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(60.0)),
+                                child: Icon(Icons.abc)),
                           ),
                         ),
                       );

@@ -20,7 +20,6 @@ class _PostsListState extends State<PostsList> {
     _scrollController.addListener(() => _onScroll());
     Provider.of<DrawerViewAbstractProvider>(context, listen: false)
         .addListener(() {
-          
       print("ViewAbstractProvider CHANGED");
       context
           .read<PostBloc>()
@@ -81,6 +80,7 @@ class _PostsListState extends State<PostsList> {
   }
 
   void _onScroll() {
+    print(" IS _onScroll $_isBottom");
     if (_isBottom) context.read<PostBloc>().add(PostFetched());
   }
 
