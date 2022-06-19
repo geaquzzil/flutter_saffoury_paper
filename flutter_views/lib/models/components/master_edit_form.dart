@@ -64,8 +64,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
   Widget build(BuildContext context) {
     List<String> fields = widget.parent.getFields();
 
-    return Scaffold(
-        body: SingleChildScrollView(
+    return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: FormBuilder(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -112,7 +111,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
                         },
                         child: Text('Subment'),
                       )
-                    ]))));
+                    ])));
   }
 
   Widget buildViewAbstractMasterWidget(

@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 import 'package:provider/provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
@@ -82,8 +83,8 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MasterEditForm(
-            parent: this as ViewAbstract,
+          builder: (context) => EditDetailsPage(
+            object: this as ViewAbstract,
           ),
         ),
       );

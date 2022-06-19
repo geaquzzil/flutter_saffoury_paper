@@ -1,27 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/main_body.dart';
 import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
-abstract class BaseActionPage<T extends ViewAbstract> extends StatelessWidget {
+abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
+  Widget? getBottomNavigationBar(BuildContext context);
+
+  Widget? getBodyActionView(BuildContext context);
+
+  List<Widget>? getAppBarActionsView(BuildContext context);
   T object;
   BaseActionPage({Key? key, required this.object}) : super(key: key);
 
-  Widget? getBottomNavigationBar(BuildContext context);
-  Widget? getBodyActionView(BuildContext context);
-  List<Widget>? getAppBarActionsView(BuildContext context);
+  @override
+  State<BaseActionPage> createState() => _BaseActionPageState();
+}
 
+class _BaseActionPageState<T extends ViewAbstract>
+    extends State<BaseActionPage<T>> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  List<Tab> myTabs = <Tab>[
+    Tab(text: 'LEFT'),
+    Tab(text: 'RIGHT'),
+  ];
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: myTabs.length);
+  }
   Widget getBody(BuildContext context) {
-    return CustomScrollView(slivers: [
+    return Scaffold(
+        body: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverAppBar(
+                      floating: true,
+                      expandedHeight: 200.0,
+                      snap: true,
+                      title: widget.object.getHeaderText(context),
+                      centerTitle: true,
+                      forceElevated: innerBoxIsScrolled,
+                      flexibleSpace: FlexibleSpaceBar(
+                          title: Text(widget.object.getHeaderTextOnly(context)),
+                          background: Hero(
+                              tag: widget.object,
+                              child:
+                                  widget.object.getCardLeadingImage(context))),
+                      actions: getAppBarActionsView(context),
+                      bottom: getTabBar(context)),
+                ],
+            body: getBodyActionView(context)!));
+
+    CustomScrollView(slivers: [
       SliverAppBar(
           pinned: true,
           snap: true,
           floating: true,
           expandedHeight: 200.0,
           flexibleSpace: FlexibleSpaceBar(
-              title: Text(object.getHeaderTextOnly(context)),
+              title: Text(widget.object.getHeaderTextOnly(context)),
               background: Hero(
-                  tag: object, child: object.getCardLeadingImage(context))),
+                  tag: widget.object,
+                  child: widget.object.getCardLeadingImage(context))),
           actions: getAppBarActionsView(context)),
       const SliverToBoxAdapter(
         child: SizedBox(
@@ -45,7 +86,7 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatelessWidget {
       //     childCount: 20,
       //   ),
       // ),
-      getBodyActionView(context)!
+      // getBodyActionView(context)!
     ]);
   }
 
@@ -76,6 +117,20 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatelessWidget {
   }
 
   List<String> getFields() {
-    return object.getFields();
+    return widget.object.getFields();
+  }
+
+  TabBar getTabBar(BuildContext context) {
+    return TabBar(tabs: [
+      Tab(
+        text: 'Tab 1',
+      ),
+      Tab(
+        text: 'Tab 2',
+      ),
+      Tab(
+        text: 'Tab 3',
+      ),
+    ]);
   }
 }

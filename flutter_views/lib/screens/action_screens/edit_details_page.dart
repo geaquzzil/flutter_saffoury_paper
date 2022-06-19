@@ -21,6 +21,6 @@ class EditDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   @override
   Widget? getBottomNavigationBar(BuildContext context) {
     // TODO: implement getBottomNavigationBar
-    throw UnimplementedError();
+    return null;
   }
 }
