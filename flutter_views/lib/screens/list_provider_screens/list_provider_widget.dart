@@ -23,9 +23,9 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
     Provider.of<DrawerViewAbstractProvider>(context, listen: false)
         .addListener(() {
       print("ViewAbstractProvider CHANGED");
-      context
-          .read<PostBloc>()
-          .clearList(context.read<DrawerViewAbstractProvider>().getObject);
+      // context
+      //     .read<PostBloc>()
+      //     .clearList(context.read<DrawerViewAbstractProvider>().getObject);
     });
     taskItemsProvider = Provider.of<ListProvider>(context, listen: false);
     // listClass = DynamicList(taskItems.list);
@@ -54,8 +54,9 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
   }
 
   void _onScroll() {
-    if (_isBottom){
-       context.read<ListProvider>().callList(viewAbstract)
+    if (_isBottom) {
+      taskItemsProvider
+          .callList(context.read<DrawerViewAbstractProvider>().getObject);
     }
   }
 
@@ -72,20 +73,14 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
         key: Key(counter.toString()),
         direction: DismissDirection.startToEnd,
         onDismissed: (direction) {
-          taskItems.deleteItem(index);
+          taskItemsProvider.deleteItem(index);
         },
         child: Container(
           margin: EdgeInsets.all(4),
           decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blue,
-                width: 2,
-              ),
+              border: Border(left: BorderSide(color: Colors.blue, width: 2)),
               borderRadius: BorderRadius.circular(10)),
-          child: ListTile(
-            title: Text(listClass.list[index].toString()),
-            trailing: Icon(Icons.keyboard_arrow_right),
-          ),
+          child: context.read<ListProvider>().objects[index].getCardView(context)
         ));
   }
 }
