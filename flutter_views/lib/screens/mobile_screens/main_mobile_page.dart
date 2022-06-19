@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             _search(),
             _categoryWidget(),
-            ListProviderWidget(),
+            Expanded(child: ListProviderWidget()),
             // PostsPage(
             //     viewAbstract:
             //         context.watch<DrawerViewAbstractProvider>().getObject),
