@@ -145,6 +145,15 @@ abstract class ViewAbstractBase<T> {
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 
+  List<Tab> getTabs(BuildContext context) {
+    return [
+      Tab(
+        text: "OverView",
+        icon: getIcon(),
+      ),
+    ];
+  }
+
   InstanceMirror getInstanceMirror() {
     return reflector.reflect(this);
   }

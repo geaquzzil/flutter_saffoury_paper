@@ -10,7 +10,7 @@ class MainBody extends StatelessWidget {
       })
       : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final EdgeInsets padding;
 
   @override

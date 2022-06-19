@@ -12,6 +12,9 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
   List<Widget>? getAppBarActionsView(BuildContext context);
   T object;
   BaseActionPage({Key? key, required this.object}) : super(key: key);
+  List<String> getFields() {
+    return object.getFields();
+  }
 
   @override
   State<BaseActionPage> createState() => _BaseActionPageState();
@@ -20,82 +23,67 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
 class _BaseActionPageState<T extends ViewAbstract>
     extends State<BaseActionPage<T>> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<Tab> myTabs = <Tab>[
-    Tab(text: 'LEFT'),
-    Tab(text: 'RIGHT'),
-  ];
+  List<Tab> tabs = <Tab>[];
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: myTabs.length);
+    tabs.addAll(widget.object.getTabs(context));
+    _tabController = TabController(vsync: this, length: tabs.length);
   }
-  Widget getBody(BuildContext context) {
-    return Scaffold(
-        body: NestedScrollView(
-            floatHeaderSlivers: true,
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverAppBar(
-                      floating: true,
-                      expandedHeight: 200.0,
-                      snap: true,
-                      title: widget.object.getHeaderText(context),
-                      centerTitle: true,
-                      forceElevated: innerBoxIsScrolled,
-                      flexibleSpace: FlexibleSpaceBar(
-                          title: Text(widget.object.getHeaderTextOnly(context)),
-                          background: Hero(
-                              tag: widget.object,
-                              child:
-                                  widget.object.getCardLeadingImage(context))),
-                      actions: getAppBarActionsView(context),
-                      bottom: getTabBar(context)),
-                ],
-            body: getBodyActionView(context)!));
 
-    CustomScrollView(slivers: [
-      SliverAppBar(
-          pinned: true,
-          snap: true,
-          floating: true,
-          expandedHeight: 200.0,
-          flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.object.getHeaderTextOnly(context)),
-              background: Hero(
-                  tag: widget.object,
-                  child: widget.object.getCardLeadingImage(context))),
-          actions: getAppBarActionsView(context)),
-      const SliverToBoxAdapter(
-        child: SizedBox(
-          height: 20,
-          child: Center(
-            child: Text('Scroll to see the SliverAppBar in effect.'),
-          ),
-        ),
-      ),
-      // SliverList(
-      //   delegate: SliverChildBuilderDelegate(
-      //     (BuildContext context, int index) {
-      //       return Container(
-      //         color: index.isOdd ? Colors.white : Colors.black12,
-      //         height: 100.0,
-      //         child: Center(
-      //           child: Text('$index', textScaleFactor: 5),
-      //         ),
-      //       );
-      //     },
-      //     childCount: 20,
-      //   ),
-      // ),
-      // getBodyActionView(context)!
-    ]);
+  SliverAppBar getSilverAppBar(BuildContext context, bool innerBoxIsScrolled) {
+    return SliverAppBar(
+        expandedHeight: 200.0,
+        snap: true,
+        title: widget.object.getHeaderText(context),
+        centerTitle: true,
+        forceElevated: innerBoxIsScrolled,
+        flexibleSpace: getSilverAppBarBackground(context),
+        actions: widget.getAppBarActionsView(context),
+        bottom: TabBar(
+          tabs: tabs,
+          controller: _tabController,
+        ));
+  }
+
+  FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
+    return FlexibleSpaceBar(
+        title: Text(widget.object.getHeaderTextOnly(context)),
+        background: Hero(
+            tag: widget.object,
+            child: widget.object.getCardLeadingImage(context)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBody: true,
-        bottomNavigationBar: getBottomNavigationBar(context),
-        body: getBody(context));
+        bottomNavigationBar: widget.getBottomNavigationBar(context),
+        body: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            getSilverAppBar(context, innerBoxIsScrolled),
+          ],
+          body: TabBarView(
+            controller: _tabController,
+            children: tabs.map((Tab tab) {
+              final String label = tab.text!.toLowerCase();
+              return MainBody(child: widget.getBodyActionView(context));
+              // final String label = tab.text!.toLowerCase();
+              // return Center(
+              //   child: Text(
+              //     'This is the $label tab',
+              //     style: const TextStyle(fontSize: 36),
+              //   ),
+              // );
+            }).toList(),
+          ),
+        ));
   }
 
   Row getTitle(BuildContext context) {
@@ -114,23 +102,5 @@ class _BaseActionPageState<T extends ViewAbstract>
         ),
       ],
     );
-  }
-
-  List<String> getFields() {
-    return widget.object.getFields();
-  }
-
-  TabBar getTabBar(BuildContext context) {
-    return TabBar(tabs: [
-      Tab(
-        text: 'Tab 1',
-      ),
-      Tab(
-        text: 'Tab 2',
-      ),
-      Tab(
-        text: 'Tab 3',
-      ),
-    ]);
   }
 }
