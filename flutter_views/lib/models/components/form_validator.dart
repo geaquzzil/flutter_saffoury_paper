@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class FormValidationManager {
@@ -22,10 +23,11 @@ class FormValidationManager {
   }
 
   bool hasError(ViewAbstract viewAbstract) {
-    return _fieldStates.entries
-        .firstWhere((element) => element.value.viewAbstract == viewAbstract)
-        .value
-        .hasError;
+    FormFieldValidationState? res = _fieldStates.entries
+        .firstWhereOrNull(
+            (element) => element.value.viewAbstract == viewAbstract)
+        ?.value;
+    return res?.hasError ?? false;
   }
 
   List<FormFieldValidationState> get erroredFields => _fieldStates.entries

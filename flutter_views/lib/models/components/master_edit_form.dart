@@ -127,13 +127,25 @@ class _MasterEditFormState extends State<MasterEditForm> {
                   .formValidationManager
                   .hasError(currentViewAbstract)
               ? Colors.red
-              : Colors.black54,
+              : null,
           collapsedTextColor: context
                   .watch<ErrorFieldsProvider>()
                   .formValidationManager
                   .hasError(currentViewAbstract)
               ? Colors.red
-              : Colors.black54,
+              : null,
+          iconColor: context
+                  .watch<ErrorFieldsProvider>()
+                  .formValidationManager
+                  .hasError(currentViewAbstract)
+              ? Colors.red
+              : null,
+          textColor: context
+                  .watch<ErrorFieldsProvider>()
+                  .formValidationManager
+                  .hasError(currentViewAbstract)
+              ? Colors.red
+              : null,
           childrenPadding: const EdgeInsets.all(30),
           subtitle: currentViewAbstract.getSubtitleHeaderText(context),
           title: TitleText(
