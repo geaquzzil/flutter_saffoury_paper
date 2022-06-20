@@ -45,6 +45,10 @@ dependencies:
   equatable: ^2.0.3
   flutter_zoom_drawer: ^3.0.2
   easy_localization: ^3.0.1
+  sliding_up_panel: ^2.0.0+1
+  latlng: ^0.1.0
+  flutter_map: ^1.1.0
+  latlong2: ^0.8.1
 
 dev_dependencies:
   flutter_test:
