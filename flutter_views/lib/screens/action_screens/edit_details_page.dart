@@ -9,7 +9,6 @@ class EditDetailsPage<T extends ViewAbstract> extends BaseActionPage {
 
   @override
   List<Widget>? getAppBarActionsView(BuildContext context) {
-    // TODO: implement getAppBarActionsView
     return object.getAppBarActionsEdit(context);
   }
 

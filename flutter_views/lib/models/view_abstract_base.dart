@@ -141,7 +141,8 @@ abstract class ViewAbstractBase<T> {
     return "null";
   }
 
-  List<Widget>? getAppBarActionsEdit(BuildContext context) => null;
+  List<Widget>? getAppBarActionsEdit(BuildContext context) =>
+      [IconButton(icon: const Icon(Icons.save_outlined), onPressed: () {})];
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 

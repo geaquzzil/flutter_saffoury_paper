@@ -68,8 +68,8 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         restorationScopeId: 'root',
         theme: ThemeData(
-            // useMaterial3: true,
-            ),
+          useMaterial3: true,
+        ),
         //  home: HomeMobilePage(drawerItems: drawerItems));
         home: HomeMobilePage(drawerItems: drawerItems));
     //home: NavigationHomeScreen());

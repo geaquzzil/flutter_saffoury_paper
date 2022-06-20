@@ -39,11 +39,12 @@ class _BaseActionPageState<T extends ViewAbstract>
 
   SliverAppBar getSilverAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
+        floating: true,
         expandedHeight: 200.0,
         snap: true,
         title: widget.object.getHeaderText(context),
         centerTitle: true,
-        forceElevated: innerBoxIsScrolled,
+        // forceElevated: innerBoxIsScrolled,
         flexibleSpace: getSilverAppBarBackground(context),
         actions: widget.getAppBarActionsView(context),
         bottom: TabBar(
