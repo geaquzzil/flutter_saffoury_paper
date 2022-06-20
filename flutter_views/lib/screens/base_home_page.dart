@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/app_theme.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
+import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
+import 'package:flutter_view_controller/screens/web/home.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -23,38 +28,34 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //   systemNavigationBarIconBrightness: Brightness.dark,
     // ));
     // if (kIsWeb) {
-    //   return MaterialApp(
-    //     theme: ThemeData(
-
-    //       colorSchemeSeed: kPrimaryColor, useMaterial3: true
-
-    //     ),
-    //     title: "Flutter Portfolio",
-    //     debugShowCheckedModeBanner: false,
-    //     themeMode: ThemeMode.system,
-    //     darkTheme: Theme.of(context).copyWith(
-    //       platform: TargetPlatform.android,
-    //       scaffoldBackgroundColor: kBackgroundColor,
-    //       primaryColor: kPrimaryColor,
-    //       canvasColor: kBackgroundColor,
-    //       textTheme: GoogleFonts.robotoTextTheme(),
-    //     ),
-    //     builder: (context, widget) => ResponsiveWrapper.builder(
-    //       ClampingScrollWrapper.builder(context, widget),
-    //       defaultScale: true,
-    //       breakpoints: [
-    //         const ResponsiveBreakpoint.resize(450, name: MOBILE),
-    //         const ResponsiveBreakpoint.resize(800, name: TABLET),
-    //         const ResponsiveBreakpoint.resize(1000, name: TABLET),
-    //         const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-    //         const ResponsiveBreakpoint.resize(2460, name: "4K"),
-    //       ],
-    //       background: Container(
-    //         color: kBackgroundColor,
-    //       ),
-    //     ),
-    //     home: const HomeWebPage(),
-    //   );
+    return MaterialApp(
+      theme: ThemeData(colorSchemeSeed: kPrimaryColor, useMaterial3: true),
+      title: "Flutter Portfolio",
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      darkTheme: Theme.of(context).copyWith(
+        platform: TargetPlatform.android,
+        scaffoldBackgroundColor: kBackgroundColor,
+        primaryColor: kPrimaryColor,
+        canvasColor: kBackgroundColor,
+        textTheme: GoogleFonts.robotoTextTheme(),
+      ),
+      builder: (context, widget) => ResponsiveWrapper.builder(
+        ClampingScrollWrapper.builder(context, widget),
+        defaultScale: true,
+        breakpoints: [
+          const ResponsiveBreakpoint.resize(450, name: MOBILE),
+          const ResponsiveBreakpoint.resize(800, name: TABLET),
+          const ResponsiveBreakpoint.resize(1000, name: TABLET),
+          const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+          const ResponsiveBreakpoint.resize(2460, name: "4K"),
+        ],
+        background: Container(
+          color: kBackgroundColor,
+        ),
+      ),
+      home: const HomeWebPage(),
+    );
     // }
     Widget widget = MaterialApp(
         supportedLocales: L10n.all,
@@ -70,8 +71,9 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
         theme: ThemeData(
             // useMaterial3: true,
             ),
-        //  home: HomeMobilePage(drawerItems: drawerItems));
         home: HomeMobilePage(drawerItems: drawerItems));
+    // home: ShoppingCartPage());
+    // home: HomeMobilePage(drawerItems: drawerItems));
     //home: NavigationHomeScreen());
     return widget;
 

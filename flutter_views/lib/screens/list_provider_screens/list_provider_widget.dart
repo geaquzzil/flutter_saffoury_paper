@@ -13,8 +13,7 @@ class ListProviderWidget extends StatefulWidget {
 
 class _ListProviderWidgetState extends State<ListProviderWidget> {
   final _scrollController = ScrollController();
-  int counter = 0;
-  // late DynamicList listClass;
+   final ListProvider listProvider = ListProvider();
 
   @override
   void initState() {
@@ -34,7 +33,7 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
     //object = context.watch<ViewAbstractProvider>().getObject;
   }
 
-  final ListProvider listProvider = ListProvider();
+ 
   Widget _listItems(List<ViewAbstract> data) {
     return SizedBox(
       height: MediaQuery.of(context).size.height - 80,
@@ -88,32 +87,4 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
   }
-
-  Widget buildList(BuildContext context, int index) {
-    counter++;
-    return context.read<ListProvider>().objects[index].getCardView(context);
-
-    // Dismissible(
-    //     key: Key(counter.toString()),
-    //     direction: DismissDirection.startToEnd,
-    //     onDismissed: (direction) {
-    //       taskItemsProvider.deleteItem(index);
-    //     },
-    //     child: Container(
-    //         margin: EdgeInsets.all(4),
-    //         decoration: BoxDecoration(
-    //             border: Border(left: BorderSide(color: Colors.blue, width: 2)),
-    //             borderRadius: BorderRadius.circular(10)),
-    //         child: context
-    //             .read<ListProvider>()
-    //             .objects[index]
-    //             .getCardView(context)));
-  }
-}
-
-class DynamicList {
-  List<ViewAbstract> _list = [];
-  DynamicList(this._list);
-
-  List get list => _list;
 }
