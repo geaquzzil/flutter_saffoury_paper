@@ -69,14 +69,8 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         restorationScopeId: 'root',
         theme: ThemeData(
-<<<<<<< HEAD
-          useMaterial3: true,
-        ),
-        //  home: HomeMobilePage(drawerItems: drawerItems));
-=======
             // useMaterial3: true,
             ),
->>>>>>> c80fd2136743af0d8528eaf3129c3d6487d0324f
         home: HomeMobilePage(drawerItems: drawerItems));
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));

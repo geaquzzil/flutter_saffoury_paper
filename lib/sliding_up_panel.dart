@@ -45,8 +45,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final double _initFabHeight = 120.0;
   double _fabHeight = 0;
-  double _panelHeightOpen = 0;
-  double _panelHeightClosed = 95.0;
+  double _panelHeightOpen = 100;
+  double _panelHeightClosed = 100;
 
   @override
   void initState() {
@@ -58,7 +58,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     _panelHeightOpen = MediaQuery.of(context).size.height * .80;
-
+    return Scaffold(
+        body: Stack(
+      children: <Widget>[
+        Center(
+          child: Text("This is the Widget behind the sliding panel"),
+        ),
+        SlidingUpPanel(
+          minHeight: MediaQuery.of(context).size.height,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
+          panel: Center(
+            child: Text("This is the sliding Widget"),
+          ),
+        )
+      ],
+    ));
     return Material(
       child: Stack(
         alignment: Alignment.topCenter,
@@ -67,6 +82,7 @@ class _HomePageState extends State<HomePage> {
             maxHeight: _panelHeightOpen,
             minHeight: _panelHeightClosed,
             parallaxEnabled: true,
+            defaultPanelState: PanelState.OPEN,
             parallaxOffset: .5,
             body: _body(),
             panelBuilder: (sc) => _panel(sc),
@@ -257,7 +273,7 @@ class _HomePageState extends State<HomePage> {
               BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.15),
-              blurRadius: 8.0,
+              blurRadius: 4.0,
             )
           ]),
         ),

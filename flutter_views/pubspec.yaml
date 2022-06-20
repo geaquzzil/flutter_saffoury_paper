@@ -41,6 +41,10 @@ dependencies:
   bloc_concurrency: ^0.2.0
   flutter_form_builder: ^7.3.1
   sliding_up_panel: ^2.0.0+1
+  latlng: ^0.1.0
+  flutter_map: ^1.1.0
+  latlong2: ^0.8.1
+  hidden_drawer_menu: ^3.0.1
   
 dev_dependencies:
   # mockito: ^5.0.16
