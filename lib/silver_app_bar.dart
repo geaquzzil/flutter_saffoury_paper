@@ -1,13 +1,21 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/screens/list_provider_screens/list_provider_widget.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(providers: [
+      ChangeNotifierProvider(
+          create: (_) => DrawerViewAbstractProvider(object: Product()))
+    ], child: MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -33,23 +41,7 @@ class MyHomePage extends StatelessWidget {
               search: _Search(),
             ),
           ),
-          SliverFillRemaining(
-            hasScrollBody: true,
-            child: ListView(
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                Text('some text'),
-                Placeholder(
-                  color: Colors.red,
-                  fallbackHeight: 200,
-                ),
-                Container(
-                  color: Colors.blueGrey,
-                  height: 500,
-                )
-              ],
-            ),
-          )
+          SliverFillRemaining(hasScrollBody: true, child: ListProviderWidget())
         ],
       ),
     );
@@ -161,7 +153,7 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
           ],
         ),
         decoration: BoxDecoration(
-            color: Colors.green,
+            color: Colors.grey.shade50,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(36),
               bottomRight: Radius.circular(36),
