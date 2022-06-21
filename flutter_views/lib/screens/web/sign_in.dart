@@ -102,11 +102,11 @@ class SignIn extends BaseWebPage {
             labelStyle: const TextStyle(fontSize: 12),
             contentPadding: const EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors?.blueGrey[50]!),
+              borderSide: BorderSide(color: Colors.blueGrey.shade400),
               borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey[50]!),
+              borderSide: BorderSide(color: Colors.blueGrey.shade500),
               borderRadius: BorderRadius.circular(15),
             ),
           ),

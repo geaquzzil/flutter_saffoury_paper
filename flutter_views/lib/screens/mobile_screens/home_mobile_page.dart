@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_view_controller/app_theme.dart';
 import 'package:flutter_view_controller/components/cart_button.dart';
+import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/light_color.dart';
@@ -204,45 +205,57 @@ class _HomeMobilePage extends State<HomeMobilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          IconButton(
-              onPressed: () {
+          RoundedIconButton(
+              icon: Icons.sort,
+              onTap: () {
                 print("TAPED");
+                Scaffold.of(buildContext).openDrawer();
                 if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
                   scaffoldKey.currentState?.openDrawer();
                 } else {
                   scaffoldKey.currentState?.openEndDrawer();
                 }
-              },
-              icon: RotatedBox(
-                quarterTurns: 4,
-                child: _icon(Icons.sort, color: Colors.red),
-              )),
-          GestureDetector(
-            onTap: () {
-              print("TAPED");
-              if (scaffoldKey.currentState?.isEndDrawerOpen == false) {
-                scaffoldKey.currentState?.openDrawer();
-              } else {
-                scaffoldKey.currentState?.openEndDrawer();
-              }
-            },
-            child: const Icon(Icons.abc),
-          ),
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(13)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                boxShadow: const <BoxShadow>[
-                  BoxShadow(
-                      color: Color(0xfff8f8f8),
-                      blurRadius: 10,
-                      spreadRadius: 10),
-                ],
-              ),
-              child: _icon(Icons.sort, color: Colors.black54),
-            ),
-          ).ripple(() {}, borderRadius: const BorderRadius.all(Radius.circular(13)))
+              }),
+          // IconButton(
+          //     onPressed: () {
+          //       print("TAPED");
+          //       if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
+          //         scaffoldKey.currentState?.openDrawer();
+          //       } else {
+          //         scaffoldKey.currentState?.openEndDrawer();
+          //       }
+          //     },
+          //     icon: RotatedBox(
+          //       quarterTurns: 4,
+          //       child: _icon(Icons.sort, color: Colors.red),
+          //     )),
+          // GestureDetector(
+          //   onTap: () {
+          //     print("TAPED");
+          //     if (scaffoldKey.currentState?.isEndDrawerOpen == false) {
+          //       scaffoldKey.currentState?.openDrawer();
+          //     } else {
+          //       scaffoldKey.currentState?.openEndDrawer();
+          //     }
+          //   },
+          //   child: const Icon(Icons.abc),
+          // ),
+          // ClipRRect(
+          //   borderRadius: const BorderRadius.all(Radius.circular(13)),
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: Theme.of(context).backgroundColor,
+          //       boxShadow: const <BoxShadow>[
+          //         BoxShadow(
+          //             color: Color(0xfff8f8f8),
+          //             blurRadius: 10,
+          //             spreadRadius: 10),
+          //       ],
+          //     ),
+          //     child: _icon(Icons.sort, color: Colors.black54),
+          //   ),
+          // ).ripple(() {},
+          //     borderRadius: const BorderRadius.all(Radius.circular(13)))
         ],
       ),
     );
@@ -313,8 +326,8 @@ class _HomeMobilePage extends State<HomeMobilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      drawerEnableOpenDragGesture: true,
+      // key: scaffoldKey,
+      drawerEnableOpenDragGesture: false,
       bottomNavigationBar: getBottomNavigationBar(),
       drawer: ViewHelper.getDrawer(context, widget.drawerItems),
       body: SafeArea(
@@ -339,16 +352,17 @@ class _HomeMobilePage extends State<HomeMobilePage> {
                   children: <Widget>[
                     _appBar(context),
                     _title(),
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        switchInCurve: Curves.easeInToLinear,
-                        switchOutCurve: Curves.easeOutBack,
-                        child: Align(
-                            alignment: Alignment.topCenter,
-                            child: getView(context)),
-                      ),
-                    )
+                    Expanded(child: getView(context))
+                    // Expanded(
+                    //   child: AnimatedSwitcher(
+                    //     duration: const Duration(milliseconds: 300),
+                    //     switchInCurve: Curves.easeInToLinear,
+                    //     switchOutCurve: Curves.easeOutBack,
+                    //     child: Align(
+                    //         alignment: Alignment.topCenter,
+                    //         child: getView(context)),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

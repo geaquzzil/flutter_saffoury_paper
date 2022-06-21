@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            _search(),
+            // _search(),
             _categoryWidget(),
             // Expanded(child: ListProviderWidget()),
             ListProviderWidget()

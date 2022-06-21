@@ -28,34 +28,34 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
     //   systemNavigationBarIconBrightness: Brightness.dark,
     // ));
     // if (kIsWeb) {
-    return MaterialApp(
-      theme: ThemeData(colorSchemeSeed: kPrimaryColor, useMaterial3: true),
-      title: "Flutter Portfolio",
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      darkTheme: Theme.of(context).copyWith(
-        platform: TargetPlatform.android,
-        scaffoldBackgroundColor: kBackgroundColor,
-        primaryColor: kPrimaryColor,
-        canvasColor: kBackgroundColor,
-        textTheme: GoogleFonts.robotoTextTheme(),
-      ),
-      builder: (context, widget) => ResponsiveWrapper.builder(
-        ClampingScrollWrapper.builder(context, widget),
-        defaultScale: true,
-        breakpoints: [
-          const ResponsiveBreakpoint.resize(450, name: MOBILE),
-          const ResponsiveBreakpoint.resize(800, name: TABLET),
-          const ResponsiveBreakpoint.resize(1000, name: TABLET),
-          const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-          const ResponsiveBreakpoint.resize(2460, name: "4K"),
-        ],
-        background: Container(
-          color: kBackgroundColor,
-        ),
-      ),
-      home: const HomeWebPage(),
-    );
+    // return MaterialApp(
+    //   theme: ThemeData(colorSchemeSeed: kPrimaryColor, useMaterial3: true),
+    //   title: "Flutter Portfolio",
+    //   debugShowCheckedModeBanner: false,
+    //   themeMode: ThemeMode.system,
+    //   darkTheme: Theme.of(context).copyWith(
+    //     platform: TargetPlatform.android,
+    //     scaffoldBackgroundColor: kBackgroundColor,
+    //     primaryColor: kPrimaryColor,
+    //     canvasColor: kBackgroundColor,
+    //     textTheme: GoogleFonts.robotoTextTheme(),
+    //   ),
+    //   builder: (context, widget) => ResponsiveWrapper.builder(
+    //     ClampingScrollWrapper.builder(context, widget),
+    //     defaultScale: true,
+    //     breakpoints: [
+    //       const ResponsiveBreakpoint.resize(450, name: MOBILE),
+    //       const ResponsiveBreakpoint.resize(800, name: TABLET),
+    //       const ResponsiveBreakpoint.resize(1000, name: TABLET),
+    //       const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+    //       const ResponsiveBreakpoint.resize(2460, name: "4K"),
+    //     ],
+    //     background: Container(
+    //       color: kBackgroundColor,
+    //     ),
+    //   ),
+    //   home: const HomeWebPage(),
+    // );
     // }
     Widget widget = MaterialApp(
         supportedLocales: L10n.all,
@@ -69,8 +69,8 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         restorationScopeId: 'root',
         theme: ThemeData(
-            // useMaterial3: true,
-            ),
+          useMaterial3: true,
+        ),
         home: HomeMobilePage(drawerItems: drawerItems));
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));

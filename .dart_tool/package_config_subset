@@ -142,6 +142,10 @@ encrypt
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/encrypt-5.0.1/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/encrypt-5.0.1/lib/
+endless
+2.12
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/endless-1.6.1/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/endless-1.6.1/lib/
 equatable
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3/
@@ -326,6 +330,10 @@ package_config
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/package_config-2.1.0/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/package_config-2.1.0/lib/
+paginated_search_bar
+2.12
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/paginated_search_bar-1.1.2/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/paginated_search_bar-1.1.2/lib/
 palette_generator
 2.14
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/palette_generator-0.3.3+1/
@@ -442,6 +450,10 @@ rxdart
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.4/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.4/lib/
+search_page
+2.12
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/search_page-2.0.0+1/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/search_page-2.0.0+1/lib/
 secure_random
 2.1
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/secure_random-1.0.1/
@@ -518,6 +530,10 @@ stack_trace
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib/
+state_property
+2.12
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/state_property-1.1.1/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/state_property-1.1.1/lib/
 stream_channel
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/

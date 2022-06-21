@@ -13,7 +13,7 @@ class ListProviderWidget extends StatefulWidget {
 
 class _ListProviderWidgetState extends State<ListProviderWidget> {
   final _scrollController = ScrollController();
-   final ListProvider listProvider = ListProvider();
+  final ListProvider listProvider = ListProvider();
 
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
     //object = context.watch<ViewAbstractProvider>().getObject;
   }
 
- 
   Widget _listItems(List<ViewAbstract> data) {
     return SizedBox(
       height: MediaQuery.of(context).size.height - 80,
