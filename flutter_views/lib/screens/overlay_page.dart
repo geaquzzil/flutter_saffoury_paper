@@ -25,7 +25,7 @@ class _OverlayWidgetState extends State<OverlayWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _showOverlay());
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _showOverlay());
     foucsNode.addListener(() {
       if (foucsNode.hasFocus) {
         _showOverlay();
@@ -39,13 +39,24 @@ class _OverlayWidgetState extends State<OverlayWidget> {
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
         link: layerLink,
-        child: InkWell(focusNode: foucsNode, child: widget.child));
+        child: InkWell(
+            onTap: () {
+              print("show overlay ${foucsNode.hasFocus}");
+              if (entry == null)
+                _showOverlay();
+              else
+                hideOverlay();
+            },
+            focusNode: foucsNode,
+            child: widget.child));
   }
 
   void _showOverlay() {
     final overlay = Overlay.of(context)!;
 
-    entry = OverlayEntry(builder: (context) => buildOverlay());
+    entry = OverlayEntry(
+      builder: (context) => buildOverlay(),
+    );
     overlay.insert(entry!);
   }
 
@@ -57,18 +68,66 @@ class _OverlayWidgetState extends State<OverlayWidget> {
   buildOverlay() {
     final renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
+    return Positioned(
+      left: MediaQuery.of(context).size.width * 0.2,
+      top: MediaQuery.of(context).size.height * 0.3,
+      child: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Stack(
+          children: [
+            Image.asset(
+              'images/commentCloud.png',
+              colorBlendMode: BlendMode.multiply,
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.13,
+              left: MediaQuery.of(context).size.width * 0.13,
+              child: Row(
+                children: [
+                  Material(
+                    color: Colors.transparent,
+                    child: Text(
+                      'This is a button!',
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.height * 0.03,
+                          color: Colors.green),
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.18,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // When the icon is pressed the OverlayEntry
+                      // is removed from Overlay
+                      entry?.remove();
+                    },
+                    child: Icon(Icons.close,
+                        color: Colors.green,
+                        size: MediaQuery.of(context).size.height * 0.025),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    return Positioned(
+      child: widget.overlay,
+      top: size.height + 8,
+      width: MediaQuery.of(context).size.width / 2,
+    );
     return CompositedTransformFollower(
       showWhenUnlinked: false,
       offset: Offset(0, size.height + 8),
       link: layerLink,
       child: Positioned(
-        width: MediaQuery.of(context).size.width * .4,
-        child: Material(
-          elevation: 8,
-          child: widget.overlay,
-        ),
-      ),
+          right: 10,
+          // height: MediaQuery.of(context).size.height / 2,
+          // width: MediaQuery.of(context).size.width,
+          child: widget.overlay),
     );
   }
 }

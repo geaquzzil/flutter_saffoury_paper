@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/base_shared_details_view.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
 import 'package:flutter_view_controller/screens/base_shared_header.dart';
 import 'package:flutter_view_controller/screens/list_provider_screens/list_provider_widget.dart';
@@ -19,6 +20,7 @@ class BaseSharedMainPage<T extends ViewAbstract> extends StatefulWidget {
 class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
     return Scaffold(
       key: context.read<DrawerMenuController>().scaffoldKey,
       drawer: BaseSharedDrawer(drawerItems: widget.drawerItems),
@@ -38,6 +40,13 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
               flex: 5,
               child: getMainPage(),
             ),
+            if (SizeConfig.isDesktop(context))
+              Expanded(
+                flex: _size.width > 1340 ? 8 : 10,
+                child: BaseSharedDetailsView(
+                  viewAbstract: null,
+                ),
+              ),
           ],
         ),
       ),

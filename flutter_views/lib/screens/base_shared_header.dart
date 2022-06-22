@@ -113,18 +113,15 @@ class HeaderActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizeConfig.isMobile(context)
         ? const ProfileCard()
-        : Row(
-            children: [
-              ProfileCard(),
-              OverlayWidget(
-                overlay: Text("THis is a test"),
-                child: IconBadge(
-                  icon: Icon(Icons.home),
-                  itemCount: 2,
-                ),
-              ),
-            ]..addAll(actions),
-          );
+        : Row(children: [
+            ProfileCard(),
+            OverlayWidget(
+              overlay: Text("THis is a test"),
+              child: Icon(Icons.home),
+            ),
+          ]
+            // ..addAll(actions),
+            );
   }
 }
 
