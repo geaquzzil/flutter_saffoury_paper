@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/overlay_page.dart';
+import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:icon_badge/icon_badge.dart';
 import 'package:provider/provider.dart';
@@ -37,8 +39,71 @@ class BaseSharedHeader extends StatelessWidget {
 }
 
 class HeaderActions extends StatelessWidget {
+  void _insertOverlay(BuildContext context) {
+    return Overlay.of(context)?.insert(
+      OverlayEntry(builder: (context) {
+        final size = MediaQuery.of(context).size;
+        print(size.width);
+        return Positioned(
+          width: 56,
+          height: 56,
+          top: size.height - 72,
+          left: size.width - 72,
+          child: Material(
+            color: Colors.transparent,
+            child: GestureDetector(
+              onTap: () => print('ON TAP OVERLAY!'),
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.redAccent),
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  Future<void> _neverSatisfied(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Rewind and remember'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You will never be satisfied.'),
+                Text('You\’re like me. I’m never satisfied.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Regret'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   List<Widget> actions = [
-    IconBadge(onTap: () {}, icon: Icon(Icons.home), itemCount: 2,),
+    // MenuTendina(
+    //   altezza: 0,
+    //   opacita: .1,
+    //   child: Text("SDSDS"),
+    //   notifiche: IconBadge(
+    //     onTap: () {},
+    //     icon: Icon(Icons.home),
+    //     itemCount: 2,
+    //   ),
+    // ),
+
     IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
     IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
   ];
@@ -49,7 +114,16 @@ class HeaderActions extends StatelessWidget {
     return SizeConfig.isMobile(context)
         ? const ProfileCard()
         : Row(
-            children: [ProfileCard()]..addAll(actions),
+            children: [
+              ProfileCard(),
+              OverlayWidget(
+                overlay: Text("THis is a test"),
+                child: IconBadge(
+                  icon: Icon(Icons.home),
+                  itemCount: 2,
+                ),
+              ),
+            ]..addAll(actions),
           );
   }
 }
@@ -116,6 +190,68 @@ class SearchField extends StatelessWidget {
               child: Icon(Icons.account_balance)),
         ),
       ),
+    );
+  }
+}
+
+class MenuTendina extends StatefulWidget {
+  double opacita;
+  double altezza;
+  Widget child;
+  Widget notifiche;
+
+  MenuTendina(
+      {Key? key,
+      required this.child,
+      required this.notifiche,
+      required this.opacita,
+      required this.altezza})
+      : super(key: key);
+
+  @override
+  _MenuTendinaState createState() => _MenuTendinaState();
+}
+
+class _MenuTendinaState extends State<MenuTendina> {
+  double opacita = 50;
+  double altezza = 50;
+  bool mostraTendina = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        widget.child,
+        Container(
+            width: MediaQuery.of(context).size.width,
+            height:
+                (this.mostraTendina) ? MediaQuery.of(context).size.height : 0.0,
+            child: Opacity(
+                opacity: widget.opacita,
+                child: Container(
+                    color: Colors.black,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          widget.opacita = 0.0;
+                          widget.altezza = 0.0;
+                          this.mostraTendina = false;
+                        });
+                      },
+                    )))),
+        AnimatedContainer(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, -5), spreadRadius: 0.0, blurRadius: 20)
+            ],
+          ),
+          duration: Duration(milliseconds: 200),
+          width: MediaQuery.of(context).size.width,
+          height: this.altezza,
+          child: widget.notifiche,
+        )
+      ],
     );
   }
 }
