@@ -9,7 +9,9 @@ import 'package:flutter_view_controller/providers/cart_provider.dart';
 import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/list_provider.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/screens/base_home_page.dart';
+import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
+import 'package:flutter_view_controller/providers_controllers/drawer_selected_item_controler.dart';
+import 'package:flutter_view_controller/screens/base_material_app.dart';
 import 'package:provider/provider.dart';
 
 // void main() {
@@ -65,6 +67,8 @@ void main() {
   List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
 
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => DrawerMenuController()),
+    ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
     ChangeNotifierProvider(
@@ -72,7 +76,7 @@ void main() {
     ChangeNotifierProvider(
         create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),
-  ], child: BaseHomePage(drawerItems: views)
+  ], child: BaseMaterialAppPage(drawerItems: views)
 
       //  App(),
       ));

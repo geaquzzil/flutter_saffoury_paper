@@ -4,6 +4,11 @@ import 'package:flutter_view_controller/light_color.dart';
 class AppTheme {
   AppTheme._();
 
+static const primaryColor = Color(0xFF2697FF);
+static const secondaryColor = Color(0xFF2A2D3E);
+static const bgColor = Color(0xFF212332);
+
+static const defaultPadding = 16.0;
   static const Color notWhite = Color(0xFFEDF0F2);
   static const Color nearlyWhite = Color(0xFFFEFEFE);
   static const Color white = Color(0xFFFFFFFF);

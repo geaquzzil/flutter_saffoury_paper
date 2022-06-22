@@ -48,6 +48,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     print('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
     context.read<DrawerViewAbstractProvider>().change(this as ViewAbstract);
+  
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

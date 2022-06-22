@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/app_theme.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
+import 'package:flutter_view_controller/screens/base_shared_main_page.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -12,9 +13,9 @@ import 'package:responsive_framework/responsive_framework.dart';
 import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
+class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
   List<T> drawerItems;
-  BaseHomePage({Key? key, required this.drawerItems}) : super(key: key);
+  BaseMaterialAppPage({Key? key, required this.drawerItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +69,16 @@ class BaseHomePage<T extends ViewAbstract> extends StatelessWidget {
         title: 'Flutter UI',
         debugShowCheckedModeBanner: false,
         restorationScopeId: 'root',
-        theme: ThemeData(
-          useMaterial3: true,
+        // theme: ThemeData(
+        //   useMaterial3: true,
+        // ),
+        theme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: bgColor,
+          // textTheme: GoogleFonts.(Theme.of(context).textTheme)
+          //     .apply(bodyColor: Colors.white),
+          canvasColor: secondaryColor,
         ),
-        home: HomeMobilePage(drawerItems: drawerItems));
+        home: BaseSharedMainPage(drawerItems: drawerItems));
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));
     //home: NavigationHomeScreen());
