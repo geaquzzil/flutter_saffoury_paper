@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
-import 'package:flutter_view_controller/screens/base_shared_details_view.dart';
+import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_new.dart';

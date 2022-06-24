@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
-class NormalCardView extends StatelessWidget {
+class ViewCardItem extends StatelessWidget {
   String title;
   String description;
   IconData icon;
   ViewAbstract? object;
-  NormalCardView(
+  ViewCardItem(
       {Key? key,
       this.object,
       required this.title,

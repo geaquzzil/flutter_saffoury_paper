@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_view_controller/components/normal_card_view.dart';
+import 'package:flutter_view_controller/screens/view/view_card_item.dart';
 import 'package:flutter_view_controller/components/primary_button.dart';
 import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/providers/cart_provider.dart';
@@ -78,16 +78,16 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
           print("builder $label");
           dynamic fieldValue = object.getFieldValue(label);
           if (fieldValue == null) {
-            return NormalCardView(
+            return ViewCardItem(
                 title: label, description: "null", icon: Icons.abc);
           } else if (fieldValue is ViewAbstract) {
-            return NormalCardView(
+            return ViewCardItem(
                 title: "",
                 description: "",
                 icon: Icons.abc,
                 object: fieldValue);
           } else {
-            return NormalCardView(
+            return ViewCardItem(
                 title: object.getFieldLabel(label, context),
                 description: fieldValue,
                 icon: object.getFieldIconData(label));
@@ -213,16 +213,16 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
           print("builder $label");
           dynamic fieldValue = object.getFieldValue(label);
           if (fieldValue == null) {
-            return NormalCardView(
+            return ViewCardItem(
                 title: label, description: "null", icon: Icons.abc);
           } else if (fieldValue is ViewAbstract) {
-            return NormalCardView(
+            return ViewCardItem(
                 title: "",
                 description: "",
                 icon: Icons.abc,
                 object: fieldValue);
           } else {
-            return NormalCardView(
+            return ViewCardItem(
                 title: object.getFieldLabel(label, context),
                 description: fieldValue,
                 icon: object.getFieldIconData(label));

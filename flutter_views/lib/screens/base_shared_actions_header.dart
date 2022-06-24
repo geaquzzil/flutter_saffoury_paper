@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:provider/provider.dart';
 
 class BaseSharedHeader extends StatelessWidget {
   @override
@@ -45,5 +49,18 @@ class BaseSharedHeader extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget buildList(BuildContext context) {
+    final action = context.watch<ActionViewAbstractProvider>().getServerActions;
+    final ViewAbstract = context.watch<ActionViewAbstractProvider>().getObject;
+    if (action == ServerActions.edit || action == ServerActions.add) {
+      ViewAbstract.getAppBarActionsView(context)
+      return ListView.builder(
+        
+        itemBuilder: (context,(context, index) {
+        
+      }));
+    }
   }
 }

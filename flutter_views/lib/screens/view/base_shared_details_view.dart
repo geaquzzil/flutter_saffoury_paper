@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/main_body.dart';
-import 'package:flutter_view_controller/components/normal_card_view.dart';
+import 'package:flutter_view_controller/screens/view/view_card_item.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
-import 'package:flutter_view_controller/screens/base_shared_header.dart';
+import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/components/product_images.dart';
+import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +18,6 @@ class BaseSharedDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   body: getBodyView(context),
-    // );
     ViewAbstract? viewAbstract =
         context.watch<ActionViewAbstractProvider>().getObject;
     return Scaffold(
@@ -120,29 +118,7 @@ class BaseSharedDetailsView extends StatelessWidget {
   }
 
   Widget getViewLoop(List<String> fields, ViewAbstract viewAbstract) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: fields.length,
-        itemBuilder: (BuildContext context, int index) {
-          String label = fields[index];
-          print("builder $label");
-          dynamic fieldValue = viewAbstract.getFieldValue(label);
-          if (fieldValue == null) {
-            return NormalCardView(
-                title: label, description: "null", icon: Icons.abc);
-          } else if (fieldValue is ViewAbstract) {
-            return NormalCardView(
-                title: "",
-                description: "",
-                icon: Icons.abc,
-                object: fieldValue);
-          } else {
-            return NormalCardView(
-                title: viewAbstract.getFieldLabel(label, context),
-                description: fieldValue,
-                icon: viewAbstract.getFieldIconData(label));
-          }
-        });
+    return ViewDetailsListWidget(viewAbstract: viewAbstract,);
   }
 
   Widget getBodyWidget(BuildContext context, ViewAbstract viewAbstract) {
@@ -212,3 +188,4 @@ class BaseSharedDetailsView extends StatelessWidget {
     );
   }
 }
+

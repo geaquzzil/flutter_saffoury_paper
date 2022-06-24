@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +11,10 @@ import 'package:reflectable/mirrors.dart';
 
 import 'view_abstract_api.dart';
 
-abstract class ViewAbstractBase<T> {
-  String iD = "-1";
+abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>{
+  
+
+
   List<String> getFields();
   String getFieldLabel(String label, BuildContext context);
   IconData getFieldIconData(String label);
@@ -178,6 +183,4 @@ abstract class ViewAbstractBase<T> {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     return dateFormat.parse(value);
   }
-
- 
 }
