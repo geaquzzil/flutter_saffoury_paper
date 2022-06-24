@@ -62,7 +62,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
             BaseAppSharedHeader(),
             SizedBox(height: defaultPadding),
             Center(child: Text("THIS IS A TEST")),
-            // ListProviderWidget()
+            ListProviderWidget()
             // Row(
             //   crossAxisAlignment: CrossAxisAlignment.start,
             //   children: [

@@ -89,7 +89,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     final double size = 52;
     bool isOpen =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen;
-    IconData icon = isOpen ? Icons.arrow_forward_ios : Icons.arrow_back_ios;
+    IconData icon = !isOpen ? Icons.arrow_forward_ios : Icons.arrow_back_ios;
     final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
     final margin = isOpen ? EdgeInsets.only(right: 16) : null;
     final width = isOpen ? size : double.infinity;
