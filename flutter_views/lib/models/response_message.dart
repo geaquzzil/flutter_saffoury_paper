@@ -55,4 +55,5 @@ class ResponseMessage<T> extends ViewAbstract<T> {
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
+  
 }

@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:convert' as convert;
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:http/http.dart';
@@ -22,6 +24,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   int _page = 0;
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
+
+  String toJsonString() {
+    return convert.jsonEncode(toJsonViewAbstract());
+  }
 
   String? getTableNameApi();
 
@@ -60,17 +66,24 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return mainBody;
   }
 
-  Map<String, String> getHeadersExtenstion() {
+  Future<Map<String, String>> getHeadersExtenstion() async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
     defaultHeaders['Auth'] =
         Encriptions.encypt("HIIAMANANDROIDUSERFROMSAFFOURYCOMPANY");
+    bool hasUser = await Configurations.hasSavedValue(AuthUser());
+    if (hasUser) {
+      AuthUser authUser = await Configurations.get(AuthUser());
+      defaultHeaders['X-Authorization'] =
+          Encriptions.encypt(authUser.toJsonString());
+    }
+
     return defaultHeaders;
   }
 
-  Map<String, String> getHeaders() {
+  Future<Map<String, String>> getHeaders() async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
     defaultHeaders.addAll(URLS.requestHeaders);
-    defaultHeaders.addAll(getHeadersExtenstion());
+    defaultHeaders.addAll(await getHeadersExtenstion());
     return defaultHeaders;
   }
 
@@ -78,7 +91,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {ServerActions? serverActions, OnResponseCallback? onResponse}) async {
     try {
       return await getHttp().post(Uri.parse(URLS.BASE_URL),
-          headers: getHeaders(), body: getBody(serverActions));
+          headers: await getHeaders(), body: getBody(serverActions));
     } on Exception catch (e) {
       // Display an alert, no internet
       onResponse?.onServerFailure(e);

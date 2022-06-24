@@ -1,15 +1,19 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/configrations.dart';
+import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class AuthProvider with ChangeNotifier {
   AuthUser _user;
   Status _status = Status.Uninitialized;
+  PermissionLevelAbstract _permissions;
 
-  Status get status => _status;
-  AuthUser get user => _user;
+  Status get getStatus => _status;
+  AuthUser get getUser => _user;
+  PermissionLevelAbstract get getPermissions => _permissions;
 
   // public variables
   final formkey = GlobalKey<FormState>();
@@ -19,20 +23,30 @@ class AuthProvider with ChangeNotifier {
   TextEditingController name = TextEditingController();
 
   AuthProvider.initialize() {
-    _fireSetUp();
+    _init();
   }
 
-  _fireSetUp() async {
-    await initialization.then((value) {
-      auth.authStateChanges().listen(_onStateChanged);
-    });
+  _init() async {
+    
+    bool hasUser = await Configurations.hasSavedValue(_user);
+    if (hasUser == false) {
+      _status = Status.Uninitialized;
+    } else {
+      _user = await Configurations.get<AuthUser>(_user);
+
+      final responseUser=_user.login()
+      await prefs.setString("id", firebaseUser.uid);
+
+      _userModel = await _userServices.getAdminById(getUser.uid).then((value) {
+        _status = Status.Authenticated;
+        return value;
+      });
+    }
+    notifyListeners();
   }
 
   Future<bool> signIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("id", " value.user.uid");
-    return true;
-
     try {
       _status = Status.Authenticating;
       notifyListeners();
@@ -40,7 +54,7 @@ class AuthProvider with ChangeNotifier {
           .signInWithEmailAndPassword(
               email: email.text.trim(), password: password.text.trim())
           .then((value) async {
-        await prefs.setString("id", value.user.uid);
+        await prefs.setString("id", value.getUser.uid);
       });
       return true;
     } catch (e) {
@@ -90,27 +104,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> reloadUserModel() async {
-    _user = await _user.getAdminById(user.uid);
-    notifyListeners();
-  }
-
-  updateUserData(Map<String, dynamic> data) async {
-    _userServices.updateUserData(data);
-  }
-
-  _onStateChanged(AuthUser firebaseUser) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (firebaseUser == null) {
-      _status = Status.Unauthenticated;
-    } else {
-      _user = firebaseUser;
-      await prefs.setString("id", firebaseUser.uid);
-
-      _userModel = await _userServices.getAdminById(user.uid).then((value) {
-        _status = Status.Authenticated;
-        return value;
-      });
-    }
+    _user = await _user.getAdminById(getUser.uid);
     notifyListeners();
   }
 

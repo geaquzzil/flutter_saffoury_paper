@@ -58,22 +58,30 @@ Future<bool> hasPermission( dynamic toDo,ServerActions? action) async {
         }
   }
 
-     bool hasPermissionImport(ViewAbstract viewAbstract) {
-        return hasPermission(viewAbstract, ServerActions.add);
+     Future<bool> hasPermissionImport({ViewAbstract? viewAbstract}) async {
+        return    viewAbstract==null? await hasPermission(this , ServerActions.add):
+        await hasPermission(viewAbstract , ServerActions.add);
+        
     }
 
-     bool hasPermissionDelete(ViewAbstract viewAbstract) {
-        return hasPermission(viewAbstract, ServerActions.delete_action);
+          Future<bool> hasPermissionDelete(ViewAbstract viewAbstract)async {
+          return    viewAbstract==null? await hasPermission(this , ServerActions.delete_action):
+        await hasPermission(viewAbstract , ServerActions.delete_action);
     }
 
-     bool hasPermissionAdd(ViewAbstract viewAbstract) {
-        return hasPermission(viewAbstract, ServerActions.add);
+          Future<bool> hasPermissionAdd(ViewAbstract viewAbstract)async {
+         return    viewAbstract==null? await hasPermission(this , ServerActions.add):
+        await hasPermission(viewAbstract , ServerActions.add);
     }
 
-     bool hasPermissionEdit(ViewAbstract viewAbstract) {
-        return hasPermission(viewAbstract, ServerActions.edit);
+          Future<bool> hasPermissionEdit(ViewAbstract viewAbstract)async {
+       return    viewAbstract==null? await hasPermission(this , ServerActions.edit):
+        await hasPermission(viewAbstract , ServerActions.edit);
     }
-
+  Future<bool> hasPermissionEditPrint(ViewAbstract viewAbstract)async {
+  return    viewAbstract==null? await hasPermission(this , ServerActions.print):
+        await hasPermission(viewAbstract , ServerActions.print);
+    }
      bool hasPerantViewAbstrct() {
         return getParent() != null;
     }
