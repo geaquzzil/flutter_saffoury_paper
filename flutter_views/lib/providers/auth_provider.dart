@@ -1,18 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class AuthProvider with ChangeNotifier {
-  User _user;
+  AuthUser _user;
   Status _status = Status.Uninitialized;
-  UserServices _userServices = UserServices();
-  UserModel _userModel;
 
-//  getter
-  UserModel get userModel => _userModel;
   Status get status => _status;
-  User get user => _user;
+  AuthUser get user => _user;
 
   // public variables
   final formkey = GlobalKey<FormState>();
@@ -93,7 +90,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> reloadUserModel() async {
-    _userModel = await _userServices.getAdminById(user.uid);
+    _user = await _user.getAdminById(user.uid);
     notifyListeners();
   }
 
@@ -101,7 +98,7 @@ class AuthProvider with ChangeNotifier {
     _userServices.updateUserData(data);
   }
 
-  _onStateChanged(User firebaseUser) async {
+  _onStateChanged(AuthUser firebaseUser) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;

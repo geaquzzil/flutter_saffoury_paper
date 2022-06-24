@@ -55,12 +55,14 @@ class BaseSharedHeader extends StatelessWidget {
     final action = context.watch<ActionViewAbstractProvider>().getServerActions;
     final ViewAbstract = context.watch<ActionViewAbstractProvider>().getObject;
     if (action == ServerActions.edit || action == ServerActions.add) {
-      ViewAbstract.getAppBarActionsView(context)
-      return ListView.builder(
-        
-        itemBuilder: (context,(context, index) {
-        
-      }));
+      // ViewAbstract.getAppBarActionsView(context)
+      // return ListView.builder(
+
+      //   itemBuilder: (context,(context, index) {
+
+      // }));
+
     }
+    return Text("");
   }
 }
