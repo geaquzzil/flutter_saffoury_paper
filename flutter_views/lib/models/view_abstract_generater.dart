@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/normal_card_list.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import 'view_abstract_api.dart';
@@ -30,6 +32,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   void onCardClicked(BuildContext context) {
     print("Card Clicked");
+    if (SizeConfig.isDesktop(context)) {
+      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
+      return;
+    }
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -48,7 +54,6 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     print('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
     context.read<DrawerViewAbstractProvider>().change(this as ViewAbstract);
-  
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

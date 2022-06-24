@@ -4,7 +4,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_details_view.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
-import 'package:flutter_view_controller/screens/base_shared_header.dart';
+import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_new.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_new_2.dart';
 import 'package:flutter_view_controller/screens/list_provider_screens/list_provider_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,10 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
+
+    // return Scaffold(
+    //   body: NavigationDrawerWidget(drawerItems: widget.drawerItems),
+    // );
     return Scaffold(
       key: context.read<DrawerMenuController>().scaffoldKey,
       drawer: BaseSharedDrawer(drawerItems: widget.drawerItems),
@@ -30,11 +36,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
           children: [
             // We want this side menu only for large screen
             if (SizeConfig.isDesktop(context))
-              Expanded(
-                // default flex = 1
-                // and it takes 1/6 part of the screen
-                child: BaseSharedDrawer(drawerItems: widget.drawerItems),
-              ),
+              NavigationDrawerWidget(drawerItems: widget.drawerItems),
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
@@ -42,11 +44,8 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
             ),
             if (SizeConfig.isDesktop(context))
               Expanded(
-                flex: _size.width > 1340 ? 8 : 10,
-                child: BaseSharedDetailsView(
-                  viewAbstract: null,
-                ),
-              ),
+                  flex: _size.width > 1340 ? 8 : 10,
+                  child: BaseSharedDetailsView()),
           ],
         ),
       ),
@@ -60,7 +59,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
-            BaseSharedHeader(),
+            BaseAppSharedHeader(),
             SizedBox(height: defaultPadding),
             Center(child: Text("THIS IS A TEST")),
             // ListProviderWidget()

@@ -72,7 +72,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
     ChangeNotifierProvider(
-        create: (_) => ActionViewAbstractProvider(object: Product())),
+        create: (_) => ActionViewAbstractProvider()),
     ChangeNotifierProvider(
         create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),

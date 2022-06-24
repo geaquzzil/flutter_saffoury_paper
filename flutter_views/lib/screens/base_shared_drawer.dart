@@ -10,26 +10,35 @@ class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      elevation: 0,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FlutterLogo(),
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: drawerItems.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return DrawerListTile(
-                    viewAbstract: drawerItems[index],
-                    idx: index,
-                  );
-                }),
-          ),
-          FlutterLogo()
-        ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25.0),
+          bottomRight: Radius.circular(25.0),
+        ),
+      ),
+      child: Drawer(
+        elevation: 0,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FlutterLogo(),
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: drawerItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return DrawerListTile(
+                      viewAbstract: drawerItems[index],
+                      idx: index,
+                    );
+                  }),
+            ),
+            FlutterLogo()
+          ],
+        ),
       ),
     );
   }
@@ -44,20 +53,17 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.watch<DrawerMenuSelectedItemController>().getIndex == idx
-          ? Colors.white10
-          : null,
-      child: ListTile(
-        horizontalTitleGap: 0.0,
-        // subtitle: viewAbstract.getLabelSubtitleText(context),
-        leading: viewAbstract.getIcon(),
-        title: viewAbstract.getLabelText(context),
-        onTap: () {
-          viewAbstract.onDrawerItemClicked(context);
-          context.read<DrawerMenuSelectedItemController>().change(idx);
-        },
-      ),
+    return ListTile(
+      horizontalTitleGap: 0.0,
+      // subtitle: viewAbstract.getLabelSubtitleText(context),
+      leading: viewAbstract.getIcon(),
+      selected:
+          context.watch<DrawerMenuSelectedItemController>().getIndex == idx,
+      title: viewAbstract.getLabelText(context),
+      onTap: () {
+        viewAbstract.onDrawerItemClicked(context);
+        context.read<DrawerMenuSelectedItemController>().change(idx);
+      },
     );
   }
 }
