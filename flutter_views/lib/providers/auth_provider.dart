@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
+enum Status {
+  Uninitialized,
+  Authenticated,
+  Authenticating,
+  Unauthenticated,
+  Faild
+}
 
 class AuthProvider with ChangeNotifier {
   AuthUser _user;
@@ -27,14 +34,21 @@ class AuthProvider with ChangeNotifier {
   }
 
   _init() async {
-    
     bool hasUser = await Configurations.hasSavedValue(_user);
     if (hasUser == false) {
       _status = Status.Uninitialized;
     } else {
       _user = await Configurations.get<AuthUser>(_user);
+      final responseUser =
+          await _user.getRespones(serverActions: ServerActions.add);
+      if (responseUser == null) {
+        _status = Status.Faild;
+      } else if (responseUser.statusCode == 401) {
+        _status = Status.Faild;
+      }else{
+        _user=
 
-      final responseUser=_user.login()
+      }
       await prefs.setString("id", firebaseUser.uid);
 
       _userModel = await _userServices.getAdminById(getUser.uid).then((value) {

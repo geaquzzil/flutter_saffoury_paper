@@ -32,7 +32,7 @@ class AuthUser<T> extends ResponseMessage<T> {
 
   Future<T?> login({OnResponseCallback? onResponse}) async {
     var response = await getRespones(
-        onResponse: onResponse, serverActions: ServerActions.view);
+        onResponse: onResponse, serverActions: ServerActions.add);
     if (response == null) return null;
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(jsonDecode(response.body));
