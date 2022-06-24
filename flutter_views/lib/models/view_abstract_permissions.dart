@@ -4,14 +4,14 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 abstract class ViewAbstractPermissions<T>{
   String iD = "-1";
-Future<bool> hasPermissionToPreformActionOn(Field field, ServerActions actions) {
-        Log.e(TAG, "hasPermissionToPreformActionOn: " + " field " + field.getName() + "  action " + actions.toString());
+Future<bool> hasPermissionToPreformActionOn(String field, ServerActions actions) {
+        print( "hasPermissionToPreformActionOn: " + " field " + field.getName() + "  action " + actions.toString());
         PermissionField permissionField = getPermission(field);
         if (permissionField == null) {
-            Log.e(TAG, "hasPermissionToPreformActionOn: " + " PermissionField ==null  " + field.getName() + "  action " + actions.toString());
+            print(  "hasPermissionToPreformActionOn: " + " PermissionField ==null  " + field.getName() + "  action " + actions.toString());
             return true;
         }
-        Log.e(TAG, "hasPermissionToPreformActionOn: " + " PermissionField " + field.getName() + "  permissionField " + permissionField.table_name());
+     print( "hasPermissionToPreformActionOn: " + " PermissionField " + field.getName() + "  permissionField " + permissionField.table_name());
         if (isEmpty(permissionField.table_name())) return false;
         return hasPermission(permissionField.table_name(), actions);
     }
@@ -64,21 +64,27 @@ Future<bool> hasPermission( dynamic toDo,ServerActions? action) async {
         
     }
 
-          Future<bool> hasPermissionDelete(ViewAbstract viewAbstract)async {
-          return    viewAbstract==null? await hasPermission(this , ServerActions.delete_action):
-        await hasPermission(viewAbstract , ServerActions.delete_action);
+          Future<bool> hasPermissionDelete({ViewAbstract? viewAbstract})async {
+            if(viewAbstract==null){
+                  if (isNew()) return false;
+        if (hasPerantViewAbstrct()) return false;
+        return await hasPermission(this , ServerActions.delete_action);
+            }
+                  if (viewAbstract.isNew()) return false;
+        if (viewAbstract.hasPerantViewAbstrct()) return false;
+                return await hasPermission(viewAbstract , ServerActions.delete_action);
     }
 
-          Future<bool> hasPermissionAdd(ViewAbstract viewAbstract)async {
+          Future<bool> hasPermissionAdd({ViewAbstract? viewAbstract})async {
          return    viewAbstract==null? await hasPermission(this , ServerActions.add):
         await hasPermission(viewAbstract , ServerActions.add);
     }
 
-          Future<bool> hasPermissionEdit(ViewAbstract viewAbstract)async {
+          Future<bool> hasPermissionEdit({ViewAbstract? viewAbstract})async {
        return    viewAbstract==null? await hasPermission(this , ServerActions.edit):
         await hasPermission(viewAbstract , ServerActions.edit);
     }
-  Future<bool> hasPermissionEditPrint(ViewAbstract viewAbstract)async {
+  Future<bool> hasPermissionEditPrint({ViewAbstract? viewAbstract})async {
   return    viewAbstract==null? await hasPermission(this , ServerActions.print):
         await hasPermission(viewAbstract , ServerActions.print);
     }

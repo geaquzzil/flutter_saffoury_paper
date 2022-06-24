@@ -11,6 +11,8 @@ part 'permission_level_abstract.g.dart';
 @reflector
 class PermissionLevelAbstract<T extends PermissionActionAbstract>
     extends ViewAbstract<T> {
+  static const String ADMIN_ID = "-2";
+  static const String CUSTOMER_ID = "2";
   String? userlevelname;
 
   static Map<String, PermissionActionAbstract> hashMapOfPermissionTableAction =
@@ -62,13 +64,13 @@ class PermissionLevelAbstract<T extends PermissionActionAbstract>
     }
   }
 
-  bool isAdmin() => false;
+  bool isAdmin() => iD == ADMIN_ID;
 
-  bool isGuest() => false;
+  bool isGuest() => iD == "0";
 
-  bool isGeneralClient() => false;
+  bool isGeneralClient() => int.parse(iD) > 0;
 
-  bool isGeneralEmployee() => false;
+  bool isGeneralEmployee() => int.parse(iD) < 0;
 
   factory PermissionLevelAbstract.fromJson(Map<String, dynamic> data) =>
       _$PermissionLevelAbstractFromJson(data);

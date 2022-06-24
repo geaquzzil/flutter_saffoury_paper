@@ -202,6 +202,10 @@ flutter_map
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map-1.1.0/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map-1.1.0/lib/
+flutter_native_splash
+2.15
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_native_splash-2.1.6/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_native_splash-2.1.6/lib/
 flutter_rating_bar
 2.14
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_rating_bar-4.0.1/
@@ -254,6 +258,10 @@ icon_badge
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/icon_badge-1.0.0/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/icon_badge-1.0.0/lib/
+image
+2.12
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.3/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.3/lib/
 intl
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/
@@ -290,6 +298,10 @@ latlong2
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/latlong2-0.8.1/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/latlong2-0.8.1/lib/
+lint
+2.15
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lint-1.8.2/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lint-1.8.2/lib/
 lints
 2.17
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/lints-2.0.0/
@@ -590,6 +602,10 @@ unicode
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/unicode-0.3.1/
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/unicode-0.3.1/lib/
+universal_io
+2.12
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/universal_io-2.0.4/
+file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/universal_io-2.0.4/lib/
 uuid
 2.12
 file:///H:/Developments/SDKS/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/uuid-3.0.6/

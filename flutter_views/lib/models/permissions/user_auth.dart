@@ -29,25 +29,7 @@ class AuthUser<T> extends ResponseMessage<T> {
   Map<String, dynamic> gets() {
     return {"login": login};
   }
-
-  Future<T?> login({OnResponseCallback? onResponse}) async {
-    var response = await getRespones(
-        onResponse: onResponse, serverActions: ServerActions.add);
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      return fromJsonViewAbstract(jsonDecode(response.body));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
-      //throw Exception('Failed to load album');
-      return null;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      return null;
-    }
-  }
+    
 
   void setRandomPassword() {
     final alphabet =
