@@ -28,8 +28,8 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   static PermissionActionAbstract? containsStaticKeyReturnValue(String key) {
     return hashMapOfPermissionTableAction[key];
   }
-
-  Future<PermissionActionAbstract?> findCurrentPermission(dynamic toDo) async {
+  @override
+  Future<PermissionActionAbstract?> findPermissionBy(dynamic toDo) async {
     PermissionActionAbstract? foundedPermission;
     String? currentTableNameFromObject = findCurrentTableNmeFromObject(toDo);
     if ((currentTableNameFromObject == null)) return null;
@@ -79,7 +79,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
 
   @override
   PermissionLevelAbstract fromJsonViewAbstract(Map<String, dynamic> json) {
-    return PermissionLevelAbstract.fromJson(json) as PermissionLevelAbstract;
+    return PermissionLevelAbstract.fromJson(json);
   }
 
   @override

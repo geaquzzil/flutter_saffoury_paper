@@ -104,8 +104,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                     blurRadius: 8),
                               ],
                             ),
-                            child: ClipRRect(
-                                borderRadius: const BorderRadius.all(
+                            child: const ClipRRect(
+                                borderRadius: BorderRadius.all(
                                     Radius.circular(60.0)),
                                 child: Icon(Icons.abc)),
                           ),

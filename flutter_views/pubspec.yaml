@@ -50,6 +50,7 @@ dependencies:
   sprung: ^3.0.0
   shared_preferences: ^2.0.15
   flutter_native_splash: ^2.1.6
+  flutter_spinkit: ^5.1.0
   
 dev_dependencies:
   # mockito: ^5.0.16

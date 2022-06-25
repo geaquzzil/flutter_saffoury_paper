@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
-import 'package:flutter_view_controller/models/components/sub_text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
-import 'package:provider/provider.dart';
 
 class SubViewAbstractEditForm extends StatefulWidget {
   String field;
@@ -64,7 +61,7 @@ class _SubViewAbstractEditFormState extends State<SubViewAbstractEditForm> {
     dynamic fieldValue = currentValue.getFieldValue(field);
 
     if (fieldValue is ViewAbstract) {
-      return Text('T');
+      return const Text('T');
     } else {
       return getFormText(field);
     }

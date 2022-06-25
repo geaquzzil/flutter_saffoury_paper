@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:http/src/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Status {
@@ -34,12 +35,12 @@ class AuthProvider with ChangeNotifier {
   TextEditingController name = TextEditingController();
 
   AuthProvider.initialize() {
-    _init();
+    init();
   }
 
-  _init() async {
-    bool hasUser = await Configurations.hasSavedValue(_user);
-    final responseUser;
+  void init() async {
+    bool hasUser = await Configurations.hasSavedValue(AuthUser());
+    final Response? responseUser;
     if (hasUser == false) {
       _user = AuthUser();
       _user.password = "";
@@ -67,12 +68,12 @@ class AuthProvider with ChangeNotifier {
     try {
       _status = Status.Authenticating;
       notifyListeners();
-      await auth
-          .signInWithEmailAndPassword(
-              email: email.text.trim(), password: password.text.trim())
-          .then((value) async {
-        await prefs.setString("id", value.getUser.uid);
-      });
+      // await auth
+      //     .signInWithEmailAndPassword(
+      //         email: email.text.trim(), password: password.text.trim())
+      //     .then((value) async {
+      //   await prefs.setString("id", value.getUser.uid);
+      // });
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;
@@ -108,7 +109,7 @@ class AuthProvider with ChangeNotifier {
   // }
 
   Future signOut() async {
-    auth.signOut();
+    // auth.signOut();
     _status = Status.Unauthenticated;
     notifyListeners();
     return Future.delayed(Duration.zero);
@@ -121,20 +122,18 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> reloadUserModel() async {
-    _user = await _user.getAdminById(getUser.uid);
+    // _user = await _user.getAdminById(getUser.uid);
     notifyListeners();
   }
 
   String? validateEmail(String value) {
     value = value.trim();
 
-    if (email.text != null) {
-      if (value.isEmpty) {
-        return 'Email can\'t be empty';
-      } else if (!value.contains(RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
-        return 'Enter a correct email address';
-      }
+    if (value.isEmpty) {
+      return 'Email can\'t be empty';
+    } else if (!value.contains(RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+      return 'Enter a correct email address';
     }
 
     return null;

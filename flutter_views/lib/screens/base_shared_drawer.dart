@@ -11,7 +11,7 @@ class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(25.0),
@@ -22,8 +22,8 @@ class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
         elevation: 0,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: FlutterLogo(),
             ),
             Expanded(
@@ -36,7 +36,7 @@ class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
                     );
                   }),
             ),
-            FlutterLogo()
+            const FlutterLogo()
           ],
         ),
       ),

@@ -27,13 +27,13 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       curve: Curves.easeInOut,
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, yOffset, 1),
       width: context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
           ? 256
           : 60,
       height: double.infinity,
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,14 +48,14 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
                             idx: index,
                           )))),
             ),
-            BottomNavigationBarItem()
+            const BottomNavigationBarItem()
           ],
         ),
       ),
     );
     return Container(
       child: Stack(children: [
-        Container(
+        SizedBox(
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,13 +70,13 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
                               idx: index,
                             )))),
               ),
-              BottomNavigationBarItem()
+              const BottomNavigationBarItem()
             ],
           ),
         ),
         AnimatedContainer(
           curve: Curves.easeInOut,
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           transform: Matrix4.translationValues(
               context
                       .watch<DrawerMenuSelectedItemController>()
@@ -88,7 +88,7 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
           width: double.infinity,
           height: double.infinity,
           color: Colors.white,
-          child: Center(child: Text('HomePage')),
+          child: const Center(child: Text('HomePage')),
         )
       ]),
     );
@@ -104,7 +104,7 @@ class BottomNavigationBarItem extends StatelessWidget {
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen;
     if (isOpen) {
       return Container(
-        color: Color(0xFFB1F2B36),
+        color: const Color(0xffb1f2b36),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -112,13 +112,13 @@ class BottomNavigationBarItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
-                    onPressed: () {}, icon: Icon(Icons.logout_outlined)),
+                    onPressed: () {}, icon: const Icon(Icons.logout_outlined)),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.settings_outlined),
+                  icon: const Icon(Icons.settings_outlined),
                 ),
               ),
               Padding(
@@ -127,7 +127,7 @@ class BottomNavigationBarItem extends StatelessWidget {
                   return IconButton(
                     onPressed: () {},
                     color: onHover ? Colors.orange : Colors.white,
-                    icon: Icon(Icons.info_outline),
+                    icon: const Icon(Icons.info_outline),
                   );
                 }),
               ),
@@ -139,7 +139,7 @@ class BottomNavigationBarItem extends StatelessWidget {
                           .read<DrawerMenuSelectedItemController>()
                           .setSideMenuIsClosed();
                     },
-                    icon: Icon(Icons.arrow_back)),
+                    icon: const Icon(Icons.arrow_back)),
               ),
             ],
           ),
@@ -147,7 +147,7 @@ class BottomNavigationBarItem extends StatelessWidget {
       );
     }
     return Container(
-      color: Color(0xFFB1F2B36),
+      color: const Color(0xffb1f2b36),
       // decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -158,7 +158,7 @@ class BottomNavigationBarItem extends StatelessWidget {
                     .read<DrawerMenuSelectedItemController>()
                     .setSideMenuIsOpen();
               },
-              icon: Icon(Icons.arrow_forward)),
+              icon: const Icon(Icons.arrow_forward)),
         ],
       ),
     );
@@ -177,14 +177,14 @@ class SideItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        color: Color(0xFFB1F2B36),
+        color: const Color(0xffb1f2b36),
         child: Row(children: [
-          Container(padding: EdgeInsets.all(20), child: Icon(Icons.abc)),
+          Container(padding: const EdgeInsets.all(20), child: const Icon(Icons.abc)),
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Text(
               itemText,
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
           )
         ]),

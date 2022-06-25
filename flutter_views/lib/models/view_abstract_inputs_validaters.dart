@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
@@ -82,23 +81,19 @@ abstract class ViewAbstractInputAndValidater<T>
     String fieldLabel = getFieldLabel(field, context);
     if (isFieldRequired(field)) {
       if (value?.isEmpty ?? false) {
-        return fieldLabel + " is required";
+        return "$fieldLabel is required";
       }
     }
     if (getTextInputValidatorMaxValue(field) != null) {
       if (value != null &&
           int.parse(value) > getTextInputValidatorMaxValue(field)!) {
-        return fieldLabel +
-            " must be less than or equal to " +
-            getTextInputValidatorMaxValue(field).toString();
+        return "$fieldLabel must be less than or equal to ${getTextInputValidatorMaxValue(field)}";
       }
     }
     if (getTextInputValidatorMinValue(field) != null) {
       if (value != null &&
           int.parse(value) < getTextInputValidatorMinValue(field)!) {
-        return fieldLabel +
-            " must be greater than or equal to " +
-            getTextInputValidatorMinValue(field).toString();
+        return "$fieldLabel must be greater than or equal to ${getTextInputValidatorMinValue(field)}";
       }
     }
     return null;

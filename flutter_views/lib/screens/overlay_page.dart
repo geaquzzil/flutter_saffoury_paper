@@ -42,10 +42,11 @@ class _OverlayWidgetState extends State<OverlayWidget> {
         child: InkWell(
             onTap: () {
               print("show overlay ${foucsNode.hasFocus}");
-              if (entry == null)
+              if (entry == null) {
                 _showOverlay();
-              else
+              } else {
                 hideOverlay();
+              }
             },
             focusNode: foucsNode,
             child: widget.child));
@@ -115,9 +116,9 @@ class _OverlayWidgetState extends State<OverlayWidget> {
       ),
     );
     return Positioned(
-      child: widget.overlay,
       top: size.height + 8,
       width: MediaQuery.of(context).size.width / 2,
+      child: widget.overlay,
     );
     return CompositedTransformFollower(
       showWhenUnlinked: false,

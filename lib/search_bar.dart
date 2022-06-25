@@ -38,7 +38,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Page'),
+        title: const Text('Search Page'),
       ),
       body: ListView.builder(
         itemCount: people.length,
@@ -59,10 +59,10 @@ class MyHomePage extends StatelessWidget {
             onQueryUpdate: (s) => print(s),
             items: people,
             searchLabel: 'Search people',
-            suggestion: Center(
+            suggestion: const Center(
               child: Text('Filter people by name, surname or age'),
             ),
-            failure: Center(
+            failure: const Center(
               child: Text('No person found :('),
             ),
             filter: (person) => [
@@ -77,7 +77,7 @@ class MyHomePage extends StatelessWidget {
             ),
           ),
         ),
-        child: Icon(Icons.search),
+        child: const Icon(Icons.search),
       ),
     );
   }

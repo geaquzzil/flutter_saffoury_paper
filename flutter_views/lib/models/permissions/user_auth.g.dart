@@ -7,14 +7,13 @@ part of 'user_auth.dart';
 // **************************************************************************
 
 AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) {
-  return AuthUser<T>(
-    json['phone'] as String,
-    json['password'] as String,
-  )
+  return AuthUser<T>()
     ..iD = json['iD'] as String
     ..login = json['login'] as bool?
     ..permission = json['permission'] as bool?
-    ..response = json['response'] as int?;
+    ..response = json['response'] as int?
+    ..phone = json['phone'] as String?
+    ..password = json['password'] as String?;
 }
 
 Map<String, dynamic> _$AuthUserToJson<T>(AuthUser<T> instance) =>

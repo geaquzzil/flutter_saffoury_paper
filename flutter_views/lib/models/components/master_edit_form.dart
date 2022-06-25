@@ -1,13 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/models/components/form_validator.dart';
-import 'package:flutter_view_controller/models/components/view_abstract_master_edit_form.dart';
-import 'package:flutter_view_controller/models/components/sub_text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +32,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
 
   void showMaterialBanner() => ScaffoldMessenger.of(context).showMaterialBanner(
         MaterialBanner(
-          leading: Icon(Icons.error),
+          leading: const Icon(Icons.error),
           content: Expanded(
             child: ListView.builder(
               itemCount: _formValidationManager.erroredFields.length,
@@ -51,7 +47,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('DISMISS'),
+              child: const Text('DISMISS'),
               onPressed: () {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
               },
@@ -109,7 +105,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
 
                           }
                         },
-                        child: Text('Subment'),
+                        child: const Text('Subment'),
                       )
                     ])));
   }

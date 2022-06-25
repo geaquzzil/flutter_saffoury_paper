@@ -30,7 +30,7 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
       onExit: (event) => onEntered(false),
       child: AnimatedContainer(
         curve: Sprung.overDamped,
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         transform: transform,
         child: widget.builder(isHover),
       ),

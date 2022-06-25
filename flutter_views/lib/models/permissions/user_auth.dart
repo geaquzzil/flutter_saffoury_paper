@@ -1,17 +1,19 @@
-import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter_view_controller/models/response_message.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/servers/server_response_master.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_auth.g.dart';
 
 @JsonSerializable()
-class AuthUser<T> extends ResponseMessage<T> {
+class AuthUser<T> extends ViewAbstract<AuthUser> {
+  bool? login;
+  bool? permission;
+  int? response;
   String? phone;
   String? password;
+
   AuthUser({bool? setPassword}) : super() {
     if (setPassword ?? false) {
       setRandomPassword();
@@ -29,10 +31,9 @@ class AuthUser<T> extends ResponseMessage<T> {
   Map<String, dynamic> gets() {
     return {"login": login};
   }
-    
 
   void setRandomPassword() {
-    final alphabet =
+    const alphabet =
         "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
     Random r = Random();
     password = String.fromCharCodes(Iterable.generate(alphabet.length,
@@ -43,4 +44,40 @@ class AuthUser<T> extends ResponseMessage<T> {
       _$AuthUserFromJson(data);
 
   Map<String, dynamic> toJson() => _$AuthUserToJson(this);
+
+  @override
+  AuthUser fromJsonViewAbstract(Map<String, dynamic> json) {
+    return AuthUser.fromJson(json);
+  }
+
+  @override
+  IconData getFieldIconData(String label) {
+    // TODO: implement getFieldIconData
+    throw UnimplementedError();
+  }
+
+  @override
+  String getFieldLabel(String label, BuildContext context) {
+    return "";
+  }
+
+  @override
+  List<String> getFields() {
+    return ["login", "permissions", "response"];
+  }
+
+  @override
+  IconData getIconData() {
+    return Icons.nat;
+  }
+
+  @override
+  String? getTableNameApi() {
+    return "";
+  }
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() {
+    return toJson();
+  }
 }

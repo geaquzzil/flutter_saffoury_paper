@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
-  final padding = EdgeInsets.symmetric(horizontal: 20);
+  final padding = const EdgeInsets.symmetric(horizontal: 20);
 
   List<ViewAbstract> drawerItems;
   NavigationDrawerWidget({Key? key, required this.drawerItems})
@@ -16,7 +16,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-    return Container(
+    return SizedBox(
       width: context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
           ? null
           : 60,
@@ -26,17 +26,17 @@ class NavigationDrawerWidget extends StatelessWidget {
               topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
         ),
         child: Container(
-          color: Color(0xFF1A2F45),
+          color: const Color(0xFF1A2F45),
           child: Column(children: [
             Container(
                 color: Colors.white12,
-                padding: EdgeInsets.symmetric(vertical: 24).add(safeArea),
+                padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
                 width: double.infinity,
                 child: buildHeader(context)),
             buildList(context),
-            Spacer(),
+            const Spacer(),
             buildCollapseIcon(context),
-            SizedBox(
+            const SizedBox(
               height: 12,
             )
           ]),
@@ -47,11 +47,11 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   Widget buildHeader(BuildContext context) {
     return !context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
-        ? FlutterLogo(
+        ? const FlutterLogo(
             size: 48,
           )
         : Row(
-            children: [
+            children: const [
               SizedBox(
                 width: 24,
               ),
@@ -72,7 +72,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     return ListView.separated(
         padding: isClosed ? EdgeInsets.zero : padding,
         separatorBuilder: (context, index) {
-          return SizedBox(
+          return const SizedBox(
             height: 16,
           );
         },
@@ -86,12 +86,12 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   Widget buildCollapseIcon(BuildContext context) {
-    final double size = 52;
+    const double size = 52;
     bool isOpen =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen;
     IconData icon = !isOpen ? Icons.arrow_forward_ios : Icons.arrow_back_ios;
     final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
-    final margin = isOpen ? EdgeInsets.only(right: 16) : null;
+    final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
     final width = isOpen ? size : double.infinity;
     return Container(
       margin: margin,
@@ -101,7 +101,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         child: InkWell(
           onTap: () =>
               context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
-          child: Container(
+          child: SizedBox(
             width: width,
             height: size,
             child: OnHoverWidget(builder: (onHover) {

@@ -38,10 +38,10 @@ class MyHomePage extends StatelessWidget {
             delegate: SearchHeader(
               icon: Icons.terrain,
               title: 'Trees',
-              search: _Search(),
+              search: const _Search(),
             ),
           ),
-          SliverFillRemaining(hasScrollBody: true, child: ListProviderWidget())
+          const SliverFillRemaining(hasScrollBody: true, child: ListProviderWidget())
         ],
       ),
     );
@@ -49,7 +49,7 @@ class MyHomePage extends StatelessWidget {
 }
 
 class _Search extends StatefulWidget {
-  _Search({Key? key}) : super(key: key);
+  const _Search({Key? key}) : super(key: key);
 
   @override
   __SearchState createState() => __SearchState();
@@ -138,11 +138,17 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
         height:
             max(maxTopBarHeight * (1 - shrinkFactor * 1.45), minTopBarHeight),
         width: 100,
+        decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(36),
+              bottomRight: Radius.circular(36),
+            )),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(title, style: Theme.of(context).textTheme.headline4),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Icon(
@@ -152,15 +158,9 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
             )
           ],
         ),
-        decoration: BoxDecoration(
-            color: Colors.grey.shade50,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(36),
-              bottomRight: Radius.circular(36),
-            )),
       ),
     );
-    return Container(
+    return SizedBox(
       height: max(maxExtent - shrinkOffset, minExtent),
       child: Stack(
         fit: StackFit.loose,
@@ -169,12 +169,11 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 bottom: 10,
               ),
               child: Container(
                 alignment: Alignment.center,
-                child: search,
                 width: 200,
                 height: 50,
                 decoration: BoxDecoration(
@@ -182,11 +181,12 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 10),
+                        offset: const Offset(0, 10),
                         blurRadius: 10,
                         color: Colors.green.withOpacity(0.23),
                       )
                     ]),
+                child: search,
               ),
             ),
           ),

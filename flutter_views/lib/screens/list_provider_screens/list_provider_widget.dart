@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:provider/provider.dart';
 
 class ListProviderWidget extends StatefulWidget {
-  ListProviderWidget({Key? key}) : super(key: key);
+  const ListProviderWidget({Key? key}) : super(key: key);
 
   @override
   State<ListProviderWidget> createState() => _ListProviderWidgetState();
@@ -53,7 +53,7 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
       value: listProvider,
       child: Consumer<ListProvider>(builder: (context, provider, listTile) {
         if (provider.getCount == 0) {
-          return Center(child: Icon(Icons.search));
+          return const Center(child: Icon(Icons.search));
         }
         return _listItems(listProvider.getObjects);
       }),

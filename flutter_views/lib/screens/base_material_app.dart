@@ -5,10 +5,6 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/screens/base_shared_main_page.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
-import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
-import 'package:flutter_view_controller/screens/web/home.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';

@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   final double _initFabHeight = 120.0;
   double _fabHeight = 0;
   double _panelHeightOpen = 100;
-  double _panelHeightClosed = 100;
+  final double _panelHeightClosed = 100;
 
   @override
   void initState() {
@@ -61,14 +61,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         body: Stack(
       children: <Widget>[
-        Center(
+        const Center(
           child: Text("This is the Widget behind the sliding panel"),
         ),
         SlidingUpPanel(
           minHeight: MediaQuery.of(context).size.height,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
-          panel: Center(
+          panel: const Center(
             child: Text("This is the sliding Widget"),
           ),
         )
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
             parallaxOffset: .5,
             body: _body(),
             panelBuilder: (sc) => _panel(sc),
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
             onPanelSlide: (double pos) => setState(() {
@@ -100,12 +100,12 @@ class _HomePageState extends State<HomePage> {
             right: 20.0,
             bottom: _fabHeight,
             child: FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: Colors.white,
               child: Icon(
                 Icons.gps_fixed,
                 color: Theme.of(context).primaryColor,
               ),
-              onPressed: () {},
-              backgroundColor: Colors.white,
             ),
           ),
 
@@ -125,17 +125,17 @@ class _HomePageState extends State<HomePage> {
             top: 52.0,
             child: Container(
               padding: const EdgeInsets.fromLTRB(24.0, 18.0, 24.0, 18.0),
-              child: Text(
-                "SlidingUpPanel Example",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Color.fromRGBO(0, 0, 0, .25), blurRadius: 16.0)
                 ],
+              ),
+              child: const Text(
+                "SlidingUpPanel Example",
+                style: TextStyle(fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           controller: sc,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 12.0,
             ),
             Row(
@@ -162,16 +162,16 @@ class _HomePageState extends State<HomePage> {
                   height: 5,
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                      borderRadius: const BorderRadius.all(Radius.circular(12.0))),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 18.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: const <Widget>[
                 Text(
                   "Explore Pittsburgh",
                   style: TextStyle(
@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 36.0,
             ),
             Row(
@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                 _button("More", Icons.more_horiz, Colors.green),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 36.0,
             ),
             Container(
@@ -201,11 +201,11 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Images",
+                  const Text("Images",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 12.0,
                   ),
                   Row(
@@ -230,14 +230,14 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 36.0,
             ),
             Container(
               padding: const EdgeInsets.only(left: 24.0, right: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+                children: const <Widget>[
                   Text("About",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
           ],
@@ -265,19 +265,19 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(16.0),
-          child: Icon(
-            icon,
-            color: Colors.white,
-          ),
           decoration:
-              BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [
+              BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.15),
               blurRadius: 4.0,
             )
           ]),
+          child: Icon(
+            icon,
+            color: Colors.white,
+          ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 12.0,
         ),
         Text(label),
@@ -298,7 +298,7 @@ class _HomePageState extends State<HomePage> {
         MarkerLayerOptions(markers: [
           Marker(
               point: LatLng(40.441753, -80.011476),
-              builder: (ctx) => Icon(
+              builder: (ctx) => const Icon(
                     Icons.location_on,
                     color: Colors.blue,
                     size: 48.0,

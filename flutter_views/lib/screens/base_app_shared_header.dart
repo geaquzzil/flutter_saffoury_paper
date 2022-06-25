@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_view_controller/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/overlay_page.dart';
-import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:icon_badge/icon_badge.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -21,7 +17,7 @@ class BaseAppSharedHeader extends StatelessWidget {
       children: [
         if (!SizeConfig.isDesktop(context))
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
             onPressed: context.read<DrawerMenuController>().controlMenu,
           ),
         if (!SizeConfig.isMobile(context))
@@ -31,7 +27,7 @@ class BaseAppSharedHeader extends StatelessWidget {
           ),
         if (!SizeConfig.isMobile(context))
           Spacer(flex: SizeConfig.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField()),
+        const Expanded(child: SearchField()),
         HeaderActions(),
       ],
     );
@@ -54,7 +50,7 @@ class HeaderActions extends StatelessWidget {
             child: GestureDetector(
               onTap: () => print('ON TAP OVERLAY!'),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     shape: BoxShape.circle, color: Colors.redAccent),
               ),
             ),
@@ -70,18 +66,18 @@ class HeaderActions extends StatelessWidget {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Rewind and remember'),
+          title: const Text('Rewind and remember'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
+              children: const <Widget>[
                 Text('You will never be satisfied.'),
-                Text('You\’re like me. I’m never satisfied.'),
+                Text('You’re like me. I’m never satisfied.'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Regret'),
+              child: const Text('Regret'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -104,8 +100,8 @@ class HeaderActions extends StatelessWidget {
     //   ),
     // ),
 
-    IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
-    IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
+    IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
   ];
   HeaderActions({Key? key}) : super(key: key);
 
@@ -114,10 +110,10 @@ class HeaderActions extends StatelessWidget {
     return SizeConfig.isMobile(context)
         ? const ProfileCard()
         : Row(children: [
-            ProfileCard(),
+            const ProfileCard(),
             OverlayWidget(
-              overlay: Text("THis is a test"),
-              child: Icon(Icons.home),
+              overlay: const Text("THis is a test"),
+              child: const Icon(Icons.home),
             ),
           ]
             // ..addAll(actions),
@@ -133,8 +129,8 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: defaultPadding),
-      padding: EdgeInsets.symmetric(
+      margin: const EdgeInsets.only(left: defaultPadding),
+      padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
         vertical: defaultPadding / 2,
       ),
@@ -145,14 +141,14 @@ class ProfileCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.account_circle),
+          const Icon(Icons.account_circle),
           if (!SizeConfig.isMobile(context))
-            Padding(
+            const Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
               child: Text("Angelina Jolie"),
             ),
-          Icon(Icons.keyboard_arrow_down),
+          const Icon(Icons.keyboard_arrow_down),
         ],
       ),
     );
@@ -171,20 +167,20 @@ class SearchField extends StatelessWidget {
         hintText: "Search",
         fillColor: secondaryColor,
         filled: true,
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         suffixIcon: InkWell(
           onTap: () {},
           child: Container(
-              padding: EdgeInsets.all(defaultPadding * 0.75),
-              margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(defaultPadding * 0.75),
+              margin: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              decoration: const BoxDecoration(
                 color: primaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              child: Icon(Icons.account_balance)),
+              child: const Icon(Icons.account_balance)),
         ),
       ),
     );
@@ -219,10 +215,10 @@ class _MenuTendinaState extends State<MenuTendina> {
     return Stack(
       children: <Widget>[
         widget.child,
-        Container(
+        SizedBox(
             width: MediaQuery.of(context).size.width,
             height:
-                (this.mostraTendina) ? MediaQuery.of(context).size.height : 0.0,
+                (mostraTendina) ? MediaQuery.of(context).size.height : 0.0,
             child: Opacity(
                 opacity: widget.opacita,
                 child: Container(
@@ -232,20 +228,20 @@ class _MenuTendinaState extends State<MenuTendina> {
                         setState(() {
                           widget.opacita = 0.0;
                           widget.altezza = 0.0;
-                          this.mostraTendina = false;
+                          mostraTendina = false;
                         });
                       },
                     )))),
         AnimatedContainer(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             boxShadow: [
               BoxShadow(
                   offset: Offset(0, -5), spreadRadius: 0.0, blurRadius: 20)
             ],
           ),
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           width: MediaQuery.of(context).size.width,
-          height: this.altezza,
+          height: altezza,
           child: widget.notifiche,
         )
       ],

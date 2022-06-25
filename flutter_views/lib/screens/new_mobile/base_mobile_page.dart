@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BaseMobilePageNew extends StatefulWidget {
-  BaseMobilePageNew({Key? key}) : super(key: key);
+  const BaseMobilePageNew({Key? key}) : super(key: key);
 
   @override
   State<BaseMobilePageNew> createState() => _BaseMobilePageNewState();

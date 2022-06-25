@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -6,120 +7,159 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-abstract class ViewAbstractPermissions<T>{
-  static const String ADMIN_ID="-1";
+abstract class ViewAbstractPermissions<T> {
+  static const String ADMIN_ID = "-1";
   String iD = "-1";
-Future<bool> hasPermissionToPreformActionOn(BuildContext context,
-  String field, ServerActions actions) {
-        print( "hasPermissionToPreformActionOn: " + " field " + field + "  action " + actions.toString());
-        PermissionField permissionField = getPermission(field);
-        if (permissionField == null) {
-            print(  "hasPermissionToPreformActionOn: " + " PermissionField ==null  " + field.getName() + "  action " + actions.toString());
-            return true;
-        }
-     print( "hasPermissionToPreformActionOn: " + " PermissionField " + field.getName() + "  permissionField " + permissionField.table_name());
-        if (isEmpty(permissionField.table_name())) return false;
-        return hasPermission(permissionField.table_name(), actions);
-    }
-Future<bool> hasPermission( dynamic toDo,ServerActions? action) async {
-    if (action == null) action = ServerActions.view;
-    PermissionLevelAbstract permissionLevelAbstract = getUserPermissionLevel();
+// Future<bool> hasPermissionToPreformActionOn(BuildContext context,
+//   String field, ServerActions? actions) async{
+//         print( "hasPermissionToPreformActionOn: " + " field " + field + "  action " + actions.toString());
+//         PermissionField permissionField = getPermission(field);
+//         if (permissionField == null) {
+//             print(  "hasPermissionToPreformActionOn: " + " PermissionField ==null  " + field.getName() + "  action " + actions.toString());
+//             return true;
+//         }
+//      print( "hasPermissionToPreformActionOn: " + " PermissionField " + field.getName() + "  permissionField " + permissionField.table_name());
+//         if (isEmpty(permissionField.table_name())) return false;
+//         return hasPermission(permissionField.table_name, actions);
+//     }
+  Future<bool> hasPermission(
+      BuildContext context, dynamic toDo, ServerActions? action) async {
+    action ??= ServerActions.view;
+    PermissionLevelAbstract permissionLevelAbstract =
+        getUserPermissionLevel(context);
     if (permissionLevelAbstract == null) {
       //todo why is null here ?
-      print("hasPermission: " +
-          "permissionLevelAbstract is null ? " +
-          this.toString());
+      print("hasPermission: permissionLevelAbstract is null ? ${toString()}");
       return true;
     } else {
-      if (getUserPermissionLevel().isAdmin()) {
-        print("hasPermission: " +
-            "Admin Permission for " +
-            toDo.toString() +
-            " to Action " +
-            action.toString());
+      if (isAdmin(context)) {
+        print("hasPermission: Admin Permission for $toDo to Action $action");
         return true;
       }
     }
-    List<?> PermissionActions = getUserPermissionLevel().getPermissions_levels();//  PermissionLevel.GetValue < IList > ("permissions_levels");
-            print( "hasPermission: " + "Checking Pe|rmission for " + toDo.toString() + " to Action " + action.toString() + "  Count" + PermissionActions.size());
-        if (PermissionActions.isEmpty()) {
-            return false;
-        }
-        PermissionActionAbstract foundedPermission = getUserPermissionLevel().findCurrentPermission(toDo);
-        if (foundedPermission == null) {
-            if (toDo is String) {
-                return false;
-            }
-            RestOption restOption = Objects.getAnnotation(toDo, RestOption.class);
-            if (restOption == null) {
-                return true;
-            }
-            return false;
-        }
-        if (toDo is String) {
-              print( "hasPermission: " + "founded permissio" + (foundedPermission.view == 1 || foundedPermission.list == 1));
-            return foundedPermission.view == 1 || foundedPermission.list == 1;
-        } else {
-            return    Objects.getValue(foundedPermission, action.toString(), Integer.class) == 1;
-        }
+    List<PermissionActionAbstract> PermissionActions = getPermssionActions(
+        context); //  PermissionLevel.GetValue < IList > ("permissions_levels");
+    print("hasPermission: Checking Pe|rmission for $toDo to Action $action  Count  ${PermissionActions.length} ");
+    if (PermissionActions.isEmpty) {
+      return false;
+    }
+    PermissionActionAbstract? foundedPermission =
+        await findCurrentPermission(context, toDo);
+    if (foundedPermission == null) {
+      if (toDo is String) {
+        return false;
+      }
+      // RestOption restOption = Objects.getAnnotation(toDo, RestOption.class);
+      // if (restOption == null) {
+      //     return true;
+      // }
+      return false;
+    }
+    if (toDo is String) {
+      print("hasPermission: " "founded permissio ${foundedPermission.view} ");
+      return foundedPermission.view == 1 || foundedPermission.list == 1;
+    } else {
+      return getPermissionActionValueFromServerAction(
+              foundedPermission, action) ==
+          1;
+    }
   }
 
-     Future<bool> hasPermissionImport({ViewAbstract? viewAbstract}) async {
-        return    viewAbstract==null? await hasPermission(this , ServerActions.add):
-        await hasPermission(viewAbstract , ServerActions.add);
-        
+  int getPermissionActionValueFromServerAction(
+      PermissionActionAbstract action, ServerActions serverActions) {
+    if (serverActions == ServerActions.add) {
+      return action.add ?? 0;
+    } else if (serverActions == ServerActions.edit) {
+      return action.edit ?? 0;
+    } else if (serverActions == ServerActions.delete_action) {
+      return action.delete_action ?? 0;
+    } else if (serverActions == ServerActions.print) {
+      return action.print ?? 0;
+    } else if (serverActions == ServerActions.notification) {
+      return action.notification ?? 0;
+    } else if (serverActions == ServerActions.print) {
+      return action.print ?? 0;
+    } else if (serverActions == ServerActions.view) {
+      return action.view ?? 0;
+    } else {
+      return 0;
     }
+  }
 
-          Future<bool> hasPermissionDelete({ViewAbstract? viewAbstract})async {
-            if(viewAbstract==null){
-                  if (isNew()) return false;
-        if (hasPerantViewAbstrct()) return false;
-        return await hasPermission(this , ServerActions.delete_action);
-            }
-                  if (viewAbstract.isNew()) return false;
-        if (viewAbstract.hasPerantViewAbstrct()) return false;
-                return await hasPermission(viewAbstract , ServerActions.delete_action);
-    }
+  Future<bool> hasPermissionImport(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.add)
+        : await hasPermission(context, viewAbstract, ServerActions.add);
+  }
 
-          Future<bool> hasPermissionAdd({ViewAbstract? viewAbstract})async {
-         return    viewAbstract==null? await hasPermission(this , ServerActions.add):
-        await hasPermission(viewAbstract , ServerActions.add);
-    }
+  Future<bool> hasPermissionAdd(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.add)
+        : await hasPermission(context, viewAbstract, ServerActions.add);
+  }
 
-          Future<bool> hasPermissionEdit({ViewAbstract? viewAbstract})async {
-       return    viewAbstract==null? await hasPermission(this , ServerActions.edit):
-        await hasPermission(viewAbstract , ServerActions.edit);
-    }
-  Future<bool> hasPermissionEditPrint({ViewAbstract? viewAbstract})async {
-  return    viewAbstract==null? await hasPermission(this , ServerActions.print):
-        await hasPermission(viewAbstract , ServerActions.print);
-    }
-    PermissionLevelAbstract getUserPermissionLevel(BuildContext context){
-     return  context.read<AuthProvider>().getPermissions;
-    }
-     bool hasPerantViewAbstrct() {
-        return getParent() != null;
-    }
-    Future<bool>  hasPermissionDelete({ViewAbstract? viewAbstract})async {
-        if (isNew()) return false;
-        if (hasPerantViewAbstrct()) return false;
-          return    viewAbstract==null? await hasPermission(this , ServerActions.delete_action):
-        await hasPermission(viewAbstract , ServerActions.delete_action);
-    }
+  Future<bool> hasPermissionEdit(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.edit)
+        : await hasPermission(context, viewAbstract, ServerActions.edit);
+  }
 
-     bool isAdmin(BuildContext context) => getUserPermissionLevel(context).iD == ADMIN_ID;
+  Future<bool> hasPermissionEditPrint(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.print)
+        : await hasPermission(context, viewAbstract, ServerActions.print);
+  }
 
-  bool isGuest(BuildContext context) =>  getUserPermissionLevel(context).iD == "0";
+  Future<PermissionActionAbstract?> findCurrentPermission(
+      BuildContext context, dynamic toDo) async {
+    PermissionLevelAbstract permissionLevelAbstract =
+        getUserPermissionLevel(context);
 
-  bool isGeneralClient(BuildContext context) => int.parse( getUserPermissionLevel(context).iD) > 0;
+    return await permissionLevelAbstract.findPermissionBy(toDo);
+  }
 
-  bool isGeneralEmployee(BuildContext context) => int.parse( getUserPermissionLevel(context).iD) < 0;
-    
-bool isEditing() {
-        return iD != "-1";
-    }
+  List<PermissionActionAbstract> getPermssionActions(BuildContext context) {
+    return getUserPermissionLevel(context).permissions_levels;
+  }
 
-    bool isNew() {
-        return iD == "-1";
-    }
+  PermissionLevelAbstract getUserPermissionLevel(BuildContext context) {
+    return context.read<AuthProvider>().getPermissions;
+  }
+
+  //  bool hasPerantViewAbstrct() {
+  //     return getParent() != null;
+  // }
+  Future<bool> hasPermissionDelete(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    if (isNew()) return false;
+    // if (hasPerantViewAbstrct()) return false;
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.delete_action)
+        : await hasPermission(
+            context, viewAbstract, ServerActions.delete_action);
+  }
+
+  bool isAdmin(BuildContext context) =>
+      getUserPermissionLevel(context).iD == ADMIN_ID;
+
+  bool isGuest(BuildContext context) =>
+      getUserPermissionLevel(context).iD == "0";
+
+  bool isGeneralClient(BuildContext context) =>
+      int.parse(getUserPermissionLevel(context).iD) > 0;
+
+  bool isGeneralEmployee(BuildContext context) =>
+      int.parse(getUserPermissionLevel(context).iD) < 0;
+
+  bool isEditing() {
+    return iD != "-1";
+  }
+
+  bool isNew() {
+    return iD == "-1";
+  }
 }

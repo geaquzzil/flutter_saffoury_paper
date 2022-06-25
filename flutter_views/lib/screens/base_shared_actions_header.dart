@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -14,36 +13,36 @@ class BaseSharedHeader extends StatelessWidget {
       child: Row(
         children: [
           // We need this back button on mobile only
-          if (SizeConfig.isMobile(context)) BackButton(),
+          if (SizeConfig.isMobile(context)) const BackButton(),
           IconButton(
-            icon: Icon(Icons.delete_outline),
+            icon: const Icon(Icons.delete_outline),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.replay_outlined),
+            icon: const Icon(Icons.replay_outlined),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.reply_all_outlined),
+            icon: const Icon(Icons.reply_all_outlined),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.transfer_within_a_station_outlined),
+            icon: const Icon(Icons.transfer_within_a_station_outlined),
             onPressed: () {},
           ),
-          Spacer(),
+          const Spacer(),
           // We don't need print option on mobile
           if (SizeConfig.isDesktop(context))
             IconButton(
-              icon: Icon(Icons.print_disabled_outlined),
+              icon: const Icon(Icons.print_disabled_outlined),
               onPressed: () {},
             ),
           IconButton(
-            icon: Icon(Icons.mark_as_unread_outlined),
+            icon: const Icon(Icons.mark_as_unread_outlined),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.more_horiz),
+            icon: const Icon(Icons.more_horiz),
             onPressed: () {},
           ),
         ],
@@ -63,6 +62,6 @@ class BaseSharedHeader extends StatelessWidget {
       // }));
 
     }
-    return Text("");
+    return const Text("");
   }
 }

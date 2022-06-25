@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_view_controller/components/main_body.dart';
-import 'package:flutter_view_controller/screens/view/view_card_item.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
-import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/components/product_images.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class BaseSharedDetailsView extends StatelessWidget {
-  BaseSharedDetailsView({Key? key}) : super(key: key);
+  const BaseSharedDetailsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +34,10 @@ class BaseSharedDetailsView extends StatelessWidget {
         child: Column(
           children: [
             BaseSharedHeader(),
-            Divider(thickness: 1),
+            const Divider(thickness: 1),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(kDefaultPadding),
+                padding: const EdgeInsets.all(kDefaultPadding),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -51,7 +45,7 @@ class BaseSharedDetailsView extends StatelessWidget {
                         maxRadius: 24,
                         backgroundColor: Colors.transparent,
                         child: viewAbstract.getCardLeadingImage(context)),
-                    SizedBox(width: kDefaultPadding),
+                    const SizedBox(width: kDefaultPadding),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,14 +81,14 @@ class BaseSharedDetailsView extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(width: kDefaultPadding / 2),
+                              const SizedBox(width: kDefaultPadding / 2),
                               Text(
                                 "Today at 15:32",
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],
                           ),
-                          SizedBox(height: kDefaultPadding),
+                          const SizedBox(height: kDefaultPadding),
                           LayoutBuilder(
                             builder: (context, constraints) => SizedBox(
                               width: constraints.maxWidth > 850
@@ -126,7 +120,7 @@ class BaseSharedDetailsView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Hello my love, \n \nSunt architecto voluptatum esse tempora sint nihil minus incidunt nisi. Perspiciatis natus quo unde magnam numquam pariatur amet ut. Perspiciatis ab totam. Ut labore maxime provident. Voluptate ea omnis et ipsum asperiores laborum repellat explicabo fuga. Dolore voluptatem praesentium quis eos laborum dolores cupiditate nemo labore. \n \nLove you, \n\nElvia",
           style: TextStyle(
             height: 1.5,
@@ -134,28 +128,28 @@ class BaseSharedDetailsView extends StatelessWidget {
             fontWeight: FontWeight.w300,
           ),
         ),
-        SizedBox(height: kDefaultPadding),
+        const SizedBox(height: kDefaultPadding),
         Row(
           children: [
-            Text(
+            const Text(
               "6 attachments",
               style: TextStyle(fontSize: 12),
             ),
-            Spacer(),
+            const Spacer(),
             Text(
               "Download All",
               style: Theme.of(context).textTheme.caption,
             ),
-            SizedBox(width: kDefaultPadding / 4),
-            Icon(
+            const SizedBox(width: kDefaultPadding / 4),
+            const Icon(
               Icons.download,
               size: 16,
               color: kGrayColor,
             ),
           ],
         ),
-        Divider(thickness: 1),
-        SizedBox(height: kDefaultPadding / 2),
+        const Divider(thickness: 1),
+        const SizedBox(height: kDefaultPadding / 2),
         // SizedBox(
         //   height: 200,
         //   child: StaggeredGrid.custom(

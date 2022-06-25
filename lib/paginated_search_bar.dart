@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
 import 'package:endless/endless.dart';
 
@@ -92,11 +91,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 ],
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
               ),
               itemPadding: 60,
 
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               maxHeight: 300,
               hintText: 'Search',
               emptyBuilder: (context) {

@@ -1,4 +1,3 @@
-import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractLists<T> {
