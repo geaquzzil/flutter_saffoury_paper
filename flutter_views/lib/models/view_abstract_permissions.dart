@@ -1,11 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 abstract class ViewAbstractPermissions<T>{
+  static const String ADMIN_ID="-1";
   String iD = "-1";
-Future<bool> hasPermissionToPreformActionOn(String field, ServerActions actions) {
-        print( "hasPermissionToPreformActionOn: " + " field " + field.getName() + "  action " + actions.toString());
+Future<bool> hasPermissionToPreformActionOn(BuildContext context,
+  String field, ServerActions actions) {
+        print( "hasPermissionToPreformActionOn: " + " field " + field + "  action " + actions.toString());
         PermissionField permissionField = getPermission(field);
         if (permissionField == null) {
             print(  "hasPermissionToPreformActionOn: " + " PermissionField ==null  " + field.getName() + "  action " + actions.toString());
@@ -35,13 +41,13 @@ Future<bool> hasPermission( dynamic toDo,ServerActions? action) async {
       }
     }
     List<?> PermissionActions = getUserPermissionLevel().getPermissions_levels();//  PermissionLevel.GetValue < IList > ("permissions_levels");
-        Log.e(TAG, "hasPermission: " + "Checking Pe|rmission for " + toDo.toString() + " to Action " + action.toString() + "  Count" + PermissionActions.size());
+            print( "hasPermission: " + "Checking Pe|rmission for " + toDo.toString() + " to Action " + action.toString() + "  Count" + PermissionActions.size());
         if (PermissionActions.isEmpty()) {
             return false;
         }
         PermissionActionAbstract foundedPermission = getUserPermissionLevel().findCurrentPermission(toDo);
         if (foundedPermission == null) {
-            if (toDo instanceof String) {
+            if (toDo is String) {
                 return false;
             }
             RestOption restOption = Objects.getAnnotation(toDo, RestOption.class);
@@ -51,7 +57,7 @@ Future<bool> hasPermission( dynamic toDo,ServerActions? action) async {
             return false;
         }
         if (toDo is String) {
-           print(TAG, "hasPermission: " + "founded permissio" + (foundedPermission.view == 1 || foundedPermission.list == 1));
+              print( "hasPermission: " + "founded permissio" + (foundedPermission.view == 1 || foundedPermission.list == 1));
             return foundedPermission.view == 1 || foundedPermission.list == 1;
         } else {
             return    Objects.getValue(foundedPermission, action.toString(), Integer.class) == 1;
@@ -88,29 +94,27 @@ Future<bool> hasPermission( dynamic toDo,ServerActions? action) async {
   return    viewAbstract==null? await hasPermission(this , ServerActions.print):
         await hasPermission(viewAbstract , ServerActions.print);
     }
+    PermissionLevelAbstract getUserPermissionLevel(BuildContext context){
+     return  context.read<AuthProvider>().getPermissions;
+    }
      bool hasPerantViewAbstrct() {
         return getParent() != null;
     }
-    bool hasPermissionDelete() {
+    Future<bool>  hasPermissionDelete({ViewAbstract? viewAbstract})async {
         if (isNew()) return false;
         if (hasPerantViewAbstrct()) return false;
-        return hasPermission(this, Enums.ServerActions.delete_action);
-    }
-     bool isAdmin() {
-        return getUserPermissionLevel().isAdmin();
+          return    viewAbstract==null? await hasPermission(this , ServerActions.delete_action):
+        await hasPermission(viewAbstract , ServerActions.delete_action);
     }
 
-    bool isGeneralEmployee() {
-        return getUserPermissionLevel().isGeneralEmployee();
-    }
+     bool isAdmin(BuildContext context) => getUserPermissionLevel(context).iD == ADMIN_ID;
 
-    bool isGeneralClient() {
-        return getUserPermissionLevel().isGeneralClient();
-    }
+  bool isGuest(BuildContext context) =>  getUserPermissionLevel(context).iD == "0";
 
-    bool isGuest() {
-        return getUserPermissionLevel().isGuest();
-    }
+  bool isGeneralClient(BuildContext context) => int.parse( getUserPermissionLevel(context).iD) > 0;
+
+  bool isGeneralEmployee(BuildContext context) => int.parse( getUserPermissionLevel(context).iD) < 0;
+    
 bool isEditing() {
         return iD != "-1";
     }

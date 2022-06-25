@@ -9,19 +9,16 @@ part 'permission_level_abstract.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class PermissionLevelAbstract<T extends PermissionActionAbstract>
-    extends ViewAbstract<T> {
-  static const String ADMIN_ID = "-2";
-  static const String CUSTOMER_ID = "2";
+class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   String? userlevelname;
 
   static Map<String, PermissionActionAbstract> hashMapOfPermissionTableAction =
       {};
 
-  List<PermissionActionAbstract>? permissions_levels;
+  List<PermissionActionAbstract> permissions_levels = [];
   PermissionLevelAbstract() : super() {
     userlevelname = '-';
-    permissions_levels = List<T>.empty();
+    permissions_levels = List.empty();
   }
 
   static bool containsStaticKey(String key) {
@@ -32,14 +29,24 @@ class PermissionLevelAbstract<T extends PermissionActionAbstract>
     return hashMapOfPermissionTableAction[key];
   }
 
-  PermissionActionAbstract? findCurrentPermission(dynamic toDo) {
+  Future<PermissionActionAbstract?> findCurrentPermission(dynamic toDo) async {
     PermissionActionAbstract? foundedPermission;
     String? currentTableNameFromObject = findCurrentTableNmeFromObject(toDo);
     if ((currentTableNameFromObject == null)) return null;
     if (containsStaticKey(currentTableNameFromObject)) {
       return containsStaticKeyReturnValue(currentTableNameFromObject);
     }
-    foundedPermission = permissions_levels?.firstWhereOrNull((o) =>
+    // if (permissions_levels == null) return null;
+    // await Future.forEach(permissions_levels,
+    //     (PermissionActionAbstract element) {
+    //   if (element.table_name != null &&
+    //       element.table_name == currentTableNameFromObject) {
+    //     foundedPermission = element;
+    //     return;
+    //   }
+    // });
+
+    foundedPermission = permissions_levels.firstWhereOrNull((o) =>
         o.table_name != null && o.table_name == currentTableNameFromObject);
     if (foundedPermission != null) {
       hashMapOfPermissionTableAction[currentTableNameFromObject] =
@@ -64,13 +71,6 @@ class PermissionLevelAbstract<T extends PermissionActionAbstract>
     }
   }
 
-  bool isAdmin() => iD == ADMIN_ID;
-
-  bool isGuest() => iD == "0";
-
-  bool isGeneralClient() => int.parse(iD) > 0;
-
-  bool isGeneralEmployee() => int.parse(iD) < 0;
 
   factory PermissionLevelAbstract.fromJson(Map<String, dynamic> data) =>
       _$PermissionLevelAbstractFromJson(data);
@@ -78,8 +78,8 @@ class PermissionLevelAbstract<T extends PermissionActionAbstract>
   Map<String, dynamic> toJson() => _$PermissionLevelAbstractToJson(this);
 
   @override
-  T fromJsonViewAbstract(Map<String, dynamic> json) {
-    return PermissionLevelAbstract.fromJson(json) as T;
+  PermissionLevelAbstract fromJsonViewAbstract(Map<String, dynamic> json) {
+    return PermissionLevelAbstract.fromJson(json) as PermissionLevelAbstract;
   }
 
   @override

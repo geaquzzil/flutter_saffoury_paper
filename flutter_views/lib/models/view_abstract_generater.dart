@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/normal_card_list.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
@@ -33,7 +34,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onCardClicked(BuildContext context) {
     print("Card Clicked");
     if (SizeConfig.isDesktop(context)) {
-      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
+      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract,ServerActions.view);
       return;
     }
     Navigator.push(
