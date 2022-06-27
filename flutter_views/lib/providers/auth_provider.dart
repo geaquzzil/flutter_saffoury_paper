@@ -9,7 +9,7 @@ import 'package:http/src/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum Status {
-  Inititailazion,
+  Initialization,
   Authenticated,
   Authenticating,
   Unauthenticated,
@@ -20,7 +20,7 @@ enum Status {
 
 class AuthProvider with ChangeNotifier {
   late AuthUser _user;
-  Status _status = Status.Inititailazion;
+  Status _status = Status.Initialization;
   late PermissionLevelAbstract _permissions;
 
   Status get getStatus => _status;

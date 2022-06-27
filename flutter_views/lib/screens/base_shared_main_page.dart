@@ -29,50 +29,28 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _init(),
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          print(snapshot.error.toString());
-          return Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Something went wrong")],
-            ),
-          );
-        }
+    print(authProvider.getStatus.toString());
+    switch (authProvider.getStatus) {
+      case Status.Initialization:
+        return Center(
+            child: Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json"));
+      case Status.Unauthenticated:
+      case Status.Authenticating:
+        return Center(
+          child: Lottie.network(
+              "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json"),
+        );
+      case Status.Authenticated:
+        return MainWidget(context);
+      case Status.Faild:
+        return Center(
+            child: Lottie.network(
+                "https://assets5.lottiefiles.com/private_files/lf30_fryjclcj.json"));
+      default:
+        return MainWidget(context);
+    }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          print(authProvider.getStatus.toString());
-          switch (authProvider.getStatus) {
-            case Status.Inititailazion:
-            case Status.Unauthenticated:
-            case Status.Authenticating:
-              return Center(
-                child: Lottie.network(
-                    "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json"),
-              );
-            case Status.Authenticated:
-              return MainWidget(context);
-            case Status.Faild:
-              return Center(
-                  child: Lottie.network(
-                      "https://assets5.lottiefiles.com/private_files/lf30_fryjclcj.json"));
-            default:
-              return MainWidget(context);
-          }
-        }
-
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Scaffold(
-            body: Center(
-                child: Lottie.network(
-                    "https://assets5.lottiefiles.com/private_files/lf30_fryjclcj.json")));
-      },
-    );
     // return Scaffold(
     //   body: NavigationDrawerWidget(drawerItems: widget.drawerItems),
     // );
