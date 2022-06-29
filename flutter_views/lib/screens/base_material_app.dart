@@ -10,8 +10,7 @@ import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
-  List<T> drawerItems;
-  BaseMaterialAppPage({Key? key, required this.drawerItems}) : super(key: key);
+  BaseMaterialAppPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
           //     .apply(bodyColor: Colors.white),
           canvasColor: secondaryColor,
         ),
-        home: BaseSharedMainPage(drawerItems: drawerItems));
+        home: BaseSharedMainPage());
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));
     //home: NavigationHomeScreen());
@@ -162,7 +161,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
             ),
             body: Container(
               padding: const EdgeInsets.all(20),
-              child: HomeMobilePage(drawerItems: drawerItems),
+              child: HomeMobilePage(),
             ),
 
             // GridView.count(
@@ -187,7 +186,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
   LayoutBuilder getLayoutBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return HomeMobilePage(drawerItems: drawerItems);
+        return HomeMobilePage();
         // if (kIsWeb) {
         //   return const HomeWebPage();
         // } else

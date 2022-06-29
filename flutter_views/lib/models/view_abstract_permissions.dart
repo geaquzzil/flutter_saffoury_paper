@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -25,6 +24,7 @@ abstract class ViewAbstractPermissions<T> {
   Future<bool> hasPermission(
       BuildContext context, dynamic toDo, ServerActions? action) async {
     action ??= ServerActions.view;
+    print("checking hasPermission started for $toDo");
     PermissionLevelAbstract permissionLevelAbstract =
         getUserPermissionLevel(context);
     if (permissionLevelAbstract == null) {
@@ -39,7 +39,8 @@ abstract class ViewAbstractPermissions<T> {
     }
     List<PermissionActionAbstract> PermissionActions = getPermssionActions(
         context); //  PermissionLevel.GetValue < IList > ("permissions_levels");
-    print("hasPermission: Checking Pe|rmission for $toDo to Action $action  Count  ${PermissionActions.length} ");
+    print(
+        "hasPermission: Checking Pe|rmission for $toDo to Action $action  Count  ${PermissionActions.length} ");
     if (PermissionActions.isEmpty) {
       return false;
     }
@@ -84,6 +85,13 @@ abstract class ViewAbstractPermissions<T> {
     } else {
       return 0;
     }
+  }
+
+  Future<bool> hasPermissionList(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.list)
+        : await hasPermission(context, viewAbstract, ServerActions.list);
   }
 
   Future<bool> hasPermissionImport(BuildContext context,

@@ -14,8 +14,7 @@ import '../../models/view_abstract.dart';
 import '../../view_generator_helper.dart';
 
 class HomeMobilePage extends StatefulWidget {
-  List<ViewAbstract> drawerItems;
-  HomeMobilePage({Key? key, required this.drawerItems}) : super(key: key);
+  HomeMobilePage({Key? key}) : super(key: key);
 
   @override
   State<HomeMobilePage> createState() => _HomeMobilePage();
@@ -329,7 +328,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
       // key: scaffoldKey,
       drawerEnableOpenDragGesture: false,
       bottomNavigationBar: getBottomNavigationBar(),
-      drawer: ViewHelper.getDrawer(context, widget.drawerItems),
+      drawer: ViewHelper.getDrawer(context),
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,

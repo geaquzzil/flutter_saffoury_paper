@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_new.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
@@ -8,8 +9,7 @@ import 'package:provider/provider.dart';
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
-  List<ViewAbstract> drawerItems;
-  NavigationDrawerWidget({Key? key, required this.drawerItems})
+  NavigationDrawerWidget({Key? key})
       : super(key: key);
 
   @override
@@ -67,6 +67,8 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   Widget buildList(BuildContext context) {
+      AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
     return ListView.separated(
@@ -76,12 +78,12 @@ class NavigationDrawerWidget extends StatelessWidget {
             height: 16,
           );
         },
-        itemCount: drawerItems.length,
+        itemCount:authProvider.getDrawerItems.length,
         shrinkWrap: true,
         primary: false,
         itemBuilder: (context, index) {
           return DrawerListTileDesktop(
-              viewAbstract: drawerItems[index], idx: index);
+              viewAbstract: authProvider.getDrawerItems[index], idx: index);
         });
   }
 

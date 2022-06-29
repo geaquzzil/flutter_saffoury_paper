@@ -14,21 +14,19 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class BaseSharedMainPage<T extends ViewAbstract> extends StatefulWidget {
-  List<T> drawerItems;
-  BaseSharedMainPage({Key? key, required this.drawerItems}) : super(key: key);
+  BaseSharedMainPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BaseSharedMainPage> createState() => _BaseSharedMainPageState();
 }
 
 class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
-  Future<void> _init() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-  }
-
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
     print(authProvider.getStatus.toString());
     switch (authProvider.getStatus) {
       case Status.Initialization:
@@ -42,13 +40,13 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
               "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json"),
         );
       case Status.Authenticated:
-        return MainWidget(context);
+        return getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
         return Center(
             child: Lottie.network(
                 "https://assets5.lottiefiles.com/private_files/lf30_fryjclcj.json"));
       default:
-        return MainWidget(context);
+        return getFutureDrawerItemsBuilder(context, authProvider);
     }
 
     // return Scaffold(
@@ -56,18 +54,38 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
     // );
   }
 
+  Widget getFutureDrawerItemsBuilder(
+      BuildContext context, AuthProvider authProvider) {
+    return FutureBuilder(
+        future: authProvider.initDrawerItems(context),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          switch (snapshot.connectionState) {
+            
+            case ConnectionState.waiting:
+              return Text('Loading....');
+            case ConnectionState.done:
+              print("drawer itmes ${authProvider.getDrawerItems.toString()}");
+              return Text('Done loading');
+            default:
+              if (snapshot.hasError)
+                return Text('Error: ${snapshot.error}');
+              else
+                return Text('Result: ${snapshot}');
+          }
+        });
+  }
+
   Scaffold MainWidget(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return Scaffold(
       key: context.read<DrawerMenuController>().scaffoldKey,
-      drawer: BaseSharedDrawer(drawerItems: widget.drawerItems),
+      drawer: BaseSharedDrawer(),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // We want this side menu only for large screen
-            if (SizeConfig.isDesktop(context))
-              NavigationDrawerWidget(drawerItems: widget.drawerItems),
+            if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,

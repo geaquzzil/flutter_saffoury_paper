@@ -69,7 +69,7 @@ void main() {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DrawerMenuController()),
-    ChangeNotifierProvider(create: (_) => AuthProvider.initialize()),
+    ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
     ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
@@ -77,7 +77,7 @@ void main() {
     ChangeNotifierProvider(
         create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),
-  ], child: BaseMaterialAppPage(drawerItems: views)
+  ], child: BaseMaterialAppPage()
 
       //  App(),
       ));

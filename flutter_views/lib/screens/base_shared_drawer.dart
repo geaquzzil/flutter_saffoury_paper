@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../providers_controllers/drawer_selected_item_controler.dart';
 
 class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
-  List<T> drawerItems;
-  BaseSharedDrawer({Key? key, required this.drawerItems}) : super(key: key);
+  BaseSharedDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     return Container(
       decoration: const BoxDecoration(
         color: Colors.black,
@@ -28,10 +29,10 @@ class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: drawerItems.length,
+                  itemCount: authProvider.getDrawerItems.length,
                   itemBuilder: (BuildContext context, int index) {
                     return DrawerListTile(
-                      viewAbstract: drawerItems[index],
+                      viewAbstract: authProvider.getDrawerItems[index],
                       idx: index,
                     );
                   }),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'models/view_abstract.dart';
 
@@ -50,10 +52,11 @@ class ViewHelper {
             )));
   }
 
-  static Drawer getDrawer<T extends ViewAbstract>(
-      BuildContext context, List<T> list) {
+  static Drawer getDrawer(
+      BuildContext context) {
+            AuthProvider authProvider = Provider.of<AuthProvider>(context);
     return Drawer(
-      child: getDrawableListView(context, list),
+      child: getDrawableListView(context, authProvider.getDrawerItems),
     );
   }
 
