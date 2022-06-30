@@ -60,15 +60,17 @@ class AuthProvider with ChangeNotifier {
       _status = Status.Faild;
     } else {
       _user = _user.fromJsonViewAbstract(jsonDecode(responseUser.body));
+
       bool isLogin = _user.login ?? false;
       bool hasPermission = _user.permission ?? false;
       _status = isLogin ? Status.Authenticated : Status.Guest;
     }
+    _permissions = _user.userlevels ?? PermissionLevelAbstract();
 
     notifyListeners();
   }
 
-  Future<void> initDrawerItems(BuildContext context) async {
+  Future initDrawerItems(BuildContext context) async {
     List<ViewAbstract> permssionedDrawerItems = [];
     await Future.forEach(_drawerItems, (item) async {
       print("checing permission for $item ");

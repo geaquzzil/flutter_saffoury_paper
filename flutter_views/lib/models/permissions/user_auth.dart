@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -13,6 +14,8 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   int? response;
   String? phone;
   String? password;
+
+  PermissionLevelAbstract? userlevels;
 
   AuthUser({bool? setPassword}) : super() {
     if (setPassword ?? false) {

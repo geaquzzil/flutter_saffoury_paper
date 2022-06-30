@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
-  NavigationDrawerWidget({Key? key})
-      : super(key: key);
+  NavigationDrawerWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +66,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   Widget buildList(BuildContext context) {
-      AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
@@ -75,15 +74,23 @@ class NavigationDrawerWidget extends StatelessWidget {
         padding: isClosed ? EdgeInsets.zero : padding,
         separatorBuilder: (context, index) {
           return const SizedBox(
-            height: 16,
+            height: 8,
           );
         },
-        itemCount:authProvider.getDrawerItems.length,
+        itemCount: authProvider.getDrawerItems.length,
         shrinkWrap: true,
         primary: false,
         itemBuilder: (context, index) {
-          return DrawerListTileDesktop(
-              viewAbstract: authProvider.getDrawerItems[index], idx: index);
+          ViewAbstract viewAbstract = authProvider.getDrawerItems[index];
+          if (viewAbstract.getDrawerGroupName() != null) {
+            List<ViewAbstract> groupedDrawerItems = authProvider.getDrawerItems
+                .where((e) =>
+                    e.getDrawerGroupName() == viewAbstract.getDrawerGroupName())
+                .toList();
+            return DrawerListTileDesktopGroup(
+                groupedDrawerItems: groupedDrawerItems, idx: index);
+          }
+          return DrawerListTileDesktop(viewAbstract: viewAbstract, idx: index);
         });
   }
 
@@ -114,6 +121,81 @@ class NavigationDrawerWidget extends StatelessWidget {
             }),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DrawerListTileDesktopGroup extends StatelessWidget {
+  List<ViewAbstract> groupedDrawerItems;
+  int idx;
+  DrawerListTileDesktopGroup(
+      {Key? key, required this.groupedDrawerItems, required this.idx})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    bool isOpen =
+        context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen;
+    bool isClosed =
+        context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
+    String title = groupedDrawerItems[0].getDrawerGroupName() ?? "";
+    // TODO: implement build
+    return isOpen
+        ? ExpansionTile(
+            title: Text(title),
+            children: [
+              ListView.separated(
+                  padding: isClosed
+                      ? EdgeInsets.zero
+                      : const EdgeInsets.symmetric(horizontal: 20),
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 8,
+                    );
+                  },
+                  itemCount: groupedDrawerItems.length,
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    ViewAbstract viewAbstract = groupedDrawerItems[index];
+                    return DrawerListTileDesktop(
+                        viewAbstract: viewAbstract, idx: index);
+                  })
+            ],
+          )
+        : Text("TODO");
+  }
+}
+
+class DrawerListTileDesktop extends StatelessWidget {
+  ViewAbstract viewAbstract;
+
+  int idx;
+  DrawerListTileDesktop(
+      {Key? key, required this.viewAbstract, required this.idx})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        leading: Container(child: viewAbstract.getIcon()),
+        selected:
+            context.watch<DrawerMenuSelectedItemController>().getIndex == idx,
+        title: context
+                .watch<DrawerMenuSelectedItemController>()
+                .getSideMenuIsClosed
+            ? null
+            : Container(child: viewAbstract.getLabelText(context)),
+        onTap: () {
+          context
+              .read<DrawerMenuSelectedItemController>()
+              .setSideMenuIsClosed();
+          viewAbstract.onDrawerItemClicked(context);
+          context.read<DrawerMenuSelectedItemController>().change(idx);
+        },
       ),
     );
   }

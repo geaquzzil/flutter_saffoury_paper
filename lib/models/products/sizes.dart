@@ -29,8 +29,20 @@ class Size extends ViewAbstract<Size> {
   }
 
   @override
+  String? getDrawerGroupName() {
+    // TODO: implement getDrawerGroupName
+    return "products";
+  }
+
+  @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+  @override
+  String getLabelTextOnly(BuildContext context) {
+    // TODO: implement getLabelTextOnly
+    return "sizes";
   }
 
   factory Size.fromJson(Map<String, dynamic> data) => _$SizeFromJson(data);

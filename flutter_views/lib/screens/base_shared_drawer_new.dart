@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_selected_item_controler.dart';
-import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_new_2.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
@@ -193,35 +193,5 @@ class SideItem extends StatelessWidget {
   }
 }
 
-class DrawerListTileDesktop extends StatelessWidget {
-  ViewAbstract viewAbstract;
 
-  int idx;
-  DrawerListTileDesktop(
-      {Key? key, required this.viewAbstract, required this.idx})
-      : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: ListTile(
-        leading: Container(child: viewAbstract.getIcon()),
-        selected:
-            context.watch<DrawerMenuSelectedItemController>().getIndex == idx,
-        title: context
-                .watch<DrawerMenuSelectedItemController>()
-                .getSideMenuIsClosed
-            ? null
-            : Container(child: viewAbstract.getLabelText(context)),
-        onTap: () {
-          context
-              .read<DrawerMenuSelectedItemController>()
-              .setSideMenuIsClosed();
-          viewAbstract.onDrawerItemClicked(context);
-          context.read<DrawerMenuSelectedItemController>().change(idx);
-        },
-      ),
-    );
-  }
-}

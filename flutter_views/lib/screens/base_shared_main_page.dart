@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/network_faild.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -30,9 +31,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
     print(authProvider.getStatus.toString());
     switch (authProvider.getStatus) {
       case Status.Initialization:
-        return Center(
-            child: Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json"));
+        return getLoadingWidget();
       case Status.Unauthenticated:
       case Status.Authenticating:
         return Center(
@@ -42,9 +41,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
       case Status.Authenticated:
         return getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
-        return Center(
-            child: Lottie.network(
-                "https://assets5.lottiefiles.com/private_files/lf30_fryjclcj.json"));
+        return NetworkFaildWidget();
       default:
         return getFutureDrawerItemsBuilder(context, authProvider);
     }
@@ -54,23 +51,26 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
     // );
   }
 
+  Widget getLoadingWidget() => Center(
+      child: Lottie.network(
+          "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json"));
   Widget getFutureDrawerItemsBuilder(
       BuildContext context, AuthProvider authProvider) {
     return FutureBuilder(
         future: authProvider.initDrawerItems(context),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           switch (snapshot.connectionState) {
-            
             case ConnectionState.waiting:
-              return Text('Loading....');
+              return getLoadingWidget();
             case ConnectionState.done:
               print("drawer itmes ${authProvider.getDrawerItems.toString()}");
-              return Text('Done loading');
+              return MainWidget(context);
             default:
-              if (snapshot.hasError)
-                return Text('Error: ${snapshot.error}');
-              else
-                return Text('Result: ${snapshot}');
+              if (snapshot.hasError) {
+                return const NetworkFaildWidget();
+              } else {
+                return const NetworkFaildWidget();
+              }
           }
         });
   }

@@ -25,17 +25,9 @@ abstract class ViewAbstractPermissions<T> {
       BuildContext context, dynamic toDo, ServerActions? action) async {
     action ??= ServerActions.view;
     print("checking hasPermission started for $toDo");
-    PermissionLevelAbstract permissionLevelAbstract =
-        getUserPermissionLevel(context);
-    if (permissionLevelAbstract == null) {
-      //todo why is null here ?
-      print("hasPermission: permissionLevelAbstract is null ? ${toString()}");
+    if (isAdmin(context)) {
+      print("hasPermission: Admin Permission for $toDo to Action $action");
       return true;
-    } else {
-      if (isAdmin(context)) {
-        print("hasPermission: Admin Permission for $toDo to Action $action");
-        return true;
-      }
     }
     List<PermissionActionAbstract> PermissionActions = getPermssionActions(
         context); //  PermissionLevel.GetValue < IList > ("permissions_levels");

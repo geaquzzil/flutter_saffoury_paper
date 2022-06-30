@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -65,7 +66,8 @@ void main() {
   // runApp(AnimatedListSample());
 
   // return;
-  List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
+  List<ViewAbstract> views =
+      List<ViewAbstract>.from([Product(), Size(), ProductType()]);
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => DrawerMenuController()),

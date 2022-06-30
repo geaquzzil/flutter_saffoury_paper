@@ -55,7 +55,11 @@ class Product extends ViewAbstract<Product> {
     // TODO: implement getTableNameApi
     return "products";
   }
-
+    @override
+  String getLabelTextOnly(BuildContext context) {
+    // TODO: implement getLabelTextOnly
+    return "products";
+  }
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();

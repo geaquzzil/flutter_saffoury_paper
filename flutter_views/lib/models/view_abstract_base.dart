@@ -9,10 +9,7 @@ import 'package:reflectable/mirrors.dart';
 
 import 'view_abstract_api.dart';
 
-abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>{
-  
-
-
+abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<String> getFields();
   String getFieldLabel(String label, BuildContext context);
   IconData getFieldIconData(String label);
@@ -20,6 +17,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>{
 
   double getCartItemPrice() => 0;
   double getCartItemQuantity() => 0;
+
+  String? getDrawerGroupName() => null;
+  IconData? getDrawerGroupIconData() => null;
 
   Icon getFieldIcon(String label) {
     return Icon(getFieldIconData(label));

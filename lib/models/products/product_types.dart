@@ -51,8 +51,18 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
+  String getLabelTextOnly(BuildContext context) {
+    // TODO: implement getLabelTextOnly
+    return "products_types";
+  }
+  @override
+  String? getDrawerGroupName() {
+    // TODO: implement getDrawerGroupName
+    return "products";
+  }
+  @override
   IconData getFieldIconData(String label) {
-  switch (label) {
+    switch (label) {
       case "id":
         return Icons.account_balance_wallet_sharp;
       case "sizes":
