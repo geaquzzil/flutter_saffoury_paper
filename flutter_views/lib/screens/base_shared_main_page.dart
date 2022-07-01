@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
@@ -64,7 +65,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
               return getLoadingWidget();
             case ConnectionState.done:
               print("drawer itmes ${authProvider.getDrawerItems.toString()}");
-              return MainWidget(context);
+              return getMainContainerWidget(context);
             default:
               if (snapshot.hasError) {
                 return const NetworkFaildWidget();
@@ -73,6 +74,53 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
               }
           }
         });
+  }
+
+  Widget getScreenDivider(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        SizedBox(
+          height: 60,
+          width: double.infinity,
+          child: Container(
+            child: BaseSharedHeader(),
+          ), //desktop header
+        ),
+        Expanded(
+          child: Row(children: [
+            if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
+            Expanded(
+                // It takes 5/6 part of the screen
+                flex: _size.width > 1340 ? 8 : 10,
+                child: Center(
+                  child: Text("left"),
+                )),
+            if (SizeConfig.isDesktop(context))
+              Expanded(
+                  flex: 5,
+                  child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(50)),
+                      ),
+                      child: Center(
+                        child: Text("Right"),
+                      )))
+          ]),
+        )
+      ],
+    );
+  }
+
+  Widget getMainContainerWidget(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+    return Scaffold(
+      key: context.read<DrawerMenuController>().scaffoldKey,
+      drawer: BaseSharedDrawer(),
+      body: SafeArea(child: getScreenDivider(context)),
+    );
   }
 
   Scaffold MainWidget(BuildContext context) {
@@ -111,7 +159,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
             BaseAppSharedHeader(),
             SizedBox(height: defaultPadding),
             Center(child: Text("THIS IS A TEST")),
-            ListProviderWidget()
+            // ListProviderWidget()
             // Row(
             //   crossAxisAlignment: CrossAxisAlignment.start,
             //   children: [

@@ -67,12 +67,12 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
         // theme: ThemeData(
         //   useMaterial3: true,
         // ),
-        theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: bgColor,
-          // textTheme: GoogleFonts.(Theme.of(context).textTheme)
-          //     .apply(bodyColor: Colors.white),
-          canvasColor: secondaryColor,
-        ),
+        // theme: ThemeData.dark().copyWith(
+        //   scaffoldBackgroundColor: bgColor,
+        //   // textTheme: GoogleFonts.(Theme.of(context).textTheme)
+        //   //     .apply(bodyColor: Colors.white),
+        //   canvasColor: secondaryColor,
+        // ),
         home: BaseSharedMainPage());
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));

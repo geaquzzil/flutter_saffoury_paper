@@ -27,7 +27,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
         ),
         child: Container(
-          color: const Color(0xFF1A2F45),
+          color: Colors.white,
           child: Column(children: [
             Container(
                 color: Colors.white12,
@@ -48,8 +48,10 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   Widget buildHeader(BuildContext context) {
     return !context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
-        ? const FlutterLogo(
-            size: 48,
+        ? Container(
+            child: const FlutterLogo(
+              size: 48,
+            ),
           )
         : Row(
             children: const [
@@ -86,7 +88,7 @@ class NavigationDrawerWidget extends StatelessWidget {
           ViewAbstract viewAbstract = authProvider.getDrawerItems[index];
           String? groupLabel = viewAbstract.getDrawerGroupName();
 
-          if (groupLabel != null ) {
+          if (groupLabel != null) {
             _addedGroups.add(groupLabel);
             List<ViewAbstract> groupedDrawerItems = authProvider.getDrawerItems
                 .where((e) =>
