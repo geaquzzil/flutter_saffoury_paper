@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/normal_card_list.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/list_provider.dart';
 import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
@@ -41,7 +42,8 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
         controller: _scrollController,
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return data[index].getCardView(context);
+          return NormalCardList(object: data[index] as ViewAbstract);
+          // return data[index].getCardView(context);
         },
       ),
     );

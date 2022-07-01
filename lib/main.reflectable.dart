@@ -1791,7 +1791,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'hasPermissionAdd': (dynamic instance) => instance.hasPermissionAdd,
         r'hasPermissionEdit': (dynamic instance) => instance.hasPermissionEdit,
         r'hasPermissionEditPrint': (dynamic instance) =>
-            instance.hasPermissionEditPrint,
+            instance.hasPermissionPrint,
         r'findCurrentPermission': (dynamic instance) =>
             instance.findCurrentPermission,
         r'getPermssionActions': (dynamic instance) =>

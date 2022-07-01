@@ -47,9 +47,6 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-  Widget getCardView(BuildContext context) {
-    return NormalCardList(object: this as ViewAbstract);
-  }
 
   void onDrawerItemClicked(BuildContext context) {
     print('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');

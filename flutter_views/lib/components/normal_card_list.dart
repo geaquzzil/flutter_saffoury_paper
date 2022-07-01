@@ -32,27 +32,29 @@ class _NormalCardListState<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: Key(widget.object.iD),
-      direction: widget.object.getDismissibleDirection(),
-      background: widget.object.getDismissibleBackground(context),
-      secondaryBackground:
-          widget.object.getDismissibleSecondaryBackground(context),
-      onDismissed: (direction) =>
-          widget.object.onCardDismissedView(context, direction),
-      child: ListTile(
-          enabled: isEnable,
-          selected: context
-                  .watch<ActionViewAbstractProvider>()
-                  .getObject
-                  ?.isEquals(widget.object) ??
-              false,
-          onTap: () => widget.object.onCardClicked(context),
-          onLongPress: () => widget.object.onCardLongClicked(context),
-          title: (widget.object.getHeaderText(context)),
-          subtitle: (widget.object.getSubtitleHeaderText(context)),
-          leading: widget.object.getCardLeading(context),
-          trailing: widget.object.getPopupMenuActionListWidget(context)),
+    return Card(
+      child: Dismissible(
+        key: Key(widget.object.iD),
+        direction: widget.object.getDismissibleDirection(),
+        background: widget.object.getDismissibleBackground(context),
+        secondaryBackground:
+            widget.object.getDismissibleSecondaryBackground(context),
+        onDismissed: (direction) =>
+            widget.object.onCardDismissedView(context, direction),
+        child: ListTile(
+            enabled: isEnable,
+            selected: context
+                    .watch<ActionViewAbstractProvider>()
+                    .getObject
+                    ?.isEquals(widget.object) ??
+                false,
+            onTap: () => widget.object.onCardClicked(context),
+            onLongPress: () => widget.object.onCardLongClicked(context),
+            title: (widget.object.getHeaderText(context)),
+            subtitle: (widget.object.getSubtitleHeaderText(context)),
+            leading: widget.object.getCardLeading(context),
+            trailing: widget.object.getPopupMenuActionListWidget(context)),
+      ),
     );
   }
 }

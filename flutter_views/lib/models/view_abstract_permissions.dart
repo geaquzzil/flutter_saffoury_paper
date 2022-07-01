@@ -100,6 +100,18 @@ abstract class ViewAbstractPermissions<T> {
         : await hasPermission(context, viewAbstract, ServerActions.add);
   }
 
+  Future<bool> hasPermissionShare(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return true;
+  }
+
+  Future<bool> hasPermissionView(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    return viewAbstract == null
+        ? await hasPermission(context, this, ServerActions.view)
+        : await hasPermission(context, viewAbstract, ServerActions.view);
+  }
+
   Future<bool> hasPermissionEdit(BuildContext context,
       {ViewAbstract? viewAbstract}) async {
     return viewAbstract == null
@@ -107,7 +119,7 @@ abstract class ViewAbstractPermissions<T> {
         : await hasPermission(context, viewAbstract, ServerActions.edit);
   }
 
-  Future<bool> hasPermissionEditPrint(BuildContext context,
+  Future<bool> hasPermissionPrint(BuildContext context,
       {ViewAbstract? viewAbstract}) async {
     return viewAbstract == null
         ? await hasPermission(context, this, ServerActions.print)

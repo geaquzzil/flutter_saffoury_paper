@@ -59,7 +59,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
       BuildContext context, AuthProvider authProvider) {
     return FutureBuilder(
         future: authProvider.initDrawerItems(context),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return getLoadingWidget();
@@ -84,29 +84,42 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
           height: 60,
           width: double.infinity,
           child: Container(
-            child: BaseSharedHeader(),
+            color: Colors.white,
           ), //desktop header
         ),
         Expanded(
           child: Row(children: [
             if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
+            // if (SizeConfig.isDesktop(context) && _size.width > 1340)
+            //   Expanded(
+            //       flex: 2,
+            //       child: Container(
+            //           decoration: const BoxDecoration(
+            //             color: Colors.grey[300],
+            //             borderRadius:
+            //                 BorderRadius.only(topLeft: Radius.circular(50)),
+            //           ),
+            //           child: Center(
+            //             child: Text("subNav par"),
+            //           ))),
             Expanded(
                 // It takes 5/6 part of the screen
-                flex: _size.width > 1340 ? 8 : 10,
-                child: Center(
-                  child: Text("left"),
+                flex: 5,
+                child: Container(
+                  padding: EdgeInsets.all(50),
+                  child: ListProviderWidget(),
                 )),
             if (SizeConfig.isDesktop(context))
               Expanded(
-                  flex: 5,
+                  flex: _size.width > 1340 ? 8 : 10,
                   child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(50)),
+                      margin: EdgeInsets.all(50),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25),
                       ),
                       child: Center(
-                        child: Text("Right"),
+                        child: BaseSharedDetailsView(),
                       )))
           ]),
         )

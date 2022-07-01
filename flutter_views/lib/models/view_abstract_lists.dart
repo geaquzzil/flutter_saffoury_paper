@@ -38,24 +38,49 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   List<Widget>? getPopupActionsList(BuildContext context) => null;
-  List<MenuItemBuild>? getPopupMenuActionsList(BuildContext context) {
+
+  Future<List<MenuItemBuild>> getPopupMenuActionsView(
+      BuildContext context) async {
     return [
-      getMenuItemPrint(context),
-      getMenuItemEdit(context),
-      getMenuItemView(context),
-      getMenuItemShare(context),
+      if (await hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (await hasPermissionShare(context)) getMenuItemShare(context),
+      if (await hasPermissionEdit(context)) getMenuItemEdit(context),
+    ];
+  }
+  
+  Future<List<MenuItemBuild>> getPopupMenuActionsEdit(
+      BuildContext context) async {
+    return [
+      if (await hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (await hasPermissionShare(context)) getMenuItemShare(context),
+      if (await hasPermissionEdit(context)) getMenuItemEdit(context),
+    ];
+  }
+  Future<List<MenuItemBuild>> getPopupMenuActionsList(
+      BuildContext context) async {
+    return [
+      if (await hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (await hasPermissionEdit(context)) getMenuItemEdit(context),
+      if (await hasPermissionView(context)) getMenuItemView(context),
+      if (await hasPermissionShare(context)) getMenuItemShare(context),
     ];
   }
 
   Widget getPopupMenuActionListWidget(BuildContext context) {
     //TODO for divider use PopupMenuDivider()
-    return PopupMenuButton<MenuItemBuild>(
-      
-      onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(context, result);
+
+    return FutureBuilder(
+      builder:
+          (BuildContext context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
+        return PopupMenuButton<MenuItemBuild>(
+          onSelected: (MenuItemBuild result) {
+            onPopupMenuActionSelected(context, result);
+          },
+          itemBuilder: (BuildContext context) =>
+              snapshot.data?.map(buildMenuItem).toList() ?? [],
+        );
       },
-      itemBuilder: (BuildContext context) =>
-          getPopupMenuActionsList(context)?.map(buildMenuItem).toList() ?? [],
+      future: getPopupMenuActionsList(context),
     );
   }
 
@@ -74,6 +99,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         ),
       );
 
+  void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {}
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
     if (result.icon == Icons.print) {
     } else if (result.icon == Icons.edit) {

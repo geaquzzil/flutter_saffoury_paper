@@ -30,10 +30,11 @@ class BaseSharedDetailsView extends StatelessWidget {
 
   Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
     return Container(
+      color: Colors.white,
       child: SafeArea(
         child: Column(
           children: [
-            BaseSharedHeader(),
+            BaseSharedHeaderViewDetailsActions(),
             const Divider(thickness: 1),
             Expanded(
               child: SingleChildScrollView(
@@ -112,7 +113,9 @@ class BaseSharedDetailsView extends StatelessWidget {
   }
 
   Widget getViewLoop(List<String> fields, ViewAbstract viewAbstract) {
-    return ViewDetailsListWidget(viewAbstract: viewAbstract,);
+    return ViewDetailsListWidget(
+      viewAbstract: viewAbstract,
+    );
   }
 
   Widget getBodyWidget(BuildContext context, ViewAbstract viewAbstract) {
@@ -182,4 +185,3 @@ class BaseSharedDetailsView extends StatelessWidget {
     );
   }
 }
-
