@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:http/src/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supercharged/supercharged.dart';
 
 enum Status {
   Initialization,
@@ -21,6 +22,8 @@ enum Status {
 
 class AuthProvider with ChangeNotifier {
   late List<ViewAbstract> _drawerItems;
+  late Map<String?, List<ViewAbstract>> __drawerItemsGrouped;
+  final List<ViewAbstract> _drawerItemsPermissions = [];
   late AuthUser _user;
   Status _status = Status.Initialization;
   late PermissionLevelAbstract _permissions;
@@ -29,6 +32,9 @@ class AuthProvider with ChangeNotifier {
   AuthUser get getUser => _user;
   PermissionLevelAbstract get getPermissions => _permissions;
   List<ViewAbstract> get getDrawerItems => _drawerItems;
+  List<ViewAbstract> get getDrawerItemsPermissions => _drawerItemsPermissions;
+  Map<String?, List<ViewAbstract>> get getDrawerItemsGrouped =>
+      __drawerItemsGrouped;
 
   // public variables
   final formkey = GlobalKey<FormState>();
@@ -71,19 +77,23 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future initDrawerItems(BuildContext context) async {
-    List<ViewAbstract> permssionedDrawerItems = [];
     await Future.forEach(_drawerItems, (item) async {
       print("checing permission for $item ");
       bool hasPermssion = await _user.hasPermissionList(context,
           viewAbstract: item as ViewAbstract);
       print("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {
-        permssionedDrawerItems.add(item);
+        _drawerItemsPermissions.add(item);
       }
     });
     print(
-        "initDrawerItems genrated list is ${permssionedDrawerItems.toString()}");
-    _drawerItems = permssionedDrawerItems;
+        "initDrawerItems genrated list is ${_drawerItemsPermissions.toString()}");
+
+    __drawerItemsGrouped = _drawerItemsPermissions
+        .groupBy((item) => item.getDrawerGroupName(), valueTransform: (v) => v);
+
+    print(
+        "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
   }
 
   Future<bool> signIn() async {

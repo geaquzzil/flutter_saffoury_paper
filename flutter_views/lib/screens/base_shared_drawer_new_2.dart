@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_selected_item_controler.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
+  List<String> _addedGroups = [];
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
   NavigationDrawerWidget({Key? key}) : super(key: key);
@@ -82,7 +84,10 @@ class NavigationDrawerWidget extends StatelessWidget {
         primary: false,
         itemBuilder: (context, index) {
           ViewAbstract viewAbstract = authProvider.getDrawerItems[index];
-          if (viewAbstract.getDrawerGroupName() != null) {
+          String? groupLabel = viewAbstract.getDrawerGroupName();
+
+          if (groupLabel != null ) {
+            _addedGroups.add(groupLabel);
             List<ViewAbstract> groupedDrawerItems = authProvider.getDrawerItems
                 .where((e) =>
                     e.getDrawerGroupName() == viewAbstract.getDrawerGroupName())
@@ -140,7 +145,6 @@ class DrawerListTileDesktopGroup extends StatelessWidget {
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
     String title = groupedDrawerItems[0].getDrawerGroupName() ?? "";
-    // TODO: implement build
     return isOpen
         ? ExpansionTile(
             title: Text(title),
