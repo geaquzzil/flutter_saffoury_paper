@@ -78,53 +78,122 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
 
   Widget getScreenDivider(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        SizedBox(
-          height: 60,
-          width: double.infinity,
-          child: Container(
-            color: Colors.white,
-          ), //desktop header
-        ),
-        Expanded(
-          child: Row(children: [
-            if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
-            // if (SizeConfig.isDesktop(context) && _size.width > 1340)
-            //   Expanded(
-            //       flex: 2,
-            //       child: Container(
-            //           decoration: const BoxDecoration(
-            //             color: Colors.grey[300],
-            //             borderRadius:
-            //                 BorderRadius.only(topLeft: Radius.circular(50)),
-            //           ),
-            //           child: Center(
-            //             child: Text("subNav par"),
-            //           ))),
-            Expanded(
-                // It takes 5/6 part of the screen
-                flex: 5,
-                child: Container(
-                  padding: EdgeInsets.all(50),
-                  child: ListProviderWidget(),
-                )),
-            if (SizeConfig.isDesktop(context))
-              Expanded(
-                  flex: _size.width > 1340 ? 8 : 10,
-                  child: Container(
-                      margin: EdgeInsets.all(50),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
+    return Row(children: [
+      if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
+      Expanded(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 60,
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 100,
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: const <Widget>[
+                    Text('Deliver features faster',
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold)),
+                    Text('Craft beautiful UIs'),
+                    Spacer(),
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.contain, // otherwise the logo will be tiny
+                        child: FlutterLogo(),
                       ),
-                      child: Center(
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(children: [
+                Expanded(
+                    // It takes 5/6 part of the screen
+                    flex: 5,
+                    child: Container(
+                      padding: EdgeInsets.all(50),
+                      // child: Text("TESRT"),
+                      child: ListProviderWidget(),
+                    )),
+                if (SizeConfig.isDesktop(context))
+                  Expanded(
+                      flex: _size.width > 1340 ? 8 : 10,
+                      child: Container(
+                          // margin: EdgeInsets.all(25),
+                          // decoration: BoxDecoration(
+                          //   // boxShadow: [
+                          //   //   BoxShadow(
+                          //   //     color: Colors.grey[100]!,
+                          //   //     spreadRadius: 10,
+                          //   //     blurRadius: 5,
+                          //   //   )
+                          //   // ],
+                          //   color: Colors.white,
+                          //   borderRadius: BorderRadius.circular(25),
+                          // ),
+                          child: Center(
                         child: BaseSharedDetailsView(),
                       )))
-          ]),
-        )
-      ],
-    );
+              ]),
+            )
+          ],
+        ),
+      )
+    ]);
+
+    //   Expanded(
+
+    //     child: Row(children: [
+    //       if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
+    //       Column(children: [
+    //   SizedBox(
+    //         height: 60,
+    //         width: double.infinity,
+    //         child: Container(
+    //           color: Colors.white,
+    //         ), //desktop header
+    //         Row(children: [
+    // Expanded(
+    //           // It takes 5/6 part of the screen
+    //           flex: 5,
+    //           child: Container(
+    //             padding: EdgeInsets.all(50),
+    //             child: ListProviderWidget(),
+    //           )),
+    //       if (SizeConfig.isDesktop(context))
+    //         Expanded(
+    //             flex: _size.width > 1340 ? 8 : 10,
+    //             child: Container(
+    //                 // margin: EdgeInsets.all(25),
+    //                 decoration: BoxDecoration(
+    //                   boxShadow: [
+    //                     BoxShadow(
+    //                       color: Colors.grey[100]!,
+    //                       spreadRadius: 10,
+    //                       blurRadius: 5,
+    //                     )
+    //                   ],
+    //                   color: Colors.white,
+    //                   borderRadius: BorderRadius.circular(25),
+    //                 ),
+    //                 child: Center(
+    //                   child: BaseSharedDetailsView(),
+    //                 )))
+    //         ],)]
+    //       )));
   }
 
   Widget getMainContainerWidget(BuildContext context) {

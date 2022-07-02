@@ -17,31 +17,27 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-    return SizedBox(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
       width: context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
-          ? null
+          ? 256
           : 60,
-      child: Drawer(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
-        ),
-        child: Container(
-          color: Colors.white,
-          child: Column(children: [
-            Container(
-                color: Colors.white12,
-                padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
-                width: double.infinity,
-                child: buildHeader(context)),
-            buildList(context),
-            const Spacer(),
-            buildCollapseIcon(context),
-            const SizedBox(
-              height: 12,
-            )
-          ]),
-        ),
+      child: Container(
+        color: Colors.white,
+        child: Column(children: [
+          Container(
+              color: Colors.white12,
+              padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
+              width: double.infinity,
+              child: buildHeader(context)),
+          buildList(context),
+          const Spacer(),
+          buildCollapseIcon(context),
+          const SizedBox(
+            height: 12,
+          )
+        ]),
       ),
     );
   }

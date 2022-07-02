@@ -44,9 +44,9 @@ class _BaseSharedHeaderViewDetailsActionsState
           children: [
             // We need this back button on mobile only
             if (SizeConfig.isMobile(context)) const BackButton(),
-            SizedBox(
-              width: 200,
+            Expanded(
               child: TabBar(
+                labelColor: Colors.black87,
                 tabs: tabs,
                 controller: _tabController,
               ),

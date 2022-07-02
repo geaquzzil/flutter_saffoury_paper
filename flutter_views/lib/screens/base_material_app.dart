@@ -64,9 +64,9 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
         title: 'Flutter UI',
         debugShowCheckedModeBanner: false,
         restorationScopeId: 'root',
-        theme: ThemeData(
-          useMaterial3: true,
-        ),
+        // theme: ThemeData(
+        //   useMaterial3: true,
+        // ),
         // theme: ThemeData.dark().copyWith(
         //   scaffoldBackgroundColor: bgColor,
         //   // textTheme: GoogleFonts.(Theme.of(context).textTheme)

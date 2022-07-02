@@ -153,7 +153,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return [
       Tab(
         text: "OverView",
-        icon: getIcon(),
+        // icon: getIcon(),
+      ),
+      Tab(
+        text: "Inventory",
+        // icon: Icon(Icons.history),
       ),
     ];
   }
