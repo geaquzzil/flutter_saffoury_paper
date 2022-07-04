@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/app_theme.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
+import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
 import 'package:flutter_view_controller/screens/base_shared_main_page.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 
@@ -73,7 +74,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
         //   //     .apply(bodyColor: Colors.white),
         //   canvasColor: secondaryColor,
         // ),
-        home: BaseSharedMainPage());
+        home: BaseAuthenticatingScreen());
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));
     //home: NavigationHomeScreen());

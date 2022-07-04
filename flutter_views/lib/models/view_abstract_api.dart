@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
@@ -59,10 +60,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return map;
   }
 
-  Map<String, String> getBody(ServerActions? action) {
+  Map<String, String> getBody(ServerActions? action, {String? searchQuery}) {
     Map<String, String> mainBody = HashMap<String, String>();
     mainBody.addAll(getBodyExtenstionParams());
-    mainBody.addAll(getBodyCurrentAction(action));
+    mainBody.addAll(getBodyCurrentAction(action, searchQuery: searchQuery));
     return mainBody;
   }
 
@@ -88,10 +89,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<Response?> getRespones(
-      {ServerActions? serverActions, OnResponseCallback? onResponse}) async {
+      {ServerActions? serverActions,
+      OnResponseCallback? onResponse,
+      String? searchQuery}) async {
     try {
       return await getHttp().post(Uri.parse(URLS.BASE_URL),
-          headers: await getHeaders(), body: getBody(serverActions));
+          headers: await getHeaders(),
+          body: getBody(serverActions, searchQuery: searchQuery));
     } on Exception catch (e) {
       // Display an alert, no internet
       onResponse?.onServerFailure(e);
@@ -127,6 +131,30 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
+  Future<List<T>> search(int count, int page, String searchQuery,
+      {OnResponseCallback? onResponse}) async {
+    var response = await getRespones(
+        onResponse: onResponse,
+        serverActions: ServerActions.search,
+        searchQuery: searchQuery);
+
+    if (response == null) return [];
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      Iterable l = convert.jsonDecode(response.body);
+      return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+    } else if (response.statusCode == 401) {
+      ServerResponseMaster serverResponse =
+          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      return [];
+    } else {
+      return [];
+    }
+  }
+
   Future<List<T>?> listCall(int count, int page,
       {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
@@ -153,10 +181,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         HttpLogger(logLevel: LogLevel.BODY),
       ]);
 
-  Map<String, String> getBodyCurrentAction(ServerActions? action) {
+  Map<String, String> getBodyCurrentAction(ServerActions? action,
+      {String? searchQuery}) {
     Map<String, String> mainBody = HashMap();
     String? customAction = getCustomAction();
-    mainBody['action'] = customAction ?? action.toString().split(".").last;
+    mainBody['action'] = action == ServerActions.search
+        ? "list"
+        : customAction ?? action.toString().split(".").last;
     mainBody['objectTables'] = convert.jsonEncode(requireObjects());
     mainBody['detailTables'] = requireObjectsList() == null
         ? convert.jsonEncode([])
@@ -179,6 +210,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody.addAll(getBodyCurrentActionASC(action));
         mainBody['start'] = getPageItemCount.toString();
         mainBody['end'] = getPageIndex.toString();
+        break;
+      case ServerActions.search:
+        mainBody['searchStringQuery'] = searchQuery?.trim() ?? "";
         break;
       default:
         break;

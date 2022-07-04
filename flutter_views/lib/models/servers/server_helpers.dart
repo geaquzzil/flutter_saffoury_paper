@@ -6,7 +6,8 @@ enum ServerActions {
   add,
   edit,
   delete_action,
-  file
+  file,
+  search,
 }
 
 class URLS {

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/components/network_faild.dart';
+import 'package:flutter_view_controller/bloc/post_bloc.dart';
+import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
+import 'package:flutter_view_controller/components/normal_card_list.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
 import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
+import 'package:flutter_view_controller/screens/components/search_bar.dart';
 import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
@@ -14,6 +18,8 @@ import 'package:flutter_view_controller/screens/list_provider_screens/list_provi
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:paginated_search_bar/paginated_search_bar.dart';
+import 'package:endless/endless.dart';
 
 class BaseSharedMainPage<T extends ViewAbstract> extends StatefulWidget {
   BaseSharedMainPage({
@@ -42,7 +48,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
       case Status.Authenticated:
         return getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
-        return NetworkFaildWidget();
+        return NetworkFaildAuth();
       default:
         return getFutureDrawerItemsBuilder(context, authProvider);
     }
@@ -68,9 +74,9 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
               return getMainContainerWidget(context);
             default:
               if (snapshot.hasError) {
-                return const NetworkFaildWidget();
+                return const NetworkFaildAuth();
               } else {
-                return const NetworkFaildWidget();
+                return const NetworkFaildAuth();
               }
           }
         });
@@ -83,18 +89,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
       Expanded(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            ),
+            HeaderMain(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -273,4 +268,134 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
       ),
     );
   }
+}
+
+class HeaderMain extends StatefulWidget {
+  const HeaderMain({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<HeaderMain> createState() => _HeaderMainState();
+}
+
+class _HeaderMainState extends State<HeaderMain> {
+  @override
+  Widget build(BuildContext context) {
+    ViewAbstract viewAbstract =
+        context.read<DrawerViewAbstractProvider>().getObject;
+
+    ExampleItemPager pager = ExampleItemPager();
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * .99,
+                    child: PaginatedSearchBar<dynamic>(
+                      containerDecoration: BoxDecoration(
+                        boxShadow: [
+                          // BoxShadow(
+                          //   color: Colors.black.withOpacity(0.16),
+                          //   offset: const Offset(0, 3),
+                          //   blurRadius: 12,
+                          // )
+                        ],
+                        color: Colors.grey.shade100,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      itemPadding: 30,
+
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      maxHeight: 300,
+                      hintText:
+                          'Search ${viewAbstract.getLabelTextOnly(context)}',
+                      emptyBuilder: (context) {
+                        return const Text("I'm an empty state!");
+                      },
+
+                      // placeholderBuilder: (context) {
+                      //   return const Text("I'm a placeholder state!");
+                      // },
+                      paginationDelegate: EndlessPaginationDelegate(
+                        pageSize: 20,
+                        maxPages: 3,
+                      ),
+                      onSearch: ({
+                        required pageIndex,
+                        required pageSize,
+                        required searchQuery,
+                      }) async {
+                        return await viewAbstract.search(5, 0, searchQuery);
+                      },
+                      //   return viewAbstract.search(5, 0, searchQuery) ?? Future.delayed(
+                      //       const Duration(milliseconds: 1300), () {
+                      //     if (searchQuery == "empty") {
+                      //       return [];+
+                      //     }
+                      //     if (searchQuery == "") {
+                      //       return [];
+                      //     }
+
+                      //     if (pageIndex == 0) {
+                      //       pager = ExampleItemPager();
+                      //     }
+
+                      //     return  [];
+                      //   });
+                      // },
+                      itemBuilder: (
+                        context, {
+                        required item,
+                        required index,
+                      }) {
+                        return NormalCardList(object: item as ViewAbstract);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            )));
+  }
+}
+
+class ExampleItemPager {
+  int pageIndex = 0;
+  final int pageSize;
+
+  ExampleItemPager({
+    this.pageSize = 20,
+  });
+
+  List<ExampleItem> nextBatch() {
+    List<ExampleItem> batch = [];
+
+    for (int i = 0; i < pageSize; i++) {
+      batch.add(ExampleItem(title: 'Item ${pageIndex * pageSize + i}'));
+    }
+
+    pageIndex += 1;
+
+    return batch;
+  }
+}
+
+class ExampleItem {
+  final String title;
+
+  ExampleItem({
+    required this.title,
+  });
 }
