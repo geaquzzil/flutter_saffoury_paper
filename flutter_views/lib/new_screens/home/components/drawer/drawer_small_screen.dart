@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:provider/provider.dart';
 
-import '../providers_controllers/drawer_selected_item_controler.dart';
-
-class BaseSharedDrawer<T extends ViewAbstract> extends StatelessWidget {
-  BaseSharedDrawer({Key? key}) : super(key: key);
+class DrawerMobile<T extends ViewAbstract> extends StatelessWidget {
+  const DrawerMobile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

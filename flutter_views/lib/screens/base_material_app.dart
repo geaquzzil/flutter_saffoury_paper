@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/app_theme.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
-import 'package:flutter_view_controller/screens/base_shared_main_page.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 
 import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
-  BaseMaterialAppPage({Key? key}) : super(key: key);
+  const BaseMaterialAppPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +72,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
         //   //     .apply(bodyColor: Colors.white),
         //   canvasColor: secondaryColor,
         // ),
-        home: BaseAuthenticatingScreen());
+        home: const BaseAuthenticatingScreen());
     // home: ShoppingCartPage());
     // home: HomeMobilePage(drawerItems: drawerItems));
     //home: NavigationHomeScreen());
@@ -162,7 +160,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
             ),
             body: Container(
               padding: const EdgeInsets.all(20),
-              child: HomeMobilePage(),
+              child: const HomeMobilePage(),
             ),
 
             // GridView.count(
@@ -187,7 +185,7 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
   LayoutBuilder getLayoutBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return HomeMobilePage();
+        return const HomeMobilePage();
         // if (kIsWeb) {
         //   return const HomeWebPage();
         // } else

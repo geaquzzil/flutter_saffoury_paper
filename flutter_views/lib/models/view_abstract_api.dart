@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
@@ -60,10 +59,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return map;
   }
 
-  Map<String, String> getBody(ServerActions? action, {String? searchQuery}) {
+  Map<String, String> getBody(ServerActions? action,
+      {String? searchQuery, int? itemCount, int? pageIndex}) {
     Map<String, String> mainBody = HashMap<String, String>();
     mainBody.addAll(getBodyExtenstionParams());
-    mainBody.addAll(getBodyCurrentAction(action, searchQuery: searchQuery));
+    mainBody.addAll(getBodyCurrentAction(action,
+        searchQuery: searchQuery, itemCount: itemCount, pageIndex: pageIndex));
     return mainBody;
   }
 
@@ -91,11 +92,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<Response?> getRespones(
       {ServerActions? serverActions,
       OnResponseCallback? onResponse,
-      String? searchQuery}) async {
+      String? searchQuery,
+      int? itemCount,
+      int? pageIndex}) async {
     try {
       return await getHttp().post(Uri.parse(URLS.BASE_URL),
           headers: await getHeaders(),
-          body: getBody(serverActions, searchQuery: searchQuery));
+          body: getBody(serverActions,
+              searchQuery: searchQuery,
+              itemCount: itemCount,
+              pageIndex: pageIndex));
     } on Exception catch (e) {
       // Display an alert, no internet
       onResponse?.onServerFailure(e);
@@ -131,12 +137,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
-  Future<List<T>> search(int count, int page, String searchQuery,
+  Future<List<T>> search(int count, int pageIndex, String searchQuery,
       {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
         onResponse: onResponse,
         serverActions: ServerActions.search,
-        searchQuery: searchQuery);
+        searchQuery: searchQuery,
+        itemCount: count,
+        pageIndex: pageIndex       
+        );
 
     if (response == null) return [];
     if (response.statusCode == 200) {
@@ -182,7 +191,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       ]);
 
   Map<String, String> getBodyCurrentAction(ServerActions? action,
-      {String? searchQuery}) {
+      {String? searchQuery, int? itemCount, int? pageIndex}) {
     Map<String, String> mainBody = HashMap();
     String? customAction = getCustomAction();
     mainBody['action'] = action == ServerActions.search
@@ -208,11 +217,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         break;
       case ServerActions.list:
         mainBody.addAll(getBodyCurrentActionASC(action));
-        mainBody['start'] = getPageItemCount.toString();
-        mainBody['end'] = getPageIndex.toString();
+        mainBody['start'] =
+            itemCount?.toString() ?? getPageItemCount.toString();
+        mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
         break;
       case ServerActions.search:
         mainBody['searchStringQuery'] = searchQuery?.trim() ?? "";
+        mainBody['start'] =
+            itemCount?.toString() ?? getPageItemCount.toString();
+        mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
         break;
       default:
         break;

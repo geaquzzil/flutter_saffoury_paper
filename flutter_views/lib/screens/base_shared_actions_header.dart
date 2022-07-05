@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/header_action_icon.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 class BaseSharedHeaderViewDetailsActions extends StatefulWidget {
-  BaseSharedHeaderViewDetailsActions({Key? key}) : super(key: key);
+  const BaseSharedHeaderViewDetailsActions({Key? key}) : super(key: key);
 
   @override
   State<BaseSharedHeaderViewDetailsActions> createState() =>
@@ -84,9 +83,7 @@ class _BaseSharedHeaderViewDetailsActionsState
             AsyncSnapshot<List<MenuItemBuild>> snapshot) {
           if (snapshot.hasData) {
             return Row(
-              children: []..addAll(
-                  snapshot.data?.map(buildMenuItem).toList() ?? [],
-                ),
+              children: [...?snapshot.data?.map(buildMenuItem).toList()],
             );
             // return ListView.builder(
 
@@ -97,7 +94,7 @@ class _BaseSharedHeaderViewDetailsActionsState
             //               MenuItemBuild("", Icons.abc, ""),
             //         ));
           }
-          return Text("");
+          return const Text("");
         });
 
     return const Text("");

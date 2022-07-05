@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_view_controller/bloc/post_bloc.dart';
-import 'package:flutter_view_controller/components/normal_card_list.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/screens/list_bloc/bottom_loader.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +56,7 @@ class _PostsListState extends State<PostsList> {
                 itemBuilder: (BuildContext context, int index) {
                   return index >= state.posts.length
                       ? BottomLoader()
-                      : NormalCardList(object: state.posts[index]);
+                      : ListCardItem(object: state.posts[index]);
                 },
                 itemCount: state.hasReachedMax
                     ? state.posts.length

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:lottie/lottie.dart';
@@ -34,7 +34,7 @@ class BaseSharedDetailsView extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            BaseSharedHeaderViewDetailsActions(),
+            const BaseSharedHeaderViewDetailsActions(),
             const Divider(thickness: 1),
             Expanded(
               child: SingleChildScrollView(

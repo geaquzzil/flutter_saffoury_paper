@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
-import 'package:flutter_view_controller/new_screens/home/base_home_screen.dart';
+import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +21,9 @@ class BaseAuthenticatingScreen extends StatelessWidget {
       case Status.Authenticated:
         return getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
-      default:
         return const NetworkFaildAuth();
+      default:
+        return getFutureDrawerItemsBuilder(context, authProvider);
     }
   }
 
@@ -38,7 +39,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-              return BaseHomePage();
+              return const BaseHomeMainPage();
             default:
               if (snapshot.hasError) {
                 return const NetworkFaildAuth();

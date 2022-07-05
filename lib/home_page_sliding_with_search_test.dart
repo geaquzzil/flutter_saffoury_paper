@@ -10,11 +10,10 @@ import 'dart:ui';
 import 'package:endless/endless.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/paginated_search_bar.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
-import 'package:flutter_view_controller/providers/cart_provider.dart';
-import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
-import 'package:flutter_view_controller/providers/list_provider.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edit_error_list_provider.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart'
     as sos;
 import 'package:latlong2/latlong.dart';
@@ -24,15 +23,14 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'models/products/products.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartProvider()),
     ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
-    ChangeNotifierProvider(
-        create: (_) => ActionViewAbstractProvider()),
+    ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
     ChangeNotifierProvider(
         create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),
@@ -110,7 +108,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 itemPadding: 60,
 
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 maxHeight: 300,
                 hintText: 'Search',
                 emptyBuilder: (context) {
@@ -273,7 +272,8 @@ class _HomePageState extends State<HomePage> {
                   height: 5,
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
-                      borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0))),
                 ),
               ],
             ),
@@ -376,13 +376,15 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(16.0),
-          decoration:
-              BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.15),
-              blurRadius: 4.0,
-            )
-          ]),
+          decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.15),
+                  blurRadius: 4.0,
+                )
+              ]),
           child: Icon(
             icon,
             color: Colors.white,

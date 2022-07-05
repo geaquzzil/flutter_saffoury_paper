@@ -5,14 +5,14 @@ import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/cart_provider.dart';
-import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
-import 'package:flutter_view_controller/providers/list_provider.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
-import 'package:flutter_view_controller/providers_controllers/drawer_selected_item_controler.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/screens/base_material_app.dart';
 import 'package:provider/provider.dart';
 
@@ -79,7 +79,7 @@ void main() {
     ChangeNotifierProvider(
         create: (_) => DrawerViewAbstractProvider(object: Product())),
     ChangeNotifierProvider(create: (_) => ListProvider()),
-  ], child: BaseMaterialAppPage()
+  ], child: const BaseMaterialAppPage()
 
       //  App(),
       ));

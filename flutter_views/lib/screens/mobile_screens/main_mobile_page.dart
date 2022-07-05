@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/components/product_icon.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/helper_model/data.dart';
 import 'package:flutter_view_controller/light_color.dart';
-import 'package:flutter_view_controller/screens/list_provider_screens/list_provider_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // _search(),
             _categoryWidget(),
             // Expanded(child: ListProviderWidget()),
-            const ListProviderWidget()
+            const ListWidget()
             // PostsPage(
             //     viewAbstract:
             //         context.watch<DrawerViewAbstractProvider>().getObject),

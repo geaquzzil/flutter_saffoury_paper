@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/providers/cart_provider.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/shopping_cart_page.dart';
 import 'package:icon_badge/icon_badge.dart';
 import 'package:provider/provider.dart';

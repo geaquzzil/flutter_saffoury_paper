@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/overlay_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';

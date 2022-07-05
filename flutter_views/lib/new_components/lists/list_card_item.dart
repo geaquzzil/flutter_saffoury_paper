@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
-import 'package:flutter_view_controller/providers/cart_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 
-class NormalCardList<T extends ViewAbstract> extends StatefulWidget {
+class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
   final T object;
-  const NormalCardList({
+  const ListCardItem({
     Key? key,
     required this.object,
   }) : super(key: key);
 
   @override
-  State<NormalCardList> createState() => _NormalCardListState();
+  State<ListCardItem> createState() => _ListCardItemState();
 }
 
-class _NormalCardListState<T extends ViewAbstract>
-    extends State<NormalCardList<T>> {
+class _ListCardItemState<T extends ViewAbstract>
+    extends State<ListCardItem<T>> {
   bool isEnable = true;
 
   Future<void> checkEnable() async {

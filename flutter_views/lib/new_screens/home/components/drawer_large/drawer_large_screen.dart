@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers_controllers/drawer_selected_item_controler.dart';
-import 'package:flutter_view_controller/screens/base_shared_drawer_new.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
-  List<String> _addedGroups = [];
+class DrawerLargeScreens extends StatelessWidget {
+  final List<String> _addedGroups = [];
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
-  NavigationDrawerWidget({Key? key}) : super(key: key);
+  DrawerLargeScreens({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
       width: context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
           ? 256
@@ -166,7 +164,7 @@ class DrawerListTileDesktopGroup extends StatelessWidget {
                   })
             ],
           )
-        : Text("TODO");
+        : const Text("TODO");
   }
 }
 

@@ -10,11 +10,10 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page_drawer.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 import 'package:flutter_view_controller/screens/profile_page.dart';
-import '../../models/view_abstract.dart';
 import '../../view_generator_helper.dart';
 
 class HomeMobilePage extends StatefulWidget {
-  HomeMobilePage({Key? key}) : super(key: key);
+  const HomeMobilePage({Key? key}) : super(key: key);
 
   @override
   State<HomeMobilePage> createState() => _HomeMobilePage();

@@ -13,7 +13,7 @@ class NetworkFaildAuth extends StatelessWidget {
               "https://assets10.lottiefiles.com/packages/lf20_lvuoopxx.json"),
         ),
         Expanded(
-          child: TextButton(onPressed: () {}, child: Text("Retr")),
+          child: TextButton(onPressed: () {}, child: const Text("Retr")),
         )
       ]),
     );

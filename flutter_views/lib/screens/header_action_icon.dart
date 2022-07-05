@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
-import 'package:flutter_view_controller/providers/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
 import 'package:provider/provider.dart';
 
 class HeaderIconBuilder extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/loading_list.dart';
-import 'package:flutter_view_controller/components/normal_card_list.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:loadmore/loadmore.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +35,7 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
-              return NormalCardList(object: list[index]);
+              return ListCardItem(object: list[index]);
             },
             itemCount: count,
           ),

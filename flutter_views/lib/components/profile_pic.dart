@@ -9,8 +9,8 @@ class ProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 115,
-      width: 115,
+      height: 40,
+      width: 40,
       child: Stack(
         fit: StackFit.expand,
         clipBehavior: Clip.none,
@@ -19,11 +19,11 @@ class ProfilePic extends StatelessWidget {
             backgroundImage: AssetImage("assets/images/Profile Image.png"),
           ),
           Positioned(
-            right: -16,
+            right: 0,
             bottom: 0,
             child: SizedBox(
-              height: 46,
-              width: 46,
+              height: 20,
+              width: 20,
               child: TextButton(
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(

@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/screens/list_provider_screens/list_provider_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MultiProvider(providers: [
@@ -41,7 +41,7 @@ class MyHomePage extends StatelessWidget {
               search: const _Search(),
             ),
           ),
-          const SliverFillRemaining(hasScrollBody: true, child: ListProviderWidget())
+          const SliverFillRemaining(hasScrollBody: true, child: ListWidget())
         ],
       ),
     );

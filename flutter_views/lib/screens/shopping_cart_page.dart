@@ -3,7 +3,7 @@ import 'package:flutter_view_controller/app_theme.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/light_color.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/cart_provider.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class ShoppingCartPage extends StatelessWidget {

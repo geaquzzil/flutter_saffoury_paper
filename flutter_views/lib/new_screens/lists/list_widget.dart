@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/components/normal_card_list.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/list_provider.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
 
-class ListProviderWidget extends StatefulWidget {
-  const ListProviderWidget({Key? key}) : super(key: key);
+class ListWidget extends StatefulWidget {
+  const ListWidget({Key? key}) : super(key: key);
 
   @override
-  State<ListProviderWidget> createState() => _ListProviderWidgetState();
+  State<ListWidget> createState() => _ListWidgetState();
 }
 
-class _ListProviderWidgetState extends State<ListProviderWidget> {
+class _ListWidgetState extends State<ListWidget> {
   final _scrollController = ScrollController();
   final ListProvider listProvider = ListProvider();
 
@@ -42,7 +42,7 @@ class _ListProviderWidgetState extends State<ListProviderWidget> {
         controller: _scrollController,
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return NormalCardList(object: data[index] as ViewAbstract);
+          return ListCardItem(object: data[index]);
           // return data[index].getCardView(context);
         },
       ),

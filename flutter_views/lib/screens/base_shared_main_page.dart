@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/bloc/post_bloc.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
-import 'package:flutter_view_controller/components/normal_card_list.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/view_abstract_provider.dart';
-import 'package:flutter_view_controller/providers_controllers/drawer_controler.dart';
-import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/components/search_bar.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
-import 'package:flutter_view_controller/screens/base_shared_drawer.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawer/drawer_small_screen.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
-import 'package:flutter_view_controller/screens/base_shared_drawer_new.dart';
-import 'package:flutter_view_controller/screens/base_shared_drawer_new_2.dart';
-import 'package:flutter_view_controller/screens/list_provider_screens/list_provider_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +18,7 @@ import 'package:paginated_search_bar/paginated_search_bar.dart';
 import 'package:endless/endless.dart';
 
 class BaseSharedMainPage<T extends ViewAbstract> extends StatefulWidget {
-  BaseSharedMainPage({
+  const BaseSharedMainPage({
     Key? key,
   }) : super(key: key);
 
@@ -48,7 +44,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
       case Status.Authenticated:
         return getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
-        return NetworkFaildAuth();
+        return const NetworkFaildAuth();
       default:
         return getFutureDrawerItemsBuilder(context, authProvider);
     }
@@ -83,13 +79,13 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   }
 
   Widget getScreenDivider(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Row(children: [
-      if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
+      if (SizeConfig.isDesktop(context)) DrawerLargeScreens(),
       Expanded(
         child: Column(
           children: [
-            HeaderMain(),
+            const HeaderMain(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -119,13 +115,13 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
                     // It takes 5/6 part of the screen
                     flex: 5,
                     child: Container(
-                      padding: EdgeInsets.all(50),
+                      padding: const EdgeInsets.all(50),
                       // child: Text("TESRT"),
-                      child: ListProviderWidget(),
+                      child: const ListWidget(),
                     )),
                 if (SizeConfig.isDesktop(context))
                   Expanded(
-                      flex: _size.width > 1340 ? 8 : 10,
+                      flex: size.width > 1340 ? 8 : 10,
                       child: Container(
                           // margin: EdgeInsets.all(25),
                           // decoration: BoxDecoration(
@@ -139,7 +135,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
                           //   color: Colors.white,
                           //   borderRadius: BorderRadius.circular(25),
                           // ),
-                          child: Center(
+                          child: const Center(
                         child: BaseSharedDetailsView(),
                       )))
               ]),
@@ -192,25 +188,25 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   }
 
   Widget getMainContainerWidget(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: context.read<DrawerMenuController>().scaffoldKey,
-      drawer: BaseSharedDrawer(),
+      drawer: const DrawerMobile(),
       body: SafeArea(child: getScreenDivider(context)),
     );
   }
 
   Scaffold MainWidget(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: context.read<DrawerMenuController>().scaffoldKey,
-      drawer: BaseSharedDrawer(),
+      drawer: const DrawerMobile(),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // We want this side menu only for large screen
-            if (SizeConfig.isDesktop(context)) NavigationDrawerWidget(),
+            if (SizeConfig.isDesktop(context)) DrawerLargeScreens(),
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
@@ -218,8 +214,8 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
             ),
             if (SizeConfig.isDesktop(context))
               Expanded(
-                  flex: _size.width > 1340 ? 8 : 10,
-                  child: BaseSharedDetailsView()),
+                  flex: size.width > 1340 ? 8 : 10,
+                  child: const BaseSharedDetailsView()),
           ],
         ),
       ),
@@ -230,9 +226,9 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
     return SafeArea(
       child: SingleChildScrollView(
         primary: false,
-        padding: EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(defaultPadding),
         child: Column(
-          children: [
+          children: const [
             BaseAppSharedHeader(),
             SizedBox(height: defaultPadding),
             Center(child: Text("THIS IS A TEST")),
@@ -304,7 +300,7 @@ class _HeaderMainState extends State<HeaderMain> {
                     width: MediaQuery.of(context).size.width * .99,
                     child: PaginatedSearchBar<dynamic>(
                       containerDecoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           // BoxShadow(
                           //   color: Colors.black.withOpacity(0.16),
                           //   offset: const Offset(0, 3),
@@ -361,7 +357,7 @@ class _HeaderMainState extends State<HeaderMain> {
                         required item,
                         required index,
                       }) {
-                        return NormalCardList(object: item as ViewAbstract);
+                        return ListCardItem(object: item as ViewAbstract);
                       },
                     ),
                   ),

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/providers/edit_error_list_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edit_error_list_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reflectable/mirrors.dart';
@@ -151,11 +151,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<Tab> getTabs(BuildContext context) {
     return [
-      Tab(
+      const Tab(
         text: "OverView",
         // icon: getIcon(),
       ),
-      Tab(
+      const Tab(
         text: "Inventory",
         // icon: Icon(Icons.history),
       ),
