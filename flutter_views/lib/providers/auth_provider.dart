@@ -30,10 +30,12 @@ class AuthProvider with ChangeNotifier {
 
   Status get getStatus => _status;
   AuthUser get getUser => _user;
+  String get getUserName => "_user.name";
+  String get getUserPermission => "Admin";
   PermissionLevelAbstract get getPermissions => _permissions;
   List<ViewAbstract> get getDrawerItems => _drawerItems;
   List<ViewAbstract> get getDrawerItemsPermissions => _drawerItemsPermissions;
-  
+
   Map<String?, List<ViewAbstract>> get getDrawerItemsGrouped =>
       __drawerItemsGrouped;
 

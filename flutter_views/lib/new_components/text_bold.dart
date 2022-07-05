@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextBold extends StatelessWidget {
-  final String text;
-  final String regex;
+  String text;
+  String regex;
   static const _separator = " ";
 
-  const TextBold({Key? key, required this.text, this.regex = r'\d+'})
-      : super(key: key);
+  TextBold({Key? key, required this.text, required this.regex})
+      : super(key: key) {
+    regex = regex;
+    text = text;
+    regex = "(?=$regex)"; // + regex + r"+$";
+  }
 
   @override
   Widget build(BuildContext context) {
     final parts = splitJoin();
-
+    print("$regex parts => $parts");
     return Text.rich(TextSpan(
         children: parts
             .map((e) => TextSpan(
                 text: e.text,
                 style: (e.isBold)
-                    ? const TextStyle(fontFamily: 'bold', fontSize: 20)
-                    : const TextStyle(fontFamily: 'light', fontSize: 16)))
+                    ? GoogleFonts.mulish(
+                        fontSize: 16, fontWeight: FontWeight.w800)
+                    : GoogleFonts.mulish(
+                        fontSize: 14, fontWeight: FontWeight.w400)))
             .toList()));
   }
 
@@ -31,7 +38,8 @@ class TextBold extends StatelessWidget {
 
     // Bold it
     for (final p in parts) {
-      tmp.add(TextPart(p + _separator, p.contains(RegExp(regex))));
+      tmp.add(TextPart(
+          p + _separator, p.contains(RegExp(regex, caseSensitive: false))));
     }
 
     final result = <TextPart>[tmp[0]];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
+import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
 import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -17,29 +18,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         child: Column(
           children: [
             const HeaderMain(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 100,
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: const <Widget>[
-                    Text('Deliver features faster',
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold)),
-                    Text('Craft beautiful UIs'),
-                    Spacer(),
-                    Expanded(
-                      child: FittedBox(
-                        fit: BoxFit.contain, // otherwise the logo will be tiny
-                        child: FlutterLogo(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            HeaderTitleMain(),
             Expanded(
               child: Row(children: [
                 Expanded(
