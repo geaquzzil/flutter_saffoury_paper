@@ -4,7 +4,8 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/search/search_api.dart';
-import 'package:flutter_view_controller/new_screens/home/components/profile_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
+import 'package:flutter_view_controller/new_screens/home/components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/screens/components/search_bar.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
@@ -40,9 +41,6 @@ class _HeaderMainState extends State<HeaderMain> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const SizedBox(
-                  width: kDefaultPadding / 2,
-                ),
                 RoundedIconButton(
                   onTap: () {},
                   icon: Icons.notifications,
@@ -50,12 +48,7 @@ class _HeaderMainState extends State<HeaderMain> {
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),
-                RoundedIconButton(
-                  onTap: () {},
-                  icon: Icons.arrow_back,
-                )
-                ,
-                ProfileWidget()
+                ProfilePicturePopupMenu(),
               ],
             )));
   }
