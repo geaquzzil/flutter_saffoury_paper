@@ -16,24 +16,29 @@ class EmptyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Lottie.network(lottiUrl),
-        Text(
-          title,
-          style: themeData.textTheme.bodyText1,
-        ),
-        SizedBox(
-          height: kDefaultPadding / 2,
-        ),
-        Text(
-          subtitle,
-          style: themeData.textTheme.subtitle1,
-        ),
-      ],
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.network(lottiUrl, height: 200, width: 200),
+          SizedBox(
+            height: kDefaultPadding,
+          ),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: themeData.textTheme.titleSmall,
+          ),
+          SizedBox(
+            height: kDefaultPadding,
+          ),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+          ),
+        ],
+      ),
     );
   }
-
-
 }

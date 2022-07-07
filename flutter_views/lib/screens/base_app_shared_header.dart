@@ -18,7 +18,9 @@ class BaseAppSharedHeader extends StatelessWidget {
         if (!SizeConfig.isDesktop(context))
           IconButton(
             icon: const Icon(Icons.menu),
-            onPressed: context.read<DrawerMenuController>().controlMenu,
+            onPressed: context
+                .read<DrawerMenuControllerProvider>()
+                .controlStartDrawerMenu,
           ),
         if (!SizeConfig.isMobile(context))
           Text(
@@ -144,8 +146,7 @@ class ProfileCard extends StatelessWidget {
           const Icon(Icons.account_circle),
           if (!SizeConfig.isMobile(context))
             const Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
               child: Text("Angelina Jolie"),
             ),
           const Icon(Icons.keyboard_arrow_down),
@@ -175,7 +176,8 @@ class SearchField extends StatelessWidget {
           onTap: () {},
           child: Container(
               padding: const EdgeInsets.all(defaultPadding * 0.75),
-              margin: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
               decoration: const BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -217,8 +219,7 @@ class _MenuTendinaState extends State<MenuTendina> {
         widget.child,
         SizedBox(
             width: MediaQuery.of(context).size.width,
-            height:
-                (mostraTendina) ? MediaQuery.of(context).size.height : 0.0,
+            height: (mostraTendina) ? MediaQuery.of(context).size.height : 0.0,
             child: Opacity(
                 opacity: widget.opacita,
                 child: Container(

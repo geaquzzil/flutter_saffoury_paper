@@ -1,7 +1,7 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_list_tile_widget.dart';
-import 'package:flutter_view_controller/new_screens/home/components/rounded_icon_button.dart';
+import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 

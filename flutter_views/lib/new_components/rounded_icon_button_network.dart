@@ -38,32 +38,5 @@ class RoundedIconButtonNetwork extends StatelessWidget {
       placeholder: (context, url) => const CircularProgressIndicator(),
       errorWidget: (context, url, error) => Icon(Icons.error),
     );
-    return GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            color: kWhite,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.12),
-                offset: const Offset(0, 1),
-                blurRadius: 4,
-              ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: CachedNetworkImage(
-            imageUrl: imageUrl,
-            imageBuilder: (context, image) => CircleAvatar(
-              backgroundImage: image,
-              radius: 150,
-            ),
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
-        ));
   }
 }

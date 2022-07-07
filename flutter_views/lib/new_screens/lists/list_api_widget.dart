@@ -5,14 +5,14 @@ import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
 
-class ListWidget extends StatefulWidget {
-  const ListWidget({Key? key}) : super(key: key);
+class ListApiWidget extends StatefulWidget {
+  const ListApiWidget({Key? key}) : super(key: key);
 
   @override
-  State<ListWidget> createState() => _ListWidgetState();
+  State<ListApiWidget> createState() => _ListApiWidgetState();
 }
 
-class _ListWidgetState extends State<ListWidget> {
+class _ListApiWidgetState extends State<ListApiWidget> {
   final _scrollController = ScrollController();
   final ListProvider listProvider = ListProvider();
 

@@ -5,20 +5,12 @@ import 'package:flutter_view_controller/flutter_view_controller.dart';
 
 import '../../models/view_abstract.dart';
 
-class CartProvider with ChangeNotifier {
+class NotificationProvider with ChangeNotifier {
   List<ViewAbstract> list = [];
 
   List<ViewAbstract> get getList => list;
 
-  int get count => list.length;
-
-  double get getTotalPrice => list
-      .map((item) => item.getCartItemPrice())
-      .reduce((value, element) => value + element);
-
-  double get getTotalQuantity => list
-      .map((item) => item.getCartItemQuantity())
-      .reduce((value, element) => value + element);
+  int get getCount => list.length;
 
   void add(ViewAbstract product) {
     list.add(product);

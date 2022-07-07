@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_view_controller/screens/view/view_card_item.dart';
 import 'package:flutter_view_controller/components/primary_button.dart';
-import 'package:flutter_view_controller/components/rounded_icon_button.dart';
+import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 import 'package:flutter_view_controller/screens/components/product_images.dart';
@@ -244,7 +244,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
       ),
       child: PrimaryButton(
         onTap: () {
-          context.read<CartProvider>().addProduct(object);
+          context.read<CartProvider>().add(object);
         },
         text: "Buy Now",
       ),

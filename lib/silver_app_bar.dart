@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,7 @@ class MyHomePage extends StatelessWidget {
               search: const _Search(),
             ),
           ),
-          const SliverFillRemaining(hasScrollBody: true, child: ListWidget())
+          const SliverFillRemaining(hasScrollBody: true, child: ListApiWidget())
         ],
       ),
     );

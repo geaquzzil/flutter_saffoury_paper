@@ -13,7 +13,7 @@ class ShoppingCartPageNew extends StatelessWidget {
     return Column(
         children: context
             .watch<CartProvider>()
-            .getProducts
+            .getList
             .map((x) => _item(context, x))
             .toList());
   }

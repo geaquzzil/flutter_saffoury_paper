@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
-class DrawerMenuController with ChangeNotifier {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class DrawerMenuControllerProvider with ChangeNotifier {
+  final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
 
-  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  void controlStartDrawerMenu() {
+    if (!_startDrawerKey.currentState!.isDrawerOpen) {
+      _startDrawerKey.currentState!.openDrawer();
+    }
+  }
 
-  void controlMenu() {
-    if (!_scaffoldKey.currentState!.isDrawerOpen) {
-      _scaffoldKey.currentState!.openDrawer();
+  void controlEndDrawerMenu() {
+    if (!_startDrawerKey.currentState!.isDrawerOpen) {
+      _startDrawerKey.currentState!.openEndDrawer();
     }
   }
 }

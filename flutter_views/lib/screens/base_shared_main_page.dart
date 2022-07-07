@@ -10,7 +10,7 @@ import 'package:flutter_view_controller/screens/view/base_shared_details_view.da
 import 'package:flutter_view_controller/new_screens/home/components/drawer/drawer_small_screen.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +117,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
                     child: Container(
                       padding: const EdgeInsets.all(50),
                       // child: Text("TESRT"),
-                      child: const ListWidget(),
+                      child: const ListApiWidget(),
                     )),
                 if (SizeConfig.isDesktop(context))
                   Expanded(
@@ -190,7 +190,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   Widget getMainContainerWidget(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      key: context.read<DrawerMenuController>().scaffoldKey,
+      key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       body: SafeArea(child: getScreenDivider(context)),
     );
@@ -199,7 +199,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   Scaffold MainWidget(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      key: context.read<DrawerMenuController>().scaffoldKey,
+      key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       body: SafeArea(
         child: Row(

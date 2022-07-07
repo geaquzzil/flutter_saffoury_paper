@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:provider/provider.dart';
 
 import 'sizes.dart';
 
@@ -26,6 +28,13 @@ class Product extends ViewAbstract<Product> {
   double? cut_request_quantity;
 
   Product() : super();
+
+  @override
+  void onCardDismissedView(BuildContext context, DismissDirection direction) {
+    if (direction == DismissDirection.endToStart) {
+      context.read<CartProvider>().add(this);
+    }
+  }
 
   @override
   Text getSubtitleHeaderText(BuildContext context) {
@@ -55,11 +64,13 @@ class Product extends ViewAbstract<Product> {
     // TODO: implement getTableNameApi
     return "products";
   }
-    @override
+
+  @override
   String getLabelTextOnly(BuildContext context) {
     // TODO: implement getLabelTextOnly
     return "products";
   }
+
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();

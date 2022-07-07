@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
@@ -27,7 +27,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(50),
                       // child: Text("TESRT"),
-                      child: const ListWidget(),
+                      child: const ListApiWidget(),
                     )),
                 if (SizeConfig.isDesktop(context))
                   Expanded(

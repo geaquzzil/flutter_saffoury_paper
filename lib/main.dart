@@ -13,6 +13,8 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_provider.dart';
+import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
+import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/base_material_app.dart';
 import 'package:provider/provider.dart';
 
@@ -70,10 +72,12 @@ void main() {
       List<ViewAbstract>.from([Product(), Size(), ProductType()]);
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => DrawerMenuController()),
+    ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
     ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
     ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
     ChangeNotifierProvider(create: (_) => CartProvider()),
+    ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
+    ChangeNotifierProvider(create: (_) => NotificationProvider()),
     ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
     ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
     ChangeNotifierProvider(
