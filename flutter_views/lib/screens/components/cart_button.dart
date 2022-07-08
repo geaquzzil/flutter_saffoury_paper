@@ -16,7 +16,7 @@ class _CartButtonState extends State<CartButton> {
   Widget build(BuildContext context) {
     return IconBadge(
       icon: const Icon(Icons.shopping_cart_outlined),
-      itemCount: context.watch<CartProvider>().count,
+      itemCount: context.watch<CartProvider>().getCount,
       badgeColor: Colors.red,
       itemColor: Colors.white,
       maxCount: 99,

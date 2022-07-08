@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
+import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:provider/provider.dart';
 
 class BaseHomeScreenLayout extends StatelessWidget {
   const BaseHomeScreenLayout({Key? key}) : super(key: key);
@@ -20,14 +23,25 @@ class BaseHomeScreenLayout extends StatelessWidget {
             const HeaderMain(),
             HeaderTitleMain(),
 
-            getMainHomeList(context, size)
+            getCurrentPage(context)
           ],
         ),
       )
     ]);
   }
-
-  Expanded getMainHomeList(BuildContext context, Size size) {
+ Widget getCurrentPage(BuildContext context) {
+    CurrentPage currentPage =
+        context.watch<LargeScreenPageProvider>().getCurrentPage;
+    switch (currentPage) {
+      case CurrentPage.cart:
+        return BaseHomeCartPage();
+      case CurrentPage.list:
+      default:
+        return getMainHomeList(context);
+    }
+  }
+  Expanded getMainHomeList(BuildContext context) {
+        Size size = MediaQuery.of(context).size;
     return Expanded(
             child: Row(children: [
               Expanded(

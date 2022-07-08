@@ -98,7 +98,7 @@ class ShoppingCartPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '${context.watch<CartProvider>().count} Items',
+          text: '${context.watch<CartProvider>().getCount} Items',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,

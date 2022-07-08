@@ -20,19 +20,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       endDrawer: BaseHomeCartPage(),
-      body: BaseHomeScreenLayout(),
+      body: const SafeArea(child: BaseHomeScreenLayout()),
     );
   }
 
-  Widget getCurrentPage(BuildContext context) {
-    CurrentPage currentPage =
-        context.watch<LargeScreenPageProvider>().getCurrentPage;
-    switch (currentPage) {
-      case CurrentPage.cart:
-        return SafeArea(child: BaseHomeCartPage());
-      case CurrentPage.list:
-      default:
-        return SafeArea(child: BaseHomeScreenLayout());
-    }
-  }
+ 
 }

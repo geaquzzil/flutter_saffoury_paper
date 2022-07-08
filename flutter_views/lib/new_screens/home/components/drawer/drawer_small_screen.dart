@@ -19,6 +19,7 @@ class DrawerMobile<T extends ViewAbstract> extends StatelessWidget {
         ),
       ),
       child: Drawer(
+        
         elevation: 0,
         child: Column(
           children: [

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
+import 'package:provider/provider.dart';
 
 class HeaderTitleMain extends StatefulWidget {
   HeaderTitleMain({Key? key}) : super(key: key);
@@ -17,8 +20,8 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         child: Row(
-          children: const <Widget>[
-            Text('Deliver features faster',
+          children: <Widget>[
+            Text(context.watch<LargeScreenPageProvider>().getCurrentPageTitle(context),
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
             Text('Craft beautiful UIs'),
             Spacer(),

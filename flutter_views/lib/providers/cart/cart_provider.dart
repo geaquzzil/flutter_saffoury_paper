@@ -10,7 +10,7 @@ class CartProvider with ChangeNotifier {
 
   List<ViewAbstract> get getList => list;
 
-  int get count => list.length;
+  int get getCount => list.length;
 
   double get getTotalPrice => list
       .map((item) => item.getCartItemPrice())

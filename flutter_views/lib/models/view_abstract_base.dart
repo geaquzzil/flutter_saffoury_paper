@@ -15,9 +15,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   IconData getFieldIconData(String label);
   IconData getIconData();
 
-  double getCartItemPrice() => 0;
-  double getCartItemQuantity() => 0;
-
   String? getDrawerGroupName() => null;
   IconData? getDrawerGroupIconData() => null;
 
@@ -138,6 +135,17 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String getLabelSubtitleTextOnly(BuildContext context) {
     return "null";
+  }
+
+  double getCartItemPrice() => 0;
+  double getCartItemQuantity() => 0;
+  
+  String getCartItemTextSubtitle(BuildContext context) {
+    return getSubtitleHeaderTextOnly(context);
+  }
+
+  String getCartItemText(BuildContext context) {
+    return getHeaderTextOnly(context);
   }
 
   String getLabelTextOnly(BuildContext context) {
