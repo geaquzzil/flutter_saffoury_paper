@@ -6,6 +6,7 @@ class LargeScreenPageProvider with ChangeNotifier {
 
   void setCurrentPage(CurrentPage currentPage) {
     _currentPage = currentPage;
+    notifyListeners();
   }
 }
 

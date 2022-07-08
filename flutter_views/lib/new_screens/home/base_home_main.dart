@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_screens/home/base_home_cart_screen.dart';
+import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_screen_layout.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawer/drawer_small_screen.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -14,14 +14,13 @@ class BaseHomeMainPage extends StatefulWidget {
 }
 
 class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
-  final LargeScreenPageProvider _pageProvider = LargeScreenPageProvider();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       endDrawer: BaseHomeCartPage(),
-      body: getCurrentPage(context),
+      body: BaseHomeScreenLayout(),
     );
   }
 

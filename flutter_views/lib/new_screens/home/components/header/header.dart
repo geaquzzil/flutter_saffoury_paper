@@ -46,10 +46,13 @@ class _HeaderMainState extends State<HeaderMain> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 RoundedIconButton(
-                    onTap: () => context
-                        .read<LargeScreenPageProvider>()
-                        .setCurrentPage(CurrentPage.cart),
-                    icon: Icons.shopping_cart_sharp),
+                    onTap: () {
+                      print("is clickeds");
+                      context
+                          .read<LargeScreenPageProvider>()
+                          .setCurrentPage(CurrentPage.cart);
+                    },
+                    icon: Icons.abc_sharp),
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),

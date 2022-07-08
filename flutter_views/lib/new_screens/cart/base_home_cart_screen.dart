@@ -10,7 +10,7 @@ class BaseHomeCartPage extends StatefulWidget {
 class _BaseHomeCartPageState extends State<BaseHomeCartPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Expanded(
 
       child: Row(children: [
           Expanded(flex: 3,child: Container(color: Colors.grey.shade100)),
