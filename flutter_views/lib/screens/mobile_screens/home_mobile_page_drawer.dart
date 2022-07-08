@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/app_theme.dart';
-import 'package:flutter_view_controller/components/custom_drawer/drawer_user_controller.dart';
 import 'package:flutter_view_controller/components/custom_drawer/home_drawer.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 import 'package:flutter_view_controller/screens/profile_page.dart';
@@ -30,16 +29,16 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         bottom: false,
         child: Scaffold(
           backgroundColor: AppTheme.nearlyWhite,
-          body: DrawerUserController(
-            screenIndex: drawerIndex,
-            drawerWidth: MediaQuery.of(context).size.width * 0.75,
-            onDrawerCall: (DrawerIndex drawerIndexdata) {
-              // changeIndex(drawerIndexdata);
-              //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
-            },
-            screenView: screenView,
-            //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
-          ),
+          // body: DrawerUserController(
+          //   screenIndex: drawerIndex,
+          //   drawerWidth: MediaQuery.of(context).size.width * 0.75,
+          //   onDrawerCall: (DrawerIndex drawerIndexdata) {
+          //     // changeIndex(drawerIndexdata);
+          //     //callback from drawer for replace screen as user need with passing DrawerIndex(Enum index)
+          //   },
+          //   screenView: screenView,
+          //   //we replace screen view as we need on navigate starting screens like MyHomePage, HelpScreen, FeedbackScreen, etc...
+          // ),
         ),
       ),
     );

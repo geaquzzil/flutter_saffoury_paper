@@ -27,7 +27,7 @@ class CartList extends StatelessWidget {
           // )),
           IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios_sharp)),
           CartListHeader(),
-          Expanded(child: CartDataTable())
+          Container(width: double.infinity, child: CartDataTable())
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
@@ -50,16 +51,21 @@ class _CartDataTableState extends State<CartDataTable> {
                 },
               ))
           .toList();
-  List<DataCell> getCells(List<dynamic> cells) =>
-      cells.map((data) => DataCell(Text('$data'))).toList();
+
   List<DataRow> getRows(List<ViewAbstract> users) =>
       users.map((ViewAbstract object) {
-        final cells = [
-          object.getCartItemText(context),
-          object.getCartItemQuantity(),
-          object.getCartItemPrice()
+        List<DataCell> cells = [];
+        cells = [
+          DataCell(SearchCardItem(viewAbstract: object, searchQuery: "")),
+          DataCell(Text(object.getCartItemQuantity().toString()),
+              showEditIcon: true),
+          DataCell(
+              Text(
+                object.getCartItemPrice().toString(),
+              ),
+              showEditIcon: true)
         ];
-        return DataRow(cells: getCells(cells));
+        return DataRow(cells: cells);
       }).toList();
 
   void onSort(BuildContext context, int columnIndex, bool ascending) {

@@ -22,14 +22,14 @@ class BaseHomeScreenLayout extends StatelessWidget {
           children: [
             const HeaderMain(),
             HeaderTitleMain(),
-
             getCurrentPage(context)
           ],
         ),
       )
     ]);
   }
- Widget getCurrentPage(BuildContext context) {
+
+  Widget getCurrentPage(BuildContext context) {
     CurrentPage currentPage =
         context.watch<LargeScreenPageProvider>().getCurrentPage;
     switch (currentPage) {
@@ -40,38 +40,39 @@ class BaseHomeScreenLayout extends StatelessWidget {
         return getMainHomeList(context);
     }
   }
+
   Expanded getMainHomeList(BuildContext context) {
-        Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Expanded(
-            child: Row(children: [
-              Expanded(
-                  // It takes 5/6 part of the screen
-                  flex: 5,
-                  child: Container(
-                    padding: const EdgeInsets.all(50),
-                    // child: Text("TESRT"),
-                    child: const ListApiWidget(),
-                  )),
-              if (SizeConfig.isDesktop(context))
-                Expanded(
-                    flex: size.width > 1340 ? 8 : 10,
-                    child: Container(
-                        // margin: EdgeInsets.all(25),
-                        // decoration: BoxDecoration(
-                        //   // boxShadow: [
-                        //   //   BoxShadow(
-                        //   //     color: Colors.grey[100]!,
-                        //   //     spreadRadius: 10,
-                        //   //     blurRadius: 5,
-                        //   //   )
-                        //   // ],
-                        //   color: Colors.white,
-                        //   borderRadius: BorderRadius.circular(25),
-                        // ),
-                        child: const Center(
-                      child: BaseSharedDetailsView(),
-                    )))
-            ]),
-          );
+      child: Row(children: [
+        Expanded(
+            // It takes 5/6 part of the screen
+            flex: 5,
+            child: Container(
+              padding: const EdgeInsets.all(50),
+              // child: Text("TESRT"),
+              child: const ListApiWidget(),
+            )),
+        if (SizeConfig.isDesktop(context))
+          Expanded(
+              flex: size.width > 1340 ? 8 : 10,
+              child: Container(
+                  // margin: EdgeInsets.all(25),
+                  // decoration: BoxDecoration(
+                  //   // boxShadow: [
+                  //   //   BoxShadow(
+                  //   //     color: Colors.grey[100]!,
+                  //   //     spreadRadius: 10,
+                  //   //     blurRadius: 5,
+                  //   //   )
+                  //   // ],
+                  //   color: Colors.white,
+                  //   borderRadius: BorderRadius.circular(25),
+                  // ),
+                  child: const Center(
+                child: BaseSharedDetailsView(),
+              )))
+      ]),
+    );
   }
 }
