@@ -88,6 +88,11 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
+  bool isFieldCanBeNullable(BuildContext context, String field) {
+    return field == "sizes";
+  }
+
+  @override
   List<String> getFields() {
     // TODO: implement getFields
     return [

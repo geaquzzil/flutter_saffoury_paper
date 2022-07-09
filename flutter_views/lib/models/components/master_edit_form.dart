@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/models/components/form_validator.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/actions/edit_error_list_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:provider/provider.dart';
 
 class MasterEditForm extends StatefulWidget {
@@ -21,7 +21,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
   @override
   void initState() {
     super.initState();
-    context.read<ErrorFieldsProvider>().change(_formValidationManager);
+    // context.read<ErrorFieldsProvider>().change(_formValidationManager);
   }
 
   @override
@@ -64,11 +64,11 @@ class _MasterEditFormState extends State<MasterEditForm> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: FormBuilder(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: () => {
-                      context
-                          .read<ErrorFieldsProvider>()
-                          .change(_formValidationManager)
-                    },
+                // onChanged: () => {
+                //       context
+                //           .read<ErrorFieldsProvider>()
+                //           .change(_formValidationManager)
+                //     },
                 key: _formKey,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -86,7 +86,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
                           if (!validationSuccess) {
                             _formKey.currentState!.save();
                             print(_formKey.currentState?.value);
-                            showMaterialBanner();
+                            // showMaterialBanner();
                           }
                           if (validationSuccess) {
                             //loop to formkeys validate
@@ -170,7 +170,7 @@ class _MasterEditFormState extends State<MasterEditForm> {
   Widget getControl(ViewAbstract viewAbstract, String field) {
     TextInputType? textInputType = viewAbstract.getTextInputType(field);
     if (kDebugMode) {
-      print("$field =  $textInputType");
+      debugPrint("$field =  $textInputType");
     }
     if (textInputType == null) getEditText(viewAbstract, field);
     if (textInputType == TextInputType.datetime) {

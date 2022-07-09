@@ -4,10 +4,12 @@ import 'package:flutter_view_controller/models/components/form_validator.dart';
 class ErrorFieldsProvider with ChangeNotifier {
   late FormValidationManager formValidationManager;
   get getFormValidationManager => formValidationManager;
-  get errorFieldsCount => formValidationManager.erroredFields.length;
+  get getErrorFieldsCount => formValidationManager.erroredFields.length;
+  void initState() {
+    formValidationManager = FormValidationManager();
+  }
 
-  void change(FormValidationManager formValidationManager) {
-    this.formValidationManager = formValidationManager;
-    notifyListeners();
+  void clear() {
+    formValidationManager.dispose();
   }
 }

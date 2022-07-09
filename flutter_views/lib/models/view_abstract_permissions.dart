@@ -7,6 +7,9 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 abstract class ViewAbstractPermissions<T> {
+  late ViewAbstract parent;
+  ViewAbstract get getParnet => parent;
+  void setParent(ViewAbstract parent) => this.parent = parent;
   static const String ADMIN_ID = "-1";
   String iD = "-1";
 // Future<bool> hasPermissionToPreformActionOn(BuildContext context,
@@ -23,15 +26,17 @@ abstract class ViewAbstractPermissions<T> {
 //     }
   Future<bool> hasPermission(
       BuildContext context, dynamic toDo, ServerActions? action) async {
+    return true;
     action ??= ServerActions.view;
-    print("checking hasPermission started for $toDo");
+
+    debugPrint("checking hasPermission started for $toDo");
     if (isAdmin(context)) {
-      print("hasPermission: Admin Permission for $toDo to Action $action");
+      debugPrint("hasPermission: Admin Permission for $toDo to Action $action");
       return true;
     }
     List<PermissionActionAbstract> PermissionActions = getPermssionActions(
         context); //  PermissionLevel.GetValue < IList > ("permissions_levels");
-    print(
+    debugPrint(
         "hasPermission: Checking Pe|rmission for $toDo to Action $action  Count  ${PermissionActions.length} ");
     if (PermissionActions.isEmpty) {
       return false;
@@ -49,7 +54,8 @@ abstract class ViewAbstractPermissions<T> {
       return false;
     }
     if (toDo is String) {
-      print("hasPermission: " "founded permissio ${foundedPermission.view} ");
+      debugPrint(
+          "hasPermission: " "founded permissio ${foundedPermission.view} ");
       return foundedPermission.view == 1 || foundedPermission.list == 1;
     } else {
       return getPermissionActionValueFromServerAction(

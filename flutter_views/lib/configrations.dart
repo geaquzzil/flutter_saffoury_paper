@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,11 +37,11 @@ class Configurations {
     } else if (value is double) {
       await prefs.setDouble(key, value);
     } else if (value is ViewAbstract) {
-      print("save value as ViewAbstract");
+      debugPrint("save value as ViewAbstract");
       save(
           value.runtimeType.toString(), jsonEncode(value.toJsonViewAbstract()));
     } else {
-      print("cant ! save value as ViewAbstract");
+      debugPrint("cant ! save value as ViewAbstract");
     }
   }
 

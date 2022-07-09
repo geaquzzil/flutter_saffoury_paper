@@ -32,7 +32,7 @@ class _CartDataTableState extends State<CartDataTable> {
   }
 
   Widget buildDataTable(BuildContext context) {
-    final columns = ['Item', 'Quantity', 'Price'];
+    final columns = ['Item', 'Quantity','Unit price', 'Price'];
 
     return DataTable(
       sortAscending: isAscending,

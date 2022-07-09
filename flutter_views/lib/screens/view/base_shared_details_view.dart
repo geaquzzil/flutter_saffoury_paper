@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:lottie/lottie.dart';
@@ -12,12 +14,21 @@ class BaseSharedDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ViewAbstract? viewAbstract =
-        context.watch<ActionViewAbstractProvider>().getObject;
-    return Scaffold(
-        body: viewAbstract == null
-            ? getEmptyView(context)
-            : getBodyView(context, viewAbstract));
+    ActionViewAbstractProvider actionViewAbstractProvider =
+        context.watch<ActionViewAbstractProvider>();
+    ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
+    switch (actionViewAbstractProvider.getServerActions) {
+      case ServerActions.edit:
+        return Scaffold(
+            body: viewAbstract == null
+                ? getEmptyView(context)
+                : BaseEditPage(parent: viewAbstract));
+      default:
+        return Scaffold(
+            body: viewAbstract == null
+                ? getEmptyView(context)
+                : getBodyView(context, viewAbstract));
+    }
   }
 
   Widget getEmptyView(BuildContext context) {

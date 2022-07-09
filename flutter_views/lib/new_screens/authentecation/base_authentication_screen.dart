@@ -19,11 +19,12 @@ class BaseAuthenticatingScreen extends StatelessWidget {
       case Status.Authenticating:
         return const LoadingAuth();
       case Status.Authenticated:
+      case Status.Guest:
         return getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
         return const NetworkFaildAuth();
       default:
-        return getFutureDrawerItemsBuilder(context, authProvider);
+        return const LoadingAuth();
     }
   }
 

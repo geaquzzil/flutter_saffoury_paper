@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/actions/action_view_abstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -15,7 +15,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardTrailingClicked(BuildContext context) {
-    print("onCardTrailingClicked");
+    debugPrint("onCardTrailingClicked");
   }
 
   void onCardLongClickedView(BuildContext context) {
@@ -23,7 +23,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardLongClicked(BuildContext context) {
-    print("onCardLongClicked");
+    debugPrint("onCardLongClicked");
   }
 
   void onCardClickedView(BuildContext context) {
@@ -31,9 +31,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardClicked(BuildContext context) {
-    print("Card Clicked");
+    debugPrint("Card Clicked");
     if (SizeConfig.isDesktop(context)) {
-      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract,ServerActions.view);
+      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract,ServerActions.edit);
       return;
     }
     Navigator.push(

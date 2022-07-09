@@ -37,7 +37,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   int get getPageIndex => _page;
 
-  int get getPageItemCount => 15;
+  int get getPageItemCount => 5;
 
   String? getCustomAction() {
     return null;
@@ -144,8 +144,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         serverActions: ServerActions.search,
         searchQuery: searchQuery,
         itemCount: count,
-        pageIndex: pageIndex       
-        );
+        pageIndex: pageIndex);
 
     if (response == null) return [];
     if (response.statusCode == 200) {

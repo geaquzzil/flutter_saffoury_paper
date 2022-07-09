@@ -49,6 +49,14 @@ abstract class ViewAbstractInputAndValidater<T>
     return false;
   }
 
+  bool isNullableAlreadyFromParentCheck(BuildContext context, String field) {
+    return getParnet.getFieldValue(field) == null;
+  }
+
+  bool canBeNullableFromParentCheck(BuildContext context, String field) {
+    return getParnet.isFieldCanBeNullable(context, field);
+  }
+
   bool isFieldCanBeNullable(BuildContext context, String field) {
     return false;
   }

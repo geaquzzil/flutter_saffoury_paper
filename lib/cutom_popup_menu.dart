@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           (item) => GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
-                              print("onTap");
+                              debugPrint("onTap");
                               _controller.hideMenu();
                             },
                             child: Container(
@@ -249,10 +249,10 @@ class MessageContent extends StatelessWidget {
               menuBuilder: () => GestureDetector(
                 child: _buildAvatar(isMe, 100),
                 onLongPress: () {
-                  print("onLongPress");
+                  debugPrint("onLongPress");
                 },
                 onTap: () {
-                  print("onTap");
+                  debugPrint("onTap");
                 },
               ),
               barrierColor: Colors.transparent,

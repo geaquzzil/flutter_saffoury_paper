@@ -32,7 +32,8 @@ class AuthProvider with ChangeNotifier {
   AuthUser get getUser => _user;
   String get getUserName => "_user.name";
   String get getUserPermission => "Admin";
-  String get getUserImageUrl =>"https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
+  String get getUserImageUrl =>
+      "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
   PermissionLevelAbstract get getPermissions => _permissions;
   List<ViewAbstract> get getDrawerItems => _drawerItems;
   List<ViewAbstract> get getDrawerItemsPermissions => _drawerItemsPermissions;
@@ -76,16 +77,16 @@ class AuthProvider with ChangeNotifier {
       _status = isLogin ? Status.Authenticated : Status.Guest;
     }
     _permissions = _user.userlevels ?? PermissionLevelAbstract();
-
+    debugPrint("Authenticated $_status");
     notifyListeners();
   }
 
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
-      print("checing permission for $item ");
+      debugPrint("checing permission for $item ");
       bool hasPermssion = await _user.hasPermissionList(context,
           viewAbstract: item as ViewAbstract);
-      print("checing permission for $item value is $hasPermssion ");
+      debugPrint("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {
         _drawerItemsPermissions.add(item);
       }

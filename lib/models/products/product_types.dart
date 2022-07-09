@@ -22,26 +22,23 @@ class ProductType extends ViewAbstract<ProductType> {
 
   @override
   String getHeaderTextOnly(BuildContext context) {
-    // TODO: implement getHeaderTextOnly
     return name ?? "";
   }
 
   @override
   ProductType fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
     return ProductType.fromJson(json);
   }
 
   @override
   String getFieldLabel(String label, BuildContext context) {
-    // TODO: implement getFieldLabel
     return label;
   }
 
   @override
   List<String> getFields() {
     // TODO: implement getFields
-    return [];
+    return ['name', 'date'];
   }
 
   @override
@@ -55,11 +52,13 @@ class ProductType extends ViewAbstract<ProductType> {
     // TODO: implement getLabelTextOnly
     return "products_types";
   }
+
   @override
   String? getDrawerGroupName() {
     // TODO: implement getDrawerGroupName
     return "products";
   }
+
   @override
   IconData getFieldIconData(String label) {
     switch (label) {
