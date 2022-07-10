@@ -8,6 +8,8 @@ enum ServerActions {
   delete_action,
   file,
   search,
+  search_by_field,
+  search_viewabstract_by_field,
 }
 
 class URLS {

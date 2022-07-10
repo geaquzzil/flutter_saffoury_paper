@@ -55,6 +55,7 @@ dependencies:
   paginated_search_bar: ^1.1.2
   custom_pop_up_menu: ^1.2.4
   animate_icons: ^2.0.0
+  form_builder_extra_fields: ^8.1.0
   
 dev_dependencies:
   # mockito: ^5.0.16

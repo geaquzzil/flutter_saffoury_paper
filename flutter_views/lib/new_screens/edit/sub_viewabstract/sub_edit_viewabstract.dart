@@ -46,7 +46,10 @@ class _EditSubViewAbstractWidgetState extends State<EditSubViewAbstractWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return EditSubViewAbstractHeader(viewAbstract: widget.parent,field: widget.field,);
+    return EditSubViewAbstractHeader(
+      viewAbstract: widget.parent,
+      field: widget.field,
+    );
     return ExpansionTile(
       key: PageStorageKey("${DateTime.now().millisecondsSinceEpoch}"),
       maintainState: true,
@@ -82,6 +85,7 @@ class _EditSubViewAbstractWidgetState extends State<EditSubViewAbstractWidget> {
     dynamic fieldValue = widget.parent.getFieldValue(field);
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(widget.parent);
+      fieldValue.setFieldNameFromParent(field);
       // return Text("FDFD");
       return EditSubViewAbstractWidget(parent: fieldValue, field: field);
     } else {

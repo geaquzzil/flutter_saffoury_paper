@@ -126,7 +126,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   String getSubtitleHeaderTextOnly(BuildContext context) {
-    return "null";
+    return iD;
   }
 
   String getHeaderTextOnly(BuildContext context) {

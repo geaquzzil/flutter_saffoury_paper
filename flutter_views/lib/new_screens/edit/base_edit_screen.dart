@@ -18,20 +18,41 @@ class BaseEditPage extends StatefulWidget {
 }
 
 class _BaseEditPageState extends State<BaseEditPage> {
+  _BaseEditPageState() {
+    debugPrint("constructor _BaseEditPageState");
+  }
   final _formKey = GlobalKey<FormBuilderState>();
   late List<String> fields;
   @override
+  void didUpdateWidget(BaseEditPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint("didUpdateWidget _BaseEditPageState");
+    // Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
+    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
+        .clear();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    debugPrint("didChangeDependencies _BaseEditPageState");
+  }
+
+  @override
   void initState() {
+    debugPrint("initState _BaseEditPageState");
     super.initState();
     ErrorFieldsProvider errorFieldsProvider =
         Provider.of<ErrorFieldsProvider>(context, listen: false);
 
     errorFieldsProvider.initState();
+
     fields = widget.parent.getFields();
   }
 
   @override
   void dispose() {
+    debugPrint("dispose _BaseEditPageState");
     Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
     Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
         .clear();
@@ -99,6 +120,8 @@ class _BaseEditPageState extends State<BaseEditPage> {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(viewAbstract);
+
+      fieldValue.setFieldNameFromParent(field);
       // return Text("FDFD");
       return EditSubViewAbstractWidget(parent: fieldValue, field: field);
     } else {

@@ -20,11 +20,27 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
     return viewAbstract?.isNullableAlreadyFromParent ?? false;
   }
 
+  bool getIsNew(String field) {
+    ViewAbstractNullableController? viewAbstract =
+        getViewAbstractNullableController(field);
+    return viewAbstract?.isNew ?? false;
+  }
+
+  void change(String field, ViewAbstract viewAbstract,
+      bool isNullableAlreadyFromParent) {
+    _list[field] = ViewAbstractNullableController(
+        viewAbstract: viewAbstract,
+        isNullableAlreadyFromParent: isNullableAlreadyFromParent,
+        isNew: viewAbstract.isNew());
+    notifyListeners();
+  }
+
   void add(String field, ViewAbstract viewAbstract,
       bool isNullableAlreadyFromParent) {
     _list[field] = ViewAbstractNullableController(
         viewAbstract: viewAbstract,
-        isNullableAlreadyFromParent: isNullableAlreadyFromParent);
+        isNullableAlreadyFromParent: isNullableAlreadyFromParent,
+        isNew: viewAbstract.isNew());
   }
 
   void toggleIsNullable(String field) {
@@ -35,6 +51,21 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
           !viewAbstractNullableController.isNullableAlreadyFromParent;
       notifyListeners();
     }
+  }
+
+  void toggleIsNew(String field, ViewAbstract newViewAbstract) {
+    ViewAbstractNullableController? viewAbstractNullableController =
+        getViewAbstractNullableController(field);
+
+    bool isNullableAlreadyFromParent =
+        viewAbstractNullableController?.isNullableAlreadyFromParent ?? false;
+
+    _list[field] = ViewAbstractNullableController(
+        viewAbstract: newViewAbstract,
+        isNullableAlreadyFromParent: isNullableAlreadyFromParent,
+        isNew: newViewAbstract.isNew());
+
+    notifyListeners();
   }
 
   void changeIsNullable(String field, bool isNullable) {
@@ -54,6 +85,9 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
 class ViewAbstractNullableController {
   ViewAbstract viewAbstract;
   bool isNullableAlreadyFromParent;
+  bool isNew;
   ViewAbstractNullableController(
-      {required this.viewAbstract, required this.isNullableAlreadyFromParent});
+      {required this.viewAbstract,
+      required this.isNullableAlreadyFromParent,
+      required this.isNew});
 }

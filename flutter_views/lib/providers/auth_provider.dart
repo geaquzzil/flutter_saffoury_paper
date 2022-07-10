@@ -58,8 +58,9 @@ class AuthProvider with ChangeNotifier {
     final Response? responseUser;
     if (hasUser == false) {
       _user = AuthUser();
-      _user.password = "";
-      _user.phone = "";
+      _user.password = "0933326882";
+      _user.phone = "0933326882";
+      _user.login = true;
       _status = Status.Guest;
     } else {
       _user = await Configurations.get<AuthUser>(_user);

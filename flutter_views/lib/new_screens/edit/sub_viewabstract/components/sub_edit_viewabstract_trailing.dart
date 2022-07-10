@@ -39,39 +39,45 @@ class _EditSubViewAbstractTrailingWidgetState
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (widget.view_abstract.isNew())
-            Icon(Icons.new_label, color: Colors.orange),
-          // widget.view_abstract.getPopupMenuActionListWidget(context),
-          if (widget.view_abstract
-              .canBeNullableFromParentCheck(context, widget.field))
-            EditSubViewAbstractNullableButton(
-              viewabstract: widget.view_abstract,
-              field: widget.field,
-            ),
-          if (!context
-              .watch<EditSubsViewAbstractControllerProvider>()
-              .getIsNullable(widget.field))
-            Icon(Icons.arrow_downward)
-
-          // GestureDetector(
-          //   onTap: () {
-          //     if (_flag) {
-          //       _animationController.forward();
-          //     } else {
-          //       _animationController.reverse();
-          //     }
-
-          //     _flag = !_flag;
-          //   },
-          //   child: AnimatedIcon(
-          //     icon: AnimatedIcons.menu_arrow,
-          //     progress: _animationController,
-          //   ),
-          // )
-        ],
+      child: Align(
+        alignment: Alignment.center,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (context
+                .watch<EditSubsViewAbstractControllerProvider>()
+                .getIsNew(widget.field))
+              Icon(Icons.edit, color: Colors.orange),
+            // widget.view_abstract.getPopupMenuActionListWidget(context),
+            if (widget.view_abstract
+                    .canBeNullableFromParentCheck(context, widget.field) ??
+                false)
+              EditSubViewAbstractNullableButton(
+                viewabstract: widget.view_abstract,
+                field: widget.field,
+              ),
+            if (!context
+                .watch<EditSubsViewAbstractControllerProvider>()
+                .getIsNullable(widget.field))
+              Icon(Icons.arrow_downward)
+      
+            // GestureDetector(
+            //   onTap: () {
+            //     if (_flag) {
+            //       _animationController.forward();
+            //     } else {
+            //       _animationController.reverse();
+            //     }
+      
+            //     _flag = !_flag;
+            //   },
+            //   child: AnimatedIcon(
+            //     icon: AnimatedIcons.menu_arrow,
+            //     progress: _animationController,
+            //   ),
+            // )
+          ],
+        ),
       ),
     );
   }

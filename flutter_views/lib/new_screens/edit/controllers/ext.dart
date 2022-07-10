@@ -16,3 +16,12 @@ InputDecoration getDecoration(
 Widget getSpace() {
   return const SizedBox(height: 24.0);
 }
+
+bool canSubmitChanges(ViewAbstract viewAbstract) =>
+    (viewAbstract.getParnet) != null;
+
+ViewAbstract copyWithSetNew(
+    ViewAbstract oldViewAbstract, String field, dynamic value) {
+  ViewAbstract newObject = oldViewAbstract.copyWithSetNew(field, value);
+  return newObject;
+}

@@ -30,6 +30,12 @@ class Product extends ViewAbstract<Product> {
   Product() : super();
 
   @override
+  bool getTextInputTypeIsAutoComplete(String field) {
+    // TODO: implement getTextInputTypeIsAutoComplete
+    return field == "barcode";
+  }
+
+  @override
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
     if (direction == DismissDirection.endToStart) {
       context.read<CartProvider>().add(this);

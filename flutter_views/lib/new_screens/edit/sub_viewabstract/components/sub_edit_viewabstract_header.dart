@@ -3,6 +3,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_trailing.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/sub_edit_viewabstract.dart';
+import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:provider/provider.dart';
 
 class EditSubViewAbstractHeader extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -38,11 +40,34 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
   void initState() {
     super.initState();
     fields = widget.viewAbstract.getFields();
+    childrenPadding = EdgeInsets.all(20);
     _controller =
         AnimationController(duration: Duration(milliseconds: 200), vsync: this);
-    _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
+
+    _heightFactor = _controller.drive(_easeInTween);
+    _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
-    childrenPadding = EdgeInsets.all(20);
+    _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final ThemeData theme = Theme.of(context);
+    final ExpansionTileThemeData expansionTileTheme =
+        ExpansionTileTheme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    _borderColorTween.end = theme.dividerColor;
+    _iconColorTween
+      ..begin =
+          expansionTileTheme.collapsedIconColor ?? theme.unselectedWidgetColor
+      ..end = expansionTileTheme.iconColor ?? colorScheme.primary;
+    super.didChangeDependencies();
   }
 
   @override
@@ -50,12 +75,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
     final bool closed = !_isExpanded && _controller.isDismissed;
-    final bool shouldRemoveChildren = false;
-    @override
-    void dispose() {
-      _controller.dispose();
-      super.dispose();
-    }
+    const bool shouldRemoveChildren = false;
 
     final Widget result = Offstage(
       offstage: closed,
@@ -78,7 +98,13 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     );
   }
 
-  void _handleTap() {
+  bool canExpand(BuildContext context) {
+    return context
+        .watch<EditSubsViewAbstractControllerProvider>()
+        .getIsNullable(widget.field);
+  }
+
+  void _handleTap(BuildContext context) {
     setState(() {
       _isExpanded = !_isExpanded;
       if (_isExpanded) {
@@ -93,6 +119,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
       }
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
+
     // widget.onExpansionChanged?.call(_isExpanded);
   }
 
@@ -108,8 +135,10 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     }
   }
 
-  Widget? _buildTitle(BuildContext context) {
-    return widget.viewAbstract.getHeaderText(context);
+  Widget? _buildTitle(BuildContext context, ViewAbstract? viewAbstractWatched) {
+    return viewAbstractWatched == null
+        ? widget.viewAbstract.getHeaderText(context)
+        : viewAbstractWatched.getHeaderText(context);
   }
 
   Widget _buildLeadingIcon(BuildContext context) {
@@ -128,39 +157,44 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: expansionTileTheme.backgroundColor ?? Colors.transparent,
-        border: Border(
-          top: BorderSide(color: borderSideColor),
-          bottom: BorderSide(color: borderSideColor),
+    ViewAbstract? viewAbstractWatched = context
+        .watch<EditSubsViewAbstractControllerProvider>()
+        .getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? "");
+    return Card(
+      child: Container(
+        padding: _isExpanded ? const EdgeInsets.all(20) : null,
+        decoration: BoxDecoration(
+          color: expansionTileTheme.backgroundColor ?? Colors.transparent,
+          border: Border(
+            top: BorderSide(color: borderSideColor),
+            bottom: BorderSide(color: borderSideColor),
+          ),
         ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTileTheme.merge(
-            iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
-            textColor: _iconColor.value,
-            child: ListTile(
-              onTap: _handleTap,
-              contentPadding: expansionTileTheme.tilePadding,
-              leading: _buildLeadingIcon(context),
-              title: _buildTitle(context),
-              // subtitle: widget.subtitle,
-              trailing: EditSubViewAbstractTrailingWidget(
-                  view_abstract: widget.viewAbstract, field: widget.field),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTileTheme.merge(
+              iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
+              textColor: _iconColor.value,
+              child: ListTile(
+                onTap: () => _handleTap(context),
+                contentPadding: expansionTileTheme.tilePadding,
+                leading: _buildLeadingIcon(context),
+                title: _buildTitle(context, viewAbstractWatched),
+                // subtitle: widget.subtitle,
+                trailing: EditSubViewAbstractTrailingWidget(
+                    view_abstract: widget.viewAbstract, field: widget.field),
+              ),
             ),
-          ),
-          ClipRect(
-            child: Align(
-              alignment: Alignment.center,
-              heightFactor: _heightFactor.value,
-              child: child,
+            ClipRect(
+              child: Align(
+                alignment: Alignment.center,
+                heightFactor: _heightFactor.value,
+                child: child,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

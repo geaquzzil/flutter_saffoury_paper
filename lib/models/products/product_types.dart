@@ -21,6 +21,10 @@ class ProductType extends ViewAbstract<ProductType> {
   ProductType() : super();
 
   @override
+  String getSubtitleHeaderTextOnly(BuildContext context) {
+    return super.getSubtitleHeaderTextOnly(context);
+  }
+  @override
   String getHeaderTextOnly(BuildContext context) {
     return name ?? "";
   }
@@ -33,6 +37,12 @@ class ProductType extends ViewAbstract<ProductType> {
   @override
   String getFieldLabel(String label, BuildContext context) {
     return label;
+  }
+
+  @override
+  bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
+    // TODO: implement getTextInputTypeIsAutoCompleteViewAbstract
+    return field == "name";
   }
 
   @override
@@ -74,13 +84,11 @@ class ProductType extends ViewAbstract<ProductType> {
 
   @override
   String? getTableNameApi() {
-    // TODO: implement getTableNameApi
     return "products_types";
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
     return toJson();
   }
 }

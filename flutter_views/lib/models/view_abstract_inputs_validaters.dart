@@ -8,6 +8,14 @@ abstract class ViewAbstractInputAndValidater<T>
     return getMap()[field];
   }
 
+  bool getTextInputTypeIsAutoComplete(String field) {
+    return false;
+  }
+
+  bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
+    return false;
+  }
+
   Map<String, TextInputType?> getMap() {
     return {};
   }
@@ -50,11 +58,11 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   bool isNullableAlreadyFromParentCheck(BuildContext context, String field) {
-    return getParnet.getFieldValue(field) == null;
+    return getParnet?.getFieldValue(field) == null;
   }
 
-  bool canBeNullableFromParentCheck(BuildContext context, String field) {
-    return getParnet.isFieldCanBeNullable(context, field);
+  bool? canBeNullableFromParentCheck(BuildContext context, String field) {
+    return getParnet?.isFieldCanBeNullable(context, field);
   }
 
   bool isFieldCanBeNullable(BuildContext context, String field) {

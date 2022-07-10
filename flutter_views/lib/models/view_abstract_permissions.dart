@@ -7,9 +7,14 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 abstract class ViewAbstractPermissions<T> {
-  late ViewAbstract parent;
-  ViewAbstract get getParnet => parent;
-  void setParent(ViewAbstract parent) => this.parent = parent;
+  String? fieldNameFromParent;
+  ViewAbstract? parent;
+  ViewAbstract? get getParnet => parent;
+  String? get getFieldNameFromParent => fieldNameFromParent;
+  void setParent(ViewAbstract? parent) => this.parent = parent;
+  void setFieldNameFromParent(String? fieldNameFromParent) =>
+      this.fieldNameFromParent = fieldNameFromParent;
+
   static const String ADMIN_ID = "-1";
   String iD = "-1";
 // Future<bool> hasPermissionToPreformActionOn(BuildContext context,

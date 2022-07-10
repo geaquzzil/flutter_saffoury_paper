@@ -70,6 +70,16 @@ class Size extends ViewAbstract<Size> {
   }
 
   @override
+  Map<String, TextInputType?> getMap() => {
+        "width": TextInputType.number,
+        "length": TextInputType.number,
+      };
+  @override
+  bool getTextInputTypeIsAutoComplete(String field) {
+    return true;
+  }
+
+  @override
   bool isFieldRequired(String field) {
     return field == "width";
   }
