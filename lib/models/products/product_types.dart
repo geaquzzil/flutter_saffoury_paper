@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'product_types.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 @reflector
 class ProductType extends ViewAbstract<ProductType> {
   factory ProductType.fromJson(Map<String, dynamic> data) =>
@@ -17,6 +17,8 @@ class ProductType extends ViewAbstract<ProductType> {
   String? image;
   String? name;
   String? comments;
+  double purchasePrice = 0;
+  // double? sellPrice;
 
   ProductType() : super();
 
@@ -47,9 +49,21 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
+  Map<String, TextInputType?> getMap() => {
+        "id": TextInputType.number,
+        "sizes": TextInputType.number,
+        "date": TextInputType.datetime,
+        "products_types": TextInputType.number,
+        "comments": TextInputType.multiline,
+        "barcode": TextInputType.text,
+        "products_count": TextInputType.number,
+        "pending_reservation_invoice": TextInputType.phone,
+        "cut_request_quantity": TextInputType.number,
+      };
+  @override
   List<String> getFields() {
     // TODO: implement getFields
-    return ['name', 'date', "comments"];
+    return ['name', 'date', "comments", "sellPrice", "purchasePrice"];
   }
 
   @override

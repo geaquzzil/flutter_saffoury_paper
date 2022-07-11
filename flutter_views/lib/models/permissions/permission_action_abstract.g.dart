@@ -9,7 +9,7 @@ part of 'permission_action_abstract.dart';
 PermissionActionAbstract _$PermissionActionAbstractFromJson(
     Map<String, dynamic> json) {
   return PermissionActionAbstract()
-    ..iD = json['iD'] as String
+    ..iD = json['iD'] as int
     ..table_name = json['table_name'] as String?
     ..print = json['print'] as int?
     ..notification = json['notification'] as int?

@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/permissions/permission_level_abst
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/src/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supercharged/supercharged.dart';
@@ -65,18 +66,18 @@ class AuthProvider with ChangeNotifier {
     } else {
       _user = await Configurations.get<AuthUser>(_user);
     }
-    responseUser = await _user.getRespones(serverActions: ServerActions.add);
-    if (responseUser == null) {
-      _status = Status.Faild;
-    } else if (responseUser.statusCode == 401) {
-      _status = Status.Faild;
-    } else {
-      _user = _user.fromJsonViewAbstract(jsonDecode(responseUser.body));
-
-      bool isLogin = _user.login ?? false;
-      bool hasPermission = _user.permission ?? false;
-      _status = isLogin ? Status.Authenticated : Status.Guest;
-    }
+    // responseUser = await _user.getRespones(serverActions: ServerActions.add);
+    // if (responseUser == null) {
+    //   _status = Status.Faild;
+    // } else if (responseUser.statusCode == 401) {
+    //   _status = Status.Faild;
+    // } else {
+    // _user = _user.fromJsonViewAbstract(jsonDecode(responseUser.body));
+    _user = _user.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)));
+    bool isLogin = _user.login ?? false;
+    bool hasPermission = _user.permission ?? false;
+    _status = isLogin ? Status.Authenticated : Status.Guest;
+    // }
     _permissions = _user.userlevels ?? PermissionLevelAbstract();
     debugPrint("Authenticated $_status");
     notifyListeners();

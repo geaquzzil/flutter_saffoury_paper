@@ -34,7 +34,7 @@ class _ListCardItemState<T extends ViewAbstract>
   Widget build(BuildContext context) {
     return Card(
       child: Dismissible(
-        key: Key(widget.object.iD),
+        key: Key(widget.object.iD.toString()),
         direction: widget.object.getDismissibleDirection(),
         background: widget.object.getDismissibleBackground(context),
         secondaryBackground:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_trailing.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
@@ -78,8 +79,6 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
 
   @override
   Widget build(BuildContext context) {
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
     final bool closed = !_isExpanded && _controller.isDismissed;
     const bool shouldRemoveChildren = false;
 
@@ -130,33 +129,43 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
   }
 
   Widget buildWidget(String field) {
-    dynamic fieldValue = widget.viewAbstract.getFieldValue(field);
+    ViewAbstract? viewAbstractWatched =
+        getViewAbstract(context, widget.viewAbstract.getFieldNameFromParent);
+    ViewAbstract currentViewAbstract =
+        viewAbstractWatched ?? widget.viewAbstract;
+    dynamic fieldValue = currentViewAbstract.getFieldValue(field);
+
     if (fieldValue is ViewAbstract) {
-      fieldValue.setParent(widget.viewAbstract);
+      fieldValue.setParent(currentViewAbstract);
       // return Text("FDFD");
       return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
     } else {
       return EditControllerMasterWidget(
-          viewAbstract: widget.viewAbstract, field: field);
+          viewAbstract: currentViewAbstract, field: field);
     }
   }
 
-  Widget? _buildTitle(
-      BuildContext context,
-      EditSubsViewAbstractControllerProvider
-          editSubsViewAbstractControllerProvider) {
-    ViewAbstract? viewAbstractWatched = editSubsViewAbstractControllerProvider
-        .getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? "");
+  Widget? _buildTitle(BuildContext context) {
+    ViewAbstract? viewAbstractWatched = getViewAbstract(
+        context, widget.viewAbstract.getFieldNameFromParent ?? "");
 
-    return editSubsViewAbstractControllerProvider
-            .getIsNullable(widget.viewAbstract.getFieldNameFromParent ?? "")
-        ? Text("IS NEW")
+    return getIsNullable(
+            context, widget.viewAbstract.getFieldNameFromParent ?? "")
+        ? widget.viewAbstract.getNullableText(context)
         : viewAbstractWatched == null
             ? widget.viewAbstract.getHeaderText(context)
             : viewAbstractWatched.getHeaderText(context);
   }
 
   Widget _buildLeadingIcon(BuildContext context) {
+    ViewAbstract? viewAbstractWatched =
+        getViewAbstract(context, getFieldNameFromParent(widget.viewAbstract));
+    return RotationTransition(
+      turns: _iconTurns,
+      child: viewAbstractWatched == null
+          ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
+          : viewAbstractWatched.getCardLeadingCircleAvatar(context),
+    );
     String? url = widget.viewAbstract.getImageUrl(context);
     if (url != null) {
       return widget.viewAbstract.getCardLeadingCircleAvatar(context);
@@ -194,10 +203,10 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
                 onTap: () => _handleTap(context),
                 contentPadding: expansionTileTheme.tilePadding,
                 leading: _buildLeadingIcon(context),
-                title: _buildTitle(context, editSubsView),
+                title: _buildTitle(context),
                 // subtitle: widget.subtitle,
-                trailing: EditSubViewAbstractTrailingWidget(
-                    view_abstract: widget.viewAbstract, field: widget.field),
+                trailing:
+                    EditSubViewAbstractTrailingWidget(field: widget.field),
               ),
             ),
             ClipRect(

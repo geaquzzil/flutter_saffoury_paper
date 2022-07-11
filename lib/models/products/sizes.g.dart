@@ -8,9 +8,9 @@ part of 'sizes.dart';
 
 Size _$SizeFromJson(Map<String, dynamic> json) {
   return Size()
-    ..iD = json['iD'] as String
-    ..width = json['width'] as String?
-    ..length = json['length'] as String?;
+    ..iD = json['iD'] as int
+    ..width = json['width'] as int?
+    ..length = json['length'] as int?;
 }
 
 Map<String, dynamic> _$SizeToJson(Size instance) => <String, dynamic>{

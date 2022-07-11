@@ -11,7 +11,7 @@ abstract class ViewAbstract<T> extends ViewAbstractLists<T> {
   T copyWithSetNew(String field, dynamic value) {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy[field] = value;
-    jsonCopy['iD'] = '-1';
+    jsonCopy['iD'] = -1;
     T newObject = fromJsonViewAbstract(jsonCopy);
     (newObject as ViewAbstract).setParent(this.parent);
     (newObject).setFieldNameFromParent(fieldNameFromParent);
@@ -20,8 +20,8 @@ abstract class ViewAbstract<T> extends ViewAbstractLists<T> {
     return newObject;
   }
 
-  @override
-  String toString() {
-    return toJsonString();
-  }
+  // @override
+  // String toString() {
+  //   return toJsonString();
+  // }
 }

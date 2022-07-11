@@ -42,10 +42,20 @@ dynamic getFieldValue(
   return getViewAbstract(context, parentField)?.getFieldValue(currentField);
 }
 
-ViewAbstract? getViewAbstract(BuildContext context, String? field) {
+String getFieldNameFromParent(ViewAbstract viewAbstract) {
+  return viewAbstract.getFieldNameFromParent?? "";
+}
+
+ViewAbstract? getViewAbstract(BuildContext context, String? field){
   return context
       .watch<EditSubsViewAbstractControllerProvider>()
       .getViewAbstract(field ?? "");
+}
+
+bool getIsNullable(BuildContext context, String? field) {
+  return context
+      .watch<EditSubsViewAbstractControllerProvider>()
+      .getIsNullable(field ?? "");
 }
 
 ViewAbstract onChange(BuildContext context, ViewAbstract oldViewAbstract,

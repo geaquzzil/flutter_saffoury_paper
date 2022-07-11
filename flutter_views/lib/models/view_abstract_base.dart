@@ -33,6 +33,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     );
   }
 
+  Text? getNullableText(BuildContext context) {
+    return Text(
+      getNullableTextOnly(context),
+      // style: const TextStyle(color: kTextLightColor)
+    );
+  }
+
   Text? getHeaderText(BuildContext context) {
     return Text(
       getHeaderTextOnly(context),
@@ -115,7 +122,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Widget getCardLeadingImage(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: getImageUrl(context)!,
+      imageUrl: getImageUrl(context) ?? "",
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
@@ -126,12 +133,17 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     );
   }
 
+
   String? getImageUrl(BuildContext context) {
     return null;
   }
 
   String getSubtitleHeaderTextOnly(BuildContext context) {
-    return iD;
+    return iD.toString();
+  }
+
+  String getNullableTextOnly(BuildContext context) {
+    return "is New ${getLabelTextOnly(context)}";
   }
 
   String getHeaderTextOnly(BuildContext context) {

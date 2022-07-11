@@ -4,10 +4,9 @@ import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabs
 import 'package:provider/provider.dart';
 
 class EditSubViewAbstractNullableButton extends StatefulWidget {
-  ViewAbstract viewabstract;
   String field;
   EditSubViewAbstractNullableButton(
-      {Key? key, required this.viewabstract, required this.field})
+      {Key? key,required this.field})
       : super(key: key);
 
   @override
@@ -42,8 +41,8 @@ class _EditSubViewAbstractNullableButtonState
     controller = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
     _color = ColorTween(
-            begin: isNullable ? Colors.orange : Colors.black,
-            end: isNullable ? Colors.black : Colors.orange)
+            begin: isNullable ? Colors.orange : null,
+            end: isNullable ? null : Colors.orange)
         .animate(controller);
   }
 

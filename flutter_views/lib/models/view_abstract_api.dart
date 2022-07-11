@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'package:reflectable/reflectable.dart';
@@ -261,6 +262,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Future<List<T>?> listCall(int count, int page,
       {OnResponseCallback? onResponse}) async {
+    Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
+    return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.list);
 
@@ -268,8 +271,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-
-      Iterable l = convert.jsonDecode(response.body);
+      //todo change this when finish testing
+      Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
       return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =

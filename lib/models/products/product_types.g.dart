@@ -8,11 +8,12 @@ part of 'product_types.dart';
 
 ProductType _$ProductTypeFromJson(Map<String, dynamic> json) {
   return ProductType()
-    ..iD = json['iD'] as String
+    ..iD = json['iD'] as int
     ..date = json['date'] as String?
     ..image = json['image'] as String?
     ..name = json['name'] as String?
-    ..comments = json['comments'] as String?;
+    ..comments = json['comments'] as String?
+    ..purchasePrice = (json['purchasePrice'] as num).toDouble();
 }
 
 Map<String, dynamic> _$ProductTypeToJson(ProductType instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$ProductTypeToJson(ProductType instance) =>
       'image': instance.image,
       'name': instance.name,
       'comments': instance.comments,
+      'purchasePrice': instance.purchasePrice,
     };

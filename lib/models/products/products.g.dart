@@ -8,11 +8,10 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) {
   return Product()
-    ..iD = json['iD'] as String
+    ..iD = json['iD'] as int
     ..products_types = json['products_types'] == null
         ? null
         : ProductType.fromJson(json['products_types'] as Map<String, dynamic>)
-    ..thisIsATest = json['thisIsATest'] as String?
     ..sizes = json['sizes'] == null
         ? null
         : Size.fromJson(json['sizes'] as Map<String, dynamic>)
@@ -28,7 +27,6 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,
       'products_types': instance.products_types?.toJson(),
-      'thisIsATest': instance.thisIsATest,
       'sizes': instance.sizes?.toJson(),
       'date': instance.date,
       'comments': instance.comments,

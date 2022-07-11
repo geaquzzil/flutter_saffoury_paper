@@ -11,11 +11,10 @@ import 'sizes.dart';
 // @reflector
 part 'products.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true,)
 @reflector
 class Product extends ViewAbstract<Product> {
   ProductType? products_types;
-  String? thisIsATest;
 
   Size? sizes;
   String? date;
@@ -104,8 +103,8 @@ class Product extends ViewAbstract<Product> {
     return [
       "iD",
       "sizes",
-      "date",
       "products_types",
+      "date",
       "comments",
       "barcode",
       "products_count",

@@ -5,10 +5,8 @@ import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabs
 import 'package:provider/provider.dart';
 
 class EditSubViewAbstractTrailingWidget extends StatefulWidget {
-  ViewAbstract view_abstract;
   String field;
-  EditSubViewAbstractTrailingWidget(
-      {Key? key, required this.view_abstract, required this.field})
+  EditSubViewAbstractTrailingWidget({Key? key, required this.field})
       : super(key: key);
 
   @override
@@ -37,30 +35,39 @@ class _EditSubViewAbstractTrailingWidgetState
 
   @override
   Widget build(BuildContext context) {
+    EditSubsViewAbstractControllerProvider editSubProvider =
+        context.watch<EditSubsViewAbstractControllerProvider>();
+    ViewAbstract? viewAbstractWatched =
+        editSubProvider.getViewAbstract(widget.field);
     return SizedBox(
       width: 200,
       child: Align(
         alignment: Alignment.center,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if (context
-                .watch<EditSubsViewAbstractControllerProvider>()
-                .getIsNew(widget.field))
-              Icon(Icons.edit, color: Colors.orange),
+            if (editSubProvider.getIsNew(widget.field))
+              IconButton(
+                  onPressed: () => {},
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.orange,
+                  )),
+
             // widget.view_abstract.getPopupMenuActionListWidget(context),
-            if (widget.view_abstract
-                    .canBeNullableFromParentCheck(context, widget.field) ??
+            if (viewAbstractWatched?.canBeNullableFromParentCheck(
+                    context, widget.field) ??
                 false)
               EditSubViewAbstractNullableButton(
-                viewabstract: widget.view_abstract,
                 field: widget.field,
               ),
-            if (!context
-                .watch<EditSubsViewAbstractControllerProvider>()
-                .getIsNullable(widget.field))
-              Icon(Icons.arrow_downward)
-      
+            if (!editSubProvider.getIsNullable(widget.field))
+              IconButton(
+                  onPressed: () => {},
+                  icon: Icon(
+                    Icons.arrow_downward,
+                    color: Colors.orange,
+                  )),
+
             // GestureDetector(
             //   onTap: () {
             //     if (_flag) {
@@ -68,7 +75,7 @@ class _EditSubViewAbstractTrailingWidgetState
             //     } else {
             //       _animationController.reverse();
             //     }
-      
+
             //     _flag = !_flag;
             //   },
             //   child: AnimatedIcon(

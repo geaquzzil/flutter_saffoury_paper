@@ -4,19 +4,23 @@ import 'package:flutter_view_controller/models/permissions/permission_level_abst
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 
 abstract class ViewAbstractPermissions<T> {
+  @JsonKey(ignore: true)
   String? fieldNameFromParent;
+  @JsonKey(ignore: true)
   ViewAbstract? parent;
+  @JsonKey(ignore: true)
+  static const int ADMIN_ID = -1;
   ViewAbstract? get getParnet => parent;
   String? get getFieldNameFromParent => fieldNameFromParent;
   void setParent(ViewAbstract? parent) => this.parent = parent;
   void setFieldNameFromParent(String? fieldNameFromParent) =>
       this.fieldNameFromParent = fieldNameFromParent;
 
-  static const String ADMIN_ID = "-1";
-  String iD = "-1";
+  int iD = -1;
 // Future<bool> hasPermissionToPreformActionOn(BuildContext context,
 //   String field, ServerActions? actions) async{
 //         print( "hasPermissionToPreformActionOn: " + " field " + field + "  action " + actions.toString());
@@ -170,19 +174,19 @@ abstract class ViewAbstractPermissions<T> {
       getUserPermissionLevel(context).iD == ADMIN_ID;
 
   bool isGuest(BuildContext context) =>
-      getUserPermissionLevel(context).iD == "0";
+      getUserPermissionLevel(context).iD == 0;
 
   bool isGeneralClient(BuildContext context) =>
-      int.parse(getUserPermissionLevel(context).iD) > 0;
+     getUserPermissionLevel(context).iD > 0;
 
   bool isGeneralEmployee(BuildContext context) =>
-      int.parse(getUserPermissionLevel(context).iD) < 0;
+      getUserPermissionLevel(context).iD < 0;
 
   bool isEditing() {
-    return iD != "-1";
+    return iD != -1;
   }
 
   bool isNew() {
-    return iD == "-1";
+    return iD == -1;
   }
 }

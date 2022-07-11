@@ -24,7 +24,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
   @override
   String? getCustomAction() {
-    return "login";
+    return "login_flutter";
   }
 
   void set(String key, dynamic v) {

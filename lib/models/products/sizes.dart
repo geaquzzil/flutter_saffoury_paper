@@ -7,8 +7,8 @@ part 'sizes.g.dart';
 @JsonSerializable()
 @reflector
 class Size extends ViewAbstract<Size> {
-  String? width;
-  String? length;
+  int? width;
+  int? length;
 
   Size() : super();
 
