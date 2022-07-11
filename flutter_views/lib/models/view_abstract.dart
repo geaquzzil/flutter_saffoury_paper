@@ -29,7 +29,6 @@ abstract class ViewAbstract<T> extends ViewAbstractLists<T> {
 
   T copyWithSetNew(String field, dynamic value) {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
-
     jsonCopy[field] = castFieldValue(field, value);
     jsonCopy['iD'] = -1;
     T newObject = fromJsonViewAbstract(jsonCopy);

@@ -49,6 +49,7 @@ class Size extends ViewAbstract<Size> {
 
   Map<String, dynamic> toJson() => _$SizeToJson(this);
 
+  
   @override
   String getFieldLabel(String label, BuildContext context) {
     return label;

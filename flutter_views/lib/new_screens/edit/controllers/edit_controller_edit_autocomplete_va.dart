@@ -31,7 +31,8 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     // ErrorFieldsProvider errorFieldsProvider =
     //     Provider.of<ErrorFieldsProvider>(context, listen: false);
     // _formValidationManager = errorFieldsProvider.getFormValidationManager;
-    textController.text = widget.viewAbstract.getFieldValue(widget.field);
+    textController.text =
+        widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
   }
 

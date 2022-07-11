@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
+import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerEditText extends StatefulWidget {
@@ -21,26 +22,26 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
   @override
   void initState() {
     super.initState();
+    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
+        .addListener(() {
+      debugPrint("EditSubsViewAbstractControllerProvider change listnerer");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ErrorFieldsProvider formValidationManager =
         context.read<ErrorFieldsProvider>();
-    if (formValidationManager == null) {
-      debugPrint("FormValidationManager ==null");
-    } else {
-      debugPrint("FormValidationManager =! null");
-    }
-
     return Column(
       children: [
         FormBuilderTextField(
+          
             onChanged: (value) {
               context.read<ErrorFieldsProvider>().notify();
               if (value == null) return;
               if (value.isEmpty) return;
-              if (value == widget.viewAbstract.getFieldValue(widget.field)) {
+              if (value ==
+                  widget.viewAbstract.getFieldValue(widget.field).toString()) {
                 return;
               }
               widget.viewAbstract =

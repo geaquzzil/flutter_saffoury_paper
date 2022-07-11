@@ -394,6 +394,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
 
             return TypeAheadField<T>(
               textFieldConfiguration: textFieldConfiguration.copyWith(
+                
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,
                 textCapitalization: textCapitalization,

@@ -151,6 +151,14 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     }
   }
 
+  Widget? _buildSubtitle(BuildContext context) {
+    ViewAbstract viewAbstractWatched = getViewAbstractReturnSameIfNull(context,
+        widget.viewAbstract, widget.viewAbstract.getFieldNameFromParent ?? "");
+    return Text(viewAbstractWatched.isNew()
+        ? "IS NEW"
+        : viewAbstractWatched.getSubtitleHeaderTextOnly(context));
+  }
+
   Widget? _buildTitle(BuildContext context) {
     ViewAbstract? viewAbstractWatched = getViewAbstract(
         context, widget.viewAbstract.getFieldNameFromParent ?? "");
@@ -214,7 +222,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
                 contentPadding: expansionTileTheme.tilePadding,
                 leading: _buildLeadingIcon(context),
                 title: _buildTitle(context),
-                // subtitle: widget.subtitle,
+                subtitle: _buildSubtitle(context),
                 trailing:
                     EditSubViewAbstractTrailingWidget(field: widget.field),
               ),

@@ -35,11 +35,11 @@ class _EditControllerEditTextAutoCompleteState
             listen: false);
     s.addListener(() {
       debugPrint(
-          "EditSubsViewAbstractControllerProvider isChanged ${s.getList.toString()}");
+          "EditSubsViewAbstractControllerProvider isChanged ${widget.viewAbstract.getGenericClassName()}  ${s.getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? '')}");
     });
-    textController.addListener(() {
-      debugPrint("is Change from textController to text");
-    });
+    textController.text =
+        widget.viewAbstract.getFieldValue(widget.field).toString();
+    textController.addListener(onTextChangeListener);
   }
 
   @override
@@ -50,14 +50,24 @@ class _EditControllerEditTextAutoCompleteState
     super.dispose();
   }
 
+  void onTextChangeListener() {
+    String currentValue = textController.text;
+    if (currentValue.isEmpty) return;
+    if (currentValue == widget.viewAbstract.getFieldValue(widget.field)) return;
+    // widget.viewAbstract =
+    //     onChange(context, widget.viewAbstract, widget.field, currentValue);
+  }
+
   @override
   Widget build(BuildContext context) {
+    ErrorFieldsProvider formValidationManager =
+        context.read<ErrorFieldsProvider>();
     // debugPrint(
     //     "EditControllerEditTextAutoComplete initValue ${widget.viewAbstract.getFieldValue(widget.field).toString()} ");
     return Column(
       children: [
         FormBuilderTypeAheadCustom<String>(
-            // controller: textController,
+            controller: textController,
             onChanged: (value) {
               if (value == null) return;
               if (value.isEmpty) return;
@@ -88,18 +98,16 @@ class _EditControllerEditTextAutoCompleteState
             //     widget.viewAbstract,
             //     widget.field),
 
-            // validator: _formValidationManager.wrapValidator(
-            //     widget.viewAbstract.getTag(widget.field),
-            //     widget.viewAbstract,
-            //     widget.field, (value) {
-            //   return widget.viewAbstract
-            //       .getTextInputValidator(context, widget.field, value);
-            // }),
+            validator: formValidationManager.wrapValidator(
+                widget.viewAbstract.getTag(widget.field),
+                widget.viewAbstract,
+                widget.field, (value) {
+              debugPrint("validator formValidationManager");
+              return widget.viewAbstract
+                  .getTextInputValidator(context, widget.field, value);
+            }),
             itemBuilder: (context, continent) {
               return ListTile(title: Text(continent));
-            },
-            onSaved: (dynamic value) {
-              return value;
             },
             suggestionsCallback: (query) {
               if (query.isEmpty) return [];
