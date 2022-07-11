@@ -24,6 +24,7 @@ class ProductType extends ViewAbstract<ProductType> {
   String getSubtitleHeaderTextOnly(BuildContext context) {
     return super.getSubtitleHeaderTextOnly(context);
   }
+
   @override
   String getHeaderTextOnly(BuildContext context) {
     return name ?? "";
@@ -48,7 +49,12 @@ class ProductType extends ViewAbstract<ProductType> {
   @override
   List<String> getFields() {
     // TODO: implement getFields
-    return ['name', 'date'];
+    return ['name', 'date', "comments"];
+  }
+
+  @override
+  String? getImageUrl(BuildContext context) {
+    return "https://$image";
   }
 
   @override

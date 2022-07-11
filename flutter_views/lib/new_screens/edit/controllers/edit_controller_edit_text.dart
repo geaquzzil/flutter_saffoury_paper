@@ -30,13 +30,23 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        
         FormBuilderTextField(
+          
+            onChanged: (value) {
+              if (value == null) return;
+              if (value.isEmpty) return;
+              if (value == widget.viewAbstract.getFieldValue(widget.field)) {
+                return;
+              }
+              widget.viewAbstract =
+                  onChange(context, widget.viewAbstract, widget.field, value);
+            },
             valueTransformer: (value) {
               return value?.trim();
             },
             name: widget.viewAbstract.getTag(widget.field),
-            initialValue: widget.viewAbstract.getFieldValue(widget.field),
+            initialValue: getFieldValue(context,
+                widget.viewAbstract.getFieldNameFromParent, widget.field),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
@@ -56,6 +66,7 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
               return widget.viewAbstract
                   .getTextInputValidator(context, widget.field, value);
             }),
+            
             onSaved: (String? value) {
               print('onSave=   $value');
             },

@@ -18,7 +18,8 @@ class EditControllerMasterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     TextInputType? textInputType = viewAbstract.getTextInputType(field);
     bool isAutoComplete = viewAbstract.getTextInputTypeIsAutoComplete(field);
-    bool isAutoCompleteViewAbstract = viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);
+    bool isAutoCompleteViewAbstract =
+        viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);
     if (kDebugMode) {
       debugPrint("$field =  $textInputType");
     }
@@ -28,8 +29,8 @@ class EditControllerMasterWidget extends StatelessWidget {
         field: field,
       );
     }
-    if(isAutoCompleteViewAbstract){
-       return EditControllerEditTextAutoCompleteViewAbstract(
+    if (isAutoCompleteViewAbstract) {
+      return EditControllerEditTextAutoCompleteViewAbstract(
         viewAbstract: viewAbstract,
         field: field,
       );

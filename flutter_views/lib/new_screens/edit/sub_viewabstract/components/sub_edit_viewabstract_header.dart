@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_trailing.dart';
-import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/sub_edit_viewabstract.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +47,13 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
+
+    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
+        .add(
+            widget.field,
+            widget.viewAbstract,
+            widget.viewAbstract
+                .isNullableAlreadyFromParentCheck(context, widget.field));
   }
 
   @override
@@ -128,23 +134,32 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(widget.viewAbstract);
       // return Text("FDFD");
-      return EditSubViewAbstractWidget(parent: fieldValue, field: field);
+      return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
     } else {
       return EditControllerMasterWidget(
           viewAbstract: widget.viewAbstract, field: field);
     }
   }
 
-  Widget? _buildTitle(BuildContext context, ViewAbstract? viewAbstractWatched) {
-    return viewAbstractWatched == null
-        ? widget.viewAbstract.getHeaderText(context)
-        : viewAbstractWatched.getHeaderText(context);
+  Widget? _buildTitle(
+      BuildContext context,
+      EditSubsViewAbstractControllerProvider
+          editSubsViewAbstractControllerProvider) {
+    ViewAbstract? viewAbstractWatched = editSubsViewAbstractControllerProvider
+        .getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? "");
+
+    return editSubsViewAbstractControllerProvider
+            .getIsNullable(widget.viewAbstract.getFieldNameFromParent ?? "")
+        ? Text("IS NEW")
+        : viewAbstractWatched == null
+            ? widget.viewAbstract.getHeaderText(context)
+            : viewAbstractWatched.getHeaderText(context);
   }
 
   Widget _buildLeadingIcon(BuildContext context) {
     String? url = widget.viewAbstract.getImageUrl(context);
     if (url != null) {
-      return widget.viewAbstract.getCardLeadingImage(context);
+      return widget.viewAbstract.getCardLeadingCircleAvatar(context);
     } else {
       return RotationTransition(
         turns: _iconTurns,
@@ -157,9 +172,8 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
-    ViewAbstract? viewAbstractWatched = context
-        .watch<EditSubsViewAbstractControllerProvider>()
-        .getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? "");
+    EditSubsViewAbstractControllerProvider editSubsView =
+        context.watch<EditSubsViewAbstractControllerProvider>();
     return Card(
       child: Container(
         padding: _isExpanded ? const EdgeInsets.all(20) : null,
@@ -180,7 +194,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
                 onTap: () => _handleTap(context),
                 contentPadding: expansionTileTheme.tilePadding,
                 leading: _buildLeadingIcon(context),
-                title: _buildTitle(context, viewAbstractWatched),
+                title: _buildTitle(context, editSubsView),
                 // subtitle: widget.subtitle,
                 trailing: EditSubViewAbstractTrailingWidget(
                     view_abstract: widget.viewAbstract, field: widget.field),

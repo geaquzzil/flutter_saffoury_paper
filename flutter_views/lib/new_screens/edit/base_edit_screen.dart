@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/components/form_validator.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
-import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/sub_edit_viewabstract.dart';
+import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_header.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_nullable_button.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
@@ -64,7 +64,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
     final validationSuccess = _formKey.currentState!.validate();
     if (!validationSuccess) {
       _formKey.currentState!.save();
-      print(_formKey.currentState?.value);
+      debugPrint("validate ${_formKey.currentState?.value}");
       // showMaterialBanner();
     }
     if (validationSuccess) {
@@ -72,8 +72,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
       _formKey.currentState!.save();
       final formData = _formKey.currentState?.value;
-
-      print(formData);
+      debugPrint("validate $formData");
       // widget.parent.setFieldValue(
       //     _formKey.currentState!.value);
       // Provider.of<ActionViewAbstractProvider>(
@@ -123,7 +122,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
       fieldValue.setFieldNameFromParent(field);
       // return Text("FDFD");
-      return EditSubViewAbstractWidget(parent: fieldValue, field: field);
+      return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
     } else {
       return EditControllerMasterWidget(
           viewAbstract: viewAbstract, field: field);

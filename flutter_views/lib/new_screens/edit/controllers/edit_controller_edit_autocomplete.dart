@@ -24,6 +24,7 @@ class _EditControllerEditTextAutoCompleteState
     extends State<EditControllerEditTextAutoComplete> {
   late final _formValidationManager;
   final textController = TextEditingController();
+  String lastQuery = "";
 
   @override
   void initState() {
@@ -37,6 +38,9 @@ class _EditControllerEditTextAutoCompleteState
     s.addListener(() {
       debugPrint(
           "EditSubsViewAbstractControllerProvider isChanged ${s.getList.toString()}");
+    });
+    textController.addListener(() {
+      debugPrint("is Change from textController to text");
     });
   }
 
@@ -57,16 +61,13 @@ class _EditControllerEditTextAutoCompleteState
         FormBuilderTypeAheadCustom<String>(
             // controller: textController,
             onChanged: (value) {
-              if (canSubmitChanges(widget.viewAbstract)) {
-                debugPrint("isChanged to $value");
-                ViewAbstract newObject =
-                    widget.viewAbstract.copyWithSetNew(widget.field, value);
-                context
-                    .read<EditSubsViewAbstractControllerProvider>()
-                    .toggleIsNew(
-                        newObject.getFieldNameFromParent ?? "", newObject);
-                widget.viewAbstract = newObject;
+              if (value == null) return;
+              if (value.isEmpty) return;
+              if (value == widget.viewAbstract.getFieldValue(widget.field)) {
+                return;
               }
+              widget.viewAbstract =
+                  onChange(context, widget.viewAbstract, widget.field, value);
             },
             valueTransformer: (value) {
               return value?.trim();
@@ -78,9 +79,9 @@ class _EditControllerEditTextAutoCompleteState
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
-            keyboardType: widget.viewAbstract.getTextInputType(widget.field),
-            inputFormatters:
-                widget.viewAbstract.getTextInputFormatter(widget.field),
+            // keyboardType: widget.viewAbstract.getTextInputType(widget.field),
+            // inputFormatters:
+            //     widget.viewAbstract.getTextInputFormatter(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
             focusNode: _formValidationManager.getFocusNodeForField(
@@ -98,11 +99,12 @@ class _EditControllerEditTextAutoCompleteState
                   .getTextInputValidator(context, widget.field, value);
             }),
             onSaved: (dynamic value) {
-              print('onSave=   ${value?.getHeaderTextOnly(context)}');
+              return value;
             },
             suggestionsCallback: (query) {
               if (query.isEmpty) return [];
-
+              if (query.trim() == lastQuery.trim()) return [];
+              lastQuery = query;
               return widget.viewAbstract
                   .searchByFieldName(field: widget.field, searchQuery: query);
             }),

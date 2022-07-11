@@ -70,10 +70,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
             : Colors.black54);
   }
 
-  Widget getCardLeading(BuildContext context) {
-    return Hero(
-        tag: this,
+  Widget getCardLeadingCircleAvatar(BuildContext context) {
+    return Container(
+        width: 60,
+        height: 60,
         child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
+  }
+
+  Widget getCardLeading(BuildContext context) {
+    return Hero(tag: this, child: (getCardLeadingCircleAvatar(context)));
   }
 
   DismissDirection getDismissibleDirection() {
