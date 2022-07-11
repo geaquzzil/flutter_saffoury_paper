@@ -13,21 +13,32 @@ class FormValidationManager {
   FormFieldValidator<T> wrapValidator<T>(String key, ViewAbstract viewAbstract,
       String field, FormFieldValidator<T> validator) {
     _ensureExists(key, viewAbstract, field);
-
+    debugPrint("wrapValidator list before input");
     return (input) {
       final result = validator(input);
       _fieldStates[key]?.errorMessage = result;
       _fieldStates[key]?.hasError = (result?.isNotEmpty ?? false);
+      debugPrint(
+          "wrapValidator key=> $key has error ${_fieldStates[key]?.hasError}");
       return result;
     };
   }
 
   bool hasError(ViewAbstract viewAbstract) {
-    FormFieldValidationState? res = _fieldStates.entries
-        .firstWhereOrNull(
-            (element) => element.value.viewAbstract == viewAbstract)
-        ?.value;
-    return res?.hasError ?? false;
+    debugPrint(
+        "hasError Checking before name=> ${viewAbstract.getGenericClassName()}");
+    final res = _fieldStates.entries
+        .where((element) => element.value.viewAbstract
+                .getGenericClassName()
+                .contains((viewAbstract.getGenericClassName()))
+            // &&(element.value.hasError)
+            )
+        .toList();
+    bool result =
+        res.firstWhereOrNull((p0) => p0.value.hasError)?.value.hasError ??
+            false;
+    debugPrint("hasError Checking $result");
+    return result;
   }
 
   List<FormFieldValidationState> get erroredFields => _fieldStates.entries

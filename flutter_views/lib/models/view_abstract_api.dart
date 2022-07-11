@@ -1,6 +1,5 @@
 import 'dart:collection';
 import 'dart:convert' as convert;
-import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
@@ -259,11 +258,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return [];
     }
   }
-
+  Future<List<T>?> listCallFake() async{
+ Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
+    return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+  }
   Future<List<T>?> listCall(int count, int page,
       {OnResponseCallback? onResponse}) async {
-    Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
-    return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+   
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.list);
 
@@ -272,7 +273,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       //todo change this when finish testing
-      Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
+      Iterable l = convert.jsonDecode(response.body);
       return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =

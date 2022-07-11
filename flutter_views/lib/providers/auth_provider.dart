@@ -51,36 +51,51 @@ class AuthProvider with ChangeNotifier {
 
   AuthProvider.initialize(List<ViewAbstract> drawerItems) {
     _drawerItems = drawerItems;
-    init();
+    initFakeData();
+  }
+  void initFakeData() async {
+    await Future.delayed(Duration(seconds: 2));
+    try {
+      _user = AuthUser();
+      _user.password = "0933326880";
+      _user.phone = "0933326882";
+      _user.login = true;
+      _user = _user.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)));
+      _status = Status.Authenticated;
+      notifyListeners();
+    } catch (ex) {
+      debugPrint("Error initial $ex");
+    }
   }
 
+  //Todo on publish use this method
   void init() async {
     bool hasUser = await Configurations.hasSavedValue(AuthUser());
     final Response? responseUser;
     if (hasUser == false) {
       _user = AuthUser();
-      _user.password = "0933326882";
+      _user.password = "0933326880";
       _user.phone = "0933326882";
       _user.login = true;
       _status = Status.Guest;
     } else {
       _user = await Configurations.get<AuthUser>(_user);
     }
-    // responseUser = await _user.getRespones(serverActions: ServerActions.add);
-    // if (responseUser == null) {
-    //   _status = Status.Faild;
-    // } else if (responseUser.statusCode == 401) {
-    //   _status = Status.Faild;
-    // } else {
-    // _user = _user.fromJsonViewAbstract(jsonDecode(responseUser.body));
-    _user = _user.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)));
-    bool isLogin = _user.login ?? false;
-    bool hasPermission = _user.permission ?? false;
-    _status = isLogin ? Status.Authenticated : Status.Guest;
-    // }
-    _permissions = _user.userlevels ?? PermissionLevelAbstract();
-    debugPrint("Authenticated $_status");
-    notifyListeners();
+    responseUser = await _user.getRespones(serverActions: ServerActions.add);
+    if (responseUser == null) {
+      _status = Status.Faild;
+    } else if (responseUser.statusCode == 401) {
+      _status = Status.Faild;
+    } else {
+      _user = _user.fromJsonViewAbstract(jsonDecode(responseUser.body));
+      bool isLogin = _user.login ?? false;
+      bool hasPermission = _user.permission ?? false;
+      _status = isLogin ? Status.Authenticated : Status.Guest;
+      // }
+      _permissions = _user.userlevels ?? PermissionLevelAbstract();
+      debugPrint("Authenticated $_status");
+      notifyListeners();
+    }
   }
 
   Future initDrawerItems(BuildContext context) async {
@@ -93,13 +108,13 @@ class AuthProvider with ChangeNotifier {
         _drawerItemsPermissions.add(item);
       }
     });
-    print(
+    debugPrint(
         "initDrawerItems genrated list is ${_drawerItemsPermissions.toString()}");
 
     __drawerItemsGrouped = _drawerItemsPermissions
         .groupBy((item) => item.getDrawerGroupName(), valueTransform: (v) => v);
 
-    print(
+    debugPrint(
         "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
   }
 
@@ -118,7 +133,7 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       _status = Status.Unauthenticated;
       notifyListeners();
-      print(e.toString());
+      debugPrint(e.toString());
       return false;
     }
   }

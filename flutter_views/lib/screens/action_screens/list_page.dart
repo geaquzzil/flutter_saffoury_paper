@@ -45,7 +45,7 @@ class _ListPageState<T extends ViewAbstract> extends State<ListPage> {
   }
 
   Future<bool> _loadMore() async {
-    print("onLoadMore");
+    debugPrint("onLoadMore");
     bool result = true;
     ViewAbstract viewAbstract =
         context.watch<DrawerViewAbstractProvider>().getObject;

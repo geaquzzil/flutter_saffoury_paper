@@ -24,7 +24,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: AppTheme.nearlyWhite,
-      child: SafeArea(
+      child: const SafeArea(
         top: false,
         bottom: false,
         child: Scaffold(

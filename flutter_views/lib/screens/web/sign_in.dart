@@ -50,7 +50,7 @@ class SignIn extends BaseWebPage {
                   const SizedBox(width: 15),
                   GestureDetector(
                     onTap: () {
-                      print(MediaQuery.of(context).size.width);
+                      debugPrint("${MediaQuery.of(context).size.width}");
                     },
                     child: const Text(
                       "Register here!",
@@ -148,7 +148,7 @@ class SignIn extends BaseWebPage {
             ],
           ),
           child: ElevatedButton(
-            onPressed: () => print("it's pressed"),
+            onPressed: () => debugPrint("it's pressed"),
             style: ElevatedButton.styleFrom(
               primary: Colors.deepPurple,
               onPrimary: Colors.white,

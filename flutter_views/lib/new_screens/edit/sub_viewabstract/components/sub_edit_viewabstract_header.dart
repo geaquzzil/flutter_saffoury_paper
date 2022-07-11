@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_trailing.dart';
+import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -40,9 +42,9 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
   void initState() {
     super.initState();
     fields = widget.viewAbstract.getFields();
-    childrenPadding = EdgeInsets.all(20);
-    _controller =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+    childrenPadding = const EdgeInsets.all(20);
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
 
     _heightFactor = _controller.drive(_easeInTween);
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
@@ -55,6 +57,10 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
             widget.viewAbstract,
             widget.viewAbstract
                 .isNullableAlreadyFromParentCheck(context, widget.field));
+
+    // Provider.of<ErrorFieldsProvider>(context, listen: false).addListener(() {
+    //   debugPrint("ErrorFieldsProvider is changed");
+    // });
   }
 
   @override
@@ -183,6 +189,9 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
     EditSubsViewAbstractControllerProvider editSubsView =
         context.watch<EditSubsViewAbstractControllerProvider>();
+    ErrorFieldsProvider formValidator = context.watch<ErrorFieldsProvider>();
+    bool hasError = formValidator.hasError(widget.viewAbstract);
+
     return Card(
       child: Container(
         padding: _isExpanded ? const EdgeInsets.all(20) : null,
@@ -190,7 +199,8 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
           color: expansionTileTheme.backgroundColor ?? Colors.transparent,
           border: Border(
             top: BorderSide(color: borderSideColor),
-            bottom: BorderSide(color: borderSideColor),
+            bottom: BorderSide(
+                color: hasError ? Colors.red : borderSideColor, width: 2),
           ),
         ),
         child: Column(

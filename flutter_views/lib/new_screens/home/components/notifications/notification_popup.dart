@@ -1,6 +1,5 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
@@ -24,7 +23,7 @@ class NotificationPopupWidget extends StatelessWidget {
       pressType: PressType.singleClick,
       verticalMargin: -15,
       controller: _controller,
-      child: Icon(
+      child: const Icon(
         Icons.notifications,
       ),
     );

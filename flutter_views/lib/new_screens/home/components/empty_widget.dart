@@ -21,7 +21,7 @@ class EmptyWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Lottie.network(lottiUrl, height: 200, width: 200),
-          SizedBox(
+          const SizedBox(
             height: kDefaultPadding,
           ),
           Text(
@@ -29,13 +29,13 @@ class EmptyWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: themeData.textTheme.titleSmall,
           ),
-          SizedBox(
+          const SizedBox(
             height: kDefaultPadding,
           ),
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+            style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
           ),
         ],
       ),

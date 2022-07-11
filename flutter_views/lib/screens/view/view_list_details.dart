@@ -16,7 +16,7 @@ class ViewDetailsListWidget extends StatelessWidget {
         itemCount: fields.length,
         itemBuilder: (BuildContext context, int index) {
           String label = fields[index];
-          print("builder $label");
+          debugPrint("builder $label");
           dynamic fieldValue = viewAbstract.getFieldValue(label);
           if (fieldValue == null) {
             return ViewCardItem(

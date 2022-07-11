@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/models/components/form_validator.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_header.dart';
-import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_nullable_button.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
@@ -42,10 +40,10 @@ class _BaseEditPageState extends State<BaseEditPage> {
   void initState() {
     debugPrint("initState _BaseEditPageState");
     super.initState();
-    ErrorFieldsProvider errorFieldsProvider =
-        Provider.of<ErrorFieldsProvider>(context, listen: false);
+    // ErrorFieldsProvider errorFieldsProvider =
+    //     Provider.of<ErrorFieldsProvider>(context, listen: false);
 
-    errorFieldsProvider.initState();
+    // errorFieldsProvider.initState();
 
     fields = widget.parent.getFields();
   }
@@ -53,7 +51,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
   @override
   void dispose() {
     debugPrint("dispose _BaseEditPageState");
-    Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
+    // Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
     Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
         .clear();
     super.dispose();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 
 class CartSummaryItem extends StatelessWidget {
   double fontSize;
@@ -15,7 +14,7 @@ class CartSummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,

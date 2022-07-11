@@ -17,7 +17,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
 
   List<PermissionActionAbstract> permissions_levels = [];
   PermissionLevelAbstract() : super() {
-    userlevelname = '-';
+    userlevelname = "-";
     permissions_levels = List.empty();
   }
 
@@ -28,6 +28,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   static PermissionActionAbstract? containsStaticKeyReturnValue(String key) {
     return hashMapOfPermissionTableAction[key];
   }
+
   @override
   Future<PermissionActionAbstract?> findPermissionBy(dynamic toDo) async {
     PermissionActionAbstract? foundedPermission;
@@ -70,7 +71,6 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
       return getTableName(toDo);
     }
   }
-
 
   factory PermissionLevelAbstract.fromJson(Map<String, dynamic> data) =>
       _$PermissionLevelAbstractFromJson(data);

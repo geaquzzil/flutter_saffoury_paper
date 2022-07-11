@@ -21,7 +21,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         child: Column(
           children: [
             const HeaderMain(),
-            HeaderTitleMain(),
+            const HeaderTitleMain(),
             getCurrentPage(context)
           ],
         ),
@@ -34,7 +34,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         context.watch<LargeScreenPageProvider>().getCurrentPage;
     switch (currentPage) {
       case CurrentPage.cart:
-        return BaseHomeCartPage();
+        return const BaseHomeCartPage();
       case CurrentPage.list:
       default:
         return getMainHomeList(context);

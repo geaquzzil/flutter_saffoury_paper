@@ -3,7 +3,7 @@ import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_d
 import 'package:flutter_view_controller/new_screens/cart/cart_list.dart';
 
 class BaseHomeCartPage extends StatefulWidget {
-  BaseHomeCartPage({Key? key}) : super(key: key);
+  const BaseHomeCartPage({Key? key}) : super(key: key);
 
   @override
   State<BaseHomeCartPage> createState() => _BaseHomeCartPageState();
@@ -21,13 +21,13 @@ class _BaseHomeCartPageState extends State<BaseHomeCartPage> {
                 flex: 3,
                 child: Container(
                   color: Colors.white,
-                  child: CartList(),
+                  child: const CartList(),
                 )),
             Expanded(
               flex: 1,
               child: Container(
                 color: Colors.grey.shade100,
-                child: SubRowCartDescription(),
+                child: const SubRowCartDescription(),
               ),
             ),
           ]),

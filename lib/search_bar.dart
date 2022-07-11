@@ -56,7 +56,7 @@ class MyHomePage extends StatelessWidget {
         onPressed: () => showSearch(
           context: context,
           delegate: SearchPage<Person>(
-            onQueryUpdate: (s) => print(s),
+            onQueryUpdate: (s) => debugPrint(s),
             items: people,
             searchLabel: 'Search people',
             suggestion: const Center(

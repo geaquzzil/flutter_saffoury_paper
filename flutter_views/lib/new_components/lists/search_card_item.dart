@@ -11,7 +11,7 @@ class SearchCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("SearchCardItem query=> $searchQuery");
+    debugPrint("SearchCardItem query=> $searchQuery");
     return ListTile(
         onTap: () => {},
         onLongPress: () => {},

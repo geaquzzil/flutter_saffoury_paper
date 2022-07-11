@@ -25,7 +25,7 @@ class CartPopupWidget extends StatelessWidget {
       pressType: PressType.singleClick,
       verticalMargin: -15,
       controller: _controller,
-      child: Icon(
+      child: const Icon(
         Icons.shopping_cart_checkout_outlined,
       ),
     );
@@ -48,7 +48,7 @@ class CartPopupWidget extends StatelessWidget {
   }
 
   Widget getContentWidget(BuildContext context, String title, String subtitle) {
-    return ShoppingCartPageNew();
+    return const ShoppingCartPageNew();
     return ListStaticWidget(
         listItembuilder: (item) =>
             SearchCardItem(viewAbstract: item, searchQuery: ""),

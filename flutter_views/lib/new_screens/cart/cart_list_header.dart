@@ -9,25 +9,25 @@ class CartListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Row(children: [
-        TitleText(
+        const TitleText(
           text: 'Shopping',
           fontSize: 27,
           fontWeight: FontWeight.w400,
         ),
-        TitleText(
+        const TitleText(
           text: 'Cart',
           fontSize: 27,
           fontWeight: FontWeight.w700,
         ),
-        Spacer(),
+        const Spacer(),
         TitleText(
           text: context.watch<CartProvider>().getCount.toString(),
           fontSize: 20,
           fontWeight: FontWeight.w700,
         ),
-        TitleText(
+        const TitleText(
           text: 'Items',
           fontSize: 20,
           fontWeight: FontWeight.w400,

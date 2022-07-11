@@ -53,12 +53,12 @@ class SimpleBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print(transition);
+    debugPrint("$transition");
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print(error);
+    debugPrint("$error");
     super.onError(bloc, error, stackTrace);
   }
 }
@@ -71,24 +71,28 @@ void main() {
   // return;
   List<ViewAbstract> views =
       List<ViewAbstract>.from([Product(), Size(), ProductType()]);
+  try {
+    runApp(MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
+      ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
+      ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
+      ChangeNotifierProvider(create: (_) => CartProvider()),
+      ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
+      ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
+      ChangeNotifierProvider(
+          create: (_) => EditSubsViewAbstractControllerProvider()),
+      ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
+      ChangeNotifierProvider(
+          create: (_) => DrawerViewAbstractProvider(object: Product())),
+      ChangeNotifierProvider(create: (_) => ListProvider()),
+    ], child: const BaseMaterialAppPage()
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
-    ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
-    ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
-    ChangeNotifierProvider(create: (_) => CartProvider()),
-    ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
-    ChangeNotifierProvider(create: (_) => NotificationProvider()),
-    ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
-    ChangeNotifierProvider(create: (_) => EditSubsViewAbstractControllerProvider()),
-    ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
-    ChangeNotifierProvider(
-        create: (_) => DrawerViewAbstractProvider(object: Product())),
-    ChangeNotifierProvider(create: (_) => ListProvider()),
-  ], child: const BaseMaterialAppPage()
-
-      //  App(),
-      ));
+        //  App(),
+        ));
+  } catch (e) {
+    debugPrint("exception => $e");
+  }
 
   // BlocOverrides.runZoned(
   //   () => runApp(App()),
@@ -105,13 +109,13 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    if (bloc is Cubit) print(change);
+    if (bloc is Cubit) debugPrint("$change");
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print(transition);
+    debugPrint("$transition");
   }
 }
 

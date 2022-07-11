@@ -206,7 +206,7 @@ class _HomeMobilePage extends State<HomeMobilePage> {
           RoundedIconButton(
               icon: Icons.sort,
               onTap: () {
-                print("TAPED");
+                debugPrint("TAPED");
                 Scaffold.of(buildContext).openDrawer();
                 if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
                   scaffoldKey.currentState?.openDrawer();

@@ -75,7 +75,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
         itemCount: fields.length,
         itemBuilder: (BuildContext context, int index) {
           String label = fields[index];
-          print("builder $label");
+          debugPrint("builder $label");
           dynamic fieldValue = object.getFieldValue(label);
           if (fieldValue == null) {
             return ViewCardItem(
@@ -210,7 +210,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           String label = fields[index];
-          print("builder $label");
+          debugPrint("builder $label");
           dynamic fieldValue = object.getFieldValue(label);
           if (fieldValue == null) {
             return ViewCardItem(

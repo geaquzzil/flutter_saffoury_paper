@@ -41,7 +41,7 @@ class HeaderActions extends StatelessWidget {
     return Overlay.of(context)?.insert(
       OverlayEntry(builder: (context) {
         final size = MediaQuery.of(context).size;
-        print(size.width);
+        debugPrint("$size.width");
         return Positioned(
           width: 56,
           height: 56,
@@ -50,7 +50,7 @@ class HeaderActions extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: GestureDetector(
-              onTap: () => print('ON TAP OVERLAY!'),
+              onTap: () => debugPrint('ON TAP OVERLAY!'),
               child: Container(
                 decoration: const BoxDecoration(
                     shape: BoxShape.circle, color: Colors.redAccent),

@@ -16,7 +16,7 @@ class TextBold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parts = splitJoin();
-    print("$regex parts => $parts");
+    debugPrint("$regex parts => $parts");
     return Text.rich(TextSpan(
         children: parts
             .map((e) => TextSpan(

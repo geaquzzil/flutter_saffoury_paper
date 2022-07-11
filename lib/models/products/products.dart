@@ -11,7 +11,9 @@ import 'sizes.dart';
 // @reflector
 part 'products.g.dart';
 
-@JsonSerializable(explicitToJson: true,)
+@JsonSerializable(
+  explicitToJson: true,
+)
 @reflector
 class Product extends ViewAbstract<Product> {
   ProductType? products_types;
@@ -21,10 +23,6 @@ class Product extends ViewAbstract<Product> {
 
   String? comments;
   String? barcode;
-  String? products_count;
-
-  double? pending_reservation_invoice;
-  double? cut_request_quantity;
 
   Product() : super();
 
@@ -43,7 +41,7 @@ class Product extends ViewAbstract<Product> {
 
   @override
   Text getSubtitleHeaderText(BuildContext context) {
-    return Text("pending_reservation_invoice    $pending_reservation_invoice");
+    return Text("pending_reservation_invoice ");
   }
 
   @override
@@ -107,9 +105,6 @@ class Product extends ViewAbstract<Product> {
       "date",
       "comments",
       "barcode",
-      "products_count",
-      "pending_reservation_invoice",
-      "cut_request_quantity"
     ];
   }
 

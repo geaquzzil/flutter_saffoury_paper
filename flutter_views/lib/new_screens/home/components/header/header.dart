@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/search/search_api.dart';
 import 'package:flutter_view_controller/new_screens/home/components/carts/cart_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
-import 'package:flutter_view_controller/screens/components/search_bar.dart';
-import 'package:paginated_search_bar/paginated_search_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:endless/endless.dart';
 
 class HeaderMain extends StatefulWidget {
   const HeaderMain({
@@ -47,7 +41,7 @@ class _HeaderMainState extends State<HeaderMain> {
               children: [
                 RoundedIconButton(
                     onTap: () {
-                      print("is clickeds");
+                      debugPrint("is clickeds");
                       context
                           .read<LargeScreenPageProvider>()
                           .setCurrentPage(CurrentPage.cart);
@@ -72,7 +66,7 @@ class _HeaderMainState extends State<HeaderMain> {
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),
-                ProfilePicturePopupMenu(),
+                const ProfilePicturePopupMenu(),
               ],
             )));
   }

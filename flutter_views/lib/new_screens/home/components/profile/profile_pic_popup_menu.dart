@@ -13,7 +13,7 @@ class ItemModel {
 }
 
 class ProfilePicturePopupMenu extends StatefulWidget {
-  ProfilePicturePopupMenu({Key? key}) : super(key: key);
+  const ProfilePicturePopupMenu({Key? key}) : super(key: key);
 
   @override
   State<ProfilePicturePopupMenu> createState() =>
@@ -57,18 +57,18 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
         child: IntrinsicWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [ProfileListTileWidget(), Divider()]..addAll(menuItems
+            children: [const ProfileListTileWidget(), const Divider(), ...menuItems
                 .map(
                   (item) => GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      print("onTap");
+                      debugPrint("onTap");
                       _controller.hideMenu();
                     },
                     child: popMenuItem(item),
                   ),
                 )
-                .toList()),
+                .toList()],
           ),
         ),
       ),
@@ -78,7 +78,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
   Container popMenuItem(ItemModel item) {
     return Container(
       height: 40,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: <Widget>[
           Icon(
@@ -88,11 +88,11 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: 10),
-              padding: EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 item.title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 12,
                 ),
@@ -117,12 +117,12 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
                   (item) => GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      print("onTap");
+                      debugPrint("onTap");
                       _controller.hideMenu();
                     },
                     child: Container(
                       height: 40,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         children: <Widget>[
                           Icon(
@@ -132,11 +132,11 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
                           ),
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(left: 10),
-                              padding: EdgeInsets.symmetric(vertical: 10),
+                              margin: const EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
                                 item.title,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black87,
                                   fontSize: 12,
                                 ),

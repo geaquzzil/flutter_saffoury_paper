@@ -42,7 +42,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late List<ChatModel> messages;
   late List<ItemModel> menuItems;
-  CustomPopupMenuController _controller = CustomPopupMenuController();
+  final CustomPopupMenuController _controller = CustomPopupMenuController();
 
   @override
   void initState() {
@@ -78,13 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CustomPopupMenu'),
+        title: const Text('CustomPopupMenu'),
         actions: <Widget>[
           CustomPopupMenu(
-            child: Container(
-              child: Icon(Icons.add_circle_outline, color: Colors.white),
-              padding: EdgeInsets.all(20),
-            ),
             menuBuilder: () => ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Container(
@@ -102,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             },
                             child: Container(
                               height: 40,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Row(
                                 children: <Widget>[
                                   Icon(
@@ -112,12 +108,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   Expanded(
                                     child: Container(
-                                      margin: EdgeInsets.only(left: 10),
+                                      margin: const EdgeInsets.only(left: 10),
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 10),
+                                          const EdgeInsets.symmetric(vertical: 10),
                                       child: Text(
                                         item.title,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,
                                         ),
@@ -137,13 +133,17 @@ class _MyHomePageState extends State<MyHomePage> {
             pressType: PressType.singleClick,
             verticalMargin: -10,
             controller: _controller,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: const Icon(Icons.add_circle_outline, color: Colors.white),
+            ),
           ),
         ],
       ),
       body: LayoutBuilder(
         builder: (context, constraint) {
           return SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraint.maxHeight),
               child: Column(
@@ -186,12 +186,12 @@ class MessageContent extends StatelessWidget {
         width: 220,
         color: const Color(0xFF4C4C4C),
         child: GridView.count(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           crossAxisCount: 5,
           crossAxisSpacing: 0,
           mainAxisSpacing: 10,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           children: menuItems
               .map((item) => Column(
                     mainAxisSize: MainAxisSize.min,
@@ -202,10 +202,10 @@ class MessageContent extends StatelessWidget {
                         color: Colors.white,
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 2),
+                        margin: const EdgeInsets.only(top: 2),
                         child: Text(
                           item.title,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       ),
                     ],
@@ -237,7 +237,7 @@ class MessageContent extends StatelessWidget {
     double avatarSize = 40;
 
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: Row(
         textDirection: isMe ? TextDirection.rtl : TextDirection.ltr,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +245,6 @@ class MessageContent extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(right: isMe ? 0 : 10, left: isMe ? 10 : 0),
             child: CustomPopupMenu(
-              child: _buildAvatar(isMe, avatarSize),
               menuBuilder: () => GestureDetector(
                 child: _buildAvatar(isMe, 100),
                 onLongPress: () {
@@ -259,21 +258,22 @@ class MessageContent extends StatelessWidget {
               pressType: PressType.singleClick,
               arrowColor: isMe ? Colors.blueAccent : Colors.pinkAccent,
               position: PreferredPosition.top,
+              child: _buildAvatar(isMe, avatarSize),
             ),
           ),
           CustomPopupMenu(
+            menuBuilder: _buildLongPressMenu,
+            barrierColor: Colors.transparent,
+            pressType: PressType.longPress,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               constraints: BoxConstraints(maxWidth: 240, minHeight: avatarSize),
               decoration: BoxDecoration(
-                color: isMe ? Color(0xff98e165) : Colors.white,
+                color: isMe ? const Color(0xff98e165) : Colors.white,
                 borderRadius: BorderRadius.circular(3.0),
               ),
               child: Text(message.content),
             ),
-            menuBuilder: _buildLongPressMenu,
-            barrierColor: Colors.transparent,
-            pressType: PressType.longPress,
           )
         ],
       ),

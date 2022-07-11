@@ -84,32 +84,32 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
-  int? getTextInputValidatorMaxValue(String field) {
+  double? getTextInputValidatorMaxValue(String field) {
     return null;
   }
 
-  int? getTextInputValidatorMinValue(String field) {
+  double? getTextInputValidatorMinValue(String field) {
     return null;
   }
 
   String? getTextInputValidator(
       BuildContext context, String field, String? value) {
     String fieldLabel = getFieldLabel(field, context);
+    double? maxValue = getTextInputValidatorMaxValue(field);
+    double? minValue = getTextInputValidatorMinValue(field);
     if (isFieldRequired(field)) {
       if (value?.isEmpty ?? false) {
         return "$fieldLabel is required";
       }
     }
-    if (getTextInputValidatorMaxValue(field) != null) {
-      if (value != null &&
-          int.parse(value) > getTextInputValidatorMaxValue(field)!) {
-        return "$fieldLabel must be less than or equal to ${getTextInputValidatorMaxValue(field)}";
+    if (maxValue != null) {
+      if (value != null && double.parse(value) > maxValue) {
+        return "$fieldLabel must be less than or equal to $maxValue";
       }
     }
-    if (getTextInputValidatorMinValue(field) != null) {
-      if (value != null &&
-          int.parse(value) < getTextInputValidatorMinValue(field)!) {
-        return "$fieldLabel must be greater than or equal to ${getTextInputValidatorMinValue(field)}";
+    if (minValue != null) {
+      if (value != null && int.parse(value) < minValue) {
+        return "$fieldLabel must be greater than or equal to $minValue";
       }
     }
     return null;

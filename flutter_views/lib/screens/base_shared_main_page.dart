@@ -31,7 +31,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
-    print(authProvider.getStatus.toString());
+    debugPrint(authProvider.getStatus.toString());
     switch (authProvider.getStatus) {
       case Status.Initialization:
         return getLoadingWidget();
@@ -66,7 +66,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-              print("drawer itmes ${authProvider.getDrawerItems.toString()}");
+              debugPrint("drawer itmes ${authProvider.getDrawerItems.toString()}");
               return getMainContainerWidget(context);
             default:
               if (snapshot.hasError) {

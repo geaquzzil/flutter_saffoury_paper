@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerEditText extends StatefulWidget {
@@ -17,22 +18,26 @@ class EditControllerEditText extends StatefulWidget {
 }
 
 class _EditControllerEditTextState extends State<EditControllerEditText> {
-  late final _formValidationManager;
   @override
   void initState() {
     super.initState();
-    ErrorFieldsProvider errorFieldsProvider =
-        Provider.of<ErrorFieldsProvider>(context, listen: false);
-    _formValidationManager = errorFieldsProvider.getFormValidationManager;
   }
 
   @override
   Widget build(BuildContext context) {
+    ErrorFieldsProvider formValidationManager =
+        context.read<ErrorFieldsProvider>();
+    if (formValidationManager == null) {
+      debugPrint("FormValidationManager ==null");
+    } else {
+      debugPrint("FormValidationManager =! null");
+    }
+
     return Column(
       children: [
         FormBuilderTextField(
-          
             onChanged: (value) {
+              context.read<ErrorFieldsProvider>().notify();
               if (value == null) return;
               if (value.isEmpty) return;
               if (value == widget.viewAbstract.getFieldValue(widget.field)) {
@@ -46,7 +51,8 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
             },
             name: widget.viewAbstract.getTag(widget.field),
             initialValue: getFieldValue(context,
-                widget.viewAbstract.getFieldNameFromParent, widget.field),
+                    widget.viewAbstract.getFieldNameFromParent, widget.field)
+                .toString(),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
@@ -55,20 +61,20 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
             keyboardType: widget.viewAbstract.getTextInputType(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-            focusNode: _formValidationManager.getFocusNodeForField(
+            focusNode: formValidationManager.getFocusNodeForField(
                 widget.viewAbstract.getTag(widget.field),
                 widget.viewAbstract,
                 widget.field),
-            validator: _formValidationManager.wrapValidator(
+            validator: formValidationManager.wrapValidator(
                 widget.viewAbstract.getTag(widget.field),
                 widget.viewAbstract,
                 widget.field, (value) {
+              debugPrint("wrapValidator");
               return widget.viewAbstract
                   .getTextInputValidator(context, widget.field, value);
             }),
-            
             onSaved: (String? value) {
-              print('onSave=   $value');
+              debugPrint('onSave=   $value');
             },
             inputFormatters:
                 widget.viewAbstract.getTextInputFormatter(widget.field)),

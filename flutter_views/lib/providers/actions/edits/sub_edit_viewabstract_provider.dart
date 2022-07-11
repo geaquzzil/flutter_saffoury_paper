@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class EditSubsViewAbstractControllerProvider with ChangeNotifier {
-  Map<String, ViewAbstractNullableController> _list = {};
+  final Map<String, ViewAbstractNullableController> _list = {};
 
   Map<String, ViewAbstractNullableController> get getList => _list;
   ViewAbstract? getViewAbstract(String field) {

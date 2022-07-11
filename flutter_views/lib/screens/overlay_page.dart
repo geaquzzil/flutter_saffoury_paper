@@ -41,7 +41,7 @@ class _OverlayWidgetState extends State<OverlayWidget> {
         link: layerLink,
         child: InkWell(
             onTap: () {
-              print("show overlay ${foucsNode.hasFocus}");
+              debugPrint("show overlay ${foucsNode.hasFocus}");
               if (entry == null) {
                 _showOverlay();
               } else {

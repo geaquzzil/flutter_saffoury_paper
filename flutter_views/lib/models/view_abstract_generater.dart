@@ -48,7 +48,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
 
   void onDrawerItemClicked(BuildContext context) {
-    print('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');
+    debugPrint('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
     context.read<DrawerViewAbstractProvider>().change(this as ViewAbstract);
   }

@@ -18,7 +18,7 @@ class _EditSubViewAbstractTrailingWidgetState
     extends State<EditSubViewAbstractTrailingWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  bool _flag = false;
+  final bool _flag = false;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _EditSubViewAbstractTrailingWidgetState
             if (editSubProvider.getIsNew(widget.field))
               IconButton(
                   onPressed: () => {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit,
                     color: Colors.orange,
                   )),
@@ -63,7 +63,7 @@ class _EditSubViewAbstractTrailingWidgetState
             if (!editSubProvider.getIsNullable(widget.field))
               IconButton(
                   onPressed: () => {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_downward,
                     color: Colors.orange,
                   )),

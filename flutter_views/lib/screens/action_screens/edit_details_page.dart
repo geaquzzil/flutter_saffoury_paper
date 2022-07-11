@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/components/master_edit_form.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 
@@ -15,7 +14,7 @@ class EditDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   @override
   Widget? getBodyActionView(BuildContext context) {
     // TODO: implement getBodyActionView
-    return Center(child: MasterEditForm(parent: object));
+    return null;
   }
 
   @override

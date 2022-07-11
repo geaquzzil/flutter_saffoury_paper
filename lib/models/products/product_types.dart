@@ -17,8 +17,8 @@ class ProductType extends ViewAbstract<ProductType> {
   String? image;
   String? name;
   String? comments;
-  double purchasePrice = 0;
-  // double? sellPrice;
+  double? purchasePrice;
+  double? sellPrice;
 
   ProductType() : super();
 
@@ -46,6 +46,12 @@ class ProductType extends ViewAbstract<ProductType> {
   bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
     // TODO: implement getTextInputTypeIsAutoCompleteViewAbstract
     return field == "name";
+  }
+
+  @override
+  bool isFieldRequired(String field) {
+    // TODO: implement isFieldRequired
+    return field == "purchasePrice" || field == "sellPrice" || field == "name";
   }
 
   @override

@@ -22,13 +22,13 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     _scrollController.addListener(() => _onScroll());
     Provider.of<DrawerViewAbstractProvider>(context, listen: false)
         .addListener(() {
-      print("ViewAbstractProvider CHANGED");
+      debugPrint("ViewAbstractProvider CHANGED");
       // context
       //     .read<PostBloc>()
       //     .clearList(context.read<DrawerViewAbstractProvider>().getObject);
     });
     listProvider
-        .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
+        .fetchFakeList(context.read<DrawerViewAbstractProvider>().getObject);
     // listClass = DynamicList(taskItems.list);
     //    = Provider.of<ViewAbstractProvider>(context, listen = false);
     //object = context.watch<ViewAbstractProvider>().getObject;
@@ -71,11 +71,11 @@ class _ListApiWidgetState extends State<ListApiWidget> {
   }
 
   void _onScroll() {
-    print(" IS _onScroll $_isBottom");
+    debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
-      print(" IS BOTTOM $_isBottom");
+      debugPrint(" IS BOTTOM $_isBottom");
       listProvider
-          .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
+          .fetchFakeList(context.read<DrawerViewAbstractProvider>().getObject);
       // context
       //     .read<ListProvider>()
       //     .fetchList(context.read<DrawerViewAbstractProvider>().getObject);

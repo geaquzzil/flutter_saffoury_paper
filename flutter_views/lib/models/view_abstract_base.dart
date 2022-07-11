@@ -71,14 +71,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Icon(getIconData(),
         color: context
                 .watch<ErrorFieldsProvider>()
-                .formValidationManager
+                .getFormValidationManager
                 .hasError(this as ViewAbstract)
             ? Colors.red
             : Colors.black54);
   }
 
   Widget getCardLeadingCircleAvatar(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: 60,
         height: 60,
         child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
@@ -93,7 +93,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
-    print("onDismissed {$this} => direction: $direction");
+    debugPrint("onDismissed {$this} => direction: $direction");
   }
 
   Widget getDismissibleSecondaryBackground(BuildContext context) {
@@ -132,7 +132,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       errorWidget: (context, url, error) => Icon(getIconData()),
     );
   }
-
 
   String? getImageUrl(BuildContext context) {
     return null;
@@ -192,6 +191,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return reflector.reflect(this);
   }
 
+  Type getFieldType(String label) {
+    return getInstanceMirror().invokeGetter(label).runtimeType;
+  }
+
   dynamic getFieldValue(String label) {
     try {
       return getInstanceMirror().invokeGetter(label);
@@ -202,6 +205,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String getTag(String label) {
     return "${T}_$label";
+  }
+
+  String getGenericClassName() {
+    return "$T";
   }
 
   DateTime? getDateTimeFromField(String? value) {

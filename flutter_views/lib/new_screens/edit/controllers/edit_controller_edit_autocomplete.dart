@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/lists/auto_complete_list_item.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type_ahead.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
-import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerEditTextAutoComplete extends StatefulWidget {
@@ -22,16 +20,16 @@ class EditControllerEditTextAutoComplete extends StatefulWidget {
 
 class _EditControllerEditTextAutoCompleteState
     extends State<EditControllerEditTextAutoComplete> {
-  late final _formValidationManager;
+  // late final _formValidationManager;
   final textController = TextEditingController();
   String lastQuery = "";
 
   @override
   void initState() {
     super.initState();
-    ErrorFieldsProvider errorFieldsProvider =
-        Provider.of<ErrorFieldsProvider>(context, listen: false);
-    _formValidationManager = errorFieldsProvider.getFormValidationManager;
+    // ErrorFieldsProvider errorFieldsProvider =
+    //     Provider.of<ErrorFieldsProvider>(context, listen: false);
+    // _formValidationManager = errorFieldsProvider.getFormValidationManager;
     EditSubsViewAbstractControllerProvider s =
         Provider.of<EditSubsViewAbstractControllerProvider>(context,
             listen: false);
@@ -73,7 +71,8 @@ class _EditControllerEditTextAutoCompleteState
               return value?.trim();
             },
             name: widget.viewAbstract.getTag(widget.field),
-            initialValue: widget.viewAbstract.getFieldValue(widget.field),
+            initialValue:
+                widget.viewAbstract.getFieldValue(widget.field).toString(),
             decoration:
                 getDecoration(context, widget.viewAbstract, widget.field),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
@@ -84,20 +83,21 @@ class _EditControllerEditTextAutoCompleteState
             //     widget.viewAbstract.getTextInputFormatter(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-            focusNode: _formValidationManager.getFocusNodeForField(
-                widget.viewAbstract.getTag(widget.field),
-                widget.viewAbstract,
-                widget.field),
+            // focusNode: _formValidationManager.getFocusNodeForField(
+            //     widget.viewAbstract.getTag(widget.field),
+            //     widget.viewAbstract,
+            //     widget.field),
+
+            // validator: _formValidationManager.wrapValidator(
+            //     widget.viewAbstract.getTag(widget.field),
+            //     widget.viewAbstract,
+            //     widget.field, (value) {
+            //   return widget.viewAbstract
+            //       .getTextInputValidator(context, widget.field, value);
+            // }),
             itemBuilder: (context, continent) {
-              return ListTile(title: Text(continent as String));
+              return ListTile(title: Text(continent));
             },
-            validator: _formValidationManager.wrapValidator(
-                widget.viewAbstract.getTag(widget.field),
-                widget.viewAbstract,
-                widget.field, (value) {
-              return widget.viewAbstract
-                  .getTextInputValidator(context, widget.field, value);
-            }),
             onSaved: (dynamic value) {
               return value;
             },
