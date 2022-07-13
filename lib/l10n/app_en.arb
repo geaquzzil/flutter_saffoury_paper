@@ -642,7 +642,10 @@
   "noti_message_2_F": "Thank you in advance for your prompt payment, i want to let you know that your last payment was: {r}\\nThe remaining balance is {r}",
   "noti_message_3_F": "This is a friendly reminder that your invoice [#] payment is due to be paid next week, knowing that your last payment was: {r}\\nThe remaining balance is {r}",
   "noti_message_4_F": "Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: {r}\\n\nThe remaining balance is {r}"
-
-
+  ,
+  "top": "Top",
+  "middle": "Middle",
+  "back": "Back"
+,  "enter":"Enter"
 
 }

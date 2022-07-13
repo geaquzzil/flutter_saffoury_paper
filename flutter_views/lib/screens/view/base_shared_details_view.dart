@@ -86,7 +86,7 @@ class BaseSharedDetailsView extends StatelessWidget {
                                     ),
                                     Text(
                                       viewAbstract
-                                          .getMainSubtitleTextOnly(context),
+                                          .getMainHeaderLabelTextOnly(context),
                                       style:
                                           Theme.of(context).textTheme.headline6,
                                     )

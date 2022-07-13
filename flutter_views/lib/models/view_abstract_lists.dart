@@ -22,7 +22,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   String getCartItemListSubtitle(BuildContext context) {
-    return getMainLabelTextOnly(context) ?? "getCartItemListSubtitle is null";
+    return getMainHeaderLabelTextOnly(context);
   }
 
   String getCardItemDropdownSubtitle(BuildContext context) {

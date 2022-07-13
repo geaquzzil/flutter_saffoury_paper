@@ -25,11 +25,11 @@ class GSM extends ViewAbstract<GSM> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    return gsm.toString() ?? "";
+    return gsm.toString();
   }
 
   @override
-  String getMainLabelTextOnly(BuildContext context) {
+  String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.gsm;
   }
 
@@ -67,7 +67,6 @@ class GSM extends ViewAbstract<GSM> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "gsm": AppLocalizations.of(context)!.gsm,
       };
-
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

@@ -46,7 +46,7 @@ class SearchWidgetApi extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   maxHeight: 300,
                   hintText:
-                      'Search in ${viewAbstract.getMainLabelTextOnly(context)}',
+                      'Search in ${viewAbstract.getMainHeaderLabelTextOnly(context)}',
                   emptyBuilder: (context) {
                     return const Text("I'm an empty state!");
                   },

@@ -8,7 +8,8 @@ class DrawerViewAbstractProvider with ChangeNotifier {
   DrawerViewAbstractProvider({required this.object});
 
   ViewAbstract get getObject => object;
-  String getTitle(BuildContext context) => object.getMainLabelTextOnly(context);
+  String getTitle(BuildContext context) =>
+      object.getMainHeaderLabelTextOnly(context);
 
   void change(ViewAbstract object) {
     this.object = object;

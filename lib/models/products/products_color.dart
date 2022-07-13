@@ -27,11 +27,11 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    return iD.toString() ?? "";
+    return iD.toString();
   }
 
   @override
-  String getMainLabelTextOnly(BuildContext context) {
+  String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.productsColors;
   }
 

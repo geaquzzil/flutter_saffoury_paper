@@ -18,7 +18,6 @@ class Product extends ViewAbstract<Product> {
   ProductType? products_types;
   Size? sizes;
 
-
   String? date;
 
   String? comments;
@@ -27,7 +26,7 @@ class Product extends ViewAbstract<Product> {
   Product() : super();
 
   @override
-  String getMainLabelTextOnly(BuildContext context) {
+  String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.product;
   }
 
@@ -67,7 +66,6 @@ class Product extends ViewAbstract<Product> {
 
   @override
   List<String> getMainFields() {
-    // TODO: implement getFields
     return [
       "iD",
       "sizes",
@@ -183,6 +181,5 @@ class Product extends ViewAbstract<Product> {
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 }
-enum ProductStatus{
-  NONE,PENDING,WASTED
-}
+
+enum ProductStatus { NONE, PENDING, WASTED }

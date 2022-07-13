@@ -80,14 +80,14 @@ class DrawerLargeScreens extends StatelessWidget {
         primary: false,
         itemBuilder: (context, index) {
           ViewAbstract viewAbstract = authProvider.getDrawerItems[index];
-          String? groupLabel = viewAbstract.getMainDrawerGroupName();
+          String? groupLabel = viewAbstract.getMainDrawerGroupName(context);
 
           if (groupLabel != null) {
             _addedGroups.add(groupLabel);
             List<ViewAbstract> groupedDrawerItems = authProvider.getDrawerItems
                 .where((e) =>
-                    e.getMainDrawerGroupName() ==
-                    viewAbstract.getMainDrawerGroupName())
+                    e.getMainDrawerGroupName(context) ==
+                    viewAbstract.getMainDrawerGroupName(context))
                 .toList();
             return DrawerListTileDesktopGroup(
                 groupedDrawerItems: groupedDrawerItems, idx: index);
@@ -141,7 +141,7 @@ class DrawerListTileDesktopGroup extends StatelessWidget {
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen;
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
-    String title = groupedDrawerItems[0].getMainDrawerGroupName() ?? "";
+    String title = groupedDrawerItems[0].getMainDrawerGroupName(context) ?? "";
     return isOpen
         ? ExpansionTile(
             title: Text(title),

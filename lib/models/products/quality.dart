@@ -29,7 +29,7 @@ class Quality extends ViewAbstract<Quality> {
   }
 
   @override
-  String getMainLabelTextOnly(BuildContext context) {
+  String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.quality;
   }
 
@@ -69,7 +69,6 @@ class Quality extends ViewAbstract<Quality> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "name": AppLocalizations.of(context)!.quality,
       };
-
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

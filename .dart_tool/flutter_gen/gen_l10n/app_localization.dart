@@ -3873,6 +3873,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: {r}\\n\nThe remaining balance is {r}'**
   String get noti_message_4_F;
+
+  /// No description provided for @top.
+  ///
+  /// In en, this message translates to:
+  /// **'Top'**
+  String get top;
+
+  /// No description provided for @middle.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle'**
+  String get middle;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @enter.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter'**
+  String get enter;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

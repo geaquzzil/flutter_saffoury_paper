@@ -66,7 +66,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
             text: view.getMainHeaderTextOnly(context),
             regex: searchQuery.trim()),
         subtitle: TextBold(
-            text: view.getMainSubtitleTextOnly(context),
+            text: view.getMainHeaderLabelTextOnly(context),
             regex: searchQuery.trim()),
         leading: view.getCardLeadingCircleAvatar(context));
   }

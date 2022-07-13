@@ -1896,4 +1896,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noti_message_4_F => 'Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: {r}\\n\nThe remaining balance is {r}';
+
+  @override
+  String get top => 'Top';
+
+  @override
+  String get middle => 'Middle';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get enter => 'Enter';
 }

@@ -164,7 +164,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
         widget.viewAbstract, widget.viewAbstract.getFieldNameFromParent ?? "");
     return Text(viewAbstractWatched.isNew()
         ? "IS NEW"
-        : viewAbstractWatched.getMainSubtitleTextOnly(context));
+        : viewAbstractWatched.getMainHeaderLabelTextOnly(context));
   }
 
   Widget? _buildTitle(BuildContext context) {

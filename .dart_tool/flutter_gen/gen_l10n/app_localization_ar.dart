@@ -1896,4 +1896,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noti_message_4_F => 'الرجاء إخبارنا إذا كانت لديك أي أسئلة حول الفاتورة أو إذا كان هناك أي شيء يمكنني فعله لك ، مع العلم أن آخر دفعة لك كانت: {r}\\n\nالرصيد المتبقي هو {r}';
+
+  @override
+  String get top => 'الاعلى';
+
+  @override
+  String get middle => 'الحشوة';
+
+  @override
+  String get back => 'الخلفية';
+
+  @override
+  String get enter => 'أدخل';
 }

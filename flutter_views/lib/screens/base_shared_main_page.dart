@@ -318,7 +318,7 @@ class _HeaderMainState extends State<HeaderMain> {
                           horizontal: 10, vertical: 10),
                       maxHeight: 300,
                       hintText:
-                          'Search ${viewAbstract.getMainLabelTextOnly(context)}',
+                          'Search ${viewAbstract.getMainHeaderLabelTextOnly(context)}',
                       emptyBuilder: (context) {
                         return const Text("I'm an empty state!");
                       },

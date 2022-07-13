@@ -30,7 +30,7 @@ class Grades extends ViewAbstract<Grades> {
   }
 
   @override
-  String getMainLabelTextOnly(BuildContext context) {
+  String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.grade;
   }
 
@@ -70,7 +70,6 @@ class Grades extends ViewAbstract<Grades> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "name": AppLocalizations.of(context)!.grade,
       };
-
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

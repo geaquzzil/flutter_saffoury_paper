@@ -38,14 +38,19 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
-  String getMainLabelTextOnly(BuildContext context) {
+  String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.products_type;
   }
 
-
   @override
   List<String> getMainFields() {
-    return ['name', 'unit', "sellPrice", "image", "comments", "grades"];
+    return [
+      'name',
+      // 'unit',
+      "sellPrice",
+      "image",
+      "comments",
+    ];
   }
 
   @override
@@ -92,7 +97,6 @@ class ProductType extends ViewAbstract<ProductType> {
         "image": AppLocalizations.of(context)!.loadImage,
         "comments": AppLocalizations.of(context)!.comments,
       };
-
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

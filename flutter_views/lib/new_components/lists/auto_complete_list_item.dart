@@ -20,7 +20,7 @@ class AutoCompleteCardItem extends StatelessWidget {
             text: viewAbstract.getMainHeaderTextOnly(context),
             regex: searchQuery.trim()),
         subtitle: TextBold(
-            text: viewAbstract.getMainSubtitleTextOnly(context),
+            text: viewAbstract.getMainHeaderLabelTextOnly(context),
             regex: searchQuery.trim()),
         leading: viewAbstract.getCardLeading(context));
   }

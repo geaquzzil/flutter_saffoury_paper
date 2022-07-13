@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../view_abstract.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'permission_level_abstract.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -72,24 +72,24 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
     }
   }
 
-  factory PermissionLevelAbstract.fromJson(Map<String, dynamic> data) =>
-      _$PermissionLevelAbstractFromJson(data);
-
-  Map<String, dynamic> toJson() => _$PermissionLevelAbstractToJson(this);
-
-  @override
-  PermissionLevelAbstract fromJsonViewAbstract(Map<String, dynamic> json) {
-    return PermissionLevelAbstract.fromJson(json);
-  }
-
   @override
   List<String> getMainFields() {
     return ['userlevelname', 'permissions_levels'];
   }
 
   @override
-  IconData getMainIconData() {
-    return Icons.security;
+  String? getMainDrawerGroupName(BuildContext context) {
+    return AppLocalizations.of(context)!.adminSetting;
+  }
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) {
+    return userlevelname ?? "";
+  }
+
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) {
+    return AppLocalizations.of(context)!.permissionName;
   }
 
   @override
@@ -98,97 +98,66 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   }
 
   @override
+  IconData getMainIconData() {
+    return Icons.security;
+  }
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {
+        "userlevelname": Icons.text_format,
+      };
+
+  @override
+  Map<String, bool> isFieldRequiredMap() => {"userlevelname": true};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        'iD': TextInputType.text,
+        "userlevelname": TextInputType.text,
+      };
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {
+        "userlevelname": 50,
+      };
+
+  @override
+  String? getImageUrl(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        'iD': AppLocalizations.of(context)!.iD,
+        "userlevelname": AppLocalizations.of(context)!.name,
+      };
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() => {};
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() => {};
+
+  @override
+  Map<String, bool> isFieldCanBeNullableMap() => {};
+
+  @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
 
-  @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
+  factory PermissionLevelAbstract.fromJson(Map<String, dynamic> data) =>
+      _$PermissionLevelAbstractFromJson(data);
+
+  Map<String, dynamic> toJson() => _$PermissionLevelAbstractToJson(this);
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, IconData> getTextInputIconMap() {
-    // TODO: implement getTextInputIconMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
+  PermissionLevelAbstract fromJsonViewAbstract(Map<String, dynamic> json) {
+    return PermissionLevelAbstract.fromJson(json);
   }
 }

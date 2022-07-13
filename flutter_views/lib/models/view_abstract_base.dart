@@ -14,7 +14,7 @@ import 'view_abstract_api.dart';
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<String> getMainFields();
   String getMainHeaderTextOnly(BuildContext context);
-  String? getMainLabelTextOnly(BuildContext context);
+  String getMainHeaderLabelTextOnly(BuildContext context);
 
   IconData getMainIconData();
   String? getMainDrawerGroupName(BuildContext context) => null;
@@ -25,8 +25,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
-
-
 
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ?? " not found label for=> $field";
@@ -46,7 +44,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Text? getMainSubtitleHeaderText(BuildContext context) {
     return Text(
-      getMainSubtitleTextOnly(context),
+      getMainHeaderLabelTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
@@ -67,14 +65,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Text? getMainLabelText(BuildContext context) {
     return Text(
-      getMainLabelTextOnly(context),
+      getMainHeaderLabelTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
   Text? getMainLabelSubtitleText(BuildContext context) {
     return Text(
-      getMainLabelSubtitleTextOnly(context),
+      getMainHeaderLabelTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
@@ -85,7 +83,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return const Icon(Icons.more_vert_outlined);
   }
 
-
   String? getImageUrl(BuildContext context) {
     return null;
   }
@@ -95,13 +92,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   String getMainNullableTextOnly(BuildContext context) {
-    return  "is New ${getMainLabelTextOnly(context)}";
+    return "is New ${getMainHeaderLabelTextOnly(context)}";
   }
 
   double getCartItemPrice() => 0;
   double getCartItemUnitPrice() => 0;
   double getCartItemQuantity() => 0;
-
 
   List<Widget>? getAppBarActionsEdit(BuildContext context) =>
       [IconButton(icon: const Icon(Icons.save_outlined), onPressed: () {})];

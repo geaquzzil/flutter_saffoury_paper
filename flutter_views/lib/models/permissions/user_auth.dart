@@ -162,4 +162,10 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     // TODO: implement isFieldRequiredMap
     throw UnimplementedError();
   }
+  
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) {
+    // TODO: implement getMainHeaderLabelTextOnly
+    throw UnimplementedError();
+  }
 }
