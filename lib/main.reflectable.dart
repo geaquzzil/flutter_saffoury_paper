@@ -3085,8 +3085,8 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'getCartItemQuantity': (dynamic instance) =>
             instance.getCartItemQuantity,
         r'getCartItemTextSubtitle': (dynamic instance) =>
-            instance.getCartItemTextSubtitle,
-        r'getCartItemText': (dynamic instance) => instance.getCartItemText,
+            instance.getCartItemListSubtitle,
+        r'getCartItemText': (dynamic instance) => instance.getCartItemListText,
         r'getMainLabelTextOnly': (dynamic instance) =>
             instance.getMainLabelTextOnly,
         r'getAppBarActionsEdit': (dynamic instance) =>

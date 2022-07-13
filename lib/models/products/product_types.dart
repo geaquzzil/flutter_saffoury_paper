@@ -3,28 +3,33 @@ import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'product_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductType extends ViewAbstract<ProductType> {
-  factory ProductType.fromJson(Map<String, dynamic> data) =>
-      _$ProductTypeFromJson(data);
-
-  Map<String, dynamic> toJson() => _$ProductTypeToJson(this);
-  Grades? grades;
-  String? image;
   String? name;
-  String? comments;
+  Grades? grades;
+  ProductTypeUnit? unit;
+
   double? purchasePrice;
   double? sellPrice;
 
+  String? image;
+
+  String? comments;
+  double? availability;
+
   ProductType() : super();
+  @override
+  String? getMainDrawerGroupName(BuildContext context) {
+    return AppLocalizations.of(context)!.product;
+  }
 
   @override
-  String getMainSubtitleTextOnly(BuildContext context) {
-    return super.getMainSubtitleTextOnly(context);
+  IconData getMainIconData() {
+    return Icons.type_specimen_outlined;
   }
 
   @override
@@ -33,39 +38,30 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
-  ProductType fromJsonViewAbstract(Map<String, dynamic> json) {
-    return ProductType.fromJson(json);
+  String getMainLabelTextOnly(BuildContext context) {
+    return AppLocalizations.of(context)!.products_type;
+  }
+
+
+  @override
+  List<String> getMainFields() {
+    return ['name', 'unit', "sellPrice", "image", "comments", "grades"];
   }
 
   @override
-  bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
-    // TODO: implement getTextInputTypeIsAutoCompleteViewAbstract
-    return field == "name";
-  }
-
-  @override
-  bool isFieldRequired(String field) {
-    // TODO: implement isFieldRequired
-    return field == "purchasePrice" || field == "sellPrice" || field == "name";
-  }
+  Map<String, bool> isFieldRequiredMap() =>
+      {"name": true, "sellPrice": true, "purchasePrice": true};
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "id": TextInputType.number,
-        "sizes": TextInputType.number,
-        "date": TextInputType.datetime,
-        "products_types": TextInputType.number,
+        "name": TextInputType.text,
+        "sellPrice": TextInputType.number,
+        "purchasePrice": TextInputType.number,
         "comments": TextInputType.multiline,
-        "barcode": TextInputType.text,
-        "products_count": TextInputType.number,
-        "pending_reservation_invoice": TextInputType.phone,
-        "cut_request_quantity": TextInputType.number,
       };
   @override
-  List<String> getMainFields() {
-    // TODO: implement getFields
-    return ['name', 'date', "comments", "sellPrice", "purchasePrice"];
-  }
+  Map<String, int> getTextInputMaxLengthMap() =>
+      {"name": 50, "sellPrice": 8, "purchasePrice": 8};
 
   @override
   String? getImageUrl(BuildContext context) {
@@ -75,109 +71,59 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
-  IconData getMainIconData() {
-    // TODO: implement getIconData
-    return Icons.type_specimen_outlined;
-  }
-
-  @override
-  String getMainLabelTextOnly(BuildContext context) {
-    // TODO: implement getLabelTextOnly
-    return "products_types";
-  }
-
-  @override
-  String? getMainDrawerGroupName() {
-    // TODO: implement getDrawerGroupName
-    return "products";
-  }
-
-  @override
   String? getTableNameApi() {
     return "products_types";
+  }
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {
+        "name": Icons.text_fields,
+        "sellPrice": Icons.price_change,
+        "purchasePrice": Icons.price_change,
+        "image": Icons.image,
+        "comments": Icons.notes,
+      };
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "name": AppLocalizations.of(context)!.name,
+        "sellPrice": AppLocalizations.of(context)!.sellPrice,
+        "purchasePrice": AppLocalizations.of(context)!.purchases_price,
+        "image": AppLocalizations.of(context)!.loadImage,
+        "comments": AppLocalizations.of(context)!.comments,
+      };
+
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
+      {"name": true};
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() => {};
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() => {};
+
+  @override
+  Map<String, bool> isFieldCanBeNullableMap() => {"grades": true};
+
+  factory ProductType.fromJson(Map<String, dynamic> data) =>
+      _$ProductTypeFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductTypeToJson(this);
+
+  @override
+  ProductType fromJsonViewAbstract(Map<String, dynamic> json) {
+    return ProductType.fromJson(json);
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, IconData> getTextInputIconMap() => {
-        "id": Icons.account_balance_wallet_sharp,
-        "sizes": Icons.sanitizer,
-        "comments": Icons.comment
-      };
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
-  }
 }
+
+enum ProductTypeUnit { KG, Sheet }

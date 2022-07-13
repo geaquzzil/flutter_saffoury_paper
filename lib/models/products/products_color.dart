@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'products_color.g.dart';
 
 @JsonSerializable()
@@ -14,124 +15,93 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   String? middle;
   String? back;
   ProductsColor() : super();
-
   @override
-  ProductsColor fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  List<String> getMainFields() {
-    // TODO: implement getMainFields
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
+  String? getMainDrawerGroupName(BuildContext context) {
+    return AppLocalizations.of(context)!.product;
   }
 
   @override
   IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
+    return Icons.color_lens;
   }
 
   @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
+  String getMainHeaderTextOnly(BuildContext context) {
+    return iD.toString() ?? "";
+  }
+
+  @override
+  String getMainLabelTextOnly(BuildContext context) {
+    return AppLocalizations.of(context)!.productsColors;
+  }
+
+  @override
+  List<String> getMainFields() {
+    return ['top', 'middle', 'back'];
+  }
+
+  @override
+  Map<String, bool> isFieldRequiredMap() =>
+      {"top": true, 'middle': true, 'back': true};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        "top": TextInputType.text,
+        'middle': TextInputType.text,
+        'back': TextInputType.text
+      };
+  @override
+  Map<String, int> getTextInputMaxLengthMap() =>
+      {"top": 6, 'middle': 6, 'back': 6};
+
+  @override
+  String? getImageUrl(BuildContext context) {
+    return null;
   }
 
   @override
   String? getTableNameApi() {
-    // TODO: implement getTableNameApi
-    throw UnimplementedError();
+    return "products_colors";
   }
 
   @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
+  Map<String, IconData> getFieldIconDataMap() =>
+      {"top": Icons.colorize, 'middle': Icons.colorize, 'back': Icons.colorize};
 
   @override
-  Map<String, IconData> getTextInputIconMap() {
-    // TODO: implement getTextInputIconMap
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "top": AppLocalizations.of(context)!.top,
+        "middle": AppLocalizations.of(context)!.middle,
+        "back": AppLocalizations.of(context)!.back,
+      };
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldCanBeNullableMap() => {};
+
+  factory ProductsColor.fromJson(Map<String, dynamic> data) =>
+      _$ProductsColorFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductsColorToJson(this);
 
   @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
+  ProductsColor fromJsonViewAbstract(Map<String, dynamic> json) {
+    return ProductsColor.fromJson(json);
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
+    return toJson();
   }
 }

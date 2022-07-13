@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'gsms.g.dart';
 
 @JsonSerializable()
@@ -11,124 +13,89 @@ part 'gsms.g.dart';
 class GSM extends ViewAbstract<GSM> {
   int? gsm;
   GSM() : super();
-
   @override
-  GSM fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  List<String> getMainFields() {
-    // TODO: implement getMainFields
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
+  String? getMainDrawerGroupName(BuildContext context) {
+    return AppLocalizations.of(context)!.product;
   }
 
   @override
   IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
+    return Icons.view_headline;
   }
 
   @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
+  String getMainHeaderTextOnly(BuildContext context) {
+    return gsm.toString() ?? "";
+  }
+
+  @override
+  String getMainLabelTextOnly(BuildContext context) {
+    return AppLocalizations.of(context)!.gsm;
+  }
+
+  @override
+  List<String> getMainFields() {
+    return ['gsm'];
+  }
+
+  @override
+  Map<String, bool> isFieldRequiredMap() => {"gsm": true};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        "gsm": TextInputType.number,
+      };
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {"gsm": 4};
+
+  @override
+  String? getImageUrl(BuildContext context) {
+    return null;
   }
 
   @override
   String? getTableNameApi() {
-    // TODO: implement getTableNameApi
-    throw UnimplementedError();
+    return "gsms";
   }
 
   @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
+  Map<String, IconData> getFieldIconDataMap() => {
+        "gsm": Icons.view_headline,
+      };
 
   @override
-  Map<String, IconData> getTextInputIconMap() {
-    // TODO: implement getTextInputIconMap
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "gsm": AppLocalizations.of(context)!.gsm,
+      };
+
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
+      {"gsm": true};
 
   @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldCanBeNullableMap() => {};
+
+  factory GSM.fromJson(Map<String, dynamic> data) => _$GSMFromJson(data);
+
+  Map<String, dynamic> toJson() => _$GSMToJson(this);
 
   @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
+  GSM fromJsonViewAbstract(Map<String, dynamic> json) {
+    return GSM.fromJson(json);
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
+    return toJson();
   }
 }

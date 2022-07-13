@@ -14,10 +14,10 @@ import 'view_abstract_api.dart';
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<String> getMainFields();
   String getMainHeaderTextOnly(BuildContext context);
-  String getMainLabelSubtitleTextOnly(BuildContext context);
+  String? getMainLabelTextOnly(BuildContext context);
 
   IconData getMainIconData();
-  String? getMainDrawerGroupName() => null;
+  String? getMainDrawerGroupName(BuildContext context) => null;
   IconData? getMainDrawerGroupIconData() => null;
 
   Map<String, String> getFieldLabelMap(BuildContext context);
@@ -25,6 +25,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
+
+
 
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ?? " not found label for=> $field";
@@ -83,103 +85,23 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return const Icon(Icons.more_vert_outlined);
   }
 
-  Widget getCardLeadingEditCard(BuildContext context) {
-    return Icon(getMainIconData(),
-        color: context
-                .watch<ErrorFieldsProvider>()
-                .getFormValidationManager
-                .hasError(this as ViewAbstract)
-            ? Colors.red
-            : Colors.black54);
-  }
-
-  Widget getCardLeadingCircleAvatar(BuildContext context) {
-    return SizedBox(
-        width: 60,
-        height: 60,
-        child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
-  }
-
-  Widget getCardLeading(BuildContext context) {
-    return Hero(tag: this, child: (getCardLeadingCircleAvatar(context)));
-  }
-
-  DismissDirection getDismissibleDirection() {
-    return DismissDirection.horizontal;
-  }
-
-  void onCardDismissedView(BuildContext context, DismissDirection direction) {
-    debugPrint("onDismissed {$this} => direction: $direction");
-  }
-
-  Widget getDismissibleSecondaryBackground(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      alignment: Alignment.centerRight,
-      color: Colors.green,
-      child: const Icon(
-        Icons.add_shopping_cart,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  Widget getDismissibleBackground(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      alignment: Alignment.centerLeft,
-      color: Colors.red,
-      child: const Icon(
-        Icons.delete_outlined,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  Widget getCardLeadingImage(BuildContext context) {
-    String? imageUrl = getImageUrl(context);
-    if (imageUrl == null) {
-      return Icon(getMainIconData());
-    }
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-        ),
-      ),
-      placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(getMainIconData()),
-    );
-  }
 
   String? getImageUrl(BuildContext context) {
     return null;
   }
 
-  String getMainSubtitleTextOnly(BuildContext context) {
+  String getIDFormat(BuildContext context) {
     return "#${iD.toString()}";
   }
 
   String getMainNullableTextOnly(BuildContext context) {
-    return "is New ${getMainLabelTextOnly(context)}";
+    return  "is New ${getMainLabelTextOnly(context)}";
   }
 
   double getCartItemPrice() => 0;
   double getCartItemUnitPrice() => 0;
   double getCartItemQuantity() => 0;
 
-  String getCartItemTextSubtitle(BuildContext context) {
-    return getMainSubtitleTextOnly(context);
-  }
-
-  String getCartItemText(BuildContext context) {
-    return getMainHeaderTextOnly(context);
-  }
-
-  String getMainLabelTextOnly(BuildContext context) {
-    return "null";
-  }
 
   List<Widget>? getAppBarActionsEdit(BuildContext context) =>
       [IconButton(icon: const Icon(Icons.save_outlined), onPressed: () {})];

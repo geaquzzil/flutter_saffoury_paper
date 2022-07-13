@@ -32,7 +32,7 @@ class _CartDataTableState extends State<CartDataTable> {
   }
 
   Widget buildDataTable(BuildContext context) {
-    final columns = ['Item', 'Quantity','Unit price', 'Price'];
+    final columns = ['Item', 'Quantity', 'Unit price', 'Price'];
 
     return DataTable(
       sortAscending: isAscending,
@@ -70,8 +70,10 @@ class _CartDataTableState extends State<CartDataTable> {
 
   void onSort(BuildContext context, int columnIndex, bool ascending) {
     if (columnIndex == 0) {
-      list.sort((obj1, obj2) => compareString(ascending,
-          obj1.getCartItemText(context), obj2.getCartItemText(context)));
+      list.sort((obj1, obj2) => compareString(
+          ascending,
+          obj1.getCartItemListText(context),
+          obj2.getCartItemListText(context)));
     } else if (columnIndex == 1) {
       list.sort((obj1, obj2) => compareDouble(
           ascending, obj1.getCartItemQuantity(), obj2.getCartItemQuantity()));

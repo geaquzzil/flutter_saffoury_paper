@@ -56,8 +56,8 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     debugPrint("AutoCompleteCardItem viewAbstract=> $view");
     return ListTile(
       leading: view.getCardLeadingCircleAvatar(context),
-      title: Text(view.getMainHeaderTextOnly(context)),
-      subtitle: Text("#${view.iD}"),
+      title: Text(view.getCardItemDropdownText(context)),
+      subtitle: Text(view.getCardItemDropdownSubtitle(context)),
     );
     return ListTile(
         onTap: () => {},

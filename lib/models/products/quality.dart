@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'quality.g.dart';
 
 @JsonSerializable()
@@ -11,124 +13,92 @@ part 'quality.g.dart';
 class Quality extends ViewAbstract<Quality> {
   String? name;
   Quality() : super();
-
   @override
-  Quality fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  List<String> getMainFields() {
-    // TODO: implement getMainFields
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
+  String? getMainDrawerGroupName(BuildContext context) {
+    return AppLocalizations.of(context)!.product;
   }
 
   @override
   IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
+    return Icons.auto_awesome_sharp;
   }
 
   @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
+  String getMainHeaderTextOnly(BuildContext context) {
+    return name ?? "";
+  }
+
+  @override
+  String getMainLabelTextOnly(BuildContext context) {
+    return AppLocalizations.of(context)!.quality;
+  }
+
+  @override
+  List<String> getMainFields() {
+    return ['name'];
+  }
+
+  @override
+  Map<String, bool> isFieldRequiredMap() => {"name": true};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        "name": TextInputType.text,
+      };
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {
+        "name": 50,
+      };
+
+  @override
+  String? getImageUrl(BuildContext context) {
+    return null;
   }
 
   @override
   String? getTableNameApi() {
-    // TODO: implement getTableNameApi
-    throw UnimplementedError();
+    return "qualities";
   }
 
   @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
+  Map<String, IconData> getFieldIconDataMap() => {
+        "name": Icons.auto_awesome_sharp,
+      };
 
   @override
-  Map<String, IconData> getTextInputIconMap() {
-    // TODO: implement getTextInputIconMap
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "name": AppLocalizations.of(context)!.quality,
+      };
+
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
+      {"name": true};
 
   @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldCanBeNullableMap() => {};
+
+  factory Quality.fromJson(Map<String, dynamic> data) =>
+      _$QualityFromJson(data);
+
+  Map<String, dynamic> toJson() => _$QualityToJson(this);
 
   @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
+  Quality fromJsonViewAbstract(Map<String, dynamic> json) {
+    return Quality.fromJson(json);
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
+    return toJson();
   }
 }

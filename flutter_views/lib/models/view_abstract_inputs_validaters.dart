@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
-  Map<String, String> getTextInputLabelMap(BuildContext context);
-  Map<String, String> getTextInputHintMap(BuildContext context);
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
-  Map<String, IconData> getTextInputIconMap();
   Map<String, int> getTextInputMaxLengthMap();
 
   Map<String, bool> isFieldRequiredMap();
@@ -51,17 +49,16 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   IconData? getTextInputIconData(String field) {
-    return getTextInputIconMap()[field] ?? getFieldIconData(field);
+    return getFieldIconData(field);
   }
 
   String? getTextInputHint(BuildContext context, String field) {
-    return getTextInputHintMap(context)[field] ??
-        getTextInputLabel(context, field);
+    String? label = getTextInputLabel(context, field);
+    return "${AppLocalizations.of(context)!.enter} $label";
   }
 
   String? getTextInputLabel(BuildContext context, String field) {
-    return getTextInputLabelMap(context)[field] ??
-        getFieldLabel(context, field);
+    return getFieldLabel(context, field);
   }
 
   String? getTextInputPrefix(BuildContext context, String field) {
