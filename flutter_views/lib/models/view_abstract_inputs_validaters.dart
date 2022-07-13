@@ -37,7 +37,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   bool isFieldCanBeNullable(BuildContext context, String field) {
-    return isFieldCanBeNullableMap()[field] ?? true;
+    return isFieldCanBeNullableMap()[field] ?? false;
   }
 
   double? getTextInputValidatorMaxValue(String field) {
@@ -50,6 +50,10 @@ abstract class ViewAbstractInputAndValidater<T>
 
   IconData? getTextInputIconData(String field) {
     return getFieldIconData(field);
+  }
+
+  String getTextInputDropdownHint(BuildContext context, String field) {
+    return getFieldLabel(context, field);
   }
 
   String? getTextInputHint(BuildContext context, String field) {
@@ -90,6 +94,7 @@ abstract class ViewAbstractInputAndValidater<T>
     if (textInputType == null) return null;
     if (textInputType == TextInputType.phone ||
         textInputType == TextInputType.number) {
+      debugPrint("getTextInputFormatter for $field , is $textInputType");
       return <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly];
     } else {
       return null;

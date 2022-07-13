@@ -25,7 +25,7 @@ class Size extends ViewAbstract<Size> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    return "$width ✗ $length";
+    return "$width X $length";
   }
 
   @override

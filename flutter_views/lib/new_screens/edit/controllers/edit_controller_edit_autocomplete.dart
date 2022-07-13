@@ -88,9 +88,9 @@ class _EditControllerEditTextAutoCompleteState
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
-            // keyboardType: widget.viewAbstract.getTextInputType(widget.field),
-            // inputFormatters:
-            //     widget.viewAbstract.getTextInputFormatter(widget.field),
+            keyboardType: widget.viewAbstract.getTextInputType(widget.field),
+            inputFormatters:
+                widget.viewAbstract.getTextInputFormatter(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
             // focusNode: _formValidationManager.getFocusNodeForField(

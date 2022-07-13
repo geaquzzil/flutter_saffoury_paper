@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
@@ -148,11 +151,18 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     ViewAbstract currentViewAbstract =
         viewAbstractWatched ?? widget.viewAbstract;
     dynamic fieldValue = currentViewAbstract.getFieldValue(field);
-
+    Type type = currentViewAbstract.getFieldType(field);
+    debugPrint("fieldValueType is ${fieldValue.runtimeType}");
+    debugPrint("type is ${type}");
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(currentViewAbstract);
       // return Text("FDFD");
       return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
+    } else if (fieldValue is ViewAbstractEnum) {
+      return EditControllerDropdown(
+          parent: currentViewAbstract,
+          enumViewAbstract: fieldValue as ViewAbstractEnum,
+          field: field);
     } else {
       return EditControllerMasterWidget(
           viewAbstract: currentViewAbstract, field: field);
@@ -182,6 +192,12 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
   Widget _buildLeadingIcon(BuildContext context) {
     ViewAbstract? viewAbstractWatched =
         getViewAbstract(context, getFieldNameFromParent(widget.viewAbstract));
+    // return RoundedIconButtonTowChilds(
+    //   largChild: viewAbstractWatched == null
+    //       ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
+    //       : viewAbstractWatched.getCardLeadingCircleAvatar(context),
+    //   smallIcon: Icons.add,
+    // );
     return RotationTransition(
       turns: _iconTurns,
       child: viewAbstractWatched == null

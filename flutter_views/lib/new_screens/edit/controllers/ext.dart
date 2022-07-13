@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
-InputDecoration getDecoration(
-    BuildContext context, ViewAbstract viewAbstract, String field) {
+InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
+    ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
     border: const UnderlineInputBorder(),
     filled: true,
-    icon: viewAbstract.getTextInputIcon(field),
-    hintText: viewAbstract.getTextInputHint(context, field),
-    labelText: viewAbstract.getTextInputLabel(context, field),
-    prefixText: viewAbstract.getTextInputPrefix(context, field),
+    icon: Icon(viewAbstractEnum.getMainIconData()),
+    labelText: viewAbstractEnum.getMainLabelText(context),
   );
+}
+
+InputDecoration getDecoration(
+    BuildContext context, ViewAbstract viewAbstract, String field) {
+  return InputDecoration(
+      border: const UnderlineInputBorder(),
+      filled: true,
+      icon: viewAbstract.getTextInputIcon(field),
+      hintText: viewAbstract.getTextInputHint(context, field),
+      labelText: viewAbstract.getTextInputLabel(context, field),
+      prefixText: viewAbstract.getTextInputPrefix(context, field),
+      suffixText: viewAbstract.getTextInputSuffix(context, field));
 }
 
 Widget getSpace() {
@@ -97,6 +108,6 @@ ViewAbstract toggleIsNew(BuildContext context, ViewAbstract oldViewAbstract,
   ViewAbstract newObject = copyWithSetNew(oldViewAbstract, field, value);
   context
       .read<EditSubsViewAbstractControllerProvider>()
-      .toggleIsNew(newObject.getFieldNameFromParent ?? "", newObject);
+      .toggleIsNew(newObject.getFieldNameFromParent ?? "", newObject, field);
   return newObject;
 }

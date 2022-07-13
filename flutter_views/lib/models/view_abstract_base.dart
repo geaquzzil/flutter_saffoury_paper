@@ -12,6 +12,7 @@ import 'package:reflectable/mirrors.dart';
 import 'view_abstract_api.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
+  String? getTableNameApi();
   List<String> getMainFields();
   String getMainHeaderTextOnly(BuildContext context);
   String getMainHeaderLabelTextOnly(BuildContext context);
@@ -83,6 +84,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return const Icon(Icons.more_vert_outlined);
   }
 
+  bool hasImageLoadButton() {
+    return false;
+  }
+
   String? getImageUrl(BuildContext context) {
     return null;
   }
@@ -144,7 +149,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   String getTag(String label) {
-    return "${T}_$label";
+    return "${getTableNameApi()}_$label";
   }
 
   String getGenericClassName() {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_header.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
@@ -116,11 +118,15 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
   Widget buildWidget(ViewAbstract viewAbstract, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
+    debugPrint("fieldValueType is ${fieldValue.runtimeType}");
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(viewAbstract);
       fieldValue.setFieldNameFromParent(field);
       // return Text("FDFD");
       return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
+    } else if (fieldValue is ViewAbstractEnum) {
+      return EditControllerDropdown(
+          parent: viewAbstract, enumViewAbstract: fieldValue, field: field);
     } else {
       return EditControllerMasterWidget(
           viewAbstract: viewAbstract, field: field);

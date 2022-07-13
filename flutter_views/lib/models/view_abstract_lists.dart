@@ -9,6 +9,8 @@ import 'package:flutter_view_controller/screens/action_screens/edit_details_page
 import '../providers/actions/edits/edit_error_list_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
+  
+
   Widget getCardLeadingSearch(BuildContext context) {
     return getCardLeadingCircleAvatar(context);
   }

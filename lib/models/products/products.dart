@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +19,13 @@ part 'products.g.dart';
 class Product extends ViewAbstract<Product> {
   ProductType? products_types;
   Size? sizes;
+  Grades? grades;
 
   String? date;
 
   String? comments;
   String? barcode;
+  // ProductStatus? status;
 
   Product() : super();
 
@@ -31,15 +35,15 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
+  String getMainLabelSubtitleTextOnly(BuildContext context) {
+    return AppLocalizations.of(context)!.product;
+  }
+
+  @override
   String getMainHeaderTextOnly(BuildContext context) {
     String? productType = products_types?.getMainHeaderTextOnly(context);
     String? size = sizes?.getMainHeaderTextOnly(context);
     return "$productType $size";
-  }
-
-  @override
-  Text getMainSubtitleHeaderText(BuildContext context) {
-    return Text("pending_reservation_invoice ");
   }
 
   @override
@@ -67,12 +71,13 @@ class Product extends ViewAbstract<Product> {
   @override
   List<String> getMainFields() {
     return [
-      "iD",
-      "sizes",
       "products_types",
+      "sizes",
+      "grades",
       "date",
       "comments",
       "barcode",
+      "status"
     ];
   }
 
@@ -95,28 +100,21 @@ class Product extends ViewAbstract<Product> {
       };
 
   @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
+  Map<String, IconData> getFieldIconDataMap() => {
+        "date": Icons.date_range,
+        "sheets": Icons.view_comfortable_outlined,
+        "barcode": Icons.qr_code,
+        "fiberLines": Icons.face,
+        "comments": Icons.notes,
+      };
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        'date': AppLocalizations.of(context)!.date,
+        "barcode": AppLocalizations.of(context)!.barcode,
+        "fiberLines": AppLocalizations.of(context)!.grain,
+        "comments": AppLocalizations.of(context)!.comments,
+      };
 
   @override
   Map<String, IconData> getTextInputIconMap() => {
@@ -127,46 +125,25 @@ class Product extends ViewAbstract<Product> {
       };
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
+  Map<String, int> getTextInputMaxLengthMap() =>
+      {'barcode': 255, 'fiberLines': 10};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldCanBeNullableMap() => {
+        "grades": true,
+      };
 
   @override
   Map<String, bool> isFieldRequiredMap() => {};
@@ -181,5 +158,3 @@ class Product extends ViewAbstract<Product> {
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 }
-
-enum ProductStatus { NONE, PENDING, WASTED }

@@ -3,6 +3,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class EditSubsViewAbstractControllerProvider with ChangeNotifier {
   final Map<String, ViewAbstractNullableController> _list = {};
+  String _lastTraggerdfieldTag = "";
+
+  String get getLastTraggerdfieldTag => _lastTraggerdfieldTag;
 
   Map<String, ViewAbstractNullableController> get getList => _list;
   ViewAbstract? getViewAbstract(String field) {
@@ -54,7 +57,9 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
     }
   }
 
-  void toggleIsNew(String field, ViewAbstract newViewAbstract) async {
+  void toggleIsNew(String field, ViewAbstract newViewAbstract,
+      String lastTraggerdfieldTag) async {
+    _lastTraggerdfieldTag = lastTraggerdfieldTag;
     ViewAbstractNullableController? viewAbstractNullableController =
         getViewAbstractNullableController(field);
 

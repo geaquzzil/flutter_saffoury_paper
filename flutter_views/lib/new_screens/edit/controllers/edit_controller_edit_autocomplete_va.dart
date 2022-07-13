@@ -98,7 +98,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
               context
                   .read<EditSubsViewAbstractControllerProvider>()
                   .toggleIsNew(widget.viewAbstract.getFieldNameFromParent ?? "",
-                      whereViewAbstract);
+                      whereViewAbstract, widget.field);
               // context
               //     .read<ErrorFieldsProvider>()
               //     .removeError(widget.viewAbstract);

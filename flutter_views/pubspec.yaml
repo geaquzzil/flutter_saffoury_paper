@@ -4,7 +4,7 @@ homepage: https://github.com/geaquzzil/flutter_view_controler
 version: 0.0.1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -56,6 +56,8 @@ dependencies:
   custom_pop_up_menu: ^1.2.4
   animate_icons: ^2.0.0
   form_builder_extra_fields: ^8.1.0
+  file_picker: ^3.0.4
+  # analyzer: ^4.2.0
   
 dev_dependencies:
   # mockito: ^5.0.16

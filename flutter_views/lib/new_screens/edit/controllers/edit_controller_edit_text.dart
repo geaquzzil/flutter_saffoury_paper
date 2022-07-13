@@ -49,10 +49,8 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
   }
 
   void onTextChangeListener() {
-   
-
     if (!isEnabled) return;
-     String value = textController.text;
+    String value = textController.text;
     debugPrint("EditTextField changed");
     context.read<ErrorFieldsProvider>().notify();
     if (value.isEmpty) return;
@@ -80,6 +78,9 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
     isEnabled = isEnabledField(editSubsView, watchedViewAbstract);
     // bool isEnabled=editSubsView
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      debugPrint(
+          "last Trggerd field name => ${editSubsView.getLastTraggerdfieldTag} current field name => ${widget.field}");
+      if (editSubsView.getLastTraggerdfieldTag == widget.field) return;
       textController.text = text;
       // Your Code Here
     });
@@ -87,37 +88,37 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
     return Column(
       children: [
         FormBuilderTextField(
-            controller: textController,
-            enabled: isEnabled,
-            valueTransformer: (value) {
-              return value?.trim();
-            },
-            name: widget.viewAbstract.getTag(widget.field),
-            maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
-            textCapitalization:
-                widget.viewAbstract.getTextInputCapitalization(widget.field),
-            decoration:
-                getDecoration(context, widget.viewAbstract, widget.field),
-            keyboardType: widget.viewAbstract.getTextInputType(widget.field),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-            // focusNode: formValidationManager.getFocusNodeForField(
-            //     widget.viewAbstract.getTag(widget.field),
-            //     widget.viewAbstract,
-            //     widget.field),
-            validator: formValidationManager.wrapValidator(
-                widget.viewAbstract.getTag(widget.field),
-                widget.viewAbstract,
-                widget.field, (value) {
-              debugPrint("wrapValidator");
-              return widget.viewAbstract
-                  .getTextInputValidator(context, widget.field, value);
-            }),
-            onSaved: (String? value) {
-              debugPrint('onSave=   $value');
-            },
-            inputFormatters:
-                widget.viewAbstract.getTextInputFormatter(widget.field)),
+          controller: textController,
+          enabled: isEnabled,
+          valueTransformer: (value) {
+            return value?.trim();
+          },
+          name: widget.viewAbstract.getTag(widget.field),
+          maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
+          textCapitalization:
+              widget.viewAbstract.getTextInputCapitalization(widget.field),
+          decoration: getDecoration(context, widget.viewAbstract, widget.field),
+          keyboardType: widget.viewAbstract.getTextInputType(widget.field),
+          inputFormatters:
+              widget.viewAbstract.getTextInputFormatter(widget.field),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
+          // focusNode: formValidationManager.getFocusNodeForField(
+          //     widget.viewAbstract.getTag(widget.field),
+          //     widget.viewAbstract,
+          //     widget.field),
+          validator: formValidationManager.wrapValidator(
+              widget.viewAbstract.getTag(widget.field),
+              widget.viewAbstract,
+              widget.field, (value) {
+            debugPrint("wrapValidator");
+            return widget.viewAbstract
+                .getTextInputValidator(context, widget.field, value);
+          }),
+          onSaved: (String? value) {
+            debugPrint('onSave=   $value');
+          },
+        ),
         getSpace()
       ],
     );

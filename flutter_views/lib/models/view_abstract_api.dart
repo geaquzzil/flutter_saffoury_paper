@@ -30,7 +30,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(ignore: true)
   List<T>? _lastSearchViewAbstractByTextInputList;
 
-  String? getTableNameApi();
+ 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
 
