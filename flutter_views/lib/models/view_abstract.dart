@@ -27,6 +27,12 @@ abstract class ViewAbstract<T> extends ViewAbstractLists<T> {
     }
   }
 
+  T copyWithNewSuggestion(ViewAbstract newValue) {
+    newValue.setFieldNameFromParent(fieldNameFromParent);
+    newValue.setParent(parent);
+    return newValue as T;
+  }
+
   T copyWithSetNew(String field, dynamic value) {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy[field] = castFieldValue(field, value);

@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'package:reflectable/reflectable.dart';
 
@@ -24,13 +25,14 @@ class Reflector extends Reflectable {
 const reflector = Reflector();
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
+  @JsonKey(ignore: true)
   int _page = 0;
+  @JsonKey(ignore: true)
   List<T>? _lastSearchViewAbstractByTextInputList;
+
+  String? getTableNameApi();
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
-  void setLastSearchViewAbstractByTextInputList(List<T>? lastList) {
-    _lastSearchViewAbstractByTextInputList = lastList;
-  }
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
     return getLastSearchViewByTextInputList?.firstWhereOrNull((element) =>
@@ -39,19 +41,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             .toString()
             .toLowerCase()
             .contains(fieldValue.toLowerCase()));
-  }
-
-  T fromJsonViewAbstract(Map<String, dynamic> json);
-  Map<String, dynamic> toJsonViewAbstract();
-
-  String toJsonString() {
-    return convert.jsonEncode(toJsonViewAbstract());
-  }
-
-  String? getTableNameApi();
-
-  set setPageIndex(int page) {
-    _page = page;
   }
 
   int get getPageIndex => _page;
@@ -258,13 +247,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return [];
     }
   }
-  Future<List<T>?> listCallFake() async{
- Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
+
+  Future<List<T>?> listCallFake() async {
+    Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
     return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
   }
+
   Future<List<T>?> listCall(int count, int page,
       {OnResponseCallback? onResponse}) async {
-   
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.list);
 
@@ -345,5 +335,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
 
     return mainBody;
+  }
+
+  void setLastSearchViewAbstractByTextInputList(List<T>? lastList) {
+    _lastSearchViewAbstractByTextInputList = lastList;
+  }
+
+  set setPageIndex(int page) {
+    _page = page;
   }
 }

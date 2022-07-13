@@ -30,13 +30,13 @@ class _EditControllerEditTextAutoCompleteState
     // ErrorFieldsProvider errorFieldsProvider =
     //     Provider.of<ErrorFieldsProvider>(context, listen: false);
     // _formValidationManager = errorFieldsProvider.getFormValidationManager;
-    EditSubsViewAbstractControllerProvider s =
-        Provider.of<EditSubsViewAbstractControllerProvider>(context,
-            listen: false);
-    s.addListener(() {
-      debugPrint(
-          "EditSubsViewAbstractControllerProvider isChanged ${widget.viewAbstract.getGenericClassName()}  ${s.getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? '')}");
-    });
+    // EditSubsViewAbstractControllerProvider s =
+    //     Provider.of<EditSubsViewAbstractControllerProvider>(context,
+    //         listen: false);
+    // s.addListener(() {
+    //   debugPrint(
+    //       "EditSubsViewAbstractControllerProvider isChanged ${widget.viewAbstract.getGenericClassName()}  ${s.getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? '')}");
+    // });
     textController.text =
         widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);

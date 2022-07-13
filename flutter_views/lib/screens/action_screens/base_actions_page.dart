@@ -13,7 +13,7 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
   T object;
   BaseActionPage({Key? key, required this.object}) : super(key: key);
   List<String> getFields() {
-    return object.getFields();
+    return object.getMainFields();
   }
 
   @override
@@ -42,7 +42,7 @@ class _BaseActionPageState<T extends ViewAbstract>
         floating: true,
         expandedHeight: 200.0,
         snap: true,
-        title: widget.object.getHeaderText(context),
+        title: widget.object.getMainHeaderText(context),
         centerTitle: true,
         // forceElevated: innerBoxIsScrolled,
         flexibleSpace: getSilverAppBarBackground(context),
@@ -55,7 +55,7 @@ class _BaseActionPageState<T extends ViewAbstract>
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
     return FlexibleSpaceBar(
-        title: Text(widget.object.getHeaderTextOnly(context)),
+        title: Text(widget.object.getMainHeaderTextOnly(context)),
         background: Hero(
             tag: widget.object,
             child: widget.object.getCardLeadingImage(context)));

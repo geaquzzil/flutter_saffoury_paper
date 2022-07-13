@@ -20,6 +20,17 @@ Widget getSpace() {
   return const SizedBox(height: 24.0);
 }
 
+bool isEnabled(BuildContext context, ViewAbstract viewAbstract) {
+  //if this is the main viewabstract then we should enabled the text field
+  debugPrint("isEnabled checking canSubmitChanges");
+  if (!canSubmitChanges(viewAbstract)) return true;
+  bool res = context
+      .watch<EditSubsViewAbstractControllerProvider>()
+      .getIsNew(viewAbstract.getFieldNameFromParent ?? "");
+  debugPrint("isEnabled checking isNew=>$res");
+  return res;
+}
+
 bool canSubmitChanges(ViewAbstract viewAbstract) =>
     (viewAbstract.getParnet) != null;
 
@@ -64,13 +75,21 @@ bool getIsNullable(BuildContext context, String? field) {
 
 ViewAbstract onChange(BuildContext context, ViewAbstract oldViewAbstract,
     String field, dynamic value) {
-
   debugPrint("isChanged to $value");
   if (canSubmitChanges(oldViewAbstract)) {
     debugPrint("isChanged can submit changes to $value");
     return toggleIsNew(context, oldViewAbstract, field, value);
   }
   return oldViewAbstract;
+}
+
+EditSubsViewAbstractControllerProvider getViewAbstractControllerProvider(
+    BuildContext context) {
+  return context.watch<EditSubsViewAbstractControllerProvider>();
+}
+
+ErrorFieldsProvider getErrorFieldProvider(BuildContext context) {
+  return context.watch<ErrorFieldsProvider>();
 }
 
 ViewAbstract toggleIsNew(BuildContext context, ViewAbstract oldViewAbstract,

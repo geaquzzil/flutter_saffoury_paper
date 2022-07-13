@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -10,53 +12,67 @@ import 'package:reflectable/mirrors.dart';
 import 'view_abstract_api.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
-  List<String> getFields();
-  String getFieldLabel(String label, BuildContext context);
-  IconData getFieldIconData(String label);
-  IconData getIconData();
+  List<String> getMainFields();
+  String getMainHeaderTextOnly(BuildContext context);
+  String getMainLabelSubtitleTextOnly(BuildContext context);
 
-  String? getDrawerGroupName() => null;
-  IconData? getDrawerGroupIconData() => null;
+  IconData getMainIconData();
+  String? getMainDrawerGroupName() => null;
+  IconData? getMainDrawerGroupIconData() => null;
 
-  Icon getFieldIcon(String label) {
-    return Icon(getFieldIconData(label));
+  Map<String, String> getFieldLabelMap(BuildContext context);
+  Map<String, IconData> getFieldIconDataMap();
+
+  T fromJsonViewAbstract(Map<String, dynamic> json);
+  Map<String, dynamic> toJsonViewAbstract();
+
+  String getFieldLabel(BuildContext context, String field) {
+    return getFieldLabelMap(context)[field] ?? " not found label for=> $field";
+  }
+
+  Icon getFieldIcon(String field) {
+    return Icon(getFieldIconDataMap()[field]);
+  }
+
+  IconData getFieldIconData(String field) {
+    return getFieldIconDataMap()[field] ?? Icons.error;
   }
 
   Icon getIcon() {
-    return Icon(getIconData());
+    return Icon(getMainIconData());
   }
 
-  Text? getSubtitleHeaderText(BuildContext context) {
+  Text? getMainSubtitleHeaderText(BuildContext context) {
     return Text(
-      getSubtitleHeaderTextOnly(context),
+      getMainSubtitleTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
-  Text? getNullableText(BuildContext context) {
+  Text? getMainNullableText(BuildContext context) {
     return Text(
-      getNullableTextOnly(context),
+      getMainNullableTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
-  Text? getHeaderText(BuildContext context) {
+  Text? getMainHeaderText(BuildContext context) {
     return Text(
-      getHeaderTextOnly(context),
+      getMainHeaderTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
-  Text? getLabelText(BuildContext context) {
+  Text? getMainLabelText(BuildContext context) {
     return Text(
-      getLabelTextOnly(context),
+      getMainLabelTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
-  Text? getLabelSubtitleText(BuildContext context) {
+  Text? getMainLabelSubtitleText(BuildContext context) {
     return Text(
-      getLabelSubtitleTextOnly(context),
+      getMainLabelSubtitleTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
@@ -68,7 +84,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget getCardLeadingEditCard(BuildContext context) {
-    return Icon(getIconData(),
+    return Icon(getMainIconData(),
         color: context
                 .watch<ErrorFieldsProvider>()
                 .getFormValidationManager
@@ -121,15 +137,19 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget getCardLeadingImage(BuildContext context) {
+    String? imageUrl = getImageUrl(context);
+    if (imageUrl == null) {
+      return Icon(getMainIconData());
+    }
     return CachedNetworkImage(
-      imageUrl: getImageUrl(context) ?? "",
+      imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
       ),
       placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(getIconData()),
+      errorWidget: (context, url, error) => Icon(getMainIconData()),
     );
   }
 
@@ -137,20 +157,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return null;
   }
 
-  String getSubtitleHeaderTextOnly(BuildContext context) {
+  String getMainSubtitleTextOnly(BuildContext context) {
     return "#${iD.toString()}";
   }
 
-  String getNullableTextOnly(BuildContext context) {
-    return "is New ${getLabelTextOnly(context)}";
-  }
-
-  String getHeaderTextOnly(BuildContext context) {
-    return "null";
-  }
-
-  String getLabelSubtitleTextOnly(BuildContext context) {
-    return "null";
+  String getMainNullableTextOnly(BuildContext context) {
+    return "is New ${getMainLabelTextOnly(context)}";
   }
 
   double getCartItemPrice() => 0;
@@ -158,14 +170,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   double getCartItemQuantity() => 0;
 
   String getCartItemTextSubtitle(BuildContext context) {
-    return getSubtitleHeaderTextOnly(context);
+    return getMainSubtitleTextOnly(context);
   }
 
   String getCartItemText(BuildContext context) {
-    return getHeaderTextOnly(context);
+    return getMainHeaderTextOnly(context);
   }
 
-  String getLabelTextOnly(BuildContext context) {
+  String getMainLabelTextOnly(BuildContext context) {
     return "null";
   }
 
@@ -197,7 +209,17 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   dynamic getFieldValue(String label) {
     try {
-      return getInstanceMirror().invokeGetter(label);
+      dynamic value = getInstanceMirror().invokeGetter(label);
+
+      // if (value == null) {
+      //   Type type = getFieldType(label);
+      //   if (type == num) {
+      //     return 0;
+      //   } else {
+      //     return "";
+      //   }
+      // }
+      return value;
     } catch (e) {
       return "$label ${e.toString()}";
     }
@@ -211,11 +233,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "$T";
   }
 
-  DateTime? getDateTimeFromField(String? value) {
+  DateTime? getFieldDateTimeParse(String? value) {
     if (value == null) {
       return null;
     }
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     return dateFormat.parse(value);
+  }
+
+  String toJsonString() {
+    return jsonEncode(toJsonViewAbstract());
   }
 }

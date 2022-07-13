@@ -88,7 +88,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                 object: fieldValue);
           } else {
             return ViewCardItem(
-                title: object.getFieldLabel(label, context),
+                title: object.getFieldLabel(context, label),
                 description: fieldValue,
                 icon: object.getFieldIconData(label));
           }
@@ -120,7 +120,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          object.getHeaderTextOnly(context),
+                          object.getMainHeaderTextOnly(context),
                           style: const TextStyle(
                             color: kPrimaryColor,
                             fontSize: 28.0,
@@ -223,7 +223,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                 object: fieldValue);
           } else {
             return ViewCardItem(
-                title: object.getFieldLabel(label, context),
+                title: object.getFieldLabel(context, label),
                 description: fieldValue,
                 icon: object.getFieldIconData(label));
           }

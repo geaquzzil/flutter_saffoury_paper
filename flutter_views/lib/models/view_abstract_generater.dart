@@ -33,7 +33,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onCardClicked(BuildContext context) {
     debugPrint("Card Clicked");
     if (SizeConfig.isDesktop(context)) {
-      context.read<ActionViewAbstractProvider>().change(this as ViewAbstract,ServerActions.edit);
+      context
+          .read<ActionViewAbstractProvider>()
+          .change(this as ViewAbstract, ServerActions.edit);
       return;
     }
     Navigator.push(
@@ -46,18 +48,17 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-
   void onDrawerItemClicked(BuildContext context) {
-    debugPrint('onDrawerItemClicked=> ${getHeaderTextOnly(context)}');
+    debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
     context.read<DrawerViewAbstractProvider>().change(this as ViewAbstract);
   }
 
   ListTile getDrawerListTitle(BuildContext context) {
     return ListTile(
-      subtitle: getLabelSubtitleText(context),
+      subtitle: getMainLabelSubtitleText(context),
       leading: getIcon(),
-      title: getLabelText(context),
+      title: getMainLabelText(context),
       onTap: () => onDrawerItemClicked(context),
     );
   }

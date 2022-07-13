@@ -14,13 +14,12 @@ abstract class ViewAbstractPermissions<T> {
   ViewAbstract? parent;
   @JsonKey(ignore: true)
   static const int ADMIN_ID = -1;
-  ViewAbstract? get getParnet => parent;
-  String? get getFieldNameFromParent => fieldNameFromParent;
-  void setParent(ViewAbstract? parent) => this.parent = parent;
-  void setFieldNameFromParent(String? fieldNameFromParent) =>
-      this.fieldNameFromParent = fieldNameFromParent;
 
   int iD = -1;
+
+  ViewAbstract? get getParnet => parent;
+  String? get getFieldNameFromParent => fieldNameFromParent;
+
 // Future<bool> hasPermissionToPreformActionOn(BuildContext context,
 //   String field, ServerActions? actions) async{
 //         print( "hasPermissionToPreformActionOn: " + " field " + field + "  action " + actions.toString());
@@ -173,11 +172,10 @@ abstract class ViewAbstractPermissions<T> {
   bool isAdmin(BuildContext context) =>
       getUserPermissionLevel(context).iD == ADMIN_ID;
 
-  bool isGuest(BuildContext context) =>
-      getUserPermissionLevel(context).iD == 0;
+  bool isGuest(BuildContext context) => getUserPermissionLevel(context).iD == 0;
 
   bool isGeneralClient(BuildContext context) =>
-     getUserPermissionLevel(context).iD > 0;
+      getUserPermissionLevel(context).iD > 0;
 
   bool isGeneralEmployee(BuildContext context) =>
       getUserPermissionLevel(context).iD < 0;
@@ -189,4 +187,8 @@ abstract class ViewAbstractPermissions<T> {
   bool isNew() {
     return iD == -1;
   }
+
+  void setParent(ViewAbstract? parent) => this.parent = parent;
+  void setFieldNameFromParent(String? fieldNameFromParent) =>
+      this.fieldNameFromParent = fieldNameFromParent;
 }

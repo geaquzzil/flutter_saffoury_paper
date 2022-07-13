@@ -59,7 +59,7 @@ class ShoppingCartPageNew extends StatelessWidget {
           Expanded(
               child: ListTile(
                   title: TitleText(
-                    text: model.getHeaderTextOnly(context),
+                    text: model.getMainHeaderTextOnly(context),
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),

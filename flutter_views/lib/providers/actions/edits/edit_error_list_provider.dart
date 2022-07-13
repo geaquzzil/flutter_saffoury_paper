@@ -18,6 +18,11 @@ class ErrorFieldsProvider with ChangeNotifier {
         key, viewAbstract, field);
   }
 
+  void removeError(ViewAbstract viewAbstract) {
+    _formValidationManager.removeError(viewAbstract);
+    notifyListeners();
+  }
+
   bool hasError(ViewAbstract viewAbstract) {
     return _formValidationManager.hasError(viewAbstract);
   }

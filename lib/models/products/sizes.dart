@@ -13,8 +13,7 @@ class Size extends ViewAbstract<Size> {
   Size() : super();
 
   @override
-  String getHeaderTextOnly(BuildContext context) {
-    // TODO: implement getHeaderTextOnly
+  String getMainHeaderTextOnly(BuildContext context) {
     return "${width}x$length";
   }
 
@@ -29,7 +28,7 @@ class Size extends ViewAbstract<Size> {
   }
 
   @override
-  String? getDrawerGroupName() {
+  String? getMainDrawerGroupName() {
     // TODO: implement getDrawerGroupName
     return "products";
   }
@@ -40,8 +39,7 @@ class Size extends ViewAbstract<Size> {
   }
 
   @override
-  String getLabelTextOnly(BuildContext context) {
-    // TODO: implement getLabelTextOnly
+  String getMainLabelTextOnly(BuildContext context) {
     return "sizes";
   }
 
@@ -49,51 +47,97 @@ class Size extends ViewAbstract<Size> {
 
   Map<String, dynamic> toJson() => _$SizeToJson(this);
 
-  
   @override
-  String getFieldLabel(String label, BuildContext context) {
-    return label;
-  }
-
-  @override
-  List<String> getFields() {
+  List<String> getMainFields() {
     return ["width", "length"];
   }
 
   @override
-  IconData getIconData() {
+  IconData getMainIconData() {
     return Icons.border_all;
   }
 
   @override
-  int? getTextInputMaxLength(String field) {
-    return 4;
-  }
-
-  @override
-  Map<String, TextInputType?> getMap() => {
+  Map<String, TextInputType?> getTextInputTypeMap() => {
         "width": TextInputType.number,
         "length": TextInputType.number,
       };
+
   @override
-  bool getTextInputTypeIsAutoComplete(String field) {
-    return true;
+  Map<String, IconData> getFieldIconDataMap() => {
+        'width': Icons.border_left_outlined,
+        'length': Icons.border_top_outlined
+      };
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) {
+    // TODO: implement getFieldLabelMap
+    throw UnimplementedError();
   }
 
   @override
-  bool isFieldRequired(String field) {
-    return field == "width";
+  String getMainLabelSubtitleTextOnly(BuildContext context) {
+    // TODO: implement getMainLabelSubtitleTextOnly
+    throw UnimplementedError();
   }
 
   @override
-  IconData getFieldIconData(String label) {
-    switch (label) {
-      case "width":
-        return Icons.border_left_outlined;
-      case "length":
-        return Icons.border_top_outlined;
-    }
+  Map<String, String> getTextInputHintMap(BuildContext context) {
+    // TODO: implement getTextInputHintMap
+    throw UnimplementedError();
+  }
 
-    return Icons.add_card_rounded;
+  @override
+  Map<String, IconData> getTextInputIconMap() {
+    // TODO: implement getTextInputIconMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() {
+    // TODO: implement getTextInputIsAutoCompleteMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
+    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, String> getTextInputLabelMap(BuildContext context) {
+    // TODO: implement getTextInputLabelMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, int> getTextInputMaxLengthMap() {
+    // TODO: implement getTextInputMaxLengthMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() {
+    // TODO: implement getTextInputMaxValidateMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() {
+    // TODO: implement getTextInputMinValidateMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> isFieldCanBeNullableMap() {
+    // TODO: implement isFieldCanBeNullableMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> isFieldRequiredMap() {
+    // TODO: implement isFieldRequiredMap
+    throw UnimplementedError();
   }
 }

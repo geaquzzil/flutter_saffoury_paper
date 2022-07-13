@@ -71,7 +71,7 @@ class BaseSharedDetailsView extends StatelessWidget {
                                     Text.rich(
                                       TextSpan(
                                         text: viewAbstract
-                                            .getHeaderTextOnly(context),
+                                            .getMainHeaderTextOnly(context),
                                         style:
                                             Theme.of(context).textTheme.button,
                                         children: [
@@ -86,7 +86,7 @@ class BaseSharedDetailsView extends StatelessWidget {
                                     ),
                                     Text(
                                       viewAbstract
-                                          .getSubtitleHeaderTextOnly(context),
+                                          .getMainSubtitleTextOnly(context),
                                       style:
                                           Theme.of(context).textTheme.headline6,
                                     )
@@ -130,7 +130,7 @@ class BaseSharedDetailsView extends StatelessWidget {
   }
 
   Widget getBodyWidget(BuildContext context, ViewAbstract viewAbstract) {
-    return getViewLoop(viewAbstract.getFields(), viewAbstract);
+    return getViewLoop(viewAbstract.getMainFields(), viewAbstract);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

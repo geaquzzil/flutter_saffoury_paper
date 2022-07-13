@@ -111,8 +111,9 @@ class AuthProvider with ChangeNotifier {
     debugPrint(
         "initDrawerItems genrated list is ${_drawerItemsPermissions.toString()}");
 
-    __drawerItemsGrouped = _drawerItemsPermissions
-        .groupBy((item) => item.getDrawerGroupName(), valueTransform: (v) => v);
+    __drawerItemsGrouped = _drawerItemsPermissions.groupBy(
+        (item) => item.getMainDrawerGroupName(),
+        valueTransform: (v) => v);
 
     debugPrint(
         "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");

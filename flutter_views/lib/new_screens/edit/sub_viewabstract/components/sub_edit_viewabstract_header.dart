@@ -41,7 +41,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
   @override
   void initState() {
     super.initState();
-    fields = widget.viewAbstract.getFields();
+    fields = widget.viewAbstract.getMainFields();
     childrenPadding = const EdgeInsets.all(20);
     _controller = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
@@ -61,6 +61,14 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     // Provider.of<ErrorFieldsProvider>(context, listen: false).addListener(() {
     //   debugPrint("ErrorFieldsProvider is changed");
     // });
+  }
+
+  @override
+  void didUpdateWidget(covariant EditSubViewAbstractHeader oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    debugPrint(
+        "EditSubViewAbstractHeader didUpdateWidget ${widget.viewAbstract}");
   }
 
   @override
@@ -156,7 +164,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
         widget.viewAbstract, widget.viewAbstract.getFieldNameFromParent ?? "");
     return Text(viewAbstractWatched.isNew()
         ? "IS NEW"
-        : viewAbstractWatched.getSubtitleHeaderTextOnly(context));
+        : viewAbstractWatched.getMainSubtitleTextOnly(context));
   }
 
   Widget? _buildTitle(BuildContext context) {
@@ -165,10 +173,10 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
 
     return getIsNullable(
             context, widget.viewAbstract.getFieldNameFromParent ?? "")
-        ? widget.viewAbstract.getNullableText(context)
+        ? widget.viewAbstract.getMainNullableText(context)
         : viewAbstractWatched == null
-            ? widget.viewAbstract.getHeaderText(context)
-            : viewAbstractWatched.getHeaderText(context);
+            ? widget.viewAbstract.getMainHeaderText(context)
+            : viewAbstractWatched.getMainHeaderText(context);
   }
 
   Widget _buildLeadingIcon(BuildContext context) {
@@ -186,7 +194,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     } else {
       return RotationTransition(
         turns: _iconTurns,
-        child: Icon(widget.viewAbstract.getIconData()),
+        child: Icon(widget.viewAbstract.getMainIconData()),
       );
     }
   }

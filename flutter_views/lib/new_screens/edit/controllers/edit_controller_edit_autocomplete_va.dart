@@ -25,9 +25,15 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
   final textController = TextEditingController();
   List<ViewAbstract> suggestionList = [];
   String lastQuery = "";
+  late bool isSuggestionSelected;
+  late ViewAbstract lastSuggestionSelected;
   @override
   void initState() {
     super.initState();
+    isSuggestionSelected = widget.viewAbstract.isEditing();
+    if (isSuggestionSelected) {
+      lastSuggestionSelected = widget.viewAbstract;
+    }
     // ErrorFieldsProvider errorFieldsProvider =
     //     Provider.of<ErrorFieldsProvider>(context, listen: false);
     // _formValidationManager = errorFieldsProvider.getFormValidationManager;
@@ -50,16 +56,17 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     debugPrint("AutoCompleteCardItem viewAbstract=> $view");
     return ListTile(
       leading: view.getCardLeadingCircleAvatar(context),
-      title: Text(view.getHeaderTextOnly(context)),
+      title: Text(view.getMainHeaderTextOnly(context)),
       subtitle: Text("#${view.iD}"),
     );
     return ListTile(
         onTap: () => {},
         onLongPress: () => {},
         title: TextBold(
-            text: view.getHeaderTextOnly(context), regex: searchQuery.trim()),
+            text: view.getMainHeaderTextOnly(context),
+            regex: searchQuery.trim()),
         subtitle: TextBold(
-            text: view.getSubtitleHeaderTextOnly(context),
+            text: view.getMainSubtitleTextOnly(context),
             regex: searchQuery.trim()),
         leading: view.getCardLeadingCircleAvatar(context));
   }
@@ -74,8 +81,6 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
               return value?.trim();
             },
             name: widget.viewAbstract.getTag(widget.field),
-            initialValue:
-                widget.viewAbstract.getFieldValue(widget.field).toString(),
             decoration:
                 getDecoration(context, widget.viewAbstract, widget.field),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
@@ -84,12 +89,20 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
             keyboardType: widget.viewAbstract.getTextInputType(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onSuggestionSelected: (value) {
+              isSuggestionSelected = true;
               ViewAbstract whereViewAbstract = widget.viewAbstract
                   .getListSearchViewByTextInputList(widget.field, value);
+
+              lastSuggestionSelected = whereViewAbstract;
+
               context
                   .read<EditSubsViewAbstractControllerProvider>()
                   .toggleIsNew(widget.viewAbstract.getFieldNameFromParent ?? "",
                       whereViewAbstract);
+              // context
+              //     .read<ErrorFieldsProvider>()
+              //     .removeError(widget.viewAbstract);
+
               // textController.text = value.getHeaderTextOnly(context);
             },
 
@@ -135,8 +148,16 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
   }
 
   void onTextChangeListener() {
+    debugPrint(
+        "onTextChangeListener EditSubsViewAbstractController ViewAbstract");
     String currentValue = textController.text;
+    if (currentValue == lastSuggestionSelected.getMainHeaderTextOnly(context)) {
+      debugPrint(
+          "onTextChangeListener last text is the same as last suggestion selected returned");
+      return;
+    }
     if (currentValue.isEmpty) return;
+
     if (currentValue == widget.viewAbstract.getFieldValue(widget.field)) return;
     widget.viewAbstract =
         onChange(context, widget.viewAbstract, widget.field, currentValue);

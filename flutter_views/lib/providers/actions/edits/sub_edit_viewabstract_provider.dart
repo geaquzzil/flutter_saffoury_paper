@@ -43,36 +43,42 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
         isNew: viewAbstract.isNew());
   }
 
-  void toggleIsNullable(String field) {
+  void toggleIsNullable(String field) async {
     ViewAbstractNullableController? viewAbstractNullableController =
         _list[field];
     if (viewAbstractNullableController != null) {
       viewAbstractNullableController.isNullableAlreadyFromParent =
           !viewAbstractNullableController.isNullableAlreadyFromParent;
+      await Future.delayed(const Duration(milliseconds: 50));
       notifyListeners();
     }
   }
 
-  void toggleIsNew(String field, ViewAbstract newViewAbstract) {
+  void toggleIsNew(String field, ViewAbstract newViewAbstract) async {
     ViewAbstractNullableController? viewAbstractNullableController =
         getViewAbstractNullableController(field);
 
     bool isNullableAlreadyFromParent =
         viewAbstractNullableController?.isNullableAlreadyFromParent ?? false;
 
+    newViewAbstract = viewAbstractNullableController?.viewAbstract
+        .copyWithNewSuggestion(newViewAbstract);
+
     _list[field] = ViewAbstractNullableController(
         viewAbstract: newViewAbstract,
         isNullableAlreadyFromParent: isNullableAlreadyFromParent,
         isNew: newViewAbstract.isNew());
 
+    await Future.delayed(const Duration(milliseconds: 50));
     notifyListeners();
   }
 
-  void changeIsNullable(String field, bool isNullable) {
+  void changeIsNullable(String field, bool isNullable) async {
     ViewAbstractNullableController? viewAbstractNullableController =
         _list[field];
     if (viewAbstractNullableController != null) {
       viewAbstractNullableController.isNullableAlreadyFromParent = isNullable;
+      await Future.delayed(const Duration(milliseconds: 50));
       notifyListeners();
     }
   }

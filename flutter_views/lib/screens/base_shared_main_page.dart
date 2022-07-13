@@ -66,7 +66,8 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-              debugPrint("drawer itmes ${authProvider.getDrawerItems.toString()}");
+              debugPrint(
+                  "drawer itmes ${authProvider.getDrawerItems.toString()}");
               return getMainContainerWidget(context);
             default:
               if (snapshot.hasError) {
@@ -317,7 +318,7 @@ class _HeaderMainState extends State<HeaderMain> {
                           horizontal: 10, vertical: 10),
                       maxHeight: 300,
                       hintText:
-                          'Search ${viewAbstract.getLabelTextOnly(context)}',
+                          'Search ${viewAbstract.getMainLabelTextOnly(context)}',
                       emptyBuilder: (context) {
                         return const Text("I'm an empty state!");
                       },

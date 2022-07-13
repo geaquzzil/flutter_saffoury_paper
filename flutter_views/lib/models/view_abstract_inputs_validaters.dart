@@ -4,25 +4,64 @@ import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
+  Map<String, String> getTextInputLabelMap(BuildContext context);
+  Map<String, String> getTextInputHintMap(BuildContext context);
+  Map<String, TextInputType?> getTextInputTypeMap();
+  Map<String, bool> getTextInputIsAutoCompleteMap();
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
+  Map<String, IconData> getTextInputIconMap();
+  Map<String, int> getTextInputMaxLengthMap();
+
+  Map<String, bool> isFieldRequiredMap();
+  Map<String, bool> isFieldCanBeNullableMap();
+
+  Map<String, double> getTextInputMaxValidateMap();
+  Map<String, double> getTextInputMinValidateMap();
+
   TextInputType? getTextInputType(String field) {
-    return getMap()[field];
+    return getTextInputTypeMap()[field];
   }
 
   bool getTextInputTypeIsAutoComplete(String field) {
-    return false;
+    return getTextInputIsAutoCompleteMap()[field] ?? false;
   }
 
   bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
-    return false;
+    return getTextInputIsAutoCompleteViewAbstractMap()[field] ?? false;
   }
 
-  Map<String, TextInputType?> getMap() {
-    return {};
+  bool isFieldRequired(String field) {
+    return isFieldRequiredMap()[field] ?? false;
   }
 
-  bool? getTextInputIsEnabled(String field) {
-    //TODO Check permission
-    return null;
+  int? getTextInputMaxLength(String field) {
+    return getTextInputMaxLengthMap()[field];
+  }
+
+  bool isFieldCanBeNullable(BuildContext context, String field) {
+    return isFieldCanBeNullableMap()[field] ?? true;
+  }
+
+  double? getTextInputValidatorMaxValue(String field) {
+    return getTextInputMaxValidateMap()[field];
+  }
+
+  double? getTextInputValidatorMinValue(String field) {
+    return getTextInputMinValidateMap()[field];
+  }
+
+  IconData? getTextInputIconData(String field) {
+    return getTextInputIconMap()[field] ?? getFieldIconData(field);
+  }
+
+  String? getTextInputHint(BuildContext context, String field) {
+    return getTextInputHintMap(context)[field] ??
+        getTextInputLabel(context, field);
+  }
+
+  String? getTextInputLabel(BuildContext context, String field) {
+    return getTextInputLabelMap(context)[field] ??
+        getFieldLabel(context, field);
   }
 
   String? getTextInputPrefix(BuildContext context, String field) {
@@ -37,26 +76,6 @@ abstract class ViewAbstractInputAndValidater<T>
     return Icon(getTextInputIconData(field));
   }
 
-  IconData? getTextInputIconData(String field) {
-    return getFieldIconData(field);
-  }
-
-  int? getTextInputMaxLength(String field) {
-    return null;
-  }
-
-  String? getTextInputHint(BuildContext context, String field) {
-    return null;
-  }
-
-  String? getTextInputLabel(BuildContext context, String field) {
-    return getFieldLabel(field, context);
-  }
-
-  bool isFieldRequired(String field) {
-    return false;
-  }
-
   bool isNullableAlreadyFromParentCheck(BuildContext context, String field) {
     return getParnet?.getFieldValue(field) == null;
   }
@@ -65,12 +84,8 @@ abstract class ViewAbstractInputAndValidater<T>
     return getParnet?.isFieldCanBeNullable(context, field);
   }
 
-  bool isFieldCanBeNullable(BuildContext context, String field) {
-    return false;
-  }
-
   TextCapitalization getTextInputCapitalization(String field) {
-    return TextCapitalization.none;
+    return TextCapitalization.sentences;
   }
 
   List<TextInputFormatter>? getTextInputFormatter(String field) {
@@ -84,17 +99,9 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
-  double? getTextInputValidatorMaxValue(String field) {
-    return null;
-  }
-
-  double? getTextInputValidatorMinValue(String field) {
-    return null;
-  }
-
   String? getTextInputValidator(
       BuildContext context, String field, String? value) {
-    String fieldLabel = getFieldLabel(field, context);
+    String fieldLabel = getFieldLabel(context, field);
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
     if (isFieldRequired(field)) {

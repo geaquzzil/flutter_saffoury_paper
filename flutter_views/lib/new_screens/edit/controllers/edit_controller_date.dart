@@ -18,7 +18,7 @@ class EditControllerDateTime extends StatelessWidget {
         name: viewAbstract.getTag(field),
         firstDate: DateTime(2020),
         lastDate: DateTime(2030),
-        initialDate: viewAbstract.getDateTimeFromField(fieldValue),
+        initialDate: viewAbstract.getFieldDateTimeParse(fieldValue),
         decoration: getDecoration(context, viewAbstract, field),
       ),
       getSpace()

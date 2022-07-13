@@ -83,33 +83,112 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   }
 
   @override
-  String getFieldLabel(String label, BuildContext context) {
-    return label;
-  }
-
-  @override
-  List<String> getFields() {
+  List<String> getMainFields() {
     return ['userlevelname', 'permissions_levels'];
   }
 
   @override
-  IconData getIconData() {
-    return Icons.security;
-  }
-
-  @override
-  IconData getFieldIconData(String label) {
+  IconData getMainIconData() {
     return Icons.security;
   }
 
   @override
   String? getTableNameApi() {
-    // TODO: implement getTableNameApi
     return "";
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() {
+    // TODO: implement getFieldIconDataMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) {
+    // TODO: implement getFieldLabelMap
+    throw UnimplementedError();
+  }
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) {
+    // TODO: implement getMainHeaderTextOnly
+    throw UnimplementedError();
+  }
+
+  @override
+  String getMainLabelSubtitleTextOnly(BuildContext context) {
+    // TODO: implement getMainLabelSubtitleTextOnly
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, String> getTextInputHintMap(BuildContext context) {
+    // TODO: implement getTextInputHintMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, IconData> getTextInputIconMap() {
+    // TODO: implement getTextInputIconMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() {
+    // TODO: implement getTextInputIsAutoCompleteMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
+    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, String> getTextInputLabelMap(BuildContext context) {
+    // TODO: implement getTextInputLabelMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, int> getTextInputMaxLengthMap() {
+    // TODO: implement getTextInputMaxLengthMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() {
+    // TODO: implement getTextInputMaxValidateMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() {
+    // TODO: implement getTextInputMinValidateMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() {
+    // TODO: implement getTextInputTypeMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> isFieldCanBeNullableMap() {
+    // TODO: implement isFieldCanBeNullableMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, bool> isFieldRequiredMap() {
+    // TODO: implement isFieldRequiredMap
+    throw UnimplementedError();
   }
 }

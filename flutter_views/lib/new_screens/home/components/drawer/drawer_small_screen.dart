@@ -19,7 +19,6 @@ class DrawerMobile<T extends ViewAbstract> extends StatelessWidget {
         ),
       ),
       child: Drawer(
-        
         elevation: 0,
         child: Column(
           children: [
@@ -60,7 +59,7 @@ class DrawerListTile extends StatelessWidget {
       leading: viewAbstract.getIcon(),
       selected:
           context.watch<DrawerMenuSelectedItemController>().getIndex == idx,
-      title: viewAbstract.getLabelText(context),
+      title: viewAbstract.getMainLabelText(context),
       onTap: () {
         viewAbstract.onDrawerItemClicked(context);
         context.read<DrawerMenuSelectedItemController>().change(idx);

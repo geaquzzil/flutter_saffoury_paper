@@ -19,6 +19,8 @@ class EditControllerEditText extends StatefulWidget {
 }
 
 class _EditControllerEditTextState extends State<EditControllerEditText> {
+  final textController = TextEditingController();
+  bool isEnabled = false;
   @override
   void initState() {
     super.initState();
@@ -26,34 +28,71 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
         .addListener(() {
       debugPrint("EditSubsViewAbstractControllerProvider change listnerer");
     });
+
+    textController.addListener(onTextChangeListener);
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  bool isEnabledField(EditSubsViewAbstractControllerProvider editSubsView,
+      ViewAbstract viewAbstract) {
+    //if this is the main viewabstract then we should enabled the text field
+    debugPrint("isEnabled checking canSubmitChanges");
+    if (!canSubmitChanges(viewAbstract)) return true;
+    bool res = editSubsView.getIsNew(viewAbstract.getFieldNameFromParent ?? "");
+    debugPrint("isEnabled checking isNew=>$res");
+    return res;
+  }
+
+  void onTextChangeListener() {
+   
+
+    if (!isEnabled) return;
+     String value = textController.text;
+    debugPrint("EditTextField changed");
+    context.read<ErrorFieldsProvider>().notify();
+    if (value.isEmpty) return;
+    if (value == widget.viewAbstract.getFieldValue(widget.field).toString()) {
+      return;
+    }
+    widget.viewAbstract =
+        onChange(context, widget.viewAbstract, widget.field, value);
   }
 
   @override
   Widget build(BuildContext context) {
     ErrorFieldsProvider formValidationManager =
         context.read<ErrorFieldsProvider>();
+
+    EditSubsViewAbstractControllerProvider editSubsView =
+        context.watch<EditSubsViewAbstractControllerProvider>();
+
+    ViewAbstract watchedViewAbstract = editSubsView.getViewAbstract(
+            widget.viewAbstract.getFieldNameFromParent ?? "") ??
+        widget.viewAbstract;
+
+    String text = watchedViewAbstract.getFieldValue(widget.field).toString();
+
+    isEnabled = isEnabledField(editSubsView, watchedViewAbstract);
+    // bool isEnabled=editSubsView
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      textController.text = text;
+      // Your Code Here
+    });
+
     return Column(
       children: [
         FormBuilderTextField(
-          
-            onChanged: (value) {
-              context.read<ErrorFieldsProvider>().notify();
-              if (value == null) return;
-              if (value.isEmpty) return;
-              if (value ==
-                  widget.viewAbstract.getFieldValue(widget.field).toString()) {
-                return;
-              }
-              widget.viewAbstract =
-                  onChange(context, widget.viewAbstract, widget.field, value);
-            },
+            controller: textController,
+            enabled: isEnabled,
             valueTransformer: (value) {
               return value?.trim();
             },
             name: widget.viewAbstract.getTag(widget.field),
-            initialValue: getFieldValue(context,
-                    widget.viewAbstract.getFieldNameFromParent, widget.field)
-                .toString(),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
@@ -62,10 +101,10 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
             keyboardType: widget.viewAbstract.getTextInputType(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-            focusNode: formValidationManager.getFocusNodeForField(
-                widget.viewAbstract.getTag(widget.field),
-                widget.viewAbstract,
-                widget.field),
+            // focusNode: formValidationManager.getFocusNodeForField(
+            //     widget.viewAbstract.getTag(widget.field),
+            //     widget.viewAbstract,
+            //     widget.field),
             validator: formValidationManager.wrapValidator(
                 widget.viewAbstract.getTag(widget.field),
                 widget.viewAbstract,

@@ -9,7 +9,9 @@ part of 'product_types.dart';
 ProductType _$ProductTypeFromJson(Map<String, dynamic> json) {
   return ProductType()
     ..iD = json['iD'] as int
-    ..date = json['date'] as String?
+    ..grades = json['grades'] == null
+        ? null
+        : Grades.fromJson(json['grades'] as Map<String, dynamic>)
     ..image = json['image'] as String?
     ..name = json['name'] as String?
     ..comments = json['comments'] as String?
@@ -20,7 +22,7 @@ ProductType _$ProductTypeFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ProductTypeToJson(ProductType instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'date': instance.date,
+      'grades': instance.grades?.toJson(),
       'image': instance.image,
       'name': instance.name,
       'comments': instance.comments,

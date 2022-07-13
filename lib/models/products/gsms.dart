@@ -1,78 +1,40 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/icon_data.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import '../view_abstract.dart';
-
-part 'permission_action_abstract.g.dart';
+part 'gsms.g.dart';
 
 @JsonSerializable()
 @reflector
-class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
-  String? table_name;
-  int? print;
-  int? notification;
-  int? list;
-  int? view;
-  int? add;
-  int? edit;
-  int? delete_action;
-
-  PermissionActionAbstract() : super();
-
-  factory PermissionActionAbstract.fromJson(Map<String, dynamic> data) =>
-      _$PermissionActionAbstractFromJson(data);
-
-  Map<String, dynamic> toJson() => _$PermissionActionAbstractToJson(this);
+class GSM extends ViewAbstract<GSM> {
+  int? gsm;
+  GSM() : super();
 
   @override
-  PermissionActionAbstract fromJsonViewAbstract(Map<String, dynamic> data) {
-    return PermissionActionAbstract.fromJson(data);
-  }
-
-  @override
-  String? getTableNameApi() {
+  GSM fromJsonViewAbstract(Map<String, dynamic> json) {
+    // TODO: implement fromJsonViewAbstract
     throw UnimplementedError();
   }
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    return toJson();
+  Map<String, IconData> getFieldIconDataMap() {
+    // TODO: implement getFieldIconDataMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) {
+    // TODO: implement getFieldLabelMap
+    throw UnimplementedError();
   }
 
   @override
   List<String> getMainFields() {
-    return [
-      "print",
-      "notification",
-      "list",
-      "view",
-      "add",
-      "edit",
-      "delete_action"
-    ];
+    // TODO: implement getMainFields
+    throw UnimplementedError();
   }
-
-  @override
-  IconData getMainIconData() {
-    return Icons.security;
-  }
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() => {
-        'iD': Icons.numbers,
-        "table_name": Icons.table_bar,
-        "print": Icons.print,
-        "notification": Icons.notifications,
-        "list": Icons.list,
-        "view": Icons.view_agenda,
-        "add": Icons.add,
-        "edit": Icons.edit,
-        "delete_action": Icons.delete
-      };
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) => {};
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
@@ -81,8 +43,20 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   }
 
   @override
+  IconData getMainIconData() {
+    // TODO: implement getMainIconData
+    throw UnimplementedError();
+  }
+
+  @override
   String getMainLabelSubtitleTextOnly(BuildContext context) {
     // TODO: implement getMainLabelSubtitleTextOnly
+    throw UnimplementedError();
+  }
+
+  @override
+  String? getTableNameApi() {
+    // TODO: implement getTableNameApi
     throw UnimplementedError();
   }
 
@@ -149,6 +123,12 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   @override
   Map<String, bool> isFieldRequiredMap() {
     // TODO: implement isFieldRequiredMap
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() {
+    // TODO: implement toJsonViewAbstract
     throw UnimplementedError();
   }
 }

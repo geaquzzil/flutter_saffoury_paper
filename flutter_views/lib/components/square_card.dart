@@ -38,8 +38,8 @@ class SquareCard<T extends ViewAbstract> extends StatelessWidget {
           Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: kDefaultPadding / 4),
-              child: object.getHeaderText(context)),
-          object.getSubtitleHeaderText(context)!,
+              child: object.getMainHeaderText(context)),
+          object.getMainSubtitleHeaderText(context)!,
           // Text(
           //   "product.price",
           //   style: TextStyle(fontWeight: FontWeight.bold),

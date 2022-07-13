@@ -28,6 +28,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
     // Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
     Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
         .clear();
+    Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
   }
 
   @override
@@ -45,7 +46,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
     // errorFieldsProvider.initState();
 
-    fields = widget.parent.getFields();
+    fields = widget.parent.getMainFields();
   }
 
   @override
@@ -117,7 +118,6 @@ class _BaseEditPageState extends State<BaseEditPage> {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(viewAbstract);
-
       fieldValue.setFieldNameFromParent(field);
       // return Text("FDFD");
       return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);

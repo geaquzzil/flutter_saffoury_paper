@@ -24,6 +24,16 @@ class FormValidationManager {
     };
   }
 
+  void removeError(ViewAbstract viewAbstract) {
+    _fieldStates.entries
+        .where((element) => element.value.viewAbstract
+                .getGenericClassName()
+                .contains((viewAbstract.getGenericClassName()))
+            // &&(element.value.hasError)
+            )
+        .map((e) => e.value.removeError());
+  }
+
   bool hasError(ViewAbstract viewAbstract) {
     debugPrint(
         "hasError Checking before name=> ${viewAbstract.getGenericClassName()}");
@@ -52,6 +62,7 @@ class FormValidationManager {
   }
 
   void dispose() {
+    _fieldStates.clear();
     for (var s in _fieldStates.entries) {
       s.value.focusNode.dispose();
     }
@@ -79,5 +90,9 @@ class FormFieldValidationState {
 
   String? getErrorMessage(BuildContext context) {
     return errorMessage;
+  }
+
+  void removeError() {
+    hasError = false;
   }
 }

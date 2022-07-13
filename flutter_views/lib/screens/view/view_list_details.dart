@@ -10,7 +10,7 @@ class ViewDetailsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fields = viewAbstract.getFields();
+    final fields = viewAbstract.getMainFields();
     return ListView.builder(
         shrinkWrap: true,
         itemCount: fields.length,
@@ -29,7 +29,7 @@ class ViewDetailsListWidget extends StatelessWidget {
                 object: fieldValue);
           } else {
             return ViewCardItem(
-                title: viewAbstract.getFieldLabel(label, context),
+                title: viewAbstract.getFieldLabel(context, label),
                 description: fieldValue,
                 icon: viewAbstract.getFieldIconData(label));
           }

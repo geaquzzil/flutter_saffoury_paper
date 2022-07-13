@@ -16,10 +16,10 @@ class SearchCardItem extends StatelessWidget {
         onTap: () => {},
         onLongPress: () => {},
         title: TextBold(
-            text: viewAbstract.getHeaderTextOnly(context),
+            text: viewAbstract.getMainHeaderTextOnly(context),
             regex: searchQuery.trim()),
         subtitle: TextBold(
-            text: viewAbstract.getSubtitleHeaderTextOnly(context),
+            text: viewAbstract.getMainSubtitleTextOnly(context),
             regex: searchQuery.trim()),
         leading: viewAbstract.getCardLeading(context));
   }
