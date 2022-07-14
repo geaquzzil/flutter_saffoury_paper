@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerEditText extends StatefulWidget {
@@ -102,13 +103,20 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           inputFormatters:
               widget.viewAbstract.getTextInputFormatter(widget.field),
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: formValidationManager.wrapValidator(
-              widget.viewAbstract.getTag(widget.field),
-              widget.viewAbstract,
-              widget.field, (value) {
-            return widget.viewAbstract
-                .getTextInputValidator(context, widget.field, value);
-          }),
+          validator: FormBuilderValidators.compose([
+            (val) {
+              return val == null ? "Field is empty" : null;
+            },
+            FormBuilderValidators.required(),
+            FormBuilderValidators.max(10)
+          ]),
+          // validator: formValidationManager.wrapValidator(
+          //     widget.viewAbstract.getTag(widget.field),
+          //     widget.viewAbstract,
+          //     widget.field, (value) {
+          //   return widget.viewAbstract
+          //       .getTextInputValidator(context, widget.field, value);
+          // }),
           onSaved: (String? value) {
             debugPrint('onSave=   $value');
           },
