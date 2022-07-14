@@ -71,7 +71,7 @@ class Product extends ViewAbstract<Product> {
   @override
   List<String> getMainFields() {
     return [
-      "products_types",
+      // "products_types",
       "sizes",
       "grades",
       "date",

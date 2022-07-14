@@ -102,16 +102,10 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           inputFormatters:
               widget.viewAbstract.getTextInputFormatter(widget.field),
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-          // focusNode: formValidationManager.getFocusNodeForField(
-          //     widget.viewAbstract.getTag(widget.field),
-          //     widget.viewAbstract,
-          //     widget.field),
           validator: formValidationManager.wrapValidator(
               widget.viewAbstract.getTag(widget.field),
               widget.viewAbstract,
               widget.field, (value) {
-            debugPrint("wrapValidator");
             return widget.viewAbstract
                 .getTextInputValidator(context, widget.field, value);
           }),

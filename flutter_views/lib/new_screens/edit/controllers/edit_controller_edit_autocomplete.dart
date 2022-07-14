@@ -68,15 +68,6 @@ class _EditControllerEditTextAutoCompleteState
       children: [
         FormBuilderTypeAheadCustom<String>(
             controller: textController,
-            onChanged: (value) {
-              if (value == null) return;
-              if (value.isEmpty) return;
-              if (value == widget.viewAbstract.getFieldValue(widget.field)) {
-                return;
-              }
-              widget.viewAbstract =
-                  onChange(context, widget.viewAbstract, widget.field, value);
-            },
             valueTransformer: (value) {
               return value?.trim();
             },
@@ -98,14 +89,20 @@ class _EditControllerEditTextAutoCompleteState
             //     widget.viewAbstract,
             //     widget.field),
 
-            validator: formValidationManager.wrapValidator(
+            validator: 
+            
+            
+            
+            formValidationManager.wrapValidator(
                 widget.viewAbstract.getTag(widget.field),
                 widget.viewAbstract,
                 widget.field, (value) {
-              debugPrint("validator formValidationManager");
+              debugPrint("validator formValidationManager for ${widget.field}");
               return widget.viewAbstract
                   .getTextInputValidator(context, widget.field, value);
-            }),
+            })
+            
+            ,
             itemBuilder: (context, continent) {
               return ListTile(title: Text(continent));
             },

@@ -5,8 +5,11 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
+@immutable
 class EditControllerEditTextAutoCompleteViewAbstract extends StatefulWidget {
   ViewAbstract viewAbstract;
   String field;
@@ -73,41 +76,36 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
 
   @override
   Widget build(BuildContext context) {
+    ErrorFieldsProvider formValidationManager =
+        context.read<ErrorFieldsProvider>();
+
+    EditSubsViewAbstractControllerProvider editSubsView =
+        context.watch<EditSubsViewAbstractControllerProvider>();
+
+    ViewAbstract watchedViewAbstract = editSubsView.getViewAbstract(
+            widget.viewAbstract.getFieldNameFromParent ?? "") ??
+        widget.viewAbstract;
+
+    String text = watchedViewAbstract.getFieldValue(widget.field).toString();
+
     return Column(
       children: [
-        FormBuilderTypeAheadCustom<String>(
-            controller: textController,
+        FormBuilderTypeAhead<String>(
+            // controller: textController,
             valueTransformer: (value) {
               return value?.trim();
             },
-            name: widget.viewAbstract.getTag(widget.field),
+            name: "widget.viewAbstract.getTag(widget.field)",
             decoration:
                 getDecoration(context, widget.viewAbstract, widget.field),
-            maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
-            textCapitalization:
-                widget.viewAbstract.getTextInputCapitalization(widget.field),
-            keyboardType: widget.viewAbstract.getTextInputType(widget.field),
+            // maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
+            // textCapitalization:
+            //     widget.viewAbstract.getTextInputCapitalization(widget.field),
+            // keyboardType: widget.viewAbstract.getTextInputType(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            onSuggestionSelected: (value) {
-              isSuggestionSelected = true;
-              ViewAbstract whereViewAbstract = widget.viewAbstract
-                  .getListSearchViewByTextInputList(widget.field, value);
-
-              lastSuggestionSelected = whereViewAbstract;
-
-              context
-                  .read<EditSubsViewAbstractControllerProvider>()
-                  .toggleIsNew(widget.viewAbstract.getFieldNameFromParent ?? "",
-                      whereViewAbstract, widget.field);
-              // context
-              //     .read<ErrorFieldsProvider>()
-              //     .removeError(widget.viewAbstract);
-
-              // textController.text = value.getHeaderTextOnly(context);
-            },
-
-            //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-
+            // onSuggestionSelected: (value) {
+            //   onSuggestionSelected(value, context);
+            // },
             itemBuilder: (context, continent) {
               debugPrint("continent $continent");
               ViewAbstract whereViewAbstract = widget.viewAbstract
@@ -122,19 +120,35 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
                 continent,
               );
             },
-            inputFormatters:
-                widget.viewAbstract.getTextInputFormatter(widget.field),
-            // focusNode: _formValidationManager.getFocusNodeForField(
-            //     widget.viewAbstract.getTag(widget.field),
-            //     widget.viewAbstract,
-            //     widget.field),
-            // validator: _formValidationManager.wrapValidator(
+            // inputFormatters:
+            //     widget.viewAbstract.getTextInputFormatter(widget.field),
+            validator: FormBuilderValidators.compose([
+              (val) {
+                return val == null ? "Field is empty" : null;
+              },
+              FormBuilderValidators.required(),
+              FormBuilderValidators.max(10)
+            ])
+
+//  validator: FormBuilderValidators.compose([
+//     FormBuilderValidators.numeric(errorText: 'La edad debe ser numérica.'),
+//     FormBuilderValidators.max(70),
+//     (val) {
+//       var number = int.tryParse(val ?? '');
+//       if (number != null) if (number < 0)
+//         return 'We cannot have a negative age';
+//       return null;
+//     }
+//   ]),
+            // formValidationManager.wrapValidator(
             //     widget.viewAbstract.getTag(widget.field),
             //     widget.viewAbstract,
             //     widget.field, (value) {
             //   return widget.viewAbstract
             //       .getTextInputValidator(context, widget.field, value);
-            // }),
+            // })
+
+            ,
             suggestionsCallback: (query) {
               if (query.isEmpty) return [];
               if (query.trim() == lastQuery.trim()) return [];
@@ -145,6 +159,25 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
         getSpace()
       ],
     );
+  }
+
+  void onSuggestionSelected(String value, BuildContext context) {
+    isSuggestionSelected = true;
+    ViewAbstract whereViewAbstract = widget.viewAbstract
+        .getListSearchViewByTextInputList(widget.field, value);
+
+    lastSuggestionSelected = whereViewAbstract;
+
+    context.read<EditSubsViewAbstractControllerProvider>().toggleIsNew(
+        widget.viewAbstract.getFieldNameFromParent ?? "",
+        whereViewAbstract,
+        widget.field);
+
+    // context
+    //     .read<ErrorFieldsProvider>()
+    //     .removeError(widget.viewAbstract);
+
+    // textController.text = value.getHeaderTextOnly(context);
   }
 
   void onTextChangeListener() {

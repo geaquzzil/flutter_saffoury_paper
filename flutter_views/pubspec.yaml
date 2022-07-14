@@ -57,6 +57,7 @@ dependencies:
   animate_icons: ^2.0.0
   form_builder_extra_fields: ^8.1.0
   file_picker: ^3.0.4
+  form_builder_validators: ^8.2.0
   # analyzer: ^4.2.0
   
 dev_dependencies:

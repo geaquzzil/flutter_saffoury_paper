@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/app_theme.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
+import 'package:form_builder_validators/localization/l10n.dart';
 
 import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -58,7 +59,8 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
+          GlobalWidgetsLocalizations.delegate,
+          FormBuilderLocalizations.delegate,
         ],
         title: 'Flutter UI',
         debugShowCheckedModeBanner: false,

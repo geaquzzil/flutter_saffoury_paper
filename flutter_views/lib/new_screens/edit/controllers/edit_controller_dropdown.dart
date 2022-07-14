@@ -18,7 +18,6 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
 
   @override
   Widget build(BuildContext context) {
-    dynamic fieldValue = enumViewAbstract;
     return Column(children: [
       FormBuilderDropdown(
         name: parent.getTag(field),

@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
-    border: const UnderlineInputBorder(),
-    filled: true,
+    // filled: true,
     icon: Icon(viewAbstractEnum.getMainIconData()),
     labelText: viewAbstractEnum.getMainLabelText(context),
   );

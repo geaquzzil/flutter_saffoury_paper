@@ -106,9 +106,11 @@ abstract class ViewAbstractInputAndValidater<T>
     String fieldLabel = getFieldLabel(context, field);
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
+    debugPrint("checking field required $field");
     if (isFieldRequired(field)) {
+      debugPrint("Field required $field value is $value");
       if (value?.isEmpty ?? false) {
-        return "$fieldLabel is required";
+        return "$fieldLabel ${AppLocalizations.of(context)!.errFieldIsIncorrect}";
       }
     }
     if (maxValue != null) {
