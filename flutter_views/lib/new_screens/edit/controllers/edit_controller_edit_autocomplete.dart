@@ -20,23 +20,13 @@ class EditControllerEditTextAutoComplete extends StatefulWidget {
 
 class _EditControllerEditTextAutoCompleteState
     extends State<EditControllerEditTextAutoComplete> {
-  // late final _formValidationManager;
   final textController = TextEditingController();
   String lastQuery = "";
+  bool isError = false;
 
   @override
   void initState() {
     super.initState();
-    // ErrorFieldsProvider errorFieldsProvider =
-    //     Provider.of<ErrorFieldsProvider>(context, listen: false);
-    // _formValidationManager = errorFieldsProvider.getFormValidationManager;
-    // EditSubsViewAbstractControllerProvider s =
-    //     Provider.of<EditSubsViewAbstractControllerProvider>(context,
-    //         listen: false);
-    // s.addListener(() {
-    //   debugPrint(
-    //       "EditSubsViewAbstractControllerProvider isChanged ${widget.viewAbstract.getGenericClassName()}  ${s.getViewAbstract(widget.viewAbstract.getFieldNameFromParent ?? '')}");
-    // });
     textController.text =
         widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
@@ -44,8 +34,6 @@ class _EditControllerEditTextAutoCompleteState
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the widget tree.
-    // This also removes the _printLatestValue listener.
     textController.dispose();
     super.dispose();
   }
@@ -62,8 +50,6 @@ class _EditControllerEditTextAutoCompleteState
   Widget build(BuildContext context) {
     ErrorFieldsProvider formValidationManager =
         context.read<ErrorFieldsProvider>();
-    // debugPrint(
-    //     "EditControllerEditTextAutoComplete initValue ${widget.viewAbstract.getFieldValue(widget.field).toString()} ");
     return Column(
       children: [
         FormBuilderTypeAheadCustom<String>(
@@ -71,11 +57,12 @@ class _EditControllerEditTextAutoCompleteState
             valueTransformer: (value) {
               return value?.trim();
             },
+            enabled: true,
             name: widget.viewAbstract.getTag(widget.field),
-            initialValue:
-                widget.viewAbstract.getFieldValue(widget.field).toString(),
             decoration:
                 getDecoration(context, widget.viewAbstract, widget.field),
+            initialValue:
+                widget.viewAbstract.getFieldValue(widget.field).toString(),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
@@ -83,26 +70,8 @@ class _EditControllerEditTextAutoCompleteState
             inputFormatters:
                 widget.viewAbstract.getTextInputFormatter(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            //TODO enabled: viewAbstract.getTextInputIsEnabled(widget.field),
-            // focusNode: _formValidationManager.getFocusNodeForField(
-            //     widget.viewAbstract.getTag(widget.field),
-            //     widget.viewAbstract,
-            //     widget.field),
-
-            validator: 
-            
-            
-            
-            formValidationManager.wrapValidator(
-                widget.viewAbstract.getTag(widget.field),
-                widget.viewAbstract,
-                widget.field, (value) {
-              debugPrint("validator formValidationManager for ${widget.field}");
-              return widget.viewAbstract
-                  .getTextInputValidator(context, widget.field, value);
-            })
-            
-            ,
+            validator: widget.viewAbstract
+                .getTextInputValidatorCompose(context, widget.field),
             itemBuilder: (context, continent) {
               return ListTile(title: Text(continent));
             },

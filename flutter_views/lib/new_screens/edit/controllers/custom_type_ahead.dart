@@ -310,6 +310,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// {@macro flutter.widgets.editableText.keyboardType}
   final TextInputType? keyboardType;
   final SelectionToTextTransformer<T>? selectionToTextTransformer;
+  final FormFieldValidator<T>? validator;
 
   /// {@macro flutter.widgets.editableText.textCapitalization}
   final TextCapitalization textCapitalization;
@@ -334,7 +335,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     bool enabled = true,
     FocusNode? focusNode,
     FormFieldSetter<T>? onSaved,
-    FormFieldValidator<T>? validator,
+    required this.validator,
     InputDecoration decoration = const InputDecoration(),
     required String name,
     required this.itemBuilder,
@@ -394,7 +395,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
 
             return TypeAheadField<T>(
               textFieldConfiguration: textFieldConfiguration.copyWith(
-                
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,
                 textCapitalization: textCapitalization,
@@ -407,6 +407,9 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                     : theme.textTheme.subtitle1!.copyWith(
                         color: theme.disabledColor,
                       ),
+                onChanged: (val) {
+                  state.didChange(val as T);
+                },
                 focusNode: state.effectiveFocusNode,
                 decoration: state.decoration,
               ),
@@ -419,6 +422,8 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                 state.didChange(suggestion);
                 onSuggestionSelected?.call(suggestion);
               },
+              minCharsForSuggestions: 2,
+
               getImmediateSuggestions: getImmediateSuggestions,
               errorBuilder: errorBuilder,
               noItemsFoundBuilder: noItemsFoundBuilder,

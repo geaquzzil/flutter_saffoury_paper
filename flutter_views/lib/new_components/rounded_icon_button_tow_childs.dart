@@ -28,6 +28,7 @@ class RoundedIconButtonTowChilds extends StatelessWidget {
             child: SizedBox(
               height: 20,
               width: 20,
+              
               child: TextButton(
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(

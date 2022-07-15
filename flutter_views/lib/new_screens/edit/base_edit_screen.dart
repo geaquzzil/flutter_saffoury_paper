@@ -21,17 +21,17 @@ class _BaseEditPageState extends State<BaseEditPage> {
   _BaseEditPageState() {
     debugPrint("constructor _BaseEditPageState");
   }
-  final _formKey = GlobalKey<FormBuilderState>();
+  late GlobalKey<FormBuilderState> _formKey;
   late List<String> fields;
-  @override
-  void didUpdateWidget(BaseEditPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    debugPrint("didUpdateWidget _BaseEditPageState");
-    // Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
-    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
-        .clear();
-    Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
-  }
+  // @override
+  // void didUpdateWidget(BaseEditPage oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   debugPrint("didUpdateWidget _BaseEditPageState");
+  //   // Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
+  //   Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
+  //       .clear();
+  //   Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
+  // }
 
   @override
   void didChangeDependencies() {
@@ -43,10 +43,10 @@ class _BaseEditPageState extends State<BaseEditPage> {
   void initState() {
     debugPrint("initState _BaseEditPageState");
     super.initState();
-    // ErrorFieldsProvider errorFieldsProvider =
-    //     Provider.of<ErrorFieldsProvider>(context, listen: false);
+    ErrorFieldsProvider errorFieldsProvider =
+        Provider.of<ErrorFieldsProvider>(context, listen: false);
 
-    // errorFieldsProvider.initState();
+    _formKey = errorFieldsProvider.getFormBuilderState;
 
     fields = widget.parent.getMainFields();
   }

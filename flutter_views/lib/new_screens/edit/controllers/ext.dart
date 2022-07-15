@@ -8,10 +8,11 @@ import 'package:provider/provider.dart';
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
-    // filled: true,
-    icon: Icon(viewAbstractEnum.getMainIconData()),
-    labelText: viewAbstractEnum.getMainLabelText(context),
-  );
+      // filled: true,
+      border: OutlineInputBorder(),
+      icon: Icon(viewAbstractEnum.getMainIconData()),
+      labelText: viewAbstractEnum.getMainLabelText(context));
+  // hintText: parent.getTextInputHint(context, field));
 }
 
 InputDecoration getDecoration(
@@ -19,7 +20,11 @@ InputDecoration getDecoration(
   return InputDecoration(
       border: const UnderlineInputBorder(),
       filled: true,
+      // errorText: "err",
       icon: viewAbstract.getTextInputIcon(field),
+      iconColor: context.watch<ErrorFieldsProvider>().hasErrorField(field)
+          ? Colors.red
+          : null,
       hintText: viewAbstract.getTextInputHint(context, field),
       labelText: viewAbstract.getTextInputLabel(context, field),
       prefixText: viewAbstract.getTextInputPrefix(context, field),

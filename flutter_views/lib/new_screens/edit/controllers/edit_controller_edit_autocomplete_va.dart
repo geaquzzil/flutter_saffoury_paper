@@ -27,6 +27,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
   // late final _formValidationManager;
   final textController = TextEditingController();
   List<ViewAbstract> suggestionList = [];
+  final GlobalKey<FormFieldState> formFieldKey = GlobalKey();
   String lastQuery = "";
   late bool isSuggestionSelected;
   late ViewAbstract lastSuggestionSelected;
@@ -90,22 +91,24 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
 
     return Column(
       children: [
-        FormBuilderTypeAhead<String>(
-            // controller: textController,
+        FormBuilderTypeAheadCustom<String>(
+            controller: textController,
             valueTransformer: (value) {
               return value?.trim();
             },
-            name: "widget.viewAbstract.getTag(widget.field)",
+            name: widget.viewAbstract.getTag(widget.field),
+            initialValue:
+                widget.viewAbstract.getFieldValue(widget.field).toString(),
             decoration:
                 getDecoration(context, widget.viewAbstract, widget.field),
-            // maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
-            // textCapitalization:
-            //     widget.viewAbstract.getTextInputCapitalization(widget.field),
-            // keyboardType: widget.viewAbstract.getTextInputType(widget.field),
+            maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
+            textCapitalization:
+                widget.viewAbstract.getTextInputCapitalization(widget.field),
+            keyboardType: widget.viewAbstract.getTextInputType(widget.field),
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            // onSuggestionSelected: (value) {
-            //   onSuggestionSelected(value, context);
-            // },
+            onSuggestionSelected: (value) {
+              onSuggestionSelected(value, context);
+            },
             itemBuilder: (context, continent) {
               debugPrint("continent $continent");
               ViewAbstract whereViewAbstract = widget.viewAbstract
@@ -120,35 +123,10 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
                 continent,
               );
             },
-            // inputFormatters:
-            //     widget.viewAbstract.getTextInputFormatter(widget.field),
-            validator: FormBuilderValidators.compose([
-              (val) {
-                return val == null ? "Field is empty" : null;
-              },
-              FormBuilderValidators.required(),
-              FormBuilderValidators.max(10)
-            ])
-
-//  validator: FormBuilderValidators.compose([
-//     FormBuilderValidators.numeric(errorText: 'La edad debe ser numérica.'),
-//     FormBuilderValidators.max(70),
-//     (val) {
-//       var number = int.tryParse(val ?? '');
-//       if (number != null) if (number < 0)
-//         return 'We cannot have a negative age';
-//       return null;
-//     }
-//   ]),
-            // formValidationManager.wrapValidator(
-            //     widget.viewAbstract.getTag(widget.field),
-            //     widget.viewAbstract,
-            //     widget.field, (value) {
-            //   return widget.viewAbstract
-            //       .getTextInputValidator(context, widget.field, value);
-            // })
-
-            ,
+            inputFormatters:
+                widget.viewAbstract.getTextInputFormatter(widget.field),
+            validator: widget.viewAbstract
+                .getTextInputValidatorCompose(context, widget.field),
             suggestionsCallback: (query) {
               if (query.isEmpty) return [];
               if (query.trim() == lastQuery.trim()) return [];
@@ -184,6 +162,9 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     debugPrint(
         "onTextChangeListener EditSubsViewAbstractController ViewAbstract");
     String currentValue = textController.text;
+    bool isValidate = formFieldKey.currentState!.validate();
+    debugPrint("onTextChangeListener autoComplete checking ${widget.field}");
+    debugPrint("onTextChangeListener autoComplete isValidate => $isValidate");
     if (currentValue == lastSuggestionSelected.getMainHeaderTextOnly(context)) {
       debugPrint(
           "onTextChangeListener last text is the same as last suggestion selected returned");

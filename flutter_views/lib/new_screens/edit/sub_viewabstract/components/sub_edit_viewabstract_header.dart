@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
@@ -32,7 +33,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
+      Tween<double>(begin: 0.0, end: .85);
   late EdgeInsets childrenPadding;
   final ColorTween _iconColorTween = ColorTween();
   late Animation<double> _iconTurns;
@@ -198,12 +199,21 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     //       : viewAbstractWatched.getCardLeadingCircleAvatar(context),
     //   smallIcon: Icons.add,
     // );
-    return RotationTransition(
+    Widget mainLeading = RotationTransition(
       turns: _iconTurns,
       child: viewAbstractWatched == null
           ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
           : viewAbstractWatched.getCardLeadingCircleAvatar(context),
     );
+    if (_isExpanded) {
+      return RoundedIconButtonTowChilds2(
+        largChild: mainLeading,
+        smallIcon: Icons.add,
+      );
+    } else {
+      return mainLeading;
+    }
+
     String? url = widget.viewAbstract.getImageUrl(context);
     if (url != null) {
       return widget.viewAbstract.getCardLeadingCircleAvatar(context);

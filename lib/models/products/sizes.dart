@@ -83,10 +83,10 @@ class Size extends ViewAbstract<Size> {
   Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMinValidateMap() => {};
+  Map<String, double> getTextInputMinValidateMap() => {"width": 10};
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() => {"grades": true};
+  Map<String, bool> isFieldCanBeNullableMap() => {};
 
   factory Size.fromJson(Map<String, dynamic> data) => _$SizeFromJson(data);
 

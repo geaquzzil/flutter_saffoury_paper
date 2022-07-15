@@ -49,11 +49,11 @@ class ProductType extends ViewAbstract<ProductType> {
     return [
       'name',
       'grades',
-      'unit',
       'purchasePrice',
       "sellPrice",
       "image",
       "comments",
+      "unit"
     ];
   }
 
@@ -139,7 +139,7 @@ class ProductType extends ViewAbstract<ProductType> {
 }
 
 // enum ProductTypeUnit { KG, Sheet }
-enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
+enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit>  {
   KG,
   Sheet;
 
@@ -159,6 +159,7 @@ enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
     }
     return " ";
   }
+
 
   @override
   List<ProductTypeUnit> getValues() {

@@ -25,7 +25,9 @@ class Product extends ViewAbstract<Product> {
 
   String? comments;
   String? barcode;
-  // ProductStatus? status;
+
+  // int? ProductTypeID;
+  //  ProductStatus? status;
 
   Product() : super();
 
@@ -71,13 +73,13 @@ class Product extends ViewAbstract<Product> {
   @override
   List<String> getMainFields() {
     return [
-      // "products_types",
+      "products_types",
       "sizes",
       "grades",
       "date",
       "comments",
       "barcode",
-      "status"
+      // "status"
     ];
   }
 
@@ -141,9 +143,7 @@ class Product extends ViewAbstract<Product> {
   Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() => {
-        "grades": true,
-      };
+  Map<String, bool> isFieldCanBeNullableMap() => {"grades": true};
 
   @override
   Map<String, bool> isFieldRequiredMap() => {};

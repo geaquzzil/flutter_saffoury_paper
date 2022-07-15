@@ -51,6 +51,10 @@ class FormValidationManager {
     return result;
   }
 
+  bool hasErrorField(String field) {
+    return _fieldStates[field]?.hasError ?? false;
+  }
+
   List<FormFieldValidationState> get erroredFields => _fieldStates.entries
       .where((s) => s.value.hasError)
       .map((s) => s.value)

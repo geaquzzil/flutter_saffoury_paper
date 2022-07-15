@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
@@ -99,6 +100,21 @@ abstract class ViewAbstractInputAndValidater<T>
     } else {
       return null;
     }
+  }
+
+  String? Function(dynamic) getTextInputValidatorCompose(
+      BuildContext context, String field) {
+    double? maxValue = getTextInputValidatorMaxValue(field);
+    double? minValue = getTextInputValidatorMinValue(field);
+    return FormBuilderValidators.compose([
+      (val) {
+        debugPrint("onTextChangeListener autoComplete compose $val");
+        return val == null ? "Field is empty" : null;
+      },
+      if (isFieldRequired(field)) FormBuilderValidators.required(),
+      if (maxValue != null) FormBuilderValidators.max(maxValue),
+      if (minValue != null) FormBuilderValidators.min(minValue),
+    ]);
   }
 
   String? getTextInputValidator(

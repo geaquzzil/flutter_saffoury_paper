@@ -7,7 +7,8 @@ import 'package:flutter_view_controller/providers/actions/edits/form_validator.d
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-
+final RegExp emailRegex = new RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 class EditControllerEditText extends StatefulWidget {
   ViewAbstract viewAbstract;
   String field;
@@ -103,13 +104,9 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           inputFormatters:
               widget.viewAbstract.getTextInputFormatter(widget.field),
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: FormBuilderValidators.compose([
-            (val) {
-              return val == null ? "Field is empty" : null;
-            },
-            FormBuilderValidators.required(),
-            FormBuilderValidators.max(10)
-          ]),
+          validator: watchedViewAbstract.getTextInputValidatorCompose(
+              context, widget.field),
+
           // validator: formValidationManager.wrapValidator(
           //     widget.viewAbstract.getTag(widget.field),
           //     widget.viewAbstract,
