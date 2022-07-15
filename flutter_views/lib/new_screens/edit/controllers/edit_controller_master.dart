@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_color_picker.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_edit_autocomplete.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_date.dart';
@@ -19,6 +21,13 @@ class EditControllerMasterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Type fieldType = viewAbstract.getFieldType(field);
     TextInputType? textInputType = viewAbstract.getTextInputType(field);
+    InputType textFieldTypeVA = viewAbstract.getInputType(field);
+    if (textFieldTypeVA == InputType.COLOR_PICKER) {
+      return EditControllerColorPicker(
+        viewAbstract: viewAbstract,
+        field: field,
+      );
+    }
     bool isAutoComplete = viewAbstract.getTextInputTypeIsAutoComplete(field);
     bool isAutoCompleteViewAbstract =
         viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);

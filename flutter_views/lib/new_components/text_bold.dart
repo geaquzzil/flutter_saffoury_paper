@@ -10,7 +10,7 @@ class TextBold extends StatelessWidget {
       : super(key: key) {
     regex = regex;
     text = text;
-    regex = "(?=$regex)"; // + regex + r"+$";
+    regex = "($regex)"; // + regex + r"+$";
   }
 
   @override

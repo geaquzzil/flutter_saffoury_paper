@@ -3,12 +3,15 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
-import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
+
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
+
 final RegExp emailRegex = new RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
 class EditControllerEditText extends StatefulWidget {
   ViewAbstract viewAbstract;
   String field;
@@ -26,11 +29,9 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
   @override
   void initState() {
     super.initState();
-    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
-        .addListener(() {
-      debugPrint("EditSubsViewAbstractControllerProvider change listnerer");
-    });
 
+    Provider.of<ErrorFieldsProvider>(context, listen: false)
+        .addField(widget.viewAbstract, widget.field);
     textController.addListener(onTextChangeListener);
   }
 
@@ -54,7 +55,8 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
     if (!isEnabled) return;
     String value = textController.text;
     debugPrint("EditTextField changed");
-    context.read<ErrorFieldsProvider>().notify();
+    context.read<ErrorFieldsProvider>().notify(widget.viewAbstract,
+        widget.field, widget.viewAbstract.getTag(widget.field));
     if (value.isEmpty) return;
     if (value == widget.viewAbstract.getFieldValue(widget.field).toString()) {
       return;
@@ -89,9 +91,10 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
 
     return Column(
       children: [
+
         FormBuilderTextField(
           controller: textController,
-          enabled: isEnabled,
+          // enabled: isEnabled,
           valueTransformer: (value) {
             return value?.trim();
           },
@@ -106,14 +109,6 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: watchedViewAbstract.getTextInputValidatorCompose(
               context, widget.field),
-
-          // validator: formValidationManager.wrapValidator(
-          //     widget.viewAbstract.getTag(widget.field),
-          //     widget.viewAbstract,
-          //     widget.field, (value) {
-          //   return widget.viewAbstract
-          //       .getTextInputValidator(context, widget.field, value);
-          // }),
           onSaved: (String? value) {
             debugPrint('onSave=   $value');
           },

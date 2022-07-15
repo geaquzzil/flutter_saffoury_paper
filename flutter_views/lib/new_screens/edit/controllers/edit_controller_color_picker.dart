@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:provider/provider.dart';
 
-class EditControllerDateTime extends StatefulWidget {
+class EditControllerColorPicker extends StatefulWidget {
   ViewAbstract viewAbstract;
   String field;
-  EditControllerDateTime(
+  EditControllerColorPicker(
       {Key? key, required this.viewAbstract, required this.field})
       : super(key: key);
 
   @override
-  State<EditControllerDateTime> createState() => _EditControllerDateTimeState();
+  State<EditControllerColorPicker> createState() => _EditControllerColorPicker();
 }
 
-class _EditControllerDateTimeState extends State<EditControllerDateTime> {
+class _EditControllerColorPicker extends State<EditControllerColorPicker> {
   @override
   void initState() {
     super.initState();
@@ -28,12 +28,9 @@ class _EditControllerDateTimeState extends State<EditControllerDateTime> {
   Widget build(BuildContext context) {
     dynamic fieldValue = widget.viewAbstract.getFieldValue(widget.field);
     return Column(children: [
-      FormBuilderDateTimePicker(
+      FormBuilderColorPickerField(
         name: widget.viewAbstract.getTag(widget.field),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2030),
-        initialDate: widget.viewAbstract.getFieldDateTimeParse(fieldValue),
-        decoration: getDecoration(context, widget.viewAbstract, widget.field),
+
       ),
       getSpace()
     ]);

@@ -22,7 +22,7 @@ InputDecoration getDecoration(
       filled: true,
       // errorText: "err",
       icon: viewAbstract.getTextInputIcon(field),
-      iconColor: context.watch<ErrorFieldsProvider>().hasErrorField(field)
+      iconColor: context.watch<ErrorFieldsProvider>().hasErrorField(viewAbstract,field)
           ? Colors.red
           : null,
       hintText: viewAbstract.getTextInputHint(context, field),

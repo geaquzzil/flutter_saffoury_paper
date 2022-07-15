@@ -30,6 +30,9 @@ class _EditControllerEditTextAutoCompleteState
     textController.text =
         widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
+    Provider.of<ErrorFieldsProvider>(context, listen: false).addField(
+        widget.viewAbstract,
+        widget.field);
   }
 
   @override

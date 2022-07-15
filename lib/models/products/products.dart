@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/product_types.dart';
+import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -20,6 +21,7 @@ class Product extends ViewAbstract<Product> {
   ProductType? products_types;
   Size? sizes;
   Grades? grades;
+  ProductsColor? products_colors;
 
   String? date;
 
@@ -76,6 +78,7 @@ class Product extends ViewAbstract<Product> {
       "products_types",
       "sizes",
       "grades",
+      "products_colors",
       "date",
       "comments",
       "barcode",

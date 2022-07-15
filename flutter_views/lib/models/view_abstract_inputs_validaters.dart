@@ -20,6 +20,9 @@ abstract class ViewAbstractInputAndValidater<T>
   TextInputType? getTextInputType(String field) {
     return getTextInputTypeMap()[field];
   }
+   InputType getInputType(String field) {
+    return InputType.EDIT_TEXT;
+  }
 
   bool getTextInputTypeIsAutoComplete(String field) {
     return getTextInputIsAutoCompleteMap()[field] ?? false;
@@ -90,6 +93,8 @@ abstract class ViewAbstractInputAndValidater<T>
     return TextCapitalization.sentences;
   }
 
+ 
+
   List<TextInputFormatter>? getTextInputFormatter(String field) {
     var textInputType = getTextInputType(field);
     if (textInputType == null) return null;
@@ -142,3 +147,5 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 }
+
+enum InputType { EDIT_TEXT, COLOR_PICKER, FILE_PICKER }

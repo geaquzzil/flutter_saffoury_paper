@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
-import 'package:flutter_view_controller/providers/actions/edits/form_validator.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';

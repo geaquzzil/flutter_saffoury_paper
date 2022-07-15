@@ -74,7 +74,8 @@ class Size extends ViewAbstract<Size> {
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() =>
-      {"width": true, "length": true};
+      // {"width": true, "length": true};
+      {};
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};

@@ -148,8 +148,39 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }
   }
 
+  String parentsTagThis() {
+    return parentsTag(this as ViewAbstract, []);
+  }
+
+  String parentsTag(ViewAbstract p, List<String> parentsString) {
+    ViewAbstract? parent = p.getParnet;
+    if (parent == null) {
+      if (parentsString.isEmpty) {
+        return "";
+      } else {
+        parentsString.add("${getTableNameApi()}");
+      }
+      return parentsString.join("=");
+    } else {
+      parentsString.add("${parent.getTableNameApi()}");
+      return parentsTag(parent, parentsString);
+    }
+  }
+
+  String getTagWithFirstParent() {
+    String? parentTableName = getParnet?.getTableNameApi();
+    if (parentTableName == null) {
+      return getTableNameApi() ?? "no_table_api";
+    }
+    return "${parentTableName}_${getTableNameApi()}";
+  }
+
   String getTag(String label) {
-    return "${getTableNameApi()}_$label";
+    String parentTag = parentsTag(this as ViewAbstract, []);
+    if (parentTag.isEmpty) {
+      return label;
+    }
+    return "$parentTag=$label";
   }
 
   String getGenericClassName() {

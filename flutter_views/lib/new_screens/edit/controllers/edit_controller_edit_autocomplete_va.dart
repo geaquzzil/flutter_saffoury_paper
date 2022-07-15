@@ -44,6 +44,9 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     textController.text =
         widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
+
+    Provider.of<ErrorFieldsProvider>(context, listen: false)
+        .addField(widget.viewAbstract, widget.field);
   }
 
   @override
@@ -159,19 +162,13 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
   }
 
   void onTextChangeListener() {
-    debugPrint(
-        "onTextChangeListener EditSubsViewAbstractController ViewAbstract");
     String currentValue = textController.text;
-    bool isValidate = formFieldKey.currentState!.validate();
-    debugPrint("onTextChangeListener autoComplete checking ${widget.field}");
-    debugPrint("onTextChangeListener autoComplete isValidate => $isValidate");
+    context.read<ErrorFieldsProvider>().notify(widget.viewAbstract,
+        widget.field, widget.viewAbstract.getTag(widget.field));
     if (currentValue == lastSuggestionSelected.getMainHeaderTextOnly(context)) {
-      debugPrint(
-          "onTextChangeListener last text is the same as last suggestion selected returned");
       return;
     }
     if (currentValue.isEmpty) return;
-
     if (currentValue == widget.viewAbstract.getFieldValue(widget.field)) return;
     widget.viewAbstract =
         onChange(context, widget.viewAbstract, widget.field, currentValue);
