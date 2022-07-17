@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Map<String, dynamic> toJsonViewAbstract();
 
   String getFieldLabel(BuildContext context, String field) {
-    return getFieldLabelMap(context)[field] ?? " not found label for=> $field";
+    return getFieldLabelMap(context)[field] ?? " not found field for=> $field";
+  }
+  ViewAbstract? getFieldValueCastViewAbstract(String field) {
+    try {
+      return getFieldValue(field) as ViewAbstract;
+    } catch (e) {
+      return null;
+    }
   }
 
   Icon getFieldIcon(String field) {
@@ -127,16 +135,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return reflector.reflect(this);
   }
 
-  Type getFieldType(String label) {
-    return getInstanceMirror().invokeGetter(label).runtimeType;
+  Type getFieldType(String field) {
+    return getInstanceMirror().invokeGetter(field).runtimeType;
   }
-
-  dynamic getFieldValue(String label) {
+  dynamic getFieldValue(String field) {
     try {
-      dynamic value = getInstanceMirror().invokeGetter(label);
+      dynamic value = getInstanceMirror().invokeGetter(field);
 
       // if (value == null) {
-      //   Type type = getFieldType(label);
+      //   Type type = getFieldType(field);
       //   if (type == num) {
       //     return 0;
       //   } else {
@@ -145,7 +152,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       // }
       return value;
     } catch (e) {
-      return "$label ${e.toString()}";
+      return "$field ${e.toString()}";
     }
   }
 
@@ -176,12 +183,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "${parentTableName}_${getTableNameApi()}";
   }
 
-  String getTag(String label) {
+  String getTag(String field) {
     String parentTag = parentsTag(this as ViewAbstract, []);
     if (parentTag.isEmpty) {
-      return label;
+      return field;
     }
-    return "$parentTag=$label";
+    return "$parentTag=$field";
   }
 
   String getGenericClassName() {

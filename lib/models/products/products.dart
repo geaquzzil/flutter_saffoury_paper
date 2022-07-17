@@ -11,7 +11,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'sizes.dart';
-
 part 'products.g.dart';
 
 @JsonSerializable(
@@ -120,6 +119,15 @@ class Product extends ViewAbstract<Product> {
         "barcode": AppLocalizations.of(context)!.barcode,
         "fiberLines": AppLocalizations.of(context)!.grain,
         "comments": AppLocalizations.of(context)!.comments,
+        "products_types": products_types?.getMainHeaderLabelTextOnly(context) ??
+            ProductType().getMainHeaderTextOnly(context),
+        "sizes": sizes?.getMainHeaderLabelTextOnly(context) ??
+            Size().getMainHeaderTextOnly(context),
+        "grades": grades?.getMainHeaderLabelTextOnly(context) ??
+            Grades().getMainHeaderLabelTextOnly(context),
+        "products_colors":
+            products_colors?.getMainHeaderLabelTextOnly(context) ??
+                ProductsColor().getMainHeaderLabelTextOnly(context),
       };
 
   @override
@@ -170,5 +178,4 @@ class Product extends ViewAbstract<Product> {
   SortByType getSortByType() {
     return SortByType.DESC;
   }
-
 }

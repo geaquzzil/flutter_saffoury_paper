@@ -8,9 +8,6 @@ import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabs
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-
-
-
 List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
   List<dynamic> v = [];
   v.add(null);
@@ -119,6 +116,8 @@ ViewAbstract? getViewAbstract(BuildContext context, String? field) {
       .watch<EditSubsViewAbstractControllerProvider>()
       .getViewAbstract(field ?? "");
 }
+
+
 
 ViewAbstract getViewAbstractReturnSameIfNull(
     BuildContext context, ViewAbstract viewAbstract, String? field) {
