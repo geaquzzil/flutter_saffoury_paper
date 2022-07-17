@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -136,33 +137,42 @@ class ProductType extends ViewAbstract<ProductType> {
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
+
+  @override
+  String getSortByFieldName() {
+    return "name";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
+  }
 }
 
-enum ProductTypeUnit { KG, Sheet }
-// enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit>  {
-//   KG,
-//   Sheet;
+// enum ProductTypeUnit { KG, Sheet }
+enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
+  KG,
+  Sheet;
 
-//   @override
-//   IconData getMainIconData() => Icons.stacked_line_chart_outlined;
-//   @override
-//   String getMainLabelText(BuildContext context) =>
-//       AppLocalizations.of(context)!.status;
+  @override
+  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.status;
 
-//   @override
-//   String getFieldLabelString(BuildContext context, ProductTypeUnit field) {
-//     switch (field) {
-//       case KG:
-//         return AppLocalizations.of(context)!.kg;
-//       case Sheet:
-//         return AppLocalizations.of(context)!.sheets;
-//     }
-//     return " ";
-//   }
+  @override
+  String getFieldLabelString(BuildContext context, ProductTypeUnit field) {
+    switch (field) {
+      case KG:
+        return AppLocalizations.of(context)!.kg;
+      case Sheet:
+        return AppLocalizations.of(context)!.sheets;
+    }
+    return " ";
+  }
 
-
-//   @override
-//   List<ProductTypeUnit> getValues() {
-//     return ProductTypeUnit.values;
-//   }
-// }
+  @override
+  List<ProductTypeUnit> getValues() {
+    return ProductTypeUnit.values;
+  }
+}

@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'products_color.g.dart';
@@ -65,6 +67,11 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
+  InputType getInputType(String field) {
+    return InputType.COLOR_PICKER;
+  }
+
+  @override
   Map<String, IconData> getFieldIconDataMap() =>
       {"top": Icons.colorize, 'middle': Icons.colorize, 'back': Icons.colorize};
 
@@ -103,5 +110,15 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+    @override
+  String getSortByFieldName() {
+    return "top";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
   }
 }

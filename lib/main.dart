@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
@@ -80,6 +81,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
+      ChangeNotifierProvider(create: (_) => FilterableProvider()),
+      
       ChangeNotifierProvider(
           create: (_) => EditSubsViewAbstractControllerProvider()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),

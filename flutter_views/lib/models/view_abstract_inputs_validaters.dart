@@ -20,7 +20,8 @@ abstract class ViewAbstractInputAndValidater<T>
   TextInputType? getTextInputType(String field) {
     return getTextInputTypeMap()[field];
   }
-   InputType getInputType(String field) {
+
+  InputType getInputType(String field) {
     return InputType.EDIT_TEXT;
   }
 
@@ -93,8 +94,6 @@ abstract class ViewAbstractInputAndValidater<T>
     return TextCapitalization.sentences;
   }
 
- 
-
   List<TextInputFormatter>? getTextInputFormatter(String field) {
     var textInputType = getTextInputType(field);
     if (textInputType == null) return null;
@@ -112,10 +111,6 @@ abstract class ViewAbstractInputAndValidater<T>
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
     return FormBuilderValidators.compose([
-      (val) {
-        debugPrint("onTextChangeListener autoComplete compose $val");
-        return val == null ? "Field is empty" : null;
-      },
       if (isFieldRequired(field)) FormBuilderValidators.required(),
       if (maxValue != null) FormBuilderValidators.max(maxValue),
       if (minValue != null) FormBuilderValidators.min(minValue),

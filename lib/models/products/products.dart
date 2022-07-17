@@ -5,6 +5,7 @@ import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -160,4 +161,14 @@ class Product extends ViewAbstract<Product> {
       _$ProductFromJson(data);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
+  @override
+  String getSortByFieldName() {
+    return "date";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.DESC;
+  }
+
 }

@@ -4,8 +4,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 class EditSubsViewAbstractControllerProvider with ChangeNotifier {
   final Map<String, ViewAbstractNullableController> _list = {};
   String _lastTraggerdfieldTag = "";
+  String _lastTraggerdViewAbstract = "";
 
   String get getLastTraggerdfieldTag => _lastTraggerdfieldTag;
+  String get getLastTraggerdViewAbstract => _lastTraggerdViewAbstract;
 
   Map<String, ViewAbstractNullableController> get getList => _list;
   ViewAbstract? getViewAbstract(String field) {
@@ -60,6 +62,7 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
   void toggleIsNew(String field, ViewAbstract newViewAbstract,
       String lastTraggerdfieldTag) async {
     _lastTraggerdfieldTag = lastTraggerdfieldTag;
+    _lastTraggerdViewAbstract = newViewAbstract.getTagWithFirstParent();
     ViewAbstractNullableController? viewAbstractNullableController =
         getViewAbstractNullableController(field);
 

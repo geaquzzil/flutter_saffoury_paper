@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'sizes.g.dart';
@@ -101,5 +102,15 @@ class Size extends ViewAbstract<Size> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+  @override
+  String getSortByFieldName() {
+    return "width";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
   }
 }

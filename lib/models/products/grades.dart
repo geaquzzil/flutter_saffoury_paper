@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'grades.g.dart';
@@ -99,5 +100,15 @@ class Grades extends ViewAbstract<Grades> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+  @override
+  String getSortByFieldName() {
+    return "name";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
   }
 }

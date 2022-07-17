@@ -41,15 +41,7 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
     super.dispose();
   }
 
-  bool isEnabledField(EditSubsViewAbstractControllerProvider editSubsView,
-      ViewAbstract viewAbstract) {
-    //if this is the main viewabstract then we should enabled the text field
-    debugPrint("isEnabled checking canSubmitChanges");
-    if (!canSubmitChanges(viewAbstract)) return true;
-    bool res = editSubsView.getIsNew(viewAbstract.getFieldNameFromParent ?? "");
-    debugPrint("isEnabled checking isNew=>$res");
-    return res;
-  }
+
 
   void onTextChangeListener() {
     if (!isEnabled) return;
@@ -80,21 +72,21 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
     String text = watchedViewAbstract.getFieldValue(widget.field).toString();
 
     isEnabled = isEnabledField(editSubsView, watchedViewAbstract);
-    // bool isEnabled=editSubsView
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (editSubsView.getLastTraggerdfieldTag == widget.field) return;
+      if (editSubsView.getLastTraggerdViewAbstract ==
+          widget.viewAbstract.getTagWithFirstParent()) return;
       debugPrint(
           "last Trggerd field name => ${editSubsView.getLastTraggerdfieldTag} current field name => ${widget.field}");
-      if (editSubsView.getLastTraggerdfieldTag == widget.field) return;
       textController.text = text;
       // Your Code Here
     });
 
     return Column(
       children: [
-
         FormBuilderTextField(
           controller: textController,
-          // enabled: isEnabled,
+          enabled: isEnabled,
           valueTransformer: (value) {
             return value?.trim();
           },

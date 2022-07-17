@@ -1,9 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/text_bold.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
+List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
+  List<dynamic> v = [];
+  v.add(null);
+  v.addAll(enumViewAbstract.getValues());
+  return v;
+}
+
+Enum getEnum(ViewAbstractEnum enumViewAbstract) {
+  return enumViewAbstract as Enum;
+}
+
+String dropdownGetEnterText(
+    BuildContext context, ViewAbstractEnum enumViewAbstract) {
+  String? label = enumViewAbstract.getMainLabelText(context);
+  return "${AppLocalizations.of(context)!.enter} $label";
+}
+
+String dropdownGettLabelWithText(
+    BuildContext context, ViewAbstractEnum viewAbstractEnum) {
+  Enum e = getEnum(viewAbstractEnum);
+  return "${viewAbstractEnum.getMainLabelText(context)}:${e.name}";
+}
+
+InputDecoration getDecorationDropdownNewWithLabelAndValue(
+    BuildContext context, ViewAbstractEnum viewAbstractEnum) {
+  return InputDecoration(
+      // filled: true,
+      border: OutlineInputBorder(),
+      label: TextBold(
+        text: dropdownGettLabelWithText(context, viewAbstractEnum),
+        regex: getEnum(viewAbstractEnum).name,
+      ));
+  // hintText: parent.getTextInputHint(context, field));
+}
 
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
@@ -22,7 +59,9 @@ InputDecoration getDecoration(
       filled: true,
       // errorText: "err",
       icon: viewAbstract.getTextInputIcon(field),
-      iconColor: context.watch<ErrorFieldsProvider>().hasErrorField(viewAbstract,field)
+      iconColor: context
+              .watch<ErrorFieldsProvider>()
+              .hasErrorField(viewAbstract, field)
           ? Colors.red
           : null,
       hintText: viewAbstract.getTextInputHint(context, field),
@@ -114,4 +153,17 @@ ViewAbstract toggleIsNew(BuildContext context, ViewAbstract oldViewAbstract,
       .read<EditSubsViewAbstractControllerProvider>()
       .toggleIsNew(newObject.getFieldNameFromParent ?? "", newObject, field);
   return newObject;
+}
+
+bool isEnabledField(EditSubsViewAbstractControllerProvider editSubsView,
+    ViewAbstract viewAbstract) {
+  if (viewAbstract.getTextInputIsAutoCompleteViewAbstractMap().isEmpty) {
+    return true;
+  }
+  //if this is the main viewabstract then we should enabled the text field
+  debugPrint("isEnabled checking canSubmitChanges");
+  if (!canSubmitChanges(viewAbstract)) return true;
+  bool res = editSubsView.getIsNew(viewAbstract.getFieldNameFromParent ?? "");
+  debugPrint("isEnabled checking isNew=>$res");
+  return res;
 }

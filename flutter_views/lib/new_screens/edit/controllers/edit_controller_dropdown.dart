@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 
 class EditControllerDropdown<T extends ViewAbstractEnum>
     extends StatelessWidget {
@@ -27,11 +27,11 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
         decoration:
             getDecorationDropdown(context, parent, enumViewAbstract, field),
         hint: Text(enumViewAbstract.getMainLabelText(context)),
-        items: getValues()
+        items: dropdownGetValues(enumViewAbstract)
             .map((item) => DropdownMenuItem(
                   value: item,
                   child: Text(item == null
-                      ? getEnterText(context)
+                      ? dropdownGetEnterText(context,enumViewAbstract)
                       : enumViewAbstract.getFieldLabelString(context, item)),
                 ))
             .toList(),
@@ -40,16 +40,5 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
     ]);
   }
 
-  String getEnterText(BuildContext context) {
-    String? label = enumViewAbstract.getMainLabelText(context);
-    return "${AppLocalizations.of(context)!.enter} $label";
-  }
-
-  List<dynamic> getValues() {
-    List<dynamic> v = [];
-    v.add(null);
-    v.addAll(enumViewAbstract.getValues());
-
-    return v;
-  }
+ 
 }

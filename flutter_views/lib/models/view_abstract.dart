@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 
-abstract class ViewAbstract<T> extends ViewAbstractLists<T> {
+abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   bool isEquals(ViewAbstract? object) {
     if (object == null) {
       return false;

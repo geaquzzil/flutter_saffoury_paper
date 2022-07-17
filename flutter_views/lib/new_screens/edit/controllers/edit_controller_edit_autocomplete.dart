@@ -24,15 +24,13 @@ class _EditControllerEditTextAutoCompleteState
   String lastQuery = "";
   bool isError = false;
 
+  bool isEnabled = false;
   @override
   void initState() {
     super.initState();
-    textController.text =
-        widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
-    Provider.of<ErrorFieldsProvider>(context, listen: false).addField(
-        widget.viewAbstract,
-        widget.field);
+    Provider.of<ErrorFieldsProvider>(context, listen: false)
+        .addField(widget.viewAbstract, widget.field);
   }
 
   @override
@@ -53,6 +51,26 @@ class _EditControllerEditTextAutoCompleteState
   Widget build(BuildContext context) {
     ErrorFieldsProvider formValidationManager =
         context.read<ErrorFieldsProvider>();
+
+    EditSubsViewAbstractControllerProvider editSubsView =
+        context.watch<EditSubsViewAbstractControllerProvider>();
+
+    ViewAbstract watchedViewAbstract = editSubsView.getViewAbstract(
+            widget.viewAbstract.getFieldNameFromParent ?? "") ??
+        widget.viewAbstract;
+
+    String text = watchedViewAbstract.getFieldValue(widget.field).toString();
+
+    isEnabled = isEnabledField(editSubsView, watchedViewAbstract);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (editSubsView.getLastTraggerdfieldTag == widget.field) return;
+      if (editSubsView.getLastTraggerdViewAbstract ==
+          widget.viewAbstract.getTagWithFirstParent()) return;
+      debugPrint(
+          "last Trggerd field name => ${editSubsView.getLastTraggerdfieldTag} current field name => ${widget.field}");
+      textController.text = text;
+      // Your Code Here
+    });
     return Column(
       children: [
         FormBuilderTypeAheadCustom<String>(

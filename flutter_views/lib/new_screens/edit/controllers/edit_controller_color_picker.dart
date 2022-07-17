@@ -30,6 +30,7 @@ class _EditControllerColorPicker extends State<EditControllerColorPicker> {
     return Column(children: [
       FormBuilderColorPickerField(
         name: widget.viewAbstract.getTag(widget.field),
+        
 
       ),
       getSpace()

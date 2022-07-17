@@ -9,3 +9,4 @@ abstract class ViewAbstractEnum<T> {
 
   
 }
+

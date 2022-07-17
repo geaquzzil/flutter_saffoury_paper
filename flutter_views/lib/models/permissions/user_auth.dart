@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_auth.g.dart';
@@ -162,10 +163,20 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     // TODO: implement isFieldRequiredMap
     throw UnimplementedError();
   }
-  
+
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     // TODO: implement getMainHeaderLabelTextOnly
     throw UnimplementedError();
+  }
+
+  @override
+  String getSortByFieldName() {
+    return "phone";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
   }
 }

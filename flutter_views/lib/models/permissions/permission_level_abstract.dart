@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -159,5 +160,15 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   @override
   PermissionLevelAbstract fromJsonViewAbstract(Map<String, dynamic> json) {
     return PermissionLevelAbstract.fromJson(json);
+  }
+
+  @override
+  String getSortByFieldName() {
+    return "userlevelname";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
   }
 }
