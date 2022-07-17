@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextBold extends StatelessWidget {
@@ -10,13 +11,14 @@ class TextBold extends StatelessWidget {
       : super(key: key) {
     regex = regex;
     text = text;
-    regex = "($regex)"; // + regex + r"+$";
+    // regex = "($regex)"; // + regex + r"+$";
   }
 
   @override
   Widget build(BuildContext context) {
     final parts = splitJoin();
-    debugPrint("$regex parts => $parts");
+    debugPrint("TextBold $regex parts => $parts");
+    return Html(data: text.replaceAll(regex, "<b>$regex</b>"));
     return Text.rich(TextSpan(
         children: parts
             .map((e) => TextSpan(
@@ -36,6 +38,15 @@ class TextBold extends StatelessWidget {
 
     final parts = text.split(_separator);
 
+    RegExp e = RegExp(regex);
+
+    // List<RegExpMatch> matches=e.allMatches(text);
+
+    Iterable<Match> matches = e.allMatches(text);
+    for (final Match m in matches) {
+      String match = m[0]!;
+      debugPrint("TextBold $match match");
+    }
     // Bold it
     for (final p in parts) {
       tmp.add(TextPart(

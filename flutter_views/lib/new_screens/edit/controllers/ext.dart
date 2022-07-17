@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/text_bold.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
+
+
 
 List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
   List<dynamic> v = [];
@@ -26,20 +30,20 @@ String dropdownGetEnterText(
 
 String dropdownGettLabelWithText(
     BuildContext context, ViewAbstractEnum viewAbstractEnum) {
-  Enum e = getEnum(viewAbstractEnum);
-  return "${viewAbstractEnum.getMainLabelText(context)}:${e.name}";
+  return "${viewAbstractEnum.getMainLabelText(context)}:${viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum)}";
 }
 
-InputDecoration getDecorationDropdownNewWithLabelAndValue(
-    BuildContext context, ViewAbstractEnum viewAbstractEnum) {
+InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
+    {ViewAbstractEnum? viewAbstractEnum}) {
   return InputDecoration(
-      // filled: true,
-      border: OutlineInputBorder(),
-      label: TextBold(
-        text: dropdownGettLabelWithText(context, viewAbstractEnum),
-        regex: getEnum(viewAbstractEnum).name,
-      ));
-  // hintText: parent.getTextInputHint(context, field));
+    // filled: true,
+    border: OutlineInputBorder(),
+    // label: TextBold(
+    //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
+    //   regex: viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum),
+    // ));
+    // hintText: parent.getTextInputHint(context, field));
+  );
 }
 
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,

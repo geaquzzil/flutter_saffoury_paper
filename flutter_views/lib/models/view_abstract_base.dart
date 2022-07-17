@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -197,5 +198,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String toJsonString() {
     return jsonEncode(toJsonViewAbstract());
+  }
+
+  List<DropdownStringListItem> getMainFieldsIconsAndValues(
+      BuildContext context) {
+    return getMainFields()
+        .map((e) => DropdownStringListItem(
+            getFieldIconData(e), getFieldLabel(context, e)))
+        .toList();
   }
 }
