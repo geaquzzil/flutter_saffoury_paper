@@ -32,6 +32,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ?? " not found field for=> $field";
   }
+
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
     try {
       return getFieldValue(field) as ViewAbstract;
@@ -135,13 +136,37 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return reflector.reflect(this);
   }
 
+  ClassMirror getInstanceMirrorFieldName(String name) {
+    ClassMirror c = getInstanceMirror().type;
+    VariableMirror vm = c.declarations[name] as VariableMirror;
+    Type type = vm.dynamicReflectedType;
+    // debugPrint("field: " +
+    //     variableMirror.simpleName +
+    //     " has type: " +
+    //     type.toString());
+    // debugPrint("${c.declarations[name].runtimeType.type}");
+    return reflector.reflectType(type) as ClassMirror;
+  }
+
+  ClassMirror getInstanceMirrorField(Type type) {
+    return reflector.reflectType(type) as ClassMirror;
+  }
+
+  dynamic getNewInstanceMirror(ClassMirror classMirror) {
+    return classMirror.newInstance('', []);
+  }
+
+  ViewAbstract getNewInstanceMirrorCastVA(ClassMirror classMirror) {
+    return classMirror.newInstance("", [""]) as ViewAbstract;
+  }
+
   Type getFieldType(String field) {
     return getInstanceMirror().invokeGetter(field).runtimeType;
   }
+
   dynamic getFieldValue(String field) {
     try {
       dynamic value = getInstanceMirror().invokeGetter(field);
-
       // if (value == null) {
       //   Type type = getFieldType(field);
       //   if (type == num) {

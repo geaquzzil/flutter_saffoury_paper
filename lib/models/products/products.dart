@@ -119,8 +119,9 @@ class Product extends ViewAbstract<Product> {
         "barcode": AppLocalizations.of(context)!.barcode,
         "fiberLines": AppLocalizations.of(context)!.grain,
         "comments": AppLocalizations.of(context)!.comments,
-        "products_types": products_types?.getMainHeaderLabelTextOnly(context) ??
-            ProductType().getMainHeaderTextOnly(context),
+        "products_types":
+            getNewInstanceMirror(getInstanceMirrorFieldName("products_types"))
+                .toString(),
         "sizes": sizes?.getMainHeaderLabelTextOnly(context) ??
             Size().getMainHeaderTextOnly(context),
         "grades": grades?.getMainHeaderLabelTextOnly(context) ??
