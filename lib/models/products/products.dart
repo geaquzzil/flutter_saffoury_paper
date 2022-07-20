@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_api.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -35,11 +33,6 @@ class Product extends ViewAbstract<Product> {
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
-    return AppLocalizations.of(context)!.product;
-  }
-
-  @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.product;
   }
 
@@ -119,24 +112,6 @@ class Product extends ViewAbstract<Product> {
         "barcode": AppLocalizations.of(context)!.barcode,
         "fiberLines": AppLocalizations.of(context)!.grain,
         "comments": AppLocalizations.of(context)!.comments,
-        "products_types":
-            getNewInstanceMirror(getInstanceMirrorFieldName("products_types"))
-                .toString(),
-        "sizes": sizes?.getMainHeaderLabelTextOnly(context) ??
-            Size().getMainHeaderTextOnly(context),
-        "grades": grades?.getMainHeaderLabelTextOnly(context) ??
-            Grades().getMainHeaderLabelTextOnly(context),
-        "products_colors":
-            products_colors?.getMainHeaderLabelTextOnly(context) ??
-                ProductsColor().getMainHeaderLabelTextOnly(context),
-      };
-
-  @override
-  Map<String, IconData> getTextInputIconMap() => {
-        "id": Icons.account_balance_wallet_sharp,
-        "sizes": Icons.sanitizer,
-        "comments": Icons.comment,
-        "date": Icons.date_range,
       };
 
   @override

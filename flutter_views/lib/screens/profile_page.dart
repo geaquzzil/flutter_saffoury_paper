@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/profile_menu.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 
 class ProfileScreen extends StatelessWidget {
   static String routeName = "/profile";

@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/test_var.dart';
 
 class ListProvider with ChangeNotifier {
   bool isLoading = false;

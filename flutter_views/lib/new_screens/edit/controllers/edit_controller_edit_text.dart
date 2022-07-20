@@ -5,11 +5,9 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
-import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
-final RegExp emailRegex = new RegExp(
+final RegExp emailRegex = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
 class EditControllerEditText extends StatefulWidget {

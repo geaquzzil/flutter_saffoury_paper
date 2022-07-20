@@ -1,0 +1,14 @@
+{
+  "ar": [
+    "approx",
+    "title_activity_test_to_remove",
+    "tab_text_1",
+    "tab_text_2",
+    "app_name_spanned",
+    "empty",
+    "ad_app_id",
+    "welcome_message",
+    "welcome_message_employees",
+    "sellDollar_format"
+  ]
+}

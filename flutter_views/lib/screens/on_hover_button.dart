@@ -21,7 +21,7 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
   @override
   Widget build(BuildContext context) {
     final hoveredTransform = Matrix4.identity()
-      ..translate(-4, -8, 0)
+      ..translate(-4.0, -8.0, 0.0)
       ..scale(1.2);
     final transform = isHover ? hoveredTransform : Matrix4.identity();
     return MouseRegion(

@@ -1,17 +1,9 @@
 import 'dart:convert';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
-import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:reflectable/mirrors.dart';
-
-import 'view_abstract_api.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -30,7 +22,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Map<String, dynamic> toJsonViewAbstract();
 
   String getFieldLabel(BuildContext context, String field) {
-    return getFieldLabelMap(context)[field] ?? " not found field for=> $field";
+    return getFieldLabelMap(context)[field] ??
+        getNewInstanceMirror(field: field)
+            ?.getMainHeaderLabelTextOnly(context) ??
+        "error geting field label =>$field";
   }
 
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
@@ -46,7 +41,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   IconData getFieldIconData(String field) {
-    return getFieldIconDataMap()[field] ?? Icons.error;
+    return getFieldIconDataMap()[field] ??
+        getNewInstanceMirror(field: field)?.getMainIconData() ??
+        Icons.error;
   }
 
   Icon getIcon() {
@@ -130,55 +127,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         // icon: Icon(Icons.history),
       ),
     ];
-  }
-
-  InstanceMirror getInstanceMirror() {
-    return reflector.reflect(this);
-  }
-
-  ClassMirror getInstanceMirrorFieldName(String name) {
-    ClassMirror c = getInstanceMirror().type;
-    VariableMirror vm = c.declarations[name] as VariableMirror;
-    Type type = vm.dynamicReflectedType;
-    // debugPrint("field: " +
-    //     variableMirror.simpleName +
-    //     " has type: " +
-    //     type.toString());
-    // debugPrint("${c.declarations[name].runtimeType.type}");
-    return reflector.reflectType(type) as ClassMirror;
-  }
-
-  ClassMirror getInstanceMirrorField(Type type) {
-    return reflector.reflectType(type) as ClassMirror;
-  }
-
-  dynamic getNewInstanceMirror(ClassMirror classMirror) {
-    return classMirror.newInstance('', []);
-  }
-
-  ViewAbstract getNewInstanceMirrorCastVA(ClassMirror classMirror) {
-    return classMirror.newInstance("", [""]) as ViewAbstract;
-  }
-
-  Type getFieldType(String field) {
-    return getInstanceMirror().invokeGetter(field).runtimeType;
-  }
-
-  dynamic getFieldValue(String field) {
-    try {
-      dynamic value = getInstanceMirror().invokeGetter(field);
-      // if (value == null) {
-      //   Type type = getFieldType(field);
-      //   if (type == num) {
-      //     return 0;
-      //   } else {
-      //     return "";
-      //   }
-      // }
-      return value;
-    } catch (e) {
-      return "$field ${e.toString()}";
-    }
   }
 
   String parentsTagThis() {

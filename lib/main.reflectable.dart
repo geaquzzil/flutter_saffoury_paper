@@ -15,7 +15,7 @@ import 'package:flutter_view_controller/models/permissions/permission_action_abs
     as prefix7;
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart'
     as prefix5;
-import 'package:flutter_view_controller/models/view_abstract_api.dart'
+import 'package:flutter_view_controller/models/va_mirrors.dart'
     as prefix0;
 
 // ignore_for_file: prefer_adjacent_string_concatenation
@@ -3737,7 +3737,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
       [])
 };
 
-final _memberSymbolMap = null;
+const _memberSymbolMap = null;
 
 void initializeReflectable() {
   r.data = _data;

@@ -54,7 +54,7 @@ class AuthProvider with ChangeNotifier {
     initFakeData();
   }
   void initFakeData() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     try {
       _user = AuthUser();
       _user.password = "0933326880";

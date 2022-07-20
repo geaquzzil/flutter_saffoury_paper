@@ -11,18 +11,10 @@ import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
-import 'package:reflectable/reflectable.dart';
 
 import 'servers/server_helpers.dart';
 
-@GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
-class Reflector extends Reflectable {
-  const Reflector()
-      : super(invokingCapability, declarationsCapability,
-            typeRelationsCapability);
-}
 
-const reflector = Reflector();
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(ignore: true)

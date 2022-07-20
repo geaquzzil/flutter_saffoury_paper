@@ -5,8 +5,6 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
-import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
 @immutable
@@ -53,8 +51,8 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
   void dispose() {
     // Clean up the controller when the widget is removed from the widget tree.
     // This also removes the _printLatestValue listener.
-    super.dispose();
     textController.dispose();
+    super.dispose();
   }
 
   Widget buildListTile(

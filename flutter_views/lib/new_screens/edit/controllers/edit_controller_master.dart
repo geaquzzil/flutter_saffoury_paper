@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_color_picker.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_edit_autocomplete.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_date.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_edit_autocomplete_va.dart';

@@ -67,7 +67,7 @@ class FormValidationManager {
     String entryText = entry.parentsTagThis();
     String viewAbstractText = viewAbstract.parentsTagThis();
     debugPrint("checkIfItContains $entryText  VS $viewAbstractText");
-    String pattern = "$viewAbstractText";
+    String pattern = viewAbstractText;
     RegExp regExp = RegExp(pattern);
     bool res = regExp.hasMatch(entryText);
     debugPrint("checkIfItContains results $res ");

@@ -310,6 +310,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// {@macro flutter.widgets.editableText.keyboardType}
   final TextInputType? keyboardType;
   final SelectionToTextTransformer<T>? selectionToTextTransformer;
+  @override
   final FormFieldValidator<T>? validator;
 
   /// {@macro flutter.widgets.editableText.textCapitalization}

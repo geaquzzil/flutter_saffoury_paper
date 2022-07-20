@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
@@ -153,7 +152,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     dynamic fieldValue = currentViewAbstract.getFieldValue(field);
     Type type = currentViewAbstract.getFieldType(field);
     debugPrint("fieldValueType is ${fieldValue.runtimeType}");
-    debugPrint("type is ${type}");
+    debugPrint("type is $type");
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(currentViewAbstract);
       // return Text("FDFD");
@@ -161,7 +160,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     } else if (fieldValue is ViewAbstractEnum) {
       return EditControllerDropdown(
           parent: currentViewAbstract,
-          enumViewAbstract: fieldValue as ViewAbstractEnum,
+          enumViewAbstract: fieldValue,
           field: field);
     } else {
       return EditControllerMasterWidget(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/text_bold.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +30,7 @@ String dropdownGettLabelWithText(
 
 InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
     {ViewAbstractEnum? viewAbstractEnum}) {
-  return InputDecoration(
+  return const InputDecoration(
     // filled: true,
     border: OutlineInputBorder(),
     // label: TextBold(
@@ -47,7 +45,7 @@ InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
       // filled: true,
-      border: OutlineInputBorder(),
+      border: const OutlineInputBorder(),
       icon: Icon(viewAbstractEnum.getMainIconData()),
       labelText: viewAbstractEnum.getMainLabelText(context));
   // hintText: parent.getTextInputHint(context, field));

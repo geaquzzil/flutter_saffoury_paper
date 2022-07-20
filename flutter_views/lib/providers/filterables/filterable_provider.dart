@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/utils/ext_enum.dart';
 
 class FilterableProvider with ChangeNotifier {
   Map<String, FilterableProviderHelper> _list = {};

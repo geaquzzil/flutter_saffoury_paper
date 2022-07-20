@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
