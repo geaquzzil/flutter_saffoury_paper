@@ -1,13 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
 class FilterableProvider with ChangeNotifier {
+  static const String SORTKEY = "sortByFieldName";
   Map<String, FilterableProviderHelper> _list = {};
-
-
-
-  
 
   void init(ViewAbstract selectedViewAbstract,
       {Map<String, FilterableProviderHelper>? savedList}) {
@@ -16,15 +16,24 @@ class FilterableProvider with ChangeNotifier {
       _list = savedList;
     } else {
       if (selectedViewAbstract.isSortAvailable()) {
-        _list["sortByFieldName"] = FilterableProviderHelper(
-            "sortByFieldName",
+        _list[SORTKEY] = FilterableProviderHelper(
+            SORTKEY,
             selectedViewAbstract.getSortByType().name,
             [selectedViewAbstract.getSortByFieldNameApi()],
             requestTheFirstValueOnly: true);
-
       }
     }
     notifyListeners();
+  }
+
+  Map getFilterableMapApi() {
+    Map<String, dynamic> map = <String, dynamic>{};
+    for (var entry in _list.entries) {
+      {
+        map[entry.value.getKey()] = entry.value.getValue();
+      }
+    }
+    return map;
   }
 
   void clear() {
@@ -37,6 +46,20 @@ class FilterableProvider with ChangeNotifier {
       return;
     }
     _list[field] = FilterableProviderHelper(field, fieldNameApi, [value]);
+    notifyListeners();
+  }
+
+  void addSortBy(SortByType sort) {
+    _list[SORTKEY] = _list[SORTKEY]?.setKey(sort.name) ??
+        FilterableProviderHelper(SORTKEY, sort.name, [],
+            requestTheFirstValueOnly: true);
+    notifyListeners();
+  }
+
+  void addSortFieldName(String value) {
+    _list[SORTKEY] = _list[SORTKEY]?.setValue(value) ??
+        FilterableProviderHelper(SORTKEY, SortByType.ASC.name, [value],
+            requestTheFirstValueOnly: true);
     notifyListeners();
   }
 
@@ -62,12 +85,32 @@ class FilterableProviderHelper {
   FilterableProviderHelper(this.field, this.fieldNameApi, this.values,
       {this.requestTheFirstValueOnly});
 
+  FilterableProviderHelper setKey(String key) {
+    fieldNameApi = key;
+    return this;
+  }
+
+  FilterableProviderHelper setValue(String value) {
+    values.clear();
+    values.add(value);
+    return this;
+  }
+
   void add(String value) {
     values.add(value);
   }
 
   void remove(String value) {
     values.remove(value);
+  }
+
+  String getKey() {
+    return fieldNameApi;
+  }
+
+  dynamic getValue() {
+    bool reqFirstValue = requestTheFirstValueOnly ?? false;
+    return reqFirstValue ? values[0] : jsonEncode(values);
   }
 
   bool isSelected(String value) {

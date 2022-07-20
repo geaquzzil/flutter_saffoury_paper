@@ -1,9 +1,11 @@
 import 'dart:collection';
 import 'dart:convert' as convert;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -14,15 +16,12 @@ import 'package:pretty_http_logger/pretty_http_logger.dart';
 
 import 'servers/server_helpers.dart';
 
-
-
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(ignore: true)
   int _page = 0;
   @JsonKey(ignore: true)
   List<T>? _lastSearchViewAbstractByTextInputList;
 
- 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
 
@@ -147,6 +146,19 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         onResponse: onResponse, serverActions: ServerActions.add);
     if (response == null) return null;
     return null;
+  }
+
+  Future<E> getServerDataApi<E extends ServerData>(
+      BuildContext context, E data) async {
+
+    Map<String, String> mainBody = HashMap<String, String>();
+    mainBody["action"] = "list_server_data";
+    Response? response = await getHttp().post(Uri.parse(URLS.BASE_URL),
+        headers: await getHeaders(), body: mainBody);
+
+
+    
+
   }
 
   Future<List<String>> searchViewAbstractByTextInput(

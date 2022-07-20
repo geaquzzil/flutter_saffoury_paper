@@ -11,7 +11,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   bool isSortAvailable() => getSortByFieldName() != null;
 
   String getSortByFieldNameApi() {
-    return getSortByFieldName()??"";
+    return getSortByFieldName() ?? "";
   }
 
   String getFilterableFieldNameApi(String field) {
@@ -25,6 +25,12 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
 
   bool hasPermssionFilterableField(BuildContext context, String field) {
     return true;
+  }
+
+  Future<void> getFilterableListFor() async {
+    List<String> fields = getMainFields();
+    ViewAbstract currentInstance = this as ViewAbstract;
+currentInstance.g
   }
 }
 
@@ -49,15 +55,22 @@ enum SortByType implements ViewAbstractEnum<SortByType> {
         return AppLocalizations.of(context)!.descSorting;
     }
     return " ";
-
   }
-
-
-
-  
 
   @override
   List<SortByType> getValues() {
     return SortByType.values;
   }
+}
+
+class FilterableProviderHelperListItem {
+  //The field Label
+  String labelText;
+//wich contains the field text
+  String valueLabelText;
+  //witch contains the iD
+  Object? valueApi;
+
+  FilterableProviderHelperListItem(
+      this.labelText, this.valueLabelText, this.valueApi);
 }

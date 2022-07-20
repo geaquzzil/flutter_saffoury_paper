@@ -184,7 +184,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       BuildContext context) {
     return getMainFields()
         .map((e) => DropdownStringListItem(
-            getFieldIconData(e), getFieldLabel(context, e)))
+            getFieldIconData(e), getFieldLabel(context, e),value: e))
         .toList();
   }
 }

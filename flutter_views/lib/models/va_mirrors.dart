@@ -28,6 +28,12 @@ class VMirrors<T> {
     return reflector.reflectType(type) as ClassMirror;
   }
 
+  String? getViewAbstractLabelText(BuildContext context, String field) {
+    return getNewInstanceMirror(field: field)
+            ?.getMainHeaderLabelTextOnly(context) ??
+        "not found for $field";
+  }
+
   ViewAbstract? getNewInstanceMirror(
       {ClassMirror? classMirror, String? field}) {
     debugPrint("getNewInstanceMirror for classMirror:$field");

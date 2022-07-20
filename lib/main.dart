@@ -82,6 +82,10 @@ void main() {
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
+      ChangeNotifierProvider(create: (_) => ServerDataProvier()),
+
+
+      
       
       ChangeNotifierProvider(
           create: (_) => EditSubsViewAbstractControllerProvider()),

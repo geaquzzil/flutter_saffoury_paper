@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,7 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
               child: DropdownEnumControllerListener(
                   viewAbstractEnum: SortByType.ASC,
                   onSelected: (obj) {
+                    addFilterableSort(context, obj as SortByType);
                     debugPrint("is selected $obj");
                   }),
             ),
@@ -50,6 +52,8 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                   hint: AppLocalizations.of(context)!.sortBy,
                   list: viewAbstract.getMainFieldsIconsAndValues(context),
                   onSelected: (obj) {
+                    addFilterableSortField(
+                        context, (obj as DropdownMenuItem).value);
                     debugPrint("is selected $obj");
                   }),
             ),
