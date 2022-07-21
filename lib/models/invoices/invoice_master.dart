@@ -8,25 +8,11 @@ import 'package:flutter_saffoury_paper/models/invoices/purchasers_refund.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'order.dart';
 
-class InvoiceMaster<T> extends ViewAbstract<T> {
+abstract class InvoiceMaster<T> extends ViewAbstract<T> {
   InvoiceMaster() : super();
-
-  @override
-  T fromJsonViewAbstract(Map<String, dynamic> json) {
-    if (T is Order) {
-    } else if (T is OrderRefund) {
-    } else if (T is ProductInput) {
-    } else if (T is ProductOutput) {
-    } else if (T is Purchases) {
-    } else if (T is PurchasesRefund) {
-    } else {
-      //is transfers
-
-    }
-  }
 
   @override
   Map<String, IconData> getFieldIconDataMap() {
@@ -131,8 +117,6 @@ class InvoiceMaster<T> extends ViewAbstract<T> {
   }
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.invoices;
 }

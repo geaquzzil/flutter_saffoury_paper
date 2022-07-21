@@ -3,19 +3,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class InvoiceMasterDetails<T> extends ViewAbstract<T>{
-
-
-    InvoiceMasterDetails():super();
-
-
-
-  @override
-  T fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
+  InvoiceMasterDetails() : super();
 
   @override
   Map<String, IconData> getFieldIconDataMap() {
@@ -62,12 +53,6 @@ class InvoiceMasterDetails<T> extends ViewAbstract<T>{
   @override
   SortByType getSortByType() {
     // TODO: implement getSortByType
-    throw UnimplementedError();
-  }
-
-  @override
-  String? getTableNameApi() {
-    // TODO: implement getTableNameApi
     throw UnimplementedError();
   }
 
@@ -120,9 +105,6 @@ class InvoiceMasterDetails<T> extends ViewAbstract<T>{
   }
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
-
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.invoices;
 }

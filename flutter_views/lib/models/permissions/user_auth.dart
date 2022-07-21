@@ -9,7 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_auth.g.dart';
 
 @JsonSerializable()
-class AuthUser<T> extends ViewAbstract<AuthUser> {
+ class AuthUser<T> extends ViewAbstract<AuthUser> {
   bool? login;
   bool? permission;
   int? response;

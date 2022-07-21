@@ -41,4 +41,8 @@ class Grades extends BaseWithNameString<Grades> {
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
+
+    @override
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.product;
 }

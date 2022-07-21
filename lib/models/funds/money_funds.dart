@@ -1,14 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/equalities.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../users/customers.dart';
 
-class MoneyFunds<T> extends ViewAbstract<T> {
+abstract class MoneyFunds<T> extends ViewAbstract<T> {
   // int? CashBoxID;
   // int? EmployeeID;
   // int? CustomerID;
@@ -22,125 +24,70 @@ class MoneyFunds<T> extends ViewAbstract<T> {
 
   String? comments;
 
-  Customer customers;
-  Employee employees;
+  Customer? customers;
+  Employee? employees;
   Equalities? equalities;
-  //todo cashbox ID
-  Warehouse warehouse;
+  Warehouse? warehouse;
 
   MoneyFunds() : super();
 
   @override
-  T fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  List<String> getMainFields() =>
+      ["customer", "employee", "date", "value", "equalities", "warehouse"];
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {
+        "value": Icons.attach_money_rounded,
+        "date": Icons.date_range,
+        "comments": Icons.notes
+      };
 
   @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  List<String> getMainFields() {
-    // TODO: implement getMainFields
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "value": AppLocalizations.of(context)!.value,
+        "date": AppLocalizations.of(context)!.date,
+        "comments": AppLocalizations.of(context)!.comments
+      };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
+    return "${customers?.name}: $value";
   }
 
   @override
-  IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
-  }
+  String? getSortByFieldName() => "date";
 
   @override
-  String? getSortByFieldName() {
-    // TODO: implement getSortByFieldName
-    throw UnimplementedError();
-  }
+  SortByType getSortByType() => SortByType.DESC;
 
   @override
-  SortByType getSortByType() {
-    // TODO: implement getSortByType
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  String? getTableNameApi() {
-    // TODO: implement getTableNameApi
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
+  Map<String, int> getTextInputMaxLengthMap() => {"value": 12};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        "value": TextInputType.number,
+        "date": TextInputType.datetime,
+        "comments": TextInputType.text
+      };
 
   @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldCanBeNullableMap() => {};
 
   @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldRequiredMap() => {"value": true};
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.money_fund;
 }
