@@ -6,39 +6,44 @@ import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-part 'grades.g.dart';
+part 'qualities.g.dart';
 
 @JsonSerializable()
 @reflector
-class Grades extends BaseWithNameString<Grades> {
-  List<Product>? products;
+class Quality extends BaseWithNameString<Quality> {
+  List<Product> ?products;
   int? products_count;
-  Grades() : super();
 
+  Quality() : super();
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
-    return AppLocalizations.of(context)!.grade;
+    return AppLocalizations.of(context)!.quality;
   }
 
   @override
-  IconData getMainIconData() => Icons.grade;
+  IconData getMainIconData() => Icons.query_stats;
   @override
-  String? getTableNameApi() => "grades";
+  String? getTableNameApi() => "qualities";
 
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"name": 50};
 
-  factory Grades.fromJson(Map<String, dynamic> data) => _$GradesFromJson(data);
+  factory Quality.fromJson(Map<String, dynamic> data) =>
+      _$QualityFromJson(data);
 
-  Map<String, dynamic> toJson() => _$GradesToJson(this);
+  Map<String, dynamic> toJson() => _$QualityToJson(this);
 
   @override
-  Grades fromJsonViewAbstract(Map<String, dynamic> json) {
-    return Grades.fromJson(json);
+  Quality fromJsonViewAbstract(Map<String, dynamic> json) {
+    return Quality.fromJson(json);
   }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
+
+  @override
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.product;
 }

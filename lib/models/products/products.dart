@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
+import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
+import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_saffoury_paper/models/products/qualities.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -16,18 +22,30 @@ part 'products.g.dart';
 )
 @reflector
 class Product extends ViewAbstract<Product> {
-  ProductType? products_types;
-  Size? sizes;
-  Grades? grades;
-  ProductsColor? products_colors;
+  int? ParentID;
+  int? ProductTypeID;
+  int? CustomsDeclarationID;
+  int? Country_Manufacture_CompanyID;
+  int? SizeID;
+  int? GSMID;
+  int? QualityID;
+  int? ProductColorID;
 
+  ProductStatus? status;
   String? date;
-
-  String? comments;
+  int? sheets;
   String? barcode;
+  String? fiberLines;
+  String? comments;
 
-  // int? ProductTypeID;
-  //  ProductStatus? status;
+  // Product parent;
+  ProductType? products_types;
+  CustomsDeclaration? customs_declarations;
+  CountryManufacture? countries_manufactures;
+  Size? sizes;
+  GSM? gsms;
+  Quality? qualities;
+  ProductsColor? products_colors;
 
   Product() : super();
 
@@ -155,3 +173,8 @@ class Product extends ViewAbstract<Product> {
     return SortByType.DESC;
   }
 }
+
+enum ProductStatus { NONE, PENDING, RETURNED, WASTED }
+// enum ProductStatus implements ViewAbstractEnum<ProductStatus>{
+
+// }

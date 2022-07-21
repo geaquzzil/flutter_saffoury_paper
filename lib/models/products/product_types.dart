@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
+import 'package:flutter_view_controller/helper_model/product.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -12,18 +13,22 @@ part 'product_types.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductType extends ViewAbstract<ProductType> {
+  int? GradeID;
+
   String? name;
-  Grades? grades;
   ProductTypeUnit? unit;
 
   double? purchasePrice;
   double? sellPrice;
 
   String? image;
-
   String? comments;
   double? availability;
 
+  Grades? grades;
+
+  List<Product>? products;
+  int? products_count;
   ProductType() : super();
   @override
   String? getMainDrawerGroupName(BuildContext context) {
@@ -149,7 +154,7 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 }
 
-enum ProductTypeUnit { KG, Sheet }
+enum ProductTypeUnit { KG, Sheet, Ream }
 // enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
 //   KG,
 //   Sheet;

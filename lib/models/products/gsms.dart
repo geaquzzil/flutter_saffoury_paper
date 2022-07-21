@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -10,6 +11,9 @@ part 'gsms.g.dart';
 @reflector
 class GSM extends ViewAbstract<GSM> {
   int? gsm;
+
+  List<Product>? products;
+  int? products_count;
   GSM() : super();
   @override
   String? getMainDrawerGroupName(BuildContext context) {

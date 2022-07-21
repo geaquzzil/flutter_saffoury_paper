@@ -12,7 +12,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String getMainHeaderLabelTextOnly(BuildContext context);
 
   IconData getMainIconData();
-  String? getMainDrawerGroupName(BuildContext context) => null;
+  String? getMainDrawerGroupName(BuildContext context);
   IconData? getMainDrawerGroupIconData() => null;
 
   Map<String, String> getFieldLabelMap(BuildContext context);
@@ -26,6 +26,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         getNewInstanceMirror(field: field)
             ?.getMainHeaderLabelTextOnly(context) ??
         "error geting field label =>$field";
+  }
+  String getMainHeaderLabelWithText(BuildContext context){
+     return "${getMainHeaderLabelTextOnly(context)}:${getMainHeaderTextOnly(context)}";
   }
 
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
@@ -56,7 +59,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       // style: const TextStyle(color: kTextLightColor)
     );
   }
-
+  
   Text? getMainNullableText(BuildContext context) {
     return Text(
       getMainNullableTextOnly(context),
