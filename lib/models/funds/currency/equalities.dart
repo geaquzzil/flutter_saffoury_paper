@@ -27,16 +27,14 @@ class Equalities extends ViewAbstract<Equalities> {
   List<String> getMainFields() => ["currency", "value", "date"];
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) =>{
-   "value":AppLocalizations.of(context)!.value,
-   "date":AppLocalizations.of(context)!.date
-  };
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "value": AppLocalizations.of(context)!.value,
+        "date": AppLocalizations.of(context)!.date
+      };
 
   @override
-  Map<String, IconData> getFieldIconDataMap() =>{
-   "value":Icons.monetization_on,
-   "date":Icons.date_range
-  };
+  Map<String, IconData> getFieldIconDataMap() =>
+      {"value": Icons.monetization_on, "date": Icons.date_range};
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -44,17 +42,16 @@ class Equalities extends ViewAbstract<Equalities> {
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-   AppLocalizations.of(context)!.equality;
-
-
-  @override
-  String getMainHeaderTextOnly(BuildContext context) =>"1 USD = ${1/value}";
+      AppLocalizations.of(context)!.equality;
 
   @override
-  IconData getMainIconData() =>Icons.currency_exchange;
+  String getMainHeaderTextOnly(BuildContext context) => "1 USD = ${1 / value}";
 
   @override
-  String? getSortByFieldName() =>"date";
+  IconData getMainIconData() => Icons.currency_exchange;
+
+  @override
+  String? getSortByFieldName() => "date";
 
   @override
   SortByType getSortByType() => SortByType.DESC;
@@ -78,11 +75,10 @@ class Equalities extends ViewAbstract<Equalities> {
   Map<String, TextInputType?> getTextInputTypeMap() =>
       {"value": TextInputType.number, "date": TextInputType.datetime};
   @override
-  Map<String, bool> isFieldCanBeNullableMap() =>{"currency":false}
-  
+  Map<String, bool> isFieldCanBeNullableMap() => {"currency": false};
+
   @override
-  Map<String, bool> isFieldRequiredMap() =>{"value":true
-  };
+  Map<String, bool> isFieldRequiredMap() => {"value": true,"currency": true};
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {

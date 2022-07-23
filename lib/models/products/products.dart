@@ -6,6 +6,8 @@ import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/product_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
+import 'package:flutter_saffoury_paper/models/products/stocks.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -46,6 +48,7 @@ class Product extends ViewAbstract<Product> {
   GSM? gsms;
   Quality? qualities;
   ProductsColor? products_colors;
+  List<Stocks> inStock = [];
 
   Product() : super();
 
@@ -159,6 +162,32 @@ class Product extends ViewAbstract<Product> {
     return toJson();
   }
 
+  double getTotalPurchasesPrice({Warehouse? warehouse}) {
+    return getUnitPurchasesPrice() * getQuantity(warehouse: warehouse);
+  }
+
+  double getTotalSellPrice({Warehouse? warehouse}) {
+    return getUnitSellPrice() * getQuantity(warehouse: warehouse);
+  }
+
+  double getUnitPurchasesPrice() {
+    return products_types?.purchasePrice ?? 0;
+  }
+
+  double getUnitSellPrice() {
+    return products_types?.sellPrice ?? 0;
+  }
+
+  double getQuantity({Warehouse? warehouse}) {
+    if (warehouse == null) {
+      return inStock.fold(
+          0, (value, element) => value + (element.quantity ?? 0));
+    }
+    return inStock
+        .where((element) => warehouse.iD == element.warehouse?.iD)
+        .fold(0, (value, element) => value + (element.quantity ?? 0));
+  }
+
   factory Product.fromJson(Map<String, dynamic> data) =>
       _$ProductFromJson(data);
 
@@ -171,6 +200,26 @@ class Product extends ViewAbstract<Product> {
   @override
   SortByType getSortByType() {
     return SortByType.DESC;
+  }
+
+  @override
+  String? getMainDrawerGroupName(BuildContext context) {
+    return AppLocalizations.of(context)!.product;
+  }
+
+  @override
+  double getCartItemPrice() {
+    return getTotalSellPrice();
+  }
+
+  @override
+  double getCartItemQuantity() {
+    return getQuantity();
+  }
+
+  @override
+  double getCartItemUnitPrice() {
+    return getUnitSellPrice();
   }
 }
 

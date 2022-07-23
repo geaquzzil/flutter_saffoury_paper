@@ -23,18 +23,8 @@ part 'user_auth.g.dart';
       setRandomPassword();
     }
   }
-  @override
-  String? getCustomAction() {
-    return "login_flutter";
-  }
 
-  void set(String key, dynamic v) {
-    gets()[key] = v;
-  }
 
-  Map<String, dynamic> gets() {
-    return {"login": login};
-  }
 
   void setRandomPassword() {
     const alphabet =
@@ -48,7 +38,10 @@ part 'user_auth.g.dart';
       _$AuthUserFromJson(data);
 
   Map<String, dynamic> toJson() => _$AuthUserToJson(this);
-
+  @override
+  String? getCustomAction() {
+    return "login_flutter";
+  }
   @override
   AuthUser fromJsonViewAbstract(Map<String, dynamic> json) {
     return AuthUser.fromJson(json);
@@ -178,5 +171,11 @@ part 'user_auth.g.dart';
   @override
   SortByType getSortByType() {
     return SortByType.ASC;
+  }
+  
+  @override
+  String? getMainDrawerGroupName(BuildContext context) {
+    // TODO: implement getMainDrawerGroupName
+    throw UnimplementedError();
   }
 }
