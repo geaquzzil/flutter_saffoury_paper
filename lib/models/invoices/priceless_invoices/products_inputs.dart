@@ -4,8 +4,8 @@ import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'invoice_master.dart';
-import 'invoice_master_details.dart';
+import '../invoice_master.dart';
+import '../invoice_master_details.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 part 'products_inputs.g.dart';
@@ -31,6 +31,7 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   @override
   List<String> getMainFields() {
     List<String> list = super.getMainFields();
+    list.remove("status");
     list.add("warehouse");
     return list;
   }
@@ -55,7 +56,8 @@ class ProductInput extends InvoiceMaster<ProductInput> {
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductInputDetails extends InvoiceMasterDetails<ProductInputDetails> {
-  ProductInput? products_input;
+  int? ProductInputID;
+  ProductInput? products_inputs;
 
   ProductInputDetails() : super();
 

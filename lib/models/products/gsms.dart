@@ -62,7 +62,7 @@ class GSM extends ViewAbstract<GSM> {
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "gsm": Icons.view_headline,
+        "gsm": Icons.line_weight,
       };
 
   @override

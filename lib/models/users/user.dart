@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
-import 'package:flutter_saffoury_paper/models/invoices/order_refund.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -18,6 +25,9 @@ class User<T> extends AuthUser {
   String? profile; //text
   String? comments; //text
 
+  List<CutRequest>? cut_requests;
+  int? cut_requests_count;
+
   List<Order>? orders;
   int? orders_count;
 
@@ -26,6 +36,27 @@ class User<T> extends AuthUser {
 
   List<OrderRefund>? orders_refunds;
   int? orders_refunds_count;
+
+  List<PurchasesRefund>? purchases_refunds;
+  int? purchases_refunds_count;
+
+  List<CustomerRequestSize>? customers_request_sizes;
+  int? customers_request_sizes_count;
+
+  List<ReservationInvoice>? reservation_invoice;
+  int? reservation_invoice_count;
+
+  List<ProductInput>? products_inputs; //employee only
+  int? products_inputs_count;
+
+  List<ProductOutput>? products_outputs; //employee only
+  int? products_outputs_count;
+
+  List<Transfers>? transfers; //employee only
+  int? transfers_count;
+
+  List<CargoTransporter>? cargo_transporters; //employee only
+  int? cargo_transporters_count;
 
   User() : super();
   @override

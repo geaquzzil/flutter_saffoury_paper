@@ -11,13 +11,16 @@ part 'governorates.g.dart';
 @JsonSerializable()
 @reflector
 class Governorate extends BaseWithNameString<Governorate> {
-  String? name;
   Governorate() : super();
 
-   @override
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.country;
   }
+
+  @override
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.invoice;
 
   @override
   IconData getMainIconData() => Icons.map;
