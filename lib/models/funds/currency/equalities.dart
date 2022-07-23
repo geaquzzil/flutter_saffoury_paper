@@ -45,7 +45,8 @@ class Equalities extends ViewAbstract<Equalities> {
       AppLocalizations.of(context)!.equality;
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) => "1 USD = ${1 / value}";
+  String getMainHeaderTextOnly(BuildContext context) =>
+      "1 USD = ${1 / (value ?? 1)}";
 
   @override
   IconData getMainIconData() => Icons.currency_exchange;
@@ -78,7 +79,7 @@ class Equalities extends ViewAbstract<Equalities> {
   Map<String, bool> isFieldCanBeNullableMap() => {"currency": false};
 
   @override
-  Map<String, bool> isFieldRequiredMap() => {"value": true,"currency": true};
+  Map<String, bool> isFieldRequiredMap() => {"value": true, "currency": true};
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
@@ -91,4 +92,7 @@ class Equalities extends ViewAbstract<Equalities> {
     // TODO: implement fromJsonViewAbstract
     throw UnimplementedError();
   }
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() => {};
 }

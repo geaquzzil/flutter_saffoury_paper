@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/funds/accounts/account_names.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -9,7 +10,15 @@ part 'incomes.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Incomes extends MoneyFunds<Incomes> {
+  int? NameID;
+
+  AccountName? account_names;
+
   Incomes() : super();
+
+  @override
+  List<String> getMainFields() =>
+      ["account_names", "employee", "date", "value", "equalities", "warehouse"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

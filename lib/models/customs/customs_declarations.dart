@@ -34,6 +34,9 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
       ["number", "date", "fromCountry", "fromName", "comments"];
 
   @override
+  List<String>? requireObjectsList() => ["customs_declarations_images"];
+
+  @override
   Map<String, IconData> getFieldIconDataMap() => {
         "number": Icons.onetwothree,
         "date": Icons.date_range,

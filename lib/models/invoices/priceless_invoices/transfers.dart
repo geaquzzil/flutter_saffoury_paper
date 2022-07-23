@@ -38,6 +38,18 @@ class Transfers extends InvoiceMaster<Transfers> {
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.transfers;
+
+  @override
+  Transfers fromJsonViewAbstract(Map<String, dynamic> json) {
+    // TODO: implement fromJsonViewAbstract
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() {
+    // TODO: implement toJsonViewAbstract
+    throw UnimplementedError();
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

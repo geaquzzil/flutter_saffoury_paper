@@ -9,7 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_auth.g.dart';
 
 @JsonSerializable()
- class AuthUser<T> extends ViewAbstract<AuthUser> {
+class AuthUser<T> extends ViewAbstract<AuthUser> {
   bool? login;
   bool? permission;
   int? response;
@@ -17,14 +17,13 @@ part 'user_auth.g.dart';
   String? password;
 
   PermissionLevelAbstract? userlevels;
+  Setting? setting;
 
   AuthUser({bool? setPassword}) : super() {
     if (setPassword ?? false) {
       setRandomPassword();
     }
   }
-
-
 
   void setRandomPassword() {
     const alphabet =
@@ -42,6 +41,7 @@ part 'user_auth.g.dart';
   String? getCustomAction() {
     return "login_flutter";
   }
+
   @override
   AuthUser fromJsonViewAbstract(Map<String, dynamic> json) {
     return AuthUser.fromJson(json);
@@ -172,7 +172,7 @@ part 'user_auth.g.dart';
   SortByType getSortByType() {
     return SortByType.ASC;
   }
-  
+
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     // TODO: implement getMainDrawerGroupName

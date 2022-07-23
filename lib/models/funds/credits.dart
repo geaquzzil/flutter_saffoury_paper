@@ -12,6 +12,9 @@ part 'credits.g.dart';
 @reflector
 class Credits extends MoneyFunds<Credits> {
   Credits() : super();
+  @override
+  List<String> getMainFields() =>
+      ["customer", "employee", "date", "value", "equalities", "warehouse"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

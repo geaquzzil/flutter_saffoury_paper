@@ -40,6 +40,9 @@ class Product extends ViewAbstract<Product> {
   String? fiberLines;
   String? comments;
 
+  double? pending_reservation_invoice;
+  double? pending_cut_requests;
+
   // Product parent;
   ProductType? products_types;
   CustomsDeclaration? customs_declarations;

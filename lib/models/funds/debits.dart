@@ -11,7 +11,9 @@ part 'debits.g.dart';
 @reflector
 class Debits extends MoneyFunds<Debits> {
   Debits() : super();
-
+  @override
+  List<String> getMainFields() =>
+      ["customer", "employee", "date", "value", "equalities", "warehouse"];
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.debits;

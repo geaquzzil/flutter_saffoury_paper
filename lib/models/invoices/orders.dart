@@ -21,6 +21,8 @@ class Order extends InvoiceMaster<Order> {
 
   Order() : super();
 
+
+  
   @override
   String? getTableNameApi() => "orders";
 

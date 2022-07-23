@@ -11,10 +11,10 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../users/customers.dart';
 
 abstract class MoneyFunds<T> extends ViewAbstract<T> {
-  // int? CashBoxID;
-  // int? EmployeeID;
-  // int? CustomerID;
-  // int? EqualitiesID;
+  int? CashBoxID;
+  int? EmployeeID;
+  int? CustomerID;
+  int? EqualitiesID;
 
   int? fromBox;
   int? isDirect;
@@ -31,9 +31,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T> {
 
   MoneyFunds() : super();
 
-  @override
-  List<String> getMainFields() =>
-      ["customer", "employee", "date", "value", "equalities", "warehouse"];
+ 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
         "value": Icons.attach_money_rounded,

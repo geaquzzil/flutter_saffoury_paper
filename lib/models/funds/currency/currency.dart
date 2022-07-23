@@ -11,7 +11,6 @@ part 'currency.g.dart';
 @JsonSerializable()
 @reflector
 class Currency extends BaseWithNameString<Currency> {
-  String? name;
   String? nameAr;
 
   Currency() : super();
@@ -30,7 +29,7 @@ class Currency extends BaseWithNameString<Currency> {
   String? getTableNameApi() => "currency";
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() => {"name": 50,"nameAr":50};
+  Map<String, int> getTextInputMaxLengthMap() => {"name": 50, "nameAr": 50};
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {

@@ -12,7 +12,7 @@ part 'customers_contacts.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CustomerContacts extends ViewAbstract<CustomerContacts> {
-  // int? CustomerID;
+  int? CustomerID;
   Customer? customers;
 
   String? name; // varchare 50
