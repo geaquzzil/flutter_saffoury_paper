@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -8,7 +6,7 @@ import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'warehouse.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Warehouse extends BaseWithNameString<Warehouse> {
   Warehouse() : super();
@@ -25,20 +23,19 @@ class Warehouse extends BaseWithNameString<Warehouse> {
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"name": 100};
 
-  
-
-   @override
+  @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.product;
 
+  factory Warehouse.fromJson(Map<String, dynamic> data) =>
+      _$WarehouseFromJson(data);
+
+  Map<String, dynamic> toJson() => _$WarehouseToJson(this);
+
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
   @override
-  Warehouse fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Warehouse fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Warehouse.fromJson(json);
 }

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
-  int? ProductID;
-  int? WarehouseID;
+  // int? ProductID;
+  // int? WarehouseID;
 
   Product? products;
   Warehouse? warehouse;

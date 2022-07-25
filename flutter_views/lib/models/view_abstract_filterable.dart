@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   String? getSortByFieldName();
@@ -30,7 +28,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   Future<void> getFilterableListFor() async {
     List<String> fields = getMainFields();
     ViewAbstract currentInstance = this as ViewAbstract;
-currentInstance.g
+// currentInstance.g
   }
 }
 

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/text_input.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
-import 'package:flutter_saffoury_paper/models/users/customers.dart';
-import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -33,25 +28,25 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customerRequestSizes;
 
-  @override
-  CustomerRequestSize fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory CustomerRequestSize.fromJson(Map<String, dynamic> data) =>
+      _$CustomerRequestSizeFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CustomerRequestSizeToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CustomerRequestSize fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CustomerRequestSize.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CustomerRequestSizeDetails
     extends ViewAbstract<CustomerRequestSizeDetails> {
-  int? CustomerReqID;
-  int? SizeID;
+  // int? CustomerReqID;
+  // int? SizeID;
 
   CustomerRequestSize? customers_request_sizes;
   Size? sizes;
@@ -118,15 +113,15 @@ class CustomerRequestSizeDetails
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory CustomerRequestSizeDetails.fromJson(Map<String, dynamic> data) =>
+      _$CustomerRequestSizeDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CustomerRequestSizeDetailsToJson(this);
 
   @override
-  CustomerRequestSizeDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CustomerRequestSizeDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CustomerRequestSizeDetails.fromJson(json);
 }

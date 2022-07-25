@@ -38,24 +38,23 @@ class Transfers extends InvoiceMaster<Transfers> {
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.transfers;
+ factory Transfers.fromJson(Map<String, dynamic> data) =>
+      _$TransfersFromJson(data);
+
+  Map<String, dynamic> toJson() => _$TransfersToJson(this);
 
   @override
-  Transfers fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Transfers fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Transfers.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class TransfersDetails extends InvoiceMasterDetails<TransfersDetails> {
-  int? TransferID;
+  // int? TransferID;
   Transfers? transfers;
   TransfersDetails() : super();
 
@@ -65,15 +64,15 @@ class TransfersDetails extends InvoiceMasterDetails<TransfersDetails> {
   @override
   List<String> getMainFields() => ["products", "quantity", "comments"];
 
-  @override
-  TransfersDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory TransfersDetails.fromJson(Map<String, dynamic> data) =>
+      _$TransfersDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$TransfersDetailsToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  TransfersDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      TransfersDetails.fromJson(json);
 }

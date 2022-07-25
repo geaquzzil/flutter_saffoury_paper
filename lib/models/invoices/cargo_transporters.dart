@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
-import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -15,7 +11,7 @@ part 'cargo_transporters.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CargoTransporter extends ViewAbstract<CargoTransporter> {
-  int? GovernorateID;
+  // int? GovernorateID;
 
   String? name;
   String? phone;
@@ -106,15 +102,15 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
         "carNumber": true,
       };
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory CargoTransporter.fromJson(Map<String, dynamic> data) =>
+      _$CargoTransporterFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CargoTransporterToJson(this);
 
   @override
-  CargoTransporter fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CargoTransporter fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CargoTransporter.fromJson(json);
 }

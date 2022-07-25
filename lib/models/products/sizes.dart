@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'sizes.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 @reflector
 class Size extends ViewAbstract<Size> {
   int? width;

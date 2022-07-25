@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
-import 'package:flutter_view_controller/helper_model/product.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-part 'product_types.g.dart';
+part 'products_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductType extends ViewAbstract<ProductType> {
-  int? GradeID;
+  // int? GradeID;
 
   String? name;
   ProductTypeUnit? unit;
@@ -29,6 +28,7 @@ class ProductType extends ViewAbstract<ProductType> {
 
   List<Product>? products;
   int? products_count;
+
   ProductType() : super();
   @override
   String? getMainDrawerGroupName(BuildContext context) {
@@ -133,16 +133,13 @@ class ProductType extends ViewAbstract<ProductType> {
 
   Map<String, dynamic> toJson() => _$ProductTypeToJson(this);
 
-  @override
-  ProductType fromJsonViewAbstract(Map<String, dynamic> json) {
-    return ProductType.fromJson(json);
-  }
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    return toJson();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
 
+  @override
+  ProductType fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ProductType.fromJson(json);
   @override
   String getSortByFieldName() {
     return "name";

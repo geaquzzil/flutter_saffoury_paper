@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations_images.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
@@ -14,7 +11,7 @@ part 'customs_declarations.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
-  int? EmployeeID;
+  // int? EmployeeID;
 
   String? number; //varchar 200
   String? date;
@@ -23,7 +20,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   String? fromName; //50
   String? comments;
 
-  List<CustomerDeclarationImages>? customs_declarations_images;
+  List<CustomsDeclarationImages>? customs_declarations_images;
   int? customs_declarations_images_count;
   Employee? employees;
 
@@ -111,15 +108,15 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   @override
   Map<String, bool> isFieldRequiredMap() => {"number": true};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory CustomsDeclaration.fromJson(Map<String, dynamic> data) =>
+      _$CustomsDeclarationFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CustomsDeclarationToJson(this);
 
   @override
-  CustomsDeclaration fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CustomsDeclaration fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CustomsDeclaration.fromJson(json);
 }

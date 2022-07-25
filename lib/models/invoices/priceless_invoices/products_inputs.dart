@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -13,7 +12,7 @@ part 'products_inputs.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductInput extends InvoiceMaster<ProductInput> {
-  int? WarehouseID;
+  // int? WarehouseID;
 
   List<ProductInputDetails>? products_inputs_details;
   int? products_inputs_details_count;
@@ -40,23 +39,23 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.productsInput;
 
-  @override
-  ProductInput fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory ProductInput.fromJson(Map<String, dynamic> data) =>
+      _$ProductInputFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductInputToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  ProductInput fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ProductInput.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductInputDetails extends InvoiceMasterDetails<ProductInputDetails> {
-  int? ProductInputID;
+  // int? ProductInputID;
   ProductInput? products_inputs;
 
   ProductInputDetails() : super();
@@ -66,15 +65,15 @@ class ProductInputDetails extends InvoiceMasterDetails<ProductInputDetails> {
   @override
   String? getTableNameApi() => "products_inputs_details";
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory ProductInputDetails.fromJson(Map<String, dynamic> data) =>
+      _$ProductInputDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductInputDetailsToJson(this);
 
   @override
-  ProductInputDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  ProductInputDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ProductInputDetails.fromJson(json);
 }

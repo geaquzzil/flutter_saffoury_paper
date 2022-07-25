@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'gsms.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 @reflector
 class GSM extends ViewAbstract<GSM> {
   int? gsm;

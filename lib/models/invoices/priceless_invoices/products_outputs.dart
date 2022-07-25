@@ -13,7 +13,7 @@ part 'products_outputs.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductOutput extends InvoiceMaster<ProductOutput> {
-  int? WarehouseID;
+  // int? WarehouseID;
 
   List<ProductOutputDetails>? products_outputs_details;
   int? products_outputs_details_count;
@@ -40,23 +40,23 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.productsOutput;
 
-  @override
-  ProductOutput fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory ProductOutput.fromJson(Map<String, dynamic> data) =>
+      _$ProductOutputFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductOutputToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  ProductOutput fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ProductOutput.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ProductOutputDetails extends InvoiceMasterDetails<ProductOutputDetails> {
-  int? ProductOutputID;
+  // int? ProductOutputID;
 
   ProductOutput? products_outputs;
 
@@ -68,15 +68,15 @@ class ProductOutputDetails extends InvoiceMasterDetails<ProductOutputDetails> {
   @override
   List<String> getMainFields() => ["products", "quantity", "comments"];
 
-  @override
-  ProductOutputDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory ProductOutputDetails.fromJson(Map<String, dynamic> data) =>
+      _$ProductOutputDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductOutputDetailsToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  ProductOutputDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ProductOutputDetails.fromJson(json);
 }

@@ -10,7 +10,7 @@ part 'orders_refunds.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class OrderRefund extends InvoiceMaster<OrderRefund> {
-  int? OrderID;
+  // int? OrderID;
 
   Order? orders;
 
@@ -33,26 +33,26 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   List<String> getMainFields() =>
       ["orders", "cargo_transporters", "date", "billNo", "comments"];
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory OrderRefund.fromJson(Map<String, dynamic> data) =>
+      _$OrderRefundFromJson(data);
+
+  Map<String, dynamic> toJson() => _$OrderRefundToJson(this);
 
   @override
-  OrderRefund fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  OrderRefund fromJsonViewAbstract(Map<String, dynamic> json) =>
+      OrderRefund.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class OrderRefundDetails extends InvoiceMasterDetails<OrderRefund> {
-  int? OrderID;
-  int? OrderDetailsID;
-  int? OrderRefundID;
-  int? WarehouseID;
+class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
+  // int? OrderID;
+  // int? OrderDetailsID;
+  // int? OrderRefundID;
+  // int? WarehouseID;
 
   OrderRefund? orders_refunds;
   Order? orders;
@@ -72,15 +72,15 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefund> {
   List<String> getMainFields() =>
       ["products", "warehouse", "quantity", "comments"];
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory OrderRefundDetails.fromJson(Map<String, dynamic> data) =>
+      _$OrderRefundDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$OrderRefundDetailsToJson(this);
 
   @override
-  OrderRefund fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  OrderRefundDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      OrderRefundDetails.fromJson(json);
 }

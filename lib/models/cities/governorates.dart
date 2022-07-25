@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 part 'governorates.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 @reflector
 class Governorate extends BaseWithNameString<Governorate> {
   Governorate() : super();
@@ -30,15 +28,15 @@ class Governorate extends BaseWithNameString<Governorate> {
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"name": 15};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory Governorate.fromJson(Map<String, dynamic> data) =>
+      _$GovernorateFromJson(data);
+
+  Map<String, dynamic> toJson() => _$GovernorateToJson(this);
 
   @override
-  Governorate fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Governorate fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Governorate.fromJson(json);
 }

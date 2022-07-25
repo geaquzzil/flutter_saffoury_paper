@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
@@ -15,8 +12,8 @@ part 'warehouse_employees.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
-  int? EmployeeID;
-  int? WarehouseID;
+  // int? EmployeeID;
+  // int? WarehouseID;
 
   Warehouse? warehouse;
   Employee? employees;
@@ -31,15 +28,13 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   IconData getMainIconData() => Icons.warehouse;
   @override
   String? getTableNameApi() => "warehouse_employees";
- 
+
   @override
   Map<String, int> getTextInputMaxLengthMap() => {};
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.employeesWarehouse;
-
- 
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
@@ -67,32 +62,29 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() =>{};
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, TextInputType?> getTextInputTypeMap()  =>{};
-  
+  Map<String, TextInputType?> getTextInputTypeMap() => {};
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() =>{
-    "employees":false,
-    "warehouse":false
-  };
+  Map<String, bool> isFieldCanBeNullableMap() =>
+      {"employees": false, "warehouse": false};
 
   @override
-  Map<String, bool> isFieldRequiredMap() =>{};
-   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldRequiredMap() => {};
+  factory WarehouseEmployee.fromJson(Map<String, dynamic> data) =>
+      _$WarehouseEmployeeFromJson(data);
+
+  Map<String, dynamic> toJson() => _$WarehouseEmployeeToJson(this);
 
   @override
-  WarehouseEmployee fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  WarehouseEmployee fromJsonViewAbstract(Map<String, dynamic> json) =>
+      WarehouseEmployee.fromJson(json);
 }

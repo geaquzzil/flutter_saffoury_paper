@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
+import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_auth.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 class AuthUser<T> extends ViewAbstract<AuthUser> {
   bool? login;
   bool? permission;

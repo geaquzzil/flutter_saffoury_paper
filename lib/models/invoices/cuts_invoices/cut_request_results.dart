@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
-import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_saffoury_paper/models/users/customers.dart';
-import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -18,9 +12,9 @@ part 'cut_request_results.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CutRequestResult extends ViewAbstract<CutRequestResult> {
-  int? CutReqquestID;
-  int? ProductInputID;
-  int? ProductOutputID;
+  // int? CutReqquestID;
+  // int? ProductInputID;
+  // int? ProductOutputID;
 
   CutRequest? cut_requests;
   ProductInput? products_inputs;
@@ -89,15 +83,15 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory CutRequestResult.fromJson(Map<String, dynamic> data) =>
+      _$CutRequestResultFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CutRequestResultToJson(this);
 
   @override
-  CutRequestResult fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CutRequestResult fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CutRequestResult.fromJson(json);
 }

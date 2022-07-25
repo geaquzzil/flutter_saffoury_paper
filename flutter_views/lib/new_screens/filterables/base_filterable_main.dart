@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BaseFilterableMainWidget extends StatefulWidget {
-  BaseFilterableMainWidget({Key? key}) : super(key: key);
+  const BaseFilterableMainWidget({Key? key}) : super(key: key);
 
   @override
   State<BaseFilterableMainWidget> createState() => _BaseFilterableMainWidgetState();

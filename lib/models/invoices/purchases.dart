@@ -29,23 +29,23 @@ class Purchases extends InvoiceMaster<Purchases> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.purchases;
 
-  @override
-  Purchases fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory Purchases.fromJson(Map<String, dynamic> data) =>
+      _$PurchasesFromJson(data);
+
+  Map<String, dynamic> toJson() => _$PurchasesToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Purchases fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Purchases.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PurchasesDetails extends InvoiceMasterDetails<PurchasesDetails> {
-  int? PurchaseID;
+  // int? PurchaseID;
 
   Purchases? purchases;
   PurchasesDetails() : super();
@@ -53,15 +53,15 @@ class PurchasesDetails extends InvoiceMasterDetails<PurchasesDetails> {
   @override
   String? getTableNameApi() => "purchases_details";
 
-  @override
-  PurchasesDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory PurchasesDetails.fromJson(Map<String, dynamic> data) =>
+      _$PurchasesDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$PurchasesDetailsToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  PurchasesDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      PurchasesDetails.fromJson(json);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master_details.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../invoice_master.dart';
@@ -22,39 +21,39 @@ class ReservationInvoice extends InvoiceMaster<ReservationInvoice> {
   @override
   String? getTableNameApi() => "reservation_invoice";
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory ReservationInvoice.fromJson(Map<String, dynamic> data) =>
+      _$ReservationInvoiceFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ReservationInvoiceToJson(this);
 
   @override
-  ReservationInvoice fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  ReservationInvoice fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ReservationInvoice.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class ReservationInvoiceDetails
     extends InvoiceMasterDetails<ReservationInvoiceDetails> {
-  int? ReservationID;
+  // int? ReservationID;
   ReservationInvoice? reservation_invoice;
   ReservationInvoiceDetails() : super();
 
   @override
   String? getTableNameApi() => "reservation_invoice_details";
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory ReservationInvoiceDetails.fromJson(Map<String, dynamic> data) =>
+      _$ReservationInvoiceDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ReservationInvoiceDetailsToJson(this);
 
   @override
-  ReservationInvoiceDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  ReservationInvoiceDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ReservationInvoiceDetails.fromJson(json);
 }

@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'stocks.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 @reflector
 class Stocks {
   double? quantity;

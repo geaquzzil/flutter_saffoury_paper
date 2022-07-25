@@ -10,7 +10,7 @@ part 'incomes.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Incomes extends MoneyFunds<Incomes> {
-  int? NameID;
+  // int? NameID;
 
   AccountName? account_names;
 
@@ -29,15 +29,15 @@ class Incomes extends MoneyFunds<Incomes> {
   @override
   String? getTableNameApi() => "incomes";
 
-  @override
-  Incomes fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory Incomes.fromJson(Map<String, dynamic> data) =>
+      _$IncomesFromJson(data);
+
+  Map<String, dynamic> toJson() => _$IncomesToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Incomes fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Incomes.fromJson(json);
 }

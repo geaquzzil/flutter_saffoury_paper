@@ -3,14 +3,13 @@ import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
-import 'package:flutter_saffoury_paper/models/products/product_types.dart';
+import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -24,14 +23,14 @@ part 'products.g.dart';
 )
 @reflector
 class Product extends ViewAbstract<Product> {
-  int? ParentID;
-  int? ProductTypeID;
-  int? CustomsDeclarationID;
-  int? Country_Manufacture_CompanyID;
-  int? SizeID;
-  int? GSMID;
-  int? QualityID;
-  int? ProductColorID;
+  // int? ParentID;
+  // int? ProductTypeID;
+  // int? CustomsDeclarationID;
+  // int? Country_Manufacture_CompanyID;
+  // int? SizeID;
+  // int? GSMID;
+  // int? QualityID;
+  // int? ProductColorID;
 
   ProductStatus? status;
   String? date;

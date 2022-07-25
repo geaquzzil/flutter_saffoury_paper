@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -23,15 +22,15 @@ class Debits extends MoneyFunds<Debits> {
   @override
   String? getTableNameApi() => "debits";
 
-  @override
-  Debits fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory Debits.fromJson(Map<String, dynamic> data) =>
+      _$DebitsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$DebitsToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Debits fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Debits.fromJson(json);
 }

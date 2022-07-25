@@ -7,7 +7,7 @@ import '../view_abstract.dart';
 
 part 'permission_action_abstract.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 @reflector
 class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   String? table_name;

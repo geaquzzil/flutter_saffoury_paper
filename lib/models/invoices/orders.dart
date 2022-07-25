@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -21,8 +21,6 @@ class Order extends InvoiceMaster<Order> {
 
   Order() : super();
 
-
-  
   @override
   String? getTableNameApi() => "orders";
 
@@ -33,38 +31,38 @@ class Order extends InvoiceMaster<Order> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.orders;
 
-  @override
-  Order fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+ factory Order.fromJson(Map<String, dynamic> data) =>
+      _$OrderFromJson(data);
+
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Order fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Order.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class OrderDetails extends InvoiceMasterDetails<OrderDetails> {
-  int? OrderID;
+  // int? OrderID;
   Order? orders;
   OrderDetails() : super();
 
   @override
   String? getTableNameApi() => "orders_details";
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+ factory OrderDetails.fromJson(Map<String, dynamic> data) =>
+      _$OrderDetailsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$OrderDetailsToJson(this);
 
   @override
-  OrderDetails fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  OrderDetails fromJsonViewAbstract(Map<String, dynamic> json) =>
+      OrderDetails.fromJson(json);
 }

@@ -148,18 +148,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
-  Future<E> getServerDataApi<E extends ServerData>(
-      BuildContext context, E data) async {
+  // Future<E> getServerDataApi<E extends ServerData>(
+  //     BuildContext context, E data) async {
 
-    Map<String, String> mainBody = HashMap<String, String>();
-    mainBody["action"] = "list_server_data";
-    Response? response = await getHttp().post(Uri.parse(URLS.BASE_URL),
-        headers: await getHeaders(), body: mainBody);
+  //   Map<String, String> mainBody = HashMap<String, String>();
+  //   mainBody["action"] = "list_server_data";
+  //   Response? response = await getHttp().post(Uri.parse(URLS.BASE_URL),
+  //       headers: await getHeaders(), body: mainBody);
 
 
     
 
-  }
+  // }
 
   Future<List<String>> searchViewAbstractByTextInput(
       {required String field,

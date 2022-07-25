@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
-import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import 'orders.dart';
-
 abstract class InvoiceMaster<T> extends ViewAbstract<T> {
-  int? EmployeeID;
-  int? CargoTransID;
-  int? CustomerID;
+  // int? EmployeeID;
+  // int? CargoTransID;
+  // int? CustomerID;
   int? TermsID;
 
   String? date;

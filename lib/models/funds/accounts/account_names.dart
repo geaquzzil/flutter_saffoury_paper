@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'account_names.g.dart';
@@ -36,17 +33,17 @@ class AccountName extends BaseWithNameString<AccountName> {
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"name": 50};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+ factory AccountName.fromJson(Map<String, dynamic> data) =>
+      _$AccountNameFromJson(data);
+
+  Map<String, dynamic> toJson() => _$AccountNameToJson(this);
 
   @override
-  AccountName fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  AccountName fromJsonViewAbstract(Map<String, dynamic> json) =>
+      AccountName.fromJson(json);
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -122,18 +119,17 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
 
   @override
   Map<String, bool> isFieldRequiredMap() => {"type": true};
+ factory AccountNameType.fromJson(Map<String, dynamic> data) =>
+      _$AccountNameTypeFromJson(data);
+
+  Map<String, dynamic> toJson() => _$AccountNameTypeToJson(this);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  AccountNameType fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  AccountNameType fromJsonViewAbstract(Map<String, dynamic> json) =>
+      AccountNameType.fromJson(json);
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>

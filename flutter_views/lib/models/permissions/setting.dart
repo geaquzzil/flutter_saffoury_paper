@@ -1,13 +1,12 @@
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'setting.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Setting extends ViewAbstract<Setting> {
   int? ENABLE_APP;
@@ -129,17 +128,17 @@ class Setting extends ViewAbstract<Setting> {
     throw UnimplementedError();
   }
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory Setting.fromJson(Map<String, dynamic> data) =>
+      _$SettingFromJson(data);
+
+  Map<String, dynamic> toJson() => _$SettingToJson(this);
 
   @override
-  Setting fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Setting fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Setting.fromJson(json);
 }
 
 enum CurrencySetting { DOLLAR, DOLLAR_THREE_ZERO, SYP }

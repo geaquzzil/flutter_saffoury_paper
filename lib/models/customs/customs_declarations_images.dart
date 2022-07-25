@@ -9,15 +9,14 @@ part 'customs_declarations_images.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class CustomerDeclarationImages
-    extends ViewAbstract<CustomerDeclarationImages> {
+class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages> {
   // int? CustomerDeclarationID;
   String? image;
   String? comments;
 
   CustomsDeclaration? customs_declarations;
 
-  CustomerDeclarationImages() : super();
+  CustomsDeclarationImages() : super();
 
   @override
   List<String> getMainFields() => ["customs_declarations", "image", "comments"];
@@ -82,15 +81,15 @@ class CustomerDeclarationImages
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+  factory CustomsDeclarationImages.fromJson(Map<String, dynamic> data) =>
+      _$CustomsDeclarationImagesFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CustomsDeclarationImagesToJson(this);
 
   @override
-  CustomerDeclarationImages fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CustomsDeclarationImages fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CustomsDeclarationImages.fromJson(json);
 }

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'grades.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Grades extends BaseWithNameString<Grades> {
   List<Product>? products;
@@ -42,7 +40,7 @@ class Grades extends BaseWithNameString<Grades> {
     return toJson();
   }
 
-    @override
+  @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.product;
 }

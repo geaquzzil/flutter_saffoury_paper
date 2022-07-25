@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'server_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 class ServerResponse {
   int? activated;
   bool? permission;

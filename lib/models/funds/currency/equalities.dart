@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'equalities.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Equalities extends ViewAbstract<Equalities> {
-  int? CurrencyID;
+  // int? CurrencyID;
   double? value;
   String? date;
 
@@ -81,17 +76,17 @@ class Equalities extends ViewAbstract<Equalities> {
   @override
   Map<String, bool> isFieldRequiredMap() => {"value": true, "currency": true};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory Equalities.fromJson(Map<String, dynamic> data) =>
+      _$EqualitiesFromJson(data);
+
+  Map<String, dynamic> toJson() => _$EqualitiesToJson(this);
 
   @override
-  Equalities fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Equalities fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Equalities.fromJson(json);
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};

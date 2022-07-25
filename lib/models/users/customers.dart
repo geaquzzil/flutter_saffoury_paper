@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/users/user.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'employees.dart';
@@ -38,13 +36,15 @@ class Customer extends User<Customer> {
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customer;
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    return toJson();
-  }
+  factory Customer.fromJson(Map<String, dynamic> data) =>
+      _$CustomerFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CustomerToJson(this);
 
   @override
-  Employee fromJsonViewAbstract(Map<String, dynamic> json) {
-    return new Employee();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Customer fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Customer.fromJson(json);
 }

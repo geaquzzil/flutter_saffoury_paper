@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
 import 'package:flutter_view_controller/models/va_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'credits.g.dart';
@@ -25,15 +22,15 @@ class Credits extends MoneyFunds<Credits> {
   @override
   String? getTableNameApi() => "credits";
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory Credits.fromJson(Map<String, dynamic> data) =>
+      _$CreditsFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CreditsToJson(this);
 
   @override
-  Credits fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  Credits fromJsonViewAbstract(Map<String, dynamic> json) =>
+      Credits.fromJson(json);
 }

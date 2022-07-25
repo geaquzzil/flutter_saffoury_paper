@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'products_color.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson:true)
 @reflector
 class ProductsColor extends ViewAbstract<ProductsColor> {
   String? top;

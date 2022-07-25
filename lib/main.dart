@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
-import 'package:flutter_saffoury_paper/models/products/product_types.dart';
+import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/providers/server_data.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
@@ -82,11 +83,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
-      ChangeNotifierProvider(create: (_) => ServerDataProvier()),
-
-
-      
-      
+      ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(
           create: (_) => EditSubsViewAbstractControllerProvider()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),

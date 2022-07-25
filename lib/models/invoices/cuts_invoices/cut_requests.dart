@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
@@ -17,9 +14,10 @@ part 'cut_requests.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CutRequest extends ViewAbstract<CutRequest> {
-  int? ProductID;
-  int? CustomerID;
-  int? EmployeeID;
+  // int? ProductID;
+  // int? CustomerID;
+  // int? EmployeeID;
+  
   String? date;
   String? comments;
   double? quantity;
@@ -32,7 +30,7 @@ class CutRequest extends ViewAbstract<CutRequest> {
   List<CutRequestResult>? cut_request_results;
   int? cut_request_results_count;
 
-  List<SizesCutRequest> sizes_cut_requests;
+  List<SizesCutRequest>? sizes_cut_requests;
   int? sizes_cut_requests_count;
 
   CutRequest() : super();
@@ -119,17 +117,17 @@ class CutRequest extends ViewAbstract<CutRequest> {
   @override
   Map<String, bool> isFieldRequiredMap() => {"quantity": true};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
+   factory CutRequest.fromJson(Map<String, dynamic> data) =>
+      _$CutRequestFromJson(data);
+
+  Map<String, dynamic> toJson() => _$CutRequestToJson(this);
 
   @override
-  CutRequest fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
-  }
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  CutRequest fromJsonViewAbstract(Map<String, dynamic> json) =>
+      CutRequest.fromJson(json);
 }
 
 enum CutStatus { PENDING, PROCESSING, COMPLETED }
