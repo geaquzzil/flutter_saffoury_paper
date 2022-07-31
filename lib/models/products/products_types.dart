@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -132,7 +132,6 @@ class ProductType extends ViewAbstract<ProductType> {
       _$ProductTypeFromJson(data);
 
   Map<String, dynamic> toJson() => _$ProductTypeToJson(this);
-
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => toJson();

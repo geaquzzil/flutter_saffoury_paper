@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -76,7 +76,7 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 
-    factory SizesCutRequest.fromJson(Map<String, dynamic> data) =>
+  factory SizesCutRequest.fromJson(Map<String, dynamic> data) =>
       _$SizesCutRequestFromJson(data);
 
   Map<String, dynamic> toJson() => _$SizesCutRequestToJson(this);

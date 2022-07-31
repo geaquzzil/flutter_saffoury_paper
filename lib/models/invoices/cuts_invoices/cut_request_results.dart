@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -83,7 +83,7 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 
-   factory CutRequestResult.fromJson(Map<String, dynamic> data) =>
+  factory CutRequestResult.fromJson(Map<String, dynamic> data) =>
       _$CutRequestResultFromJson(data);
 
   Map<String, dynamic> toJson() => _$CutRequestResultToJson(this);

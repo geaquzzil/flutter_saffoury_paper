@@ -24,6 +24,14 @@ class VMirrors<T> {
         as ClassMirror;
   }
 
+  ClassMirror getInstanceMirrorFieldNameFromList(String name) {
+    ClassMirror c = getInstanceMirror().type;
+    VariableMirror vm = c.declarations[name] as VariableMirror;
+    TypeMirror nonGenericClassMirrorImpl = vm.type;
+    return reflector.reflectType(nonGenericClassMirrorImpl.reflectedType)
+        as ClassMirror;
+  }
+
   ClassMirror getInstanceMirrorField(Type type) {
     return reflector.reflectType(type) as ClassMirror;
   }
@@ -34,7 +42,22 @@ class VMirrors<T> {
         "not found for $field";
   }
 
+  List<String> getFieldsDeclarations() {
+    ClassMirror c = getInstanceMirror().type;
+    return c.declarations.entries.map((e) => e.key).toList();
+  }
+
   ViewAbstract? getNewInstanceMirror(
+      {ClassMirror? classMirror, String? field}) {
+    debugPrint("getNewInstanceMirror for classMirror:$field");
+    if (field != null) {
+      return getNewInstanceMirror(
+          classMirror: getInstanceMirrorFieldName(field));
+    }
+    return classMirror?.newInstance("", []) as ViewAbstract?;
+  }
+
+  ViewAbstract? getNewInstanceMirrorFromList(
       {ClassMirror? classMirror, String? field}) {
     debugPrint("getNewInstanceMirror for classMirror:$field");
     if (field != null) {

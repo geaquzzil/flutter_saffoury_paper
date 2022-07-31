@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import '../invoice_master.dart';
 import '../invoice_master_details.dart';
 
@@ -38,7 +41,7 @@ class Transfers extends InvoiceMaster<Transfers> {
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.transfers;
- factory Transfers.fromJson(Map<String, dynamic> data) =>
+  factory Transfers.fromJson(Map<String, dynamic> data) =>
       _$TransfersFromJson(data);
 
   Map<String, dynamic> toJson() => _$TransfersToJson(this);

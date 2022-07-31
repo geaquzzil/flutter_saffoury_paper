@@ -2,9 +2,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master_details.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 part 'orders_refunds.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -33,7 +38,7 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   List<String> getMainFields() =>
       ["orders", "cargo_transporters", "date", "billNo", "comments"];
 
-   factory OrderRefund.fromJson(Map<String, dynamic> data) =>
+  factory OrderRefund.fromJson(Map<String, dynamic> data) =>
       _$OrderRefundFromJson(data);
 
   Map<String, dynamic> toJson() => _$OrderRefundToJson(this);
@@ -57,7 +62,6 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
   OrderRefund? orders_refunds;
   Order? orders;
   OrderDetails? orders_details;
-  
 
   OrderRefundDetails() : super();
   OrderRefundDetails setOrder(Order orders) {
@@ -72,7 +76,7 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
   List<String> getMainFields() =>
       ["products", "warehouse", "quantity", "comments"];
 
-   factory OrderRefundDetails.fromJson(Map<String, dynamic> data) =>
+  factory OrderRefundDetails.fromJson(Map<String, dynamic> data) =>
       _$OrderRefundDetailsFromJson(data);
 
   Map<String, dynamic> toJson() => _$OrderRefundDetailsToJson(this);

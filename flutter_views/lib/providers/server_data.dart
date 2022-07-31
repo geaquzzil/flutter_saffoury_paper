@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 
 class ServerDataProvider with ChangeNotifier {
-  late ServerData _serverData;
+  late FilterableData _serverData;
   DateTime dateTime = DateTime.now();
-  set setData(ServerData serverData) {
+  set setData(FilterableData serverData) {
     _serverData = serverData;
     dateTime = DateTime.now();
   }

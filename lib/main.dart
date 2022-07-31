@@ -4,12 +4,14 @@ import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
+import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:flutter_view_controller/providers/server_data.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -90,6 +92,9 @@ void main() {
       ChangeNotifierProvider(
           create: (_) => DrawerViewAbstractProvider(object: Product())),
       ChangeNotifierProvider(create: (_) => ListProvider()),
+      ChangeNotifierProvider(
+        create: (_) => FilterableListApiProvider<FilterableDataApi>.initialize(FilterableDataApi()),
+      )
     ], child: const BaseMaterialAppPage()
 
         //  App(),

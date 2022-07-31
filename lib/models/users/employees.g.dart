@@ -55,7 +55,9 @@ Employee _$EmployeeFromJson(Map<String, dynamic> json) => Employee()
           .toList()
   ..customers_request_sizes_count =
       json['customers_request_sizes_count'] as int?
-  ..reservation_invoice = json['reservation_invoice'] as List<dynamic>?
+  ..reservation_invoice = (json['reservation_invoice'] as List<dynamic>?)
+      ?.map((e) => ReservationInvoice.fromJson(e as Map<String, dynamic>))
+      .toList()
   ..reservation_invoice_count = json['reservation_invoice_count'] as int?
   ..products_inputs = (json['products_inputs'] as List<dynamic>?)
       ?.map((e) => ProductInput.fromJson(e as Map<String, dynamic>))
@@ -111,7 +113,8 @@ Map<String, dynamic> _$EmployeeToJson(Employee instance) => <String, dynamic>{
       'customers_request_sizes':
           instance.customers_request_sizes?.map((e) => e.toJson()).toList(),
       'customers_request_sizes_count': instance.customers_request_sizes_count,
-      'reservation_invoice': instance.reservation_invoice,
+      'reservation_invoice':
+          instance.reservation_invoice?.map((e) => e.toJson()).toList(),
       'reservation_invoice_count': instance.reservation_invoice_count,
       'products_inputs':
           instance.products_inputs?.map((e) => e.toJson()).toList(),

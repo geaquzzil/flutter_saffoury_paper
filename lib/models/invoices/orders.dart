@@ -3,9 +3,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'invoice_master_details.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'orders.g.dart';
@@ -31,8 +34,7 @@ class Order extends InvoiceMaster<Order> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.orders;
 
- factory Order.fromJson(Map<String, dynamic> data) =>
-      _$OrderFromJson(data);
+  factory Order.fromJson(Map<String, dynamic> data) => _$OrderFromJson(data);
 
   Map<String, dynamic> toJson() => _$OrderToJson(this);
 
@@ -40,8 +42,7 @@ class Order extends InvoiceMaster<Order> {
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  Order fromJsonViewAbstract(Map<String, dynamic> json) =>
-      Order.fromJson(json);
+  Order fromJsonViewAbstract(Map<String, dynamic> json) => Order.fromJson(json);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -54,7 +55,7 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails> {
   @override
   String? getTableNameApi() => "orders_details";
 
- factory OrderDetails.fromJson(Map<String, dynamic> data) =>
+  factory OrderDetails.fromJson(Map<String, dynamic> data) =>
       _$OrderDetailsFromJson(data);
 
   Map<String, dynamic> toJson() => _$OrderDetailsToJson(this);

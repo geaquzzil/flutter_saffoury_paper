@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_view_controller/models/va_mirrors.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'qualities.g.dart';
 
-@JsonSerializable(explicitToJson:true)
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Quality extends BaseWithNameString<Quality> {
-  List<Product> ?products;
+  List<Product>? products;
   int? products_count;
 
   Quality() : super();
