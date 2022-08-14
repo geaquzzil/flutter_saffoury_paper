@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class RoundedIconButtonTowChilds2 extends StatelessWidget {
@@ -32,7 +32,7 @@ class RoundedIconButtonTowChilds2 extends StatelessWidget {
               child: IconButton(
                 icon: Icon(smallIcon),
                 onPressed: () {
-                  pickFile();
+                  // pickFile();
                 },
               ),
             ),
@@ -42,25 +42,25 @@ class RoundedIconButtonTowChilds2 extends StatelessWidget {
     );
   }
 
-  void pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg'],
-    );
+//   void pickFile() async {
+//     FilePickerResult? result = await FilePicker.platform.pickFiles(
+//       type: FileType.custom,
+//       allowedExtensions: ['jpg', 'png', 'jpeg'],
+//     );
 
-    if (result != null) {
-      //TODO IF WEB then we have to use readBytes instead
-      String? path = result.files.single.path;
-      debugPrint("file path: $path");
-      if (path != null) File file = File(path);
-    } else {
-      // User canceled the picker
-    }
+//     if (result != null) {
+//       //TODO IF WEB then we have to use readBytes instead
+//       String? path = result.files.single.path;
+//       debugPrint("file path: $path");
+//       // if (path != null) File file = File(path);
+//     } else {
+//       // User canceled the picker
+//     }
 
-// if (result != null) {
-//   File file = File(result.files.single.path);
-// } else {
-//   // User canceled the picker
-// }
-  }
+// // if (result != null) {
+// //   File file = File(result.files.single.path);
+// // } else {
+// //   // User canceled the picker
+// // }
+//   }
 }

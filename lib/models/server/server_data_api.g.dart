@@ -6,8 +6,9 @@ part of 'server_data_api.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FilterableDataApi _$ServerDataApiFromJson(Map<String, dynamic> json) =>
+FilterableDataApi _$FilterableDataApiFromJson(Map<String, dynamic> json) =>
     FilterableDataApi()
+      ..iD = json['iD'] as int
       ..product_types = (json['product_types'] as List<dynamic>)
           .map((e) => ProductType.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -21,8 +22,9 @@ FilterableDataApi _$ServerDataApiFromJson(Map<String, dynamic> json) =>
           .map((e) => CustomsDeclaration.fromJson(e as Map<String, dynamic>))
           .toList();
 
-Map<String, dynamic> _$ServerDataApiToJson(FilterableDataApi instance) =>
+Map<String, dynamic> _$FilterableDataApiToJson(FilterableDataApi instance) =>
     <String, dynamic>{
+      'iD': instance.iD,
       'product_types': instance.product_types.map((e) => e.toJson()).toList(),
       'qualities': instance.qualities.map((e) => e.toJson()).toList(),
       'grades': instance.grades.map((e) => e.toJson()).toList(),

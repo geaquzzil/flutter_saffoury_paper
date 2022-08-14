@@ -18,9 +18,9 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
 
   FilterableDataApi() : super();
   factory FilterableDataApi.fromJson(Map<String, dynamic> data) =>
-      _$ServerDataApiFromJson(data);
+      _$FilterableDataApiFromJson(data);
 
-  Map<String, dynamic> toJson() => _$ServerDataApiToJson(this);
+  Map<String, dynamic> toJson() => _$FilterableDataApiToJson(this);
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => toJson();
