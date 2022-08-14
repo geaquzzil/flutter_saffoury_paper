@@ -23,15 +23,9 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     Provider.of<DrawerViewAbstractProvider>(context, listen: false)
         .addListener(() {
       debugPrint("ViewAbstractProvider CHANGED");
-      // context
-      //     .read<PostBloc>()
-      //     .clearList(context.read<DrawerViewAbstractProvider>().getObject);
     });
     listProvider
         .fetchFakeList(context.read<DrawerViewAbstractProvider>().getObject);
-    // listClass = DynamicList(taskItems.list);
-    //    = Provider.of<ViewAbstractProvider>(context, listen = false);
-    //object = context.watch<ViewAbstractProvider>().getObject;
   }
 
   Widget _listItems(List<ViewAbstract> data) {

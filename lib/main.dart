@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
@@ -74,7 +79,7 @@ void main() {
 
   // return;
   List<ViewAbstract> views =
-      List<ViewAbstract>.from([Product(), Size(), ProductType()]);
+      List<ViewAbstract>.from([Product(), Size(), ProductType(),Order(),Purchases(),ProductInput(),ProductOutput(),Transfers()]);
   try {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),

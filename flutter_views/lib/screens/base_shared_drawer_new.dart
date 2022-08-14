@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';

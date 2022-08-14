@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawer_large/drawer_large_screen.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
@@ -70,8 +70,8 @@ class BaseHomeScreenLayout extends StatelessWidget {
                   //   borderRadius: BorderRadius.circular(25),
                   // ),
                   child: const Center(
-                child: BaseSharedDetailsView(),
-              )))
+                      // child: BaseSharedDetailsView(),
+                      )))
       ]),
     );
   }

@@ -38,25 +38,25 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                     const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
             const Text('Craft beautiful UIs'),
             const Spacer(),
-            Expanded(
-              child: DropdownEnumControllerListener(
-                  viewAbstractEnum: SortByType.ASC,
-                  onSelected: (obj) {
-                    addFilterableSort(context, obj as SortByType);
-                    debugPrint("is selected $obj");
-                  }),
-            ),
-            Expanded(
-              child: DropdownStringListControllerListener(
-                  tag: "soso",
-                  hint: AppLocalizations.of(context)!.sortBy,
-                  list: viewAbstract.getMainFieldsIconsAndValues(context),
-                  onSelected: (obj) {
-                    addFilterableSortField(
-                        context, (obj as DropdownMenuItem).value);
-                    debugPrint("is selected $obj");
-                  }),
-            ),
+            // Expanded(
+            //   child: DropdownEnumControllerListener(
+            //       viewAbstractEnum: SortByType.ASC,
+            //       onSelected: (obj) {
+            //         addFilterableSort(context, obj as SortByType);
+            //         debugPrint("is selected $obj");
+            //       }),
+            // ),
+            // Expanded(
+            //   child: DropdownStringListControllerListener(
+            //       tag: "soso",
+            //       hint: AppLocalizations.of(context)!.sortBy,
+            //       list: viewAbstract.getMainFieldsIconsAndValues(context),
+            //       onSelected: (obj) {
+            //         addFilterableSortField(
+            //             context, (obj as DropdownMenuItem).value);
+            //         debugPrint("is selected $obj");
+            //       }),
+            // ),
             const Expanded(
               child: FittedBox(
                 fit: BoxFit.contain, // otherwise the logo will be tiny

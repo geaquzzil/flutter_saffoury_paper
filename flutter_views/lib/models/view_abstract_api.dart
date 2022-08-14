@@ -156,9 +156,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   //   Response? response = await getHttp().post(Uri.parse(URLS.BASE_URL),
   //       headers: await getHeaders(), body: mainBody);
 
-
-    
-
   // }
 
   Future<List<String>> searchViewAbstractByTextInput(
@@ -253,8 +250,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<List<T>?> listCallFake() async {
-    Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
-    return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+    try {
+      Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
+      return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
   }
 
   Future<List<T>?> listCall(int count, int page,

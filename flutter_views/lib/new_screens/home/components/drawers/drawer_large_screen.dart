@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
+import 'package:supercharged/supercharged.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
   final List<String> _addedGroups = [];
@@ -29,7 +30,7 @@ class DrawerLargeScreens extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
               width: double.infinity,
               child: buildHeader(context)),
-          buildList(context),
+          // buildList(context),
           const Spacer(),
           buildCollapseIcon(context),
           const SizedBox(
@@ -68,6 +69,7 @@ class DrawerLargeScreens extends StatelessWidget {
 
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
+
     return ListView.separated(
         padding: isClosed ? EdgeInsets.zero : padding,
         separatorBuilder: (context, index) {
@@ -75,22 +77,19 @@ class DrawerLargeScreens extends StatelessWidget {
             height: 8,
           );
         },
-        itemCount: authProvider.getDrawerItems.length,
+        itemCount: authProvider.getDrawerItemsGrouped.entries.length,
         shrinkWrap: true,
         primary: false,
         itemBuilder: (context, index) {
+          debugPrint("getDrawerItemsGrouped $index");
           ViewAbstract viewAbstract = authProvider.getDrawerItems[index];
-          String? groupLabel = viewAbstract.getMainDrawerGroupName(context);
-
+          String? groupLabel =
+              authProvider.getDrawerItemsGrouped.keys.elementAt(index);
           if (groupLabel != null) {
-            _addedGroups.add(groupLabel);
-            List<ViewAbstract> groupedDrawerItems = authProvider.getDrawerItems
-                .where((e) =>
-                    e.getMainDrawerGroupName(context) ==
-                    viewAbstract.getMainDrawerGroupName(context))
-                .toList();
             return DrawerListTileDesktopGroup(
-                groupedDrawerItems: groupedDrawerItems, idx: index);
+                groupedDrawerItems:
+                    authProvider.getDrawerItemsGrouped[index] ?? [],
+                idx: index);
           }
           return DrawerListTileDesktop(viewAbstract: viewAbstract, idx: index);
         });
@@ -141,6 +140,7 @@ class DrawerListTileDesktopGroup extends StatelessWidget {
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen;
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
+
     String title = groupedDrawerItems[0].getMainDrawerGroupName(context) ?? "";
     return isOpen
         ? ExpansionTile(
