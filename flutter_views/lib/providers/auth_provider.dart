@@ -100,23 +100,23 @@ class AuthProvider with ChangeNotifier {
 
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
-      debugPrint("checing permission for $item ");
+      // debugPrint("checing permission for $item ");
       bool hasPermssion = await _user.hasPermissionList(context,
           viewAbstract: item as ViewAbstract);
-      debugPrint("checing permission for $item value is $hasPermssion ");
+      // debugPrint("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {
         _drawerItemsPermissions.add(item);
       }
     });
-    debugPrint(
-        "initDrawerItems genrated list is ${_drawerItemsPermissions.toString()}");
+    // debugPrint(
+    //     "initDrawerItems genrated list is ${_drawerItemsPermissions.toString()}");
 
     __drawerItemsGrouped = _drawerItemsPermissions.groupBy(
         (item) => item.getMainDrawerGroupName(context),
         valueTransform: (v) => v);
 
-    debugPrint(
-        "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
+    // debugPrint(
+    //     "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
   }
 
   Future<bool> signIn() async {

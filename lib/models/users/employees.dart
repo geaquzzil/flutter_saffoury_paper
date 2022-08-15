@@ -48,6 +48,7 @@ class Employee extends User<Employee> {
   factory Employee.fromJson(Map<String, dynamic> data) =>
       _$EmployeeFromJson(data);
 
+  @override
   Map<String, dynamic> toJson() => _$EmployeeToJson(this);
 
   @override

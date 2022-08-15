@@ -70,7 +70,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
                   //   borderRadius: BorderRadius.circular(25),
                   // ),
                   child: const Center(
-                      // child: BaseSharedDetailsView(),
+                      child: BaseSharedDetailsView(),
                       )))
       ]),
     );

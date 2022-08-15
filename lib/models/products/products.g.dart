@@ -37,11 +37,14 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..qualities = json['qualities'] == null
       ? null
       : Quality.fromJson(json['qualities'] as Map<String, dynamic>)
+  ..grades = json['grades'] == null
+      ? null
+      : Grades.fromJson(json['grades'] as Map<String, dynamic>)
   ..products_colors = json['products_colors'] == null
       ? null
       : ProductsColor.fromJson(json['products_colors'] as Map<String, dynamic>)
-  ..inStock = (json['inStock'] as List<dynamic>)
-      .map((e) => Stocks.fromJson(e as Map<String, dynamic>))
+  ..inStock = (json['inStock'] as List<dynamic>?)
+      ?.map((e) => Stocks.fromJson(e as Map<String, dynamic>))
       .toList();
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
@@ -60,8 +63,9 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'sizes': instance.sizes?.toJson(),
       'gsms': instance.gsms?.toJson(),
       'qualities': instance.qualities?.toJson(),
+      'grades': instance.grades?.toJson(),
       'products_colors': instance.products_colors?.toJson(),
-      'inStock': instance.inStock.map((e) => e.toJson()).toList(),
+      'inStock': instance.inStock?.map((e) => e.toJson()).toList(),
     };
 
 const _$ProductStatusEnumMap = {

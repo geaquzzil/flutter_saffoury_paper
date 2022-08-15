@@ -10,6 +10,7 @@ import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -49,8 +50,9 @@ class Product extends ViewAbstract<Product> {
   Size? sizes;
   GSM? gsms;
   Quality? qualities;
+  Grades? grades;
   ProductsColor? products_colors;
-  List<Stocks> inStock = [];
+  List<Stocks>? inStock;
 
   Product() : super();
 
@@ -181,11 +183,12 @@ class Product extends ViewAbstract<Product> {
   }
 
   double getQuantity({Warehouse? warehouse}) {
+    if (inStock == null) return 0;
     if (warehouse == null) {
-      return inStock.fold(
-          0, (value, element) => value + (element.quantity ?? 0));
+      return inStock!
+          .fold(0, (value, element) => value + (element.quantity ?? 0));
     }
-    return inStock
+    return inStock!
         .where((element) => warehouse.iD == element.warehouse?.iD)
         .fold(0, (value, element) => value + (element.quantity ?? 0));
   }
@@ -225,7 +228,36 @@ class Product extends ViewAbstract<Product> {
   }
 }
 
-enum ProductStatus { NONE, PENDING, RETURNED, WASTED }
-// enum ProductStatus implements ViewAbstractEnum<ProductStatus>{
+// enum ProductStatus { NONE, PENDING, RETURNED, WASTED }
 
-// }
+enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
+  NONE,
+  PENDING,
+  RETURNED,
+  WASTED;
+
+  @override
+  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.status;
+
+  @override
+  String getFieldLabelString(BuildContext context, ProductStatus field) {
+    switch (field) {
+      case NONE:
+        return AppLocalizations.of(context)!.none;
+      case PENDING:
+        return AppLocalizations.of(context)!.pending;
+      case RETURNED:
+        return AppLocalizations.of(context)!.returnedProduct;
+      case WASTED:
+        return AppLocalizations.of(context)!.wasted;
+    }
+  }
+
+  @override
+  List<ProductStatus> getValues() {
+    return ProductStatus.values;
+  }
+}

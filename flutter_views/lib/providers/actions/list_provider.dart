@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
@@ -25,14 +24,18 @@ class ListProvider with ChangeNotifier {
   }
 
   Future fetchFakeList(ViewAbstract viewAbstract) async {
-    debugPrint(
-        "fetching list of objects from view $viewAbstract page is $page");
-    isLoading = true;
-    List? list = await viewAbstract.listCallFake();
-    isLoading = false;
-    objects.addAll(list as List<ViewAbstract>);
-    page++;
-    notifyListeners();
+    // debugPrint(
+    //     "fetching list of objects from view $viewAbstract page is $page");
+    try {
+      isLoading = true;
+      List? list = await viewAbstract.listCallFake();
+      isLoading = false;
+      objects.addAll(list as List<ViewAbstract>);
+      page++;
+      notifyListeners();
+    } catch (e) {
+      debugPrint("fetchFakeList ${e.toString()}");
+    }
   }
 
   //TODO on publish use this method

@@ -52,6 +52,7 @@ class Customer extends User<Customer> {
   factory Customer.fromJson(Map<String, dynamic> data) =>
       _$CustomerFromJson(data);
 
+  @override
   Map<String, dynamic> toJson() => _$CustomerToJson(this);
 
   @override

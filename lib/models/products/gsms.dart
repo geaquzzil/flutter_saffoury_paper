@@ -14,6 +14,7 @@ class GSM extends ViewAbstract<GSM> {
 
   List<Product>? products;
   int? products_count;
+  
   GSM() : super();
   @override
   String? getMainDrawerGroupName(BuildContext context) {

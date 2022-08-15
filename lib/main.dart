@@ -74,12 +74,7 @@ class SimpleBlocObserver extends BlocObserver {
 
 void main() {
   initializeReflectable();
-
-  // runApp(AnimatedListSample());
-
-  // return;
-  List<ViewAbstract> views =
-      List<ViewAbstract>.from([Product(), Size(), ProductType(),Order(),Purchases(),ProductInput(),ProductOutput(),Transfers()]);
+  List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
   try {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
@@ -98,7 +93,8 @@ void main() {
           create: (_) => DrawerViewAbstractProvider(object: Product())),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(
-        create: (_) => FilterableListApiProvider<FilterableDataApi>.initialize(FilterableDataApi()),
+        create: (_) => FilterableListApiProvider<FilterableDataApi>.initialize(
+            FilterableDataApi()),
       )
     ], child: const BaseMaterialAppPage()
 

@@ -6,6 +6,7 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -130,4 +131,33 @@ class CutRequest extends ViewAbstract<CutRequest> {
       CutRequest.fromJson(json);
 }
 
-enum CutStatus { PENDING, PROCESSING, COMPLETED }
+// enum CutStatus { PENDING, PROCESSING, COMPLETED }
+
+enum CutStatus implements ViewAbstractEnum<CutStatus> {
+  PENDING,
+  PROCESSING,
+  COMPLETED;
+
+  @override
+  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.status;
+
+  @override
+  String getFieldLabelString(BuildContext context, CutStatus field) {
+    switch (field) {
+      case PENDING:
+        return AppLocalizations.of(context)!.pending;
+      case PROCESSING:
+        return AppLocalizations.of(context)!.processing;
+      case COMPLETED:
+        return AppLocalizations.of(context)!.completed;
+    }
+  }
+
+  @override
+  List<CutStatus> getValues() {
+    return CutStatus.values;
+  }
+}
