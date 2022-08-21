@@ -14,7 +14,6 @@ class BaseHomeScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Row(children: [
       if (SizeConfig.isDesktop(context)) DrawerLargeScreens(),
       Expanded(

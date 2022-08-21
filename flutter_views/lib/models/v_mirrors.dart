@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:reflectable/reflectable.dart';
 
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
@@ -18,10 +20,15 @@ class VMirrors<T> {
 
   ClassMirror getInstanceMirrorFieldName(String name) {
     ClassMirror c = getInstanceMirror().type;
-    VariableMirror vm = c.declarations[name] as VariableMirror;
-    TypeMirror nonGenericClassMirrorImpl = vm.type;
-    return reflector.reflectType(nonGenericClassMirrorImpl.reflectedType)
-        as ClassMirror;
+    try {
+      VariableMirror vm = c.declarations[name] as VariableMirror;
+      TypeMirror nonGenericClassMirrorImpl = vm.type;
+      return reflector.reflectType(nonGenericClassMirrorImpl.reflectedType)
+          as ClassMirror;
+    } catch (e) {
+      debugPrint("getInstanceMirrorFieldName error=> $e");
+      return c;
+    }
   }
 
   ClassMirror getInstanceMirrorFieldNameFromList(String name) {
@@ -45,6 +52,16 @@ class VMirrors<T> {
   List<String> getFieldsDeclarations() {
     ClassMirror c = getInstanceMirror().type;
     return c.declarations.entries.map((e) => e.key).toList();
+  }
+
+  ViewAbstractEnum? getNewInstanceEnum(
+      {ClassMirror? classMirror, String? field}) {
+    debugPrint("getNewInstanceEnum for classMirror:$field");
+    if (field != null) {
+      if (!getInstanceMirrorFieldName(field).isEnum) return null;
+      return getNewInstanceEnum(classMirror: getInstanceMirrorFieldName(field));
+    }
+    return classMirror?.newInstance("", []) as ViewAbstractEnum?;
   }
 
   ViewAbstract? getNewInstanceMirror(

@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:intl/intl.dart';
+import 'package:reflectable/mirrors.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -21,14 +23,23 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
 
+  IconData getFieldIconData(String field) {
+    return getFieldIconDataMap()[field] ??
+        getNewInstanceEnum(field: field)?.getMainIconData() ??
+        getNewInstanceMirror(field: field)?.getMainIconData() ??
+        Icons.error;
+  }
+
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ??
+        getNewInstanceEnum(field: field)?.getMainLabelText(context) ??
         getNewInstanceMirror(field: field)
             ?.getMainHeaderLabelTextOnly(context) ??
         "error geting field label =>$field";
   }
-  String getMainHeaderLabelWithText(BuildContext context){
-     return "${getMainHeaderLabelTextOnly(context)}:${getMainHeaderTextOnly(context)}";
+
+  String getMainHeaderLabelWithText(BuildContext context) {
+    return "${getMainHeaderLabelTextOnly(context)}:${getMainHeaderTextOnly(context)}";
   }
 
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
@@ -43,12 +54,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Icon(getFieldIconDataMap()[field]);
   }
 
-  IconData getFieldIconData(String field) {
-    return getFieldIconDataMap()[field] ??
-        getNewInstanceMirror(field: field)?.getMainIconData() ??
-        Icons.error;
-  }
-
   Icon getIcon() {
     return Icon(getMainIconData());
   }
@@ -59,7 +64,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       // style: const TextStyle(color: kTextLightColor)
     );
   }
-  
+
   Text? getMainNullableText(BuildContext context) {
     return Text(
       getMainNullableTextOnly(context),
@@ -187,7 +192,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       BuildContext context) {
     return getMainFields()
         .map((e) => DropdownStringListItem(
-            getFieldIconData(e), getFieldLabel(context, e),value: e))
+            getFieldIconData(e), getFieldLabel(context, e),
+            value: e))
         .toList();
   }
 }

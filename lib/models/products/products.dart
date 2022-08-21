@@ -93,14 +93,17 @@ class Product extends ViewAbstract<Product> {
   @override
   List<String> getMainFields() {
     return [
+      "customs_declarations",
       "products_types",
       "sizes",
+      "gsms",
+      "qualities",
       "grades",
       "products_colors",
       "date",
       "comments",
       "barcode",
-      // "status"
+      "status"
     ];
   }
 
@@ -156,7 +159,13 @@ class Product extends ViewAbstract<Product> {
   Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() => {"grades": true};
+  Map<String, bool> isFieldCanBeNullableMap() => {
+        "grades": true,
+        "gsms": true,
+        "products_colors": true,
+        "qualities": true,
+        "grades": true
+      };
 
   @override
   Map<String, bool> isFieldRequiredMap() => {};

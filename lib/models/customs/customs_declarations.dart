@@ -28,7 +28,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
 
   @override
   List<String> getMainFields() =>
-      ["number", "date", "fromCountry", "fromName", "comments"];
+      ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override
   List<String>? requireObjectsList() => ["customs_declarations_images"];

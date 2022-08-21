@@ -6,7 +6,6 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
-  final List<String> _addedGroups = [];
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
   DrawerLargeScreens({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class DrawerLargeScreens extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
               width: double.infinity,
               child: buildHeader(context)),
-          // buildList(context),
+          buildList(context),
           const Spacer(),
           buildCollapseIcon(context),
           const SizedBox(
@@ -68,7 +67,10 @@ class DrawerLargeScreens extends StatelessWidget {
 
     bool isClosed =
         context.watch<DrawerMenuSelectedItemController>().getSideMenuIsClosed;
-
+    debugPrint(
+        "getDrawerItemsGrouped current length=> ${authProvider.getDrawerItemsGrouped.length}");
+    debugPrint(
+        "getDrawerItemsGrouped current entires length=> ${authProvider.getDrawerItemsGrouped.entries.length}");
     return ListView.separated(
         padding: isClosed ? EdgeInsets.zero : padding,
         separatorBuilder: (context, index) {
@@ -76,20 +78,23 @@ class DrawerLargeScreens extends StatelessWidget {
             height: 8,
           );
         },
-        itemCount: authProvider.getDrawerItemsGrouped.entries.length,
+        itemCount: authProvider.getDrawerItemsGrouped.length,
         shrinkWrap: true,
         primary: false,
         itemBuilder: (context, index) {
-          debugPrint("getDrawerItemsGrouped $index");
-          ViewAbstract viewAbstract = authProvider.getDrawerItems[index];
           String? groupLabel =
               authProvider.getDrawerItemsGrouped.keys.elementAt(index);
+
+          debugPrint(
+              "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
           if (groupLabel != null) {
             return DrawerListTileDesktopGroup(
                 groupedDrawerItems:
-                    authProvider.getDrawerItemsGrouped[index] ?? [],
+                    authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
                 idx: index);
           }
+          ViewAbstract viewAbstract =
+              authProvider.getDrawerItemsGrouped[groupLabel]!.first;
           return DrawerListTileDesktop(viewAbstract: viewAbstract, idx: index);
         });
   }
@@ -164,7 +169,7 @@ class DrawerListTileDesktopGroup extends StatelessWidget {
                   })
             ],
           )
-        : const Text("TODO");
+        : Icon(groupedDrawerItems[0].getMainDrawerGroupIconData() ?? Icons.abc);
   }
 }
 

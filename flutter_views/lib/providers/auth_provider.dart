@@ -115,8 +115,8 @@ class AuthProvider with ChangeNotifier {
         (item) => item.getMainDrawerGroupName(context),
         valueTransform: (v) => v);
 
-    // debugPrint(
-    //     "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
+    debugPrint(
+        "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
   }
 
   Future<bool> signIn() async {
