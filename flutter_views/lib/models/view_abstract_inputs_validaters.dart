@@ -87,7 +87,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   bool? canBeNullableFromParentCheck(BuildContext context, String field) {
-    return getParnet?.isFieldCanBeNullable(context, field);
+    return getParnet?.isFieldCanBeNullable(context, field) ;
   }
 
   TextCapitalization getTextInputCapitalization(String field) {

@@ -99,6 +99,7 @@ class Product extends ViewAbstract<Product> {
       "gsms",
       "qualities",
       "grades",
+      "countries_manufactures",
       "products_colors",
       "date",
       "comments",
@@ -164,7 +165,7 @@ class Product extends ViewAbstract<Product> {
         "gsms": true,
         "products_colors": true,
         "qualities": true,
-        "grades": true
+        "customs_declarations": true,
       };
 
   @override

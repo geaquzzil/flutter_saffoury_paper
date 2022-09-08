@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 
 class EditSubViewAbstractNullableButton extends StatefulWidget {
   String field;
-  EditSubViewAbstractNullableButton(
-      {Key? key,required this.field})
+  EditSubViewAbstractNullableButton({Key? key, required this.field})
       : super(key: key);
 
   @override

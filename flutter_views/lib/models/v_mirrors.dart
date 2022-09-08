@@ -88,6 +88,18 @@ class VMirrors<T> {
     return getInstanceMirror().invokeGetter(field).runtimeType;
   }
 
+  bool isViewAbstract(String field) {
+    try {
+      ViewAbstract? t = getNewInstanceMirror(field: field);
+      bool res = t is ViewAbstract;
+      debugPrint("isViewAbstract $field  res=>$res");
+      return res;
+    } catch (e) {
+      debugPrint("isViewAbstract error=> $e");
+      return false;
+    }
+  }
+
   dynamic getFieldValue(String field) {
     try {
       dynamic value = getInstanceMirror().invokeGetter(field);

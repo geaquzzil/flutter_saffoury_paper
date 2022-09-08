@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/edit_contro
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/edit/ext.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_trailing.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
@@ -153,6 +154,15 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     Type type = currentViewAbstract.getFieldType(field);
     debugPrint("fieldValueType is ${fieldValue.runtimeType}");
     debugPrint("type is $type");
+
+    // if (checkIfNullAndViewAbstractField(currentViewAbstract,
+    //     fieldValue: fieldValue, fieldName: field)) {
+    //   fieldValue = currentViewAbstract.getNewInstanceMirror(field: field);
+    //   fieldValue.setParent(currentViewAbstract);
+    //   // fieldValue.setFieldNameFromParent(field);
+    //   return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
+    // }
+
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(currentViewAbstract);
       // return Text("FDFD");
