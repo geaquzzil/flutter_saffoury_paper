@@ -238,36 +238,36 @@ class Product extends ViewAbstract<Product> {
   }
 }
 
-// enum ProductStatus { NONE, PENDING, RETURNED, WASTED }
+enum ProductStatus { NONE, PENDING, RETURNED, WASTED }
 
-enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
-  NONE,
-  PENDING,
-  RETURNED,
-  WASTED;
+// enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
+//   NONE,
+//   PENDING,
+//   RETURNED,
+//   WASTED;
 
-  @override
-  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
-  @override
-  String getMainLabelText(BuildContext context) =>
-      AppLocalizations.of(context)!.status;
+//   @override
+//   IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+//   @override
+//   String getMainLabelText(BuildContext context) =>
+//       AppLocalizations.of(context)!.status;
 
-  @override
-  String getFieldLabelString(BuildContext context, ProductStatus field) {
-    switch (field) {
-      case NONE:
-        return AppLocalizations.of(context)!.none;
-      case PENDING:
-        return AppLocalizations.of(context)!.pending;
-      case RETURNED:
-        return AppLocalizations.of(context)!.returnedProduct;
-      case WASTED:
-        return AppLocalizations.of(context)!.wasted;
-    }
-  }
+//   @override
+//   String getFieldLabelString(BuildContext context, ProductStatus field) {
+//     switch (field) {
+//       case NONE:
+//         return AppLocalizations.of(context)!.none;
+//       case PENDING:
+//         return AppLocalizations.of(context)!.pending;
+//       case RETURNED:
+//         return AppLocalizations.of(context)!.returnedProduct;
+//       case WASTED:
+//         return AppLocalizations.of(context)!.wasted;
+//     }
+//   }
 
-  @override
-  List<ProductStatus> getValues() {
-    return ProductStatus.values;
-  }
-}
+//   @override
+//   List<ProductStatus> getValues() {
+//     return ProductStatus.values;
+//   }
+// }
