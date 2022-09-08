@@ -1,6 +1,3 @@
-
-
-
 import 'app_localization.dart';
 
 /// The translations for Arabic (`ar`).
