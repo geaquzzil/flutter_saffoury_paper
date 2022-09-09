@@ -31,7 +31,10 @@ String dropdownGettLabelWithText(
 InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
     {ViewAbstractEnum? viewAbstractEnum}) {
   return const InputDecoration(
-    // filled: true,
+    fillColor: Colors.white,
+    focusColor: Colors.white,
+
+    filled: true,
     border: OutlineInputBorder(),
     // label: TextBold(
     //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
@@ -114,8 +117,6 @@ ViewAbstract? getViewAbstract(BuildContext context, String? field) {
       .watch<EditSubsViewAbstractControllerProvider>()
       .getViewAbstract(field ?? "");
 }
-
-
 
 ViewAbstract getViewAbstractReturnSameIfNull(
     BuildContext context, ViewAbstract viewAbstract, String? field) {

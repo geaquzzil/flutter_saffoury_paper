@@ -35,7 +35,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (SizeConfig.isDesktop(context)) {
       context
           .read<ActionViewAbstractProvider>()
-          .change(this as ViewAbstract, ServerActions.edit);
+          .change(this as ViewAbstract, ServerActions.view);
       return;
     }
     Navigator.push(
@@ -51,7 +51,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onDrawerItemClicked(BuildContext context) {
     debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
-    context.read<DrawerViewAbstractProvider>().change(context,this as ViewAbstract);
+    context
+        .read<DrawerViewAbstractProvider>()
+        .change(context, this as ViewAbstract);
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

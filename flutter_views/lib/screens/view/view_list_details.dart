@@ -30,7 +30,7 @@ class ViewDetailsListWidget extends StatelessWidget {
           } else {
             return ViewCardItem(
                 title: viewAbstract.getFieldLabel(context, label),
-                description: fieldValue,
+                description: fieldValue.toString(),
                 icon: viewAbstract.getFieldIconData(label));
           }
         });

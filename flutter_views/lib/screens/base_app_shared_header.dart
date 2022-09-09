@@ -78,12 +78,12 @@ class HeaderActions extends StatelessWidget {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-              child: const Text('Regret'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            // FlatButton(
+            //   child: const Text('Regret'),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
           ],
         );
       },

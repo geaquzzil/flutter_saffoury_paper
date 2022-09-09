@@ -34,42 +34,42 @@ class SideMenu extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: kDefaultPadding),
-              FlatButton.icon(
-                minWidth: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  vertical: kDefaultPadding,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: kPrimaryColor,
-                onPressed: () {},
-                icon: SvgPicture.asset("Icons/Edit.svg", width: 16),
-                label: const Text(
-                  "New message",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ).addNeumorphism(
-                topShadowColor: Colors.white,
-                bottomShadowColor: const Color(0xFF234395).withOpacity(0.2),
-              ),
-              const SizedBox(height: kDefaultPadding),
-              FlatButton.icon(
-                minWidth: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  vertical: kDefaultPadding,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: kBgDarkColor,
-                onPressed: () {},
-                icon: SvgPicture.asset("Icons/Download.svg", width: 16),
-                label: const Text(
-                  "Get messages",
-                  style: TextStyle(color: kTextColor),
-                ),
-              ).addNeumorphism(),
+              // TextButton.icon(
+              //   minWidth: double.infinity,
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: kDefaultPadding,
+              //   ),
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   color: kPrimaryColor,
+              //   onPressed: () {},
+              //   icon: SvgPicture.asset("Icons/Edit.svg", width: 16),
+              //   label: const Text(
+              //     "New message",
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // ).addNeumorphism(
+              //   topShadowColor: Colors.white,
+              //   bottomShadowColor: const Color(0xFF234395).withOpacity(0.2),
+              // ),
+              // const SizedBox(height: kDefaultPadding),
+              // FlatButton.icon(
+              //   minWidth: double.infinity,
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: kDefaultPadding,
+              //   ),
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   color: kBgDarkColor,
+              //   onPressed: () {},
+              //   icon: SvgPicture.asset("Icons/Download.svg", width: 16),
+              //   label: const Text(
+              //     "Get messages",
+              //     style: TextStyle(color: kTextColor),
+              //   ),
+              // ).addNeumorphism(),
               const SizedBox(height: kDefaultPadding * 2),
               // Menu Items
               SideMenuItem(

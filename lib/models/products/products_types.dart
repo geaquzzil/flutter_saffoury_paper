@@ -151,32 +151,32 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 }
 
-enum ProductTypeUnit { KG, Sheet, Ream }
-// enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
-//   KG,
-//   Sheet,
-//   Ream;
+// enum ProductTypeUnit { KG, Sheet, Ream }
+enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
+  KG,
+  Sheet,
+  Ream;
 
-//   @override
-//   IconData getMainIconData() => Icons.stacked_line_chart_outlined;
-//   @override
-//   String getMainLabelText(BuildContext context) =>
-//       AppLocalizations.of(context)!.status;
+  @override
+  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.status;
 
-//   @override
-//   String getFieldLabelString(BuildContext context, ProductTypeUnit field) {
-//     switch (field) {
-//       case KG:
-//         return AppLocalizations.of(context)!.kg;
-//       case Sheet:
-//         return AppLocalizations.of(context)!.sheets;
-//       case Ream:
-//         return AppLocalizations.of(context)!.reams;
-//     }
-//   }
+  @override
+  String getFieldLabelString(BuildContext context, ProductTypeUnit field) {
+    switch (field) {
+      case KG:
+        return AppLocalizations.of(context)!.kg;
+      case Sheet:
+        return AppLocalizations.of(context)!.sheets;
+      case Ream:
+        return AppLocalizations.of(context)!.reams;
+    }
+  }
 
-//   @override
-//   List<ProductTypeUnit> getValues() {
-//     return ProductTypeUnit.values;
-//   }
-// }
+  @override
+  List<ProductTypeUnit> getValues() {
+    return ProductTypeUnit.values;
+  }
+}
