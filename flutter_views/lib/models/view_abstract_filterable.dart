@@ -61,14 +61,14 @@ enum SortByType implements ViewAbstractEnum<SortByType> {
   }
 }
 
-class FilterableProviderHelperListItem {
-  //The field Label
-  String labelText;
-//wich contains the field text
-  String valueLabelText;
-  //witch contains the iD
-  Object? valueApi;
+// class FilterableProviderHelperListItem {
+//   //The field Label
+//   String labelText;
+// //wich contains the field text
+//   String valueLabelText;
+//   //witch contains the iD
+//   Object? valueApi;
 
-  FilterableProviderHelperListItem(
-      this.labelText, this.valueLabelText, this.valueApi);
-}
+//   FilterableProviderHelperListItem(
+//       this.labelText, this.valueLabelText, this.valueApi);
+// }

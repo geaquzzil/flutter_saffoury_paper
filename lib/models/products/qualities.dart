@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'qualities.g.dart';
 
 @JsonSerializable(explicitToJson: true)
+
 @reflector
 class Quality extends BaseWithNameString<Quality> {
   List<Product>? products;

@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
+import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
@@ -42,7 +43,19 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
             ),
             const Text('Craft beautiful UIs'),
             const Spacer(),
-            RoundedIconButton(onTap: () => {}, icon: Icons.filter_alt_sharp),
+            RoundedIconButton(
+                onTap: () {
+                  debugPrint("is Clicked");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Scaffold(body: const BaseFilterableMainWidget()),
+                    ),
+                  );
+                  // BaseFilterableMainWidget();
+                },
+                icon: Icons.filter_alt_sharp),
             Expanded(
               flex: 1,
               child: Padding(

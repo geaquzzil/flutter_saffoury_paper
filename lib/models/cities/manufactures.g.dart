@@ -8,7 +8,7 @@ part of 'manufactures.dart';
 
 Manufacture _$ManufactureFromJson(Map<String, dynamic> json) => Manufacture()
   ..iD = json['iD'] as int
-  ..name = json['name'] as String?;
+  ..name = BaseWithNameString.intFromString(json['name']);
 
 Map<String, dynamic> _$ManufactureToJson(Manufacture instance) =>
     <String, dynamic>{

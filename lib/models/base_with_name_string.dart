@@ -1,10 +1,16 @@
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_saffoury_paper/models/converters.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+@JsonIntToString()
 abstract class BaseWithNameString<T> extends ViewAbstract<T> {
+  @JsonKey(
+    fromJson: intFromString,
+  )
   String? name;
 
   BaseWithNameString() : super();
@@ -51,4 +57,5 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) =>
       {"name": getMainHeaderLabelTextOnly(context)};
+  static String? intFromString(dynamic number) => number?.toString();
 }

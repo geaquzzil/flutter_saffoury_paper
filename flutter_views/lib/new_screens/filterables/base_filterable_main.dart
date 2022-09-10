@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
@@ -20,7 +21,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
 
     return FutureBuilder(
         future: context
-            .read<FilterableListApiProvider>()
+            .read<FilterableListApiProvider<FilterableData>>()
             .getServerData(drawerViewAbstract),
         builder: ((context, snapshot) {
           return Text(snapshot.data.toString());

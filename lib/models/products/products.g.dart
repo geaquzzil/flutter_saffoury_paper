@@ -8,7 +8,7 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = json['iD'] as int
-  ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
+  ..status = json['status']
   ..date = json['date'] as String?
   ..sheets = json['sheets'] as int?
   ..barcode = json['barcode'] as String?
@@ -49,7 +49,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,
-      'status': _$ProductStatusEnumMap[instance.status],
+      'status': instance.status,
       'date': instance.date,
       'sheets': instance.sheets,
       'barcode': instance.barcode,
@@ -67,10 +67,3 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'products_colors': instance.products_colors?.toJson(),
       'inStock': instance.inStock?.map((e) => e.toJson()).toList(),
     };
-
-const _$ProductStatusEnumMap = {
-  ProductStatus.NONE: 'NONE',
-  ProductStatus.PENDING: 'PENDING',
-  ProductStatus.RETURNED: 'RETURNED',
-  ProductStatus.WASTED: 'WASTED',
-};

@@ -11,6 +11,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
@@ -95,7 +96,7 @@ void main() {
           create: (_) => DrawerViewAbstractProvider(object: Product())),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(
-        create: (_) => FilterableListApiProvider<FilterableDataApi>.initialize(
+        create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),
       )
     ], child: const BaseMaterialAppPage()
