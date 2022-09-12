@@ -38,4 +38,9 @@ class Warehouse extends BaseWithNameString<Warehouse> {
   @override
   Warehouse fromJsonViewAbstract(Map<String, dynamic> json) =>
       Warehouse.fromJson(json);
+
+        @override
+  String getForeignKeyName() {
+    return "WarehouseID";
+  }
 }

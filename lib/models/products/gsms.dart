@@ -14,8 +14,13 @@ class GSM extends ViewAbstract<GSM> {
 
   List<Product>? products;
   int? products_count;
-  
+
   GSM() : super();
+  @override
+  String getForeignKeyName() {
+    return "GSMID";
+  }
+
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     return AppLocalizations.of(context)!.product;

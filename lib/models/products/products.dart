@@ -236,6 +236,10 @@ class Product extends ViewAbstract<Product> {
   double getCartItemUnitPrice() {
     return getUnitSellPrice();
   }
+    @override
+  String getForeignKeyName() {
+    return "ProductID";
+  }
 }
 
 // enum ProductStatus { NONE, PENDING, RETURNED, WASTED }

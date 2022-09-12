@@ -30,6 +30,10 @@ class ProductType extends ViewAbstract<ProductType> {
   List<Product>? products;
   int? products_count;
 
+  @override
+  String getForeignKeyName() {
+    return "ProductTypeID";
+  }
   ProductType() : super();
   @override
   String? getMainDrawerGroupName(BuildContext context) {

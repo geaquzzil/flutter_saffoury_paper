@@ -72,14 +72,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     );
   }
 
-  Text? getMainHeaderText(BuildContext context) {
+  Text getMainHeaderText(BuildContext context) {
     return Text(
       getMainHeaderTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
-  Text? getMainLabelText(BuildContext context) {
+  Text getMainLabelText(BuildContext context) {
     return Text(
       getMainHeaderLabelTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)

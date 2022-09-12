@@ -45,4 +45,9 @@ class Quality extends BaseWithNameString<Quality> {
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.product;
+
+        @override
+  String getForeignKeyName() {
+    return "QualityID";
+  }
 }

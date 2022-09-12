@@ -12,6 +12,10 @@ class Grades extends BaseWithNameString<Grades> {
   List<Product>? products;
   int? products_count;
   Grades() : super();
+  @override
+  String getForeignKeyName() {
+    return "GradeID";
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {

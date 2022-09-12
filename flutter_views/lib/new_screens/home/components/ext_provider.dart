@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
@@ -9,4 +10,15 @@ void addFilterableSort(BuildContext context, SortByType selectedItem) {
 
 void addFilterableSortField(BuildContext context, String selectedItem) {
   context.read<FilterableProvider>().addSortFieldName(selectedItem);
+}
+
+void addFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
+context.read<FilterableProvider>().add(selectedItem);
+
+}
+void removeFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
+
+}
+bool isFilterableSelected(BuildContext context, ViewAbstract item){
+  context.watch<FilterableProvider>().isSelected(selectedItem);
 }

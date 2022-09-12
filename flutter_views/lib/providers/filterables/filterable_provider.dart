@@ -71,8 +71,10 @@ class FilterableProvider with ChangeNotifier {
   }
 
   void remove(String field) {
-    _list.remove(field);
-    notifyListeners();
+    if (_list.containsKey(field)) {
+      _list.remove(field);
+      notifyListeners();
+    }
   }
 }
 

@@ -6,8 +6,10 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
   T? _filterData;
   late T _filterOb;
   final Map<ViewAbstract?, List<dynamic>> _requiredFiltter = {};
+
+  Map<ViewAbstract?, List<dynamic>> get getRequiredFiltter => _requiredFiltter;
   ViewAbstract? _lastViewAbstract;
-  
+
   FilterableListApiProvider.initialize(T filterOb) {
     _filterOb = filterOb;
   }
@@ -31,7 +33,9 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
     debugPrint("setRequiredFilterList called with sharedFields $sharedFields");
     for (var field in sharedFields) {
       _requiredFiltter[_filterOb.getNewInstanceMirror(field: field)] =
-          sharedFields;
+          _filterData?.getFieldValue(field);
     }
+    debugPrint(
+        "setRequiredFilterList called with _filterData $_requiredFiltter");
   }
 }

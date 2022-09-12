@@ -7,6 +7,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   String? getSortByFieldName();
   SortByType getSortByType();
+  String getForeignKeyName() {
+    return getTableNameApi() ?? " no_foreign_key";
+  }
 
   bool isSortAvailable() => getSortByFieldName() != null;
 

@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'sizes.g.dart';
 
-@JsonSerializable(explicitToJson:true)
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Size extends ViewAbstract<Size> {
   int? width;
@@ -37,6 +37,11 @@ class Size extends ViewAbstract<Size> {
   @override
   List<String> getMainFields() {
     return ['width', 'length'];
+  }
+
+  @override
+  String getForeignKeyName() {
+    return "SizeID";
   }
 
   @override
