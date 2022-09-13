@@ -13,12 +13,21 @@ void addFilterableSortField(BuildContext context, String selectedItem) {
 }
 
 void addFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
-context.read<FilterableProvider>().add(selectedItem);
-
+  context.read<FilterableProvider>().add(selectedItem.getForeignKeyName(),
+      selectedItem.getForeignKeyName(), selectedItem.getIDString());
 }
+
 void removeFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
-
+  context.read<FilterableProvider>().remove(selectedItem.getForeignKeyName(),
+      value: selectedItem.getIDString());
 }
-bool isFilterableSelected(BuildContext context, ViewAbstract item){
-  context.watch<FilterableProvider>().isSelected(selectedItem);
+
+bool isFilterableSelected(BuildContext context, ViewAbstract item) {
+  return context
+      .watch<FilterableProvider>()
+      .isSelected(item.getForeignKeyName(), item.getIDString());
+}
+
+int getFilterableFieldsCount(BuildContext context, ViewAbstract item) {
+  return context.read<FilterableProvider>().getCount(item.getForeignKeyName());
 }

@@ -35,7 +35,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
   }
 
   Widget getListFilterableControlers(BuildContext context) {
-    Map<ViewAbstract?, List<dynamic>> list = context
+    Map<ViewAbstract, List<dynamic>> list = context
         .read<FilterableListApiProvider<FilterableData>>()
         .getRequiredFiltter;
 
@@ -46,12 +46,15 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
       itemCount: list.length,
       shrinkWrap: true,
       primary: false,
-      itemBuilder: (context, index) =>
-          // debugPrint("getListFilterableControlers ")
-          //  ViewAbstract? groupLabel =list.elementAt(index);
-          MasterFilterableController(
-              viewAbstract: list.keys.elementAt(index),
-              list: list[list.keys.elementAt(index)] ?? []),
+      itemBuilder: (context, index) {
+        ViewAbstract viewAbstract = list.keys.elementAt(index);
+        List<dynamic> itemsViewAbstract = list[viewAbstract] ?? [];
+        debugPrint(
+            "getListFilterableControlers is => ${viewAbstract.runtimeType.toString()} count is ${itemsViewAbstract.length}");
+        return MasterFilterableController(
+            viewAbstract: viewAbstract, list: itemsViewAbstract);
+      },
+      
     );
   }
 }

@@ -73,7 +73,11 @@ class VMirrors<T> {
     }
     return classMirror?.newInstance("", []) as ViewAbstract?;
   }
-
+ViewAbstract getNewInstanceMirrorNotNull(
+   String field) {
+    debugPrint("getNewInstanceMirrorNotNull for classMirror:$field");
+    return getInstanceMirrorFieldName(field).newInstance("", []) as ViewAbstract;
+  }
   ViewAbstract? getNewInstanceMirrorFromList(
       {ClassMirror? classMirror, String? field}) {
     debugPrint("getNewInstanceMirror for classMirror:$field");

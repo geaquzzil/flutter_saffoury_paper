@@ -5,10 +5,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
   T? _filterData;
   late T _filterOb;
-  final Map<ViewAbstract?, List<dynamic>> _requiredFiltter = {};
+  final Map<ViewAbstract, List<dynamic>> _requiredFiltter = {};
 
-  Map<ViewAbstract?, List<dynamic>> get getRequiredFiltter => _requiredFiltter;
-  ViewAbstract? _lastViewAbstract;
+  Map<ViewAbstract, List<dynamic>> get getRequiredFiltter => _requiredFiltter;
+  late ViewAbstract _lastViewAbstract;
 
   FilterableListApiProvider.initialize(T filterOb) {
     _filterOb = filterOb;
@@ -31,8 +31,9 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
         fields.where((element) => filterFields.contains(element)).toList();
 
     debugPrint("setRequiredFilterList called with sharedFields $sharedFields");
+
     for (var field in sharedFields) {
-      _requiredFiltter[_filterOb.getNewInstanceMirror(field: field)] =
+      _requiredFiltter[_lastViewAbstract.getNewInstanceMirrorNotNull(field)] =
           _filterData?.getFieldValue(field);
     }
     debugPrint(

@@ -4,10 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 class FilterableData<T> extends VObject<T> {
   FilterableData() : super();
-@JsonKey(ignore: true)
+  @JsonKey(ignore: true)
   Map<String, List<ViewAbstract>> filterableObjects = {};
-
-  
 
   @override
   T fromJsonViewAbstract(Map<String, dynamic> json) {

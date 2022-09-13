@@ -111,6 +111,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "#${iD.toString()}";
   }
 
+  String getIDString() {
+    return "$iD";
+  }
+
   String getMainNullableTextOnly(BuildContext context) {
     return "is New ${getMainHeaderLabelTextOnly(context)}";
   }

@@ -43,9 +43,10 @@ class FilterableProvider with ChangeNotifier {
   void add(String field, String fieldNameApi, String value) {
     if (_list.containsKey(field)) {
       _list[field]?.add(value);
-      return;
+      // return;
+    } else {
+      _list[field] = FilterableProviderHelper(field, fieldNameApi, [value]);
     }
-    _list[field] = FilterableProviderHelper(field, fieldNameApi, [value]);
     notifyListeners();
   }
 
@@ -70,10 +71,22 @@ class FilterableProvider with ChangeNotifier {
     return false;
   }
 
-  void remove(String field) {
-    if (_list.containsKey(field)) {
-      _list.remove(field);
-      notifyListeners();
+  int getCount(String field) {
+    debugPrint("getCount => $field  is ${_list[field]}");
+    return _list[field]?.getCount() ?? 0;
+  }
+
+  void remove(String field, {String? value}) {
+    if (value == null) {
+      if (_list.containsKey(field)) {
+        _list.remove(field);
+        notifyListeners();
+      }
+    } else {
+      if (_list.containsKey(field)) {
+        _list[field]?.remove(value);
+        notifyListeners();
+      }
     }
   }
 }
@@ -96,6 +109,10 @@ class FilterableProviderHelper {
     values.clear();
     values.add(value);
     return this;
+  }
+
+  int getCount() {
+    return values.length;
   }
 
   void add(String value) {
