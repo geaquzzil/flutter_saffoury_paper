@@ -71,7 +71,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
                       .getCustomFilterableFields(context)[index]);
             }),
         TextButton(
-          child: Text("DONE"),
+          child: const Text("DONE"),
           onPressed: () {
             debugPrint(context.read<FilterableProvider>().getList.toString());
           },

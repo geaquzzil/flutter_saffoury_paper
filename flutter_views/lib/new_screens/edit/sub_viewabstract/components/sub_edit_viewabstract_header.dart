@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/edit_contro
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
-import 'package:flutter_view_controller/new_screens/edit/ext.dart';
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_trailing.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';

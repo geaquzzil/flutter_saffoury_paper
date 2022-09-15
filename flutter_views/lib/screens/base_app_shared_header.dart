@@ -77,7 +77,7 @@ class HeaderActions extends StatelessWidget {
               ],
             ),
           ),
-          actions: <Widget>[
+          actions: const <Widget>[
             // FlatButton(
             //   child: const Text('Regret'),
             //   onPressed: () {

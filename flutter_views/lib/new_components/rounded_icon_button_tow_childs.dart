@@ -31,11 +31,10 @@ class RoundedIconButtonTowChilds extends StatelessWidget {
               
               child: TextButton(
                 style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
+                  foregroundColor: Colors.black87, shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                     side: const BorderSide(color: Colors.white),
                   ),
-                  primary: Colors.black87,
                   backgroundColor: Colors.white,
                 ),
                 onPressed: () {},

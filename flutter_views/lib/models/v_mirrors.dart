@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:reflectable/reflectable.dart';
 
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)

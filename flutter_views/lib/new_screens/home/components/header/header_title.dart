@@ -50,7 +50,7 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          Scaffold(body: const BaseFilterableMainWidget()),
+                          const Scaffold(body: BaseFilterableMainWidget()),
                     ),
                   );
                   // BaseFilterableMainWidget();

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/theming/text_field_theming.dart';
 
 import '../edit/controllers/ext.dart';
 
@@ -19,18 +18,18 @@ class CustomFilterableController extends StatelessWidget {
       children: [
         ExpansionTile(
           childrenPadding:
-              EdgeInsets.only(right: 40, top: 0, left: 40, bottom: 0),
+              const EdgeInsets.only(right: 40, top: 0, left: 40, bottom: 0),
           initiallyExpanded: true,
           leading: Badge(
             badgeContent: Text(getFilterableFieldsCountStringValue(
                     context, customFilterableField.field)
                 .toString()),
-            child: Icon(customFilterableField.icon),
             toAnimate: true,
             showBadge: getFilterableFieldsCountStringValue(
                     context, customFilterableField.field) >
                 0,
             animationType: BadgeAnimationType.slide,
+            child: Icon(customFilterableField.icon),
           ),
           title: Text(customFilterableField.title),
           children: [

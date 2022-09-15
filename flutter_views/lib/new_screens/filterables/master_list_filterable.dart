@@ -1,13 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
-import 'package:flutter_view_controller/screens/view/view_card_item.dart';
 
-import '../home/components/empty_widget.dart';
 
 class MasterFilterableController extends StatelessWidget {
   List<dynamic> list;
@@ -23,10 +18,10 @@ class MasterFilterableController extends StatelessWidget {
       leading: Badge(
         badgeContent:
             Text(getFilterableFieldsCount(context, viewAbstract).toString()),
-        child: viewAbstract.getIcon(),
         toAnimate: true,
          showBadge: getFilterableFieldsCount(context, viewAbstract) > 0,
         animationType: BadgeAnimationType.slide,
+        child: viewAbstract.getIcon(),
       ),
       children: [
         Wrap(

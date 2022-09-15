@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class DrawerLargeScreens extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
-  DrawerLargeScreens({Key? key}) : super(key: key);
+  const DrawerLargeScreens({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
