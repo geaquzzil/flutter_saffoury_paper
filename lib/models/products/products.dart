@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -107,6 +108,36 @@ class Product extends ViewAbstract<Product> {
       "status"
     ];
   }
+
+  @override
+  List<CustomFilterableField> getCustomFilterableFields(BuildContext context) =>
+      super.getCustomFilterableFields(context)
+        ..addAll([
+          CustomFilterableField(
+              this,
+              ProductStatus.NONE.getMainLabelText(context),
+              Icons.date_range,
+              "status",
+              "status",
+              ProductStatus.NONE,
+              singleChoiceIfList: true),
+          CustomFilterableField(
+            this,
+            "width",
+            Icons.border_left_outlined,
+            "width",
+            "width",
+            "",
+          ),
+          CustomFilterableField(
+            this,
+            "length",
+            Icons.border_top_outlined,
+            "length",
+            "length",
+            "",
+          ),
+        ]);
 
   @override
   IconData getMainIconData() {
@@ -236,7 +267,8 @@ class Product extends ViewAbstract<Product> {
   double getCartItemUnitPrice() {
     return getUnitSellPrice();
   }
-    @override
+
+  @override
   String getForeignKeyName() {
     return "ProductID";
   }
@@ -275,3 +307,6 @@ enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
     return ProductStatus.values;
   }
 }
+// enum ProductTypePalletOrRoll implements ViewAbstractEnum<ProductTypePalletOrRoll> {
+
+// }

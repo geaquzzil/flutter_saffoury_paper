@@ -36,7 +36,10 @@ class FilterableProvider with ChangeNotifier {
     return map;
   }
 
-  void clear() {
+  void clear({String? field}) {
+    if (field != null) {
+      _list.remove(field);
+    }
     _list.clear();
   }
 

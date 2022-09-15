@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/theming/text_field_theming.dart';
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   String? getSortByFieldName();
@@ -16,7 +17,17 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
 
   List<String> getFilterableFields() => getMainFields();
 
-  List<CustomFilterableField> getCustomFilterableFields() => [];
+  List<CustomFilterableField> getCustomFilterableFields(BuildContext context) =>
+      [
+        CustomFilterableField(
+            this as ViewAbstract,
+            AppLocalizations.of(context)!.date,
+            Icons.date_range,
+            "date",
+            "date",
+            "",
+            type: TextInputType.datetime)
+      ];
   String getSortByFieldNameApi() {
     return getSortByFieldName() ?? "";
   }
@@ -65,11 +76,19 @@ enum SortByType implements ViewAbstractEnum<SortByType> {
 }
 
 class CustomFilterableField {
+  ViewAbstract parent;
+  String title;
+  IconData icon;
   String field;
   String fieldNameApi;
+  TextFieldTheming theme;
   dynamic object;
-  TextInputType type;
-  CustomFilterableField(this.field, this.fieldNameApi, this.object, this.type);
+  TextInputType? type;
+  bool? singleChoiceIfList;
+  CustomFilterableField(this.parent, this.title, this.icon, this.field,
+      this.fieldNameApi, this.object,
+      {this.type, this.singleChoiceIfList})
+      : theme = TextFieldTheming(lableText: title,icon: icon );
 }
 // class FilterableProviderHelperListItem {
 //   //The field Label

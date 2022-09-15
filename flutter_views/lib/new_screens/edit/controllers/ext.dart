@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:flutter_view_controller/theming/text_field_theming.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -52,6 +55,19 @@ InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
       icon: Icon(viewAbstractEnum.getMainIconData()),
       labelText: viewAbstractEnum.getMainLabelText(context));
   // hintText: parent.getTextInputHint(context, field));
+}
+
+InputDecoration getDecorationTheming(
+    BuildContext context, TextFieldTheming theme) {
+  return InputDecoration(
+      border: theme.inputBorder,
+      filled: true,
+      // errorText: "err",
+      icon: Icon(theme.icon),
+      hintText: theme.hintText,
+      labelText: theme.lableText,
+      prefixText: theme.prefix,
+      suffixText: theme.suffix);
 }
 
 InputDecoration getDecoration(
@@ -169,3 +185,89 @@ bool isEnabledField(EditSubsViewAbstractControllerProvider editSubsView,
   debugPrint("isEnabled checking isNew=>$res");
   return res;
 }
+
+Widget getTextInputController(
+    BuildContext context, TextFieldTheming theme, String initialValue,
+    {Function(String?)? onFieldSubmitted,
+    TextInputAction? textInputAction,
+    TextInputType? keyboardType}) {
+  return TextFormField(
+      //  cursorColor: Theme.of(context).cursorColor,
+      decoration: getDecorationTheming(context, theme),
+      initialValue: initialValue,
+      onSaved: (newValue) => debugPrint("getTextInputController onSaved"),
+      maxLength: 20,
+      textInputAction: textInputAction,
+      keyboardType: keyboardType,
+      onFieldSubmitted: onFieldSubmitted);
+}
+
+// Widget getTextInputMultibleController(
+//     BuildContext context, String initialValue, Function(String)? onChange) {
+//   return FormBuilderChipsInput<String>(
+//     autovalidateMode: AutovalidateMode.onUserInteraction,
+//     decoration: const InputDecoration(
+//         labelText: 'Ok, if I had to choose one language, it would be:'),
+//     name: 'languages_choice',
+
+//     onChanged: (string) => debugPrint("getTextInputController onChanged"),
+//   );
+  // return FormBuilderChipsInput(
+  //   name: "test",
+  //   //  cursorColor: Theme.of(context).cursorColor,
+  //   onSaved: (newValue) => debugPrint("getTextInputController onSaved"),
+  //   onChanged: (string) => debugPrint("getTextInputController onChanged"),
+  //   chipBuilder:
+  //       (BuildContext context, ChipsInputState<Object?> state, Object? data) {},
+  // );
+// }
+
+
+  //  FormBuilderChipsInput<Contact>(
+  //                 decoration: const InputDecoration(labelText: 'Chips Input'),
+  //                 name: 'chips_test',
+  //                 onChanged: _onChanged,
+  //                 maxChips: 5,
+  //                 findSuggestions: (String query) {
+  //                   if (query.isNotEmpty) {
+  //                     var lowercaseQuery = query.toLowerCase();
+  //                     return contacts.where((profile) {
+  //                       return profile.name
+  //                               .toLowerCase()
+  //                               .contains(query.toLowerCase()) ||
+  //                           profile.email
+  //                               .toLowerCase()
+  //                               .contains(query.toLowerCase());
+  //                     }).toList(growable: false)
+  //                       ..sort((a, b) => a.name
+  //                           .toLowerCase()
+  //                           .indexOf(lowercaseQuery)
+  //                           .compareTo(
+  //                               b.name.toLowerCase().indexOf(lowercaseQuery)));
+  //                   } else {
+  //                     return const <Contact>[];
+  //                   }
+  //                 },
+  //                 chipBuilder: (context, state, profile) {
+  //                   return InputChip(
+  //                     key: ObjectKey(profile),
+  //                     label: Text(profile.name),
+  //                     avatar: CircleAvatar(
+  //                       backgroundImage: NetworkImage(profile.imageUrl),
+  //                     ),
+  //                     onDeleted: () => state.deleteChip(profile),
+  //                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  //                   );
+  //                 },
+  //                 suggestionBuilder: (context, state, profile) {
+  //                   return ListTile(
+  //                     key: ObjectKey(profile),
+  //                     leading: CircleAvatar(
+  //                       backgroundImage: NetworkImage(profile.imageUrl),
+  //                     ),
+  //                     title: Text(profile.name),
+  //                     subtitle: Text(profile.email),
+  //                     onTap: () => state.selectSuggestion(profile),
+  //                   );
+  //                 },
+  //               ),
