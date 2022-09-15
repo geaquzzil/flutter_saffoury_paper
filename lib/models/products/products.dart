@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jsonize/jsonize.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'sizes.dart';
@@ -122,21 +123,13 @@ class Product extends ViewAbstract<Product> {
               ProductStatus.NONE,
               singleChoiceIfList: true),
           CustomFilterableField(
-            this,
-            "width",
-            Icons.border_left_outlined,
-            "width",
-            "width",
-            "",
-          ),
+              this, "width", Icons.border_left_outlined, "width", "width", "",
+              type: const TextInputType.numberWithOptions(
+                  decimal: false, signed: false)),
           CustomFilterableField(
-            this,
-            "length",
-            Icons.border_top_outlined,
-            "length",
-            "length",
-            "",
-          ),
+              this, "length", Icons.border_top_outlined, "length", "length", "",
+              type: const TextInputType.numberWithOptions(
+                  decimal: false, signed: false)),
         ]);
 
   @override
@@ -274,12 +267,25 @@ class Product extends ViewAbstract<Product> {
   }
 }
 
-// enum ProductStatus { NONE, PENDING, RETURNED, WASTED }
+// enum ProductStatus { @JsonValue("NONE")
+//   NONE,
+//   @JsonValue("PENDING")
+//   PENDING,
+//   @JsonValue("RETURNED")
+//   RETURNED,
+//   @JsonValue("WASTED")
+//   WASTED}
+// enum test with JsonizableEnum {
 
+// }
 enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
+  @JsonValue("NONE")
   NONE,
+  @JsonValue("PENDING")
   PENDING,
+  @JsonValue("RETURNED")
   RETURNED,
+  @JsonValue("WASTED")
   WASTED;
 
   @override

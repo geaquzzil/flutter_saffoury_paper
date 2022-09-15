@@ -24,8 +24,6 @@ class ListProvider with ChangeNotifier {
   }
 
   Future fetchFakeList(ViewAbstract viewAbstract) async {
-    // debugPrint(
-    //     "fetching list of objects from view $viewAbstract page is $page");
     try {
       isLoading = true;
       List? list = await viewAbstract.listCallFake();

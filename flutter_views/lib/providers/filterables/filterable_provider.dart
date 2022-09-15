@@ -9,6 +9,8 @@ class FilterableProvider with ChangeNotifier {
   static const String SORTKEY = "sortByFieldName";
   Map<String, FilterableProviderHelper> _list = {};
 
+  Map<String, FilterableProviderHelper> get getList => _list;
+
   void init(ViewAbstract selectedViewAbstract,
       {Map<String, FilterableProviderHelper>? savedList}) {
     _list.clear();
@@ -137,5 +139,10 @@ class FilterableProviderHelper {
 
   bool isSelected(String value) {
     return values.firstWhereOrNull((v) => v == value) != null;
+  }
+
+  @override
+  String toString() {
+    return values.toString();
   }
 }

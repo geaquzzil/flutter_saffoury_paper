@@ -8,7 +8,8 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = json['iD'] as int
-  ..status = json['status']
+  ..status = ProductStatus.values
+      .firstWhere((e) => e.toString() == 'ProductStatus.' + json['status'])
   ..date = json['date'] as String?
   ..sheets = json['sheets'] as int?
   ..barcode = json['barcode'] as String?
