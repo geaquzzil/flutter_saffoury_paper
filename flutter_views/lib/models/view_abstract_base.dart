@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/prints/print_commad.dart';
+import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
@@ -200,7 +200,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         .toList();
   }
 
-  E? getPrintCommand<E extends PrintCommand>(BuildContext context) {
+  E? getPrintCommand<E extends PrintCommandAbstract>(BuildContext context) {
     return null;
   }
 }

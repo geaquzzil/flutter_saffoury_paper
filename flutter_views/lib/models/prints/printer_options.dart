@@ -4,9 +4,12 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:jsonize/jsonize.dart';
+
+import '../view_abstract_enum.dart';
 part 'printer_options.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 @reflector
 class PrinterOptions extends ViewAbstract<PrinterOptions> {
   Language language;
@@ -39,7 +42,7 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
         "language": AppLocalizations.of(context)!.language,
         "copies": AppLocalizations.of(context)!.copies,
         "startEndPage": AppLocalizations.of(context)!.startEndPage,
-        "printPaperSize": AppLocalizations.of(context)!.printType
+        "printPaperSize": AppLocalizations.of(context)!.size
       };
 
   @override
@@ -83,7 +86,7 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "copies": const TextInputType.numberWithOptions(
             signed: false, decimal: false),
-        "reportFooter": TextInputType.text
+        "startEndPage": TextInputType.text
       };
 
   @override
@@ -122,3 +125,68 @@ enum PrintPaperSize {
   @JsonValue(3)
   A5Size
 }
+
+// enum PrintPaperSize implements ViewAbstractEnum<PrintPaperSize> {
+//   @JsonValue(0)
+//   Default,
+//   @JsonValue(1)
+//   A3Size,
+//   @JsonValue(2)
+//   A4Size,
+//   @JsonValue(3)
+//   A5Size;
+
+//   @override
+//   IconData getMainIconData() => Icons.format_size_outlined;
+//   @override
+//   String getMainLabelText(BuildContext context) =>
+//       AppLocalizations.of(context)!.size;
+
+//   @override
+//   String getFieldLabelString(BuildContext context, PrintPaperSize field) {
+//     switch (field) {
+//       case PrintPaperSize.Default:
+//         return AppLocalizations.of(context)!.defaultReportSize;
+//       case PrintPaperSize.A3Size:
+//         return AppLocalizations.of(context)!.a3ProductLabel;
+//       case PrintPaperSize.A4Size:
+//         return AppLocalizations.of(context)!.a4ProductLabel;
+//       case PrintPaperSize.A5Size:
+//         return AppLocalizations.of(context)!.a5ProductLabel;
+//     }
+//   }
+
+//   @override
+//   List<PrintPaperSize> getValues() {
+//     return PrintPaperSize.values;
+//   }
+// }
+// enum Language implements ViewAbstractEnum<Language> {
+//   @JsonValue(0)
+//   English,
+//   @JsonValue(1)
+//   Arabic;
+
+  
+//   @override
+//   IconData getMainIconData() => Icons.language;
+//   @override
+//   String getMainLabelText(BuildContext context) =>
+//       AppLocalizations.of(context)!.language;
+
+//   @override
+//   String getFieldLabelString(BuildContext context, Language field) {
+//     switch (field) {
+//       case English:
+//         return AppLocalizations.of(context)!.english;
+//       case Arabic:
+//         return AppLocalizations.of(context)!.arabic;
+//     }
+//   }
+
+//   @override
+//   List<Language> getValues() {
+//     return Language.values;
+//   }
+
+// }

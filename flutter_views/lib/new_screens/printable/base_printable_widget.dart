@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class BasePrintableWidget extends StatelessWidget {
-  const BasePrintableWidget({Key? key}) : super(key: key);
+  ViewAbstract printObject;
+  BasePrintableWidget({Key? key, required this.printObject}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

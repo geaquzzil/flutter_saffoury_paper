@@ -131,33 +131,41 @@ class CutRequest extends ViewAbstract<CutRequest> {
       CutRequest.fromJson(json);
 }
 
-// enum CutStatus { PENDING, PROCESSING, COMPLETED }
-
-enum CutStatus implements ViewAbstractEnum<CutStatus> {
+enum CutStatus {
+  @JsonValue("PENDING")
   PENDING,
+  @JsonValue("PROCESSING")
   PROCESSING,
-  COMPLETED;
-
-  @override
-  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
-  @override
-  String getMainLabelText(BuildContext context) =>
-      AppLocalizations.of(context)!.status;
-
-  @override
-  String getFieldLabelString(BuildContext context, CutStatus field) {
-    switch (field) {
-      case PENDING:
-        return AppLocalizations.of(context)!.pending;
-      case PROCESSING:
-        return AppLocalizations.of(context)!.processing;
-      case COMPLETED:
-        return AppLocalizations.of(context)!.completed;
-    }
-  }
-
-  @override
-  List<CutStatus> getValues() {
-    return CutStatus.values;
-  }
+  @JsonValue("COMPLETED")
+  COMPLETED
 }
+
+// enum CutStatus implements ViewAbstractEnum<CutStatus> {
+
+//   PENDING,
+//   PROCESSING,
+//   COMPLETED;
+
+//   @override
+//   IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+//   @override
+//   String getMainLabelText(BuildContext context) =>
+//       AppLocalizations.of(context)!.status;
+
+//   @override
+//   String getFieldLabelString(BuildContext context, CutStatus field) {
+//     switch (field) {
+//       case PENDING:
+//         return AppLocalizations.of(context)!.pending;
+//       case PROCESSING:
+//         return AppLocalizations.of(context)!.processing;
+//       case COMPLETED:
+//         return AppLocalizations.of(context)!.completed;
+//     }
+//   }
+
+//   @override
+//   List<CutStatus> getValues() {
+//     return CutStatus.values;
+//   }
+// }
