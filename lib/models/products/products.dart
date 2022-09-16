@@ -265,50 +265,50 @@ class Product extends ViewAbstract<Product> {
   }
 }
 
-enum ProductStatus { @JsonValue("NONE")
-  NONE,
-  @JsonValue("PENDING")
-  PENDING,
-  @JsonValue("RETURNED")
-  RETURNED,
-  @JsonValue("WASTED")
-  WASTED}
-
-// enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
-//   @JsonValue("NONE")
+// enum ProductStatus { @JsonValue("NONE")
 //   NONE,
 //   @JsonValue("PENDING")
 //   PENDING,
 //   @JsonValue("RETURNED")
 //   RETURNED,
 //   @JsonValue("WASTED")
-//   WASTED;
+//   WASTED}
 
-//   @override
-//   IconData getMainIconData() => Icons.stacked_line_chart_outlined;
-//   @override
-//   String getMainLabelText(BuildContext context) =>
-//       AppLocalizations.of(context)!.status;
+enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
+  @JsonValue("NONE")
+  NONE,
+  @JsonValue("PENDING")
+  PENDING,
+  @JsonValue("RETURNED")
+  RETURNED,
+  @JsonValue("WASTED")
+  WASTED;
 
-//   @override
-//   String getFieldLabelString(BuildContext context, ProductStatus field) {
-//     switch (field) {
-//       case NONE:
-//         return AppLocalizations.of(context)!.none;
-//       case PENDING:
-//         return AppLocalizations.of(context)!.pending;
-//       case RETURNED:
-//         return AppLocalizations.of(context)!.returnedProduct;
-//       case WASTED:
-//         return AppLocalizations.of(context)!.wasted;
-//     }
-//   }
+  @override
+  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.status;
 
-//   @override
-//   List<ProductStatus> getValues() {
-//     return ProductStatus.values;
-//   }
-// }
+  @override
+  String getFieldLabelString(BuildContext context, ProductStatus field) {
+    switch (field) {
+      case NONE:
+        return AppLocalizations.of(context)!.none;
+      case PENDING:
+        return AppLocalizations.of(context)!.pending;
+      case RETURNED:
+        return AppLocalizations.of(context)!.returnedProduct;
+      case WASTED:
+        return AppLocalizations.of(context)!.wasted;
+    }
+  }
+
+  @override
+  List<ProductStatus> getValues() {
+    return ProductStatus.values;
+  }
+}
 // enum ProductTypePalletOrRoll implements ViewAbstractEnum<ProductTypePalletOrRoll> {
 
 // }
