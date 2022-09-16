@@ -87,7 +87,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   bool? canBeNullableFromParentCheck(BuildContext context, String field) {
-    return getParnet?.isFieldCanBeNullable(context, field) ;
+    return getParnet?.isFieldCanBeNullable(context, field);
   }
 
   TextCapitalization getTextInputCapitalization(String field) {
@@ -141,6 +141,8 @@ abstract class ViewAbstractInputAndValidater<T>
     }
     return null;
   }
+
+  void onDropdownChanged(BuildContext context, String field, dynamic value) {}
 }
 
 enum InputType { EDIT_TEXT, COLOR_PICKER, FILE_PICKER }

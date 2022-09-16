@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/prints/print_commad.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
@@ -197,5 +198,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
             getFieldIconData(e), getFieldLabel(context, e),
             value: e))
         .toList();
+  }
+
+  E? getPrintCommand<E extends PrintCommand>(BuildContext context) {
+    return null;
   }
 }

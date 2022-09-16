@@ -121,6 +121,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
+  Future<void> printCall() async {
+    // get the printcommand that generated
+    // view the result as html page
+    //
+  }
+
   Future<T?> viewCall(int iD, {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.view);
