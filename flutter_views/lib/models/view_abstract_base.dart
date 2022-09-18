@@ -200,7 +200,5 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         .toList();
   }
 
-  E? getPrintCommand<E extends PrintCommandAbstract>(BuildContext context) {
-    return null;
-  }
+  PrintCommandAbstract? getPrintCommand(BuildContext context) => null;
 }

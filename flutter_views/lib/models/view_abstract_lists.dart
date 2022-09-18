@@ -4,13 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/printable/base_printable_widget.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 
 import '../providers/actions/edits/edit_error_list_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
-  
-
   Widget getCardLeadingSearch(BuildContext context) {
     return getCardLeadingCircleAvatar(context);
   }
@@ -211,6 +210,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {}
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
     if (result.icon == Icons.print) {
+      debugPrint("onPopupMenuActionSelected $result");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+              body: BasePrintableWidget(
+            printObject: this as ViewAbstract,
+          )),
+        ),
+      );
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.push(

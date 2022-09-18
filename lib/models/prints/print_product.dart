@@ -19,16 +19,10 @@ class PrintProduct extends PrintCommandAbstract<PrintProduct> {
   PrintProduct([printObject]) : super(printObject);
 
   @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
+  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {};
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

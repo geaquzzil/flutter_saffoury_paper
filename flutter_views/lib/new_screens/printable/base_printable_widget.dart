@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 
 class BasePrintableWidget extends StatelessWidget {
   ViewAbstract printObject;
@@ -7,6 +8,7 @@ class BasePrintableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BaseEditPage(
+        parent: printObject.getPrintCommand(context) as ViewAbstract);
   }
 }

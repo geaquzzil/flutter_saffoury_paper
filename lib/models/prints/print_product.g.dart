@@ -35,7 +35,4 @@ Map<String, dynamic> _$PrintProductToJson(PrintProduct instance) =>
       'sortByType': _$SortByTypeEnumMap[instance.sortByType]!,
     };
 
-const _$SortByTypeEnumMap = {
-  SortByType.ASC: 'ASC',
-  SortByType.DESC: 'DESC',
-};
+const _$SortByTypeEnumMap = {};
