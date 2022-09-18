@@ -47,38 +47,38 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   }
 }
 
-enum SortByType { 
-  @JsonValue("ASC")
-  ASC, 
-  @JsonValue("DESC")
-  DESC }
+// enum SortByType { 
+//   @JsonValue("ASC")
+//   ASC, 
+//   @JsonValue("DESC")
+//   DESC }
 
-// enum SortByType implements ViewAbstractEnum<SortByType> {
-//   ASC,
-//   DESC;
+enum SortByType implements ViewAbstractEnum<SortByType> {
+  ASC,
+  DESC;
 
-//   @override
-//   IconData getMainIconData() => Icons.stacked_line_chart_outlined;
-//   @override
-//   String getMainLabelText(BuildContext context) =>
-//       AppLocalizations.of(context)!.sortBy;
+  @override
+  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.sortBy;
 
-//   @override
-//   String getFieldLabelString(BuildContext context, SortByType field) {
-//     switch (field) {
-//       case ASC:
-//         return AppLocalizations.of(context)!.ascSorting;
-//       case DESC:
-//         return AppLocalizations.of(context)!.descSorting;
-//     }
-//     return " ";
-//   }
+  @override
+  String getFieldLabelString(BuildContext context, SortByType field) {
+    switch (field) {
+      case ASC:
+        return AppLocalizations.of(context)!.ascSorting;
+      case DESC:
+        return AppLocalizations.of(context)!.descSorting;
+    }
+    return " ";
+  }
 
-//   @override
-//   List<SortByType> getValues() {
-//     return SortByType.values;
-//   }
-// }
+  @override
+  List<SortByType> getValues() {
+    return SortByType.values;
+  }
+}
 
 class CustomFilterableField {
   ViewAbstract parent;

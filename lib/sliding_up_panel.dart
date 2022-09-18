@@ -292,20 +292,20 @@ class _HomePageState extends State<HomePage> {
         zoom: 13,
         maxZoom: 15,
       ),
-      layers: [
-        TileLayerOptions(
-            urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"),
-        MarkerLayerOptions(markers: [
-          Marker(
-              point: LatLng(40.441753, -80.011476),
-              builder: (ctx) => const Icon(
-                    Icons.location_on,
-                    color: Colors.blue,
-                    size: 48.0,
-                  ),
-              height: 60),
-        ]),
-      ],
+      // layers: [
+      //   TileLayerOptions(
+      //       urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"),
+      //   MarkerLayerOptions(markers: [
+      //     Marker(
+      //         point: LatLng(40.441753, -80.011476),
+      //         builder: (ctx) => const Icon(
+      //               Icons.location_on,
+      //               color: Colors.blue,
+      //               size: 48.0,
+      //             ),
+      //         height: 60),
+      //   ]),
+      // ],
     );
   }
 }
