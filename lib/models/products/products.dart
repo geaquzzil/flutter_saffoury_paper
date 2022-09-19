@@ -267,7 +267,7 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
-  PrintProduct? getPrintCommand(BuildContext context) => PrintProduct(this);
+  PrintProduct? getPrintCommand(BuildContext context) => PrintProduct(printObject: this);
 }
 
 // enum ProductStatus {

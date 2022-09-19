@@ -16,7 +16,7 @@ part 'print_product.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PrintProduct extends PrintCommandAbstract<PrintProduct> {
-  PrintProduct([printObject]) : super(printObject);
+  PrintProduct({dynamic printObject}) : super(printObject);
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {};

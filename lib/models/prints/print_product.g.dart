@@ -8,11 +8,12 @@ part of 'print_product.dart';
 
 PrintProduct _$PrintProductFromJson(Map<String, dynamic> json) => PrintProduct()
   ..iD = json['iD'] as int
-  ..requestIDs = json['requestIDs'] as String
-  ..actionMessage = json['actionMessage'] as String
+  ..requestIDs = json['requestIDs'] as String?
+  ..actionMessage = json['actionMessage'] as String?
   ..imgLinkAndroidQRCode = json['imgLinkAndroidQRCode'] as String?
-  ..printerOptions =
-      PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)
+  ..printerOptions = json['printerOptions'] == null
+      ? null
+      : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)
   ..reportOptions = json['reportOptions'] == null
       ? null
       : ReportOptions.fromJson(json['reportOptions'] as Map<String, dynamic>)
@@ -27,7 +28,7 @@ Map<String, dynamic> _$PrintProductToJson(PrintProduct instance) =>
       'requestIDs': instance.requestIDs,
       'actionMessage': instance.actionMessage,
       'imgLinkAndroidQRCode': instance.imgLinkAndroidQRCode,
-      'printerOptions': instance.printerOptions.toJson(),
+      'printerOptions': instance.printerOptions?.toJson(),
       'reportOptions': instance.reportOptions?.toJson(),
       'fieldSortBy': instance.fieldSortBy,
       'fieldSortByAscDesc': instance.fieldSortByAscDesc,

@@ -12,10 +12,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
-  late String requestIDs;
-  late String actionMessage;
+  String? requestIDs;
+  String? actionMessage;
   String? imgLinkAndroidQRCode;
-  late PrinterOptions printerOptions;
+  PrinterOptions? printerOptions;
   ReportOptions? reportOptions;
 
   @JsonKey(ignore: true)
@@ -29,7 +29,13 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
 
   PrintCommandAbstract(this.printObject, {this.imgLinkAndroidQRCode})
       : super() {
+    if (printObject == null) {
+      debugPrint("PrintCommandAbstract No printObject found");
+      return;
+    }
+    debugPrint("PrintCommandAbstract ${this.printObject}");
     ViewAbstract currentViewAbstract;
+
     if (printObject is List) {
       List list = printObject as List;
       currentViewAbstract = list[0] as ViewAbstract;
@@ -38,7 +44,7 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
       requestIDs = jsonEncode(ids);
     } else {
       currentViewAbstract = printObject;
-      List<String> ids = [(printObject as ViewAbstract).getIDString()];
+      List<String> ids = [currentViewAbstract.getIDString()];
       requestIDs = jsonEncode(ids);
     }
     actionMessage = currentViewAbstract.getTableNameApi() ?? "";
@@ -68,7 +74,7 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      "${AppLocalizations.of(context)!.print} ${printObject.getMainHeaderTextOnly(context)}";
+      "${AppLocalizations.of(context)!.print} ${printObject?.getMainHeaderTextOnly(context)}";
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>

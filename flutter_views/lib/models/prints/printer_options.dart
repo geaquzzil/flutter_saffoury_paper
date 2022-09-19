@@ -161,13 +161,13 @@ enum PrintPaperSize implements ViewAbstractEnum<PrintPaperSize> {
     return PrintPaperSize.values;
   }
 }
+
 enum Language implements ViewAbstractEnum<Language> {
   @JsonValue(0)
   English,
   @JsonValue(1)
   Arabic;
 
-  
   @override
   IconData getMainIconData() => Icons.language;
   @override
@@ -188,5 +188,4 @@ enum Language implements ViewAbstractEnum<Language> {
   List<Language> getValues() {
     return Language.values;
   }
-
 }
