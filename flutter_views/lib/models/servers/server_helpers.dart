@@ -15,10 +15,12 @@ enum ServerActions {
 class URLS {
   static const String BASE_URL =
       'https://saffoury.com/SaffouryPaper2/index.php';
-  static const Map<String ,String> requsetHeaders2={
+  static const String BASE_URL_PRINT =
+      'https://saffoury.com/SaffouryPaper2/print/index.php';
+  static const Map<String, String> requsetHeaders2 = {
     'Accept': 'application/json',
     'Accept-Encoding': 'gzip',
-'Content-Type': 'application/json',
+    'Content-Type': 'application/json',
     'Access-Control-Allow-Headers':
         'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN, Access-Control-Allow-Origin',
     'Access-Control-Expose-Headers': "" 'Authorization, authenticated',
@@ -29,7 +31,8 @@ class URLS {
   static const Map<String, String> requestHeaders = {
     'Accept': 'application/json',
     'Accept-Encoding': 'gzip',
-    "Access-Control-Allow-Origin": "*", // Required for CORS support to work/ Required for CORS support to work
+    "Access-Control-Allow-Origin":
+        "*", // Required for CORS support to work/ Required for CORS support to work
     "Access-Control-Allow-Credentials":
         'true', // Required for cookies, authorization headers with HTTPS
     "Access-Control-Allow-Headers":

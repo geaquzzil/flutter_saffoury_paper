@@ -61,14 +61,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {String? fieldBySearchQuery,
       String? searchQuery,
       int? itemCount,
-      int? pageIndex}) {
+      int? pageIndex,
+      ViewAbstract? printObject}) {
     Map<String, String> mainBody = HashMap<String, String>();
     mainBody.addAll(getBodyExtenstionParams());
     mainBody.addAll(getBodyCurrentAction(action,
         fieldBySearchQuery: fieldBySearchQuery,
         searchQuery: searchQuery,
         itemCount: itemCount,
-        pageIndex: pageIndex));
+        pageIndex: pageIndex,
+        printObject: printObject));
     return mainBody;
   }
 
@@ -103,15 +105,20 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       String? searchQuery,
       String? fieldBySearchQuery,
       int? itemCount,
-      int? pageIndex}) async {
+      int? pageIndex,
+      ViewAbstract? printObject}) async {
     try {
-      return await getHttp().post(Uri.parse(URLS.BASE_URL),
+      return await getHttp().post(
+          Uri.parse(serverActions == ServerActions.print
+              ? URLS.BASE_URL_PRINT
+              : URLS.BASE_URL),
           headers: await getHeaders(),
           body: getBody(serverActions,
               searchQuery: searchQuery,
               fieldBySearchQuery: fieldBySearchQuery,
               itemCount: itemCount,
-              pageIndex: pageIndex));
+              pageIndex: pageIndex,
+              printObject: printObject));
     } on Exception catch (e) {
       // Display an alert, no internet
       onResponse?.onServerFailure(e);
@@ -119,12 +126,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } catch (err) {
       return null;
     }
-  }
-
-  Future<void> printCall() async {
-    // get the printcommand that generated
-    // view the result as html page
-    //
   }
 
   Future<T?> viewCall(int iD, {OnResponseCallback? onResponse}) async {
@@ -264,6 +265,19 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
+  Future<String?> printCall(ViewAbstract printObject) async {
+    var response = await getRespones(
+        serverActions: ServerActions.print, printObject: printObject);
+    if (response == null) return null;
+    if (response.statusCode == 200) {
+      return response.body;
+    } else if (response.statusCode == 401) {
+      return null;
+    } else {
+      return null;
+    }
+  }
+
   Future<List<T>?> listCall(int count, int page,
       {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
@@ -294,7 +308,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {String? fieldBySearchQuery,
       String? searchQuery,
       int? itemCount,
-      int? pageIndex}) {
+      int? pageIndex,
+      ViewAbstract? printObject}) {
     Map<String, String> mainBody = HashMap();
     String? customAction = getCustomAction();
     mainBody['action'] = action == ServerActions.search ||
@@ -340,6 +355,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       case ServerActions.search_viewabstract_by_field:
         mainBody['<$fieldBySearchQuery>'] = searchQuery?.trim() ?? "";
         mainBody['searchViewAbstractByFieldName'] = fieldBySearchQuery ?? "";
+        break;
+      case ServerActions.print:
+        mainBody['data'] = printObject?.toJsonString() ?? "";
         break;
       default:
         break;

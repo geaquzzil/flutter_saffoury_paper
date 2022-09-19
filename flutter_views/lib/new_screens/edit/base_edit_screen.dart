@@ -12,7 +12,10 @@ import 'package:provider/provider.dart';
 
 class BaseEditPage extends StatefulWidget {
   ViewAbstract parent;
-  BaseEditPage({Key? key, required this.parent}) : super(key: key);
+
+  Function(ViewAbstract? obj)? onSubmit;
+  BaseEditPage({Key? key, required this.parent, this.onSubmit})
+      : super(key: key);
 
   @override
   State<BaseEditPage> createState() => _BaseEditPageState();

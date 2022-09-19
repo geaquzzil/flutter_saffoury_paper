@@ -17,6 +17,7 @@ permission_handler=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\permis
 permission_handler_android=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\permission_handler_android-9.0.2+1\\
 permission_handler_apple=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\permission_handler_apple-9.0.4\\
 permission_handler_windows=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\permission_handler_windows-0.1.0\\
+printing=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\printing-5.9.3\\
 shared_preferences=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences-2.0.15\\
 shared_preferences_android=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_android-2.0.13\\
 shared_preferences_ios=c:\\flutter-sdk\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences_ios-2.1.1\\
