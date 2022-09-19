@@ -42,6 +42,10 @@ badges
 2.12
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/badges-2.0.3/
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/badges-2.0.3/lib/
+barcode
+2.12
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/barcode-2.2.3/
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/barcode-2.2.3/lib/
 bloc
 2.12
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.3/
@@ -570,6 +574,10 @@ path_provider_windows
 2.17
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.1.0/
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.1.0/lib/
+pdf
+2.12
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pdf-3.8.3/
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pdf-3.8.3/lib/
 pedantic
 2.12
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pedantic-1.11.1/
@@ -626,6 +634,10 @@ pretty_http_logger
 2.12
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pretty_http_logger-0.2.1/
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pretty_http_logger-0.2.1/lib/
+printing
+2.12
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/printing-5.9.3/
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/printing-5.9.3/lib/
 process
 2.14
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/
@@ -646,6 +658,10 @@ pubspec_parse
 2.14
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.2.0/
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.2.0/lib/
+qr
+2.16
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/qr-3.0.1/
+file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/qr-3.0.1/lib/
 quiver
 2.12
 file:///c:/flutter-sdk/.pub-cache/hosted/pub.dartlang.org/quiver-3.1.0/

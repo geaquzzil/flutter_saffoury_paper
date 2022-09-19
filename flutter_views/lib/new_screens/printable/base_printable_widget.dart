@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 
 class BasePrintableWidget extends StatelessWidget {
-  var printURL = "https://www.saffoury.com/print/index.php";
   ViewAbstract printObject;
   BasePrintableWidget({Key? key, required this.printObject}) : super(key: key);
 
