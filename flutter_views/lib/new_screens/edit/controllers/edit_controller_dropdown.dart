@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 
-
 class EditControllerDropdown<T extends ViewAbstractEnum>
     extends StatelessWidget {
   T enumViewAbstract;
@@ -21,10 +20,14 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
   Widget build(BuildContext context) {
     return Column(children: [
       FormBuilderDropdown(
-        onChanged:(obj)=> parent.onDropdownChanged(context,field,obj),
+        onChanged: (obj) => parent.onDropdownChanged(context, field, obj),
         validator: parent.getTextInputValidatorCompose(context, field),
         name: parent.getTag(field),
         initialValue: parent.getFieldValue(field),
+        onSaved: (newValue) {
+          parent.setFieldValue(field, newValue);
+          debugPrint('FormBuilderDropdown onSave=   $newValue');
+        },
         decoration:
             getDecorationDropdown(context, parent, enumViewAbstract, field),
         hint: Text(enumViewAbstract.getMainLabelText(context)),
@@ -32,7 +35,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
             .map((item) => DropdownMenuItem(
                   value: item,
                   child: Text(item == null
-                      ? dropdownGetEnterText(context,enumViewAbstract)
+                      ? dropdownGetEnterText(context, enumViewAbstract)
                       : enumViewAbstract.getFieldLabelString(context, item)),
                 ))
             .toList(),
@@ -40,6 +43,4 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
       getSpace()
     ]);
   }
-
- 
 }

@@ -39,8 +39,6 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
     super.dispose();
   }
 
-
-
   void onTextChangeListener() {
     if (!isEnabled) return;
     String value = textController.text;
@@ -100,7 +98,14 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           validator: watchedViewAbstract.getTextInputValidatorCompose(
               context, widget.field),
           onSaved: (String? value) {
+            widget.viewAbstract.setFieldValue(widget.field, value);
             debugPrint('onSave=   $value');
+            debugPrint('onSave viewAbstract =>   ${widget.viewAbstract}');
+            if (widget.viewAbstract.getFieldNameFromParent != null) {
+              widget.viewAbstract.getParnet?.setFieldValue(
+                  widget.viewAbstract.getFieldNameFromParent ?? "",
+                  widget.viewAbstract);
+            }
           },
         ),
         getSpace()

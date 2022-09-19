@@ -1128,7 +1128,7 @@ packages:
     source: hosted
     version: "0.2.1"
   printing:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: printing
       url: "https://pub.dartlang.org"

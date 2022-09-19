@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -12,8 +9,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
-  String? requestIDs;
-  String? actionMessage;
+  dynamic requestIDs;
+  dynamic actionMessage;
   String? imgLinkAndroidQRCode;
   PrinterOptions? printerOptions;
   ReportOptions? reportOptions;
@@ -33,7 +30,7 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
       debugPrint("PrintCommandAbstract No printObject found");
       return;
     }
-    debugPrint("PrintCommandAbstract ${this.printObject}");
+    debugPrint("PrintCommandAbstract $printObject");
     ViewAbstract currentViewAbstract;
 
     if (printObject is List) {
@@ -44,8 +41,8 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
       requestIDs = jsonEncode(ids);
     } else {
       currentViewAbstract = printObject;
-      List<String> ids = [currentViewAbstract.getIDString()];
-      requestIDs = jsonEncode(ids);
+      // List<int> ids = [currentViewAbstract.iD];
+      requestIDs = currentViewAbstract.iD;
     }
     actionMessage = currentViewAbstract.getTableNameApi() ?? "";
     printerOptions = PrinterOptions();

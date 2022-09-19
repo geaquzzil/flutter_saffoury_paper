@@ -72,11 +72,13 @@ class VMirrors<T> {
     }
     return classMirror?.newInstance("", []) as ViewAbstract?;
   }
-ViewAbstract getNewInstanceMirrorNotNull(
-   String field) {
+
+  ViewAbstract getNewInstanceMirrorNotNull(String field) {
     debugPrint("getNewInstanceMirrorNotNull for classMirror:$field");
-    return getInstanceMirrorFieldName(field).newInstance("", []) as ViewAbstract;
+    return getInstanceMirrorFieldName(field).newInstance("", [])
+        as ViewAbstract;
   }
+
   ViewAbstract? getNewInstanceMirrorFromList(
       {ClassMirror? classMirror, String? field}) {
     debugPrint("getNewInstanceMirror for classMirror:$field");
@@ -108,7 +110,15 @@ ViewAbstract getNewInstanceMirrorNotNull(
       dynamic value = getInstanceMirror().invokeGetter(field);
       return value;
     } catch (e) {
-      return "$field ${e.toString()}";
+      return "getFieldValue $field ${e.toString()}";
+    }
+  }
+
+  void setFieldValue(String field, Object? value) {
+    try {
+      getInstanceMirror().invokeSetter(field, value);
+    } catch (e) {
+      debugPrint("setFieldValue $field ${e.toString()}");
     }
   }
 }

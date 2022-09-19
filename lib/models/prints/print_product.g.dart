@@ -8,8 +8,8 @@ part of 'print_product.dart';
 
 PrintProduct _$PrintProductFromJson(Map<String, dynamic> json) => PrintProduct()
   ..iD = json['iD'] as int
-  ..requestIDs = json['requestIDs'] as String?
-  ..actionMessage = json['actionMessage'] as String?
+  ..requestIDs = json['requestIDs']
+  ..actionMessage = json['actionMessage']
   ..imgLinkAndroidQRCode = json['imgLinkAndroidQRCode'] as String?
   ..printerOptions = json['printerOptions'] == null
       ? null

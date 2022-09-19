@@ -78,6 +78,8 @@ class _BaseEditPageState extends State<BaseEditPage> {
       _formKey.currentState!.save();
       final formData = _formKey.currentState?.value;
       debugPrint("validate $formData");
+      debugPrint("validate mainObject ${widget.parent}");
+      widget.onSubmit!(widget.parent);
       // widget.parent.setFieldValue(
       //     _formKey.currentState!.value);
       // Provider.of<ActionViewAbstractProvider>(
