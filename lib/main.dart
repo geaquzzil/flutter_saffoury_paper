@@ -25,6 +25,8 @@ import 'package:flutter_view_controller/providers/notifications/notification_pro
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/base_material_app.dart';
 import 'package:provider/provider.dart';
+import 'package:webcontent_converter/webcontent_converter.dart';
+import 'package:window_manager/window_manager.dart';
 
 // void main() {
 //   initializeReflectable();
@@ -70,8 +72,18 @@ class SimpleBlocObserver extends BlocObserver {
   }
 }
 
-void main() {
+void main() async {
   initializeReflectable();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (WebViewHelper.isDesktop) {
+    await windowManager.ensureInitialized();
+
+    /// ensure brower is initializedc
+    await WebcontentConverter.ensureInitialized();
+  }
+
   List<ViewAbstract> views = List<ViewAbstract>.from(
       [Product(), Size(), Order(), Purchases(), Customer()]);
   try {
