@@ -5,14 +5,25 @@ import 'package:reflectable/reflectable.dart';
 
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
 class Reflector extends Reflectable {
+  // const Reflector()
+  //     : super(invokingCapability, declarationsCapability,
+  //           typeRelationsCapability);
   const Reflector()
-      : super(invokingCapability, declarationsCapability,
-            typeRelationsCapability);
+      : super(
+          // newInstanceCapability,
+          invokingCapability,
+          reflectedTypeCapability,
+          typingCapability,
+          declarationsCapability,
+        );
 }
 
 const reflector = Reflector();
 
 class VMirrors<T> {
+  Map<String, Type> getMirrorFieldsTypeMap() => {};
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};
+
   InstanceMirror getInstanceMirror() {
     return reflector.reflect(this);
   }
@@ -91,10 +102,7 @@ class VMirrors<T> {
 
   Type? getFieldTypeMirror(String field) {
     try {
-      ClassMirror classMirror = getInstanceMirror();
-      var d = classMirror.declarations[field] as VariableMirror;
-      Type type = d.run;
-      return type;
+      return getMirrorFieldsTypeMap()[field];
     } catch (e) {
       debugPrint("getFieldTypeMirror error: $e");
       return null;

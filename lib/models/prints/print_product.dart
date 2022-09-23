@@ -14,9 +14,16 @@ part 'print_product.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PrintProduct extends PrintCommandAbstract<PrintProduct> {
-  bool? printProductAsLabel;
-  int? test;
+  bool printProductAsLabel = false;
+  int test = 0;
   PrintProduct({dynamic printObject}) : super(printObject);
+
+  @override
+  Map<String, Type> getMirrorFieldsTypeMap() => super.getMirrorFieldsTypeMap()
+    ..addAll({
+      "printProductAsLabel": bool,
+      "test": int,
+    });
 
   @override
   List<String> getMainFields() =>
