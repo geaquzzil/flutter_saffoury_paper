@@ -67,13 +67,14 @@ dependencies:
   flutter_html_to_pdf: ^0.7.0
   webcontent_converter: ^0.0.7+2
   window_manager: ^0.2.7
+  path: ^1.8.2
   
   # analyzer: ^4.2.0
   
 dev_dependencies:
   # mockito: ^5.0.16
   build_runner: ^2.0.5
-  json_serializable: ^6.3.1
+  # json_serializable: ^6.3.1
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0

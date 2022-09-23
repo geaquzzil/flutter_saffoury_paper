@@ -124,7 +124,9 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
   Widget buildWidget(ViewAbstract viewAbstract, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
+    Type? fieldTypeMirror = viewAbstract.getFieldTypeMirror(field);
     debugPrint("fieldValueType is ${fieldValue.runtimeType}");
+    debugPrint("fieldTypeMirror field $field is=> $fieldTypeMirror");
     if (checkIfNullAndViewAbstractField(viewAbstract,
         fieldValue: fieldValue, fieldName: field)) {
       fieldValue = viewAbstract.getNewInstanceMirror(field: field);

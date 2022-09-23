@@ -215,9 +215,22 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         context,
         MaterialPageRoute(
           builder: (context) => Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.arrow_back_ios),
+                  iconSize: 20.0,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                centerTitle: true,
+              ),
               body: BasePrintableWidget(
-            printObject: this as ViewAbstract,
-          )),
+                printObject: this as ViewAbstract,
+              )),
         ),
       );
     } else if (result.icon == Icons.edit) {

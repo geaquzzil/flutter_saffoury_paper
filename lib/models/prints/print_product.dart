@@ -6,21 +6,41 @@ import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'print_product.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PrintProduct extends PrintCommandAbstract<PrintProduct> {
+  bool? printProductAsLabel;
+  int? test;
   PrintProduct({dynamic printObject}) : super(printObject);
+
+  @override
+  List<String> getMainFields() =>
+      super.getMainFields()..addAll(["printProductAsLabel"]);
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) => {};
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "printProductAsLabel": AppLocalizations.of(context)!.date,
+        "test": "This is a test"
+      };
+
+  @override
+  InputType getInputType(String field) {
+    if (field == "printProductAsLabel") {
+      return InputType.CHECKBOX;
+    } else if (field == "test") {
+      return InputType.CHECKBOX;
+    } else {
+      return InputType.EDIT_TEXT;
+    }
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

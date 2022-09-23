@@ -5,12 +5,47 @@ import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
+import 'package:webcontent_converter/webview_helper.dart';
+import 'package:window_manager/window_manager.dart';
 
 import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:webcontent_converter/webcontent_converter.dart';
+import 'package:window_manager/window_manager.dart';
 
-class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
+class BaseMaterialAppPage extends StatefulWidget {
   const BaseMaterialAppPage({Key? key}) : super(key: key);
+
+  @override
+  State<BaseMaterialAppPage> createState() => _BaseMaterialAppPageState();
+}
+
+class _BaseMaterialAppPageState extends State<BaseMaterialAppPage>
+    with WindowListener {
+  @override
+  void onWindowClose() {
+    /// auto close browser
+    if (WebViewHelper.isDesktop && windowBrower != null) {
+      WebcontentConverter.deinitWebcontentConverter();
+    }
+    super.onWindowClose();
+  }
+
+  @override
+  void dispose() {
+    if (WebViewHelper.isDesktop) {
+      windowManager.removeListener(this);
+    }
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    if (WebViewHelper.isDesktop) {
+      windowManager.addListener(this);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +125,13 @@ class BaseMaterialAppPage<T extends ViewAbstract> extends StatelessWidget {
   }
 
   final int _selectedDestination = 0;
+
   void selectDestination(int index) {
     // setState(() {
     //   _selectedDestination = index;
     // });
   }
+
   Row getStandardDrawerView() {
     return Row(
       children: [

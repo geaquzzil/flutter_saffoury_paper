@@ -142,7 +142,16 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 
+  String getTextCheckBoxDescription(BuildContext context,String field) {
+    return "getTextCheckBoxDescription $field";
+  }
+
+  String getTextCheckBoxTitle(BuildContext context,String field) {
+    return getFieldLabel(context, field);
+  }
+
   void onDropdownChanged(BuildContext context, String field, dynamic value) {}
+  void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
 }
 
-enum InputType { EDIT_TEXT, COLOR_PICKER, FILE_PICKER }
+enum InputType { EDIT_TEXT, COLOR_PICKER, FILE_PICKER, CHECKBOX }

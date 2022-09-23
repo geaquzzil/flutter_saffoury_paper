@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_checkbox.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_color_picker.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_edit_autocomplete.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_date.dart';
@@ -25,6 +26,9 @@ class EditControllerMasterWidget extends StatelessWidget {
         viewAbstract: viewAbstract,
         field: field,
       );
+    }
+    if (textFieldTypeVA == InputType.CHECKBOX) {
+      return EditControllerCheckBox(viewAbstract: viewAbstract, field: field);
     }
     bool isAutoComplete = viewAbstract.getTextInputTypeIsAutoComplete(field);
     bool isAutoCompleteViewAbstract =

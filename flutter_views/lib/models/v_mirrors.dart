@@ -89,6 +89,18 @@ class VMirrors<T> {
     return classMirror?.newInstance("", []) as ViewAbstract?;
   }
 
+  Type? getFieldTypeMirror(String field) {
+    try {
+      ClassMirror classMirror = getInstanceMirror();
+      var d = classMirror.declarations[field] as VariableMirror;
+      Type type = d.run;
+      return type;
+    } catch (e) {
+      debugPrint("getFieldTypeMirror error: $e");
+      return null;
+    }
+  }
+
   Type getFieldType(String field) {
     return getInstanceMirror().invokeGetter(field).runtimeType;
   }
