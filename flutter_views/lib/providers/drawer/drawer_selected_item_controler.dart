@@ -17,8 +17,11 @@ class DrawerMenuSelectedItemController with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSideMenuIsClosed() {
+  void setSideMenuIsClosed({int? byIdx}) {
     sideMenuOpen = false;
+    if (byIdx != null) {
+      _idx = byIdx;
+    }
     notifyListeners();
   }
 

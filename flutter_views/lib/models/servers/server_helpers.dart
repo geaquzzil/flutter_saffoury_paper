@@ -36,7 +36,7 @@ class URLS {
     "Access-Control-Allow-Credentials":
         'true', // Required for cookies, authorization headers with HTTPS
     "Access-Control-Allow-Headers":
-        "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+        "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale,Platform",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, HEAD"
   };
 }

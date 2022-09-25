@@ -150,7 +150,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   List<PermissionActionAbstract> getPermssionActions(BuildContext context) {
-    return getUserPermissionLevel(context).permissions_levels;
+    return getUserPermissionLevel(context).permissions_levels ?? [];
   }
 
   PermissionLevelAbstract getUserPermissionLevel(BuildContext context) {

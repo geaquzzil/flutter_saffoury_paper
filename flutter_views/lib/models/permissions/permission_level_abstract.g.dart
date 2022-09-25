@@ -11,8 +11,8 @@ PermissionLevelAbstract _$PermissionLevelAbstractFromJson(
     PermissionLevelAbstract()
       ..iD = json['iD'] as int
       ..userlevelname = json['userlevelname'] as String?
-      ..permissions_levels = (json['permissions_levels'] as List<dynamic>)
-          .map((e) =>
+      ..permissions_levels = (json['permissions_levels'] as List<dynamic>?)
+          ?.map((e) =>
               PermissionActionAbstract.fromJson(e as Map<String, dynamic>))
           .toList();
 
@@ -22,5 +22,5 @@ Map<String, dynamic> _$PermissionLevelAbstractToJson(
       'iD': instance.iD,
       'userlevelname': instance.userlevelname,
       'permissions_levels':
-          instance.permissions_levels.map((e) => e.toJson()).toList(),
+          instance.permissions_levels?.map((e) => e.toJson()).toList(),
     };

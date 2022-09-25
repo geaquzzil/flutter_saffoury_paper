@@ -17,6 +17,18 @@ class ListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ///clear all the objects list and load the other objects list from viewAbstract if not null
+  Future<void> clear({ViewAbstract? viewAbstract}) async {
+    objects.clear();
+    if (viewAbstract != null) {
+      debugPrint("clearing list and change viewAbstract to ${viewAbstract}");
+      await fetchList(viewAbstract);
+    } else {
+      debugPrint("clearing list only");
+      notifyListeners();
+    }
+  }
+
   // Removing a movie from the favorites list
   void removeFromList(ViewAbstract movie) {
     objects.remove(movie);

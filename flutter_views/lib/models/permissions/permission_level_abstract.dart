@@ -16,7 +16,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   static Map<String, PermissionActionAbstract> hashMapOfPermissionTableAction =
       {};
 
-  List<PermissionActionAbstract> permissions_levels = [];
+  List<PermissionActionAbstract>? permissions_levels;
   PermissionLevelAbstract() : super() {
     userlevelname = "-";
     permissions_levels = List.empty();
@@ -48,7 +48,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
     //   }
     // });
 
-    foundedPermission = permissions_levels.firstWhereOrNull((o) =>
+    foundedPermission = permissions_levels?.firstWhereOrNull((o) =>
         o.table_name != null && o.table_name == currentTableNameFromObject);
     if (foundedPermission != null) {
       hashMapOfPermissionTableAction[currentTableNameFromObject] =

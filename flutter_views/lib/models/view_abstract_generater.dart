@@ -48,6 +48,18 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
+  void onDrawerLeadingItemClicked(BuildContext context,
+      {ViewAbstract? clickedObject}) {
+    debugPrint(
+        'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}');
+    if (SizeConfig.isDesktop(context)) {
+      context
+          .read<ActionViewAbstractProvider>()
+          .change(clickedObject ?? this as ViewAbstract, ServerActions.edit);
+      return;
+    }
+  }
+
   void onDrawerItemClicked(BuildContext context) {
     debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
     //Navigator.of(context).pop();

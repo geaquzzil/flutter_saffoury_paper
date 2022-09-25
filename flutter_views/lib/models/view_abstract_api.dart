@@ -76,11 +76,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Future<Map<String, String>> getHeadersExtenstion() async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
+    defaultHeaders['Platform'] = "Flutter";
     defaultHeaders['Auth'] =
         Encriptions.encypt("HIIAMANANDROIDUSERFROMSAFFOURYCOMPANY");
 
     defaultHeaders['X-Authorization'] =
-        "YmUxN2E4ZjBlYjE4ZmU0OYkrl2fiKec95AFcix7iEoV7KMO2aRZ9WxKEN7SVYVRy1a2DyFTrAFZMNX1NTqsK8AugH2/9baf69dvhMJNBEARIuuHyaw9e0mm3HAHSGUnj5z0DjMf3m99KRCsrki8k15sG9A4Sxy897NLD3d7Ti79xXRUqYZjua4omEoxfS/63Opwaik3lVVTB6BLhHmwtOEwFjfB/qCLYaCc8PMqXbHV2K0o4kumU4Tl0LjSl0jMFNHTWsNEF3y9YLIrvsqjkgO8WOIgv/o+5FTG/MatJ5Jqs7RRMYICWaZXqDNC6K92qm475jX4Z47o1X81Pi3TDyoOzAhpQtIe+p7MBqrEDwFw=";
+        "WNYDGno8agC7nVmX99/uxyz24UgjvUTsjWFk3T94bERF9JLgBubq4cwiga3q5r9XExvUiE5rezZ5axsWvBjfmOwyW0GL34NS0y5y1UeVM12OU6JLnAEWfO6TxkMe7O9nr+H1LUkn4uYhVJFcJ0t8pYZF9iO7UHQXZTnDzTRQ4vnDRrWazwgtPXrBjMHNrYzNhxiuBzsH5CGtE2ZPnX+slhCI4F1KWfJHrXJX7n+Ddvc=";
 
     bool hasUser = await Configurations.hasSavedValue(AuthUser());
     if (hasUser) {

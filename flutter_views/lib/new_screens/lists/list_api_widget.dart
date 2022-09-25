@@ -15,15 +15,15 @@ class ListApiWidget extends StatefulWidget {
 class _ListApiWidgetState extends State<ListApiWidget> {
   final _scrollController = ScrollController();
   final ListProvider listProvider = ListProvider();
+  late DrawerViewAbstractProvider drawerViewAbstractObsever;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() => _onScroll());
-    Provider.of<DrawerViewAbstractProvider>(context, listen: false)
-        .addListener(() {
-      debugPrint("ViewAbstractProvider CHANGED");
-    });
+    drawerViewAbstractObsever =
+        Provider.of<DrawerViewAbstractProvider>(context, listen: false);
+    drawerViewAbstractObsever.addListener(onChangedViewAbstract);
     listProvider
         .fetchFakeList(context.read<DrawerViewAbstractProvider>().getObject);
   }
@@ -81,5 +81,10 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
+  }
+
+  void onChangedViewAbstract() {
+    listProvider.clear(viewAbstract: drawerViewAbstractObsever.object);
+    debugPrint("ViewAbstractProvider CHANGED");
   }
 }

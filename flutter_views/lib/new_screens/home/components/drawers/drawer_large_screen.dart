@@ -41,24 +41,24 @@ class DrawerLargeScreens extends StatelessWidget {
 
   Widget buildHeader(BuildContext context) {
     return !context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
-        ? Container(
-            child: const FlutterLogo(
-              size: 48,
-            ),
+        ? const FlutterLogo(
+            size: 48,
           )
-        : Row(
-            children: const [
-              SizedBox(
-                width: 24,
-              ),
-              FlutterLogo(
-                size: 48,
-              ),
-              SizedBox(
-                width: 16,
-              ),
-              Text("Flutter")
-            ],
+        : Expanded(
+            child: Row(
+              children: const [
+                SizedBox(
+                  width: 24,
+                ),
+                FlutterLogo(
+                  size: 48,
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Text("Flutter")
+              ],
+            ),
           );
   }
 
@@ -121,7 +121,7 @@ class DrawerLargeScreens extends StatelessWidget {
             child: OnHoverWidget(builder: (onHover) {
               return Icon(
                 icon,
-                color: onHover ? Colors.orange : Colors.white,
+                color: onHover ? Colors.orange : Colors.black,
               );
             }),
           ),
@@ -183,37 +183,44 @@ class DrawerListTileDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: ListTile(
-        leading: OnHoverWidget(builder: (onHover) {
-          if (onHover) {
-            return Container(child: Icon(Icons.plus_one_sharp));
-          }
-          return Container(child: viewAbstract.getIcon());
-        })
-        //         return IconButton(
-        //           onPressed: () {},
-        //           color: onHover ? Colors.orange : Colors.white,
-        //           icon: const Icon(Icons.info_outline),
-        //         );
-        //       }),
-        ,
-        selected:
-            context.watch<DrawerMenuSelectedItemController>().getIndex == idx,
-        title: context
-                .watch<DrawerMenuSelectedItemController>()
-                .getSideMenuIsClosed
-            ? null
-            : Container(child: viewAbstract.getMainLabelText(context)),
-        onTap: () {
-          context
-              .read<DrawerMenuSelectedItemController>()
-              .setSideMenuIsClosed();
-          viewAbstract.onDrawerItemClicked(context);
-          context.read<DrawerMenuSelectedItemController>().change(idx);
-        },
-      ),
-    );
+    return OnHoverWidget(
+        scale: false,
+        builder: (onHover) {
+          return Material(
+            color: Colors.transparent,
+            child: ListTile(
+              leading: InkWell(
+                  onTap: () {
+                    viewAbstract.onDrawerLeadingItemClicked(context);
+                    debugPrint("onLeading ListTile tapped");
+                  },
+                  child: Container(
+                      child: onHover
+                          ? const Icon(Icons.plus_one_sharp)
+                          : viewAbstract.getIcon()))
+              //         return IconButton(
+              //           onPressed: () {},
+              //           color: onHover ? Colors.orange : Colors.white,
+              //           icon: const Icon(Icons.info_outline),
+              //         );
+              //       }),
+              ,
+              selected:
+                  context.watch<DrawerMenuSelectedItemController>().getIndex ==
+                      idx,
+              title: context
+                      .watch<DrawerMenuSelectedItemController>()
+                      .getSideMenuIsClosed
+                  ? null
+                  : Container(child: viewAbstract.getMainLabelText(context)),
+              onTap: () {
+                context
+                    .read<DrawerMenuSelectedItemController>()
+                    .setSideMenuIsClosed(byIdx: idx);
+                viewAbstract.onDrawerItemClicked(context);
+              },
+            ),
+          );
+        });
   }
 }
