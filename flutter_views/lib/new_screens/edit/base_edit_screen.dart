@@ -27,6 +27,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
   }
   late GlobalKey<FormBuilderState> _formKey;
   late List<String> fields;
+  late EditSubsViewAbstractControllerProvider prov;
   // @override
   // void didUpdateWidget(BaseEditPage oldWidget) {
   //   super.didUpdateWidget(oldWidget);
@@ -41,6 +42,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint("didChangeDependencies _BaseEditPageState");
+    
   }
 
   @override
@@ -124,12 +126,12 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
   Widget buildWidget(ViewAbstract viewAbstract, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
-    Type? fieldTypeMirror = viewAbstract.getFieldTypeMirror(field);
+    Type? fieldTypeMirror = viewAbstract.getMirrorFieldType(field);
     debugPrint("fieldValueType is ${fieldValue.runtimeType}");
     debugPrint("fieldTypeMirror field $field is=> $fieldTypeMirror");
     if (checkIfNullAndViewAbstractField(viewAbstract,
         fieldValue: fieldValue, fieldName: field)) {
-      fieldValue = viewAbstract.getNewInstanceMirror(field: field);
+      fieldValue = viewAbstract.getMirrorNewInstanceViewAbstract(field);
       fieldValue.setParent(viewAbstract);
       fieldValue.setFieldNameFromParent(field);
       return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);

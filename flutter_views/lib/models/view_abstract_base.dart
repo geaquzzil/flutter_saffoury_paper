@@ -24,17 +24,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   IconData getFieldIconData(String field) {
     return getFieldIconDataMap()[field] ??
-        getNewInstanceEnum(field: field)?.getMainIconData() ??
-        getNewInstanceMirror(field: field)?.getMainIconData() ??
+        getMirrorNewInstance(field)?.getMainIconData() ??
         Icons.error;
   }
 
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ??
-        getNewInstanceEnum(field: field)?.getMainLabelText(context) ??
-        getNewInstanceMirror(field: field)
-            ?.getMainHeaderLabelTextOnly(context) ??
-        "error geting field label =>$field";
+        getMirrorViewAbstractLabelText(context,field);
   }
 
   String getMainHeaderLabelWithText(BuildContext context) {

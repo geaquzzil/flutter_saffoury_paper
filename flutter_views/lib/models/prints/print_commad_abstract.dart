@@ -63,9 +63,9 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "printOptions": PrinterOptions(),
-        "ReportOptions": ReportOptions(),
+        "reportOptions": ReportOptions(),
         "sortByType": SortByType.DESC
       };
   @override

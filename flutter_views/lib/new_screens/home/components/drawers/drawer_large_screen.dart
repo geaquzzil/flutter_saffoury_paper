@@ -186,7 +186,19 @@ class DrawerListTileDesktop extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: ListTile(
-        leading: Container(child: viewAbstract.getIcon()),
+        leading: OnHoverWidget(builder: (onHover) {
+          if (onHover) {
+            return Container(child: Icon(Icons.plus_one_sharp));
+          }
+          return Container(child: viewAbstract.getIcon());
+        })
+        //         return IconButton(
+        //           onPressed: () {},
+        //           color: onHover ? Colors.orange : Colors.white,
+        //           icon: const Icon(Icons.info_outline),
+        //         );
+        //       }),
+        ,
         selected:
             context.watch<DrawerMenuSelectedItemController>().getIndex == idx,
         title: context

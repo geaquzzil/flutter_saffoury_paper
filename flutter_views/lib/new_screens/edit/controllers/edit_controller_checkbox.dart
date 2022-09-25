@@ -13,7 +13,7 @@ class EditControllerCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Type? fieldType = viewAbstract.getFieldTypeMirror(field);
+    Type? fieldType = viewAbstract.getMirrorFieldType(field);
     debugPrint("EditControllerCheckBox field Type=> $fieldType");
     return Column(
       children: [

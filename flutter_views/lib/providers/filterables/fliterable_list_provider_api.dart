@@ -33,7 +33,8 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
     debugPrint("setRequiredFilterList called with sharedFields $sharedFields");
 
     for (var field in sharedFields) {
-      _requiredFiltter[_lastViewAbstract.getNewInstanceMirrorNotNull(field)] =
+      _requiredFiltter[
+              _lastViewAbstract.getMirrorNewInstanceViewAbstract(field)] =
           _filterData?.getFieldValue(field);
     }
     debugPrint(

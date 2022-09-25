@@ -31,6 +31,34 @@ abstract class VMirrors<T> {
     return reflector.reflect(this);
   }
 
+  dynamic getFieldValue(String field) {
+    try {
+      dynamic value = getInstanceMirror().invokeGetter(field);
+      return value;
+    } catch (e) {
+      return "getFieldValue $field ${e.toString()}";
+    }
+  }
+
+  void setFieldValue(String field, Object? value) {
+    try {
+      getInstanceMirror().invokeSetter(field, value);
+    } catch (e) {
+      debugPrint("setFieldValue $field ${e.toString()}");
+    }
+  }
+
+  ClassMirror getInstanceMirrorReflectField(Type type) {
+    return reflector.reflectType(type) as ClassMirror;
+  }
+
+  List<String> getFieldsDeclarations() {
+    ClassMirror c = getInstanceMirror().type;
+    return c.declarations.entries.map((e) => e.key).toList();
+  }
+
+  /// Get the field type of the given String name
+  /// throw exception if the field type is not object or if the field type is [int, float,String,...]
   ClassMirror getInstanceMirrorFieldName(String name) {
     ClassMirror c = getInstanceMirror().type;
     try {
@@ -52,58 +80,58 @@ abstract class VMirrors<T> {
         as ClassMirror;
   }
 
-  ClassMirror getInstanceMirrorField(Type type) {
-    return reflector.reflectType(type) as ClassMirror;
-  }
-
-  String? getViewAbstractLabelText(BuildContext context, String field) {
-    return getNewInstanceMirror(field: field)
-            ?.getMainHeaderLabelTextOnly(context) ??
-        "not found for $field";
-  }
-
-  List<String> getFieldsDeclarations() {
-    ClassMirror c = getInstanceMirror().type;
-    return c.declarations.entries.map((e) => e.key).toList();
-  }
-
-  ViewAbstractEnum? getNewInstanceEnum(
-      {ClassMirror? classMirror, String? field}) {
-    debugPrint("getNewInstanceEnum for classMirror:$field");
-    if (field != null) {
-      if (!getInstanceMirrorFieldName(field).isEnum) return null;
-      return getNewInstanceEnum(classMirror: getInstanceMirrorFieldName(field));
+  String getMirrorViewAbstractLabelText(BuildContext context, String field) {
+    dynamic v = getMirrorNewInstance(field);
+    if (v is ViewAbstractEnum) {
+      return v.getMainLabelText(context);
+    } else if (v is ViewAbstract) {
+      return v.getMainHeaderLabelTextOnly(context);
+    } else {
+      return v.toString();
     }
-    return classMirror?.newInstance("", []) as ViewAbstractEnum?;
   }
 
-  ViewAbstract? getNewInstanceMirror(
-      {ClassMirror? classMirror, String? field}) {
-    debugPrint("getNewInstanceMirror for classMirror:$field");
-    if (field != null) {
-      return getNewInstanceMirror(
-          classMirror: getInstanceMirrorFieldName(field));
+  dynamic getMirrorNewInstance(String field) {
+    try {
+      return getMirrorFieldsMapNewInstance()[field];
+    } catch (e) {
+      throw UnimplementedError(
+          "Could not get field dynamic value for $field from getMirrorFieldsMapNewInstance");
     }
-    return classMirror?.newInstance("", []) as ViewAbstract?;
   }
 
-  ViewAbstract getNewInstanceMirrorNotNull(String field) {
-    debugPrint("getNewInstanceMirrorNotNull for classMirror:$field");
-    return getInstanceMirrorFieldName(field).newInstance("", [])
-        as ViewAbstract;
-  }
-
-  ViewAbstract? getNewInstanceMirrorFromList(
-      {ClassMirror? classMirror, String? field}) {
-    debugPrint("getNewInstanceMirror for classMirror:$field");
-    if (field != null) {
-      return getNewInstanceMirror(
-          classMirror: getInstanceMirrorFieldName(field));
+  ViewAbstractEnum getMirrorNewInstanceEnum(String field) {
+    try {
+      return getMirrorFieldsMapNewInstance()[field];
+    } catch (e) {
+      throw UnimplementedError(
+          "Could not get field dynamic value for $field from getMirrorFieldsMapNewInstance");
     }
-    return classMirror?.newInstance("", []) as ViewAbstract?;
   }
 
-  Type? getFieldTypeMirror(String field) {
+  ViewAbstract getMirrorNewInstanceViewAbstract(String field) {
+    try {
+      return getMirrorFieldsMapNewInstance()[field];
+    } catch (e) {
+      throw UnimplementedError(
+          "Could not get field dynamic value for $field from getMirrorFieldsMapNewInstance");
+    }
+  }
+
+  bool isViewAbstract(String field) {
+    dynamic t = getMirrorNewInstance(field);
+    bool res = t is ViewAbstract;
+    debugPrint("isViewAbstract $field  res=>$res");
+    return res;
+  }
+
+  /// Get the type of the field based on its value
+  /// if the field is null the type is null use [getMirrorFieldType] instead
+  Type getFieldType(String field) {
+    return getInstanceMirror().invokeGetter(field).runtimeType;
+  }
+
+  Type? getMirrorFieldType(String field) {
     try {
       return getMirrorFieldsMapNewInstance()[field].runtimeType;
     } catch (e) {
@@ -111,37 +139,40 @@ abstract class VMirrors<T> {
       return null;
     }
   }
+  // ViewAbstractEnum? getNewInstanceEnum(
+  //     {ClassMirror? classMirror, String? field}) {
+  //   debugPrint("getNewInstanceEnum for classMirror:$field");
+  //   if (field != null) {
+  //     if (!getInstanceMirrorFieldName(field).isEnum) return null;
+  //     return getNewInstanceEnum(classMirror: getInstanceMirrorFieldName(field));
+  //   }
+  //   return classMirror?.newInstance("", []) as ViewAbstractEnum?;
+  // }
 
-  Type getFieldType(String field) {
-    return getInstanceMirror().invokeGetter(field).runtimeType;
-  }
+  // ViewAbstract? getNewInstanceMirror(
+  //     {ClassMirror? classMirror, String? field}) {
+  //   debugPrint("getNewInstanceMirror for classMirror:$field");
+  //   if (field != null) {
+  //     return getNewInstanceMirror(
+  //         classMirror: getInstanceMirrorFieldName(field));
+  //   }
+  //   return classMirror?.newInstance("", []) as ViewAbstract?;
+  // }
 
-  bool isViewAbstract(String field) {
-    try {
-      ViewAbstract? t = getNewInstanceMirror(field: field);
-      bool res = t is ViewAbstract;
-      debugPrint("isViewAbstract $field  res=>$res");
-      return res;
-    } catch (e) {
-      debugPrint("isViewAbstract error=> $e");
-      return false;
-    }
-  }
+  // ViewAbstract getNewInstanceMirrorNotNull(String field) {
+  //   debugPrint("getNewInstanceMirrorNotNull for classMirror:$field");
+  //   return getInstanceMirrorFieldName(field).newInstance("", [])
+  //       as ViewAbstract;
+  // }
 
-  dynamic getFieldValue(String field) {
-    try {
-      dynamic value = getInstanceMirror().invokeGetter(field);
-      return value;
-    } catch (e) {
-      return "getFieldValue $field ${e.toString()}";
-    }
-  }
+  // ViewAbstract? getNewInstanceMirrorFromList(
+  //     {ClassMirror? classMirror, String? field}) {
+  //   debugPrint("getNewInstanceMirror for classMirror:$field");
+  //   if (field != null) {
+  //     return getMirrorNewInstanceViewAbstract(
+  //         classMirror: getInstanceMirrorFieldName(field));
+  //   }
+  //   return classMirror?.newInstance("", []) as ViewAbstract?;
+  // }
 
-  void setFieldValue(String field, Object? value) {
-    try {
-      getInstanceMirror().invokeSetter(field, value);
-    } catch (e) {
-      debugPrint("setFieldValue $field ${e.toString()}");
-    }
-  }
 }

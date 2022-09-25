@@ -27930,21 +27930,21 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'getInstanceMirrorFieldNameFromList': (dynamic instance) =>
             instance.getInstanceMirrorFieldNameFromList,
         r'getInstanceMirrorField': (dynamic instance) =>
-            instance.getInstanceMirrorField,
+            instance.getInstanceMirrorReflectField,
         r'getViewAbstractLabelText': (dynamic instance) =>
-            instance.getViewAbstractLabelText,
+            instance.getMirrorViewAbstractLabelText,
         r'getFieldsDeclarations': (dynamic instance) =>
             instance.getFieldsDeclarations,
         r'getNewInstanceEnum': (dynamic instance) =>
-            instance.getNewInstanceEnum,
+            instance.getMirrorNewInstanceEnum,
         r'getNewInstanceMirror': (dynamic instance) =>
-            instance.getNewInstanceMirror,
+            instance.getMirrorNewInstanceViewAbstract,
         r'getNewInstanceMirrorNotNull': (dynamic instance) =>
             instance.getNewInstanceMirrorNotNull,
         r'getNewInstanceMirrorFromList': (dynamic instance) =>
             instance.getNewInstanceMirrorFromList,
         r'getFieldTypeMirror': (dynamic instance) =>
-            instance.getFieldTypeMirror,
+            instance.getMirrorFieldType,
         r'getFieldType': (dynamic instance) => instance.getFieldType,
         r'isViewAbstract': (dynamic instance) => instance.isViewAbstract,
         r'getFieldValue': (dynamic instance) => instance.getFieldValue,
