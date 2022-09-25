@@ -85,4 +85,14 @@ class ReportOptions extends ViewAbstract<ReportOptions> {
       _$ReportOptionsFromJson(data);
 
   Map<String, dynamic> toJson() => _$ReportOptionsToJson(this);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "reportHeader": "",
+        "reportFooter": "",
+      };
+
+  // @override
+  // Map<String, Type> getMirrorFieldsTypeMap() =>
+  //     {"reportHeader": String, "reportFooter": String};
 }

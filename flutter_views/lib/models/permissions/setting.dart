@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -128,7 +127,7 @@ class Setting extends ViewAbstract<Setting> {
     throw UnimplementedError();
   }
 
-   factory Setting.fromJson(Map<String, dynamic> data) =>
+  factory Setting.fromJson(Map<String, dynamic> data) =>
       _$SettingFromJson(data);
 
   Map<String, dynamic> toJson() => _$SettingToJson(this);
@@ -139,6 +138,18 @@ class Setting extends ViewAbstract<Setting> {
   @override
   Setting fromJsonViewAbstract(Map<String, dynamic> json) =>
       Setting.fromJson(json);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() {
+    // TODO: implement getMirrorFieldsMapNewInstance
+    throw UnimplementedError();
+  }
+
+  // @override
+  // Map<String, Type> getMirrorFieldsTypeMap() {
+  //   // TODO: implement getMirrorFieldsTypeMap
+  //   throw UnimplementedError();
+  // }
 }
 
 enum CurrencySetting { DOLLAR, DOLLAR_THREE_ZERO, SYP }

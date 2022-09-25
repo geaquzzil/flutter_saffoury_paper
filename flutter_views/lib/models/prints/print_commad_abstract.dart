@@ -25,18 +25,11 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
   SortByType sortByType = SortByType.DESC;
 
   @override
-  Map<String, Type> getMirrorFieldsTypeMap() => {
-        "printOptions": PrinterOptions,
-        "ReportOptions": ReportOptions,
-        "sortByType": SortByType
-      };
-
-  @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() => {
-        "printOptions": PrinterOptions(),
-        "ReportOptions": ReportOptions(),
-        
-      };
+  // Map<String, Type> getMirrorFieldsTypeMap() => {
+  //       "printOptions": PrinterOptions,
+  //       "ReportOptions": ReportOptions,
+  //       "sortByType": SortByType
+  //     };
 
   PrintCommandAbstract(this.printObject, {this.imgLinkAndroidQRCode})
       : super() {
@@ -69,6 +62,12 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
     }
   }
 
+  @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+        "printOptions": PrinterOptions(),
+        "ReportOptions": ReportOptions(),
+        "sortByType": SortByType.DESC
+      };
   @override
   List<String> getMainFields() => ["printerOptions", "reportOptions"];
 

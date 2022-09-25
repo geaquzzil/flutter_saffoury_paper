@@ -24,6 +24,16 @@ class Transfers extends InvoiceMaster<Transfers> {
   Transfers() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "fromWarehouse": Warehouse(),
+          "toWarehouse": Warehouse(),
+          "transfers_details": List<TransfersDetails>.empty(),
+          "trasfers_details_count": 0
+        });
+
+  @override
   String? getTableNameApi() => "transfers";
 
   @override
@@ -60,6 +70,13 @@ class TransfersDetails extends InvoiceMasterDetails<TransfersDetails> {
   // int? TransferID;
   Transfers? transfers;
   TransfersDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "transfers": Transfers(),
+        });
 
   @override
   String? getTableNameApi() => "transfers_details";

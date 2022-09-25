@@ -7,7 +7,7 @@ import '../view_abstract.dart';
 
 part 'permission_action_abstract.g.dart';
 
-@JsonSerializable(explicitToJson:true)
+@JsonSerializable(explicitToJson: true)
 @reflector
 class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   String? table_name;
@@ -140,7 +140,8 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
   }
-     @override
+
+  @override
   String getSortByFieldName() {
     return "table_name";
   }
@@ -149,4 +150,28 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   SortByType getSortByType() {
     return SortByType.DESC;
   }
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "table_name": "",
+        "print": 0,
+        "notification": 0,
+        "list": 0,
+        "add": 0,
+        "edit": 0,
+        "view": 0,
+        "delete_action": 0
+      };
+
+  // @override
+  // Map<String, Type> getMirrorFieldsTypeMap() => {
+  //       "table_name": String,
+  //       "print": int,
+  //       "notification": int,
+  //       "list": int,
+  //       "add": int,
+  //       "edit": int,
+  //       "view": int,
+  //       "delete_action": int
+  //     };
 }

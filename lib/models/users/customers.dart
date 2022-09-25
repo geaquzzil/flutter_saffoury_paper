@@ -37,6 +37,19 @@ class Customer extends User<Customer> {
   Customer() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "cash": 0,
+          "totalCredits": 0,
+          "totalDebits": 0,
+          "totalOrders": 0,
+          "totalPurchases": 0,
+          "balance": 0,
+          "employees": Employee(),
+        });
+
+  @override
   IconData getMainIconData() {
     return Icons.account_circle;
   }

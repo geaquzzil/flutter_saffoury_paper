@@ -31,6 +31,8 @@ abstract class VObject<T> extends ViewAbstract<T> {
   SortByType getSortByType() => SortByType.DESC;
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};
+  @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override

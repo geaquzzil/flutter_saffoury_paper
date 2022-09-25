@@ -171,4 +171,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   SortByType getSortByType() {
     return SortByType.ASC;
   }
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"userlevelname": ""};
 }

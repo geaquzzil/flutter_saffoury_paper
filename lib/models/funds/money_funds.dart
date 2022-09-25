@@ -28,7 +28,19 @@ abstract class MoneyFunds<T> extends ViewAbstract<T> {
 
   MoneyFunds() : super();
 
- 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "fromBox": 0,
+        "isDirect": 0,
+        "date": "",
+        "value": 0,
+        "comments": "",
+        "customers": Customer(),
+        "employees": Employee(),
+        "equalities": Equalities(),
+        "warehouse": Warehouse()
+      };
+
   @override
   Map<String, IconData> getFieldIconDataMap() => {
         "value": Icons.attach_money_rounded,

@@ -12,6 +12,10 @@ class Manufacture extends BaseWithNameString<Manufacture> {
   Manufacture() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance();
+
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.manufacture;
   }

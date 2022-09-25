@@ -44,6 +44,16 @@ class Purchases extends InvoiceMaster<Purchases> {
   @override
   Purchases fromJsonViewAbstract(Map<String, dynamic> json) =>
       Purchases.fromJson(json);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "purchases_details": List<PurchasesDetails>.empty(),
+          "purchases_details_count": 0,
+          "purchases_refunds": List<PurchasesRefund>.empty(),
+          "purchases_refunds_count": 0,
+        });
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -53,6 +63,13 @@ class PurchasesDetails extends InvoiceMasterDetails<PurchasesDetails> {
 
   Purchases? purchases;
   PurchasesDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "purchases": Purchases(),
+        });
 
   @override
   String? getTableNameApi() => "purchases_details";

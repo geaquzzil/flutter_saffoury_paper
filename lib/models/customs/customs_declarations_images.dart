@@ -19,6 +19,13 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages> {
   CustomsDeclarationImages() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "image": "",
+        "comments": "",
+        "customs_declarations": CustomsDeclaration()
+      };
+
+  @override
   List<String> getMainFields() => ["customs_declarations", "image", "comments"];
 
   @override

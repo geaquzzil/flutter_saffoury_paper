@@ -5,6 +5,8 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
+import 'products.dart';
 part 'gsms.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -16,6 +18,11 @@ class GSM extends ViewAbstract<GSM> {
   int? products_count;
 
   GSM() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"products": List<Product>.empty(), "products_count": 0, "gsm": 0};
+
   @override
   String getForeignKeyName() {
     return "GSMID";

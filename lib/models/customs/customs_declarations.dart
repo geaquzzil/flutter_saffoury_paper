@@ -28,6 +28,18 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   CustomsDeclaration() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+
+    "number":"",
+    "date":"",
+    "fromCountry": "",
+    "fromName":"",
+    "comments": "",
+    "customs_declarations_images": List<CustomsDeclarationImages>.empty(),
+    "customs_declarations_images_count":0,
+    "employees":Employee(),
+  };
+  @override
   List<String> getMainFields() =>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 

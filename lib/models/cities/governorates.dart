@@ -6,10 +6,14 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 part 'governorates.g.dart';
 
-@JsonSerializable(explicitToJson:true)
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Governorate extends BaseWithNameString<Governorate> {
   Governorate() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance();
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {

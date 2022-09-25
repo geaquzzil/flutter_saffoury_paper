@@ -87,4 +87,8 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   @override
   WarehouseEmployee fromJsonViewAbstract(Map<String, dynamic> json) =>
       WarehouseEmployee.fromJson(json);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"warehouse": Warehouse(), "employee": Employee()};
 }

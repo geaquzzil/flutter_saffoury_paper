@@ -10,6 +10,10 @@ part 'warehouse.g.dart';
 @reflector
 class Warehouse extends BaseWithNameString<Warehouse> {
   Warehouse() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance();
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.warehouse;
@@ -39,7 +43,7 @@ class Warehouse extends BaseWithNameString<Warehouse> {
   Warehouse fromJsonViewAbstract(Map<String, dynamic> json) =>
       Warehouse.fromJson(json);
 
-        @override
+  @override
   String getForeignKeyName() {
     return "WarehouseID";
   }

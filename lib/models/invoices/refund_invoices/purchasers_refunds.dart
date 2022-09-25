@@ -22,6 +22,16 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
   int? purchases_refunds_purchases_details_count;
 
   PurchasesRefund() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "purchases": Purchases(),
+          "purchases_refunds_purchases_details":
+              List<PurchasesRefundDetails>.empty(),
+          "purchases_refunds_purchases_details_count": 0
+        });
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customerRequestSizes;
@@ -63,6 +73,15 @@ class PurchasesRefundDetails
   PurchasesDetails? purchases_details;
 
   PurchasesRefundDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "purchases": Purchases(),
+          "purchases_refunds": PurchasesRefund(),
+          "purchases_details": PurchasesDetails()
+        });
   PurchasesRefundDetails setPurchases(Purchases purchases) {
     //TODO: implement this
     return this;

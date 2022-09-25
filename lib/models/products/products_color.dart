@@ -14,6 +14,10 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   String? middle;
   String? back;
   ProductsColor() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"top": "", "middle": "", "back": ""};
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     return AppLocalizations.of(context)!.product;
@@ -118,4 +122,8 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   SortByType getSortByType() {
     return SortByType.ASC;
   }
+
+  @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() =>
+      {"top": "", "middle": "", "back": ""};
 }

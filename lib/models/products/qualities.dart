@@ -7,13 +7,20 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'qualities.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-
 @reflector
 class Quality extends BaseWithNameString<Quality> {
   List<Product>? products;
   int? products_count;
 
   Quality() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "products": List<Product>.empty(),
+          "products_count": 0,
+        });
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.quality;
@@ -46,7 +53,7 @@ class Quality extends BaseWithNameString<Quality> {
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.product;
 
-        @override
+  @override
   String getForeignKeyName() {
     return "QualityID";
   }

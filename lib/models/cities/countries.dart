@@ -12,6 +12,9 @@ class Country extends BaseWithNameString<Country> {
   Country() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance();
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.country;
   }
@@ -24,7 +27,7 @@ class Country extends BaseWithNameString<Country> {
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"name": 50};
 
- factory Country.fromJson(Map<String, dynamic> data) =>
+  factory Country.fromJson(Map<String, dynamic> data) =>
       _$CountryFromJson(data);
 
   Map<String, dynamic> toJson() => _$CountryToJson(this);

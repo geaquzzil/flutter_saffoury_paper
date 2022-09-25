@@ -19,6 +19,17 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
 
   String? comments;
 
+  @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+        "products": Product(),
+        "warehouse": Warehouse(),
+        "quantity": 0,
+        "unitPrice": 0,
+        "discount": 0,
+        "price": 0,
+        "comments": ""
+      };
+
   InvoiceMasterDetails() : super();
   InvoiceMasterDetails setProduct(Product products) {
     this.products = products;

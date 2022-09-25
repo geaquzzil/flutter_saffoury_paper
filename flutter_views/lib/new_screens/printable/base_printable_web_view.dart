@@ -1,17 +1,10 @@
-import 'package:easy_web_view/easy_web_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
-import 'package:webcontent_converter/webcontent_converter.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 class BasePrintableViewWidget extends StatelessWidget {
   ViewAbstract printObject;
@@ -28,7 +21,7 @@ class BasePrintableViewWidget extends StatelessWidget {
           backgroundColor: Colors.white,
           leading: IconButton(
             color: Colors.black,
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             iconSize: 20.0,
             onPressed: () {
               Navigator.pop(context);
@@ -42,7 +35,7 @@ class BasePrintableViewWidget extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.done) {
                 return TextButton(
                     onPressed: () => {generatePdf(snapshot.data)},
-                    child: Text("dsa"));
+                    child: const Text("dsa"));
                 return PdfPreview(
                     build: (format) async =>
                         await Printing.convertHtml(html: snapshot.data.body));

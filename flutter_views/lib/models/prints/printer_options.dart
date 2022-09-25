@@ -105,6 +105,22 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
       _$PrinterOptionsFromJson(data);
 
   Map<String, dynamic> toJson() => _$PrinterOptionsToJson(this);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "language": Language.English,
+        "copies": 0,
+        "startEndPage": "",
+        "printPaperSize": PrintPaperSize.Default
+      };
+
+  // @override
+  // Map<String, Type> getMirrorFieldsTypeMap() => {
+  //       "language": Language,
+  //       "copies": int,
+  //       "startEndPage": String,
+  //       "printPaperSize": PrintPaperSize
+  //     };
 }
 
 // enum Language {

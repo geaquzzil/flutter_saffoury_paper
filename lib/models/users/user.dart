@@ -58,6 +58,42 @@ class User<T> extends AuthUser {
   List<CargoTransporter>? cargo_transporters; //employee only
   int? cargo_transporters_count;
 
+  @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "name": "",
+          "email": "",
+          "token": "",
+          "activated": 0,
+          "date": "",
+          "city": "",
+          "address": "",
+          "profile": "",
+          "comments": "",
+          "cut_requests": List<CutRequest>.empty(),
+          "cut_requests_count": 0,
+          "orders": List<Order>.empty(),
+          "orders_count": 0,
+          "purchases": List<Purchases>.empty(),
+          "purchases_count": 0,
+          "orders_refunds": List<OrderRefund>.empty(),
+          "orders_refunds_count": 0,
+          "purchases_refunds_count": 0,
+          "purchases_refunds": List<PurchasesRefund>.empty(),
+          "customers_request_sizes": List<CustomerRequestSize>.empty(),
+          "customers_request_sizes_count": 0,
+          "reservation_invoice": List<ReservationInvoice>.empty(),
+          "reservation_invoice_count": 0,
+          "products_inputs": List<ProductInput>.empty(),
+          "products_inputs_count": 0,
+          "products_outputs": List<ProductOutput>.empty(),
+          "products_outputs_count": 0,
+          "transfers": List<Transfers>.empty(),
+          "transfers_count": 0,
+          "cargo_transporters": List<CargoTransporter>.empty(),
+          "cargo_transporters_count": 0
+        });
   User() : super();
   @override
   List<String> getMainFields() {

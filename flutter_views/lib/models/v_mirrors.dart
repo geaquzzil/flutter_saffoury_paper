@@ -20,8 +20,11 @@ class Reflector extends Reflectable {
 
 const reflector = Reflector();
 
-class VMirrors<T> {
-  Map<String, Type> getMirrorFieldsTypeMap() => {};
+abstract class VMirrors<T> {
+  Type getMirrorFieldsType(String field) {
+    return getMirrorFieldsMapNewInstance()[field].runtimeType;
+  }
+
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};
 
   InstanceMirror getInstanceMirror() {
@@ -102,7 +105,7 @@ class VMirrors<T> {
 
   Type? getFieldTypeMirror(String field) {
     try {
-      return getMirrorFieldsTypeMap()[field];
+      return getMirrorFieldsMapNewInstance()[field].runtimeType;
     } catch (e) {
       debugPrint("getFieldTypeMirror error: $e");
       return null;

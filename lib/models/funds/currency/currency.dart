@@ -13,6 +13,10 @@ class Currency extends BaseWithNameString<Currency> {
   Currency() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()..addAll({"nameAr": ""});
+
+  @override
   List<String> getMainFields() => ["name", "nameAr"];
 
   @override

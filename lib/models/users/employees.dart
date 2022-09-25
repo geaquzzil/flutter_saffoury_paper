@@ -29,6 +29,14 @@ class Employee extends User<Employee> {
   Employee() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "publish": 0,
+          "employee": Employee(),
+        });
+
+  @override
   IconData getMainIconData() {
     return Icons.engineering;
   }
@@ -57,4 +65,12 @@ class Employee extends User<Employee> {
   @override
   Employee fromJsonViewAbstract(Map<String, dynamic> json) =>
       Employee.fromJson(json);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "publish": 0,
+          "employee": Employee(),
+        });
 }

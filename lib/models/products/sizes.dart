@@ -118,4 +118,8 @@ class Size extends ViewAbstract<Size> {
   SortByType getSortByType() {
     return SortByType.ASC;
   }
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"width": 0, "length": 0};
 }

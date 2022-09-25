@@ -21,6 +21,9 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   SizesCutRequest() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"cut_requests": CutRequest(), "sizes": Size(), "quantity": 0};
+  @override
   List<String> getMainFields() => ["sizes", "quantity"];
 
   @override

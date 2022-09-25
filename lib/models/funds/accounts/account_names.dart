@@ -15,6 +15,13 @@ class AccountName extends BaseWithNameString<AccountName> {
   AccountName() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "account_names_types": AccountNameType(),
+        });
+
+  @override
   Map<String, bool> isFieldCanBeNullableMap() => {"account_names_types": true};
 
   @override
@@ -33,7 +40,7 @@ class AccountName extends BaseWithNameString<AccountName> {
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"name": 50};
 
- factory AccountName.fromJson(Map<String, dynamic> data) =>
+  factory AccountName.fromJson(Map<String, dynamic> data) =>
       _$AccountNameFromJson(data);
 
   Map<String, dynamic> toJson() => _$AccountNameToJson(this);
@@ -60,6 +67,14 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
   int? account_names_count;
 
   AccountNameType() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "type": "",
+        "typeAr": "",
+        "account_names": List<AccountName>.empty(),
+        "account_names_count": 0
+      };
 
   @override
   Map<String, IconData> getFieldIconDataMap() =>
@@ -119,7 +134,7 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
 
   @override
   Map<String, bool> isFieldRequiredMap() => {"type": true};
- factory AccountNameType.fromJson(Map<String, dynamic> data) =>
+  factory AccountNameType.fromJson(Map<String, dynamic> data) =>
       _$AccountNameTypeFromJson(data);
 
   Map<String, dynamic> toJson() => _$AccountNameTypeToJson(this);

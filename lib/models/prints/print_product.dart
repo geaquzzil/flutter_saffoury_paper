@@ -19,11 +19,9 @@ class PrintProduct extends PrintCommandAbstract<PrintProduct> {
   PrintProduct({dynamic printObject}) : super(printObject);
 
   @override
-  Map<String, Type> getMirrorFieldsTypeMap() => super.getMirrorFieldsTypeMap()
-    ..addAll({
-      "printProductAsLabel": bool,
-      "test": int,
-    });
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({"printProductAsLabel": false, "test": 0});
 
   @override
   List<String> getMainFields() =>

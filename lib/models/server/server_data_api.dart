@@ -55,4 +55,10 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
   String? getTableNameApi() => "";
   @override
   String? getCustomAction() => "list_server_data";
+  
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() {
+    // TODO: implement getMirrorFieldsMapNewInstance
+    throw UnimplementedError();
+  }
 }

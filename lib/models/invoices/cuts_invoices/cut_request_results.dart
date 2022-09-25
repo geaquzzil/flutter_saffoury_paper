@@ -23,6 +23,13 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
   CutRequestResult() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "cut_requests": CutRequest(),
+        "products_inputs": ProductInput(),
+        "products_outputs": ProductOutput()
+      };
+
+  @override
   List<String> getMainFields() => [
         "cut_requests",
         "products_inputs",

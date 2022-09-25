@@ -25,6 +25,14 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   OrderRefund() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "orders_refunds_order_details": List<OrderRefundDetails>.empty(),
+          "orders_refunds_order_details_count": 0
+        });
+
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customerRequestSizes;
 
@@ -64,6 +72,15 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
   OrderDetails? orders_details;
 
   OrderRefundDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "orders_refunds": OrderRefund(),
+          "orders": Order(),
+          "orders_details": OrderDetails()
+        });
   OrderRefundDetails setOrder(Order orders) {
     //TODO: implement this
     return this;

@@ -26,6 +26,15 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   ProductOutput() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "products_outputs_details": List<ProductOutputDetails>.empty(),
+          "products_outputs_details_count": 0,
+          "warehouse": Warehouse()
+        });
+
+  @override
   String? getTableNameApi() => "products_outputs";
 
   @override
@@ -64,6 +73,11 @@ class ProductOutputDetails extends InvoiceMasterDetails<ProductOutputDetails> {
   ProductOutput? products_outputs;
 
   ProductOutputDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({"products_outputs": ProductOutput()});
 
   @override
   String? getTableNameApi() => "products_outputs";

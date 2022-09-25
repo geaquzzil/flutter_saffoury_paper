@@ -55,6 +55,27 @@ class Product extends ViewAbstract<Product> {
   ProductsColor? products_colors;
   List<Stocks>? inStock;
 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "status": ProductStatus.NONE,
+        "date": "",
+        "sheets": 0,
+        "barcode": "",
+        "fiberLines": "",
+        "comments": "",
+        "pending_reservation_invoice": 0,
+        "pending_cut_requests": 0,
+        "products_types": ProductType(),
+        "customs_declarations": CustomsDeclaration(),
+        "countries_manufactures": CountryManufacture(),
+        "sizes": Size(),
+        "gsms": GSM(),
+        "qualities": Quality(),
+        "grades": Grades(),
+        "products_colors": ProductsColor(),
+        "inStock": List<Stocks>.empty()
+      };
+
   Product() : super();
 
   @override
@@ -266,7 +287,8 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
-  PrintProduct? getPrintCommand(BuildContext context) => PrintProduct(printObject: this);
+  PrintProduct? getPrintCommand(BuildContext context) =>
+      PrintProduct(printObject: this);
 }
 
 // enum ProductStatus {

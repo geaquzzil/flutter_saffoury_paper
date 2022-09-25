@@ -9,7 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_auth.g.dart';
 
-@JsonSerializable(explicitToJson:true)
+@JsonSerializable(explicitToJson: true)
 class AuthUser<T> extends ViewAbstract<AuthUser> {
   bool? login;
   bool? permission;
@@ -20,11 +20,32 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   PermissionLevelAbstract? userlevels;
   Setting? setting;
 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "login": false,
+        "permission": false,
+        "response": 0,
+        "phone": "",
+        "password": "",
+        "userlevels": PermissionLevelAbstract(),
+        "setting": Setting()
+      };
+
   AuthUser({bool? setPassword}) : super() {
     if (setPassword ?? false) {
       setRandomPassword();
     }
   }
+  @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+        "login": false,
+        "permission": false,
+        "response": 1,
+        "phone": "",
+        "password": "",
+        "userlevels": PermissionLevelAbstract(),
+        "setting": Setting()
+      };
 
   void setRandomPassword() {
     const alphabet =

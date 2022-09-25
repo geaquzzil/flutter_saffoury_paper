@@ -16,6 +16,14 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
   BaseWithNameString() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+        "name": "",
+      };
+
+  @override
+  // Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"name": ""};
+
+  @override
   List<String> getMainFields() => ["name"];
 
   @override

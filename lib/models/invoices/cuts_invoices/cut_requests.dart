@@ -37,6 +37,21 @@ class CutRequest extends ViewAbstract<CutRequest> {
   CutRequest() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "date": "",
+        "comments": "",
+        "quantity": "",
+        "cut_status": CutStatus.PENDING,
+        "products": Product(),
+        "customers": Customer(),
+        "employees": Employee(),
+        "cut_request_results": List<CutRequestResult>.empty(),
+        "cut_request_results_count": 0,
+        "sizes_cut_requests": List<SizesCutRequest>.empty(),
+        "sizes_cut_requests_count": 0
+      };
+
+  @override
   List<String>? requireObjectsList() => ["cut_request_results"];
   @override
   List<String> getMainFields() => [
@@ -141,7 +156,6 @@ class CutRequest extends ViewAbstract<CutRequest> {
 // }
 
 enum CutStatus implements ViewAbstractEnum<CutStatus> {
-
   PENDING,
   PROCESSING,
   COMPLETED;

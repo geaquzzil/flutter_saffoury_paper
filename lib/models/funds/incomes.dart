@@ -18,6 +18,11 @@ class Incomes extends MoneyFunds<Incomes> {
 
   AccountName? account_names;
 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({"account_names": AccountName()});
+
   Incomes() : super();
 
   @override

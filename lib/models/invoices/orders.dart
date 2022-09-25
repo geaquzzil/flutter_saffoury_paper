@@ -25,6 +25,16 @@ class Order extends InvoiceMaster<Order> {
   Order() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "order_details": List<OrderDetails>.empty(),
+          "orders_details_count": 0,
+          "orders_refunds": List<OrderRefund>.empty(),
+          "orders_refunds_count": 0
+        });
+
+  @override
   String? getTableNameApi() => "orders";
 
   @override
@@ -52,6 +62,12 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails> {
   Order? orders;
   OrderDetails() : super();
 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "orders": Order(),
+        });
   @override
   String? getTableNameApi() => "orders_details";
 

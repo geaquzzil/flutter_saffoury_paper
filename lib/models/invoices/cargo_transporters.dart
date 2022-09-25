@@ -20,6 +20,15 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   Governorate? governorates;
 
   CargoTransporter() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "name": "",
+        "phone": "",
+        "maxWeight": "",
+        "carNumber": "",
+        "governorates": Governorate()
+      };
   @override
   List<String> getMainFields() =>
       ["name", "phone", "maxWeight", "carNumber", "governorates"];

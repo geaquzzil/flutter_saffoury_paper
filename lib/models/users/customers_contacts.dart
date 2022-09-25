@@ -21,7 +21,6 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
 
   CustomerContacts() : super();
 
-
   @override
   Map<String, IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap
@@ -130,7 +129,7 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
     throw UnimplementedError();
   }
 
-   factory CustomerContacts.fromJson(Map<String, dynamic> data) =>
+  factory CustomerContacts.fromJson(Map<String, dynamic> data) =>
       _$CustomerContactsFromJson(data);
 
   Map<String, dynamic> toJson() => _$CustomerContactsToJson(this);
@@ -141,4 +140,8 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
   @override
   CustomerContacts fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomerContacts.fromJson(json);
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"customers": Customer(), "name": "", "phone": ""};
 }

@@ -5,13 +5,10 @@ import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
 import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
-import 'package:webcontent_converter/webview_helper.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
-import 'package:window_manager/window_manager.dart';
 
 class BaseMaterialAppPage extends StatefulWidget {
   const BaseMaterialAppPage({Key? key}) : super(key: key);

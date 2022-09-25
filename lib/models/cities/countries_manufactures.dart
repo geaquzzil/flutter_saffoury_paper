@@ -18,6 +18,12 @@ class CountryManufacture extends ViewAbstract<CountryManufacture> {
 
   Manufacture? manufactures;
 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "countries": Country(),
+        "manufactures": Manufacture(),
+      };
+
   CountryManufacture() : super();
 
   @override

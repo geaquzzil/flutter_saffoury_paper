@@ -18,6 +18,16 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   int? customers_request_sizes_details_count;
 
   CustomerRequestSize() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "customers_request_sizes_details":
+              List<CustomerRequestSizeDetails>.empty(),
+          "customers_request_sizes_details_count": 0
+        });
+
   @override
   String? getTableNameApi() => "customers_request_sizes";
 
@@ -56,6 +66,13 @@ class CustomerRequestSizeDetails
   String? date;
 
   CustomerRequestSizeDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "customers_request_sizes": CustomerRequestSize(),
+        "sizes": Size(),
+        "date": ""
+      };
 
   @override
   List<String> getMainFields() => ["sizes", "date"];

@@ -220,7 +220,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
                 backgroundColor: Colors.white,
                 leading: IconButton(
                   color: Colors.black,
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   iconSize: 20.0,
                   onPressed: () {
                     Navigator.pop(context);

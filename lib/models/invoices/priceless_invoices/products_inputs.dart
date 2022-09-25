@@ -26,6 +26,15 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   ProductInput() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "products_inputs_details": List<ProductInputDetails>.empty(),
+          "products_inputs_details_count": 0,
+          "warehouse": Warehouse()
+        });
+
+  @override
   String? getTableNameApi() => "products_inputs";
 
   @override
@@ -63,6 +72,13 @@ class ProductInputDetails extends InvoiceMasterDetails<ProductInputDetails> {
   ProductInput? products_inputs;
 
   ProductInputDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "products_inputs": ProductInput(),
+        });
 
   @override
   List<String> getMainFields() => ["products", "quantity", "comments"];

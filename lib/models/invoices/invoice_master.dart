@@ -25,6 +25,42 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T> {
   InvoiceMaster() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+        "TermsID": 0,
+        "date": "",
+        "billNo": "",
+        "comments": "",
+        "employee": Employee(),
+        "customer": Customer(),
+        "cargo_transporters": CargoTransporter(),
+        "status": InvoiceStatus.NONE
+      };
+  // @override
+  // Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+  //       "TermsID": 0,
+  //       "date": "",
+  //       "billNo": "",
+  //       "comments": "",
+  //       "employees": Employee(),
+  //       "customers": Customer(),
+  //       "cargo_transporters": CargoTransporter(),
+  //       "status": InvoiceStatus.NONE,
+  //     };
+
+  // @override
+  // Map<String, Type> getMirrorFieldsTypeMap() =>
+  //    {
+  //       "TermsID": int,
+  //       "date": "",
+  //       "billNo": "",
+  //       "comments": "",
+  //       "employees": Employee(),
+  //       "customers": Customer(),
+  //       "cargo_transporters": CargoTransporter(),
+  //       "status": InvoiceStatus.NONE,
+  //     };
+
+  @override
   List<String> getMainFields() => [
         "customers",
         "cargo_transporters",

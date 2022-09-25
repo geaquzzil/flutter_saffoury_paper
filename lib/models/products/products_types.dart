@@ -31,6 +31,20 @@ class ProductType extends ViewAbstract<ProductType> {
   int? products_count;
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "name": "",
+        "unit": ProductTypeUnit.KG,
+        "purchasePrice": 0,
+        "sellPrice": 0,
+        "image": "",
+        "comments": "",
+        "availability": 0,
+        "grades": Grades(),
+        "products": List<Product>.empty(),
+        "products_count": 0
+      };
+
+  @override
   String getForeignKeyName() {
     return "ProductTypeID";
   }

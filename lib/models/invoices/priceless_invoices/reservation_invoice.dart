@@ -19,6 +19,15 @@ class ReservationInvoice extends InvoiceMaster<ReservationInvoice> {
   ReservationInvoice() : super();
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "reservation_invoice_details":
+              List<ReservationInvoiceDetails>.empty(),
+          "reservation_invoice_details_count": 0
+        });
+
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.reservationInvoice;
 
@@ -45,6 +54,13 @@ class ReservationInvoiceDetails
   // int? ReservationID;
   ReservationInvoice? reservation_invoice;
   ReservationInvoiceDetails() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({
+          "reservation_invoice": ReservationInvoice(),
+        });
 
   @override
   String? getTableNameApi() => "reservation_invoice_details";

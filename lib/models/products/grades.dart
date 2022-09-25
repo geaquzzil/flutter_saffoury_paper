@@ -12,6 +12,11 @@ class Grades extends BaseWithNameString<Grades> {
   List<Product>? products;
   int? products_count;
   Grades() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      super.getMirrorFieldsMapNewInstance()
+        ..addAll({"products": List<Product>.empty(), "products_count": 0});
   @override
   String getForeignKeyName() {
     return "GradeID";
