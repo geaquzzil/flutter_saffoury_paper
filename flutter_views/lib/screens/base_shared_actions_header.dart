@@ -6,33 +6,12 @@ import 'package:flutter_view_controller/screens/header_action_icon.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
-class BaseSharedHeaderViewDetailsActions extends StatefulWidget {
-  const BaseSharedHeaderViewDetailsActions({Key? key}) : super(key: key);
-
-  @override
-  State<BaseSharedHeaderViewDetailsActions> createState() =>
-      _BaseSharedHeaderViewDetailsActionsState();
-}
-
-class _BaseSharedHeaderViewDetailsActionsState
-    extends State<BaseSharedHeaderViewDetailsActions>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  List<Tab> tabs = [];
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    ActionViewAbstractProvider abstractProvider =
-        Provider.of<ActionViewAbstractProvider>(context, listen: false);
-    tabs.addAll(abstractProvider.getObject?.getTabs(context) ?? []);
-    _tabController = TabController(vsync: this, length: tabs.length);
-  }
+class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
+  TabController tabController;
+  List<Tab> tabs;
+  BaseSharedHeaderViewDetailsActions(
+      {Key? key, required this.tabController, required this.tabs})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +26,10 @@ class _BaseSharedHeaderViewDetailsActionsState
               child: TabBar(
                 labelColor: Colors.black87,
                 tabs: tabs,
-                controller: _tabController,
+                controller: tabController,
               ),
             ),
             const Spacer(),
-
             // We don't need print option on mobile
             buildList(context),
             IconButton(

@@ -17,12 +17,29 @@ abstract class ViewAbstractInputAndValidater<T>
   Map<String, double> getTextInputMaxValidateMap();
   Map<String, double> getTextInputMinValidateMap();
 
+  Map<String, bool> isTextInputEnabledMap(BuildContext context) => {};
+
   TextInputType? getTextInputType(String field) {
     return getTextInputTypeMap()[field];
   }
 
   InputType getInputType(String field) {
     return InputType.EDIT_TEXT;
+  }
+
+  /// if the field is auto-complete view-abstract then enabled it by default
+  /// if the field is not auto-complete view-abstract then check map 
+  /// if not found in the map then enable it by default
+  bool isTextInputEnabled(BuildContext context, String field) {
+    bool isAutoComplete =
+        getTextInputIsAutoCompleteViewAbstractMap()[field] ?? false;
+    if (isAutoComplete) return true;
+    if (isEditing()) return false;
+    return isTextInputEnabledMap(context)[field] ?? true;
+  }
+
+  bool isTextInputVisible(BuildContext context, String field) {
+    return true;
   }
 
   bool getTextInputTypeIsAutoComplete(String field) {
@@ -142,11 +159,11 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 
-  String getTextCheckBoxDescription(BuildContext context,String field) {
+  String getTextCheckBoxDescription(BuildContext context, String field) {
     return "getTextCheckBoxDescription $field";
   }
 
-  String getTextCheckBoxTitle(BuildContext context,String field) {
+  String getTextCheckBoxTitle(BuildContext context, String field) {
     return getFieldLabel(context, field);
   }
 

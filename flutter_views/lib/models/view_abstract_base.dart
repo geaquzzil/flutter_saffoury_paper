@@ -18,6 +18,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Map<String, String> getFieldLabelMap(BuildContext context);
   Map<String, IconData> getFieldIconDataMap();
+  double getCartItemPrice() => 0;
+  double getCartItemUnitPrice() => 0;
+  double getCartItemQuantity() => 0;
+
+  List<TabControllerHelper> getListFields() =>
+      List<TabControllerHelper>.empty();
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
@@ -30,7 +36,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ??
-        getMirrorViewAbstractLabelText(context,field);
+        getMirrorViewAbstractLabelText(context, field);
   }
 
   String getMainHeaderLabelWithText(BuildContext context) {
@@ -114,10 +120,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "is New ${getMainHeaderLabelTextOnly(context)}";
   }
 
-  double getCartItemPrice() => 0;
-  double getCartItemUnitPrice() => 0;
-  double getCartItemQuantity() => 0;
-
   List<Widget>? getAppBarActionsEdit(BuildContext context) =>
       [IconButton(icon: const Icon(Icons.save_outlined), onPressed: () {})];
 
@@ -125,14 +127,17 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<Tab> getTabs(BuildContext context) {
     return [
-      const Tab(
-        text: "OverView",
-        // icon: getIcon(),
+      Tab(
+        text: getMainHeaderTextOnly(context),
+        icon: getIcon(),
       ),
-      const Tab(
-        text: "Inventory",
-        // icon: Icon(Icons.history),
-      ),
+      ...getListFields()
+          .map((e) => Tab(
+                key: Key(e.field),
+                text: e.title,
+                icon: Icon(e.icon),
+              ))
+          .toList(),
     ];
   }
 
@@ -175,6 +180,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "$T";
   }
 
+  String? getFieldDateTimeParseFromDateTime(DateTime? dateTime) {
+    if (dateTime == null) return null;
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    return dateFormat.format(dateTime);
+  }
+
   DateTime? getFieldDateTimeParse(String? value) {
     if (value == null) {
       return null;
@@ -197,4 +208,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   PrintCommandAbstract? getPrintCommand(BuildContext context) => null;
+}
+
+class TabControllerHelper {
+  String field;
+  String title;
+  IconData icon;
+  TabControllerHelper(this.field, this.title, this.icon);
 }

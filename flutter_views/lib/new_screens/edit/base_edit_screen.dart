@@ -42,7 +42,6 @@ class _BaseEditPageState extends State<BaseEditPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint("didChangeDependencies _BaseEditPageState");
-    
   }
 
   @override
@@ -126,16 +125,20 @@ class _BaseEditPageState extends State<BaseEditPage> {
 
   Widget buildWidget(ViewAbstract viewAbstract, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
-    Type? fieldTypeMirror = viewAbstract.getMirrorFieldType(field);
-    debugPrint("fieldValueType is ${fieldValue.runtimeType}");
-    debugPrint("fieldTypeMirror field $field is=> $fieldTypeMirror");
-    if (checkIfNullAndViewAbstractField(viewAbstract,
-        fieldValue: fieldValue, fieldName: field)) {
-      fieldValue = viewAbstract.getMirrorNewInstanceViewAbstract(field);
-      fieldValue.setParent(viewAbstract);
-      fieldValue.setFieldNameFromParent(field);
-      return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
-    }
+    // Type? fieldTypeMirror = viewAbstract.getMirrorFieldType(field);
+    fieldValue ??= viewAbstract.getMirrorNewInstance(field);
+
+    // debugPrint("fieldValueType is ${fieldValue.runtimeType}");
+    // debugPrint("fieldTypeMirror field $field is=> $fieldTypeMirror");
+    // debugPrint(
+    //     "fieldTypeMirror field $field is viewAbstract=> ${fieldTypeMirror == ViewAbstract}");
+    // if (checkIfNullAndViewAbstractField(viewAbstract,
+    //     fieldValue: fieldValue, fieldName: field)) {
+    //   fieldValue = viewAbstract.getMirrorNewInstanceViewAbstract(field);
+    //   fieldValue.setParent(viewAbstract);
+    //   fieldValue.setFieldNameFromParent(field);
+    //   return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
+    // }
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(viewAbstract);
       fieldValue.setFieldNameFromParent(field);

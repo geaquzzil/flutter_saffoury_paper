@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_components/search/search_api.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
@@ -50,7 +51,14 @@ class BaseHomeScreenLayout extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(50),
               // child: Text("TESRT"),
-              child: const ListApiWidget(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SearchWidgetApi(),
+                    const ListApiWidget(),
+                  ],
+                ),
+              ),
             )),
         if (SizeConfig.isDesktop(context))
           Expanded(
@@ -69,8 +77,11 @@ class BaseHomeScreenLayout extends StatelessWidget {
                   //   borderRadius: BorderRadius.circular(25),
                   // ),
                   child: const Center(
-                      child: BaseSharedDetailsView(),
-                      )))
+                child: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: BaseSharedDetailsView(),
+                ),
+              )))
       ]),
     );
   }

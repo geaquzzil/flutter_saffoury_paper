@@ -14,6 +14,7 @@ part 'customs_declarations.g.dart';
 class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   // int? EmployeeID;
 
+  @JsonKey(fromJson:intFromString )
   String? number; //varchar 200
   String? date;
 
@@ -132,4 +133,5 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   @override
   CustomsDeclaration fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomsDeclaration.fromJson(json);
+       static String? intFromString(dynamic number) => number?.toString();
 }

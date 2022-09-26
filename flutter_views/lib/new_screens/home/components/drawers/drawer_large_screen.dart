@@ -20,21 +20,27 @@ class DrawerLargeScreens extends StatelessWidget {
       width: context.watch<DrawerMenuSelectedItemController>().getSideMenuIsOpen
           ? 256
           : 60,
-      child: Container(
-        color: Colors.white,
-        child: Column(children: [
-          Container(
-              color: Colors.white12,
-              padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
-              width: double.infinity,
-              child: buildHeader(context)),
-          buildList(context),
-          const Spacer(),
-          buildCollapseIcon(context),
-          const SizedBox(
-            height: 12,
-          )
-        ]),
+          
+      child: Expanded(
+        child: Container(
+          color: Colors.white,
+          child: Column(children: [
+            Expanded(
+              child: Container(
+                  color: Colors.white12,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24).add(safeArea),
+                  width: double.infinity,
+                  child: buildHeader(context)),
+            ),
+            buildList(context),
+            const Spacer(),
+            buildCollapseIcon(context),
+            const SizedBox(
+              height: 12,
+            )
+          ]),
+        ),
       ),
     );
   }
@@ -72,6 +78,7 @@ class DrawerLargeScreens extends StatelessWidget {
     debugPrint(
         "getDrawerItemsGrouped current entires length=> ${authProvider.getDrawerItemsGrouped.entries.length}");
     return ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
         padding: isClosed ? EdgeInsets.zero : padding,
         separatorBuilder: (context, index) {
           return const SizedBox(
@@ -88,10 +95,12 @@ class DrawerLargeScreens extends StatelessWidget {
           debugPrint(
               "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
           if (groupLabel != null) {
-            return DrawerListTileDesktopGroup(
-                groupedDrawerItems:
-                    authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-                idx: index);
+            return Expanded(
+              child: DrawerListTileDesktopGroup(
+                  groupedDrawerItems:
+                      authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
+                  idx: index),
+            );
           }
           ViewAbstract viewAbstract =
               authProvider.getDrawerItemsGrouped[groupLabel]!.first;

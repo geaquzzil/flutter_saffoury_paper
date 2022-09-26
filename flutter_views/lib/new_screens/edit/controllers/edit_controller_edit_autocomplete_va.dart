@@ -28,7 +28,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
   final GlobalKey<FormFieldState> formFieldKey = GlobalKey();
   String lastQuery = "";
   late bool isSuggestionSelected;
-  late ViewAbstract lastSuggestionSelected;
+  ViewAbstract? lastSuggestionSelected;
   @override
   void initState() {
     super.initState();
@@ -163,7 +163,8 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     String currentValue = textController.text;
     context.read<ErrorFieldsProvider>().notify(widget.viewAbstract,
         widget.field, widget.viewAbstract.getTag(widget.field));
-    if (currentValue == lastSuggestionSelected.getMainHeaderTextOnly(context)) {
+    if (currentValue ==
+        lastSuggestionSelected?.getMainHeaderTextOnly(context)) {
       return;
     }
     if (currentValue.isEmpty) return;

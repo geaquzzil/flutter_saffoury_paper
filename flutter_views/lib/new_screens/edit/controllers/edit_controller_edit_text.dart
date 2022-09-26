@@ -65,16 +65,18 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
             widget.viewAbstract.getFieldNameFromParent ?? "") ??
         widget.viewAbstract;
 
-    String text = watchedViewAbstract.getFieldValue(widget.field).toString();
+    isEnabled = watchedViewAbstract.isTextInputEnabled(context, widget.field);
 
-    isEnabled = isEnabledField(editSubsView, watchedViewAbstract);
+    // isEnabledField(editSubsView, watchedViewAbstract);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (editSubsView.getLastTraggerdfieldTag == widget.field) return;
       if (editSubsView.getLastTraggerdViewAbstract ==
           widget.viewAbstract.getTagWithFirstParent()) return;
       debugPrint(
           "last Trggerd field name => ${editSubsView.getLastTraggerdfieldTag} current field name => ${widget.field}");
-      textController.text = text;
+      textController.text = getEditControllerText(
+          watchedViewAbstract.getFieldValue(widget.field));
       // Your Code Here
     });
 
@@ -99,8 +101,7 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
               context, widget.field),
           onSaved: (String? value) {
             widget.viewAbstract.setFieldValue(widget.field, value);
-            debugPrint('onSave=   $value');
-            debugPrint('onSave viewAbstract =>   ${widget.viewAbstract}');
+            debugPrint('EditControllerEditText onSave= ${widget.field}:$value');
             if (widget.viewAbstract.getFieldNameFromParent != null) {
               widget.viewAbstract.getParnet?.setFieldValue(
                   widget.viewAbstract.getFieldNameFromParent ?? "",

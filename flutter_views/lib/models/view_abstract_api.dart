@@ -269,6 +269,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<Response?> printCall(ViewAbstract printObject) async {
     var response = await getRespones(
         serverActions: ServerActions.print, printObject: printObject);
+        
     if (response == null) return null;
     if (response.statusCode == 200) {
       return response;

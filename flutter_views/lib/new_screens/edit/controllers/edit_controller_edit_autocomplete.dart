@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:flutter_view_controller/screens/loading_main.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerEditTextAutoComplete extends StatefulWidget {
@@ -59,16 +60,17 @@ class _EditControllerEditTextAutoCompleteState
             widget.viewAbstract.getFieldNameFromParent ?? "") ??
         widget.viewAbstract;
 
-    String text = watchedViewAbstract.getFieldValue(widget.field).toString();
+    isEnabled = watchedViewAbstract.isTextInputEnabled(context, widget.field);
 
-    isEnabled = isEnabledField(editSubsView, watchedViewAbstract);
+    // isEnabledField(editSubsView, watchedViewAbstract);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (editSubsView.getLastTraggerdfieldTag == widget.field) return;
       if (editSubsView.getLastTraggerdViewAbstract ==
           widget.viewAbstract.getTagWithFirstParent()) return;
       debugPrint(
           "last Trggerd field name => ${editSubsView.getLastTraggerdfieldTag} current field name => ${widget.field}");
-      textController.text = text;
+      textController.text = getEditControllerText(
+          watchedViewAbstract.getFieldValue(widget.field));
       // Your Code Here
     });
     return Column(
@@ -78,7 +80,7 @@ class _EditControllerEditTextAutoCompleteState
             valueTransformer: (value) {
               return value?.trim();
             },
-            enabled: true,
+            enabled: isEnabled,
             name: widget.viewAbstract.getTag(widget.field),
             decoration:
                 getDecoration(context, widget.viewAbstract, widget.field),
@@ -95,6 +97,18 @@ class _EditControllerEditTextAutoCompleteState
                 .getTextInputValidatorCompose(context, widget.field),
             itemBuilder: (context, continent) {
               return ListTile(title: Text(continent));
+            },
+            hideOnLoading: false,
+            errorBuilder: (context, error) => CircularProgressIndicator(),
+            onSaved: (newValue) {
+              widget.viewAbstract.setFieldValue(widget.field, newValue);
+              debugPrint(
+                  'EditControllerEditText onSave= ${widget.field}:$newValue');
+              if (widget.viewAbstract.getFieldNameFromParent != null) {
+                widget.viewAbstract.getParnet?.setFieldValue(
+                    widget.viewAbstract.getFieldNameFromParent ?? "",
+                    widget.viewAbstract);
+              }
             },
             suggestionsCallback: (query) {
               if (query.isEmpty) return [];

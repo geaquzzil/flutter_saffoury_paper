@@ -33,12 +33,14 @@ class BasePrintableViewWidget extends StatelessWidget {
             future: printObject.printCall(printCommand),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return TextButton(
-                    onPressed: () => {generatePdf(snapshot.data)},
-                    child: const Text("dsa"));
+                // return TextButton(
+                //     onPressed: () => {generatePdf(snapshot.data)},
+                //     child: const Text("dsa"));
                 return PdfPreview(
-                    build: (format) async =>
-                        await Printing.convertHtml(html: snapshot.data.body));
+                    build: (format) async => snapshot.data.bodyBytes
+                    // await Printing.convertHtml(html: snapshot.data.body)
+
+                    );
 
                 //  snapshot.data.bodyBytes);
               }
@@ -56,8 +58,7 @@ class BasePrintableViewWidget extends StatelessWidget {
         onLayout: (format) async => Printing.convertHtml(
             baseUrl: "http://saffoury.com/SaffouryPaper2/print/index.php",
             html: response.body,
-            format: PdfPageFormat.a4
-            ));
+            format: PdfPageFormat.a4));
   }
 
 //   Future<Uint8List> _generatePdf(PdfPageFormat format, Response response) async {

@@ -5,29 +5,49 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
+import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class BaseSharedDetailsView extends StatelessWidget {
+class BaseSharedDetailsView extends StatefulWidget {
   const BaseSharedDetailsView({Key? key}) : super(key: key);
+
+  @override
+  State<BaseSharedDetailsView> createState() => _BaseSharedDetailsViewState();
+}
+
+class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  List<Tab> tabs = [];
+  @override
+  void initState() {
+    super.initState();
+    ActionViewAbstractProvider abstractProvider =
+        Provider.of<ActionViewAbstractProvider>(context, listen: false);
+    tabs.addAll(abstractProvider.getObject?.getTabs(context) ?? []);
+    _tabController = TabController(vsync: this, length: tabs.length);
+  }
 
   @override
   Widget build(BuildContext context) {
     ActionViewAbstractProvider actionViewAbstractProvider =
         context.watch<ActionViewAbstractProvider>();
+
     ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
-    switch (actionViewAbstractProvider.getServerActions) {
-      case ServerActions.edit:
-        return Scaffold(
-            body: viewAbstract == null
-                ? getEmptyView(context)
-                : BaseEditPage(parent: viewAbstract));
-      default:
-        return Scaffold(
-            body: viewAbstract == null
-                ? getEmptyView(context)
-                : getBodyView(context, viewAbstract));
+    if (viewAbstract == null) {
+      return Scaffold(body: getEmptyView(context));
+    } else {
+      tabs.clear();
+      tabs.addAll(viewAbstract.getTabs(context));
+
+      switch (actionViewAbstractProvider.getServerActions) {
+        case ServerActions.edit:
+          return Scaffold(body: BaseEditPage(parent: viewAbstract));
+        default:
+          return Scaffold(body: getBodyView(context, viewAbstract));
+      }
     }
   }
 
@@ -39,84 +59,104 @@ class BaseSharedDetailsView extends StatelessWidget {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
   Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
     return Container(
       color: Colors.white,
       child: SafeArea(
         child: Column(
           children: [
-            const BaseSharedHeaderViewDetailsActions(),
-            const Divider(thickness: 1),
+        
+            BaseSharedHeaderViewDetailsActions(
+                tabController: _tabController, tabs: tabs),
+
+            Divider(thickness: 1),
+            BaseSharedHeaderDescription(viewAbstract: viewAbstract),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(kDefaultPadding),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                        maxRadius: 24,
-                        backgroundColor: Colors.transparent,
-                        child: viewAbstract.getCardLeadingImage(context)),
-                    const SizedBox(width: kDefaultPadding),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: viewAbstract
-                                            .getMainHeaderTextOnly(context),
-                                        style:
-                                            Theme.of(context).textTheme.button,
-                                        children: [
-                                          TextSpan(
-                                              text:
-                                                  "  <elvia.atkins@gmail.com> to Jerry Torp",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption),
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                      viewAbstract
-                                          .getMainHeaderLabelTextOnly(context),
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: kDefaultPadding / 2),
-                              Text(
-                                "Today at 15:32",
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: kDefaultPadding),
-                          LayoutBuilder(
-                            builder: (context, constraints) => SizedBox(
-                              width: constraints.maxWidth > 850
-                                  ? 800
-                                  : constraints.maxWidth,
-                              child: Expanded(
-                                  child: getBodyWidget(context, viewAbstract)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              child: TabBarView(controller: _tabController, children: [
+                Container(
+                  color: Colors.red,
                 ),
-              ),
-            )
+                // Container(
+                //   color: Colors.orange,
+                // ),
+              ]),
+            ),
+            // Expanded(
+            //   child: SingleChildScrollView(
+            //     padding: const EdgeInsets.all(kDefaultPadding),
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         CircleAvatar(
+            //             maxRadius: 24,
+            //             backgroundColor: Colors.transparent,
+            //             child: viewAbstract.getCardLeadingImage(context)),
+            //         const SizedBox(width: kDefaultPadding),
+            //         Expanded(
+            //           child: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Row(
+            //                 children: [
+            //                   Expanded(
+            //                     child: Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: [
+            //                         Text.rich(
+            //                           TextSpan(
+            //                             text: viewAbstract
+            //                                 .getMainHeaderTextOnly(context),
+            //                             style:
+            //                                 Theme.of(context).textTheme.button,
+            //                             children: [
+            //                               TextSpan(
+            //                                   text:
+            //                                       "  <elvia.atkins@gmail.com> to Jerry Torp",
+            //                                   style: Theme.of(context)
+            //                                       .textTheme
+            //                                       .caption),
+            //                             ],
+            //                           ),
+            //                         ),
+            //                         Text(
+            //                           viewAbstract
+            //                               .getMainHeaderLabelTextOnly(context),
+            //                           style:
+            //                               Theme.of(context).textTheme.headline6,
+            //                         )
+            //                       ],
+            //                     ),
+            //                   ),
+            //                   const SizedBox(width: kDefaultPadding / 2),
+            //                   Text(
+            //                     "Today at 15:32",
+            //                     style: Theme.of(context).textTheme.caption,
+            //                   ),
+            //                 ],
+            //               ),
+            //               const SizedBox(height: kDefaultPadding),
+            //               LayoutBuilder(
+            //                 builder: (context, constraints) => SizedBox(
+            //                   width: constraints.maxWidth > 850
+            //                       ? 800
+            //                       : constraints.maxWidth,
+            //                   child: Expanded(
+            //                       child: getBodyWidget(context, viewAbstract)),
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

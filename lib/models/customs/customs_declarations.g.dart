@@ -9,7 +9,7 @@ part of 'customs_declarations.dart';
 CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
     CustomsDeclaration()
       ..iD = json['iD'] as int
-      ..number = json['number'] as String?
+      ..number = CustomsDeclaration.intFromString(json['number'])
       ..date = json['date'] as String?
       ..fromCountry = json['fromCountry'] as String?
       ..fromName = json['fromName'] as String?

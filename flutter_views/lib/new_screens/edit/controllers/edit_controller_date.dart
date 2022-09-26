@@ -34,6 +34,17 @@ class _EditControllerDateTimeState extends State<EditControllerDateTime> {
         lastDate: DateTime(2030),
         initialDate: widget.viewAbstract.getFieldDateTimeParse(fieldValue),
         decoration: getDecoration(context, widget.viewAbstract, widget.field),
+        onSaved: (newValue) {
+          widget.viewAbstract.setFieldValue(widget.field,
+              widget.viewAbstract.getFieldDateTimeParseFromDateTime(newValue));
+          debugPrint(
+              'EditControllerEditText onSave= ${widget.field}:$newValue');
+          if (widget.viewAbstract.getFieldNameFromParent != null) {
+            widget.viewAbstract.getParnet?.setFieldValue(
+                widget.viewAbstract.getFieldNameFromParent ?? "",
+                widget.viewAbstract);
+          }
+        },
       ),
       getSpace()
     ]);

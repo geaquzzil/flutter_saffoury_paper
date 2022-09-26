@@ -134,6 +134,11 @@ class User<T> extends AuthUser {
       };
 
   @override
+  String? getCustomAction() {
+    return null;
+  }
+
+  @override
   Map<String, IconData> getFieldIconDataMap() => {
         "name": getMainIconData(),
         "phone": Icons.phone,

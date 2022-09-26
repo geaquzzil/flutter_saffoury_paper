@@ -14,6 +14,10 @@ List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
   return v;
 }
 
+String getEditControllerText(dynamic invokedValue) {
+  return invokedValue?.toString() ?? "";
+}
+
 Enum getEnum(ViewAbstractEnum enumViewAbstract) {
   return enumViewAbstract as Enum;
 }
