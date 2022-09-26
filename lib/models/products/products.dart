@@ -37,6 +37,7 @@ class Product extends ViewAbstract<Product> {
   ProductStatus? status;
   String? date;
   int? sheets;
+  @JsonKey(fromJson: intFromString)
   String? barcode;
   String? fiberLines;
   String? comments;
@@ -289,6 +290,8 @@ class Product extends ViewAbstract<Product> {
   @override
   PrintProduct? getPrintCommand(BuildContext context) =>
       PrintProduct(printObject: this);
+
+  static String? intFromString(dynamic number) => number?.toString();
 }
 
 // enum ProductStatus {

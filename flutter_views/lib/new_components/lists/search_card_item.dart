@@ -13,7 +13,7 @@ class SearchCardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint("SearchCardItem query=> $searchQuery");
     return ListTile(
-        onTap: () => {},
+        onTap: () => {viewAbstract.onCardClickedFromSearchResult(context)},
         onLongPress: () => {},
         title: TextBold(
             text: viewAbstract.getMainHeaderTextOnly(context),
@@ -21,6 +21,6 @@ class SearchCardItem extends StatelessWidget {
         subtitle: TextBold(
             text: viewAbstract.getMainHeaderLabelTextOnly(context),
             regex: searchQuery.trim()),
-        leading: viewAbstract.getCardLeading(context));
+        leading: viewAbstract.getCardLeadingCircleAvatar(context));
   }
 }

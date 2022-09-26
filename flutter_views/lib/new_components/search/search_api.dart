@@ -50,21 +50,20 @@ class SearchWidgetApi extends StatelessWidget {
                   emptyBuilder: (context) {
                     return const Text("I'm an empty state!");
                   },
-
-                  // placeholderBuilder: (context) {
-                  //   return const Text("I'm a placeholder state!");
-                  // },
                   paginationDelegate: EndlessPaginationDelegate(
                     pageSize: 20,
                     maxPages: 3,
                   ),
+
                   onSearch: ({
                     required pageIndex,
                     required pageSize,
                     required searchQuery,
                   }) async {
                     _searchQuery = searchQuery;
-                    return await viewAbstract.search(5, pageIndex, searchQuery);
+                    // return await viewAbstract.search(5, pageIndex, searchQuery);
+                    return Future.delayed(Duration(milliseconds: 1000),
+                        () => viewAbstract.search(5, pageIndex, searchQuery));
                   },
                   //   return viewAbstract.search(5, 0, searchQuery) ?? Future.delayed(
                   //       const Duration(milliseconds: 1300), () {

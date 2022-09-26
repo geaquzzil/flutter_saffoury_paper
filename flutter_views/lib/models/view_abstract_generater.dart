@@ -29,7 +29,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onCardClickedView(BuildContext context) {
     onCardClicked(context);
   }
-
+  void onCardClickedFromSearchResult(BuildContext context) {
+    onCardClicked(context);
+  }
   void onCardClicked(BuildContext context) {
     debugPrint("Card Clicked");
     if (SizeConfig.isDesktop(context)) {
