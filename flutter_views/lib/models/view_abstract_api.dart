@@ -18,11 +18,21 @@ import 'servers/server_helpers.dart';
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(ignore: true)
   int _page = 0;
+
   @JsonKey(ignore: true)
   List<T>? _lastSearchViewAbstractByTextInputList;
 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
+
+  @JsonKey(ignore: true)
+  Map<String, String>? _customMap;
+
+  Map<String, String> get getCustomMap => _customMap ?? {};
+
+  void setCustomMap(Map<String, String> customMap) {
+    _customMap = customMap;
+  }
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
     return getLastSearchViewByTextInputList?.firstWhereOrNull((element) =>
@@ -269,7 +279,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<Response?> printCall(ViewAbstract printObject) async {
     var response = await getRespones(
         serverActions: ServerActions.print, printObject: printObject);
-        
+
     if (response == null) return null;
     if (response.statusCode == 200) {
       return response;
@@ -342,6 +352,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody['start'] =
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
+
+        mainBody.addAll(getCustomMap);
         break;
       case ServerActions.search:
         mainBody['searchStringQuery'] = searchQuery?.trim() ?? "";

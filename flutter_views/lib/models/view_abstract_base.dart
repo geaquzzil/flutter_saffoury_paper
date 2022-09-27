@@ -203,7 +203,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getMainFields()
         .map((e) => DropdownStringListItem(
             getFieldIconData(e), getFieldLabel(context, e),
-            value: e))
+            value: isViewAbstract(e)
+                ? getMirrorNewInstanceViewAbstract(e).getForeignKeyName()
+                : e))
         .toList();
   }
 

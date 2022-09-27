@@ -20,6 +20,7 @@ class ListProvider with ChangeNotifier {
   ///clear all the objects list and load the other objects list from viewAbstract if not null
   Future<void> clear({ViewAbstract? viewAbstract}) async {
     objects.clear();
+    notifyListeners();
     if (viewAbstract != null) {
       debugPrint("clearing list and change viewAbstract to ${viewAbstract}");
       await fetchList(viewAbstract);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ListApiWidget extends StatefulWidget {
   const ListApiWidget({Key? key}) : super(key: key);
@@ -17,6 +19,9 @@ class _ListApiWidgetState extends State<ListApiWidget> {
   final ListProvider listProvider = ListProvider();
   late DrawerViewAbstractProvider drawerViewAbstractObsever;
 
+  var loadingLottie =
+      "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
+
   @override
   void initState() {
     super.initState();
@@ -25,7 +30,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
         Provider.of<DrawerViewAbstractProvider>(context, listen: false);
     drawerViewAbstractObsever.addListener(onChangedViewAbstract);
     listProvider
-        .fetchFakeList(context.read<DrawerViewAbstractProvider>().getObject);
+        .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
   }
 
   Widget _listItems(List<ViewAbstract> data) {
@@ -49,7 +54,10 @@ class _ListApiWidgetState extends State<ListApiWidget> {
       value: listProvider,
       child: Consumer<ListProvider>(builder: (context, provider, listTile) {
         if (provider.getCount == 0) {
-          return const Center(child: Icon(Icons.search));
+          return EmptyWidget(
+              lottiUrl: loadingLottie,
+              title: AppLocalizations.of(context)!.loading,
+              subtitle: AppLocalizations.of(context)!.pleaseWait);
         }
         return _listItems(listProvider.getObjects);
       }),
@@ -69,7 +77,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider
-          .fetchFakeList(context.read<DrawerViewAbstractProvider>().getObject);
+          .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
       // context
       //     .read<ListProvider>()
       //     .fetchList(context.read<DrawerViewAbstractProvider>().getObject);

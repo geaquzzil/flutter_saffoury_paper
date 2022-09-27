@@ -24,11 +24,6 @@ class DropdownStringListControllerListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
       name: tag,
-      // hint: TextBold(
-      //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
-      //   regex: viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum),
-      // ),
-  
       decoration: getDecorationDropdownNewWithLabelAndValue(context),
       items: list
           .map((item) => DropdownMenuItem(
@@ -41,7 +36,10 @@ class DropdownStringListControllerListener extends StatelessWidget {
                     : Text(hint),
               ))
           .toList(),
-      onChanged: (obj) => onSelected(obj),
+      onChanged: (obj) {
+        debugPrint("changed: $obj");
+        onSelected(obj);
+      },
     );
   }
 }

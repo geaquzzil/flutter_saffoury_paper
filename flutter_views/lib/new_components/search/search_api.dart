@@ -54,33 +54,22 @@ class SearchWidgetApi extends StatelessWidget {
                     pageSize: 20,
                     maxPages: 3,
                   ),
-
                   onSearch: ({
                     required pageIndex,
                     required pageSize,
                     required searchQuery,
                   }) async {
                     _searchQuery = searchQuery;
+                    if (_searchQuery == null) {
+                      return [];
+                    }
+                    if (_searchQuery == "") {
+                      return [];
+                    }
                     // return await viewAbstract.search(5, pageIndex, searchQuery);
-                    return Future.delayed(Duration(milliseconds: 1000),
+                    return Future.delayed(const Duration(milliseconds: 1000),
                         () => viewAbstract.search(5, pageIndex, searchQuery));
                   },
-                  //   return viewAbstract.search(5, 0, searchQuery) ?? Future.delayed(
-                  //       const Duration(milliseconds: 1300), () {
-                  //     if (searchQuery == "empty") {
-                  //       return [];+
-                  //     }
-                  //     if (searchQuery == "") {
-                  //       return [];
-                  //     }
-
-                  //     if (pageIndex == 0) {
-                  //       pager = ExampleItemPager();
-                  //     }
-
-                  //     return  [];
-                  //   });
-                  // },
                   itemBuilder: (
                     context, {
                     required item,

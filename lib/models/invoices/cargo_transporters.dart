@@ -16,6 +16,7 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   String? name;
   String? phone;
   double? maxWeight;
+   @JsonKey(fromJson: intFromString)
   String? carNumber;
   Governorate? governorates;
 
@@ -122,4 +123,6 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   @override
   CargoTransporter fromJsonViewAbstract(Map<String, dynamic> json) =>
       CargoTransporter.fromJson(json);
+
+      static String? intFromString(dynamic number) => number?.toString();
 }

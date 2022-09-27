@@ -12,7 +12,7 @@ CargoTransporter _$CargoTransporterFromJson(Map<String, dynamic> json) =>
       ..name = json['name'] as String?
       ..phone = json['phone'] as String?
       ..maxWeight = (json['maxWeight'] as num?)?.toDouble()
-      ..carNumber = json['carNumber'] as String?
+      ..carNumber = CargoTransporter.intFromString(json['carNumber'])
       ..governorates = json['governorates'] == null
           ? null
           : Governorate.fromJson(json['governorates'] as Map<String, dynamic>);

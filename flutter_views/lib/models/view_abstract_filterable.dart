@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
@@ -44,11 +45,25 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   bool hasPermssionFilterableField(BuildContext context, String field) {
     return true;
   }
+
+  void setFilterableMap(Map<String, FilterableProviderHelper> map) {
+    debugPrint("setFilterableMap=> $map");
+    Map<String, String> bodyMap = {};
+    map.forEach((key, value) {
+      if (key == FilterableProvider.SORTKEY) {
+        bodyMap[map[key]!.fieldNameApi] = map[key]!.getValue();
+      } else {
+        bodyMap[map[key]!.fieldNameApi] = map[key]!.getValue();
+      }
+    });
+    debugPrint("setFilterableMap bodyMap $bodyMap");
+    setCustomMap(bodyMap);
+  }
 }
 
-// enum SortByType { 
+// enum SortByType {
 //   @JsonValue("ASC")
-//   ASC, 
+//   ASC,
 //   @JsonValue("DESC")
 //   DESC }
 
@@ -92,7 +107,7 @@ class CustomFilterableField {
   CustomFilterableField(this.parent, this.title, this.icon, this.field,
       this.fieldNameApi, this.object,
       {this.type, this.singleChoiceIfList})
-      : theme = TextFieldTheming(lableText: title,icon: icon );
+      : theme = TextFieldTheming(lableText: title, icon: icon);
 }
 // class FilterableProviderHelperListItem {
 //   //The field Label

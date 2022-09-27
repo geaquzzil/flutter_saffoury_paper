@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
 class FilterableProvider with ChangeNotifier {
   static const String SORTKEY = "sortByFieldName";
+  static const String SORTKEYAD = "sortBy";
   Map<String, FilterableProviderHelper> _list = {};
 
   Map<String, FilterableProviderHelper> get getList => _list;
@@ -102,6 +103,7 @@ class FilterableProviderHelper {
   List<String> values = [];
   //converts the first value on the list to a string and remove the list on request
   bool? requestTheFirstValueOnly;
+  
   FilterableProviderHelper(this.field, this.fieldNameApi, this.values,
       {this.requestTheFirstValueOnly});
 
@@ -143,6 +145,6 @@ class FilterableProviderHelper {
 
   @override
   String toString() {
-    return values.toString();
+    return "toString field:$field , fieldApi: $fieldNameApi ,values:{$values}";
   }
 }

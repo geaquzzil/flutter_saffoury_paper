@@ -48,18 +48,22 @@ class BaseHomeScreenLayout extends StatelessWidget {
         Expanded(
             // It takes 5/6 part of the screen
             flex: 5,
-            child: Container(
-              padding: const EdgeInsets.all(50),
-              // child: Text("TESRT"),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SearchWidgetApi(),
-                    const ListApiWidget(),
-                  ],
-                ),
-              ),
-            )),
+            child: ListApiWidget())
+
+        // Container(
+        //   padding: const EdgeInsets.all(50),
+        //   // child: Text("TESRT"),
+        //   child: SingleChildScrollView(
+        //     child: Column(
+        //       children: [
+        //         SearchWidgetApi(),
+        //         const ListApiWidget(),
+        //       ],
+        //     ),
+        //   ),
+        // ))
+
+        ,
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 8 : 10,

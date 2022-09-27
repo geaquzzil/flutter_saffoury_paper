@@ -48,7 +48,7 @@ class Employee extends User<Employee> {
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.customer;
+      AppLocalizations.of(context)!.employee;
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};

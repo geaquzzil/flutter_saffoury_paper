@@ -7,6 +7,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -85,7 +86,7 @@ void main() async {
   }
 
   List<ViewAbstract> views = List<ViewAbstract>.from(
-      [Product(), Size(), Order(), Purchases(), Customer()]);
+      [Product(), Size(), Order(), Purchases(), Customer(), Employee()]);
   try {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),

@@ -49,8 +49,21 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const Scaffold(body: BaseFilterableMainWidget()),
+                      builder: (context) => Scaffold(
+                          appBar: AppBar(
+                            elevation: 0,
+                            backgroundColor: Colors.white,
+                            leading: IconButton(
+                              color: Colors.black,
+                              icon: const Icon(Icons.arrow_back_ios),
+                              iconSize: 20.0,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            centerTitle: true,
+                          ),
+                          body: BaseFilterableMainWidget()),
                     ),
                   );
                   // BaseFilterableMainWidget();
@@ -64,7 +77,8 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                     viewAbstractEnum: SortByType.ASC,
                     onSelected: (obj) {
                       addFilterableSort(context, obj as SortByType);
-                      debugPrint("is selected $obj");
+                      notifyListApi(context);
+                      debugPrint("SortByType is selected $obj");
                     }),
               ),
             ),
@@ -77,8 +91,11 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                     hint: AppLocalizations.of(context)!.sortBy,
                     list: viewAbstract.getMainFieldsIconsAndValues(context),
                     onSelected: (obj) {
+                      debugPrint("is selected ${obj.runtimeType}");
                       addFilterableSortField(
-                          context, (obj as DropdownMenuItem).value);
+                          context,
+                          (obj as DropdownStringListItem).value.toString());
+                      notifyListApi(context);
                       debugPrint("is selected $obj");
                     }),
               ),
