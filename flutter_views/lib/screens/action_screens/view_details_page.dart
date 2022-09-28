@@ -19,40 +19,6 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
     required T object,
   }) : super(key: key, object: object);
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: kPrimaryColor,
-  //     appBar: AppBar(
-  //       title: Row(
-  //         children: [
-  //           Padding(
-  //             padding: const EdgeInsets.symmetric(
-  //               horizontal: kDefaultPadding,
-  //             ),
-  //             child: RoundedIconButton(
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //               },
-  //               icon: 'assets/icons/arrow.svg',
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       actions: [
-  //         InkWell(
-  //           onTap: () {},
-  //           child: Container(
-  //             padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-  //             child: SvgPicture.asset(
-  //               'assets/icons/cart.svg',
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //     extendBody: true,
-  // }
 
   // Widget getBody(BuildContext context) {
   //   List<String> fields = getFields();

@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/new_screens/home/components/header/heade
 import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
-import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
+import 'package:flutter_view_controller/screens/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -45,29 +45,16 @@ class BaseHomeScreenLayout extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [
+        // Expanded(
+        //     // It takes 5/6 part of the screen
+        //     flex: 5,
+        //     child: ListApiWidget())
         Expanded(
             // It takes 5/6 part of the screen
             flex: 5,
-            child: ListApiWidget())
-
-        // SingleChildScrollView(
-        //     physics: const AlwaysScrollableScrollPhysics(),
-        //     child: ListApiWidget()))
-
-        // Container(
-        //   padding: const EdgeInsets.all(50),
-        //   // child: Text("TESRT"),
-        //   child: SingleChildScrollView(
-        //     child: Column(
-        //       children: [
-        //         SearchWidgetApi(),
-        //         const ListApiWidget(),
-        //       ],
-        //     ),
-        //   ),
-        // ))
-
-        ,
+            child: Center(
+              child: Text("This is a list"),
+            )),
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 8 : 10,

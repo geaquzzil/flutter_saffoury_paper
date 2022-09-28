@@ -36,7 +36,8 @@ abstract class VMirrors<T> {
       dynamic value = getInstanceMirror().invokeGetter(field);
       return value;
     } catch (e) {
-      return "getFieldValue $field ${e.toString()}";
+      debugPrint("getFieldValue $e");
+      return null;
     }
   }
 

@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
+import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
 import 'package:flutter_view_controller/screens/header_action_icon.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:provider/provider.dart';
+
+import '../constants.dart';
+import '../models/permissions/permission_level_abstract.dart';
 
 class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
   TabController tabController;
@@ -18,28 +24,36 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SafeArea(
-        child: Row(
+        child: Column(
           children: [
-            // We need this back button on mobile only
-            if (SizeConfig.isMobile(context)) const BackButton(),
-            // Expanded(
-            //   child: TabBar(
-            //     labelColor: Colors.black87,
-            //     tabs: tabs,
-            //     controller: tabController,
-            //   ),
-            // ),
-            const Spacer(),
-            // We don't need print option on mobile
-            buildList(context),
-            IconButton(
-              icon: const Icon(Icons.more_horiz),
-              onPressed: () {},
+            Row(
+              children: [
+                // We need this back button on mobile only
+                // if (SizeConfig.isMobile(context))
+                const BackButton(),
+                // Expanded(
+                //   child: TabBar(
+                //     labelColor: Colors.black87,
+                //     tabs: tabs,
+                //     controller: tabController,
+                //   ),
+                // ),
+                const Spacer(),
+                // We don't need print option on mobile
+                buildList(context),
+                IconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {},
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {},
-            ),
+            BaseSharedHeaderDescription(
+                viewAbstract: PermissionLevelAbstract()),
+            BaseSharedDetailsRating(viewAbstract: PermissionLevelAbstract()),
           ],
         ),
       ),
@@ -74,7 +88,5 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
           }
           return const Text("");
         });
-
-    return const Text("");
   }
 }

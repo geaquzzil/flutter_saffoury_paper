@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/new_screens/home/components/drawers/draw
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
-import 'package:flutter_view_controller/screens/view/base_shared_details_view.dart';
+import 'package:flutter_view_controller/screens/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';

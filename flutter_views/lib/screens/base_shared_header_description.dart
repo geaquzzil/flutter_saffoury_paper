@@ -26,17 +26,18 @@ class BaseSharedHeaderDescription extends StatelessWidget {
                 children: [
                   Text.rich(
                     TextSpan(
-                      text: viewAbstract.getMainHeaderTextOnly(context),
+                      // text: viewAbstract.getMainHeaderTextOnly(context),
                       style: Theme.of(context).textTheme.button,
                       children: [
                         TextSpan(
-                            text: "  <elvia.atkins@gmail.com> to Jerry Torp",
+                            text: viewAbstract
+                                .getMainHeaderLabelTextOnly(context),
                             style: Theme.of(context).textTheme.caption),
                       ],
                     ),
                   ),
                   Text(
-                    viewAbstract.getMainHeaderLabelTextOnly(context),
+                    viewAbstract.getMainHeaderTextOnly(context),
                     style: Theme.of(context).textTheme.headline6,
                   )
                 ],
@@ -44,7 +45,7 @@ class BaseSharedHeaderDescription extends StatelessWidget {
             ),
             const SizedBox(width: kDefaultPadding / 2),
             Text(
-              "Today at 15:32",
+              viewAbstract.getDateTextOnly() ?? "",
               style: Theme.of(context).textTheme.caption,
             ),
           ],

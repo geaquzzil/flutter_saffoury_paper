@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
+import 'package:flutter_view_controller/screens/profile_page.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
+import 'package:flutter_view_controller/screens/web/sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -32,11 +36,13 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
 
   @override
   Widget build(BuildContext context) {
+    return getTowLayoutScreen(context, PermissionActionAbstract());
     ActionViewAbstractProvider actionViewAbstractProvider =
         context.watch<ActionViewAbstractProvider>();
 
     ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
     if (viewAbstract == null) {
+      // return getTowLayoutScreen(context, viewAbstract);
       return Scaffold(body: getEmptyView(context));
     } else {
       tabs.clear();
@@ -49,6 +55,21 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
           return Scaffold(body: getBodyView(context, viewAbstract));
       }
     }
+  }
+
+  Widget getTowLayoutScreen(BuildContext context, ViewAbstract viewAbstract) {
+    return Expanded(
+      child: Row(children: [
+        Expanded(
+          flex: 1,
+          child: Text("2"),
+        ),
+        Expanded(
+          flex: 1,
+          child: Center(child: getBodyView(context, viewAbstract)),
+        )
+      ]),
+    );
   }
 
   Widget getEmptyView(BuildContext context) {
@@ -71,12 +92,11 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
       child: SafeArea(
         child: Column(
           children: [
-        
             BaseSharedHeaderViewDetailsActions(
                 tabController: _tabController, tabs: tabs),
-
-            Divider(thickness: 1),
-            BaseSharedHeaderDescription(viewAbstract: viewAbstract),
+            Expanded(child: getBodyWidget(context, viewAbstract))
+            // Divider(thickness: 1),
+            // BaseSharedHeaderDescription(viewAbstract: viewAbstract),
             // Expanded(
             //   child: TabBarView(controller: _tabController, children: [
             //     Container(

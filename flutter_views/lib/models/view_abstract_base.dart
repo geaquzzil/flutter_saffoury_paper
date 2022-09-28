@@ -22,6 +22,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   double getCartItemUnitPrice() => 0;
   double getCartItemQuantity() => 0;
 
+  String? getDateTextOnly() {
+    dynamic value = getFieldValue("date");
+    // if (value == null) return null;
+    return value?.toString() ?? "";
+  }
+
   List<TabControllerHelper> getListFields() =>
       List<TabControllerHelper>.empty();
 
