@@ -22,13 +22,13 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
           children: [
             // We need this back button on mobile only
             if (SizeConfig.isMobile(context)) const BackButton(),
-            Expanded(
-              child: TabBar(
-                labelColor: Colors.black87,
-                tabs: tabs,
-                controller: tabController,
-              ),
-            ),
+            // Expanded(
+            //   child: TabBar(
+            //     labelColor: Colors.black87,
+            //     tabs: tabs,
+            //     controller: tabController,
+            //   ),
+            // ),
             const Spacer(),
             // We don't need print option on mobile
             buildList(context),

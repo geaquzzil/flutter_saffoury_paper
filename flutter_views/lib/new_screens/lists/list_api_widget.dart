@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -6,6 +8,8 @@ import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
+import '../loading_shimmer.dart';
 
 class ListApiWidget extends StatefulWidget {
   const ListApiWidget({Key? key}) : super(key: key);
@@ -33,17 +37,52 @@ class _ListApiWidgetState extends State<ListApiWidget> {
         .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
   }
 
-  Widget _listItems(List<ViewAbstract> data) {
+  Widget _listItems(List<ViewAbstract> data, ListProvider listProvider) {
     return SizedBox(
       height: MediaQuery.of(context).size.height - 80,
-      child: ListView.builder(
+      child:
+          // ScrollConfiguration(
+          //   behavior: ScrollConfiguration.of(context).copyWith(
+          //     dragDevices: {
+          //       PointerDeviceKind.touch,
+          //       PointerDeviceKind.mouse,
+          //     },
+          //   ),
+          //   child:
+
+          ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        // scrollDirection: Axis.horizontal,
+        // physics: const AlwaysScrollableScrollPhysics(),
+        // physics: const AlwaysScrollableScrollPhysics(),
+        // scrollDirection: Axis.horizontal,
         shrinkWrap: true,
         controller: _scrollController,
-        itemCount: data.length,
+        itemCount: listProvider.isLoading ? (data.length + 1) : (data.length),
         itemBuilder: (context, index) {
+          if (listProvider.isLoading && index == data.length) {
+            return Center(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text("Loading..."),
+                  SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      )),
+                ],
+              ),
+            ));
+          }
           return ListCardItem(object: data[index]);
           // return data[index].getCardView(context);
         },
+        // ),
       ),
     );
   }
@@ -54,13 +93,35 @@ class _ListApiWidgetState extends State<ListApiWidget> {
       value: listProvider,
       child: Consumer<ListProvider>(builder: (context, provider, listTile) {
         if (provider.getCount == 0) {
-          return EmptyWidget(
-              lottiUrl: loadingLottie,
-              title: AppLocalizations.of(context)!.loading,
-              subtitle: AppLocalizations.of(context)!.pleaseWait);
+          // return EmptyWidget(
+          //     lottiUrl: loadingLottie,
+          //     title: AppLocalizations.of(context)!.loading,
+          //     subtitle: AppLocalizations.of(context)!.pleaseWait);
+          return getShimmerLoading(context);
         }
-        return _listItems(listProvider.getObjects);
+        debugPrint("List api provider loaded ${listProvider.isLoading}");
+        return _listItems(listProvider.getObjects, listProvider);
       }),
+    );
+  }
+
+  Widget getShimmerLoading(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 10,
+          itemBuilder: (ctx, i) {
+            return Column(
+              children: [
+                const ShimmerLoadingList(),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
+            );
+          }),
     );
   }
 

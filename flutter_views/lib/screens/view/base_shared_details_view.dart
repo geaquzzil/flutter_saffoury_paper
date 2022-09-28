@@ -77,16 +77,16 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
 
             Divider(thickness: 1),
             BaseSharedHeaderDescription(viewAbstract: viewAbstract),
-            Expanded(
-              child: TabBarView(controller: _tabController, children: [
-                Container(
-                  color: Colors.red,
-                ),
-                // Container(
-                //   color: Colors.orange,
-                // ),
-              ]),
-            ),
+            // Expanded(
+            //   child: TabBarView(controller: _tabController, children: [
+            //     Container(
+            //       color: Colors.red,
+            //     ),
+            //     // Container(
+            //     //   color: Colors.orange,
+            //     // ),
+            //   ]),
+            // ),
             // Expanded(
             //   child: SingleChildScrollView(
             //     padding: const EdgeInsets.all(kDefaultPadding),

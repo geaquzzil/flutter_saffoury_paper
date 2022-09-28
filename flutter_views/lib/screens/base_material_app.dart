@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/app_theme.dart';
@@ -86,6 +88,14 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage>
     // );
     // }
     Widget widget = MaterialApp(
+        scrollBehavior: MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+            PointerDeviceKind.stylus,
+            PointerDeviceKind.unknown
+          },
+        ),
         supportedLocales: L10n.all,
         localizationsDelegates: const [
           AppLocalizations.delegate,

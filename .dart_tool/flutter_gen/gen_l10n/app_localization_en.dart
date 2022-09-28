@@ -1905,4 +1905,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enter => 'Enter';
+
+  @override
+  String get checkout => 'Check out';
+
+  @override
+  String get tax => 'Tax';
+
+  @override
+  String get shipping => 'Shipping';
 }

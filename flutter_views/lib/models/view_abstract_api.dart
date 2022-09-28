@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -45,7 +46,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   int get getPageIndex => _page;
 
-  int get getPageItemCount => 5;
+  int get getPageItemCount => 20;
 
   String? getCustomAction() {
     return null;
@@ -352,7 +353,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody['start'] =
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
-
+        if (getCustomMap.isEmpty) {
+          String? hasSortByFieldDefault =
+              (this as ViewAbstractFilterable).getSortByFieldName();
+          if (hasSortByFieldDefault != null) {
+            mainBody[(this as ViewAbstractFilterable).getSortByType().name] =
+                hasSortByFieldDefault;
+          }
+        }
         mainBody.addAll(getCustomMap);
         break;
       case ServerActions.search:

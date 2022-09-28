@@ -50,6 +50,10 @@ class BaseHomeScreenLayout extends StatelessWidget {
             flex: 5,
             child: ListApiWidget())
 
+        // SingleChildScrollView(
+        //     physics: const AlwaysScrollableScrollPhysics(),
+        //     child: ListApiWidget()))
+
         // Container(
         //   padding: const EdgeInsets.all(50),
         //   // child: Text("TESRT"),

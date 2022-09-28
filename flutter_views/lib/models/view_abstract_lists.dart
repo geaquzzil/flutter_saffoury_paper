@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 import 'package:flutter_view_controller/new_screens/printable/base_printable_widget.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 
 import '../providers/actions/edits/edit_error_list_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
+  IconData? getCardLeadingBottomIcon() => null;
   Widget getCardLeadingSearch(BuildContext context) {
     return getCardLeadingCircleAvatar(context);
   }
@@ -97,10 +99,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   Widget getCardLeadingImage(BuildContext context) {
     String? imageUrl = getImageUrl(context);
+
     if (imageUrl == null) {
       return Icon(getMainIconData());
     }
-    return CachedNetworkImage(
+    IconData? iconOnButton = getCardLeadingBottomIcon();
+    Widget image = CachedNetworkImage(
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
@@ -110,6 +114,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       placeholder: (context, url) => const CircularProgressIndicator(),
       errorWidget: (context, url, error) => Icon(getMainIconData()),
     );
+    if (iconOnButton != null) {
+      return RoundedIconButtonTowChilds(
+        largChild: image,
+        smallIcon: iconOnButton,
+      );
+    }
+    return image;
   }
 
   MenuItemBuild getMenuItemPrint(BuildContext context) {

@@ -39,6 +39,9 @@ class ListProvider with ChangeNotifier {
   Future fetchFakeList(ViewAbstract viewAbstract) async {
     try {
       isLoading = true;
+      // objects.add(null);
+      notifyListeners();
+
       List? list = await viewAbstract.listCallFake();
       isLoading = false;
       objects.addAll(list as List<ViewAbstract>);
@@ -53,6 +56,7 @@ class ListProvider with ChangeNotifier {
   Future fetchList(ViewAbstract viewAbstract) async {
     if (isLoading) return;
     isLoading = true;
+    notifyListeners();
     List? list =
         await viewAbstract.listCall(viewAbstract.getPageItemCount, page);
     isLoading = false;

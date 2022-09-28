@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/carts/cart_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
@@ -50,11 +52,18 @@ class _HeaderMainState extends State<HeaderMain> {
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),
-                RoundedIconButton(
-                    onTap: () => context
-                        .read<DrawerMenuControllerProvider>()
-                        .controlEndDrawerMenu(),
-                    icon: Icons.shopping_cart_rounded),
+                Badge(
+                  badgeContent:
+                      Text("${context.watch<CartProvider>().getCount}"),
+                  toAnimate: true,
+                  showBadge: context.watch<CartProvider>().getCount > 0,
+                  animationType: BadgeAnimationType.slide,
+                  child: RoundedIconButton(
+                      onTap: () => context
+                          .read<DrawerMenuControllerProvider>()
+                          .controlEndDrawerMenu(),
+                      icon: Icons.shopping_cart_rounded),
+                ),
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),

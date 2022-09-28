@@ -258,6 +258,20 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
+  IconData? getCardLeadingBottomIcon() {
+    switch (status) {
+      case ProductStatus.PENDING:
+        return Icons.timer;
+      case ProductStatus.WASTED:
+        return Icons.delete;
+      case ProductStatus.RETURNED:
+        return Icons.arrow_back;
+      default:
+        return null;
+    }
+  }
+
+  @override
   SortByType getSortByType() {
     return SortByType.DESC;
   }

@@ -1905,4 +1905,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get enter => 'أدخل';
+
+  @override
+  String get checkout => 'المتابعة';
+
+  @override
+  String get tax => 'ضريبة';
+
+  @override
+  String get shipping => 'نقل ومواصلات';
 }

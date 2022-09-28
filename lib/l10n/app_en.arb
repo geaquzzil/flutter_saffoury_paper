@@ -647,5 +647,7 @@
   "middle": "Middle",
   "back": "Back"
 ,  "enter":"Enter"
-
+,"checkout":"Check out",
+  "tax": "Tax",
+  "shipping":"Shipping"
 }

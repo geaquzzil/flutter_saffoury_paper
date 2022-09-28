@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/new_components/lists/search_card_item.da
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CartDataTable extends StatefulWidget {
   const CartDataTable({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class CartDataTable extends StatefulWidget {
 }
 
 class _CartDataTableState extends State<CartDataTable> {
-  final columns = ['Item', 'Size', 'Quantity', 'Price'];
   late List<ViewAbstract> list;
   int? sortColumnIndex;
   bool isAscending = false;
@@ -32,7 +32,12 @@ class _CartDataTableState extends State<CartDataTable> {
   }
 
   Widget buildDataTable(BuildContext context) {
-    final columns = ['Item', 'Quantity', 'Unit price', 'Price'];
+    final columns = [
+      AppLocalizations.of(context)!.description,
+      AppLocalizations.of(context)!.quantity,
+      AppLocalizations.of(context)!.unit_price,
+      AppLocalizations.of(context)!.total_price
+    ];
 
     return DataTable(
       sortAscending: isAscending,
@@ -56,8 +61,13 @@ class _CartDataTableState extends State<CartDataTable> {
       users.map((ViewAbstract object) {
         List<DataCell> cells = [];
         cells = [
-          DataCell(SearchCardItem(viewAbstract: object, searchQuery: "")),
+          DataCell(Text(object.getMainHeaderTextOnly(context))),
           DataCell(Text(object.getCartItemQuantity().toString()),
+              showEditIcon: true),
+          DataCell(
+              Text(
+                object.getCartItemUnitPrice().toString(),
+              ),
               showEditIcon: true),
           DataCell(
               Text(
