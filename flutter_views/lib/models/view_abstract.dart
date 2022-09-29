@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
+  ViewAbstract() : super();
+  bool isEqualsAsType(ViewAbstract? object) {
+    if (object == null) {
+      return false;
+    }
+    debugPrint(
+        "isEqualsAsType type is $runtimeType object type is ${object.runtimeType}");
+    return runtimeType == object.runtimeType;
+  }
 
-  ViewAbstract(): super();
   bool isEquals(ViewAbstract? object) {
     if (object == null) {
       return false;

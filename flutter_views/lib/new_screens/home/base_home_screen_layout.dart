@@ -10,6 +10,8 @@ import 'package:flutter_view_controller/screens/view/base_home_details_view.dart
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
+import '../../new_components/ext.dart';
+
 class BaseHomeScreenLayout extends StatelessWidget {
   const BaseHomeScreenLayout({Key? key}) : super(key: key);
 
@@ -45,38 +47,28 @@ class BaseHomeScreenLayout extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [
+        const Expanded(
+            // It takes 5/6 part of the screen
+            flex: 5,
+            child: ListApiWidget()),
         // Expanded(
         //     // It takes 5/6 part of the screen
         //     flex: 5,
-        //     child: ListApiWidget())
-        Expanded(
-            // It takes 5/6 part of the screen
-            flex: 5,
-            child: Center(
-              child: Text("This is a list"),
-            )),
+        //     child: Center(
+        //       child: Text("This is a list"),
+        //     )),
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 8 : 10,
               child: Container(
-                  // margin: EdgeInsets.all(25),
-                  // decoration: BoxDecoration(
-                  //   // boxShadow: [
-                  //   //   BoxShadow(
-                  //   //     color: Colors.grey[100]!,
-                  //   //     spreadRadius: 10,
-                  //   //     blurRadius: 5,
-                  //   //   )
-                  //   // ],
-                  //   color: Colors.white,
-                  //   borderRadius: BorderRadius.circular(25),
-                  // ),
+                  padding: EdgeInsets.all(20),
+                  decoration: getShadowBoxDecoration(),
                   child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: BaseSharedDetailsView(),
-                ),
-              )))
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: BaseSharedDetailsView(),
+                    ),
+                  )))
       ]),
     );
   }

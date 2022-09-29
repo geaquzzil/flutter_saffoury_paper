@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
@@ -11,52 +12,46 @@ import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../models/permissions/permission_level_abstract.dart';
+import 'base_shared_drawer_navigation.dart';
 
 class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
-  TabController tabController;
-  List<Tab> tabs;
-  BaseSharedHeaderViewDetailsActions(
-      {Key? key, required this.tabController, required this.tabs})
+  ViewAbstract viewAbstract;
+  BaseSharedHeaderViewDetailsActions({Key? key, required this.viewAbstract})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: SafeArea(
-        child: Column(
+    return Column(
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                // We need this back button on mobile only
-                // if (SizeConfig.isMobile(context))
-                const BackButton(),
-                // Expanded(
-                //   child: TabBar(
-                //     labelColor: Colors.black87,
-                //     tabs: tabs,
-                //     controller: tabController,
-                //   ),
-                // ),
-                const Spacer(),
-                // We don't need print option on mobile
-                buildList(context),
-                IconButton(
-                  icon: const Icon(Icons.more_horiz),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {},
-                ),
-              ],
+            // We need this back button on mobile only
+            // if (SizeConfig.isMobile(context))
+            const BackButton(),
+            // Expanded(
+            //   child: TabBar(
+            //     labelColor: Colors.black87,
+            //     tabs: tabs,
+            //     controller: tabController,
+            //   ),
+            // ),
+            const Spacer(),
+            // We don't need print option on mobile
+            buildList(context),
+            IconButton(
+              icon: const Icon(Icons.more_horiz),
+              onPressed: () {},
             ),
-            BaseSharedHeaderDescription(
-                viewAbstract: PermissionLevelAbstract()),
-            BaseSharedDetailsRating(viewAbstract: PermissionLevelAbstract()),
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {},
+            ),
           ],
         ),
-      ),
+        BaseSharedHeaderDescription(viewAbstract: viewAbstract),
+        BaseSharedDetailsRating(viewAbstract: viewAbstract),
+        BaseSharedActionDrawerNavigation()
+      ],
     );
   }
 

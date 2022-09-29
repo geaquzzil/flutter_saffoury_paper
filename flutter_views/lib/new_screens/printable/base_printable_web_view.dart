@@ -33,6 +33,7 @@ class BasePrintableViewWidget extends StatelessWidget {
             future: printObject.printCall(printCommand),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                
                 // return TextButton(
                 //     onPressed: () => {generatePdf(snapshot.data)},
                 //     child: const Text("dsa"));
