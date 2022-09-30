@@ -22,6 +22,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/base_material_app.dart';
@@ -104,6 +105,7 @@ void main() async {
       ChangeNotifierProvider(
           create: (_) => DrawerViewAbstractProvider(object: Product())),
       ChangeNotifierProvider(create: (_) => ListProvider()),
+      ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),
       ChangeNotifierProvider(
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),

@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:intl/intl.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
@@ -28,9 +31,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value?.toString() ?? "";
   }
 
-  
-
-  List<TabControllerHelper> getListFields() =>
+  List<TabControllerHelper> getCustomTabList() =>
       List<TabControllerHelper>.empty();
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
@@ -133,19 +134,29 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 
-  List<Tab> getTabs(BuildContext context) {
+  List<Widget> getTabsViewGenerator(BuildContext context,
+      {List<TabControllerHelper>? tabs}) {
+    List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
+    return tabsList.map((e) {
+      if (tabsList.indexOf(e) == 0) {
+        return Text("This is the main page");
+      }
+      if (e.autoRest != null) {
+        return ListApiAutoRestWidget(
+          autoRest: e.autoRest!,
+        );
+      }
+      return Text("This is the sec page");
+    }).toList();
+  }
+
+  List<TabControllerHelper> getTabs(BuildContext context) {
     return [
-      Tab(
-        text: getMainHeaderTextOnly(context),
-        icon: getIcon(),
+      TabControllerHelper(
+        getMainHeaderTextOnly(context),
+        getMainIconData(),
       ),
-      ...getListFields()
-          .map((e) => Tab(
-                key: Key(e.fieldThatHasList),
-                text: e.title,
-                icon: Icon(e.icon),
-              ))
-          .toList(),
+      ...getCustomTabList()
     ];
   }
 
@@ -220,9 +231,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   PrintCommandAbstract? getPrintCommand(BuildContext context) => null;
 }
 
-class TabControllerHelper {
-  String fieldThatHasList;
-  String title;
-  IconData icon;
-  TabControllerHelper(this.fieldThatHasList, this.title, this.icon);
+class TabControllerHelper extends Tab {
+  ///Auto get the field list from the parent
+  ///
+  String? fieldThatHasList;
+
+  ///Auto get the field list from the api object;
+  AutoRest? autoRest;
+
+  TabControllerHelper(String title, IconData icon,
+      {this.fieldThatHasList, this.autoRest})
+      : super(icon: Icon(icon), text: title);
 }

@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/permissions/permission_action_abs
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/data_table_builder.dart';
+import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
@@ -82,7 +83,13 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
             viewAbstract: viewAbstract,
           ),
           if (viewAbstract.getListableFieldName() != null)
-            DataTableBuilder(viewAbstract: viewAbstract)
+            DataTableBuilder(viewAbstract: viewAbstract),
+
+          if (viewAbstract.getTabs(context).isNotEmpty)
+            TabBarWidget(
+              viewAbstract: viewAbstract,
+            )
+
           // Expanded(child: getBodyWidget(context, viewAbstract)),
           // SizedBox(
           //     width: double.maxFinite,

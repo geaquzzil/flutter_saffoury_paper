@@ -29464,7 +29464,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
             instance.getCartItemUnitPrice,
         r'getCartItemQuantity': (dynamic instance) =>
             instance.getCartItemQuantity,
-        r'getListFields': (dynamic instance) => instance.getListFields,
+        r'getListFields': (dynamic instance) => instance.getCustomTabList,
         r'getFieldIconData': (dynamic instance) => instance.getFieldIconData,
         r'getFieldLabel': (dynamic instance) => instance.getFieldLabel,
         r'getMainHeaderLabelWithText': (dynamic instance) =>
