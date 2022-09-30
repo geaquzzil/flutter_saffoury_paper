@@ -23,7 +23,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
       : CargoTransporter.fromJson(
           json['cargo_transporters'] as Map<String, dynamic>)
   ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
-  ..order_details = (json['order_details'] as List<dynamic>?)
+  ..orders_details = (json['orders_details'] as List<dynamic>?)
       ?.map((e) => OrderDetails.fromJson(e as Map<String, dynamic>))
       .toList()
   ..orders_details_count = json['orders_details_count'] as int?
@@ -42,7 +42,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'customers': instance.customers?.toJson(),
       'cargo_transporters': instance.cargo_transporters?.toJson(),
       'status': _$InvoiceStatusEnumMap[instance.status],
-      'order_details': instance.order_details?.map((e) => e.toJson()).toList(),
+      'order_details': instance.orders_details?.map((e) => e.toJson()).toList(),
       'orders_details_count': instance.orders_details_count,
       'orders_refunds':
           instance.orders_refunds?.map((e) => e.toJson()).toList(),

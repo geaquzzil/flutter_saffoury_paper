@@ -7,32 +7,38 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 class ActionViewAbstractProvider with ChangeNotifier {
   ViewAbstract? object;
   ServerActions? serverActions;
-  StackList<StackedActions?> stack = StackList<StackedActions>();
+  List<StackedActions?> stack = [null];
   ActionViewAbstractProvider();
 
   ViewAbstract? get getObject => object;
   ViewAbstract get getObjectNotNull => object ?? PermissionActionAbstract();
   ServerActions? get getServerActions => serverActions;
-  StackList<StackedActions?> get getStackedActions => stack;
+  List<StackedActions?> get getStackedActions => stack;
 
   void change(ViewAbstract object, ServerActions? serverActions) {
     this.object = object;
     this.serverActions = serverActions;
-    dynamic obj = stack.peek;
-    if (obj != null) {
-      if (object.isEqualsAsType((obj as StackedActions).object)) {
-        stack.pop();
+    if (stack.isNotEmpty) {
+      dynamic obj = stack.last;
+      if (obj != null) {
+        if (object.isEqualsAsType((obj as StackedActions).object)) {
+          stack.removeLast();
+        }
       }
     }
-    stack.push(StackedActions(object, serverActions));
+    stack.add(StackedActions(object, serverActions, stack.isEmpty));
     notifyListeners();
+  }
+  void popUntil(StackedActions stack){
+    //TODO: this
   }
 }
 
 class StackedActions {
+  bool? isMain;
   ViewAbstract? object;
   ServerActions? serverActions;
-  StackedActions(this.object, this.serverActions);
+  StackedActions(this.object, this.serverActions, this.isMain);
 }
 
 class StackList<E> {

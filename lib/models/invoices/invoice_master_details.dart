@@ -20,7 +20,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
   String? comments;
 
   @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "products": Product(),
         "warehouse": Warehouse(),
         "quantity": 0,
@@ -39,6 +39,15 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
     discount = 0;
     return this;
   }
+
+  @override
+  List<ListableDataRow> getListableDetailsColumns(BuildContext context) => [
+        ListableDataRow("quantity", AppLocalizations.of(context)!.quantity),
+        ListableDataRow("unitPrice", AppLocalizations.of(context)!.unit_price),
+        ListableDataRow("discount", AppLocalizations.of(context)!.discount),
+        ListableDataRow("price", AppLocalizations.of(context)!.total_price),
+        ListableDataRow("comments", AppLocalizations.of(context)!.comments),
+      ];
 
   @override
   List<String> getMainFields() => [

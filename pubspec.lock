@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.10"
+  auto_size_text:
+    dependency: transitive
+    description:
+      name: auto_size_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   badges:
     dependency: transitive
     description:
@@ -281,6 +288,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  dashboard:
+    dependency: transitive
+    description:
+      name: dashboard
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2+4"
   dio:
     dependency: transitive
     description:

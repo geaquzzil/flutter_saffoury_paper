@@ -68,6 +68,8 @@ dependencies:
   webcontent_converter: ^0.0.7+2
   window_manager: ^0.2.7
   path: ^1.8.2
+  dashboard: ^0.0.2+4
+  auto_size_text: ^3.0.0
   
   # analyzer: ^4.2.0
   

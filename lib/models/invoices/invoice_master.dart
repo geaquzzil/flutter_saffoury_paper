@@ -6,6 +6,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import 'orders.dart';
+
 abstract class InvoiceMaster<T> extends ViewAbstract<T> {
   // int? EmployeeID;
   // int? CargoTransID;
@@ -23,6 +25,14 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T> {
   InvoiceStatus? status;
 
   InvoiceMaster() : super();
+  @override
+  String? getListableFieldName() {
+    debugPrint("getListableFieldName $runtimeType");
+    if (runtimeType == Order) {
+      return "orders_details";
+    }
+    return super.getListableFieldName();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

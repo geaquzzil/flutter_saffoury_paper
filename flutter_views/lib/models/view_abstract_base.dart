@@ -28,6 +28,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value?.toString() ?? "";
   }
 
+  
+
   List<TabControllerHelper> getListFields() =>
       List<TabControllerHelper>.empty();
 
@@ -139,7 +141,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       ),
       ...getListFields()
           .map((e) => Tab(
-                key: Key(e.field),
+                key: Key(e.fieldThatHasList),
                 text: e.title,
                 icon: Icon(e.icon),
               ))
@@ -219,8 +221,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 }
 
 class TabControllerHelper {
-  String field;
+  String fieldThatHasList;
   String title;
   IconData icon;
-  TabControllerHelper(this.field, this.title, this.icon);
+  TabControllerHelper(this.fieldThatHasList, this.title, this.icon);
 }

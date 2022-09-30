@@ -3,6 +3,22 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   ViewAbstract() : super();
+
+  String? getListableFieldName() => null;
+
+  List<ListableDataRow> getListableDetailsColumns(BuildContext context) => [];
+
+  DataCell getListableDetailsRowDataCell(String field) =>
+      DataCell(Text('${getFieldValue(field)}'),
+          // TextFormField(
+          //   initialValue: '${getFieldValue(field)}',
+          //   keyboardType: getTextInputType(field),
+          //   onFieldSubmitted: (val) {
+          //     print('onSubmited $val');
+          //   },
+          // ),
+          showEditIcon: true);
+
   bool isEqualsAsType(ViewAbstract? object) {
     if (object == null) {
       return false;
@@ -59,4 +75,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   String toString() {
     return toJsonString();
   }
+}
+
+class ListableDataRow {
+  String fieldName;
+  String labelTitle;
+  ListableDataRow(this.fieldName, this.labelTitle);
 }

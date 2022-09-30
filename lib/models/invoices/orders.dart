@@ -16,13 +16,14 @@ part 'orders.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Order extends InvoiceMaster<Order> {
-  List<OrderDetails>? order_details;
+  List<OrderDetails>? orders_details;
   int? orders_details_count;
 
   List<OrderRefund>? orders_refunds;
   int? orders_refunds_count;
 
   Order() : super();
+  
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
