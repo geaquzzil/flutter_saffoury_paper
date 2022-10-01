@@ -72,6 +72,7 @@ dependencies:
   auto_size_text: ^3.0.0
   popover: ^0.2.6+3
   just_the_tooltip: ^0.0.12
+  pdf: ^3.8.3
   
   # analyzer: ^4.2.0
   

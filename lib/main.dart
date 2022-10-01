@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
@@ -79,6 +80,11 @@ void main() async {
   initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
+  //TODO what is this ?
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
 
   if (WebViewHelper.isDesktop) {
     await windowManager.ensureInitialized();
