@@ -35,6 +35,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T> {
   }
 
   @override
+  IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "TermsID": 0,
         "date": "",

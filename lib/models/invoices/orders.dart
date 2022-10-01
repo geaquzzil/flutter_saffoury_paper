@@ -61,7 +61,7 @@ class Order extends InvoiceMaster<Order> {
         getMainIconData(),
         autoRest: AutoRest<Order>(
             obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-            key: "CustomerByOrder"),
+            key: "CustomerByOrder$iD"),
       )
     ];
   }

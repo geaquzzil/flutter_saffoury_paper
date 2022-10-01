@@ -43,7 +43,8 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
               child: Expanded(
                   child: ListView.builder(
                       itemCount: widget.drawerItems.length,
-                      itemBuilder: ((context, index) => DrawerListTileDesktop(
+                      itemBuilder: ((context, index) =>
+                          DrawerListTileDesktopOpen(
                             viewAbstract: widget.drawerItems[index],
                             idx: index,
                           )))),
@@ -65,7 +66,8 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
                 child: Expanded(
                     child: ListView.builder(
                         itemCount: widget.drawerItems.length,
-                        itemBuilder: ((context, index) => DrawerListTileDesktop(
+                        itemBuilder: ((context, index) =>
+                            DrawerListTileDesktopOpen(
                               viewAbstract: widget.drawerItems[index],
                               idx: index,
                             )))),
@@ -179,7 +181,8 @@ class SideItem extends StatelessWidget {
       child: Container(
         color: const Color(0xffb1f2b36),
         child: Row(children: [
-          Container(padding: const EdgeInsets.all(20), child: const Icon(Icons.abc)),
+          Container(
+              padding: const EdgeInsets.all(20), child: const Icon(Icons.abc)),
           Container(
             padding: const EdgeInsets.all(20),
             child: Text(
@@ -192,6 +195,3 @@ class SideItem extends StatelessWidget {
     );
   }
 }
-
-
-

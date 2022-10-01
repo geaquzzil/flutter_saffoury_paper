@@ -833,6 +833,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.7"
+  just_the_tooltip:
+    dependency: transitive
+    description:
+      name: just_the_tooltip
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.12"
   latlng:
     dependency: "direct main"
     description:
@@ -1134,6 +1141,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
+  popover:
+    dependency: transitive
+    description:
+      name: popover
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.6+3"
   positioned_tap_detector_2:
     dependency: transitive
     description:

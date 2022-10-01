@@ -59,7 +59,8 @@ abstract class MoneyFunds<T> extends ViewAbstract<T> {
   String getMainHeaderTextOnly(BuildContext context) {
     return "${customers?.name}: $value";
   }
-
+ @override
+  IconData? getMainDrawerGroupIconData() => Icons.credit_card;
   @override
   String? getSortByFieldName() => "date";
 

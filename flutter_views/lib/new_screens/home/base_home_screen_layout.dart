@@ -18,7 +18,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      if (SizeConfig.isDesktop(context)) const DrawerLargeScreens(),
+      if (SizeConfig.isDesktop(context)) DrawerLargeScreens(),
       Expanded(
         child: Column(
           children: [

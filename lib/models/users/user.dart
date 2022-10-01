@@ -59,6 +59,9 @@ class User<T> extends AuthUser {
   int? cargo_transporters_count;
 
   @override
+  IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;
+  
+  @override
   Map<String, dynamic> getMirrorFieldsNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({

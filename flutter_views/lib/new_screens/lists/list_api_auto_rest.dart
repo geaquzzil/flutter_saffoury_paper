@@ -32,7 +32,9 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
   void initState() {
     super.initState();
     _scrollController.addListener(() => _onScroll());
-    listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+    if (listProvider.getCount(widget.autoRest.key) == 0) {
+      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+    }
   }
 
   Widget _listItems(
@@ -53,7 +55,7 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
+                children: [
                   Text(AppLocalizations.of(context)!.loading),
                   const SizedBox(
                       height: 24,

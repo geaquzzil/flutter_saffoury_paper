@@ -85,6 +85,9 @@ class Product extends ViewAbstract<Product> {
   }
 
   @override
+  IconData? getMainDrawerGroupIconData() => Icons.waterfall_chart_outlined;
+
+  @override
   String getMainHeaderTextOnly(BuildContext context) {
     String? productType = products_types?.getMainHeaderTextOnly(context);
     String? size = sizes?.getMainHeaderTextOnly(context);

@@ -21,10 +21,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       endDrawer: const BaseHomeCartPage(),
-      body:
-          // DashboardWidget()
-
-          const SafeArea(child: BaseHomeScreenLayout()),
+      body:const SafeArea(child: BaseHomeScreenLayout()),
     );
   }
 }

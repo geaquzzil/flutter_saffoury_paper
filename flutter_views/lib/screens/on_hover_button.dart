@@ -28,7 +28,6 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
     final transform = isHover ? hoveredTransform : Matrix4.identity();
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-    
       onEnter: (event) => onEntered(true),
       onExit: (event) => onEntered(false),
       child: AnimatedContainer(

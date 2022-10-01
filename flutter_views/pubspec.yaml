@@ -70,6 +70,8 @@ dependencies:
   path: ^1.8.2
   dashboard: ^0.0.2+4
   auto_size_text: ^3.0.0
+  popover: ^0.2.6+3
+  just_the_tooltip: ^0.0.12
   
   # analyzer: ^4.2.0
   

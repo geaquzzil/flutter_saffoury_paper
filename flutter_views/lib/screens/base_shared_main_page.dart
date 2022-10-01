@@ -82,7 +82,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
   Widget getScreenDivider(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Row(children: [
-      if (SizeConfig.isDesktop(context)) const DrawerLargeScreens(),
+      if (SizeConfig.isDesktop(context))  DrawerLargeScreens(),
       Expanded(
         child: Column(
           children: [
@@ -207,7 +207,7 @@ class _BaseSharedMainPageState extends State<BaseSharedMainPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // We want this side menu only for large screen
-            if (SizeConfig.isDesktop(context)) const DrawerLargeScreens(),
+            if (SizeConfig.isDesktop(context))  DrawerLargeScreens(),
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,

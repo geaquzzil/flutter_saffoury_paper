@@ -9,7 +9,7 @@ class ShimmerLoadingList extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: Colors.grey,
       highlightColor: Colors.grey[400]!,
-      period:const Duration(seconds: 1),
+      period: const Duration(seconds: 1),
       child: Container(
         decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
         child: Row(
@@ -20,7 +20,7 @@ class ShimmerLoadingList extends StatelessWidget {
               flex: 1,
               child: Container(
                 width: 100,
-                height: 100,
+                height: 75,
                 color: Colors.grey,
               ),
             ),
