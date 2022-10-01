@@ -31,7 +31,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value?.toString() ?? "";
   }
 
-  List<TabControllerHelper> getCustomTabList() =>
+  List<TabControllerHelper> getCustomTabList(BuildContext context) =>
       List<TabControllerHelper>.empty();
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
@@ -156,7 +156,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         getMainHeaderTextOnly(context),
         getMainIconData(),
       ),
-      ...getCustomTabList()
+      ...getCustomTabList(context)
     ];
   }
 

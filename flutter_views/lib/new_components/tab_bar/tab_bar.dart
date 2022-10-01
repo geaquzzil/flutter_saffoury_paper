@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+///Controller tabs used context to AppLoclazation \
+///this throw error if we init tabController in the initState 
+///So we initialize tab controller on the build 
 class TabBarWidget extends StatefulWidget {
   ViewAbstract viewAbstract;
   TabBarWidget({Key? key, required this.viewAbstract}) : super(key: key);
@@ -12,13 +16,12 @@ class TabBarWidget extends StatefulWidget {
 class _TabBarWidgetState extends State<TabBarWidget>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  List<Tab> _tabs = [];
+  List<TabControllerHelper> _tabs = [];
 
   @override
   void initState() {
     super.initState();
-    _tabs.addAll(widget.viewAbstract.getTabs(context));
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override
@@ -29,41 +32,43 @@ class _TabBarWidgetState extends State<TabBarWidget>
     _tabs.addAll(widget.viewAbstract.getTabs(context));
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    debugPrint("didChangeDependencies tabController");
-    _tabs.clear();
-    _tabs.addAll(widget.viewAbstract.getTabs(context));
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   debugPrint("didChangeDependencies tabController");
+  //   _tabs.clear();
+  //   _tabs.addAll(widget.viewAbstract.getTabs(context));
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TabBar(
-              isScrollable: true,
-              indicator: CircleTabIndicator(color: Colors.black12, radius: 4),
-              labelPadding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              controller: _tabController,
-              tabs: _tabs),
-        ),
-        Container(
+    _tabs.clear();
+    _tabs.addAll(widget.viewAbstract.getTabs(context));
+    _tabController = TabController(length: _tabs.length, vsync: this);
+    return Column(children: [
+      Align(
+        alignment: Alignment.centerLeft,
+        child: TabBar(
+            isScrollable: true,
+            indicator: CircleTabIndicator(color: Colors.black12, radius: 4),
+            labelPadding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            controller: _tabController,
+            tabs: _tabs),
+      ),
+      Container(
           width: double.maxFinite,
           height: 200,
           child: TabBarView(
-              controller: _tabController,
-              children: _tabs.map((e) => Text("sadadsa")).toList()),
-        )
-      ],
-    );
+            controller: _tabController,
+            children:
+                widget.viewAbstract.getTabsViewGenerator(context, tabs: _tabs),
+          ))
+    ]);
   }
 }
 

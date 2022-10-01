@@ -53,9 +53,9 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text("Loading..."),
-                  SizedBox(
+                children:  [
+                  Text(AppLocalizations.of(context)!.loading),
+                  const SizedBox(
                       height: 24,
                       width: 24,
                       child: CircularProgressIndicator(

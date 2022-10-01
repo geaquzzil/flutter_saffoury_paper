@@ -29,6 +29,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = listMap[key];
     } else {
       listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
     multiListProviderHelper.isLoading = true;
