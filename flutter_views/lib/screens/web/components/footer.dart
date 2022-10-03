@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/screens/web/models/footer_item.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 final List<FooterItem> footerItems = [
   FooterItem(
     icon: const Icon(Icons.add_home_work, size: 25),
@@ -132,7 +132,7 @@ Widget _buildUi(double width, BuildContext context) {
                   const Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      "Copyright (c) 2021 Michele Harrington. All rights Reserved",
+                      "Copyright (c) 2023 SaffouryPaper. All rights Reserved",
                       style: TextStyle(
                         color: kCaptionColor,
                       ),
@@ -143,11 +143,11 @@ Widget _buildUi(double width, BuildContext context) {
                     children: [
                       GestureDetector(
                         onTap: () {},
-                        child: const MouseRegion(
+                        child:  MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(
-                            "Privacy Policy",
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.privacy,
+                            style: const TextStyle(
                               color: kCaptionColor,
                             ),
                           ),
@@ -164,11 +164,11 @@ Widget _buildUi(double width, BuildContext context) {
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: const MouseRegion(
+                        child:  MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(
-                            "Terms & Conditions",
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.agree_terms_and_condition,
+                            style: const TextStyle(
                               color: kCaptionColor,
                             ),
                           ),

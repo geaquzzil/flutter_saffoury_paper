@@ -28,11 +28,11 @@ class AuthProvider with ChangeNotifier {
   late AuthUser _user;
   Status _status = Status.Initialization;
   late PermissionLevelAbstract _permissions;
-
+bool hasSavedUser=false;
   Status get getStatus => _status;
   AuthUser get getUser => _user;
-  String get getUserName => "_user.name";
-  String get getUserPermission => "Admin";
+  String get getUserName => _user.getFieldValue("name");
+  String get getUserPermission => _user.userlevels?.userlevelname??"";
   String get getUserImageUrl =>
       "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
   PermissionLevelAbstract get getPermissions => _permissions;
@@ -70,9 +70,9 @@ class AuthProvider with ChangeNotifier {
 
   //Todo on publish use this method
   void init() async {
-    bool hasUser = await Configurations.hasSavedValue(AuthUser());
+    hasSavedUser = await Configurations.hasSavedValue(AuthUser());
     final Response? responseUser;
-    if (hasUser == false) {
+    if (hasSavedUser == false) {
       _user = AuthUser();
       _user.password = "0933326880";
       _user.phone = "0933326882";

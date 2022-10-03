@@ -4,12 +4,14 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ItemModel {
   String title;
   IconData icon;
+  GestureTapCallback? onPress;
 
-  ItemModel(this.title, this.icon);
+  ItemModel(this.title, this.icon, {this.onPress});
 }
 
 class ProfilePicturePopupMenu extends StatefulWidget {
@@ -23,18 +25,35 @@ class ProfilePicturePopupMenu extends StatefulWidget {
 class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
   final GlobalKey<PopupMenuButtonState<int>> _key = GlobalKey();
 
-  List<ItemModel> menuItems = [
-    ItemModel('QussaiAl-Saffoury', Icons.chat_bubble),
-    ItemModel('Edit Profile', Icons.account_box_outlined),
-    ItemModel('Tasks', Icons.task),
-    ItemModel('Chat', Icons.chat_bubble),
-    ItemModel('Logout', Icons.logout),
-  ];
+  List<ItemModel> menuItems = [];
 
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = context.read<AuthProvider>();
+    if (authProvider.hasSavedUser) {
+      menuItems = [
+        ItemModel(authProvider.getUserName, Icons.chat_bubble),
+        ItemModel(
+            "${AppLocalizations.of(context)!.edit} ${AppLocalizations.of(context)!.profile}",
+            Icons.account_box_outlined),
+        ItemModel('Tasks', Icons.task),
+        ItemModel('Chat', Icons.chat_bubble),
+        ItemModel(AppLocalizations.of(context)!.logout, Icons.logout),
+      ];
+    } else {
+      menuItems = [
+        ItemModel(
+            AppLocalizations.of(context)!.action_sign_in_short, Icons.login,
+            onPress: () {
+          debugPrint("onPress sing_in");
+          _controller.hideMenu();
+          Navigator.pushNamed(context, '/sign_in');
+        }),
+      ];
+    }
+
     return CustomPopupMenu(
       arrowSize: 20,
       arrowColor: Colors.white,
@@ -43,9 +62,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
       verticalMargin: -15,
       controller: _controller,
       child: RoundedIconButtonNetwork(
-          size: 25,
-          onTap: () {},
-          imageUrl: context.read<AuthProvider>().getUserImageUrl),
+          size: 25, onTap: () {}, imageUrl: authProvider.getUserImageUrl),
     );
   }
 
@@ -57,25 +74,33 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
         child: IntrinsicWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [const ProfileListTileWidget(), const Divider(), ...menuItems
-                .map(
-                  (item) => GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      debugPrint("onTap");
-                      _controller.hideMenu();
-                    },
-                    child: popMenuItem(item),
-                  ),
-                )
-                .toList()],
+            children: [
+              const ProfileListTileWidget(),
+              const Divider(),
+              ...menuItems
+                  .map(
+                    (item) => GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: item.onPress,
+
+                      // {
+                      //   debugPrint("onTap toto");
+
+                      //   _controller.hideMenu();
+                      // }
+                      // ,
+                      child: popMenuItem(item),
+                    ),
+                  )
+                  .toList()
+            ],
           ),
         ),
       ),
     );
   }
 
-  Container popMenuItem(ItemModel item) {
+  Widget popMenuItem(ItemModel item) {
     return Container(
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -117,7 +142,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
                   (item) => GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      debugPrint("onTap");
+                      debugPrint("onTap tot");
                       _controller.hideMenu();
                     },
                     child: Container(

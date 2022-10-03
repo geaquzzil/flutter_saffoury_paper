@@ -9,7 +9,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dar
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import '../loading_shimmer.dart';
+import '../../new_components/loading_shimmer.dart';
 
 class ListApiWidget extends StatefulWidget {
   const ListApiWidget({Key? key}) : super(key: key);

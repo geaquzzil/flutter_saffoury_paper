@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
-import 'package:flutter_view_controller/screens/web/sign_in.dart';
+import 'package:flutter_view_controller/new_screens/sign_in.dart';
 
 class HeaderItem {
   final String title;
@@ -23,7 +23,7 @@ class HeaderItem {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const SignIn(),
+        builder: (context) => const SignInPage(),
       ),
     );
   }

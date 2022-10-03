@@ -19,6 +19,10 @@ class PdfApi {
 
     return file;
   }
+//  static Future openFile(File file) async {
+//     final url = file.path;
 
+//     await OpenFile.open(url);
+//   }
 
 }

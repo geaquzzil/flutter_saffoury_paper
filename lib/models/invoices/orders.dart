@@ -4,8 +4,10 @@ import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
@@ -68,6 +70,8 @@ class Order extends InvoiceMaster<Order> {
 
   @override
   Order fromJsonViewAbstract(Map<String, dynamic> json) => Order.fromJson(json);
+
+  
 }
 
 @JsonSerializable(explicitToJson: true)

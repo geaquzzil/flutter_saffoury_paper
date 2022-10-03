@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class SignIn extends BaseWebPage {
-  const SignIn({Key? key}) : super(key: key);
+class SignInPage extends BaseWebPage {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget getContentWidget(BuildContext context) {
@@ -15,6 +16,22 @@ class SignIn extends BaseWebPage {
 
   Widget body(BuildContext context) {
     return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: Colors.green,
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
@@ -22,8 +39,8 @@ class SignIn extends BaseWebPage {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Sign In to \nMy Application',
+              Text(
+                AppLocalizations.of(context)!.signInWithYourAccount,
                 style: TextStyle(
                   fontSize: 45,
                   fontWeight: FontWeight.bold,
@@ -61,17 +78,19 @@ class SignIn extends BaseWebPage {
                   ),
                 ],
               ),
-              Image.asset(
-                'images/illustration-2.png',
+              Container(
                 width: 300,
-              ),
+                height: 300,
+                color: Colors.orange,
+              )
             ],
           ),
         ),
 
-        Image.asset(
-          'images/illustration-1.png',
+        Container(
           width: 300,
+          height: 300,
+          color: Colors.orange,
         ),
         // MediaQuery.of(context).size.width >= 1300 //Responsive
         //     ? Image.asset(
@@ -84,19 +103,20 @@ class SignIn extends BaseWebPage {
               vertical: MediaQuery.of(context).size.height / 6),
           child: SizedBox(
             width: 320,
-            child: _formLogin(),
+            child: _formLogin(context),
           ),
         )
       ],
     );
   }
 
-  Widget _formLogin() {
+  Widget _formLogin(BuildContext context) {
     return Column(
       children: [
         TextField(
           decoration: InputDecoration(
-            hintText: 'Enter email or Phone number',
+            //Enter username or email
+            hintText: AppLocalizations.of(context)!.user_name,
             filled: true,
             fillColor: Colors.blueGrey[50],
             labelStyle: const TextStyle(fontSize: 12),
@@ -114,8 +134,8 @@ class SignIn extends BaseWebPage {
         const SizedBox(height: 30),
         TextField(
           decoration: InputDecoration(
-            hintText: 'Password',
-            counterText: 'Forgot password?',
+            hintText: AppLocalizations.of(context)!.password,
+            counterText: AppLocalizations.of(context)!.forget_get_account,
             suffixIcon: const Icon(
               Icons.visibility_off_outlined,
               color: Colors.grey,
@@ -150,15 +170,18 @@ class SignIn extends BaseWebPage {
           child: ElevatedButton(
             onPressed: () => debugPrint("it's pressed"),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Colors.deepPurple,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.deepPurple,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-            child: const SizedBox(
+            child: SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: Center(child: Text("Sign In"))),
+                child: Center(
+                    child: Text(
+                        AppLocalizations.of(context)!.action_sign_in_short))),
           ),
         ),
         const SizedBox(height: 40),
@@ -215,24 +238,23 @@ class SignIn extends BaseWebPage {
             ),
       child: Center(
           child: Container(
-        decoration: isActive
-            ? BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(35),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey[400]!,
-                    spreadRadius: 2,
-                    blurRadius: 15,
-                  )
-                ],
-              )
-            : const BoxDecoration(),
-        child: Image.asset(
-          image,
-          width: 35,
-        ),
-      )),
+              decoration: isActive
+                  ? BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(35),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey[400]!,
+                          spreadRadius: 2,
+                          blurRadius: 15,
+                        )
+                      ],
+                    )
+                  : const BoxDecoration(),
+              child: Container(
+                width: 34,
+                color: Colors.orange,
+              ))),
     );
   }
 }

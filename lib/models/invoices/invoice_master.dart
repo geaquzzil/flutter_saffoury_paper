@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 
 import 'orders.dart';
 
-abstract class InvoiceMaster<T> extends ViewAbstract<T> {
+abstract class InvoiceMaster<T> extends ViewAbstract<T>
+    implements InvoiceGenerator {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -139,6 +142,21 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T> {
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.invoices;
+
+  @override
+  String getInvoiceTitle(BuildContext context, PrintCommandAbstract? pca) =>
+      getMainHeaderLabelTextOnly(context).toUpperCase();
+  @override
+  List<TitleAndDescriptionInfo> getInvoiceInfo(
+      BuildContext context, PrintCommandAbstract? pca) {
+    return [];
+  }
+
+  @override
+  List<TitleAndDescriptionInfo> getInvoiceTotal(
+      BuildContext context, PrintCommandAbstract? pca) {
+    return [];
+  }
 }
 
 enum InvoiceStatus { NONE, PENDING, PROCESSING, CANCELED, APPROVED }

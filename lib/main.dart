@@ -11,6 +11,7 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
@@ -27,7 +28,6 @@ import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
-import 'package:flutter_view_controller/screens/base_material_app.dart';
 import 'package:provider/provider.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
 import 'package:window_manager/window_manager.dart';
@@ -118,9 +118,7 @@ void main() async {
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),
       )
-    ], child: const BaseMaterialAppPage()
-
-        //  App(),
+    ], child:  BaseMaterialAppPage()
         ));
   } catch (e) {
     debugPrint("exception => $e");

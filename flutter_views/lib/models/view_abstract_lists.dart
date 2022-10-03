@@ -6,6 +6,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 import 'package:flutter_view_controller/new_screens/printable/base_printable_widget.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 
 import '../providers/actions/edits/edit_error_list_provider.dart';
@@ -220,29 +222,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {}
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
+ 
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Scaffold(
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Colors.white,
-                leading: IconButton(
-                  color: Colors.black,
-                  icon: const Icon(Icons.arrow_back_ios),
-                  iconSize: 20.0,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                centerTitle: true,
-              ),
-              body: BasePrintableWidget(
-                printObject: this as ViewAbstract,
-              )),
-        ),
+          builder: (context) => PdfPage(invoiceObj: this as InvoiceGenerator,))
       );
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);

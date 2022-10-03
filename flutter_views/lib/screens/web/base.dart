@@ -64,13 +64,15 @@ abstract class BaseWebPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Header(),
-            getContentWidget(context)!,
-            const Footer(),
-          ],
+        child: Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Header(),
+              getContentWidget(context)!,
+              const Footer(),
+            ],
+          ),
         ),
       ),
     );

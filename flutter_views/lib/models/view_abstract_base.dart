@@ -9,7 +9,10 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dar
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:intl/intl.dart';
 
-abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
+import '../printing_generator/pdf_invoice_api.dart';
+
+abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
+     {
   String? getTableNameApi();
   List<String> getMainFields();
   String getMainHeaderTextOnly(BuildContext context);
@@ -30,6 +33,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     // if (value == null) return null;
     return value?.toString() ?? "";
   }
+
+
 
   List<TabControllerHelper> getCustomTabList(BuildContext context) =>
       List<TabControllerHelper>.empty();

@@ -12,7 +12,7 @@ import 'package:flutter_view_controller/screens/base_shared_actions_header.dart'
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/profile_page.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
-import 'package:flutter_view_controller/screens/web/sign_in.dart';
+import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
