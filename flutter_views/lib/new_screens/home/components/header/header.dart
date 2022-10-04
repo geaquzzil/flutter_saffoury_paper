@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class HeaderMain extends StatefulWidget {
   const HeaderMain({
@@ -41,14 +42,11 @@ class _HeaderMainState extends State<HeaderMain> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                RoundedIconButton(
-                    onTap: () {
-                      debugPrint("is clickeds");
-                      context
-                          .read<LargeScreenPageProvider>()
-                          .setCurrentPage(CurrentPage.cart);
-                    },
-                    icon: Icons.abc_sharp),
+                ElevatedButton.icon(
+                    icon: Icon(Icons.add),
+                    onPressed: () {},
+                    label: Text(
+                        "${AppLocalizations.of(context)!.add_new} ${context.watch<LargeScreenPageProvider>().getCurrentPageTitle(context)}")),
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),

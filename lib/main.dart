@@ -32,6 +32,8 @@ import 'package:provider/provider.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'models/products/products_types.dart';
+
 // void main() {
 //   initializeReflectable();
 //   List<ViewAbstract> views = List<ViewAbstract>.from([Product(), Size()]);
@@ -93,8 +95,15 @@ void main() async {
     await WebcontentConverter.ensureInitialized();
   }
 
-  List<ViewAbstract> views = List<ViewAbstract>.from(
-      [Product(), Size(), Order(), Purchases(), Customer(), Employee()]);
+  List<ViewAbstract> views = List<ViewAbstract>.from([
+    Product(),
+    Size(),
+    Order(),
+    Purchases(),
+    Customer(),
+    Employee(),
+    ProductType()
+  ]);
   try {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
@@ -118,8 +127,7 @@ void main() async {
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),
       )
-    ], child:  BaseMaterialAppPage()
-        ));
+    ], child: BaseMaterialAppPage()));
   } catch (e) {
     debugPrint("exception => $e");
   }

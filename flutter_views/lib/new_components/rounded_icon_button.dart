@@ -30,7 +30,10 @@ class RoundedIconButton extends StatelessWidget {
             ],
           ),
           alignment: Alignment.center,
-          child: Icon(icon),
+          child: Icon(
+            icon,
+            color: Colors.black,
+          ),
         ));
   }
 }

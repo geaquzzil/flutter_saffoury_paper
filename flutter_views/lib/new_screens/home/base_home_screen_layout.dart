@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_components/search/search_api.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../new_components/ext.dart';
+import 'components/header/header_title_on_list.dart';
 
 class BaseHomeScreenLayout extends StatelessWidget {
   const BaseHomeScreenLayout({Key? key}) : super(key: key);
@@ -23,7 +25,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         child: Column(
           children: [
             const HeaderMain(),
-            const HeaderTitleMain(),
+            // const HeaderTitleMain(),
             getCurrentPage(context)
           ],
         ),
@@ -47,10 +49,18 @@ class BaseHomeScreenLayout extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [
-        const Expanded(
+        Expanded(
             // It takes 5/6 part of the screen
-            flex: 5,
-            child: ListApiWidget()),
+            flex: 4,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  HeaderTitleOnListMain(),
+                  SearchWidgetApi(),
+                  ListApiWidget(),
+                ],
+              ),
+            )),
         // Expanded(
         //     // It takes 5/6 part of the screen
         //     flex: 5,

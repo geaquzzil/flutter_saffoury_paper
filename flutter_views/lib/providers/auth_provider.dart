@@ -11,6 +11,8 @@ import 'package:http/src/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supercharged/supercharged.dart';
 
+import '../models/dealers/dealer.dart';
+
 enum Status {
   Initialization,
   Authenticated,
@@ -31,6 +33,7 @@ class AuthProvider with ChangeNotifier {
 bool hasSavedUser=false;
   Status get getStatus => _status;
   AuthUser get getUser => _user;
+  Dealers? get getDealers => _user.dealers;
   String get getUserName => _user.getFieldValue("name");
   String get getUserPermission => _user.userlevels?.userlevelname??"";
   String get getUserImageUrl =>

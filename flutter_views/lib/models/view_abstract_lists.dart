@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 
+import '../providers/actions/action_viewabstract_provider.dart';
 import '../providers/actions/edits/edit_error_list_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
@@ -63,6 +64,20 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
   }
 
+  Widget getCardLeadingCircleAvatarWithSelectedBorder(BuildContext context) {
+    return SizedBox(
+        width: 60,
+        height: 60,
+        child: CircleAvatar(
+            radius: 28, child: getCardLeadingImageWithFutureSelected(context)));
+  }
+
+  Widget getCardLeadingWithSelecedBorder(BuildContext context) {
+    return Hero(
+        tag: this,
+        child: (getCardLeadingCircleAvatarWithSelectedBorder(context)));
+  }
+
   Widget getCardLeading(BuildContext context) {
     return Hero(tag: this, child: (getCardLeadingCircleAvatar(context)));
   }
@@ -99,17 +114,32 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  Widget getCardLeadingImage(BuildContext context) {
-    String? imageUrl = getImageUrl(context);
+  Widget getCardLeadingImageWithFutureSelected(BuildContext context) {
+    bool isSelected = context
+            .watch<ActionViewAbstractProvider>()
+            .getObject
+            ?.isEquals(this as ViewAbstract) ??
+        false;
 
+    return getCardLeadingImage(context, isSelected: isSelected);
+  }
+
+  Widget getCardLeadingImage(BuildContext context, {bool? isSelected}) {
+    String? imageUrl = getImageUrl(context);
     if (imageUrl == null) {
       return Icon(getMainIconData());
     }
     IconData? iconOnButton = getCardLeadingBottomIcon();
     Widget image = CachedNetworkImage(
+      color: Colors.white,
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
+          border: (isSelected == false)
+              ? null
+              : Border.all(color: Colors.orange, width: 1),
+          shape: BoxShape.circle,
+          color: Colors.white,
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
       ),
@@ -222,14 +252,14 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {}
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
- 
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
       Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfPage(invoiceObj: this as InvoiceGenerator,))
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) => PdfPage(
+                    invoiceObj: this as InvoiceGenerator,
+                  )));
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.push(

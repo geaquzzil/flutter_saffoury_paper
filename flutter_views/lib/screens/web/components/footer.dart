@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/models/footer_item.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 final List<FooterItem> footerItems = [
   FooterItem(
     icon: const Icon(Icons.add_home_work, size: 25),
@@ -46,6 +50,7 @@ class Footer extends StatelessWidget {
 }
 
 Widget _buildUi(double width, BuildContext context) {
+  Dealers? dealersInfo = context.read<AuthProvider>().getDealers;
   return Center(
     child: ResponsiveWrapper(
       maxWidth: width,
@@ -143,7 +148,7 @@ Widget _buildUi(double width, BuildContext context) {
                     children: [
                       GestureDetector(
                         onTap: () {},
-                        child:  MouseRegion(
+                        child: MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(
                             AppLocalizations.of(context)!.privacy,
@@ -164,10 +169,11 @@ Widget _buildUi(double width, BuildContext context) {
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child:  MouseRegion(
+                        child: MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(
-                            AppLocalizations.of(context)!.agree_terms_and_condition,
+                            AppLocalizations.of(context)!
+                                .agree_terms_and_condition,
                             style: const TextStyle(
                               color: kCaptionColor,
                             ),

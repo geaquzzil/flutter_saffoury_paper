@@ -7,6 +7,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../dealers/dealer.dart';
+
 part 'user_auth.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -19,6 +21,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
 
   PermissionLevelAbstract? userlevels;
   Setting? setting;
+  Dealers? dealers;
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

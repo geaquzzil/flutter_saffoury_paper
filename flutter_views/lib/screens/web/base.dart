@@ -1,12 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
 
+import '../../new_components/rounded_icon_button.dart';
+
 abstract class BaseWebPage extends StatelessWidget {
   Widget? getContentWidget(BuildContext context);
   const BaseWebPage({Key? key}) : super(key: key);
+  Widget getHeader(BuildContext context) {
+    if (kIsWeb) {
+      return const Header();
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
+        child: BackButton(),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +77,13 @@ abstract class BaseWebPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Header(),
-              getContentWidget(context)!,
-              const Footer(),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            getHeader(context),
+            getContentWidget(context)!,
+            const Footer(),
+          ],
         ),
       ),
     );

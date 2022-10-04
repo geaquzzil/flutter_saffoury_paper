@@ -4,9 +4,11 @@ import 'package:flutter_view_controller/models/permissions/permission_action_abs
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/data_table_builder.dart';
+import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseSharedDetailsView extends StatefulWidget {
   const BaseSharedDetailsView({Key? key}) : super(key: key);
@@ -72,124 +75,209 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
   }
 
   Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+        // fit: BoxFit.contain,
         children: [
-          BaseSharedHeaderViewDetailsActions(
-            viewAbstract: viewAbstract,
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BaseSharedHeaderViewDetailsActions(
+                  viewAbstract: viewAbstract,
+                ),
+                ViewDetailsListWidget(
+                  viewAbstract: viewAbstract,
+                ),
+                if (viewAbstract.getListableFieldName() != null)
+                  DataTableBuilder(viewAbstract: viewAbstract),
+
+                if (viewAbstract.getTabs(context).isNotEmpty)
+                  TabBarWidget(
+                    viewAbstract: viewAbstract,
+                  )
+
+                // Expanded(child: getBodyWidget(context, viewAbstract)),
+                // SizedBox(
+                //     width: double.maxFinite,
+                //     height: 100,
+                //     child: TabBar(
+                //       tabs: tabs,
+                //       controller: _tabController,
+                //     )),
+                // Expanded(
+                //   child: TabBarView(controller: _tabController, children: [
+                //     ...tabs.map((e) => Text("2"))
+                //     // Container(
+                //     //   color: Colors.orange,
+                //     // ),
+                //   ]),
+
+                // Divider(thickness: 1),
+                // BaseSharedHeaderDescription(viewAbstract: viewAbstract),
+                // Expanded(
+                //   child: TabBarView(controller: _tabController, children: [
+                //     Container(
+                //       color: Colors.red,
+                //     ),
+                //     // Container(
+                //     //   color: Colors.orange,
+                //     // ),
+                //   ]),
+                // ),
+                // Expanded(
+                //   child: SingleChildScrollView(
+                //     padding: const EdgeInsets.all(kDefaultPadding),
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         CircleAvatar(
+                //             maxRadius: 24,
+                //             backgroundColor: Colors.transparent,
+                //             child: viewAbstract.getCardLeadingImage(context)),
+                //         const SizedBox(width: kDefaultPadding),
+                //         Expanded(
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               Row(
+                //                 children: [
+                //                   Expanded(
+                //                     child: Column(
+                //                       crossAxisAlignment: CrossAxisAlignment.start,
+                //                       children: [
+                //                         Text.rich(
+                //                           TextSpan(
+                //                             text: viewAbstract
+                //                                 .getMainHeaderTextOnly(context),
+                //                             style:
+                //                                 Theme.of(context).textTheme.button,
+                //                             children: [
+                //                               TextSpan(
+                //                                   text:
+                //                                       "  <elvia.atkins@gmail.com> to Jerry Torp",
+                //                                   style: Theme.of(context)
+                //                                       .textTheme
+                //                                       .caption),
+                //                             ],
+                //                           ),
+                //                         ),
+                //                         Text(
+                //                           viewAbstract
+                //                               .getMainHeaderLabelTextOnly(context),
+                //                           style:
+                //                               Theme.of(context).textTheme.headline6,
+                //                         )
+                //                       ],
+                //                     ),
+                //                   ),
+                //                   const SizedBox(width: kDefaultPadding / 2),
+                //                   Text(
+                //                     "Today at 15:32",
+                //                     style: Theme.of(context).textTheme.caption,
+                //                   ),
+                //                 ],
+                //               ),
+                //               const SizedBox(height: kDefaultPadding),
+                //               LayoutBuilder(
+                //                 builder: (context, constraints) => SizedBox(
+                //                   width: constraints.maxWidth > 850
+                //                       ? 800
+                //                       : constraints.maxWidth,
+                //                   child: Expanded(
+                //                       child: getBodyWidget(context, viewAbstract)),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // )
+              ],
+            ),
           ),
-          ViewDetailsListWidget(
+          BottomWidgetOnView(
             viewAbstract: viewAbstract,
-          ),
-          if (viewAbstract.getListableFieldName() != null)
-            DataTableBuilder(viewAbstract: viewAbstract),
+          )
+        ]);
+  }
+}
 
-          if (viewAbstract.getTabs(context).isNotEmpty)
-            TabBarWidget(
-              viewAbstract: viewAbstract,
-            )
+class BottomWidgetOnView extends StatelessWidget {
+  ViewAbstract viewAbstract;
+  BottomWidgetOnView({Key? key, required this.viewAbstract}) : super(key: key);
 
-          // Expanded(child: getBodyWidget(context, viewAbstract)),
-          // SizedBox(
-          //     width: double.maxFinite,
-          //     height: 100,
-          //     child: TabBar(
-          //       tabs: tabs,
-          //       controller: _tabController,
-          //     )),
-          // Expanded(
-          //   child: TabBarView(controller: _tabController, children: [
-          //     ...tabs.map((e) => Text("2"))
-          //     // Container(
-          //     //   color: Colors.orange,
-          //     // ),
-          //   ]),
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Material(
+          elevation: 5,
+          child: Container(
+            width: double.maxFinite,
+            height: 100,
+            color: Colors.white,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: SearchCardItem(
+                        viewAbstract: viewAbstract, searchQuery: ""),
+                  ),
+                  Expanded(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(AppLocalizations.of(context)!.add_to_cart),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              // decoration:,
+                              initialValue: viewAbstract
+                                  .getCartItemQuantity()
+                                  .toStringAsFixed(2),
+                            ),
+                          )
+                          // Text(viewAbstract
+                          //     .getCartItemQuantity()
+                          //     .toStringAsFixed(2))
+                        ]),
+                  ),
+                  Container(
+                    width: 150,
+                    height: double.maxFinite,
+                    child: FutureBuilder<bool>(
+                      future:
+                          context.watch<CartProvider>().hasItem(viewAbstract),
 
-          // Divider(thickness: 1),
-          // BaseSharedHeaderDescription(viewAbstract: viewAbstract),
-          // Expanded(
-          //   child: TabBarView(controller: _tabController, children: [
-          //     Container(
-          //       color: Colors.red,
-          //     ),
-          //     // Container(
-          //     //   color: Colors.orange,
-          //     // ),
-          //   ]),
-          // ),
-          // Expanded(
-          //   child: SingleChildScrollView(
-          //     padding: const EdgeInsets.all(kDefaultPadding),
-          //     child: Row(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         CircleAvatar(
-          //             maxRadius: 24,
-          //             backgroundColor: Colors.transparent,
-          //             child: viewAbstract.getCardLeadingImage(context)),
-          //         const SizedBox(width: kDefaultPadding),
-          //         Expanded(
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               Row(
-          //                 children: [
-          //                   Expanded(
-          //                     child: Column(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         Text.rich(
-          //                           TextSpan(
-          //                             text: viewAbstract
-          //                                 .getMainHeaderTextOnly(context),
-          //                             style:
-          //                                 Theme.of(context).textTheme.button,
-          //                             children: [
-          //                               TextSpan(
-          //                                   text:
-          //                                       "  <elvia.atkins@gmail.com> to Jerry Torp",
-          //                                   style: Theme.of(context)
-          //                                       .textTheme
-          //                                       .caption),
-          //                             ],
-          //                           ),
-          //                         ),
-          //                         Text(
-          //                           viewAbstract
-          //                               .getMainHeaderLabelTextOnly(context),
-          //                           style:
-          //                               Theme.of(context).textTheme.headline6,
-          //                         )
-          //                       ],
-          //                     ),
-          //                   ),
-          //                   const SizedBox(width: kDefaultPadding / 2),
-          //                   Text(
-          //                     "Today at 15:32",
-          //                     style: Theme.of(context).textTheme.caption,
-          //                   ),
-          //                 ],
-          //               ),
-          //               const SizedBox(height: kDefaultPadding),
-          //               LayoutBuilder(
-          //                 builder: (context, constraints) => SizedBox(
-          //                   width: constraints.maxWidth > 850
-          //                       ? 800
-          //                       : constraints.maxWidth,
-          //                   child: Expanded(
-          //                       child: getBodyWidget(context, viewAbstract)),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // )
-        ],
-      ),
+                      builder: (context, snapshot) => ElevatedButton(
+                        style: snapshot.data ?? false
+                            ? ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.orange),
+                              )
+                            : null,
+                        onPressed: () {},
+                        child: Text("ADD TO CART"),
+                        // icon: Icon(Icons.plus_one_outlined),
+                        // label: Text("ADD TO CART")
+                      ),
+                      // child: ElevatedButton(
+                      //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
+
+                      //   ButtonStyle():null,
+                      //   onPressed: () {},
+                      //   child: Text("ADD TO CART"),
+                      //   // icon: Icon(Icons.plus_one_outlined),
+                      //   // label: Text("ADD TO CART")
+                      // ),
+                    ),
+                  )
+                ]),
+          )),
     );
   }
 }

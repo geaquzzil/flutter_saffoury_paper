@@ -24,7 +24,7 @@ class ProfilePicturePopupMenu extends StatefulWidget {
 
 class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
   final GlobalKey<PopupMenuButtonState<int>> _key = GlobalKey();
-
+  bool loading = true;
   List<ItemModel> menuItems = [];
 
   final CustomPopupMenuController _controller = CustomPopupMenuController();
@@ -54,15 +54,22 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
       ];
     }
 
-    return CustomPopupMenu(
-      arrowSize: 20,
-      arrowColor: Colors.white,
-      menuBuilder: () => popMenuBuilderListTile(),
-      pressType: PressType.singleClick,
-      verticalMargin: -15,
-      controller: _controller,
-      child: RoundedIconButtonNetwork(
-          size: 25, onTap: () {}, imageUrl: authProvider.getUserImageUrl),
+    return AnimatedSwitcher(
+      transitionBuilder: (child, animation) => ScaleTransition(
+        scale: animation,
+        child: child,
+      ),
+      duration: const Duration(milliseconds: 1000),
+      child: CustomPopupMenu(
+        arrowSize: 20,
+        arrowColor: Colors.white,
+        menuBuilder: () => popMenuBuilderListTile(),
+        pressType: PressType.singleClick,
+        verticalMargin: -15,
+        controller: _controller,
+        child: RoundedIconButtonNetwork(
+            size: 25, onTap: () {}, imageUrl: authProvider.getUserImageUrl),
+      ),
     );
   }
 
