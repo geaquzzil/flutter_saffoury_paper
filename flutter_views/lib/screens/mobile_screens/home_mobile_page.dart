@@ -186,9 +186,9 @@ class _HomeMobilePage extends State<HomeMobilePage> {
       BottomNavigationBarItem(
           icon: Icon(icon), activeIcon: Icon(activeIcon), label: label);
 
-  List<Widget> getBaseActions(BuildContext context) {
-    return [const CartButton()];
-  }
+  // List<Widget> getBaseActions(BuildContext context) {
+  //   return [const CartButton()];
+  // }
 
   void _handleMenuButtonPressed() {
     // NOTICE: Manage Advanced Drawer state through the Controller.

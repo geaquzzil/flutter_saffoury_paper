@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
@@ -21,14 +23,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   Widget getCardLeadingDropdown(BuildContext context) {
     return getCardLeadingCircleAvatar(context);
-  }
-
-  String getCartItemListText(BuildContext context) {
-    return getMainHeaderTextOnly(context);
-  }
-
-  String getCartItemListSubtitle(BuildContext context) {
-    return getMainHeaderLabelTextOnly(context);
   }
 
   String getCardItemDropdownSubtitle(BuildContext context) {
@@ -83,7 +77,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   DismissDirection getDismissibleDirection() {
-    return DismissDirection.horizontal;
+    if (this is CartableDetailItemInterface) {
+      return DismissDirection.horizontal;
+    }
+
+    return DismissDirection.startToEnd;
   }
 
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
@@ -258,7 +256,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           context,
           MaterialPageRoute(
               builder: (context) => PdfPage(
-                    invoiceObj: this as InvoiceGenerator,
+                    invoiceObj: this as PrintableInterface,
                   )));
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);

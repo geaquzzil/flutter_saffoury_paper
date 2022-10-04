@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart'
 import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
-    implements InvoiceGenerator {
+    implements PrintableInterface {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;

@@ -65,7 +65,7 @@ class _HeaderMainState extends State<HeaderMain> {
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),
-                CartPopupWidget(),
+                // CartPopupWidget(),
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),

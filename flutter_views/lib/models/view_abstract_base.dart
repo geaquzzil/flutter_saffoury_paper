@@ -24,9 +24,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
 
   Map<String, String> getFieldLabelMap(BuildContext context);
   Map<String, IconData> getFieldIconDataMap();
-  double getCartItemPrice() => 0;
-  double getCartItemUnitPrice() => 0;
-  double getCartItemQuantity() => 0;
+
 
   String? getDateTextOnly() {
     dynamic value = getFieldValue("date");

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -18,12 +19,7 @@ class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
 
 class _ListCardItemState<T extends ViewAbstract>
     extends State<ListCardItem<T>> {
-  bool isEnable = true;
 
-  Future<void> checkEnable() async {
-    bool result = await context.watch<CartProvider>().hasItem(widget.object);
-    setState(() => isEnable = result); // set the local variable
-  }
 
   @override
   void initState() {
@@ -54,7 +50,6 @@ class _ListCardItemState<T extends ViewAbstract>
           child: Ink(
             color: isSelected ? Colors.white : null,
             child: ListTile(
-                enabled: isEnable,
                 selected: isSelected,
                 onTap: () => widget.object.onCardClicked(context),
                 onLongPress: () => widget.object.onCardLongClicked(context),

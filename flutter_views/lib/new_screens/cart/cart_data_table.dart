@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
@@ -14,7 +15,7 @@ class CartDataTable extends StatefulWidget {
 }
 
 class _CartDataTableState extends State<CartDataTable> {
-  late List<ViewAbstract> list;
+  late List<CartableDetailItemInterface> list;
   int? sortColumnIndex;
   bool isAscending = false;
 
@@ -57,11 +58,11 @@ class _CartDataTableState extends State<CartDataTable> {
               ))
           .toList();
 
-  List<DataRow> getRows(List<ViewAbstract> users) =>
-      users.map((ViewAbstract object) {
+  List<DataRow> getRows(List<CartableDetailItemInterface> users) =>
+      users.map((CartableDetailItemInterface object) {
         List<DataCell> cells = [];
         cells = [
-          DataCell(Text(object.getMainHeaderTextOnly(context))),
+          DataCell(Text(object.getCartItemDescription(context))),
           DataCell(Text(object.getCartItemQuantity().toString()),
               showEditIcon: true),
           DataCell(
@@ -82,8 +83,8 @@ class _CartDataTableState extends State<CartDataTable> {
     if (columnIndex == 0) {
       list.sort((obj1, obj2) => compareString(
           ascending,
-          obj1.getCartItemListText(context),
-          obj2.getCartItemListText(context)));
+          obj1.getCartItemDescription(context),
+          obj2.getCartItemDescription(context)));
     } else if (columnIndex == 1) {
       list.sort((obj1, obj2) => compareDouble(
           ascending, obj1.getCartItemQuantity(), obj2.getCartItemQuantity()));

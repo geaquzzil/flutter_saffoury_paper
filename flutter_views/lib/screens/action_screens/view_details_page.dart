@@ -208,12 +208,12 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
         right: 37,
         bottom: 30,
       ),
-      child: PrimaryButton(
-        onTap: () {
-          context.read<CartProvider>().add(object);
-        },
-        text: "Buy Now",
-      ),
+      // child: PrimaryButton(
+      //   onTap: () {
+      //     context.read<CartProvider>().add(object);
+      //   },
+      //   text: "Buy Now",
+      // ),
     );
   }
 }

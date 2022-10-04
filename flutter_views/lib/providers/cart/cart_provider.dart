@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 
 import '../../models/view_abstract.dart';
 
 class CartProvider with ChangeNotifier {
-  List<ViewAbstract> list = [];
+  List<CartableDetailItemInterface> list = [];
 
-  List<ViewAbstract> get getList => list;
+  List<CartableDetailItemInterface> get getList => list;
 
   int get getCount => list.length;
 
@@ -20,18 +21,18 @@ class CartProvider with ChangeNotifier {
       .map((item) => item.getCartItemQuantity())
       .reduce((value, element) => value + element);
 
-  void add(ViewAbstract product) {
+  void add(CartableDetailItemInterface product) {
     list.add(product);
     notifyListeners();
   }
 
-  void remove(ViewAbstract product) {
+  void remove(CartableDetailItemInterface product) {
     list.remove(product);
     notifyListeners();
   }
 
-  Future<bool> hasItem(ViewAbstract product) async {
-    return list.firstWhereOrNull((p0) => p0.isEquals(product)) != null;
+  Future<bool> hasItem(CartableDetailItemInterface product) async {
+    return list.firstWhereOrNull((p0) => p0.isEqualsCartItem(product)) != null;
   }
 
   void clear() {

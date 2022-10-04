@@ -71,13 +71,12 @@ class BaseHomeScreenLayout extends StatelessWidget {
           Expanded(
               flex: size.width > 1340 ? 8 : 10,
               child: Container(
-                  padding: EdgeInsets.all(20),
+
+
+                  padding: EdgeInsets.all(10),
                   decoration: getShadowBoxDecoration(),
                   child: const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: BaseSharedDetailsView(),
-                    ),
+                    child: BaseSharedDetailsView(),
                   )))
       ]),
     );

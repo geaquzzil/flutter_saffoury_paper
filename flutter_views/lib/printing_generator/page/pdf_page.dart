@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:printing/printing.dart';
@@ -6,7 +7,7 @@ import 'package:printing/printing.dart';
 import '../pdf_api.dart';
 
 class PdfPage extends StatefulWidget {
-  InvoiceGenerator invoiceObj;
+  PrintableInterface invoiceObj;
 
   PdfPage({super.key, required this.invoiceObj});
 

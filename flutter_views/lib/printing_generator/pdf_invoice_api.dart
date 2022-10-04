@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_api.dart';
 import 'package:flutter_view_controller/printing_generator/utils.dart';
@@ -20,22 +21,9 @@ class TitleAndDescriptionInfo {
   TitleAndDescriptionInfo(this.title, this.description);
 }
 
-abstract class InvoiceGenerator {
-  String getInvoiceTitle(
-      material.BuildContext context, PrintCommandAbstract? pca);
 
-  ///invoice number ...etc
-  ///'Invoice Number:',
-  /// 'Invoice Date:',
-  /// 'Payment Terms:',
-  ///'Due Date:'
-  List<TitleAndDescriptionInfo> getInvoiceInfo(
-      material.BuildContext context, PrintCommandAbstract? pca);
-  List<TitleAndDescriptionInfo> getInvoiceTotal(
-      material.BuildContext context, PrintCommandAbstract? pca);
-}
 
-class PdfInvoiceApi<T extends InvoiceGenerator> {
+class PdfInvoiceApi<T extends PrintableInterface> {
   material.BuildContext context;
   T printObj;
   PrintCommandAbstract? printCommand;

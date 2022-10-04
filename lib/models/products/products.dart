@@ -9,6 +9,7 @@ import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -24,7 +25,8 @@ part 'products.g.dart';
   explicitToJson: true,
 )
 @reflector
-class Product extends ViewAbstract<Product> {
+class Product extends ViewAbstract<Product>
+    implements CartableDetailItemInterface {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -309,6 +311,29 @@ class Product extends ViewAbstract<Product> {
       PrintProduct(printObject: this);
 
   static String? intFromString(dynamic number) => number?.toString();
+
+  @override
+  String getCartItemDescription(BuildContext context) =>
+      getMainHeaderTextOnly(context);
+
+  @override
+  bool isEqualsCartItem(CartableDetailItemInterface other) {
+    return isEquals(other as ViewAbstract);
+  }
+
+  @override
+  void onCartItemAdded(BuildContext context) {
+    // TODO: implement onCartItemAdded
+  }
+
+  @override
+  void onCartItemRemoved(BuildContext context) {
+    // TODO: implement onCartItemRemoved
+  }
+
+  @override
+  String getCartItemSubtitle(BuildContext context) =>
+      getMainHeaderLabelTextOnly(context);
 }
 
 // enum ProductStatus {
