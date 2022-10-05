@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/interfaces/printable_interface.dart';
+import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
+abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
+    implements PrintableInterfaceDetails {
   // int? ProductID;
   // int? WarehouseID;
 
@@ -127,6 +130,24 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T> {
     return products?.getImageUrl(context);
   }
 
+  @override
+  Map<String, String> getInvoiceTableHeaderAndContent(
+          BuildContext context, PrintCommandAbstract? pca) =>
+      {
+        AppLocalizations.of(context)!.description:
+            "${products?.getMainHeaderTextOnly(context)} \n sadsada\ndsadas" ??
+                "",
+        AppLocalizations.of(context)!.gsm:
+            products?.gsms?.gsm.toString() ?? "0",
+        AppLocalizations.of(context)!.quantity:
+            quantity?.toStringAsFixed(2) ?? "0",
+        AppLocalizations.of(context)!.unit_price:
+            unitPrice?.toStringAsFixed(2) ?? "0",
+        AppLocalizations.of(context)!.discount:
+            discount?.toStringAsFixed(2) ?? "0",
+        AppLocalizations.of(context)!.total_price:
+            price?.toStringAsFixed(2) ?? "0",
+      };
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
 

@@ -195,4 +195,8 @@ class User<T> extends AuthUser {
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;
+      
+        @override
+        String getMainHeaderLabelTextOnly(BuildContext context)  =>
+      AppLocalizations.of(context)!.users;
 }

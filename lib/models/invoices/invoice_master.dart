@@ -148,15 +148,58 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   String getInvoiceTitle(BuildContext context, PrintCommandAbstract? pca) =>
       getMainHeaderLabelTextOnly(context).toUpperCase();
   @override
-  List<TitleAndDescriptionInfo> getInvoiceInfo(
+  List<List<TitleAndDescriptionInfoWithIcon>> getInvoiceInfo(
       BuildContext context, PrintCommandAbstract? pca) {
+    return [
+      getInvoicDesFirstRow(context, pca),
+      getInvoiceDesSecRow(context, pca)
+    ];
+  }
+
+  @override
+  List<PrintableInterfaceDetails> getInvoiceDetailsList() {
+    if (runtimeType == Order) {
+      return (this as Order).orders_details ?? [];
+    }
     return [];
+  }
+
+  List<TitleAndDescriptionInfoWithIcon> getInvoiceDesSecRow(
+      BuildContext context, PrintCommandAbstract? pca) {
+    return [
+      TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.iD,
+          customers?.iD.toString() ?? "", Icons.numbers),
+      TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.date,
+          customers?.date.toString() ?? "", Icons.date_range),
+    ];
+  }
+
+  List<TitleAndDescriptionInfoWithIcon> getInvoicDesFirstRow(
+      BuildContext context, PrintCommandAbstract? pca) {
+    if (customers == null) return [];
+    return [
+      TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.mr,
+          customers?.name ?? "", Icons.account_circle_rounded),
+      if (customers?.address != null)
+        TitleAndDescriptionInfoWithIcon(
+            AppLocalizations.of(context)!.addressInfo,
+            customers?.name ?? "",
+            Icons.map),
+      if (customers?.phone != null)
+        TitleAndDescriptionInfoWithIcon(
+            AppLocalizations.of(context)!.phone_number,
+            customers?.phone ?? "",
+            Icons.phone),
+    ];
   }
 
   @override
   List<TitleAndDescriptionInfo> getInvoiceTotal(
       BuildContext context, PrintCommandAbstract? pca) {
-    return [];
+    return [
+      TitleAndDescriptionInfo("TOTAL", "@132!"),
+      TitleAndDescriptionInfo("SUB TOTAL", "@132!"),
+    ];
   }
 }
 

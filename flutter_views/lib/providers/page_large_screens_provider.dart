@@ -22,4 +22,4 @@ class LargeScreenPageProvider with ChangeNotifier {
   }
 }
 
-enum CurrentPage { list, notifications, cart, settings }
+enum CurrentPage { list, notifications, cart, settings,dashboard }

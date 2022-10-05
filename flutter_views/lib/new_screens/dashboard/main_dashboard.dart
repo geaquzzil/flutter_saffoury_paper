@@ -2,14 +2,17 @@ import 'dart:math';
 
 import 'package:dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/storage.dart';
 
 import 'add_dialog.dart';
 import 'data_widget.dart';
 
 class DashboardWidget extends StatefulWidget {
+  ViewAbstract viewAbstract;
+
   ///
-  const DashboardWidget({Key? key}) : super(key: key);
+   DashboardWidget({Key? key,required this.viewAbstract}) : super(key: key);
 
   ///
   @override

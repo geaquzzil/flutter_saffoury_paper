@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
@@ -102,7 +103,7 @@ void main() async {
     Purchases(),
     Customer(),
     Employee(),
-    ProductType()
+    ProductType(),Dashboard()
   ]);
   try {
     runApp(MultiProvider(providers: [

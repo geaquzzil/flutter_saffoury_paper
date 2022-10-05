@@ -1,8 +1,11 @@
+import 'package:easy_web_view/easy_web_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:printing/printing.dart';
+// import 'package:webcontent_converter/webcontent_converter.dart';
 
 import '../pdf_api.dart';
 
@@ -14,23 +17,75 @@ class PdfPage extends StatefulWidget {
   @override
   _PdfPageState createState() => _PdfPageState();
 }
+// void printPage() async {
+//   // get the html from the current page
+//   String html = await _controller.runJavascriptReturningResult(
+//       "encodeURIComponent(document.documentElement.outerHTML)");
+//   html = Uri.decodeComponent(html);
+//   // there would be `"` at the beginning and the end, so remove it
+//   html = html.substring(1, html.length - 1);
 
+//   // get the pdf of the html
+//   final pdf = await Printing.convertHtml(
+//     format: const PdfPageFormat(
+//       100 * PdfPageFormat.mm,
+//       50 * PdfPageFormat.mm,
+//       // marginLeft: 5 * PdfPageFormat.mm,
+//       // marginRight: 5 * PdfPageFormat.mm,
+//     ),
+//     html: htmlStr,
+//   );
+//   // the dpi is the resolution of the pdf, it's important if the page size is small, otherwise you can ignore it
+//   const dpi = 288.0;
+
+//   // transform pdf to image so you can print it directly
+//   await for (var page in Printing.raster(pdf, dpi: dpi)) {
+//     final imgData = await page.toPng();
+//     // personally I'm using sunmi printer, you'll need to change to your personnel function
+//     await SunmiPrinter.printImage(Uint8List.fromList(imgData));
+//   }
+// }
 class _PdfPageState extends State<PdfPage> {
+  // Widget getWebContentConverter(BuildContext context) {
+  //   return FutureBuilder<Uint8List?>(
+  //     builder: (context, snapshot) {
+  //       return PdfPreview(build: (format) async {
+  //         final pdf = PdfInvoiceApi(context, widget.invoiceObj);
+  //         return pdf.generateFromImage(snapshot.data);
+  //       }
+  //           // await Printing.convertHtml(html: snapshot.data.body)
+
+  //           );
+  //     },
+  //     future: WebcontentConverter.webUriToImage(
+  //         uri: "https://www.saffoury.com/SaffouryPaper2/print/index.php"),
+  //   );
+  // }
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text("title"),
-        centerTitle: true,
-      ),
-      body: PdfPreview(build: (format) async {
-        final pdf = PdfInvoiceApi(context, widget.invoiceObj);
-        return pdf.generate();
-      }
-          // await Printing.convertHtml(html: snapshot.data.body)
+  Widget build(BuildContext context) {
+    Widget body = PdfPreview(build: (format) async {
+      final pdf = PdfInvoiceApi(context, widget.invoiceObj);
+      return pdf.generate();
+    });
+    // Widget body = EasyWebView(
+    //   onLoaded: (controller) {
+    //     // controller.postMessageWeb(message, targetOrigin)
+    //   },
+    //   src: "https://www.saffoury.com/SaffouryPaper2/print/index.php",
+    // );
 
-          ));
+    // Text("DSA");
+    // Widget body = getWebContentConverter(context);
 
+    return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: Text("title"),
+          centerTitle: true,
+        ),
+        body: body);
+  }
   //   Container(
   //     padding: EdgeInsets.all(32),
   //     child: Center(

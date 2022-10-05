@@ -12,40 +12,61 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
-
+import 'package:flutter/material.dart' as mt;
 import 'svg/headers/a4.dart';
-
-class TitleAndDescriptionInfo {
-  String title;
-  String description;
-  TitleAndDescriptionInfo(this.title, this.description);
-}
-
-
 
 class PdfInvoiceApi<T extends PrintableInterface> {
   material.BuildContext context;
   T printObj;
   PrintCommandAbstract? printCommand;
   PdfInvoiceApi(this.context, this.printObj, {this.printCommand});
-
-  Future<Uint8List> generate() async {
+  Future<Uint8List> generateFromImage(Uint8List? list) {
     final pdf = Document();
 
-    final netImage = await networkImage(
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=434343');
     pdf.addPage(MultiPage(
       build: (context) => [
         // buildHeader(),
-        pw.Image(netImage),
+        if (list != null) pw.Image(MemoryImage(list)),
 
         buildInvoiceInfo(),
         // buildSubHeaderInfo(invoice),
         SizedBox(height: 3 * PdfPageFormat.cm),
         buildTitle(),
         // buildInvoiceTable(),
-        Divider(),
-        // buildTotal(),
+        // Divider(),
+        buildTotal(),
+      ],
+      // footer: (context) => buildFooter(invoice),
+    ));
+    return pdf.save();
+    // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+  }
+
+  Future<Uint8List> generate() async {
+    var myTheme = ThemeData.withFont(
+        icons: await PdfGoogleFonts.materialIcons(),
+        base: await PdfGoogleFonts.tajawalRegular(),
+        bold: await PdfGoogleFonts.tajawalBold(),
+        italic: await PdfGoogleFonts.tajawalMedium(),
+        boldItalic: await PdfGoogleFonts.tajawalBold());
+    final pdf = Document(theme: myTheme);
+    // final netImage = await networkImage(
+    //     'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=434343');
+    pdf.addPage(MultiPage(
+      margin: EdgeInsets.zero,
+      // pageTheme: ,
+      build: (context) => [
+        // buildHeader(),
+        // pw.Image(netImage),
+
+        buildInvoiceInfo(),
+        // buildSubHeaderInfo(invoice),
+        // SizedBox(height: 3 * PdfPageFormat.cm),
+        buildTitle(),
+        buildInvoiceTable(),
+        // Divider(),
+        // buildTotalWithTable(),
+        buildTotal()
       ],
       // footer: (context) => buildFooter(invoice),
     ));
@@ -99,19 +120,49 @@ class PdfInvoiceApi<T extends PrintableInterface> {
   //     );
 
   Widget buildInvoiceInfo() {
-    List<TitleAndDescriptionInfo> inf =
+    List<List<TitleAndDescriptionInfoWithIcon>> inf =
         printObj.getInvoiceInfo(context, printCommand);
-    final titles = inf.map((e) => e.title).toList();
-    final description = inf.map((e) => e.description).toList();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: List.generate(titles.length, (index) {
-        final title = titles[index];
-        final value = description[index];
-        return buildText(title: title, value: value, width: 200);
-      }),
-    );
+    return Container(
+        width: double.infinity,
+        color: PdfColors.grey50,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: inf.map((e) {
+              // inf.firs==
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: e
+                      .map((item) => Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Container(
+                              width: 200,
+                              // width: double.infinity,
+                              child: Column(
+                                  // crossAxisAlignment: ,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          IconData(item.icon.codePoint),
+                                        ),
+                                        Text(item.title),
+                                      ],
+                                    ),
+                                    Text(
+                                      item.description,
+                                      textDirection: TextDirection.rtl,
+                                    ),
+                                  ]))))
+                      .toList());
+            }).toList()));
   }
 
   Widget buildTitle() => Column(
@@ -126,115 +177,196 @@ class PdfInvoiceApi<T extends PrintableInterface> {
           // SizedBox(height: 0.8 * PdfPageFormat.cm),
         ],
       );
+  // List<String> getTotalText(int colCount) {
+  //  return List.generate(colCount, (index) =>
 
-//    Widget buildInvoiceTable() {
-//     final headers = [
-//       'Description',
-//       'Date',
-//       'Quantity',
-//       'Unit Price',
-//       'VAT',
-//       'Total'
-//     ];
-//     final data = invoice.items.map((item) {
-//       final total = item.unitPrice * item.quantity * (1 + item.vat);
+  //  );
+  // }
+  Widget buildInvoiceTable() {
+    List<PrintableInterfaceDetails> details = printObj.getInvoiceDetailsList();
 
-//       return [
-//         item.description,
-//         Utils.formatDate(item.date),
-//         '${item.quantity}',
-//         '\$ ${item.unitPrice}',
-//         '${item.vat} %',
-//         '\$ ${total.toStringAsFixed(2)}',
-//       ];
-//     }).toList();
+    PrintableInterfaceDetails head = details[0];
+    final headers = head
+        .getInvoiceTableHeaderAndContent(context, printCommand)
+        .keys
+        .toList();
 
-//     return Table.fromTextArray(
-//       headers: headers,
-//       data: data,
-//       border: null,
-//       headerStyle: TextStyle(fontWeight: FontWeight.bold),
-//       headerDecoration: BoxDecoration(color: PdfColors.grey300),
-//       cellHeight: 30,
-//       cellAlignments: {
-//         0: Alignment.centerLeft,
-//         1: Alignment.centerRight,
-//         2: Alignment.centerRight,
-//         3: Alignment.centerRight,
-//         4: Alignment.centerRight,
-//         5: Alignment.centerRight,
-//       },
-//     );
-//   }
+    final data = details
+        .map((e) => e
+            .getInvoiceTableHeaderAndContent(context, printCommand)
+            .values
+            .toList())
+        .toList();
 
-//  Widget buildTotal() {
-//     final netTotal = invoice.items
-//         .map((item) => item.unitPrice * item.quantity)
-//         .reduce((item1, item2) => item1 + item2);
-//     final vatPercent = invoice.items.first.vat;
-//     final vat = netTotal * vatPercent;
-//     final total = netTotal + vat;
+    // data.addAll(getTotalText(headers.length - 1));
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Table.fromTextArray(
+          
+            headers: headers,
+            data: data,
+            border: null,
+            cellDecoration: (index, data, rowNum) => BoxDecoration(
+                color: PdfColors.white,
+                border: Border(
+                    bottom: BorderSide(
+                  //                    <--- top side
+                  color: PdfColors.grey,
+                  // width: 1.0,
+                ))),
+            headerCellDecoration: const BoxDecoration(
+                color: PdfColors.white,
+                border: Border(
+                    bottom: BorderSide(
+                  //                    <--- top side
+                  color: PdfColors.green,
+                  // width: 2.0,
+                ))),
+            //this is content table text color
+            cellStyle: TextStyle(color: PdfColors.black),
+            headerStyle: TextStyle(
+                color: PdfColors.green,
+                fontWeight: FontWeight.bold,
+                background: BoxDecoration(color: PdfColors.white)),
+            headerDecoration: BoxDecoration(color: PdfColors.grey300),
+            cellHeight: 30,
+            cellAlignments: Map.fromIterable(headers, key: (e) {
+              int idx = headers.indexOf(e);
+              return idx;
+            }, value: (e) {
+              int idx = headers.indexOf(e);
+              return idx == 0
+                  ? Alignment.centerLeft
+                  : (idx == headers.length - 1
+                      ? Alignment.centerRight
+                      : Alignment.center);
+            })));
+  }
 
-//     return Container(
-//       alignment: Alignment.centerRight,
-//       child: Row(
-//         children: [
-//           Spacer(flex: 6),
-//           Expanded(
-//             flex: 4,
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildText(
-//                   title: 'Net total',
-//                   value: Utils.formatPrice(netTotal),
-//                   unite: true,
-//                 ),
-//                 buildText(
-//                   title: 'Vat ${vatPercent * 100} %',
-//                   value: Utils.formatPrice(vat),
-//                   unite: true,
-//                 ),
-//                 Divider(),
-//                 buildText(
-//                   title: 'Total amount due',
-//                   titleStyle: TextStyle(
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                   value: Utils.formatPrice(total),
-//                   unite: true,
-//                 ),
-//                 SizedBox(height: 2 * PdfPageFormat.mm),
-//                 Container(height: 1, color: PdfColors.grey400),
-//                 SizedBox(height: 0.5 * PdfPageFormat.mm),
-//                 Container(height: 1, color: PdfColors.grey400),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
+  Widget buildTitleOnInvoice(String title) {
+    return Text(title,
+        style: TextStyle(fontWeight: FontWeight.bold, color: PdfColors.green));
+  }
 
-  static buildSimpleText({
-    required String title,
-    required String value,
-  }) {
-    final style = TextStyle(fontWeight: FontWeight.bold);
-
+  Widget buildInvoiceBottomInfoWithQrCode() {
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: pw.CrossAxisAlignment.end,
-      children: [
-        Text(title, style: style),
-        SizedBox(width: 2 * PdfPageFormat.mm),
-        Text(value),
-      ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(children: [
+            Text("abou wael labalaidi : 21321321"),
+            Text("abou number labalaidi : 231iD"),
+          ]),
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Container(
+                width: 50,
+                height: 50,
+                child: BarcodeWidget(
+                  barcode: Barcode.qrCode(),
+                  data: "invoice.infor",
+                )),
+            Text("INV-823-2022")
+          ])
+        ]);
+  }
+
+  Widget buildInvoiceBottom() {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildTitleOnInvoice("ACCOUNT INFO"),
+              buildInvoiceBottomInfoWithQrCode(),
+              SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
+              buildTitleOnInvoice("Terms and conditions"),
+              Text(
+                  "1- Please quote invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of purchase\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments.",
+                  style: TextStyle(fontSize: 8, color: PdfColors.grey700)),
+              SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
+              buildTitleOnInvoice("Additional notes"),
+              Text(
+                  "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
+                  style: TextStyle(fontSize: 8, color: PdfColors.grey700))
+            ]));
+  }
+
+  Widget buildTotal() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      alignment: Alignment.centerRight,
+      child: Row(
+        children: [
+          Expanded(flex: 2, child: buildInvoiceBottom()),
+          Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(color: PdfColors.grey),
+                // color: PdfColors.grey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...printObj
+                        .getInvoiceTotal(context, printCommand)
+                        .map(
+                          (e) => buildTotalText(
+                            title: e.title,
+                            value: e.description,
+                            unite: true,
+                          ),
+                        )
+                        .toList(),
+                    buildTotalText(
+                      title: 'Net total',
+                      value: " ",
+                      unite: true,
+                    ),
+                    buildTotalText(
+                      title: 'Vat ${3 * 100} %',
+                      value: "V",
+                      unite: true,
+                    ),
+                    Divider(),
+                    buildTotalText(
+                      title: 'Total amount due',
+                      titleStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      value: Utils.formatPrice(2321),
+                      unite: true,
+                    ),
+                    SizedBox(height: 2 * PdfPageFormat.mm),
+                    Container(height: 1, color: PdfColors.grey400),
+                    SizedBox(height: 0.5 * PdfPageFormat.mm),
+                    Container(height: 1, color: PdfColors.grey400),
+                  ],
+                ),
+              )),
+        ],
+      ),
     );
   }
 
-  static buildText({
+//   static buildSimpleText({
+//     required String title,
+//     required String value,
+//   }) {
+//     final style = TextStyle(fontWeight: FontWeight.bold);
+
+//     return Row(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: pw.CrossAxisAlignment.end,
+//       children: [
+//         Text(title, style: style),
+//         SizedBox(width: 2 * PdfPageFormat.mm),
+//         Text(value),
+//       ],
+//     );
+//   }
+
+  static buildTotalText({
     required String title,
     required String value,
     double width = double.infinity,
@@ -245,12 +377,82 @@ class PdfInvoiceApi<T extends PrintableInterface> {
 
     return Container(
       width: width,
+      height: 25,
+      decoration: getDividerBetweenContent(),
       child: Row(
         children: [
           Expanded(child: Text(title, style: style)),
-          Text(value, style: unite ? style : null),
+          // RichText(text: text)
+          Text(
+            value,
+            style: unite ? style : null,
+            textDirection: TextDirection.rtl,
+          ),
+          // Html.fromDom(data: "<b>$value</b>")
         ],
       ),
     );
+  }
+
+  static pw.BoxDecoration getDividerBetweenContent() {
+    return const BoxDecoration(
+        color: PdfColors.white,
+        border: Border(
+            bottom: BorderSide(
+          //                    <--- top side
+          color: PdfColors.grey,
+          width: 1.0,
+        )));
+  }
+}
+
+class _Block extends pw.StatelessWidget {
+  _Block({
+    required this.title,
+    this.icon,
+  });
+
+  final String title;
+
+  final pw.IconData? icon;
+
+  @override
+  pw.Widget build(pw.Context context) {
+    return pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: <pw.Widget>[
+          pw.Row(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: <pw.Widget>[
+                pw.Container(
+                  width: 6,
+                  height: 6,
+                  margin: const pw.EdgeInsets.only(top: 5.5, left: 2, right: 5),
+                  decoration: const pw.BoxDecoration(
+                    color: PdfColors.grey,
+                    shape: pw.BoxShape.circle,
+                  ),
+                ),
+                pw.Text(title,
+                    style: pw.Theme.of(context)
+                        .defaultTextStyle
+                        .copyWith(fontWeight: pw.FontWeight.bold)),
+                pw.Spacer(),
+                if (icon != null)
+                  pw.Icon(icon!, color: PdfColors.grey, size: 18),
+              ]),
+          pw.Container(
+            decoration: const pw.BoxDecoration(
+                border: pw.Border(
+                    left: pw.BorderSide(color: PdfColors.grey, width: 2))),
+            padding: const pw.EdgeInsets.only(left: 10, top: 5, bottom: 5),
+            margin: const pw.EdgeInsets.only(left: 5),
+            child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: <pw.Widget>[
+                  pw.Lorem(length: 20),
+                ]),
+          ),
+        ]);
   }
 }

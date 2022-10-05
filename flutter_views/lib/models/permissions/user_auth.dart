@@ -182,11 +182,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     throw UnimplementedError();
   }
 
-  @override
-  String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
-    throw UnimplementedError();
-  }
 
   @override
   String getSortByFieldName() {
@@ -201,6 +196,12 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     // TODO: implement getMainDrawerGroupName
+    throw UnimplementedError();
+  }
+  
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) {
+    // TODO: implement getMainHeaderLabelTextOnly
     throw UnimplementedError();
   }
 }
