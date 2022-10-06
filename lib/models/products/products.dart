@@ -334,6 +334,14 @@ class Product extends ViewAbstract<Product>
   @override
   String getCartItemSubtitle(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
+
+  String? getNameString() {
+    return products_types?.name;
+  }
+
+  String? getSizeString(BuildContext context) {
+    return sizes?.getMainHeaderTextOnly(context);
+  }
 }
 
 // enum ProductStatus {

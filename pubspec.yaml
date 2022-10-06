@@ -55,11 +55,14 @@ dependencies:
   custom_pop_up_menu: ^1.2.4
   form_builder_validators: ^8.2.0
   path_provider: ^2.0.11
-  file_picker: ^5.0.1
+  # file_picker: ^5.0.1
   jsonize: ^1.5.0
   flutter_html: ^3.0.0-alpha.5
   printing: ^5.9.3
   window_manager: ^0.2.7
+  number_to_character: ^0.0.11
+  # hid_windows: ^0.1.0
+  # hid: ^0.1.6
   
   
 dev_dependencies:

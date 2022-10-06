@@ -3914,6 +3914,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shipping'**
   String get shipping;
+
+  /// No description provided for @subTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub total'**
+  String get subTotal;
+
+  /// No description provided for @grandTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Grand total'**
+  String get grandTotal;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

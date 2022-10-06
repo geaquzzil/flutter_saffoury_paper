@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
+import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
-
 
 class PdfPage extends StatefulWidget {
   PrintableInterface invoiceObj;
@@ -60,10 +60,17 @@ class _PdfPageState extends State<PdfPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget body = PdfPreview(build: (format) async {
-      final pdf = PdfInvoiceApi(context, widget.invoiceObj);
-      return pdf.generate(format);
-    });
+    Widget body = PdfPreview(
+        pdfFileName: widget.invoiceObj.getInvoiceQrCodeID(),
+        shareActionExtraEmails: ["info@saffoury.com"],
+        initialPageFormat: PdfPageFormat.a4,
+        canChangePageFormat: true,
+        canChangeOrientation: true,
+        // shouldRepaint: ,
+        build: (format) async {
+          final pdf = PdfInvoiceApi(context, widget.invoiceObj);
+          return pdf.generate(format);
+        });
     // Widget body = EasyWebView(
     //   onLoaded: (controller) {
     //     // controller.postMessageWeb(message, targetOrigin)

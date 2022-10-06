@@ -649,5 +649,7 @@
 ,  "enter":"Enter"
 ,"checkout":"Check out",
   "tax": "Tax",
-  "shipping":"Shipping"
+  "shipping":"Shipping",
+    "subTotal":"Sub total",
+  "grandTotal":"Grand total"
 }

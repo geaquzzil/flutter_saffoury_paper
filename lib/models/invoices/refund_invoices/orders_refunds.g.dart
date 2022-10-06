@@ -31,7 +31,14 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
           ?.map((e) => OrderRefundDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..orders_refunds_order_details_count =
-      json['orders_refunds_order_details_count'] as int?;
+      json['orders_refunds_order_details_count'] as int?
+    ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
+  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+  ..extendedRefundPrice =
+      InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
 
 Map<String, dynamic> _$OrderRefundToJson(OrderRefund instance) =>
     <String, dynamic>{

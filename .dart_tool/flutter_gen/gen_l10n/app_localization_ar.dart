@@ -1914,4 +1914,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get shipping => 'نقل ومواصلات';
+
+  @override
+  String get subTotal => 'المجموع الجزئي';
+
+  @override
+  String get grandTotal => 'المجموع العام';
 }

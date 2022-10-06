@@ -14,6 +14,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:intl/intl.dart' as intl;
 
 class PdfInvoiceApi<T extends PrintableInterface> {
   material.BuildContext context;
@@ -41,17 +42,18 @@ class PdfInvoiceApi<T extends PrintableInterface> {
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
+
   Future<pw.ThemeData> getThemeData() async {
-return ThemeData.withFont(
+    return ThemeData.withFont(
         icons: await PdfGoogleFonts.materialIcons(),
         base: await PdfGoogleFonts.tajawalRegular(),
         bold: await PdfGoogleFonts.tajawalBold(),
         italic: await PdfGoogleFonts.tajawalMedium(),
         boldItalic: await PdfGoogleFonts.tajawalBold());
   }
-  Future<Widget> buildHeader()async=>
-  pw.Image( await networkImage(
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getInvoicePrimaryColor()}&darkColor=${printObj.getInvoiceSecondaryColor()}'));
+
+  Future<Widget> buildHeader() async => pw.Image(await networkImage(
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getInvoicePrimaryColor()}&darkColor=${printObj.getInvoiceSecondaryColor()}'));
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
@@ -59,28 +61,33 @@ return ThemeData.withFont(
 
     final pdf = Document(theme: myTheme);
     pdf.addPage(MultiPage(
-      
       pageFormat: format,
       margin: EdgeInsets.zero,
+
       // pageTheme: ,
       build: (context) => [
-      header,
+        Stack(alignment: Alignment.bottomRight, fit: StackFit.loose,
+            // alignment: ,
+            children: [header, buildTitle()]),
+        // header,
         buildInvoiceMainInfoHeader(),
+
+        SizedBox(height: .5 * (PdfPageFormat.cm)),
         buildInvoiceMainTable(),
-        buildMainTotal()
+        buildMainTotal(),
       ],
-      // footer: (context) => buildFooter(invoice),
+      footer: (context) => buildFooter(),
     ));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
   Widget buildInvoiceMainInfoHeader() {
-    List<List<TitleAndDescriptionInfoWithIcon>> inf =
+    List<List<InvoiceHeaderTitleAndDescriptionInfo>> inf =
         printObj.getInvoiceInfo(context, printCommand);
     return Container(
         width: double.infinity,
-        color: PdfColors.grey50,
+        color: PdfColors.grey200,
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +101,7 @@ return ThemeData.withFont(
             }).toList()));
   }
 
-  pw.Padding buildInvoiceInfoItem(TitleAndDescriptionInfoWithIcon item) {
+  pw.Padding buildInvoiceInfoItem(InvoiceHeaderTitleAndDescriptionInfo item) {
     return Padding(
         padding: EdgeInsets.all(5),
         child: Container(
@@ -106,14 +113,12 @@ return ThemeData.withFont(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buildTextWithIcon(item),
-                  Text(
-                    item.description,
-                    textDirection: TextDirection.rtl,
-                  ),
+                  Text(item.description,
+                      textDirection: getTextDirection(item.description)),
                 ])));
   }
 
-  pw.Row buildTextWithIcon(TitleAndDescriptionInfoWithIcon item) {
+  pw.Row buildTextWithIcon(InvoiceHeaderTitleAndDescriptionInfo item) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,7 +127,7 @@ return ThemeData.withFont(
         Icon(
           color: PdfColors.grey,
           size: 15,
-          IconData(item.icon.codePoint),
+          IconData(item.icon?.codePoint ?? 0),
         ),
         SizedBox(width: 0.2 * PdfPageFormat.cm),
         Text(item.title),
@@ -130,23 +135,14 @@ return ThemeData.withFont(
     );
   }
 
-  Widget buildTitle() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            printObj.getInvoiceTitle(context, printCommand),
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 0.8 * PdfPageFormat.cm),
-          // Text(invoice.info.description),
-          // SizedBox(height: 0.8 * PdfPageFormat.cm),
-        ],
-      );
-  // List<String> getTotalText(int colCount) {
-  //  return List.generate(colCount, (index) =>
-
-  //  );
-  // }
+  Widget buildTitle() => Padding(
+      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 5),
+      child: Text(
+        printObj.getInvoiceTitle(context, printCommand),
+        style: TextStyle(
+            fontSize: 20,
+            color: PdfColor.fromHex(printObj.getInvoicePrimaryColor())),
+      ));
   Widget buildInvoiceMainTable() {
     List<PrintableInterfaceDetails> details = printObj.getInvoiceDetailsList();
 
@@ -154,6 +150,7 @@ return ThemeData.withFont(
     final headers = head
         .getInvoiceTableHeaderAndContent(context, printCommand)
         .keys
+        .map((e) => e.toUpperCase())
         .toList();
 
     final data = details
@@ -165,7 +162,7 @@ return ThemeData.withFont(
 
     // data.addAll(getTotalText(headers.length - 1));
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Table.fromTextArray(
             headers: headers,
             data: data,
@@ -217,21 +214,29 @@ return ThemeData.withFont(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: printObj
+                  .getInvoiceAccountInfoInBottom(context, printCommand)
+                  .map((e) => buildBottomAccountInfo(
+                      title: e.title, value: e.description))
+                  .toList()),
+          // BarcodeWidget(
+          //   height: 50,
+          //   width: 50,
+          //   barcode: Barcode.qrCode(),
+          //   data: printObj.getInvoiceQrCode(),
+          // ),
           Column(children: [
-            Text("${AppLocalizations.of(context)!.name}
-              
-              "abou wael labalaidi : 21321321"),
-            Text("abou number labalaidi : 231iD"),
-          ]),
-          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Container(
-                width: 50,
-                height: 50,
-                child: BarcodeWidget(
-                  barcode: Barcode.qrCode(),
-                  data: printObj.getInvoiceQrCode(),
-                )),
-            Text("INV-823-2022")
+            BarcodeWidget(
+              height: 50,
+              width: 50,
+              barcode: Barcode.qrCode(),
+              data: printObj.getInvoiceQrCode(),
+            ),
+            SizedBox(height: .1 * (PdfPageFormat.cm)),
+            Text(printObj.getInvoiceQrCodeID(), style: TextStyle(fontSize: 9))
           ])
         ]);
   }
@@ -243,76 +248,74 @@ return ThemeData.withFont(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(height: 1 * (PdfPageFormat.cm)),
               buildTitleOnInvoice("ACCOUNT INFO"),
               buildInvoiceBottomInfoWithQrCode(),
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice("Terms and conditions"),
               Text(
                   "1- Please quote invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of purchase\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments.",
-                  style: TextStyle(fontSize: 8, color: PdfColors.grey700)),
+                  style: TextStyle(fontSize: 9, color: PdfColors.grey700)),
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice("Additional notes"),
               Text(
                   "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
-                  style: TextStyle(fontSize: 8, color: PdfColors.grey700))
+                  style: TextStyle(fontSize: 9, color: PdfColors.grey700))
             ]));
   }
 
+  Widget buildFooter() {
+    return Text(
+        "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
+        style: TextStyle(fontSize: 8, color: PdfColors.grey700));
+  }
+
   Widget buildMainTotal() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      alignment: Alignment.centerRight,
-      child: Row(
-        children: [
-          Expanded(flex: 2, child: buildInvoiceBottom()),
-          Expanded(
-              flex: 1,
-              child: Container(
-                decoration: BoxDecoration(color: PdfColors.grey),
-                // color: PdfColors.grey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...printObj
-                        .getInvoiceTotal(context, printCommand)
-                        .map(
-                          (e) => buildTotalText(
-                            title: e.title,
-                            value: e.description,
-                            unite: true,
-                          ),
-                        )
-                        .toList(),
-                    buildTotalText(
-                      title: 'Net total',
-                      value: " ",
-                      unite: true,
+    List<InvoiceTotalTitleAndDescriptionInfo> totals =
+        printObj.getInvoiceTotal(context, printCommand);
+    List<InvoiceTotalTitleAndDescriptionInfo> totalDes =
+        printObj.getInvoiceTotalDescripton(context, printCommand);
+
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 2, child: buildInvoiceBottom()),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    decoration: BoxDecoration(color: PdfColors.grey),
+                    // color: PdfColors.grey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...totals
+                            .map(
+                              (e) => buildTotalText(
+                                  title: e.title,
+                                  value: e.description,
+                                  color: e.getColor(),
+                                  withDivider:
+                                      totals.indexOf(e) != totals.length - 1),
+                            )
+                            .toList(),
+                        ...totalDes
+                            .map((e) => buildTotalText(
+                                size: e.size,
+                                title: e.title,
+                                value: e.description,
+                                color: e.getColor(),
+                                withDivider:
+                                    totalDes.indexOf(e) == totalDes.length - 1))
+                            .toList()
+                      ],
                     ),
-                    buildTotalText(
-                      title: 'Vat ${3 * 100} %',
-                      value: "V",
-                      unite: true,
-                    ),
-                    Divider(),
-                    buildTotalText(
-                      title: 'Total amount due',
-                      titleStyle: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      value: Utils.formatPrice(2321),
-                      unite: true,
-                    ),
-                    SizedBox(height: 2 * PdfPageFormat.mm),
-                    Container(height: 1, color: PdfColors.grey400),
-                    SizedBox(height: 0.5 * PdfPageFormat.mm),
-                    Container(height: 1, color: PdfColors.grey400),
-                  ],
-                ),
-              )),
-        ],
-      ),
-    );
+                  )),
+            ],
+          ),
+        ));
   }
 
 //   static buildSimpleText({
@@ -331,44 +334,84 @@ return ThemeData.withFont(
 //       ],
 //     );
 //   }
-
-  static buildTotalText({
-    required String title,
-    required String value,
-    double width = double.infinity,
-    TextStyle? titleStyle,
-    bool unite = false,
-  }) {
-    final style = titleStyle ?? TextStyle(fontWeight: FontWeight.bold);
-
+  Widget buildBottomAccountInfo(
+      {required String title,
+      String? value,
+      PdfColor? color,
+      double width = double.infinity,
+      bool withDivider = true}) {
     return Container(
-      width: width,
-      height: 25,
-      decoration: getDividerBetweenContent(),
+      // width: width,
+      // height: 25,
+      // decoration: getDividerBetweenContent(withDivider: withDivider),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(child: Text(title, style: style)),
+          Text(title, style: TextStyle(color: color, fontSize: 8)),
           // RichText(text: text)
-          Text(
-            value,
-            style: unite ? style : null,
-            textDirection: TextDirection.rtl,
-          ),
-          // Html.fromDom(data: "<b>$value</b>")
+          if (value != null)
+            Text(value,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: color, fontSize: 8),
+                textDirection: getTextDirection(value)),
+          SizedBox(height: .3 * (PdfPageFormat.cm))
         ],
       ),
     );
   }
 
-  static pw.BoxDecoration getDividerBetweenContent() {
-    return const BoxDecoration(
+  buildTotalText(
+      {required String title,
+      String? value,
+      PdfColor? color,
+      double width = double.infinity,
+      double? size,
+      bool withDivider = true}) {
+    return Container(
+      width: width,
+      height: 25,
+      decoration: getDividerBetweenContent(withDivider: withDivider),
+      child: Row(
+        children: [
+          Expanded(
+              child: Text(
+            title,
+            style: TextStyle(color: color, fontSize: size),
+            textDirection: getTextDirection(value),
+          )),
+          // RichText(text: text)
+          if (value != null)
+            Text(
+              value,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: color, fontSize: size),
+              textDirection: getTextDirection(value),
+            ),
+        ],
+      ),
+    );
+  }
+
+  TextDirection getTextDirection(String? value) {
+    return isRTL(value) ? TextDirection.rtl : TextDirection.ltr;
+  }
+
+  bool isRTL(String? text) {
+    if (text == null) return false;
+    return intl.Bidi.detectRtlDirectionality(text);
+  }
+
+  static pw.BoxDecoration getDividerBetweenContent({bool withDivider = true}) {
+    return BoxDecoration(
         color: PdfColors.white,
-        border: Border(
-            bottom: BorderSide(
-          //                    <--- top side
-          color: PdfColors.grey,
-          width: 1.0,
-        )));
+        border: withDivider
+            ? const Border(
+                bottom: BorderSide(
+                color: PdfColors.grey,
+                width: 1.0,
+              ))
+            : null);
   }
 }
 

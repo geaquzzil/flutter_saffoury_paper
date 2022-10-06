@@ -32,7 +32,14 @@ Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
   ..transfers_details = (json['transfers_details'] as List<dynamic>?)
       ?.map((e) => TransfersDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..trasfers_details_count = json['trasfers_details_count'] as int?;
+  ..trasfers_details_count = json['trasfers_details_count'] as int?
+   ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
+  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+  ..extendedRefundPrice =
+      InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
 
 Map<String, dynamic> _$TransfersToJson(Transfers instance) => <String, dynamic>{
       'iD': instance.iD,

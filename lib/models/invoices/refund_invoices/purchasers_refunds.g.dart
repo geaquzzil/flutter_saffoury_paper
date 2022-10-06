@@ -33,7 +33,16 @@ PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
                   PurchasesRefundDetails.fromJson(e as Map<String, dynamic>))
               .toList()
       ..purchases_refunds_purchases_details_count =
-          json['purchases_refunds_purchases_details_count'] as int?;
+          json['purchases_refunds_purchases_details_count'] as int?
+      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+      ..extendedDiscount =
+          InvoiceMaster.convertToDouble(json['extendedDiscount'])
+      ..extendedNetPrice =
+          InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+      ..extendedRefundPrice =
+          InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
 
 Map<String, dynamic> _$PurchasesRefundToJson(PurchasesRefund instance) =>
     <String, dynamic>{

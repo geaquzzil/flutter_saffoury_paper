@@ -364,7 +364,7 @@ packages:
       name: ffi
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "1.2.1"
   file:
     dependency: transitive
     description:
@@ -372,13 +372,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
-  file_picker:
-    dependency: "direct main"
-    description:
-      name: file_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.1"
   fixnum:
     dependency: transitive
     description:
@@ -522,13 +515,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.6"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.7"
   flutter_rating_bar:
     dependency: transitive
     description:
@@ -945,6 +931,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  number_to_character:
+    dependency: "direct main"
+    description:
+      name: number_to_character
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.11"
   numerus:
     dependency: transitive
     description:
@@ -1049,7 +1042,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.0.7"
   pdf:
     dependency: transitive
     description:
@@ -1705,7 +1698,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "2.6.1"
   window_manager:
     dependency: "direct main"
     description:

@@ -30,7 +30,14 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
                   ReservationInvoiceDetails.fromJson(e as Map<String, dynamic>))
               .toList()
       ..reservation_invoice_details_count =
-          json['reservation_invoice_details_count'] as int?;
+          json['reservation_invoice_details_count'] as int?
+  ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
+  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+  ..extendedRefundPrice =
+      InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
 
 Map<String, dynamic> _$ReservationInvoiceToJson(ReservationInvoice instance) =>
     <String, dynamic>{

@@ -32,7 +32,14 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
           json['products_outputs_details_count'] as int?
       ..warehouse = json['warehouse'] == null
           ? null
-          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>);
+          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
+     ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
+  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+  ..extendedRefundPrice =
+      InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
 
 Map<String, dynamic> _$ProductOutputToJson(ProductOutput instance) =>
     <String, dynamic>{

@@ -1914,4 +1914,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shipping => 'Shipping';
+
+  @override
+  String get subTotal => 'Sub total';
+
+  @override
+  String get grandTotal => 'Grand total';
 }
