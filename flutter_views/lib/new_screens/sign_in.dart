@@ -24,7 +24,7 @@ class SignInPage extends BaseWebPage {
       children: [
         Text(
           AppLocalizations.of(context)!.signInWithYourAccount,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 45,
             fontWeight: FontWeight.bold,
           ),
@@ -59,7 +59,7 @@ class SignInPage extends BaseWebPage {
             ),
           ],
         ),
-        FlutterLogo(
+        const FlutterLogo(
           size: 300,
         )
       ],
@@ -86,14 +86,14 @@ class SignInPage extends BaseWebPage {
                       spacing: 20.0,
                       runSpacing: 20.0,
                       children: [
-                        Container(
+                        SizedBox(
                           width: ScreenHelper.isMobile(context)
                               ? constraints.maxWidth - 20.0
                               : constraints.maxWidth / 2 - 20.0,
                           height: MediaQuery.of(context).size.height - 100,
                           child: header(width, context),
                         ),
-                        Container(
+                        SizedBox(
                           width: ScreenHelper.isMobile(context)
                               ? constraints.maxWidth - 20.0
                               : constraints.maxWidth / 2 - 20.0,

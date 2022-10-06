@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
 
-import '../../new_components/rounded_icon_button.dart';
 
 abstract class BaseWebPage extends StatelessWidget {
   Widget? getContentWidget(BuildContext context);
@@ -14,8 +13,8 @@ abstract class BaseWebPage extends StatelessWidget {
     if (kIsWeb) {
       return const Header();
     } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
         child: BackButton(),
       );
     }

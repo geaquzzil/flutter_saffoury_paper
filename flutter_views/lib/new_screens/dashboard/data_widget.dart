@@ -71,8 +71,8 @@ class LinkedIn extends StatelessWidget {
       child: Container(
         color: const Color(0xFF0A66C2),
         child: Row(
-          children: [
-            const Expanded(
+          children: const [
+            Expanded(
                 child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("Connect Me!", style: TextStyle(color: Colors.white)),
@@ -104,8 +104,8 @@ class Twitter extends StatelessWidget {
       child: Container(
         color: const Color(0xFF1DA0F1),
         child: Row(
-          children: [
-            const Expanded(
+          children: const [
+            Expanded(
                 child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("Follow Me!", style: TextStyle(color: Colors.white)),
@@ -137,8 +137,8 @@ class Github extends StatelessWidget {
       child: Container(
         color: Colors.white,
         child: Row(
-          children: [
-            const Expanded(
+          children: const [
+            Expanded(
                 child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(

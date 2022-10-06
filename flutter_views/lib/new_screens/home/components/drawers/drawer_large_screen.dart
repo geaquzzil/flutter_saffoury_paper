@@ -5,9 +5,7 @@ import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:provider/provider.dart';
-import 'package:popover/popover.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
@@ -75,7 +73,7 @@ class DrawerLargeScreens extends StatelessWidget {
     debugPrint(
         "getDrawerItemsGrouped current entires length=> ${authProvider.getDrawerItemsGrouped.entries.length}");
     return ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         padding: isClosed ? EdgeInsets.zero : padding,
         separatorBuilder: (context, index) {
           return const SizedBox(
@@ -103,7 +101,6 @@ class DrawerLargeScreens extends StatelessWidget {
                     idx: index,
                   );
 
-            ;
           }
           ViewAbstract viewAbstract =
               authProvider.getDrawerItemsGrouped[groupLabel]!.first;

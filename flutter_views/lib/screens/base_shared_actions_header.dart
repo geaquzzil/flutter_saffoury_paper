@@ -6,12 +6,8 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
 import 'package:flutter_view_controller/screens/header_action_icon.dart';
-import 'package:flutter_view_controller/size_config.dart';
-import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
-import '../models/permissions/permission_level_abstract.dart';
 import 'base_shared_drawer_navigation.dart';
 
 class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
@@ -50,7 +46,7 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
         ),
         BaseSharedHeaderDescription(viewAbstract: viewAbstract),
         BaseSharedDetailsRating(viewAbstract: viewAbstract),
-        BaseSharedActionDrawerNavigation()
+        const BaseSharedActionDrawerNavigation()
       ],
     );
   }

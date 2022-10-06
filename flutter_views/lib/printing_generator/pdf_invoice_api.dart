@@ -13,7 +13,7 @@ import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
-import 'svg/headers/a4.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class PdfInvoiceApi<T extends PrintableInterface> {
   material.BuildContext context;
@@ -28,45 +28,46 @@ class PdfInvoiceApi<T extends PrintableInterface> {
         // buildHeader(),
         if (list != null) pw.Image(MemoryImage(list)),
 
-        buildInvoiceInfo(),
+        buildInvoiceMainInfoHeader(),
         // buildSubHeaderInfo(invoice),
         SizedBox(height: 3 * PdfPageFormat.cm),
         buildTitle(),
         // buildInvoiceTable(),
         // Divider(),
-        buildTotal(),
+        buildMainTotal(),
       ],
       // footer: (context) => buildFooter(invoice),
     ));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
-
-  Future<Uint8List> generate() async {
-    var myTheme = ThemeData.withFont(
+  Future<pw.ThemeData> getThemeData() async {
+return ThemeData.withFont(
         icons: await PdfGoogleFonts.materialIcons(),
         base: await PdfGoogleFonts.tajawalRegular(),
         bold: await PdfGoogleFonts.tajawalBold(),
         italic: await PdfGoogleFonts.tajawalMedium(),
         boldItalic: await PdfGoogleFonts.tajawalBold());
+  }
+  Future<Widget> buildHeader()async=>
+  pw.Image( await networkImage(
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getInvoicePrimaryColor()}&darkColor=${printObj.getInvoiceSecondaryColor()}'));
+
+  Future<Uint8List> generate(PdfPageFormat? format) async {
+    var myTheme = await getThemeData();
+    final header = await buildHeader();
+
     final pdf = Document(theme: myTheme);
-    // final netImage = await networkImage(
-    //     'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=434343');
     pdf.addPage(MultiPage(
+      
+      pageFormat: format,
       margin: EdgeInsets.zero,
       // pageTheme: ,
       build: (context) => [
-        // buildHeader(),
-        // pw.Image(netImage),
-
-        buildInvoiceInfo(),
-        // buildSubHeaderInfo(invoice),
-        // SizedBox(height: 3 * PdfPageFormat.cm),
-        buildTitle(),
-        buildInvoiceTable(),
-        // Divider(),
-        // buildTotalWithTable(),
-        buildTotal()
+      header,
+        buildInvoiceMainInfoHeader(),
+        buildInvoiceMainTable(),
+        buildMainTotal()
       ],
       // footer: (context) => buildFooter(invoice),
     ));
@@ -74,52 +75,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
-  // Widget buildHeader() {
-  //   return Html(data: "data");
-  //   return Column(children: [
-  //     SvgPicture.network('https://site-that-takes-a-while.com/image.svg',
-  //         semanticsLabel: 'A shark?!')
-  //   ]);
-  // }
-  // static Widget buildHeader() => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         SizedBox(height: 1 * PdfPageFormat.cm),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             buildSupplierAddress(invoice.supplier),
-  //             Container(
-  //               height: 50,
-  //               width: 50,
-  //               child: BarcodeWidget(
-  //                 barcode: Barcode.qrCode(),
-  //                 data: invoice.info.number,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         SizedBox(height: 1 * PdfPageFormat.cm),
-  //         Row(
-  //           crossAxisAlignment: CrossAxisAlignment.end,
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             buildCustomerAddress(invoice.customer),
-  //             buildInvoiceInfo(invoice.info),
-  //           ],
-  //         ),
-  //       ],
-  //     );
-
-  // static Widget buildCustomerAddress() => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
-  //         Text(customer.address),
-  //       ],
-  //     );
-
-  Widget buildInvoiceInfo() {
+  Widget buildInvoiceMainInfoHeader() {
     List<List<TitleAndDescriptionInfoWithIcon>> inf =
         printObj.getInvoiceInfo(context, printCommand);
     return Container(
@@ -127,42 +83,51 @@ class PdfInvoiceApi<T extends PrintableInterface> {
         color: PdfColors.grey50,
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: inf.map((e) {
               // inf.firs==
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: e
-                      .map((item) => Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Container(
-                              width: 200,
-                              // width: double.infinity,
-                              child: Column(
-                                  // crossAxisAlignment: ,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          IconData(item.icon.codePoint),
-                                        ),
-                                        Text(item.title),
-                                      ],
-                                    ),
-                                    Text(
-                                      item.description,
-                                      textDirection: TextDirection.rtl,
-                                    ),
-                                  ]))))
-                      .toList());
+                  children:
+                      e.map((item) => buildInvoiceInfoItem(item)).toList());
             }).toList()));
+  }
+
+  pw.Padding buildInvoiceInfoItem(TitleAndDescriptionInfoWithIcon item) {
+    return Padding(
+        padding: EdgeInsets.all(5),
+        child: Container(
+            width: 200,
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                // crossAxisAlignment: ,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildTextWithIcon(item),
+                  Text(
+                    item.description,
+                    textDirection: TextDirection.rtl,
+                  ),
+                ])));
+  }
+
+  pw.Row buildTextWithIcon(TitleAndDescriptionInfoWithIcon item) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          color: PdfColors.grey,
+          size: 15,
+          IconData(item.icon.codePoint),
+        ),
+        SizedBox(width: 0.2 * PdfPageFormat.cm),
+        Text(item.title),
+      ],
+    );
   }
 
   Widget buildTitle() => Column(
@@ -182,7 +147,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
 
   //  );
   // }
-  Widget buildInvoiceTable() {
+  Widget buildInvoiceMainTable() {
     List<PrintableInterfaceDetails> details = printObj.getInvoiceDetailsList();
 
     PrintableInterfaceDetails head = details[0];
@@ -202,7 +167,6 @@ class PdfInvoiceApi<T extends PrintableInterface> {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Table.fromTextArray(
-          
             headers: headers,
             data: data,
             border: null,
@@ -254,7 +218,9 @@ class PdfInvoiceApi<T extends PrintableInterface> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(children: [
-            Text("abou wael labalaidi : 21321321"),
+            Text("${AppLocalizations.of(context)!.name}
+              
+              "abou wael labalaidi : 21321321"),
             Text("abou number labalaidi : 231iD"),
           ]),
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -263,7 +229,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
                 height: 50,
                 child: BarcodeWidget(
                   barcode: Barcode.qrCode(),
-                  data: "invoice.infor",
+                  data: printObj.getInvoiceQrCode(),
                 )),
             Text("INV-823-2022")
           ])
@@ -292,7 +258,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
             ]));
   }
 
-  Widget buildTotal() {
+  Widget buildMainTotal() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
       alignment: Alignment.centerRight,

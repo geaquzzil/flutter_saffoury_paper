@@ -135,8 +135,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
           BuildContext context, PrintCommandAbstract? pca) =>
       {
         AppLocalizations.of(context)!.description:
-            "${products?.getMainHeaderTextOnly(context)} \n sadsada\ndsadas" ??
-                "",
+            "<b> Sapp</b> soso \n sadsada\ndsadas",
         AppLocalizations.of(context)!.gsm:
             products?.gsms?.gsm.toString() ?? "0",
         AppLocalizations.of(context)!.quantity:

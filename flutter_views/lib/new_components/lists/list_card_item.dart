@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
@@ -46,7 +43,7 @@ class _ListCardItemState<T extends ViewAbstract>
         elevation: isSelected ? 20 : 0,
         // shadowColor: Colors.lightBlue,
         child: Padding(
-          padding: isSelected ? EdgeInsets.all(4.0) : EdgeInsets.all(0),
+          padding: isSelected ? const EdgeInsets.all(4.0) : const EdgeInsets.all(0),
           child: Ink(
             color: isSelected ? Colors.white : null,
             child: ListTile(

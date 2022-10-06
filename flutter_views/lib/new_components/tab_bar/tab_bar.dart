@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 ///Controller tabs used context to AppLoclazation \
@@ -16,7 +15,7 @@ class TabBarWidget extends StatefulWidget {
 class _TabBarWidgetState extends State<TabBarWidget>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  List<TabControllerHelper> _tabs = [];
+  final List<TabControllerHelper> _tabs = [];
 
   @override
   void initState() {
@@ -60,7 +59,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
             controller: _tabController,
             tabs: _tabs),
       ),
-      Container(
+      SizedBox(
           width: double.maxFinite,
           height: 200,
           child: TabBarView(
@@ -91,11 +90,11 @@ class _CirclePainter extends BoxPainter {
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration cfg) {
-    late Paint _paint;
-    _paint = Paint()..color = color;
-    _paint = _paint..isAntiAlias = true;
+    late Paint paint;
+    paint = Paint()..color = color;
+    paint = paint..isAntiAlias = true;
     final Offset circleOffset =
         offset + Offset(cfg.size!.width / 2, cfg.size!.height - radius);
-    canvas.drawCircle(circleOffset, radius, _paint);
+    canvas.drawCircle(circleOffset, radius, paint);
   }
 }

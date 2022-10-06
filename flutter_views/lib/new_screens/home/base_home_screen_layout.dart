@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_components/search/search_api.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
-import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
@@ -74,9 +72,9 @@ class BaseHomeScreenLayout extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  HeaderTitleOnListMain(),
+                  const HeaderTitleOnListMain(),
                   SearchWidgetApi(),
-                  ListApiWidget(),
+                  const ListApiWidget(),
                 ],
               ),
             )),
@@ -90,7 +88,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
           Expanded(
               flex: size.width > 1340 ? 8 : 10,
               child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: getShadowBoxDecoration(),
                   child: const Center(
                     child: BaseSharedDetailsView(),

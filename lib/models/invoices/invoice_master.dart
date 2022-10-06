@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 
 import 'orders.dart';
 
@@ -29,6 +29,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   InvoiceStatus? status;
 
   InvoiceMaster() : super();
+
   @override
   String? getListableFieldName() {
     debugPrint("getListableFieldName $runtimeType");
@@ -152,8 +153,53 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       BuildContext context, PrintCommandAbstract? pca) {
     return [
       getInvoicDesFirstRow(context, pca),
-      getInvoiceDesSecRow(context, pca)
+      getInvoiceDesSecRow(context, pca),
+      getInvoiceDesTherdRow(context, pca)
     ];
+  }
+
+  @override
+  List<TitleAndDescriptionInfoWithIcon> getInvoiceAccountInfoInBottom(
+          BuildContext context, PrintCommandAbstract? pca) =>
+      [
+        if (customers != null)
+          TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.name,
+              customers?.name ?? "", Icons.account_circle),
+        if (customers != null)
+          TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.name,
+              customers?.iD.toString() ?? "", Icons.numbers),
+        if (cargo_transporters != null)
+          TitleAndDescriptionInfoWithIcon(
+              AppLocalizations.of(context)!.transfers,
+              "${cargo_transporters?.name.toString()} :${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
+              Icons.numbers)
+      ];
+  @override
+  String getInvoiceQrCode() {
+    var q = QRCodeID(
+      iD: iD,
+      action: getTableNameApi() ?? "",
+    );
+    return q.getQrCode();
+  }
+
+  @override
+  String getInvoicePrimaryColor() {
+    if (runtimeType == Order) {
+      return Colors.green.value.toRadixString(16).substring(2, 8);
+    }
+    return "";
+  }
+
+  @override
+  String getInvoiceSecondaryColor() {
+    if (runtimeType == Order) {
+      return const Color.fromARGB(255, 33, 140, 39)
+          .value
+          .toRadixString(16)
+          .substring(2, 8);
+    }
+    return "";
   }
 
   @override
@@ -171,6 +217,20 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           customers?.iD.toString() ?? "", Icons.numbers),
       TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.date,
           customers?.date.toString() ?? "", Icons.date_range),
+    ];
+  }
+
+  List<TitleAndDescriptionInfoWithIcon> getInvoiceDesTherdRow(
+      BuildContext context, PrintCommandAbstract? pca) {
+    return [
+      TitleAndDescriptionInfoWithIcon(
+          AppLocalizations.of(context)!.total_price, "totalPrice", Icons.tag),
+      TitleAndDescriptionInfoWithIcon(AppLocalizations.of(context)!.balance,
+          customers?.date.toString() ?? "", Icons.balance),
+      TitleAndDescriptionInfoWithIcon(
+          AppLocalizations.of(context)!.paymentMethod,
+          "payment on advanced",
+          Icons.credit_card),
     ];
   }
 

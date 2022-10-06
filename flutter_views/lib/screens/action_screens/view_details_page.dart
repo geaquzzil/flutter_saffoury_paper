@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_view_controller/screens/view/view_card_item.dart';
-import 'package:flutter_view_controller/components/primary_button.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 import 'package:flutter_view_controller/screens/components/product_images.dart';
-import 'package:provider/provider.dart';
 
 import '../../components/main_body.dart';
 import '../../models/view_abstract.dart';

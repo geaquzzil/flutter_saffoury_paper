@@ -11,7 +11,7 @@ class LargeScreenPageProvider with ChangeNotifier {
         return "Shopping cart";
       case CurrentPage.list:
       default:
-        return "${context.watch<DrawerViewAbstractProvider>().getTitle(context)}";
+        return context.watch<DrawerViewAbstractProvider>().getTitle(context);
     }
     return "";
   }

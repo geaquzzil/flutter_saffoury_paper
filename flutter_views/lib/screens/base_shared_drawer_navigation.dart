@@ -21,7 +21,7 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
           height: 100,
           child: ListView.builder(
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               // scrollDirection: Axis.horizontal,
               itemCount: stack.length,
@@ -31,7 +31,7 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
                 dynamic v = stack[index];
                 if (v == null) {
                   return getIconWithText(
-                      Icons.home, "Home" + (stack.length == 1 ? "" : " >"));
+                      Icons.home, "Home${stack.length == 1 ? "" : " >"}");
                 }
                 ViewAbstract? viewAbstract = v!.object;
                 if (viewAbstract == null) {

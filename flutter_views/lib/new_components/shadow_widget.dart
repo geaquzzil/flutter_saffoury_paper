@@ -20,7 +20,7 @@ class ShadowWidget extends StatelessWidget {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 5,
             blurRadius: 7,
-            offset: Offset(0, 0), // changes position of shadow
+            offset: const Offset(0, 0), // changes position of shadow
           ),
         ],
       ),

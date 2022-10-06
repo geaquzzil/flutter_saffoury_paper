@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
-import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/data_table_builder.dart';
@@ -10,12 +8,8 @@ import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
-import 'package:flutter_view_controller/screens/profile_page.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
-import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -257,7 +251,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                           //     .toStringAsFixed(2))
                         ]),
                   ),
-                  Container(
+                  SizedBox(
                     width: 150,
                     height: double.maxFinite,
                     child: FutureBuilder<bool>(
@@ -272,7 +266,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                               )
                             : null,
                         onPressed: () {},
-                        child: Text("ADD TO CART"),
+                        child: const Text("ADD TO CART"),
                         // icon: Icon(Icons.plus_one_outlined),
                         // label: Text("ADD TO CART")
                       ),
@@ -314,7 +308,7 @@ class BottomWidgetOnViewIfViewAbstract extends StatelessWidget {
                 children: [
                   Expanded(
                     child: SearchCardItem(
-                        viewAbstract: viewAbstract as ViewAbstract,
+                        viewAbstract: viewAbstract,
                         searchQuery: ""),
                   ),
                   // Expanded(
@@ -337,12 +331,12 @@ class BottomWidgetOnViewIfViewAbstract extends StatelessWidget {
                   //         //     .toStringAsFixed(2))
                   //       ]),
                   // ),
-                  Container(
+                  SizedBox(
                       width: 150,
                       height: double.maxFinite,
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text("EDIT"),
+                        child: const Text("EDIT"),
                         // icon: Icon(Icons.plus_one_outlined),
                         // label: Text("ADD TO CART")
                       ))

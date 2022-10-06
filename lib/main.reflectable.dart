@@ -13516,7 +13516,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
             {},
             {
               r'': (bool b) =>
-                  ({language = null, copies = 1, printPaperSize = null}) => b
+                  ({language, copies = 1, printPaperSize}) => b
                       ? prefix39.PrinterOptions(
                           copies: copies,
                           language: language,
@@ -30316,7 +30316,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
       [])
 };
 
-final _memberSymbolMap = null;
+const _memberSymbolMap = null;
 
 void initializeReflectable() {
   r.data = _data;

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 
-import '../printing_generator/pdf_invoice_api.dart';
 
 abstract class PrintableInterfaceDetails {
-  Map<String,String> getInvoiceTableHeaderAndContent(
+  Map<String, String> getInvoiceTableHeaderAndContent(
       BuildContext context, PrintCommandAbstract? pca);
 }
 
@@ -18,6 +17,12 @@ abstract class PrintableInterface {
       BuildContext context, PrintCommandAbstract? pca);
 
   List<PrintableInterfaceDetails> getInvoiceDetailsList();
+
+  List<TitleAndDescriptionInfoWithIcon> getInvoiceAccountInfoInBottom(
+      BuildContext context, PrintCommandAbstract? pca);
+  String getInvoicePrimaryColor();
+  String getInvoiceSecondaryColor();
+  String getInvoiceQrCode();
 }
 
 class TitleAndDescriptionInfo {

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 
-import '../../models/view_abstract.dart';
 
 class CartProvider with ChangeNotifier {
   List<CartableDetailItemInterface> list = [];

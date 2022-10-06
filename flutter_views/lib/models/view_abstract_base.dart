@@ -6,10 +6,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:intl/intl.dart';
 
-import '../printing_generator/pdf_invoice_api.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
      {
@@ -142,14 +140,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
     List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
     return tabsList.map((e) {
       if (tabsList.indexOf(e) == 0) {
-        return Text("This is the main page");
+        return const Text("This is the main page");
       }
       if (e.autoRest != null) {
         return ListApiAutoRestWidget(
           autoRest: e.autoRest!,
         );
       }
-      return Text("This is the sec page");
+      return const Text("This is the sec page");
     }).toList();
   }
 

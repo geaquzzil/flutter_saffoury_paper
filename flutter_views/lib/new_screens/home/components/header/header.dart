@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/home/components/carts/cart_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -43,7 +42,7 @@ class _HeaderMainState extends State<HeaderMain> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton.icon(
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     onPressed: () {},
                     label: Text(
                         "${AppLocalizations.of(context)!.add_new} ${context.watch<LargeScreenPageProvider>().getCurrentPageTitle(context)}")),

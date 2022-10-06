@@ -22,7 +22,7 @@ class ListProvider with ChangeNotifier {
     objects.clear();
     notifyListeners();
     if (viewAbstract != null) {
-      debugPrint("clearing list and change viewAbstract to ${viewAbstract}");
+      debugPrint("clearing list and change viewAbstract to $viewAbstract");
       await fetchList(viewAbstract);
     } else {
       debugPrint("clearing list only");

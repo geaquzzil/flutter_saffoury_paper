@@ -63,7 +63,7 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
                             ),
                             centerTitle: true,
                           ),
-                          body: BaseFilterableMainWidget()),
+                          body: const BaseFilterableMainWidget()),
                     ),
                   );
                   // BaseFilterableMainWidget();

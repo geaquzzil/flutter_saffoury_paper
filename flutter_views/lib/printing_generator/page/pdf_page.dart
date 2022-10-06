@@ -1,13 +1,9 @@
-import 'package:easy_web_view/easy_web_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:printing/printing.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
-import '../pdf_api.dart';
 
 class PdfPage extends StatefulWidget {
   PrintableInterface invoiceObj;
@@ -66,7 +62,7 @@ class _PdfPageState extends State<PdfPage> {
   Widget build(BuildContext context) {
     Widget body = PdfPreview(build: (format) async {
       final pdf = PdfInvoiceApi(context, widget.invoiceObj);
-      return pdf.generate();
+      return pdf.generate(format);
     });
     // Widget body = EasyWebView(
     //   onLoaded: (controller) {
@@ -81,7 +77,7 @@ class _PdfPageState extends State<PdfPage> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: Text("title"),
+          title: const Text("title"),
           centerTitle: true,
         ),
         body: body);
@@ -133,7 +129,7 @@ class TitleWidget extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 42,
               fontWeight: FontWeight.w400,
               color: Colors.white,
@@ -157,14 +153,14 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          minimumSize: Size.fromHeight(40),
+          minimumSize: const Size.fromHeight(40),
         ),
+        onPressed: onClicked,
         child: FittedBox(
           child: Text(
             text,
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
-        onPressed: onClicked,
       );
 }

@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
-import 'package:flutter_view_controller/screens/loading_main.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerEditTextAutoComplete extends StatefulWidget {
@@ -99,7 +98,7 @@ class _EditControllerEditTextAutoCompleteState
               return ListTile(title: Text(continent));
             },
             hideOnLoading: false,
-            errorBuilder: (context, error) => CircularProgressIndicator(),
+            errorBuilder: (context, error) => const CircularProgressIndicator(),
             onSaved: (newValue) {
               widget.viewAbstract.setFieldValue(widget.field, newValue);
               debugPrint(

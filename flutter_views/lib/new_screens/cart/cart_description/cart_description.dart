@@ -65,7 +65,7 @@ class SubRowCartDescription extends StatelessWidget {
             child: ElevatedButton(
                 onPressed: () {},
                 child: Padding(
-                  padding: EdgeInsets.all(kDefaultPadding),
+                  padding: const EdgeInsets.all(kDefaultPadding),
                   child: Text(AppLocalizations.of(context)!.checkout),
                 )),
           )

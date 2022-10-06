@@ -1,13 +1,9 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -100,9 +96,9 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
           itemCount: 10,
           itemBuilder: (ctx, i) {
             return Column(
-              children: [
-                const ShimmerLoadingList(),
-                const SizedBox(
+              children: const [
+                ShimmerLoadingList(),
+                SizedBox(
                   height: 10,
                 )
               ],
