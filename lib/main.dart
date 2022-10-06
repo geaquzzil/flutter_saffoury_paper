@@ -29,7 +29,6 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:webcontent_converter/webcontent_converter.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'models/products/products_types.dart';
@@ -64,19 +63,6 @@ import 'models/products/products_types.dart';
 //   );
 // }
 
-class SimpleBlocObserver extends BlocObserver {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    debugPrint("$transition");
-  }
-
-  @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    debugPrint("$error");
-    super.onError(bloc, error, stackTrace);
-  }
-}
 
 void main() async {
   initializeReflectable();
@@ -88,12 +74,6 @@ void main() async {
   //   DeviceOrientation.portraitDown,
   // ]);
 
-  if (WebViewHelper.isDesktop) {
-    await windowManager.ensureInitialized();
-
-    /// ensure brower is initializedc
-    await WebcontentConverter.ensureInitialized();
-  }
 
   List<ViewAbstract> views = List<ViewAbstract>.from([
     Product(),

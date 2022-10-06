@@ -85,13 +85,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.3"
-  bloc_concurrency:
-    dependency: transitive
-    description:
-      name: bloc_concurrency
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -99,13 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  bottom_navy_bar:
-    dependency: transitive
-    description:
-      name: bottom_navy_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.0"
   build:
     dependency: transitive
     description:
@@ -295,13 +281,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2+4"
-  dio:
-    dependency: transitive
-    description:
-      name: dio
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.6"
   dropdown_search:
     dependency: transitive
     description:
@@ -384,13 +363,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_advanced_drawer:
-    dependency: transitive
-    description:
-      name: flutter_advanced_drawer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.2"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -588,13 +560,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.5+3"
-  flutter_zoom_drawer:
-    dependency: "direct main"
-    description:
-      name: flutter_zoom_drawer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.2"
   form_builder_extra_fields:
     dependency: transitive
     description:
@@ -693,13 +658,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  hidden_drawer_menu:
-    dependency: transitive
-    description:
-      name: hidden_drawer_menu
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
   html:
     dependency: transitive
     description:
@@ -819,13 +777,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.7"
-  just_the_tooltip:
-    dependency: transitive
-    description:
-      name: just_the_tooltip
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.12"
   latlng:
     dependency: "direct main"
     description:
@@ -861,13 +812,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  loadmore:
-    dependency: transitive
-    description:
-      name: loadmore
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   logging:
     dependency: transitive
     description:
@@ -1134,13 +1078,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
-  popover:
-    dependency: transitive
-    description:
-      name: popover
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.6+3"
   positioned_tap_detector_2:
     dependency: transitive
     description:
@@ -1197,13 +1134,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  puppeteer:
-    dependency: transitive
-    description:
-      name: puppeteer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.12.0"
   qr:
     dependency: transitive
     description:
@@ -1650,13 +1580,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
-  webcontent_converter:
-    dependency: transitive
-    description:
-      name: webcontent_converter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.7+2"
   webview_flutter:
     dependency: transitive
     description:

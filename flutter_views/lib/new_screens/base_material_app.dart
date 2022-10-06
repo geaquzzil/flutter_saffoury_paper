@@ -14,7 +14,6 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:webcontent_converter/webcontent_converter.dart';
 
 import 'home/base_home_main.dart';
 
@@ -25,33 +24,7 @@ class BaseMaterialAppPage extends StatefulWidget {
   State<BaseMaterialAppPage> createState() => _BaseMaterialAppPageState();
 }
 
-class _BaseMaterialAppPageState extends State<BaseMaterialAppPage>
-    with WindowListener {
-  @override
-  void onWindowClose() {
-    /// auto close browser
-    if (WebViewHelper.isDesktop && windowBrower != null) {
-      WebcontentConverter.deinitWebcontentConverter();
-    }
-    super.onWindowClose();
-  }
-
-  @override
-  void dispose() {
-    if (WebViewHelper.isDesktop) {
-      windowManager.removeListener(this);
-    }
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    if (WebViewHelper.isDesktop) {
-      windowManager.addListener(this);
-    }
-    super.initState();
-  }
-
+class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -157,7 +130,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage>
   LayoutBuilder getLayoutBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return const HomeMobilePage();
+        return Text("HomeMobilePage ");
+        // return const HomeMobilePage();
         // if (kIsWeb) {
         //   return const HomeWebPage();
         // } else

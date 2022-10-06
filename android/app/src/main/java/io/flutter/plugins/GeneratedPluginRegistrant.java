@@ -86,11 +86,6 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin wakelock, creativemaybeno.wakelock.WakelockPlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new app.mylekha.webcontent_converter.WebcontentConverterPlugin());
-    } catch(Exception e) {
-      Log.e(TAG, "Error registering plugin webcontent_converter, app.mylekha.webcontent_converter.WebcontentConverterPlugin", e);
-    }
-    try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.webviewflutter.WebViewFlutterPlugin());
     } catch(Exception e) {
       Log.e(TAG, "Error registering plugin webview_flutter_android, io.flutter.plugins.webviewflutter.WebViewFlutterPlugin", e);

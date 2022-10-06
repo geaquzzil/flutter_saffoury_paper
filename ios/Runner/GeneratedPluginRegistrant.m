@@ -90,12 +90,6 @@
 @import wakelock;
 #endif
 
-#if __has_include(<webcontent_converter/WebcontentConverterPlugin.h>)
-#import <webcontent_converter/WebcontentConverterPlugin.h>
-#else
-@import webcontent_converter;
-#endif
-
 #if __has_include(<webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>)
 #import <webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>
 #else
@@ -119,7 +113,6 @@
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
   [FLTVideoPlayerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTVideoPlayerPlugin"]];
   [WakelockPlugin registerWithRegistrar:[registry registrarForPlugin:@"WakelockPlugin"]];
-  [WebcontentConverterPlugin registerWithRegistrar:[registry registrarForPlugin:@"WebcontentConverterPlugin"]];
   [FLTWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTWebViewFlutterPlugin"]];
 }
 
