@@ -6,6 +6,8 @@ project(flutter_saffoury_paper LANGUAGES CXX)
 # the on-disk name of your application.
 set(BINARY_NAME "flutter_saffoury_paper")
 
+set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
+set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
 cmake_policy(SET CMP0063 NEW)
@@ -28,8 +30,7 @@ set(CMAKE_EXE_LINKER_FLAGS_PROFILE "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 set(CMAKE_SHARED_LINKER_FLAGS_PROFILE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE}")
 set(CMAKE_C_FLAGS_PROFILE "${CMAKE_C_FLAGS_RELEASE}")
 set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE}")
-set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
-set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)
+
 
 # Use Unicode for all projects.
 add_definitions(-DUNICODE -D_UNICODE)

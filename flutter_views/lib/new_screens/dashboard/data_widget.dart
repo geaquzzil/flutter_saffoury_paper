@@ -3,7 +3,7 @@ import 'package:dashboard/dashboard.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/storage.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+// import 'package:url_launcher/url_launcher_string.dart';
 
 const Color blue = Color(0xFF4285F4);
 const Color red = Color(0xFFEA4335);
@@ -44,7 +44,7 @@ class Pub extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        launchUrlString("https://pub.dev/packages/dashboard");
+        // launchUrlString("https://pub.dev/packages/dashboard");
       },
       child: Container(
         color: Colors.white,
@@ -66,7 +66,7 @@ class LinkedIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        launchUrlString("https://www.linkedin.com/in/mehmetyaz/");
+        // launchUrlString("https://www.linkedin.com/in/mehmetyaz/");
       },
       child: Container(
         color: const Color(0xFF0A66C2),
@@ -99,7 +99,7 @@ class Twitter extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        launchUrlString("https://twitter.com/smehmetyaz");
+        // launchUrlString("https://twitter.com/smehmetyaz");
       },
       child: Container(
         color: const Color(0xFF1DA0F1),
@@ -132,7 +132,7 @@ class Github extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        launchUrlString("https://github.com/Mehmetyaz/dashboard");
+        // launchUrlString("https://github.com/Mehmetyaz/dashboard");
       },
       child: Container(
         color: Colors.white,
@@ -169,7 +169,7 @@ class BuyMee extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        launchUrlString("https://www.buymeacoffee.com/mehmetyaz");
+        // launchUrlString("https://www.buymeacoffee.com/mehmetyaz");
       },
       child: Container(
           alignment: Alignment.center,
@@ -379,7 +379,7 @@ class WelcomeWidget extends StatelessWidget {
                   TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launchUrlString("https://pub.dev/packages/dashboard");
+                          // launchUrlString("https://pub.dev/packages/dashboard");
                         },
                       text: "dashboard",
                       style: const TextStyle(
