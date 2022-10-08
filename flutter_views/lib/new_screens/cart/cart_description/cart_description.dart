@@ -67,35 +67,43 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
                 icon: const Icon(Icons.clear_all)),
           ),
 
-          CartDescriptionHeader(),
-
-          CartSummaryItem(title: "SubTitle", description: r"252.00 $"),
-          const SizedBox(
-            height: kDefaultPadding / 2,
-          ),
-          CartSummaryItem(
-              title: AppLocalizations.of(context)!.shipping,
-              description: r"0.00"),
-          const SizedBox(
-            height: kDefaultPadding / 2,
-          ),
-          CartSummaryItem(
-              title: AppLocalizations.of(context)!.tax, description: r"0"),
-          const SizedBox(
-            height: kDefaultPadding / 2,
-          ),
-          const SizedBox(
-            height: kDefaultPadding,
-          ),
-          // // CartSummaryItem(title: "Promocode", description: r"Enter code"),
-          const Spacer(),
-          CartSummaryItem(
-              title: AppLocalizations.of(context)!.total,
-              description: context
-                  .watch<CartProvider>()
-                  .getTotalPrice
-                  .toStringAsFixed(2),
-              fontSize: 18),
+          const CartDescriptionHeader(),
+          ...context
+              .watch<CartProvider>()
+              .getCartableInvoice
+              .getCartableInvoiceSummary(context)
+              .map((e) => CartSummaryItem(
+                    title: e.title,
+                    description: e.description,
+                  ))
+              .toList(),
+          // CartSummaryItem(title: "SubTitle", description: r"252.00 $"),
+          // const SizedBox(
+          //   height: kDefaultPadding / 2,
+          // ),
+          // CartSummaryItem(
+          //     title: AppLocalizations.of(context)!.shipping,
+          //     description: r"0.00"),
+          // const SizedBox(
+          //   height: kDefaultPadding / 2,
+          // ),
+          // CartSummaryItem(
+          //     title: AppLocalizations.of(context)!.tax, description: r"0"),
+          // const SizedBox(
+          //   height: kDefaultPadding / 2,
+          // ),
+          // const SizedBox(
+          //   height: kDefaultPadding,
+          // ),
+          // // // CartSummaryItem(title: "Promocode", description: r"Enter code"),
+          // const Spacer(),
+          // CartSummaryItem(
+          //     title: AppLocalizations.of(context)!.total,
+          //     description: context
+          //         .watch<CartProvider>()
+          //         .getTotalPrice
+          //         .toStringAsFixed(2),
+          //     fontSize: 18),
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: kDefaultPadding, vertical: kDefaultPadding),

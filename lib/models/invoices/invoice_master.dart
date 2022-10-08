@@ -167,10 +167,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       AppLocalizations.of(context)!.invoices;
 
   @override
-  String getInvoiceTitle(BuildContext context, PrintCommandAbstract? pca) =>
+  String getPrintableInvoiceTitle(
+          BuildContext context, PrintCommandAbstract? pca) =>
       getMainHeaderLabelTextOnly(context).toUpperCase();
   @override
-  List<List<InvoiceHeaderTitleAndDescriptionInfo>> getInvoiceInfo(
+  List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
       BuildContext context, PrintCommandAbstract? pca) {
     return [
       getInvoicDesFirstRow(context, pca),
@@ -180,28 +181,29 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceAccountInfoInBottom(
-          BuildContext context, PrintCommandAbstract? pca) =>
-      [
-        if (customers != null)
-          InvoiceHeaderTitleAndDescriptionInfo(
-              title: "${AppLocalizations.of(context)!.name}: ",
-              description: customers?.name ?? "",
-              icon: Icons.account_circle),
-        if (customers != null)
-          InvoiceHeaderTitleAndDescriptionInfo(
-              title: "${AppLocalizations.of(context)!.iD}: ",
-              description: customers?.iD.toString() ?? "",
-              icon: Icons.numbers),
-        if (cargo_transporters != null)
-          InvoiceHeaderTitleAndDescriptionInfo(
-              title: "${AppLocalizations.of(context)!.transfers}: ",
-              description:
-                  "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
-              icon: Icons.numbers)
-      ];
+  List<InvoiceHeaderTitleAndDescriptionInfo>
+      getPrintableInvoiceAccountInfoInBottom(
+              BuildContext context, PrintCommandAbstract? pca) =>
+          [
+            if (customers != null)
+              InvoiceHeaderTitleAndDescriptionInfo(
+                  title: "${AppLocalizations.of(context)!.name}: ",
+                  description: customers?.name ?? "",
+                  icon: Icons.account_circle),
+            if (customers != null)
+              InvoiceHeaderTitleAndDescriptionInfo(
+                  title: "${AppLocalizations.of(context)!.iD}: ",
+                  description: customers?.iD.toString() ?? "",
+                  icon: Icons.numbers),
+            if (cargo_transporters != null)
+              InvoiceHeaderTitleAndDescriptionInfo(
+                  title: "${AppLocalizations.of(context)!.transfers}: ",
+                  description:
+                      "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
+                  icon: Icons.numbers)
+          ];
   @override
-  String getInvoiceQrCodeID() {
+  String getPrintableInvoiceQrCodeID() {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
 
     String year = "${dateFormat.parse(date ?? "").year}";
@@ -220,7 +222,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getInvoiceQrCode() {
+  String getPrintableInvoiceQrCode() {
     var q = QRCodeID(
       iD: iD,
       action: getTableNameApi() ?? "",
@@ -229,7 +231,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getInvoicePrimaryColor() {
+  String getPrintableInvoicePrimaryColor() {
     if (runtimeType == Order) {
       return Colors.green.value.toRadixString(16).substring(2, 8);
     }
@@ -237,7 +239,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getInvoiceSecondaryColor() {
+  String getPrintableInvoiceSecondaryColor() {
     if (runtimeType == Order) {
       return const Color.fromARGB(255, 33, 140, 39)
           .value
@@ -248,7 +250,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<PrintableInterfaceDetails> getInvoiceDetailsList() {
+  List<PrintableInterfaceDetails> getPrintableInvoiceDetailsList() {
     if (runtimeType == Order) {
       return (this as Order).orders_details ?? [];
     }
@@ -309,7 +311,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<InvoiceTotalTitleAndDescriptionInfo> getInvoiceTotalDescripton(
+  List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
       BuildContext context, PrintCommandAbstract? pca) {
     var converter = NumberToCharacterConverter('ar');
     return [
@@ -331,9 +333,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<InvoiceTotalTitleAndDescriptionInfo> getInvoiceTotal(
+  List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
       BuildContext context, PrintCommandAbstract? pca) {
-    Color c = Colors.grey;
     return [
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
@@ -344,7 +345,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
           description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-          hexColor: getInvoicePrimaryColor()),
+          hexColor: getPrintableInvoicePrimaryColor()),
     ];
   }
 

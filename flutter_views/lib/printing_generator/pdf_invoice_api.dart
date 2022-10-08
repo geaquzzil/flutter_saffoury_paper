@@ -52,7 +52,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
   }
 
   Future<Widget> buildHeader() async => pw.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getInvoicePrimaryColor()}&darkColor=${printObj.getInvoiceSecondaryColor()}'));
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintableInvoicePrimaryColor()}&darkColor=${printObj.getPrintableInvoiceSecondaryColor()}'));
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
@@ -83,7 +83,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
 
   Widget buildInvoiceMainInfoHeader() {
     List<List<InvoiceHeaderTitleAndDescriptionInfo>> inf =
-        printObj.getInvoiceInfo(context, printCommand);
+        printObj.getPrintableInvoiceInfo(context, printCommand);
     return Container(
         width: double.infinity,
         color: PdfColors.grey200,
@@ -137,24 +137,26 @@ class PdfInvoiceApi<T extends PrintableInterface> {
   Widget buildTitle() => Padding(
       padding: EdgeInsets.symmetric(horizontal: 26, vertical: 5),
       child: Text(
-        printObj.getInvoiceTitle(context, printCommand),
+        printObj.getPrintableInvoiceTitle(context, printCommand),
         style: TextStyle(
             fontSize: 20,
-            color: PdfColor.fromHex(printObj.getInvoicePrimaryColor())),
+            color:
+                PdfColor.fromHex(printObj.getPrintableInvoicePrimaryColor())),
       ));
   Widget buildInvoiceMainTable() {
-    List<PrintableInterfaceDetails> details = printObj.getInvoiceDetailsList();
+    List<PrintableInterfaceDetails> details =
+        printObj.getPrintableInvoiceDetailsList();
 
     PrintableInterfaceDetails head = details[0];
     final headers = head
-        .getInvoiceTableHeaderAndContent(context, printCommand)
+        .getPrintableInvoiceTableHeaderAndContent(context, printCommand)
         .keys
         .map((e) => e.toUpperCase())
         .toList();
 
     final data = details
         .map((e) => e
-            .getInvoiceTableHeaderAndContent(context, printCommand)
+            .getPrintableInvoiceTableHeaderAndContent(context, printCommand)
             .values
             .toList())
         .toList();
@@ -217,7 +219,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
               crossAxisAlignment: CrossAxisAlignment.start,
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: printObj
-                  .getInvoiceAccountInfoInBottom(context, printCommand)
+                  .getPrintableInvoiceAccountInfoInBottom(context, printCommand)
                   .map((e) => buildBottomAccountInfo(
                       title: e.title, value: e.description))
                   .toList()),
@@ -232,10 +234,11 @@ class PdfInvoiceApi<T extends PrintableInterface> {
               height: 50,
               width: 50,
               barcode: Barcode.qrCode(),
-              data: printObj.getInvoiceQrCode(),
+              data: printObj.getPrintableInvoiceQrCode(),
             ),
             SizedBox(height: .1 * (PdfPageFormat.cm)),
-            Text(printObj.getInvoiceQrCodeID(), style: TextStyle(fontSize: 9))
+            Text(printObj.getPrintableInvoiceQrCodeID(),
+                style: TextStyle(fontSize: 9))
           ])
         ]);
   }
@@ -271,9 +274,9 @@ class PdfInvoiceApi<T extends PrintableInterface> {
 
   Widget buildMainTotal() {
     List<InvoiceTotalTitleAndDescriptionInfo> totals =
-        printObj.getInvoiceTotal(context, printCommand);
+        printObj.getPrintableInvoiceTotal(context, printCommand);
     List<InvoiceTotalTitleAndDescriptionInfo> totalDes =
-        printObj.getInvoiceTotalDescripton(context, printCommand);
+        printObj.getPrintableInvoiceTotalDescripton(context, printCommand);
 
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),

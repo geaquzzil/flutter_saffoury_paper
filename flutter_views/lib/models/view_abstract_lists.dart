@@ -78,7 +78,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   DismissDirection getDismissibleDirection() {
-    if (this is CartableItemInterface) {
+    if (this is CartableProductItemInterface) {
       return DismissDirection.horizontal;
     }
 

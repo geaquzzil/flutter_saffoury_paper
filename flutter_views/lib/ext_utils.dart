@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -43,4 +45,10 @@ extension DatesDateTime on DateTime? {
 extension IterableModifier<E> on Iterable<E> {
   E? firstWhereOrNull(bool Function(E) test) =>
       cast<E?>().firstWhere((v) => v != null && test(v), orElse: () => null);
+}
+
+extension NonNullableDouble on double? {
+  double toNonNullable() {
+    return this ?? 0;
+  }
 }

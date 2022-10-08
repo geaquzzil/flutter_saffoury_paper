@@ -2,47 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
 
 abstract class CartableInvoiceMasterObjectInterface {
-  List<List<InvoiceHeaderTitleAndDescriptionInfo>> getCartableInvoiceSummary(
+  List<InvoiceTotalTitleAndDescriptionInfo> getCartableInvoiceSummary(
       BuildContext context);
 
   void onCartItemChanged(
       BuildContext context, int index, CartableInvoiceDetailsInterface cii);
   void onCartItemAdded(
-      BuildContext context, int index, CartableInvoiceDetailsInterface cii);
+      BuildContext context, int index, CartableProductItemInterface cii);
   void onCartItemRemoved(
-      BuildContext context, int index, CartableInvoiceDetailsInterface cii);
+      BuildContext context, int index, CartableProductItemInterface cii);
 
   List<CartableInvoiceDetailsInterface> getDetailList(BuildContext context);
 
   Widget onCartCheckout(
-      BuildContext context, List<CartableItemInterface> items);
+      BuildContext context, List<CartableProductItemInterface> items);
 }
 
 abstract class CartableInvoiceDetailsInterface {
-  Map<String, dynamic> getCartInvoiceTableHeaderAndContent(
+  ///key is field
+  ///value is CartInvoiceHeader that contains translated title and options
+  Map<String, CartInvoiceHeader> getCartInvoiceTableHeaderAndContent(
       BuildContext context);
-  bool onGenerateEditTextFieldCanEdit(String field);
-  bool isEqualsCartItem(CartableInvoiceDetailsInterface other);
+  bool isCartEquals(CartableInvoiceDetailsInterface other);
+
+  String? Function(dynamic) getCartableEditableValidateItemCell(
+      BuildContext context, String field);
+
+  void getCartableEditableOnChange(
+      BuildContext context, int rowIndex,String field, dynamic value);
 }
 
-abstract class CartableItemInterface {
-  double cartPrice = 0;
-  double cartUnitPrice = 0;
-  double cartQuantity = 0;
-
-  Widget? getCartItemLeading(BuildContext context);
-  String getCartItemDescription(BuildContext context);
-  String getCartItemSubtitle(BuildContext context);
-  double getCartItemPrice();
-  double getCartItemUnitPrice();
-  double getCartItemQuantity();
-
-  void onCartItemChanged(BuildContext context);
-  void onCartItemAdded(BuildContext context);
-  void onCartItemRemoved(BuildContext context);
-
-  Widget onCartCheckout(
-      BuildContext context, List<CartableItemInterface> items);
-
-  bool isEqualsCartItem(CartableItemInterface other);
+class CartInvoiceHeader {
+  String title;
+  dynamic value;
+  bool canEdit;
+  CartInvoiceHeader(
+      {required this.title, required this.value, required this.canEdit});
 }
+
+abstract class CartableProductItemInterface {}

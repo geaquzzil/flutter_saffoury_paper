@@ -3,31 +3,33 @@ import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart
 import 'package:pdf/pdf.dart';
 
 abstract class PrintableInterfaceDetails {
-  Map<String, String> getInvoiceTableHeaderAndContent(
+  Map<String, String> getPrintableInvoiceTableHeaderAndContent(
       BuildContext context, PrintCommandAbstract? pca);
 }
 
 abstract class PrintableInterface {
-  String getInvoiceTitle(BuildContext context, PrintCommandAbstract? pca);
-
-  List<List<InvoiceHeaderTitleAndDescriptionInfo>> getInvoiceInfo(
+  String getPrintableInvoiceTitle(
       BuildContext context, PrintCommandAbstract? pca);
 
-  List<InvoiceTotalTitleAndDescriptionInfo> getInvoiceTotal(
+  List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
       BuildContext context, PrintCommandAbstract? pca);
 
-  List<InvoiceTotalTitleAndDescriptionInfo> getInvoiceTotalDescripton(
+  List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
       BuildContext context, PrintCommandAbstract? pca);
 
-  List<PrintableInterfaceDetails> getInvoiceDetailsList();
-
-  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceAccountInfoInBottom(
+  List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
       BuildContext context, PrintCommandAbstract? pca);
 
-  String getInvoicePrimaryColor();
-  String getInvoiceSecondaryColor();
-  String getInvoiceQrCode();
-  String getInvoiceQrCodeID();
+  List<PrintableInterfaceDetails> getPrintableInvoiceDetailsList();
+
+  List<InvoiceHeaderTitleAndDescriptionInfo>
+      getPrintableInvoiceAccountInfoInBottom(
+          BuildContext context, PrintCommandAbstract? pca);
+
+  String getPrintableInvoicePrimaryColor();
+  String getPrintableInvoiceSecondaryColor();
+  String getPrintableInvoiceQrCode();
+  String getPrintableInvoiceQrCodeID();
 }
 
 class InvoiceHeaderTitleAndDescriptionInfo {

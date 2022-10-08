@@ -61,7 +61,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
       ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
-      ChangeNotifierProvider(create: (_) => CartProvider()),
+      ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class CartSummaryItem extends StatelessWidget {
   double fontSize;
   String title;
-  String description;
+  String ?description;
   CartSummaryItem(
       {Key? key,
       required this.title,
-      required this.description,
+      this.description,
       this.fontSize = 16})
       : super(key: key);
 
@@ -26,8 +26,9 @@ class CartSummaryItem extends StatelessWidget {
                 fontSize: fontSize,
                 fontWeight: FontWeight.normal),
           ),
+          if(description!=null)
           Text(
-            description,
+            description!,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: fontSize,

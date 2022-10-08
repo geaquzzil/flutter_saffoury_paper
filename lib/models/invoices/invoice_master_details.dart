@@ -34,7 +34,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       };
 
   InvoiceMasterDetails() : super();
-    InvoiceMasterDetails setProduct(Product products) {
+  InvoiceMasterDetails setProduct(Product products) {
     this.products = products;
     unitPrice = products.getCartItemUnitPrice();
     price = products.getCartItemPrice();
@@ -131,7 +131,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  Map<String, String> getInvoiceTableHeaderAndContent(
+  Map<String, String> getPrintableInvoiceTableHeaderAndContent(
           BuildContext context, PrintCommandAbstract? pca) =>
       {
         AppLocalizations.of(context)!.description:

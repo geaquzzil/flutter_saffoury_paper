@@ -61,7 +61,7 @@ class _PdfPageState extends State<PdfPage> {
   @override
   Widget build(BuildContext context) {
     Widget body = PdfPreview(
-        pdfFileName: widget.invoiceObj.getInvoiceQrCodeID(),
+        pdfFileName: widget.invoiceObj.getPrintableInvoiceQrCodeID(),
         shareActionExtraEmails: ["info@saffoury.com"],
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,

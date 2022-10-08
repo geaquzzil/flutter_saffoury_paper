@@ -27,7 +27,8 @@ part 'products.g.dart';
   explicitToJson: true,
 )
 @reflector
-class Product extends ViewAbstract<Product> implements CartableItemInterface {
+class Product extends ViewAbstract<Product>
+    implements CartableProductItemInterface {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -100,7 +101,7 @@ class Product extends ViewAbstract<Product> implements CartableItemInterface {
   @override
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
     if (direction == DismissDirection.endToStart) {
-      context.read<CartProvider>().add(this);
+      context.read<CartProvider>().add(context, this);
     }
   }
 
@@ -319,7 +320,7 @@ class Product extends ViewAbstract<Product> implements CartableItemInterface {
       getMainHeaderTextOnly(context);
 
   @override
-  bool isEqualsCartItem(CartableItemInterface other) {
+  bool isEqualsCartItem(CartableProductItemInterface other) {
     return isEquals(other as ViewAbstract);
   }
 
@@ -351,7 +352,7 @@ class Product extends ViewAbstract<Product> implements CartableItemInterface {
 
   @override
   Widget onCartCheckout(
-      BuildContext context, List<CartableItemInterface> items) {
+      BuildContext context, List<CartableProductItemInterface> items) {
     Order order = Order();
     order.orders_details = List.generate(items.length,
         (index) => OrderDetails()..setProduct(items[index] as Product));
@@ -366,10 +367,9 @@ class Product extends ViewAbstract<Product> implements CartableItemInterface {
 
   @override
   double cartUnitPrice = 0;
-  
+
   @override
-  void onCartItemChanged(BuildContext context) {
-  }
+  void onCartItemChanged(BuildContext context) {}
 }
 
 // enum ProductStatus {

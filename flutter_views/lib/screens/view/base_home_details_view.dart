@@ -194,9 +194,9 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
                 ],
               ),
             ),
-            if (viewAbstract is CartableItemInterface)
+            if (viewAbstract is CartableProductItemInterface)
               BottomWidgetOnViewIfCartable(
-                viewAbstract: viewAbstract as CartableItemInterface,
+                viewAbstract: viewAbstract as CartableProductItemInterface,
               )
             else
               BottomWidgetOnViewIfViewAbstract(
@@ -208,7 +208,7 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
 }
 
 class BottomWidgetOnViewIfCartable extends StatelessWidget {
-  CartableItemInterface viewAbstract;
+  CartableProductItemInterface viewAbstract;
   BottomWidgetOnViewIfCartable({Key? key, required this.viewAbstract})
       : super(key: key);
 
@@ -241,9 +241,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                             width: 100,
                             child: TextFormField(
                               // decoration:,
-                              initialValue: viewAbstract
-                                  .getCartItemQuantity()
-                                  .toStringAsFixed(2),
+                              initialValue: "TODO"
                             ),
                           )
                           // Text(viewAbstract
