@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -49,7 +48,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
 
           ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        // scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.vertical,
         // physics: const AlwaysScrollableScrollPhysics(),
         // physics: const AlwaysScrollableScrollPhysics(),
         // scrollDirection: Axis.horizontal,

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-
+import 'package:flutter_view_controller/ext_utils.dart';
 class FilterableProvider with ChangeNotifier {
   static const String SORTKEY = "sortByFieldName";
   static const String SORTKEYAD = "sortBy";

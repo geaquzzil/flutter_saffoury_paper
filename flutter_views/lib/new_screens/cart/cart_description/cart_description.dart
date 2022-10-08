@@ -7,8 +7,49 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class SubRowCartDescription extends StatelessWidget {
-  const SubRowCartDescription({Key? key}) : super(key: key);
+import 'cart_descriptopn_header.dart';
+
+class SubRowCartDescription extends StatefulWidget {
+  SubRowCartDescription({Key? key}) : super(key: key);
+
+  @override
+  State<SubRowCartDescription> createState() => _SubRowCartDescriptionState();
+}
+
+class _SubRowCartDescriptionState extends State<SubRowCartDescription>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation _colorTween;
+
+  late CartProcessType type = CartProcessType.PROCESS;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _colorTween = ColorTween(begin: null, end: Colors.green)
+        .animate(_animationController);
+
+    Provider.of<CartProvider>(context, listen: false).addListener(() {
+      CartProcessType providerType =
+          context.read<CartProvider>().getProcessType;
+      if (type == providerType) return;
+      type = providerType;
+      if (type == CartProcessType.CHECKOUT) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +59,16 @@ class SubRowCartDescription extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Align(
-            alignment: AlignmentDirectional.centerEnd,
+            alignment: Alignment.centerRight,
             child: IconButton(
-                icon: const Icon(Icons.close),
                 onPressed: () {
-                  debugPrint("close clicked");
-                  context
-                      .read<DrawerMenuControllerProvider>()
-                      .controlEndDrawerMenu();
-                }),
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.clear_all)),
           ),
-          TitleText(
-            text: AppLocalizations.of(context)!.no_summary,
-            fontSize: 27,
-            fontWeight: FontWeight.w700,
-          ),
+
+          CartDescriptionHeader(),
+
           CartSummaryItem(title: "SubTitle", description: r"252.00 $"),
           const SizedBox(
             height: kDefaultPadding / 2,
@@ -51,19 +87,26 @@ class SubRowCartDescription extends StatelessWidget {
           const SizedBox(
             height: kDefaultPadding,
           ),
-          // CartSummaryItem(title: "Promocode", description: r"Enter code"),
+          // // CartSummaryItem(title: "Promocode", description: r"Enter code"),
           const Spacer(),
           CartSummaryItem(
               title: AppLocalizations.of(context)!.total,
-              description:
-                  context.watch<CartProvider>().getTotalPrice.toString(),
+              description: context
+                  .watch<CartProvider>()
+                  .getTotalPrice
+                  .toStringAsFixed(2),
               fontSize: 18),
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: kDefaultPadding, vertical: kDefaultPadding),
             width: double.maxFinite,
             child: ElevatedButton(
-                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _colorTween.value,
+                ),
+                onPressed: () {
+                  context.read<CartProvider>().checkout(context);
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(kDefaultPadding),
                   child: Text(AppLocalizations.of(context)!.checkout),

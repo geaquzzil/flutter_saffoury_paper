@@ -13,7 +13,7 @@ class CartDataTable extends StatefulWidget {
 }
 
 class _CartDataTableState extends State<CartDataTable> {
-  late List<CartableDetailItemInterface> list;
+  late List<CartableItemInterface> list;
   int? sortColumnIndex;
   bool isAscending = false;
 
@@ -42,7 +42,7 @@ class _CartDataTableState extends State<CartDataTable> {
       sortAscending: isAscending,
       sortColumnIndex: sortColumnIndex,
       columns: getColumns(context, columns),
-      rows: getRows(list),
+      rows: getRows(context, list),
     );
   }
 
@@ -55,12 +55,22 @@ class _CartDataTableState extends State<CartDataTable> {
                 },
               ))
           .toList();
+  Widget getDescriptionWidget(
+      BuildContext context, CartableItemInterface object) {
+    Widget? leading = object.getCartItemLeading(context);
+    if (leading == null) {
+      return Text(object.getCartItemDescription(context));
+    }
+    return ListTile(
+        leading: leading, title: Text(object.getCartItemDescription(context)));
+  }
 
-  List<DataRow> getRows(List<CartableDetailItemInterface> users) =>
-      users.map((CartableDetailItemInterface object) {
+  List<DataRow> getRows(
+          BuildContext context, List<CartableItemInterface> users) =>
+      users.map((CartableItemInterface object) {
         List<DataCell> cells = [];
         cells = [
-          DataCell(Text(object.getCartItemDescription(context))),
+          DataCell(getDescriptionWidget(context, object)),
           DataCell(Text(object.getCartItemQuantity().toString()),
               showEditIcon: true),
           DataCell(
@@ -69,8 +79,13 @@ class _CartDataTableState extends State<CartDataTable> {
               ),
               showEditIcon: true),
           DataCell(
-              Text(
-                object.getCartItemPrice().toString(),
+              TextFormField(
+                onChanged: (value) {
+                  object.cartQuantity = double.parse(value);
+                  object.onCartItemChanged(context);
+                },
+                // decoration:,
+                initialValue: object.getCartItemQuantity().toStringAsFixed(2),
               ),
               showEditIcon: true)
         ];

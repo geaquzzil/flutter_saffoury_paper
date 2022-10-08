@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -56,9 +58,17 @@ class _HeaderMainState extends State<HeaderMain> {
                   showBadge: context.watch<CartProvider>().getCount > 0,
                   animationType: BadgeAnimationType.slide,
                   child: RoundedIconButton(
-                      onTap: () => context
-                          .read<DrawerMenuControllerProvider>()
-                          .controlEndDrawerMenu(),
+                      onTap: () {
+                        // context
+                        //     .read<EndDrawerProvider>()
+                        //     .change();
+                        context
+                            .read<DrawerMenuControllerProvider>()
+                            .controlEndDrawerMenu();
+                      },
+                      // onTap: () => context
+                      //     .read<EndDrawerProvider>()
+                      //     .changeAndOpen(context, BaseHomeCartPage()),
                       icon: Icons.shopping_cart_rounded),
                 ),
                 const SizedBox(

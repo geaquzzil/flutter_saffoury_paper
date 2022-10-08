@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,9 @@ class CartListHeader extends StatelessWidget {
           text: context.watch<CartProvider>().getCount.toString(),
           fontSize: 20,
           fontWeight: FontWeight.w700,
+        ),
+        SizedBox(
+          width: kDefaultPadding / 2,
         ),
         const TitleText(
           text: 'Items',

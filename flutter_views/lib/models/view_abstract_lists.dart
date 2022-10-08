@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
 import '../providers/actions/edits/edit_error_list_provider.dart';
+import '../providers/drawer/drawer_controler.dart';
+import '../providers/end_drawer_changed_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   IconData? getCardLeadingBottomIcon() => null;
@@ -49,10 +51,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             : Colors.black54);
   }
 
-  Widget getCardLeadingCircleAvatar(BuildContext context) {
+  Widget getCardLeadingCircleAvatar(BuildContext context,
+      {double width = 60, double height = 60}) {
     return SizedBox(
-        width: 60,
-        height: 60,
+        width: width,
+        height: height,
         child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
   }
 
@@ -75,7 +78,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   DismissDirection getDismissibleDirection() {
-    if (this is CartableDetailItemInterface) {
+    if (this is CartableItemInterface) {
       return DismissDirection.horizontal;
     }
 
@@ -213,7 +216,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     ];
   }
 
-  Widget getPopupMenuActionListWidget(BuildContext context) {
+  Widget getPopupMenuActionListWidget(BuildContext c) {
     //TODO for divider use PopupMenuDivider()
 
     return FutureBuilder(
@@ -221,13 +224,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           (BuildContext context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
         return PopupMenuButton<MenuItemBuild>(
           onSelected: (MenuItemBuild result) {
-            onPopupMenuActionSelected(context, result);
+            onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
               snapshot.data?.map(buildMenuItem).toList() ?? [],
         );
       },
-      future: getPopupMenuActionsList(context),
+      future: getPopupMenuActionsList(c),
     );
   }
 
@@ -250,12 +253,19 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PdfPage(
-                    invoiceObj: this as PrintableInterface,
-                  )));
+
+      // context.read<EndDrawerProvider>().changeAndOpen(
+      //     context,
+      //     PdfPage(
+      //       invoiceObj: this as PrintableInterface,
+      //     ));
+      context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu;
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => PdfPage(
+      //               invoiceObj: this as PrintableInterface,
+      //             )));
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.push(

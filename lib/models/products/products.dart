@@ -14,10 +14,12 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import '../invoices/orders.dart';
 import 'sizes.dart';
 part 'products.g.dart';
 
@@ -25,8 +27,7 @@ part 'products.g.dart';
   explicitToJson: true,
 )
 @reflector
-class Product extends ViewAbstract<Product>
-    implements CartableDetailItemInterface {
+class Product extends ViewAbstract<Product> implements CartableItemInterface {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -288,7 +289,8 @@ class Product extends ViewAbstract<Product>
 
   @override
   double getCartItemPrice() {
-    return getTotalSellPrice();
+    cartPrice = getTotalSellPrice();
+    return cartPrice;
   }
 
   @override
@@ -317,7 +319,7 @@ class Product extends ViewAbstract<Product>
       getMainHeaderTextOnly(context);
 
   @override
-  bool isEqualsCartItem(CartableDetailItemInterface other) {
+  bool isEqualsCartItem(CartableItemInterface other) {
     return isEquals(other as ViewAbstract);
   }
 
@@ -341,6 +343,32 @@ class Product extends ViewAbstract<Product>
 
   String? getSizeString(BuildContext context) {
     return sizes?.getMainHeaderTextOnly(context);
+  }
+
+  @override
+  Widget? getCartItemLeading(BuildContext context) =>
+      getCardLeadingCircleAvatar(context, height: 20, width: 20);
+
+  @override
+  Widget onCartCheckout(
+      BuildContext context, List<CartableItemInterface> items) {
+    Order order = Order();
+    order.orders_details = List.generate(items.length,
+        (index) => OrderDetails()..setProduct(items[index] as Product));
+    return BaseEditPage(parent: order);
+  }
+
+  @override
+  double cartPrice = 0;
+
+  @override
+  double cartQuantity = 0;
+
+  @override
+  double cartUnitPrice = 0;
+  
+  @override
+  void onCartItemChanged(BuildContext context) {
   }
 }
 

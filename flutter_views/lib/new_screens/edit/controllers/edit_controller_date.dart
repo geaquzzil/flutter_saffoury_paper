@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
@@ -27,12 +28,15 @@ class _EditControllerDateTimeState extends State<EditControllerDateTime> {
   @override
   Widget build(BuildContext context) {
     dynamic fieldValue = widget.viewAbstract.getFieldValue(widget.field);
+    debugPrint(
+        "EditControllerDate value => $fieldValue field => ${widget.field}");
     return Column(children: [
       FormBuilderDateTimePicker(
+        initialValue: (fieldValue as String?).toDateTime(),
         name: widget.viewAbstract.getTag(widget.field),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2030),
-        initialDate: widget.viewAbstract.getFieldDateTimeParse(fieldValue),
+        // firstDate: DateTime(2020),
+        // lastDate: DateTime(2030),
+        initialDate: (fieldValue as String?).toDateTime(),
         decoration: getDecoration(context, widget.viewAbstract, widget.field),
         onSaved: (newValue) {
           widget.viewAbstract.setFieldValue(widget.field,

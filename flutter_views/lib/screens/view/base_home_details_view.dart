@@ -194,9 +194,9 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
                 ],
               ),
             ),
-            if (viewAbstract is CartableDetailItemInterface)
+            if (viewAbstract is CartableItemInterface)
               BottomWidgetOnViewIfCartable(
-                viewAbstract: viewAbstract as CartableDetailItemInterface,
+                viewAbstract: viewAbstract as CartableItemInterface,
               )
             else
               BottomWidgetOnViewIfViewAbstract(
@@ -208,7 +208,7 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
 }
 
 class BottomWidgetOnViewIfCartable extends StatelessWidget {
-  CartableDetailItemInterface viewAbstract;
+  CartableItemInterface viewAbstract;
   BottomWidgetOnViewIfCartable({Key? key, required this.viewAbstract})
       : super(key: key);
 
@@ -308,8 +308,7 @@ class BottomWidgetOnViewIfViewAbstract extends StatelessWidget {
                 children: [
                   Expanded(
                     child: SearchCardItem(
-                        viewAbstract: viewAbstract,
-                        searchQuery: ""),
+                        viewAbstract: viewAbstract, searchQuery: ""),
                   ),
                   // Expanded(
                   //   child: Column(

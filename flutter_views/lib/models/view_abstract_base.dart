@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -8,9 +9,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:intl/intl.dart';
 
-
-abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
-     {
+abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
   List<String> getMainFields();
   String getMainHeaderTextOnly(BuildContext context);
@@ -23,14 +22,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
   Map<String, String> getFieldLabelMap(BuildContext context);
   Map<String, IconData> getFieldIconDataMap();
 
-
   String? getDateTextOnly() {
     dynamic value = getFieldValue("date");
     // if (value == null) return null;
     return value?.toString() ?? "";
   }
-
-
 
   List<TabControllerHelper> getCustomTabList(BuildContext context) =>
       List<TabControllerHelper>.empty();
@@ -201,17 +197,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T>
   }
 
   String? getFieldDateTimeParseFromDateTime(DateTime? dateTime) {
-    if (dateTime == null) return null;
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-    return dateFormat.format(dateTime);
+    return dateTime.toDateTimeString();
   }
 
-  DateTime? getFieldDateTimeParse(String? value) {
-    if (value == null) {
-      return null;
-    }
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-    return dateFormat.parse(value);
+  DateTime getFieldDateTimeParse(String? value) {
+    return value.toDateTime();
   }
 
   String toJsonString() {

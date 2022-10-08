@@ -5,9 +5,9 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_re
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
-import 'package:flutter_view_controller/mixes.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -47,7 +47,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @JsonKey(fromJson: convertToDouble)
   double? extendedNetPrice;
 
-  InvoiceMaster() : super();
+  InvoiceMaster() : super() {
+    date = "".toDateTimeNowString();
+  }
 
   @override
   String? getListableFieldName() {

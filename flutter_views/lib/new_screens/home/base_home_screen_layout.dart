@@ -72,8 +72,8 @@ class BaseHomeScreenLayout extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const HeaderTitleOnListMain(),
-                  SearchWidgetApi(),
+                  // const HeaderTitleOnListMain(),
+                  // SearchWidgetApi(),
                   const ListApiWidget(),
                 ],
               ),

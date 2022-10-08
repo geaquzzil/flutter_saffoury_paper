@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/new_screens/home/components/drawers/draw
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 
-
 class BaseHomeMainPage extends StatefulWidget {
   const BaseHomeMainPage({Key? key}) : super(key: key);
 
@@ -17,11 +16,10 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       endDrawer: const BaseHomeCartPage(),
-      body:const SafeArea(child: BaseHomeScreenLayout()),
+      body: const SafeArea(child: BaseHomeScreenLayout()),
     );
   }
 }

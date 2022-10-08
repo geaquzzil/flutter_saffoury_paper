@@ -13,17 +13,11 @@ class CartList extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Align(
-          //   alignment: AlignmentDirectional.centerStart,
-          //   child: IconButton(
-          //       icon: Icon(Icons.arrow_back_ios_sharp
-          //       onPressed: () {
-          //         context
-          //             .read<DrawerMenuControllerProvider>()
-          //             .controlEndDrawerMenu();
-          //       }),
-          // )),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back_ios_sharp)),
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios_sharp)),
           const CartListHeader(),
           const SizedBox(width: double.infinity, child: CartDataTable())
         ],

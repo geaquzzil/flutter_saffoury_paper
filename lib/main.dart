@@ -16,6 +16,8 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
+import 'package:flutter_view_controller/providers/therd_screen_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:flutter_view_controller/providers/server_data.dart';
@@ -31,6 +33,7 @@ import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'models/products/products_types.dart';
+
 void main() async {
   initializeReflectable();
 
@@ -41,7 +44,6 @@ void main() async {
   //   DeviceOrientation.portraitDown,
   // ]);
 
-
   List<ViewAbstract> views = List<ViewAbstract>.from([
     Product(),
     Size(),
@@ -49,10 +51,13 @@ void main() async {
     Purchases(),
     Customer(),
     Employee(),
-    ProductType(),Dashboard()
+    ProductType(),
+    Dashboard()
   ]);
   try {
     runApp(MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => TherdScreenProvider()),
+      ChangeNotifierProvider(create: (context) => EndDrawerProvider()),
       ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
       ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),

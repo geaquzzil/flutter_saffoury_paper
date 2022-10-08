@@ -1,6 +1,7 @@
 //create product cart provider class
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 
 import '../../models/view_abstract.dart';

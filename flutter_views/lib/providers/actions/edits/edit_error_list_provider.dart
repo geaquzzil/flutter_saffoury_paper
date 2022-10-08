@@ -3,10 +3,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/edits/form_validation_manager.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 
 class ErrorFieldsProvider with ChangeNotifier {
-  late  FormValidationManager2 _formValidationManager =
-      FormValidationManager2();
+  late FormValidationManager2 _formValidationManager = FormValidationManager2();
   FormValidationManager2 get getFormValidationManager => _formValidationManager;
 
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
@@ -17,15 +17,11 @@ class ErrorFieldsProvider with ChangeNotifier {
     _formValidationManager.addField(field, viewAbstract);
   }
 
-
-
   void removeError(ViewAbstract viewAbstract) {
     _formValidationManager.removeError(viewAbstract);
 
     notifyListeners();
   }
-
- 
 
   bool hasError(ViewAbstract viewAbstract) {
     return _formValidationManager.hasError(viewAbstract);
@@ -35,13 +31,14 @@ class ErrorFieldsProvider with ChangeNotifier {
     _formValidationManager = FormValidationManager2();
   }
 
-  void notify(ViewAbstract v, String field,String key) {
+  void notify(ViewAbstract v, String field, String key) {
     debugPrint("errorFieldsProvider notify called");
     _formValidationManager.notifyField(_formKey, key, v, field);
     notifyListeners();
   }
-   bool hasErrorField(ViewAbstract v,String field) {
-    return _formValidationManager.hasErrorField(v,field);
+
+  bool hasErrorField(ViewAbstract v, String field) {
+    return _formValidationManager.hasErrorField(v, field);
   }
 }
 
@@ -49,9 +46,6 @@ class ErrorFieldsProvider with ChangeNotifier {
 
 class FormValidationManager {
   final _fieldStates = <String, FormFieldValidationState>{};
-
-
-
 
   void removeError(ViewAbstract viewAbstract) {
     _fieldStates.entries

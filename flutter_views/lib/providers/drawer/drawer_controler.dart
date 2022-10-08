@@ -14,5 +14,6 @@ class DrawerMenuControllerProvider with ChangeNotifier {
     if (!_startDrawerKey.currentState!.isEndDrawerOpen) {
       _startDrawerKey.currentState!.openEndDrawer();
     }
+    // notifyListeners();
   }
 }
