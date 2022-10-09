@@ -8,7 +8,8 @@ abstract class CartableInvoiceMasterObjectInterface {
   void onCartItemChanged(
       BuildContext context, int index, CartableInvoiceDetailsInterface cii);
   void onCartItemAdded(
-      BuildContext context, int index, CartableProductItemInterface cii);
+      BuildContext context, int index, CartableProductItemInterface cii,
+      {double? quantiy});
   void onCartItemRemoved(
       BuildContext context, int index, CartableProductItemInterface cii);
 
@@ -21,7 +22,7 @@ abstract class CartableInvoiceMasterObjectInterface {
 abstract class CartableInvoiceDetailsInterface {
   ///key is field
   ///value is CartInvoiceHeader that contains translated title and options
-  Map<String, CartInvoiceHeader> getCartInvoiceTableHeaderAndContent(
+  Map<String, DataTableContent> getCartInvoiceTableHeaderAndContent(
       BuildContext context);
   bool isCartEquals(CartableInvoiceDetailsInterface other);
 
@@ -29,15 +30,17 @@ abstract class CartableInvoiceDetailsInterface {
       BuildContext context, String field);
 
   void getCartableEditableOnChange(
-      BuildContext context, int rowIndex,String field, dynamic value);
+      BuildContext context, int rowIndex, String field, dynamic value);
 }
 
-class CartInvoiceHeader {
+class DataTableContent {
   String title;
   dynamic value;
   bool canEdit;
-  CartInvoiceHeader(
+  DataTableContent(
       {required this.title, required this.value, required this.canEdit});
 }
 
-abstract class CartableProductItemInterface {}
+abstract class CartableProductItemInterface {
+  double getCartableProductQuantity();
+}

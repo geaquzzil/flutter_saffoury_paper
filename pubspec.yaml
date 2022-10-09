@@ -87,6 +87,8 @@ flutter:
   uses-material-design: true
   assets:
   - assets/images/
+  - assets/vector/
+  - assets/raster/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

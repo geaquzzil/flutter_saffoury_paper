@@ -34,11 +34,11 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       };
 
   InvoiceMasterDetails() : super();
-  InvoiceMasterDetails setProduct(Product products) {
+  InvoiceMasterDetails setProduct(Product products, {double? quantity}) {
     this.products = products;
-    unitPrice = products.getCartItemUnitPrice();
-    price = products.getCartItemPrice();
-    quantity = products.getCartItemQuantity();
+    unitPrice = products.getUnitSellPrice();
+    price = products.getTotalSellPrice();
+    quantity = quantity ?? products.getCartableProductQuantity();
     discount = 0;
     return this;
   }

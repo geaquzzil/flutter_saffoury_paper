@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -9,30 +10,53 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../theming/text_field_theming.dart';
-import '../edit/controllers/ext.dart';
+import '../../new_screens/edit/controllers/ext.dart';
 
+@immutable
 class CartDataTableMaster extends StatefulWidget {
-  const CartDataTableMaster({Key? key}) : super(key: key);
+  ServerActions action;
+  CartableInvoiceMasterObjectInterface? obj;
+
+  ///if the obj is set then we get the obj data
+  ///else the cartProvider data
+  CartDataTableMaster({Key? key, required this.action, this.obj})
+      : super(key: key);
 
   @override
   State<CartDataTableMaster> createState() => _CartDataTableState();
 }
 
+@immutable
 class _CartDataTableState extends State<CartDataTableMaster> {
-  late List<CartableProductItemInterface> list;
   late List<CartableInvoiceDetailsInterface> list_invoice_details;
   late CartProvider cartProvider;
+  Map<String, TextEditingController> controllers = {};
   int? sortColumnIndex;
   bool isAscending = false;
   int lastIndexOfSelected = -1;
+  @override
+  void didUpdateWidget(covariant CartDataTableMaster oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    list_invoice_details = widget.obj?.getDetailList(context) ??
+        cartProvider.getCartableInvoice.getDetailList(context);
+  }
 
   @override
   void initState() {
     super.initState();
     cartProvider = Provider.of<CartProvider>(context, listen: false);
-    list = cartProvider.getList;
-    list_invoice_details =
+    list_invoice_details = widget.obj?.getDetailList(context) ??
         cartProvider.getCartableInvoice.getDetailList(context);
+  }
+
+  @override
+  void dispose() {
+    controllers.values.forEach((element) {
+      element.dispose();
+    });
+    controllers.clear();
+    super.dispose();
   }
 
   @override
@@ -93,29 +117,62 @@ class _CartDataTableState extends State<CartDataTableMaster> {
     }).toList();
   }
 
+  TextEditingController getController(
+      int row,
+      CartableInvoiceDetailsInterface cidi,
+      MapEntry<String, DataTableContent> ee) {
+    String mapKey = "${ee.key}$row";
+    if (controllers.containsKey(mapKey)) {
+      return controllers[mapKey]!;
+    }
+    dynamic value = getEditControllerText(ee.value.value);
+    controllers[mapKey] = TextEditingController();
+    controllers[mapKey]?.text = value;
+    controllers[mapKey]?.addListener(() {
+      cidi.getCartableEditableOnChange(context, row, ee.key, value);
+      modifieController(row, cidi);
+    });
+    return controllers[mapKey]!;
+    // controllers[mapKey]?.addListener(() { })
+  }
+
+  void modifieController(int row, CartableInvoiceDetailsInterface cidi) {
+    controllers.entries.forEach((element) {
+      String mapKey = "${element.key}$row";
+      debugPrint(
+          "modifieController ${element.key} is founded =>${element.key.contains("$row")}");
+      if (element.key.contains("$row")) {
+        controllers[mapKey]?.text = getEditControllerText(element.value.value);
+      }
+    });
+  }
+
   Widget getTextField(
           BuildContext context,
           int mainRow,
           CartableInvoiceDetailsInterface cidi,
-          MapEntry<String, CartInvoiceHeader> ee) =>
+          MapEntry<String, DataTableContent> ee) =>
       FormBuilderTextField(
+        controller: getController(mainRow, cidi, ee),
         valueTransformer: (value) {
           return value?.trim();
         },
         name: "${ee.key} ${cidi.hashCode}",
-        initialValue: getEditControllerText(ee.value.value),
+        // initialValue: getEditControllerText(ee.value.value),
         // maxLength: 12,
         // decoration: getDecorationTheming(context, TextFieldTheming()),
         keyboardType:
-            TextInputType.numberWithOptions(decimal: true, signed: true),
+            const TextInputType.numberWithOptions(decimal: true, signed: true),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly
         ],
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: cidi.getCartableEditableValidateItemCell(context, ee.key),
         onChanged: (value) {
+          debugPrint("onChanged called");
           cidi.getCartableEditableOnChange(context, mainRow, ee.key, value);
-          setState(() {});
+          modifieController(mainRow, cidi);
+          // setState(() {});
         },
       );
   DataCell getDataCell(
@@ -123,9 +180,12 @@ class _CartDataTableState extends State<CartDataTableMaster> {
       CartableInvoiceDetailsInterface cidi,
       int indexOfRow,
       String indexOfCell,
-      MapEntry<String, CartInvoiceHeader> ee) {
-    CartInvoiceHeader e = ee.value;
+      MapEntry<String, DataTableContent> ee) {
+    DataTableContent e = ee.value;
     bool canEdit = indexOfRow == lastIndexOfSelected && e.canEdit;
+
+    return DataCell(Text(e.value.toString()), showEditIcon: false);
+
     if (canEdit) {
       return DataCell(
           SizedBox(
@@ -136,13 +196,25 @@ class _CartDataTableState extends State<CartDataTableMaster> {
     }
   }
 
+  bool isEditWidget() {
+    return widget.action == ServerActions.edit;
+  }
+
   void onSort(BuildContext context, int columnIndex, bool ascending) {
     debugPrint(
         "onSort: columnIndex $columnIndex  listsize=> ${list_invoice_details.length} ");
     list_invoice_details.sort((obj1, obj2) => compareDynamic(
         ascending,
-        obj1.getCartInvoiceTableHeaderAndContent(context)[columnIndex]?.value,
-        obj2.getCartInvoiceTableHeaderAndContent(context)[columnIndex]?.value));
+        obj1
+            .getCartInvoiceTableHeaderAndContent(context)
+            .values
+            .elementAt(columnIndex)
+            .value,
+        obj2
+            .getCartInvoiceTableHeaderAndContent(context)
+            .values
+            .elementAt(columnIndex)
+            .value));
 
     setState(() {
       sortColumnIndex = columnIndex;

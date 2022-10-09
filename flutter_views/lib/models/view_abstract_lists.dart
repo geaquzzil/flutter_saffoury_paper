@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
+import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 import 'package:provider/provider.dart';
@@ -146,7 +147,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       errorWidget: (context, url, error) => Icon(getMainIconData()),
     );
     if (iconOnButton != null) {
-      return RoundedIconButtonTowChilds(
+      return TowIcons(
         largChild: image,
         smallIcon: iconOnButton,
       );

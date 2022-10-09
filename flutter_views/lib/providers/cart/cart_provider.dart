@@ -32,7 +32,10 @@ class CartProvider with ChangeNotifier {
     // _checkoutWidget = list[0].onCartCheckout(context, list);
     notifyListeners();
   }
-
+  void onCartItemAdded(BuildContext context,int idx,   CartableProductItemInterface detail,double qu) {
+    _cartObject.onCartItemAdded(context, idx, detail,quantiy: qu);
+      notifyListeners();
+  }
   void onCartItemChanged(BuildContext context,int idx,   CartableInvoiceDetailsInterface detail) {
     _cartObject.onCartItemChanged(context, idx, detail);
       notifyListeners();

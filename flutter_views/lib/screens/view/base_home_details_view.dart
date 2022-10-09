@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/data_table_builder.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/listable_data_table_builder.dart';
 import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
@@ -85,8 +86,11 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
                   ViewDetailsListWidget(
                     viewAbstract: viewAbstract,
                   ),
-                  if (viewAbstract.getListableFieldName() != null)
-                    DataTableBuilder(viewAbstract: viewAbstract),
+                  if (viewAbstract is CartableInvoiceMasterObjectInterface)
+                    CartDataTableMaster(
+                        action: ServerActions.view,
+                        obj: viewAbstract
+                            as CartableInvoiceMasterObjectInterface),
 
                   if (viewAbstract.getTabs(context).isNotEmpty)
                     TabBarWidget(
@@ -209,11 +213,14 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
 
 class BottomWidgetOnViewIfCartable extends StatelessWidget {
   CartableProductItemInterface viewAbstract;
+  TextEditingController controller = TextEditingController();
   BottomWidgetOnViewIfCartable({Key? key, required this.viewAbstract})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    controller.text =
+        viewAbstract.getCartableProductQuantity().toStringAsFixed(2);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Material(
@@ -240,8 +247,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                           SizedBox(
                             width: 100,
                             child: TextFormField(
-                              // decoration:,
-                              initialValue: "TODO"
+                              controller: controller,
                             ),
                           )
                           // Text(viewAbstract
@@ -263,7 +269,13 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                                     MaterialStateProperty.all(Colors.orange),
                               )
                             : null,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<CartProvider>().onCartItemAdded(
+                              context,
+                              -1,
+                              viewAbstract,
+                              double.tryParse(controller.text) ?? 0);
+                        },
                         child: const Text("ADD TO CART"),
                         // icon: Icon(Icons.plus_one_outlined),
                         // label: Text("ADD TO CART")

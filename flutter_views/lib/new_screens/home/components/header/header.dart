@@ -40,7 +40,9 @@ class _HeaderMainState extends State<HeaderMain> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Row(
+            child: 
+            
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton.icon(
@@ -55,8 +57,8 @@ class _HeaderMainState extends State<HeaderMain> {
                   badgeContent:
                       Text("${context.watch<CartProvider>().getCount}"),
                   toAnimate: true,
+                  animationType: BadgeAnimationType.scale,
                   showBadge: context.watch<CartProvider>().getCount > 0,
-                  animationType: BadgeAnimationType.slide,
                   child: RoundedIconButton(
                       onTap: () {
                         // context
@@ -84,6 +86,8 @@ class _HeaderMainState extends State<HeaderMain> {
                 ),
                 const ProfilePicturePopupMenu(),
               ],
-            )));
+            ))
+            
+            );
   }
 }

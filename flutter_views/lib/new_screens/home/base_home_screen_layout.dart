@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../new_components/ext.dart';
+import '../dashboard/main_dashboard2.dart';
 import 'components/header/header_title_on_list.dart';
 
 class BaseHomeScreenLayout extends StatelessWidget {
@@ -26,7 +27,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
       Expanded(
         child: Column(
           children: [
-            const HeaderMain(),
+            // const HeaderMain(),
             // const HeaderTitleMain(),
             getCurrentPage(context)
           ],
@@ -43,11 +44,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         context.watch<DrawerViewAbstractProvider>().getObject;
 
     if (viewAbstract is DashableInterface) {
-      return Expanded(
-        child: DashboardWidget(
-          viewAbstract: viewAbstract,
-        ),
-      );
+      return Expanded(child: DashboardScreen());
     }
     switch (currentPage) {
       case CurrentPage.dashboard:
@@ -73,7 +70,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
               child: Column(
                 children: [
                   // const HeaderTitleOnListMain(),
-                  // SearchWidgetApi(),
+                  SearchWidgetApi(),
                   const ListApiWidget(),
                 ],
               ),

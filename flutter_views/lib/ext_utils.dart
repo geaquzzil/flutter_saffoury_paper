@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:intl/intl.dart';
 
 extension HexColor on Color {
@@ -50,5 +51,29 @@ extension IterableModifier<E> on Iterable<E> {
 extension NonNullableDouble on double? {
   double toNonNullable() {
     return this ?? 0;
+  }
+}
+
+extension TaskTypeExtension on TaskType {
+  Color getColor() {
+    switch (this) {
+      case TaskType.done:
+        return Colors.lightBlue;
+      case TaskType.inProgress:
+        return Colors.amber[700]!;
+      default:
+        return Colors.redAccent;
+    }
+  }
+
+  String toStringValue() {
+    switch (this) {
+      case TaskType.done:
+        return "Done";
+      case TaskType.inProgress:
+        return "In Progress";
+      default:
+        return "Todo";
+    }
   }
 }

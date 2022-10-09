@@ -288,21 +288,6 @@ class Product extends ViewAbstract<Product>
     return AppLocalizations.of(context)!.product;
   }
 
-  @override
-  double getCartItemPrice() {
-    cartPrice = getTotalSellPrice();
-    return cartPrice;
-  }
-
-  @override
-  double getCartItemQuantity() {
-    return getQuantity();
-  }
-
-  @override
-  double getCartItemUnitPrice() {
-    return getUnitSellPrice();
-  }
 
   @override
   String getForeignKeyName() {
@@ -315,29 +300,6 @@ class Product extends ViewAbstract<Product>
 
   static String? intFromString(dynamic number) => number?.toString();
 
-  @override
-  String getCartItemDescription(BuildContext context) =>
-      getMainHeaderTextOnly(context);
-
-  @override
-  bool isEqualsCartItem(CartableProductItemInterface other) {
-    return isEquals(other as ViewAbstract);
-  }
-
-  @override
-  void onCartItemAdded(BuildContext context) {
-    // TODO: implement onCartItemAdded
-  }
-
-  @override
-  void onCartItemRemoved(BuildContext context) {
-    // TODO: implement onCartItemRemoved
-  }
-
-  @override
-  String getCartItemSubtitle(BuildContext context) =>
-      getMainHeaderLabelTextOnly(context);
-
   String? getNameString() {
     return products_types?.name;
   }
@@ -346,10 +308,7 @@ class Product extends ViewAbstract<Product>
     return sizes?.getMainHeaderTextOnly(context);
   }
 
-  @override
-  Widget? getCartItemLeading(BuildContext context) =>
-      getCardLeadingCircleAvatar(context, height: 20, width: 20);
-
+  
   @override
   Widget onCartCheckout(
       BuildContext context, List<CartableProductItemInterface> items) {
@@ -360,16 +319,7 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  double cartPrice = 0;
-
-  @override
-  double cartQuantity = 0;
-
-  @override
-  double cartUnitPrice = 0;
-
-  @override
-  void onCartItemChanged(BuildContext context) {}
+  double getCartableProductQuantity() => getQuantity();
 }
 
 // enum ProductStatus {

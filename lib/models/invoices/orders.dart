@@ -100,7 +100,7 @@ class Order extends InvoiceMaster<Order>
           description: totalQuantity?.toStringAsFixed(2) ?? "0"),
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-          description: totalNetPrice?.toStringAsFixed(2) ?? "0",
+          description: totalNetPrice.toStringAsFixed(2),
           hexColor: getPrintableInvoicePrimaryColor()),
     ];
   }
@@ -147,12 +147,6 @@ class Order extends InvoiceMaster<Order>
   }
 
   @override
-  void onCartItemAdded(
-      BuildContext context, int index, CartableProductItemInterface cii) {
-    orders_details?.add(OrderDetails()..setProduct(cii as Product));
-  }
-
-  @override
   void onCartItemChanged(
       BuildContext context, int index, CartableInvoiceDetailsInterface cii) {
     orders_details![index] = cii as OrderDetails;
@@ -162,6 +156,14 @@ class Order extends InvoiceMaster<Order>
   void onCartItemRemoved(
       BuildContext context, int index, CartableProductItemInterface cii) {
     orders_details?.removeAt(index);
+  }
+
+  @override
+  void onCartItemAdded(
+      BuildContext context, int index, CartableProductItemInterface cii,
+      {double? quantiy}) {
+    orders_details
+        ?.add(OrderDetails()..setProduct(cii as Product, quantity: quantity));
   }
 }
 
@@ -195,30 +197,30 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
       OrderDetails.fromJson(json);
 
   @override
-  Map<String, CartInvoiceHeader> getCartInvoiceTableHeaderAndContent(
+  Map<String, DataTableContent> getCartInvoiceTableHeaderAndContent(
           BuildContext context) =>
       {
-        "description": CartInvoiceHeader(
+        "description": DataTableContent(
             title: AppLocalizations.of(context)!.description,
             value: products?.getMainHeaderTextOnly(context) ?? "",
             canEdit: false),
-        "gsm": CartInvoiceHeader(
+        "gsm": DataTableContent(
             title: AppLocalizations.of(context)!.gsm,
             value: products?.gsms?.gsm ?? 0,
             canEdit: false),
-        "quantity": CartInvoiceHeader(
+        "quantity": DataTableContent(
             title: AppLocalizations.of(context)!.quantity,
             value: quantity ?? 0,
             canEdit: true),
-        "unitPrice": CartInvoiceHeader(
+        "unitPrice": DataTableContent(
             title: AppLocalizations.of(context)!.unit_price,
             value: unitPrice ?? 0,
             canEdit: true),
-        "discount": CartInvoiceHeader(
+        "discount": DataTableContent(
             title: AppLocalizations.of(context)!.discount,
             value: discount ?? 0,
             canEdit: true),
-        "price": CartInvoiceHeader(
+        "price": DataTableContent(
             title: AppLocalizations.of(context)!.total_price,
             value: price ?? 0,
             canEdit: true),

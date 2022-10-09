@@ -5,8 +5,10 @@ import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+
 class DrawerLargeScreens extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
 
@@ -100,7 +102,6 @@ class DrawerLargeScreens extends StatelessWidget {
                         authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
                     idx: index,
                   );
-
           }
           ViewAbstract viewAbstract =
               authProvider.getDrawerItemsGrouped[groupLabel]!.first;
@@ -126,12 +127,14 @@ class DrawerLargeScreens extends StatelessWidget {
           child: SizedBox(
             width: width,
             height: size,
-            child: OnHoverWidget(builder: (onHover) {
-              return Icon(
-                icon,
-                color: onHover ? Colors.orange : Colors.black,
-              );
-            }),
+            child: OnHoverWidget(
+                scale: false,
+                builder: (onHover) {
+                  return Icon(
+                    icon,
+                    color: onHover ? Colors.orange : Colors.black,
+                  );
+                }),
           ),
         ),
       ),

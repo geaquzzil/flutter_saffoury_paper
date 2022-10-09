@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_data_table.dart';
-import 'package:flutter_view_controller/new_screens/cart/cart_data_table_master.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_list_header.dart';
 
 class CartList extends StatelessWidget {
@@ -20,7 +21,7 @@ class CartList extends StatelessWidget {
               },
               icon: const Icon(Icons.arrow_back_ios_sharp)),
           const CartListHeader(),
-          const SizedBox(width: double.infinity, child: CartDataTableMaster())
+           SizedBox(width: double.infinity, child: CartDataTableMaster(action: ServerActions.edit,))
         ],
       ),
     );

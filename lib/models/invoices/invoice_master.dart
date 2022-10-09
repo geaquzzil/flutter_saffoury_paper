@@ -51,14 +51,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     date = "".toDateTimeNowString();
   }
 
-  @override
-  String? getListableFieldName() {
-    debugPrint("getListableFieldName $runtimeType");
-    if (runtimeType == Order) {
-      return "orders_details";
-    }
-    return super.getListableFieldName();
-  }
 
   @override
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
@@ -73,31 +65,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         "cargo_transporters": CargoTransporter(),
         "status": InvoiceStatus.NONE
       };
-  // @override
-  // Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-  //       "TermsID": 0,
-  //       "date": "",
-  //       "billNo": "",
-  //       "comments": "",
-  //       "employees": Employee(),
-  //       "customers": Customer(),
-  //       "cargo_transporters": CargoTransporter(),
-  //       "status": InvoiceStatus.NONE,
-  //     };
-
-  // @override
-  // Map<String, Type> getMirrorFieldsTypeMap() =>
-  //    {
-  //       "TermsID": int,
-  //       "date": "",
-  //       "billNo": "",
-  //       "comments": "",
-  //       "employees": Employee(),
-  //       "customers": Customer(),
-  //       "cargo_transporters": CargoTransporter(),
-  //       "status": InvoiceStatus.NONE,
-  //     };
-
   @override
   List<String> getMainFields() => [
         "customers",

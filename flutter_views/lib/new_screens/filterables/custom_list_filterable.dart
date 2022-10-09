@@ -21,7 +21,9 @@ class CustomFilterableController extends StatelessWidget {
               const EdgeInsets.only(right: 40, top: 0, left: 40, bottom: 0),
           initiallyExpanded: true,
           leading: Badge(
-            badgeContent: Text(getFilterableFieldsCountStringValue(
+            badgeContent: 
+            
+            Text(getFilterableFieldsCountStringValue(
                     context, customFilterableField.field)
                 .toString()),
             toAnimate: true,
