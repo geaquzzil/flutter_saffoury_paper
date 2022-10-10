@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:intl/intl.dart';
@@ -50,6 +48,12 @@ extension IterableModifier<E> on Iterable<E> {
 
 extension NonNullableDouble on double? {
   double toNonNullable() {
+    return this ?? 0;
+  }
+}
+
+extension NonNullableInt on int? {
+  int toNonNullable() {
     return this ?? 0;
   }
 }

@@ -44,7 +44,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         context.watch<DrawerViewAbstractProvider>().getObject;
 
     if (viewAbstract is DashableInterface) {
-      return Expanded(child: DashboardScreen());
+      return Expanded(child: Text("DS"));
     }
     switch (currentPage) {
       case CurrentPage.dashboard:

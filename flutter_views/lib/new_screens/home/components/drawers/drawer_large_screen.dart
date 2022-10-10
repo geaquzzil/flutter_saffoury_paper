@@ -25,7 +25,7 @@ class DrawerLargeScreens extends StatelessWidget {
         height: double.maxFinite,
         width: isOpen ? 256 : 60,
         color: Colors.white,
-        child: Column(children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           buildHeader(context, isOpen),
           buildList(context, isOpen),
           const Spacer(),
@@ -116,7 +116,67 @@ class DrawerLargeScreens extends StatelessWidget {
     final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
     final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
     final width = isOpen ? size : double.infinity;
+    if (!isOpen) {
+      return buildColapsedIcon(
+        context,
+        Icons.arrow_forward_ios,
+        () => context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
+      );
+    }
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          buildColapsedIcon(
+            context,
+            Icons.settings,
+            () =>
+                context.read<Page>().toggleIsOpen(),
+          ),
+          buildColapsedIcon(
+            context,
+            Icons.bar_chart,
+            () =>
+                context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
+          ),
+          buildColapsedIcon(
+            context,
+            Icons.arrow_back_ios,
+            () =>
+                context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
+          ),
+          buildColapsedIcon(
+            context,
+            Icons.arrow_back_ios,
+            () =>
+                context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
+          )
+          // oldCollapsedIcon(margin, alignemt, context, icon),
+        ],
+      ),
+    ]);
+  }
+
+  OnHoverWidget buildColapsedIcon(
+      BuildContext context, IconData data, VoidCallback? onPress) {
+    return OnHoverWidget(
+        scale: false,
+        builder: (onHover) {
+          return IconButton(
+            // padding: EdgeInsets.all(4),
+            onPressed: onPress,
+            iconSize: 25,
+            icon: Icon(data),
+            color: onHover ? Colors.orange : Colors.black,
+          );
+        });
+  }
+
+  Container oldCollapsedIcon(EdgeInsets? margin, Alignment alignemt,
+      BuildContext context, IconData icon) {
     return Container(
+      padding: EdgeInsets.all(10),
       margin: margin,
       alignment: alignemt,
       child: Material(
@@ -124,18 +184,14 @@ class DrawerLargeScreens extends StatelessWidget {
         child: InkWell(
           onTap: () =>
               context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
-          child: SizedBox(
-            width: width,
-            height: size,
-            child: OnHoverWidget(
-                scale: false,
-                builder: (onHover) {
-                  return Icon(
-                    icon,
-                    color: onHover ? Colors.orange : Colors.black,
-                  );
-                }),
-          ),
+          child: OnHoverWidget(
+              scale: false,
+              builder: (onHover) {
+                return Icon(
+                  icon,
+                  color: onHover ? Colors.orange : Colors.black,
+                );
+              }),
         ),
       ),
     );

@@ -19,6 +19,7 @@ set(FLUTTER_ICU_DATA_FILE "${EPHEMERAL_DIR}/icudtl.dat" PARENT_SCOPE)
 set(PROJECT_BUILD_DIR "${PROJECT_DIR}/build/" PARENT_SCOPE)
 set(AOT_LIBRARY "${PROJECT_DIR}/build/windows/app.so" PARENT_SCOPE)
 
+
 list(APPEND FLUTTER_LIBRARY_HEADERS
   "flutter_export.h"
   "flutter_windows.h"

@@ -6,8 +6,7 @@ project(flutter_saffoury_paper LANGUAGES CXX)
 # the on-disk name of your application.
 set(BINARY_NAME "flutter_saffoury_paper")
 
-set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
-set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)
+
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
 cmake_policy(SET CMP0063 NEW)
@@ -102,3 +101,6 @@ install(DIRECTORY "${PROJECT_BUILD_DIR}/${FLUTTER_ASSET_DIR_NAME}"
 install(FILES "${AOT_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_DATA_DIR}"
   CONFIGURATIONS Profile;Release
   COMPONENT Runtime)
+
+set(PDFIUM_VERSION "4929" CACHE STRING "" FORCE)
+set(PDFIUM_ARCH "x64" CACHE STRING "" FORCE)

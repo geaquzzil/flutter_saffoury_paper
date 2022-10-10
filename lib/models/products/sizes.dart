@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 part 'sizes.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -107,6 +109,29 @@ class Size extends ViewAbstract<Size> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+  String getSizeHtmlFormatString(BuildContext context, {String? fiberLines}) {
+    int widthNon = width.toNonNullable();
+    int lengthNon = length.toNonNullable();
+    if (length.toNonNullable() == 0) {
+      return "$widthNon";
+    }
+    if (fiberLines == null) {
+      return "$widthNon X $lengthNon";
+    } else {
+      if (fiberLines == "Width") {
+        return "<big>$widthNon</big> X $lengthNon";
+      } else {
+        return "$widthNon X <big>$lengthNon</big>";
+      }
+    }
+  }
+
+  Html getSizeHtmlFormat(BuildContext context, {String? fiberLines}) {
+    return Html(
+      data: getSizeHtmlFormatString(context, fiberLines: fiberLines),
+    );
   }
 
   @override

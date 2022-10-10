@@ -79,7 +79,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     );
   }
 
-  Text getMainHeaderText(BuildContext context) {
+  Widget getMainHeaderText(BuildContext context) {
     return Text(
       getMainHeaderTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)

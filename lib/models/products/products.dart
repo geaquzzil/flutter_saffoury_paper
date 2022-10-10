@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
@@ -88,6 +89,38 @@ class Product extends ViewAbstract<Product>
     return AppLocalizations.of(context)!.product;
   }
 
+  String getQuantityStringAndLabel(BuildContext context) {
+    double quantity = getQuantity();
+    if (quantity > 0) {
+      return "${AppLocalizations.of(context)!.instock}: ${quantity.toStringAsFixed(2)}";
+    }
+    return "${AppLocalizations.of(context)!.outOfStock}";
+  }
+
+  @override
+  Text? getMainSubtitleHeaderText(BuildContext context) {
+    double quantity = getQuantity();
+    return Text(
+      getQuantityStringAndLabel(context),
+      style: TextStyle(color: quantity > 0 ? Colors.green : Colors.red),
+    );
+  }
+
+  Widget getTitleTextHtml(BuildContext context) {
+    String? productType = products_types?.getMainHeaderTextOnly(context);
+    String? size =
+        sizes?.getSizeHtmlFormatString(context, fiberLines: fiberLines);
+    String? gsm = gsms?.getMainHeaderTextOnly(context);
+    return Html(
+      data: "$productType $size X $gsm",
+    );
+  }
+
+  @override
+  Widget getMainHeaderText(BuildContext context) {
+    return getTitleTextHtml(context);
+  }
+
   @override
   IconData? getMainDrawerGroupIconData() => Icons.waterfall_chart_outlined;
 
@@ -95,7 +128,8 @@ class Product extends ViewAbstract<Product>
   String getMainHeaderTextOnly(BuildContext context) {
     String? productType = products_types?.getMainHeaderTextOnly(context);
     String? size = sizes?.getMainHeaderTextOnly(context);
-    return "$productType $size";
+    String? gsm = gsms?.getMainHeaderTextOnly(context);
+    return "$productType $size X $gsm";
   }
 
   @override
@@ -288,7 +322,6 @@ class Product extends ViewAbstract<Product>
     return AppLocalizations.of(context)!.product;
   }
 
-
   @override
   String getForeignKeyName() {
     return "ProductID";
@@ -308,7 +341,6 @@ class Product extends ViewAbstract<Product>
     return sizes?.getMainHeaderTextOnly(context);
   }
 
-  
   @override
   Widget onCartCheckout(
       BuildContext context, List<CartableProductItemInterface> items) {
