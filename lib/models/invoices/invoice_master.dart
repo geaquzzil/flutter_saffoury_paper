@@ -8,6 +8,7 @@ import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable_interface.dart';
+import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -19,7 +20,7 @@ import 'package:number_to_character/number_to_character.dart';
 import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
-    implements PrintableInterface {
+    implements PrintableInterface, ModifiableInterface {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -50,7 +51,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   InvoiceMaster() : super() {
     date = "".toDateTimeNowString();
   }
-
 
   @override
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
@@ -315,6 +315,16 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           hexColor: getPrintableInvoicePrimaryColor()),
     ];
   }
+
+  @override
+  String getModifibleTitleName(BuildContext context) =>
+      getMainHeaderLabelTextOnly(context);
+  @override
+  String getModifiableMainGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.printerSetting;
+
+  @override
+  IconData getModifibleIconData() => Icons.print;
 
   static double? convertToDouble(dynamic number) =>
       number == null ? 0 : double.tryParse(number.toString());

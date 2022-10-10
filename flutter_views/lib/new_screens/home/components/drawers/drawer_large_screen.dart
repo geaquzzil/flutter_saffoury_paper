@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
+import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ class DrawerLargeScreens extends StatelessWidget {
       child: Container(
         height: double.maxFinite,
         width: isOpen ? 256 : 60,
-        color: Colors.white,
+        color: Colors.blueGrey,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           buildHeader(context, isOpen),
           buildList(context, isOpen),
@@ -131,8 +132,9 @@ class DrawerLargeScreens extends StatelessWidget {
           buildColapsedIcon(
             context,
             Icons.settings,
-            () =>
-                context.read<Page>().toggleIsOpen(),
+            () => context
+                .read<LargeScreenPageProvider>()
+                .setCurrentPage(CurrentPage.settings),
           ),
           buildColapsedIcon(
             context,

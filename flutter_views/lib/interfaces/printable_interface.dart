@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:pdf/pdf.dart';
 
+abstract class PrintableSharedParams{
+  
+}
+
 abstract class PrintableInterfaceDetails {
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
       BuildContext context, PrintCommandAbstract? pca);

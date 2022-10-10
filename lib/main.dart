@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
+import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/providers/therd_screen_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
@@ -38,7 +39,7 @@ void main() async {
   initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
-  //TODO what is this ? 
+  //TODO what is this ?
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
@@ -58,8 +59,11 @@ void main() async {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => TherdScreenProvider()),
       ChangeNotifierProvider(create: (context) => EndDrawerProvider()),
-      ChangeNotifierProvider(create: (_) => DrawerMenuControllerProvider()),
-      ChangeNotifierProvider(create: (_) => AuthProvider.initialize(views)),
+      ChangeNotifierProvider(
+          create: (context) => DrawerMenuControllerProvider()),
+      ChangeNotifierProvider(create: (context) => SettingProvider()),
+      ChangeNotifierProvider(
+          create: (context) => AuthProvider.initialize(views)),
       ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),

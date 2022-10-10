@@ -13515,13 +13515,12 @@ final _data = <r.Reflectable, r.ReflectorData>{
             {},
             {},
             {
-              r'': (bool b) =>
-                  ({language, copies = 1, printPaperSize}) => b
-                      ? prefix39.PrinterOptions(
-                          copies: copies,
-                          language: language,
-                          printPaperSize: printPaperSize)
-                      : null,
+              r'': (bool b) => ({language, copies = 1, printPaperSize}) => b
+                  ? prefix39.PrinterOptions(
+                      copies: copies,
+                      language: language,
+                      printPaperSize: printPaperSize)
+                  : null,
               r'fromJson': (bool b) =>
                   (data) => b ? prefix39.PrinterOptions.fromJson(data) : null
             },
@@ -29509,7 +29508,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'toJsonString': (dynamic instance) => instance.toJsonString,
         r'getMainFieldsIconsAndValues': (dynamic instance) =>
             instance.getMainFieldsIconsAndValues,
-        r'getPrintCommand': (dynamic instance) => instance.getPrintCommand,
+        r'getPrintCommand': (dynamic instance) => instance.getPrintSetting,
         r'setCustomMap': (dynamic instance) => instance.setCustomMap,
         r'getListSearchViewByTextInputList': (dynamic instance) =>
             instance.getListSearchViewByTextInputList,

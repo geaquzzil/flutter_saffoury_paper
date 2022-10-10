@@ -15,6 +15,8 @@ import 'package:provider/provider.dart';
 
 import '../../new_components/ext.dart';
 import '../dashboard/main_dashboard2.dart';
+import '../setting/list_sticky_setting_page.dart';
+import '../setting/setting_page.dart';
 import 'components/header/header_title_on_list.dart';
 
 class BaseHomeScreenLayout extends StatelessWidget {
@@ -47,6 +49,8 @@ class BaseHomeScreenLayout extends StatelessWidget {
       return Expanded(child: Text("DS"));
     }
     switch (currentPage) {
+      case CurrentPage.settings:
+        return SettingPage();
       case CurrentPage.dashboard:
         return DashboardWidget(
           viewAbstract: viewAbstract,
@@ -57,6 +61,28 @@ class BaseHomeScreenLayout extends StatelessWidget {
       default:
         return getMainHomeList(context);
     }
+  }
+
+  Widget getSettingHomeWidget(BuildContext context) {
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(
+              flex: 4,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListStickySettingWidget(),
+                  ],
+                ),
+              )),
+          Expanded(
+            flex: 8,
+            child: Text("description"),
+          ),
+        ],
+      ),
+    );
   }
 
   Expanded getMainHomeList(BuildContext context) {
