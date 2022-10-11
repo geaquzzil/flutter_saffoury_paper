@@ -11,6 +11,7 @@ import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -29,7 +30,7 @@ part 'products.g.dart';
 )
 @reflector
 class Product extends ViewAbstract<Product>
-    implements CartableProductItemInterface {
+    implements CartableProductItemInterface, ModifiableInterface {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -352,6 +353,20 @@ class Product extends ViewAbstract<Product>
 
   @override
   double getCartableProductQuantity() => getQuantity();
+
+  @override
+  String getModifiableMainGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.printerSetting;
+
+  @override
+  IconData getModifibleIconData() => getMainIconData();
+
+  @override
+  getModifibleObject(BuildContext context) => PrintProduct(printObject: this);
+
+  @override
+  String getModifibleTitleName(BuildContext context) =>
+      getMainHeaderLabelTextOnly(context);
 }
 
 // enum ProductStatus {

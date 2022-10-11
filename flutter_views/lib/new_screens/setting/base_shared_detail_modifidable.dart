@@ -32,6 +32,7 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(vsync: this, length: tabs.length);
   }
 
   @override
@@ -41,7 +42,9 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
     if (settingObject == null) {
       return getEmptyView(context);
     }
-    return getEmptyView(context);
+    return BaseEditPage(
+      parent: settingObject.getModifibleObject(context),
+    );
   }
 
   Widget getEmptyView(BuildContext context) {
@@ -60,7 +63,7 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
 
   Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
     return Container(
-      color: Colors.white,
+      color: Colors.grey,
       child: Expanded(
         flex: 2,
         child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,

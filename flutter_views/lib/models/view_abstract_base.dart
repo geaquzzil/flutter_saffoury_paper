@@ -218,8 +218,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
                 : e))
         .toList();
   }
-
-  PrintCommandAbstract? getPrintCommand(BuildContext context) => null;
 }
 
 class TabControllerHelper extends Tab {

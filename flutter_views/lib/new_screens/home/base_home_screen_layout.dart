@@ -63,28 +63,6 @@ class BaseHomeScreenLayout extends StatelessWidget {
     }
   }
 
-  Widget getSettingHomeWidget(BuildContext context) {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-              flex: 4,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListStickySettingWidget(),
-                  ],
-                ),
-              )),
-          Expanded(
-            flex: 8,
-            child: Text("description"),
-          ),
-        ],
-      ),
-    );
-  }
-
   Expanded getMainHomeList(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Expanded(

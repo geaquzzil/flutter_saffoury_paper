@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -20,7 +21,7 @@ import 'package:number_to_character/number_to_character.dart';
 import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
-    implements PrintableInterface, ModifiableInterface {
+    implements PrintableInterface, ModifiableInterface<PrintProduct> {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -325,6 +326,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   IconData getModifibleIconData() => Icons.print;
+
+  @override
+  PrintProduct getModifibleObject(BuildContext context) {
+    return PrintProduct(printObject: this);
+  }
 
   static double? convertToDouble(dynamic number) =>
       number == null ? 0 : double.tryParse(number.toString());
