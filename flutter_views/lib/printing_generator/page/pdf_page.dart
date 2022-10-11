@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/printable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
 class PdfPage extends StatefulWidget {
-  PrintableInterface invoiceObj;
+  PrintableInvoiceInterface invoiceObj;
 
   PdfPage({super.key, required this.invoiceObj});
 
@@ -67,6 +67,7 @@ class _PdfPageState extends State<PdfPage> {
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,
+
         // shouldRepaint: ,
         build: (format) async {
           final pdf = PdfInvoiceApi(context, widget.invoiceObj);

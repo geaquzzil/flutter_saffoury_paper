@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_view_controller/interfaces/printable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_api.dart';
 import 'package:flutter_view_controller/printing_generator/utils.dart';
@@ -15,11 +16,12 @@ import 'package:flutter/material.dart' as mt;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart' as intl;
 
-class PdfInvoiceApi<T extends PrintableInterface> {
+class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
   material.BuildContext context;
   T printObj;
   PrintCommandAbstract? printCommand;
   PdfInvoiceApi(this.context, this.printObj, {this.printCommand});
+  @deprecated
   Future<Uint8List> generateFromImage(Uint8List? list) {
     final pdf = Document();
 
@@ -43,8 +45,10 @@ class PdfInvoiceApi<T extends PrintableInterface> {
   }
 
   Future<pw.ThemeData> getThemeData() async {
+    var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
+    final ttf = pw.Font.ttf(pathToFile);
     return ThemeData.withFont(
-        icons: await PdfGoogleFonts.materialIcons(),
+        icons: ttf,
         base: await PdfGoogleFonts.tajawalRegular(),
         bold: await PdfGoogleFonts.tajawalBold(),
         italic: await PdfGoogleFonts.tajawalMedium(),
@@ -58,9 +62,11 @@ class PdfInvoiceApi<T extends PrintableInterface> {
     var myTheme = await getThemeData();
     final header = await buildHeader();
 
-    final pdf = Document(theme: myTheme);
+    final pdf = Document(
+        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
     pdf.addPage(MultiPage(
       pageFormat: format,
+
       margin: EdgeInsets.zero,
 
       // pageTheme: ,
@@ -87,6 +93,7 @@ class PdfInvoiceApi<T extends PrintableInterface> {
     return Container(
         width: double.infinity,
         color: PdfColors.grey200,
+        padding: EdgeInsets.all(20),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,25 +102,66 @@ class PdfInvoiceApi<T extends PrintableInterface> {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children:
-                      e.map((item) => buildInvoiceInfoItem(item)).toList());
+                  children: e
+                      .map((item) => buildInvoiceInfoItem(
+                          item, inf.length, inf.indexOf(e)))
+                      .toList());
             }).toList()));
   }
 
-  pw.Padding buildInvoiceInfoItem(InvoiceHeaderTitleAndDescriptionInfo item) {
+  MainAxisAlignment getMainAxisSizeForHeaderInfo(int length, int idx) {
+    if (idx == length - 1) {
+      return MainAxisAlignment.end;
+    } else if (idx == 0) {
+      return MainAxisAlignment.start;
+    } else {
+      return MainAxisAlignment.center;
+    }
+  }
+
+  double getSizeForHeaderInfo(int length, int idx) {
+    if (idx == length - 1) {
+      return 200;
+    } else if (idx == 0) {
+      return 200;
+    } else {
+      return 100;
+    }
+  }
+
+  CrossAxisAlignment getCrossAxisAlignmentForHeaderInfo(int length, int idx) {
+    if (idx == length - 1) {
+      return CrossAxisAlignment.end;
+    } else if (idx == 0) {
+      return CrossAxisAlignment.start;
+    } else {
+      return CrossAxisAlignment.center;
+    }
+  }
+
+  pw.Padding buildInvoiceInfoItem(
+      InvoiceHeaderTitleAndDescriptionInfo item, int length, int idx) {
     return Padding(
         padding: EdgeInsets.all(5),
         child: Container(
-            width: 200,
+            width: getSizeForHeaderInfo(length, idx),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 // crossAxisAlignment: ,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment:
+                    getCrossAxisAlignmentForHeaderInfo(length, idx),
+                mainAxisAlignment: getMainAxisSizeForHeaderInfo(length, idx),
                 children: [
                   buildTextWithIcon(item),
-                  Text(item.description,
-                      textDirection: getTextDirection(item.description)),
+                  Padding(
+                      padding: item.getCodeIcon() == null
+                          ? EdgeInsets.symmetric()
+                          : EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(item.description,
+                          textDirection: getTextDirection(item.description),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: item.getColor()))),
                 ])));
   }
 
@@ -123,12 +171,13 @@ class PdfInvoiceApi<T extends PrintableInterface> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          color: PdfColors.grey,
-          size: 15,
-          IconData(item.icon?.codePoint ?? 0),
-        ),
-        SizedBox(width: 0.2 * PdfPageFormat.cm),
+        if (item.getCodeIcon() != null)
+          Icon(
+            color: PdfColors.grey,
+            size: 15,
+            IconData(item.getCodeIcon()!, matchTextDirection: true),
+          ),
+        if (item.getCodeIcon() != null) SizedBox(width: 0.2 * PdfPageFormat.cm),
         Text(item.title),
       ],
     );
@@ -144,10 +193,10 @@ class PdfInvoiceApi<T extends PrintableInterface> {
                 PdfColor.fromHex(printObj.getPrintableInvoicePrimaryColor())),
       ));
   Widget buildInvoiceMainTable() {
-    List<PrintableInterfaceDetails> details =
+    List<PrintableInvoiceInterfaceDetails> details =
         printObj.getPrintableInvoiceDetailsList();
 
-    PrintableInterfaceDetails head = details[0];
+    PrintableInvoiceInterfaceDetails head = details[0];
     final headers = head
         .getPrintableInvoiceTableHeaderAndContent(context, printCommand)
         .keys

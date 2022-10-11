@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/printable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 
 abstract class CartableInvoiceMasterObjectInterface {
   List<InvoiceTotalTitleAndDescriptionInfo> getCartableInvoiceSummary(

@@ -11,20 +11,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   PrinterOptions? printerOptions;
   ReportOptions? reportOptions;
-
-  @override
-  // Map<String, Type> getMirrorFieldsTypeMap() => {
-  //       "printOptions": PrinterOptions,
-  //       "ReportOptions": ReportOptions,
-  //       "sortByType": SortByType
-  //     };
-
-  @override
-  void onDropdownChanged(BuildContext context, String field, value) {
-    if (field == "sortByType") {
-      SortByType v = value as SortByType;
-    }
-  }
+  String? primaryColor;
+  String? secondaryColor;
+  PrintLocalSetting() : super();
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

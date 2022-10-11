@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/printable_interface.dart';
-import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/new_components/ext.dart';
 import 'package:flutter_view_controller/new_screens/setting/base_shared_detail_modifidable.dart';
 import 'package:flutter_view_controller/new_screens/setting/list_sticky_setting_page.dart';
@@ -37,7 +37,8 @@ class SettingPage extends StatelessWidget {
   Widget desideLyout(BuildContext context) {
     ModifiableInterface? selectedObject =
         context.watch<SettingProvider>().getSelectedObject;
-    if (selectedObject == null || selectedObject is! PrintableInterface) {
+    if (selectedObject == null ||
+        selectedObject is! ModifiablePrintableInterface) {
       return Container(
           // color: Colors.grey,
           // padding: const EdgeInsets.all(10),
@@ -54,14 +55,14 @@ class SettingPage extends StatelessWidget {
         child: Row(
       children: [
         Expanded(
-            child: PdfPage(
-          invoiceObj: selectedObject as PrintableInterface,
-        )),
-        Expanded(
           child: Center(
             child: BaseSettingDetailsView(),
           ),
         ),
+        Expanded(
+            child: PdfPage(
+          invoiceObj: selectedObject.getModifiablePrintableOnSetting(context),
+        )),
       ],
     ));
   }

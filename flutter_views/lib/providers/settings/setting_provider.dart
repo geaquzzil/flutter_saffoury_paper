@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:provider/provider.dart';
 
-import '../../interfaces/settings/printable_setting.dart';
+import '../../interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import '../auth_provider.dart';
 
 class SettingProvider with ChangeNotifier {

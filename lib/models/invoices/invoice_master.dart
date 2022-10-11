@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
-import 'package:flutter_view_controller/interfaces/printable_interface.dart';
-import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+// import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -21,7 +23,9 @@ import 'package:number_to_character/number_to_character.dart';
 import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
-    implements PrintableInterface, ModifiableInterface<PrintProduct> {
+    implements
+        PrintableInvoiceInterface,
+        ModifiablePrintableInterface<PrintProduct> {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -155,20 +159,23 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           [
             if (customers != null)
               InvoiceHeaderTitleAndDescriptionInfo(
-                  title: "${AppLocalizations.of(context)!.name}: ",
-                  description: customers?.name ?? "",
-                  icon: Icons.account_circle),
+                title: "${AppLocalizations.of(context)!.name}: ",
+                description: customers?.name ?? "",
+                // icon: Icons.account_circle_rounded
+              ),
             if (customers != null)
               InvoiceHeaderTitleAndDescriptionInfo(
-                  title: "${AppLocalizations.of(context)!.iD}: ",
-                  description: customers?.iD.toString() ?? "",
-                  icon: Icons.numbers),
+                title: "${AppLocalizations.of(context)!.iD}: ",
+                description: customers?.iD.toString() ?? "",
+                // icon: Icons.numbers
+              ),
             if (cargo_transporters != null)
               InvoiceHeaderTitleAndDescriptionInfo(
-                  title: "${AppLocalizations.of(context)!.transfers}: ",
-                  description:
-                      "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
-                  icon: Icons.numbers)
+                title: "${AppLocalizations.of(context)!.transfers}: ",
+                description:
+                    "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
+                // icon: Icons.numbers
+              )
           ];
   @override
   String getPrintableInvoiceQrCodeID() {
@@ -218,7 +225,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<PrintableInterfaceDetails> getPrintableInvoiceDetailsList() {
+  List<PrintableInvoiceInterfaceDetails> getPrintableInvoiceDetailsList() {
     if (runtimeType == Order) {
       return (this as Order).orders_details ?? [];
     }
@@ -229,13 +236,15 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       BuildContext context, PrintCommandAbstract? pca) {
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.iD,
-          description: customers?.iD.toString() ?? "",
-          icon: Icons.numbers),
+        title: AppLocalizations.of(context)!.iD,
+        description: customers?.iD.toString() ?? "",
+        // icon: Icons.numbers
+      ),
       InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.date,
-          description: customers?.date.toString() ?? "",
-          icon: Icons.date_range),
+        title: AppLocalizations.of(context)!.date,
+        description: customers?.date.toString() ?? "",
+        // icon: Icons.date_range
+      ),
     ];
   }
 
@@ -245,15 +254,21 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.total_price,
           description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-          icon: Icons.tag),
+          hexColor: Colors.green.toHex()
+          // icon: Icons.tag
+          ),
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.balance,
           description: customers?.balance?.toStringAsFixed(2) ?? "",
-          icon: Icons.balance),
+          hexColor: Colors.green.toHex()
+          // icon: Icons.balance
+          ),
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.paymentMethod,
           description: "payment on advanced",
-          icon: Icons.credit_card),
+          hexColor: Colors.green.toHex()
+          // icon: Icons.credit_card
+          ),
     ];
   }
 
@@ -262,19 +277,22 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     if (customers == null) return [];
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.mr,
-          description: customers?.name ?? "",
-          icon: Icons.account_circle_rounded),
+        title: AppLocalizations.of(context)!.mr,
+        description: customers?.name ?? "",
+        // icon: Icons.account_circle_rounded
+      ),
       if (customers?.address != null)
         InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.addressInfo,
-            description: customers?.name ?? "",
-            icon: Icons.map),
+          title: AppLocalizations.of(context)!.addressInfo,
+          description: customers?.name ?? "",
+          // icon: Icons.map
+        ),
       if (customers?.phone != null)
         InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.phone_number,
-            description: customers?.phone ?? "",
-            icon: Icons.phone),
+          title: AppLocalizations.of(context)!.phone_number,
+          description: customers?.phone ?? "",
+          // icon: Icons.phone
+        ),
     ];
   }
 
@@ -330,6 +348,21 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   PrintProduct getModifibleObject(BuildContext context) {
     return PrintProduct(printObject: this);
+  }
+
+  @override
+  PrintableInvoiceInterface getModifiablePrintableOnSetting(
+      BuildContext context) {
+    Order o = Order();
+    o.customers = Customer()..name = "TEST";
+    o.customers?.address = "Damascus - Syria";
+    o.customers?.phone = "099999999";
+    o.cargo_transporters = CargoTransporter();
+    o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
+    o.cargo_transporters?.name = "Test Driver";
+    o.cargo_transporters?.carNumber = "123-435";
+    o.employees = Employee()..name = "TEST";
+    return o..orders_details?.add(OrderDetails());
   }
 
   static double? convertToDouble(dynamic number) =>

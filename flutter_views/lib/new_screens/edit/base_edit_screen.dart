@@ -27,6 +27,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
   late GlobalKey<FormBuilderState> _formKey;
   late List<String> fields;
   late EditSubsViewAbstractControllerProvider prov;
+
   // @override
   // void didUpdateWidget(BaseEditPage oldWidget) {
   //   super.didUpdateWidget(oldWidget);
@@ -49,6 +50,8 @@ class _BaseEditPageState extends State<BaseEditPage> {
     super.initState();
     ErrorFieldsProvider errorFieldsProvider =
         Provider.of<ErrorFieldsProvider>(context, listen: false);
+    prov = Provider.of<EditSubsViewAbstractControllerProvider>(context,
+        listen: false);
 
     _formKey = errorFieldsProvider.getFormBuilderState;
 
@@ -59,8 +62,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
   void dispose() {
     debugPrint("dispose _BaseEditPageState");
     // Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
-    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
-        .clear();
+    prov.clear();
     super.dispose();
   }
 
