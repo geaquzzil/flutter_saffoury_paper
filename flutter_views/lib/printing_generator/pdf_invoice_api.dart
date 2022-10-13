@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_api.dart';
 import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -15,6 +14,8 @@ import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart' as intl;
+
+import '../interfaces/printable/printable_master.dart';
 
 class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
   material.BuildContext context;
@@ -56,7 +57,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
   }
 
   Future<Widget> buildHeader() async => pw.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintableInvoicePrimaryColor()}&darkColor=${printObj.getPrintableInvoiceSecondaryColor()}'));
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}'));
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
@@ -189,8 +190,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
         printObj.getPrintableInvoiceTitle(context, printCommand),
         style: TextStyle(
             fontSize: 20,
-            color:
-                PdfColor.fromHex(printObj.getPrintableInvoicePrimaryColor())),
+            color: PdfColor.fromHex(printObj.getPrintablePrimaryColor())),
       ));
   Widget buildInvoiceMainTable() {
     List<PrintableInvoiceInterfaceDetails> details =
@@ -217,14 +217,17 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
             headers: headers,
             data: data,
             border: null,
-            cellDecoration: (index, data, rowNum) => BoxDecoration(
-                color: PdfColors.white,
-                border: Border(
-                    bottom: BorderSide(
-                  //                    <--- top side
-                  color: PdfColors.grey,
-                  // width: 1.0,
-                ))),
+            cellDecoration: (index, data, rowNum) {
+              mt.debugPrint("cellDecoration rownum $rowNum index= $index");
+              return BoxDecoration(
+                  color: PdfColors.white,
+                  border: Border(
+                      bottom: BorderSide(
+                    //                    <--- top side
+                    color: PdfColors.grey,
+                    // width: 1.0,
+                  )));
+            },
             headerCellDecoration: const BoxDecoration(
                 color: PdfColors.white,
                 border: Border(
@@ -283,11 +286,10 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
               height: 50,
               width: 50,
               barcode: Barcode.qrCode(),
-              data: printObj.getPrintableInvoiceQrCode(),
+              data: printObj.getPrintableQrCode(),
             ),
             SizedBox(height: .1 * (PdfPageFormat.cm)),
-            Text(printObj.getPrintableInvoiceQrCodeID(),
-                style: TextStyle(fontSize: 9))
+            Text(printObj.getPrintableQrCodeID(), style: TextStyle(fontSize: 9))
           ])
         ]);
   }

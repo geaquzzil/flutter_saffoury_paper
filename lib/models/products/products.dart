@@ -363,7 +363,8 @@ class Product extends ViewAbstract<Product>
   IconData getModifibleIconData() => getMainIconData();
 
   @override
-  getModifibleObject(BuildContext context) => PrintProduct(printObject: this);
+  getModifibleSettingObject(BuildContext context) =>
+      PrintProduct(printObject: this);
 
   @override
   String getModifibleTitleName(BuildContext context) =>

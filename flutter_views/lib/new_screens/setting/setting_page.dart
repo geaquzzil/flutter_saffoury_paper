@@ -61,7 +61,7 @@ class SettingPage extends StatelessWidget {
         ),
         Expanded(
             child: PdfPage(
-          invoiceObj: selectedObject.getModifiablePrintableOnSetting(context),
+          invoiceObj: selectedObject.getModifiablePrintablePdfSetting(context),
         )),
       ],
     ));

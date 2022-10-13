@@ -101,7 +101,7 @@ class Order extends InvoiceMaster<Order>
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
           description: totalNetPrice.toStringAsFixed(2),
-          hexColor: getPrintableInvoicePrimaryColor()),
+          hexColor: getPrintablePrimaryColor()),
     ];
   }
 

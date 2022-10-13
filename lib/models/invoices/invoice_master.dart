@@ -178,7 +178,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
               )
           ];
   @override
-  String getPrintableInvoiceQrCodeID() {
+  String getPrintableQrCodeID() {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
 
     String year = "${dateFormat.parse(date ?? "").year}";
@@ -197,7 +197,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintableInvoiceQrCode() {
+  String getPrintableQrCode() {
     var q = QRCodeID(
       iD: iD,
       action: getTableNameApi() ?? "",
@@ -206,7 +206,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintableInvoicePrimaryColor() {
+  String getPrintablePrimaryColor() {
     if (runtimeType == Order) {
       return Colors.green.value.toRadixString(16).substring(2, 8);
     }
@@ -214,7 +214,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintableInvoiceSecondaryColor() {
+  String getPrintableSecondaryColor() {
     if (runtimeType == Order) {
       return const Color.fromARGB(255, 33, 140, 39)
           .value
@@ -299,7 +299,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
       BuildContext context, PrintCommandAbstract? pca) {
-    var converter = NumberToCharacterConverter('ar');
+    var converter = NumberToCharacterConverter('en');
     return [
       InvoiceTotalTitleAndDescriptionInfo(
           size: 10,
@@ -331,7 +331,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
           description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-          hexColor: getPrintableInvoicePrimaryColor()),
+          hexColor: getPrintablePrimaryColor()),
     ];
   }
 
@@ -346,12 +346,12 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   IconData getModifibleIconData() => Icons.print;
 
   @override
-  PrintProduct getModifibleObject(BuildContext context) {
+  PrintProduct getModifibleSettingObject(BuildContext context) {
     return PrintProduct(printObject: this);
   }
 
   @override
-  PrintableInvoiceInterface getModifiablePrintableOnSetting(
+  PrintableInvoiceInterface getModifiablePrintablePdfSetting(
       BuildContext context) {
     Order o = Order();
     o.customers = Customer()..name = "TEST";

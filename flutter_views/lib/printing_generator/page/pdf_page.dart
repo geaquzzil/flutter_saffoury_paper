@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+
+import '../../interfaces/printable/printable_master.dart';
+import '../pdf_receipt_api.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
 class PdfPage extends StatefulWidget {
-  PrintableInvoiceInterface invoiceObj;
+  PrintableMaster invoiceObj;
 
   PdfPage({super.key, required this.invoiceObj});
 
@@ -62,16 +66,24 @@ class _PdfPageState extends State<PdfPage> {
   Widget build(BuildContext context) {
     // Printing.(onLayout: onLayout)
     Widget body = PdfPreview(
-        pdfFileName: widget.invoiceObj.getPrintableInvoiceQrCodeID(),
+        pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
         shareActionExtraEmails: ["info@saffoury.com"],
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
+        pageFormats: {"a3": PdfPageFormat.a3, "a5": PdfPageFormat.a5},
         canChangeOrientation: true,
 
         // shouldRepaint: ,
         build: (format) async {
-          final pdf = PdfInvoiceApi(context, widget.invoiceObj);
-          return pdf.generate(format);
+          if (widget.invoiceObj is PrintableInvoiceInterface) {
+            final pdf = PdfInvoiceApi<PrintableInvoiceInterface>(
+                context, widget.invoiceObj as PrintableInvoiceInterface);
+            return pdf.generate(format);
+          } else {
+            final pdf = PdfReceipt<PrintableReceiptInterface>(
+                context, widget.invoiceObj as PrintableReceiptInterface);
+            return pdf.generate(format);
+          }
         });
     // Widget body = EasyWebView(
     //   onLoaded: (controller) {

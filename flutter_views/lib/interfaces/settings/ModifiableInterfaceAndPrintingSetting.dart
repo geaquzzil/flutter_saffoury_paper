@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:pdf/pdf.dart';
@@ -10,12 +11,11 @@ abstract class ModifiableInterface<T> {
   String getModifiableMainGroupName(BuildContext context);
   String getModifibleTitleName(BuildContext context);
   IconData getModifibleIconData();
-  T getModifibleObject(BuildContext context);
+  T getModifibleSettingObject(BuildContext context);
 }
 
 abstract class ModifiablePrintableInterface<T> extends ModifiableInterface<T> {
-  PrintableInvoiceInterface getModifiablePrintableOnSetting(
-      BuildContext context);
+  PrintableMaster getModifiablePrintablePdfSetting(BuildContext context);
 }
 
 class PrintPageSetting {

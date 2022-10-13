@@ -33,6 +33,7 @@ import 'package:flutter_view_controller/providers/page_large_screens_provider.da
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'models/funds/credits.dart';
 import 'models/products/products_types.dart';
 
 void main() async {
@@ -52,6 +53,7 @@ void main() async {
     Purchases(),
     Customer(),
     Employee(),
+    Credits(),
     ProductType(),
     Dashboard()
   ]);

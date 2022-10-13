@@ -43,7 +43,7 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
       return getEmptyView(context);
     }
     return BaseEditPage(
-      parent: settingObject.getModifibleObject(context),
+      parent: settingObject.getModifibleSettingObject(context),
     );
   }
 
