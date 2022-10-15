@@ -42,7 +42,12 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
         context.watch<ActionViewAbstractProvider>();
 
     ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
-    if (viewAbstract == null) {
+    Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
+    if (customWidget != null) {
+      return Center(
+        child: customWidget,
+      );
+    } else if (viewAbstract == null) {
       return Scaffold(body: getEmptyView(context));
     } else {
       tabs.clear();

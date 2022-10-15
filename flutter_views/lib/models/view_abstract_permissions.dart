@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -137,7 +138,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   Future<bool> hasPermissionPrint(BuildContext context,
       {ViewAbstract? viewAbstract}) async {
-    if (this is! PrintableInvoiceInterface) return false;
+    if (this is! PrintableMaster) return false;
     return viewAbstract == null
         ? await hasPermission(context, this, ServerActions.print)
         : await hasPermission(context, viewAbstract, ServerActions.print);

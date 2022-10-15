@@ -30,7 +30,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
           json['countries_manufactures'] as Map<String, dynamic>)
   ..sizes = json['sizes'] == null
       ? null
-      : Size.fromJson(json['sizes'] as Map<String, dynamic>)
+      : sizeProduct.Size.fromJson(json['sizes'] as Map<String, dynamic>)
   ..gsms = json['gsms'] == null
       ? null
       : GSM.fromJson(json['gsms'] as Map<String, dynamic>)

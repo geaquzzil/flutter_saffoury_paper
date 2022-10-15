@@ -8,8 +8,8 @@ import '../auth_provider.dart';
 class SettingProvider with ChangeNotifier {
   ModifiableInterface? _selectedObject;
   ModifiableInterface? get getSelectedObject => _selectedObject;
-  void change(ModifiableInterface _selectedObject) {
-    this._selectedObject = _selectedObject;
+  void change(ModifiableInterface selectedObject) {
+    _selectedObject = selectedObject;
     notifyListeners();
   }
 
@@ -19,6 +19,7 @@ class SettingProvider with ChangeNotifier {
         .getDrawerItemsPermissions
         .whereType<ModifiableInterface>()
         .toList();
+
     return printableSettingsObjects;
   }
 }

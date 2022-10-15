@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
@@ -34,7 +36,7 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../invoices/orders.dart';
-import 'sizes.dart';
+import 'sizes.dart' as sizeProduct;
 part 'products.g.dart';
 
 @JsonSerializable(
@@ -70,7 +72,7 @@ class Product extends ViewAbstract<Product>
   ProductType? products_types;
   CustomsDeclaration? customs_declarations;
   CountryManufacture? countries_manufactures;
-  Size? sizes;
+  sizeProduct.Size? sizes;
   GSM? gsms;
   Quality? qualities;
   Grades? grades;
@@ -90,7 +92,7 @@ class Product extends ViewAbstract<Product>
         "products_types": ProductType(),
         "customs_declarations": CustomsDeclaration(),
         "countries_manufactures": CountryManufacture(),
-        "sizes": Size(),
+        "sizes": sizeProduct.Size(),
         "gsms": GSM(),
         "qualities": Quality(),
         "grades": Grades(),
@@ -98,7 +100,9 @@ class Product extends ViewAbstract<Product>
         "inStock": List<Stocks>.empty()
       };
 
-  Product() : super();
+  Product() : super() {
+    date = "".toDateTimeNowString();
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
@@ -294,6 +298,44 @@ class Product extends ViewAbstract<Product>
     return products_types?.sellPrice ?? 0;
   }
 
+  double getSheetWeight() {
+    try {
+      return (getWidth() * getLength() * getGSM()).toDouble() / 1000000;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  int getWidth() {
+    return sizes?.width ?? 0;
+  }
+
+  int getLength() {
+    return sizes?.length ?? 0;
+  }
+
+  int getGSM() {
+    return gsms?.gsm ?? 0;
+  }
+
+  String getManufactureNameString() {
+    //TODO if cutrequest return saffouryPaper;
+    return "TODO";
+  }
+
+  String getCountryNameString() {
+    //TODO if cutrequest return syria;
+    return "TODO";
+  }
+
+  String getCutRequestID() {
+    return "TODO";
+  }
+
+  String getCustomerNameIfCutRequest() {
+    return "TODO";
+  }
+
   double getQuantity({Warehouse? warehouse}) {
     if (inStock == null) return 0;
     if (warehouse == null) {
@@ -350,24 +392,23 @@ class Product extends ViewAbstract<Product>
   static String? intFromString(dynamic number) => number?.toString();
 
   String getProductTypeNameString() {
-    return products_types?.name??"";
+    return products_types?.name ?? "-";
   }
 
-  String? getSizeString(BuildContext context) {
-    return sizes?.getMainHeaderTextOnly(context);
+  String getGradeString() {
+    return grades?.name ?? "-";
+  }
+
+  String getQualityString() {
+    return qualities?.name ?? "-";
+  }
+
+  String getSizeString(BuildContext context) {
+    return sizes?.getMainHeaderTextOnly(context) ?? "-";
   }
 
   String getGSMString(BuildContext context) {
     return gsms?.gsm.toString() ?? "";
-  }
-
-  @override
-  Widget onCartCheckout(
-      BuildContext context, List<CartableProductItemInterface> items) {
-    Order order = Order();
-    order.orders_details = List.generate(items.length,
-        (index) => OrderDetails()..setProduct(items[index] as Product));
-    return BaseEditPage(parent: order);
   }
 
   @override
@@ -424,7 +465,7 @@ class Product extends ViewAbstract<Product>
   Future<
       pdfWidget
           .Widget> buildHeader() async => pdfWidget.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${getPrintablePrimaryColor()}&darkColor=${getPrintableSecondaryColor()}'));
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor()}&darkColor=${getPrintableSecondaryColor()}'));
 
   @override
   String getPrintableInvoiceTitle(
@@ -457,8 +498,14 @@ class Product extends ViewAbstract<Product>
 
   @override
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
-    // TODO: implement getModifiablePrintablePdfSetting
-    throw UnimplementedError();
+    Product p = new Product();
+    p.products_types = ProductType()..name = "sappi";
+    p.sizes = sizeProduct.Size();
+    p.sizes?.length = 1000;
+    p.sizes?.width = 700;
+
+    p.gsms = GSM()..gsm = 300;
+    return p;
   }
 }
 

@@ -19,60 +19,15 @@ class PdfPage extends StatefulWidget {
   @override
   _PdfPageState createState() => _PdfPageState();
 }
-// void printPage() async {
-//   // get the html from the current page
-//   String html = await _controller.runJavascriptReturningResult(
-//       "encodeURIComponent(document.documentElement.outerHTML)");
-//   html = Uri.decodeComponent(html);
-//   // there would be `"` at the beginning and the end, so remove it
-//   html = html.substring(1, html.length - 1);
 
-//   // get the pdf of the html
-//   final pdf = await Printing.convertHtml(
-//     format: const PdfPageFormat(
-//       100 * PdfPageFormat.mm,
-//       50 * PdfPageFormat.mm,
-//       // marginLeft: 5 * PdfPageFormat.mm,
-//       // marginRight: 5 * PdfPageFormat.mm,
-//     ),
-//     html: htmlStr,
-//   );
-//   // the dpi is the resolution of the pdf, it's important if the page size is small, otherwise you can ignore it
-//   const dpi = 288.0;
-
-//   // transform pdf to image so you can print it directly
-//   await for (var page in Printing.raster(pdf, dpi: dpi)) {
-//     final imgData = await page.toPng();
-//     // personally I'm using sunmi printer, you'll need to change to your personnel function
-//     await SunmiPrinter.printImage(Uint8List.fromList(imgData));
-//   }
-// }
 class _PdfPageState extends State<PdfPage> {
-  // Widget getWebContentConverter(BuildContext context) {
-  //   return FutureBuilder<Uint8List?>(
-  //     builder: (context, snapshot) {
-  //       return PdfPreview(build: (format) async {
-  //         final pdf = PdfInvoiceApi(context, widget.invoiceObj);
-  //         return pdf.generateFromImage(snapshot.data);
-  //       }
-  //           // await Printing.convertHtml(html: snapshot.data.body)
-
-  //           );
-  //     },
-  //     future: WebcontentConverter.webUriToImage(
-  //         uri: "https://www.saffoury.com/SaffouryPaper2/print/index.php"),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // Printing.(onLayout: onLayout)
     Widget body = PdfPreview(
         pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
         shareActionExtraEmails: ["info@saffoury.com"],
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
-        pageFormats: {"a3": PdfPageFormat.a3, "a5": PdfPageFormat.a5},
         canChangeOrientation: true,
         canDebug: false,
 
@@ -92,23 +47,7 @@ class _PdfPageState extends State<PdfPage> {
             return pdf.generate(format);
           }
         });
-    // Widget body = EasyWebView(
-    //   onLoaded: (controller) {
-    //     // controller.postMessageWeb(message, targetOrigin)
-    //   },
-    //   src: "https://www.saffoury.com/SaffouryPaper2/print/index.php",
-    // );
-
-    // Text("DSA");
-    // Widget body = getWebContentConverter(context);
-
-    return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          title: const Text("title"),
-          centerTitle: true,
-        ),
-        body: body);
+    return body;
   }
   //   Container(
   //     padding: EdgeInsets.all(32),

@@ -8,13 +8,20 @@ class ActionViewAbstractProvider with ChangeNotifier {
   ServerActions? serverActions;
   List<StackedActions?> stack = [null];
   ActionViewAbstractProvider();
-
+  Widget? _customWidget;
+  Widget? get getCustomWidget => _customWidget;
   ViewAbstract? get getObject => object;
   ViewAbstract get getObjectNotNull => object ?? PermissionActionAbstract();
   ServerActions? get getServerActions => serverActions;
   List<StackedActions?> get getStackedActions => stack;
+  void changeCustomWidget(Widget widget) {
+    _customWidget = widget;
+    object = null;
+    notifyListeners();
+  }
 
   void change(ViewAbstract object, ServerActions? serverActions) {
+    _customWidget = null;
     this.object = object;
     this.serverActions = serverActions;
     if (stack.isNotEmpty) {
@@ -28,7 +35,8 @@ class ActionViewAbstractProvider with ChangeNotifier {
     stack.add(StackedActions(object, serverActions, stack.isEmpty));
     notifyListeners();
   }
-  void popUntil(StackedActions stack){
+
+  void popUntil(StackedActions stack) {
     //TODO: this
   }
 }

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
@@ -260,12 +261,14 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       //     PdfPage(
       //       invoiceObj: this as PrintableInterface,
       //     ));
-      context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu;
+      context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
+            invoiceObj: this as PrintableMaster,
+          ));
       // Navigator.push(
       //     context,
       //     MaterialPageRoute(
       //         builder: (context) => PdfPage(
-      //               invoiceObj: this as PrintableInterface,
+      //               invoiceObj: this as PrintableMaster,
       //             )));
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);

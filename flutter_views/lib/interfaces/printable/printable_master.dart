@@ -16,4 +16,6 @@ abstract class PrintableMaster {
 
   String getPrintableInvoiceTitle(
       BuildContext context, PrintCommandAbstract? pca);
+
+      
 }

@@ -17,6 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../interfaces/printable/printable_master.dart';
+import 'ext.dart';
 
 class PdfReceipt<T extends PrintableReceiptInterface> {
   material.BuildContext context;
@@ -63,7 +64,10 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(flex: 3, child: buildTable()),
-              Expanded(flex: 1, child: buildQrCode())
+              Expanded(
+                  flex: 1,
+                  child: buildQrCode(this.context, printObj,
+                      printCommandAbstract: printCommand))
             ])
         // buildInvoiceMainTable(),
       ],
@@ -246,26 +250,6 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
   Widget buildTitleOnInvoice(String title) {
     return Text(title,
         style: TextStyle(fontWeight: FontWeight.bold, color: PdfColors.green));
-  }
-
-  Widget buildQrCode() {
-    return Column(
-        // verticalDirection: VerticalDirection.down,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        // mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: 80),
-          // Container(color: PdfColors.blue, width: 100, height: 100),
-          SizedBox(
-              width: 80,
-              height: 80,
-              child: BarcodeWidget(
-                barcode: Barcode.qrCode(),
-                data: printObj.getPrintableQrCode(),
-              )),
-          SizedBox(height: .4 * (PdfPageFormat.cm)),
-          Text(printObj.getPrintableQrCodeID(), style: TextStyle(fontSize: 9)),
-        ]);
   }
 
   buildTotalText(
