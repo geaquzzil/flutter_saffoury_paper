@@ -18,7 +18,7 @@ extension HexColor on Color {
 
 String dateFormatString = "yyyy-MM-dd HH:mm:ss";
 
-extension DatesString on String? {
+extension StringsUtils on String? {
   /// get Date time format from string
   /// if null return the now date
   DateTime toDateTime() {
@@ -30,6 +30,10 @@ extension DatesString on String? {
   String toDateTimeNowString() {
     DateFormat dateFormat = DateFormat(dateFormatString);
     return dateFormat.format(DateTime.now());
+  }
+
+  String toNonNullable() {
+    return this ?? "";
   }
 }
 

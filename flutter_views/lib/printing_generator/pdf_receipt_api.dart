@@ -45,8 +45,10 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
     final pdf = Document(
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
     pdf.addPage(MultiPage(
+      footer: (_) =>
+          Container(width: double.infinity, height: 15, color: PdfColors.green),
       pageFormat: format,
-      orientation: PageOrientation.landscape,
+      // orientation: PageOrientation.landscape,
       margin: EdgeInsets.zero,
 
       // pageTheme: ,
@@ -55,243 +57,88 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
             // alignment: ,
             children: [header, buildTitle()]),
         // header,
-        buildInvoiceMainInfoHeader(),
-        buildInvoiceMainTable(),
+        // buildInvoiceMainInfoHeader(),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(flex: 3, child: buildTable()),
+              Expanded(flex: 1, child: buildQrCode())
+            ])
+        // buildInvoiceMainTable(),
       ],
     ));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
-  Widget buildInvoiceMainInfoHeader() {
-    Map<int, List<RecieptHeaderTitleAndDescriptionInfo>> inf = printObj
-        .getPrintableRecieptHeaderTitleAndDescription(context, printCommand);
-
-    return Container(
-        child: Column(
-            // mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-          Row(children: [
-            Expanded(
-                flex: 2,
-                child: Container(
-                    color: PdfColors.grey,
-                    child: Column(children: [
-                      ...inf.entries
-                          .map((e) => _buildListItem(e.value))
-                          .toList()
-                    ]))),
-            Expanded(
-                flex: 1,
-                child: Container(color: PdfColors.green, child: buildQrCode()))
-          ]),
-          // Text("TEST"),
-          // ...inf.entries.map((e) => _buildListItem(e.value)).toList()
-        ]));
-    return Expanded(
-        child: Container(
-            // width: double.infinity,
-            color: PdfColors.grey,
-            // padding: const EdgeInsets.all(20),
-            child: SizedBox(
-                width: 20,
-                height: 20,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("")
-                      // Column(children: [
-                      //   Row(children: [Text("12113"), Text("213123")]),
-                      //   ...inf.entries.map((e) => _buildListItem(e.value)).toList(),
-                      // ]),
-
-                      // Column(children: [Text("TEST")])
-                    ]))
-            // child:
-            // Column(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   crossAxisAlignment: CrossAxisAlignment.center,
-            //   children: inf.entries.map((e) {
-            //     int idx = e.key;
-            //     if (idx == 0) {
-            //       return Column(
-            //           children: inf[idx]!.map((e) => _buildItem(e)).toList());
-            //     } else {
-            //       return Expanded(
-            //           child: Column(children: [
-            //         Row(children: [
-            //           // Expanded(flex: 2, child: _buildListItem(e.value)),
-            //           // Expanded(flex: 1, child: buildQrCode())
-            //         ])
-            //       ]));
-            //       // Column(children: inf[idx].map((e) => _buildItem(item)).toList());
-            //     }
-            //   }).toList(),
-            // ))
-            ));
+  List<String> getList(List<RecieptHeaderTitleAndDescriptionInfo> list) {
+    List<String> stringList = [];
+    list.forEach((element) {
+      stringList.add(element.title);
+      stringList.add(element.description);
+    });
+    return stringList;
   }
 
-  Widget _buildListItem(List<RecieptHeaderTitleAndDescriptionInfo> items) {
-    return
-        // Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     children: [
-
-        Container(
-            width: double.infinity,
-            height: 30,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: items.map((e) => _buildItem(e)).toList(),
-            ));
-    // ]
-    // );
+  Widget buildTable() {
+    return Column(
+        children: [buildInvoiceMainTable(), buildInvoiceBottomOfQr()]);
   }
 
-  Widget _buildItem(RecieptHeaderTitleAndDescriptionInfo item) {
-    return Row(
-      // mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(item.title, style: TextStyle(fontSize: 14)),
-        // SizedBox(
-        //     height: 29,
-        //     width: 29,
-        //     child:
-        Container(
-          width: 100,
-          height: 20,
-          color: PdfColors.grey200,
-          child: Text(item.description,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-        ),
-        // SizedBox(width: 3 * PdfPageFormat.cm)
-        // )
-      ],
-    );
-  }
-
-  MainAxisAlignment getMainAxisSizeForHeaderInfo(int length, int idx) {
-    if (idx == length - 1) {
-      return MainAxisAlignment.end;
-    } else if (idx == 0) {
-      return MainAxisAlignment.start;
-    } else {
-      return MainAxisAlignment.center;
-    }
-  }
-
-  double getSizeForHeaderInfo(int length, int idx) {
-    if (idx == length - 1) {
-      return 200;
-    } else if (idx == 0) {
-      return 200;
-    } else {
-      return 100;
-    }
-  }
-
-  CrossAxisAlignment getCrossAxisAlignmentForHeaderInfo(int length, int idx) {
-    if (idx == length - 1) {
-      return CrossAxisAlignment.end;
-    } else if (idx == 0) {
-      return CrossAxisAlignment.start;
-    } else {
-      return CrossAxisAlignment.center;
-    }
-  }
-
-  pw.Padding buildInvoiceInfoItem(
-      InvoiceHeaderTitleAndDescriptionInfo item, int length, int idx) {
+  Widget buildInvoiceBottomOfQr() {
     return Padding(
-        padding: EdgeInsets.all(5),
-        child: Container(
-            width: getSizeForHeaderInfo(length, idx),
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                // crossAxisAlignment: ,
-                crossAxisAlignment:
-                    getCrossAxisAlignmentForHeaderInfo(length, idx),
-                mainAxisAlignment: getMainAxisSizeForHeaderInfo(length, idx),
-                children: [
-                  buildTextWithIcon(item),
-                  Padding(
-                      padding: item.getCodeIcon() == null
-                          ? EdgeInsets.symmetric()
-                          : EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(item.description,
-                          textDirection: getTextDirection(item.description),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: item.getColor()))),
-                ])));
-  }
-
-  pw.Row buildTextWithIcon(InvoiceHeaderTitleAndDescriptionInfo item) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (item.getCodeIcon() != null)
-          Icon(
-            color: PdfColors.grey,
-            size: 15,
-            IconData(item.getCodeIcon()!, matchTextDirection: true),
-          ),
-        if (item.getCodeIcon() != null) SizedBox(width: 0.2 * PdfPageFormat.cm),
-        Text(item.title),
-      ],
-    );
-  }
-
-  Widget buildInvoiceMainTable() {
-    // PrintableInvoiceInterfaceDetails head = details[0];
-    final data = printObj
-        .getPrintableRecieptHeaderTitleAndDescription(context, null)
-        .entries
-        .map((e) => e.value.map((e) => e.title).toList())
-        .toList();
-
-    // data.addAll(getTotalText(headers.length - 1));
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 0),
         child: Table.fromTextArray(
-          data: data,
+          headers: ["", ""],
+          data: [
+            // ["iD", "23132"],
+            ["paymant amount", "21231"],
+            ["balance", "2421"],
+            ["served by", "Qussai Al-Saffoury"]
+          ],
           border: null,
+          oddCellStyle: TextStyle(color: PdfColors.green),
+          cellAlignment: Alignment.centerRight,
+          cellAlignments: {0: Alignment.centerLeft, 1: Alignment.centerRight},
+
+          // oddCellStyle: TextStyle(fontWeight: FontWeight.bold),
           cellDecoration: (index, data, rowNum) {
             mt.debugPrint("cellDecoration rownum $rowNum index= $index");
             return BoxDecoration(
-                color: PdfColors.white,
+
+                // borderRadius: BorderRadius.circular(1),
+                // color: index % 2 != 0 ? PdfColors.grey200 : PdfColors.white,
                 border: Border(
                     bottom: BorderSide(
-                  //                    <--- top side
-                  color: PdfColors.grey,
-                  // width: 1.0,
-                )));
+              width: 10,
+              //                    <--- top side
+              color: PdfColors.white,
+              // width: 1.0,
+            )));
           },
           headerCellDecoration: const BoxDecoration(
               color: PdfColors.white,
               border: Border(
                   bottom: BorderSide(
                 //                    <--- top side
-                color: PdfColors.green,
+                color: PdfColors.white,
                 // width: 2.0,
               ))),
           //this is content table text color
-          cellStyle: TextStyle(color: PdfColors.black),
+          // cellFormat: ,
+          // cellStyle:
+          //     TextStyle(color: PdfColors.black, fontWeight: FontWeight.bold),
+          // oddCellStyle: TextStyle(
+          //   color: PdfColors.black,
+          // ),
           headerStyle: TextStyle(
               color: PdfColors.green,
               fontWeight: FontWeight.bold,
               background: BoxDecoration(color: PdfColors.white)),
           headerDecoration: BoxDecoration(color: PdfColors.grey300),
-          cellHeight: 30,
+          // cellHeight: 20,
+          // cellAlignments: {0: Alignment.centerRight, 1: Alignment.centerLeft}
           // cellAlignments: Map.fromIterable(headers, key: (e) {
           //   int idx = headers.indexOf(e);
           //   return idx;
@@ -304,6 +151,88 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
           //           : Alignment.center);
           // })
         ));
+  }
+
+  // Widget buildTable() {
+  //   return Column(children: [buildIdAndDate(), buildInvoiceMainTable()]);
+  // }
+
+  Widget buildInvoiceMainTable() {
+    // PrintableInvoiceInterfaceDetails head = details[0];
+    final data = printObj
+        .getPrintableRecieptHeaderTitleAndDescription(context, null)
+        .entries
+        .map((e) => getList(e.value))
+        .toList();
+
+    // return Table(children: [
+    //   TableRow(children: [
+    //     Text("iD"),
+    //     Text("231qq", style: TextStyle(fontWeight: FontWeight.bold))
+    //   ])
+    // ]);
+
+    // data.addAll(getTotalText(headers.length - 1));
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: Table.fromTextArray(
+            headers: ["", ""],
+            data: data,
+            // cellStyle: TextStyle(fontSize: 14),
+            border: null,
+            // oddCellStyle: TextStyle(fontSize: 14),
+            cellAlignment: Alignment.centerLeft,
+
+            // oddCellStyle: TextStyle(fontWeight: FontWeight.bold),
+            cellDecoration: (index, data, rowNum) {
+              mt.debugPrint("cellDecoration rownum $rowNum index= $index");
+              return BoxDecoration(
+
+                  // borderRadius: BorderRadius.circular(1),
+                  color: index % 2 != 0 ? PdfColors.grey200 : PdfColors.white,
+                  border: Border(
+                      bottom: BorderSide(
+                    width: 10,
+                    //                    <--- top side
+                    color: PdfColors.white,
+                    // width: 1.0,
+                  )));
+            },
+            headerCellDecoration: const BoxDecoration(
+                color: PdfColors.white,
+                border: Border(
+                    bottom: BorderSide(
+                  //                    <--- top side
+                  color: PdfColors.white,
+                  // width: 2.0,
+                ))),
+            //this is content table text color
+            // cellFormat: ,
+            // cellStyle:
+            //     TextStyle(color: PdfColors.black, fontWeight: FontWeight.bold),
+            // oddCellStyle: TextStyle(
+            //   color: PdfColors.black,
+            // ),
+
+            headerStyle: TextStyle(
+                color: PdfColors.green,
+                fontWeight: FontWeight.bold,
+                background: BoxDecoration(color: PdfColors.white)),
+            headerDecoration: BoxDecoration(color: PdfColors.grey300),
+            cellHeight: 30,
+            cellAlignments: {0: Alignment.centerRight, 1: Alignment.centerLeft}
+            // cellAlignments: Map.fromIterable(headers, key: (e) {
+            //   int idx = headers.indexOf(e);
+            //   return idx;
+            // }, value: (e) {
+            //   int idx = headers.indexOf(e);
+            //   return idx == 0
+            //       ? Alignment.centerLeft
+            //       : (idx == headers.length - 1
+            //           ? Alignment.centerRight
+            //           : Alignment.center);
+            // })
+            ));
   }
 
   Widget buildTitle() => Padding(
@@ -320,16 +249,23 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
   }
 
   Widget buildQrCode() {
-    return Column(children: [
-      BarcodeWidget(
-        height: 50,
-        width: 50,
-        barcode: Barcode.qrCode(),
-        data: printObj.getPrintableQrCode(),
-      ),
-      SizedBox(height: .1 * (PdfPageFormat.cm)),
-      Text(printObj.getPrintableQrCodeID(), style: TextStyle(fontSize: 9))
-    ]);
+    return Column(
+        // verticalDirection: VerticalDirection.down,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 80),
+          // Container(color: PdfColors.blue, width: 100, height: 100),
+          SizedBox(
+              width: 80,
+              height: 80,
+              child: BarcodeWidget(
+                barcode: Barcode.qrCode(),
+                data: printObj.getPrintableQrCode(),
+              )),
+          SizedBox(height: .4 * (PdfPageFormat.cm)),
+          Text(printObj.getPrintableQrCodeID(), style: TextStyle(fontSize: 9)),
+        ]);
   }
 
   buildTotalText(

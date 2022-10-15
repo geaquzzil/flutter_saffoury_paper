@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
+import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
@@ -10,16 +11,26 @@ import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pdf/pdf.dart' as pdf;
+import 'package:pdf/widgets.dart' as pdfWidget;
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../invoices/orders.dart';
@@ -31,7 +42,10 @@ part 'products.g.dart';
 )
 @reflector
 class Product extends ViewAbstract<Product>
-    implements CartableProductItemInterface, ModifiableInterface {
+    implements
+        CartableProductItemInterface,
+        ModifiablePrintableInterface<PrintProduct>,
+        PrintableCustomInterface {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -335,12 +349,16 @@ class Product extends ViewAbstract<Product>
 
   static String? intFromString(dynamic number) => number?.toString();
 
-  String? getNameString() {
-    return products_types?.name;
+  String getProductTypeNameString() {
+    return products_types?.name??"";
   }
 
   String? getSizeString(BuildContext context) {
     return sizes?.getMainHeaderTextOnly(context);
+  }
+
+  String getGSMString(BuildContext context) {
+    return gsms?.gsm.toString() ?? "";
   }
 
   @override
@@ -369,6 +387,79 @@ class Product extends ViewAbstract<Product>
   @override
   String getModifibleTitleName(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
+
+  @override
+  Future<pdfWidget.Widget?>? getPrintableCustomFooter(BuildContext context,
+          {pdf.PdfPageFormat? format}) =>
+      null;
+  // null;
+
+  @override
+  Future<pdfWidget.Widget?>? getPrintableCustomHeader(BuildContext context,
+          {pdf.PdfPageFormat? format}) =>
+      null;
+
+  @override
+  Future<List<pdfWidget.Widget>> getPrintableCustomPage(BuildContext context,
+      {pdf.PdfPageFormat? format}) async {
+    pdfWidget.Widget header = await buildHeader();
+
+    return [
+      pdfWidget.Stack(
+          alignment: pdfWidget.Alignment.bottomRight,
+          fit: pdfWidget.StackFit.loose,
+          // alignment: ,
+          children: [header, buildTitle(context, this)]),
+      ProductLabelPDF(context, this).generate()
+      //  Row(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      // children: [
+      //   Expanded(flex: 3, child: buildTable()),
+      //   Expanded(flex: 1, child: buildQrCode())
+      // ])
+    ];
+  }
+
+  Future<
+      pdfWidget
+          .Widget> buildHeader() async => pdfWidget.Image(await networkImage(
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${getPrintablePrimaryColor()}&darkColor=${getPrintableSecondaryColor()}'));
+
+  @override
+  String getPrintableInvoiceTitle(
+      BuildContext context, PrintCommandAbstract? pca) {
+    return getMainHeaderLabelTextOnly(context);
+  }
+
+  @override
+  String getPrintablePrimaryColor() => Colors.grey.toHex();
+
+  @override
+  String getPrintableQrCode() {
+    var q = QRCodeID(
+      iD: iD,
+      action: getTableNameApi() ?? "",
+    );
+    return q.getQrCode();
+  }
+
+  @override
+  String getPrintableQrCodeID() {
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+
+    String year = "${dateFormat.parse(date ?? "").year}";
+    return "PR-$iD-$year";
+  }
+
+  @override
+  String getPrintableSecondaryColor() => Colors.grey.toHex();
+
+  @override
+  PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
+    // TODO: implement getModifiablePrintablePdfSetting
+    throw UnimplementedError();
+  }
 }
 
 // enum ProductStatus {

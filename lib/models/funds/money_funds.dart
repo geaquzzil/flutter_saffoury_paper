@@ -153,6 +153,14 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.iD,
             description: iD.toString()),
+        // RecieptHeaderTitleAndDescriptionInfo(
+        //     title: AppLocalizations.of(context)!.date,
+        //     description: date.toString()),
+      ],
+      10: [
+        // RecieptHeaderTitleAndDescriptionInfo(
+        //     title: AppLocalizations.of(context)!.iD,
+        //     description: iD.toString()),
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.date,
             description: date.toString()),

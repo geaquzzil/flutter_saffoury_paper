@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -72,12 +74,17 @@ class _PdfPageState extends State<PdfPage> {
         canChangePageFormat: true,
         pageFormats: {"a3": PdfPageFormat.a3, "a5": PdfPageFormat.a5},
         canChangeOrientation: true,
+        canDebug: false,
 
         // shouldRepaint: ,
         build: (format) async {
           if (widget.invoiceObj is PrintableInvoiceInterface) {
             final pdf = PdfInvoiceApi<PrintableInvoiceInterface>(
                 context, widget.invoiceObj as PrintableInvoiceInterface);
+            return pdf.generate(format);
+          } else if (widget.invoiceObj is PrintableCustomInterface) {
+            final pdf = PdfCustom<PrintableCustomInterface>(
+                context, widget.invoiceObj as PrintableCustomInterface);
             return pdf.generate(format);
           } else {
             final pdf = PdfReceipt<PrintableReceiptInterface>(

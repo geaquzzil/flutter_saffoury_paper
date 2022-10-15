@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -34,7 +35,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
         buildInvoiceMainInfoHeader(),
         // buildSubHeaderInfo(invoice),
         SizedBox(height: 3 * PdfPageFormat.cm),
-        buildTitle(),
+        buildTitle(this.context, this.printObj,printCommandAbstract: printCommand),
         // buildInvoiceTable(),
         // Divider(),
         buildMainTotal(),
@@ -74,7 +75,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
       build: (context) => [
         Stack(alignment: Alignment.bottomRight, fit: StackFit.loose,
             // alignment: ,
-            children: [header, buildTitle()]),
+            children: [header, buildTitle(this.context,printObj,printCommandAbstract: printCommand)]),
         // header,
         buildInvoiceMainInfoHeader(),
 
@@ -184,14 +185,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
     );
   }
 
-  Widget buildTitle() => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 26, vertical: 5),
-      child: Text(
-        printObj.getPrintableInvoiceTitle(context, printCommand),
-        style: TextStyle(
-            fontSize: 20,
-            color: PdfColor.fromHex(printObj.getPrintablePrimaryColor())),
-      ));
+
   Widget buildInvoiceMainTable() {
     List<PrintableInvoiceInterfaceDetails> details =
         printObj.getPrintableInvoiceDetailsList();
