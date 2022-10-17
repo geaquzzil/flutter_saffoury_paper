@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
@@ -35,7 +37,13 @@ import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/orders.dart';
+import '../invoices/priceless_invoices/products_inputs.dart';
+import '../invoices/priceless_invoices/products_outputs.dart';
+import '../invoices/priceless_invoices/transfers.dart';
+import '../invoices/purchases.dart';
+import '../invoices/refund_invoices/purchasers_refunds.dart';
 import 'sizes.dart' as sizeProduct;
 part 'products.g.dart';
 
@@ -67,6 +75,7 @@ class Product extends ViewAbstract<Product>
 
   double? pending_reservation_invoice;
   double? pending_cut_requests;
+  double? cut_request_quantity;
 
   // Product parent;
   ProductType? products_types;
@@ -78,6 +87,33 @@ class Product extends ViewAbstract<Product>
   Grades? grades;
   ProductsColor? products_colors;
   List<Stocks>? inStock;
+
+  List<CutRequest>? cut_requests;
+  int? cut_requests_count;
+
+  List<OrderRefundDetails>? order_refunds_order_details;
+  int? order_refunds_order_details_count;
+
+  List<OrderDetails>? orders_details;
+  int? orders_details_count;
+
+  List<ProductInputDetails>? products_inputs_details;
+  int? products_inputs_details_count;
+
+  List<ProductOutputDetails>? products_outputs_details;
+  int? products_outputs_details_count;
+
+  List<PurchasesDetails>? purchases_details;
+  int? purchases_details_count;
+
+  List<PurchasesRefundDetails>? purchases_refunds_purchases_details;
+  int? purchases_refunds_purchases_details_count;
+
+  List<ReservationInvoiceDetails>? reservation_invoice_details;
+  int? reservation_invoice_details_count;
+
+  List<TransfersDetails>? transfers_details;
+  int? transfers_details_count;
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -298,6 +334,16 @@ class Product extends ViewAbstract<Product>
     return products_types?.sellPrice ?? 0;
   }
 
+  int getReams() {
+    if (sheets.toNonNullable() == 0) return 0;
+    return getQuantity().toInt();
+  }
+
+  double getSheets() {
+    return getQuantity() / (getSheetWeight() / 1000);
+  }
+
+  ///get sheet weight by  grsm
   double getSheetWeight() {
     try {
       return (getWidth() * getLength() * getGSM()).toDouble() / 1000000;
@@ -319,12 +365,22 @@ class Product extends ViewAbstract<Product>
   }
 
   String getManufactureNameString() {
-    //TODO if cutrequest return saffouryPaper;
+    if (isCutRequest()) {
+      return "Saffoury Paper";
+    }
     return "TODO";
+  }
+
+  bool isCutRequest() {
+    //todo check type of value return  is cutrequest
+    return true;
   }
 
   String getCountryNameString() {
     //TODO if cutrequest return syria;
+    if (isCutRequest()) {
+      return "Syria";
+    }
     return "TODO";
   }
 
@@ -409,6 +465,13 @@ class Product extends ViewAbstract<Product>
 
   String getGSMString(BuildContext context) {
     return gsms?.gsm.toString() ?? "";
+  }
+
+  String getGrainOn() {
+    if (fiberLines == null) return "-";
+    if (fiberLines == "Width") return getWidth().toString();
+    if (fiberLines == "Length") return getLength().toString();
+    return "-";
   }
 
   @override

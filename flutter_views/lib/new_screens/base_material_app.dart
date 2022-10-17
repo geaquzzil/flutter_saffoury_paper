@@ -29,7 +29,7 @@ class BaseMaterialAppPage extends StatefulWidget {
 class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   @override
   Widget build(BuildContext context) {
-    Get.put(DashboardController());
+    // Get.put(DashboardController());
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarColor: Colors.transparent,
     //   statusBarIconBrightness: Brightness.dark,
@@ -116,9 +116,10 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         },
         '/sign_in': (context) => const SignInPage()
       },
-      // theme: ThemeData(
-      //   useMaterial3: true,
-      // ),
+      theme: ThemeData(
+        primaryColor: Colors.white,
+        useMaterial3: true,
+      ),
       // theme: ThemeData.dark().copyWith(
       //   scaffoldBackgroundColor: bgColor,
       //   // textTheme: GoogleFonts.(Theme.of(context).textTheme)

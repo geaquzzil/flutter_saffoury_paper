@@ -54,11 +54,21 @@ extension NonNullableDouble on double? {
   double toNonNullable() {
     return this ?? 0;
   }
+
+  String toCurrencyFormat({String symbol = ""}) {
+    return NumberFormat.currency(locale: "en_US", symbol: symbol)
+        .format(toNonNullable());
+  }
 }
 
 extension NonNullableInt on int? {
   int toNonNullable() {
     return this ?? 0;
+  }
+
+  String toCurrencyFormat({String symbol = ""}) {
+    return NumberFormat.currency(locale: "en_US", symbol: symbol)
+        .format(toNonNullable());
   }
 }
 

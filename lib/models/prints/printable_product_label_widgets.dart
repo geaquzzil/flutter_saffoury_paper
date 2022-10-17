@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/pdf.dart';
@@ -12,7 +13,7 @@ class ProductLabelPDF {
 
   Widget generate() {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 4),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         // decoration: BoxDecoration(
         //     border: Border.all(color: PdfColors.black, width: 2),
         //     borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -36,7 +37,7 @@ class ProductLabelPDF {
     return Row(children: [
       Expanded(
           flex: 4,
-          child: buildLabelAndText(AppLocalizations.of(context)!.products_type,
+          child: buildLabelAndText(AppLocalizations.of(context)!.description,
               product.getProductTypeNameString())),
       Expanded(
           child: buildLabelAndText(
@@ -48,17 +49,20 @@ class ProductLabelPDF {
   }
 
   Widget build2th() {
+    Widget? size = product.sizes?.getSizeTextRichWidget(context);
+
     return Row(children: [
       Expanded(
           flex: 4,
           child: buildLabelAndText(AppLocalizations.of(context)!.size,
-              product.getSizeString(context))),
+              product.getSizeString(context),
+              isValueWidget: size)),
       Expanded(
           child: buildLabelAndText(AppLocalizations.of(context)!.gsm,
               product.getGSMString(context))),
       Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.quality,
-              product.getQualityString()))
+          child: buildLabelAndText(
+              AppLocalizations.of(context)!.grainOn, product.getGrainOn()))
     ]);
   }
 
@@ -81,13 +85,15 @@ class ProductLabelPDF {
           flex: 3,
           child: buildLabelAndText(AppLocalizations.of(context)!.quantity, "",
               isValueWidget: getRichSmall(
-                  product.getQuantityStringAndLabel(context), " kg"))),
+                  product.getQuantity().toCurrencyFormat(symbol: ""),
+                  " ${AppLocalizations.of(context)!.kg}"))),
       Expanded(
           flex: 2,
           child: buildLabelAndText(
               AppLocalizations.of(context)!.weightPerSheet, "",
               isValueWidget: getRichSmall(
-                  product.getSheetWeight().toStringAsFixed(2), " g"))),
+                  product.getSheetWeight().toCurrencyFormat(symbol: ""),
+                  " g"))),
     ]);
   }
 
@@ -109,14 +115,15 @@ class ProductLabelPDF {
   Widget build4th() {
     return Row(children: [
       Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.quantity,
-              product.getQuantityStringAndLabel(context))),
+          child: buildLabelAndText(
+              AppLocalizations.of(context)!.sheetsInNotPrac,
+              product.getSheets().toStringAsFixed(0))),
       Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.weightPerSheet,
-              product.getSheetWeight().toStringAsFixed(0))),
+          child: buildLabelAndText(AppLocalizations.of(context)!.sheetsPerReam,
+              product.sheets?.toString() ?? "-")),
       Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.weightPerSheet,
-              product.getSheetWeight().toStringAsFixed(0))),
+          child: buildLabelAndText(AppLocalizations.of(context)!.reams,
+              product.getReams().toStringAsFixed(0))),
     ]);
   }
 
@@ -147,15 +154,15 @@ class ProductLabelPDF {
   Widget build7th() {
     return Row(children: [
       Expanded(
-          flex: 2, child: buildLabelAndText("", "MADE IN SYRIA\nصنع في سورية")),
-      Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.weightPerSheet,
-              product.getSheetWeight().toStringAsFixed(0))),
+          flex: 2,
+          child: buildLabelAndText("", "MADE IN SYRIA\nصنع في سورية",
+              fontSize: 24)),
+      Expanded(child: buildLabelAndText("", product.comments ?? "",fontSize: 20)),
     ]);
   }
 
   Widget buildLabelAndText(String label, String value,
-      {double size = 80, Widget? isValueWidget}) {
+      {double size = 80, Widget? isValueWidget, double fontSize = 32}) {
     return Container(
         height: size,
         // padding: EdgeInsets.all(2),
@@ -167,15 +174,19 @@ class ProductLabelPDF {
           Align(
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                  child: Text(label, style: TextStyle(fontSize: 10))),
+                  child: Text(label,
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(fontSize: 10))),
               alignment: Alignment.topLeft),
           Expanded(
               child: Align(
                   alignment: Alignment.center,
                   child: isValueWidget ??
                       Text(value,
+                          textDirection: TextDirection.rtl,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24)))),
+                              fontWeight: FontWeight.bold,
+                              fontSize: fontSize)))),
         ]));
   }
 }

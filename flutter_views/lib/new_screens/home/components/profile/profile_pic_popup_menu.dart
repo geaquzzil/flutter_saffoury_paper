@@ -68,7 +68,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
         verticalMargin: -15,
         controller: _controller,
         child: RoundedIconButtonNetwork(
-            size: 25, onTap: () {}, imageUrl: authProvider.getUserImageUrl),
+            onTap: () {}, imageUrl: authProvider.getUserImageUrl),
       ),
     );
   }

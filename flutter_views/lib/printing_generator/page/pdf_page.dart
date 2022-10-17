@@ -30,6 +30,11 @@ class _PdfPageState extends State<PdfPage> {
         canChangePageFormat: true,
         canChangeOrientation: true,
         canDebug: false,
+        shareActionExtraBody: "shareActionExtraBody",
+        dynamicLayout: true,
+        // actions: [Icon(Icons.search), Icon(Icons.ac_unit_sharp)],
+        // pdfPreviewPageDecoration: BoxDecoration(color: Colors.green),
+        useActions: true,
 
         // shouldRepaint: ,
         build: (format) async {

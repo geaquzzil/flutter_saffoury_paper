@@ -11,21 +11,17 @@ class ProfileListTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider auth = context.watch<AuthProvider>();
 
-    return SizedBox(
-      width: 300,
-      child: ListTile(
-        leading: RoundedIconButtonNetwork(
-            onTap: () {},
-            imageUrl: context.read<AuthProvider>().getUserImageUrl),
-        title: Text(
-          auth.hasSavedUser
-              ? auth.getUserName
-              : AppLocalizations.of(context)!.hiThere,
-        ),
-        subtitle: Text(auth.hasSavedUser
-            ? auth.getUserPermission
-            : AppLocalizations.of(context)!.guest),
+    return ListTile(
+      leading: RoundedIconButtonNetwork(
+          onTap: () {}, imageUrl: context.read<AuthProvider>().getUserImageUrl),
+      title: Text(
+        auth.hasSavedUser
+            ? auth.getUserName
+            : AppLocalizations.of(context)!.hiThere,
       ),
+      subtitle: Text(auth.hasSavedUser
+          ? auth.getUserPermission
+          : AppLocalizations.of(context)!.guest),
     );
   }
 }

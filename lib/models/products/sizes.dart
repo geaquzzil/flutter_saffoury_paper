@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:pdf/widgets.dart' as pdf;
+import 'package:pdf/pdf.dart' as pdff;
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -109,6 +111,48 @@ class Size extends ViewAbstract<Size> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     return toJson();
+  }
+
+  ///check fiberLines if on the width then return length
+  ///
+  String getWidth(String? fibrelines) {
+    if (fibrelines == null) {
+      return width.toNonNullable().toString();
+    }
+    if (fibrelines == "Length") {
+      return width.toNonNullable().toString();
+    } else {
+      return length.toNonNullable().toString();
+    }
+  }
+
+  ///check fiberLines if on the width then return length
+  ///
+  String getLength(String? fibrelines) {
+    if (fibrelines == null) {
+      return length.toNonNullable().toString();
+    }
+    if (fibrelines == "Length") {
+      return length.toNonNullable().toString();
+    } else {
+      return width.toNonNullable().toString();
+    }
+  }
+
+  pdf.Widget getSizeTextRichWidget(BuildContext context, {String? fiberLines}) {
+    return pdf.RichText(
+      text: pdf.TextSpan(
+        text: "${getWidth(fiberLines)} X ",
+        style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 32),
+        children: <pdf.TextSpan>[
+          pdf.TextSpan(
+              text: getLength(fiberLines),
+              style:
+                  pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 42)),
+          // TextSpan(text: ' world!'),
+        ],
+      ),
+    );
   }
 
   String getSizeHtmlFormatString(BuildContext context, {String? fiberLines}) {

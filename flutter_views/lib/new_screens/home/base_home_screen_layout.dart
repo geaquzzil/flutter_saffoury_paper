@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../new_components/ext.dart';
+import '../../new_components/search/search_filterable_widget.dart';
 import '../dashboard/main_dashboard2.dart';
 import '../setting/list_sticky_setting_page.dart';
 import '../setting/setting_page.dart';
@@ -69,12 +70,14 @@ class BaseHomeScreenLayout extends StatelessWidget {
       child: Row(children: [
         Expanded(
             // It takes 5/6 part of the screen
-            flex: 4,
+            flex: size.width > 1340 ? 4 : 1,
+            // flex: 4,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   // const HeaderTitleOnListMain(),
                   SearchWidgetApi(),
+                  SearchFilterableWidget(),
                   const ListApiWidget(),
                 ],
               ),
@@ -87,7 +90,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         //     )),
         if (SizeConfig.isDesktop(context))
           Expanded(
-              flex: size.width > 1340 ? 8 : 10,
+              flex: size.width > 1340 ? 8 : 2,
               child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: getShadowBoxDecoration(),

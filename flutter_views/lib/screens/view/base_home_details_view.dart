@@ -81,7 +81,7 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
       color: Colors.white,
       child: Row(
         children: [
-          Expanded(flex: 1, child: Text("TEST")),
+          // Expanded(flex: 1, child: Text("TEST")),
           Expanded(
             flex: 2,
             child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,

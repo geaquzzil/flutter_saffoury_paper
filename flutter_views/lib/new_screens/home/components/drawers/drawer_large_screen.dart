@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
@@ -9,6 +10,10 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:provider/single_child_widget.dart';
+
+import '../profile/profile_list_tile_widget.dart';
+import '../profile/profile_pic_popup_menu.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
@@ -22,20 +27,39 @@ class DrawerLargeScreens extends StatelessWidget {
     return AnimatedSize(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
-      child: Container(
+      child: SizedBox(
         height: double.maxFinite,
         width: isOpen ? 256 : 60,
-        color: Colors.blueGrey,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          buildHeader(context, isOpen),
-          buildList(context, isOpen),
-          const Spacer(),
-          buildCollapseIcon(context, isOpen),
-          const SizedBox(
-            height: 12,
-          )
-        ]),
+        // color: Colors.blueGrey,
+        child: Card(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            fit: StackFit.loose,
+            children: [
+              Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                buildHeader(context, isOpen),
+                buildList(context, isOpen),
+                // const Spacer(),
+              ]),
+              buildDrawerFooter(context, isOpen),
+              // buildProfilePic(context, isOpen),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget buildDrawerFooter(BuildContext context, bool isOpen) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        const Divider(),
+        buildProfilePic(context, isOpen),
+        const Divider(),
+        buildCollapseIcon(context, isOpen),
+      ],
     );
   }
 
@@ -75,40 +99,56 @@ class DrawerLargeScreens extends StatelessWidget {
         "getDrawerItemsGrouped current length=> ${authProvider.getDrawerItemsGrouped.length}");
     debugPrint(
         "getDrawerItemsGrouped current entires length=> ${authProvider.getDrawerItemsGrouped.entries.length}");
-    return ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: isClosed ? EdgeInsets.zero : padding,
-        separatorBuilder: (context, index) {
-          return const SizedBox(
-            height: 8,
-          );
-        },
-        itemCount: authProvider.getDrawerItemsGrouped.length,
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (context, index) {
-          String? groupLabel =
-              authProvider.getDrawerItemsGrouped.keys.elementAt(index);
+    return SingleChildScrollView(
+      child: Expanded(
+          // height: MediaQuery.of(context).size.height - 80,
+          child: ListView.separated(
+              scrollDirection: Axis.vertical,
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: isClosed ? EdgeInsets.zero : padding,
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 8,
+                );
+              },
+              itemCount: authProvider.getDrawerItemsGrouped.length,
+              shrinkWrap: true,
+              primary: false,
+              itemBuilder: (context, index) {
+                String? groupLabel =
+                    authProvider.getDrawerItemsGrouped.keys.elementAt(index);
 
-          debugPrint(
-              "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
-          if (groupLabel != null) {
-            return isOpen
-                ? DrawerListTileDesktopGroupOpen(
-                    groupedDrawerItems:
-                        authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-                    idx: index)
-                : DrawerListTileDesktopGroupClosed(
-                    groupedDrawerItems:
-                        authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-                    idx: index,
-                  );
-          }
-          ViewAbstract viewAbstract =
-              authProvider.getDrawerItemsGrouped[groupLabel]!.first;
-          return DrawerListTileDesktopOpen(
-              viewAbstract: viewAbstract, idx: index);
-        });
+                debugPrint(
+                    "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
+                if (groupLabel != null) {
+                  return isOpen
+                      ? DrawerListTileDesktopGroupOpen(
+                          groupedDrawerItems:
+                              authProvider.getDrawerItemsGrouped[groupLabel] ??
+                                  [],
+                          idx: index)
+                      : DrawerListTileDesktopGroupClosed(
+                          groupedDrawerItems:
+                              authProvider.getDrawerItemsGrouped[groupLabel] ??
+                                  [],
+                          idx: index,
+                        );
+                }
+                ViewAbstract viewAbstract =
+                    authProvider.getDrawerItemsGrouped[groupLabel]!.first;
+                return DrawerListTileDesktopOpen(
+                    viewAbstract: viewAbstract, idx: index);
+              })),
+    );
+  }
+
+  Widget buildProfilePic(BuildContext context, bool isOpen) {
+    const double size = 52;
+    IconData icon = !isOpen ? Icons.arrow_forward_ios : Icons.arrow_back_ios;
+    final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
+    final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
+    final width = isOpen ? size : double.infinity;
+    return isOpen ? ProfileListTileWidget() : const ProfilePicturePopupMenu();
   }
 
   Widget buildCollapseIcon(BuildContext context, bool isOpen) {
