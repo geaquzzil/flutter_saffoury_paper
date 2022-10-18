@@ -24,7 +24,7 @@ class DropdownStringListControllerListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
       name: tag,
-      decoration: getDecorationDropdownNewWithLabelAndValue(context),
+      // decoration: getDecorationDropdownNewWithLabelAndValue(context),
       items: list
           .map((item) => DropdownMenuItem(
                 value: item,

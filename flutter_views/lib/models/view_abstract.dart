@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   ViewAbstract() : super();
 
-
+  List<Widget> getHorizotalList(BuildContext context) => [];
 
   bool isEqualsAsType(ViewAbstract? object) {
     if (object == null) {

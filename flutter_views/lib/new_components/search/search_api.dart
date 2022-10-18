@@ -19,7 +19,7 @@ class SearchWidgetApi extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          // color: Colors.white,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
@@ -38,10 +38,9 @@ class SearchWidgetApi extends StatelessWidget {
                       //   blurRadius: 12,
                       // )
                     ],
-                    color: Colors.grey.shade100,
+                    // color: Colors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   ),
-
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   maxHeight: 300,
@@ -66,6 +65,7 @@ class SearchWidgetApi extends StatelessWidget {
                     if (_searchQuery == "") {
                       return [];
                     }
+
                     // return await viewAbstract.search(5, pageIndex, searchQuery);
                     return Future.delayed(const Duration(milliseconds: 1000),
                         () => viewAbstract.search(5, pageIndex, searchQuery));

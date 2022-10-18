@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPopupWidget extends StatelessWidget {
@@ -23,9 +24,14 @@ class NotificationPopupWidget extends StatelessWidget {
       pressType: PressType.singleClick,
       verticalMargin: -15,
       controller: _controller,
-      child: const Icon(
+      child:
+      OnHoverWidget(
+        scale: false,
+        builder: (isHovered) =>Icon(
         Icons.notifications,
-      ),
+              color: isHovered ? Colors.orange : Colors.black,
+      ) ,
+      )
     );
   }
 

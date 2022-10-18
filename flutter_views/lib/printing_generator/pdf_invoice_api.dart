@@ -35,7 +35,8 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
         buildInvoiceMainInfoHeader(),
         // buildSubHeaderInfo(invoice),
         SizedBox(height: 3 * PdfPageFormat.cm),
-        buildTitle(this.context, this.printObj,printCommandAbstract: printCommand),
+        buildTitle(this.context, this.printObj,
+            printCommandAbstract: printCommand),
         // buildInvoiceTable(),
         // Divider(),
         buildMainTotal(),
@@ -75,7 +76,11 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
       build: (context) => [
         Stack(alignment: Alignment.bottomRight, fit: StackFit.loose,
             // alignment: ,
-            children: [header, buildTitle(this.context,printObj,printCommandAbstract: printCommand)]),
+            children: [
+              header,
+              buildTitle(this.context, printObj,
+                  printCommandAbstract: printCommand)
+            ]),
         // header,
         buildInvoiceMainInfoHeader(),
 
@@ -83,7 +88,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
         buildInvoiceMainTable(),
         buildMainTotal(),
       ],
-      footer: (context) => buildFooter(),
+      // footer: (context) => buildFooter(),
     ));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
@@ -184,7 +189,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
       ],
     );
   }
-
 
   Widget buildInvoiceMainTable() {
     List<PrintableInvoiceInterfaceDetails> details =

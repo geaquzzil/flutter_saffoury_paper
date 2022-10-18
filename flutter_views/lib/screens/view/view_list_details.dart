@@ -12,6 +12,8 @@ class ViewDetailsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final fields = viewAbstract.getMainFields();
     return ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: ScrollController(),
         shrinkWrap: true,
         itemCount: fields.length,
         itemBuilder: (BuildContext context, int index) {

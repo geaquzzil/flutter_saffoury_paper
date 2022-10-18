@@ -117,7 +117,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         '/sign_in': (context) => const SignInPage()
       },
       theme: ThemeData(
-        primaryColor: Colors.white,
+        primaryColor: Colors.blueGrey,
         useMaterial3: true,
       ),
       // theme: ThemeData.dark().copyWith(

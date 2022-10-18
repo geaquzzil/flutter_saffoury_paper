@@ -21,6 +21,7 @@ import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -28,6 +29,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:intl/intl.dart';
@@ -429,6 +431,20 @@ class Product extends ViewAbstract<Product>
   @override
   SortByType getSortByType() {
     return SortByType.DESC;
+  }
+
+  @override
+  List<Widget> getHorizotalList(BuildContext context) {
+    return [
+      ListHorizontalApiAutoRestWidget(
+          titleString: "TEST1 ",
+          autoRest:
+              AutoRest<Product>(obj: Product(), key: "HCustomerByOrder$iD")),
+      ListHorizontalApiAutoRestWidget(
+        titleString: "TEST2",
+        autoRest: AutoRest<Product>(obj: Product(), key: "HCustomerByOrder$iD"),
+      ),
+    ];
   }
 
   @override

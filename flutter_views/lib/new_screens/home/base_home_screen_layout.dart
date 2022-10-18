@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/new_screens/home/components/header/heade
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
+import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
 import 'package:flutter_view_controller/screens/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -60,11 +61,11 @@ class BaseHomeScreenLayout extends StatelessWidget {
         return const BaseHomeCartPage();
       case CurrentPage.list:
       default:
-        return getMainHomeList(context);
+        return getMainHomeList(context, viewAbstract);
     }
   }
 
-  Expanded getMainHomeList(BuildContext context) {
+  Expanded getMainHomeList(BuildContext context, ViewAbstract viewAbstract) {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [
@@ -77,7 +78,11 @@ class BaseHomeScreenLayout extends StatelessWidget {
                 children: [
                   // const HeaderTitleOnListMain(),
                   SearchWidgetApi(),
-                  SearchFilterableWidget(),
+                  SearchField(),
+                  
+                  SearchFilterableWidget(
+                    viewAbstract: viewAbstract,
+                  ),
                   const ListApiWidget(),
                 ],
               ),

@@ -31,6 +31,7 @@ class ListStickySettingWidget extends StatelessWidget {
         groupSeparatorBuilder: (element) =>
             _getGroupSeparator(context, element),
         itemBuilder: _getItem,
+        
       ),
     );
   }

@@ -18,12 +18,12 @@ class DropdownEnumControllerListener extends StatelessWidget {
     return FormBuilderDropdown(
       name: viewAbstractEnum.getMainLabelText(context),
       initialValue: viewAbstractEnum,
-      hint: TextBold(
-        text: dropdownGettLabelWithText(context, viewAbstractEnum),
-        regex: viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum),
-      ),
-      decoration: getDecorationDropdownNewWithLabelAndValue(context,
-          viewAbstractEnum: viewAbstractEnum),
+      // hint: TextBold(
+      //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
+      //   regex: viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum),
+      // ),
+      // decoration: getDecorationDropdownNewWithLabelAndValue(context,
+      //     viewAbstractEnum: viewAbstractEnum),
       items: dropdownGetValues(viewAbstractEnum)
           .map((item) => DropdownMenuItem(
                 value: item,

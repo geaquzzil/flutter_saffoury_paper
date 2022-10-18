@@ -1,9 +1,12 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
@@ -12,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../../../../providers/cart/cart_provider.dart';
 import '../profile/profile_list_tile_widget.dart';
 import '../profile/profile_pic_popup_menu.dart';
 
@@ -52,7 +56,7 @@ class DrawerLargeScreens extends StatelessWidget {
 
   Widget buildDrawerFooter(BuildContext context, bool isOpen) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         const Divider(),
@@ -176,18 +180,24 @@ class DrawerLargeScreens extends StatelessWidget {
                 .read<LargeScreenPageProvider>()
                 .setCurrentPage(CurrentPage.settings),
           ),
-          buildColapsedIcon(
-            context,
-            Icons.bar_chart,
-            () =>
-                context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
+          Badge(
+
+            badgeContent: Text("${context.watch<CartProvider>().getCount}"),
+            toAnimate: true,
+            animationType: BadgeAnimationType.scale,
+            showBadge: context.watch<CartProvider>().getCount > 0,
+            child: buildColapsedIcon(
+              context,
+              Icons.shopping_cart_rounded,
+              () {
+                context
+                    .read<DrawerMenuControllerProvider>()
+                    .controlEndDrawerMenu();
+              },
+            ),
           ),
-          buildColapsedIcon(
-            context,
-            Icons.arrow_back_ios,
-            () =>
-                context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
-          ),
+
+          NotificationPopupWidget(),
           buildColapsedIcon(
             context,
             Icons.arrow_back_ios,

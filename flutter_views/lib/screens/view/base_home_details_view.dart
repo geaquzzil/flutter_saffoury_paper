@@ -56,8 +56,10 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
       switch (actionViewAbstractProvider.getServerActions) {
         case ServerActions.edit:
           return Scaffold(body: BaseEditPage(parent: viewAbstract));
+        // case ServerActions.view:
+        //   return MasterView(viewAbstract: viewAbstract);
         default:
-          return getBodyView(context, viewAbstract);
+          return MasterHomeHorizontal(viewAbstract: viewAbstract);
       }
     }
   }
@@ -74,53 +76,6 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
   void dispose() {
     super.dispose();
     _tabController.dispose();
-  }
-
-  Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
-    return Container(
-      color: Colors.white,
-      child: Row(
-        children: [
-          // Expanded(flex: 1, child: Text("TEST")),
-          Expanded(
-            flex: 2,
-            child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-                // fit: BoxFit.contain,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BaseSharedHeaderViewDetailsActions(
-                        viewAbstract: viewAbstract,
-                      ),
-                      ViewDetailsListWidget(
-                        viewAbstract: viewAbstract,
-                      ),
-                      if (viewAbstract is CartableInvoiceMasterObjectInterface)
-                        CartDataTableMaster(
-                            action: ServerActions.view,
-                            obj: viewAbstract
-                                as CartableInvoiceMasterObjectInterface),
-                      if (viewAbstract.getTabs(context).isNotEmpty)
-                        TabBarWidget(
-                          viewAbstract: viewAbstract,
-                        )
-                    ],
-                  ),
-                  if (viewAbstract is CartableProductItemInterface)
-                    BottomWidgetOnViewIfCartable(
-                      viewAbstract:
-                          viewAbstract as CartableProductItemInterface,
-                    )
-                  else
-                    BottomWidgetOnViewIfViewAbstract(
-                      viewAbstract: viewAbstract,
-                    )
-                ]),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget getBodyView2Layout(BuildContext context, ViewAbstract viewAbstract) {
@@ -285,6 +240,77 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
   }
 }
 
+class MasterHomeHorizontal extends StatelessWidget {
+  ViewAbstract viewAbstract;
+  MasterHomeHorizontal({Key? key, required this.viewAbstract})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      
+        child: Column(children: viewAbstract.getHorizotalList(context)));
+  }
+}
+
+class MasterView extends StatelessWidget {
+  ViewAbstract viewAbstract;
+  MasterView({Key? key, required this.viewAbstract}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Row(
+        children: [
+          // Expanded(flex: 1, child: Text("TEST")),
+          Expanded(
+            flex: 1,
+            child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+                // fit: BoxFit.contain,
+                children: [
+                  SingleChildScrollView(
+                    controller: ScrollController(),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BaseSharedHeaderViewDetailsActions(
+                          viewAbstract: viewAbstract,
+                        ),
+                        ViewDetailsListWidget(
+                          viewAbstract: viewAbstract,
+                        ),
+                        if (viewAbstract
+                            is CartableInvoiceMasterObjectInterface)
+                          CartDataTableMaster(
+                              action: ServerActions.view,
+                              obj: viewAbstract
+                                  as CartableInvoiceMasterObjectInterface),
+                        if (viewAbstract.getTabs(context).isNotEmpty)
+                          TabBarWidget(
+                            viewAbstract: viewAbstract,
+                          )
+                      ],
+                    ),
+                  ),
+                  if (viewAbstract is CartableProductItemInterface)
+                    BottomWidgetOnViewIfCartable(
+                      viewAbstract:
+                          viewAbstract as CartableProductItemInterface,
+                    )
+                  else
+                    BottomWidgetOnViewIfViewAbstract(
+                      viewAbstract: viewAbstract,
+                    )
+                ]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class BottomWidgetOnViewIfCartable extends StatelessWidget {
   CartableProductItemInterface viewAbstract;
   TextEditingController controller = TextEditingController();
@@ -298,11 +324,11 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Material(
-          elevation: 5,
-          child: Container(
+          elevation: 20,
+          child: SizedBox(
             width: double.maxFinite,
             height: 100,
-            color: Colors.white,
+            // color: Colors.white,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -329,41 +355,36 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                           //     .toStringAsFixed(2))
                         ]),
                   ),
-                  SizedBox(
-                    width: 150,
-                    height: double.maxFinite,
-                    child: FutureBuilder<bool>(
-                      future:
-                          context.watch<CartProvider>().hasItem(viewAbstract),
+                  FutureBuilder<bool>(
+                    future: context.watch<CartProvider>().hasItem(viewAbstract),
 
-                      builder: (context, snapshot) => ElevatedButton(
-                        style: snapshot.data ?? false
-                            ? ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.orange),
-                              )
-                            : null,
-                        onPressed: () {
-                          context.read<CartProvider>().onCartItemAdded(
-                              context,
-                              -1,
-                              viewAbstract,
-                              double.tryParse(controller.text) ?? 0);
-                        },
-                        child: const Text("ADD TO CART"),
-                        // icon: Icon(Icons.plus_one_outlined),
-                        // label: Text("ADD TO CART")
-                      ),
-                      // child: ElevatedButton(
-                      //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
-
-                      //   ButtonStyle():null,
-                      //   onPressed: () {},
-                      //   child: Text("ADD TO CART"),
-                      //   // icon: Icon(Icons.plus_one_outlined),
-                      //   // label: Text("ADD TO CART")
-                      // ),
+                    builder: (context, snapshot) => ElevatedButton(
+                      style: snapshot.data ?? false
+                          ? ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.orange),
+                            )
+                          : null,
+                      onPressed: () {
+                        context.read<CartProvider>().onCartItemAdded(
+                            context,
+                            -1,
+                            viewAbstract,
+                            double.tryParse(controller.text) ?? 0);
+                      },
+                      child: const Text("ADD TO CART"),
+                      // icon: Icon(Icons.plus_one_outlined),
+                      // label: Text("ADD TO CART")
                     ),
+                    // child: ElevatedButton(
+                    //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
+
+                    //   ButtonStyle():null,
+                    //   onPressed: () {},
+                    //   child: Text("ADD TO CART"),
+                    //   // icon: Icon(Icons.plus_one_outlined),
+                    //   // label: Text("ADD TO CART")
+                    // ),
                   )
                 ]),
           )),

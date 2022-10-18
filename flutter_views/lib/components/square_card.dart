@@ -15,36 +15,29 @@ class SquareCard<T extends ViewAbstract> extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => object.onCardClicked(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(kDefaultPadding),
-              // For  demo we use fixed height  and width
-              // Now we dont need them
-              // height: 180,
-              // width: 160,
-              decoration: BoxDecoration(
-                color: object.getColor(context),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Hero(
-                tag: object,
-                child: object.getCardLeadingImage(context),
-              ),
+      child: SizedBox(
+        width: 100,
+        height: 100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 70,
+              height: 70,
+              child: object.getCardLeading(context),
             ),
-          ),
-          Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: kDefaultPadding / 4),
-              child: object.getMainHeaderText(context)),
-          object.getMainSubtitleHeaderText(context)!,
-          // Text(
-          //   "product.price",
-          //   style: TextStyle(fontWeight: FontWeight.bold),
-          // )
-        ],
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: kDefaultPadding / 4),
+                child: object.getMainHeaderText(context)),
+            const Spacer(),
+            object.getMainSubtitleHeaderText(context)!,
+            // Text(
+            //   "product.price",
+            //   style: TextStyle(fontWeight: FontWeight.bold),
+            // )
+          ],
+        ),
       ),
     );
   }
