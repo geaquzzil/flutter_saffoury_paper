@@ -37,7 +37,7 @@ class Transfers extends InvoiceMaster<Transfers> {
   String? getTableNameApi() => "transfers";
 
   @override
-  List<String>? requireObjectsList() => ["transfers_details"];
+  List<String>? isRequiredObjectsList() => ["transfers_details"];
 
   @override
   List<String> getMainFields() {

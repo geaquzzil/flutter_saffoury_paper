@@ -51,7 +51,7 @@ class Order extends InvoiceMaster<Order>
   String? getTableNameApi() => "orders";
 
   @override
-  List<String>? requireObjectsList() => ["orders_details"];
+  List<String>? isRequiredObjectsList() => ["orders_details"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

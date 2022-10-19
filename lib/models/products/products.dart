@@ -90,6 +90,8 @@ class Product extends ViewAbstract<Product>
   ProductsColor? products_colors;
   List<Stocks>? inStock;
 
+  Product? products;
+
   List<CutRequest>? cut_requests;
   int? cut_requests_count;
 
@@ -367,20 +369,20 @@ class Product extends ViewAbstract<Product>
   }
 
   String getManufactureNameString() {
-    if (isCutRequest()) {
+    if (isRollCut()) {
       return "Saffoury Paper";
     }
     return "TODO";
   }
 
-  bool isCutRequest() {
+  bool isRollCut() {
     //todo check type of value return  is cutrequest
-    return true;
+    return products != null;
   }
 
   String getCountryNameString() {
     //TODO if cutrequest return syria;
-    if (isCutRequest()) {
+    if (isRollCut()) {
       return "Syria";
     }
     return "TODO";
@@ -433,13 +435,26 @@ class Product extends ViewAbstract<Product>
     return SortByType.DESC;
   }
 
+  Widget getWelcomHome(BuildContext context) {
+    return ListTile(
+      leading: Icon(Icons.account_circle),
+      title: Text("Welcom back"),
+      trailing: Icon(Icons.arrow_right_outlined),
+    );
+  }
+
   @override
   List<Widget> getHorizotalList(BuildContext context) {
     return [
+      getWelcomHome(context),
       ListHorizontalApiAutoRestWidget(
           titleString: "TEST1 ",
           autoRest:
               AutoRest<Product>(obj: Product(), key: "HCustomerByOrder$iD")),
+      ListHorizontalApiAutoRestWidget(
+        titleString: "TEST2",
+        autoRest: AutoRest<Product>(obj: Product(), key: "HCustomerByOrder$iD"),
+      ),
       ListHorizontalApiAutoRestWidget(
         titleString: "TEST2",
         autoRest: AutoRest<Product>(obj: Product(), key: "HCustomerByOrder$iD"),
@@ -585,6 +600,29 @@ class Product extends ViewAbstract<Product>
 
     p.gsms = GSM()..gsm = 300;
     return p;
+  }
+
+  double findRemainingWeightCut(Warehouse warehouse) {
+    return getQuantity(warehouse: warehouse) -
+        cut_request_quantity.toNonNullable();
+  }
+
+  double findRemainingWeightCutReservation(Warehouse warehouse) {
+    return getQuantity(warehouse: warehouse) -
+        cut_request_quantity.toNonNullable() -
+        pending_reservation_invoice.toNonNullable();
+  }
+
+  bool hasMovement() {
+    return order_refunds_order_details_count.toNonNullable() +
+            orders_details_count.toNonNullable() +
+            purchases_details_count.toNonNullable() +
+            purchases_refunds_purchases_details_count.toNonNullable() +
+            products_inputs_details_count.toNonNullable() +
+            products_outputs_details_count.toNonNullable() +
+            transfers_details_count.toNonNullable() +
+            cut_requests_count.toNonNullable() !=
+        0;
   }
 }
 

@@ -29513,9 +29513,9 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'getListSearchViewByTextInputList': (dynamic instance) =>
             instance.getListSearchViewByTextInputList,
         r'getCustomAction': (dynamic instance) => instance.getCustomAction,
-        r'requireObjects': (dynamic instance) => instance.requireObjects,
+        r'requireObjects': (dynamic instance) => instance.isRequiredObjects,
         r'requireObjectsList': (dynamic instance) =>
-            instance.requireObjectsList,
+            instance.isRequiredObjectsList,
         r'getBodyExtenstionParams': (dynamic instance) =>
             instance.getBodyExtenstionParams,
         r'getBodyCurrentActionASC': (dynamic instance) =>

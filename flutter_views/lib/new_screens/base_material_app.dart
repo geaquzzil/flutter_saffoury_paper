@@ -118,7 +118,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
       },
       theme: ThemeData(
         primaryColor: Colors.blueGrey,
-        useMaterial3: true,
+        // useMaterial3: true,
       ),
       // theme: ThemeData.dark().copyWith(
       //   scaffoldBackgroundColor: bgColor,

@@ -32,7 +32,7 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   String? getTableNameApi() => "customers_request_sizes";
 
   @override
-  List<String>? requireObjectsList() => ["customers_request_sizes_details"];
+  List<String>? isRequiredObjectsList() => ["customers_request_sizes_details"];
 
   @override
   List<String> getMainFields() =>

@@ -52,7 +52,7 @@ class CutRequest extends ViewAbstract<CutRequest> {
       };
 
   @override
-  List<String>? requireObjectsList() => ["cut_request_results"];
+  List<String>? isRequiredObjectsList() => ["cut_request_results"];
   @override
   List<String> getMainFields() => [
         "products",

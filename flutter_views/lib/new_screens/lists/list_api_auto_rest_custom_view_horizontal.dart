@@ -10,21 +10,22 @@ import '../../components/square_card.dart';
 import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
-class ListHorizontalApiAutoRestWidget extends StatefulWidget {
-  AutoRest autoRest;
+class ListHorizontalCustomViewApiAutoRestWidget<T extends ViewAbstract,E extends CustomViewResponse<T>> extends StatefulWidget {
+
+  AutoRestCustomResponseView<T,E> autoRest;
   Widget? title;
   String? titleString;
-  ListHorizontalApiAutoRestWidget(
+  ListHorizontalCustomViewApiAutoRestWidget(
       {Key? key, required this.autoRest, this.title, this.titleString})
       : super(key: key);
 
   @override
-  State<ListHorizontalApiAutoRestWidget> createState() =>
+  State<ListHorizontalCustomViewApiAutoRestWidget> createState() =>
       _ListHorizontalApiWidgetState();
 }
 
 class _ListHorizontalApiWidgetState
-    extends State<ListHorizontalApiAutoRestWidget> {
+    extends State<ListHorizontalCustomViewApiAutoRestWidget> {
   final _scrollController = ScrollController();
   final ListMultiKeyProvider listProvider = ListMultiKeyProvider();
 
@@ -69,6 +70,7 @@ class _ListHorizontalApiWidgetState
             ),
           ));
         }
+        widget.autoRest.
         return ListCardItemHorizontal(object: data[index]);
         // return data[index].getCardView(context);
       },

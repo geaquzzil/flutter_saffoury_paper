@@ -40,7 +40,7 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   String? getTableNameApi() => "orders_refunds";
 
   @override
-  List<String>? requireObjectsList() => ["orders_refunds_order_details"];
+  List<String>? isRequiredObjectsList() => ["orders_refunds_order_details"];
 
   @override
   List<String> getMainFields() =>

@@ -27,7 +27,7 @@ class Purchases extends InvoiceMaster<Purchases> {
   String? getTableNameApi() => "purchases";
 
   @override
-  List<String>? requireObjectsList() => ["purchases_details"];
+  List<String>? isRequiredObjectsList() => ["purchases_details"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

@@ -248,8 +248,10 @@ class MasterHomeHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      
-        child: Column(children: viewAbstract.getHorizotalList(context)));
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: viewAbstract.getHorizotalList(context)));
   }
 }
 

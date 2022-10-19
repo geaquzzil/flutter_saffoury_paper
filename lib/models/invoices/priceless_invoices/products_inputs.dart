@@ -38,7 +38,7 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   String? getTableNameApi() => "products_inputs";
 
   @override
-  List<String>? requireObjectsList() => ["products_inputs_details"];
+  List<String>? isRequiredObjectsList() => ["products_inputs_details"];
 
   @override
   List<String> getMainFields() {

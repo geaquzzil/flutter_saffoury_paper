@@ -40,7 +40,8 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
   String? getTableNameApi() => "purchasers_refunds";
 
   @override
-  List<String>? requireObjectsList() => ["purchases_refunds_purchases_details"];
+  List<String>? isRequiredObjectsList() =>
+      ["purchases_refunds_purchases_details"];
 
   @override
   List<String> getMainFields() =>

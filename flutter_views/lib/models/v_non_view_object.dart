@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-
+///is non editable view
 abstract class VObject<T> extends ViewAbstract<T> {
   VObject() : super();
 

@@ -14,7 +14,7 @@ part 'customs_declarations.g.dart';
 class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   // int? EmployeeID;
 
-  @JsonKey(fromJson:intFromString )
+  @JsonKey(fromJson: intFromString)
   String? number; //varchar 200
   String? date;
 
@@ -30,22 +30,21 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-
-    "number":"",
-    "date":"",
-    "fromCountry": "",
-    "fromName":"",
-    "comments": "",
-    "customs_declarations_images": List<CustomsDeclarationImages>.empty(),
-    "customs_declarations_images_count":0,
-    "employees":Employee(),
-  };
+        "number": "",
+        "date": "",
+        "fromCountry": "",
+        "fromName": "",
+        "comments": "",
+        "customs_declarations_images": List<CustomsDeclarationImages>.empty(),
+        "customs_declarations_images_count": 0,
+        "employees": Employee(),
+      };
   @override
   List<String> getMainFields() =>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override
-  List<String>? requireObjectsList() => ["customs_declarations_images"];
+  List<String>? isRequiredObjectsList() => ["customs_declarations_images"];
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
@@ -133,5 +132,5 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   @override
   CustomsDeclaration fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomsDeclaration.fromJson(json);
-       static String? intFromString(dynamic number) => number?.toString();
+  static String? intFromString(dynamic number) => number?.toString();
 }

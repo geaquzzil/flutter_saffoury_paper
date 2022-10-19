@@ -52,11 +52,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
-  bool requireObjects() {
+  bool isRequiredObjects() {
     return true;
   }
 
-  List<String>? requireObjectsList() {
+  List<String>? isRequiredObjectsList() {
     return null;
   }
 
@@ -330,10 +330,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             action == ServerActions.search_viewabstract_by_field
         ? "list"
         : customAction ?? action.toString().split(".").last;
-    mainBody['objectTables'] = convert.jsonEncode(requireObjects());
-    mainBody['detailTables'] = requireObjectsList() == null
+    mainBody['objectTables'] = convert.jsonEncode(isRequiredObjects());
+    mainBody['detailTables'] = isRequiredObjectsList() == null
         ? convert.jsonEncode([])
-        : convert.jsonEncode(requireObjectsList());
+        : convert.jsonEncode(isRequiredObjectsList());
 
     String? table = getTableNameApi();
     if (table != null) {
