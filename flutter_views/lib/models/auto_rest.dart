@@ -12,7 +12,9 @@ class AutoRestCustomResponseView<T extends ViewAbstract,
   T obj;
   String key;
   bool? isSingleResponse;
-  AutoRestCustomResponseView({required this.obj, required this.key,this.isSingleResponse});
+  E? viewResponse;
+  AutoRestCustomResponseView(
+      {required this.obj,required this.viewResponse, required this.key, this.isSingleResponse});
 }
 
 abstract class CustomViewResponse<T> {
