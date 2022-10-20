@@ -31,8 +31,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<TabControllerHelper> getCustomTabList(BuildContext context) =>
       List<TabControllerHelper>.empty();
 
-  T fromJsonViewAbstract(Map<String, dynamic> json);
-  Map<String, dynamic> toJsonViewAbstract();
+
 
   IconData getFieldIconData(String field) {
     return getFieldIconDataMap()[field] ??
@@ -204,9 +203,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value.toDateTime();
   }
 
-  String toJsonString() {
-    return jsonEncode(toJsonViewAbstract());
-  }
 
   List<DropdownStringListItem> getMainFieldsIconsAndValues(
       BuildContext context) {

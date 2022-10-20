@@ -18,4 +18,10 @@ class FilterableData<T> extends VObject<T> {
     // TODO: implement getTableNameApi
     throw UnimplementedError();
   }
+  
+  @override
+  Map<String, dynamic> toJsonViewAbstract() {
+    // TODO: implement toJsonViewAbstract
+    throw UnimplementedError();
+  }
 }

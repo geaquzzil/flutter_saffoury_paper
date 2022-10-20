@@ -10,9 +10,10 @@ import '../../components/square_card.dart';
 import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
-class ListHorizontalCustomViewApiAutoRestWidget<T extends ViewAbstract,E extends CustomViewResponse<T>> extends StatefulWidget {
-
-  AutoRestCustomResponseView<T,E> autoRest;
+///no scroll controller for now
+class ListHorizontalCustomViewApiAutoRestWidget<T extends CustomViewResponse>
+    extends StatefulWidget {
+  T autoRest;
   Widget? title;
   String? titleString;
   ListHorizontalCustomViewApiAutoRestWidget(
@@ -28,27 +29,76 @@ class _ListHorizontalApiWidgetState
     extends State<ListHorizontalCustomViewApiAutoRestWidget> {
   final _scrollController = ScrollController();
   final ListMultiKeyProvider listProvider = ListMultiKeyProvider();
-
+  late String key;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
 
   @override
   void initState() {
     super.initState();
+    key = widget.autoRest.getCustomViewKey();
     _scrollController.addListener(() => _onScroll());
-    if (listProvider.getCount(widget.autoRest.key) == 0) {
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+    if (listProvider.getCount(key) == 0) {
+      switch (widget.autoRest.getCustomViewResponseType()) {
+        case ResponseType.LIST:
+          listProvider.fetchList(key, widget.autoRest as ViewAbstract);
+          break;
+        case ResponseType.SINGLE:
+          listProvider.fetchView(key, widget.autoRest as ViewAbstract);
+          break;
+      }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: listProvider,
+      child: Consumer<ListMultiKeyProvider>(
+          builder: (context, provider, listTile) {
+        if (provider.getCount(key) == 0) {
+          return wrapHeader(
+              context,
+              const CircularProgressIndicator(
+                strokeWidth: 2,
+              ));
+        }
+        debugPrint("List api provider loaded ${listProvider.isLoading}");
+        return wrapHeader(context, getWidget(listProvider));
+      }),
+    );
+  }
+
+  Widget getWidget(ListMultiKeyProvider listProvider) {
+    switch (widget.autoRest.getCustomViewResponseType()) {
+      case ResponseType.LIST:
+        return getListWidget(listProvider);
+
+      case ResponseType.SINGLE:
+        return getSingleWidget(listProvider);
+    }
+  }
+
+  Widget getSingleWidget(ListMultiKeyProvider listProvider) {
+    return widget.autoRest.getCustomViewSingleResponseWidget(
+            context, listProvider.getList(key)[0]) ??
+        Text("Not emplemented getCustomViewSingleResponseWidget");
+  }
+
+  Widget getListWidget(ListMultiKeyProvider listProvider) {
+    return widget.autoRest.getCustomViewListResponseWidget(
+            context, listProvider.getList(key)) ??
+        Text("Not emplemented getCustomViewListToSingle");
   }
 
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
-    bool isLoading = listProvider.isLoading(widget.autoRest.key);
+    bool isLoading = listProvider.isLoading(key);
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      controller: _scrollController,
+      // controller: _scrollController,
       itemCount: isLoading ? (data.length + 1) : (data.length),
       itemBuilder: (context, index) {
         if (isLoading && index == data.length) {
@@ -70,33 +120,10 @@ class _ListHorizontalApiWidgetState
             ),
           ));
         }
-        widget.autoRest.
         return ListCardItemHorizontal(object: data[index]);
         // return data[index].getCardView(context);
       },
       // ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: listProvider,
-      child: Consumer<ListMultiKeyProvider>(
-          builder: (context, provider, listTile) {
-        if (provider.getCount(widget.autoRest.key) == 0) {
-          return wrapHeader(
-              context,
-              CircularProgressIndicator(
-                strokeWidth: 2,
-              ));
-        }
-        debugPrint("List api provider loaded ${listProvider.isLoading}");
-        return wrapHeader(
-            context,
-            _listItems(
-                listProvider.getList(widget.autoRest.key), listProvider));
-      }),
     );
   }
 
@@ -155,7 +182,7 @@ class _ListHorizontalApiWidgetState
     debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+      // listProvider.fetchList(key, widget.autoRest.getCustomViewKey());
     }
   }
 

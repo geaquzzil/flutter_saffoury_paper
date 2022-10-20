@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
@@ -395,4 +396,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   set setPageIndex(int page) {
     _page = page;
   }
+
+  String toJsonString() {
+    return jsonEncode(toJsonViewAbstract());
+  }
+
+  T fromJsonViewAbstract(Map<String, dynamic> json);
+  Map<String, dynamic> toJsonViewAbstract();
 }

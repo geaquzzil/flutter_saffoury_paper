@@ -29554,7 +29554,8 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'onCardClickedView': (dynamic instance) => instance.onCardClickedView,
         r'onCardClickedFromSearchResult': (dynamic instance) =>
             instance.onCardClickedFromSearchResult,
-        r'onCardClicked': (dynamic instance) => instance.onCardClicked,
+        r'onCardClicked': (dynamic instance) =>
+            instance.onCustomViewCardClicked,
         r'onDrawerLeadingItemClicked': (dynamic instance) =>
             instance.onDrawerLeadingItemClicked,
         r'onDrawerItemClicked': (dynamic instance) =>

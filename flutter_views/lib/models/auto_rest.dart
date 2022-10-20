@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_api.dart';
 
 class AutoRest<T extends ViewAbstract> {
   T obj;
@@ -14,11 +15,21 @@ class AutoRestCustomResponseView<T extends ViewAbstract,
   bool? isSingleResponse;
   E? viewResponse;
   AutoRestCustomResponseView(
-      {required this.obj,required this.viewResponse, required this.key, this.isSingleResponse});
+      {required this.obj,
+      required this.viewResponse,
+      required this.key,
+      this.isSingleResponse});
 }
 
-abstract class CustomViewResponse<T> {
-  Widget getItemWidget(BuildContext context, T item);
-  Widget? getWidgetIfSingle(BuildContext context, T item);
-  void onCardClicked(BuildContext context, T istem);
+abstract class CustomViewResponse<T extends ViewAbstract> {
+  Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
+  Widget? getCustomViewSingleResponseWidget(BuildContext context, T item);
+  void onCustomViewCardClicked(BuildContext context, T istem);
+  ResponseType getCustomViewResponseType();
+  String getCustomViewKey();
+}
+
+enum ResponseType {
+  SINGLE,
+  LIST,
 }

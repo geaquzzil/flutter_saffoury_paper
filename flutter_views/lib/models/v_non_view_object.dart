@@ -55,9 +55,4 @@ abstract class VObject<T> extends ViewAbstract<T> {
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 
-  @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
-  }
 }

@@ -43,6 +43,26 @@ class ListMultiKeyProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future fetchView(String key, ViewAbstract viewAbstract) async {
+    late MultiListProviderHelper? multiListProviderHelper;
+    if (listMap.containsKey(key)) {
+      multiListProviderHelper = listMap[key];
+    } else {
+      listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = listMap[key];
+    }
+    if (multiListProviderHelper!.isLoading) return;
+    multiListProviderHelper.isLoading = true;
+    notifyListeners();
+    dynamic list = await viewAbstract.viewCall(0);
+    multiListProviderHelper.isLoading = false;
+    if (list != null) {
+      multiListProviderHelper.objects.add(list);
+      multiListProviderHelper.page++;
+      notifyListeners();
+    }
+  }
 }
 
 class MultiListProviderHelper {

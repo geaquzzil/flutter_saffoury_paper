@@ -1,9 +1,14 @@
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:json_annotation/json_annotation.dart';
 import '../view_abstract.dart';
-
-class ChangesRecords extends VObject<ChangesRecords> {
-  ViewAbstract? viewAbstract;
+@JsonSerializable(explicitToJson: true)
+class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
+    implements CustomViewResponse<ChangesRecords> {
+      @JsonKey(ignore: true)
+  T? viewAbstract;
   String? fieldToGroupBy;
   int? total;
   List<ChangesRecordGroup>? totalGrouped = [];
@@ -16,7 +21,7 @@ class ChangesRecords extends VObject<ChangesRecords> {
     return totalGrouped ?? [];
   }
 
-  ChangesRecords.init(ViewAbstract viewAbstract, String fieldToGroupBy) {
+  ChangesRecords.init(T viewAbstract, String fieldToGroupBy) {
     this.viewAbstract = viewAbstract;
     this.fieldToGroupBy = fieldToGroupBy;
   }
@@ -74,15 +79,36 @@ class ChangesRecords extends VObject<ChangesRecords> {
       {"fieldToGroupBy": fieldToGroupBy ?? ""};
 
   @override
-  ChangesRecords fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
+  ChangesRecords fromJsonViewAbstract(Map<String, dynamic> json) =>ChangesRecords()..
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() => {};
+
+  @override
+  String getCustomViewKey() {
+    return "changesRecords$T";
+  }
+
+  @override
+  Widget getCustomViewListResponseWidget(
+      BuildContext context, List<ChangesRecords> item) {
+    // TODO: implement getCustomViewListResponseWidget
     throw UnimplementedError();
   }
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
+  ResponseType getCustomViewResponseType() => ResponseType.SINGLE;
+
+  @override
+  Widget? getCustomViewSingleResponseWidget(
+      BuildContext context, ChangesRecords item) {
+    // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();
+  }
+
+  @override
+  void onCustomViewCardClicked(BuildContext context, ChangesRecords istem) {
+    // TODO: implement onCustomViewCardClicked
   }
   // @Override
   // public ViewAbstract<?> onReadNewObject(Context context, ViewAbstract<?> newObject, ViewAbstract<?> oldCalledViewAbstract) {
@@ -91,7 +117,7 @@ class ChangesRecords extends VObject<ChangesRecords> {
   // }
 
 }
-
+@JsonSerializable()
 class ChangesRecordGroup {
   int? count;
   String? groupBy;
@@ -113,4 +139,9 @@ class ChangesRecordGroup {
   void setGroupBy(String groupBy) {
     this.groupBy = groupBy;
   }
+
+  factory ChangesRecordGroup.fromJson(Map<String, dynamic> data) =>
+      _$ServerResponseMasterFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ChangesRecordGroup(this);
 }
