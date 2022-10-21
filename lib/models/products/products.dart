@@ -21,6 +21,9 @@ import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/apis/changes_records.dart';
+import 'package:flutter_view_controller/models/apis/chart_records.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
@@ -449,8 +452,27 @@ class Product extends ViewAbstract<Product>
   List<Widget> getHorizotalList(BuildContext context) {
     return [
       getWelcomHome(context),
+      // Row(
+      //   children: [
+      //     Expanded(
+      //       child: ListHorizontalCustomViewApiAutoRestWidget(
+      //           titleString: "TEST1 ",
+      //           autoRest: ChangesRecords.init(Product(), "status")),
+      //     ),
+      //     Expanded(
+      //       child: ListHorizontalCustomViewApiAutoRestWidget(
+      //           titleString: "TEST1 ",
+      //           autoRest: ChangesRecords.init(Product(), "ProductTypeID")),
+      //     )
+      //   ],
+      // ),
       ListHorizontalCustomViewApiAutoRestWidget(
-          titleString: "TEST1 ", autoRest: UnusedRecords.init(Product())),
+          titleString: "TEST1 ",
+          autoRest: ChartRecordAnalysis.init(
+              Order(), DateObject(), EnteryInteval.monthy)),
+
+      // ListHorizontalCustomViewApiAutoRestWidget(
+      //     titleString: "TEST1 ", autoRest: UnusedRecords.init(Product())),
       // ListHorizontalApiAutoRestWidget(
       //     titleString: "TEST1 ",
       //     autoRest:

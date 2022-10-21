@@ -1,13 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../new_screens/dashboard/components/overview_header.dart';
 import '../view_abstract.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 @JsonSerializable(explicitToJson: true)
 class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     implements CustomViewResponse<ChangesRecords> {
-      @JsonKey(ignore: true)
+  @JsonKey(ignore: true)
   T? viewAbstract;
   String? fieldToGroupBy;
   int? total;
@@ -65,10 +71,6 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   //     };
   // }
 
-  ViewAbstract? getViewAbstract() {
-    return viewAbstract;
-  }
-
   @override
   String? getTableNameApi() => viewAbstract?.getTableNameApi();
 
@@ -79,10 +81,20 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
       {"fieldToGroupBy": fieldToGroupBy ?? ""};
 
   @override
-  ChangesRecords fromJsonViewAbstract(Map<String, dynamic> json) =>ChangesRecords()..
+  ChangesRecords fromJsonViewAbstract(Map<String, dynamic> json) =>
+      ChangesRecords.fromJson(json);
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() => {};
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  factory ChangesRecords.fromJson(Map<String, dynamic> data) => ChangesRecords()
+    ..total = data["total"] as int?
+    ..fieldToGroupBy = data["fieldToGroupBy"] as String?
+    ..totalGrouped = (data['totalGrouped'] as List<dynamic>?)
+        ?.map((e) => ChangesRecordGroup.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+  Map<String, dynamic> toJson() => {};
 
   @override
   String getCustomViewKey() {
@@ -102,8 +114,14 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   @override
   Widget? getCustomViewSingleResponseWidget(
       BuildContext context, ChangesRecords item) {
-    // TODO: implement getCustomViewSingleResponseWidget
-    throw UnimplementedError();
+    debugPrint("getCustomViewSingleResponseWidget ${item.totalGrouped}");
+    return CirculeChartItem<ChangesRecordGroup, String>(
+      title:
+          "${AppLocalizations.of(context)!.total}: ${item.total.toCurrencyFormat()} ",
+      list: item.totalGrouped ?? [],
+      xValueMapper: (item, value) => item.groupBy,
+      yValueMapper: (item, n) => item.count,
+    );
   }
 
   @override
@@ -117,9 +135,11 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   // }
 
 }
+
 @JsonSerializable()
 class ChangesRecordGroup {
   int? count;
+  @JsonKey(fromJson: convertToString)
   String? groupBy;
 
   ChangesRecordGroup();
@@ -140,8 +160,12 @@ class ChangesRecordGroup {
     this.groupBy = groupBy;
   }
 
+  static String? convertToString(dynamic number) =>
+      number == null ? "-" : number.toString();
   factory ChangesRecordGroup.fromJson(Map<String, dynamic> data) =>
-      _$ServerResponseMasterFromJson(data);
+      ChangesRecordGroup()
+        ..count = data['count'] as int?
+        ..groupBy = ChangesRecordGroup.convertToString(['groupBy']);
 
-  Map<String, dynamic> toJson() => _$ChangesRecordGroup(this);
+  Map<String, dynamic> toJson() => {};
 }

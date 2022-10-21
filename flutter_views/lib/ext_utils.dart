@@ -32,6 +32,11 @@ extension StringsUtils on String? {
     return dateFormat.format(DateTime.now());
   }
 
+  String toDateTimeFirstDateYearString() {
+    DateTime d = DateTime(DateTime.now().year, 1, 1);
+    return d.toDateTimeString();
+  }
+
   String toNonNullable() {
     return this ?? "";
   }

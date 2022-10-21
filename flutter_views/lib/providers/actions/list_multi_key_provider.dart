@@ -55,7 +55,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     if (multiListProviderHelper!.isLoading) return;
     multiListProviderHelper.isLoading = true;
     notifyListeners();
-    dynamic list = await viewAbstract.viewCall(0);
+    dynamic list = await viewAbstract.callApi();
     multiListProviderHelper.isLoading = false;
     if (list != null) {
       multiListProviderHelper.objects.add(list);

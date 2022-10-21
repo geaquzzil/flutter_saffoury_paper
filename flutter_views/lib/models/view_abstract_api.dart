@@ -141,6 +141,21 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
+  ///call only with custom action and added custom params
+  Future<T?> callApi() async {
+    var response = await getRespones(serverActions: ServerActions.call);
+    if (response == null) return null;
+    if (response.statusCode == 200) {
+      return fromJsonViewAbstract(convert.jsonDecode(response.body));
+    } else if (response.statusCode == 401) {
+      ServerResponseMaster serverResponse =
+          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+      return null;
+    } else {
+      return null;
+    }
+  }
+
   Future<T?> viewCall(int iD, {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.view);
@@ -362,6 +377,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
                 hasSortByFieldDefault;
           }
         }
+        mainBody.addAll(getCustomMap);
+        break;
+      case ServerActions.call:
         mainBody.addAll(getCustomMap);
         break;
       case ServerActions.search:
