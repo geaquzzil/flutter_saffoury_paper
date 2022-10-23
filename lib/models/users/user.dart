@@ -10,6 +10,7 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -26,41 +27,52 @@ class User<T> extends AuthUser {
   String? comments; //text
 
   List<CutRequest>? cut_requests;
+  List<GrowthRate>? cut_requestsAnalysis;
   int? cut_requests_count;
 
   List<Order>? orders;
+  List<GrowthRate>? ordersAnalysis;
   int? orders_count;
 
   List<Purchases>? purchases;
+  List<GrowthRate>? purchasesAnalysis;
   int? purchases_count;
 
   List<OrderRefund>? orders_refunds;
+  List<GrowthRate>? orders_refundsAnalysis;
   int? orders_refunds_count;
 
   List<PurchasesRefund>? purchases_refunds;
+  List<GrowthRate>? purchases_refundsAnalysis;
   int? purchases_refunds_count;
 
   List<CustomerRequestSize>? customers_request_sizes;
+  List<GrowthRate>? customers_request_sizesAnalysis;
   int? customers_request_sizes_count;
 
   List<ReservationInvoice>? reservation_invoice;
+  List<GrowthRate>? reservation_invoiceAnalysis;
   int? reservation_invoice_count;
 
   List<ProductInput>? products_inputs; //employee only
+  List<GrowthRate>? products_inputsAnalysis;
   int? products_inputs_count;
 
   List<ProductOutput>? products_outputs; //employee only
+  List<GrowthRate>? products_outputsAnalysis;
   int? products_outputs_count;
 
   List<Transfers>? transfers; //employee only
+  List<GrowthRate>? transfersAnalysis;
   int? transfers_count;
 
   List<CargoTransporter>? cargo_transporters; //employee only
+  List<GrowthRate>? cargo_transportersAnalysis;
   int? cargo_transporters_count;
 
   @override
   IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;
-  
+
   @override
   Map<String, dynamic> getMirrorFieldsNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
@@ -195,8 +207,8 @@ class User<T> extends AuthUser {
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;
-      
-        @override
-        String getMainHeaderLabelTextOnly(BuildContext context)  =>
+
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.users;
 }

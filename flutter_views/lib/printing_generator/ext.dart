@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
-Widget buildTitle(mt.BuildContext context, PrintableMaster printObj,
-        {PrintCommandAbstract? printCommandAbstract}) =>
+Widget buildTitle<T extends PrintLocalSetting>(mt.BuildContext context, PrintableMaster printObj,
+        {T? printCommandAbstract}) =>
     Padding(
         padding: EdgeInsets.symmetric(horizontal: 26, vertical: 5),
         child: Text(
@@ -17,8 +18,8 @@ Widget buildTitle(mt.BuildContext context, PrintableMaster printObj,
               color: PdfColor.fromHex(printObj.getPrintablePrimaryColor())),
         ));
 
-Widget buildQrCode(mt.BuildContext context, PrintableMaster printObj,
-    {PrintCommandAbstract? printCommandAbstract,
+Widget buildQrCode<T extends PrintLocalSetting>(mt.BuildContext context, PrintableMaster printObj,
+    {T? printCommandAbstract,
     bool withPaddingTop = true,
     double size = 80}) {
   return Column(

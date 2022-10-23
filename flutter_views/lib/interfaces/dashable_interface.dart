@@ -5,6 +5,6 @@ abstract class DashableItemInterface {}
 
 abstract class DashableInterface<T extends ViewAbstract> {
   List<ViewAbstract> getDashboardsItems(BuildContext context);
-
+  
  
 }

@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:pdf/pdf.dart';
 
-abstract class PrintableInvoiceInterfaceDetails {
+abstract class PrintableInvoiceInterfaceDetails<T extends PrintLocalSetting> {
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
-      BuildContext context, PrintCommandAbstract? pca);
+      BuildContext context, T? pca);
 }
 
-abstract class PrintableInvoiceInterface extends PrintableMaster {
+abstract class PrintableInvoiceInterface<T extends PrintLocalSetting> extends PrintableMaster <T>{
   
 
   List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
-      BuildContext context, PrintCommandAbstract? pca);
+      BuildContext context, T? pca);
 
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
-      BuildContext context, PrintCommandAbstract? pca);
+      BuildContext context, T? pca);
 
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
-      BuildContext context, PrintCommandAbstract? pca);
+      BuildContext context, T? pca);
 
   List<PrintableInvoiceInterfaceDetails> getPrintableInvoiceDetailsList();
 
   List<InvoiceHeaderTitleAndDescriptionInfo>
       getPrintableInvoiceAccountInfoInBottom(
-          BuildContext context, PrintCommandAbstract? pca);
+          BuildContext context, T? pca);
 
   
 }

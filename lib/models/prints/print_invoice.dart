@@ -1,0 +1,38 @@
+import 'package:flutter/src/widgets/icon_data.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+
+class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
+  @override
+  PrintInvoice fromJsonViewAbstract(Map<String, dynamic> json) => this;
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {};
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) => {};
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) => "";
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
+
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {};
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() => {};
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() => {};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() => {};
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() => {};
+}

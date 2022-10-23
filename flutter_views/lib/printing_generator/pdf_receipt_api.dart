@@ -6,6 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -19,10 +20,10 @@ import 'package:intl/intl.dart' as intl;
 import '../interfaces/printable/printable_master.dart';
 import 'ext.dart';
 
-class PdfReceipt<T extends PrintableReceiptInterface> {
+class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
-  PrintCommandAbstract? printCommand;
+  E? printCommand;
   PdfReceipt(this.context, this.printObj, {this.printCommand});
 
   Future<pw.ThemeData> getThemeData() async {
@@ -66,7 +67,7 @@ class PdfReceipt<T extends PrintableReceiptInterface> {
               Expanded(flex: 3, child: buildTable()),
               Expanded(
                   flex: 1,
-                  child: buildQrCode(this.context, printObj,
+                  child: buildQrCode<E>(this.context, printObj,
                       printCommandAbstract: printCommand))
             ])
         // buildInvoiceMainTable(),

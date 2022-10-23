@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_invoice.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
@@ -24,7 +25,7 @@ import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
     implements
-        PrintableInvoiceInterface,
+        PrintableInvoiceInterface<PrintInvoice>,
         ModifiablePrintableInterface<PrintProduct> {
   // int? EmployeeID;
   // int? CargoTransID;
@@ -140,11 +141,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   String getPrintableInvoiceTitle(
-          BuildContext context, PrintCommandAbstract? pca) =>
+          BuildContext context, PrintInvoice? pca) =>
       getMainHeaderLabelTextOnly(context).toUpperCase();
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintInvoice? pca) {
     return [
       getInvoicDesFirstRow(context, pca),
       getInvoiceDesSecRow(context, pca),
@@ -155,7 +156,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
       getPrintableInvoiceAccountInfoInBottom(
-              BuildContext context, PrintCommandAbstract? pca) =>
+              BuildContext context, PrintInvoice? pca) =>
           [
             if (customers != null)
               InvoiceHeaderTitleAndDescriptionInfo(
@@ -233,7 +234,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesSecRow(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintInvoice? pca) {
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
         title: AppLocalizations.of(context)!.iD,
@@ -249,7 +250,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesTherdRow(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintInvoice? pca) {
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.total_price,
@@ -273,7 +274,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintInvoice? pca) {
     if (customers == null) return [];
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
@@ -298,7 +299,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintInvoice? pca) {
     var converter = NumberToCharacterConverter('en');
     return [
       InvoiceTotalTitleAndDescriptionInfo(
@@ -320,7 +321,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintInvoice? pca) {
     return [
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.subTotal.toUpperCase(),

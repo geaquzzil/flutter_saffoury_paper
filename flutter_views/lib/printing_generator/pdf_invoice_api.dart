@@ -17,11 +17,12 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../interfaces/printable/printable_master.dart';
+import '../models/prints/print_local_setting.dart';
 
-class PdfInvoiceApi<T extends PrintableInvoiceInterface> {
+class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
-  PrintCommandAbstract? printCommand;
+  E? printCommand;
   PdfInvoiceApi(this.context, this.printObj, {this.printCommand});
   @deprecated
   Future<Uint8List> generateFromImage(Uint8List? list) {

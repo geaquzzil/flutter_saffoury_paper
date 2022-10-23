@@ -253,6 +253,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2+4"
+  data_table_2:
+    dependency: transitive
+    description:
+      name: data_table_2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.7"
   dropdown_search:
     dependency: transitive
     description:

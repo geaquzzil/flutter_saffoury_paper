@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:pdf/pdf.dart';
@@ -11,8 +12,8 @@ import '../../interfaces/printable/printable_master.dart';
 import '../pdf_receipt_api.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
-class PdfPage extends StatefulWidget {
-  PrintableMaster invoiceObj;
+class PdfPage<T extends PrintLocalSetting> extends StatefulWidget {
+  PrintableMaster<T> invoiceObj;
 
   PdfPage({super.key, required this.invoiceObj});
 
@@ -20,7 +21,7 @@ class PdfPage extends StatefulWidget {
   _PdfPageState createState() => _PdfPageState();
 }
 
-class _PdfPageState extends State<PdfPage> {
+class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
   @override
   Widget build(BuildContext context) {
     Widget body = PdfPreview(
@@ -39,15 +40,15 @@ class _PdfPageState extends State<PdfPage> {
         // shouldRepaint: ,
         build: (format) async {
           if (widget.invoiceObj is PrintableInvoiceInterface) {
-            final pdf = PdfInvoiceApi<PrintableInvoiceInterface>(
+            final pdf = PdfInvoiceApi<PrintableInvoiceInterface,T>(
                 context, widget.invoiceObj as PrintableInvoiceInterface);
             return pdf.generate(format);
           } else if (widget.invoiceObj is PrintableCustomInterface) {
-            final pdf = PdfCustom<PrintableCustomInterface>(
+            final pdf = PdfCustom<PrintableCustomInterface,T>(
                 context, widget.invoiceObj as PrintableCustomInterface);
             return pdf.generate(format);
           } else {
-            final pdf = PdfReceipt<PrintableReceiptInterface>(
+            final pdf = PdfReceipt<PrintableReceiptInterface,T>(
                 context, widget.invoiceObj as PrintableReceiptInterface);
             return pdf.generate(format);
           }

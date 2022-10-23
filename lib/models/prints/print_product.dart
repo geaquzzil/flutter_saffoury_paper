@@ -2,6 +2,7 @@ import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -9,14 +10,13 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-part 'print_product.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class PrintProduct extends PrintCommandAbstract<PrintProduct> {
+class PrintProduct extends PrintLocalSetting<PrintProduct> {
   bool printProductAsLabel = false;
   int test = 0;
-  PrintProduct({dynamic printObject}) : super(printObject);
+  PrintProduct({dynamic printObject});
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -65,14 +65,15 @@ class PrintProduct extends PrintCommandAbstract<PrintProduct> {
   Map<String, TextInputType?> getTextInputTypeMap() => {};
 
   @override
-  Map<String, dynamic> toJsonViewAbstract() => toJson();
+  Map<String, dynamic> toJsonViewAbstract() => {};
 
   @override
   PrintProduct fromJsonViewAbstract(Map<String, dynamic> json) =>
       fromJsonViewAbstract(json);
 
-  factory PrintProduct.fromJson(Map<String, dynamic> data) =>
-      _$PrintProductFromJson(data);
-
-  Map<String, dynamic> toJson() => _$PrintProductToJson(this);
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) {
+    // TODO: implement getMainHeaderLabelTextOnly
+    throw UnimplementedError();
+  }
 }

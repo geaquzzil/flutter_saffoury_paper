@@ -28,10 +28,13 @@ class LineChartItem<T, E> extends StatelessWidget {
         series: <ChartSeries>[
           LineSeries<T, E>(
               // Bind data source
+              
+
               enableTooltip: true,
               dataSource: list,
               xValueMapper: xValueMapper,
               yValueMapper: yValueMapper,
+              // legendItemText: ,
               dataLabelSettings: const DataLabelSettings(isVisible: true)),
         ]);
   }

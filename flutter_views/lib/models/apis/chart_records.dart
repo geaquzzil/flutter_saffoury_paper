@@ -10,7 +10,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../v_non_view_object.dart';
 
-@JsonSerializable(explicitToJson: true)
 class ChartRecordAnalysis<T extends ViewAbstract>
     extends VObject<ChartRecordAnalysis>
     implements CustomViewResponse<ChartRecordAnalysis> {

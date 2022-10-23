@@ -55,7 +55,7 @@ void main() async {
     Employee(),
     Credits(),
     ProductType(),
-    Dashboard()
+    // Dashboard()
   ]);
   try {
     runApp(MultiProvider(providers: [

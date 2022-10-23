@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../../new_components/ext.dart';
 import '../../new_components/search/search_filterable_widget.dart';
 import '../dashboard/main_dashboard2.dart';
+import '../dashboard2/dashboard.dart';
 import '../setting/list_sticky_setting_page.dart';
 import '../setting/setting_page.dart';
 import 'components/header/header_title_on_list.dart';
@@ -48,7 +49,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
         context.watch<DrawerViewAbstractProvider>().getObject;
 
     if (viewAbstract is DashableInterface) {
-      return Expanded(child: Text("DS"));
+      return DashboardPage(dashboard: viewAbstract as DashableInterface,);
     }
     switch (currentPage) {
       case CurrentPage.settings:
@@ -79,7 +80,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
                   // const HeaderTitleOnListMain(),
                   SearchWidgetApi(),
                   SearchField(),
-                  
+
                   SearchFilterableWidget(
                     viewAbstract: viewAbstract,
                   ),

@@ -1,7 +1,6 @@
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
 class DateObject {
   String from;
   String to;

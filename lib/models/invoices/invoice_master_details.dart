@@ -7,8 +7,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import '../prints/print_invoice.dart';
+
 abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
-    implements PrintableInvoiceInterfaceDetails {
+    implements PrintableInvoiceInterfaceDetails<PrintInvoice> {
   // int? ProductID;
   // int? WarehouseID;
 
@@ -132,7 +134,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
 
   @override
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
-          BuildContext context, PrintCommandAbstract? pca) =>
+          BuildContext context, PrintInvoice? pca) =>
       {
         AppLocalizations.of(context)!.description:
             "${products?.getProductTypeNameString()}\n${products?.getSizeString(context)}",

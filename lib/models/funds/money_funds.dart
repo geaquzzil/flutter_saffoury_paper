@@ -23,7 +23,7 @@ import '../users/customers.dart';
 abstract class MoneyFunds<T> extends ViewAbstract<T>
     implements
         ModifiablePrintableInterface<PrintReceipt>,
-        PrintableReceiptInterface {
+        PrintableReceiptInterface<PrintReceipt> {
   // int? CashBoxID;
   // int? EmployeeID;
   // int? CustomerID;
@@ -140,13 +140,13 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   String getPrintableInvoiceTitle(
-          BuildContext context, PrintCommandAbstract? pca) =>
+          BuildContext context, PrintReceipt? pca) =>
       getMainHeaderLabelTextOnly(context);
 
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
       getPrintableRecieptHeaderTitleAndDescription(
-          BuildContext context, PrintCommandAbstract? pca) {
+          BuildContext context, PrintReceipt? pca) {
     var converter = NumberToCharacterConverter('en');
     return {
       0: [

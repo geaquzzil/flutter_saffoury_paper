@@ -51,6 +51,12 @@ class _ListHorizontalApiWidgetState
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // listProvider.fetchView(key, widget.autoRest as ViewAbstract);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: listProvider,

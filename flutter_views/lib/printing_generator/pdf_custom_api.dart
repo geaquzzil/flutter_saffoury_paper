@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_bill_inte
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -19,10 +20,10 @@ import 'package:intl/intl.dart' as intl;
 
 import '../interfaces/printable/printable_master.dart';
 
-class PdfCustom<T extends PrintableCustomInterface> {
+class PdfCustom<T extends PrintableCustomInterface,E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
-  PrintCommandAbstract? printCommand;
+  E? printCommand;
   PdfCustom(this.context, this.printObj, {this.printCommand});
 
   Future<pw.ThemeData> getThemeData() async {

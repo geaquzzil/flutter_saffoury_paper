@@ -62,7 +62,7 @@ class Product extends ViewAbstract<Product>
     implements
         CartableProductItemInterface,
         ModifiablePrintableInterface<PrintProduct>,
-        PrintableCustomInterface {
+        PrintableCustomInterface<PrintProduct> {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -452,20 +452,20 @@ class Product extends ViewAbstract<Product>
   List<Widget> getHorizotalList(BuildContext context) {
     return [
       getWelcomHome(context),
-      // Row(
-      //   children: [
-      //     Expanded(
-      //       child: ListHorizontalCustomViewApiAutoRestWidget(
-      //           titleString: "TEST1 ",
-      //           autoRest: ChangesRecords.init(Product(), "status")),
-      //     ),
-      //     Expanded(
-      //       child: ListHorizontalCustomViewApiAutoRestWidget(
-      //           titleString: "TEST1 ",
-      //           autoRest: ChangesRecords.init(Product(), "ProductTypeID")),
-      //     )
-      //   ],
-      // ),
+      Row(
+        children: [
+          Expanded(
+            child: ListHorizontalCustomViewApiAutoRestWidget(
+                titleString: "TEST1 ",
+                autoRest: ChangesRecords.init(Product(), "status")),
+          ),
+          Expanded(
+            child: ListHorizontalCustomViewApiAutoRestWidget(
+                titleString: "TEST1 ",
+                autoRest: ChangesRecords.init(Product(), "ProductTypeID")),
+          )
+        ],
+      ),
       ListHorizontalCustomViewApiAutoRestWidget(
           titleString: "TEST1 ",
           autoRest: ChartRecordAnalysis.init(
@@ -589,7 +589,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   String getPrintableInvoiceTitle(
-      BuildContext context, PrintCommandAbstract? pca) {
+      BuildContext context, PrintProduct? pca) {
     return getMainHeaderLabelTextOnly(context);
   }
 

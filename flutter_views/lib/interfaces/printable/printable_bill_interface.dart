@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:pdf/pdf.dart';
 
-abstract class PrintableReceiptInterface extends PrintableMaster {
+abstract class PrintableReceiptInterface<T extends PrintLocalSetting> extends PrintableMaster<T> {
   ///for each int key is a column
   ///for each List is row list
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
       getPrintableRecieptHeaderTitleAndDescription(
-          BuildContext context, PrintCommandAbstract? pca);
+          BuildContext context, T? pca);
 }
 
 class RecieptHeaderTitleAndDescriptionInfo {

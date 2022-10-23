@@ -10,7 +10,6 @@ import '../../new_screens/dashboard/components/overview_header.dart';
 import '../view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-@JsonSerializable(explicitToJson: true)
 class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     implements CustomViewResponse<ChangesRecords> {
   @JsonKey(ignore: true)

@@ -8,7 +8,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable(explicitToJson: true)
 class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     implements CustomViewResponse<UnusedRecords> {
   List<int> list = [];
