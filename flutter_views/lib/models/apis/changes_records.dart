@@ -127,6 +127,9 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   void onCustomViewCardClicked(BuildContext context, ChangesRecords istem) {
     // TODO: implement onCustomViewCardClicked
   }
+
+  @override
+  double getCustomViewHeight() => 200;
   // @Override
   // public ViewAbstract<?> onReadNewObject(Context context, ViewAbstract<?> newObject, ViewAbstract<?> oldCalledViewAbstract) {
   //     ((ChangesRecords) newObject).viewAbstract = ((ChangesRecords) oldCalledViewAbstract).viewAbstract;

@@ -588,8 +588,7 @@ class Product extends ViewAbstract<Product>
       'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor()}&darkColor=${getPrintableSecondaryColor()}'));
 
   @override
-  String getPrintableInvoiceTitle(
-      BuildContext context, PrintProduct? pca) {
+  String getPrintableInvoiceTitle(BuildContext context, PrintProduct? pca) {
     return getMainHeaderLabelTextOnly(context);
   }
 

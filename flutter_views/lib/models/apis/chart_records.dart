@@ -5,9 +5,13 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 import '../v_non_view_object.dart';
 
 class ChartRecordAnalysis<T extends ViewAbstract>
@@ -81,34 +85,71 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       BuildContext context, ChartRecordAnalysis item) {
     debugPrint(
         "getCustomViewSingleResponseWidget ${item.responseListAnalysis?.length}");
-    return LineChartItem<GrowthRate, DateTime>(
-      title:
-          "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",
-      list: item.responseListAnalysis ?? [],
-      xValueMapper: (item, value) =>
-          DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
-      yValueMapper: (item, n) => item.total,
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Spacer(),
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: DropdownEnumControllerListener(
+                  viewAbstractEnum: enteryInteval ?? EnteryInteval.monthy,
+                  onSelected: (obj) {
+                    debugPrint("onSelected: changed $obj");
+                    context
+                        .read<ListMultiKeyProvider>()
+                        .recall(getCustomViewKey(),this,getCustomViewResponseType());
+                  }),
+            )
+          ],
+        ),
+        LineChartItem<GrowthRate, DateTime>(
+          title:
+              "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",
+          list: item.responseListAnalysis ?? [],
+          xValueMapper: (item, value) =>
+              DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
+          yValueMapper: (item, n) => item.total,
+        ),
+      ],
     );
   }
 
-  // Widget getDecription(BuildContext context, ChartRecordAnalysis item) {
-  //   return RichText(
-  //     text: TextSpan(
-  //       text: AppLocalizations.of(context)!.youHave,
-  //       // style: TextStyle(fontWeight: FontWeight.bold),
-  //       children: <TextSpan>[
-  //         TextSpan(
-  //             text:
-  //                 "${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
-  //             style: TextStyle(fontWeight: FontWeight.bold)),
-  //         // TextSpan(text: ' world!'),
-  //       ],
-  //     ),
-  //   );
-  // }
+  @override
+  double getCustomViewHeight() => 200;
 }
 
-enum EnteryInteval { monthy, daily }
+enum EnteryInteval implements ViewAbstractEnum<EnteryInteval> {
+  monthy,
+  daily;
+
+  @override
+  IconData getMainIconData() {
+    return Icons.date_range;
+  }
+
+  @override
+  String getMainLabelText(BuildContext context) {
+    return AppLocalizations.of(context)!.enteryInterval;
+  }
+
+  @override
+  String getFieldLabelString(BuildContext context, EnteryInteval field) {
+    switch (field) {
+      case EnteryInteval.monthy:
+        return AppLocalizations.of(context)!.thisMonth;
+      case EnteryInteval.daily:
+        return AppLocalizations.of(context)!.this_day;
+    }
+  }
+
+  @override
+  List<EnteryInteval> getValues() {
+    return EnteryInteval.values;
+  }
+}
 
 const _$EnteryInteval = {
   EnteryInteval.monthy: 'monthy',

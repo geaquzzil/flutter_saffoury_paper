@@ -3558,7 +3558,7 @@ abstract class AppLocalizations {
   /// No description provided for @enteryInterval.
   ///
   /// In en, this message translates to:
-  /// **'Select intervalDaily intervalsMonthly intervals'**
+  /// **'Interval'**
   String get enteryInterval;
 
   /// No description provided for @dateEnteryInterval.

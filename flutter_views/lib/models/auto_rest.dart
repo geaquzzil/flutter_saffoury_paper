@@ -25,6 +25,7 @@ abstract class CustomViewResponse<T extends ViewAbstract> {
   Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
   Widget? getCustomViewSingleResponseWidget(BuildContext context, T item);
   void onCustomViewCardClicked(BuildContext context, T istem);
+  double getCustomViewHeight();
   ResponseType getCustomViewResponseType();
   String getCustomViewKey();
 }

@@ -28,7 +28,7 @@ class ListHorizontalCustomViewApiAutoRestWidget<T extends CustomViewResponse>
 class _ListHorizontalApiWidgetState
     extends State<ListHorizontalCustomViewApiAutoRestWidget> {
   final _scrollController = ScrollController();
-  final ListMultiKeyProvider listProvider = ListMultiKeyProvider();
+  late ListMultiKeyProvider listProvider;
   late String key;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
@@ -37,17 +37,23 @@ class _ListHorizontalApiWidgetState
   void initState() {
     super.initState();
     key = widget.autoRest.getCustomViewKey();
+    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+    listProvider.addListener(() {
+      debugPrint("list provider is changed ${listProvider.listMap}");
+    });
     _scrollController.addListener(() => _onScroll());
-    if (listProvider.getCount(key) == 0) {
-      switch (widget.autoRest.getCustomViewResponseType()) {
-        case ResponseType.LIST:
-          listProvider.fetchList(key, widget.autoRest as ViewAbstract);
-          break;
-        case ResponseType.SINGLE:
-          listProvider.fetchView(key, widget.autoRest as ViewAbstract);
-          break;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (listProvider.getCount(key) == 0) {
+        switch (widget.autoRest.getCustomViewResponseType()) {
+          case ResponseType.LIST:
+            listProvider.fetchList(key, widget.autoRest as ViewAbstract);
+            break;
+          case ResponseType.SINGLE:
+            listProvider.fetchView(key, widget.autoRest as ViewAbstract);
+            break;
+        }
       }
-    }
+    });
   }
 
   @override
@@ -97,46 +103,10 @@ class _ListHorizontalApiWidgetState
         Text("Not emplemented getCustomViewListToSingle");
   }
 
-  Widget _listItems(
-      List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
-    bool isLoading = listProvider.isLoading(key);
-    return ListView.builder(
-      physics: const AlwaysScrollableScrollPhysics(),
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      // controller: _scrollController,
-      itemCount: isLoading ? (data.length + 1) : (data.length),
-      itemBuilder: (context, index) {
-        if (isLoading && index == data.length) {
-          return Center(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(AppLocalizations.of(context)!.loading),
-                const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                    )),
-              ],
-            ),
-          ));
-        }
-        return ListCardItemHorizontal(object: data[index]);
-        // return data[index].getCardView(context);
-      },
-      // ),
-    );
-  }
-
   Widget wrapHeader(BuildContext context, Widget child) {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 80,
-        height: 230,
+        height: widget.autoRest.getCustomViewHeight(),
         child: Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

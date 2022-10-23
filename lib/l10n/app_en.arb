@@ -587,7 +587,7 @@
   "turnOn": "Turn on",
   "cameraAccess": "Camera access is denied",
   "denied_camera_permssion": "Permission denied. Please allow access to your camera to start scanning",
-  "enteryInterval": "Select intervalDaily intervalsMonthly intervals",
+  "enteryInterval": "Interval",
   "dateEnteryInterval": "Select dateThis yearThis monthCustom",
 
 

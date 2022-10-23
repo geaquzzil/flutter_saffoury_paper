@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
+import '../../models/auto_rest.dart';
+
 class ListMultiKeyProvider with ChangeNotifier {
+
+  // ListMultiKeyProvider list= ListMultiKeyProvider();
   Map<String, MultiListProviderHelper> listMap = {};
 
   int getCount(String key) {
@@ -20,8 +24,25 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future<void> clear(String key) async {
     MultiListProviderHelper? multiListProviderHelper = listMap[key];
     multiListProviderHelper?.objects.clear();
+
     notifyListeners();
   }
+   ///clear all the objects list and load the other objects list from viewAbstract if not null
+  Future<void> recall(String key,ViewAbstract t,ResponseType type) async {
+    MultiListProviderHelper? multiListProviderHelper = listMap[key];
+    multiListProviderHelper?.objects.clear();
+    
+    notifyListeners();
+    switch (type) {
+          case ResponseType.LIST:
+            fetchList(key, t);
+            break;
+          case ResponseType.SINGLE:
+            fetchView(key,t);
+            break;
+        }
+  }
+  
 
   Future fetchList(String key, ViewAbstract viewAbstract) async {
     late MultiListProviderHelper? multiListProviderHelper;

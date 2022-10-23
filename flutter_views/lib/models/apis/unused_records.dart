@@ -108,4 +108,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   Widget getTitle(BuildContext context) {
     return Text(AppLocalizations.of(context)!.unUsed);
   }
+
+  @override
+  double getCustomViewHeight() => 200;
 }

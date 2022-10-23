@@ -1736,7 +1736,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get denied_camera_permssion => 'Permission denied. Please allow access to your camera to start scanning';
 
   @override
-  String get enteryInterval => 'Select intervalDaily intervalsMonthly intervals';
+  String get enteryInterval => 'Interval';
 
   @override
   String get dateEnteryInterval => 'Select dateThis yearThis monthCustom';
