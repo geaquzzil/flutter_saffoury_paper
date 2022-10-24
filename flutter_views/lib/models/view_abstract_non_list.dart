@@ -5,6 +5,8 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
+import 'package:provider/provider.dart';
 
 abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
   ViewAbstractStandAloneCustomView() : super();
@@ -12,6 +14,7 @@ abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
   ResponseType getCustomStandAloneResponseType();
 
   Widget getCustomStandAloneWidget(BuildContext context);
+  Widget? getCustomeStandAloneSideWidget(BuildContext context);
 
   @override
   Map<String, IconData> getFieldIconDataMap() {
@@ -29,6 +32,11 @@ abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
   List<String> getMainFields() {
     // TODO: implement getMainFields
     throw UnimplementedError();
+  }
+
+  @override
+  void onDrawerItemClicked(BuildContext context) {
+    context.read<DrawerViewAbstractStandAloneProvider>().change(context, this);
   }
 
   @override

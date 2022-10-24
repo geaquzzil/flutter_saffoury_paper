@@ -17,6 +17,8 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/providers/therd_screen_provider.dart';
@@ -26,7 +28,7 @@ import 'package:flutter_view_controller/providers/server_data.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+
 import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
@@ -80,7 +82,10 @@ void main() async {
           create: (_) => EditSubsViewAbstractControllerProvider()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
       ChangeNotifierProvider(
-          create: (_) => DrawerViewAbstractProvider(object: Product())),
+          create: (_) => DrawerViewAbstractListProvider(object: Product())),
+      ChangeNotifierProvider(
+          create: (_) =>
+              DrawerViewAbstractStandAloneProvider(CustomerBalanceList())),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),
       ChangeNotifierProvider(

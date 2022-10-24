@@ -171,4 +171,7 @@ class CustomerClinetGuide
     // TODO: implement getCustomStandAloneWidget
     throw UnimplementedError();
   }
+
+  @override
+  mt.Widget? getCustomeStandAloneSideWidget(mt.BuildContext context) => null;
 }

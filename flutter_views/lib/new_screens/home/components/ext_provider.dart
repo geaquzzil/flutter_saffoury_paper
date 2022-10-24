@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
 
 void notifyListApi(BuildContext context) {
-  ViewAbstract? v = context.read<DrawerViewAbstractProvider>().getObject;
+  ViewAbstract? v = context.read<DrawerViewAbstractListProvider>().getObject;
   v.setFilterableMap(context.read<FilterableProvider>().getList);
-  context.read<DrawerViewAbstractProvider>().change(context, v);
-  
+  context.read<DrawerViewAbstractListProvider>().change(context, v);
 }
 
 void addFilterableSort(BuildContext context, SortByType selectedItem) {

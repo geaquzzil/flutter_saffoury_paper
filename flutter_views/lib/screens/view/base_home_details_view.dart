@@ -55,11 +55,11 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
     } else {
       tabs.clear();
       tabs.addAll(viewAbstract.getTabs(context));
-      if (viewAbstract is ViewAbstractStandAloneCustomView) {
-        return Center(
-          child: MasterViewStandAlone(viewAbstract: viewAbstract),
-        );
-      }
+      // if (viewAbstract is ViewAbstractStandAloneCustomView) {
+      //   return Center(
+      //     child: MasterViewStandAlone(viewAbstract: viewAbstract),
+      //   );
+      // }
       switch (actionViewAbstractProvider.getServerActions) {
         case ServerActions.edit:
           return Scaffold(body: BaseEditPage(parent: viewAbstract));

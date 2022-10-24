@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
   @override
   Widget build(BuildContext context) {
     ViewAbstract drawerViewAbstract =
-        context.watch<DrawerViewAbstractProvider>().getObject;
+        context.watch<DrawerViewAbstractListProvider>().getObject;
 
     return FutureBuilder(
         future: context

@@ -7,7 +7,8 @@ import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard.dar
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/screens/base_app_shared_header.dart';
 import 'package:flutter_view_controller/screens/view/base_home_details_view.dart';
@@ -33,11 +34,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
       if (SizeConfig.isDesktop(context)) DrawerLargeScreens(),
       Expanded(
         child: Column(
-          children: [
-            // const HeaderMain(),
-            // const HeaderTitleMain(),
-            getCurrentPage(context)
-          ],
+          children: [getCurrentPage(context)],
         ),
       )
     ]);
@@ -48,11 +45,21 @@ class BaseHomeScreenLayout extends StatelessWidget {
         context.watch<LargeScreenPageProvider>().getCurrentPage;
 
     ViewAbstract viewAbstract =
-        context.watch<DrawerViewAbstractProvider>().getObject;
+        context.watch<DrawerViewAbstractListProvider>().getObject;
+
+    ViewAbstractStandAloneCustomView? viewAbstractStandAloneCustomView =
+        context.watch<DrawerViewAbstractStandAloneProvider>().getObject;
 
     if (viewAbstract is DashableInterface) {
       return DashboardPage(
         dashboard: viewAbstract as DashableInterface,
+      );
+    }
+    if (viewAbstractStandAloneCustomView is ViewAbstractStandAloneCustomView) {
+      return Center(
+        child: Expanded(
+            child: MasterViewStandAlone(
+                viewAbstract: viewAbstractStandAloneCustomView)),
       );
     }
     switch (currentPage) {
@@ -71,12 +78,6 @@ class BaseHomeScreenLayout extends StatelessWidget {
   }
 
   Widget getMainHomeList(BuildContext context, ViewAbstract viewAbstract) {
-    if (viewAbstract is ViewAbstractStandAloneCustomView) {
-      return Center(
-        child:
-            Expanded(child: MasterViewStandAlone(viewAbstract: viewAbstract)),
-      );
-    }
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [

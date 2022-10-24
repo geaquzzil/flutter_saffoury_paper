@@ -8,7 +8,7 @@ import 'package:flutter_view_controller/new_screens/home/components/notification
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class _HeaderMainState extends State<HeaderMain> {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.read<DrawerViewAbstractProvider>().getObject;
+        context.read<DrawerViewAbstractListProvider>().getObject;
 
     // return ProfileMenu(icon: "", text: "dsa", press: () {});
     // return  SearchWidgetApi();
@@ -40,9 +40,7 @@ class _HeaderMainState extends State<HeaderMain> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: 
-            
-            Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton.icon(
@@ -86,8 +84,6 @@ class _HeaderMainState extends State<HeaderMain> {
                 ),
                 const ProfilePicturePopupMenu(),
               ],
-            ))
-            
-            );
+            )));
   }
 }

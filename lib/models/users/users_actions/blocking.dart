@@ -92,6 +92,9 @@ class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
     // TODO: implement getCustomStandAloneWidget
     throw UnimplementedError();
   }
+
+  @override
+  Widget? getCustomeStandAloneSideWidget(BuildContext context) => null;
 }
 
 const _$BlockMood = {

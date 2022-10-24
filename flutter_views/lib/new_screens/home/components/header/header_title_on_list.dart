@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -22,7 +22,7 @@ class _HeaderTitleMainState extends State<HeaderTitleOnListMain> {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.watch<DrawerViewAbstractProvider>().getObject;
+        context.watch<DrawerViewAbstractListProvider>().getObject;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(

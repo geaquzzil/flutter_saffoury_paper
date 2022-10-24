@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -29,9 +29,11 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onCardClickedView(BuildContext context) {
     onCardClicked(context);
   }
+
   void onCardClickedFromSearchResult(BuildContext context) {
     onCardClicked(context);
   }
+
   void onCardClicked(BuildContext context) {
     debugPrint("Card Clicked");
     if (SizeConfig.isDesktop(context)) {
@@ -66,7 +68,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
     //Navigator.of(context).pop();
     context
-        .read<DrawerViewAbstractProvider>()
+        .read<DrawerViewAbstractListProvider>()
         .change(context, this as ViewAbstract);
   }
 

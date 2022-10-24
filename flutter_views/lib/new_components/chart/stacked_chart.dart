@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class LineChartItem<T, E> extends StatelessWidget {
+class StackedChartItem<T, E> extends StatelessWidget {
   List<T> list;
   String title;
 
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
-  LineChartItem(
+  StackedChartItem(
       {Key? key,
       required this.title,
       required this.list,

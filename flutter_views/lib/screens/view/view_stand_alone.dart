@@ -3,8 +3,10 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../../new_components/ext.dart';
+import '../../providers/actions/action_viewabstract_provider.dart';
 import '../base_shared_actions_header.dart';
 
 class MasterViewStandAlone extends StatelessWidget {
@@ -27,11 +29,17 @@ class MasterViewStandAlone extends StatelessWidget {
         future: getFuture(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            // return TextButton(
-            //     onPressed: () => {generatePdf(snapshot.data)},
-            //     child: const Text("dsa"));
-            return snapshot.data.getCustomStandAloneWidget(context);
-
+            debugPrint("getFutureBuilder ${snapshot.data}");
+            viewAbstract = snapshot.data;
+            Size size = MediaQuery.of(context).size;
+            return Expanded(
+              child: Row(children: [
+                Expanded(
+                    flex: size.width > 1340 ? 8 : 2,
+                    child: getMainWidget(context)),
+                if (SizeConfig.isDesktop(context)) wrapSideWidget(context, size)
+              ]),
+            );
             //  snapshot.data.bodyBytes);
           }
           return Center(child: CircularProgressIndicator());
@@ -58,7 +66,7 @@ class MasterViewStandAlone extends StatelessWidget {
                         BaseSharedHeaderViewDetailsActions(
                           viewAbstract: viewAbstract,
                         ),
-                        getFutureBuilder(context)
+                        viewAbstract.getCustomStandAloneWidget(context)
                       ],
                     ),
                   ),
@@ -69,24 +77,30 @@ class MasterViewStandAlone extends StatelessWidget {
     );
   }
 
-  Widget getSideWidget(BuildContext context) {
+  Widget getSideWidget(BuildContext context, Widget? hasCustomWidget) {
     return Container(
         padding: const EdgeInsets.all(10),
         decoration: getShadowBoxDecoration(),
-        child: const Center(child: Text("TEXT")));
+        child: Center(
+            child: hasCustomWidget ??
+                viewAbstract.getCustomeStandAloneSideWidget(context)));
+  }
+
+  Widget wrapSideWidget(BuildContext context, Size size) {
+    ActionViewAbstractProvider actionViewAbstractProvider =
+        context.watch<ActionViewAbstractProvider>();
+    Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
+    return Expanded(
+        flex: customWidget != null
+            ? 6
+            : size.width > 1340
+                ? 4
+                : 1,
+        child: getSideWidget(context, customWidget));
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Expanded(
-      child: Row(children: [
-        Expanded(
-            flex: size.width > 1340 ? 8 : 2, child: getMainWidget(context)),
-        if (SizeConfig.isDesktop(context))
-          Expanded(
-              flex: size.width > 1340 ? 4 : 1, child: getSideWidget(context))
-      ]),
-    );
+    return getFutureBuilder(context);
   }
 }

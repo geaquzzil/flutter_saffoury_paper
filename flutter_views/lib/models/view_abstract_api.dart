@@ -144,6 +144,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   ///call only with custom action and added custom params
   Future<T?> callApi() async {
     var response = await getRespones(serverActions: ServerActions.call);
+    debugPrint("callApi $response");
+    debugPrint("callApi status code ${response?.statusCode}");
+    debugPrint("callApi response =>${response?.body}");
+
     if (response == null) return null;
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));

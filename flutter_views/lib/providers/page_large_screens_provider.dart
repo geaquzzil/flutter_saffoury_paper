@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:provider/provider.dart';
 
 class LargeScreenPageProvider with ChangeNotifier {
@@ -11,7 +11,9 @@ class LargeScreenPageProvider with ChangeNotifier {
         return "Shopping cart";
       case CurrentPage.list:
       default:
-        return context.watch<DrawerViewAbstractProvider>().getTitle(context);
+        return context
+            .watch<DrawerViewAbstractListProvider>()
+            .getTitle(context);
     }
     return "";
   }
@@ -22,4 +24,4 @@ class LargeScreenPageProvider with ChangeNotifier {
   }
 }
 
-enum CurrentPage { list, notifications, cart, settings,dashboard }
+enum CurrentPage { list, notifications, cart, settings, dashboard }

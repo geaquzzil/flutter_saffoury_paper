@@ -52,7 +52,7 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
   }
 
   Widget buildMenuItem(MenuItemBuild menuItemBuild) => HeaderIconBuilder(
-    
+        viewAbstract: viewAbstract,
         menuItemBuild: menuItemBuild,
       );
 

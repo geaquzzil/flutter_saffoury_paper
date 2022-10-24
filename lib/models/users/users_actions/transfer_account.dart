@@ -86,6 +86,9 @@ class TransferAccount
     // TODO: implement getCustomStandAloneWidget
     throw UnimplementedError();
   }
+
+  @override
+  Widget? getCustomeStandAloneSideWidget(BuildContext context) => null;
 }
 
 // @RestOption(Action = "action_transfer_account", ChangeActionOnAdd = true)
