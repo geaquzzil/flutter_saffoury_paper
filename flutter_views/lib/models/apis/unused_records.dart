@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
-    implements CustomViewResponse<UnusedRecords> {
+    implements CustomViewHorizontalListResponse<UnusedRecords> {
   List<int> list = [];
   List<T>? listObjects = [];
   @JsonKey(ignore: true)

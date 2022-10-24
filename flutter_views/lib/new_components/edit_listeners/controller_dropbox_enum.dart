@@ -5,9 +5,9 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 
 import '../text_bold.dart';
 
-class DropdownEnumControllerListener extends StatelessWidget {
-  ViewAbstractEnum viewAbstractEnum;
-  void Function(Object? object) onSelected;
+class DropdownEnumControllerListener<T extends ViewAbstractEnum> extends StatelessWidget {
+  T viewAbstractEnum;
+  void Function(T? object) onSelected;
 
   DropdownEnumControllerListener(
       {Key? key, required this.viewAbstractEnum, required this.onSelected})
@@ -38,7 +38,7 @@ class DropdownEnumControllerListener extends StatelessWidget {
                         : viewAbstractEnum.getFieldLabelString(context, item)),
               ))
           .toList(),
-      onChanged: (obj) => onSelected(obj),
+      onChanged: (obj) => onSelected(obj as T ),
     );
   }
 }

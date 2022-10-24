@@ -251,7 +251,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         ),
       );
 
-  void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {}
+  void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {
+    onPopupMenuActionSelected(context, e);
+  }
+
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");

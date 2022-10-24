@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
@@ -14,7 +15,8 @@ import '../../prints/print_customer_balances.dart';
 import 'customer_terms.dart';
 import '../customers.dart';
 
-class CustomerBalanceList extends ViewAbstractNonList<CustomerBalanceList>
+class CustomerBalanceList
+    extends ViewAbstractStandAloneCustomView<CustomerBalanceList>
     implements PrintableInvoiceInterface<PrintCustomerBalances> {
   List<CustomerBalanceSingle>? customers;
   double? totalBalance;
@@ -24,14 +26,14 @@ class CustomerBalanceList extends ViewAbstractNonList<CustomerBalanceList>
   CustomerBalanceList();
   @override
   CustomerBalanceList fromJsonViewAbstract(Map<String, dynamic> json) =>
-      CustomerBalanceList()
-        ..totalBalance = json['totalBalance'] as double?
-        ..termsBreakCount = json['termsBreakCount'] as int?
-        ..nextPaymentCount = json['nextPaymentCount'] as int?
-        ..customers = (json['customers'] as List<dynamic>?)
-            ?.map((e) =>
-                CustomerBalanceSingle.fromJson(e as Map<String, dynamic>))
-            .toList();
+      CustomerBalanceList();
+  // ..totalBalance = json['totalBalance'] as double?
+  // ..termsBreakCount = json['termsBreakCount'] as int?
+  // ..nextPaymentCount = json['nextPaymentCount'] as int?
+  // ..customers = (json['customers'] as List<dynamic>?)
+  //     ?.map((e) =>
+  //         CustomerBalanceSingle.fromJson(e as Map<String, dynamic>))
+  //     .toList();
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
@@ -109,4 +111,12 @@ class CustomerBalanceList extends ViewAbstractNonList<CustomerBalanceList>
 
   @override
   String getPrintableQrCodeID() => "TODO";
+
+  @override
+  ResponseType getCustomStandAloneResponseType() => ResponseType.SINGLE;
+
+  @override
+  Widget getCustomStandAloneWidget(BuildContext context) {
+    return Text("dsad");
+  }
 }

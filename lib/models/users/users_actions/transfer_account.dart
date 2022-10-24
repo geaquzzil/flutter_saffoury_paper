@@ -1,5 +1,6 @@
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 
@@ -7,7 +8,8 @@ import '../customers.dart';
 import '../employees.dart';
 
 @reflector
-class TransferAccount extends ViewAbstractNonList<TransferAccount> {
+class TransferAccount
+    extends ViewAbstractStandAloneCustomView<TransferAccount> {
   Employee employee;
   Customer customerFrom;
   Customer customerTo;
@@ -70,6 +72,18 @@ class TransferAccount extends ViewAbstractNonList<TransferAccount> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     // TODO: implement toJsonViewAbstract
+    throw UnimplementedError();
+  }
+
+  @override
+  ResponseType getCustomStandAloneResponseType() {
+    // TODO: implement getCustomStandAloneResponseType
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget getCustomStandAloneWidget(BuildContext context) {
+    // TODO: implement getCustomStandAloneWidget
     throw UnimplementedError();
   }
 }

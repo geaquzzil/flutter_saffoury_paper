@@ -52,18 +52,21 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
   }
 
   Widget buildMenuItem(MenuItemBuild menuItemBuild) => HeaderIconBuilder(
+    
         menuItemBuild: menuItemBuild,
       );
 
   Widget buildList(BuildContext context) {
     final action = context.watch<ActionViewAbstractProvider>().getServerActions;
-    final viewAbstract = context.watch<ActionViewAbstractProvider>().getObject;
+    // final viewAbstract = context.watch<ActionViewAbstractProvider>().getObject;
+
     return FutureBuilder(
         future: action == ServerActions.view
-            ? viewAbstract?.getPopupMenuActionsView(context)
-            : viewAbstract?.getPopupMenuActionsEdit(context),
+            ? viewAbstract.getPopupMenuActionsView(context)
+            : viewAbstract.getPopupMenuActionsEdit(context),
         builder: (BuildContext context,
             AsyncSnapshot<List<MenuItemBuild>> snapshot) {
+          debugPrint("shared header build List ${snapshot.data}");
           if (snapshot.hasData) {
             return Row(
               children: [...?snapshot.data?.map(buildMenuItem).toList()],

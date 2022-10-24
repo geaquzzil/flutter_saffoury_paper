@@ -11,7 +11,7 @@ import '../view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
-    implements CustomViewResponse<ChangesRecords> {
+    implements CustomViewHorizontalListResponse<ChangesRecords> {
   @JsonKey(ignore: true)
   T? viewAbstract;
   String? fieldToGroupBy;

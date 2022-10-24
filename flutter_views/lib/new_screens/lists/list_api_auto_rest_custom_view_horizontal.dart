@@ -11,8 +11,8 @@ import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
-class ListHorizontalCustomViewApiAutoRestWidget<T extends CustomViewResponse>
-    extends StatefulWidget {
+class ListHorizontalCustomViewApiAutoRestWidget<
+    T extends CustomViewHorizontalListResponse> extends StatefulWidget {
   T autoRest;
   Widget? title;
   String? titleString;

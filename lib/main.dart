@@ -6,6 +6,7 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
+import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
@@ -55,6 +56,7 @@ void main() async {
     Employee(),
     Credits(),
     ProductType(),
+    CustomerBalanceList()
     // Dashboard()
   ]);
   try {

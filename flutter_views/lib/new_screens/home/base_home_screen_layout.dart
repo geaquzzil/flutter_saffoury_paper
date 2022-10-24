@@ -14,8 +14,10 @@ import 'package:flutter_view_controller/screens/view/base_home_details_view.dart
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/view_abstract_non_list.dart';
 import '../../new_components/ext.dart';
 import '../../new_components/search/search_filterable_widget.dart';
+import '../../screens/view/view_stand_alone.dart';
 import '../dashboard/main_dashboard2.dart';
 import '../dashboard2/dashboard.dart';
 import '../setting/list_sticky_setting_page.dart';
@@ -49,7 +51,9 @@ class BaseHomeScreenLayout extends StatelessWidget {
         context.watch<DrawerViewAbstractProvider>().getObject;
 
     if (viewAbstract is DashableInterface) {
-      return DashboardPage(dashboard: viewAbstract as DashableInterface,);
+      return DashboardPage(
+        dashboard: viewAbstract as DashableInterface,
+      );
     }
     switch (currentPage) {
       case CurrentPage.settings:
@@ -66,7 +70,13 @@ class BaseHomeScreenLayout extends StatelessWidget {
     }
   }
 
-  Expanded getMainHomeList(BuildContext context, ViewAbstract viewAbstract) {
+  Widget getMainHomeList(BuildContext context, ViewAbstract viewAbstract) {
+    if (viewAbstract is ViewAbstractStandAloneCustomView) {
+      return Center(
+        child:
+            Expanded(child: MasterViewStandAlone(viewAbstract: viewAbstract)),
+      );
+    }
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [

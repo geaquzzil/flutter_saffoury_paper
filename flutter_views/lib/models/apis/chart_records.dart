@@ -16,7 +16,7 @@ import '../v_non_view_object.dart';
 
 class ChartRecordAnalysis<T extends ViewAbstract>
     extends VObject<ChartRecordAnalysis>
-    implements CustomViewResponse<ChartRecordAnalysis> {
+    implements CustomViewHorizontalListResponse<ChartRecordAnalysis> {
   List<GrowthRate>? responseListAnalysis = [];
   DateObject? date;
   EnteryInteval? enteryInteval;
@@ -85,7 +85,14 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       BuildContext context, ChartRecordAnalysis item) {
     debugPrint(
         "getCustomViewSingleResponseWidget ${item.responseListAnalysis?.length}");
-
+    return LineChartItem<GrowthRate, DateTime>(
+      title:
+          "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",
+      list: item.responseListAnalysis ?? [],
+      xValueMapper: (item, value) =>
+          DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
+      yValueMapper: (item, n) => item.total,
+    );
     return Column(
       children: [
         Row(
@@ -94,13 +101,17 @@ class ChartRecordAnalysis<T extends ViewAbstract>
             SizedBox(
               width: 100,
               height: 100,
-              child: DropdownEnumControllerListener(
+              child: DropdownEnumControllerListener<EnteryInteval>(
                   viewAbstractEnum: enteryInteval ?? EnteryInteval.monthy,
                   onSelected: (obj) {
                     debugPrint("onSelected: changed $obj");
-                    context
-                        .read<ListMultiKeyProvider>()
-                        .recall(getCustomViewKey(),this,getCustomViewResponseType());
+                    if (obj != null) {
+                      enteryInteval = obj;
+                      context.read<ListMultiKeyProvider>().recall(
+                          getCustomViewKey(),
+                          this,
+                          getCustomViewResponseType());
+                    }
                   }),
             )
           ],
@@ -118,7 +129,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  double getCustomViewHeight() => 200;
+  double getCustomViewHeight() => 600;
 }
 
 enum EnteryInteval implements ViewAbstractEnum<EnteryInteval> {

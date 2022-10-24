@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
@@ -9,7 +10,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 @reflector
-class Blocking extends ViewAbstractNonList<Blocking> {
+class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
   BlockMood blockMood;
   Customer customer;
   bool block;
@@ -79,6 +80,18 @@ class Blocking extends ViewAbstractNonList<Blocking> {
         "tableName": getTableName(),
         "blockValue": block ? "0" : "1"
       };
+
+  @override
+  ResponseType getCustomStandAloneResponseType() {
+    // TODO: implement getCustomStandAloneResponseType
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget getCustomStandAloneWidget(BuildContext context) {
+    // TODO: implement getCustomStandAloneWidget
+    throw UnimplementedError();
+  }
 }
 
 const _$BlockMood = {

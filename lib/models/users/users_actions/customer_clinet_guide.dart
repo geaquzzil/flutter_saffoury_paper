@@ -1,6 +1,7 @@
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:pdf/src/widgets/widget.dart';
@@ -9,7 +10,8 @@ import 'package:flutter/material.dart' as mt;
 import '../../prints/print_customer_guid.dart';
 import '../customers.dart';
 
-class CustomerClinetGuide extends ViewAbstractNonList<CustomerClinetGuide>
+class CustomerClinetGuide
+    extends ViewAbstractStandAloneCustomView<CustomerClinetGuide>
     implements
         PrintableCustomInterface<PrintCustomerGuid>,
         ModifiablePrintableInterface<PrintCustomerGuid> {
@@ -155,6 +157,18 @@ class CustomerClinetGuide extends ViewAbstractNonList<CustomerClinetGuide>
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     // TODO: implement toJsonViewAbstract
+    throw UnimplementedError();
+  }
+
+  @override
+  ResponseType getCustomStandAloneResponseType() {
+    // TODO: implement getCustomStandAloneResponseType
+    throw UnimplementedError();
+  }
+
+  @override
+  mt.Widget getCustomStandAloneWidget(mt.BuildContext context) {
+    // TODO: implement getCustomStandAloneWidget
     throw UnimplementedError();
   }
 }
