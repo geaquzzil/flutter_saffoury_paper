@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_summary_item.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'cart_descriptopn_header.dart';
 
 class SubRowCartDescription extends StatefulWidget {
-  SubRowCartDescription({Key? key}) : super(key: key);
+  const SubRowCartDescription({Key? key}) : super(key: key);
 
   @override
   State<SubRowCartDescription> createState() => _SubRowCartDescriptionState();
@@ -26,7 +24,7 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     _colorTween = ColorTween(begin: null, end: Colors.green)
         .animate(_animationController);
 

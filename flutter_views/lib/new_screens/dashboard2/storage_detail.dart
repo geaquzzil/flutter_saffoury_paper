@@ -10,37 +10,37 @@ class StarageDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Storage Details",
               style: Theme.of(context).textTheme.titleMedium),
-          SizedBox(height: defaultPadding),
-          Chart(),
-          StorageInfoCard(
+          const SizedBox(height: defaultPadding),
+          const Chart(),
+          const StorageInfoCard(
             svgSrc: Icons.document_scanner,
             title: "Documents Files",
             amountOfFiles: "1.3GB",
             numOfFiles: 1328,
           ),
-          StorageInfoCard(
+          const StorageInfoCard(
             svgSrc: Icons.media_bluetooth_off,
             title: "Media Files",
             amountOfFiles: "15.3GB",
             numOfFiles: 1328,
           ),
-          StorageInfoCard(
+          const StorageInfoCard(
             svgSrc: Icons.other_houses,
             title: "Other Files",
             amountOfFiles: "1.3GB",
             numOfFiles: 1328,
           ),
-          StorageInfoCard(
+          const StorageInfoCard(
             svgSrc: Icons.unarchive,
             title: "Unknown",
             amountOfFiles: "1.3GB",
@@ -68,8 +68,8 @@ class StorageInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: defaultPadding),
-      padding: EdgeInsets.all(defaultPadding),
+      margin: const EdgeInsets.only(top: defaultPadding),
+      padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         border: Border.all(width: 2, color: primaryColor.withOpacity(0.15)),
         borderRadius: const BorderRadius.all(
@@ -117,12 +117,12 @@ class Chart extends StatelessWidget {
       width: double.infinity,
       child: Stack(
         children: [
-          Text("PIE"),
+          const Text("PIE"),
           Positioned.fill(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: defaultPadding),
+                const SizedBox(height: defaultPadding),
                 Text(
                   "29.1",
                   style: Theme.of(context).textTheme.headline4!.copyWith(
@@ -131,7 +131,7 @@ class Chart extends StatelessWidget {
                         height: 0.5,
                       ),
                 ),
-                Text("of 128GB")
+                const Text("of 128GB")
               ],
             ),
           ),

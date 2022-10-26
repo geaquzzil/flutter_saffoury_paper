@@ -1,27 +1,8 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/controllers/dashboard_controller.dart';
-import 'package:flutter_view_controller/new_screens/dashboard/components/profile_tile.dart';
-import 'package:flutter_view_controller/new_screens/dashboard/components/sidebar.dart';
-import 'package:flutter_view_controller/shared_components/chatting_card.dart';
-import 'package:flutter_view_controller/shared_components/progress_card.dart';
-import 'package:flutter_view_controller/shared_components/progress_report_card.dart';
-import 'package:flutter_view_controller/shared_components/project_card.dart';
-import 'package:flutter_view_controller/shared_components/responsive_builder.dart';
-import 'package:flutter_view_controller/shared_components/task_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
-import '../../screens/web/components/header.dart';
-import '../../shared_components/get_premium_card.dart';
-import '../../shared_components/list_profil_image.dart';
-import 'components/active_project_card.dart';
-import 'components/overview_header.dart';
-import 'components/recent_messages.dart';
-import 'components/team_member.dart';
 
 enum TaskType {
   todo,

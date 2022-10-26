@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import '../../components/square_card.dart';
-import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
@@ -94,13 +90,13 @@ class _ListHorizontalApiWidgetState
   Widget getSingleWidget(ListMultiKeyProvider listProvider) {
     return widget.autoRest.getCustomViewSingleResponseWidget(
             context, listProvider.getList(key)[0]) ??
-        Text("Not emplemented getCustomViewSingleResponseWidget");
+        const Text("Not emplemented getCustomViewSingleResponseWidget");
   }
 
   Widget getListWidget(ListMultiKeyProvider listProvider) {
     return widget.autoRest.getCustomViewListResponseWidget(
             context, listProvider.getList(key)) ??
-        Text("Not emplemented getCustomViewListToSingle");
+        const Text("Not emplemented getCustomViewListToSingle");
   }
 
   Widget wrapHeader(BuildContext context, Widget child) {
@@ -121,7 +117,7 @@ class _ListHorizontalApiWidgetState
       child: widget.title ??
           Text(
             widget.titleString ?? "NONT",
-            style: TextStyle(fontWeight: FontWeight.w200),
+            style: const TextStyle(fontWeight: FontWeight.w200),
           ),
     );
   }

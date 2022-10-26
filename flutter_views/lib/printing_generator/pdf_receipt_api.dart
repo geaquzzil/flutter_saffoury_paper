@@ -1,23 +1,15 @@
-import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
-import 'dart:ui';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart' as intl;
 
-import '../interfaces/printable/printable_master.dart';
 import 'ext.dart';
 
 class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetting> {
@@ -79,10 +71,10 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
 
   List<String> getList(List<RecieptHeaderTitleAndDescriptionInfo> list) {
     List<String> stringList = [];
-    list.forEach((element) {
+    for (var element in list) {
       stringList.add(element.title);
       stringList.add(element.description);
-    });
+    }
     return stringList;
   }
 
@@ -93,7 +85,7 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
 
   Widget buildInvoiceBottomOfQr() {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 0),
         child: Table.fromTextArray(
           headers: ["", ""],
           data: [
@@ -103,14 +95,14 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
             ["served by", "Qussai Al-Saffoury"]
           ],
           border: null,
-          oddCellStyle: TextStyle(color: PdfColors.green),
+          oddCellStyle: const TextStyle(color: PdfColors.green),
           cellAlignment: Alignment.centerRight,
           cellAlignments: {0: Alignment.centerLeft, 1: Alignment.centerRight},
 
           // oddCellStyle: TextStyle(fontWeight: FontWeight.bold),
           cellDecoration: (index, data, rowNum) {
             mt.debugPrint("cellDecoration rownum $rowNum index= $index");
-            return BoxDecoration(
+            return const BoxDecoration(
 
                 // borderRadius: BorderRadius.circular(1),
                 // color: index % 2 != 0 ? PdfColors.grey200 : PdfColors.white,
@@ -140,8 +132,8 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
           headerStyle: TextStyle(
               color: PdfColors.green,
               fontWeight: FontWeight.bold,
-              background: BoxDecoration(color: PdfColors.white)),
-          headerDecoration: BoxDecoration(color: PdfColors.grey300),
+              background: const BoxDecoration(color: PdfColors.white)),
+          headerDecoration: const BoxDecoration(color: PdfColors.grey300),
           // cellHeight: 20,
           // cellAlignments: {0: Alignment.centerRight, 1: Alignment.centerLeft}
           // cellAlignments: Map.fromIterable(headers, key: (e) {
@@ -195,7 +187,7 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
 
                   // borderRadius: BorderRadius.circular(1),
                   color: index % 2 != 0 ? PdfColors.grey200 : PdfColors.white,
-                  border: Border(
+                  border: const Border(
                       bottom: BorderSide(
                     width: 10,
                     //                    <--- top side
@@ -222,8 +214,8 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
             headerStyle: TextStyle(
                 color: PdfColors.green,
                 fontWeight: FontWeight.bold,
-                background: BoxDecoration(color: PdfColors.white)),
-            headerDecoration: BoxDecoration(color: PdfColors.grey300),
+                background: const BoxDecoration(color: PdfColors.white)),
+            headerDecoration: const BoxDecoration(color: PdfColors.grey300),
             cellHeight: 30,
             cellAlignments: {0: Alignment.centerRight, 1: Alignment.centerLeft}
             // cellAlignments: Map.fromIterable(headers, key: (e) {
@@ -241,7 +233,7 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
   }
 
   Widget buildTitle() => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Text(
         printObj.getPrintableInvoiceTitle(context, printCommand),
         style: TextStyle(

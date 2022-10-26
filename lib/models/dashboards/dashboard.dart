@@ -1,12 +1,9 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
-import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
-import '../funds/money_funds.dart';
-import '../users/balances/customer_terms.dart';
 import '../users/user.dart';
 import 'balance_due.dart';
 

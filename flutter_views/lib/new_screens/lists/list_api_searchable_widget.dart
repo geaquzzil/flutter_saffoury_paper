@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -58,7 +57,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
 
   Widget getTrailingWidget() {
     return IconButton(
-      icon: Icon(Icons.cancel),
+      icon: const Icon(Icons.cancel),
       onPressed: () {
         controller.clear();
         onSearchTextChanged('');
@@ -66,13 +65,13 @@ class _ListApiWidgetState<T extends ViewAbstract>
     );
     return controller.text.isEmpty
         ? IconButton(
-            icon: Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel),
             onPressed: () {
               controller.clear();
               onSearchTextChanged('');
             },
           )
-        : CircularProgressIndicator(
+        : const CircularProgressIndicator(
             strokeWidth: 2,
           );
   }
@@ -82,11 +81,11 @@ class _ListApiWidgetState<T extends ViewAbstract>
       padding: const EdgeInsets.all(8.0),
       child: Card(
         child: ListTile(
-          leading: Icon(Icons.search),
+          leading: const Icon(Icons.search),
           title: TextField(
             controller: controller,
             decoration:
-                InputDecoration(hintText: 'Search', border: InputBorder.none),
+                const InputDecoration(hintText: 'Search', border: InputBorder.none),
             onChanged: onSearchTextChanged,
           ),
           trailing: getTrailingWidget(),

@@ -110,9 +110,6 @@ class OverviewHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          label,
-        ),
         style: ElevatedButton.styleFrom(
           foregroundColor:
               selected ? kFontColorPallets[0] : kFontColorPallets[2],
@@ -122,6 +119,9 @@ class OverviewHeader extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+        ),
+        child: Text(
+          label,
         ),
       ),
     );

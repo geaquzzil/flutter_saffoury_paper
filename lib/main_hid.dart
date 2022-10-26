@@ -101,8 +101,8 @@ class _MyAppState extends State<MyApp> {
                   );
                 }),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.refresh),
           onPressed: dev == null ? null : _listDevices,
+          child: const Icon(Icons.refresh),
         ),
       ),
     );

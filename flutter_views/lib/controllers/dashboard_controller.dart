@@ -81,7 +81,7 @@ class DashboardController extends GetxController {
     return [
       ProjectCardData(
         percent: .3,
-        projectImage: AssetImage(ImageRasterPath.logo2),
+        projectImage: const AssetImage(ImageRasterPath.logo2),
         projectName: "Taxi Online",
         releaseTime: DateTime.now().add(const Duration(days: 130)),
       ),

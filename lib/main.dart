@@ -4,7 +4,6 @@ import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
@@ -35,7 +34,6 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'models/funds/credits.dart';
 import 'models/products/products_types.dart';

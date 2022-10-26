@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import '../../components/square_card.dart';
 import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
@@ -85,7 +83,7 @@ class _ListHorizontalApiWidgetState
         if (provider.getCount(widget.autoRest.key) == 0) {
           return wrapHeader(
               context,
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 strokeWidth: 2,
               ));
         }
@@ -116,7 +114,7 @@ class _ListHorizontalApiWidgetState
       child: widget.title ??
           Text(
             widget.titleString ?? "NONT",
-            style: TextStyle(fontWeight: FontWeight.w200),
+            style: const TextStyle(fontWeight: FontWeight.w200),
           ),
     );
   }

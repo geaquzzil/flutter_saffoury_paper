@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../prints/print_customer_balances.dart';
 import 'customer_terms.dart';

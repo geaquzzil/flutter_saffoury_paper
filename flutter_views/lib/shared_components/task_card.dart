@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:flutter_view_controller/shared_components/list_profil_image.dart';
-import 'package:get/get.dart';
 
 class TaskCardData {
   final String title;
@@ -59,8 +58,7 @@ class TaskCard extends StatelessWidget {
                 title: data.title,
                 subtitle: (data.dueDay < 0)
                     ? "Late in ${data.dueDay * -1} days"
-                    : "Due in " +
-                        ((data.dueDay > 1) ? "${data.dueDay} days" : "today"),
+                    : "Due in ${(data.dueDay > 1) ? "${data.dueDay} days" : "today"}",
                 onPressedMore: onPressedMore,
               ),
             ),
@@ -210,7 +208,7 @@ class _IconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        primary: Colors.transparent,
+        backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kBorderRadius),
         ),

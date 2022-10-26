@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class ListStaticWidget<T> extends StatelessWidget {
   List<T> list = [];

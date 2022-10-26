@@ -1,33 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
-import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
-import 'package:flutter_view_controller/new_components/title_wraper.dart';
-import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
-import 'package:flutter_view_controller/screens/web/components/header.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import '../../prints/print_customer_balances.dart';
-import 'customer_terms.dart';
-import '../customers.dart';
 
 class CustomerBalanceList
     extends ViewAbstractStandAloneCustomView<CustomerBalanceList>
@@ -42,7 +27,7 @@ class CustomerBalanceList
   @override
   Future<CustomerBalanceList?> callApi() async {
     // TODO: implement callApi
-    return await fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
+    return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
   }
 
   @override
@@ -163,24 +148,24 @@ class CustomerBalanceList
       // width: 200,
       height: 200,
       child: Card(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: Column(children: [
           Row(
             children: [
-              Spacer(),
+              const Spacer(),
               Text(
                 DateTime.now().toDateTimeString(),
-                style: TextStyle(fontWeight: FontWeight.w200),
+                style: const TextStyle(fontWeight: FontWeight.w200),
               )
             ],
           ),
           Text(
             AppLocalizations.of(context)!.balance,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
             totalBalance?.toCurrencyFormat() ?? "0",
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Colors.orange,
                 fontSize: 32),
@@ -242,7 +227,7 @@ class CustomerBalanceList
         children: [
           ListStaticWidget<CustomerBalanceSingle>(
             list: customers?.sublist(0, 10) ?? [],
-            emptyWidget: Text("null"),
+            emptyWidget: const Text("null"),
             listItembuilder: (item) => ListTile(
               leading: item.getCardLeading(context),
               title: Text(item.name ?? ""),

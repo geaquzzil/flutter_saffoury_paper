@@ -5,13 +5,16 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_re
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/apis/chart_records.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -70,10 +73,27 @@ class Order extends InvoiceMaster<Order>
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
         getMainIconData(),
-        autoRest: AutoRest<Order>(
-            obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-            key: "CustomerByOrder$iD"),
-      )
+        widget: ListApiAutoRestWidget(
+          autoRest: AutoRest<Order>(
+              obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+              key: "CustomerByOrder$iD"),
+        ),
+      ),
+      TabControllerHelper(
+        AppLocalizations.of(context)!.size_analyzer,
+        getMainIconData(),
+        widget: ListHorizontalCustomViewApiAutoRestWidget(
+            titleString: "TEST1 ",
+            autoRest: ChartRecordAnalysis.init(
+                Order(), DateObject(), EnteryInteval.monthy,
+                customAction: {"CustomerID": customers?.iD})),
+      ),
+
+      //  ChartItem(
+      //   autoRest: AutoRest<Order>(
+      //     obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+      //     key: "CustomerByOrder$iD"),
+      // ),
     ];
   }
 

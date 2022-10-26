@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
-import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
@@ -54,7 +53,7 @@ class ListStickySettingWidget extends StatelessWidget {
   Widget _getGroupSeparator(BuildContext ctx, ModifiableInterface element) {
     return Text(
       element.getModifiableMainGroupName(ctx).toString(),
-      style: TextStyle(color: Colors.grey),
+      style: const TextStyle(color: Colors.grey),
     );
   }
 }

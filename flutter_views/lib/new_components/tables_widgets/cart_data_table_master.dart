@@ -9,7 +9,6 @@ import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import '../../theming/text_field_theming.dart';
 import '../../new_screens/edit/controllers/ext.dart';
 
 @immutable
@@ -52,9 +51,9 @@ class _CartDataTableState extends State<CartDataTableMaster> {
 
   @override
   void dispose() {
-    controllers.values.forEach((element) {
+    for (var element in controllers.values) {
       element.dispose();
-    });
+    }
     controllers.clear();
     super.dispose();
   }
@@ -137,14 +136,14 @@ class _CartDataTableState extends State<CartDataTableMaster> {
   }
 
   void modifieController(int row, CartableInvoiceDetailsInterface cidi) {
-    controllers.entries.forEach((element) {
+    for (var element in controllers.entries) {
       String mapKey = "${element.key}$row";
       debugPrint(
           "modifieController ${element.key} is founded =>${element.key.contains("$row")}");
       if (element.key.contains("$row")) {
         controllers[mapKey]?.text = getEditControllerText(element.value.value);
       }
-    });
+    }
   }
 
   Widget getTextField(

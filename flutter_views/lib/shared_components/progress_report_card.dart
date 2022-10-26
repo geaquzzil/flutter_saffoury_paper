@@ -119,7 +119,7 @@ class _Indicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            (percent * 100).toString() + " %",
+            "${percent * 100} %",
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const Text(

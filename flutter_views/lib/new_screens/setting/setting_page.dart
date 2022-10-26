@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
-import 'package:flutter_view_controller/new_components/ext.dart';
 import 'package:flutter_view_controller/new_screens/setting/base_shared_detail_modifidable.dart';
 import 'package:flutter_view_controller/new_screens/setting/list_sticky_setting_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
@@ -22,8 +20,8 @@ class SettingPage extends StatelessWidget {
             flex: 3,
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  const ListStickySettingWidget(),
+                children: const [
+                  ListStickySettingWidget(),
                 ],
               ),
             )),
@@ -54,7 +52,7 @@ class SettingPage extends StatelessWidget {
         // decoration: getShadowBoxDecoration(),
         child: Row(
       children: [
-        Expanded(
+        const Expanded(
           child: Center(
             child: BaseSettingDetailsView(),
           ),

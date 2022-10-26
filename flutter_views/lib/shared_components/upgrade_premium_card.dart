@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_view_controller/assets_path.dart';
-import 'package:get/get.dart';
 
 import '../constants.dart';
 
@@ -32,9 +29,9 @@ class UpgradePremiumCard extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(10),
           child: Stack(
-            children: [
+            children: const [
               Padding(
-                  padding: const EdgeInsets.only(
+                  padding: EdgeInsets.only(
                     top: 80,
                   ),
                   child: Icon(Icons.dangerous)
@@ -43,7 +40,7 @@ class UpgradePremiumCard extends StatelessWidget {
                   //   fit: BoxFit.contain,
                   // ),
                   ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(10),
                 child: _Info(),
               ),
@@ -79,7 +76,7 @@ class _Info extends StatelessWidget {
   }
 
   Widget _subtitle() {
-    return Text(
+    return const Text(
       "in order to get full access",
       // style: Theme.of(Get.context!).textTheme.caption,
     );

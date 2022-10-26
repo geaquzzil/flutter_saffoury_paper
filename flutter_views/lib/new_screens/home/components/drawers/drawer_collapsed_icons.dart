@@ -6,9 +6,7 @@ import 'package:flutter_view_controller/new_screens/home/components/notification
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CollapsedIcons extends StatelessWidget {
   const CollapsedIcons({Key? key}) : super(key: key);

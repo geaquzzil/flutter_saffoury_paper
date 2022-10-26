@@ -1,8 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/flutter_view_controller.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -13,7 +11,6 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:provider/single_child_widget.dart';
 
 import '../../../../providers/cart/cart_provider.dart';
 import '../profile/profile_list_tile_widget.dart';
@@ -156,7 +153,7 @@ class DrawerLargeScreens extends StatelessWidget {
     final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
     final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
     final width = isOpen ? size : double.infinity;
-    return isOpen ? ProfileListTileWidget() : const ProfilePicturePopupMenu();
+    return isOpen ? const ProfileListTileWidget() : const ProfilePicturePopupMenu();
   }
 
   Widget buildCollapseIcon(BuildContext context, bool isOpen) {

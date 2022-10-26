@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
-import 'package:intl/intl.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -30,8 +27,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<TabControllerHelper> getCustomTabList(BuildContext context) =>
       List<TabControllerHelper>.empty();
-
-
 
   IconData getFieldIconData(String field) {
     return getFieldIconDataMap()[field] ??
@@ -135,12 +130,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
     return tabsList.map((e) {
       if (tabsList.indexOf(e) == 0) {
-        return e.
+        return const Text("This is the sec page");
       }
       if (e.autoRest != null) {
         return ListApiAutoRestWidget(
           autoRest: e.autoRest!,
         );
+      }
+      if (e.widget != null) {
+        return e.widget!;
       }
       return const Text("This is the sec page");
     }).toList();
@@ -203,7 +201,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value.toDateTime();
   }
 
-
   List<DropdownStringListItem> getMainFieldsIconsAndValues(
       BuildContext context) {
     return getMainFields()
@@ -227,6 +224,6 @@ class TabControllerHelper extends Tab {
   Widget? widget;
 
   TabControllerHelper(String title, IconData icon,
-      {this.fieldThatHasList, this.autoRest,this.widget})
+      {this.fieldThatHasList, this.autoRest, this.widget})
       : super(icon: Icon(icon), text: title);
 }

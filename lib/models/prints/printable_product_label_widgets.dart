@@ -13,7 +13,7 @@ class ProductLabelPDF {
 
   Widget generate() {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         // decoration: BoxDecoration(
         //     border: Border.all(color: PdfColors.black, width: 2),
         //     borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -173,10 +173,10 @@ class ProductLabelPDF {
         child: Column(children: [
           Align(
               child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                   child: Text(label,
                       textDirection: TextDirection.rtl,
-                      style: TextStyle(fontSize: 10))),
+                      style: const TextStyle(fontSize: 10))),
               alignment: Alignment.topLeft),
           Expanded(
               child: Align(

@@ -5,8 +5,6 @@ import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../new_screens/dashboard/components/overview_header.dart';
 import '../view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 

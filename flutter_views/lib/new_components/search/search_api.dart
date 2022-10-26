@@ -30,8 +30,8 @@ class SearchWidgetApi extends StatelessWidget {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * .99,
                 child: PaginatedSearchBar<dynamic>(
-                  containerDecoration: BoxDecoration(
-                    boxShadow: const [
+                  containerDecoration: const BoxDecoration(
+                    boxShadow: [
                       // BoxShadow(
                       //   color: Colors.black.withOpacity(0.16),
                       //   offset: const Offset(0, 3),
@@ -39,7 +39,7 @@ class SearchWidgetApi extends StatelessWidget {
                       // )
                     ],
                     // color: Colors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

@@ -6,7 +6,7 @@ class TherdScreenProvider with ChangeNotifier {
   Widget? get getWidgt => _therdWidget;
 
   void change(Widget? widget) {
-    this._therdWidget = widget;
+    _therdWidget = widget;
     notifyListeners();
   }
 }

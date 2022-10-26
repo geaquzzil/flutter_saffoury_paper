@@ -28,7 +28,7 @@ class CartListHeader extends StatelessWidget {
           fontSize: 20,
           fontWeight: FontWeight.w700,
         ),
-        SizedBox(
+        const SizedBox(
           width: kDefaultPadding / 2,
         ),
         const TitleText(

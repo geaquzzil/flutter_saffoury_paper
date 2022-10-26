@@ -36,7 +36,7 @@ class _EditControllerDateTimeState extends State<EditControllerDateTime> {
         name: widget.viewAbstract.getTag(widget.field),
         // firstDate: DateTime(2020),
         // lastDate: DateTime(2030),
-        initialDate: (fieldValue as String?).toDateTime(),
+        initialDate: (fieldValue).toDateTime(),
         decoration: getDecoration(context, widget.viewAbstract, widget.field),
         onSaved: (newValue) {
           widget.viewAbstract.setFieldValue(widget.field,

@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -98,7 +96,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
           TextSpan(
               text:
                   "${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           // TextSpan(text: ' world!'),
         ],
       ),

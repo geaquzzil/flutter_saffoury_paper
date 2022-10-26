@@ -35,7 +35,7 @@ class _ListStaticSearchableWidgetState<T>
       shrinkWrap: true,
       itemCount: _userDetails.length,
       itemBuilder: (context, index) {
-        return widget.listItembuilder!(_userDetails[index]);
+        return widget.listItembuilder(_userDetails[index]);
         // return data[index].getCardView(context);
       },
     );
@@ -48,7 +48,7 @@ class _ListStaticSearchableWidgetState<T>
       shrinkWrap: true,
       itemCount: _searchResult.length,
       itemBuilder: (context, index) {
-        return widget.listItembuilder!(_searchResult[index]);
+        return widget.listItembuilder(_searchResult[index]);
         // return data[index].getCardView(context);
       },
     );
@@ -59,15 +59,15 @@ class _ListStaticSearchableWidgetState<T>
       padding: const EdgeInsets.all(8.0),
       child: Card(
         child: ListTile(
-          leading: Icon(Icons.search),
+          leading: const Icon(Icons.search),
           title: TextField(
             controller: controller,
             decoration:
-                InputDecoration(hintText: 'Search', border: InputBorder.none),
+                const InputDecoration(hintText: 'Search', border: InputBorder.none),
             onChanged: onSearchTextChanged,
           ),
           trailing: IconButton(
-            icon: Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel),
             onPressed: () {
               controller.clear();
               onSearchTextChanged('');

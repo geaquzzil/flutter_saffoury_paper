@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_view_controller/constants.dart';
 
-import '../assets_path.dart';
 
 class GetPremiumCard extends StatelessWidget {
   const GetPremiumCard({
@@ -31,7 +29,7 @@ class GetPremiumCard extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(10),
           child: Stack(
-            children: [
+            children: const [
               Align(
                 alignment: Alignment.topRight,
                 child:Icon(Icons.dangerous,size: 180,)
@@ -42,7 +40,7 @@ class GetPremiumCard extends StatelessWidget {
                 //   fit: BoxFit.contain,
                 // ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(15),
                 child: _Info(),
               ),

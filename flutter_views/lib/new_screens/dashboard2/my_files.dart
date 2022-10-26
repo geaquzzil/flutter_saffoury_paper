@@ -13,7 +13,7 @@ class MyFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Row(
@@ -32,20 +32,20 @@ class MyFiles extends StatelessWidget {
                 ),
               ),
               onPressed: () {},
-              icon: Icon(Icons.add),
-              label: Text("Add New"),
+              icon: const Icon(Icons.add),
+              label: const Text("Add New"),
             ),
           ],
         ),
-        SizedBox(height: defaultPadding),
+        const SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoStaggerdGridView(
-            crossAxisCount: _size.width < 750 ? 2 : 4,
-            childAspectRatio: _size.width < 750 && _size.width > 350 ? 1.3 : 1,
+            crossAxisCount: size.width < 750 ? 2 : 4,
+            childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
           ),
-          tablet: FileInfoStaggerdGridView(),
+          tablet: const FileInfoStaggerdGridView(),
           desktop: FileInfoStaggerdGridView(
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
       ],
@@ -54,7 +54,7 @@ class MyFiles extends StatelessWidget {
 }
 
 class TestExpanded extends StatefulWidget {
-  TestExpanded({Key? key}) : super(key: key);
+  const TestExpanded({Key? key}) : super(key: key);
 
   @override
   State<TestExpanded> createState() => _TestExpandedState();
@@ -70,17 +70,17 @@ class _TestExpandedState extends State<TestExpanded> {
         mainAxisCellCount: width,
         child: Card(
           elevation: 0,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             side: BorderSide(
                 // color: Theme.of(context).colorScheme.outline,
                 ),
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           child: Container(
-            padding: EdgeInsets.all(defaultPadding),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.all(defaultPadding),
+            decoration: const BoxDecoration(
               // color: secondaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,18 +90,18 @@ class _TestExpandedState extends State<TestExpanded> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        padding: EdgeInsets.all(defaultPadding / 8),
+                        padding: const EdgeInsets.all(defaultPadding / 8),
                         height: 10,
                         width: 10,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           // color: Colors.orange.withOpacity(0.1),
                           // color: info.color!.withOpacity(0.1),
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                              BorderRadius.all(Radius.circular(10)),
                         ),
-                        child: Icon(Icons.file_copy)),
+                        child: const Icon(Icons.file_copy)),
                     IconButton(
-                      icon: Icon(Icons.file_copy),
+                      icon: const Icon(Icons.file_copy),
                       onPressed: () => setState(() {
                         width = width == 4 ? 1 : 4;
                         length = length == 2 ? 1 : 2;
@@ -153,7 +153,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
       children: [
-        TestExpanded(),
+        const TestExpanded(),
         StaggeredGridTile.count(
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
@@ -201,7 +201,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   Widget wrapContainer(String text, Color color) {
     return Container(
       // color: color,
-      child: ChartCardItem(),
+      child: const ChartCardItem(),
     );
   }
 }
@@ -219,7 +219,7 @@ class FileInfoCardGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: 10,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -228,7 +228,7 @@ class FileInfoCardGridView extends StatelessWidget {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-      itemBuilder: (context, index) => ChartCardItem(),
+      itemBuilder: (context, index) => const ChartCardItem(),
     );
   }
 }

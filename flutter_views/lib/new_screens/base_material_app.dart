@@ -4,17 +4,13 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/controllers/dashboard_controller.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -138,7 +134,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   LayoutBuilder getLayoutBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Text("HomeMobilePage ");
+        return const Text("HomeMobilePage ");
         // return const HomeMobilePage();
         // if (kIsWeb) {
         //   return const HomeWebPage();

@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/new_screens/cart/cart_list.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/drawer/drawer_controler.dart';
 
 class BaseHomeCartPage extends StatefulWidget {
   const BaseHomeCartPage({Key? key}) : super(key: key);
@@ -31,7 +30,7 @@ class _BaseHomeCartPageState extends State<BaseHomeCartPage> {
             flex: 1,
             child: Container(
               color: Colors.grey.shade100,
-              child: SubRowCartDescription(),
+              child: const SubRowCartDescription(),
             ),
           ),
         ]),

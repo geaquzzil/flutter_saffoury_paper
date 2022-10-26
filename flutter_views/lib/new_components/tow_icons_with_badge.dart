@@ -14,8 +14,7 @@ class TowIcons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Badge(
       badgeColor: Colors.white,
-      child: largChild,
-      animationDuration: Duration(milliseconds: 200),
+      animationDuration: const Duration(milliseconds: 200),
       badgeContent: Icon(
         smallIcon,
         size: 20,
@@ -27,6 +26,7 @@ class TowIcons extends StatelessWidget {
       animationType: BadgeAnimationType.scale,
       alignment: Alignment.bottomLeft,
       elevation: 2,
+      child: largChild,
     );
   }
 }

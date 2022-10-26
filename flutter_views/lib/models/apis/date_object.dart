@@ -1,5 +1,4 @@
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 class DateObject {
   String from;
@@ -14,5 +13,5 @@ class DateObject {
     ..to = data["to"] as String;
 
   Map<String, dynamic> toJson() =>
-      {"""from""": """$from""", """to""": """$to"""};
+      {"""from""": from, """to""": to};
 }

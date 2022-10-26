@@ -19,11 +19,11 @@ class DashboardPage extends StatelessWidget {
       width: double.infinity,
       child: SingleChildScrollView(
         primary: false,
-        padding: EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
-            Header(),
-            SizedBox(height: defaultPadding),
+            const Header(),
+            const SizedBox(height: defaultPadding),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -31,24 +31,24 @@ class DashboardPage extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      MyFiles(),
-                      SizedBox(height: defaultPadding),
-                      MyFiles(),
-                      SizedBox(height: defaultPadding),
-                      RecentFiles(),
+                      const MyFiles(),
+                      const SizedBox(height: defaultPadding),
+                      const MyFiles(),
+                      const SizedBox(height: defaultPadding),
+                      const RecentFiles(),
                       if (SizeConfig.isMobile(context))
-                        SizedBox(height: defaultPadding),
-                      if (SizeConfig.isMobile(context)) StarageDetails(),
+                        const SizedBox(height: defaultPadding),
+                      if (SizeConfig.isMobile(context)) const StarageDetails(),
                     ],
                   ),
                 ),
                 if (!SizeConfig.isMobile(context))
-                  SizedBox(width: defaultPadding),
+                  const SizedBox(width: defaultPadding),
                 // On Mobile means if the screen is less than 850 we dont want to show it
                 if (!SizeConfig.isMobile(context))
                   Expanded(
                     flex: 2,
-                    child: Column(children: [
+                    child: Column(children: const [
                       StarageDetails(),
                       SizedBox(height: defaultPadding),
                       StarageDetails()
@@ -90,13 +90,13 @@ class Responsive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     // If our width is more than 1100 then we consider it a desktop
-    if (_size.width >= 1100) {
+    if (size.width >= 1100) {
       return desktop;
     }
     // If width it less then 1100 and more then 850 we consider it as tablet
-    else if (_size.width >= 850 && tablet != null) {
+    else if (size.width >= 850 && tablet != null) {
       return tablet!;
     }
     // Or less then that we called it mobile

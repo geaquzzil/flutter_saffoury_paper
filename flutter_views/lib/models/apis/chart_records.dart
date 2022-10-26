@@ -23,19 +23,24 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @JsonKey(ignore: true)
   T? viewAbstract;
+  @JsonKey(ignore: true)
+  Map<String, dynamic>? customAction;
   ChartRecordAnalysis() : super();
 
   ChartRecordAnalysis.init(
-      T viewAbstract, DateObject date, EnteryInteval enteryInteval) {
+      T viewAbstract, DateObject date, EnteryInteval enteryInteval,
+      {this.customAction}) {
     this.viewAbstract = viewAbstract;
     this.date = date;
     this.enteryInteval = enteryInteval;
+    customAction = customAction;
   }
 
   @override
   Map<String, String> get getCustomMap => {
         "enteryInteval": _$EnteryInteval[enteryInteval] ?? "",
-        "date": jsonEncode(date?.toJson() ?? "")
+        "date": jsonEncode(date?.toJson() ?? ""),
+        if (customAction != null) "customAction": jsonEncode(customAction)
       };
 
   @override
@@ -60,7 +65,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   String getCustomViewKey() {
-    return "list_dashboard_single_item$T";
+    return "list_dashboard_single_item$T$customAction";
   }
 
   @override
@@ -97,7 +102,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       children: [
         Row(
           children: [
-            Spacer(),
+            const Spacer(),
             SizedBox(
               width: 100,
               height: 100,

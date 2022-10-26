@@ -26,7 +26,7 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
   Widget build(BuildContext context) {
     Widget body = PdfPreview(
         pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
-        shareActionExtraEmails: ["info@saffoury.com"],
+        shareActionExtraEmails: const ["info@saffoury.com"],
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,

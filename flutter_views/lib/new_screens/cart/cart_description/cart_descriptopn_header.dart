@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
-import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CartDescriptionHeader extends StatelessWidget {

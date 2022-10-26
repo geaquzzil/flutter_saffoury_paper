@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
-import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/listable_data_table_builder.dart';
-import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
-import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/view/view_list_details.dart';
-import 'package:flutter_view_controller/screens/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseSharedDetailsView extends StatefulWidget {
   const BaseSharedDetailsView({Key? key}) : super(key: key);

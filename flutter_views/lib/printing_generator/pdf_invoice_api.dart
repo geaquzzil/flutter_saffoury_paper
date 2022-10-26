@@ -1,22 +1,15 @@
-import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
-import 'dart:ui';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
-import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart' as intl;
 
-import '../interfaces/printable/printable_master.dart';
 import '../models/prints/print_local_setting.dart';
 
 class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSetting> {
@@ -36,7 +29,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
         buildInvoiceMainInfoHeader(),
         // buildSubHeaderInfo(invoice),
         SizedBox(height: 3 * PdfPageFormat.cm),
-        buildTitle(this.context, this.printObj,
+        buildTitle(this.context, printObj,
             printCommandAbstract: printCommand),
         // buildInvoiceTable(),
         // Divider(),
@@ -101,7 +94,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
     return Container(
         width: double.infinity,
         color: PdfColors.grey200,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,7 +143,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
   pw.Padding buildInvoiceInfoItem(
       InvoiceHeaderTitleAndDescriptionInfo item, int length, int idx) {
     return Padding(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         child: Container(
             width: getSizeForHeaderInfo(length, idx),
             child: Column(
@@ -163,8 +156,8 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
                   buildTextWithIcon(item),
                   Padding(
                       padding: item.getCodeIcon() == null
-                          ? EdgeInsets.symmetric()
-                          : EdgeInsets.symmetric(horizontal: 15),
+                          ? const EdgeInsets.symmetric()
+                          : const EdgeInsets.symmetric(horizontal: 15),
                       child: Text(item.description,
                           textDirection: getTextDirection(item.description),
                           style: TextStyle(
@@ -218,7 +211,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
             border: null,
             cellDecoration: (index, data, rowNum) {
               mt.debugPrint("cellDecoration rownum $rowNum index= $index");
-              return BoxDecoration(
+              return const BoxDecoration(
                   color: PdfColors.white,
                   border: Border(
                       bottom: BorderSide(
@@ -236,12 +229,12 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
                   // width: 2.0,
                 ))),
             //this is content table text color
-            cellStyle: TextStyle(color: PdfColors.black),
+            cellStyle: const TextStyle(color: PdfColors.black),
             headerStyle: TextStyle(
                 color: PdfColors.green,
                 fontWeight: FontWeight.bold,
-                background: BoxDecoration(color: PdfColors.white)),
-            headerDecoration: BoxDecoration(color: PdfColors.grey300),
+                background: const BoxDecoration(color: PdfColors.white)),
+            headerDecoration: const BoxDecoration(color: PdfColors.grey300),
             cellHeight: 30,
             cellAlignments: Map.fromIterable(headers, key: (e) {
               int idx = headers.indexOf(e);
@@ -288,14 +281,14 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
               data: printObj.getPrintableQrCode(),
             ),
             SizedBox(height: .1 * (PdfPageFormat.cm)),
-            Text(printObj.getPrintableQrCodeID(), style: TextStyle(fontSize: 9))
+            Text(printObj.getPrintableQrCodeID(), style: const TextStyle(fontSize: 9))
           ])
         ]);
   }
 
   Widget buildInvoiceBottom() {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -307,19 +300,19 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
               buildTitleOnInvoice("Terms and conditions"),
               Text(
                   "1- Please quote invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of purchase\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments.",
-                  style: TextStyle(fontSize: 9, color: PdfColors.grey700)),
+                  style: const TextStyle(fontSize: 9, color: PdfColors.grey700)),
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice("Additional notes"),
               Text(
                   "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
-                  style: TextStyle(fontSize: 9, color: PdfColors.grey700))
+                  style: const TextStyle(fontSize: 9, color: PdfColors.grey700))
             ]));
   }
 
   Widget buildFooter() {
     return Text(
         "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
-        style: TextStyle(fontSize: 8, color: PdfColors.grey700));
+        style: const TextStyle(fontSize: 8, color: PdfColors.grey700));
   }
 
   Widget buildMainTotal() {
@@ -338,7 +331,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
               Expanded(
                   flex: 1,
                   child: Container(
-                    decoration: BoxDecoration(color: PdfColors.grey),
+                    decoration: const BoxDecoration(color: PdfColors.grey),
                     // color: PdfColors.grey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -470,7 +463,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
 class _Block extends pw.StatelessWidget {
   _Block({
     required this.title,
-    this.icon,
   });
 
   final String title;

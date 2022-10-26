@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -24,17 +23,12 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
-import 'package:flutter_view_controller/models/apis/unused_records.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:intl/intl.dart';
@@ -159,7 +153,7 @@ class Product extends ViewAbstract<Product>
     if (quantity > 0) {
       return "${AppLocalizations.of(context)!.instock}: ${quantity.toStringAsFixed(2)}";
     }
-    return "${AppLocalizations.of(context)!.outOfStock}";
+    return AppLocalizations.of(context)!.outOfStock;
   }
 
   @override
@@ -441,7 +435,7 @@ class Product extends ViewAbstract<Product>
   }
 
   Widget getWelcomHome(BuildContext context) {
-    return ListTile(
+    return const ListTile(
       leading: Icon(Icons.account_circle),
       title: Text("Welcom back"),
       trailing: Icon(Icons.arrow_right_outlined),
@@ -617,7 +611,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
-    Product p = new Product();
+    Product p = Product();
     p.products_types = ProductType()..name = "sappi";
     p.sizes = sizeProduct.Size();
     p.sizes?.length = 1000;

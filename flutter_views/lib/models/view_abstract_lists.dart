@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
@@ -14,8 +12,6 @@ import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
 import '../providers/actions/edits/edit_error_list_provider.dart';
-import '../providers/drawer/drawer_controler.dart';
-import '../providers/end_drawer_changed_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   IconData? getCardLeadingBottomIcon() => null;

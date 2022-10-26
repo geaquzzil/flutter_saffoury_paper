@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -8,7 +7,7 @@ import 'package:pdf/widgets.dart';
 Widget buildTitle<T extends PrintLocalSetting>(mt.BuildContext context, PrintableMaster printObj,
         {T? printCommandAbstract}) =>
     Padding(
-        padding: EdgeInsets.symmetric(horizontal: 26, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
         child: Text(
           printObj
               .getPrintableInvoiceTitle(context, printCommandAbstract)
@@ -37,6 +36,6 @@ Widget buildQrCode<T extends PrintLocalSetting>(mt.BuildContext context, Printab
               data: printObj.getPrintableQrCode(),
             )),
         SizedBox(height: .4 * (PdfPageFormat.cm)),
-        Text(printObj.getPrintableQrCodeID(), style: TextStyle(fontSize: 9)),
+        Text(printObj.getPrintableQrCodeID(), style: const TextStyle(fontSize: 9)),
       ]);
 }

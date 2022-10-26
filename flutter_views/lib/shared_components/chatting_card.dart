@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:get/get.dart';
 
 class ChattingCardData {
   final ImageProvider image;
@@ -32,7 +31,7 @@ class ChattingCard extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: kSpacing),
+          contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
           leading: Stack(
             children: [
               CircleAvatar(backgroundImage: data.image),

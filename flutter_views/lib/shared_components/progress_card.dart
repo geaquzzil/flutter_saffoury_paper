@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_view_controller/constants.dart';
 
-import '../assets_path.dart';
 
 class ProgressCardData {
   final int totalUndone;
@@ -38,7 +36,7 @@ class ProgressCard extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: Transform.translate(
                 offset: const Offset(10, 30),
-                child: SizedBox(
+                child: const SizedBox(
                   height: 200,
                   width: 200,
                     child:    Icon(Icons.dangerous,)

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
 class ChartCardItem extends StatelessWidget {
-  ChartCardItem({Key? key}) : super(key: key);
+  const ChartCardItem({Key? key}) : super(key: key);
 
   // final CloudStorageInfo info;
 
@@ -11,17 +11,17 @@ class ChartCardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         side: BorderSide(
             // color: Theme.of(context).colorScheme.outline,
             ),
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: Container(
-        padding: EdgeInsets.all(defaultPadding),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(defaultPadding),
+        decoration: const BoxDecoration(
           // color: secondaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,16 +31,16 @@ class ChartCardItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    padding: EdgeInsets.all(defaultPadding / 8),
+                    padding: const EdgeInsets.all(defaultPadding / 8),
                     height: 10,
                     width: 10,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       // color: Colors.orange.withOpacity(0.1),
                       // color: info.color!.withOpacity(0.1),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Icon(Icons.file_copy)),
-                Icon(
+                    child: const Icon(Icons.file_copy)),
+                const Icon(
                   Icons.more_vert,
                 )
               ],
@@ -88,7 +88,7 @@ class ProgressLine extends StatelessWidget {
           height: 5,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.outline,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
         ),
         LayoutBuilder(
@@ -97,7 +97,7 @@ class ProgressLine extends StatelessWidget {
             height: 5,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
           ),
         ),

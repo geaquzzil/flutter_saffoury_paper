@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../new_components/ext.dart';
 import '../../providers/actions/action_viewabstract_provider.dart';
 import '../base_shared_actions_header.dart';
 
@@ -44,7 +42,7 @@ class MasterViewStandAlone extends StatelessWidget {
             );
             //  snapshot.data.bodyBytes);
           }
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         });
   }
 

@@ -159,7 +159,7 @@ class BottomWidgetOnViewIfViewAbstract extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Card(
           elevation: 5,
-          child: Container(
+          child: SizedBox(
             width: double.maxFinite,
             height: 100,
             // color: Colors.white,

@@ -58,11 +58,9 @@ class ListMultiKeyProvider with ChangeNotifier {
     List? list = await viewAbstract.search(
         viewAbstract.getPageItemCount, multiListProviderHelper.page, query);
     multiListProviderHelper.isLoading = false;
-    if (list != null) {
-      multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
-      multiListProviderHelper.page++;
-      notifyListeners();
-    }
+    multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+    multiListProviderHelper.page++;
+    notifyListeners();
   }
 
   Future fetchList(String key, ViewAbstract viewAbstract) async {

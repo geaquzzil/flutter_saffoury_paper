@@ -120,7 +120,7 @@ class _Button extends StatelessWidget {
   Widget _labelText(String data) {
     return Text(
       data,
-      style: TextStyle(
+      style: const TextStyle(
         // color: (!selected)
         //     ? kFontColorPallets[1]
         //     // : Theme.of(Get.context!).primaryColor,
