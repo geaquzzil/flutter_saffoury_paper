@@ -33,6 +33,8 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       MyFiles(),
                       SizedBox(height: defaultPadding),
+                      MyFiles(),
+                      SizedBox(height: defaultPadding),
                       RecentFiles(),
                       if (SizeConfig.isMobile(context))
                         SizedBox(height: defaultPadding),
@@ -46,7 +48,11 @@ class DashboardPage extends StatelessWidget {
                 if (!SizeConfig.isMobile(context))
                   Expanded(
                     flex: 2,
-                    child: StarageDetails(),
+                    child: Column(children: [
+                      StarageDetails(),
+                      SizedBox(height: defaultPadding),
+                      StarageDetails()
+                    ]),
                   ),
               ],
             )

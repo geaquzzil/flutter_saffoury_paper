@@ -88,7 +88,7 @@ class TransferAccount
   }
 
   @override
-  Widget? getCustomeStandAloneSideWidget(BuildContext context) => null;
+   List<Widget>?  getCustomeStandAloneSideWidget(BuildContext context) => null;
 }
 
 // @RestOption(Action = "action_transfer_account", ChangeActionOnAdd = true)

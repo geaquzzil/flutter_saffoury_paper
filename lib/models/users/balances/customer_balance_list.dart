@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
+import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
@@ -18,7 +19,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
+import 'package:flutter_view_controller/new_components/title_wraper.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
 import 'package:flutter_view_controller/test_var.dart';
@@ -135,7 +138,24 @@ class CustomerBalanceList
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
-    return Text("");
+    return Expanded(
+      // height: 200,
+      child: ListStaticSearchableWidget<CustomerBalanceSingle>(
+        list: customers ?? [],
+        listItembuilder: (item) => ListTile(
+          onTap: () {},
+          leading: item.getCardLeading(context),
+          title: Text(item.name ?? ""),
+          subtitle: Text(item.balance.toCurrencyFormat()),
+        ),
+        onSearchTextChanged: (query) =>
+            customers
+                ?.where((element) =>
+                    element.name?.toLowerCase().contains(query) ?? false)
+                .toList() ??
+            [],
+      ),
+    );
   }
 
   Widget getHeaderWidget(BuildContext context) {
@@ -143,6 +163,7 @@ class CustomerBalanceList
       // width: 200,
       height: 200,
       child: Card(
+        margin: EdgeInsets.all(20),
         child: Column(children: [
           Row(
             children: [
@@ -199,44 +220,59 @@ class CustomerBalanceList
   }
 
   @override
-  Widget? getCustomeStandAloneSideWidget(BuildContext context) {
+  List<Widget>? getCustomeStandAloneSideWidget(BuildContext context) {
     debugPrint("getCustomeStandAloneSideWidget ${toString()}");
-    return Column(
-      children: [
-        getHeaderWidget(context),
-        CirculeChartItem<CustomerBalanceSingle, String>(
-          title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
-          list: customers ?? [],
-          xValueMapper: (item, value) => item.name,
-          yValueMapper: (item, n) => item.balance,
-        ),
-        ListStaticWidget(
-          list: customers?.sublist(0, 3) ?? [],
-          emptyWidget: Text("null"),
-          listItembuilder: (item) => Text(""),
-        )
-      ],
-    );
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+    return [
+      ExpansionTile(
+          title: TitleText(
+              text: AppLocalizations.of(context)!.balance,
+              fontWeight: FontWeight.bold),
+          children: [getHeaderWidget(context)]),
+      // CirculeChartItem<CustomerBalanceSingle, String>(
+      //   title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
+      //   list: customers ?? [],
+      //   xValueMapper: (item, value) => item.name,
+      //   yValueMapper: (item, n) => item.balance,
+      // ),
+      ExpansionTile(
+        initiallyExpanded: true,
+        title: TitleText(
+            text: AppLocalizations.of(context)!.mostPopular,
+            fontWeight: FontWeight.bold),
         children: [
-          // HeaderMain(),
-          CirculeChartItem<CustomerBalanceSingle, String>(
-            title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
-            list: customers ?? [],
-            xValueMapper: (item, value) => item.name,
-            yValueMapper: (item, n) => item.balance,
-          ),
-          LineChartItem<CustomerBalanceSingle, String>(
-            title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
-            list: customers ?? [],
-            xValueMapper: (item, value) => item.name,
-            yValueMapper: (item, n) => item.balance,
+          ListStaticWidget<CustomerBalanceSingle>(
+            list: customers?.sublist(0, 10) ?? [],
+            emptyWidget: Text("null"),
+            listItembuilder: (item) => ListTile(
+              leading: item.getCardLeading(context),
+              title: Text(item.name ?? ""),
+              subtitle: Text(item.balance.toCurrencyFormat()),
+            ),
           )
         ],
-      ),
-    );
+      )
+    ];
+
+    // return Expanded(
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.center,
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: [
+    //       // HeaderMain(),
+    //       CirculeChartItem<CustomerBalanceSingle, String>(
+    //         title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
+    //         list: customers ?? [],
+    //         xValueMapper: (item, value) => item.name,
+    //         yValueMapper: (item, n) => item.balance,
+    //       ),
+    //       LineChartItem<CustomerBalanceSingle, String>(
+    //         title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
+    //         list: customers ?? [],
+    //         xValueMapper: (item, value) => item.name,
+    //         yValueMapper: (item, n) => item.balance,
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }

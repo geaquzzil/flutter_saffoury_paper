@@ -18,13 +18,8 @@ class StarageDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Storage Details",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text("Storage Details",
+              style: Theme.of(context).textTheme.titleMedium),
           SizedBox(height: defaultPadding),
           Chart(),
           StorageInfoCard(
@@ -97,10 +92,7 @@ class StorageInfoCard extends StatelessWidget {
                   ),
                   Text(
                     "$numOfFiles Files",
-                    style: Theme.of(context)
-                        .textTheme
-                        .caption!
-                        .copyWith(color: Colors.white70),
+                    style: Theme.of(context).textTheme.caption!,
                   ),
                 ],
               ),
@@ -122,6 +114,7 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
+      width: double.infinity,
       child: Stack(
         children: [
           Text("PIE"),

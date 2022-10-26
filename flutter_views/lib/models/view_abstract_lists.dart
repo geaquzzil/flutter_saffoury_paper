@@ -138,7 +138,8 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         decoration: BoxDecoration(
           border: (isSelected == false)
               ? null
-              : Border.all(color: Colors.orange, width: 1),
+              : Border.all(
+                  color: Theme.of(context).colorScheme.outline, width: 1),
           shape: BoxShape.circle,
           color: Colors.white,
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
@@ -242,7 +243,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           children: [
             Icon(
               e.icon,
-              color: Colors.black,
+              // color: Colors.black,
               size: 20,
             ),
             const SizedBox(width: 12),
@@ -256,7 +257,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
-     debugPrint("onPopupMenuActionSelected $result");
+    debugPrint("onPopupMenuActionSelected $result");
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
 

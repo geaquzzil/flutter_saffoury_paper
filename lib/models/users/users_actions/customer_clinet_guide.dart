@@ -173,5 +173,6 @@ class CustomerClinetGuide
   }
 
   @override
-  mt.Widget? getCustomeStandAloneSideWidget(mt.BuildContext context) => null;
+  List<mt.Widget>? getCustomeStandAloneSideWidget(mt.BuildContext context) =>
+      null;
 }

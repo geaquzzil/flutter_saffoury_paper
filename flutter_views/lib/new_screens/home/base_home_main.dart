@@ -16,6 +16,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: true,
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
       drawer: const DrawerMobile(),
       endDrawer: const BaseHomeCartPage(),

@@ -18,8 +18,12 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
       // mainAxisSize: MainAxisSize.,
       children: [
         SizedBox(
-          height: 100,
-          child: ListView.builder(
+          height: 40,
+          child: ListView.separated(
+              separatorBuilder: (context, index) => Center(
+                      child: VerticalDivider(
+                    color: Theme.of(context).colorScheme.outline,
+                  )),
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               scrollDirection: Axis.horizontal,
@@ -30,14 +34,15 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
                 debugPrint("generate navigate icon index : $index");
                 dynamic v = stack[index];
                 if (v == null) {
-                  return getIconWithText(
-                      Icons.home, "Home${stack.length == 1 ? "" : " >"}");
+                  return getIconWithText(context, Icons.home,
+                      "Home${stack.length == 1 ? "" : " >"}");
                 }
                 ViewAbstract? viewAbstract = v!.object;
                 if (viewAbstract == null) {
-                  return getIconWithText(Icons.home, "Home");
+                  return getIconWithText(context, Icons.home, "Home");
                 } else {
                   return getIconWithText(
+                      context,
                       viewAbstract.getMainIconData(),
                       viewAbstract.getMainHeaderLabelTextOnly(context) +
                           (index == stack.length ? "" : ">"));
@@ -48,22 +53,24 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
     );
   }
 
-  Widget getIconWithText(IconData icon, String title) {
+  Widget getIconWithText(BuildContext context, IconData icon, String title) {
     return InkWell(
-      onTap: () {
-        
-      },
+      onTap: () {},
       child: OnHoverWidget(
           scale: false,
           builder: (isHovered) => Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(icon, color: isHovered ? Colors.orange : Colors.grey),
+                  Icon(icon,
+                      color: isHovered
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary),
                   Text(
                     title,
                     style: TextStyle(
-                      color: isHovered ? Colors.orange : Colors.grey,
-                    ),
+                        color: isHovered
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.secondary),
                   ),
                 ],
               )),

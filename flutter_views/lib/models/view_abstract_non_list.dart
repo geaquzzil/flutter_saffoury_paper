@@ -14,7 +14,7 @@ abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
   ResponseType getCustomStandAloneResponseType();
 
   Widget getCustomStandAloneWidget(BuildContext context);
-  Widget? getCustomeStandAloneSideWidget(BuildContext context);
+  List<Widget>? getCustomeStandAloneSideWidget(BuildContext context);
 
   @override
   Map<String, IconData> getFieldIconDataMap() {

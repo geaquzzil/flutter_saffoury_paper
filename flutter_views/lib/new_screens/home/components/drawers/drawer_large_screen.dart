@@ -71,28 +71,32 @@ class DrawerLargeScreens extends StatelessWidget {
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
     // AnimatedSize(,)
-    return Container(
-        color: Colors.white12,
-        padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
-        width: double.infinity,
-        child: !isOpen
-            ? const FlutterLogo(
-                size: 48,
-              )
-            : Row(
-                children: const [
-                  SizedBox(
-                    width: 24,
-                  ),
-                  FlutterLogo(
-                    size: 48,
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Text("Flutter")
-                ],
-              ));
+    return Card(
+      color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+      elevation: 0,
+      child: Container(
+          // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+          padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
+          width: double.infinity,
+          child: !isOpen
+              ? const FlutterLogo(
+                  size: 48,
+                )
+              : Row(
+                  children: const [
+                    SizedBox(
+                      width: 24,
+                    ),
+                    FlutterLogo(
+                      size: 48,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Text("Flutter")
+                  ],
+                )),
+    );
   }
 
   Widget buildList(BuildContext context, bool isOpen) {
@@ -181,7 +185,6 @@ class DrawerLargeScreens extends StatelessWidget {
                 .setCurrentPage(CurrentPage.settings),
           ),
           Badge(
-
             badgeContent: Text("${context.watch<CartProvider>().getCount}"),
             toAnimate: true,
             animationType: BadgeAnimationType.scale,
@@ -216,37 +219,14 @@ class DrawerLargeScreens extends StatelessWidget {
         scale: false,
         builder: (onHover) {
           return IconButton(
-            // padding: EdgeInsets.all(4),
-            onPressed: onPress,
-            iconSize: 25,
-            icon: Icon(data),
-            color: onHover ? Colors.orange : Colors.black,
-          );
+              // padding: EdgeInsets.all(4),
+              onPressed: onPress,
+              iconSize: 25,
+              icon: Icon(data),
+              color: onHover
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondary);
         });
-  }
-
-  Container oldCollapsedIcon(EdgeInsets? margin, Alignment alignemt,
-      BuildContext context, IconData icon) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: margin,
-      alignment: alignemt,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () =>
-              context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
-          child: OnHoverWidget(
-              scale: false,
-              builder: (onHover) {
-                return Icon(
-                  icon,
-                  color: onHover ? Colors.orange : Colors.black,
-                );
-              }),
-        ),
-      ),
-    );
   }
 }
 
@@ -326,9 +306,6 @@ class _DrawerListTileDesktopGroupClosedState
     DrawerMenuSelectedItemController ds =
         context.watch<DrawerMenuSelectedItemController>();
     return OnHoverWidget(builder: (isHovered) {
-      // context.read<IsHoveredOnDrawerClosed>().setIsHovered(isHovered);
-      // return Icon(widget.groupedDrawerItems[0].getMainDrawerGroupIconData() ??
-      //     Icons.abc);
       if (!isHovered) {
         return SizedBox(
           width: 40,
@@ -339,7 +316,7 @@ class _DrawerListTileDesktopGroupClosedState
             color: widget.groupedDrawerItems.firstWhereOrNull(
                         (element) => element.hashCode == ds.getIndex) !=
                     null
-                ? Colors.orange
+                ? Theme.of(context).colorScheme.primary
                 : null,
           ),
         );
@@ -415,7 +392,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
                   icon: Icon(
                     viewAbstract.getMainIconData(),
                     color: ds.getIndex == viewAbstract.hashCode
-                        ? Colors.orange
+                        ? Theme.of(context).colorScheme.secondary
                         : null,
                   ),
                   onPressed: () {
@@ -426,30 +403,6 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
                     viewAbstract.onDrawerItemClicked(context);
                   }));
         });
-
-    //     ListTile(
-    //       leading: InkWell(
-    //           onTap: () {
-    //             viewAbstract.onDrawerLeadingItemClicked(context);
-    //             debugPrint("onLeading ListTile tapped");
-    //           },
-    //           child: Container(
-    //               child: onHover
-    //                   ? const Icon(Icons.plus_one_sharp)
-    //                   : viewAbstract.getIcon())),
-    //       selected: ds.getIndex == idx,
-    //       title: ds.getSideMenuIsClosed
-    //           ? null
-    //           : Container(child: viewAbstract.getMainLabelText(context)),
-    //       onTap: () {
-    //         context
-    //             .read<DrawerMenuSelectedItemController>()
-    //             .setSideMenuIsClosed(byIdx: idx);
-    //         viewAbstract.onDrawerItemClicked(context);
-    //       },
-    //     ),
-    //   );
-    // });
   }
 }
 

@@ -47,6 +47,15 @@ class CustomerBalanceSingle extends Customer
     return totalDebits.toNonNullable() + totalOrders.toNonNullable();
   }
 
+  // @override
+  // Widget getCardLeading(BuildContext context) {
+  //   // TODO: implement getCardLeading
+  //   return SizedBox(
+  //       width: 60,
+  //       height: 60,
+  //       child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
+  // }
+
   @override
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
           BuildContext context, PrintCustomerBalances? pca) =>

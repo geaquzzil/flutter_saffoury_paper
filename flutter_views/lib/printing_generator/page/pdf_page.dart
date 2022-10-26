@@ -30,7 +30,10 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,
+        // pdfPreviewPageDecoration:
         canDebug: false,
+        scrollViewDecoration:
+            BoxDecoration(color: Theme.of(context).colorScheme.outline),
         shareActionExtraBody: "shareActionExtraBody",
         dynamicLayout: true,
         // actions: [Icon(Icons.search), Icon(Icons.ac_unit_sharp)],
@@ -40,15 +43,15 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         // shouldRepaint: ,
         build: (format) async {
           if (widget.invoiceObj is PrintableInvoiceInterface) {
-            final pdf = PdfInvoiceApi<PrintableInvoiceInterface,T>(
+            final pdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
                 context, widget.invoiceObj as PrintableInvoiceInterface);
             return pdf.generate(format);
           } else if (widget.invoiceObj is PrintableCustomInterface) {
-            final pdf = PdfCustom<PrintableCustomInterface,T>(
+            final pdf = PdfCustom<PrintableCustomInterface, T>(
                 context, widget.invoiceObj as PrintableCustomInterface);
             return pdf.generate(format);
           } else {
-            final pdf = PdfReceipt<PrintableReceiptInterface,T>(
+            final pdf = PdfReceipt<PrintableReceiptInterface, T>(
                 context, widget.invoiceObj as PrintableReceiptInterface);
             return pdf.generate(format);
           }

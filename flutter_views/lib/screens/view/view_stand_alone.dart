@@ -34,6 +34,8 @@ class MasterViewStandAlone extends StatelessWidget {
             Size size = MediaQuery.of(context).size;
             return Expanded(
               child: Row(children: [
+
+                
                 Expanded(
                     flex: size.width > 1340 ? 8 : 2,
                     child: getMainWidget(context)),
@@ -47,45 +49,55 @@ class MasterViewStandAlone extends StatelessWidget {
   }
 
   Widget getMainWidget(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Row(
-        children: [
-          // Expanded(flex: 1, child: Text("TEST")),
-          Expanded(
-            flex: 1,
-            child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-                // fit: BoxFit.contain,
-                children: [
-                  SingleChildScrollView(
-                    controller: ScrollController(),
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BaseSharedHeaderViewDetailsActions(
-                          viewAbstract: viewAbstract,
-                        ),
-                        viewAbstract.getCustomStandAloneWidget(context)
-                      ],
-                    ),
+    return viewAbstract.getCustomStandAloneWidget(context);
+    return Row(
+      children: [
+        // Expanded(flex: 1, child: Text("TEST")),
+        Expanded(
+          flex: 1,
+          child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+              // fit: BoxFit.contain,
+              children: [
+                SingleChildScrollView(
+                  controller: ScrollController(),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BaseSharedHeaderViewDetailsActions(
+                        viewAbstract: viewAbstract,
+                      ),
+                      viewAbstract.getCustomStandAloneWidget(context)
+                    ],
                   ),
-                ]),
-          ),
-        ],
-      ),
+                ),
+              ]),
+        ),
+      ],
     );
   }
 
   Widget getSideWidget(BuildContext context, Widget? hasCustomWidget) {
-    return Container(
-        padding: const EdgeInsets.all(10),
-        decoration: getShadowBoxDecoration(),
-        child: Center(
-            child: hasCustomWidget ??
-                viewAbstract.getCustomeStandAloneSideWidget(context)));
+    return ListView(
+      shrinkWrap: true,
+      // controller: ScrollController(),
+      // physics: const AlwaysScrollableScrollPhysics(),
+      // c: Column(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      children: [...viewAbstract.getCustomeStandAloneSideWidget(context) ?? []],
+      // ),
+    );
   }
 
+  // Widget wrapMainWidget(BuildContext context,Size size){
+  //     return Expanded(
+  //       flex: customWidget != null
+  //           ? 6
+  //           : size.width > 1340
+  //               ? 4
+  //               : 1,
+  //       child: getSideWidget(context, customWidget));
+  // }
   Widget wrapSideWidget(BuildContext context, Size size) {
     ActionViewAbstractProvider actionViewAbstractProvider =
         context.watch<ActionViewAbstractProvider>();
@@ -94,8 +106,8 @@ class MasterViewStandAlone extends StatelessWidget {
         flex: customWidget != null
             ? 6
             : size.width > 1340
-                ? 4
-                : 1,
+                ? 5
+                : 2,
         child: getSideWidget(context, customWidget));
   }
 

@@ -135,7 +135,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
     return tabsList.map((e) {
       if (tabsList.indexOf(e) == 0) {
-        return const Text("This is the main page");
+        return e.
       }
       if (e.autoRest != null) {
         return ListApiAutoRestWidget(
@@ -224,7 +224,9 @@ class TabControllerHelper extends Tab {
   ///Auto get the field list from the api object;
   AutoRest? autoRest;
 
+  Widget? widget;
+
   TabControllerHelper(String title, IconData icon,
-      {this.fieldThatHasList, this.autoRest})
+      {this.fieldThatHasList, this.autoRest,this.widget})
       : super(icon: Icon(icon), text: title);
 }

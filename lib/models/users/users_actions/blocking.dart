@@ -94,7 +94,7 @@ class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
   }
 
   @override
-  Widget? getCustomeStandAloneSideWidget(BuildContext context) => null;
+ List<Widget>?  getCustomeStandAloneSideWidget(BuildContext context) => null;
 }
 
 const _$BlockMood = {

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -17,6 +18,7 @@ import 'package:window_manager/window_manager.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import '../theming/text_field_theming.dart';
 import 'home/base_home_main.dart';
 
 class BaseMaterialAppPage extends StatefulWidget {
@@ -69,65 +71,67 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     //   home: const HomeWebPage(),
     // );
     // }
-    Widget widget = MaterialApp(
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.stylus,
-          PointerDeviceKind.unknown
-        },
-      ),
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        FormBuilderLocalizations.delegate,
-      ],
-      builder: (context, widget) => ResponsiveWrapper.builder(
-        ClampingScrollWrapper.builder(context, widget!),
-        defaultScale: true,
-        breakpoints: [
-          const ResponsiveBreakpoint.resize(450, name: MOBILE),
-          const ResponsiveBreakpoint.resize(800, name: TABLET),
-          const ResponsiveBreakpoint.resize(1000, name: TABLET),
-          const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-          const ResponsiveBreakpoint.resize(2460, name: "4K"),
-        ],
-        background: Container(
-          color: kBackgroundColor,
+
+    Widget widget = DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) => MaterialApp(
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+            PointerDeviceKind.stylus,
+            PointerDeviceKind.unknown
+          },
         ),
-      ),
-      // title: AppLocalizations.of(context)!.appTitle,
-      title: "SSSS",
-      debugShowCheckedModeBanner: false,
-      restorationScopeId: 'root',
-      initialRoute: '/',
-      routes: {
-        '/': (context) {
-          Status authStatus = context.read<AuthProvider>().getStatus;
-          if (authStatus == Status.Authenticated) {
-            return const BaseHomeMainPage();
-          } else {
-            return const BaseAuthenticatingScreen();
-          }
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          FormBuilderLocalizations.delegate,
+        ],
+        builder: (context, widget) => ResponsiveWrapper.builder(
+          ClampingScrollWrapper.builder(context, widget!),
+          defaultScale: true,
+          breakpoints: [
+            const ResponsiveBreakpoint.resize(450, name: MOBILE),
+            const ResponsiveBreakpoint.resize(800, name: TABLET),
+            const ResponsiveBreakpoint.resize(1000, name: TABLET),
+            const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+            const ResponsiveBreakpoint.resize(2460, name: "4K"),
+          ],
+          background: Container(
+            color: kBackgroundColor,
+          ),
+        ),
+        // title: AppLocalizations.of(context)!.appTitle,
+        title: "SSSS",
+        debugShowCheckedModeBanner: false,
+        restorationScopeId: 'root',
+        initialRoute: '/',
+        routes: {
+          '/': (context) {
+            Status authStatus = context.read<AuthProvider>().getStatus;
+            if (authStatus == Status.Authenticated) {
+              return const BaseHomeMainPage();
+            } else {
+              return const BaseAuthenticatingScreen();
+            }
+          },
+          '/sign_in': (context) => const SignInPage()
         },
-        '/sign_in': (context) => const SignInPage()
-      },
-      theme: ThemeData(
-        primaryColor: Colors.blueGrey,
-        // useMaterial3: true,
+        theme: ThemeData(
+          colorScheme: lightDynamic ?? defaultLightColorScheme,
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData(
+          colorScheme: darkDynamic ?? defaultDarkColorScheme,
+          useMaterial3: true,
+        ),
+        themeMode: ThemeMode.system,
       ),
-      // theme: ThemeData.dark().copyWith(
-      //   scaffoldBackgroundColor: bgColor,
-      //   // textTheme: GoogleFonts.(Theme.of(context).textTheme)
-      //   //     .apply(bodyColor: Colors.white),
-      //   canvasColor: secondaryColor,
-      // ),
-      // home: const BaseAuthenticatingScreen()
     );
+
     return widget;
   }
 

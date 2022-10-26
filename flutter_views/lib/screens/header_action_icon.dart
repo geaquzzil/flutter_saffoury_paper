@@ -7,14 +7,15 @@ import 'package:provider/provider.dart';
 class HeaderIconBuilder extends StatelessWidget {
   MenuItemBuild menuItemBuild;
   ViewAbstract viewAbstract;
-  HeaderIconBuilder({Key? key,required this.viewAbstract, required this.menuItemBuild}) : super(key: key);
+  HeaderIconBuilder(
+      {Key? key, required this.viewAbstract, required this.menuItemBuild})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       mouseCursor: SystemMouseCursors.click,
       tooltip: menuItemBuild.title,
-      hoverColor: Colors.green,
       icon: Icon(menuItemBuild.icon),
       onPressed: () =>
           viewAbstract?.onMenuItemActionClickedView(context, menuItemBuild),

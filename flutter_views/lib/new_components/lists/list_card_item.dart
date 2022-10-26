@@ -16,8 +16,6 @@ class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
 
 class _ListCardItemState<T extends ViewAbstract>
     extends State<ListCardItem<T>> {
-
-
   @override
   void initState() {
     super.initState();
@@ -43,11 +41,13 @@ class _ListCardItemState<T extends ViewAbstract>
         elevation: isSelected ? 20 : 0,
         // shadowColor: Colors.lightBlue,
         child: Padding(
-          padding: isSelected ? const EdgeInsets.all(4.0) : const EdgeInsets.all(0),
+          padding:
+              isSelected ? const EdgeInsets.all(4.0) : const EdgeInsets.all(0),
           child: Ink(
-            color: isSelected ? Colors.white : null,
+            // color: isSelected ? Theme.of(context).colorScheme.primary : null,
             child: ListTile(
                 selected: isSelected,
+                selectedTileColor: Theme.of(context).colorScheme.onSecondary,
                 onTap: () => widget.object.onCardClicked(context),
                 onLongPress: () => widget.object.onCardLongClicked(context),
                 title: (widget.object.getMainHeaderText(context)),

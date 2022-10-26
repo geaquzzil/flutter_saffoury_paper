@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
@@ -58,8 +59,8 @@ void main() async {
     Employee(),
     Credits(),
     ProductType(),
-    CustomerBalanceList()
-    // Dashboard()
+    CustomerBalanceList(),
+    Dashboard()
   ]);
   try {
     runApp(MultiProvider(providers: [

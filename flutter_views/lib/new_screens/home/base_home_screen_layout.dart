@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.d
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
@@ -56,11 +57,8 @@ class BaseHomeScreenLayout extends StatelessWidget {
       );
     }
     if (viewAbstractStandAloneCustomView is ViewAbstractStandAloneCustomView) {
-      return Center(
-        child: Expanded(
-            child: MasterViewStandAlone(
-                viewAbstract: viewAbstractStandAloneCustomView)),
-      );
+      return MasterViewStandAlone(
+          viewAbstract: viewAbstractStandAloneCustomView);
     }
     switch (currentPage) {
       case CurrentPage.settings:
@@ -85,20 +83,22 @@ class BaseHomeScreenLayout extends StatelessWidget {
             // It takes 5/6 part of the screen
             flex: size.width > 1340 ? 4 : 1,
             // flex: 4,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // const HeaderTitleOnListMain(),
-                  SearchWidgetApi(),
-                  SearchField(),
+            child: ListApiSearchableWidget()),
 
-                  SearchFilterableWidget(
-                    viewAbstract: viewAbstract,
-                  ),
-                  const ListApiWidget(),
-                ],
-              ),
-            )),
+        //  SingleChildScrollView(
+        //   child: Column(
+        //     children: [
+        //       // const HeaderTitleOnListMain(),
+        //       SearchWidgetApi(),
+        //       SearchField(),
+
+        //       SearchFilterableWidget(
+        //         viewAbstract: viewAbstract,
+        //       ),
+        //       const ListApiWidget(),
+        //     ],
+        //   ),
+        // )),
         // Expanded(
         //     // It takes 5/6 part of the screen
         //     flex: 5,
@@ -110,7 +110,7 @@ class BaseHomeScreenLayout extends StatelessWidget {
               flex: size.width > 1340 ? 8 : 2,
               child: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: getShadowBoxDecoration(),
+                  // decoration: getShadowBoxDecoration(),
                   child: const Center(
                     child: BaseSharedDetailsView(),
                   )))

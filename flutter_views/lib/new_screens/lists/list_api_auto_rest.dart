@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -19,7 +18,7 @@ class ListApiAutoRestWidget extends StatefulWidget {
 
 class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
   final _scrollController = ScrollController();
-  final ListMultiKeyProvider listProvider = ListMultiKeyProvider();
+  late ListMultiKeyProvider listProvider;
 
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
@@ -28,9 +27,17 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
   void initState() {
     super.initState();
     _scrollController.addListener(() => _onScroll());
-    if (listProvider.getCount(widget.autoRest.key) == 0) {
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
-    }
+
+    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+    listProvider.addListener(() {
+      debugPrint("list provider is changed ${listProvider.listMap}");
+    });
+    _scrollController.addListener(() => _onScroll());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (listProvider.getCount(widget.autoRest.key) == 0) {
+        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+      }
+    });
   }
 
   Widget _listItems(

@@ -7,11 +7,12 @@ class ShimmerLoadingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey,
-      highlightColor: Colors.grey[400]!,
+      baseColor: Theme.of(context).colorScheme.outline,
+      highlightColor: Theme.of(context).colorScheme.onBackground,
       period: const Duration(seconds: 1),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+        decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).colorScheme.outline)),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -21,7 +22,7 @@ class ShimmerLoadingList extends StatelessWidget {
               child: Container(
                 width: 100,
                 height: 75,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.outline,
               ),
             ),
             const SizedBox(
@@ -35,7 +36,7 @@ class ShimmerLoadingList extends StatelessWidget {
                   Container(
                     width: 250,
                     height: 10,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                   const SizedBox(
                     height: 10,
@@ -43,7 +44,7 @@ class ShimmerLoadingList extends StatelessWidget {
                   Container(
                     width: 150,
                     height: 10,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ],
               ),
