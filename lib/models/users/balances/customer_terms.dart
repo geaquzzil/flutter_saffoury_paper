@@ -1,17 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 
 import '../customers.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+//  {
+//     "iD": 1036,
+//     "OrderID": 577,
+//     "termsDate": "2022-03-25 11:54:15"
+//   },
 @reflector
-class CustomerTerms extends Customer {
-  String? termsDate;
-
+class CustomerTerms extends Customer
+    implements CustomViewHorizontalListResponse<CustomerTerms> {
   //FIX ME ITS ALSOW declares on Customer
 //    @com.saffoury.viewgenerator.Annotations.View(Type = Enums.ViewType.VIEW_TEXT, Priority = 0, MasterOnList = true)
 //     int termsBreakCount;
   int? OrderID;
 
+  String? termsDate;
+
   CustomerTerms() : super();
+  CustomerTerms.init(int iD) {
+    this.iD = iD;
+  }
+  @override
+  String? getCustomAction() => "list_customers_terms";
+  @override
+  Map<String, String> get getCustomMap => {"iD": iD.toString()};
 
   @override
   CustomerTerms fromJsonViewAbstract(Map<String, dynamic> json) =>
@@ -46,4 +64,35 @@ class CustomerTerms extends Customer {
 
   @override
   Map<String, dynamic> toJson() => {};
+
+  @override
+  double getCustomViewHeight() => 200;
+
+  @override
+  String getCustomViewKey() => "customer_terms$iD";
+
+  @override
+  Widget? getCustomViewListResponseWidget(
+      BuildContext context, List<CustomerTerms> item) {
+    return StorageInfoCardCustom(
+        title: AppLocalizations.of(context)!.overDue,
+        description: "${item.length}",
+        trailing: "Times",
+        svgSrc: Icons.date_range);
+  }
+
+  @override
+  ResponseType getCustomViewResponseType() => ResponseType.LIST;
+
+  @override
+  Widget? getCustomViewSingleResponseWidget(
+      BuildContext context, CustomerTerms item) {
+    // TODO: implement getCustomViewSingleResponseWidget
+    throw UnimplementedError();
+  }
+
+  @override
+  void onCustomViewCardClicked(BuildContext context, CustomerTerms istem) {
+    // TODO: implement onCustomViewCardClicked
+  }
 }

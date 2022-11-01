@@ -138,8 +138,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintableInvoiceTitle(
-          BuildContext context, PrintReceipt? pca) =>
+  String getPrintableInvoiceTitle(BuildContext context, PrintReceipt? pca) =>
       getMainHeaderLabelTextOnly(context);
 
   @override
@@ -177,7 +176,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
       3: [
         RecieptHeaderTitleAndDescriptionInfo(
             title: "IN WORDS",
-            description: converter.convertDouble(value ?? 0) ?? ""),
+            description: converter.convertDouble(value ?? 0)),
       ],
       4: [
         RecieptHeaderTitleAndDescriptionInfo(

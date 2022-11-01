@@ -129,16 +129,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       {List<TabControllerHelper>? tabs}) {
     List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
     return tabsList.map((e) {
-      if (tabsList.indexOf(e) == 0) {
-        return const Text("This is the sec page");
-      }
       if (e.autoRest != null) {
         return ListApiAutoRestWidget(
           autoRest: e.autoRest!,
         );
       }
       if (e.widget != null) {
-        return e.widget!;
+        return SingleChildScrollView(child: e.widget!);
       }
       return const Text("This is the sec page");
     }).toList();
@@ -146,10 +143,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<TabControllerHelper> getTabs(BuildContext context) {
     return [
-      TabControllerHelper(
-        getMainHeaderTextOnly(context),
-        getMainIconData(),
-      ),
+      // TabControllerHelper(
+      //   getMainHeaderTextOnly(context),
+      //   getMainIconData(),
+      // ),
       ...getCustomTabList(context)
     ];
   }
@@ -223,7 +220,7 @@ class TabControllerHelper extends Tab {
 
   Widget? widget;
 
-  TabControllerHelper(String title, IconData icon,
-      {this.fieldThatHasList, this.autoRest, this.widget})
-      : super(icon: Icon(icon), text: title);
+  TabControllerHelper(String title, IconData? icon,
+      {super.key, this.fieldThatHasList, this.autoRest, this.widget})
+      : super(icon: icon == null ? null : Icon(icon), text: title);
 }

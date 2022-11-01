@@ -144,50 +144,44 @@ class CustomerBalanceList
   }
 
   Widget getHeaderWidget(BuildContext context) {
-    return SizedBox(
-      // width: 200,
-      height: 200,
-      child: Card(
-        margin: const EdgeInsets.all(20),
-        child: Column(children: [
-          Row(
-            children: [
-              const Spacer(),
-              Text(
-                DateTime.now().toDateTimeString(),
-                style: const TextStyle(fontWeight: FontWeight.w200),
-              )
-            ],
-          ),
-          Text(
-            AppLocalizations.of(context)!.balance,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(
-            totalBalance?.toCurrencyFormat() ?? "0",
-            style: const TextStyle(
-                fontWeight: FontWeight.w900,
-                color: Colors.orange,
-                fontSize: 32),
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: getListTile(context,
-                      color: Colors.green,
-                      icon: Icons.trending_up_rounded,
-                      title: AppLocalizations.of(context)!.incomes,
-                      subtitle: "213,232 SYP")),
-              Expanded(
-                  child: getListTile(context,
-                      icon: Icons.trending_down_rounded,
-                      color: Colors.red,
-                      title: AppLocalizations.of(context)!.spendings,
-                      subtitle: "231,332 SYP")),
-            ],
-          )
-        ]),
-      ),
+    return Card(
+      margin: const EdgeInsets.all(20),
+      child: Column(children: [
+        Row(
+          children: [
+            const Spacer(),
+            Text(
+              DateTime.now().toDateTimeString(),
+              style: const TextStyle(fontWeight: FontWeight.w200),
+            )
+          ],
+        ),
+        Text(
+          AppLocalizations.of(context)!.balance,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          totalBalance?.toCurrencyFormat() ?? "0",
+          style: const TextStyle(
+              fontWeight: FontWeight.w900, color: Colors.orange, fontSize: 32),
+        ),
+        Row(
+          children: [
+            Expanded(
+                child: getListTile(context,
+                    color: Colors.green,
+                    icon: Icons.trending_up_rounded,
+                    title: AppLocalizations.of(context)!.incomes,
+                    subtitle: "213,232 SYP")),
+            Expanded(
+                child: getListTile(context,
+                    icon: Icons.trending_down_rounded,
+                    color: Colors.red,
+                    title: AppLocalizations.of(context)!.spendings,
+                    subtitle: "231,332 SYP")),
+          ],
+        )
+      ]),
     );
   }
 

@@ -55,6 +55,14 @@ class _ListApiWidgetState<T extends ViewAbstract>
     controller.text = "";
   }
 
+  Widget getRefreshWidget() =>
+    IconButton(
+        onPressed: () {
+          _refresh();
+        },
+        icon: Icon(Icons.refresh));
+  
+
   Widget getTrailingWidget() {
     return IconButton(
       icon: const Icon(Icons.cancel),
@@ -76,6 +84,10 @@ class _ListApiWidgetState<T extends ViewAbstract>
           );
   }
 
+  void _refresh() {
+    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObject);
+  }
+
   Widget _buildSearchBox() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -84,8 +96,8 @@ class _ListApiWidgetState<T extends ViewAbstract>
           leading: const Icon(Icons.search),
           title: TextField(
             controller: controller,
-            decoration:
-                const InputDecoration(hintText: 'Search', border: InputBorder.none),
+            decoration: const InputDecoration(
+                hintText: 'Search', border: InputBorder.none),
             onChanged: onSearchTextChanged,
           ),
           trailing: getTrailingWidget(),
@@ -136,6 +148,12 @@ class _ListApiWidgetState<T extends ViewAbstract>
     return Column(
       children: <Widget>[
         Container(child: _buildSearchBox()),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [Spacer(), getRefreshWidget()],
+          ),
+        ),
         Expanded(
             child: ChangeNotifierProvider.value(
           value: listProvider,

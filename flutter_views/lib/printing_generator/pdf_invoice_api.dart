@@ -12,7 +12,8 @@ import 'package:intl/intl.dart' as intl;
 
 import '../models/prints/print_local_setting.dart';
 
-class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSetting> {
+class PdfInvoiceApi<T extends PrintableInvoiceInterface,
+    E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
   E? printCommand;
@@ -29,8 +30,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
         buildInvoiceMainInfoHeader(),
         // buildSubHeaderInfo(invoice),
         SizedBox(height: 3 * PdfPageFormat.cm),
-        buildTitle(this.context, printObj,
-            printCommandAbstract: printCommand),
+        buildTitle(this.context, printObj, printCommandAbstract: printCommand),
         // buildInvoiceTable(),
         // Divider(),
         buildMainTotal(),
@@ -281,7 +281,8 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
               data: printObj.getPrintableQrCode(),
             ),
             SizedBox(height: .1 * (PdfPageFormat.cm)),
-            Text(printObj.getPrintableQrCodeID(), style: const TextStyle(fontSize: 9))
+            Text(printObj.getPrintableQrCodeID(),
+                style: const TextStyle(fontSize: 9))
           ])
         ]);
   }
@@ -300,7 +301,8 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
               buildTitleOnInvoice("Terms and conditions"),
               Text(
                   "1- Please quote invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of purchase\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments.",
-                  style: const TextStyle(fontSize: 9, color: PdfColors.grey700)),
+                  style:
+                      const TextStyle(fontSize: 9, color: PdfColors.grey700)),
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice("Additional notes"),
               Text(
@@ -457,55 +459,5 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,E extends PrintLocalSett
                 width: 1.0,
               ))
             : null);
-  }
-}
-
-class _Block extends pw.StatelessWidget {
-  _Block({
-    required this.title,
-  });
-
-  final String title;
-
-  final pw.IconData? icon;
-
-  @override
-  pw.Widget build(pw.Context context) {
-    return pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: <pw.Widget>[
-          pw.Row(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: <pw.Widget>[
-                pw.Container(
-                  width: 6,
-                  height: 6,
-                  margin: const pw.EdgeInsets.only(top: 5.5, left: 2, right: 5),
-                  decoration: const pw.BoxDecoration(
-                    color: PdfColors.grey,
-                    shape: pw.BoxShape.circle,
-                  ),
-                ),
-                pw.Text(title,
-                    style: pw.Theme.of(context)
-                        .defaultTextStyle
-                        .copyWith(fontWeight: pw.FontWeight.bold)),
-                pw.Spacer(),
-                if (icon != null)
-                  pw.Icon(icon!, color: PdfColors.grey, size: 18),
-              ]),
-          pw.Container(
-            decoration: const pw.BoxDecoration(
-                border: pw.Border(
-                    left: pw.BorderSide(color: PdfColors.grey, width: 2))),
-            padding: const pw.EdgeInsets.only(left: 10, top: 5, bottom: 5),
-            margin: const pw.EdgeInsets.only(left: 5),
-            child: pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: <pw.Widget>[
-                  pw.Lorem(length: 20),
-                ]),
-          ),
-        ]);
   }
 }

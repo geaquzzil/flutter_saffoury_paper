@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_saffoury_paper/models/users/balances/customer_terms.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
@@ -72,7 +75,7 @@ class Order extends InvoiceMaster<Order>
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
-        getMainIconData(),
+        null,
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Order>(
               obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
@@ -81,12 +84,51 @@ class Order extends InvoiceMaster<Order>
       ),
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
-        getMainIconData(),
+        null,
         widget: ListHorizontalCustomViewApiAutoRestWidget(
             titleString: "TEST1 ",
             autoRest: ChartRecordAnalysis.init(
                 Order(), DateObject(), EnteryInteval.monthy,
                 customAction: {"CustomerID": customers?.iD})),
+      ),
+      TabControllerHelper(
+        AppLocalizations.of(context)!.size_analyzer,
+        null,
+        widget: StarageDetailsCustom(
+            chart: ListHorizontalCustomViewApiAutoRestWidget(
+                onResponseAddWidget: ((response) {
+                  ChartRecordAnalysis i = response as ChartRecordAnalysis;
+                  double total = i.getTotalListAnalysis();
+                  return Column(
+                    children: [
+                      // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+                      //     titleString: "TEST1 ",
+                      //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+                      StorageInfoCardCustom(
+                          title: AppLocalizations.of(context)!.total,
+                          description: total.toCurrencyFormat(),
+                          trailing: "kg",
+                          svgSrc: Icons.monitor_weight),
+                      StorageInfoCardCustom(
+                          title: AppLocalizations.of(context)!.balance,
+                          description:
+                              customers?.balance?.toCurrencyFormat() ?? "0",
+                          trailing: "trailing",
+                          svgSrc: Icons.balance),
+                    ],
+                  );
+                }),
+                titleString: "TEST1 ",
+                autoRest: ChartRecordAnalysis.init(
+                    Order(), DateObject(), EnteryInteval.monthy,
+                    customAction: {"CustomerID": customers?.iD})),
+            list: [
+              StorageInfoCardCustom(
+                  title: AppLocalizations.of(context)!.balance,
+                  description: customers?.balance?.toCurrencyFormat() ?? "0",
+                  trailing: "trailing",
+                  svgSrc: Icons.balance),
+            ]),
       ),
 
       //  ChartItem(

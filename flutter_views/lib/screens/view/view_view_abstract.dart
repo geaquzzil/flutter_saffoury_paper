@@ -43,17 +43,20 @@ class MasterView extends StatelessWidget {
                             action: ServerActions.view,
                             obj: viewAbstract
                                 as CartableInvoiceMasterObjectInterface),
+                      SizedBox(
+                        height: 200,
+                      )
                     ],
                   ),
                 ),
-                if (viewAbstract is CartableProductItemInterface)
-                  BottomWidgetOnViewIfCartable(
-                    viewAbstract: viewAbstract as CartableProductItemInterface,
-                  )
-                else
-                  BottomWidgetOnViewIfViewAbstract(
-                    viewAbstract: viewAbstract,
-                  )
+                // if (viewAbstract is CartableProductItemInterface)
+                //   BottomWidgetOnViewIfCartable(
+                //     viewAbstract: viewAbstract as CartableProductItemInterface,
+                //   )
+                // else
+                //   BottomWidgetOnViewIfViewAbstract(
+                //     viewAbstract: viewAbstract,
+                //   )
               ]),
         ),
         if (viewAbstract.getTabs(context).isNotEmpty)

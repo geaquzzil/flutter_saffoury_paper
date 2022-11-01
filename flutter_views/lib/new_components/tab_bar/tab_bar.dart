@@ -45,31 +45,35 @@ class _TabBarWidgetState extends State<TabBarWidget>
     _tabs.clear();
     _tabs.addAll(widget.viewAbstract.getTabs(context));
     _tabController = TabController(length: _tabs.length, vsync: this);
-    return Card(
-      child: Column(children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TabBar(
-              isScrollable: true,
-              indicator: CircleTabIndicator(color: Colors.black12, radius: 4),
-              labelPadding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              // labelColor: Colors.black,
-              // unselectedLabelColor: Colors.grey,
-              controller: _tabController,
-              tabs: _tabs),
-        ),
-        Expanded(
-          child: TabBarView(
+    return Column(children: [
+      Align(
+        alignment: Alignment.centerLeft,
+        child: TabBar(
+            isScrollable: true,
+            // indicator: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(50),
+            //     color: Theme.of(context)
+            //         .colorScheme
+            //         .secondary), // Creates border
+            // color: Theme.of(context).colorScheme.),
+            // indicator: CircleTabIndicator(color: Colors.black12, radius: 4),
+            labelPadding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            // labelColor: Colors.black,
+            // unselectedLabelColor: Colors.grey,
             controller: _tabController,
-            children:
-                widget.viewAbstract.getTabsViewGenerator(context, tabs: _tabs),
-          ),
-        )
-      ]),
-    );
+            tabs: _tabs),
+      ),
+      Expanded(
+        child: TabBarView(
+          controller: _tabController,
+          children:
+              widget.viewAbstract.getTabsViewGenerator(context, tabs: _tabs),
+        ),
+      )
+    ]);
   }
 }
 

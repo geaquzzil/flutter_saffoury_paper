@@ -13,6 +13,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 import '../v_non_view_object.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 
 class ChartRecordAnalysis<T extends ViewAbstract>
     extends VObject<ChartRecordAnalysis>
@@ -34,6 +35,16 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     this.date = date;
     this.enteryInteval = enteryInteval;
     customAction = customAction;
+  }
+  double getTotalListAnalysis() {
+    try {
+      return responseListAnalysis
+              ?.map((e) => e.total)
+              .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
+          0;
+    } catch (e) {
+      return 0;
+    }
   }
 
   @override
@@ -89,7 +100,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   Widget? getCustomViewSingleResponseWidget(
       BuildContext context, ChartRecordAnalysis item) {
     debugPrint(
-        "getCustomViewSingleResponseWidget ${item.responseListAnalysis?.length}");
+        "getCustomViewSingleResponseWidget ${item.rFesponseListAnalysis?.length}");
     return LineChartItem<GrowthRate, DateTime>(
       title:
           "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",

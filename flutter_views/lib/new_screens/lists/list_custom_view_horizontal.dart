@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/auto_rest.dart';
 import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
-class ListHorizontalCustomViewApiAutoRestWidget<
+class ListHorizontalCustomViewWidget<
     T extends CustomViewHorizontalListResponse> extends StatefulWidget {
   T autoRest;
   Widget? title;
   String? titleString;
   Function(dynamic response)? onResponse;
-  Widget? Function(dynamic response)? onResponseAddWidget;
-  ListHorizontalCustomViewApiAutoRestWidget(
+  ListHorizontalCustomViewWidget(
       {Key? key,
       required this.autoRest,
       this.title,
       this.titleString,
-      this.onResponse,
-      this.onResponseAddWidget})
+      this.onResponse})
       : super(key: key);
 
   @override
-  State<ListHorizontalCustomViewApiAutoRestWidget> createState() =>
-      _ListHorizontalApiWidgetState<T>();
+  State<ListHorizontalCustomViewWidget> createState() =>
+      _ListHorizontalApiWidgetState();
 }
 
 class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
-    extends State<ListHorizontalCustomViewApiAutoRestWidget<T>> {
-  final _scrollController = ScrollController();
+    extends State<ListHorizontalCustomViewWidget<T>> {
   late ListMultiKeyProvider listProvider;
   late String key;
   var loadingLottie =
@@ -41,11 +38,12 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     super.initState();
     key = widget.autoRest.getCustomViewKey();
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    listProvider.addListener(() {
-      debugPrint("list provider is changed ${listProvider.listMap}");
-    });
-    _scrollController.addListener(() => _onScroll());
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if(T is List){
+  // listProvider.addCustomList(key, widget.autoRest as ViewAbstract);
+        }else{
+
+        }
       if (listProvider.getCount(key) == 0) {
         switch (widget.autoRest.getCustomViewResponseType()) {
           case ResponseType.LIST:
@@ -57,6 +55,7 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
         }
       }
     });
+
   }
 
   @override
@@ -76,11 +75,10 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
               context,
               const CircularProgressIndicator(
                 strokeWidth: 2,
-              ),
-              provider);
+              ));
         }
         debugPrint("List api provider loaded ${listProvider.isLoading}");
-        return wrapHeader(context, getWidget(listProvider), listProvider);
+        return wrapHeader(context, getWidget(listProvider));
       }),
     );
   }
@@ -106,38 +104,21 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
 
   Widget getListWidget(ListMultiKeyProvider listProvider) {
     if (widget.onResponse != null) {
-      widget.onResponse!(listProvider.getList(key) as List<T>);
+      widget.onResponse!(listProvider.getList(key));
     }
     return widget.autoRest.getCustomViewListResponseWidget(
             context, listProvider.getList(key)) ??
         const Text("Not emplemented getCustomViewListToSingle");
   }
 
-  Widget wrapHeader(
-      BuildContext context, Widget child, ListMultiKeyProvider listProvider) {
-    Widget? custom;
-
-    if (widget.onResponseAddWidget != null) {
-      if (listProvider.getList(key).isNotEmpty) {
-        dynamic obj =
-            widget.autoRest.getCustomViewResponseType() == ResponseType.LIST
-                ? listProvider.getList(key)
-                : listProvider.getList(key)[0];
-        custom = widget.onResponseAddWidget!(obj);
-      }
-    }
-
+  Widget wrapHeader(BuildContext context, Widget child) {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 80,
         height: widget.autoRest.getCustomViewHeight(),
         child: Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildHeader(context),
-              Expanded(child: child),
-              if (custom != null) custom
-            ],
+            children: [buildHeader(context), Expanded(child: child)],
           ),
         ));
   }
@@ -173,26 +154,4 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     );
   }
 
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    debugPrint(" IS _onScroll $_isBottom");
-    if (_isBottom) {
-      debugPrint(" IS BOTTOM $_isBottom");
-      // listProvider.fetchList(key, widget.autoRest.getCustomViewKey());
-    }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
-  }
 }

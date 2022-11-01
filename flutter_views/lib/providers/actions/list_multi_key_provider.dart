@@ -31,6 +31,8 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future<void> recall(String key, ViewAbstract t, ResponseType type) async {
     MultiListProviderHelper? multiListProviderHelper = listMap[key];
     multiListProviderHelper?.objects.clear();
+    multiListProviderHelper?.page = 0;
+    multiListProviderHelper?.isLoading = false;
 
     notifyListeners();
     switch (type) {
@@ -41,6 +43,11 @@ class ListMultiKeyProvider with ChangeNotifier {
         fetchView(key, t);
         break;
     }
+  }
+
+  void refresh(String key, ViewAbstract viewAbstract) {
+    clear(key);
+    fetchList(key, viewAbstract);
   }
 
   Future fetchListSearch(
@@ -59,6 +66,34 @@ class ListMultiKeyProvider with ChangeNotifier {
         viewAbstract.getPageItemCount, multiListProviderHelper.page, query);
     multiListProviderHelper.isLoading = false;
     multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+    multiListProviderHelper.page++;
+    notifyListeners();
+  }
+
+  void addCustomList(String key, List<ViewAbstract> viewAbstract) async {
+    late MultiListProviderHelper? multiListProviderHelper;
+    if (listMap.containsKey(key)) {
+      multiListProviderHelper = listMap[key];
+    } else {
+      listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = listMap[key];
+    }
+    multiListProviderHelper!.isLoading = false;
+    multiListProviderHelper.objects.addAll(viewAbstract as List<ViewAbstract>);
+    multiListProviderHelper.page++;
+    notifyListeners();
+  }
+
+  void addCustomSingle(String key, ViewAbstract viewAbstract) async {
+    late MultiListProviderHelper? multiListProviderHelper;
+    if (listMap.containsKey(key)) {
+      multiListProviderHelper = listMap[key];
+    } else {
+      listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = listMap[key];
+    }
+    multiListProviderHelper!.isLoading = false;
+    multiListProviderHelper.objects.add(viewAbstract);
     multiListProviderHelper.page++;
     notifyListeners();
   }

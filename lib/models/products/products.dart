@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reserv
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
+import 'package:flutter_saffoury_paper/models/products/analysis/products_movments.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
@@ -26,8 +26,10 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -491,6 +493,62 @@ class Product extends ViewAbstract<Product>
   String getForeignKeyName() {
     return "ProductID";
   }
+
+  @override
+  List<TabControllerHelper> getCustomTabList(BuildContext context) => [
+        // TabControllerHelper(AppLocalizations.of(context)!.movments, null,
+        //     widget: Text("asdda")),
+        // TabControllerHelper(AppLocalizations.of(context)!.movments, null,
+        //     widget: Text("asdda")),
+        
+        TabControllerHelper(AppLocalizations.of(context)!.movments, null,
+            widget: ListHorizontalCustomViewApiAutoRestWidget(
+                titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
+      ];
+  // @override
+  // List<TabControllerHelper> getCustomTabList(BuildContext context) {
+  //   return [
+  //     TabControllerHelper(
+  //       AppLocalizations.of(context)!.movments,
+  //       null,
+  //       widget: StarageDetailsCustom(
+  //           chart: ListHorizontalCustomViewApiAutoRestWidget(
+  //               onResponseAddWidget: ((response) {
+  //                 ChartRecordAnalysis i = response as ChartRecordAnalysis;
+  //                 double total = i.getTotalListAnalysis();
+  //                 return Column(
+  //                   children: [
+  //                     // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+  //                     //     titleString: "TEST1 ",
+  //                     //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+  //                     StorageInfoCardCustom(
+  //                         title: AppLocalizations.of(context)!.total,
+  //                         description: total.toCurrencyFormat(),
+  //                         trailing: "kg",
+  //                         svgSrc: Icons.monitor_weight),
+  //                     StorageInfoCardCustom(
+  //                         title: AppLocalizations.of(context)!.balance,
+  //                         description:
+  //                             customers?.balance?.toCurrencyFormat() ?? "0",
+  //                         trailing: "trailing",
+  //                         svgSrc: Icons.balance),
+  //                   ],
+  //                 );
+  //               }),
+  //               titleString: "TEST1 ",
+  //               autoRest: ChartRecordAnalysis.init(
+  //                   Order(), DateObject(), EnteryInteval.monthy,
+  //                   customAction: {"CustomerID": customers?.iD})),
+  //        ),
+  //     ),
+
+  //     //  ChartItem(
+  //     //   autoRest: AutoRest<Order>(
+  //     //     obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+  //     //     key: "CustomerByOrder$iD"),
+  //     // ),
+  //   ];
+  // }
 
   @override
   PrintProduct? getPrintCommand(BuildContext context) =>

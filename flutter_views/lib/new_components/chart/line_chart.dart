@@ -19,11 +19,11 @@ class LineChartItem<T, E> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCartesianChart(
         title: ChartTitle(alignment: ChartAlignment.near, text: title),
-        legend:
-            Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+        // legend:
+        //     Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
         // Initialize category axis
         // primaryXAxis: CategoryAxis(),
-        primaryXAxis: T is DateTime ? DateTimeAxis() : CategoryAxis(),
+        primaryXAxis: DateTimeAxis(),
         tooltipBehavior: TooltipBehavior(),
         series: <ChartSeries>[
           LineSeries<T, E>(
