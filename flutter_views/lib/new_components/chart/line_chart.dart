@@ -26,12 +26,24 @@ class LineChartItem<T, E> extends StatelessWidget {
         primaryXAxis: DateTimeAxis(),
         tooltipBehavior: TooltipBehavior(),
         series: <ChartSeries>[
+          // ColumnSeries<T, E>(
+          //   // Bind data source
+
+          //   // enableTooltip: true,
+          //   dataSource: list,
+          //   xValueMapper: xValueMapper,
+          //   yValueMapper: yValueMapper,
+          //   // legendItemText: ,
+          //   // dataLabelSettings: const DataLabelSettings(isVisible: true)
+          // ),
           LineSeries<T, E>(
               // Bind data source
 
               enableTooltip: true,
               dataSource: list,
               xValueMapper: xValueMapper,
+              xAxisName: "dsad",
+              yAxisName: "y axis",
               yValueMapper: yValueMapper,
               // legendItemText: ,
               dataLabelSettings: const DataLabelSettings(isVisible: true)),

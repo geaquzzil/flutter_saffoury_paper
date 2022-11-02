@@ -83,7 +83,41 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) => Customer()
   ..balance = (json['balance'] as num?)?.toDouble()
   ..employees = json['employees'] == null
       ? null
-      : Employee.fromJson(json['employees'] as Map<String, dynamic>);
+      : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+  ..ordersAnalysis = (json['ordersAnalysis'] as List<dynamic>?)
+      ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..purchasesAnalysis = (json['purchasesAnalysis'] as List<dynamic>?)
+      ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..transfersAnalysis = (json['transfersAnalysis'] as List<dynamic>?)
+      ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..cut_requestsAnalysis = (json['cut_requestsAnalysis'] as List<dynamic>?)
+      ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..products_inputsAnalysis =
+      (json['products_inputsAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..products_outputsAnalysis =
+      (json['products_outputsAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..purchases_refundsAnalysis =
+      (json['purchases_refundsAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..orders_refundsAnalysis = (json['orders_refundsAnalysis'] as List<dynamic>?)
+      ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..cargo_transportersAnalysis =
+      (json['cargo_transportersAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..transfersAnalysis = (json['transfersAnalysis'] as List<dynamic>?)
+      ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+      .toList();
 
 Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
       'iD': instance.iD,

@@ -43,7 +43,7 @@ class MasterView extends StatelessWidget {
                             action: ServerActions.view,
                             obj: viewAbstract
                                 as CartableInvoiceMasterObjectInterface),
-                      SizedBox(
+                      const SizedBox(
                         height: 200,
                       )
                     ],

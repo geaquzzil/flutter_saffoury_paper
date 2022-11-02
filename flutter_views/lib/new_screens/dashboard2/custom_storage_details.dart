@@ -20,7 +20,8 @@ class StarageDetailsCustom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: double.infinity, height: 400, child: chart), if (list != null) ...list!,
+            SizedBox(width: double.infinity, height: 600, child: chart),
+            if (list != null) ...list!,
           ],
         ),
       ),
@@ -29,7 +30,7 @@ class StarageDetailsCustom extends StatelessWidget {
 }
 
 class StorageInfoCardCustom extends StatelessWidget {
-  const StorageInfoCardCustom({
+   StorageInfoCardCustom({
     Key? key,
     required this.title,
     required this.description,
@@ -37,7 +38,8 @@ class StorageInfoCardCustom extends StatelessWidget {
     required this.svgSrc,
   }) : super(key: key);
 
-  final String title, description, trailing;
+  final String title, description;
+  Widget trailing;
   final IconData svgSrc;
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,7 @@ class StorageInfoCardCustom extends StatelessWidget {
               ),
             ),
           ),
-          Text(trailing)
+          (trailing)
         ],
       ),
     );

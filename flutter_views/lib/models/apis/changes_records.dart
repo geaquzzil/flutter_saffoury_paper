@@ -127,7 +127,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   }
 
   @override
-  double getCustomViewHeight() => 200;
+  double? getCustomViewHeight() => 200;
   // @Override
   // public ViewAbstract<?> onReadNewObject(Context context, ViewAbstract<?> newObject, ViewAbstract<?> oldCalledViewAbstract) {
   //     ((ChangesRecords) newObject).viewAbstract = ((ChangesRecords) oldCalledViewAbstract).viewAbstract;

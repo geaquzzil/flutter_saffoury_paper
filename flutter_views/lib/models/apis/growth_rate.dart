@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 
 class GrowthRate {
   int? year;
@@ -7,6 +10,11 @@ class GrowthRate {
   @JsonKey(fromJson: convertToDouble)
   double? total;
   GrowthRate();
+  bool isEqualsByDate(GrowthRate? growthRates) {
+    return growthRates?.year == year &&
+        growthRates?.month == month &&
+        growthRates?.day == day;
+  }
 
   static double? convertToDouble(dynamic number) =>
       number == null ? 0 : double.tryParse(number.toString());
@@ -18,4 +26,48 @@ class GrowthRate {
     ..year = data["year"] as int?;
 
   Map<String, dynamic> toJson() => {};
+
+  @override
+  String toString() {
+    return "day:$day,month:$month,year:$year total:$total";
+  }
+
+  static double getTotal(List<GrowthRate>? growthRates) {
+    try {
+      return growthRates?.map((e) => e.total).reduce((value, element) =>
+              value.toNonNullable() + element.toNonNullable()) ??
+          0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  static Widget getGrowthRateText(
+      BuildContext context, List<GrowthRate>? growth) {
+    double getGrowthRate = GrowthRate.getGrowthRate(growth);
+    return Text(
+      getGrowthRate.toCurrencyFormat(symbol: "%"),
+      style:
+          getGrowthRate > 0 ? getGrowTheme(context) : getReduceTheme(context),
+    );
+  }
+
+  static double getGrowthRate(List<GrowthRate>? growth) {
+    if (growth == null) return 0;
+    if (growth.isEmpty) return 0;
+    if (growth.length == 1) return 0;
+    double period1 = growth[growth.length - 2].total.toNonNullable();
+    double period2 = growth[growth.length - 1].total.toNonNullable();
+    // Percent increase (or decrease) = (Period 2 – Period 1) / Period 1 * 100
+    return (period2 - period1) / period1 * 100;
+  }
+
+  static getGrowTheme(BuildContext context) => Theme.of(context)
+      .textTheme
+      .caption!
+      .copyWith(color: Theme.of(context).colorScheme.primary);
+  static getReduceTheme(BuildContext context) => Theme.of(context)
+      .textTheme
+      .caption!
+      .copyWith(color: Theme.of(context).colorScheme.error);
 }

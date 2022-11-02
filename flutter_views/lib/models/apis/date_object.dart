@@ -5,13 +5,12 @@ class DateObject {
   String to;
 
   DateObject({this.from = "", this.to = ""}) {
-    from = "".toDateTimeFirstDateYearString();
-    to = "".toDateTimeNowString();
+    from = from.isEmpty ? "".toDateTimeFirstDateYearString() : from;
+    to = to.isEmpty ? "".toDateTimeNowString() : to;
   }
   factory DateObject.fromJson(Map<String, dynamic> data) => DateObject()
     ..from = data["from"] as String
     ..to = data["to"] as String;
 
-  Map<String, dynamic> toJson() =>
-      {"""from""": from, """to""": to};
+  Map<String, dynamic> toJson() => {"""from""": from, """to""": to};
 }

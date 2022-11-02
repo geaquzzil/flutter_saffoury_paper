@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
@@ -12,16 +9,13 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_re
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import '../../invoices/orders.dart';
 import '../../invoices/priceless_invoices/transfers.dart';
@@ -60,9 +54,6 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
   }
 
   @override
-  double getCustomViewHeight() => 500;
-
-  @override
   String getCustomViewKey() => "products_movments$iD";
   @override
   String? getCustomAction() => "list_products_movements";
@@ -79,10 +70,19 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
           BuildContext context, List<ProductMovments> item) =>
       null;
   Widget wrapContainer(
-      {required String title, required String description, Color? color}) {
+      {required String title,
+      required String description,
+      Color? color,
+      String? footer,
+      String? footerRight}) {
     return Container(
       // color: color,
-      child: ChartCardItemCustom(title: title, description: description),
+      child: ChartCardItemCustom(
+        title: title,
+        description: description,
+        footer: footer,
+        footerRight: footerRight,
+      ),
     );
   }
 
@@ -139,7 +139,10 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
                   child: wrapContainer(
                       title:
                           item.orders![0].getMainHeaderLabelTextOnly(context),
-                      description: "${item.orders?.length}")),
+                      description:
+                          "${GrowthRate.getTotal(item.ordersAnalysis).toCurrencyFormat(symbol: "kg")} ",
+                      footer: "${item.orders?.length}",
+                      footerRight: "23%")),
             if (item.orders_refunds!.isNotEmpty)
               StaggeredGridTile.count(
                   crossAxisCellCount: 1,
@@ -184,6 +187,8 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
         ),
       ],
     );
+ 
+ 
   }
 
   @override
@@ -213,9 +218,6 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
   @override
   ProductMovments fromJsonViewAbstract(Map<String, dynamic> json) =>
       ProductMovments()
-        ..cut_requests = (json['cut_requests'] as List<dynamic>?)
-            ?.map((e) => CutRequest.fromJson(e as Map<String, dynamic>))
-            .toList()
         ..products = Product.fromJson(json['products'])
         ..purchases = (json['purchases'] as List<dynamic>?)
             ?.map((e) => Purchases.fromJson(e as Map<String, dynamic>))
@@ -286,4 +288,7 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
   IconData getMainIconData() => Icons.move_down;
   @override
   String? getTableNameApi() => null;
+
+  @override
+  double? getCustomViewHeight() => 700;
 }

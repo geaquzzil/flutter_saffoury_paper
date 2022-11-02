@@ -7,8 +7,8 @@ import '../../models/auto_rest.dart';
 import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
-class ListHorizontalCustomViewWidget<
-    T extends CustomViewHorizontalListResponse> extends StatefulWidget {
+class ListHorizontalCustomViewWidget<T extends CustomViewHorizontalListResponse>
+    extends StatefulWidget {
   T autoRest;
   Widget? title;
   String? titleString;
@@ -37,13 +37,12 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
   void initState() {
     super.initState();
     key = widget.autoRest.getCustomViewKey();
+    debugPrint("_ListHorizontalApiWidgetState $key");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if(T is List){
-  // listProvider.addCustomList(key, widget.autoRest as ViewAbstract);
-        }else{
-
-        }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (T is List) {
+        // listProvider.addCustomList(key, widget.autoRest as ViewAbstract);
+      } else {}
       if (listProvider.getCount(key) == 0) {
         switch (widget.autoRest.getCustomViewResponseType()) {
           case ResponseType.LIST:
@@ -55,7 +54,6 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
         }
       }
     });
-
   }
 
   @override
@@ -114,7 +112,8 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
   Widget wrapHeader(BuildContext context, Widget child) {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 80,
-        height: widget.autoRest.getCustomViewHeight(),
+        height: widget.autoRest.getCustomViewHeight() ??
+            MediaQuery.of(context).size.height,
         child: Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,5 +152,4 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
           }),
     );
   }
-
 }

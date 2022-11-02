@@ -60,7 +60,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
         onPressed: () {
           _refresh();
         },
-        icon: Icon(Icons.refresh));
+        icon: const Icon(Icons.refresh));
   
 
   Widget getTrailingWidget() {
@@ -151,7 +151,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            children: [Spacer(), getRefreshWidget()],
+            children: [const Spacer(), getRefreshWidget()],
           ),
         ),
         Expanded(

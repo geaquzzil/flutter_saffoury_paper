@@ -16,7 +16,6 @@ import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 
-import '../invoices/orders.dart';
 part 'credits.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -77,13 +76,13 @@ class Credits extends MoneyFunds<Credits> {
                     StorageInfoCardCustom(
                         title: AppLocalizations.of(context)!.total,
                         description: total.toCurrencyFormat(),
-                        trailing: "SYP",
+                        trailing: Text("SYP"),
                         svgSrc: Icons.monitor_weight),
                     StorageInfoCardCustom(
                         title: AppLocalizations.of(context)!.balance,
                         description:
                             customers?.balance?.toCurrencyFormat() ?? "0",
-                        trailing: "trailing",
+                        trailing: Text("trailing"),
                         svgSrc: Icons.balance),
                   ],
                 );

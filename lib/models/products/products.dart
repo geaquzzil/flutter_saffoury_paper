@@ -496,14 +496,42 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context) => [
-        // TabControllerHelper(AppLocalizations.of(context)!.movments, null,
-        //     widget: Text("asdda")),
-        // TabControllerHelper(AppLocalizations.of(context)!.movments, null,
-        //     widget: Text("asdda")),
-        
+        TabControllerHelper(AppLocalizations.of(context)!.descSorting, null,
+            widget: Text("$iD")),
         TabControllerHelper(AppLocalizations.of(context)!.movments, null,
             widget: ListHorizontalCustomViewApiAutoRestWidget(
                 titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
+        TabControllerHelper(
+          AppLocalizations.of(context)!.movments,
+          null,
+          widget: StarageDetailsCustom(
+            chart: ListHorizontalCustomViewApiAutoRestWidget(
+                // onResponseAddWidget: ((response) {
+                //   ChartRecordAnalysis i = response as ChartRecordAnalysis;
+                //   double total = i.getTotalListAnalysis();
+                //   return Column(
+                //     children: [
+                //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+                //       //     titleString: "TEST1 ",
+                //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+                //       StorageInfoCardCustom(
+                //           title: AppLocalizations.of(context)!.total,
+                //           description: total.toCurrencyFormat(),
+                //           trailing: "kg",
+                //           svgSrc: Icons.monitor_weight),
+                //       StorageInfoCardCustom(
+                //           title: AppLocalizations.of(context)!.balance,
+                //           description:
+                //               customers?.balance?.toCurrencyFormat() ?? "0",
+                //           trailing: "trailing",
+                //           svgSrc: Icons.balance),
+                //     ],
+                //   );
+                // }),
+                titleString: "TEST1 ",
+                autoRest: ProductMovments.init(iD)),
+          ),
+        ),
       ];
   // @override
   // List<TabControllerHelper> getCustomTabList(BuildContext context) {

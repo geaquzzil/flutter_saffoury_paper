@@ -204,6 +204,13 @@ class User<T> extends AuthUser {
     return SortByType.ASC;
   }
 
+  double getTotalAnalsis(List<GrowthRate>? growthRateList) {
+    if (growthRateList?.length == 1) {
+      return growthRateList![0].total!;
+    }
+    return GrowthRate.getTotal(growthRateList);
+  }
+
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;

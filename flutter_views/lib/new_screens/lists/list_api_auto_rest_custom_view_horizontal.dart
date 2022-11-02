@@ -40,6 +40,7 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
   void initState() {
     super.initState();
     key = widget.autoRest.getCustomViewKey();
+    debugPrint("_ListHorizontalApiWidgetState $key");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     listProvider.addListener(() {
       debugPrint("list provider is changed ${listProvider.listMap}");
@@ -72,12 +73,11 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
       child: Consumer<ListMultiKeyProvider>(
           builder: (context, provider, listTile) {
         if (provider.getCount(key) == 0) {
-          return wrapHeader(
-              context,
-              const CircularProgressIndicator(
-                strokeWidth: 2,
-              ),
-              provider);
+          return Center(
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          );
         }
         debugPrint("List api provider loaded ${listProvider.isLoading}");
         return wrapHeader(context, getWidget(listProvider), listProvider);
@@ -129,7 +129,8 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
 
     return SizedBox(
         width: MediaQuery.of(context).size.width - 80,
-        height: widget.autoRest.getCustomViewHeight(),
+        height: widget.autoRest.getCustomViewHeight() ??
+            MediaQuery.of(context).size.height,
         child: Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

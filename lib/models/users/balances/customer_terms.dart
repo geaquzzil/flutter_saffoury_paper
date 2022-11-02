@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
@@ -77,7 +76,7 @@ class CustomerTerms extends Customer
     return StorageInfoCardCustom(
         title: AppLocalizations.of(context)!.overDue,
         description: "${item.length}",
-        trailing: "Times",
+        trailing: Text("Times"),
         svgSrc: Icons.date_range);
   }
 

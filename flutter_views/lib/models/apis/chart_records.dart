@@ -13,7 +13,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 import '../v_non_view_object.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 
 class ChartRecordAnalysis<T extends ViewAbstract>
     extends VObject<ChartRecordAnalysis>
@@ -100,7 +99,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   Widget? getCustomViewSingleResponseWidget(
       BuildContext context, ChartRecordAnalysis item) {
     debugPrint(
-        "getCustomViewSingleResponseWidget ${item.rFesponseListAnalysis?.length}");
+        "getCustomViewSingleResponseWidget ${item.responseListAnalysis?.length}");
     return LineChartItem<GrowthRate, DateTime>(
       title:
           "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",
@@ -145,7 +144,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  double getCustomViewHeight() => 600;
+  double? getCustomViewHeight() => 600;
 }
 
 enum EnteryInteval implements ViewAbstractEnum<EnteryInteval> {
