@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   cached_network_image: ^3.2.2
   intl: ^0.17.0
-  intl_converter: ^1.0.0
+  # intl_converter: ^1.0.0
   provider: ^6.0.3
   icon_badge: ^1.0.0
   # flutter_bloc: ^8.0.1
@@ -70,7 +70,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.2.0
-  # json_serializable: ^6.3.1
+  json_serializable: ^6.3.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

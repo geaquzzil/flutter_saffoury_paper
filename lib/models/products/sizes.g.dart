@@ -6,12 +6,13 @@ part of 'sizes.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Size _$SizeFromJson(Map<String, dynamic> json) => Size()
+ProductSize _$ProductSizeFromJson(Map<String, dynamic> json) => ProductSize()
   ..iD = json['iD'] as int
   ..width = json['width'] as int?
   ..length = json['length'] as int?;
 
-Map<String, dynamic> _$SizeToJson(Size instance) => <String, dynamic>{
+Map<String, dynamic> _$ProductSizeToJson(ProductSize instance) =>
+    <String, dynamic>{
       'iD': instance.iD,
       'width': instance.width,
       'length': instance.length,

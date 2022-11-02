@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/recent_files.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../dashboard/components/header.dart';
 import 'my_files.dart';
 
@@ -14,6 +16,25 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: (dashboard as ViewAbstract).callApi(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          dashboard = snapshot.data as DashableInterface;
+          return getWidget(context);
+        }
+        return Center(
+          child: EmptyWidget(
+              lottiUrl:
+                  "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
+              title: AppLocalizations.of(context)!.noItems,
+              subtitle: AppLocalizations.of(context)!.error_empty),
+        );
+      },
+    );
+  }
+
+  SizedBox getWidget(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: double.infinity,

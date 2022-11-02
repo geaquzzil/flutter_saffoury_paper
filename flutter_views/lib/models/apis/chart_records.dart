@@ -75,7 +75,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   String getCustomViewKey() {
-    return "list_dashboard_single_item$T$customAction";
+    return "list_dashboard_single_item$T$customAction${enteryInteval.toString()}$date";
   }
 
   @override

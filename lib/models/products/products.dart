@@ -12,6 +12,7 @@ import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
+import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -47,7 +48,6 @@ import '../invoices/priceless_invoices/products_outputs.dart';
 import '../invoices/priceless_invoices/transfers.dart';
 import '../invoices/purchases.dart';
 import '../invoices/refund_invoices/purchasers_refunds.dart';
-import 'sizes.dart' as sizeProduct;
 part 'products.g.dart';
 
 @JsonSerializable(
@@ -84,7 +84,7 @@ class Product extends ViewAbstract<Product>
   ProductType? products_types;
   CustomsDeclaration? customs_declarations;
   CountryManufacture? countries_manufactures;
-  sizeProduct.Size? sizes;
+  ProductSize? sizes;
   GSM? gsms;
   Quality? qualities;
   Grades? grades;
@@ -133,7 +133,7 @@ class Product extends ViewAbstract<Product>
         "products_types": ProductType(),
         "customs_declarations": CustomsDeclaration(),
         "countries_manufactures": CountryManufacture(),
-        "sizes": sizeProduct.Size(),
+        "sizes": ProductSize(),
         "gsms": GSM(),
         "qualities": Quality(),
         "grades": Grades(),
@@ -699,7 +699,7 @@ class Product extends ViewAbstract<Product>
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
     Product p = Product();
     p.products_types = ProductType()..name = "sappi";
-    p.sizes = sizeProduct.Size();
+    p.sizes = ProductSize();
     p.sizes?.length = 1000;
     p.sizes?.width = 700;
 

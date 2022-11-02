@@ -61,8 +61,30 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
   }
 
   @override
+  void didUpdateWidget(
+      covariant ListHorizontalCustomViewApiAutoRestWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint("ListHorizontalCustomViewApiAutoRestWidget didUpdateWidget");
+    key = widget.autoRest.getCustomViewKey();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (listProvider.getCount(key) == 0) {
+        switch (widget.autoRest.getCustomViewResponseType()) {
+          case ResponseType.LIST:
+            listProvider.fetchList(key, widget.autoRest as ViewAbstract);
+            break;
+          case ResponseType.SINGLE:
+            listProvider.fetchView(key, widget.autoRest as ViewAbstract);
+            break;
+        }
+      }
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    debugPrint(
+        "ListHorizontalCustomViewApiAutoRestWidget didChangeDependencies");
     // listProvider.fetchView(key, widget.autoRest as ViewAbstract);
   }
 

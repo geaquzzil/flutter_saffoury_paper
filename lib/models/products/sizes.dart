@@ -11,11 +11,11 @@ part 'sizes.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class Size extends ViewAbstract<Size> {
+class ProductSize extends ViewAbstract<ProductSize> {
   int? width;
   int? length;
 
-  Size() : super();
+  ProductSize() : super();
 
   @override
   String? getMainDrawerGroupName(BuildContext context) {
@@ -98,13 +98,14 @@ class Size extends ViewAbstract<Size> {
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
 
-  factory Size.fromJson(Map<String, dynamic> data) => _$SizeFromJson(data);
+  factory ProductSize.fromJson(Map<String, dynamic> data) =>
+      _$ProductSizeFromJson(data);
 
-  Map<String, dynamic> toJson() => _$SizeToJson(this);
+  Map<String, dynamic> toJson() => _$ProductSizeToJson(this);
 
   @override
-  Size fromJsonViewAbstract(Map<String, dynamic> json) {
-    return Size.fromJson(json);
+  ProductSize fromJsonViewAbstract(Map<String, dynamic> json) {
+    return ProductSize.fromJson(json);
   }
 
   @override

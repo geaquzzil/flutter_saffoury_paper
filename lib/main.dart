@@ -50,7 +50,7 @@ void main() async {
 
   List<ViewAbstract> views = List<ViewAbstract>.from([
     Product(),
-    Size(),
+    ProductSize(),
     Order(),
     Purchases(),
     Customer(),

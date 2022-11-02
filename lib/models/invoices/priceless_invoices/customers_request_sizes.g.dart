@@ -24,6 +24,15 @@ CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
           : CargoTransporter.fromJson(
               json['cargo_transporters'] as Map<String, dynamic>)
       ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
+      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+      ..extendedRefundPrice =
+          InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
+      ..extendedDiscount =
+          InvoiceMaster.convertToDouble(json['extendedDiscount'])
+      ..extendedNetPrice =
+          InvoiceMaster.convertToDouble(json['extendedNetPrice'])
       ..customers_request_sizes_details =
           (json['customers_request_sizes_details'] as List<dynamic>?)
               ?.map((e) => CustomerRequestSizeDetails.fromJson(
@@ -44,6 +53,12 @@ Map<String, dynamic> _$CustomerRequestSizeToJson(
       'customers': instance.customers?.toJson(),
       'cargo_transporters': instance.cargo_transporters?.toJson(),
       'status': _$InvoiceStatusEnumMap[instance.status],
+      'quantity': instance.quantity,
+      'extendedPrice': instance.extendedPrice,
+      'refundQuantity': instance.refundQuantity,
+      'extendedRefundPrice': instance.extendedRefundPrice,
+      'extendedDiscount': instance.extendedDiscount,
+      'extendedNetPrice': instance.extendedNetPrice,
       'customers_request_sizes_details': instance
           .customers_request_sizes_details
           ?.map((e) => e.toJson())
@@ -70,7 +85,7 @@ CustomerRequestSizeDetails _$CustomerRequestSizeDetailsFromJson(
               json['customers_request_sizes'] as Map<String, dynamic>)
       ..sizes = json['sizes'] == null
           ? null
-          : Size.fromJson(json['sizes'] as Map<String, dynamic>)
+          : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
       ..date = json['date'] as String?;
 
 Map<String, dynamic> _$CustomerRequestSizeDetailsToJson(

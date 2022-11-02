@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/users/user.dart';
 import 'package:flutter_saffoury_paper/models/users/users_actions/customer_by_employee_analysis.dart';
+import 'package:flutter_saffoury_paper/models/users/warehouse_employees.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
@@ -24,6 +26,19 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_view_controller/models/apis/growth_rate.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 part 'employees.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -33,6 +48,8 @@ class Employee extends User<Employee> {
   int? publish;
 
   Employee? employee;
+
+  List<WarehouseEmployee>? warehouse_employees;
 
   Employee() : super();
 

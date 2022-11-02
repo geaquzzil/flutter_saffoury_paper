@@ -62,7 +62,7 @@ class CustomerRequestSizeDetails
   // int? SizeID;
 
   CustomerRequestSize? customers_request_sizes;
-  Size? sizes;
+  ProductSize? sizes;
   String? date;
 
   CustomerRequestSizeDetails() : super();
@@ -70,7 +70,7 @@ class CustomerRequestSizeDetails
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "customers_request_sizes": CustomerRequestSize(),
-        "sizes": Size(),
+        "sizes": ProductSize(),
         "date": ""
       };
 

@@ -15,14 +15,14 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   // int? SizeID;
 
   CutRequest? cut_requests;
-  Size? sizes;
+  ProductSize? sizes;
   double? quantity;
 
   SizesCutRequest() : super();
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"cut_requests": CutRequest(), "sizes": Size(), "quantity": 0};
+      {"cut_requests": CutRequest(), "sizes": ProductSize(), "quantity": 0};
   @override
   List<String> getMainFields() => ["sizes", "quantity"];
 

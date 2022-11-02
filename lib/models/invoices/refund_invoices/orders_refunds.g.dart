@@ -23,6 +23,13 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
       : CargoTransporter.fromJson(
           json['cargo_transporters'] as Map<String, dynamic>)
   ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
+  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+  ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+  ..extendedRefundPrice =
+      InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
+  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
+  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
   ..orders = json['orders'] == null
       ? null
       : Order.fromJson(json['orders'] as Map<String, dynamic>)
@@ -31,14 +38,7 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
           ?.map((e) => OrderRefundDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..orders_refunds_order_details_count =
-      json['orders_refunds_order_details_count'] as int?
-    ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
-  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
-  ..extendedRefundPrice =
-      InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
+      json['orders_refunds_order_details_count'] as int?;
 
 Map<String, dynamic> _$OrderRefundToJson(OrderRefund instance) =>
     <String, dynamic>{
@@ -51,6 +51,12 @@ Map<String, dynamic> _$OrderRefundToJson(OrderRefund instance) =>
       'customers': instance.customers?.toJson(),
       'cargo_transporters': instance.cargo_transporters?.toJson(),
       'status': _$InvoiceStatusEnumMap[instance.status],
+      'quantity': instance.quantity,
+      'extendedPrice': instance.extendedPrice,
+      'refundQuantity': instance.refundQuantity,
+      'extendedRefundPrice': instance.extendedRefundPrice,
+      'extendedDiscount': instance.extendedDiscount,
+      'extendedNetPrice': instance.extendedNetPrice,
       'orders': instance.orders?.toJson(),
       'orders_refunds_order_details': instance.orders_refunds_order_details
           ?.map((e) => e.toJson())

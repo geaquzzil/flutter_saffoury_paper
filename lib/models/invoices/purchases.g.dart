@@ -23,6 +23,13 @@ Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
       : CargoTransporter.fromJson(
           json['cargo_transporters'] as Map<String, dynamic>)
   ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
+  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+  ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+  ..extendedRefundPrice =
+      InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
+  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
+  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
   ..purchases_details = (json['purchases_details'] as List<dynamic>?)
       ?.map((e) => PurchasesDetails.fromJson(e as Map<String, dynamic>))
       .toList()
@@ -30,14 +37,7 @@ Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
   ..purchases_refunds = (json['purchases_refunds'] as List<dynamic>?)
       ?.map((e) => PurchasesRefund.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..purchases_refunds_count = json['purchases_refunds_count'] as int?
-  ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
-  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
-  ..extendedRefundPrice =
-      InvoiceMaster.convertToDouble(json['extendedRefundPrice']);
+  ..purchases_refunds_count = json['purchases_refunds_count'] as int?;
 
 Map<String, dynamic> _$PurchasesToJson(Purchases instance) => <String, dynamic>{
       'iD': instance.iD,
@@ -49,6 +49,12 @@ Map<String, dynamic> _$PurchasesToJson(Purchases instance) => <String, dynamic>{
       'customers': instance.customers?.toJson(),
       'cargo_transporters': instance.cargo_transporters?.toJson(),
       'status': _$InvoiceStatusEnumMap[instance.status],
+      'quantity': instance.quantity,
+      'extendedPrice': instance.extendedPrice,
+      'refundQuantity': instance.refundQuantity,
+      'extendedRefundPrice': instance.extendedRefundPrice,
+      'extendedDiscount': instance.extendedDiscount,
+      'extendedNetPrice': instance.extendedNetPrice,
       'purchases_details':
           instance.purchases_details?.map((e) => e.toJson()).toList(),
       'purchases_details_count': instance.purchases_details_count,

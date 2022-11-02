@@ -12,5 +12,10 @@ class DateObject {
     ..from = data["from"] as String
     ..to = data["to"] as String;
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   Map<String, dynamic> toJson() => {"""from""": from, """to""": to};
 }

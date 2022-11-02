@@ -5,17 +5,17 @@ import 'package:reflectable/reflectable.dart';
 
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
 class Reflector extends Reflectable {
-  // const Reflector()
-  //     : super(invokingCapability, declarationsCapability,
-  //           typeRelationsCapability);
   const Reflector()
-      : super(
-          // newInstanceCapability,
-          invokingCapability,
-          reflectedTypeCapability,
-          typingCapability,
-          declarationsCapability,
-        );
+      : super(invokingCapability, declarationsCapability,
+            typeRelationsCapability);
+  // const Reflector()
+  //     : super(
+  //         // newInstanceCapability,
+  //         invokingCapability,
+  //         reflectedTypeCapability,
+  //         typingCapability,
+  //         declarationsCapability,
+  //       );
 }
 
 const reflector = Reflector();

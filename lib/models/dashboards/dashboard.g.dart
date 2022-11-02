@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'customers.dart';
+part of 'dashboard.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Customer _$CustomerFromJson(Map<String, dynamic> json) => Customer()
+Dashboard _$DashboardFromJson(Map<String, dynamic> json) => Dashboard()
   ..iD = json['iD'] as int
   ..login = json['login'] as bool?
   ..permission = json['permission'] as bool?
@@ -108,26 +108,72 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) => Customer()
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
   ..cargo_transporters_count = json['cargo_transporters_count'] as int?
-  ..name = json['name'] as String?
-  ..email = json['email'] as String?
-  ..token = json['token'] as String?
-  ..activated = json['activated'] as int?
-  ..date = json['date'] as String?
-  ..city = json['city'] as String?
-  ..address = json['address'] as String?
-  ..profile = json['profile'] as String?
-  ..comments = json['comments'] as String?
-  ..cash = json['cash'] as int?
-  ..totalCredits = (json['totalCredits'] as num?)?.toDouble()
-  ..totalDebits = (json['totalDebits'] as num?)?.toDouble()
-  ..totalOrders = (json['totalOrders'] as num?)?.toDouble()
-  ..totalPurchases = (json['totalPurchases'] as num?)?.toDouble()
-  ..balance = (json['balance'] as num?)?.toDouble()
-  ..employees = json['employees'] == null
+  ..debitsDue = (json['debitsDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..creditsDue = (json['creditsDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..incomesDue = (json['incomesDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..spendingsDue = (json['spendingsDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..debitsBalanceToday = (json['debitsBalanceToday'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..creditsBalanceToday = (json['creditsBalanceToday'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..incomesBalanceToday = (json['incomesBalanceToday'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..spendingsBalanceToday = (json['spendingsBalanceToday'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..previousdebitsDue = (json['previousdebitsDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..previouscreditsDue = (json['previouscreditsDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..previousincomesDue = (json['previousincomesDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..previousspendingsDue = (json['previousspendingsDue'] as List<dynamic>?)
+      ?.map((e) => BalanceDue.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..notPayedCustomers = (json['notPayedCustomers'] as List<dynamic>?)
+      ?.map((e) => CustomerTerms.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..customerToPayNext = (json['customerToPayNext'] as List<dynamic>?)
+      ?.map((e) => CustomerTerms.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..date = json['date'] == null
       ? null
-      : Employee.fromJson(json['employees'] as Map<String, dynamic>);
+      : DateObject.fromJson(json['date'] as Map<String, dynamic>)
+  ..modifiedNotPayedCustomers =
+      (json['modifiedNotPayedCustomers'] as List<dynamic>?)
+          ?.map((e) => CustomerTerms.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..modifiedCustomerToPayNext =
+      (json['modifiedCustomerToPayNext'] as List<dynamic>?)
+          ?.map((e) => CustomerTerms.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..overdue_reservation_invoice =
+      (json['overdue_reservation_invoice'] as List<dynamic>?)
+          ?.map((e) => ReservationInvoice.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..pending_reservation_invoice =
+      (json['pending_reservation_invoice'] as List<dynamic>?)
+          ?.map((e) => ReservationInvoice.fromJson(e as Map<String, dynamic>))
+          .toList()
+  ..pending_cut_requests = (json['pending_cut_requests'] as List<dynamic>?)
+      ?.map((e) => CutRequest.fromJson(e as Map<String, dynamic>))
+      .toList();
 
-Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
+Map<String, dynamic> _$DashboardToJson(Dashboard instance) => <String, dynamic>{
       'iD': instance.iD,
       'login': instance.login,
       'permission': instance.permission,
@@ -190,20 +236,39 @@ Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
       'cargo_transportersAnalysis':
           instance.cargo_transportersAnalysis?.map((e) => e.toJson()).toList(),
       'cargo_transporters_count': instance.cargo_transporters_count,
-      'name': instance.name,
-      'email': instance.email,
-      'token': instance.token,
-      'activated': instance.activated,
-      'date': instance.date,
-      'city': instance.city,
-      'address': instance.address,
-      'profile': instance.profile,
-      'comments': instance.comments,
-      'cash': instance.cash,
-      'totalCredits': instance.totalCredits,
-      'totalDebits': instance.totalDebits,
-      'totalOrders': instance.totalOrders,
-      'totalPurchases': instance.totalPurchases,
-      'balance': instance.balance,
-      'employees': instance.employees?.toJson(),
+      'debitsDue': instance.debitsDue?.map((e) => e.toJson()).toList(),
+      'creditsDue': instance.creditsDue?.map((e) => e.toJson()).toList(),
+      'incomesDue': instance.incomesDue?.map((e) => e.toJson()).toList(),
+      'spendingsDue': instance.spendingsDue?.map((e) => e.toJson()).toList(),
+      'debitsBalanceToday':
+          instance.debitsBalanceToday?.map((e) => e.toJson()).toList(),
+      'creditsBalanceToday':
+          instance.creditsBalanceToday?.map((e) => e.toJson()).toList(),
+      'incomesBalanceToday':
+          instance.incomesBalanceToday?.map((e) => e.toJson()).toList(),
+      'spendingsBalanceToday':
+          instance.spendingsBalanceToday?.map((e) => e.toJson()).toList(),
+      'previousdebitsDue':
+          instance.previousdebitsDue?.map((e) => e.toJson()).toList(),
+      'previouscreditsDue':
+          instance.previouscreditsDue?.map((e) => e.toJson()).toList(),
+      'previousincomesDue':
+          instance.previousincomesDue?.map((e) => e.toJson()).toList(),
+      'previousspendingsDue':
+          instance.previousspendingsDue?.map((e) => e.toJson()).toList(),
+      'notPayedCustomers':
+          instance.notPayedCustomers?.map((e) => e.toJson()).toList(),
+      'customerToPayNext':
+          instance.customerToPayNext?.map((e) => e.toJson()).toList(),
+      'date': instance.date?.toJson(),
+      'modifiedNotPayedCustomers':
+          instance.modifiedNotPayedCustomers?.map((e) => e.toJson()).toList(),
+      'modifiedCustomerToPayNext':
+          instance.modifiedCustomerToPayNext?.map((e) => e.toJson()).toList(),
+      'overdue_reservation_invoice':
+          instance.overdue_reservation_invoice?.map((e) => e.toJson()).toList(),
+      'pending_reservation_invoice':
+          instance.pending_reservation_invoice?.map((e) => e.toJson()).toList(),
+      'pending_cut_requests':
+          instance.pending_cut_requests?.map((e) => e.toJson()).toList(),
     };

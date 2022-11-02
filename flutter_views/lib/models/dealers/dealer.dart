@@ -25,7 +25,7 @@ class Dealers {
   factory Dealers.fromJson(Map<String, dynamic> data) =>
       _$DealersFromJson(data);
 
-  // Map<String, dynamic> toJson() => _$DealersToJson(this);
+  Map<String, dynamic> toJson() => {};
 }
 
 class DealersDetailsApstract {
@@ -47,7 +47,7 @@ class DealersEmails extends DealersDetailsApstract {
   String? email;
   DealersEmails() : super();
 
-   factory DealersEmails.fromJson(Map<String, dynamic> data) =>
+  factory DealersEmails.fromJson(Map<String, dynamic> data) =>
       _$DealersEmailsFromJson(data);
 
   // Map<String, dynamic> toJson() => _$DealersEmailsToJson(this);
@@ -60,7 +60,7 @@ class DealersPhone extends DealersDetailsApstract {
   String? phone;
   DealersPhone() : super();
 
-   factory DealersPhone.fromJson(Map<String, dynamic> data) =>
+  factory DealersPhone.fromJson(Map<String, dynamic> data) =>
       _$DealersPhoneFromJson(data);
 
   // Map<String, dynamic> toJson() => _$DealersPhoneToJson(this);
@@ -72,7 +72,7 @@ class DealersPhone extends DealersDetailsApstract {
 class DealersSocial extends DealersDetailsApstract {
   DealersSocial() : super();
 
-    factory DealersSocial.fromJson(Map<String, dynamic> data) =>
+  factory DealersSocial.fromJson(Map<String, dynamic> data) =>
       _$DealersSocialFromJson(data);
 
   // Map<String, dynamic> toJson() => _$DealersSocialToJson(this);

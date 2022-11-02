@@ -7,7 +7,6 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-@JsonSerializable(explicitToJson: true)
 @reflector
 class PrintProduct extends PrintLocalSetting<PrintProduct> {
   bool printProductAsLabel = false;

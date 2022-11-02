@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_saffoury_paper/widgets/chart_date_chosser.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
@@ -80,37 +81,9 @@ class Order extends InvoiceMaster<Order>
         ),
       ),
       TabControllerHelper(
-        AppLocalizations.of(context)!.size_analyzer,
+        AppLocalizations.of(context)!.overview,
         null,
-        widget: StarageDetailsCustom(
-          chart: ListHorizontalCustomViewApiAutoRestWidget(
-              onResponseAddWidget: ((response) {
-                ChartRecordAnalysis i = response as ChartRecordAnalysis;
-                double total = i.getTotalListAnalysis();
-                return Column(
-                  children: [
-                    // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-                    //     titleString: "TEST1 ",
-                    //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-                    StorageInfoCardCustom(
-                        title: AppLocalizations.of(context)!.total,
-                        description: total.toCurrencyFormat(),
-                        trailing: Text("kg"),
-                        svgSrc: Icons.monitor_weight),
-                    StorageInfoCardCustom(
-                        title: AppLocalizations.of(context)!.balance,
-                        description:
-                            customers?.balance?.toCurrencyFormat() ?? "0",
-                        trailing: Text("trailing"),
-                        svgSrc: Icons.balance),
-                  ],
-                );
-              }),
-              titleString: "TEST1 ",
-              autoRest: ChartRecordAnalysis.init(
-                  Order(), DateObject(), EnteryInteval.monthy,
-                  customAction: {"CustomerID": customers?.iD})),
-        ),
+        widget: getTabControllerChartWidget(context),
       ),
 
       //  ChartItem(
@@ -119,6 +92,38 @@ class Order extends InvoiceMaster<Order>
       //     key: "CustomerByOrder$iD"),
       // ),
     ];
+  }
+
+  Widget getTabControllerChartWidget(BuildContext context) {
+    return ChartDateChooser<EnteryInteval>(
+      obj: EnteryInteval.monthy,
+      onSelected: (obj) => ListHorizontalCustomViewApiAutoRestWidget(
+          onResponseAddWidget: ((response) {
+            ChartRecordAnalysis i = response as ChartRecordAnalysis;
+            double total = i.getTotalListAnalysis();
+            return Column(
+              children: [
+                // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+                //     titleString: "TEST1 ",
+                //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+                StorageInfoCardCustom(
+                    title: AppLocalizations.of(context)!.total,
+                    description: total.toCurrencyFormat(),
+                    trailing: Text("kg"),
+                    svgSrc: Icons.monitor_weight),
+                StorageInfoCardCustom(
+                    title: AppLocalizations.of(context)!.balance,
+                    description: customers?.balance?.toCurrencyFormat() ?? "0",
+                    trailing: Text("trailing"),
+                    svgSrc: Icons.balance),
+              ],
+            );
+          }),
+          titleString: "TEST1 ",
+          autoRest: ChartRecordAnalysis.init(
+              Order(), DateObject(), obj ?? EnteryInteval.monthy,
+              customAction: {"CustomerID": customers?.iD})),
+    );
   }
 
   @override

@@ -14,7 +14,7 @@ SizesCutRequest _$SizesCutRequestFromJson(Map<String, dynamic> json) =>
           : CutRequest.fromJson(json['cut_requests'] as Map<String, dynamic>)
       ..sizes = json['sizes'] == null
           ? null
-          : Size.fromJson(json['sizes'] as Map<String, dynamic>)
+          : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
       ..quantity = (json['quantity'] as num?)?.toDouble();
 
 Map<String, dynamic> _$SizesCutRequestToJson(SizesCutRequest instance) =>

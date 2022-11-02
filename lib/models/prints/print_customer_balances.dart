@@ -2,7 +2,8 @@ import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-
+import 'package:flutter_view_controller/models/v_mirrors.dart';
+@reflector
 class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
   @override
   PrintCustomerBalances fromJsonViewAbstract(Map<String, dynamic> json) => this;
