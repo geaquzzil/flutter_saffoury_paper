@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/balance_due.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
@@ -9,21 +10,58 @@ import '../funds/money_funds.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
 extension InvoiceMasterUtils<T extends InvoiceMaster> on List<T?>? {
-  double getTotalQuantityGrouped({ProductTypeUnit? unit}) {
-    if (this == null) return 0;
+  String getTotalQuantityGroupedFormattedText(BuildContext context) {
+    List<String> list = [];
+    Map<ProductTypeUnit, double> total = getTotalQuantityGrouped();
+    total.forEach((key, value) {
+      list.add(value.toCurrencyFormat(
+          symbol: key.getFieldLabelString(context, key)));
+    });
+    return list.join("\n");
+  }
+
+  Map<ProductTypeUnit, double> getTotalQuantityGrouped() {
+    if (this == null) return {};
     Map<ProductTypeUnit, double> map = {};
 
     for (var element in this!) {
       // if(map.containsKey(key))
-      element?.getDetailListFromMaster().getTotalQuantityGrouped(unit: unit);
+      Map<ProductTypeUnit, double> detailMap = element!
+          .getDetailListFromMaster()
+          .getTotalQuantityGroupedByProductType();
+
+      detailMap.forEach((key, value) {
+        if (map.containsKey(key)) {
+          map[key] = value + map[key]!;
+        } else {
+          map[key] = value;
+        }
+      });
     }
 
-    return 0;
+    return map;
   }
 }
 
 extension InvoiceMasterDetailsUtils<T extends InvoiceMasterDetails>
     on List<T?>? {
+  Map<ProductTypeUnit, double> getTotalQuantityGroupedByProductType() {
+    if (this == null) return {};
+    try {
+      Map<ProductTypeUnit, double> total = {};
+      Map<ProductTypeUnit, List<double>> quantity = this!.groupBy(
+          (item) => item!.products!.products_types!.unit!,
+          valueTransform: (v) => v!.quantity.toNonNullable());
+      quantity.forEach((key, value) {
+        total[key] = value.reduce((value, element) =>
+            value.toNonNullable() + element.toNonNullable());
+      });
+      return total;
+    } catch (e) {
+      return {};
+    }
+  }
+
   double getTotalQuantityGrouped({ProductTypeUnit? unit}) {
     if (this == null) return 0;
     Map<ProductTypeUnit?, List<double?>> quantity = this!.groupBy(
@@ -81,6 +119,39 @@ extension MoneyFundTotals<T extends MoneyFunds> on List<T?>? {
 }
 
 extension BalanceDueTotals<T extends BalanceDue> on List<T?>? {
+  String getTotalGroupedFormattedText() {
+    List<String> list = [];
+    Map<String, double> total = getTotalGrouped();
+    total.forEach((key, value) {
+      list.add(value.toCurrencyFormat(symbol: key));
+    });
+    return list.join("\n");
+  }
+
+  Map<String, double> getTotalGrouped({int? CashboxID}) {
+    if (this == null) return {};
+    Map<String, double> total = {};
+    Map<String, List<double>> t = {};
+    if (CashboxID != null) {
+      t = this!.where((element) => element!.CashBoxID == CashboxID).groupBy(
+          (item) => item!.currency!,
+          valueTransform: (v) => v!.sum.toNonNullable());
+    } else {
+      t = this!.groupBy((item) => item!.currency!,
+          valueTransform: (v) => v!.sum.toNonNullable());
+    }
+
+    t.forEach((key, value) {
+      total[key] = value
+              .reduce((value, element) =>
+                  value.toNonNullable() + element.toNonNullable())
+              .toNonNullable() ??
+          0;
+    });
+
+    return total;
+  }
+
   double getTotalValue({String? currencyName, int? cashBoxID}) {
     if (this == null) return 0;
     try {
@@ -109,4 +180,13 @@ extension BalanceDueTotals<T extends BalanceDue> on List<T?>? {
       return 0;
     }
   }
+}
+
+String getTotalGroupedFormattedText(Map<String, double> customMap) {
+  List<String> list = [];
+  Map<String, double> total = customMap;
+  total.forEach((key, value) {
+    list.add(value.toCurrencyFormat(symbol: key));
+  });
+  return list.join("\n");
 }

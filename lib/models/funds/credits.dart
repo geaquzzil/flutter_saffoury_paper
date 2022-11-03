@@ -63,7 +63,7 @@ class Credits extends MoneyFunds<Credits> {
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
         null,
-        widget: StarageDetailsCustom(
+        widget: StorageDetailsCustom(
           chart: ListHorizontalCustomViewApiAutoRestWidget(
               onResponseAddWidget: ((response) {
                 ChartRecordAnalysis i = response as ChartRecordAnalysis;

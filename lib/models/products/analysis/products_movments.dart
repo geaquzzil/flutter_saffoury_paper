@@ -104,13 +104,13 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
       BuildContext context, ProductMovments item) {
     return Column(
       children: [
-        MultiLineChartItem<GrowthRate, DateTime>(
-          title: "title",
-          list: item.getAnalysisChart(),
-          xValueMapper: (item, value, indexInsideList) =>
-              DateTime(value.year ?? 0, value.month ?? 0, value.day ?? 0),
-          yValueMapper: (item, n, indexInsideList) => n.total,
-        ),
+        // MultiLineChartItem<GrowthRate, DateTime>(
+        //   title: "title",
+        //   list: item.getAnalysisChart(),
+        //   xValueMapper: (item, value, indexInsideList) =>
+        //       DateTime(value.year ?? 0, value.month ?? 0, value.day ?? 0),
+        //   yValueMapper: (item, n, indexInsideList) => n.total,
+        // ),
         StaggeredGrid.count(
           crossAxisCount: 2,
           mainAxisSpacing: 2,
@@ -187,8 +187,6 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
         ),
       ],
     );
- 
- 
   }
 
   @override

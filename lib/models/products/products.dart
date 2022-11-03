@@ -504,7 +504,7 @@ class Product extends ViewAbstract<Product>
         TabControllerHelper(
           AppLocalizations.of(context)!.movments,
           null,
-          widget: StarageDetailsCustom(
+          widget: StorageDetailsCustom(
             chart: ListHorizontalCustomViewApiAutoRestWidget(
                 // onResponseAddWidget: ((response) {
                 //   ChartRecordAnalysis i = response as ChartRecordAnalysis;

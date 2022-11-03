@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 
-class StarageDetailsCustom extends StatelessWidget {
+class StorageDetailsCustom extends StatelessWidget {
   List<StorageInfoCardCustom>? list;
   Widget chart;
-  StarageDetailsCustom({Key? key, this.list, required this.chart})
+  StorageDetailsCustom({Key? key, this.list, required this.chart})
       : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class StarageDetailsCustom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: double.infinity, height: 600, child: chart),
+            SizedBox(width: double.infinity, height: 200, child: chart),
             if (list != null) ...list!,
           ],
         ),
@@ -30,7 +30,7 @@ class StarageDetailsCustom extends StatelessWidget {
 }
 
 class StorageInfoCardCustom extends StatelessWidget {
-   StorageInfoCardCustom({
+  StorageInfoCardCustom({
     Key? key,
     required this.title,
     required this.description,

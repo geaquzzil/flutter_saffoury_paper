@@ -43,6 +43,8 @@ class DashboardPage extends StatelessWidget {
         padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
+
+            
             const Header(),
             const SizedBox(height: defaultPadding),
             Row(

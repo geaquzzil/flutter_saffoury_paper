@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 
 class ListStaticWidget<T> extends StatelessWidget {
   List<T> list = [];
@@ -23,6 +25,9 @@ class ListStaticWidget<T> extends StatelessWidget {
       shrinkWrap: true,
       itemCount: list.length,
       itemBuilder: (context, index) {
+        if (listItembuilder == null) {
+          return ListCardItem(object: list[index] as ViewAbstract);
+        }
         return listItembuilder!(list[index]);
         // return data[index].getCardView(context);
       },
