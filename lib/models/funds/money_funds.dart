@@ -186,6 +186,11 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     };
   }
 
+  /// get value multiply bt equality
+  double getValue() {
+    return value.toNonNullable() * (equalities?.value.toNonNullable() ?? 0);
+  }
+
   @override
   String getPrintableQrCode() {
     var q = QRCodeID(

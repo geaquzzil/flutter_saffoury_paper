@@ -41,7 +41,7 @@ class MyFiles extends StatelessWidget {
         Responsive(
           mobile: FileInfoStaggerdGridView(
             list: dgh.widgets,
-            crossAxisCount: size.width < 750 ? 2 : 4,
+            crossAxisCount: size.width < 750 ? 2 : 6,
             childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
           ),
           tablet: FileInfoStaggerdGridView(
@@ -49,10 +49,11 @@ class MyFiles extends StatelessWidget {
           ),
           desktop: FileInfoStaggerdGridView(
             list: dgh.widgets,
+            crossAxisCount: 6,
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
-        SizedBox(height: defaultPadding)
+        SizedBox(height: defaultPadding * 4)
       ],
     );
   }
@@ -155,7 +156,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StaggeredGrid.count(
-        crossAxisCount: 4,
+        crossAxisCount: crossAxisCount,
         mainAxisSpacing: 4,
         crossAxisSpacing: 4,
         children: list);

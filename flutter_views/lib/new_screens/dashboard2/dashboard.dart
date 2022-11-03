@@ -49,7 +49,7 @@ class DashboardPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 5,
+                  // flex: 5,
                   child: Column(
                     children: [
                       ...dashboard
@@ -65,18 +65,18 @@ class DashboardPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (!SizeConfig.isMobile(context))
-                  const SizedBox(width: defaultPadding),
-                // On Mobile means if the screen is less than 850 we dont want to show it
-                if (!SizeConfig.isMobile(context))
-                  Expanded(
-                    flex: 2,
-                    child: Column(children: const [
-                      StarageDetails(),
-                      SizedBox(height: defaultPadding),
-                      StarageDetails()
-                    ]),
-                  ),
+                // if (!SizeConfig.isMobile(context))
+                //   const SizedBox(width: defaultPadding),
+                // // On Mobile means if the screen is less than 850 we dont want to show it
+                // if (!SizeConfig.isMobile(context))
+                //   Expanded(
+                //     flex: 2,
+                //     child: Column(children: const [
+                //       StarageDetails(),
+                //       SizedBox(height: defaultPadding),
+                //       StarageDetails()
+                //     ]),
+                //   ),
               ],
             )
           ],

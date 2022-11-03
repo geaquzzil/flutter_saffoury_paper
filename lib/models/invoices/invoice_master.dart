@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
@@ -20,6 +22,7 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
 
+import 'invoice_master_details.dart';
 import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
@@ -139,8 +142,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       AppLocalizations.of(context)!.invoices;
 
   @override
-  String getPrintableInvoiceTitle(
-          BuildContext context, PrintInvoice? pca) =>
+  String getPrintableInvoiceTitle(BuildContext context, PrintInvoice? pca) =>
       getMainHeaderLabelTextOnly(context).toUpperCase();
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
@@ -177,6 +179,26 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
                 // icon: Icons.numbers
               )
           ];
+
+  List<InvoiceMasterDetails> getDetailListFromMaster() {
+    if (runtimeType == Order) {
+      return (this as Order).orders_details ?? [];
+    } else if (runtimeType == Purchases) {
+      return (this as Purchases).purchases_details ?? [];
+    } else if (runtimeType == OrderRefund) {
+      return (this as OrderRefund).orders_refunds_order_details ?? [];
+    } else if (runtimeType == PurchasesRefund) {
+      return (this as PurchasesRefund).purchases_refunds_purchases_details ??
+          [];
+    } else if (runtimeType == ProductInput) {
+      return (this as ProductInput).products_inputs_details ?? [];
+    } else if (runtimeType == ProductOutput) {
+      return (this as ProductOutput).products_outputs_details ?? [];
+    } else {
+      return [];
+    }
+  }
+
   @override
   String getPrintableQrCodeID() {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
