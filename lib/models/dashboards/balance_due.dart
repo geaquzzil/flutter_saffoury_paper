@@ -7,7 +7,7 @@ class BalanceDue {
 
   BalanceDue();
   bool isDollar() {
-    return currency == (r"$");
+    return currency == (r"S.Y.P");
   }
 
   static double? convertToDouble(dynamic number) =>

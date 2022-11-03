@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
@@ -70,4 +69,26 @@ class GrowthRate {
       .textTheme
       .caption!
       .copyWith(color: Theme.of(context).colorScheme.error);
+}
+
+extension GrowthRateUtils<T extends GrowthRate> on List<T?>? {
+  double getGrowthRate() {
+    if (this == null) return 0;
+    if (this!.isEmpty) return 0;
+    if (this!.length == 1) return 0;
+    double period1 = this![this!.length - 2]!.total.toNonNullable();
+    double period2 = this![this!.length - 1]!.total.toNonNullable();
+    // Percent increase (or decrease) = (Period 2 – Period 1) / Period 1 * 100
+    return (period2 - period1) / period1 * 100;
+  }
+
+  Widget getGrowthRateText(BuildContext context) {
+    double getGrowthRate = this.getGrowthRate();
+    return Text(
+      getGrowthRate.toCurrencyFormat(symbol: "%"),
+      style: getGrowthRate > 0
+          ? GrowthRate.getGrowTheme(context)
+          : GrowthRate.getReduceTheme(context),
+    );
+  }
 }

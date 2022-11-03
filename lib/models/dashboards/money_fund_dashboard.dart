@@ -1,4 +1,3 @@
-import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -17,10 +16,13 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../users/balances/customer_terms.dart';
 import 'balance_due.dart';
 import 'dashboard.dart';
+import '../funds/credits.dart';
+import '../funds/debits.dart';
+import '../funds/incomes.dart';
+import '../funds/spendings.dart';
 part 'money_fund_dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)

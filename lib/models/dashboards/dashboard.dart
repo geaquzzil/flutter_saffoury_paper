@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
@@ -10,26 +14,29 @@ import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
+import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
-import '../funds/money_funds.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/priceless_invoices/reservation_invoice.dart';
 import '../users/balances/customer_terms.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import '../users/user.dart';
 import 'balance_due.dart';
+import '../funds/credits.dart';
+import '../funds/debits.dart';
+import '../funds/incomes.dart';
+import '../funds/spendings.dart';
 part 'dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -66,26 +73,32 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
 
   Dashboard.init(int iD, {DateObject? dateObject}) {
     this.iD = iD;
-    this.date = dateObject;
+    date = dateObject;
   }
+  @override
+  Future<Dashboard?> callApi() async {
+    return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  }
+
   @override
   String? getCustomAction() => "list_dashboard";
 
   @override
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.dashboard_and_rep;
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.dashboard_and_rep;
+  @override
   Map<String, String> get getCustomMap => {
         "date": jsonEncode(
-            DateObject(from: "2022-11-02", to: "2022-11-02").toJson()),
+            DateObject(from: "2022-02-02", to: "2022-02-03").toJson()),
       };
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.title_dashboard;
-
-  @override
-  List<ViewAbstract> getDashboardsItems(BuildContext context) {
-    // TODO: implement getDashboardsItems
-    throw UnimplementedError();
-  }
 
   factory Dashboard.fromJson(Map<String, dynamic> data) =>
       _$DashboardFromJson(data);
@@ -99,4 +112,116 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   Dashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       Dashboard.fromJson(json);
+  List<List<GrowthRate>> getAnalysisChart() {
+    return [
+      if (creditsAnalysis != null) creditsAnalysis ?? [],
+      if (debitsAnalysis != null) debitsAnalysis ?? [],
+      // if (spendingsAnalysis != null) spendingsAnalysis ?? [],
+      // if (incomesAnalysis != null) incomesAnalysis ?? [],
+    ];
+  }
+
+  double getTotalTodayBalance({int? CashBoxID, String? currency}) {
+    return (creditsBalanceToday.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency) +
+            incomesBalanceToday.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency)) -
+        (debitsBalanceToday.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency) +
+            spendingsBalanceToday.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency));
+  }
+
+  double getTotalBalanceDue({int? CashBoxID, String? currency}) {
+    return (creditsDue.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency) +
+            incomesDue.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency)) -
+        (debitsDue.getTotalValue(cashBoxID: CashBoxID, currencyName: currency) +
+            spendingsDue.getTotalValue(
+                cashBoxID: CashBoxID, currencyName: currency));
+  }
+
+  @override
+  List<DashableGridHelper> getDashboardSections(BuildContext context) => [
+        DashableGridHelper(AppLocalizations.of(context)!.overview, [
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: .5,
+              child: ChartCardItemCustom(
+                icon: Icons.arrow_back_sharp,
+                title: AppLocalizations.of(context)!.credits,
+                description:
+                    "${credits?.getTotalValue(currencyID: 2).toCurrencyFormat()}\n${credits?.getTotalValue(currencyID: 1).toCurrencyFormat()}" ??
+                        "",
+                footer: credits?.length.toString(),
+                footerRightWidget: creditsAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: .5,
+              child: ChartCardItemCustom(
+                icon: Icons.arrow_forward_rounded,
+                title: AppLocalizations.of(context)!.debits,
+                description: debits?.getTotalValue().toCurrencyFormat() ?? "",
+                footer: debits?.length.toString(),
+                footerRightWidget: debitsAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 2,
+              child: MultiLineChartItem<GrowthRate, DateTime>(
+                title: "T",
+                list: getAnalysisChart(),
+                xValueMapper: (item, value, indexInsideList) =>
+                    DateTime(value.year ?? 0, value.month ?? 0, value.day ?? 0),
+                yValueMapper: (item, n, indexInsideList) => n.total,
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 2,
+              child: StarageDetails()),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                icon: Icons.arrow_forward_rounded,
+                title: AppLocalizations.of(context)!.spendings,
+                description:
+                    spendings?.getTotalValue().toCurrencyFormat() ?? "",
+                footer: spendings?.length.toString(),
+                footerRightWidget: spendingsAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                icon: Icons.arrow_back_sharp,
+                title: AppLocalizations.of(context)!.incomes,
+                description: incomes?.getTotalValue().toCurrencyFormat() ?? "",
+                footer: incomes?.length.toString(),
+                footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                icon: Icons.today,
+                title: AppLocalizations.of(context)!.this_day,
+                description: getTotalTodayBalance().toCurrencyFormat() ?? "",
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 3,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                icon: Icons.balance,
+                title: AppLocalizations.of(context)!.balance_due,
+                description: getTotalBalanceDue().toCurrencyFormat() ?? "",
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+        ])
+      ];
 }

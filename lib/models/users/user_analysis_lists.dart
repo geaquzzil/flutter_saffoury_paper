@@ -1,3 +1,4 @@
+import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
@@ -12,7 +13,23 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchaser
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 
-class UserLists<T> extends AuthUser {
+import '../funds/debits.dart';
+import '../funds/incomes.dart';
+import '../funds/spendings.dart';
+
+class UserLists<T> extends AuthUser<T> {
+  List<Credits>? credits;
+  List<GrowthRate>? creditsAnalysis;
+
+  List<Debits>? debits;
+  List<GrowthRate>? debitsAnalysis;
+
+  List<Spendings>? spendings;
+  List<GrowthRate>? spendingsAnalysis;
+
+  List<Incomes>? incomes;
+  List<GrowthRate>? incomesAnalysis;
+
   List<CutRequest>? cut_requests;
   List<GrowthRate>? cut_requestsAnalysis;
   int? cut_requests_count;

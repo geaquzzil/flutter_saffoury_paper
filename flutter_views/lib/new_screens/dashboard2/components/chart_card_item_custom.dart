@@ -8,6 +8,8 @@ class ChartCardItemCustom extends StatelessWidget {
   String description;
   String? footer;
   String? footerRight;
+  Widget? footerWidget;
+  Widget? footerRightWidget;
   Color? color;
   ChartCardItemCustom(
       {Key? key,
@@ -16,7 +18,9 @@ class ChartCardItemCustom extends StatelessWidget {
       required this.description,
       this.icon,
       this.footer,
-      this.footerRight})
+      this.footerRight,
+      this.footerWidget,
+      this.footerRightWidget})
       : super(key: key);
 
   // final CloudStorageInfo info;
@@ -44,19 +48,20 @@ class ChartCardItemCustom extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                    padding: const EdgeInsets.all(defaultPadding / 8),
-                    height: 10,
-                    width: 10,
-                    decoration: const BoxDecoration(
-                      // color: Colors.orange.withOpacity(0.1),
-                      // color: info.color!.withOpacity(0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: const Icon(Icons.file_copy)),
+                if (icon != null)
+                  Container(
+                      padding: const EdgeInsets.all(defaultPadding / 8),
+                      height: 10,
+                      width: 10,
+                      decoration: const BoxDecoration(
+                        // color: Colors.orange.withOpacity(0.1),
+                        // color: info.color!.withOpacity(0.1),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Icon(icon)),
                 if (icon != null)
                   Icon(
-                    icon,
+                    Icons.deblur_outlined,
                   )
               ],
             ),
@@ -68,18 +73,20 @@ class ChartCardItemCustom extends StatelessWidget {
             ),
             Text(
               description,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.titleLarge!,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if (footerWidget != null) footerWidget!,
                 if (footer != null)
                   Text(footer!, style: Theme.of(context).textTheme.caption!),
                 if (footerRight != null)
                   Text(footerRight!,
                       style: Theme.of(context).textTheme.caption!),
+                if (footerRightWidget != null) footerRightWidget!
               ],
             )
           ],

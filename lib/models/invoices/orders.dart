@@ -109,12 +109,12 @@ class Order extends InvoiceMaster<Order>
                 StorageInfoCardCustom(
                     title: AppLocalizations.of(context)!.total,
                     description: total.toCurrencyFormat(),
-                    trailing: Text("kg"),
+                    trailing: const Text("kg"),
                     svgSrc: Icons.monitor_weight),
                 StorageInfoCardCustom(
                     title: AppLocalizations.of(context)!.balance,
                     description: customers?.balance?.toCurrencyFormat() ?? "0",
-                    trailing: Text("trailing"),
+                    trailing: const Text("trailing"),
                     svgSrc: Icons.balance),
               ],
             );

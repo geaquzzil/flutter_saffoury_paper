@@ -28,7 +28,7 @@ class MultiLineChartItem<T, E> extends StatelessWidget {
         series: <ChartSeries>[
           ...list
               .map(
-                (e) => ColumnSeries<T, E>(
+                (e) => LineSeries<T, E>(
                     // Bind data source
 
                     enableTooltip: true,

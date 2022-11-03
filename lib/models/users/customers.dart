@@ -20,6 +20,10 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import '../funds/credits.dart';
+import '../funds/debits.dart';
+import '../funds/incomes.dart';
+import '../funds/spendings.dart';
 part 'customers.g.dart';
 
 @JsonSerializable(explicitToJson: true)

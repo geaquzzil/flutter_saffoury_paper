@@ -27,8 +27,8 @@ class DashboardPage extends StatelessWidget {
           child: EmptyWidget(
               lottiUrl:
                   "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
-              title: AppLocalizations.of(context)!.noItems,
-              subtitle: AppLocalizations.of(context)!.error_empty),
+              title: AppLocalizations.of(context)!.loading,
+              subtitle: AppLocalizations.of(context)!.pleaseWait),
         );
       },
     );
@@ -52,10 +52,12 @@ class DashboardPage extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      const MyFiles(),
-                      const SizedBox(height: defaultPadding),
-                      const MyFiles(),
-                      const SizedBox(height: defaultPadding),
+                      ...dashboard
+                          .getDashboardSections(context)
+                          .map((e) => MyFiles(
+                                dgh: e,
+                              ))
+                          .toList(),
                       const RecentFiles(),
                       if (SizeConfig.isMobile(context))
                         const SizedBox(height: defaultPadding),

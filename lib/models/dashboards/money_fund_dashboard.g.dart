@@ -24,6 +24,30 @@ MoneyFundDashbaord _$MoneyFundDashbaordFromJson(Map<String, dynamic> json) =>
       ..dealers = json['dealers'] == null
           ? null
           : Dealers.fromJson(json['dealers'] as Map<String, dynamic>)
+      ..credits = (json['credits'] as List<dynamic>?)
+          ?.map((e) => Credits.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..creditsAnalysis = (json['creditsAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..debits = (json['debits'] as List<dynamic>?)
+          ?.map((e) => Debits.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..debitsAnalysis = (json['debitsAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..spendings = (json['spendings'] as List<dynamic>?)
+          ?.map((e) => Spendings.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..spendingsAnalysis = (json['spendingsAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..incomes = (json['incomes'] as List<dynamic>?)
+          ?.map((e) => Incomes.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..incomesAnalysis = (json['incomesAnalysis'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
       ..cut_requests = (json['cut_requests'] as List<dynamic>?)
           ?.map((e) => CutRequest.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -187,6 +211,18 @@ Map<String, dynamic> _$MoneyFundDashbaordToJson(MoneyFundDashbaord instance) =>
       'userlevels': instance.userlevels?.toJson(),
       'setting': instance.setting?.toJson(),
       'dealers': instance.dealers?.toJson(),
+      'credits': instance.credits?.map((e) => e.toJson()).toList(),
+      'creditsAnalysis':
+          instance.creditsAnalysis?.map((e) => e.toJson()).toList(),
+      'debits': instance.debits?.map((e) => e.toJson()).toList(),
+      'debitsAnalysis':
+          instance.debitsAnalysis?.map((e) => e.toJson()).toList(),
+      'spendings': instance.spendings?.map((e) => e.toJson()).toList(),
+      'spendingsAnalysis':
+          instance.spendingsAnalysis?.map((e) => e.toJson()).toList(),
+      'incomes': instance.incomes?.map((e) => e.toJson()).toList(),
+      'incomesAnalysis':
+          instance.incomesAnalysis?.map((e) => e.toJson()).toList(),
       'cut_requests': instance.cut_requests?.map((e) => e.toJson()).toList(),
       'cut_requestsAnalysis':
           instance.cut_requestsAnalysis?.map((e) => e.toJson()).toList(),

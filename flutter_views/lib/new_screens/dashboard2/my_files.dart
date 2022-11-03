@@ -3,13 +3,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
+import '../../interfaces/dashable_interface.dart';
 import 'components/chart_card_item.dart';
 import 'dashboard.dart';
 
 class MyFiles extends StatelessWidget {
-  const MyFiles({
-    Key? key,
-  }) : super(key: key);
+  DashableGridHelper dgh;
+  MyFiles({Key? key, required this.dgh}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class MyFiles extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "My Files",
+              dgh.title,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             ElevatedButton.icon(
@@ -40,14 +40,19 @@ class MyFiles extends StatelessWidget {
         const SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoStaggerdGridView(
+            list: dgh.widgets,
             crossAxisCount: size.width < 750 ? 2 : 4,
             childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
           ),
-          tablet: const FileInfoStaggerdGridView(),
+          tablet: FileInfoStaggerdGridView(
+            list: dgh.widgets,
+          ),
           desktop: FileInfoStaggerdGridView(
+            list: dgh.widgets,
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
+        SizedBox(height: defaultPadding)
       ],
     );
   }
@@ -96,8 +101,7 @@ class _TestExpandedState extends State<TestExpanded> {
                         decoration: const BoxDecoration(
                           // color: Colors.orange.withOpacity(0.1),
                           // color: info.color!.withOpacity(0.1),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         child: const Icon(Icons.file_copy)),
                     IconButton(
@@ -137,11 +141,13 @@ class _TestExpandedState extends State<TestExpanded> {
 }
 
 class FileInfoStaggerdGridView extends StatelessWidget {
-  const FileInfoStaggerdGridView({
-    Key? key,
-    this.crossAxisCount = 4,
-    this.childAspectRatio = 1,
-  }) : super(key: key);
+  List<StaggeredGridTile> list;
+  FileInfoStaggerdGridView(
+      {Key? key,
+      this.crossAxisCount = 4,
+      this.childAspectRatio = 1,
+      required this.list})
+      : super(key: key);
 
   final int crossAxisCount;
   final double childAspectRatio;
@@ -149,60 +155,10 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StaggeredGrid.count(
-      crossAxisCount: 4,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      children: [
-        const TestExpanded(),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
-          child: wrapContainer("2", Colors.brown),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: 2,
-          child: wrapContainer("3", Colors.amber),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
-          child: wrapContainer("4", Colors.blue),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
-          child: wrapContainer("5", Colors.orange),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: .75,
-          child: wrapContainer("5", Colors.orange),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: .75,
-          child: wrapContainer("5", Colors.orange),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: .75,
-          child: wrapContainer("5", Colors.orange),
-        ),
-        StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: .75,
-          child: wrapContainer("5", Colors.orange),
-        ),
-      ],
-    );
-  }
-
-  Widget wrapContainer(String text, Color color) {
-    return Container(
-      // color: color,
-      child: const ChartCardItem(),
-    );
+        crossAxisCount: 4,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        children: list);
   }
 }
 

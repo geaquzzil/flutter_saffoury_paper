@@ -76,13 +76,13 @@ class Credits extends MoneyFunds<Credits> {
                     StorageInfoCardCustom(
                         title: AppLocalizations.of(context)!.total,
                         description: total.toCurrencyFormat(),
-                        trailing: Text("SYP"),
+                        trailing: const Text("SYP"),
                         svgSrc: Icons.monitor_weight),
                     StorageInfoCardCustom(
                         title: AppLocalizations.of(context)!.balance,
                         description:
                             customers?.balance?.toCurrencyFormat() ?? "0",
-                        trailing: Text("trailing"),
+                        trailing: const Text("trailing"),
                         svgSrc: Icons.balance),
                   ],
                 );

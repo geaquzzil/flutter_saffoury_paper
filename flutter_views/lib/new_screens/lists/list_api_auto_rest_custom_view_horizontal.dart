@@ -95,8 +95,8 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
       child: Consumer<ListMultiKeyProvider>(
           builder: (context, provider, listTile) {
         if (provider.getCount(key) == 0) {
-          return Center(
-            child: const CircularProgressIndicator(
+          return const Center(
+            child: CircularProgressIndicator(
               strokeWidth: 2,
             ),
           );

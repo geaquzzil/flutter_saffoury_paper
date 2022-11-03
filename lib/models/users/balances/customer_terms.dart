@@ -76,7 +76,7 @@ class CustomerTerms extends Customer
     return StorageInfoCardCustom(
         title: AppLocalizations.of(context)!.overDue,
         description: "${item.length}",
-        trailing: Text("Times"),
+        trailing: const Text("Times"),
         svgSrc: Icons.date_range);
   }
 
