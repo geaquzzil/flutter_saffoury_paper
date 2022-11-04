@@ -119,6 +119,27 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   Dashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       Dashboard.fromJson(json);
+  List<String> getAnalysisChartFundsTitle(BuildContext context) {
+    return [
+      if (creditsAnalysis != null)
+        Credits().getMainHeaderLabelTextOnly(context),
+      if (debitsAnalysis != null) Debits().getMainHeaderLabelTextOnly(context),
+      if (spendingsAnalysis != null)
+        Spendings().getMainHeaderLabelTextOnly(context),
+      if (incomesAnalysis != null)
+        Incomes().getMainHeaderLabelTextOnly(context),
+    ];
+  }
+
+  List<List<GrowthRate>> getAnalysisChartFunds() {
+    return [
+      if (creditsAnalysis != null) creditsAnalysis ?? [],
+      if (debitsAnalysis != null) debitsAnalysis ?? [],
+      if (spendingsAnalysis != null) spendingsAnalysis ?? [],
+      if (incomesAnalysis != null) incomesAnalysis ?? [],
+    ];
+  }
+
   List<List<GrowthRate>> getAnalysisChart() {
     return [
       if (ordersAnalysis != null) ordersAnalysis ?? [],
@@ -226,7 +247,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             titles: getAnalysisChartTitle(context),
             dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
             xValueMapper: (item, value, indexInsideList) =>
-                DateTime(value.year ?? 0, value.month ?? 0, value.day ?? 1),
+                DateTime(value.year ?? 2022, value.month ?? 1, value.day ?? 1),
             yValueMapper: (item, n, indexInsideList) => n.total,
           )),
       StaggeredGridTile.count(
@@ -382,6 +403,18 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
 
   List<StaggeredGridTile> getFundWidgets(BuildContext context) {
     return [
+      StaggeredGridTile.count(
+          crossAxisCellCount: 6,
+          mainAxisCellCount: 1.5,
+          child: MultiLineChartItem<GrowthRate, DateTime>(
+            title: "T",
+            list: getAnalysisChartFunds(),
+            titles: getAnalysisChartFundsTitle(context),
+            dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
+            xValueMapper: (item, value, indexInsideList) =>
+                DateTime(value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+            yValueMapper: (item, n, indexInsideList) => n.total,
+          )),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,

@@ -20,7 +20,7 @@ class Spendings extends MoneyFunds<Spendings> {
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({"account_names": AccountName()});
-        
+
   Spendings() : super();
 
   @override
@@ -29,7 +29,7 @@ class Spendings extends MoneyFunds<Spendings> {
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.credits;
+      AppLocalizations.of(context)!.spendings;
   @override
   IconData getMainIconData() => Icons.input_rounded;
 

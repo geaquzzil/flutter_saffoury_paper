@@ -53,12 +53,21 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
         onZoomStart: (ZoomPanArgs args) => zoom(args),
         zoomPanBehavior: _zoomPanBehavior,
         primaryXAxis: DateTimeAxis(),
-        tooltipBehavior: TooltipBehavior(),
+        // primaryYAxis: NumericAxis(
+        //     // minimum: 3,
+        //     // maximum: 21,
+        //     interval: 6,
+        //     labelFormat: '{value}%',
+        //     axisLine: const AxisLine(width: 0),
+        //     majorTickLines: const MajorTickLines(color: Colors.transparent)),
+        tooltipBehavior: TooltipBehavior(enable: true),
         series: <ChartSeries>[
           ...widget.list
               .map(
                 (e) => LineSeries<T, E>(
+                  
                     legendIconType: LegendIconType.circle,
+                    markerSettings: const MarkerSettings(isVisible: true),
                     // Bind data source
                     legendItemText: widget.titles[widget.list.indexOf(e)],
                     enableTooltip: true,
@@ -70,6 +79,7 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
                         widget.list.indexOf(e), datum, index),
                     // legendItemText: ,
                     dataLabelSettings: const DataLabelSettings(
+                      
                       isVisible: true,
                     )),
               )
