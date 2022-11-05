@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_summary_item.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
 import 'package:provider/provider.dart';
+
+import '../../constants.dart';
+import '../../providers/cart/cart_provider.dart';
+import '../cart/cart_description/cart_description.dart';
+import '../cart/cart_description/cart_descriptopn_header.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import 'cart_descriptopn_header.dart';
-
-class SubRowCartDescription extends StatefulWidget {
-  const SubRowCartDescription({Key? key}) : super(key: key);
+class POSDescription extends StatefulWidget {
+  POSDescription({Key? key}) : super(key: key);
 
   @override
-  State<SubRowCartDescription> createState() => _SubRowCartDescriptionState();
+  State<POSDescription> createState() => _POSDescriptionState();
 }
 
-class _SubRowCartDescriptionState extends State<SubRowCartDescription>
+class _POSDescriptionState extends State<POSDescription>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation _colorTween;
@@ -56,25 +58,34 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.clear_all)),
+          Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.no_summary,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.clear_all))
+              ],
+            ),
           ),
-          const CartDescriptionHeader(),
-          Spacer(),
+          Expanded(child: POSCartList()),
           CartDescriptionTotals(),
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: kDefaultPadding, vertical: kDefaultPadding),
             width: double.maxFinite,
             child: ElevatedButton(
-                // style: ElevatedButton.styleFrom(
-                //   backgroundColor: _colorTween.value,
-                // ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _colorTween.value,
+                ),
                 onPressed: () {
                   context.read<CartProvider>().checkout(context);
                 },
@@ -86,27 +97,5 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
         ],
       ),
     );
-  }
-}
-
-class CartDescriptionTotals extends StatelessWidget {
-  const CartDescriptionTotals({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: Container(
-            padding: EdgeInsets.all(kDefaultPadding),
-            child: Column(
-              children: context
-                  .watch<CartProvider>()
-                  .getCartableInvoice
-                  .getCartableInvoiceSummary(context)
-                  .map((e) => CartSummaryItem(
-                        title: e.title,
-                        description: e.description,
-                      ))
-                  .toList(),
-            )));
   }
 }

@@ -65,7 +65,7 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
           ...widget.list
               .map(
                 (e) => LineSeries<T, E>(
-                  
+                    
                     legendIconType: LegendIconType.circle,
                     markerSettings: const MarkerSettings(isVisible: true),
                     // Bind data source

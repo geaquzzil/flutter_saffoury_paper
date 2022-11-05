@@ -30,6 +30,8 @@ class ProductType extends ViewAbstract<ProductType> {
   List<Product>? products;
   int? products_count;
 
+  bool requestAvailablity = false;
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "name": "",
@@ -50,6 +52,18 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   ProductType() : super();
+
+  ProductType.init(bool requestAvailablity) {
+    this.requestAvailablity = requestAvailablity;
+  }
+  @override
+  String? getCustomAction() {
+    if (requestAvailablity) {
+      return "available_product_type";
+    }
+    return null;
+  }
+
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     return AppLocalizations.of(context)!.product;

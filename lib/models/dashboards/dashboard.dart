@@ -254,6 +254,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            // color: Colors.green.withOpacity(0.2),
             icon: Order().getMainIconData(),
             title: AppLocalizations.of(context)!.orders,
             description:
@@ -287,30 +288,22 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       StaggeredGridTile.count(
           crossAxisCellCount: 2,
           mainAxisCellCount: 3,
-          child: StorageDetailsCustom(
-              list: [
-                StorageInfoCardCustom(
-                    title: AppLocalizations.of(context)!.previousBalance,
-                    description: getTotalPreviousBalance(),
-                    trailing: Text(""),
-                    svgSrc: Icons.preview)
-              ],
-              chart: TabBarByListWidget<TabControllerHelper>(
-                tabs: [
-                  TabControllerHelper(
-                    "title",
-                    null,
-                    widget: ListStaticWidget(
-                        list: credits!, emptyWidget: Text("Empty")),
-                  ),
-                  // TabControllerHelper(
-                  //   "deb",
-                  //   null,
-                  //   widget:
-                  //       ListStaticWidget(list: debits!, emptyWidget: Text("Empty")),
-                  // )
-                ],
-              ))),
+          child: TabBarByListWidget<TabControllerHelper>(
+            tabs: [
+              TabControllerHelper(
+                "orders",
+                null,
+                widget:
+                    ListStaticWidget(list: orders!, emptyWidget: Text("Empty")),
+              ),
+              // TabControllerHelper(
+              //   "deb",
+              //   null,
+              //   widget:
+              //       ListStaticWidget(list: debits!, emptyWidget: Text("Empty")),
+              // )
+            ],
+          )),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,

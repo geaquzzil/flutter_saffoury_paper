@@ -103,10 +103,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       alignment: Alignment.centerLeft,
-      color: Colors.red,
-      child: const Icon(
+      color: Theme.of(context).colorScheme.error,
+      child:  Icon(
         Icons.delete_outlined,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.outline,
       ),
     );
   }

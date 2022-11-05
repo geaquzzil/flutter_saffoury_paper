@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 class CartSummaryItem extends StatelessWidget {
   double fontSize;
   String title;
-  String ?description;
+  String? description;
   CartSummaryItem(
-      {Key? key,
-      required this.title,
-      this.description,
-      this.fontSize = 16})
+      {Key? key, required this.title, this.description, this.fontSize = 16})
       : super(key: key);
 
   @override
@@ -19,21 +16,13 @@ class CartSummaryItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-                color: Colors.grey,
-                fontSize: fontSize,
-                fontWeight: FontWeight.normal),
-          ),
-          if(description!=null)
-          Text(
-            description!,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold),
-          ),
+          Text(title, style: Theme.of(context).textTheme.caption),
+          if (description != null)
+            Text(
+              description!,
+              style: Theme.of(context).textTheme.titleMedium,
+              maxLines: 2,
+            ),
         ],
       ),
     );

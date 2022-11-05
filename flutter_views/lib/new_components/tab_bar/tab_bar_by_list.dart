@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 ///Controller tabs used context to AppLoclazation \
 ///this throw error if we init tabController in the initState
@@ -30,11 +31,25 @@ class _TabBarWidgetState<T extends TabControllerHelper>
       Align(
         alignment: Alignment.centerLeft,
         child: TabBar(
-            isScrollable: true,
-            labelPadding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
+            indicator:
+                // DotIndicator(
+                //   color: Theme.of(context).colorScheme.primary,
+                //   distanceFromCenter: 16,
+                //   radius: 3,
+                //   paintingStyle: PaintingStyle.fill,
+                // ),
+                RectangularIndicator(
+              bottomLeftRadius: 100,
+              bottomRightRadius: 100,
+              topLeftRadius: 100,
+              topRightRadius: 100,
+              paintingStyle: PaintingStyle.stroke,
             ),
+            isScrollable: true,
+            // labelPadding: const EdgeInsets.only(
+            //   left: 20,
+            //   right: 20,
+            // ),
             controller: _tabController,
             tabs: widget.tabs),
       ),

@@ -25,6 +25,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:provider/provider.dart';
 import 'invoice_master_details.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 part 'orders.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -136,7 +137,8 @@ class Order extends InvoiceMaster<Order>
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
     double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
-
+    debugPrint("getCartableInvoiceSummary $orders_details");
+    // [this].getTotalQuantityGroupedFormattedText(context);
     return [
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
@@ -146,7 +148,8 @@ class Order extends InvoiceMaster<Order>
           description: totalDiscount?.toStringAsFixed(2) ?? "0"),
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.quantity.toUpperCase(),
-          description: totalQuantity?.toStringAsFixed(2) ?? "0"),
+          description:
+              orders_details.getTotalQuantityGroupedFormattedText(context)),
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
           description: totalNetPrice.toStringAsFixed(2),
@@ -185,7 +188,7 @@ class Order extends InvoiceMaster<Order>
   }
 
   @override
-  List<CartableInvoiceDetailsInterface> getDetailList(BuildContext context) {
+  List<CartableInvoiceDetailsInterface> getDetailList() {
     return orders_details ?? [];
   }
 
@@ -203,16 +206,28 @@ class Order extends InvoiceMaster<Order>
 
   @override
   void onCartItemRemoved(
-      BuildContext context, int index, CartableProductItemInterface cii) {
-    orders_details?.removeAt(index);
+      BuildContext context, int index, CartableInvoiceDetailsInterface cii) {
+    if (index != -1) {
+      orders_details?.removeAt(index);
+    }
+    try {
+      orders_details?.removeWhere((element) =>
+          element.products?.iD == (cii as OrderDetails).products?.iD);
+    } catch (e) {}
   }
 
   @override
   void onCartItemAdded(
       BuildContext context, int index, CartableProductItemInterface cii,
       {double? quantiy}) {
-    orders_details
-        ?.add(OrderDetails()..setProduct(cii as Product, quantity: quantity));
+    orders_details?.add(OrderDetails()
+      ..setProduct(cii as Product,
+          quantity: (cii).getCartableProductQuantity()));
+  }
+
+  @override
+  void onCartClear() {
+    orders_details?.clear();
   }
 }
 

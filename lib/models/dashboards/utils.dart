@@ -45,6 +45,16 @@ extension InvoiceMasterUtils<T extends InvoiceMaster> on List<T?>? {
 
 extension InvoiceMasterDetailsUtils<T extends InvoiceMasterDetails>
     on List<T?>? {
+  String getTotalQuantityGroupedFormattedText(BuildContext context) {
+    List<String> list = [];
+    Map<ProductTypeUnit, double> total = getTotalQuantityGroupedByProductType();
+    total.forEach((key, value) {
+      list.add(value.toCurrencyFormat(
+          symbol: key.getFieldLabelString(context, key)));
+    });
+    return list.join("\n");
+  }
+
   Map<ProductTypeUnit, double> getTotalQuantityGroupedByProductType() {
     if (this == null) return {};
     try {

@@ -28,19 +28,20 @@ class ChartCardItemCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(
-            // color: Theme.of(context).colorScheme.outline,
-            ),
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-      ),
+      // elevation: 0,
+      color: color,
+      // shape: const RoundedRectangleBorder(
+      //   side: BorderSide(
+      //       // color: Theme.of(context).colorScheme.outline,
+      //       ),
+      //   borderRadius: BorderRadius.all(Radius.circular(12)),
+      // ),
       child: Container(
         padding: const EdgeInsets.all(defaultPadding),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
+        // decoration: BoxDecoration(
+        //   // color: color,
+        //   borderRadius: const BorderRadius.all(Radius.circular(10)),
+        // ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

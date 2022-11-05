@@ -81,6 +81,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.3.50
   data_table_2: ^2.3.7
   dynamic_color: ^1.5.4
+  tab_indicator_styler: ^2.0.0
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   

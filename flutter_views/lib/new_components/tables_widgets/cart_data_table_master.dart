@@ -37,16 +37,16 @@ class _CartDataTableState extends State<CartDataTableMaster> {
   void didUpdateWidget(covariant CartDataTableMaster oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    list_invoice_details = widget.obj?.getDetailList(context) ??
-        cartProvider.getCartableInvoice.getDetailList(context);
+    list_invoice_details = widget.obj?.getDetailList() ??
+        cartProvider.getCartableInvoice.getDetailList();
   }
 
   @override
   void initState() {
     super.initState();
     cartProvider = Provider.of<CartProvider>(context, listen: false);
-    list_invoice_details = widget.obj?.getDetailList(context) ??
-        cartProvider.getCartableInvoice.getDetailList(context);
+    list_invoice_details = widget.obj?.getDetailList() ??
+        cartProvider.getCartableInvoice.getDetailList();
   }
 
   @override

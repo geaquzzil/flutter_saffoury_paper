@@ -11,9 +11,11 @@ abstract class CartableInvoiceMasterObjectInterface {
       BuildContext context, int index, CartableProductItemInterface cii,
       {double? quantiy});
   void onCartItemRemoved(
-      BuildContext context, int index, CartableProductItemInterface cii);
+      BuildContext context, int index, CartableInvoiceDetailsInterface cii);
 
-  List<CartableInvoiceDetailsInterface> getDetailList(BuildContext context);
+  void onCartClear();
+
+  List<CartableInvoiceDetailsInterface> getDetailList();
 
   Widget onCartCheckout(
       BuildContext context, List<CartableProductItemInterface> items);

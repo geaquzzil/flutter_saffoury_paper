@@ -11,12 +11,13 @@ class CartProvider with ChangeNotifier {
   CartProvider.init(CartableInvoiceMasterObjectInterface cartObject) {
     _cartObject = cartObject;
   }
-  List<CartableProductItemInterface> list = [];
+  // List<CartableProductItemInterface> list = [];
   Widget? _checkoutWidget;
 
-  List<CartableProductItemInterface> get getList => list;
+  List<CartableInvoiceDetailsInterface> get getList =>
+      _cartObject.getDetailList();
 
-  int get getCount => list.length;
+  int get getCount => getList.length;
 
   CartProcessType _cartType = CartProcessType.PROCESS;
 
@@ -30,24 +31,22 @@ class CartProvider with ChangeNotifier {
     // _checkoutWidget = list[0].onCartCheckout(context, list);
     notifyListeners();
   }
-  void onCartItemAdded(BuildContext context,int idx,   CartableProductItemInterface detail,double qu) {
-    _cartObject.onCartItemAdded(context, idx, detail,quantiy: qu);
-      notifyListeners();
-  }
-  void onCartItemChanged(BuildContext context,int idx,   CartableInvoiceDetailsInterface detail) {
-    _cartObject.onCartItemChanged(context, idx, detail);
-      notifyListeners();
-  }
 
-  void add(BuildContext context, CartableProductItemInterface product) {
-    list.add(product);
-    _cartObject.onCartItemAdded(
-        context, _cartObject.getDetailList(context).length - 1, product);
+  void onCartItemAdded(BuildContext context, int idx,
+      CartableProductItemInterface detail, double? qu) {
+    _cartObject.onCartItemAdded(context, idx, detail, quantiy: qu);
     notifyListeners();
   }
 
-  void remove(CartableProductItemInterface product) {
-    list.remove(product);
+  void onCartItemChanged(
+      BuildContext context, int idx, CartableInvoiceDetailsInterface detail) {
+    _cartObject.onCartItemChanged(context, idx, detail);
+    notifyListeners();
+  }
+
+  void onCartItemRemoved(
+      BuildContext context, CartableInvoiceDetailsInterface detail) {
+    _cartObject.onCartItemRemoved(context, -1, detail);
     notifyListeners();
   }
 
@@ -57,7 +56,7 @@ class CartProvider with ChangeNotifier {
   }
 
   void clear() {
-    list.clear();
+    _cartObject.onCartClear();
     notifyListeners();
   }
 }

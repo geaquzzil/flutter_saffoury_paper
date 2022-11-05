@@ -18,20 +18,26 @@ import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/posable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_screens/dashboard/components/header.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:intl/intl.dart';
@@ -58,7 +64,8 @@ class Product extends ViewAbstract<Product>
     implements
         CartableProductItemInterface,
         ModifiablePrintableInterface<PrintProduct>,
-        PrintableCustomInterface<PrintProduct> {
+        PrintableCustomInterface<PrintProduct>,
+        PosableInterface {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -163,7 +170,10 @@ class Product extends ViewAbstract<Product>
     double quantity = getQuantity();
     return Text(
       getQuantityStringAndLabel(context),
-      style: TextStyle(color: quantity > 0 ? Colors.green : Colors.red),
+      style: TextStyle(
+          color: quantity > 0
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.error),
     );
   }
 
@@ -196,7 +206,9 @@ class Product extends ViewAbstract<Product>
   @override
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
     if (direction == DismissDirection.endToStart) {
-      context.read<CartProvider>().add(context, this);
+      context
+          .read<CartProvider>()
+          .onCartItemAdded(context, -1, this, getQuantity());
     }
   }
 
@@ -728,6 +740,47 @@ class Product extends ViewAbstract<Product>
             transfers_details_count.toNonNullable() +
             cut_requests_count.toNonNullable() !=
         0;
+  }
+
+  @override
+  Future getPosableInitObj(BuildContext context) {
+    return ProductType.init(true).listCall(0, 1);
+  }
+
+  @override
+  Widget getPosableMainWidget(
+      BuildContext context, AsyncSnapshot snapshotResponse) {
+    var data = snapshotResponse.data as List<ProductType>;
+
+    return Column(
+      children: [
+        DashboardHeader(),
+        Expanded(
+          child: Container(
+              color: Theme.of(context).colorScheme.background,
+              child: TabBarByListWidget(
+                  tabs: data
+                      .where(
+                (element) => element.availability.toNonNullable() > 0,
+              )
+                      .map((e) {
+                return TabControllerHelper(
+                  e.name ?? "dsa",
+                  null,
+                  widget: ListApiAutoRestWidget(
+                    autoRest: AutoRest<Product>(
+                        obj: Product()
+                          ..setCustomMap({
+                            "<ProductTypeID>": "${e?.iD}",
+                            "requireInventory": "true"
+                          }),
+                        key: "productsByType${e.iD}"),
+                  ),
+                );
+              }).toList())),
+        ),
+      ],
+    );
   }
 }
 
