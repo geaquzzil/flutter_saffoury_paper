@@ -107,14 +107,17 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
+    if (multiListProviderHelper.isNoMoreItem) return;
     multiListProviderHelper.isLoading = true;
     notifyListeners();
     List? list = await viewAbstract.listCall(
-        viewAbstract.getPageItemCount, multiListProviderHelper.page);
+        count: viewAbstract.getPageItemCount,
+        page: multiListProviderHelper.page);
     multiListProviderHelper.isLoading = false;
+    multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
     if (list != null) {
       multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
-      multiListProviderHelper.page++;
+      multiListProviderHelper.page = multiListProviderHelper.page + 1;
       notifyListeners();
     }
   }
@@ -128,6 +131,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
+
     multiListProviderHelper.isLoading = true;
     notifyListeners();
     dynamic list = await viewAbstract.callApi();
@@ -143,6 +147,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 class MultiListProviderHelper {
   bool isLoading = false;
   bool isFetching = false;
+  bool isNoMoreItem = false;
   // All movies (that will be displayed on the Home screen)
   final List<ViewAbstract> objects = [];
   int page = 0;

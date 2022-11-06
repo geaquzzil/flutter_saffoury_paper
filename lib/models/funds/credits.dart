@@ -52,7 +52,7 @@ class Credits extends MoneyFunds<Credits> {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
-        null,
+
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Credits>(
               obj: Credits()
@@ -62,7 +62,7 @@ class Credits extends MoneyFunds<Credits> {
       ),
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
-        null,
+       
         widget: StorageDetailsCustom(
           chart: ListHorizontalCustomViewApiAutoRestWidget(
               onResponseAddWidget: ((response) {

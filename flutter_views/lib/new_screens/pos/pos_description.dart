@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
+import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -30,17 +30,19 @@ class _POSDescriptionState extends State<POSDescription>
     _colorTween = ColorTween(begin: null, end: Colors.green)
         .animate(_animationController);
 
-    Provider.of<CartProvider>(context, listen: false).addListener(() {
-      CartProcessType providerType =
-          context.read<CartProvider>().getProcessType;
-      if (type == providerType) return;
-      type = providerType;
-      if (type == CartProcessType.CHECKOUT) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   Provider.of<CartProvider>(context, listen: false).addListener(() {
+    //     CartProcessType providerType =
+    //         context.read<CartProvider>().getProcessType;
+    //     if (type == providerType) return;
+    //     type = providerType;
+    //     if (type == CartProcessType.CHECKOUT) {
+    //       _animationController.forward();
+    //     } else {
+    //       _animationController.reverse();
+    //     }
+    //   });
+    // });
 
     super.initState();
   }

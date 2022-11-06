@@ -23,7 +23,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   }
 
   dynamic castFieldValue(String field, dynamic value) {
-    Type fieldType = getFieldType(field);
+    Type? fieldType = getMirrorFieldType(field);
     debugPrint("castFieldValue type is $fieldType");
 
     // value = value ?? "";
@@ -50,6 +50,21 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy[field] = castFieldValue(field, value);
     jsonCopy['iD'] = -1;
+    T newObject = fromJsonViewAbstract(jsonCopy);
+    (newObject as ViewAbstract).setParent(parent);
+    (newObject).setFieldNameFromParent(fieldNameFromParent);
+    (newObject).setLastSearchViewAbstractByTextInputList(
+        getLastSearchViewByTextInputList);
+    return newObject;
+  }
+
+  T copyWith(Map<String, dynamic> map) {
+    Map<String, dynamic> jsonCopy = toJsonViewAbstract();
+    jsonCopy.forEach((key, value) {
+      if (map.containsKey(key)) {
+        jsonCopy[key] = castFieldValue(key,map[key]);
+      }
+    });
     T newObject = fromJsonViewAbstract(jsonCopy);
     (newObject as ViewAbstract).setParent(parent);
     (newObject).setFieldNameFromParent(fieldNameFromParent);

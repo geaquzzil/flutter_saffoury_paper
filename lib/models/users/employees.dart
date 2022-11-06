@@ -89,13 +89,13 @@ class Employee extends User<Employee> {
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context) {
     return [
-      TabControllerHelper(AppLocalizations.of(context)!.size_analyzer, null,
+      TabControllerHelper(AppLocalizations.of(context)!.size_analyzer,
           widget: Center(
             child: Text("sdad $iD"),
           )),
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
-        null,
+      
         widget: ListHorizontalCustomViewApiAutoRestWidget(
             // onResponseAddWidget: ((response) {
             //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 
 class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
   final T object;
@@ -13,30 +15,30 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => object.onCardClicked(context),
-      child: SizedBox(
-        width: 100,
-        height: 100,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: 70,
-              height: 70,
-              child: object.getCardLeading(context),
-            ),
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: kDefaultPadding / 4),
-                child: object.getMainHeaderText(context)),
-            const Spacer(),
-            object.getMainSubtitleHeaderText(context)!,
-            // Text(
-            //   "product.price",
-            //   style: TextStyle(fontWeight: FontWeight.bold),
-            // )
-          ],
+    return OutlinedCard(
+      child: GestureDetector(
+        onTap: () => object.onCardClicked(context),
+        child: SizedBox(
+          width: 150,
+          height: 100,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              SizedBox(
+                width: 70,
+                height: 70,
+                child: object.getCardLeading(context),
+              ),
+              object.getMainHeaderText(context),
+              // const Spacer(),
+              object.getMainSubtitleHeaderText(context)!,
+              // Text(
+              //   "product.price",
+              //   style: TextStyle(fontWeight: FontWeight.bold),
+              // )
+            ],
+          ),
         ),
       ),
     );

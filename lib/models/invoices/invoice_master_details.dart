@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 
 import '../prints/print_invoice.dart';
 
@@ -27,10 +28,10 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "products": Product(),
         "warehouse": Warehouse(),
-        "quantity": 0,
-        "unitPrice": 0,
-        "discount": 0,
-        "price": 0,
+        "quantity": 0.toDouble(),
+        "unitPrice": 0.toDouble(),
+        "discount": 0.toDouble(),
+        "price": 0.toDouble(),
         "comments": ""
       };
 
@@ -85,10 +86,10 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
             decimal: false, signed: false),
         "unitPrice":
             const TextInputType.numberWithOptions(decimal: true, signed: false),
-        "discount":
-            const TextInputType.numberWithOptions(decimal: true, signed: false),
-        "price":
-            const TextInputType.numberWithOptions(decimal: true, signed: false),
+        "discount": const TextInputType.numberWithOptions(
+            decimal: false, signed: false),
+        "price": const TextInputType.numberWithOptions(
+            decimal: false, signed: false),
         "comments": TextInputType.text
       };
   @override
@@ -98,6 +99,16 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
       products?.getMainHeaderTextOnly(context) ?? "not found for products";
+
+  @override
+  Text getMainLabelText(BuildContext context) {
+    return products?.getMainLabelText(context) ?? Text("ds");
+  }
+
+  @override
+  Text? getMainSubtitleHeaderText(BuildContext context) {
+    return Text(quantity.toCurrencyFormat(symbol: "KG"));
+  }
 
   @override
   IconData getMainIconData() => Icons.list;
@@ -129,6 +140,38 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   @override
   String? getImageUrl(BuildContext context) {
     return products?.getImageUrl(context);
+  }
+
+  @override
+  void onTextChangeListener(BuildContext context, String field, String? value) {
+    super.onTextChangeListener(context, field, value);
+
+    setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
+
+    if (field == "quantity") {
+      price =
+          (quantity.toNonNullable() * unitPrice.toNonNullable()).roundDouble();
+    }
+    if (field == "price") {
+      unitPrice =
+          (price.toNonNullable() / quantity.toNonNullable()).roundDouble();
+    }
+    if (field == "unitPrice") {
+      price =
+          (unitPrice.toNonNullable() * quantity.toNonNullable()).roundDouble();
+    }
+    // switch (field) {
+    //   case "unitPrice":
+
+    //     price = unitPrice.toNonNullable() * quantity.toNonNullable();
+    //     break;
+    //   case "price":
+    //     unitPrice = unitPrice.toNonNullable() * quantity.toNonNullable();
+    //     break;
+    //   case "quantity":
+    //     price = unitPrice.toNonNullable() * quantity.toNonNullable();
+    //     break;
+    // }
   }
 
   @override

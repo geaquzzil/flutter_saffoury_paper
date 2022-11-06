@@ -220,7 +220,11 @@ class TabControllerHelper extends Tab {
 
   Widget? widget;
 
-  TabControllerHelper(String title, IconData? icon,
-      {super.key, this.fieldThatHasList, this.autoRest, this.widget})
-      : super(icon: icon == null ? null : Icon(icon), text: title);
+  TabControllerHelper(String title,
+      {super.key,
+      Widget? icon,
+      this.fieldThatHasList,
+      this.autoRest,
+      this.widget})
+      : super(icon: icon, text: title);
 }

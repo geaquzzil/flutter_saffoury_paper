@@ -9,6 +9,7 @@ import 'package:flutter_saffoury_paper/models/prints/printable_product_label_wid
 import 'package:flutter_saffoury_paper/models/products/analysis/products_movments.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
+import 'package:flutter_saffoury_paper/models/products/pos_on_add_dialog.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
@@ -37,7 +38,10 @@ import 'package:flutter_view_controller/new_screens/dashboard/components/header.
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:intl/intl.dart';
@@ -508,14 +512,13 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context) => [
-        TabControllerHelper(AppLocalizations.of(context)!.descSorting, null,
+        TabControllerHelper(AppLocalizations.of(context)!.descSorting,
             widget: Text("$iD")),
-        TabControllerHelper(AppLocalizations.of(context)!.movments, null,
+        TabControllerHelper(AppLocalizations.of(context)!.movments,
             widget: ListHorizontalCustomViewApiAutoRestWidget(
                 titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
         TabControllerHelper(
           AppLocalizations.of(context)!.movments,
-          null,
           widget: StorageDetailsCustom(
             chart: ListHorizontalCustomViewApiAutoRestWidget(
                 // onResponseAddWidget: ((response) {
@@ -744,40 +747,134 @@ class Product extends ViewAbstract<Product>
 
   @override
   Future getPosableInitObj(BuildContext context) {
-    return ProductType.init(true).listCall(0, 1);
+    return ProductType.init(true).listCall();
+  }
+
+  @override
+  Widget getPosableOnAddWidget(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      scrollable: true,
+      title: getMainHeaderText(context),
+      content: Builder(builder: (context) {
+        // Get available height and width of the build area of this widget. Make a choice depending on the size.
+        var height = MediaQuery.of(context).size.height;
+        var width = MediaQuery.of(context).size.width;
+
+        return Container(
+          height: height - 400,
+          width: width - 400,
+        );
+      }),
+      actions: <Widget>[
+        ElevatedButton(
+          child: Text('CANCEL'),
+          onPressed: () {
+            // setState(() {
+            //   Navigator.pop(context);
+            // });
+          },
+        ),
+        ElevatedButton(
+          child: Text('OK'),
+          onPressed: () {
+            // if (validated == null) return;
+            // // debugPrint("textEdit ${_textFieldController.text}");
+            // // context.read<CartProvider>().onCartItemAdded(
+            // //     context,
+            // //     -1,
+            // //     widget.object as CartableProductItemInterface,
+            // //     double.tryParse(_textFieldController.text ?? "0"));
+            // setState(() {
+            //   // codeDialog = valueText;
+            //   Navigator.pop(context);
+            // });
+          },
+        ),
+      ],
+    );
+  }
+
+  TabControllerHelper getPosableFirstWidget(BuildContext context) {
+    return TabControllerHelper(
+      "All",
+      widget: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 250,
+              child: ListHorizontalApiAutoRestWidget(
+                titleString: "This week",
+                listItembuilder: (v) => PosCardSquareItem(object: v),
+                autoRest: AutoRest<Product>(
+                    obj: Product()
+                      ..setCustomMap({
+                        "<dateEnum>": "[\"This week\"]",
+                        "requireInventory": "true"
+                      }),
+                    key: "productsByType<dateEnum>thisWeek"),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 250,
+              child: ListHorizontalApiAutoRestWidget(
+                titleString: "Today",
+                // listItembuilder: (v) => SizedBox(
+                //     width: 100, height: 100, child: POSListCardItem(object: v)),
+                autoRest: AutoRest<Product>(
+                    obj: Product()
+                      ..setCustomMap({
+                        "<dateEnum>": "[\"Today\"]",
+                        "requireInventory": "true"
+                      }),
+                    key: "productsByType<dateEnum>thisDay"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget getPosableMainWidget(
       BuildContext context, AsyncSnapshot snapshotResponse) {
     var data = snapshotResponse.data as List<ProductType>;
-
+    data.insert(0, ProductType()..availability = 2);
     return Column(
       children: [
         DashboardHeader(),
         Expanded(
           child: Container(
-              color: Theme.of(context).colorScheme.background,
+              // color: Theme.of(context).colorScheme.background,
               child: TabBarByListWidget(
                   tabs: data
                       .where(
-                (element) => element.availability.toNonNullable() > 0,
-              )
+            (element) => element.availability.toNonNullable() > 0,
+          )
                       .map((e) {
-                return TabControllerHelper(
-                  e.name ?? "dsa",
-                  null,
-                  widget: ListApiAutoRestWidget(
-                    autoRest: AutoRest<Product>(
-                        obj: Product()
-                          ..setCustomMap({
-                            "<ProductTypeID>": "${e?.iD}",
-                            "requireInventory": "true"
-                          }),
-                        key: "productsByType${e.iD}"),
-                  ),
-                );
-              }).toList())),
+            if (data.indexOf(e) == 0) {
+              return getPosableFirstWidget(context);
+            }
+
+            return TabControllerHelper(
+              e.name ?? "dsa",
+              icon:
+                  e.getCardLeadingCircleAvatar(context, height: 20, width: 20),
+              widget: POSListWidget(
+                autoRest: AutoRest<Product>(
+                    obj: Product()
+                      ..setCustomMap({
+                        "<ProductTypeID>": "${e?.iD}",
+                        "requireInventory": "true"
+                      }),
+                    key: "productsByType${e.iD}"),
+              ),
+            );
+          }).toList())),
         ),
       ],
     );

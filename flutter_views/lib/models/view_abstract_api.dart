@@ -310,9 +310,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  Future<List<T>?> listCall(int count, int page,
-      {OnResponseCallback? onResponse}) async {
-    var response = await getRespones(
+  Future<List<T>?> listCall(
+      {int? count, int? page,OnResponseCallback? onResponse}) async {
+    debugPrint("listCall count=> $count page=>$page");
+    var response = await getRespones(itemCount: count,pageIndex: page,
         onResponse: onResponse, serverActions: ServerActions.list);
 
     if (response == null) return null;

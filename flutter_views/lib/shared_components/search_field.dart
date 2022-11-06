@@ -11,25 +11,51 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: ListTile(
+          leading: const Icon(Icons.search),
+          title: TextField(
+            controller: controller,
+            // decoration: InputDecoration(
+            //   filled: true,
+            //   border: OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //     borderSide: BorderSide.none,
+            //   ),
+            //   prefixIcon: const Icon(EvaIcons.search),
+            //   hintText: "search..",
+            //   isDense: true,
+            //   fillColor: Theme.of(context).cardColor,
+            // ),
+            decoration: const InputDecoration(
+                hintText: 'Search', border: InputBorder.none),
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+              if (onSearch != null) onSearch!(controller.text);
+            },
+            textInputAction: TextInputAction.search,
+            style: TextStyle(color: kFontColorPallets[1]),
+          ),
         ),
-        prefixIcon: const Icon(EvaIcons.search),
-        hintText: "search..",
-        isDense: true,
-        fillColor: Theme.of(context).cardColor,
       ),
-      onEditingComplete: () {
-        FocusScope.of(context).unfocus();
-        if (onSearch != null) onSearch!(controller.text);
-      },
-      textInputAction: TextInputAction.search,
-      style: TextStyle(color: kFontColorPallets[1]),
     );
   }
 }
+
+// return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: Card(
+//         child: ListTile(
+//           leading: const Icon(Icons.search),
+//           title: TextField(
+//             controller: controller,
+//             decoration: const InputDecoration(
+//                 hintText: 'Search', border: InputBorder.none),
+//             onChanged: onSearchTextChanged,
+//           ),t
+//           trailing: getTrailingWidget(),
+//         ),
+//       ),
+//     );

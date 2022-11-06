@@ -37,7 +37,7 @@ class CartProvider with ChangeNotifier {
     _cartObject.onCartItemAdded(context, idx, detail, quantiy: qu);
     notifyListeners();
   }
-
+  
   void onCartItemChanged(
       BuildContext context, int idx, CartableInvoiceDetailsInterface detail) {
     _cartObject.onCartItemChanged(context, idx, detail);

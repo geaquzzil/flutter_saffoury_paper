@@ -292,7 +292,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             tabs: [
               TabControllerHelper(
                 "orders",
-                null,
+              
                 widget:
                     ListStaticWidget(list: orders!, emptyWidget: Text("Empty")),
               ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -15,6 +17,12 @@ List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
 }
 
 String getEditControllerText(dynamic invokedValue) {
+  var num1 = 10.12345678;
+  // var f = new NurFormat("###.##", "en_US");
+  // print(f.format(num1));
+  if (invokedValue is double) {
+    return (invokedValue as double?)?.toCurrencyFormatWithoutDecimal() ?? "0";
+  }
   return invokedValue?.toString() ?? "";
 }
 
@@ -79,11 +87,11 @@ InputDecoration getDecoration(
       filled: true,
       // errorText: "err",
       icon: viewAbstract.getTextInputIcon(field),
-      iconColor: context
-              .watch<ErrorFieldsProvider>()
-              .hasErrorField(viewAbstract, field)
-          ? Colors.red
-          : null,
+      // iconColor: context
+      //         .watch<ErrorFieldsProvider>()
+      //         .hasErrorField(viewAbstract, field)
+      //     ? Theme.of(context).colorScheme.error
+      //     : null,
       hintText: viewAbstract.getTextInputHint(context, field),
       labelText: viewAbstract.getTextInputLabel(context, field),
       prefixText: viewAbstract.getTextInputPrefix(context, field),

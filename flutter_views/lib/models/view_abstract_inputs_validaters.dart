@@ -28,7 +28,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   /// if the field is auto-complete view-abstract then enabled it by default
-  /// if the field is not auto-complete view-abstract then check map 
+  /// if the field is not auto-complete view-abstract then check map
   /// if not found in the map then enable it by default
   bool isTextInputEnabled(BuildContext context, String field) {
     bool isAutoComplete =
@@ -169,6 +169,11 @@ abstract class ViewAbstractInputAndValidater<T>
 
   void onDropdownChanged(BuildContext context, String field, dynamic value) {}
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
+
+  void onTextChangeListener(BuildContext context, String field, String? value) {
+    debugPrint("onTextChangeListener field=> $field value=> $value");
+    // setFieldValue(field, value)
+  }
 }
 
 enum InputType { EDIT_TEXT, COLOR_PICKER, FILE_PICKER, CHECKBOX }

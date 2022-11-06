@@ -31,20 +31,19 @@ class _TabBarWidgetState<T extends TabControllerHelper>
       Align(
         alignment: Alignment.centerLeft,
         child: TabBar(
-            indicator:
-                // DotIndicator(
-                //   color: Theme.of(context).colorScheme.primary,
-                //   distanceFromCenter: 16,
-                //   radius: 3,
-                //   paintingStyle: PaintingStyle.fill,
-                // ),
-                RectangularIndicator(
-              bottomLeftRadius: 100,
-              bottomRightRadius: 100,
-              topLeftRadius: 100,
-              topRightRadius: 100,
-              paintingStyle: PaintingStyle.stroke,
+            indicator: DotIndicator(
+              color: Theme.of(context).colorScheme.primary,
+              distanceFromCenter: 16,
+              radius: 3,
+              paintingStyle: PaintingStyle.fill,
             ),
+            //   RectangularIndicator(
+            // bottomLeftRadius: 100,
+            // bottomRightRadius: 100,
+            // topLeftRadius: 100,
+            // topRightRadius: 100,
+            // paintingStyle: PaintingStyle.stroke,
+
             isScrollable: true,
             // labelPadding: const EdgeInsets.only(
             //   left: 20,

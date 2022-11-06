@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -31,6 +35,19 @@ class ProductType extends ViewAbstract<ProductType> {
   int? products_count;
 
   bool requestAvailablity = false;
+
+  @override
+  Future<List<ProductType>?> listCall(
+      {int? count, int? page, OnResponseCallback? onResponse}) async {
+    try {
+      Iterable l = jsonDecode(jsonEncode(availabilityType));
+      return List<ProductType>.from(
+          l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint("listCallFake ${e.toString()}");
+    }
+    return null;
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../new_components/editables/editable_widget.dart';
 import '../../providers/cart/cart_provider.dart';
 
 class POSListCardItem<T extends ViewAbstract> extends StatefulWidget {
@@ -29,23 +31,38 @@ class _POSListCardItem<T extends ViewAbstract>
   Widget build(BuildContext context) {
     return Card(
       child: Dismissible(
-        key: UniqueKey(),
-        direction: DismissDirection.horizontal,
-        background: dismissBackground(context),
-        secondaryBackground: dismissBackground(context),
-        onDismissed: (direction) => context
-            .read<CartProvider>()
-            .onCartItemRemoved(
-                context, widget.object as CartableInvoiceDetailsInterface),
-        child: ListTile(
-            selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-            onTap: () => widget.object.onCardClicked(context),
-            onLongPress: () => widget.object.onCardLongClicked(context),
+          key: UniqueKey(),
+          direction: DismissDirection.horizontal,
+          background: dismissBackground(context),
+          secondaryBackground: dismissBackground(context),
+          onDismissed: (direction) => context
+              .read<CartProvider>()
+              .onCartItemRemoved(
+                  context, widget.object as CartableInvoiceDetailsInterface),
+          child: ListTile(
+            // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+            // onTap: () => widget.object.onCardClicked(context),
+            // onLongPress: () => widget.object.onCardLongClicked(context),
             title: (widget.object.getMainHeaderText(context)),
             subtitle: (widget.object.getMainSubtitleHeaderText(context)),
+            isThreeLine: true,
+
             leading: widget.object.getCardLeadingWithSelecedBorder(context),
-            trailing: widget.object.getPopupMenuActionListWidget(context)),
-      ),
+            trailing: widget.object.getPopupMenuActionListWidget(context),
+
+            // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+            // onTap: () => widget.object.onCardClicked(context),
+            // onLongPress: () => widget.object.onCardLongClicked(context),
+            // children: [
+            //   EditableWidget(
+            //       viewAbstract: widget.object,
+            //       onValidated: (viewAbstract) {
+
+            //         context.read<CartProvider>().onCartItemChanged(context, -1,
+            //             viewAbstract as CartableInvoiceDetailsInterface);
+            //       })
+            // ]),
+          )),
     );
   }
 

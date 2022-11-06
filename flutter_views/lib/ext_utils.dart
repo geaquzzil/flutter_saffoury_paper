@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
 
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
@@ -50,19 +51,37 @@ extension DatesDateTime on DateTime? {
   }
 }
 
-extension IterableModifier<E> on Iterable<E> {
+extension IterableModifier<E> on Iterable<E?> {
   E? firstWhereOrNull(bool Function(E) test) =>
       cast<E?>().firstWhere((v) => v != null && test(v), orElse: () => null);
 }
 
+extension ConvertersNumbers on dynamic {}
+
 extension NonNullableDouble on double? {
+  double roundDouble() {
+    if (this == null) return 0;
+    return double.tryParse(this!.toStringAsFixed(2)) ?? 0;
+  }
+
+  String toCurrencyFormatWithoutDecimal() {
+    if (this == null) return "0";
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    return this!.toString().replaceAll(regex, '');
+  }
+
+  String format(double n) {
+    return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 2);
+  }
+
   double toNonNullable() {
     return this ?? 0;
   }
 
   String toCurrencyFormat({String symbol = ""}) {
     return NumberFormat.currency(locale: "en_US", symbol: "$symbol ")
-        .format(toNonNullable());
+        .format(toNonNullable())
+        .replaceFirst(RegExp(r'\.?0*$'), '');
   }
 }
 
@@ -73,7 +92,9 @@ extension NonNullableInt on int? {
 
   String toCurrencyFormat({String symbol = ""}) {
     return NumberFormat.currency(locale: "en_US", symbol: symbol)
-        .format(toNonNullable());
+        .format(toNonNullable())
+        .replaceFirst(RegExp(r'\.?0*$'), '');
+    ;
   }
 }
 

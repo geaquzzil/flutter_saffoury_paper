@@ -6,4 +6,6 @@ abstract class PosableInterface {
 
   Widget getPosableMainWidget(
       BuildContext context, AsyncSnapshot<dynamic> snapshotResponse);
+
+  Widget getPosableOnAddWidget(BuildContext context);
 }

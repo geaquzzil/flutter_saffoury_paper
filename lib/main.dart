@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
+import 'package:flutter_saffoury_paper/models/funds/debits.dart';
+import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
+import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
@@ -53,12 +66,25 @@ void main() async {
     ProductSize(),
     Order(),
     Purchases(),
+    ProductInput(),
+    ProductOutput(),
+    Transfers(),
+    CutRequest(),
+    CustomerRequestSize(),
+    CargoTransporter(),
+    OrderRefund(),
+    PurchasesRefund(),
+    ReservationInvoice(),
+    CustomsDeclaration(),
     Customer(),
     Employee(),
     Credits(),
+    Debits(),
+    Incomes(),
+    Spendings(),
     ProductType(),
     CustomerBalanceList(),
-    Dashboard()
+    Dashboard(),
   ]);
   try {
     runApp(MultiProvider(providers: [

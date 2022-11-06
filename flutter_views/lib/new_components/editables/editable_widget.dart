@@ -1,0 +1,183 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart'
+    as v;
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
+import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_header.dart';
+import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../../new_screens/edit/controllers/ext.dart';
+
+class EditableWidget extends StatefulWidget {
+  ViewAbstract viewAbstract;
+  void Function(ViewAbstract? viewAbstract)? onValidated;
+  EditableWidget({Key? key, required this.viewAbstract, this.onValidated})
+      : super(key: key);
+
+  @override
+  State<EditableWidget> createState() => _EditableWidget();
+}
+
+class _EditableWidget extends State<EditableWidget> {
+  late List<String> fields;
+  late GlobalKey<FormBuilderState> _formKey;
+  Map<String, TextEditingController> controllers = {};
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    debugPrint("didChangeDependencies _BaseEditPageState");
+  }
+
+  @override
+  void initState() {
+    debugPrint("initState _BaseEditPageState");
+    super.initState();
+    _formKey = GlobalKey<FormBuilderState>();
+    fields = widget.viewAbstract.getMainFields();
+  }
+
+  @override
+  void dispose() {
+    controllers.forEach((key, value) {
+      controllers[key]!.removeListener(() {
+        widget.viewAbstract
+            .onTextChangeListener(context, key, controllers[key]!.text);
+        modifieController(key);
+      });
+      controllers[key]!.dispose();
+    });
+    controllers.clear();
+    super.dispose();
+  }
+
+  void validate() {
+    // FocusScope.of(context).unfocus();
+    final validationSuccess = _formKey.currentState!.validate();
+    if (!validationSuccess) {
+      _formKey.currentState!.save();
+      debugPrint("! validationSuccess ");
+      if (widget.onValidated != null) {
+        widget.onValidated!(null);
+      }
+    }
+    if (validationSuccess) {
+      _formKey.currentState!.save();
+      final formData = _formKey.currentState?.value;
+      var newObject = widget.viewAbstract.copyWith(formData ?? {});
+      debugPrint("validate $newObject");
+      if (widget.onValidated != null) {
+        widget.onValidated!(newObject);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: buildForm());
+  }
+
+  void modifieController(String field) {
+    debugPrint("\n");
+    controllers.forEach((key, value) {
+      if (key != field) {
+        // controllers[key]!.removeListener(() {
+        //   // widget.viewAbstract
+        //   //     .onTextChangeListener(context, key, controllers[key]!.text);
+        //   // modifieController(key);
+        // });
+        // controllers[key]!.removeListener(() {});
+        String v =
+            getEditControllerText(widget.viewAbstract.getFieldValue(key));
+        debugPrint("modifieController for key=>$key value => $v");
+        controllers[key]!.value = TextEditingValue(
+            selection:
+                TextSelection(baseOffset: v.length, extentOffset: v.length),
+            text: v);
+        // controllers[key]!.text = v;
+        // controllers[key]!.addListener(() {
+        //   widget.viewAbstract
+        //       .onTextChangeListener(context, key, controllers[key]!.text);
+        //   modifieController(key);
+        // });
+      }
+    });
+  }
+
+  TextEditingController getController(
+      {required String field, required dynamic value}) {
+    if (controllers.containsKey(field)) {
+      return controllers[field]!;
+    }
+    value = getEditControllerText(value);
+    controllers[field] = TextEditingController();
+    controllers[field]!.text = value;
+    controllers[field]!.addListener(() {
+      widget.viewAbstract
+          .onTextChangeListener(context, field, controllers[field]!.text);
+      modifieController(field);
+    });
+    return controllers[field]!;
+  }
+
+  FormBuilder buildForm() {
+    return FormBuilder(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: fields
+              .where((element) =>
+                  !widget.viewAbstract.isViewAbstract(element) &&
+                  widget.viewAbstract.getInputType(element) ==
+                      v.InputType.EDIT_TEXT)
+              .map((e) => buildTextField(e))
+              .toList(),
+        ));
+  }
+
+  Widget buildTextField(String fieldName) {
+    return Column(
+      children: [
+        FormBuilderTextField(
+          controller: getController(
+              field: fieldName,
+              value: widget.viewAbstract.getFieldValue(fieldName)),
+          valueTransformer: (value) {
+            return value?.trim();
+          },
+          name: widget.viewAbstract.getTag(fieldName),
+          maxLength: widget.viewAbstract.getTextInputMaxLength(fieldName),
+          textCapitalization:
+              widget.viewAbstract.getTextInputCapitalization(fieldName),
+          decoration: getDecoration(context, widget.viewAbstract, fieldName),
+          keyboardType: widget.viewAbstract.getTextInputType(fieldName),
+          inputFormatters: widget.viewAbstract.getTextInputFormatter(fieldName),
+          autovalidateMode: AutovalidateMode.always,
+          validator: widget.viewAbstract
+              .getTextInputValidatorCompose(context, fieldName),
+          onSubmitted: (value) => debugPrint("onSubmitted"),
+          onEditingComplete: () => debugPrint("onEditingComplete"),
+          onChanged: (value) => validate(),
+          onSaved: (String? value) {
+            widget.viewAbstract.setFieldValue(fieldName, value);
+            debugPrint('EditControllerEditText onSave= ${fieldName}:$value');
+            if (widget.viewAbstract.getFieldNameFromParent != null) {
+              widget.viewAbstract.getParnet?.setFieldValue(
+                  widget.viewAbstract.getFieldNameFromParent ?? "",
+                  widget.viewAbstract);
+            }
+          },
+        ),
+        getSpace()
+      ],
+    );
+  }
+}

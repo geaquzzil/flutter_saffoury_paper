@@ -74,7 +74,6 @@ class Order extends InvoiceMaster<Order>
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
-        null,
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Order>(
               obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
@@ -83,7 +82,6 @@ class Order extends InvoiceMaster<Order>
       ),
       TabControllerHelper(
         AppLocalizations.of(context)!.overview,
-        null,
         widget: getTabControllerChartWidget(context),
       ),
 
@@ -201,7 +199,15 @@ class Order extends InvoiceMaster<Order>
   @override
   void onCartItemChanged(
       BuildContext context, int index, CartableInvoiceDetailsInterface cii) {
-    orders_details![index] = cii as OrderDetails;
+    if (index != -1) {
+      orders_details![index] = cii as OrderDetails;
+    }
+    try {
+      OrderDetails? d = orders_details?.firstWhereOrNull(
+        (element) => element.products?.iD == (cii as OrderDetails).products?.iD,
+      );
+      d = cii as OrderDetails?;
+    } catch (e) {}
   }
 
   @override
@@ -222,7 +228,7 @@ class Order extends InvoiceMaster<Order>
       {double? quantiy}) {
     orders_details?.add(OrderDetails()
       ..setProduct(cii as Product,
-          quantity: (cii).getCartableProductQuantity()));
+          quantity: quantiy ?? (cii).getCartableProductQuantity()));
   }
 
   @override
@@ -299,7 +305,7 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
   void getCartableEditableOnChange(
       BuildContext context, int idx, String field, value) {
     debugPrint("getCartableEditableOnChange field=> $field value => $value");
-    setFieldValue(field, double.tryParse(value));
+    setFieldValue(field, double.tryParse(value) ?? 0);
     if (field == "quantity") {
       price = quantity.toNonNullable() * unitPrice.toNonNullable();
     }

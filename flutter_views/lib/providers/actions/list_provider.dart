@@ -58,7 +58,7 @@ class ListProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     List? list =
-        await viewAbstract.listCall(viewAbstract.getPageItemCount, page);
+        await viewAbstract.listCall(count:viewAbstract.getPageItemCount, page:page);
     isLoading = false;
     if (list != null) {
       objects.addAll(list as List<ViewAbstract>);

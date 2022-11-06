@@ -12,8 +12,13 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   AutoRest autoRest;
   Widget? title;
   String? titleString;
+  Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
-      {Key? key, required this.autoRest, this.title, this.titleString})
+      {Key? key,
+      required this.autoRest,
+      this.title,
+      this.titleString,
+      this.listItembuilder})
       : super(key: key);
 
   @override
@@ -67,7 +72,9 @@ class _ListHorizontalApiWidgetState
             ),
           ));
         }
-        return ListCardItemHorizontal(object: data[index]);
+        return widget.listItembuilder == null
+            ? ListCardItemHorizontal(object: data[index])
+            : widget.listItembuilder!(data[index]);
         // return data[index].getCardView(context);
       },
       // ),
@@ -83,8 +90,10 @@ class _ListHorizontalApiWidgetState
         if (provider.getCount(widget.autoRest.key) == 0) {
           return wrapHeader(
               context,
-              const CircularProgressIndicator(
-                strokeWidth: 2,
+              Center(
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
               ));
         }
         debugPrint("List api provider loaded ${listProvider.isLoading}");
@@ -114,7 +123,7 @@ class _ListHorizontalApiWidgetState
       child: widget.title ??
           Text(
             widget.titleString ?? "NONT",
-            style: const TextStyle(fontWeight: FontWeight.w200),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
     );
   }
@@ -148,7 +157,6 @@ class _ListHorizontalApiWidgetState
   }
 
   void _onScroll() {
-    debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
