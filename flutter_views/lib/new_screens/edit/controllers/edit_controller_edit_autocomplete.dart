@@ -82,7 +82,7 @@ class _EditControllerEditTextAutoCompleteState
             enabled: isEnabled,
             name: widget.viewAbstract.getTag(widget.field),
             decoration:
-                getDecoration(context, widget.viewAbstract, widget.field),
+                getDecoration(context, widget.viewAbstract, field: widget.field),
             initialValue:
                 widget.viewAbstract.getFieldValue(widget.field).toString(),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),

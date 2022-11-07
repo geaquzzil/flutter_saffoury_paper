@@ -35,9 +35,10 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
       };
 
   AuthUser({bool? setPassword}) : super() {
-    if (setPassword ?? false) {
-      setRandomPassword();
-    }
+    // if (setPassword ?? false) {
+    //   setRandomPassword();
+    // }
+    setRandomPassword();
   }
   @override
   Map<String, dynamic> getMirrorFieldsNewInstance() => {
@@ -54,8 +55,8 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     const alphabet =
         "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
     Random r = Random();
-    password = String.fromCharCodes(Iterable.generate(alphabet.length,
-        (_) => alphabet.codeUnitAt(r.nextInt(alphabet.length))));
+    password = String.fromCharCodes(Iterable.generate(
+        8, (_) => alphabet.codeUnitAt(r.nextInt(alphabet.length))));
   }
 
   factory AuthUser.fromJson(Map<String, dynamic> data) =>
@@ -182,7 +183,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     throw UnimplementedError();
   }
 
-
   @override
   String getSortByFieldName() {
     return "phone";
@@ -198,7 +198,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     // TODO: implement getMainDrawerGroupName
     throw UnimplementedError();
   }
-  
+
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     // TODO: implement getMainHeaderLabelTextOnly

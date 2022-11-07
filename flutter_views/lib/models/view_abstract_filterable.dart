@@ -14,6 +14,10 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return getTableNameApi() ?? " no_foreign_key";
   }
 
+  String getFieldToReduceSize() {
+    return "iD";
+  }
+
   bool isSortAvailable() => getSortByFieldName() != null;
 
   List<String> getFilterableFields() => getMainFields();

@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_character/number_to_character.dart';
 import '../users/customers.dart';
@@ -47,10 +48,10 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "fromBox": 0,
-        "isDirect": 0,
+        "fromBox": 0.toInt(),
+        "isDirect": 0.toInt(),
         "date": "",
-        "value": 0,
+        "value": 0.toDouble(),
         "comments": "",
         "customers": Customer(),
         "employees": Employee(),
@@ -140,6 +141,12 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   @override
   String getPrintableInvoiceTitle(BuildContext context, PrintReceipt? pca) =>
       getMainHeaderLabelTextOnly(context);
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "warehouse" || field == "employees" || field == "customers")
+      return ViewAbstractControllerInputType.DROP_DOWN_API;
+    return ViewAbstractControllerInputType.EDIT_TEXT;
+  }
 
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>

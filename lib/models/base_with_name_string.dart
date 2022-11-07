@@ -32,7 +32,10 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
 
   @override
   String? getSortByFieldName() => "name";
-
+@override
+  String getFieldToReduceSize() {
+    return "name";
+  }
   @override
   SortByType getSortByType() => SortByType.DESC;
 

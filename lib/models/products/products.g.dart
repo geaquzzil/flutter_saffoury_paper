@@ -14,6 +14,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..barcode = Product.intFromString(json['barcode'])
   ..fiberLines = json['fiberLines'] as String?
   ..comments = json['comments'] as String?
+  ..products = json['products'] == null
+          ? null
+          : Product.fromJson(json['products'] as Map<String, dynamic>)
   ..pending_reservation_invoice =
       (json['pending_reservation_invoice'] as num?)?.toDouble()
   ..pending_cut_requests = (json['pending_cut_requests'] as num?)?.toDouble()

@@ -62,7 +62,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy.forEach((key, value) {
       if (map.containsKey(key)) {
-        jsonCopy[key] = castFieldValue(key,map[key]);
+        jsonCopy[key] = castFieldValue(key, map[key]);
       }
     });
     T newObject = fromJsonViewAbstract(jsonCopy);
@@ -70,6 +70,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     (newObject).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setLastSearchViewAbstractByTextInputList(
         getLastSearchViewByTextInputList);
+    (newObject).textFieldController = textFieldController;
     return newObject;
   }
 

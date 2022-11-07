@@ -43,6 +43,9 @@ class POSPage extends StatelessWidget {
                           child: Center(child: CircularProgressIndicator()));
                     },
                   )),
+              // VerticalDivider(
+              //   color: Theme.of(context).colorScheme.outline,
+              // ),
               Expanded(
                 flex: 1,
                 child: Container(

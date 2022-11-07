@@ -11,6 +11,7 @@ enum ServerActions {
   search_by_field,
   search_viewabstract_by_field,
   call,
+  list_reduce_size,
 }
 
 class URLS {

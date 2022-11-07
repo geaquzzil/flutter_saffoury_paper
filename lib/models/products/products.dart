@@ -16,6 +16,7 @@ import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -443,6 +444,9 @@ class Product extends ViewAbstract<Product>
       case ProductStatus.RETURNED:
         return Icons.arrow_back;
       default:
+        if (isRollCut()) {
+          return Icons.cut_sharp;
+        }
         return null;
     }
   }
@@ -846,7 +850,7 @@ class Product extends ViewAbstract<Product>
     data.insert(0, ProductType()..availability = 2);
     return Column(
       children: [
-        DashboardHeader(),
+        PosHeader(),
         Expanded(
           child: Container(
               // color: Theme.of(context).colorScheme.background,

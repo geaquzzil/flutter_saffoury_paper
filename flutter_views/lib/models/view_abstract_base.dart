@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:path/path.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -29,9 +31,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       List<TabControllerHelper>.empty();
 
   IconData getFieldIconData(String field) {
-    return getFieldIconDataMap()[field] ??
-        getMirrorNewInstance(field)?.getMainIconData() ??
-        Icons.error;
+    dynamic value = getMirrorNewInstance(field);
+    if (value is ViewAbstract) {
+      return value.getMainIconData();
+    } else if (value is ViewAbstractEnum) {
+      return value.getMainIconData();
+    } else {
+      return getFieldIconDataMap()[field] ?? Icons.error;
+    }
   }
 
   String getFieldLabel(BuildContext context, String field) {
@@ -149,6 +156,21 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       // ),
       ...getCustomTabList(context)
     ];
+  }
+
+  Map<String, List<String>> getMainFieldsGroups(BuildContext context) => {};
+
+  List<String> getMainFieldsWithOutGroups(BuildContext context) {
+    Map<String, List<String>> map = getMainFieldsGroups(context);
+    List<String> mainField = getMainFields();
+    map.forEach((key, value) {
+      for (var element in value) {
+        if (mainField.contains(element)) {
+          mainField.remove(element);
+        }
+      }
+    });
+    return mainField;
   }
 
   String parentsTagThis() {

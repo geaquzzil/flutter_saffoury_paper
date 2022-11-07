@@ -199,7 +199,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       AppLocalizations.of(context)!.invoices;
 
   double getMaxDiscountValue() {
-    return products?.getTotalSellPrice() ?? 0;
+    return price ?? 0;
   }
 
   double getMinQuantityValue() {

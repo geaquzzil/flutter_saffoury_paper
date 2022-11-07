@@ -80,22 +80,39 @@ InputDecoration getDecorationTheming(
       suffixText: theme.suffix);
 }
 
-InputDecoration getDecoration(
-    BuildContext context, ViewAbstract viewAbstract, String field) {
-  return InputDecoration(
+InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
+    {String? field}) {
+  if (field != null) {
+    return InputDecoration(
+        border: const UnderlineInputBorder(),
+        filled: true,
+        // errorText: "err",
+        icon: viewAbstract.getTextInputIcon(field),
+        // iconColor: context
+        //         .watch<ErrorFieldsProvider>()
+        //         .hasErrorField(viewAbstract, field)
+        //     ? Theme.of(context).colorScheme.error
+        //     : null,
+        hintText: viewAbstract.getTextInputHint(context, field: field),
+        labelText: viewAbstract.getTextInputLabel(context, field),
+        prefixText: viewAbstract.getTextInputPrefix(context, field),
+        suffixText: viewAbstract.getTextInputSuffix(context, field));
+  } else {
+    return InputDecoration(
       border: const UnderlineInputBorder(),
       filled: true,
+
       // errorText: "err",
-      icon: viewAbstract.getTextInputIcon(field),
+      icon: viewAbstract.getIcon(),
       // iconColor: context
       //         .watch<ErrorFieldsProvider>()
       //         .hasErrorField(viewAbstract, field)
       //     ? Theme.of(context).colorScheme.error
       //     : null,
-      hintText: viewAbstract.getTextInputHint(context, field),
-      labelText: viewAbstract.getTextInputLabel(context, field),
-      prefixText: viewAbstract.getTextInputPrefix(context, field),
-      suffixText: viewAbstract.getTextInputSuffix(context, field));
+      hintText: viewAbstract.getTextInputHint(context),
+      // labelText: viewAbstract.getMainHeaderLabelTextOnly(context),
+    );
+  }
 }
 
 Widget getSpace() {

@@ -19,12 +19,14 @@ abstract class ViewAbstractInputAndValidater<T>
 
   Map<String, bool> isTextInputEnabledMap(BuildContext context) => {};
 
+  Map<String, TextEditingController> textFieldController = {};
+
   TextInputType? getTextInputType(String field) {
     return getTextInputTypeMap()[field];
   }
 
-  InputType getInputType(String field) {
-    return InputType.EDIT_TEXT;
+  ViewAbstractControllerInputType getInputType(String field) {
+    return ViewAbstractControllerInputType.EDIT_TEXT;
   }
 
   /// if the field is auto-complete view-abstract then enabled it by default
@@ -78,9 +80,13 @@ abstract class ViewAbstractInputAndValidater<T>
     return getFieldLabel(context, field);
   }
 
-  String? getTextInputHint(BuildContext context, String field) {
-    String? label = getTextInputLabel(context, field);
-    return "${AppLocalizations.of(context)!.enter} $label";
+  String? getTextInputHint(BuildContext context, {String? field}) {
+    if (field == null) {
+      return "${AppLocalizations.of(context)!.enter} ${getMainHeaderLabelTextOnly(context)}";
+    } else {
+      String? label = getTextInputLabel(context, field);
+      return "${AppLocalizations.of(context)!.enter} $label";
+    }
   }
 
   String? getTextInputLabel(BuildContext context, String field) {
@@ -167,13 +173,39 @@ abstract class ViewAbstractInputAndValidater<T>
     return getFieldLabel(context, field);
   }
 
-  void onDropdownChanged(BuildContext context, String field, dynamic value) {}
+  void onDropdownChanged(BuildContext context, String field, dynamic value) {
+    debugPrint("onDropdownChanged field=> $field value=> $value");
+    setFieldValue(field, value);
+  }
+
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
 
   void onTextChangeListener(BuildContext context, String field, String? value) {
     debugPrint("onTextChangeListener field=> $field value=> $value");
     // setFieldValue(field, value)
   }
+
+  void setTextFieldControllerValue(String field, dynamic value) {
+    textFieldController[getTag(field)]?.text = value.toString();
+  }
+
+  void addTextFieldController(String field, TextEditingController controller) {
+    textFieldController[getTag(field)] = controller;
+  }
+
+  void dispose() {
+    // textFieldController.forEach((key, value) {
+    //   textFieldController[key]?.removeListener(() {});
+    //   textFieldController[key]?.dispose();
+    // });
+    textFieldController.clear();
+  }
 }
 
-enum InputType { EDIT_TEXT, COLOR_PICKER, FILE_PICKER, CHECKBOX }
+enum ViewAbstractControllerInputType {
+  EDIT_TEXT,
+  COLOR_PICKER,
+  FILE_PICKER,
+  CHECKBOX,
+  DROP_DOWN_API
+}

@@ -24,7 +24,7 @@ class Credits extends MoneyFunds<Credits> {
   Credits() : super();
   @override
   List<String> getMainFields() =>
-      ["customer", "employee", "date", "value", "equalities", "warehouse"];
+      ["customers", "employees", "date", "value", "equalities", "warehouse"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -52,7 +52,6 @@ class Credits extends MoneyFunds<Credits> {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
-
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Credits>(
               obj: Credits()
@@ -62,7 +61,6 @@ class Credits extends MoneyFunds<Credits> {
       ),
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
-       
         widget: StorageDetailsCustom(
           chart: ListHorizontalCustomViewApiAutoRestWidget(
               onResponseAddWidget: ((response) {

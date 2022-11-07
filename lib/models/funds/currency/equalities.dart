@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'equalities.g.dart';
@@ -17,10 +18,16 @@ class Equalities extends ViewAbstract<Equalities> {
   Currency? currency;
 
   Equalities() : super();
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "currency")
+      return ViewAbstractControllerInputType.DROP_DOWN_API;
+    return ViewAbstractControllerInputType.EDIT_TEXT;
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"value": 0, "date": "", "currency": Currency()};
+      {"value": 0.toDouble(), "date": "", "currency": Currency()};
   @override
   List<String> getMainFields() => ["currency", "value", "date"];
 

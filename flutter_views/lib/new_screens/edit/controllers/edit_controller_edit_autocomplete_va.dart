@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 @immutable
@@ -40,7 +41,8 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     //     Provider.of<ErrorFieldsProvider>(context, listen: false);
     // _formValidationManager = errorFieldsProvider.getFormValidationManager;
     textController.text =
-        widget.viewAbstract.getFieldValue(widget.field).toString();
+        getEditControllerText(widget.viewAbstract.getFieldValue(widget.field));
+    // widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
 
     Provider.of<ErrorFieldsProvider>(context, listen: false)
@@ -101,7 +103,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
             initialValue:
                 widget.viewAbstract.getFieldValue(widget.field).toString(),
             decoration:
-                getDecoration(context, widget.viewAbstract, widget.field),
+                getDecoration(context, widget.viewAbstract,field:  widget.field),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),
@@ -110,6 +112,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
             onSuggestionSelected: (value) {
               onSuggestionSelected(value, context);
             },
+            loadingBuilder: (context) => CircularProgressIndicator(),
             itemBuilder: (context, continent) {
               debugPrint("continent $continent");
               ViewAbstract whereViewAbstract = widget.viewAbstract
@@ -152,9 +155,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
         whereViewAbstract,
         widget.field);
 
-    // context
-    //     .read<ErrorFieldsProvider>()
-    //     .removeError(widget.viewAbstract);
+    // context.read<ErrorFieldsProvider>().removeError(widget.viewAbstract);
 
     // textController.text = value.getHeaderTextOnly(context);
   }

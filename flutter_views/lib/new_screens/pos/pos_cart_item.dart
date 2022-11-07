@@ -21,6 +21,8 @@ class POSListCardItem<T extends ViewAbstract> extends StatefulWidget {
 
 class _POSListCardItem<T extends ViewAbstract>
     extends State<POSListCardItem<T>> {
+  bool isExpanded = false;
+  ViewAbstract? validated;
   @override
   void initState() {
     super.initState();
@@ -30,40 +32,63 @@ class _POSListCardItem<T extends ViewAbstract>
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Dismissible(
-          key: UniqueKey(),
-          direction: DismissDirection.horizontal,
-          background: dismissBackground(context),
-          secondaryBackground: dismissBackground(context),
-          onDismissed: (direction) => context
-              .read<CartProvider>()
-              .onCartItemRemoved(
-                  context, widget.object as CartableInvoiceDetailsInterface),
-          child: ListTile(
+        child: Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.horizontal,
+      background: dismissBackground(context),
+      secondaryBackground: dismissBackground(context),
+      onDismissed: (direction) => context
+          .read<CartProvider>()
+          .onCartItemRemoved(
+              context, widget.object as CartableInvoiceDetailsInterface),
+      child: Container(
+        decoration: validated != null
+            ? null
+            : BoxDecoration(
+                // borderRadius: BorderRadius.all(Radius.circular(5)),
+                border: Border(
+                left: BorderSide(
+                  //                   <--- left side
+                  color: Theme.of(context).colorScheme.onError,
+                  width: 5.0,
+                ),
+              )),
+        child: ExpansionTile(
+            initiallyExpanded: isExpanded,
+            onExpansionChanged: ((value) {
+              if (value) {
+                setState(() {
+                  isExpanded = value;
+                });
+              }
+            }),
             // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
             // onTap: () => widget.object.onCardClicked(context),
             // onLongPress: () => widget.object.onCardLongClicked(context),
             title: (widget.object.getMainHeaderText(context)),
             subtitle: (widget.object.getMainSubtitleHeaderText(context)),
-            isThreeLine: true,
+            // isThreeLine: true,
 
-            leading: widget.object.getCardLeadingWithSelecedBorder(context),
+            leading: widget.object.getCardLeading(context),
             trailing: widget.object.getPopupMenuActionListWidget(context),
 
             // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
             // onTap: () => widget.object.onCardClicked(context),
             // onLongPress: () => widget.object.onCardLongClicked(context),
-            // children: [
-            //   EditableWidget(
-            //       viewAbstract: widget.object,
-            //       onValidated: (viewAbstract) {
+            children: [
+              EditableWidget(
+                  viewAbstract: widget.object,
+                  onValidated: (viewAbstract) {
+                    setState(() {
+                      validated = viewAbstract;
+                    });
 
-            //         context.read<CartProvider>().onCartItemChanged(context, -1,
-            //             viewAbstract as CartableInvoiceDetailsInterface);
-            //       })
-            // ]),
-          )),
-    );
+                    context.read<CartProvider>().onCartItemChanged(context, -1,
+                        viewAbstract as CartableInvoiceDetailsInterface);
+                  })
+            ]),
+      ),
+    ));
   }
 
   Container dismissBackground(BuildContext context) {

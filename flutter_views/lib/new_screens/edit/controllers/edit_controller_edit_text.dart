@@ -92,7 +92,7 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
           textCapitalization:
               widget.viewAbstract.getTextInputCapitalization(widget.field),
-          decoration: getDecoration(context, widget.viewAbstract, widget.field),
+          decoration: getDecoration(context, widget.viewAbstract,field:  widget.field),
           keyboardType: widget.viewAbstract.getTextInputType(widget.field),
           inputFormatters:
               widget.viewAbstract.getTextInputFormatter(widget.field),

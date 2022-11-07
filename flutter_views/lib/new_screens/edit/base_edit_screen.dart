@@ -9,6 +9,9 @@ import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/view_abstract_inputs_validaters.dart';
+import 'controllers/edit_controller_dropdown_api.dart';
+
 class BaseEditPage extends StatefulWidget {
   ViewAbstract parent;
 
@@ -71,15 +74,14 @@ class _BaseEditPageState extends State<BaseEditPage> {
     final validationSuccess = _formKey.currentState!.validate();
     if (!validationSuccess) {
       _formKey.currentState!.save();
-      debugPrint("validate ${_formKey.currentState?.value}");
+      debugPrint("validate false ");
       // showMaterialBanner();
     }
     if (validationSuccess) {
       //loop to formkeys validate
-
       _formKey.currentState!.save();
       final formData = _formKey.currentState?.value;
-      debugPrint("validate $formData");
+      // debugPrint("validate $formData");
       debugPrint("validate mainObject ${widget.parent}");
       widget.onSubmit!(widget.parent);
       // widget.parent.setFieldValue(
@@ -128,6 +130,8 @@ class _BaseEditPageState extends State<BaseEditPage> {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     // Type? fieldTypeMirror = viewAbstract.getMirrorFieldType(field);
     fieldValue ??= viewAbstract.getMirrorNewInstance(field);
+    ViewAbstractControllerInputType textFieldTypeVA =
+        viewAbstract.getInputType(field);
 
     // debugPrint("fieldValueType is ${fieldValue.runtimeType}");
     // debugPrint("fieldTypeMirror field $field is=> $fieldTypeMirror");
@@ -143,6 +147,10 @@ class _BaseEditPageState extends State<BaseEditPage> {
     if (fieldValue is ViewAbstract) {
       fieldValue.setParent(viewAbstract);
       fieldValue.setFieldNameFromParent(field);
+      if (textFieldTypeVA == ViewAbstractControllerInputType.DROP_DOWN_API) {
+        return EditControllerDropdownFromViewAbstract(
+            parent: viewAbstract, viewAbstract: fieldValue, field: field);
+      }
       // return Text("FDFD");
       return EditSubViewAbstractHeader(viewAbstract: fieldValue, field: field);
     } else if (fieldValue is ViewAbstractEnum) {

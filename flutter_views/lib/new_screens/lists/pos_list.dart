@@ -31,7 +31,7 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
   @override
   void initState() {
     super.initState();
-    // _scrollController.addListener(() => _onScroll());
+    _scrollController.addListener(() => _onScroll());
 
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     listProvider.addListener(() {
@@ -50,7 +50,7 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
     bool isLoading = listProvider.isLoading(widget.autoRest.key);
 
     return GridView.builder(
-        // controller: _scrollController,
+        controller: _scrollController,
         itemCount: listProvider.isLoading(widget.autoRest.key)
             ? (data.length + 1)
             : (data.length),
@@ -122,7 +122,7 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
       child: Consumer<ListMultiKeyProvider>(
           builder: (context, provider, listTile) {
         if (provider.getCount(widget.autoRest.key) == 0) {
-          return getShimmerLoading(context);
+          return getShimmerLoadingGrid(context);
         }
         debugPrint("List api provider loaded ${listProvider.isLoading}");
         return _listItems(
@@ -130,7 +130,29 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
       }),
     );
   }
-
+  Widget getShimmerLoadingGrid(BuildContext context){
+   return GridView.builder(
+        controller: _scrollController,
+        itemCount: 10,
+        shrinkWrap: true,
+        gridDelegate: SliverQuiltedGridDelegate(
+          crossAxisCount: 4,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          repeatPattern: QuiltedGridRepeatPattern.inverted,
+          pattern: [
+            QuiltedGridTile(1, 2),
+            QuiltedGridTile(1, 1),
+            QuiltedGridTile(1, 1),
+            QuiltedGridTile(1, 2),
+          ],
+        ),
+        itemBuilder: (context, index) {
+        
+          return ShimmerLoadingListGrid();
+          // return data[index].getCardView(context);
+        });
+  }
   Widget getShimmerLoading(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),

@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart'
     as v;
-import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_master.dart';
-import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_header.dart';
-import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
-import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
-import 'package:provider/provider.dart';
-
 import '../../new_screens/edit/controllers/ext.dart';
 
 class EditableWidget extends StatefulWidget {
   ViewAbstract viewAbstract;
   void Function(ViewAbstract? viewAbstract)? onValidated;
-  EditableWidget({Key? key, required this.viewAbstract, this.onValidated})
+  void Function(FocusNode? lastNode)? onFocusChange;
+  EditableWidget(
+      {Key? key,
+      required this.viewAbstract,
+      this.onValidated,
+      this.onFocusChange})
       : super(key: key);
 
   @override
@@ -25,12 +22,19 @@ class EditableWidget extends StatefulWidget {
 
 class _EditableWidget extends State<EditableWidget> {
   late List<String> fields;
+  late Map<String, List<String>> fieldsGroups;
   late GlobalKey<FormBuilderState> _formKey;
   Map<String, TextEditingController> controllers = {};
+  Map<String, FocusNode> focusNodes = {};
+  FocusNode? _lastFocusNode;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint("didChangeDependencies _BaseEditPageState");
+    if (_lastFocusNode != null) {
+      debugPrint("didChangeDependencies _lastFocusNode");
+      FocusScope.of(context).requestFocus(_lastFocusNode);
+    }
   }
 
   @override
@@ -38,7 +42,10 @@ class _EditableWidget extends State<EditableWidget> {
     debugPrint("initState _BaseEditPageState");
     super.initState();
     _formKey = GlobalKey<FormBuilderState>();
-    fields = widget.viewAbstract.getMainFields();
+    fields = widget.viewAbstract.getMainFieldsWithOutGroups(context);
+    fieldsGroups = widget.viewAbstract.getMainFieldsGroups(context);
+
+    debugPrint("initState $fieldsGroups");
   }
 
   @override
@@ -47,11 +54,16 @@ class _EditableWidget extends State<EditableWidget> {
       controllers[key]!.removeListener(() {
         widget.viewAbstract
             .onTextChangeListener(context, key, controllers[key]!.text);
-        modifieController(key);
+        // modifieController(key);
       });
       controllers[key]!.dispose();
     });
+    focusNodes.forEach((key, value) {
+      value.dispose();
+    });
+    widget.viewAbstract.dispose();
     controllers.clear();
+    focusNodes.clear();
     super.dispose();
   }
 
@@ -110,6 +122,14 @@ class _EditableWidget extends State<EditableWidget> {
     });
   }
 
+  FocusNode getFocusNode({required String field}) {
+    if (focusNodes.containsKey(field)) {
+      return focusNodes[field]!;
+    }
+    focusNodes[field] = FocusNode();
+    return focusNodes[field]!;
+  }
+
   TextEditingController getController(
       {required String field, required dynamic value}) {
     if (controllers.containsKey(field)) {
@@ -121,8 +141,9 @@ class _EditableWidget extends State<EditableWidget> {
     controllers[field]!.addListener(() {
       widget.viewAbstract
           .onTextChangeListener(context, field, controllers[field]!.text);
-      modifieController(field);
+      // modifieController(field);
     });
+    widget.viewAbstract.addTextFieldController(field, controllers[field]!);
     return controllers[field]!;
   }
 
@@ -137,7 +158,7 @@ class _EditableWidget extends State<EditableWidget> {
               .where((element) =>
                   !widget.viewAbstract.isViewAbstract(element) &&
                   widget.viewAbstract.getInputType(element) ==
-                      v.InputType.EDIT_TEXT)
+                      v.ViewAbstractControllerInputType.EDIT_TEXT)
               .map((e) => buildTextField(e))
               .toList(),
         ));
@@ -146,35 +167,53 @@ class _EditableWidget extends State<EditableWidget> {
   Widget buildTextField(String fieldName) {
     return Column(
       children: [
-        FormBuilderTextField(
-          controller: getController(
-              field: fieldName,
-              value: widget.viewAbstract.getFieldValue(fieldName)),
-          valueTransformer: (value) {
-            return value?.trim();
-          },
-          name: widget.viewAbstract.getTag(fieldName),
-          maxLength: widget.viewAbstract.getTextInputMaxLength(fieldName),
-          textCapitalization:
-              widget.viewAbstract.getTextInputCapitalization(fieldName),
-          decoration: getDecoration(context, widget.viewAbstract, fieldName),
-          keyboardType: widget.viewAbstract.getTextInputType(fieldName),
-          inputFormatters: widget.viewAbstract.getTextInputFormatter(fieldName),
-          autovalidateMode: AutovalidateMode.always,
-          validator: widget.viewAbstract
-              .getTextInputValidatorCompose(context, fieldName),
-          onSubmitted: (value) => debugPrint("onSubmitted"),
-          onEditingComplete: () => debugPrint("onEditingComplete"),
-          onChanged: (value) => validate(),
-          onSaved: (String? value) {
-            widget.viewAbstract.setFieldValue(fieldName, value);
-            debugPrint('EditControllerEditText onSave= ${fieldName}:$value');
-            if (widget.viewAbstract.getFieldNameFromParent != null) {
-              widget.viewAbstract.getParnet?.setFieldValue(
-                  widget.viewAbstract.getFieldNameFromParent ?? "",
-                  widget.viewAbstract);
+        Focus(
+          // focusNode: getFocusNode(field: fieldName),
+          onFocusChange: (value) {
+            debugPrint("onFocusChange $value");
+            if (value) {
+              setState(() {
+                _lastFocusNode = getFocusNode(field: fieldName);
+                debugPrint("onFocusChange $fieldName $value");
+              });
             }
           },
+          child: FormBuilderTextField(
+            focusNode: getFocusNode(field: fieldName),
+            controller: getController(
+                field: fieldName,
+                value: widget.viewAbstract.getFieldValue(fieldName)),
+            valueTransformer: (value) {
+              return value?.trim();
+            },
+            name: widget.viewAbstract.getTag(fieldName),
+            maxLength: widget.viewAbstract.getTextInputMaxLength(fieldName),
+            textCapitalization:
+                widget.viewAbstract.getTextInputCapitalization(fieldName),
+            decoration: getDecoration(context, widget.viewAbstract,field: 
+             fieldName),
+            keyboardType: widget.viewAbstract.getTextInputType(fieldName),
+            inputFormatters:
+                widget.viewAbstract.getTextInputFormatter(fieldName),
+            autovalidateMode: AutovalidateMode.always,
+            validator: widget.viewAbstract
+                .getTextInputValidatorCompose(context, fieldName),
+            onSubmitted: (value) => debugPrint("onSubmitted"),
+            onEditingComplete: () => debugPrint("onEditingComplete"),
+            onChanged: (value) {
+              // widget.viewAbstract.onTextChangeListener(context, fieldName, value);
+              validate();
+            },
+            onSaved: (String? value) {
+              widget.viewAbstract.setFieldValue(fieldName, value);
+              debugPrint('EditControllerEditText onSave= ${fieldName}:$value');
+              if (widget.viewAbstract.getFieldNameFromParent != null) {
+                widget.viewAbstract.getParnet?.setFieldValue(
+                    widget.viewAbstract.getFieldNameFromParent ?? "",
+                    widget.viewAbstract);
+              }
+            },
+          ),
         ),
         getSpace()
       ],

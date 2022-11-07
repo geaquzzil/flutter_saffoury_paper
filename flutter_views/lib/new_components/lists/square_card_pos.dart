@@ -39,7 +39,9 @@ class _SquareCardPOSState<T extends ViewAbstract>
                 widget.object.getCardLeading(context),
                 IconButton(
                     onPressed: () async {
-                      _showDialog(context);
+                      // _showDialog(context);
+                      context.read<CartProvider>().onCartItemAdded(context, -1,
+                          widget.object as CartableProductItemInterface, null);
                     },
                     icon: Icon(Icons.add_shopping_cart))
               ],

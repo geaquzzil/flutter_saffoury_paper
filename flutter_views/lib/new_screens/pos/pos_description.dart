@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:provider/provider.dart';
@@ -55,48 +56,50 @@ class _POSDescriptionState extends State<POSDescription>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(kDefaultPadding),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.no_summary,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.clear_all))
-              ],
+    return OutlinedCard(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(kDefaultPadding),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.no_summary,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.clear_all))
+                ],
+              ),
             ),
-          ),
-          Expanded(child: POSCartList()),
-          CartDescriptionTotals(),
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: kDefaultPadding, vertical: kDefaultPadding),
-            width: double.maxFinite,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _colorTween.value,
-                ),
-                onPressed: () {
-                  context.read<CartProvider>().checkout(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(kDefaultPadding),
-                  child: Text(AppLocalizations.of(context)!.checkout),
-                )),
-          )
-        ],
+            Expanded(child: POSCartList()),
+            CartDescriptionTotals(),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding, vertical: kDefaultPadding),
+              width: double.maxFinite,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _colorTween.value,
+                  ),
+                  onPressed: () {
+                    context.read<CartProvider>().checkout(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(kDefaultPadding),
+                    child: Text(AppLocalizations.of(context)!.checkout),
+                  )),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -68,8 +68,8 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  InputType getInputType(String field) {
-    return InputType.COLOR_PICKER;
+  ViewAbstractControllerInputType getInputType(String field) {
+    return ViewAbstractControllerInputType.COLOR_PICKER;
   }
 
   @override

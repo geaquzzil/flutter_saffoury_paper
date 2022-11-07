@@ -48,6 +48,11 @@ class User<T> extends UserLists<T> {
   }
 
   @override
+  String getFieldToReduceSize() {
+    return "name";
+  }
+
+  @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "name": getMainHeaderLabelTextOnly(context),
         "phone": AppLocalizations.of(context)!.phone_number,

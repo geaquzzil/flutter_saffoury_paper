@@ -106,7 +106,10 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
           padding: childrenPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: fields.map((e) => buildWidget(e)).toList(),
+            children: [
+              ...fields.map((e) => buildWidget(e)).toList(),
+              getSpace()
+            ],
           ),
         ),
       ),
@@ -189,12 +192,14 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
     ViewAbstract? viewAbstractWatched = getViewAbstract(
         context, widget.viewAbstract.getFieldNameFromParent ?? "");
 
-    return getIsNullable(
-            context, widget.viewAbstract.getFieldNameFromParent ?? "")
-        ? widget.viewAbstract.getMainNullableText(context)
-        : viewAbstractWatched == null
-            ? widget.viewAbstract.getMainHeaderText(context)
-            : viewAbstractWatched.getMainHeaderText(context);
+    return (viewAbstractWatched?.isNew() ?? true)
+        ? getIsNullable(
+                context, widget.viewAbstract.getFieldNameFromParent ?? "")
+            ? widget.viewAbstract.getMainNullableText(context)
+            : viewAbstractWatched == null
+                ? widget.viewAbstract.getMainHeaderText(context)
+                : viewAbstractWatched.getMainHeaderText(context)
+        : viewAbstractWatched!.getMainHeaderText(context);
   }
 
   Widget _buildLeadingIcon(BuildContext context) {

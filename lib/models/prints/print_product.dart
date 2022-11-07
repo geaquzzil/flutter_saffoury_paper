@@ -31,13 +31,13 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
       };
 
   @override
-  InputType getInputType(String field) {
+  ViewAbstractControllerInputType getInputType(String field) {
     if (field == "printProductAsLabel") {
-      return InputType.CHECKBOX;
+      return ViewAbstractControllerInputType.CHECKBOX;
     } else if (field == "test") {
-      return InputType.CHECKBOX;
+      return ViewAbstractControllerInputType.CHECKBOX;
     } else {
-      return InputType.EDIT_TEXT;
+      return ViewAbstractControllerInputType.EDIT_TEXT;
     }
   }
 

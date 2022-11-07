@@ -194,7 +194,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   //       headers: await getHeaders(), body: mainBody);
 
   // }
-
+  
   Future<List<String>> searchViewAbstractByTextInput(
       {required String field,
       required String searchQuery,
@@ -259,7 +259,25 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return [];
     }
   }
+Future<List<T>>? listApiReduceSizes(String customField) async{
+    var response = await getRespones(
+        serverActions: ServerActions.list_reduce_size,
+        searchQuery: customField
+      );
 
+    if (response == null) return [];
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      Iterable l = convert.jsonDecode(response.body);
+      return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+    } else if (response.statusCode == 401) {
+      return [];
+    } else {
+      return [];
+    }
+  }
   Future<List<T>> search(int count, int pageIndex, String searchQuery,
       {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
@@ -349,6 +367,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             action == ServerActions.search_by_field ||
             action == ServerActions.search_viewabstract_by_field
         ? "list"
+        :action ==ServerActions.list_reduce_size?
+        "list_reduce_size"
         : customAction ?? action.toString().split(".").last;
     mainBody['objectTables'] = convert.jsonEncode(isRequiredObjects());
     mainBody['detailTables'] = isRequiredObjectsList() == null
@@ -364,6 +384,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         //TODO multiple add
         mainBody['data'] = convert.jsonEncode(toJsonViewAbstract());
         break;
+   
+
       case ServerActions.view:
       case ServerActions.delete_action:
         mainBody['<iD>'] = iD.toString();
@@ -392,6 +414,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
         break;
+
+         case ServerActions.list_reduce_size:
+ mainBody['<fieldToSelectList>'] = searchQuery?.trim() ?? "";
+         break;  
       case ServerActions.search_by_field:
         mainBody['<$fieldBySearchQuery>'] = searchQuery?.trim() ?? "";
         mainBody['searchByFieldName'] = fieldBySearchQuery ?? "";

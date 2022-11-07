@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
+import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
 class EditControllerDateTime extends StatefulWidget {
@@ -18,6 +19,7 @@ class EditControllerDateTime extends StatefulWidget {
 }
 
 class _EditControllerDateTimeState extends State<EditControllerDateTime> {
+  bool isEnabled = false;
   @override
   void initState() {
     super.initState();
@@ -28,16 +30,26 @@ class _EditControllerDateTimeState extends State<EditControllerDateTime> {
   @override
   Widget build(BuildContext context) {
     dynamic fieldValue = widget.viewAbstract.getFieldValue(widget.field);
+    EditSubsViewAbstractControllerProvider editSubsView =
+        context.watch<EditSubsViewAbstractControllerProvider>();
+
+    ViewAbstract watchedViewAbstract = editSubsView.getViewAbstract(
+            widget.viewAbstract.getFieldNameFromParent ?? "") ??
+        widget.viewAbstract;
+
+    isEnabled = watchedViewAbstract.isTextInputEnabled(context, widget.field);
     debugPrint(
         "EditControllerDate value => $fieldValue field => ${widget.field}");
+    isEnabled = watchedViewAbstract.isTextInputEnabled(context, widget.field);
     return Column(children: [
       FormBuilderDateTimePicker(
+        enabled: isEnabled,
         initialValue: (fieldValue as String?).toDateTime(),
         name: widget.viewAbstract.getTag(widget.field),
         // firstDate: DateTime(2020),
         // lastDate: DateTime(2030),
         initialDate: (fieldValue).toDateTime(),
-        decoration: getDecoration(context, widget.viewAbstract, widget.field),
+        decoration: getDecoration(context, widget.viewAbstract,field:  widget.field),
         onSaved: (newValue) {
           widget.viewAbstract.setFieldValue(widget.field,
               widget.viewAbstract.getFieldDateTimeParseFromDateTime(newValue));

@@ -37,12 +37,11 @@ class BaseAuthenticatingScreen extends StatelessWidget {
     return FutureBuilder(
         future: authProvider.initDrawerItems(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-         
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-             return POSPage();
+              //  return POSPage();
               return const BaseHomeMainPage();
             default:
               if (snapshot.hasError) {
