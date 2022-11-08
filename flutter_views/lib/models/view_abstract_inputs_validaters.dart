@@ -175,7 +175,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   void onDropdownChanged(BuildContext context, String field, dynamic value) {
     debugPrint("onDropdownChanged field=> $field value=> $value");
-    setFieldValue(field, value);
+    // setFieldValue(field, value);
   }
 
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}

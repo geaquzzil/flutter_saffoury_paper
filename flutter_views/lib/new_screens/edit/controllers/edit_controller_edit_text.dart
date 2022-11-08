@@ -92,7 +92,8 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
           maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
           textCapitalization:
               widget.viewAbstract.getTextInputCapitalization(widget.field),
-          decoration: getDecoration(context, widget.viewAbstract,field:  widget.field),
+          decoration:
+              getDecoration(context, widget.viewAbstract, field: widget.field),
           keyboardType: widget.viewAbstract.getTextInputType(widget.field),
           inputFormatters:
               widget.viewAbstract.getTextInputFormatter(widget.field),
@@ -101,7 +102,8 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
               context, widget.field),
           onSaved: (String? value) {
             widget.viewAbstract.setFieldValue(widget.field, value);
-            debugPrint('EditControllerEditText onSave= ${widget.field}:$value');
+            debugPrint(
+                'EditControllerEditText onSave= ${widget.field}:$value textController:${textController.text}');
             if (widget.viewAbstract.getFieldNameFromParent != null) {
               widget.viewAbstract.getParnet?.setFieldValue(
                   widget.viewAbstract.getFieldNameFromParent ?? "",

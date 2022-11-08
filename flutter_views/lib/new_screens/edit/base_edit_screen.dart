@@ -73,7 +73,7 @@ class _BaseEditPageState extends State<BaseEditPage> {
     FocusScope.of(context).unfocus();
     final validationSuccess = _formKey.currentState!.validate();
     if (!validationSuccess) {
-      _formKey.currentState!.save();
+      // _formKey.currentState!.save();
       debugPrint("validate false ");
       // showMaterialBanner();
     }
@@ -83,7 +83,9 @@ class _BaseEditPageState extends State<BaseEditPage> {
       final formData = _formKey.currentState?.value;
       // debugPrint("validate $formData");
       debugPrint("validate mainObject ${widget.parent}");
-      widget.onSubmit!(widget.parent);
+      if (widget.onSubmit != null) {
+        widget.onSubmit!(widget.parent);
+      }
       // widget.parent.setFieldValue(
       //     _formKey.currentState!.value);
       // Provider.of<ActionViewAbstractProvider>(

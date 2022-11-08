@@ -109,8 +109,7 @@ void main() async {
       ChangeNotifierProvider(
           create: (_) => DrawerViewAbstractListProvider(object: Product())),
       ChangeNotifierProvider(
-          create: (_) =>
-              DrawerViewAbstractStandAloneProvider(CustomerBalanceList())),
+          create: (_) => DrawerViewAbstractStandAloneProvider(null)),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),
       ChangeNotifierProvider(

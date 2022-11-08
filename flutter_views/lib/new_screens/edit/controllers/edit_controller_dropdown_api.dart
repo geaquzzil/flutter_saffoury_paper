@@ -23,11 +23,15 @@ class EditControllerDropdownFromViewAbstract<T extends ViewAbstract>
 
 class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
     extends State<EditControllerDropdownFromViewAbstract<T>> {
-  List<dynamic>? _list;
-  getFuture() async {
+  List<T?>? _list;
+  Future<List<T?>?> getFuture() async {
     if (_list != null) return _list;
     _list = await widget.viewAbstract
-        .listApiReduceSizes(widget.viewAbstract.getFieldToReduceSize());
+            .listApiReduceSizes(widget.viewAbstract.getFieldToReduceSize())
+        as List<T?>;
+    if (_list != null) {
+      _list!.insert(0, null);
+    }
     setState(() {});
     return _list;
   }
@@ -35,12 +39,11 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      FutureBuilder<List<dynamic>?>(
+      FutureBuilder<List<T?>?>(
         future: getFuture(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return getDropdownController(
-                context, snapshot.data as List<T> ?? []);
+            return getDropdownController(context, snapshot.data as List<T>);
           }
           return CircularProgressIndicator();
         },
@@ -51,7 +54,6 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
 
   FormBuilderDropdown<T?> getDropdownController(
       BuildContext context, List<T?> list) {
-    list.insert(0, null);
     return FormBuilderDropdown<T?>(
       onChanged: (obj) =>
           widget.parent.onDropdownChanged(context, widget.field, obj),
@@ -66,7 +68,7 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
       decoration: getDecoration(context, widget.viewAbstract),
       // hint: Text(viewAbstract.getMainHeaderLabelTextOnly(context)),
       items: list
-          .map((item) => DropdownMenuItem(
+          .map((item) => DropdownMenuItem<T?>(
                 value: item,
                 child: Text(item == null
                     ? widget.viewAbstract.getTextInputHint(context) ?? ""

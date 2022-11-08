@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
@@ -28,6 +30,7 @@ import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -45,6 +48,7 @@ import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dar
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as pdf;
@@ -747,6 +751,19 @@ class Product extends ViewAbstract<Product>
             transfers_details_count.toNonNullable() +
             cut_requests_count.toNonNullable() !=
         0;
+  }
+
+  @override
+  Future<List<Product>?> listCall(
+      {int? count, int? page, OnResponseCallback? onResponse}) async {
+    try {
+      Iterable l = jsonDecode(jsonEncode(productsJson));
+      return List<Product>.from(
+          l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint("listCallFake ${e.toString()}");
+    }
+    return null;
   }
 
   @override
