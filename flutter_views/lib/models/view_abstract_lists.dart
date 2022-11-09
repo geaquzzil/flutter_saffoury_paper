@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
@@ -85,6 +86,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
     debugPrint("onDismissed {$this} => direction: $direction");
+    if (direction == DismissDirection.startToEnd) {
+      context
+          .read<ActionViewAbstractProvider>()
+          .change(this as ViewAbstract, ServerActions.edit);
+    }
   }
 
   Widget getDismissibleSecondaryBackground(BuildContext context) {
@@ -104,7 +110,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       alignment: Alignment.centerLeft,
       color: Theme.of(context).colorScheme.error,
-      child:  Icon(
+      child: Icon(
         Icons.delete_outlined,
         color: Theme.of(context).colorScheme.outline,
       ),

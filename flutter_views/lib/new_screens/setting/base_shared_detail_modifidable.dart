@@ -12,6 +12,8 @@ import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../edit_new/base_edit_new.dart';
+
 class BaseSettingDetailsView extends StatefulWidget {
   const BaseSettingDetailsView({Key? key}) : super(key: key);
 
@@ -36,8 +38,8 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
     if (settingObject == null) {
       return getEmptyView(context);
     }
-    return BaseEditPage(
-      parent: settingObject.getModifibleSettingObject(context),
+    return BaseEditPageNew(
+      viewAbstract: settingObject.getModifibleSettingObject(context),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
+import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
 import 'package:lottie/lottie.dart';
@@ -53,13 +54,13 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
         case ServerActions.edit:
           debugPrint("ServerActions.edit ${viewAbstract.runtimeType} ");
           return Scaffold(
-              body: BaseEditPage(
-            parent: viewAbstract,
-            onSubmit: (obj) {
-              if (obj != null) {
-                debugPrint("baseEditPage onSubmit $obj");
-              }
-            },
+              body: BaseEditPageNew(
+            viewAbstract: viewAbstract,
+            // onSubmit: (obj) {
+            //   if (obj != null) {
+            //     debugPrint("baseEditPage onSubmit $obj");
+            //   }
+            // },
           ));
         case ServerActions.view:
           return MasterView(viewAbstract: viewAbstract);

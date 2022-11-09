@@ -76,6 +76,8 @@ class BaseHomeScreenLayout extends StatelessWidget {
             // flex: 4,
             child: const ListApiSearchableWidget()),
 
+        VerticalDivider(),
+
         //  SingleChildScrollView(
         //   child: Column(
         //     children: [

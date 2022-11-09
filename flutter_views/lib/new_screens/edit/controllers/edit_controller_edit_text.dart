@@ -28,18 +28,22 @@ class _EditControllerEditTextState extends State<EditControllerEditText> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ErrorFieldsProvider>(context, listen: false)
-          .addField(widget.viewAbstract, widget.field);
-      textController.addListener(onTextChangeListener);
+ Provider.of<ErrorFieldsProvider>(context, listen: false)
+        .addField(widget.viewAbstract, widget.field);
+    textController.addListener(onTextChangeListener);
+
     });
+   
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint("didChangeDependencies editContoller edit text");
+    try{
     textController.text =
         getEditControllerText(widget.viewAbstract.getFieldValue(widget.field));
+    }catch(e){}
   }
 
   @override

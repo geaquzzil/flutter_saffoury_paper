@@ -218,7 +218,9 @@ class Product extends ViewAbstract<Product>
       context
           .read<CartProvider>()
           .onCartItemAdded(context, -1, this, getQuantity());
+      return;
     }
+    super.onCardDismissedView(context, direction);
   }
 
   @override
@@ -758,8 +760,7 @@ class Product extends ViewAbstract<Product>
       {int? count, int? page, OnResponseCallback? onResponse}) async {
     try {
       Iterable l = jsonDecode(jsonEncode(productsJson));
-      return List<Product>.from(
-          l.map((model) => fromJsonViewAbstract(model)));
+      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
     } catch (e) {
       debugPrint("listCallFake ${e.toString()}");
     }

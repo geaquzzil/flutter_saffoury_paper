@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/edit_contro
 import 'package:flutter_view_controller/new_screens/edit/sub_viewabstract/components/sub_edit_viewabstract_header.dart';
 import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/view_abstract_inputs_validaters.dart';
@@ -124,8 +125,17 @@ class _BaseEditPageState extends State<BaseEditPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+        controller: ScrollController(),
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-        child: buildForm());
+        child: Column(
+          children: [
+            BaseSharedHeaderViewDetailsActions(
+              viewAbstract: widget.parent,
+            ),
+            buildForm(),
+          ],
+        ));
   }
 
   FormBuilder buildForm() {
