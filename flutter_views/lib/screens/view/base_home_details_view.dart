@@ -51,7 +51,16 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
       // }
       switch (actionViewAbstractProvider.getServerActions) {
         case ServerActions.edit:
-          return Scaffold(body: BaseEditPage(parent: viewAbstract));
+          debugPrint("ServerActions.edit ${viewAbstract.runtimeType} ");
+          return Scaffold(
+              body: BaseEditPage(
+            parent: viewAbstract,
+            onSubmit: (obj) {
+              if (obj != null) {
+                debugPrint("baseEditPage onSubmit $obj");
+              }
+            },
+          ));
         case ServerActions.view:
           return MasterView(viewAbstract: viewAbstract);
         default:

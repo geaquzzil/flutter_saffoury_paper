@@ -59,8 +59,11 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
     }
   }
 
-  void toggleIsNew(String field, ViewAbstract newViewAbstract,
-      String lastTraggerdfieldTag) async {
+  void toggleIsNew(
+    String field,
+    ViewAbstract newViewAbstract,
+    String lastTraggerdfieldTag,
+  ) async {
     _lastTraggerdfieldTag = lastTraggerdfieldTag;
     _lastTraggerdViewAbstract = newViewAbstract.getTagWithFirstParent();
     ViewAbstractNullableController? viewAbstractNullableController =
@@ -71,6 +74,8 @@ class EditSubsViewAbstractControllerProvider with ChangeNotifier {
 
     newViewAbstract = viewAbstractNullableController?.viewAbstract
         .copyWithNewSuggestion(newViewAbstract);
+
+    newViewAbstract.parent?.setFieldValue(field, newViewAbstract);
 
     _list[field] = ViewAbstractNullableController(
         viewAbstract: newViewAbstract,

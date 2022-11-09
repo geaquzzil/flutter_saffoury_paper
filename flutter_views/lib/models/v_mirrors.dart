@@ -41,11 +41,31 @@ abstract class VMirrors<T> {
     }
   }
 
+  dynamic castFieldValue(String field, dynamic value) {
+    Type? fieldType = getMirrorFieldType(field);
+    debugPrint("castFieldValue type is $fieldType");
+
+    // value = value ?? "";
+    if (fieldType == int) {
+      return int.parse(value.toString());
+    } else if (fieldType == num) {
+      return num.parse(value.toString());
+    } else if (fieldType == double) {
+      return double.parse(value.toString());
+    } else if (fieldType == String) {
+      return value.toString();
+    } else {
+      return value;
+    }
+  }
+
   void setFieldValue(String field, Object? value) {
+ 
     try {
-      getInstanceMirror().invokeSetter(field, value);
+      getInstanceMirror().invokeSetter(field, castFieldValue(field, value));
+         debugPrint("setFieldValue $T  field=$field value=$value");
     } catch (e) {
-      debugPrint("setFieldValue $field ${e.toString()}");
+      debugPrint("setFieldValue error $T field= $field ${e.toString()}");
     }
   }
 

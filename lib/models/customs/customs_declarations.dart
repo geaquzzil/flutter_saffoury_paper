@@ -114,7 +114,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
         "fromName": TextInputType.text,
         "comments": TextInputType.text
       };
-
+  
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
 

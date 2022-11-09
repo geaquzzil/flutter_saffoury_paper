@@ -20,7 +20,7 @@ class EditControllerEditTextAutoComplete extends StatefulWidget {
 
 class _EditControllerEditTextAutoCompleteState
     extends State<EditControllerEditTextAutoComplete> {
-  final textController = TextEditingController();
+  late TextEditingController textController;
   String lastQuery = "";
   bool isError = false;
 
@@ -28,6 +28,8 @@ class _EditControllerEditTextAutoCompleteState
   @override
   void initState() {
     super.initState();
+    textController = TextEditingController();
+
     textController.addListener(onTextChangeListener);
     Provider.of<ErrorFieldsProvider>(context, listen: false)
         .addField(widget.viewAbstract, widget.field);
@@ -35,7 +37,9 @@ class _EditControllerEditTextAutoCompleteState
 
   @override
   void dispose() {
-    textController.dispose();
+    try {
+      textController.dispose();
+    } catch (e) {}
     super.dispose();
   }
 
@@ -81,8 +85,8 @@ class _EditControllerEditTextAutoCompleteState
             },
             enabled: isEnabled,
             name: widget.viewAbstract.getTag(widget.field),
-            decoration:
-                getDecoration(context, widget.viewAbstract, field: widget.field),
+            decoration: getDecoration(context, widget.viewAbstract,
+                field: widget.field),
             initialValue:
                 widget.viewAbstract.getFieldValue(widget.field).toString(),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),

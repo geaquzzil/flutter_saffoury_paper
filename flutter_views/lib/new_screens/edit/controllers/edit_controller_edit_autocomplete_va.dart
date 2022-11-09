@@ -24,15 +24,17 @@ class EditControllerEditTextAutoCompleteViewAbstract extends StatefulWidget {
 class _EditControllerEditTextAutoCompleteViewAbstractState
     extends State<EditControllerEditTextAutoCompleteViewAbstract> {
   // late final _formValidationManager;
-  final textController = TextEditingController();
+  late TextEditingController textController;
   List<ViewAbstract> suggestionList = [];
   final GlobalKey<FormFieldState> formFieldKey = GlobalKey();
   String lastQuery = "";
   late bool isSuggestionSelected;
   ViewAbstract? lastSuggestionSelected;
+
   @override
   void initState() {
     super.initState();
+    textController = TextEditingController();
     isSuggestionSelected = widget.viewAbstract.isEditing();
     if (isSuggestionSelected) {
       lastSuggestionSelected = widget.viewAbstract;
@@ -40,20 +42,26 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     // ErrorFieldsProvider errorFieldsProvider =
     //     Provider.of<ErrorFieldsProvider>(context, listen: false);
     // _formValidationManager = errorFieldsProvider.getFormValidationManager;
-    textController.text =
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+   textController.text =
         getEditControllerText(widget.viewAbstract.getFieldValue(widget.field));
     // widget.viewAbstract.getFieldValue(widget.field).toString();
     textController.addListener(onTextChangeListener);
 
     Provider.of<ErrorFieldsProvider>(context, listen: false)
         .addField(widget.viewAbstract, widget.field);
+
+    });
+ 
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the widget tree.
     // This also removes the _printLatestValue listener.
-    textController.dispose();
+    try {
+      textController.dispose();
+    } catch (e) {}
     super.dispose();
   }
 
@@ -102,8 +110,8 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
             name: widget.viewAbstract.getTag(widget.field),
             initialValue:
                 widget.viewAbstract.getFieldValue(widget.field).toString(),
-            decoration:
-                getDecoration(context, widget.viewAbstract,field:  widget.field),
+            decoration: getDecoration(context, widget.viewAbstract,
+                field: widget.field),
             maxLength: widget.viewAbstract.getTextInputMaxLength(widget.field),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(widget.field),

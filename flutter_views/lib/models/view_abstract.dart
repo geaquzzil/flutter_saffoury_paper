@@ -22,23 +22,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return object.iD == iD && object.getTableNameApi() == getTableNameApi();
   }
 
-  dynamic castFieldValue(String field, dynamic value) {
-    Type? fieldType = getMirrorFieldType(field);
-    debugPrint("castFieldValue type is $fieldType");
-
-    // value = value ?? "";
-    if (fieldType == int) {
-      return int.parse(value.toString());
-    } else if (fieldType == num) {
-      return num.parse(value.toString());
-    } else if (fieldType == double) {
-      return double.parse(value.toString());
-    } else if (fieldType == String) {
-      return value.toString();
-    } else {
-      return value;
-    }
-  }
+ 
 
   T copyWithNewSuggestion(ViewAbstract newValue) {
     newValue.setFieldNameFromParent(fieldNameFromParent);

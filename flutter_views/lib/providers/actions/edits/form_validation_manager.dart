@@ -4,7 +4,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class FormValidationManager2 {
   final _fieldStates = <String, dynamic>{};
-
+  void clear(){
+    _fieldStates.clear();
+  }
   void setError(ViewAbstract viewAbstract, String key, bool isValidate) {
     dynamic map = _fieldStates[viewAbstract.getTagWithFirstParent()];
     if (map is Map<String, dynamic>) {

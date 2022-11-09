@@ -8,7 +8,7 @@ class ErrorFieldsProvider with ChangeNotifier {
   late FormValidationManager2 _formValidationManager = FormValidationManager2();
   FormValidationManager2 get getFormValidationManager => _formValidationManager;
 
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   GlobalKey<FormBuilderState> get getFormBuilderState => _formKey;
 
@@ -28,6 +28,11 @@ class ErrorFieldsProvider with ChangeNotifier {
 
   void initState() {
     _formValidationManager = FormValidationManager2();
+  }
+
+  void clear() {
+    _formKey = GlobalKey<FormBuilderState>();
+    _formValidationManager.clear();
   }
 
   void notify(ViewAbstract v, String field, String key) {

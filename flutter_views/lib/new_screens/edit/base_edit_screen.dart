@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
@@ -24,9 +25,9 @@ class BaseEditPage extends StatefulWidget {
 }
 
 class _BaseEditPageState extends State<BaseEditPage> {
-  _BaseEditPageState() {
-    debugPrint("constructor _BaseEditPageState");
-  }
+  // _BaseEditPageState() {
+  //   debugPrint("constructor _BaseEditPageState");
+  // }
   late GlobalKey<FormBuilderState> _formKey;
   late List<String> fields;
   late EditSubsViewAbstractControllerProvider prov;
@@ -42,9 +43,32 @@ class _BaseEditPageState extends State<BaseEditPage> {
   // }
 
   @override
+  void didUpdateWidget(covariant BaseEditPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint(
+        "didUpdateWidget _BaseEditPageState ${widget.parent.runtimeType}");
+
+    debugPrint(
+        "didUpdateWidget _BaseEditPageState ${widget.parent.runtimeType}");
+    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
+        .clear();
+    Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
+    fields.clear();
+    fields = widget.parent.getMainFields();
+    debugPrint("didUpdateWidget _BaseEditPageState ${fields}");
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    debugPrint("didChangeDependencies _BaseEditPageState");
+    debugPrint(
+        "didChangeDependencies _BaseEditPageState ${widget.parent.runtimeType}");
+    Provider.of<EditSubsViewAbstractControllerProvider>(context, listen: false)
+        .clear();
+    Provider.of<ErrorFieldsProvider>(context, listen: false).clear();
+    fields.clear();
+    fields = widget.parent.getMainFields();
+    debugPrint("didChangeDependencies _BaseEditPageState ${fields}");
   }
 
   @override
@@ -100,18 +124,14 @@ class _BaseEditPageState extends State<BaseEditPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         child: buildForm());
   }
 
   FormBuilder buildForm() {
+    debugPrint("_BaseEdit buildForm ${widget.parent.runtimeType}");
     return FormBuilder(
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        // onChanged: () => {
-        //       context
-        //           .read<ErrorFieldsProvider>()
-        //           .change(_formValidationManager)
-        //     },
         key: _formKey,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -129,6 +149,8 @@ class _BaseEditPageState extends State<BaseEditPage> {
   }
 
   Widget buildWidget(ViewAbstract viewAbstract, String field) {
+    debugPrint(
+        "_BaseEdit buildWidget ${widget.parent.runtimeType} field=>$field");
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     // Type? fieldTypeMirror = viewAbstract.getMirrorFieldType(field);
     fieldValue ??= viewAbstract.getMirrorNewInstance(field);
