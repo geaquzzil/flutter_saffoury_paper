@@ -328,6 +328,8 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// {@macro flutter.widgets.editableText.inputFormatters}
   final List<TextInputFormatter>? inputFormatters;
 
+  T Function(String text) onChangeGetObject;
+
   /// Creates text field that auto-completes user input from a list of items
   FormBuilderTypeAheadCustom({
     Key? key,
@@ -337,6 +339,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     FocusNode? focusNode,
     FormFieldSetter<T>? onSaved,
     required this.validator,
+    required this.onChangeGetObject,
     InputDecoration decoration = const InputDecoration(),
     required String name,
     required this.itemBuilder,
@@ -408,9 +411,9 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                     : theme.textTheme.subtitle1!.copyWith(
                         color: theme.disabledColor,
                       ),
-                // onChanged: (val) {
-                //   state.didChange(val );
-                // },
+                onChanged: (val) {
+                  state.didChange(onChangeGetObject(val));
+                },
                 focusNode: state.effectiveFocusNode,
                 decoration: state.decoration,
               ),

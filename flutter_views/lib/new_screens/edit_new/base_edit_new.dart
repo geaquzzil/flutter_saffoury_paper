@@ -93,13 +93,13 @@ class BaseEditPageNew extends StatelessWidget {
         _formKey.currentState!.fields[viewAbstract.getTag(field)]?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
-      // if (isAutoCompleteVA) {
-      //   viewAbstract =
-      //       viewAbstract.copyWithSetNew(field, controllers[field]!.text);
-      //   viewAbstract.parent?.setFieldValue(field, viewAbstract);
-      //   //  refreshControllers(context);
-      //   viewAbstractChangeProvider.change(viewAbstract);
-      // }
+      if (isAutoCompleteVA) {
+        viewAbstract =
+            viewAbstract.copyWithSetNew(field, controllers[field]!.text);
+        viewAbstract.parent?.setFieldValue(field, viewAbstract);
+        //  refreshControllers(context);
+        viewAbstractChangeProvider.change(viewAbstract);
+      }
 
       // }
       // modifieController(field);
@@ -252,7 +252,7 @@ class BaseEditPageNew extends StatelessWidget {
         onSelected: (selectedViewAbstract) {
           viewAbstract = selectedViewAbstract;
           viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
-          // refreshControllers(context, field);
+          refreshControllers(context, field);
           viewAbstractChangeProvider.change(viewAbstract);
           // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
         },

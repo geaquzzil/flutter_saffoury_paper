@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -139,6 +140,20 @@ abstract class ViewAbstractInputAndValidater<T>
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
     return FormBuilderValidators.compose([
+      if (isFieldRequired(field)) FormBuilderValidators.required(),
+      if (maxValue != null) FormBuilderValidators.max(maxValue),
+      if (minValue != null) FormBuilderValidators.min(minValue),
+    ]);
+  }
+
+  String? Function(ViewAbstract? viewAbstract)
+      getTextInputValidatorComposeAutoComplete(
+          BuildContext context, String field) {
+    double? maxValue = getTextInputValidatorMaxValue(field);
+    double? minValue = getTextInputValidatorMinValue(field);
+    debugPrint(
+        "getTextInputValidatorComposeAutoComplete maxValue:$maxValue minValue:$minValue isRequired: ${isFieldRequired(field)}");
+    return FormBuilderValidators.compose<ViewAbstract>([
       if (isFieldRequired(field)) FormBuilderValidators.required(),
       if (maxValue != null) FormBuilderValidators.max(maxValue),
       if (minValue != null) FormBuilderValidators.min(minValue),

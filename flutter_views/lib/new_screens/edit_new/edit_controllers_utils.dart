@@ -79,6 +79,9 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
   return FormBuilderTypeAheadCustom<ViewAbstract>(
       controller: controller,
+      onChangeGetObject: (text) => viewAbstract.parent!
+          .getMirrorNewInstanceViewAbstract(viewAbstract.fieldNameFromParent!)
+        ..setFieldValue(field, text),
       selectionToTextTransformer: (suggestion) =>
           getEditControllerText(suggestion.getFieldValue(field)),
       name: viewAbstract.getTag(field),
@@ -102,7 +105,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
         );
       },
       inputFormatters: viewAbstract.getTextInputFormatter(field),
-      validator: viewAbstract.getTextInputValidatorCompose(context, field),
+      validator: (value) => value?.getTextInputValidator(
+          context, field, getEditControllerText(value.getFieldValue(field))),
       suggestionsCallback: (query) {
         if (query.isEmpty) return [];
         if (query.trim().isEmpty) return [];
@@ -119,6 +123,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
     bool enabled = true}) {
   return FormBuilderTypeAheadCustom<String>(
       controller: controller,
+      onChangeGetObject: (text) => text,
       valueTransformer: (value) {
         return value?.trim();
       },

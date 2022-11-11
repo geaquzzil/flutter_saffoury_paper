@@ -80,6 +80,7 @@ class _EditControllerEditTextAutoCompleteState
       children: [
         FormBuilderTypeAheadCustom<String>(
             controller: textController,
+            onChangeGetObject: (text) => text,
             valueTransformer: (value) {
               return value?.trim();
             },

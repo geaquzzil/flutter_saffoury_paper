@@ -43,16 +43,14 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
     //     Provider.of<ErrorFieldsProvider>(context, listen: false);
     // _formValidationManager = errorFieldsProvider.getFormValidationManager;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-   textController.text =
-        getEditControllerText(widget.viewAbstract.getFieldValue(widget.field));
-    // widget.viewAbstract.getFieldValue(widget.field).toString();
-    textController.addListener(onTextChangeListener);
+      textController.text = getEditControllerText(
+          widget.viewAbstract.getFieldValue(widget.field));
+      // widget.viewAbstract.getFieldValue(widget.field).toString();
+      textController.addListener(onTextChangeListener);
 
-    Provider.of<ErrorFieldsProvider>(context, listen: false)
-        .addField(widget.viewAbstract, widget.field);
-
+      Provider.of<ErrorFieldsProvider>(context, listen: false)
+          .addField(widget.viewAbstract, widget.field);
     });
- 
   }
 
   @override
@@ -104,6 +102,7 @@ class _EditControllerEditTextAutoCompleteViewAbstractState
       children: [
         FormBuilderTypeAheadCustom<String>(
             controller: textController,
+            onChangeGetObject: (text) => text,
             valueTransformer: (value) {
               return value?.trim();
             },
