@@ -315,7 +315,7 @@ packages:
       name: ffi
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "2.0.1"
   file:
     dependency: transitive
     description:
@@ -323,6 +323,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.4"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.2.2"
   fixnum:
     dependency: transitive
     description:
@@ -452,6 +459,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.7"
   flutter_rating_bar:
     dependency: transitive
     description:
@@ -560,48 +574,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  hid:
-    dependency: "direct main"
-    description:
-      name: hid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.6"
-  hid_android:
-    dependency: transitive
-    description:
-      name: hid_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
-  hid_linux:
-    dependency: transitive
-    description:
-      name: hid_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
-  hid_macos:
-    dependency: transitive
-    description:
-      name: hid_macos
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
-  hid_platform_interface:
-    dependency: transitive
-    description:
-      name: hid_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.8"
-  hid_windows:
-    dependency: transitive
-    description:
-      name: hid_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   html:
     dependency: transitive
     description:
@@ -881,7 +853,7 @@ packages:
       name: path_provider_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.1.3"
   pdf:
     dependency: transitive
     description:
@@ -1355,7 +1327,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.1"
+    version: "3.1.1"
   window_manager:
     dependency: "direct main"
     description:

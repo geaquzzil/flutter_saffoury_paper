@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -17,7 +18,9 @@ class Setting extends ViewAbstract<Setting> {
   int? BUY_EXCHANGE_RATE_OLD;
   String? date;
   CurrencySetting? currency;
-  Setting() : super();
+  Setting() : super() {
+    date = "".toDateTimeNowString();
+  }
 
   @override
   Map<String, IconData> getFieldIconDataMap() {

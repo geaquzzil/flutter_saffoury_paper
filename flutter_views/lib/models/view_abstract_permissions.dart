@@ -191,6 +191,10 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     return iD == -1;
   }
 
+  bool hasParent() {
+    return parent != null;
+  }
+
   void setParent(ViewAbstract? parent) => this.parent = parent;
   void setFieldNameFromParent(String? fieldNameFromParent) =>
       this.fieldNameFromParent = fieldNameFromParent;

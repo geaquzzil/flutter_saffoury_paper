@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_r
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -34,7 +35,9 @@ class CutRequest extends ViewAbstract<CutRequest> {
   List<SizesCutRequest>? sizes_cut_requests;
   int? sizes_cut_requests_count;
 
-  CutRequest() : super();
+  CutRequest() : super() {
+    date = "".toDateTimeNowString();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

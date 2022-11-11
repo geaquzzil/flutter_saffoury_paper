@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations_images.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -26,7 +27,9 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   int? customs_declarations_images_count;
   Employee? employees;
 
-  CustomsDeclaration() : super();
+  CustomsDeclaration() : super() {
+    date = "".toDateTimeNowString();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -114,7 +117,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
         "fromName": TextInputType.text,
         "comments": TextInputType.text
       };
-  
+
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
 

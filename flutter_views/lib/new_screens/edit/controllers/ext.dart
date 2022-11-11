@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -116,7 +117,7 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
 }
 
 Widget getSpace() {
-  return const SizedBox(height: 24.0);
+  return const SizedBox(height:kDefaultPadding);
 }
 
 bool isEnabled(BuildContext context, ViewAbstract viewAbstract) {

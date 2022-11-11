@@ -26,6 +26,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "image") return ViewAbstractControllerInputType.IMAGE;
     return ViewAbstractControllerInputType.EDIT_TEXT;
   }
 
@@ -50,6 +51,10 @@ abstract class ViewAbstractInputAndValidater<T>
 
   bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
     return getTextInputIsAutoCompleteViewAbstractMap()[field] ?? false;
+  }
+
+  bool isFieldEnabled(String field) {
+    return true;
   }
 
   bool isFieldRequired(String field) {
@@ -207,5 +212,6 @@ enum ViewAbstractControllerInputType {
   COLOR_PICKER,
   FILE_PICKER,
   CHECKBOX,
-  DROP_DOWN_API
+  DROP_DOWN_API,
+  IMAGE
 }

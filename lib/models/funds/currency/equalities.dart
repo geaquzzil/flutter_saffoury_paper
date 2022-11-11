@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -17,7 +18,9 @@ class Equalities extends ViewAbstract<Equalities> {
 
   Currency? currency;
 
-  Equalities() : super();
+  Equalities() : super() {
+    date = "".toDateTimeNowString();
+  }
   @override
   ViewAbstractControllerInputType getInputType(String field) {
     if (field == "currency")

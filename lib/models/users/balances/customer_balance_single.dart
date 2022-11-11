@@ -7,9 +7,7 @@ import 'customer_terms.dart';
 import '../customers.dart';
 
 class CustomerBalanceSingle extends Customer
-    implements
-        PrintableInvoiceInterfaceDetails<PrintCustomerBalances>
-         {
+    implements PrintableInvoiceInterfaceDetails<PrintCustomerBalances> {
   // double totalBalance;
   List<EqualityValue>? lastCredit;
   // String fullAddress;

@@ -30,7 +30,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
         },
         decoration:
             getDecorationDropdown(context, parent, enumViewAbstract, field),
-        hint: Text(enumViewAbstract.getMainLabelText(context)),
+        // hint: Text(enumViewAbstract.getMainLabelText(context)),
         items: dropdownGetValues(enumViewAbstract)
             .map((item) => DropdownMenuItem(
                   value: item,

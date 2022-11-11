@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -65,7 +66,9 @@ class CustomerRequestSizeDetails
   ProductSize? sizes;
   String? date;
 
-  CustomerRequestSizeDetails() : super();
+  CustomerRequestSizeDetails() : super() {
+    date = "".toDateTimeNowString();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

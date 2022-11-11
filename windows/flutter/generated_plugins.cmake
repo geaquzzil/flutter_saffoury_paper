@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   dynamic_color
-  hid_windows
   printing
   screen_retriever
   window_manager

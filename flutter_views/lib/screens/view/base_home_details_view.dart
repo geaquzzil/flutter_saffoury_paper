@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+
+import '../base_shared_actions_header.dart';
 
 class BaseSharedDetailsView extends StatefulWidget {
   const BaseSharedDetailsView({Key? key}) : super(key: key);
@@ -17,15 +20,9 @@ class BaseSharedDetailsView extends StatefulWidget {
 
 class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
     with TickerProviderStateMixin {
-  late TabController _tabController;
-  List<Tab> tabs = [];
   @override
   void initState() {
     super.initState();
-    ActionViewAbstractProvider abstractProvider =
-        Provider.of<ActionViewAbstractProvider>(context, listen: false);
-    tabs.addAll(abstractProvider.getObject?.getTabs(context) ?? []);
-    _tabController = TabController(vsync: this, length: tabs.length);
   }
 
   @override
@@ -43,19 +40,16 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
     } else if (viewAbstract == null) {
       return Scaffold(body: getEmptyView(context));
     } else {
-      tabs.clear();
-      tabs.addAll(viewAbstract.getTabs(context));
-      // if (viewAbstract is ViewAbstractStandAloneCustomView) {
-      //   return Center(
-      //     child: MasterViewStandAlone(viewAbstract: viewAbstract),
-      //   );
-      // }
       switch (actionViewAbstractProvider.getServerActions) {
         case ServerActions.edit:
           debugPrint("ServerActions.edit ${viewAbstract.runtimeType} ");
           return Scaffold(
               body: BaseEditPageNew(
+            onValidate: (viewAbstract) {
+              debugPrint("BaseSharedDetailsView onValidate=> $viewAbstract");
+            },
             viewAbstract: viewAbstract,
+            isTheFirst: true,
             // onSubmit: (obj) {
             //   if (obj != null) {
             //     debugPrint("baseEditPage onSubmit $obj");
@@ -63,11 +57,33 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
             // },
           ));
         case ServerActions.view:
-          return MasterView(viewAbstract: viewAbstract);
+          return wrapHeaderAndFooter(
+              MasterView(viewAbstract: viewAbstract), viewAbstract);
         default:
           return MasterHomeHorizontal(viewAbstract: viewAbstract);
       }
     }
+  }
+
+  Widget wrapHeaderAndFooter(Widget main, ViewAbstract viewAbstract) {
+    return Stack(
+        alignment: Alignment.bottomCenter,
+        fit: StackFit.loose,
+        children: [
+          Column(
+            children: [
+              BaseSharedHeaderViewDetailsActions(
+                viewAbstract: viewAbstract,
+              ),
+              Expanded(child: main)
+            ],
+          ),
+          if (viewAbstract is CartableProductItemInterface)
+            BottomWidgetOnViewIfCartable(
+                viewAbstract: viewAbstract as CartableProductItemInterface)
+          else
+            BottomWidgetOnViewIfViewAbstract(viewAbstract: viewAbstract)
+        ]);
   }
 
   Widget getEmptyView(BuildContext context) {
@@ -76,12 +92,6 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
       child: Lottie.network(
           "https://assets3.lottiefiles.com/private_files/lf30_gctc76jz.json"),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
   }
 }
 

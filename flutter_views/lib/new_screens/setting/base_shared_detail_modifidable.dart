@@ -40,6 +40,7 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
     }
     return BaseEditPageNew(
       viewAbstract: settingObject.getModifibleSettingObject(context),
+      isTheFirst: true,
     );
   }
 
