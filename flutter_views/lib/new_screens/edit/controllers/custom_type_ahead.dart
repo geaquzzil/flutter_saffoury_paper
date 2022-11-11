@@ -408,9 +408,9 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                     : theme.textTheme.subtitle1!.copyWith(
                         color: theme.disabledColor,
                       ),
-                onChanged: (val) {
-                  state.didChange(val as T);
-                },
+                // onChanged: (val) {
+                //   state.didChange(val );
+                // },
                 focusNode: state.effectiveFocusNode,
                 decoration: state.decoration,
               ),

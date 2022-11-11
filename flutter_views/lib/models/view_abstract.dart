@@ -22,9 +22,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return object.iD == iD && object.getTableNameApi() == getTableNameApi();
   }
 
- 
-
   T copyWithNewSuggestion(ViewAbstract newValue) {
+    newValue.setLastSearchViewAbstractByTextInputList(
+        getLastSearchViewByTextInputList);
     newValue.setFieldNameFromParent(fieldNameFromParent);
     newValue.setParent(parent);
     return newValue as T;

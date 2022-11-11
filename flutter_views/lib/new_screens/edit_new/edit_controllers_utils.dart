@@ -47,7 +47,8 @@ Widget getControllerFilePicker(BuildContext context,
 Widget getControllerDateTime(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
-    required dynamic value,bool enabled=true}) {
+    required dynamic value,
+    bool enabled = true}) {
   debugPrint("getControllerDateTime field : $field value:$value");
   return wrapController(
     FormBuilderDateTimePicker(
@@ -76,37 +77,28 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     required String field,
     required TextEditingController controller,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
-  return FormBuilderTypeAheadCustom<String>(
+  return FormBuilderTypeAheadCustom<ViewAbstract>(
       controller: controller,
-      valueTransformer: (value) {
-        return value?.trim();
-      },
+      selectionToTextTransformer: (suggestion) =>
+          getEditControllerText(suggestion.getFieldValue(field)),
       name: viewAbstract.getTag(field),
-      initialValue: viewAbstract.getFieldValue(field).toString(),
+      initialValue: viewAbstract,
       decoration: getDecoration(context, viewAbstract, field: field),
       maxLength: viewAbstract.getTextInputMaxLength(field),
       textCapitalization: viewAbstract.getTextInputCapitalization(field),
       keyboardType: viewAbstract.getTextInputType(field),
       autovalidateMode: AutovalidateMode.always,
       onSuggestionSelected: (value) {
-        ViewAbstract whereViewAbstract =
-            viewAbstract.getListSearchViewByTextInputList(field, value);
-        onSelected(whereViewAbstract);
+        debugPrint(
+            "getControllerEditTextViewAbstractAutoComplete value=>$value");
+        onSelected(viewAbstract.copyWithNewSuggestion(value));
       },
       loadingBuilder: (context) => CircularProgressIndicator(),
       itemBuilder: (context, continent) {
-        debugPrint("continent $continent");
-        ViewAbstract whereViewAbstract =
-            viewAbstract.getListSearchViewByTextInputList(field, continent);
-        debugPrint("founded  $whereViewAbstract");
-        if (whereViewAbstract == null) {
-          return Text(continent);
-        }
         return ListTile(
-          leading: whereViewAbstract.getCardLeadingCircleAvatar(context),
-          title: Text(whereViewAbstract.getCardItemDropdownText(context)),
-          subtitle:
-              Text(whereViewAbstract.getCardItemDropdownSubtitle(context)),
+          leading: continent.getCardLeadingCircleAvatar(context),
+          title: Text(continent.getCardItemDropdownText(context)),
+          subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
         );
       },
       inputFormatters: viewAbstract.getTextInputFormatter(field),
@@ -115,7 +107,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
         if (query.isEmpty) return [];
         if (query.trim().isEmpty) return [];
 
-        return viewAbstract.searchViewAbstractByTextInput(
+        return viewAbstract.searchViewAbstractByTextInputViewAbstract(
             field: field, searchQuery: query);
       });
 }
@@ -123,13 +115,14 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
 Widget getControllerEditTextAutoComplete(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
-    required TextEditingController controller,bool enabled=true}) {
+    required TextEditingController controller,
+    bool enabled = true}) {
   return FormBuilderTypeAheadCustom<String>(
       controller: controller,
       valueTransformer: (value) {
         return value?.trim();
       },
-     enabled: enabled,
+      enabled: enabled,
       name: viewAbstract.getTag(field),
       decoration: getDecoration(context, viewAbstract, field: field),
       initialValue: viewAbstract.getFieldValue(field).toString(),
@@ -137,7 +130,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
       textCapitalization: viewAbstract.getTextInputCapitalization(field),
       keyboardType: viewAbstract.getTextInputType(field),
       inputFormatters: viewAbstract.getTextInputFormatter(field),
- autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.always,
       validator: viewAbstract.getTextInputValidatorCompose(context, field),
       itemBuilder: (context, continent) {
         return ListTile(title: Text(continent));
@@ -164,8 +157,8 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
 Widget getControllerEditText(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
-    required TextEditingController controller
-    ,bool enabled=true}) {
+    required TextEditingController controller,
+    bool enabled = true}) {
   return wrapController(FormBuilderTextField(
     onSubmitted: (value) =>
         debugPrint("getControllerEditText field $field value $value"),

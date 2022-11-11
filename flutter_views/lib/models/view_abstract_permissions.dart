@@ -192,7 +192,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool hasParent() {
-    return parent != null;
+    return parent!=null;
   }
 
   void setParent(ViewAbstract? parent) => this.parent = parent;

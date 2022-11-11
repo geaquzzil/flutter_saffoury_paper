@@ -37,8 +37,30 @@ class _EditControllerFilePickerState extends State<EditControllerFilePicker> {
     return base64;
   }
 
+  bool isHasImage() {
+    return widget.viewAbstract.getImageUrl(context) != null;
+  }
+
   bool isURL() {
-    return Uri.parse(widget.viewAbstract.getImageUrl(context) ?? "").isAbsolute;
+    String? image = widget.viewAbstract.getImageUrl(context);
+    if (image == null) return false;
+    return Uri.parse(image).isAbsolute;
+  }
+
+  Widget getImageWidget() {
+    if (isHasImage()) {
+      if (isURL()) {
+        return widget.viewAbstract.getCardLeadingCircleAvatar(context);
+      } else {
+        return Image.memory(
+          dataFromBase64String(widget.viewAbstract.getFieldValue(widget.field)),
+          width: 200,
+          fit: BoxFit.fitWidth,
+        );
+      }
+    } else {
+      return widget.viewAbstract.getCardLeadingCircleAvatar(context);
+    }
   }
 
   @override
@@ -49,11 +71,7 @@ class _EditControllerFilePickerState extends State<EditControllerFilePicker> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (isURL()) widget.viewAbstract.getCardLeadingCircleAvatar(context),
-          if (!isURL())
-            Image.memory(dataFromBase64String(
-                widget.viewAbstract.getFieldValue(widget.field)),width: 200,
-          fit: BoxFit.fitWidth,),
+          getImageWidget(),
           ElevatedButton.icon(
               icon: Icon(Icons.image),
               onPressed: () async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -31,6 +32,7 @@ class BaseEditPageNew extends StatelessWidget {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   late List<String> fields;
   Map<String, TextEditingController> controllers = {};
+  late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
   late EditSubsViewAbstractControllerProvider prov;
   BaseEditPageNew(
@@ -40,6 +42,7 @@ class BaseEditPageNew extends StatelessWidget {
       this.onValidate})
       : super(key: key);
   void init(BuildContext context) {
+    viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
     prov = Provider.of<EditSubsViewAbstractControllerProvider>(context,
         listen: false);
 
@@ -54,8 +57,27 @@ class BaseEditPageNew extends StatelessWidget {
     return viewAbstract.isNew() && viewAbstract.isFieldEnabled(field);
   }
 
+  void refreshControllers(BuildContext context, String currentField) {
+    controllers.forEach((key, value) {
+      if (key != currentField) {
+        viewAbstract.toJsonViewAbstract().forEach((field, value) {
+          if (key == field) {
+            controllers[key]!.text =
+                getEditControllerText(viewAbstract.getFieldValue(field));
+          }
+        });
+      }
+    });
+  }
+
+  bool hasError() {
+    return _formKey.currentState?.validate() == false;
+  }
+
   TextEditingController getController(BuildContext context,
-      {required String field, required dynamic value}) {
+      {required String field,
+      required dynamic value,
+      bool isAutoCompleteVA = false}) {
     if (controllers.containsKey(field)) {
       return controllers[field]!;
     }
@@ -71,6 +93,15 @@ class BaseEditPageNew extends StatelessWidget {
         _formKey.currentState!.fields[viewAbstract.getTag(field)]?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
+      // if (isAutoCompleteVA) {
+      //   viewAbstract =
+      //       viewAbstract.copyWithSetNew(field, controllers[field]!.text);
+      //   viewAbstract.parent?.setFieldValue(field, viewAbstract);
+      //   //  refreshControllers(context);
+      //   viewAbstractChangeProvider.change(viewAbstract);
+      // }
+
+      // }
       // modifieController(field);
     });
     viewAbstract.addTextFieldController(field, controllers[field]!);
@@ -117,43 +148,50 @@ class BaseEditPageNew extends StatelessWidget {
     // if (!isTheFirst) {
     //   return OutlinedCard(child: Text(viewAbstract.toString()));
     // }
-    Widget? table;
-    if (viewAbstract is CartableInvoiceMasterObjectInterface) {
-      table = CartDataTableMaster(
-          action: ServerActions.edit,
-          obj: viewAbstract as CartableInvoiceMasterObjectInterface);
-    }
-    Widget form = SingleChildScrollView(
-        controller: ScrollController(),
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-        child: Column(
-          children: [
-            if (isTheFirst)
-              BaseSharedHeaderViewDetailsActions(
-                viewAbstract: viewAbstract,
-              ),
-            buildForm(context),
-            if (table != null) table
-          ],
-        ));
-    return isTheFirst
-        ? form
-        : Padding(
+    return ChangeNotifierProvider.value(
+      value: viewAbstractChangeProvider,
+      child: Consumer<ViewAbstractChangeProvider>(
+          builder: (context, provider, listTile) {
+        Widget? table;
+        if (viewAbstract is CartableInvoiceMasterObjectInterface) {
+          table = CartDataTableMaster(
+              action: ServerActions.edit,
+              obj: viewAbstract as CartableInvoiceMasterObjectInterface);
+        }
+        Widget form = SingleChildScrollView(
+            controller: ScrollController(),
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: OutlinedCard(
-              // fillColor: false,
-              child: ExpansionTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: viewAbstract.getCardLeadingCircleAvatar(context),
+            child: Column(
+              children: [
+                if (isTheFirst)
+                  BaseSharedHeaderViewDetailsActions(
+                    viewAbstract: viewAbstract,
                   ),
-                  trailing: IconButton(
-                      icon: Icon(Icons.image_sharp), onPressed: () {}),
-                  title: viewAbstract.getMainHeaderText(context),
-                  children: [form]),
-            ),
-          );
+                buildForm(context),
+                if (table != null) table
+              ],
+            ));
+
+        return isTheFirst
+            ? form
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: ExpansionTileCustom(
+                    hasError: hasError(),
+                    canExpand: () => false,
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: viewAbstract.getCardLeadingCircleAvatar(context),
+                    ),
+                    trailing: IconButton(
+                        icon: Icon(Icons.image_sharp), onPressed: () {}),
+                    title: viewAbstract.getMainHeaderText(context),
+                    children: [form]),
+              );
+      }),
+    );
   }
 
   FormBuilder buildForm(BuildContext context) {
@@ -209,12 +247,14 @@ class BaseEditPageNew extends StatelessWidget {
         context,
         viewAbstract: viewAbstract,
         field: field,
-        controller: getController(context, field: field, value: fieldValue),
+        controller: getController(context,
+            field: field, value: fieldValue, isAutoCompleteVA: true),
         onSelected: (selectedViewAbstract) {
-          viewAbstract =
-              viewAbstract.copyWithNewSuggestion(selectedViewAbstract);
-
-          viewAbstract.parent?.setFieldValue(field, viewAbstract);
+          viewAbstract = selectedViewAbstract;
+          viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
+          // refreshControllers(context, field);
+          viewAbstractChangeProvider.change(viewAbstract);
+          // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
         },
       );
     }
@@ -270,3 +310,64 @@ class BaseEditPageNew extends StatelessWidget {
     }
   }
 }
+
+class ViewAbstractChangeProvider with ChangeNotifier {
+  late ViewAbstract viewAbstract;
+  ViewAbstractChangeProvider.init(ViewAbstract viewAbstract) {
+    this.viewAbstract = viewAbstract;
+  }
+  void change(ViewAbstract view) {
+    this.viewAbstract = view;
+    notifyListeners();
+  }
+}
+
+
+
+
+  // Widget? _buildSubtitle(BuildContext context) {
+  //   ViewAbstract viewAbstractWatched = getViewAbstractReturnSameIfNull(context,
+  //       widget.viewAbstract, widget.viewAbstract.getFieldNameFromParent ?? "");
+  //   return Text(viewAbstractWatched.isNew()
+  //       ? "IS NEW"
+  //       : viewAbstractWatched.getMainHeaderLabelTextOnly(context));
+  // }
+
+  // Widget? _buildTitle(BuildContext context) {
+  //   ViewAbstract? viewAbstractWatched = getViewAbstract(
+  //       context, widget.viewAbstract.getFieldNameFromParent ?? "");
+
+  //   return (viewAbstractWatched?.isNew() ?? true)
+  //       ? getIsNullable(
+  //               context, widget.viewAbstract.getFieldNameFromParent ?? "")
+  //           ? widget.viewAbstract.getMainNullableText(context)
+  //           : viewAbstractWatched == null
+  //               ? widget.viewAbstract.getMainHeaderText(context)
+  //               : viewAbstractWatched.getMainHeaderText(context)
+  //       : viewAbstractWatched!.getMainHeaderText(context);
+  // }
+
+  // Widget _buildLeadingIcon(BuildContext context) {
+  //   ViewAbstract? viewAbstractWatched =
+  //       getViewAbstract(context, getFieldNameFromParent(widget.viewAbstract));
+  //   // return RoundedIconButtonTowChilds(
+  //   //   largChild: viewAbstractWatched == null
+  //   //       ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
+  //   //       : viewAbstractWatched.getCardLeadingCircleAvatar(context),
+  //   //   smallIcon: Icons.add,
+  //   // );
+  //   Widget mainLeading = RotationTransition(
+  //     turns: _iconTurns,
+  //     child: viewAbstractWatched == null
+  //         ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
+  //         : viewAbstractWatched.getCardLeadingCircleAvatar(context),
+  //   );
+  //   if (_isExpanded) {
+  //     return RoundedIconButtonTowChilds2(
+  //       largChild: mainLeading,
+  //       smallIcon: Icons.add,
+  //     );
+  //   } else {
+  //     return mainLeading;
+  //   }
+  // }

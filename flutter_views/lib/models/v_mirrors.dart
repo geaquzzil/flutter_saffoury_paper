@@ -47,7 +47,8 @@ abstract class VMirrors<T> {
 
     // value = value ?? "";
     if (fieldType == int) {
-      return int.parse(value.toString());
+
+      return int.tryParse(value.toString());
     } else if (fieldType == num) {
       return num.parse(value.toString());
     } else if (fieldType == double) {

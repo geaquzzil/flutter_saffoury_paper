@@ -36,6 +36,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
+    debugPrint(
+        "getListSearchViewByTextInputList list=>$getLastSearchViewByTextInputList");
+    debugPrint(
+        "getListSearchViewByTextInputList value=>$fieldValue field $field");
     return getLastSearchViewByTextInputList?.firstWhereOrNull((element) =>
         (element as ViewAbstract)
             .getFieldValue(field)
@@ -194,7 +198,37 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   //       headers: await getHeaders(), body: mainBody);
 
   // }
-  
+  Future<List<ViewAbstract>> searchViewAbstractByTextInputViewAbstract(
+      {required String field,
+      required String searchQuery,
+      OnResponseCallback? onResponse}) async {
+    var response = await getRespones(
+        onResponse: onResponse,
+        fieldBySearchQuery: field,
+        serverActions: ServerActions.search_viewabstract_by_field,
+        searchQuery: searchQuery);
+
+    if (response == null) return [];
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      Iterable l = convert.jsonDecode(response.body);
+      List<T> list =
+          List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+      setLastSearchViewAbstractByTextInputList(list);
+
+      return list.cast();
+    } else if (response.statusCode == 401) {
+      ServerResponseMaster serverResponse =
+          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      return [];
+    } else {
+      return [];
+    }
+  }
+
   Future<List<String>> searchViewAbstractByTextInput(
       {required String field,
       required String searchQuery,
@@ -259,11 +293,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return [];
     }
   }
-Future<List<T>>? listApiReduceSizes(String customField) async{
+
+  Future<List<T>>? listApiReduceSizes(String customField) async {
     var response = await getRespones(
         serverActions: ServerActions.list_reduce_size,
-        searchQuery: customField
-      );
+        searchQuery: customField);
 
     if (response == null) return [];
     if (response.statusCode == 200) {
@@ -278,6 +312,7 @@ Future<List<T>>? listApiReduceSizes(String customField) async{
       return [];
     }
   }
+
   Future<List<T>> search(int count, int pageIndex, String searchQuery,
       {OnResponseCallback? onResponse}) async {
     var response = await getRespones(
@@ -329,10 +364,13 @@ Future<List<T>>? listApiReduceSizes(String customField) async{
   }
 
   Future<List<T>?> listCall(
-      {int? count, int? page,OnResponseCallback? onResponse}) async {
+      {int? count, int? page, OnResponseCallback? onResponse}) async {
     debugPrint("listCall count=> $count page=>$page");
-    var response = await getRespones(itemCount: count,pageIndex: page,
-        onResponse: onResponse, serverActions: ServerActions.list);
+    var response = await getRespones(
+        itemCount: count,
+        pageIndex: page,
+        onResponse: onResponse,
+        serverActions: ServerActions.list);
 
     if (response == null) return null;
     if (response.statusCode == 200) {
@@ -367,9 +405,9 @@ Future<List<T>>? listApiReduceSizes(String customField) async{
             action == ServerActions.search_by_field ||
             action == ServerActions.search_viewabstract_by_field
         ? "list"
-        :action ==ServerActions.list_reduce_size?
-        "list_reduce_size"
-        : customAction ?? action.toString().split(".").last;
+        : action == ServerActions.list_reduce_size
+            ? "list_reduce_size"
+            : customAction ?? action.toString().split(".").last;
     mainBody['objectTables'] = convert.jsonEncode(isRequiredObjects());
     mainBody['detailTables'] = isRequiredObjectsList() == null
         ? convert.jsonEncode([])
@@ -384,7 +422,6 @@ Future<List<T>>? listApiReduceSizes(String customField) async{
         //TODO multiple add
         mainBody['data'] = convert.jsonEncode(toJsonViewAbstract());
         break;
-   
 
       case ServerActions.view:
       case ServerActions.delete_action:
@@ -415,9 +452,9 @@ Future<List<T>>? listApiReduceSizes(String customField) async{
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
         break;
 
-         case ServerActions.list_reduce_size:
- mainBody['<fieldToSelectList>'] = searchQuery?.trim() ?? "";
-         break;  
+      case ServerActions.list_reduce_size:
+        mainBody['<fieldToSelectList>'] = searchQuery?.trim() ?? "";
+        break;
       case ServerActions.search_by_field:
         mainBody['<$fieldBySearchQuery>'] = searchQuery?.trim() ?? "";
         mainBody['searchByFieldName'] = fieldBySearchQuery ?? "";
