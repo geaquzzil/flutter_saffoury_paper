@@ -208,6 +208,7 @@ class BaseEditPageNew extends StatelessWidget {
                   ),
                   onPressed: () {
                     viewAbstractChangeProvider.toggleNullbale();
+                    
                     debugPrint(
                         "onToggleNullbale pressed null ${viewAbstract.isNull}");
                   }),

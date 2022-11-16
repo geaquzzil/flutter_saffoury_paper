@@ -8,7 +8,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
- 
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
@@ -113,8 +112,6 @@ abstract class ViewAbstractInputAndValidater<T>
     return Icon(getTextInputIconData(field));
   }
 
-  
-
   bool? canBeNullableFromParentCheck(BuildContext context, String field) {
     return getParnet?.isFieldCanBeNullable(context, field);
   }
@@ -165,9 +162,7 @@ abstract class ViewAbstractInputAndValidater<T>
     String fieldLabel = getFieldLabel(context, field);
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
-    debugPrint("checking field required $field");
     if (isFieldRequired(field)) {
-      debugPrint("Field required $field value is $value");
       if (value?.isEmpty ?? false) {
         return "$fieldLabel ${AppLocalizations.of(context)!.errFieldIsIncorrect}";
       }

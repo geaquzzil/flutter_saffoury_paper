@@ -5,7 +5,7 @@
     "sheets": null,
     "barcode": "2822426428001",
     "fiberLines": "Width",
-    "comments": "klkl",
+    "comments": "34",
     "pending_reservation_invoice": null,
     "pending_cut_requests": null,
     "cut_request_quantity": null,
@@ -35,8 +35,8 @@
         "length": 0
     },
     "gsms": {
-        "iD": 9,
-        "gsm": 320,
+        "iD": -1,
+        "gsm": 300,
         "products": null,
         "products_count": null
     },
