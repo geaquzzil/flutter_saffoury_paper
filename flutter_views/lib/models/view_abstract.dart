@@ -38,10 +38,26 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     T newObject = fromJsonViewAbstract(jsonCopy);
 
     (newObject as ViewAbstract).setFieldNameFromParent(fieldNameFromParent);
-    (newObject as ViewAbstract).setParent(parent);
+    (newObject).setParent(parent);
     (newObject).setLastSearchViewAbstractByTextInputList(
         getLastSearchViewByTextInputList);
     return newObject;
+  }
+
+  T copyToUplode() {
+    Map<String, dynamic> jsonCopy = toJsonViewAbstract();
+    jsonCopy.forEach((key, value) {
+      dynamic o = getFieldValue(key);
+      if (o is ViewAbstract) {
+        debugPrint("copyToUplode field=$key isViewAbstract ");
+        if (o.isNull) {
+            debugPrint("copyToUplode field=$key is Null ");
+          jsonCopy[key] = null;
+        }
+      }
+    });
+
+    return fromJsonViewAbstract(jsonCopy);
   }
 
   T copyWith(Map<String, dynamic> map) {
@@ -54,7 +70,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     T newObject = fromJsonViewAbstract(jsonCopy);
 
     ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
-    (newObject as ViewAbstract).setParent(parent);
+    (newObject).setParent(parent);
     (newObject).setLastSearchViewAbstractByTextInputList(
         getLastSearchViewByTextInputList);
     (newObject).textFieldController = textFieldController;

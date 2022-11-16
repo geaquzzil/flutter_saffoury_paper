@@ -12,8 +12,6 @@ import 'package:flutter_view_controller/screens/action_screens/edit_details_page
 import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
-import '../providers/actions/edits/edit_error_list_provider.dart';
-
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   IconData? getCardLeadingBottomIcon() {
     return null;
@@ -43,15 +41,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return getMainHeaderTextOnly(context);
   }
 
-  Widget getCardLeadingEditCard(BuildContext context) {
-    return Icon(getMainIconData(),
-        color: context
-                .watch<ErrorFieldsProvider>()
-                .getFormValidationManager
-                .hasError(this as ViewAbstract)
-            ? Colors.red
-            : Colors.black54);
-  }
 
   Widget getCardLeadingCircleAvatar(BuildContext context,
       {double width = 60, double height = 60}) {

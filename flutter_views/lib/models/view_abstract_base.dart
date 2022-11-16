@@ -82,7 +82,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Widget getMainHeaderText(BuildContext context) {
     return Text(
-      getMainHeaderTextOnly(context),
+      getMainHeaderTextOnly(context)+"# $iD",
       // style: const TextStyle(color: kTextLightColor)
     );
   }

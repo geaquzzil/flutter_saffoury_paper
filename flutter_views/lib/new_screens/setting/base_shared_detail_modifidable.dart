@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
-import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
@@ -38,7 +37,7 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
     if (settingObject == null) {
       return getEmptyView(context);
     }
-    return BaseEditPageNew(
+    return BaseEditWidget(
       viewAbstract: settingObject.getModifibleSettingObject(context),
       isTheFirst: true,
     );

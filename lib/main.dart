@@ -28,8 +28,6 @@ import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
-import 'package:flutter_view_controller/providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
@@ -101,12 +99,10 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => ViewAbstractChangeProvider.init(Product())),
-      ChangeNotifierProvider(create: (_) => ErrorFieldsProvider()),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
-      ChangeNotifierProvider(
-          create: (_) => EditSubsViewAbstractControllerProvider()),
+
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
       ChangeNotifierProvider(
           create: (_) => DrawerViewAbstractListProvider(object: Product())),

@@ -5,7 +5,7 @@
     "sheets": null,
     "barcode": "2822426428001",
     "fiberLines": "Width",
-    "comments": "34",
+    "comments": null,
     "pending_reservation_invoice": null,
     "pending_cut_requests": null,
     "cut_request_quantity": null,
@@ -35,29 +35,14 @@
         "length": 0
     },
     "gsms": {
-        "iD": -1,
-        "gsm": 300,
-        "products": null,
-        "products_count": null
+        "iD": 23,
+        "gsm": 325,
+        "products": [],
+        "products_count": 126
     },
-    "qualities": {
-        "iD": 20,
-        "name": "gestr. Duplex Karton graue RS",
-        "products": null,
-        "products_count": null
-    },
-    "grades": {
-        "iD": 7,
-        "name": "GD: A",
-        "products": null,
-        "products_count": null
-    },
-    "products_colors": {
-        "iD": 1,
-        "top": "ffffff",
-        "middle": "dbd8e0",
-        "back": "ab8153"
-    },
+    "qualities": null,
+    "grades": null,
+    "products_colors": null,
     "inStock": null,
     "products": null,
     "cut_requests": [],

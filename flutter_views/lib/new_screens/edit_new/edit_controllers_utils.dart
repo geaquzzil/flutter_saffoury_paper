@@ -81,17 +81,14 @@ Widget getControllerDropdownViewAbstractEnum(BuildContext context,
   return FormBuilderDropdown<ViewAbstractEnum?>(
     autovalidateMode: AutovalidateMode.always,
     onChanged: (obj) {
-
       viewAbstract.onDropdownChanged(context, field, obj);
       viewAbstract.setFieldValue(field, obj);
       debugPrint('getControllerDropdownViewAbstractEnum onChanged=   $obj');
       onSelected(obj);
-
     },
     validator: viewAbstract.getTextInputValidatorCompose(context, field),
     name: viewAbstract.getTag(field),
     initialValue: viewAbstract.getFieldValue(field),
-  
     decoration:
         getDecorationDropdown(context, viewAbstract, viewAbstractEnum, field),
     items: dropdownGetValues(viewAbstractEnum)
@@ -128,6 +125,13 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
         debugPrint(
             "getControllerEditTextViewAbstractAutoComplete value=>$value");
         onSelected(viewAbstract.copyWithNewSuggestion(value));
+      },
+      onSaved: (newValue) {
+        viewAbstract.parent!
+            .setFieldValue(viewAbstract.getFieldNameFromParent!, newValue);
+        debugPrint(
+            'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
+
       },
       loadingBuilder: (context) => CircularProgressIndicator(),
       itemBuilder: (context, continent) {

@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/size_config.dart';
+import 'package:material_dialogs/material_dialogs.dart';
 
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -21,12 +25,18 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
   void initState() {
     super.initState();
     isExtended = true;
+    if (widget.viewAbstract.isEditing()) {
+      currentViewAbstract = widget.viewAbstract;
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     isExtended = true;
+    if (widget.viewAbstract.isEditing()) {
+      currentViewAbstract = widget.viewAbstract;
+    }
   }
 
   Widget getLoadingWidget() {
@@ -81,31 +91,67 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
-              if (!isExtended) {
-                if (currentViewAbstract == null) {
-                  isCalledApi = false;
-                  debugPrint(
-                      "BaseEditMainPage  ready to upload currentViewAbstract=null");
-                  _showToast(context);
-                  return;
-                } else {
-                  debugPrint(
-                      "BaseEditMainPage ready to upload => $currentViewAbstract");
-                  isCalledApi = true;
-                  responseViewAbstract = await currentViewAbstract!.addCall();
-                  debugPrint(
-                      "BaseEditMainPage  response obj=> $responseViewAbstract");
-                  if (responseViewAbstract != null) {
-                    widget.viewAbstract = responseViewAbstract!;
-                  }
-                  setState(() {});
-                }
-
+              if (currentViewAbstract == null) {
+                isCalledApi = false;
+                debugPrint(
+                    "BaseEditMainPage  ready to upload currentViewAbstract=null");
+                _showToast(context);
                 return;
               }
-              setState(() {
-                isExtended = !isExtended;
-              });
+              Dialogs.materialDialog(
+                  msgAlign: TextAlign.end,
+                  dialogWidth:
+                      kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
+                  color: Theme.of(context).colorScheme.background,
+                  msg: 'Are you sure? you can\'t undo this action',
+                  title: 'Delete',
+                  context: context,
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('TextButton'),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          ViewAbstract viewAbstractToUpload =
+                              currentViewAbstract!.copyToUplode();
+                          debugPrint(
+                              "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                        },
+                        child: Text("OK")),
+                  ]);
+              // showModalBottomSheet<void>(
+              //   context: context,
+              //   shape: RoundedRectangleBorder(
+              //       borderRadius:
+              //           BorderRadius.vertical(top: Radius.circular(20))),
+              //   builder: (BuildContext context) {
+              //     return Container(
+              //       // height: 200,
+              //       // color: Colors.amber,
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: <Widget>[
+              //           ListTile(
+              //             title:
+              //                 (widget.viewAbstract.getMainHeaderText(context)),
+              //             leading: Icon(Icons.arrow_back_sharp),
+              //             subtitle: Text(widget.viewAbstract
+              //                 .getMainHeaderLabelTextOnly(context)),
+              //           ),
+              //           const Text('Modal BottomSheet'),
+              //           ElevatedButton(
+              //             child: const Text('Close BottomSheet'),
+              //             onPressed: () => Navigator.pop(context),
+              //           ),
+              //         ],
+              //       ),
+              //     );
+              //   },
+              // );
             },
             label: AnimatedSwitcher(
               duration: Duration(seconds: 1),
@@ -121,9 +167,8 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               child:
                   isExtended ? Icon(Icons.arrow_forward) : getLoadingWidget(),
             )),
-        body: BaseEditPageNew(
+        body: BaseEditWidget(
           onValidate: (viewAbstract) {
-            // debugPrint("BaseSharedDetailsView onValidate=> $viewAbstract");
             currentViewAbstract = viewAbstract;
           },
           viewAbstract: widget.viewAbstract,

@@ -11,7 +11,8 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
-import 'package:flutter_view_controller/new_screens/edit/base_edit_screen.dart';
+import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -193,7 +194,7 @@ class Order extends InvoiceMaster<Order>
   @override
   Widget onCartCheckout(
       BuildContext context, List<CartableProductItemInterface> details) {
-    return BaseEditPage(parent: this);
+    return BaseEditNewPage(viewAbstract: this);
   }
 
   @override

@@ -47,7 +47,6 @@ abstract class VMirrors<T> {
 
     // value = value ?? "";
     if (fieldType == int) {
-
       return int.tryParse(value.toString());
     } else if (fieldType == num) {
       return num.parse(value.toString());
@@ -61,12 +60,12 @@ abstract class VMirrors<T> {
   }
 
   void setFieldValue(String field, Object? value) {
- 
     try {
       getInstanceMirror().invokeSetter(field, castFieldValue(field, value));
-         debugPrint("setFieldValue $T  field=$field value=$value");
+      debugPrint("setFieldValue $T  field=$field value=$value");
     } catch (e) {
-      debugPrint("setFieldValue error $T field= $field ${e.toString()}");
+      debugPrint(
+          "setFieldValue error $T field= $field excepion=${e.toString()}");
     }
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
-import 'package:flutter_view_controller/providers/actions/edits/edit_error_list_provider.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +19,8 @@ class _EditControllerColorPicker extends State<EditControllerColorPicker> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ErrorFieldsProvider>(context, listen: false)
-        .addField(widget.viewAbstract, widget.field);
+    // Provider.of<ErrorFieldsProvider>(context, listen: false)
+    //     .addField(widget.viewAbstract, widget.field);
   }
 
   @override

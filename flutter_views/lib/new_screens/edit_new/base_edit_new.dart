@@ -14,19 +14,16 @@ import '../../interfaces/cartable_interface.dart';
 import '../../models/view_abstract.dart';
 import '../../models/view_abstract_inputs_validaters.dart';
 import '../../new_components/tables_widgets/cart_data_table_master.dart';
-import '../../providers/actions/edits/edit_error_list_provider.dart';
-import '../../providers/actions/edits/sub_edit_viewabstract_provider.dart';
 import '../../screens/base_shared_actions_header.dart';
 import '../edit/controllers/edit_controller_checkbox.dart';
 import '../edit/controllers/edit_controller_dropdown.dart';
 import '../edit/controllers/edit_controller_dropdown_api.dart';
-import '../edit/controllers/edit_controller_edit_text.dart';
 import '../edit/controllers/edit_controller_file_picker.dart';
 import '../edit/controllers/ext.dart';
 import 'edit_controllers_utils.dart';
 
 @immutable
-class BaseEditPageNew extends StatelessWidget {
+class BaseEditWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isTheFirst;
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
@@ -34,8 +31,7 @@ class BaseEditPageNew extends StatelessWidget {
   Map<String, TextEditingController> controllers = {};
   late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
-  late EditSubsViewAbstractControllerProvider prov;
-  BaseEditPageNew(
+  BaseEditWidget(
       {Key? key,
       required this.viewAbstract,
       required this.isTheFirst,
@@ -43,8 +39,6 @@ class BaseEditPageNew extends StatelessWidget {
       : super(key: key);
   void init(BuildContext context) {
     viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
-    prov = Provider.of<EditSubsViewAbstractControllerProvider>(context,
-        listen: false);
 
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;
@@ -111,6 +105,10 @@ class BaseEditPageNew extends StatelessWidget {
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
       if (isAutoCompleteVA) {
+        if (controllers[field]!.text ==
+            getEditControllerText(viewAbstract.getFieldValue(field))) {
+          return;
+        }
         viewAbstract =
             viewAbstract.copyWithSetNew(field, controllers[field]!.text);
         viewAbstract.parent?.setFieldValue(field, viewAbstract);
@@ -150,7 +148,6 @@ class BaseEditPageNew extends StatelessWidget {
                   ),
                 buildForm(context),
                 if (table != null) table,
-               
               ],
             ));
 
@@ -207,8 +204,10 @@ class BaseEditPageNew extends StatelessWidget {
                         : Theme.of(context).colorScheme.onBackground,
                   ),
                   onPressed: () {
+                    viewAbstract.toggleIsNullable();
+                    viewAbstract.parent!.setFieldValue(viewAbstract.fieldNameFromParent!, viewAbstract);
                     viewAbstractChangeProvider.toggleNullbale();
-                    
+
                     debugPrint(
                         "onToggleNullbale pressed null ${viewAbstract.isNull}");
                   }),
@@ -291,7 +290,7 @@ class BaseEditPageNew extends StatelessWidget {
         return EditControllerDropdownFromViewAbstract(
             parent: viewAbstract, viewAbstract: fieldValue, field: field);
       }
-      return BaseEditPageNew(
+      return BaseEditWidget(
         viewAbstract: fieldValue,
         isTheFirst: false,
         onValidate: ((ob) {
@@ -348,7 +347,7 @@ class ViewAbstractChangeProvider with ChangeNotifier {
   }
 
   void toggleNullbale() {
-    viewAbstract.toggleIsNullable();
+    // viewAbstract.toggleIsNullable();
     notifyListeners();
     // viewAbstract.isNul
   }
