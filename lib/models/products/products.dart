@@ -330,9 +330,15 @@ class Product extends ViewAbstract<Product>
   Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
+  bool isFieldEnabled(String field) {
+    return "status" != field;
+  }
+
+  @override
   Map<String, bool> isFieldCanBeNullableMap() => {
         "grades": true,
         "gsms": true,
+        "countries_manufactures": true,
         "products_colors": true,
         "qualities": true,
         "customs_declarations": true,

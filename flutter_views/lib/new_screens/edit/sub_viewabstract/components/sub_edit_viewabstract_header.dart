@@ -58,7 +58,7 @@ class _EditSubViewAbstractHeaderState extends State<EditSubViewAbstractHeader>
             widget.field,
             widget.viewAbstract,
             widget.viewAbstract
-                .isNullableAlreadyFromParentCheck(context, widget.field));
+                .isNullableAlreadyFromParentCheck( widget.field));
 
     // Provider.of<ErrorFieldsProvider>(context, listen: false).addListener(() {
     //   debugPrint("ErrorFieldsProvider is changed");

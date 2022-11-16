@@ -4,9 +4,11 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
+ 
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
@@ -111,9 +113,7 @@ abstract class ViewAbstractInputAndValidater<T>
     return Icon(getTextInputIconData(field));
   }
 
-  bool isNullableAlreadyFromParentCheck(BuildContext context, String field) {
-    return getParnet?.getFieldValue(field) == null;
-  }
+  
 
   bool? canBeNullableFromParentCheck(BuildContext context, String field) {
     return getParnet?.isFieldCanBeNullable(context, field);

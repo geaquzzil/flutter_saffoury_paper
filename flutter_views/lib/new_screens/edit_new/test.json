@@ -1,0 +1,81 @@
+{
+    "iD": 449,
+    "status": "NONE",
+    "date": "2020-01-22 12:56:47",
+    "sheets": null,
+    "barcode": "2822426428001",
+    "fiberLines": "Width",
+    "comments": "klkl",
+    "pending_reservation_invoice": null,
+    "pending_cut_requests": null,
+    "cut_request_quantity": null,
+    "products_types": {
+        "iD": 1,
+        "name": "MM",
+        "unit": "KG",
+        "purchasePrice": 0.59,
+        "sellPrice": 0.775,
+        "image": "saffoury.com/SaffouryPaper2/Images/mmLogo.png",
+        "comments": null,
+        "availability": 0.0,
+        "grades": {
+            "iD": 1,
+            "name": "GT A",
+            "products": null,
+            "products_count": null
+        },
+        "products": null,
+        "products_count": null
+    },
+    "customs_declarations": null,
+    "countries_manufactures": null,
+    "sizes": {
+        "iD": 257,
+        "width": 540,
+        "length": 0
+    },
+    "gsms": {
+        "iD": 9,
+        "gsm": 320,
+        "products": null,
+        "products_count": null
+    },
+    "qualities": {
+        "iD": 20,
+        "name": "gestr. Duplex Karton graue RS",
+        "products": null,
+        "products_count": null
+    },
+    "grades": {
+        "iD": 7,
+        "name": "GD: A",
+        "products": null,
+        "products_count": null
+    },
+    "products_colors": {
+        "iD": 1,
+        "top": "ffffff",
+        "middle": "dbd8e0",
+        "back": "ab8153"
+    },
+    "inStock": null,
+    "products": null,
+    "cut_requests": [],
+    "cut_requests_count": 0,
+    "order_refunds_order_details": [],
+    "order_refunds_order_details_count": 0,
+    "orders_details": [],
+    "orders_details_count": 0,
+    "products_inputs_details": [],
+    "products_inputs_details_count": 0,
+    "products_outputs_details": [],
+    "products_outputs_details_count": 0,
+    "purchases_details": [],
+    "purchases_details_count": 0,
+    "purchases_refunds_purchases_details": [],
+    "purchases_refunds_purchases_details_count": 0,
+    "reservation_invoice_details": [],
+    "reservation_invoice_details_count": 0,
+    "transfers_details": [],
+    "transfers_details_count": 0
+}

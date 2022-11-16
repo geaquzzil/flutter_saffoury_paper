@@ -13,12 +13,12 @@ class TowIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeColor: Colors.white,
+      badgeColor: Theme.of(context).colorScheme.onBackground,
       animationDuration: const Duration(milliseconds: 200),
       badgeContent: Icon(
         smallIcon,
         size: 20,
-        color: Colors.black,
+        color: Theme.of(context).colorScheme.background,
       ),
       position: BadgePosition.bottomEnd(),
       padding: const EdgeInsets.all(5),

@@ -50,6 +50,12 @@ class BaseEditPageNew extends StatelessWidget {
     //     .getFormBuilderState;
 
     fields = viewAbstract.getMainFields();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewAbstract.hasParent()) {
+        viewAbstractChangeProvider.notifyListeners();
+      }
+    });
   }
 
   bool isFieldEnabled(String field) {
@@ -70,8 +76,19 @@ class BaseEditPageNew extends StatelessWidget {
     });
   }
 
-  bool hasError() {
-    return _formKey.currentState?.validate() == false;
+  bool hasError(BuildContext context) {
+    bool isFieldCanBeNullable = viewAbstract.parent!
+        .isFieldCanBeNullable(context, viewAbstract.getFieldNameFromParent!);
+
+    bool hasErr = _formKey.currentState?.validate() == false;
+    bool isNull = viewAbstract.isNull;
+    if (!isFieldCanBeNullable) {
+      return hasErr;
+    }
+    if (isNull) {
+      return false;
+    }
+    return hasErr;
   }
 
   TextEditingController getController(BuildContext context,
@@ -111,43 +128,6 @@ class BaseEditPageNew extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     init(context);
-    // if (isTheFirst) {
-    //   return Column(
-    //     children: [
-    //       BaseSharedHeaderViewDetailsActions(
-    //         viewAbstract: viewAbstract,
-    //       ),
-    //       Row(
-    //         children: [
-    //           Expanded(
-    //             child: Column(children: [
-    //               SizedBox(
-    //                 width: double.infinity,
-    //                 height: MediaQuery.of(context).size.height,
-    //                 child: SingleChildScrollView(
-    //                     controller: ScrollController(),
-    //                     physics: const AlwaysScrollableScrollPhysics(),
-    //                     padding: const EdgeInsets.symmetric(
-    //                         horizontal: kDefaultPadding),
-    //                     child: Column(
-    //                       children: [
-    //                         buildForm(context),
-    //                       ],
-    //                     )),
-    //               ),
-    //             ]),
-    //           ),
-    //           Expanded(
-    //             child: Expanded(child: Text("das")),
-    //           )
-    //         ],
-    //       )
-    //     ],
-    //   );
-    // }
-    // if (!isTheFirst) {
-    //   return OutlinedCard(child: Text(viewAbstract.toString()));
-    // }
     return ChangeNotifierProvider.value(
       value: viewAbstractChangeProvider,
       child: Consumer<ViewAbstractChangeProvider>(
@@ -169,7 +149,8 @@ class BaseEditPageNew extends StatelessWidget {
                     viewAbstract: viewAbstract,
                   ),
                 buildForm(context),
-                if (table != null) table
+                if (table != null) table,
+               
               ],
             ));
 
@@ -179,18 +160,61 @@ class BaseEditPageNew extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 child: ExpansionTileCustom(
-                    hasError: hasError(),
-                    canExpand: () => false,
+                    // initiallyExpanded: !viewAbstract.isNull,
+                    // isExpanded: false,
+                    hasError: hasError(context),
+                    canExpand: () => true,
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: viewAbstract.getCardLeadingCircleAvatar(context),
+                      child: viewAbstract.getCardLeading(context),
                     ),
-                    trailing: IconButton(
-                        icon: Icon(Icons.image_sharp), onPressed: () {}),
+                    subtitle: viewAbstract.getMainLabelSubtitleText(context),
+                    trailing: getTrailing(context),
                     title: viewAbstract.getMainHeaderText(context),
                     children: [form]),
               );
       }),
+    );
+  }
+
+  bool canExpand(BuildContext context) {
+    String? field = viewAbstract.getFieldNameFromParent;
+    if (field == null) return true;
+    // return viewAbstract.isNull
+    return !viewAbstract.isNull;
+    // return viewAbstract.isNullableAlreadyFromParentCheck(field) ==
+    //     false;
+  }
+
+  Widget getTrailing(BuildContext context) {
+    String? field = viewAbstract.getFieldNameFromParent;
+    return SizedBox(
+      width: 200,
+      height: double.infinity,
+      child: Row(
+        children: [
+          // AnimatedIcon(icon: AnimatedIcons.add_event, progress: progress)
+          Spacer(),
+          if (viewAbstract.isNew()) Icon(Icons.new_label_sharp),
+          if (field != null)
+            if (viewAbstract.canBeNullableFromParentCheck(context, field!) ??
+                false)
+              IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: viewAbstract.isNull
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onBackground,
+                  ),
+                  onPressed: () {
+                    viewAbstractChangeProvider.toggleNullbale();
+                    debugPrint(
+                        "onToggleNullbale pressed null ${viewAbstract.isNull}");
+                  }),
+          if (viewAbstract.isEditing())
+            viewAbstract.getPopupMenuActionWidget(context, ServerActions.edit)
+        ],
+      ),
     );
   }
 
@@ -259,8 +283,9 @@ class BaseEditPageNew extends StatelessWidget {
       );
     }
     if (fieldValue is ViewAbstract) {
-      fieldValue.setParent(viewAbstract);
       fieldValue.setFieldNameFromParent(field);
+      fieldValue.setParent(viewAbstract);
+
       if (textFieldTypeVA == ViewAbstractControllerInputType.DROP_DOWN_API) {
         return EditControllerDropdownFromViewAbstract(
             parent: viewAbstract, viewAbstract: fieldValue, field: field);
@@ -319,6 +344,12 @@ class ViewAbstractChangeProvider with ChangeNotifier {
   void change(ViewAbstract view) {
     this.viewAbstract = view;
     notifyListeners();
+  }
+
+  void toggleNullbale() {
+    viewAbstract.toggleIsNullable();
+    notifyListeners();
+    // viewAbstract.isNul
   }
 }
 

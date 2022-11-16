@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type_ahead.dart';
 import '../edit/controllers/ext.dart';
 
@@ -69,6 +70,38 @@ Widget getControllerDateTime(BuildContext context,
         }
       },
     ),
+  );
+}
+
+Widget getControllerDropdownViewAbstractEnum(BuildContext context,
+    {required ViewAbstract viewAbstract,
+    required String field,
+    required ViewAbstractEnum viewAbstractEnum,
+    required Function(ViewAbstractEnum? selectedEnum) onSelected}) {
+  return FormBuilderDropdown<ViewAbstractEnum?>(
+    autovalidateMode: AutovalidateMode.always,
+    onChanged: (obj) {
+
+      viewAbstract.onDropdownChanged(context, field, obj);
+      viewAbstract.setFieldValue(field, obj);
+      debugPrint('getControllerDropdownViewAbstractEnum onChanged=   $obj');
+      onSelected(obj);
+
+    },
+    validator: viewAbstract.getTextInputValidatorCompose(context, field),
+    name: viewAbstract.getTag(field),
+    initialValue: viewAbstract.getFieldValue(field),
+  
+    decoration:
+        getDecorationDropdown(context, viewAbstract, viewAbstractEnum, field),
+    items: dropdownGetValues(viewAbstractEnum)
+        .map((item) => DropdownMenuItem<ViewAbstractEnum>(
+              value: item,
+              child: Text(item == null
+                  ? dropdownGetEnterText(context, viewAbstractEnum)
+                  : viewAbstractEnum.getFieldLabelString(context, item)),
+            ))
+        .toList(),
   );
 }
 

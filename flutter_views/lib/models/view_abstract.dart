@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   ViewAbstract() : super();
@@ -35,8 +36,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     jsonCopy[field] = castFieldValue(field, value);
     jsonCopy['iD'] = -1;
     T newObject = fromJsonViewAbstract(jsonCopy);
+
+    (newObject as ViewAbstract).setFieldNameFromParent(fieldNameFromParent);
     (newObject as ViewAbstract).setParent(parent);
-    (newObject).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setLastSearchViewAbstractByTextInputList(
         getLastSearchViewByTextInputList);
     return newObject;
@@ -50,8 +52,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
       }
     });
     T newObject = fromJsonViewAbstract(jsonCopy);
+
+    ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
     (newObject as ViewAbstract).setParent(parent);
-    (newObject).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setLastSearchViewAbstractByTextInputList(
         getLastSearchViewByTextInputList);
     (newObject).textFieldController = textFieldController;
@@ -61,6 +64,13 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @override
   String toString() {
     return toJsonString();
+  }
+
+  String getActionText(BuildContext context) {
+    if (isEditing()) {
+      return "${AppLocalizations.of(context)!.edit} ${getMainHeaderLabelTextOnly(context)}";
+    }
+    return "${AppLocalizations.of(context)!.add_new} ${getMainHeaderLabelTextOnly(context)}";
   }
 }
 

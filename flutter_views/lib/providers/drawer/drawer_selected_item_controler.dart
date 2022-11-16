@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DrawerMenuSelectedItemController with ChangeNotifier {
-  bool sideMenuOpen = false;
+  bool sideMenuOpen = true;
   int _idx = 0;
   int get getIndex => _idx;
   bool get getSideMenuIsOpen => sideMenuOpen;

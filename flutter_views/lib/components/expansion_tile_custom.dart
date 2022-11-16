@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
@@ -15,6 +16,7 @@ class ExpansionTileCustom extends StatefulWidget {
   Widget? subtitle;
   Widget? trailing;
   bool? hasError;
+  bool initiallyExpanded;
   List<Widget> children;
   bool Function()? canExpand;
   ExpansionTileCustom(
@@ -24,6 +26,7 @@ class ExpansionTileCustom extends StatefulWidget {
       this.subtitle,
       this.trailing,
       required this.children,
+      this.initiallyExpanded = false,
       this.hasError,
       this.canExpand})
       : super(key: key);
@@ -61,6 +64,12 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
+
+    _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
+        widget.initiallyExpanded;
+    if (_isExpanded) {
+      _controller.value = 1.0;
+    }
   }
 
   @override
@@ -80,6 +89,11 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       ..begin =
           expansionTileTheme.collapsedIconColor ?? theme.unselectedWidgetColor
       ..end = expansionTileTheme.iconColor ?? colorScheme.primary;
+    _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
+        widget.initiallyExpanded;
+    if (_isExpanded) {
+      _controller.value = 1.0;
+    }
     super.didChangeDependencies();
   }
 
@@ -117,6 +131,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   }
 
   void _handleTap(BuildContext context) {
+    if (!canExpand(context)) return;
     setState(() {
       _isExpanded = !_isExpanded;
       if (_isExpanded) {
@@ -141,17 +156,22 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
 
     return Card(
-      child: Container(
-        padding: _isExpanded ? const EdgeInsets.all(20) : null,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 750),
+        padding: _isExpanded
+            ? const EdgeInsets.symmetric(horizontal: kDefaultPadding)
+            : null,
         decoration: BoxDecoration(
           color: expansionTileTheme.backgroundColor ?? Colors.transparent,
-          border: Border(
-            top: BorderSide(color: borderSideColor),
+          border: 
+          
+          
+          Border(
             bottom: BorderSide(
                 color: (widget.hasError ?? false)
                     ? Theme.of(context).colorScheme.onError
                     : borderSideColor,
-                width: 2),
+                width: (widget.hasError ?? false) ? 3 : 0),
           ),
         ),
         child: Column(

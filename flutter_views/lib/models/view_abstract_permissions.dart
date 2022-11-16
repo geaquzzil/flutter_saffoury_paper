@@ -17,6 +17,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(ignore: true)
   static const int ADMIN_ID = -1;
 
+  @JsonKey(ignore: true)
+  bool isNull = false;
+
   int iD = -1;
 
   ViewAbstract? get getParnet => parent;
@@ -192,10 +195,22 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool hasParent() {
-    return parent!=null;
+    return parent != null;
   }
 
-  void setParent(ViewAbstract? parent) => this.parent = parent;
+  void setParent(ViewAbstract? parent) {
+    this.parent = parent;
+    isNull = isNullableAlreadyFromParentCheck(getFieldNameFromParent!);
+  }
+
+  void toggleIsNullable() {
+    isNull = !isNull;
+  }
+
+  bool isNullableAlreadyFromParentCheck(String field) {
+    return getParnet?.getFieldValue(field) == null;
+  }
+
   void setFieldNameFromParent(String? fieldNameFromParent) =>
       this.fieldNameFromParent = fieldNameFromParent;
 }

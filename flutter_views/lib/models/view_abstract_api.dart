@@ -184,8 +184,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Future<T?> addCall({OnResponseCallback? onResponse}) async {
     var response = await getRespones(
-        onResponse: onResponse, serverActions: ServerActions.add);
+        onResponse: onResponse,
+        serverActions: isEditing() ? ServerActions.edit : ServerActions.add);
     if (response == null) return null;
+    if (response.statusCode == 200) {
+      return fromJsonViewAbstract(convert.jsonDecode(response.body));
+    }
     return null;
   }
 

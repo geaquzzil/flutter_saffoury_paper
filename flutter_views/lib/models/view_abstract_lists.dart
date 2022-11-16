@@ -15,7 +15,10 @@ import '../providers/actions/action_viewabstract_provider.dart';
 import '../providers/actions/edits/edit_error_list_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
-  IconData? getCardLeadingBottomIcon() => null;
+  IconData? getCardLeadingBottomIcon() {
+    return null;
+  }
+
   Widget getCardLeadingSearch(BuildContext context) {
     return getCardLeadingCircleAvatar(context);
   }
@@ -202,6 +205,15 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     ];
   }
 
+  Future<List<MenuItemBuild>> getPopupMenuActions(
+      BuildContext context, ServerActions action) async {
+    if (action == ServerActions.edit) {
+      return getPopupMenuActionsEdit(context);
+    }
+
+    return [];
+  }
+
   Future<List<MenuItemBuild>> getPopupMenuActionsEdit(
       BuildContext context) async {
     return [
@@ -219,6 +231,26 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       if (await hasPermissionView(context)) getMenuItemView(context),
       if (await hasPermissionShare(context)) getMenuItemShare(context),
     ];
+  }
+
+  Widget getPopupMenuActionWidget(BuildContext c, ServerActions action) {
+    //TODO for divider use PopupMenuDivider()
+
+    return FutureBuilder(
+      builder:
+          (BuildContext context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
+        return PopupMenuButton<MenuItemBuild>(
+          onSelected: (MenuItemBuild result) {
+            onPopupMenuActionSelected(c, result);
+          },
+          itemBuilder: (BuildContext context) =>
+              snapshot.data?.map(buildMenuItem).toList() ?? [],
+        );
+      },
+      future: action == ServerActions.edit
+          ? getPopupMenuActionsEdit(c)
+          : getPopupMenuActionsList(c),
+    );
   }
 
   Widget getPopupMenuActionListWidget(BuildContext c) {

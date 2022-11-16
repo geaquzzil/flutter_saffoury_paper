@@ -20,6 +20,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
   Widget build(BuildContext context) {
     return Column(children: [
       FormBuilderDropdown(
+        enabled: parent.isFieldEnabled(field),
         onChanged: (obj) => parent.onDropdownChanged(context, field, obj),
         validator: parent.getTextInputValidatorCompose(context, field),
         name: parent.getTag(field),
