@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
@@ -13,43 +14,47 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
     List<StackedActions?> stack =
         context.watch<ActionViewAbstractProvider>().getStackedActions;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      // mainAxisSize: MainAxisSize.,
-      children: [
-        SizedBox(
-          height: 40,
-          child: ListView.separated(
-              separatorBuilder: (context, index) => Center(
-                      child: VerticalDivider(
-                    color: Theme.of(context).colorScheme.outline,
-                  )),
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              // scrollDirection: Axis.horizontal,
-              itemCount: stack.length,
-              // scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                debugPrint("generate navigate icon index : $index");
-                dynamic v = stack[index];
-                if (v == null) {
-                  return getIconWithText(context, Icons.home,
-                      "Home${stack.length == 1 ? "" : " >"}");
-                }
-                ViewAbstract? viewAbstract = v!.object;
-                if (viewAbstract == null) {
-                  return getIconWithText(context, Icons.home, "Home");
-                } else {
-                  return getIconWithText(
-                      context,
-                      viewAbstract.getMainIconData(),
-                      viewAbstract.getMainHeaderLabelTextOnly(context) +
-                          (index == stack.length ? "" : ">"));
-                }
-              }),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisSize: MainAxisSize.,
+        children: [
+          SizedBox(
+            height: 40,
+            child: ListView.separated(
+                separatorBuilder: (context, index) => Center(
+                        child: VerticalDivider(
+                      color: Theme.of(context).colorScheme.outline,
+                    )),
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                // scrollDirection: Axis.horizontal,
+                itemCount: stack.length,
+                // scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  debugPrint("generate navigate icon index : $index");
+                  dynamic v = stack[index];
+                  if (v == null) {
+                    return getIconWithText(context, Icons.home,
+                        "Home${stack.length == 1 ? "" : " >"}");
+                  }
+                  ViewAbstract? viewAbstract = v!.object;
+                  if (viewAbstract == null) {
+                    return getIconWithText(context, Icons.home, "Home");
+                  } else {
+                    return getIconWithText(
+                        context,
+                        viewAbstract.getMainIconData(),
+                        viewAbstract.getMainHeaderLabelTextOnly(context) +
+                            (index == stack.length ? "" : ">"));
+                  }
+                }),
+          ),
+        ],
+      ),
     );
   }
 

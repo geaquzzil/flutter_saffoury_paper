@@ -1,13 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 
+import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
 import '../../new_components/tab_bar/tab_bar.dart';
+import '../../screens/base_shared_actions_header.dart';
 
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -174,46 +180,105 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
   }
 
   Widget getBody() {
-    return Row(
-      children: [
-        // Expanded(flex: 1, child: Text("TEST")),
-        Expanded(
-          flex: 1,
-          child: BaseEditWidget(
-            onValidate: (viewAbstract) {
-              currentViewAbstract = viewAbstract;
-            },
+    bool isListable = widget.viewAbstract is ListableInterface;
+    if (isListable) {
+      return Column(
+        children: [
+          BaseSharedHeaderViewDetailsActions(
             viewAbstract: widget.viewAbstract,
-            isTheFirst: true,
-            // onSubmit: (obj) {
-            //   if (obj != null) {
-            //     debugPrint("baseEditPage onSubmit $obj");
-            //   }
-            // },
           ),
-        ),
-        if (widget.viewAbstract.getTabs(context).isNotEmpty)
           Expanded(
-            child: OutlinedCard(
-              child: TabBarWidget(
+            child: TabBarByListWidget(
+              tabs: [
+                TabControllerHelper(
+                  "EDIT",
+                  widget: SingleChildScrollView(
+                      controller: ScrollController(),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      child: BaseEditWidget(
+                        onValidate: (viewAbstract) {
+                          currentViewAbstract = viewAbstract;
+                        },
+                        viewAbstract: widget.viewAbstract,
+                        isTheFirst: true,
+                        // onSubmit: (obj) {
+                        //   if (obj != null) {
+                        //     debugPrint("baseEditPage onSubmit $obj");
+                        //   }
+                        // },
+                      )),
+                ),
+                TabControllerHelper("LIST",
+                    widget: ListStaticWidget<ViewAbstract>(
+                      list: (widget.viewAbstract as ListableInterface)
+                          .getListableList(context),
+                      emptyWidget: const Text("null"),
+                      listItembuilder: (item) => ListTile(
+                        leading: item.getCardLeading(context),
+                        title: Text(item.getMainHeaderTextOnly(context) ?? ""),
+                        subtitle: (item.getMainLabelSubtitleText(context)),
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      return SingleChildScrollView(
+          controller: ScrollController(),
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          child: Column(
+            children: [
+              BaseSharedHeaderViewDetailsActions(
                 viewAbstract: widget.viewAbstract,
               ),
-            ),
-          )
-      ],
-    );
-    return BaseEditWidget(
-      onValidate: (viewAbstract) {
-        currentViewAbstract = viewAbstract;
-      },
-      viewAbstract: widget.viewAbstract,
-      isTheFirst: true,
-      // onSubmit: (obj) {
-      //   if (obj != null) {
-      //     debugPrint("baseEditPage onSubmit $obj");
-      //   }
-      // },
-    );
+              BaseEditWidget(
+                onValidate: (viewAbstract) {
+                  currentViewAbstract = viewAbstract;
+                },
+                viewAbstract: widget.viewAbstract,
+                isTheFirst: true,
+                // onSubmit: (obj) {
+                //   if (obj != null) {
+                //     debugPrint("baseEditPage onSubmit $obj");
+                //   }
+                // },
+              ),
+            ],
+          ));
+    }
+    // return Row(
+    //   children: [
+    //     // Expanded(flex: 1, child: Text("TEST")),
+    //     Expanded(
+    //       flex: 2,
+    //       child: BaseEditWidget(
+    //         onValidate: (viewAbstract) {
+    //           currentViewAbstract = viewAbstract;
+    //         },
+    //         viewAbstract: widget.viewAbstract,
+    //         isTheFirst: true,
+    //         // onSubmit: (obj) {
+    //         //   if (obj != null) {
+    //         //     debugPrint("baseEditPage onSubmit $obj");
+    //         //   }
+    //         // },
+    //       ),
+    //     ),
+    //     if (widget.viewAbstract.getTabs(context).isNotEmpty)
+    //       Expanded(
+    //         child: OutlinedCard(
+    //           child: TabBarWidget(
+    //             viewAbstract: widget.viewAbstract,
+    //           ),
+    //         ),
+    //       )
+    //   ],
+    // );
   }
 
   void _showToast(BuildContext context) {

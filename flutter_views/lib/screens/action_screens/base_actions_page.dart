@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/main_body.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -21,7 +22,7 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
 }
 
 class _BaseActionPageState<T extends ViewAbstract>
-    extends State<BaseActionPage<T>> with SingleTickerProviderStateMixin {
+    extends State<BaseActionPage<T>> with TickerProviderStateMixin {
   late TabController _tabController;
   List<Tab> tabs = <Tab>[];
   @override
@@ -33,7 +34,7 @@ class _BaseActionPageState<T extends ViewAbstract>
   @override
   void initState() {
     super.initState();
-    tabs.addAll(widget.object.getTabs(context));
+    tabs.addAll([TabControllerHelper("TITLE"), TabControllerHelper("LIST")]);
     _tabController = TabController(vsync: this, length: tabs.length);
   }
 
@@ -42,11 +43,11 @@ class _BaseActionPageState<T extends ViewAbstract>
         floating: true,
         expandedHeight: 200.0,
         snap: true,
-        title: widget.object.getMainHeaderText(context),
-        centerTitle: true,
-        // forceElevated: innerBoxIsScrolled,
+        // title: widget.object.getMainHeaderText(context),
+        // centerTitle: true,
+        forceElevated: innerBoxIsScrolled,
         flexibleSpace: getSilverAppBarBackground(context),
-        actions: widget.getAppBarActionsView(context),
+        // actions: widget.getAppBarActionsView(context),
         bottom: TabBar(
           tabs: tabs,
           controller: _tabController,
@@ -66,15 +67,16 @@ class _BaseActionPageState<T extends ViewAbstract>
     return Scaffold(
         bottomNavigationBar: widget.getBottomNavigationBar(context),
         body: NestedScrollView(
-          floatHeaderSlivers: true,
+          floatHeaderSlivers: false,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             getSilverAppBar(context, innerBoxIsScrolled),
           ],
-          body: TabBarView(
+          body: // widget.getBodyActionView(context) ??
+              TabBarView(
             controller: _tabController,
             children: tabs.map((Tab tab) {
               final String label = tab.text!.toLowerCase();
-              return MainBody(child: widget.getBodyActionView(context));
+              return MainBody(child: Text(label));
               // final String label = tab.text!.toLowerCase();
               // return Center(
               //   child: Text(

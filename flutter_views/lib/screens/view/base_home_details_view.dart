@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../action_screens/edit_details_page.dart';
 import '../base_shared_actions_header.dart';
 
 class BaseSharedDetailsView extends StatefulWidget {
@@ -43,6 +44,9 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
       switch (actionViewAbstractProvider.getServerActions) {
         case ServerActions.edit:
           debugPrint("ServerActions.edit ${viewAbstract.runtimeType} ");
+          // return EditDetailsPage(
+          //   object: viewAbstract,
+          // );
           return BaseEditNewPage(
             viewAbstract: viewAbstract,
           );

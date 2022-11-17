@@ -136,20 +136,16 @@ class BaseEditWidget extends StatelessWidget {
               action: ServerActions.edit,
               obj: viewAbstract as CartableInvoiceMasterObjectInterface);
         }
-        Widget form = SingleChildScrollView(
-            controller: ScrollController(),
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: Column(
-              children: [
-                // if (isTheFirst)
-                //   BaseSharedHeaderViewDetailsActions(
-                //     viewAbstract: viewAbstract,
-                //   ),
-                buildForm(context),
-                if (table != null) table,
-              ],
-            ));
+        Widget form = Column(
+          children: [
+            // if (isTheFirst)
+            //   BaseSharedHeaderViewDetailsActions(
+            //     viewAbstract: viewAbstract,
+            //   ),
+            buildForm(context),
+            if (table != null) table,
+          ],
+        );
 
         return isTheFirst
             ? form

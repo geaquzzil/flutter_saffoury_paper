@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
@@ -18,41 +19,46 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const BackButton(),
-              Expanded(
-                  child:
-                      BaseSharedHeaderDescription(viewAbstract: viewAbstract)),
-              // Expanded(
-              //   child: TabBar(
-              //     labelColor: Colors.black87,
-              //     tabs: tabs,
-              //     controller: tabController,
-              //   ),
-              // ),
-              // const Spacer(),
-              // We don't need print option on mobile
-              buildList(context),
-              IconButton(
-                icon: const Icon(Icons.more_horiz),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {},
-              ),
-            ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: Row(
+              children: [
+                const BackButton(),
+                Expanded(
+                    child: BaseSharedHeaderDescription(
+                        viewAbstract: viewAbstract)),
+                // Expanded(
+                //   child: TabBar(
+                //     labelColor: Colors.black87,
+                //     tabs: tabs,
+                //     controller: tabController,
+                //   ),
+                // ),
+                // const Spacer(),
+                // We don't need print option on mobile
+                buildList(context),
+                IconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {},
+                ),
+              ],
+            ),
           ),
-          // BaseSharedHeaderDescription(viewAbstract: viewAbstract),
-          // BaseSharedDetailsRating(viewAbstract: viewAbstract),
-          const BaseSharedActionDrawerNavigation()
-        ],
-      ),
+        ),
+
+        // BaseSharedHeaderDescription(viewAbstract: viewAbstract),
+        // BaseSharedDetailsRating(viewAbstract: viewAbstract),
+        // const BaseSharedActionDrawerNavigation()
+      ],
     );
   }
 

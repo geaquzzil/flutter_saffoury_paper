@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/screens/action_screens/edit_details_page
 import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
+
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   IconData? getCardLeadingBottomIcon() {
     return null;
@@ -40,7 +41,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   String getCardItemSearchText(BuildContext context) {
     return getMainHeaderTextOnly(context);
   }
-
 
   Widget getCardLeadingCircleAvatar(BuildContext context,
       {double width = 60, double height = 60}) {
@@ -104,7 +104,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       color: Theme.of(context).colorScheme.error,
       child: Icon(
         Icons.delete_outlined,
-        color: Theme.of(context).colorScheme.outline,
+        color: Theme.of(context).colorScheme.onError,
       ),
     );
   }

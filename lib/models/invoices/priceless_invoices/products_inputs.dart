@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -15,7 +16,8 @@ part 'products_inputs.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class ProductInput extends InvoiceMaster<ProductInput> {
+class ProductInput extends InvoiceMaster<ProductInput>
+    implements ListableInterface<ProductInputDetails> {
   // int? WarehouseID;
 
   List<ProductInputDetails>? products_inputs_details;
@@ -63,6 +65,11 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   @override
   ProductInput fromJsonViewAbstract(Map<String, dynamic> json) =>
       ProductInput.fromJson(json);
+
+  @override
+  List<ProductInputDetails> getListableList(BuildContext context) {
+    return products_inputs_details ?? [];
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

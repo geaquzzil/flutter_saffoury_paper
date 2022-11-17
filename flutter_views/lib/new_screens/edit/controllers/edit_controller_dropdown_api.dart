@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
@@ -55,13 +56,16 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   FormBuilderDropdown<T?> getDropdownController(
       BuildContext context, List<T?> list) {
     return FormBuilderDropdown<T?>(
+      // valueTransformer: ,
       autovalidateMode: AutovalidateMode.always,
       onChanged: (obj) =>
           widget.parent.onDropdownChanged(context, widget.field, obj),
       validator: ((value) => widget.parent
           .getTextInputValidatorIsRequired(context, widget.field, value)),
       name: widget.parent.getTag(widget.field),
-      initialValue: widget.parent.getFieldValue(widget.field),
+      initialValue: list.firstWhereOrNull((element) =>
+          element.iD ==
+          ((widget.parent.getFieldValue(widget.field) as ViewAbstract).iD)),
       onSaved: (newValue) {
         widget.parent.setFieldValue(widget.field, newValue);
         debugPrint('FormBuilderDropdown onSave=   $newValue');

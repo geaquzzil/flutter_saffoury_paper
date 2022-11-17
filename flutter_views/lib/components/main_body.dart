@@ -17,13 +17,14 @@ class MainBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      height: double.infinity,
       padding: padding,
       decoration: const BoxDecoration(
-        color: kWhite,
+        // color: kWhite,
         // ignore: unnecessary_const
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(60.0),
-          topRight: Radius.circular(20.0),
+          topRight: Radius.circular(60.0),
         ),
       ),
       child: child,

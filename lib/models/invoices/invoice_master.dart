@@ -29,6 +29,7 @@ import 'orders.dart';
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
     implements
         PrintableInvoiceInterface<PrintInvoice>,
+     
         ModifiablePrintableInterface<PrintProduct> {
   // int? EmployeeID;
   // int? CargoTransID;
