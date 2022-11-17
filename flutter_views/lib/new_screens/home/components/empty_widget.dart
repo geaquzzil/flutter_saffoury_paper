@@ -35,7 +35,7 @@ class EmptyWidget extends StatelessWidget {
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+            style: themeData.textTheme.caption
           ),
         ],
       ),

@@ -53,6 +53,17 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
     ]);
   }
 
+  int getEqualID() {
+    dynamic val = widget.parent.getFieldValue(widget.field);
+    if (val == null) {
+      return -100;
+    } else if (val is ViewAbstract) {
+      return val.iD;
+    } else {
+      return -100;
+    }
+  }
+
   FormBuilderDropdown<T?> getDropdownController(
       BuildContext context, List<T?> list) {
     return FormBuilderDropdown<T?>(
@@ -63,9 +74,9 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
       validator: ((value) => widget.parent
           .getTextInputValidatorIsRequired(context, widget.field, value)),
       name: widget.parent.getTag(widget.field),
-      initialValue: list.firstWhereOrNull((element) =>
-          element.iD ==
-          ((widget.parent.getFieldValue(widget.field) as ViewAbstract).iD)),
+      initialValue:
+          list.firstWhereOrNull((element) => element.iD == getEqualID()),
+
       onSaved: (newValue) {
         widget.parent.setFieldValue(widget.field, newValue);
         debugPrint('FormBuilderDropdown onSave=   $newValue');

@@ -14,6 +14,7 @@ import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
 import '../../new_components/tab_bar/tab_bar.dart';
 import '../../screens/base_shared_actions_header.dart';
+import '../lists/list_static_editable.dart';
 
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -210,17 +211,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                         // },
                       )),
                 ),
-                TabControllerHelper("LIST",
-                    widget: ListStaticWidget<ViewAbstract>(
-                      list: (widget.viewAbstract as ListableInterface)
-                          .getListableList(context),
-                      emptyWidget: const Text("null"),
-                      listItembuilder: (item) => ListTile(
-                        leading: item.getCardLeading(context),
-                        title: Text(item.getMainHeaderTextOnly(context) ?? ""),
-                        subtitle: (item.getMainLabelSubtitleText(context)),
-                      ),
-                    ))
+                TabControllerHelper("LIST", widget: getEditableList())
               ],
             ),
           ),
@@ -279,6 +270,12 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     //       )
     //   ],
     // );
+  }
+
+  Widget getEditableList() {
+    return ListableStaticEditable(
+        list: (widget.viewAbstract as ListableInterface)
+            .getListableList(context));
   }
 
   void _showToast(BuildContext context) {
