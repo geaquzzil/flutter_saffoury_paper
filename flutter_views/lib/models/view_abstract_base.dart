@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:path/path.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -80,11 +81,18 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     );
   }
 
+  Widget getMainHeaderTextOnEdit(BuildContext context) {
+    return Text(isNull
+            ? AppLocalizations.of(context)!.undefined.toUpperCase()
+            : getMainHeaderTextOnly(context).toUpperCase()
+        // style: const TextStyle(color: kTextLightColor)
+        );
+  }
+
   Widget getMainHeaderText(BuildContext context) {
-    return Text(
-      getMainHeaderTextOnly(context)+"# $iD",
-      // style: const TextStyle(color: kTextLightColor)
-    );
+    return Text(getMainHeaderTextOnly(context)
+        // style: const TextStyle(color: kTextLightColor)
+        );
   }
 
   Text getMainLabelText(BuildContext context) {
@@ -172,7 +180,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     });
     return mainField;
   }
-
 
   String getTag(String field) {
     return field;

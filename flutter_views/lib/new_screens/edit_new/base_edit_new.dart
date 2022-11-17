@@ -142,10 +142,10 @@ class BaseEditWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
             child: Column(
               children: [
-                if (isTheFirst)
-                  BaseSharedHeaderViewDetailsActions(
-                    viewAbstract: viewAbstract,
-                  ),
+                // if (isTheFirst)
+                //   BaseSharedHeaderViewDetailsActions(
+                //     viewAbstract: viewAbstract,
+                //   ),
                 buildForm(context),
                 if (table != null) table,
               ],
@@ -167,7 +167,7 @@ class BaseEditWidget extends StatelessWidget {
                     ),
                     subtitle: viewAbstract.getMainLabelSubtitleText(context),
                     trailing: getTrailing(context),
-                    title: viewAbstract.getMainHeaderText(context),
+                    title: viewAbstract.getMainHeaderTextOnEdit(context),
                     children: [form]),
               );
       }),
@@ -205,7 +205,8 @@ class BaseEditWidget extends StatelessWidget {
                   ),
                   onPressed: () {
                     viewAbstract.toggleIsNullable();
-                    viewAbstract.parent!.setFieldValue(viewAbstract.fieldNameFromParent!, viewAbstract);
+                    viewAbstract.parent!.setFieldValue(
+                        viewAbstract.fieldNameFromParent!, viewAbstract);
                     viewAbstractChangeProvider.toggleNullbale();
 
                     debugPrint(

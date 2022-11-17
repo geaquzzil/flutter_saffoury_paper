@@ -6,6 +6,9 @@ import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart'
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 
+import '../../new_components/cards/outline_card.dart';
+import '../../new_components/tab_bar/tab_bar.dart';
+
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
   BaseEditNewPage({Key? key, required this.viewAbstract}) : super(key: key);
@@ -167,18 +170,50 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               child:
                   isExtended ? Icon(Icons.arrow_forward) : getLoadingWidget(),
             )),
-        body: BaseEditWidget(
-          onValidate: (viewAbstract) {
-            currentViewAbstract = viewAbstract;
-          },
-          viewAbstract: widget.viewAbstract,
-          isTheFirst: true,
-          // onSubmit: (obj) {
-          //   if (obj != null) {
-          //     debugPrint("baseEditPage onSubmit $obj");
-          //   }
-          // },
-        ));
+        body: getBody());
+  }
+
+  Widget getBody() {
+    return Row(
+      children: [
+        // Expanded(flex: 1, child: Text("TEST")),
+        Expanded(
+          flex: 1,
+          child: BaseEditWidget(
+            onValidate: (viewAbstract) {
+              currentViewAbstract = viewAbstract;
+            },
+            viewAbstract: widget.viewAbstract,
+            isTheFirst: true,
+            // onSubmit: (obj) {
+            //   if (obj != null) {
+            //     debugPrint("baseEditPage onSubmit $obj");
+            //   }
+            // },
+          ),
+        ),
+        if (widget.viewAbstract.getTabs(context).isNotEmpty)
+          Expanded(
+            child: OutlinedCard(
+              child: TabBarWidget(
+                viewAbstract: widget.viewAbstract,
+              ),
+            ),
+          )
+      ],
+    );
+    return BaseEditWidget(
+      onValidate: (viewAbstract) {
+        currentViewAbstract = viewAbstract;
+      },
+      viewAbstract: widget.viewAbstract,
+      isTheFirst: true,
+      // onSubmit: (obj) {
+      //   if (obj != null) {
+      //     debugPrint("baseEditPage onSubmit $obj");
+      //   }
+      // },
+    );
   }
 
   void _showToast(BuildContext context) {

@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
@@ -126,14 +127,19 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {};
-
   @override
-  Map<String, bool> isFieldRequiredMap() => {};
+  Map<String, bool> isFieldRequiredMap() => {"warehouse": true};
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {
         "cargo_transporters": true,
         "warehouse": false // if there are warehouse then it cant be null
       };
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "warehouse")
+      return ViewAbstractControllerInputType.DROP_DOWN_API;
+    return ViewAbstractControllerInputType.EDIT_TEXT;
+  }
 
   @override
   IconData getMainIconData() => Icons.receipt;

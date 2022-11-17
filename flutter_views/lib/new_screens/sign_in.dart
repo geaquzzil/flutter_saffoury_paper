@@ -32,29 +32,27 @@ class SignInPage extends BaseWebPage {
         const SizedBox(
           height: 30,
         ),
-        const Text(
+        Text(
           "If you don't have an account",
-          style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(
           height: 10,
         ),
         Row(
           children: [
-            const Text(
+            Text(
               "You can",
-              style:
-                  TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(width: 15),
             GestureDetector(
               onTap: () {
                 debugPrint("${MediaQuery.of(context).size.width}");
               },
-              child: const Text(
+              child: Text(
                 "Register here!",
-                style: TextStyle(
-                    color: Colors.deepPurple, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.button,
               ),
             ),
           ],
@@ -123,15 +121,17 @@ class SignInPage extends BaseWebPage {
               //Enter username or email
               hintText: AppLocalizations.of(context)!.user_name,
               filled: true,
-              fillColor: Colors.blueGrey[50],
+
               labelStyle: const TextStyle(fontSize: 12),
               contentPadding: const EdgeInsets.only(left: 30),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueGrey.shade400),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.outline),
                 borderRadius: BorderRadius.circular(15),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueGrey.shade500),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.outline),
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
@@ -143,18 +143,18 @@ class SignInPage extends BaseWebPage {
               counterText: AppLocalizations.of(context)!.forget_get_account,
               suffixIcon: const Icon(
                 Icons.visibility_off_outlined,
-                color: Colors.grey,
               ),
               filled: true,
-              fillColor: Colors.blueGrey[50],
               labelStyle: const TextStyle(fontSize: 12),
               contentPadding: const EdgeInsets.only(left: 30),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueGrey[50]!),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.outline),
                 borderRadius: BorderRadius.circular(15),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueGrey[50]!),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.outline),
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
@@ -162,11 +162,10 @@ class SignInPage extends BaseWebPage {
           const SizedBox(height: 40),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.deepPurple[100]!,
+                  color: Theme.of(context).colorScheme.primary,
                   spreadRadius: 10,
                   blurRadius: 20,
                 ),
@@ -175,8 +174,8 @@ class SignInPage extends BaseWebPage {
             child: ElevatedButton(
               onPressed: () => debugPrint("it's pressed"),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.deepPurple,
+                foregroundColor: Theme.of(context).colorScheme.shadow,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -212,10 +211,10 @@ class SignInPage extends BaseWebPage {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _loginWithButton(image: Icons.g_mobiledata),
-              _loginWithButton(
+              _loginWithButton(context, image: Icons.g_mobiledata),
+              _loginWithButton(context,
                   image: Icons.g_mobiledata_rounded, isActive: true),
-              _loginWithButton(image: Icons.facebook),
+              _loginWithButton(context, image: Icons.facebook),
             ],
           ),
         ],
@@ -223,16 +222,16 @@ class SignInPage extends BaseWebPage {
     );
   }
 
-  Widget _loginWithButton({required IconData image, bool isActive = false}) {
+  Widget _loginWithButton(BuildContext context,
+      {required IconData image, bool isActive = false}) {
     return Container(
       width: 90,
       height: 70,
       decoration: isActive
           ? BoxDecoration(
-              color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey[300]!,
+                  color: Theme.of(context).colorScheme.shadow,
                   spreadRadius: 10,
                   blurRadius: 30,
                 )
@@ -247,7 +246,6 @@ class SignInPage extends BaseWebPage {
           child: Container(
               decoration: isActive
                   ? BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(35),
                       boxShadow: [
                         BoxShadow(

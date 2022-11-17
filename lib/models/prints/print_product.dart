@@ -67,7 +67,6 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
-    throw UnimplementedError();
+    return "dsad";
   }
 }

@@ -55,16 +55,18 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   FormBuilderDropdown<T?> getDropdownController(
       BuildContext context, List<T?> list) {
     return FormBuilderDropdown<T?>(
+      autovalidateMode: AutovalidateMode.always,
       onChanged: (obj) =>
           widget.parent.onDropdownChanged(context, widget.field, obj),
-      validator:
-          widget.parent.getTextInputValidatorCompose(context, widget.field),
+      validator: ((value) => widget.parent
+          .getTextInputValidatorIsRequired(context, widget.field, value)),
       name: widget.parent.getTag(widget.field),
       initialValue: widget.parent.getFieldValue(widget.field),
       onSaved: (newValue) {
         widget.parent.setFieldValue(widget.field, newValue);
         debugPrint('FormBuilderDropdown onSave=   $newValue');
       },
+
       decoration: getDecoration(context, widget.viewAbstract),
       // hint: Text(viewAbstract.getMainHeaderLabelTextOnly(context)),
       items: list

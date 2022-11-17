@@ -62,7 +62,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
       duration: const Duration(milliseconds: 1000),
       child: CustomPopupMenu(
         arrowSize: 20,
-        arrowColor: Colors.white,
+        arrowColor: Theme.of(context).colorScheme.onBackground,
         menuBuilder: () => popMenuBuilderListTile(),
         pressType: PressType.singleClick,
         verticalMargin: -15,
@@ -77,7 +77,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.background,
         child: IntrinsicWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -116,7 +116,6 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
           Icon(
             item.icon,
             size: 15,
-            color: Colors.black87,
           ),
           Expanded(
             child: Container(
@@ -124,10 +123,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
                 item.title,
-                style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 12,
-                ),
+                style: Theme.of(context).textTheme.caption,
               ),
             ),
           ),
@@ -140,7 +136,6 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        color: Colors.white,
         child: IntrinsicWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

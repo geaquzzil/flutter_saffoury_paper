@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -155,6 +156,29 @@ abstract class ViewAbstractInputAndValidater<T>
       if (maxValue != null) FormBuilderValidators.max(maxValue),
       if (minValue != null) FormBuilderValidators.min(minValue),
     ]);
+  }
+
+  String? getTextInputValidatorEnum(
+      BuildContext context, String field, ViewAbstractEnum? value) {
+    if (isFieldRequired(field)) {
+      if (value == null) {
+        ViewAbstractEnum e = getMirrorNewInstanceEnum(field);
+        return "${e.getMainLabelText(context)} ${AppLocalizations.of(context)!.errFieldIsIncorrect}";
+      }
+    }
+    return null;
+  }
+
+  String? getTextInputValidatorIsRequired(
+      BuildContext context, String field, dynamic value) {
+    debugPrint("getTextInputValidatorIsRequired field=>$field value=>$value");
+    if (isFieldRequired(field)) {
+      if (value == null) {
+        String fieldLabel = getFieldLabel(context, field);
+        return "$fieldLabel ${AppLocalizations.of(context)!.errFieldIsIncorrect}";
+      }
+    }
+    return null;
   }
 
   String? getTextInputValidator(
