@@ -68,7 +68,7 @@ class ProductInput extends InvoiceMaster<ProductInput>
       ProductInput.fromJson(json);
 
   @override
-  List<ProductInputDetails> getListableList(BuildContext context) {
+  List<ProductInputDetails> getListableList() {
     return products_inputs_details ?? [];
   }
 

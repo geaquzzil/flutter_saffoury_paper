@@ -8,12 +8,14 @@ part of 'sizes.dart';
 
 ProductSize _$ProductSizeFromJson(Map<String, dynamic> json) => ProductSize()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..width = json['width'] as int?
   ..length = json['length'] as int?;
 
 Map<String, dynamic> _$ProductSizeToJson(ProductSize instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'width': instance.width,
       'length': instance.length,
     };

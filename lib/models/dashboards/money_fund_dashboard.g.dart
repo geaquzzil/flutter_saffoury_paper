@@ -9,6 +9,7 @@ part of 'money_fund_dashboard.dart';
 MoneyFundDashbaord _$MoneyFundDashbaordFromJson(Map<String, dynamic> json) =>
     MoneyFundDashbaord()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..login = json['login'] as bool?
       ..permission = json['permission'] as bool?
       ..response = json['response'] as int?
@@ -203,6 +204,7 @@ MoneyFundDashbaord _$MoneyFundDashbaordFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$MoneyFundDashbaordToJson(MoneyFundDashbaord instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'login': instance.login,
       'permission': instance.permission,
       'response': instance.response,

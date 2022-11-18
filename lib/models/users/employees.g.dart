@@ -8,6 +8,7 @@ part of 'employees.dart';
 
 Employee _$EmployeeFromJson(Map<String, dynamic> json) => Employee()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..login = json['login'] as bool?
   ..permission = json['permission'] as bool?
   ..response = json['response'] as int?
@@ -151,6 +152,7 @@ Employee _$EmployeeFromJson(Map<String, dynamic> json) => Employee()
 
 Map<String, dynamic> _$EmployeeToJson(Employee instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'login': instance.login,
       'permission': instance.permission,
       'response': instance.response,

@@ -8,6 +8,7 @@ part of 'gsms.dart';
 
 GSM _$GSMFromJson(Map<String, dynamic> json) => GSM()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..gsm = json['gsm'] as int?
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
@@ -16,6 +17,7 @@ GSM _$GSMFromJson(Map<String, dynamic> json) => GSM()
 
 Map<String, dynamic> _$GSMToJson(GSM instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'gsm': instance.gsm,
       'products': instance.products?.map((e) => e.toJson()).toList(),
       'products_count': instance.products_count,

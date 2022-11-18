@@ -8,6 +8,7 @@ part of 'equalities.dart';
 
 Equalities _$EqualitiesFromJson(Map<String, dynamic> json) => Equalities()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..value = (json['value'] as num?)?.toDouble()
   ..date = json['date'] as String?
   ..currency = json['currency'] == null
@@ -17,6 +18,7 @@ Equalities _$EqualitiesFromJson(Map<String, dynamic> json) => Equalities()
 Map<String, dynamic> _$EqualitiesToJson(Equalities instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'value': instance.value,
       'date': instance.date,
       'currency': instance.currency?.toJson(),

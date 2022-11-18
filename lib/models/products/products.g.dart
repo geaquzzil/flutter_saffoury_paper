@@ -8,15 +8,13 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
   ..date = json['date'] as String?
   ..sheets = json['sheets'] as int?
   ..barcode = Product.intFromString(json['barcode'])
   ..fiberLines = json['fiberLines'] as String?
   ..comments = json['comments'] as String?
-  ..products = json['products'] == null
-          ? null
-          : Product.fromJson(json['products'] as Map<String, dynamic>)
   ..pending_reservation_invoice =
       (json['pending_reservation_invoice'] as num?)?.toDouble()
   ..pending_cut_requests = (json['pending_cut_requests'] as num?)?.toDouble()
@@ -104,6 +102,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'status': _$ProductStatusEnumMap[instance.status],
       'date': instance.date,
       'sheets': instance.sheets,

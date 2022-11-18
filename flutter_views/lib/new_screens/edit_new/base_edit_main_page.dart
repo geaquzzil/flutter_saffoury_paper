@@ -6,6 +6,9 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -99,84 +102,139 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              if (currentViewAbstract == null) {
-                isCalledApi = false;
-                debugPrint(
-                    "BaseEditMainPage  ready to upload currentViewAbstract=null");
-                _showToast(context);
-                return;
-              }
-              Dialogs.materialDialog(
-                  msgAlign: TextAlign.end,
-                  dialogWidth:
-                      kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-                  color: Theme.of(context).colorScheme.background,
-                  msg: 'Are you sure? you can\'t undo this action',
-                  title: 'Delete',
-                  context: context,
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('TextButton'),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton.extended(
+                onPressed: () async {
+                  Dialogs.materialDialog(
+                      msgAlign: TextAlign.end,
+                      customView: SizedBox(
+                          height: 300,
+                          width: 300,
+                          child: ListApiSearchableWidget()),
+                      dialogWidth:
+                          kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
+                      color: Theme.of(context).colorScheme.background,
+                      msg: 'Are you sure? you can\'t undo this action',
+                      title: 'Delete',
+                      context: context,
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('TextButton'),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              ViewAbstract viewAbstractToUpload =
+                                  currentViewAbstract!.copyToUplode();
+                              debugPrint(
+                                  "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                            },
+                            child: Text("OK")),
+                      ]);
+                },
+                label: AnimatedSwitcher(
+                  duration: Duration(seconds: 1),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) =>
+                          FadeTransition(
+                    opacity: animation,
+                    child: SizeTransition(
+                      child: child,
+                      sizeFactor: animation,
+                      axis: Axis.horizontal,
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          ViewAbstract viewAbstractToUpload =
-                              currentViewAbstract!.copyToUplode();
-                          debugPrint(
-                              "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
-                        },
-                        child: Text("OK")),
-                  ]);
-              // showModalBottomSheet<void>(
-              //   context: context,
-              //   shape: RoundedRectangleBorder(
-              //       borderRadius:
-              //           BorderRadius.vertical(top: Radius.circular(20))),
-              //   builder: (BuildContext context) {
-              //     return Container(
-              //       // height: 200,
-              //       // color: Colors.amber,
-              //       child: Column(
-              //         mainAxisAlignment: MainAxisAlignment.start,
-              //         mainAxisSize: MainAxisSize.min,
-              //         children: <Widget>[
-              //           ListTile(
-              //             title:
-              //                 (widget.viewAbstract.getMainHeaderText(context)),
-              //             leading: Icon(Icons.arrow_back_sharp),
-              //             subtitle: Text(widget.viewAbstract
-              //                 .getMainHeaderLabelTextOnly(context)),
-              //           ),
-              //           const Text('Modal BottomSheet'),
-              //           ElevatedButton(
-              //             child: const Text('Close BottomSheet'),
-              //             onPressed: () => Navigator.pop(context),
-              //           ),
-              //         ],
-              //       ),
-              //     );
-              //   },
-              // );
-            },
-            label: AnimatedSwitcher(
-              duration: Duration(seconds: 1),
-              transitionBuilder: (Widget child, Animation<double> animation) =>
-                  FadeTransition(
-                opacity: animation,
-                child: SizeTransition(
-                  child: child,
-                  sizeFactor: animation,
-                  axis: Axis.horizontal,
-                ),
-              ),
-              child:
-                  isExtended ? Icon(Icons.arrow_forward) : getLoadingWidget(),
-            )),
+                  ),
+                  child: isExtended ? Icon(Icons.add) : getLoadingWidget(),
+                )),
+            SizedBox(
+              width: kDefaultPadding,
+            ),
+            FloatingActionButton.extended(
+                onPressed: () async {
+                  if (currentViewAbstract == null) {
+                    isCalledApi = false;
+                    debugPrint(
+                        "BaseEditMainPage  ready to upload currentViewAbstract=null");
+                    _showToast(context);
+                    return;
+                  }
+                  Dialogs.materialDialog(
+                      msgAlign: TextAlign.end,
+                      dialogWidth:
+                          kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
+                      color: Theme.of(context).colorScheme.background,
+                      msg: 'Are you sure? you can\'t undo this action',
+                      title: 'Delete',
+                      context: context,
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('TextButton'),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              ViewAbstract viewAbstractToUpload =
+                                  currentViewAbstract!.copyToUplode();
+                              debugPrint(
+                                  "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                            },
+                            child: Text("OK")),
+                      ]);
+                  // showModalBottomSheet<void>(
+                  //   context: context,
+                  //   shape: RoundedRectangleBorder(
+                  //       borderRadius:
+                  //           BorderRadius.vertical(top: Radius.circular(20))),
+                  //   builder: (BuildContext context) {
+                  //     return Container(
+                  //       // height: 200,
+                  //       // color: Colors.amber,
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: <Widget>[
+                  //           ListTile(
+                  //             title:
+                  //                 (widget.viewAbstract.getMainHeaderText(context)),
+                  //             leading: Icon(Icons.arrow_back_sharp),
+                  //             subtitle: Text(widget.viewAbstract
+                  //                 .getMainHeaderLabelTextOnly(context)),
+                  //           ),
+                  //           const Text('Modal BottomSheet'),
+                  //           ElevatedButton(
+                  //             child: const Text('Close BottomSheet'),
+                  //             onPressed: () => Navigator.pop(context),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // );
+                },
+                label: AnimatedSwitcher(
+                  duration: Duration(seconds: 1),
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) =>
+                          FadeTransition(
+                    opacity: animation,
+                    child: SizeTransition(
+                      child: child,
+                      sizeFactor: animation,
+                      axis: Axis.horizontal,
+                    ),
+                  ),
+                  child: isExtended
+                      ? Icon(Icons.arrow_forward)
+                      : getLoadingWidget(),
+                )),
+          ],
+        ),
         body: getBody());
   }
 
@@ -278,8 +336,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
             (widget.viewAbstract as ListableInterface).onListableDelete(v),
         onUpdate: (v) =>
             (widget.viewAbstract as ListableInterface).onListableUpdate(v),
-        list: (widget.viewAbstract as ListableInterface)
-            .getListableList(context));
+        list: (widget.viewAbstract as ListableInterface).getListableList());
   }
 
   void _showToast(BuildContext context) {

@@ -9,6 +9,7 @@ part of 'reservation_invoice.dart';
 ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
     ReservationInvoice()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
       ..billNo = json['billNo'] as String?
@@ -44,6 +45,7 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ReservationInvoiceToJson(ReservationInvoice instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -76,6 +78,7 @@ ReservationInvoiceDetails _$ReservationInvoiceDetailsFromJson(
         Map<String, dynamic> json) =>
     ReservationInvoiceDetails()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -96,6 +99,7 @@ Map<String, dynamic> _$ReservationInvoiceDetailsToJson(
         ReservationInvoiceDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),
       'quantity': instance.quantity,

@@ -8,6 +8,7 @@ part of 'orders_refunds.dart';
 
 OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
   ..billNo = json['billNo'] as String?
@@ -43,6 +44,7 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
 Map<String, dynamic> _$OrderRefundToJson(OrderRefund instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -76,6 +78,7 @@ const _$InvoiceStatusEnumMap = {
 OrderRefundDetails _$OrderRefundDetailsFromJson(Map<String, dynamic> json) =>
     OrderRefundDetails()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -101,6 +104,7 @@ OrderRefundDetails _$OrderRefundDetailsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$OrderRefundDetailsToJson(OrderRefundDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),
       'quantity': instance.quantity,

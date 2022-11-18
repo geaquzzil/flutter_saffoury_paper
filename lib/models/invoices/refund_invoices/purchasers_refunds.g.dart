@@ -9,6 +9,7 @@ part of 'purchasers_refunds.dart';
 PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
     PurchasesRefund()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
       ..billNo = json['billNo'] as String?
@@ -47,6 +48,7 @@ PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PurchasesRefundToJson(PurchasesRefund instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -82,6 +84,7 @@ PurchasesRefundDetails _$PurchasesRefundDetailsFromJson(
         Map<String, dynamic> json) =>
     PurchasesRefundDetails()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -109,6 +112,7 @@ Map<String, dynamic> _$PurchasesRefundDetailsToJson(
         PurchasesRefundDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),
       'quantity': instance.quantity,

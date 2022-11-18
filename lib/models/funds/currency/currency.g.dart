@@ -8,11 +8,13 @@ part of 'currency.dart';
 
 Currency _$CurrencyFromJson(Map<String, dynamic> json) => Currency()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..name = BaseWithNameString.intFromString(json['name'])
   ..nameAr = json['nameAr'] as String?;
 
 Map<String, dynamic> _$CurrencyToJson(Currency instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'name': instance.name,
       'nameAr': instance.nameAr,
     };

@@ -8,6 +8,7 @@ part of 'account_names.dart';
 
 AccountName _$AccountNameFromJson(Map<String, dynamic> json) => AccountName()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..name = BaseWithNameString.intFromString(json['name'])
   ..account_names_types = json['account_names_types'] == null
       ? null
@@ -17,6 +18,7 @@ AccountName _$AccountNameFromJson(Map<String, dynamic> json) => AccountName()
 Map<String, dynamic> _$AccountNameToJson(AccountName instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'name': instance.name,
       'account_names_types': instance.account_names_types?.toJson(),
     };
@@ -24,6 +26,7 @@ Map<String, dynamic> _$AccountNameToJson(AccountName instance) =>
 AccountNameType _$AccountNameTypeFromJson(Map<String, dynamic> json) =>
     AccountNameType()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..type = json['type'] as String?
       ..typeAr = json['typeAr'] as String?
       ..account_names = (json['account_names'] as List<dynamic>?)
@@ -34,6 +37,7 @@ AccountNameType _$AccountNameTypeFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$AccountNameTypeToJson(AccountNameType instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'type': instance.type,
       'typeAr': instance.typeAr,
       'account_names': instance.account_names?.map((e) => e.toJson()).toList(),

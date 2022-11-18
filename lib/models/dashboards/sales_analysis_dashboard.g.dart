@@ -10,6 +10,7 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
         Map<String, dynamic> json) =>
     SalesAnalysisDashboard()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..date = json['date'] == null
           ? null
           : DateObject.fromJson(json['date'] as Map<String, dynamic>)
@@ -80,6 +81,7 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
         SalesAnalysisDashboard instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'date': instance.date?.toJson(),
       'bestSellingSize':
           instance.bestSellingSize?.map((e) => e.toJson()).toList(),

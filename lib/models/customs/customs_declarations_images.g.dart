@@ -10,6 +10,7 @@ CustomsDeclarationImages _$CustomsDeclarationImagesFromJson(
         Map<String, dynamic> json) =>
     CustomsDeclarationImages()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..image = json['image'] as String?
       ..comments = json['comments'] as String?
       ..customs_declarations = json['customs_declarations'] == null
@@ -21,6 +22,7 @@ Map<String, dynamic> _$CustomsDeclarationImagesToJson(
         CustomsDeclarationImages instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'image': instance.image,
       'comments': instance.comments,
       'customs_declarations': instance.customs_declarations?.toJson(),

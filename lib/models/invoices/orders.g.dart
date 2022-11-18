@@ -8,6 +8,7 @@ part of 'orders.dart';
 
 Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
   ..billNo = json['billNo'] as String?
@@ -41,6 +42,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -73,6 +75,7 @@ const _$InvoiceStatusEnumMap = {
 
 OrderDetails _$OrderDetailsFromJson(Map<String, dynamic> json) => OrderDetails()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..products = json['products'] == null
       ? null
       : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -91,6 +94,7 @@ OrderDetails _$OrderDetailsFromJson(Map<String, dynamic> json) => OrderDetails()
 Map<String, dynamic> _$OrderDetailsToJson(OrderDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),
       'quantity': instance.quantity,

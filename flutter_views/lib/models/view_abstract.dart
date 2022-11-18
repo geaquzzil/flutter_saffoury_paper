@@ -47,6 +47,13 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   }
 
   T copyToUplode() {
+    if (this is ListableInterface) {
+      Iterable<ViewAbstract>? l = (this as ListableInterface).deletedList;
+      if (l != null) {
+        debugPrint("copyToUplode list to delete=> $l");
+        (this as ListableInterface).getListableList().addAll(l);
+      }
+    }
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy.forEach((key, value) {
       dynamic o = getFieldValue(key);
@@ -58,10 +65,6 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
         }
       }
     });
-    if (this is ListableInterface) {
-      List? l = (this as ListableInterface).deletedList;
-      debugPrint("copyToUplode list to delete=> $l");
-    }
 
     return fromJsonViewAbstract(jsonCopy);
   }

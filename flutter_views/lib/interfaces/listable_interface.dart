@@ -6,7 +6,7 @@ abstract class ListableInterface<T extends ViewAbstract> {
   List<T>? deletedList = [];
 
   /// get future that fired when pos widget is created
-  List<T> getListableList(BuildContext context);
+  List<T> getListableList();
 
   void onListableDelete(T item);
 

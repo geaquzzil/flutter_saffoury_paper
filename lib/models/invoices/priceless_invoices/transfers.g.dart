@@ -8,6 +8,7 @@ part of 'transfers.dart';
 
 Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
   ..billNo = json['billNo'] as String?
@@ -43,6 +44,7 @@ Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
 
 Map<String, dynamic> _$TransfersToJson(Transfers instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -75,6 +77,7 @@ const _$InvoiceStatusEnumMap = {
 TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
     TransfersDetails()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -93,6 +96,7 @@ TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$TransfersDetailsToJson(TransfersDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),
       'quantity': instance.quantity,

@@ -9,6 +9,7 @@ part of 'sizes_cut_requests.dart';
 SizesCutRequest _$SizesCutRequestFromJson(Map<String, dynamic> json) =>
     SizesCutRequest()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..cut_requests = json['cut_requests'] == null
           ? null
           : CutRequest.fromJson(json['cut_requests'] as Map<String, dynamic>)
@@ -20,6 +21,7 @@ SizesCutRequest _$SizesCutRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$SizesCutRequestToJson(SizesCutRequest instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'cut_requests': instance.cut_requests?.toJson(),
       'sizes': instance.sizes?.toJson(),
       'quantity': instance.quantity,

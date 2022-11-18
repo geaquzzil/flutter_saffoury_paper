@@ -9,6 +9,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
+  @JsonKey(ignore: true)
+  Map<String, TextEditingController> textFieldController = {};
+
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
@@ -21,8 +24,6 @@ abstract class ViewAbstractInputAndValidater<T>
   Map<String, double> getTextInputMinValidateMap();
 
   Map<String, bool> isTextInputEnabledMap(BuildContext context) => {};
-
-  Map<String, TextEditingController> textFieldController = {};
 
   TextInputType? getTextInputType(String field) {
     return getTextInputTypeMap()[field];

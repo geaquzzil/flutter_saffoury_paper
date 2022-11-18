@@ -9,6 +9,7 @@ part of 'products_outputs.dart';
 ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
       ..billNo = json['billNo'] as String?
@@ -46,6 +47,7 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ProductOutputToJson(ProductOutput instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -78,6 +80,7 @@ ProductOutputDetails _$ProductOutputDetailsFromJson(
         Map<String, dynamic> json) =>
     ProductOutputDetails()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -98,6 +101,7 @@ Map<String, dynamic> _$ProductOutputDetailsToJson(
         ProductOutputDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),
       'quantity': instance.quantity,

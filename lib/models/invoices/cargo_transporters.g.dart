@@ -9,6 +9,7 @@ part of 'cargo_transporters.dart';
 CargoTransporter _$CargoTransporterFromJson(Map<String, dynamic> json) =>
     CargoTransporter()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..name = json['name'] as String?
       ..phone = json['phone'] as String?
       ..maxWeight = (json['maxWeight'] as num?)?.toDouble()
@@ -20,6 +21,7 @@ CargoTransporter _$CargoTransporterFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CargoTransporterToJson(CargoTransporter instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'name': instance.name,
       'phone': instance.phone,
       'maxWeight': instance.maxWeight,

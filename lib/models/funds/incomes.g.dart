@@ -8,6 +8,7 @@ part of 'incomes.dart';
 
 Incomes _$IncomesFromJson(Map<String, dynamic> json) => Incomes()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
   ..date = json['date'] as String?
@@ -31,6 +32,7 @@ Incomes _$IncomesFromJson(Map<String, dynamic> json) => Incomes()
 
 Map<String, dynamic> _$IncomesToJson(Incomes instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'fromBox': instance.fromBox,
       'isDirect': instance.isDirect,
       'date': instance.date,

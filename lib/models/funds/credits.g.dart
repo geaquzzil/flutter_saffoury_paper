@@ -8,6 +8,7 @@ part of 'credits.dart';
 
 Credits _$CreditsFromJson(Map<String, dynamic> json) => Credits()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
   ..date = json['date'] as String?
@@ -28,6 +29,7 @@ Credits _$CreditsFromJson(Map<String, dynamic> json) => Credits()
 
 Map<String, dynamic> _$CreditsToJson(Credits instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'fromBox': instance.fromBox,
       'isDirect': instance.isDirect,
       'date': instance.date,
