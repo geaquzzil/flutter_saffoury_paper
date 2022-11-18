@@ -33,7 +33,9 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
     if (_list != null) {
       _list!.insert(0, null);
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     return _list;
   }
 

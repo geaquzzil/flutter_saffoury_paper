@@ -31,10 +31,12 @@ class BaseEditWidget extends StatelessWidget {
   Map<String, TextEditingController> controllers = {};
   late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
+  bool isRequiredSubViewAbstract;
   BaseEditWidget(
       {Key? key,
       required this.viewAbstract,
       required this.isTheFirst,
+      this.isRequiredSubViewAbstract = true,
       this.onValidate})
       : super(key: key);
   void init(BuildContext context) {
@@ -42,8 +44,14 @@ class BaseEditWidget extends StatelessWidget {
 
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;
-
-    fields = viewAbstract.getMainFields();
+    if (!isRequiredSubViewAbstract) {
+      fields = viewAbstract
+          .getMainFields()
+          .where((element) => !viewAbstract.isViewAbstract(element))
+          .toList();
+    } else {
+      fields = viewAbstract.getMainFields();
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (viewAbstract.hasParent()) {

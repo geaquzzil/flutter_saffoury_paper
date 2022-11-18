@@ -274,6 +274,10 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
 
   Widget getEditableList() {
     return ListableStaticEditable(
+        onDelete: (v) =>
+            (widget.viewAbstract as ListableInterface).onListableDelete(v),
+        onUpdate: (v) =>
+            (widget.viewAbstract as ListableInterface).onListableUpdate(v),
         list: (widget.viewAbstract as ListableInterface)
             .getListableList(context));
   }

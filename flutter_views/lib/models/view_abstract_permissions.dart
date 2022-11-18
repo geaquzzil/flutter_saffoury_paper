@@ -200,7 +200,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   void setParent(ViewAbstract? parent) {
     this.parent = parent;
-    isNull = isNullableAlreadyFromParentCheck(getFieldNameFromParent!);
+    if(getFieldNameFromParent!=null) {
+      isNull = isNullableAlreadyFromParentCheck(getFieldNameFromParent!);
+    }
   }
 
   void toggleIsNullable() {

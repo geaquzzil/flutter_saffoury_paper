@@ -47,8 +47,11 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
           // return EditDetailsPage(
           //   object: viewAbstract,
           // );
-          return BaseEditNewPage(
-            viewAbstract: viewAbstract,
+          return Container(
+            color: Theme.of(context).colorScheme.background,
+            child: BaseEditNewPage(
+              viewAbstract: viewAbstract,
+            ),
           );
         case ServerActions.view:
           return wrapHeaderAndFooter(

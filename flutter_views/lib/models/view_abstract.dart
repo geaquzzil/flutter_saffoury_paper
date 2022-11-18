@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
+  bool? delete;
   ViewAbstract() : super();
 
   List<Widget> getHorizotalList(BuildContext context) => [];
@@ -51,11 +53,15 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
       if (o is ViewAbstract) {
         debugPrint("copyToUplode field=$key isViewAbstract ");
         if (o.isNull) {
-            debugPrint("copyToUplode field=$key is Null ");
+          debugPrint("copyToUplode field=$key is Null ");
           jsonCopy[key] = null;
         }
       }
     });
+    if (this is ListableInterface) {
+      List? l = (this as ListableInterface).deletedList;
+      debugPrint("copyToUplode list to delete=> $l");
+    }
 
     return fromJsonViewAbstract(jsonCopy);
   }

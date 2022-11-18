@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -9,10 +11,14 @@ import '../../providers/cart/cart_provider.dart';
 
 class ListCardItemEditable<T extends ViewAbstract> extends StatefulWidget {
   final T object;
-  const ListCardItemEditable({
-    Key? key,
-    required this.object,
-  }) : super(key: key);
+  void Function(T object) onDelete;
+  void Function(T object) onUpdate;
+  ListCardItemEditable(
+      {Key? key,
+      required this.object,
+      required this.onDelete,
+      required this.onUpdate})
+      : super(key: key);
 
   @override
   State<ListCardItemEditable> createState() => _ListCardItemEditable();
@@ -25,69 +31,39 @@ class _ListCardItemEditable<T extends ViewAbstract>
   @override
   void initState() {
     super.initState();
+    validated = widget.object;
     // checkEnable();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Dismissible(
+    return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.horizontal,
       background: dismissBackground(context),
       secondaryBackground: dismissBackground(context),
-      onDismissed: (direction) => context
-          .read<CartProvider>()
-          .onCartItemRemoved(
-              context, widget.object as CartableInvoiceDetailsInterface),
-      child: Container(
-        decoration: validated != null
-            ? null
-            : BoxDecoration(
-                // borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border(
-                left: BorderSide(
-                  //                   <--- left side
-                  color: Theme.of(context).colorScheme.onError,
-                  width: 5.0,
-                ),
-              )),
-        child: ExpansionTile(
-            initiallyExpanded: isExpanded,
-            onExpansionChanged: ((value) {
-              if (value) {
+      onDismissed: (direction) => widget.onDelete(widget.object),
+      child: ExpansionTileCustom(
+        title: (widget.object.getMainHeaderText(context)),
+        subtitle: (widget.object.getMainSubtitleHeaderText(context)),
+        leading: widget.object.getCardLeading(context),
+        trailing: widget.object.getPopupMenuActionListWidget(context),
+        hasError: validated == null,
+        canExpand: () => true,
+        children: [
+          BaseEditWidget(
+              viewAbstract: widget.object,
+              isTheFirst: true,
+              isRequiredSubViewAbstract: false,
+              onValidate: (viewAbstract) {
+                widget.onUpdate(validated as T);
                 setState(() {
-                  isExpanded = value;
+                  validated = viewAbstract;
                 });
-              }
-            }),
-            // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-            // onTap: () => widget.object.onCardClicked(context),
-            // onLongPress: () => widget.object.onCardLongClicked(context),
-            title: (widget.object.getMainHeaderText(context)),
-            subtitle: (widget.object.getMainSubtitleHeaderText(context)),
-            // isThreeLine: true,
-
-            leading: widget.object.getCardLeading(context),
-            trailing: widget.object.getPopupMenuActionListWidget(context),
-
-            // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-            // onTap: () => widget.object.onCardClicked(context),
-            // onLongPress: () => widget.object.onCardLongClicked(context),
-            children: [
-              EditableWidget(
-                  viewAbstract: widget.object,
-                  onValidated: (viewAbstract) {
-                    setState(() {
-                      validated = viewAbstract;
-                    });
-
-                    context.read<CartProvider>().onCartItemChanged(context, -1,
-                        viewAbstract as CartableInvoiceDetailsInterface);
-                  })
-            ]),
+              })
+        ],
       ),
-    ));
+    );
   }
 
   Container dismissBackground(BuildContext context) {

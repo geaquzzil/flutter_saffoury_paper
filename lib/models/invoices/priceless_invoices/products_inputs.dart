@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -70,6 +71,30 @@ class ProductInput extends InvoiceMaster<ProductInput>
   List<ProductInputDetails> getListableList(BuildContext context) {
     return products_inputs_details ?? [];
   }
+
+  @override
+  void onListableDelete(ProductInputDetails item) {
+    if (item.isEditing()) {
+      deletedList ??= [];
+      item.delete = true;
+      deletedList?.add(item);
+    }
+    products_inputs_details
+        ?.removeWhere((element) => item.products?.iD == element.products?.iD);
+  }
+
+  @override
+  void onListableUpdate(ProductInputDetails item) {
+    try {
+      ProductInputDetails? d = products_inputs_details!.firstWhereOrNull(
+        (element) => element.products?.iD == item.products?.iD,
+      );
+      d = item;
+    } catch (e) {}
+  }
+
+  @override
+  List<ProductInputDetails>? deletedList;
 }
 
 @JsonSerializable(explicitToJson: true)

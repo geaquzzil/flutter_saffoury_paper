@@ -3,6 +3,8 @@ import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.da
 import 'package:intl/intl.dart';
 import 'dart:math';
 
+import 'models/view_abstract.dart';
+
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   static Color fromHex(String hexString) {
@@ -51,9 +53,26 @@ extension DatesDateTime on DateTime? {
   }
 }
 
+extension IterableModifierNullbale<E> on Iterable<E?>? {
+  E? firstWhereOrNull(bool Function(E) test) {
+    if (this == null) return null;
+    return this!.firstWhereOrNull(test);
+  }
+
+  void setParent(ViewAbstract parent) {
+    if (this == null) return;
+    this!.setParent(parent);
+  }
+}
+
 extension IterableModifier<E> on Iterable<E?> {
   E? firstWhereOrNull(bool Function(E) test) =>
       cast<E?>().firstWhere((v) => v != null && test(v), orElse: () => null);
+  void setParent(ViewAbstract parent) {
+    forEach((element) {
+      (element as ViewAbstract).setParent(parent);
+    });
+  }
 }
 
 extension ConvertersNumbers on dynamic {}
