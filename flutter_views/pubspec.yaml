@@ -84,6 +84,7 @@ dependencies:
   tab_indicator_styler: ^2.0.0
   stacked_services: ^0.9.8
   material_dialogs: ^1.1.3
+  flutter_custom_dialog: ^1.3.0
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   

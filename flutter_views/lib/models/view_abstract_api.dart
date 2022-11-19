@@ -29,11 +29,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(ignore: true)
   Map<String, String>? _customMap;
 
+  Map<String, String> getCustomMapOnSearch() => {};
+
   Map<String, String> get getCustomMap => _customMap ?? {};
 
   void setCustomMap(Map<String, String> customMap) {
     _customMap = customMap;
   }
+
+  
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
     debugPrint(
@@ -454,6 +458,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody['start'] =
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
+
+        mainBody.addAll(getCustomMapOnSearch());
         break;
 
       case ServerActions.list_reduce_size:

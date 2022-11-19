@@ -11,8 +11,11 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../interfaces/cartable_interface.dart';
+import '../../interfaces/listable_interface.dart';
 import '../../models/view_abstract.dart';
 import '../../models/view_abstract_inputs_validaters.dart';
+import '../../new_components/editables/editable_table_widget.dart';
+import '../../new_components/editables/paginated_data_table2.dart';
 import '../../new_components/tables_widgets/cart_data_table_master.dart';
 import '../../screens/base_shared_actions_header.dart';
 import '../edit/controllers/edit_controller_checkbox.dart';
@@ -139,10 +142,10 @@ class BaseEditWidget extends StatelessWidget {
       child: Consumer<ViewAbstractChangeProvider>(
           builder: (context, provider, listTile) {
         Widget? table;
-        if (viewAbstract is CartableInvoiceMasterObjectInterface) {
-          table = CartDataTableMaster(
-              action: ServerActions.edit,
-              obj: viewAbstract as CartableInvoiceMasterObjectInterface);
+        if (viewAbstract is ListableInterface) {
+          table = EditableTableWidget(
+              viewAbstract: viewAbstract as ListableInterface);
+          // table = PaginatedDataTableDemo();
         }
         Widget form = Column(
           children: [
@@ -150,8 +153,9 @@ class BaseEditWidget extends StatelessWidget {
             //   BaseSharedHeaderViewDetailsActions(
             //     viewAbstract: viewAbstract,
             //   ),
-            buildForm(context),
+
             if (table != null) table,
+            buildForm(context),
           ],
         );
 
@@ -242,7 +246,7 @@ class BaseEditWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const SizedBox(height: 24.0),
-              ...fields.map((e) => buildWidget(context, e)).toList(),
+              ...fields.map((e) => getControllerWidget(context, e)).toList(),
               // ElevatedButton(
               //   onPressed: () {
               //     // validate();
@@ -252,7 +256,7 @@ class BaseEditWidget extends StatelessWidget {
             ]));
   }
 
-  Widget buildWidget(BuildContext context, String field) {
+  Widget getControllerWidget(BuildContext context, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     fieldValue ??= viewAbstract.getMirrorNewInstance(field);
     TextInputType? textInputType = viewAbstract.getTextInputType(field);

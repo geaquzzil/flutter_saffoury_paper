@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_re
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/widgets/chart_date_chosser.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -32,7 +33,9 @@ part 'orders.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Order extends InvoiceMaster<Order>
-    implements CartableInvoiceMasterObjectInterface {
+    implements
+        CartableInvoiceMasterObjectInterface,
+        ListableInterface<OrderDetails> {
   List<OrderDetails>? orders_details;
   int? orders_details_count;
 
@@ -235,6 +238,28 @@ class Order extends InvoiceMaster<Order>
   @override
   void onCartClear() {
     orders_details?.clear();
+  }
+
+  @override
+  List<OrderDetails>? deletedList;
+
+  @override
+  List<OrderDetails> getListableList() => orders_details ?? [];
+
+  @override
+  void onListableDelete(OrderDetails item) {
+      if (item.isEditing()) {
+      deletedList ??= [];
+      item.delete = true;
+      deletedList?.add(item);
+    }
+    orders_details
+        ?.removeWhere((element) => item.products?.iD == element.products?.iD);
+  }
+
+  @override
+  void onListableUpdate(OrderDetails item) {
+    // TODO: implement onListableUpdate
   }
 }
 

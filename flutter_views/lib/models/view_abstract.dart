@@ -33,6 +33,13 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return newValue as T;
   }
 
+  T getNewInstance({String? searchByAutoCompleteTextInput}) {
+    T ob = ((copyWithNewSuggestion(this) as ViewAbstract)..iD = -1) as T;
+    (ob as ViewAbstract).searchByAutoCompleteTextInput =
+        searchByAutoCompleteTextInput;
+    return ob;
+  }
+
   T copyWithSetNew(String field, dynamic value) {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy[field] = castFieldValue(field, value);

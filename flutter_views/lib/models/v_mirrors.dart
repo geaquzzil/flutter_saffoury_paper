@@ -26,7 +26,7 @@ abstract class VMirrors<T> {
   }
 
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};
-
+  
   InstanceMirror getInstanceMirror() {
     return reflector.reflect(this);
   }

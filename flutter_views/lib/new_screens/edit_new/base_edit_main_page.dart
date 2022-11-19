@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog_widget.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/editables/paginated_data_table2.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
@@ -58,24 +61,24 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         if (responseViewAbstract == null) {
           return Row(
             children: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
+              const Padding(
+                  padding: EdgeInsets.only(right: 4.0),
                   child: Icon(Icons.cancel)),
-              Text("faild to added")
+              const Text("faild to added")
             ],
           );
         } else {
           return Row(
             children: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
+              const Padding(
+                  padding: EdgeInsets.only(right: 4.0),
                   child: Icon(Icons.done)),
-              Text("Successfully added")
+              const Text("Successfully added")
             ],
           );
         }
       } else {
-        return SizedBox(
+        return const SizedBox(
           width: 20,
           height: 20,
           child: CircularProgressIndicator(
@@ -99,6 +102,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
 
   @override
   Widget build(BuildContext context) {
+    YYDialog.init(context);
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
@@ -107,37 +111,43 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
           children: [
             FloatingActionButton.extended(
                 onPressed: () async {
-                  Dialogs.materialDialog(
-                      msgAlign: TextAlign.end,
-                      customView: SizedBox(
-                          height: 300,
-                          width: 300,
-                          child: ListApiSearchableWidget()),
-                      dialogWidth:
-                          kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-                      color: Theme.of(context).colorScheme.background,
-                      msg: 'Are you sure? you can\'t undo this action',
-                      title: 'Delete',
-                      context: context,
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('TextButton'),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              ViewAbstract viewAbstractToUpload =
-                                  currentViewAbstract!.copyToUplode();
-                              debugPrint(
-                                  "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
-                            },
-                            child: Text("OK")),
-                      ]);
+                  YY(
+                    items: [RadioItem(text: "dsad")],
+                  );
+                  // YYListViewDialogListTile();
+                  // Dialogs.materialDialog(
+                  //     msgAlign: TextAlign.end,
+                  //     customView: OutlinedCard(
+                  //       child: const SizedBox(
+                  //           height: 400,
+                  //           width: 400,
+                  //           child: ListApiSearchableWidget()),
+                  //     ),
+                  //     dialogWidth:
+                  //         kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
+                  //     color: Theme.of(context).colorScheme.background,
+                  //     msg: 'Are you sure? you can\'t undo this action',
+                  //     title: 'Delete',
+                  //     context: context,
+                  //     actions: [
+                  //       TextButton(
+                  //         onPressed: () {
+                  //           Navigator.of(context).pop();
+                  //         },
+                  //         child: const Text('TextButton'),
+                  //       ),
+                  //       ElevatedButton(
+                  //           onPressed: () {
+                  //             ViewAbstract viewAbstractToUpload =
+                  //                 currentViewAbstract!.copyToUplode();
+                  //             debugPrint(
+                  //                 "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                  //           },
+                  //           child: const Text("OK")),
+                  //     ]);
                 },
                 label: AnimatedSwitcher(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) =>
                           FadeTransition(
@@ -148,9 +158,10 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                       axis: Axis.horizontal,
                     ),
                   ),
-                  child: isExtended ? Icon(Icons.add) : getLoadingWidget(),
+                  child:
+                      isExtended ? const Icon(Icons.add) : getLoadingWidget(),
                 )),
-            SizedBox(
+            const SizedBox(
               width: kDefaultPadding,
             ),
             FloatingActionButton.extended(
@@ -175,7 +186,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('TextButton'),
+                          child: const Text('TextButton'),
                         ),
                         ElevatedButton(
                             onPressed: () {
@@ -184,7 +195,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                               debugPrint(
                                   "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
                             },
-                            child: Text("OK")),
+                            child: const Text("OK")),
                       ]);
                   // showModalBottomSheet<void>(
                   //   context: context,
@@ -218,7 +229,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                   // );
                 },
                 label: AnimatedSwitcher(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) =>
                           FadeTransition(
@@ -230,7 +241,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                     ),
                   ),
                   child: isExtended
-                      ? Icon(Icons.arrow_forward)
+                      ? const Icon(Icons.arrow_forward)
                       : getLoadingWidget(),
                 )),
           ],
@@ -251,23 +262,25 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               tabs: [
                 TabControllerHelper(
                   "EDIT",
-                  widget: SingleChildScrollView(
-                      controller: ScrollController(),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                      child: BaseEditWidget(
-                        onValidate: (viewAbstract) {
-                          currentViewAbstract = viewAbstract;
-                        },
-                        viewAbstract: widget.viewAbstract,
-                        isTheFirst: true,
-                        // onSubmit: (obj) {
-                        //   if (obj != null) {
-                        //     debugPrint("baseEditPage onSubmit $obj");
-                        //   }
-                        // },
-                      )),
+                  widget: ListView(
+                      // controller: ScrollController(),
+                      // physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kDefaultPadding),
+                      children: [
+                        BaseEditWidget(
+                          onValidate: (viewAbstract) {
+                            currentViewAbstract = viewAbstract;
+                          },
+                          viewAbstract: widget.viewAbstract,
+                          isTheFirst: true,
+                          // onSubmit: (obj) {
+                          //   if (obj != null) {
+                          //     debugPrint("baseEditPage onSubmit $obj");
+                          //   }
+                          // },
+                        )
+                      ]),
                 ),
                 TabControllerHelper("LIST", widget: getEditableList())
               ],
@@ -279,7 +292,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
       return SingleChildScrollView(
           controller: ScrollController(),
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
           child: Column(
             children: [
               BaseSharedHeaderViewDetailsActions(
@@ -343,13 +356,13 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showMaterialBanner(
       MaterialBanner(
-        content: Text('This is a MaterialBanner'),
+        content: const Text('This is a MaterialBanner'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               scaffold.hideCurrentMaterialBanner();
             },
-            child: Text('DISMISS'),
+            child: const Text('DISMISS'),
           ),
         ],
       ),

@@ -868,6 +868,13 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  String getTextInputChangeViewAbstractToAutoComplete() {
+    return super.getTextInputChangeViewAbstractToAutoComplete();
+  }
+
+  @override
+  Map<String, String> getCustomMapOnSearch() => {"requireInventory": "true"};
+  @override
   Widget getPosableMainWidget(
       BuildContext context, AsyncSnapshot snapshotResponse) {
     var data = snapshotResponse.data as List<ProductType>;

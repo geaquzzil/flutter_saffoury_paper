@@ -57,6 +57,10 @@ abstract class ViewAbstractInputAndValidater<T>
     return getTextInputIsAutoCompleteViewAbstractMap()[field] ?? false;
   }
 
+  String getTextInputChangeViewAbstractToAutoComplete() {
+    return "";
+  }
+
   bool isFieldEnabled(String field) {
     return true;
   }

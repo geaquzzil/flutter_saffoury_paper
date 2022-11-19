@@ -72,6 +72,7 @@ class ProductInput extends InvoiceMaster<ProductInput>
     return products_inputs_details ?? [];
   }
 
+  
   @override
   void onListableDelete(ProductInputDetails item) {
     if (item.isEditing()) {

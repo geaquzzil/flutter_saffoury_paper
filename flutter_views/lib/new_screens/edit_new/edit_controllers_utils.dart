@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type_ahead.dart';
+import '../../models/view_abstract_inputs_validaters.dart';
 import '../edit/controllers/ext.dart';
 
 Widget wrapController(Widget controller) {
@@ -29,7 +30,7 @@ Widget getControllerFilePicker(BuildContext context,
       children: [
         viewAbstract.getCardLeadingCircleAvatar(context),
         ElevatedButton.icon(
-            icon: Icon(Icons.image),
+            icon: const Icon(Icons.image),
             onPressed: () async {
               FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -102,39 +103,50 @@ Widget getControllerDropdownViewAbstractEnum(BuildContext context,
   );
 }
 
-
 Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
-    {required ViewAbstract viewAbstract,
+    {bool autoCompleteBySearchQuery = false,
+    required ViewAbstract viewAbstract,
     required String field,
     required TextEditingController controller,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
   return FormBuilderTypeAheadCustom<ViewAbstract>(
       controller: controller,
-      onChangeGetObject: (text) => viewAbstract.parent!
-          .getMirrorNewInstanceViewAbstract(viewAbstract.fieldNameFromParent!)
+      onChangeGetObject: (text) => autoCompleteBySearchQuery
+          ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
+          : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+              viewAbstract.fieldNameFromParent!)
         ..setFieldValue(field, text),
-      selectionToTextTransformer: (suggestion) =>
-          getEditControllerText(suggestion.getFieldValue(field)),
+      selectionToTextTransformer: (suggestion) => autoCompleteBySearchQuery
+          ? suggestion.isNew()
+              ? suggestion.searchByAutoCompleteTextInput ?? ""
+              : suggestion.getMainHeaderTextOnly(context)
+          : getEditControllerText(suggestion.getFieldValue(field)),
       name: viewAbstract.getTag(field),
       initialValue: viewAbstract,
-      decoration: getDecoration(context, viewAbstract, field: field),
+      decoration: autoCompleteBySearchQuery
+          ? const InputDecoration()
+          : getDecoration(context, viewAbstract, field: field),
       maxLength: viewAbstract.getTextInputMaxLength(field),
       textCapitalization: viewAbstract.getTextInputCapitalization(field),
       keyboardType: viewAbstract.getTextInputType(field),
       autovalidateMode: AutovalidateMode.always,
       onSuggestionSelected: (value) {
+        if (autoCompleteBySearchQuery) {
+          onSelected(value);
+        }
         debugPrint(
             "getControllerEditTextViewAbstractAutoComplete value=>$value");
         onSelected(viewAbstract.copyWithNewSuggestion(value));
       },
       onSaved: (newValue) {
+        if (autoCompleteBySearchQuery) {}
         viewAbstract.parent!
             .setFieldValue(viewAbstract.getFieldNameFromParent!, newValue);
         debugPrint(
             'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
-
       },
-      loadingBuilder: (context) => CircularProgressIndicator(),
+      hideOnLoading: false,
+      loadingBuilder: (context) => const CircularProgressIndicator(),
       itemBuilder: (context, continent) {
         return ListTile(
           leading: continent.getCardLeadingCircleAvatar(context),
@@ -148,7 +160,10 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
       suggestionsCallback: (query) {
         if (query.isEmpty) return [];
         if (query.trim().isEmpty) return [];
-
+        if (autoCompleteBySearchQuery) {
+          return viewAbstract.search(5, 0, query) as Future<List<ViewAbstract>>;
+          // field: field, searchQuery: query);
+        }
         return viewAbstract.searchViewAbstractByTextInputViewAbstract(
             field: field, searchQuery: query);
       });
@@ -201,6 +216,7 @@ Widget getControllerEditText(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
     required TextEditingController controller,
+    bool withDecoration = true,
     bool enabled = true}) {
   return wrapController(FormBuilderTextField(
     onSubmitted: (value) =>
@@ -213,7 +229,9 @@ Widget getControllerEditText(BuildContext context,
     name: viewAbstract.getTag(field),
     maxLength: viewAbstract.getTextInputMaxLength(field),
     textCapitalization: viewAbstract.getTextInputCapitalization(field),
-    decoration: getDecoration(context, viewAbstract, field: field),
+    decoration: !withDecoration
+        ? const InputDecoration()
+        : getDecoration(context, viewAbstract, field: field),
     keyboardType: viewAbstract.getTextInputType(field),
     inputFormatters: viewAbstract.getTextInputFormatter(field),
     autovalidateMode: AutovalidateMode.always,

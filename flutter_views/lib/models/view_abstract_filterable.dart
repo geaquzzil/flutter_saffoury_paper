@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
+  String? searchByAutoCompleteTextInput;
   String? getSortByFieldName();
   SortByType getSortByType();
 
