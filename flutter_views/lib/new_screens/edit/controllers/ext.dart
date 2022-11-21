@@ -79,6 +79,17 @@ InputDecoration getDecorationTheming(
       suffixText: theme.suffix);
 }
 
+InputDecoration getDecorationForAutoComplete(
+    BuildContext context, ViewAbstract viewAbstract) {
+  return InputDecoration(
+    filled: true,
+    icon:
+        viewAbstract.getCardLeadingCircleAvatar(context, height: 40, width: 40),
+    hintText: viewAbstract.getTextInputHint(context),
+    labelText: viewAbstract.getMainHeaderLabelTextOnly(context),
+  );
+}
+
 InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
     {String? field}) {
   if (field != null) {

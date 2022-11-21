@@ -103,11 +103,14 @@ Widget getControllerDropdownViewAbstractEnum(BuildContext context,
   );
 }
 
+enum AutoCompleteFor { TABLE, NORMAL }
+
 Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     {bool autoCompleteBySearchQuery = false,
     required ViewAbstract viewAbstract,
     required String field,
     required TextEditingController controller,
+    AutoCompleteFor? type,
     bool withDecoration = true,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
   return FormBuilderTypeAheadCustom<ViewAbstract>(
@@ -124,11 +127,13 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           : getEditControllerText(suggestion.getFieldValue(field)),
       name: viewAbstract.getTag(field),
       initialValue: viewAbstract,
-      decoration: withDecoration
-          ? autoCompleteBySearchQuery
-              ? const InputDecoration()
-              : getDecoration(context, viewAbstract, field: field)
-          : const InputDecoration(),
+      decoration: type == AutoCompleteFor.NORMAL
+          ? getDecorationForAutoComplete(context, viewAbstract)
+          : withDecoration
+              ? autoCompleteBySearchQuery
+                  ? const InputDecoration()
+                  : getDecoration(context, viewAbstract, field: field)
+              : const InputDecoration(),
       maxLength: viewAbstract.getTextInputMaxLength(field),
       textCapitalization: viewAbstract.getTextInputCapitalization(field),
       keyboardType: viewAbstract.getTextInputType(field),
@@ -161,8 +166,16 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
         );
       },
       inputFormatters: viewAbstract.getTextInputFormatter(field),
-      validator: (value) => value?.getTextInputValidator(
-          context, field, getEditControllerText(value.getFieldValue(field))),
+      validator: (value) {
+        if (autoCompleteBySearchQuery) {
+          if (value?.isNew() ?? true) {
+            return AppLocalizations.of(context)!.errFieldNotSelected(
+                viewAbstract.getMainHeaderLabelTextOnly(context));
+          }
+        }
+        return value?.getTextInputValidator(
+            context, field, getEditControllerText(value.getFieldValue(field)));
+      },
       suggestionsCallback: (query) {
         if (query.isEmpty) return [];
         if (query.trim().isEmpty) return [];

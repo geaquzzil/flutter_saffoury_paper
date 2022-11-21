@@ -600,6 +600,15 @@
   "product_size_roll_f_string": "Width: {r}",
   "product_notes_format": "Notes:\\n•{r}",
   "errFieldNotSelected": "({r}) is not selected!",
+  "@errFieldNotSelected": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
   "price_dollar": "Price: {r} $",
   "last_payment_format_with_d": "Last Credit: {r} • {r}",
   "last_spend_format": "Last expense: {r} • {r}",

@@ -221,7 +221,10 @@ abstract class ViewAbstractInputAndValidater<T>
     debugPrint("onDropdownChanged field=> $field value=> $value");
     // setFieldValue(field, value);
   }
-
+void onAutoComplete(BuildContext context, String field, dynamic value) {
+    debugPrint("onAutoComplete field=> $field value=> $value");
+    // setFieldValue(field, value);
+  }
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
 
   void onTextChangeListener(BuildContext context, String field, String? value) {

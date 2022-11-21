@@ -58,35 +58,32 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
   }
 
   Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
-    return Container(
-      color: Colors.grey,
-      child: Expanded(
-        flex: 2,
-        child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-            // fit: BoxFit.contain,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BaseSharedHeaderViewDetailsActions(
+    return Expanded(
+      flex: 2,
+      child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+          // fit: BoxFit.contain,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BaseSharedHeaderViewDetailsActions(
+                  viewAbstract: viewAbstract,
+                ),
+                ViewDetailsListWidget(
+                  viewAbstract: viewAbstract,
+                ),
+                if (viewAbstract is CartableInvoiceMasterObjectInterface)
+                  CartDataTableMaster(
+                      action: ServerActions.view,
+                      obj: viewAbstract
+                          as CartableInvoiceMasterObjectInterface),
+                if (viewAbstract.getTabs(context).isNotEmpty)
+                  TabBarWidget(
                     viewAbstract: viewAbstract,
-                  ),
-                  ViewDetailsListWidget(
-                    viewAbstract: viewAbstract,
-                  ),
-                  if (viewAbstract is CartableInvoiceMasterObjectInterface)
-                    CartDataTableMaster(
-                        action: ServerActions.view,
-                        obj: viewAbstract
-                            as CartableInvoiceMasterObjectInterface),
-                  if (viewAbstract.getTabs(context).isNotEmpty)
-                    TabBarWidget(
-                      viewAbstract: viewAbstract,
-                    )
-                ],
-              ),
-            ]),
-      ),
+                  )
+              ],
+            ),
+          ]),
     );
   }
 }

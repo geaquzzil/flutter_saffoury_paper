@@ -304,11 +304,15 @@ class BaseEditWidget extends StatelessWidget {
           context,
           viewAbstract: fieldValue,
           field: field,
+          type: AutoCompleteFor.NORMAL,
           controller: TextEditingController(),
           onSelected: (selectedViewAbstract) {
             // viewAbstract = selectedViewAbstract;
-            // fieldValue.parent?.setFieldValue(field, selectedViewAbstract);
-            // refreshControllers(context, field);
+            fieldValue.parent?.setFieldValue(field, selectedViewAbstract);
+            fieldValue.parent
+                ?.onAutoComplete(context, field, selectedViewAbstract);
+
+            refreshControllers(context, field);
             // //TODO viewAbstractChangeProvider.change(viewAbstract);
             // // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
           },

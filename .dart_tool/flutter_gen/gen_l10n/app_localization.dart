@@ -3615,11 +3615,11 @@ abstract class AppLocalizations {
   /// **'Notes:\\n•{r}'**
   String get product_notes_format;
 
-  /// No description provided for @errFieldNotSelected.
+  /// Greet the user by their name.
   ///
   /// In en, this message translates to:
   /// **'({r}) is not selected!'**
-  String get errFieldNotSelected;
+  String errFieldNotSelected(String r);
 
   /// No description provided for @price_dollar.
   ///

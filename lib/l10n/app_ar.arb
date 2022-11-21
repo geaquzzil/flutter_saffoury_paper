@@ -608,6 +608,15 @@
   "order_format": "مبيعات: {r}",
 
   "errFieldNotSelected": "({r}) لم يتم اختياره!",
+  "@errFieldNotSelected": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
   "addToFormat": "إضافة إلى {r}",
   "toFormat": "إلى {r}",
   "addFormat": "إضافة {r}",

@@ -30,14 +30,13 @@ class ListStickySettingWidget extends StatelessWidget {
         groupSeparatorBuilder: (element) =>
             _getGroupSeparator(context, element),
         itemBuilder: _getItem,
-        
       ),
     );
   }
 
   Widget _getItem(BuildContext ctx, ModifiableInterface element) {
     return ListTile(
-      selectedTileColor: Colors.white,
+      // selectedTileColor: Colors.white,
       selected: ctx.watch<SettingProvider>().getSelectedObject?.hashCode ==
           element.hashCode,
       onTap: () {

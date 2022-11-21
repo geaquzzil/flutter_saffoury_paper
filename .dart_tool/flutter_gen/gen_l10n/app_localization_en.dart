@@ -1766,7 +1766,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get product_notes_format => 'Notes:\\n•{r}';
 
   @override
-  String get errFieldNotSelected => '({r}) is not selected!';
+  String errFieldNotSelected(String r) {
+    return '($r) is not selected!';
+  }
 
   @override
   String get price_dollar => 'Price: {r} \$';
