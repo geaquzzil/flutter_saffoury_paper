@@ -9,6 +9,8 @@ part of 'customers_request_sizes.dart';
 CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
     CustomerRequestSize()
       ..iD = json['iD'] as int
+      ..searchByAutoCompleteTextInput =
+          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -46,6 +48,7 @@ Map<String, dynamic> _$CustomerRequestSizeToJson(
         CustomerRequestSize instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -81,6 +84,8 @@ CustomerRequestSizeDetails _$CustomerRequestSizeDetailsFromJson(
         Map<String, dynamic> json) =>
     CustomerRequestSizeDetails()
       ..iD = json['iD'] as int
+      ..searchByAutoCompleteTextInput =
+          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..customers_request_sizes = json['customers_request_sizes'] == null
           ? null
@@ -95,6 +100,7 @@ Map<String, dynamic> _$CustomerRequestSizeDetailsToJson(
         CustomerRequestSizeDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'customers_request_sizes': instance.customers_request_sizes?.toJson(),
       'sizes': instance.sizes?.toJson(),

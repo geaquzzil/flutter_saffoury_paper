@@ -9,6 +9,8 @@ part of 'customs_declarations.dart';
 CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
     CustomsDeclaration()
       ..iD = json['iD'] as int
+      ..searchByAutoCompleteTextInput =
+          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..number = CustomsDeclaration.intFromString(json['number'])
       ..date = json['date'] as String?
@@ -29,6 +31,7 @@ CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CustomsDeclarationToJson(CustomsDeclaration instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'number': instance.number,
       'date': instance.date,

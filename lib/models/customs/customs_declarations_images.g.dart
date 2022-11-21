@@ -10,6 +10,8 @@ CustomsDeclarationImages _$CustomsDeclarationImagesFromJson(
         Map<String, dynamic> json) =>
     CustomsDeclarationImages()
       ..iD = json['iD'] as int
+      ..searchByAutoCompleteTextInput =
+          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..image = json['image'] as String?
       ..comments = json['comments'] as String?
@@ -22,6 +24,7 @@ Map<String, dynamic> _$CustomsDeclarationImagesToJson(
         CustomsDeclarationImages instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'image': instance.image,
       'comments': instance.comments,

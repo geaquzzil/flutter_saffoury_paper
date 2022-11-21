@@ -9,6 +9,8 @@ part of 'countries_manufactures.dart';
 CountryManufacture _$CountryManufactureFromJson(Map<String, dynamic> json) =>
     CountryManufacture()
       ..iD = json['iD'] as int
+      ..searchByAutoCompleteTextInput =
+          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..countries = json['countries'] == null
           ? null
@@ -20,6 +22,7 @@ CountryManufacture _$CountryManufactureFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CountryManufactureToJson(CountryManufacture instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'countries': instance.countries?.toJson(),
       'manufactures': instance.manufactures?.toJson(),

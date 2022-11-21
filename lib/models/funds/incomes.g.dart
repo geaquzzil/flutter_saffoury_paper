@@ -8,6 +8,8 @@ part of 'incomes.dart';
 
 Incomes _$IncomesFromJson(Map<String, dynamic> json) => Incomes()
   ..iD = json['iD'] as int
+  ..searchByAutoCompleteTextInput =
+      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
@@ -32,6 +34,7 @@ Incomes _$IncomesFromJson(Map<String, dynamic> json) => Incomes()
 
 Map<String, dynamic> _$IncomesToJson(Incomes instance) => <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'fromBox': instance.fromBox,
       'isDirect': instance.isDirect,

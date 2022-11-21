@@ -8,6 +8,8 @@ part of 'products_types.dart';
 
 ProductType _$ProductTypeFromJson(Map<String, dynamic> json) => ProductType()
   ..iD = json['iD'] as int
+  ..searchByAutoCompleteTextInput =
+      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..name = json['name'] as String?
   ..unit = $enumDecodeNullable(_$ProductTypeUnitEnumMap, json['unit'])
@@ -28,6 +30,7 @@ ProductType _$ProductTypeFromJson(Map<String, dynamic> json) => ProductType()
 Map<String, dynamic> _$ProductTypeToJson(ProductType instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'name': instance.name,
       'unit': _$ProductTypeUnitEnumMap[instance.unit],

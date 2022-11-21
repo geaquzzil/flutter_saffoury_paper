@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
@@ -29,7 +30,6 @@ import 'orders.dart';
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
     implements
         PrintableInvoiceInterface<PrintInvoice>,
-     
         ModifiablePrintableInterface<PrintProduct> {
   // int? EmployeeID;
   // int? CargoTransID;
@@ -398,4 +398,35 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       number == null ? 0 : double.tryParse(number.toString());
 }
 
-enum InvoiceStatus { NONE, PENDING, PROCESSING, CANCELED, APPROVED }
+enum InvoiceStatus implements ViewAbstractEnum<InvoiceStatus> {
+  NONE,
+  PENDING,
+  PROCESSING,
+  CANCELED,
+  APPROVED;
+
+  @override
+  IconData getMainIconData() => Icons.select_all_outlined;
+
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.status;
+  @override
+  String getFieldLabelString(BuildContext context, InvoiceStatus field) {
+    switch (field) {
+      case InvoiceStatus.APPROVED:
+        return AppLocalizations.of(context)!.approved;
+      case InvoiceStatus.CANCELED:
+        return AppLocalizations.of(context)!.canceled;
+      case InvoiceStatus.NONE:
+        return AppLocalizations.of(context)!.none;
+      case InvoiceStatus.PENDING:
+        return AppLocalizations.of(context)!.pending;
+      case InvoiceStatus.PROCESSING:
+        return AppLocalizations.of(context)!.processing;
+    }
+  }
+
+  @override
+  List<InvoiceStatus> getValues() => InvoiceStatus.values;
+}

@@ -9,6 +9,8 @@ part of 'customers_contacts.dart';
 CustomerContacts _$CustomerContactsFromJson(Map<String, dynamic> json) =>
     CustomerContacts()
       ..iD = json['iD'] as int
+      ..searchByAutoCompleteTextInput =
+          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..customers = json['customers'] == null
           ? null
@@ -19,6 +21,7 @@ CustomerContacts _$CustomerContactsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CustomerContactsToJson(CustomerContacts instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'customers': instance.customers?.toJson(),
       'name': instance.name,
