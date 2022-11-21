@@ -1,29 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
-import 'package:flutter_custom_dialog/flutter_custom_dialog_widget.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/editables/paginated_data_table2.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 
 import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
-import '../../new_components/tab_bar/tab_bar.dart';
 import '../../screens/base_shared_actions_header.dart';
 import '../lists/list_static_editable.dart';
 
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
+
   BaseEditNewPage({Key? key, required this.viewAbstract}) : super(key: key);
 
   @override
@@ -111,9 +105,52 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
           children: [
             FloatingActionButton.extended(
                 onPressed: () async {
-                  YY(
-                    items: [RadioItem(text: "dsad")],
-                  );
+                  var dia = await showModalBottomSheet<String>(
+                    isScrollControlled: true,
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20))),
+                    builder: (BuildContext context) {
+                      return FractionallySizedBox(
+                        heightFactor: 0.9,
+                        child: Container(
+                          // height: 200,
+                          // color: Colors.amber,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                title: (widget.viewAbstract
+                                    .getMainHeaderText(context)),
+                                leading: Icon(Icons.arrow_back_sharp),
+                                subtitle: Text(widget.viewAbstract
+                                    .getMainHeaderLabelTextOnly(context)),
+                              ),
+                              OutlinedCard(
+                                child: const SizedBox(
+                                    height: 400,
+                                    width: double.infinity,
+                                    child: ListApiSearchableWidget()),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop("is pop up"),
+                                  child: Text("OK"))
+                              // But(
+                              //   onPressed: () {
+                              //     Navigator.of(context).pop();
+                              //   },
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ).then((value) => null);
+                  // YY(
+                  //   items: [RadioItem(text: "dsad")],
+                  // );
                   // YYListViewDialogListTile();
                   // Dialogs.materialDialog(
                   //     msgAlign: TextAlign.end,
@@ -197,36 +234,6 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                             },
                             child: const Text("OK")),
                       ]);
-                  // showModalBottomSheet<void>(
-                  //   context: context,
-                  //   shape: RoundedRectangleBorder(
-                  //       borderRadius:
-                  //           BorderRadius.vertical(top: Radius.circular(20))),
-                  //   builder: (BuildContext context) {
-                  //     return Container(
-                  //       // height: 200,
-                  //       // color: Colors.amber,
-                  //       child: Column(
-                  //         mainAxisAlignment: MainAxisAlignment.start,
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         children: <Widget>[
-                  //           ListTile(
-                  //             title:
-                  //                 (widget.viewAbstract.getMainHeaderText(context)),
-                  //             leading: Icon(Icons.arrow_back_sharp),
-                  //             subtitle: Text(widget.viewAbstract
-                  //                 .getMainHeaderLabelTextOnly(context)),
-                  //           ),
-                  //           const Text('Modal BottomSheet'),
-                  //           ElevatedButton(
-                  //             child: const Text('Close BottomSheet'),
-                  //             onPressed: () => Navigator.pop(context),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     );
-                  //   },
-                  // );
                 },
                 label: AnimatedSwitcher(
                   duration: const Duration(seconds: 1),
