@@ -64,10 +64,10 @@ class _EditableTableWidget extends State<EditableTableWidget> {
 
   @override
   void dispose() {
-    for (var element in controllers.values) {
-      element.dispose();
-    }
-    controllers.clear();
+    // for (var element in controllers.values) {
+    //   element.dispose();
+    // }
+    // controllers.clear();
     super.dispose();
   }
 
@@ -90,17 +90,17 @@ class _EditableTableWidget extends State<EditableTableWidget> {
         key: _formKey,
         child: Column(
           children: [
-            PaginatedDataTable2(
-              header: Text("Dada"),
-              source: _data,
+            DataTable(
+              // header: Text("Dada"),
+              // source: _data,
               columnSpacing: 100,
               horizontalMargin: 10,
-              rowsPerPage: 8,
+              // rowsPerPage: 8,
               showCheckboxColumn: false,
               sortAscending: isAscending,
               sortColumnIndex: sortColumnIndex,
               columns: getColumns(context),
-              // rows: getRows(context),
+              rows: getRows(context),
             ),
           ],
         ));

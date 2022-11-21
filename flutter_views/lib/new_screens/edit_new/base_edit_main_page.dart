@@ -103,125 +103,8 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton.extended(
-                onPressed: () async {
-                  var dia = await showModalBottomSheet<String>(
-                    isScrollControlled: true,
-                    context: context,
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20))),
-                    builder: (BuildContext context) {
-                      List<ViewAbstract> selectedList = [];
-                      return FractionallySizedBox(
-                        heightFactor: 0.9,
-                        child: Container(
-                          // height: 200,
-                          // color: Colors.amber,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                title: Text((widget.viewAbstract
-                                        .getMainHeaderTextOnly(context)) +
-                                    " items Selected ${selectedList.length}"),
-                                leading: Icon(Icons.arrow_back_sharp),
-                                subtitle: Text(widget.viewAbstract
-                                    .getMainHeaderLabelTextOnly(context)),
-                              ),
-                              OutlinedCard(
-                                child: SizedBox(
-                                    height: 400,
-                                    width: double.infinity,
-                                    child: ListApiSelectedSearchableWidget(
-                                      viewAbstract: widget.viewAbstract,
-                                      onSelected: (sList) {
-                                        setState(() {
-                                          selectedList = sList.cast();
-                                        });
-                                      },
-                                    )),
-                              ),
-                              ElevatedButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop("is pop up"),
-                                  child: Text("OK"))
-                              // But(
-                              //   onPressed: () {
-
-                              //     Navigator.of(context).pop();
-                              //   },
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-
-                  debugPrint("on popup navigator $dia");
-                  // YY(
-                  //   items: [RadioItem(text: "dsad")],
-                  // );
-                  // YYListViewDialogListTile();
-                  Dialogs.materialDialog(
-                      msgAlign: TextAlign.end,
-
-                      customView: SizedBox(
-                          height: 400,
-                          width: double.infinity,
-                          child: ListApiSelectedSearchableWidget(
-                            viewAbstract: widget.viewAbstract,
-                            onSelected: (sList) {
-                              // setState(() {
-                              //   selectedList=sList.cast();
-                              // });
-                            },
-                          )),
-                      dialogShape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      ),
-                      dialogWidth:
-                          kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
-                      color: Theme.of(context).colorScheme.background,
-                      // msg: 'Are you sure? you can\'t undo this action',
-                      // title: 'Delete',
-                      context: context,
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('TextButton'),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              ViewAbstract viewAbstractToUpload =
-                                  currentViewAbstract!.copyToUplode();
-                              debugPrint(
-                                  "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
-                            },
-                            child: const Text("OK")),
-                      ]);
-                },
-                label: AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) =>
-                          FadeTransition(
-                    opacity: animation,
-                    child: SizeTransition(
-                      child: child,
-                      sizeFactor: animation,
-                      axis: Axis.horizontal,
-                    ),
-                  ),
-                  child:
-                      isExtended ? const Icon(Icons.add) : getLoadingWidget(),
-                )),
+            if (widget.viewAbstract is ListableInterface)
+              getAddFloatingButton(context),
             const SizedBox(
               width: kDefaultPadding,
             ),
@@ -278,6 +161,141 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
           ],
         ),
         body: getBody());
+  }
+
+  List<ViewAbstract> selectedList = [];
+  FloatingActionButton getAddFloatingButton(BuildContext context) {
+    return FloatingActionButton.extended(
+        onPressed: () {
+          // var dia = await showModalBottomSheet<String>(
+          //   isScrollControlled: true,
+          //   context: context,
+          //   shape: RoundedRectangleBorder(
+          //       borderRadius:
+          //           BorderRadius.vertical(top: Radius.circular(20))),
+          //   builder: (BuildContext context) {
+          //     List<ViewAbstract> selectedList = [];
+          //     return FractionallySizedBox(
+          //       heightFactor: 0.9,
+          //       child: Container(
+          //         // height: 200,
+          //         // color: Colors.amber,
+          //         child: Column(
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: <Widget>[
+          //             ListTile(
+          //               title: Text((widget.viewAbstract
+          //                       .getMainHeaderTextOnly(context)) +
+          //                   " items Selected ${selectedList.length}"),
+          //               leading: Icon(Icons.arrow_back_sharp),
+          //               subtitle: Text(widget.viewAbstract
+          //                   .getMainHeaderLabelTextOnly(context)),
+          //             ),
+          //             OutlinedCard(
+          //               child: SizedBox(
+          //                   height: 400,
+          //                   width: double.infinity,
+          //                   child: ListApiSelectedSearchableWidget(
+          //                     viewAbstract: (widget.viewAbstract
+          //                             as ListableInterface)
+          //                         .getListablePickObject(),
+          //                     onSelected: (sList) {
+          //                       setState(() {
+          //                         selectedList = sList.cast();
+          //                       });
+          //                     },
+          //                   )),
+          //             ),
+          //             ElevatedButton(
+          //                 onPressed: () =>
+          //                     Navigator.of(context).pop("is pop up"),
+          //                 child: Text("OK"))
+          //             // But(
+          //             //   onPressed: () {
+
+          //             //     Navigator.of(context).pop();
+          //             //   },
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
+
+          // debugPrint("on popup navigator $dia");
+          // YY(
+          //   items: [RadioItem(text: "dsad")],
+          // );
+          // YYListViewDialogListTile();
+          Dialogs.materialDialog(
+              // isScrollControlled: true,
+              msgAlign: TextAlign.end,
+              customView: Align(
+                alignment: Alignment(0, 1),
+                child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: double.infinity,
+                    child: ListApiSelectedSearchableWidget(
+                      viewAbstract: (widget.viewAbstract as ListableInterface)
+                          .getListablePickObject(),
+                      onSelected: (sList) {
+                        selectedList = sList.cast();
+                        // setState(() {
+                        //   selectedList=sList.cast();
+                        // });
+                      },
+                    )),
+              ),
+              dialogShape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+              dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
+              useSafeArea: false,
+              onClose: (value) {
+                debugPrint("onClosed $selectedList");
+                setState(() {
+                  (widget.viewAbstract as ListableInterface)
+                      .onListableSelectedListAdded(selectedList);
+                });
+              },
+              color: Theme.of(context).colorScheme.background,
+              // msg: 'Are you sure? you can\'t undo this action',
+              // title: 'Delete',
+              context: context,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop("dasda");
+                  },
+                  child: const Text('TextButton'),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      // ViewAbstract viewAbstractToUpload =
+                      //     currentViewAbstract!.copyToUplode();
+                      // debugPrint(
+                      //     "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                    },
+                    child: const Text("OK")),
+              ]);
+        },
+        label: AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          transitionBuilder: (Widget child, Animation<double> animation) =>
+              FadeTransition(
+            opacity: animation,
+            child: SizeTransition(
+              child: child,
+              sizeFactor: animation,
+              axis: Axis.horizontal,
+            ),
+          ),
+          child: isExtended ? const Icon(Icons.add) : getLoadingWidget(),
+        ));
   }
 
   Widget getBody() {

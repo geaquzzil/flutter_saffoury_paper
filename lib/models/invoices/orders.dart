@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page.dart';
@@ -248,7 +249,7 @@ class Order extends InvoiceMaster<Order>
 
   @override
   void onListableDelete(OrderDetails item) {
-      if (item.isEditing()) {
+    if (item.isEditing()) {
       deletedList ??= [];
       item.delete = true;
       deletedList?.add(item);
@@ -260,6 +261,16 @@ class Order extends InvoiceMaster<Order>
   @override
   void onListableUpdate(OrderDetails item) {
     // TODO: implement onListableUpdate
+  }
+
+  @override
+  Product getListablePickObject() {
+    return Product();
+  }
+  
+  @override
+  void onListableSelectedListAdded(List<ViewAbstract> list) {
+    // TODO: implement onListableSelectedListAdded
   }
 }
 

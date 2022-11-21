@@ -24,6 +24,7 @@ class _ListCardItemSelected<T extends ViewAbstract>
   Widget build(BuildContext context) {
     bool isSelected = widget.object.isSelected;
     return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
       value: isSelected,
       onChanged: (value) {
         setState(() {
@@ -37,8 +38,10 @@ class _ListCardItemSelected<T extends ViewAbstract>
       selectedTileColor: Theme.of(context).colorScheme.onSecondary,
       // onTap: () => widget.object.onCardClicked(context),
       // onLongPress: () => widget.object.onCardLongClicked(context),
-      title: (widget.object.getMainHeaderText(context)),
-      subtitle: (widget.object.getMainSubtitleHeaderText(context)),
+      title: ListTile(
+          subtitle: (widget.object.getMainSubtitleHeaderText(context)),
+          leading: widget.object.getCardLeading(context),
+          title: (widget.object.getMainHeaderText(context))),
     );
   }
 }

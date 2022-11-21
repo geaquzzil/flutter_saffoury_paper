@@ -108,6 +108,19 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     );
   }
 
+  Widget _buildSelectedCountBox() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Card(
+        child: ListTile(
+          leading: const Icon(Icons.contact_support_rounded),
+          title: Text("Selectd item ${selectedList.length}"),
+          // trailing: getTrailingWidget(),
+        ),
+      ),
+    );
+  }
+
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
     return ListView.builder(
@@ -151,12 +164,14 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
                 selectedList.add(obj);
                 if (widget.onSelected != null) {
                   widget.onSelected!(selectedList);
+                  setState(() {});
                 }
               }
             } else {
               selectedList.removeWhere((element) => element.isEquals(obj));
               if (widget.onSelected != null) {
                 widget.onSelected!(selectedList);
+                setState(() {});
               }
             }
           },
@@ -172,6 +187,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     return Column(
       children: <Widget>[
         Container(child: _buildSearchBox()),
+        if (selectedList.isNotEmpty) Container(child: _buildSelectedCountBox()),
         Expanded(
             child: ChangeNotifierProvider.value(
           value: listProvider,

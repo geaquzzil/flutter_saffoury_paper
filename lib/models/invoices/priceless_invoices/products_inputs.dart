@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
@@ -72,7 +73,6 @@ class ProductInput extends InvoiceMaster<ProductInput>
     return products_inputs_details ?? [];
   }
 
-  
   @override
   void onListableDelete(ProductInputDetails item) {
     if (item.isEditing()) {
@@ -96,6 +96,20 @@ class ProductInput extends InvoiceMaster<ProductInput>
 
   @override
   List<ProductInputDetails>? deletedList;
+
+  @override
+  Product getListablePickObject() {
+    return Product();
+  }
+
+  @override
+  void onListableSelectedListAdded(List<ViewAbstract> list) {
+    List<Product> products = list.cast();
+    products_inputs_details ??= [];
+    for (var element in products) {
+      products_inputs_details!.add(ProductInputDetails()..setProduct(element));
+    }
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
