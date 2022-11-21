@@ -9,11 +9,15 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
+  @JsonKey(ignore: true)
+  bool isSelected = false;
+
   IconData? getCardLeadingBottomIcon() {
     return null;
   }
@@ -111,9 +115,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   Widget getCardLeadingImageWithFutureSelected(BuildContext context) {
     bool isSelected = context
-            .watch<ActionViewAbstractProvider>()
-            .getObject
-            ?.isEquals(this as ViewAbstract) ??
+        .watch<ActionViewAbstractProvider>()
+        .getObject
+        ?.isEquals(this as ViewAbstract) ??
         false;
 
     return getCardLeadingImage(context, isSelected: isSelected);
@@ -133,7 +137,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           border: (isSelected == false)
               ? null
               : Border.all(
-                  color: Theme.of(context).colorScheme.outline, width: 1),
+              color: Theme.of(context).colorScheme.outline, width: 1),
           shape: BoxShape.circle,
           color: Colors.white,
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
@@ -185,8 +189,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   List<Widget>? getPopupActionsList(BuildContext context) => null;
 
-  Future<List<MenuItemBuild>> getPopupMenuActionsView(
-      BuildContext context) async {
+  Future<List<MenuItemBuild>> getPopupMenuActionsView(BuildContext context) async {
     return [
       if (await hasPermissionPrint(context)) getMenuItemPrint(context),
       if (await hasPermissionShare(context)) getMenuItemShare(context),
@@ -194,8 +197,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     ];
   }
 
-  Future<List<MenuItemBuild>> getPopupMenuActions(
-      BuildContext context, ServerActions action) async {
+  Future<List<MenuItemBuild>> getPopupMenuActions(BuildContext context, ServerActions action) async {
     if (action == ServerActions.edit) {
       return getPopupMenuActionsEdit(context);
     }
@@ -203,8 +205,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return [];
   }
 
-  Future<List<MenuItemBuild>> getPopupMenuActionsEdit(
-      BuildContext context) async {
+  Future<List<MenuItemBuild>> getPopupMenuActionsEdit(BuildContext context) async {
     return [
       if (await hasPermissionPrint(context)) getMenuItemPrint(context),
       if (await hasPermissionShare(context)) getMenuItemShare(context),
@@ -212,8 +213,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     ];
   }
 
-  Future<List<MenuItemBuild>> getPopupMenuActionsList(
-      BuildContext context) async {
+  Future<List<MenuItemBuild>> getPopupMenuActionsList(BuildContext context) async {
     return [
       if (await hasPermissionPrint(context)) getMenuItemPrint(context),
       if (await hasPermissionEdit(context)) getMenuItemEdit(context),
@@ -233,7 +233,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
-              snapshot.data?.map(buildMenuItem).toList() ?? [],
+          snapshot.data?.map(buildMenuItem).toList() ?? [],
         );
       },
       future: action == ServerActions.edit
@@ -253,7 +253,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
-              snapshot.data?.map(buildMenuItem).toList() ?? [],
+          snapshot.data?.map(buildMenuItem).toList() ?? [],
         );
       },
       future: getPopupMenuActionsList(c),
@@ -261,19 +261,19 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   PopupMenuItem<MenuItemBuild> buildMenuItem(MenuItemBuild e) => PopupMenuItem(
-        value: e,
-        child: Row(
-          children: [
-            Icon(
-              e.icon,
-              // color: Colors.black,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Text(e.title),
-          ],
+    value: e,
+    child: Row(
+      children: [
+        Icon(
+          e.icon,
+          // color: Colors.black,
+          size: 20,
         ),
-      );
+        const SizedBox(width: 12),
+        Text(e.title),
+      ],
+    ),
+  );
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {
     onPopupMenuActionSelected(context, e);
@@ -290,8 +290,8 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       //       invoiceObj: this as PrintableInterface,
       //     ));
       context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
-            invoiceObj: this as PrintableMaster,
-          ));
+        invoiceObj: this as PrintableMaster,
+      ));
       // Navigator.push(
       //     context,
       //     MaterialPageRoute(

@@ -7,12 +7,12 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 
 import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
 import '../../screens/base_shared_actions_header.dart';
+import '../lists/list_api_selected_searchable_widget.dart';
 import '../lists/list_static_editable.dart';
 
 class BaseEditNewPage extends StatefulWidget {
@@ -112,6 +112,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20))),
                     builder: (BuildContext context) {
+                      List<ViewAbstract> selectedList = [];
                       return FractionallySizedBox(
                         heightFactor: 0.9,
                         child: Container(
@@ -122,17 +123,25 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               ListTile(
-                                title: (widget.viewAbstract
-                                    .getMainHeaderText(context)),
+                                title: Text((widget.viewAbstract
+                                        .getMainHeaderTextOnly(context)) +
+                                    " items Selected ${selectedList.length}"),
                                 leading: Icon(Icons.arrow_back_sharp),
                                 subtitle: Text(widget.viewAbstract
                                     .getMainHeaderLabelTextOnly(context)),
                               ),
                               OutlinedCard(
-                                child: const SizedBox(
+                                child: SizedBox(
                                     height: 400,
                                     width: double.infinity,
-                                    child: ListApiSearchableWidget()),
+                                    child: ListApiSelectedSearchableWidget(
+                                      viewAbstract: widget.viewAbstract,
+                                      onSelected: (sList) {
+                                        setState(() {
+                                          selectedList = sList.cast();
+                                        });
+                                      },
+                                    )),
                               ),
                               ElevatedButton(
                                   onPressed: () =>
@@ -140,6 +149,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                                   child: Text("OK"))
                               // But(
                               //   onPressed: () {
+
                               //     Navigator.of(context).pop();
                               //   },
                             ],
@@ -147,41 +157,55 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                         ),
                       );
                     },
-                  ).then((value) => null);
+                  );
+
+                  debugPrint("on popup navigator $dia");
                   // YY(
                   //   items: [RadioItem(text: "dsad")],
                   // );
                   // YYListViewDialogListTile();
-                  // Dialogs.materialDialog(
-                  //     msgAlign: TextAlign.end,
-                  //     customView: OutlinedCard(
-                  //       child: const SizedBox(
-                  //           height: 400,
-                  //           width: 400,
-                  //           child: ListApiSearchableWidget()),
-                  //     ),
-                  //     dialogWidth:
-                  //         kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-                  //     color: Theme.of(context).colorScheme.background,
-                  //     msg: 'Are you sure? you can\'t undo this action',
-                  //     title: 'Delete',
-                  //     context: context,
-                  //     actions: [
-                  //       TextButton(
-                  //         onPressed: () {
-                  //           Navigator.of(context).pop();
-                  //         },
-                  //         child: const Text('TextButton'),
-                  //       ),
-                  //       ElevatedButton(
-                  //           onPressed: () {
-                  //             ViewAbstract viewAbstractToUpload =
-                  //                 currentViewAbstract!.copyToUplode();
-                  //             debugPrint(
-                  //                 "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
-                  //           },
-                  //           child: const Text("OK")),
-                  //     ]);
+                  Dialogs.materialDialog(
+                      msgAlign: TextAlign.end,
+
+                      customView: SizedBox(
+                          height: 400,
+                          width: double.infinity,
+                          child: ListApiSelectedSearchableWidget(
+                            viewAbstract: widget.viewAbstract,
+                            onSelected: (sList) {
+                              // setState(() {
+                              //   selectedList=sList.cast();
+                              // });
+                            },
+                          )),
+                      dialogShape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      ),
+                      dialogWidth:
+                          kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
+                      color: Theme.of(context).colorScheme.background,
+                      // msg: 'Are you sure? you can\'t undo this action',
+                      // title: 'Delete',
+                      context: context,
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('TextButton'),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              ViewAbstract viewAbstractToUpload =
+                                  currentViewAbstract!.copyToUplode();
+                              debugPrint(
+                                  "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                            },
+                            child: const Text("OK")),
+                      ]);
                 },
                 label: AnimatedSwitcher(
                   duration: const Duration(seconds: 1),

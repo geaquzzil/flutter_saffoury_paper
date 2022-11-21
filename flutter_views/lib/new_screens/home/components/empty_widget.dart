@@ -20,7 +20,7 @@ class EmptyWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Lottie.network(lottiUrl, height: 200, width: 200),
+          Lottie.network(lottiUrl),
           const SizedBox(
             height: kDefaultPadding,
           ),
