@@ -51,7 +51,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return SizedBox(
         width: width,
         height: height,
-        child: CircleAvatar(radius: 28, child: getCardLeadingImage(context)));
+        child: CircleAvatar(
+            radius: 28,
+            backgroundColor: Theme.of(context).backgroundColor,
+            child: getCardLeadingImage(context)));
   }
 
   Widget getCardLeadingCircleAvatarWithSelectedBorder(BuildContext context) {
@@ -134,10 +137,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
-          border: (isSelected == false)
-              ? null
-              : Border.all(
-                  color: Theme.of(context).colorScheme.outline, width: 1),
           shape: BoxShape.circle,
           color: Theme.of(context).colorScheme.onBackground,
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),

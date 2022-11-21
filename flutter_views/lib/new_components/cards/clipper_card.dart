@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class ClippedCard extends StatelessWidget {
   Widget child;
   Color color;
-  ClippedCard({super.key, required this.child, required this.color});
+  double elevation;
+  ClippedCard({super.key, required this.child, required this.color,this.elevation=2});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
+      elevation: elevation,
       child: ClipPath(
         clipper: ShapeBorderClipper(
             shape: RoundedRectangleBorder(

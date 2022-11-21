@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -37,26 +39,25 @@ class _ListCardItemState<T extends ViewAbstract>
           widget.object.getDismissibleSecondaryBackground(context),
       onDismissed: (direction) =>
           widget.object.onCardDismissedView(context, direction),
-      child: Material(
-        elevation: isSelected ? 20 : 0,
-        // shadowColor: Colors.lightBlue,
-        child: Padding(
-          padding:
-              isSelected ? const EdgeInsets.all(4.0) : const EdgeInsets.all(0),
-          child: Ink(
-            // color: isSelected ? Theme.of(context).colorScheme.primary : null,
-            child: ListTile(
-                selected: isSelected,
-                selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-                onTap: () => widget.object.onCardClicked(context),
-                onLongPress: () => widget.object.onCardLongClicked(context),
-                title: (widget.object.getMainHeaderText(context)),
-                subtitle: (widget.object.getMainSubtitleHeaderText(context)),
-                leading: widget.object.getCardLeadingWithSelecedBorder(context),
-                trailing: widget.object.getPopupMenuActionListWidget(context)),
-          ),
-        ),
-      ),
+      child: isSelected
+          ? ClippedCard(
+              elevation: 0,
+              color: Theme.of(context).colorScheme.primary,
+              child: getListTile(isSelected, context),
+            )
+          : getListTile(isSelected, context),
     );
+  }
+
+  ListTile getListTile(bool isSelected, BuildContext context) {
+    return ListTile(
+        selected: isSelected,
+        selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+        onTap: () => widget.object.onCardClicked(context),
+        onLongPress: () => widget.object.onCardLongClicked(context),
+        title: (widget.object.getMainHeaderText(context)),
+        subtitle: (widget.object.getMainSubtitleHeaderText(context)),
+        leading: widget.object.getCardLeadingCircleAvatar(context),
+        trailing: widget.object.getPopupMenuActionListWidget(context));
   }
 }
