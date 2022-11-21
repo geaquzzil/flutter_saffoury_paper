@@ -11,6 +11,7 @@ class OutlinedCard extends StatelessWidget {
         color: fillColor ? null : Theme.of(context).colorScheme.onPrimary,
         elevation: 0,
         shape: RoundedRectangleBorder(
+          
           side: BorderSide(
             color: Theme.of(context).colorScheme.outline,
           ),

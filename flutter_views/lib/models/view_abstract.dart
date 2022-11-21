@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -104,6 +105,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     }
     return "${AppLocalizations.of(context)!.add_new} ${getMainHeaderLabelTextOnly(context)}";
   }
+
+  Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {}
 }
 
 class ListableDataRow {

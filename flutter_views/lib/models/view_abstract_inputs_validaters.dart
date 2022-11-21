@@ -252,5 +252,6 @@ enum ViewAbstractControllerInputType {
   FILE_PICKER,
   CHECKBOX,
   DROP_DOWN_API,
+  DROP_DOWN_TEXT_SEARCH_API,
   IMAGE
 }

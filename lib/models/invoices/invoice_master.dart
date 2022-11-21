@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -159,6 +161,76 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       getInvoiceDesSecRow(context, pca),
       getInvoiceDesTherdRow(context, pca)
     ];
+  }
+
+  double? getTotalDiscountFromList() {
+    try {
+      return getDetailListFromMaster()
+          ?.map((e) => e.discount)
+          .reduce((value, element) => (value ?? 0) + (element ?? 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  double? getTotalPriceFromList() {
+    try {
+      return getDetailListFromMaster()
+          ?.map((e) => e.price)
+          .reduce((value, element) => (value ?? 0) + (element ?? 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  double? getTotalQuantityFromList() {
+    try {
+      return getDetailListFromMaster()
+          ?.map((e) => e.quantity)
+          .reduce((value, element) => (value ?? 0) + (element ?? 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  @override
+  Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {
+    double? totalPrice = getTotalPriceFromList();
+    double? totalDiscount = getTotalDiscountFromList();
+    double? totalQuantity = getTotalQuantityFromList();
+    double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
+
+    return ExpansionTile(
+      leading: Icon(Icons.summarize),
+      title: Text(AppLocalizations.of(context)!.no_summary),
+      children: [
+        Column(
+          children: [
+            getListTile(
+                title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+                description: totalPrice?.toStringAsFixed(2) ?? "0"),
+            getListTile(
+                title: AppLocalizations.of(context)!.discount.toUpperCase(),
+                description: totalDiscount?.toStringAsFixed(2) ?? "0"),
+            getListTile(
+                title: AppLocalizations.of(context)!.quantity.toUpperCase(),
+                description: getDetailListFromMaster()
+                    .cast<InvoiceMasterDetails>()
+                    .getTotalQuantityGroupedFormattedText(context)),
+            getListTile(
+                title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+                description: totalNetPrice.toStringAsFixed(2)),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget getListTile({required String title, required String description}) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(description),
+    );
   }
 
   @override

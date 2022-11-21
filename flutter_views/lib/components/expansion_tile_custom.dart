@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+
+import '../new_components/cards/clipper_card.dart';
 
 class ExpansionTileCustom extends StatefulWidget {
   Widget? title;
@@ -12,6 +15,7 @@ class ExpansionTileCustom extends StatefulWidget {
   Widget? subtitle;
   Widget? trailing;
   bool? hasError;
+  bool? isEnabled;
   bool initiallyExpanded;
   List<Widget> children;
   bool Function()? canExpand;
@@ -23,6 +27,7 @@ class ExpansionTileCustom extends StatefulWidget {
       this.trailing,
       required this.children,
       this.initiallyExpanded = false,
+      this.isEnabled = true,
       this.hasError,
       this.canExpand})
       : super(key: key);
@@ -52,7 +57,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   void initState() {
     super.initState();
 
-    childrenPadding = const EdgeInsets.all(20);
+    childrenPadding = const EdgeInsets.all(kDefaultPadding);
     _controller = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
 
@@ -151,25 +156,12 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
         ExpansionTileTheme.of(context);
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
 
-    return Card(
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 750),
-        padding: _isExpanded
-            ? const EdgeInsets.symmetric(horizontal: kDefaultPadding)
-            : null,
-        decoration: BoxDecoration(
-          color: expansionTileTheme.backgroundColor ?? Colors.transparent,
-          border: 
-          
-          
-          Border(
-            bottom: BorderSide(
-                color: (widget.hasError ?? false)
-                    ? Theme.of(context).colorScheme.onError
-                    : borderSideColor,
-                width: (widget.hasError ?? false) ? 3 : 0),
-          ),
-        ),
+    return ListTile(
+      leading: widget.leading,
+      title: ClippedCard(
+        color: (widget.hasError ?? false)
+            ? Theme.of(context).colorScheme.onError
+            : borderSideColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -178,12 +170,13 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
               textColor: _iconColor.value,
               child: ListTile(
                   onTap: () => _handleTap(context),
-                  contentPadding: expansionTileTheme.tilePadding,
-                  leading: widget.leading,
+                  // contentPadding: expansionTileTheme.tilePadding,
+                  // leading: widget.leading,
                   title: widget.title,
                   subtitle: widget.subtitle,
                   trailing: widget.trailing),
             ),
+            if (_isExpanded) Divider(),
             ClipRect(
               child: Align(
                 alignment: Alignment.center,

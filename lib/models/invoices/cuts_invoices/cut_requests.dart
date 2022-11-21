@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'cut_requests.g.dart';
@@ -106,6 +107,11 @@ class CutRequest extends ViewAbstract<CutRequest> {
 
   @override
   String? getTableNameApi() => "cut_requests";
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    return field=="products" ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API:ViewAbstractControllerInputType.EDIT_TEXT;
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

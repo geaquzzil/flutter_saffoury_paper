@@ -160,36 +160,7 @@ class Order extends InvoiceMaster<Order>
     ];
   }
 
-  double? getTotalDiscountFromList() {
-    try {
-      return orders_details
-          ?.map((e) => e.discount)
-          .reduce((value, element) => (value ?? 0) + (element ?? 0));
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  double? getTotalPriceFromList() {
-    try {
-      return orders_details
-          ?.map((e) => e.price)
-          .reduce((value, element) => (value ?? 0) + (element ?? 0));
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  double? getTotalQuantityFromList() {
-    try {
-      return orders_details
-          ?.map((e) => e.quantity)
-          .reduce((value, element) => (value ?? 0) + (element ?? 0));
-    } catch (e) {
-      return 0;
-    }
-  }
-
+  
   @override
   List<CartableInvoiceDetailsInterface> getDetailList() {
     return orders_details ?? [];
@@ -267,10 +238,14 @@ class Order extends InvoiceMaster<Order>
   Product getListablePickObject() {
     return Product();
   }
-  
+
   @override
   void onListableSelectedListAdded(List<ViewAbstract> list) {
-    // TODO: implement onListableSelectedListAdded
+    List<Product> products = list.cast();
+    orders_details ??= [];
+    for (var element in products) {
+      orders_details!.add(OrderDetails()..setProduct(element));
+    }
   }
 }
 

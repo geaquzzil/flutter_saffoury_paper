@@ -141,43 +141,35 @@ class BaseEditWidget extends StatelessWidget {
       value: viewAbstractChangeProvider,
       child: Consumer<ViewAbstractChangeProvider>(
           builder: (context, provider, listTile) {
-        Widget? table;
-        if (viewAbstract is ListableInterface) {
-          table = EditableTableWidget(
-              viewAbstract: viewAbstract as ListableInterface);
-          // table = PaginatedDataTableDemo();
-        }
+        Widget? customBottom =
+            viewAbstract.getCustomBottomWidget(context, ServerActions.edit);
         Widget form = Column(
           children: [
-            // if (isTheFirst)
-            //   BaseSharedHeaderViewDetailsActions(
-            //     viewAbstract: viewAbstract,
-            //   ),
-
-            if (table != null) table,
             buildForm(context),
+            if (isTheFirst && customBottom != null) customBottom
           ],
         );
 
         return isTheFirst
             ? form
-            : Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: ExpansionTileCustom(
-                    // initiallyExpanded: !viewAbstract.isNull,
-                    // isExpanded: false,
-                    hasError: hasError(context),
-                    canExpand: () => true,
-                    leading: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: viewAbstract.getCardLeading(context),
-                    ),
-                    subtitle: viewAbstract.getMainLabelSubtitleText(context),
-                    trailing: getTrailing(context),
-                    title: viewAbstract.getMainHeaderTextOnEdit(context),
-                    children: [form]),
-              );
+            : ExpansionTileCustom(
+
+                // initiallyExpanded: !viewAbstract.isNull,
+                // isExpanded: false,
+                hasError: hasError(context),
+                canExpand: () => true,
+                leading: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: viewAbstract.getCardLeadingImage(context)),
+                subtitle: !_canBuildChildern()
+                    ? null
+                    : viewAbstract.getMainLabelSubtitleText(context),
+                trailing: getTrailing(context),
+                title: !_canBuildChildern()
+                    ? form
+                    : viewAbstract.getMainHeaderTextOnEdit(context),
+                children: [if (_canBuildChildern()) form else Text("dsa")]);
       }),
     );
   }
@@ -207,9 +199,9 @@ class BaseEditWidget extends StatelessWidget {
               IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: viewAbstract.isNull
+                    color: !viewAbstract.isNull
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onBackground,
+                        : Theme.of(context).colorScheme.onError,
                   ),
                   onPressed: () {
                     viewAbstract.toggleIsNullable();
@@ -256,6 +248,11 @@ class BaseEditWidget extends StatelessWidget {
             ]));
   }
 
+  bool _canBuildChildern() {
+    return true;
+    return viewAbstract.getMainFields().length > 1;
+  }
+
   Widget getControllerWidget(BuildContext context, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     fieldValue ??= viewAbstract.getMirrorNewInstance(field);
@@ -279,6 +276,7 @@ class BaseEditWidget extends StatelessWidget {
       return getControllerEditTextViewAbstractAutoComplete(
         context,
         viewAbstract: viewAbstract,
+        withDecoration: _canBuildChildern(),
         field: field,
         controller: getController(context,
             field: field, value: fieldValue, isAutoCompleteVA: true),
@@ -298,6 +296,23 @@ class BaseEditWidget extends StatelessWidget {
       if (textFieldTypeVA == ViewAbstractControllerInputType.DROP_DOWN_API) {
         return EditControllerDropdownFromViewAbstract(
             parent: viewAbstract, viewAbstract: fieldValue, field: field);
+      }
+      if (textFieldTypeVA ==
+          ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
+        return getControllerEditTextViewAbstractAutoComplete(
+          autoCompleteBySearchQuery: true,
+          context,
+          viewAbstract: fieldValue,
+          field: field,
+          controller: TextEditingController(),
+          onSelected: (selectedViewAbstract) {
+            // viewAbstract = selectedViewAbstract;
+            // fieldValue.parent?.setFieldValue(field, selectedViewAbstract);
+            // refreshControllers(context, field);
+            // //TODO viewAbstractChangeProvider.change(viewAbstract);
+            // // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
+          },
+        );
       }
       return BaseEditWidget(
         viewAbstract: fieldValue,

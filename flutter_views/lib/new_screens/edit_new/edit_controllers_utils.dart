@@ -108,6 +108,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     required ViewAbstract viewAbstract,
     required String field,
     required TextEditingController controller,
+    bool withDecoration = true,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
   return FormBuilderTypeAheadCustom<ViewAbstract>(
       controller: controller,
@@ -123,9 +124,11 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           : getEditControllerText(suggestion.getFieldValue(field)),
       name: viewAbstract.getTag(field),
       initialValue: viewAbstract,
-      decoration: autoCompleteBySearchQuery
-          ? const InputDecoration()
-          : getDecoration(context, viewAbstract, field: field),
+      decoration: withDecoration
+          ? autoCompleteBySearchQuery
+              ? const InputDecoration()
+              : getDecoration(context, viewAbstract, field: field)
+          : const InputDecoration(),
       maxLength: viewAbstract.getTextInputMaxLength(field),
       textCapitalization: viewAbstract.getTextInputCapitalization(field),
       keyboardType: viewAbstract.getTextInputType(field),
@@ -146,7 +149,10 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
             'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
       },
       hideOnLoading: false,
-      loadingBuilder: (context) => const CircularProgressIndicator(),
+      loadingBuilder: (context) => SizedBox(
+          width: double.infinity,
+          height: 200,
+          child: const Center(child: CircularProgressIndicator())),
       itemBuilder: (context, continent) {
         return ListTile(
           leading: continent.getCardLeadingCircleAvatar(context),

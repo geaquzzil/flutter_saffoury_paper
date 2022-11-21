@@ -83,8 +83,9 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
     {String? field}) {
   if (field != null) {
     return InputDecoration(
-        border: const UnderlineInputBorder(),
+        // border: const UnderlineInputBorder(),
         filled: true,
+        // fillColor: Theme.of(context).colorScheme.onBackground,
         // errorText: "err",
         icon: viewAbstract.getTextInputIcon(field),
         // iconColor: context
@@ -115,9 +116,8 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
 }
 
 Widget getSpace() {
-  return const SizedBox(height:kDefaultPadding);
+  return const SizedBox(height: kDefaultPadding);
 }
-
 
 bool canSubmitChanges(ViewAbstract viewAbstract) =>
     (viewAbstract.getParnet) != null;

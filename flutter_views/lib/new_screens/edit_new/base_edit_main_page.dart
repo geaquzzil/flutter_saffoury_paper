@@ -96,7 +96,6 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
 
   @override
   Widget build(BuildContext context) {
-    YYDialog.init(context);
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
@@ -104,67 +103,68 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             if (widget.viewAbstract is ListableInterface)
-              getAddFloatingButton(context),
+              getAddToListFloatingButton(context),
             const SizedBox(
               width: kDefaultPadding,
             ),
-            FloatingActionButton.extended(
-                onPressed: () async {
-                  if (currentViewAbstract == null) {
-                    isCalledApi = false;
-                    debugPrint(
-                        "BaseEditMainPage  ready to upload currentViewAbstract=null");
-                    _showToast(context);
-                    return;
-                  }
-                  Dialogs.materialDialog(
-                      msgAlign: TextAlign.end,
-                      dialogWidth:
-                          kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-                      color: Theme.of(context).colorScheme.background,
-                      msg: 'Are you sure? you can\'t undo this action',
-                      title: 'Delete',
-                      context: context,
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('TextButton'),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              ViewAbstract viewAbstractToUpload =
-                                  currentViewAbstract!.copyToUplode();
-                              debugPrint(
-                                  "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
-                            },
-                            child: const Text("OK")),
-                      ]);
-                },
-                label: AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) =>
-                          FadeTransition(
-                    opacity: animation,
-                    child: SizeTransition(
-                      child: child,
-                      sizeFactor: animation,
-                      axis: Axis.horizontal,
-                    ),
-                  ),
-                  child: isExtended
-                      ? const Icon(Icons.arrow_forward)
-                      : getLoadingWidget(),
-                )),
+            getAddFloatingButton2(context),
           ],
         ),
         body: getBody());
   }
 
+  FloatingActionButton getAddFloatingButton2(BuildContext context) {
+    return FloatingActionButton.extended(
+        onPressed: () async {
+          if (currentViewAbstract == null) {
+            isCalledApi = false;
+            debugPrint(
+                "BaseEditMainPage  ready to upload currentViewAbstract=null");
+            _showToast(context);
+            return;
+          }
+          Dialogs.materialDialog(
+              msgAlign: TextAlign.end,
+              dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
+              color: Theme.of(context).colorScheme.background,
+              msg: 'Are you sure? you can\'t undo this action',
+              title: 'Delete',
+              context: context,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('TextButton'),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      ViewAbstract viewAbstractToUpload =
+                          currentViewAbstract!.copyToUplode();
+                      debugPrint(
+                          "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                    },
+                    child: const Text("OK")),
+              ]);
+        },
+        label: AnimatedSwitcher(
+          duration: const Duration(seconds: 1),
+          transitionBuilder: (Widget child, Animation<double> animation) =>
+              FadeTransition(
+            opacity: animation,
+            child: SizeTransition(
+              child: child,
+              sizeFactor: animation,
+              axis: Axis.horizontal,
+            ),
+          ),
+          child:
+              isExtended ? const Icon(Icons.arrow_forward) : getLoadingWidget(),
+        ));
+  }
+
   List<ViewAbstract> selectedList = [];
-  FloatingActionButton getAddFloatingButton(BuildContext context) {
+  FloatingActionButton getAddToListFloatingButton(BuildContext context) {
     return FloatingActionButton.extended(
         onPressed: () {
           // var dia = await showModalBottomSheet<String>(
