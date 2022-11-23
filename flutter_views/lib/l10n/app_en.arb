@@ -653,7 +653,8 @@
   "noti_message_4_F": "Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: {r}\\n\nThe remaining balance is {r}"
   ,"checkout":"Check out",
   "tax": "Tax",
-  "shipping":"Shipping"
- 
+  "shipping":"Shipping",
+   "ok":"Ok",
+  "cancel":"Cancel"
 
 }

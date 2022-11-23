@@ -22,6 +22,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   @JsonKey(ignore: true)
   List<T>? _lastSearchViewAbstractByTextInputList;
+  @JsonKey(ignore: true)
+  static Map<String, List<ViewAbstract>>? _lastListReduseSizeViewAbstract;
 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
@@ -36,8 +38,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   void setCustomMap(Map<String, String> customMap) {
     _customMap = customMap;
   }
-
-  
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
     debugPrint(
@@ -303,6 +303,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<List<T>>? listApiReduceSizes(String customField) async {
+    if (getLastReduseSize(customField).isNotEmpty) {
+      return getLastReduseSize(customField).cast();
+    }
     var response = await getRespones(
         serverActions: ServerActions.list_reduce_size,
         searchQuery: customField);
@@ -313,7 +316,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       // then parse the JSON.
 
       Iterable l = convert.jsonDecode(response.body);
-      return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+      List<T> list =
+          List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+
+      setListReduseSizeViewAbstract(customField, list.cast());
+      return list;
     } else if (response.statusCode == 401) {
       return [];
     } else {
@@ -486,6 +493,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   void setLastSearchViewAbstractByTextInputList(List<T>? lastList) {
     _lastSearchViewAbstractByTextInputList = lastList;
+  }
+
+  List<ViewAbstract> getLastReduseSize(String field) {
+    return _lastListReduseSizeViewAbstract?["$T$field"] ?? [];
+  }
+
+  void setListReduseSizeViewAbstract(
+      String field, List<ViewAbstract> lastList) {
+    _lastListReduseSizeViewAbstract ??= {};
+    _lastListReduseSizeViewAbstract!["$T$field"] = lastList;
   }
 
   set setPageIndex(int page) {

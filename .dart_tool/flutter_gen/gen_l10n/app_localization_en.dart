@@ -1922,4 +1922,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get grandTotal => 'Grand total';
+
+  @override
+  String get ok => 'Ok';
+
+  @override
+  String get cancel => 'Cancel';
 }

@@ -4,7 +4,13 @@ class ClippedCard extends StatelessWidget {
   Widget child;
   Color color;
   double elevation;
-  ClippedCard({super.key, required this.child, required this.color,this.elevation=2});
+  BorderSideColor borderSide;
+  ClippedCard(
+      {super.key,
+      required this.child,
+      required this.color,
+      this.borderSide = BorderSideColor.START,
+      this.elevation = 2});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +23,25 @@ class ClippedCard extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           decoration: BoxDecoration(
-              border: Border(left: BorderSide(color: color, width: 5))),
+              border: Border(
+            top: borderSide == BorderSideColor.TOP
+                ? BorderSide(color: color, width: 5)
+                : BorderSide.none,
+            bottom: borderSide == BorderSideColor.BOTTOM
+                ? BorderSide(color: color, width: 5)
+                : BorderSide.none,
+            left: borderSide == BorderSideColor.START
+                ? BorderSide(color: color, width: 5)
+                : BorderSide.none,
+            right: borderSide == BorderSideColor.END
+                ? BorderSide(color: color, width: 5)
+                : BorderSide.none,
+          )),
           child: child,
         ),
       ),
     );
   }
 }
+
+enum BorderSideColor { TOP, BOTTOM, START, END }

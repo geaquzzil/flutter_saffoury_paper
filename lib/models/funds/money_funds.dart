@@ -99,11 +99,11 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMinValidateMap() => {};
+  Map<String, double> getTextInputMinValidateMap() => {"value": 0.1};
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "value": TextInputType.number,
+        "value": TextInputType.numberWithOptions(decimal: true, signed: false),
         "date": TextInputType.datetime,
         "comments": TextInputType.text
       };

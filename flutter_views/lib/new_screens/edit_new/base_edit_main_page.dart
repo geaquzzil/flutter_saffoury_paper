@@ -8,12 +8,14 @@ import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.d
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:material_dialogs/material_dialogs.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
 import '../../screens/base_shared_actions_header.dart';
 import '../lists/list_api_selected_searchable_widget.dart';
 import '../lists/list_static_editable.dart';
+import 'package:nil/nil.dart';
 
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -102,6 +104,21 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            widget.viewAbstract.onHasPermission(
+              context,
+              function: widget.viewAbstract.hasPermissionDelete(context),
+              onHasPermissionWidget: () {
+                return Row(
+                  children: [
+                    getDeleteFloatingButton(context),
+                    const SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                  ],
+                );
+              },
+            ),
+            getAddToListFloatingButton(context),
             if (widget.viewAbstract is ListableInterface)
               getAddToListFloatingButton(context),
             const SizedBox(
@@ -127,175 +144,114 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               msgAlign: TextAlign.end,
               dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
               color: Theme.of(context).colorScheme.background,
-              msg: 'Are you sure? you can\'t undo this action',
-              title: 'Delete',
+              msg: getMessage(),
+              title: getTitle(),
               context: context,
+              onClose: (value) {},
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('TextButton'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      ViewAbstract viewAbstractToUpload =
-                          currentViewAbstract!.copyToUplode();
-                      debugPrint(
-                          "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
+                      Navigator.of(context).pop("confirm");
                     },
-                    child: const Text("OK")),
+                    child: Text(AppLocalizations.of(context)!.ok)),
               ]);
         },
-        label: AnimatedSwitcher(
-          duration: const Duration(seconds: 1),
-          transitionBuilder: (Widget child, Animation<double> animation) =>
-              FadeTransition(
-            opacity: animation,
-            child: SizeTransition(
-              child: child,
-              sizeFactor: animation,
-              axis: Axis.horizontal,
-            ),
-          ),
-          child:
-              isExtended ? const Icon(Icons.arrow_forward) : getLoadingWidget(),
-        ));
+        icon: Icon(Icons.arrow_forward),
+        label: Text("Confirm"));
   }
 
   List<ViewAbstract> selectedList = [];
+  FloatingActionButton getDeleteFloatingButton(BuildContext context) {
+    return FloatingActionButton.small(
+      onPressed: () {
+        Dialogs.materialDialog(
+            msgAlign: TextAlign.end,
+            dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
+            color: Theme.of(context).colorScheme.background,
+            msg: getMessage(),
+            title: getTitle(),
+            context: context,
+            onClose: (value) {},
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(AppLocalizations.of(context)!.cancel),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop("confirm");
+                  },
+                  child: Text(AppLocalizations.of(context)!.delete)),
+            ]);
+      },
+      child: const Icon(Icons.delete),
+    );
+  }
+
   FloatingActionButton getAddToListFloatingButton(BuildContext context) {
-    return FloatingActionButton.extended(
-        onPressed: () {
-          // var dia = await showModalBottomSheet<String>(
-          //   isScrollControlled: true,
-          //   context: context,
-          //   shape: RoundedRectangleBorder(
-          //       borderRadius:
-          //           BorderRadius.vertical(top: Radius.circular(20))),
-          //   builder: (BuildContext context) {
-          //     List<ViewAbstract> selectedList = [];
-          //     return FractionallySizedBox(
-          //       heightFactor: 0.9,
-          //       child: Container(
-          //         // height: 200,
-          //         // color: Colors.amber,
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.start,
-          //           mainAxisSize: MainAxisSize.min,
-          //           children: <Widget>[
-          //             ListTile(
-          //               title: Text((widget.viewAbstract
-          //                       .getMainHeaderTextOnly(context)) +
-          //                   " items Selected ${selectedList.length}"),
-          //               leading: Icon(Icons.arrow_back_sharp),
-          //               subtitle: Text(widget.viewAbstract
-          //                   .getMainHeaderLabelTextOnly(context)),
-          //             ),
-          //             OutlinedCard(
-          //               child: SizedBox(
-          //                   height: 400,
-          //                   width: double.infinity,
-          //                   child: ListApiSelectedSearchableWidget(
-          //                     viewAbstract: (widget.viewAbstract
-          //                             as ListableInterface)
-          //                         .getListablePickObject(),
-          //                     onSelected: (sList) {
-          //                       setState(() {
-          //                         selectedList = sList.cast();
-          //                       });
-          //                     },
-          //                   )),
-          //             ),
-          //             ElevatedButton(
-          //                 onPressed: () =>
-          //                     Navigator.of(context).pop("is pop up"),
-          //                 child: Text("OK"))
-          //             // But(
-          //             //   onPressed: () {
-
-          //             //     Navigator.of(context).pop();
-          //             //   },
-          //           ],
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // );
-
-          // debugPrint("on popup navigator $dia");
-          // YY(
-          //   items: [RadioItem(text: "dsad")],
-          // );
-          // YYListViewDialogListTile();
-          Dialogs.materialDialog(
-              // isScrollControlled: true,
-              msgAlign: TextAlign.end,
-              customView: Align(
-                alignment: Alignment(0, 1),
-                child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 2,
-                    width: double.infinity,
-                    child: ListApiSelectedSearchableWidget(
-                      viewAbstract: (widget.viewAbstract as ListableInterface)
-                          .getListablePickObject(),
-                      onSelected: (sList) {
-                        selectedList = sList.cast();
-                        // setState(() {
-                        //   selectedList=sList.cast();
-                        // });
-                      },
-                    )),
+    return FloatingActionButton.small(
+      onPressed: () {
+        Dialogs.materialDialog(
+            // isScrollControlled: true,
+            msgAlign: TextAlign.end,
+            customView: Align(
+              alignment: Alignment(0, 1),
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height / 2,
+                  width: double.infinity,
+                  child: ListApiSelectedSearchableWidget(
+                    viewAbstract: (widget.viewAbstract as ListableInterface)
+                        .getListablePickObject(),
+                    onSelected: (sList) {
+                      selectedList = sList.cast();
+                      // setState(() {
+                      //   selectedList=sList.cast();
+                      // });
+                    },
+                  )),
+            ),
+            dialogShape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
               ),
-              dialogShape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-              ),
-              dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
-              useSafeArea: false,
-              onClose: (value) {
-                debugPrint("onClosed $selectedList");
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
+            useSafeArea: false,
+            onClose: (value) {
+              if (value != null) {
                 setState(() {
                   (widget.viewAbstract as ListableInterface)
                       .onListableSelectedListAdded(selectedList);
                 });
-              },
-              color: Theme.of(context).colorScheme.background,
-              // msg: 'Are you sure? you can\'t undo this action',
-              // title: 'Delete',
-              context: context,
-              actions: [
-                TextButton(
+              }
+            },
+            color: Theme.of(context).colorScheme.background,
+            context: context,
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(AppLocalizations.of(context)!.cancel),
+              ),
+              ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop("dasda");
                   },
-                  child: const Text('TextButton'),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      // ViewAbstract viewAbstractToUpload =
-                      //     currentViewAbstract!.copyToUplode();
-                      // debugPrint(
-                      //     "BaseEditMainPage ready to upload  copyToUplode=> $viewAbstractToUpload");
-                    },
-                    child: const Text("OK")),
-              ]);
-        },
-        label: AnimatedSwitcher(
-          duration: const Duration(seconds: 1),
-          transitionBuilder: (Widget child, Animation<double> animation) =>
-              FadeTransition(
-            opacity: animation,
-            child: SizeTransition(
-              child: child,
-              sizeFactor: animation,
-              axis: Axis.horizontal,
-            ),
-          ),
-          child: isExtended ? const Icon(Icons.add) : getLoadingWidget(),
-        ));
+                  child: Text(AppLocalizations.of(context)!.ok)),
+            ]);
+      },
+      child: const Icon(Icons.add),
+    );
   }
 
   Widget getBody() {
@@ -416,5 +372,38 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         ],
       ),
     );
+  }
+
+  String getActionText() {
+    if (currentViewAbstract == null) {
+      return "NOT FOUND";
+    }
+    if (currentViewAbstract!.isNew()) {
+      return AppLocalizations.of(context)!.add.toLowerCase();
+    } else {
+      return AppLocalizations.of(context)!.edit.toLowerCase();
+    }
+  }
+
+  String getTitle() {
+    String descripon = "";
+    if (widget.viewAbstract.isEditing()) {
+      descripon =
+          widget.viewAbstract.getMainHeaderTextOnly(context).toLowerCase();
+    } else {
+      descripon =
+          widget.viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase();
+    }
+    return "${getActionText().toUpperCase()} $descripon ";
+  }
+
+  String getLabelViewAbstract() {
+    return widget.viewAbstract
+        .getMainHeaderLabelTextOnly(context)
+        .toLowerCase();
+  }
+
+  String getMessage() {
+    return "${AppLocalizations.of(context)!.areYouSure}${getActionText()} ${getLabelViewAbstract()} ";
   }
 }

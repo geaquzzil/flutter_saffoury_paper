@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
 import '../../models/auto_rest.dart';
@@ -17,6 +18,27 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   bool isLoading(String key) {
     return listMap[key]?.isLoading ?? false;
+  }
+
+  Future<void> edit(String key, ViewAbstract obj) async {
+    MultiListProviderHelper? multiListProviderHelper = listMap[key];
+    try {
+      ViewAbstract? o = multiListProviderHelper?.objects
+          .firstWhereOrNull((element) => element.isEquals(obj));
+      if (o != null) {
+        o = obj;
+      }
+    } catch (e) {}
+
+    notifyListeners();
+  }
+
+  Future<void> delete(String key, ViewAbstract obj) async {
+    MultiListProviderHelper? multiListProviderHelper = listMap[key];
+    multiListProviderHelper?.objects
+        .removeWhere((element) => element.isEquals(obj));
+
+    notifyListeners();
   }
 
   ///clear all the objects list and load the other objects list from viewAbstract if not null

@@ -154,11 +154,14 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   Widget _buildChildren(BuildContext context, Widget? child) {
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
-    final Color borderSideColor = _borderColor.value ?? Colors.transparent;
+    final Color borderSideColor = _isExpanded
+        ? Theme.of(context).colorScheme.primary
+        : Colors.transparent;
 
     return ListTile(
       leading: widget.leading,
       title: ClippedCard(
+        borderSide: BorderSideColor.START,
         color: (widget.hasError ?? false)
             ? Theme.of(context).colorScheme.onError
             : borderSideColor,

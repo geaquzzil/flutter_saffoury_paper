@@ -154,6 +154,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
             'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
       },
       hideOnLoading: false,
+      debounceDuration: Duration(milliseconds: 500),
       loadingBuilder: (context) => SizedBox(
           width: double.infinity,
           height: 200,

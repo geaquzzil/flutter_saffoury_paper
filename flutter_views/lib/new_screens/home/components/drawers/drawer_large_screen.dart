@@ -1,6 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -153,7 +155,9 @@ class DrawerLargeScreens extends StatelessWidget {
     final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
     final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
     final width = isOpen ? size : double.infinity;
-    return isOpen ? const ProfileListTileWidget() : const ProfilePicturePopupMenu();
+    return isOpen
+        ? const ProfileListTileWidget()
+        : const ProfilePicturePopupMenu();
   }
 
   Widget buildCollapseIcon(BuildContext context, bool isOpen) {
@@ -241,7 +245,7 @@ class DrawerListTileDesktopGroupOpen extends StatelessWidget {
       title: Text(title),
       children: [
         ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            // padding: const EdgeInsets.symmetric(horizontal: 20),
             separatorBuilder: (context, index) {
               return const SizedBox(
                 height: 8,
@@ -276,25 +280,22 @@ class DrawerListTileDesktopGroupClosed extends StatefulWidget {
 class _DrawerListTileDesktopGroupClosedState
     extends State<DrawerListTileDesktopGroupClosed> {
   Widget listItems(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      child: ShadowWidget(
-        child: ListView.separated(
-            padding: EdgeInsets.zero,
-            separatorBuilder: (context, index) {
-              return const SizedBox(
-                height: 8,
-              );
-            },
-            itemCount: widget.groupedDrawerItems.length,
-            shrinkWrap: true,
-            primary: false,
-            itemBuilder: (context, index) {
-              ViewAbstract viewAbstract = widget.groupedDrawerItems[index];
-              return DrawerListTileDesktopClosed(
-                  viewAbstract: viewAbstract, idx: index);
-            }),
-      ),
+    return OutlinedCard(
+      child: ListView.separated(
+          padding: EdgeInsets.zero,
+          separatorBuilder: (context, index) {
+            return const SizedBox(
+              height: kDefaultPadding / 2,
+            );
+          },
+          itemCount: widget.groupedDrawerItems.length,
+          shrinkWrap: true,
+          primary: true,
+          itemBuilder: (context, index) {
+            ViewAbstract viewAbstract = widget.groupedDrawerItems[index];
+            return DrawerListTileDesktopClosed(
+                viewAbstract: viewAbstract, idx: index);
+          }),
     );
   }
 
@@ -380,25 +381,25 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
     return OnHoverWidget(
         scale: false,
         builder: (onHover) {
-          return Material(
-              color: Colors.transparent,
-              child: IconButton(
+          return IconButton(
 
-                  // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
+              // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
 
-                  icon: Icon(
-                    viewAbstract.getMainIconData(),
-                    color: ds.getIndex == viewAbstract.hashCode
-                        ? Theme.of(context).colorScheme.secondary
+              icon: Icon(
+                viewAbstract.getMainIconData(),
+                color: onHover
+                    ? Theme.of(context).colorScheme.primary
+                    : ds.getIndex == viewAbstract.hashCode
+                        ? Theme.of(context).colorScheme.primary
                         : null,
-                  ),
-                  onPressed: () {
-                    context
-                        .read<DrawerMenuSelectedItemController>()
-                        .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+              ),
+              onPressed: () {
+                context
+                    .read<DrawerMenuSelectedItemController>()
+                    .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
 
-                    viewAbstract.onDrawerItemClicked(context);
-                  }));
+                viewAbstract.onDrawerItemClicked(context);
+              });
         });
   }
 }

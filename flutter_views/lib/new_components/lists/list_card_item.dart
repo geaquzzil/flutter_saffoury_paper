@@ -41,7 +41,9 @@ class _ListCardItemState<T extends ViewAbstract>
           widget.object.onCardDismissedView(context, direction),
       child: isSelected
           ? ClippedCard(
+            borderSide: BorderSideColor.END,
               elevation: 0,
+
               color: Theme.of(context).colorScheme.primary,
               child: getListTile(isSelected, context),
             )

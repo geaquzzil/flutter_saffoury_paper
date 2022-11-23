@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
 abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
@@ -162,6 +163,21 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     return context.read<AuthProvider>().getPermissions;
   }
 
+  FutureBuilder<bool> onHasPermission(BuildContext context,
+      {required Future<bool> function,
+      required Widget Function() onHasPermissionWidget}) {
+    return FutureBuilder<bool>(
+      future: function,
+      builder: (context, snapshot) {
+        if (snapshot.data == false) {
+          return nil;
+        } else {
+          return onHasPermissionWidget();
+        }
+      },
+    );
+  }
+
   //  bool hasPerantViewAbstrct() {
   //     return getParent() != null;
   // }
@@ -200,7 +216,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   void setParent(ViewAbstract? parent) {
     this.parent = parent;
-    if(getFieldNameFromParent!=null) {
+    if (getFieldNameFromParent != null) {
       isNull = isNullableAlreadyFromParentCheck(getFieldNameFromParent!);
     }
   }

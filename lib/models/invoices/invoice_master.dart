@@ -201,6 +201,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
 
     return ExpansionTile(
+      initiallyExpanded: true,
       leading: Icon(Icons.summarize),
       title: Text(AppLocalizations.of(context)!.no_summary),
       children: [

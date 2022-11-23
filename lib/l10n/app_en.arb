@@ -660,5 +660,7 @@
   "tax": "Tax",
   "shipping":"Shipping",
     "subTotal":"Sub total",
-  "grandTotal":"Grand total"
+  "grandTotal":"Grand total",
+  "ok":"Ok",
+  "cancel":"Cancel"
 }

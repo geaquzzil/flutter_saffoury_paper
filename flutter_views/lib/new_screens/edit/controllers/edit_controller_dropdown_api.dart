@@ -41,16 +41,22 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
+    List<T?> savedList = widget.viewAbstract
+        .getLastReduseSize(widget.viewAbstract.getFieldToReduceSize())
+        .cast();
     return Column(children: [
-      FutureBuilder<List<T?>?>(
-        future: getFuture(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return getDropdownController(context, snapshot.data as List<T>);
-          }
-          return CircularProgressIndicator();
-        },
-      ),
+      if (savedList.isNotEmpty)
+        getDropdownController(context, savedList)
+      else
+        FutureBuilder<List<T?>?>(
+          future: getFuture(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return getDropdownController(context, snapshot.data as List<T?>);
+            }
+            return CircularProgressIndicator();
+          },
+        ),
       getSpace()
     ]);
   }
@@ -71,8 +77,12 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
     return FormBuilderDropdown<T?>(
       // valueTransformer: ,
       autovalidateMode: AutovalidateMode.always,
-      onChanged: (obj) =>
-          widget.parent.onDropdownChanged(context, widget.field, obj),
+      onChanged: (obj) {
+        if (obj == null) {
+          widget.parent.setFieldValue(widget.field, obj);
+        }
+        widget.parent.onDropdownChanged(context, widget.field, obj);
+      },
       validator: ((value) => widget.parent
           .getTextInputValidatorIsRequired(context, widget.field, value)),
       name: widget.parent.getTag(widget.field),
