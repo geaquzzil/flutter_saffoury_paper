@@ -8,8 +8,6 @@ part of 'equalities.dart';
 
 Equalities _$EqualitiesFromJson(Map<String, dynamic> json) => Equalities()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..value = (json['value'] as num?)?.toDouble()
   ..date = json['date'] as String?
@@ -20,7 +18,6 @@ Equalities _$EqualitiesFromJson(Map<String, dynamic> json) => Equalities()
 Map<String, dynamic> _$EqualitiesToJson(Equalities instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'value': instance.value,
       'date': instance.date,

@@ -1928,4 +1928,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get hideAccountPhone => 'Hide account phone';
+
+  @override
+  String get hideAccountAdress => 'Hide account address';
+
+  @override
+  String get hideCompanyTerms => 'Hide company terms';
+
+  @override
+  String get hideCompanyNotes => 'Hide company notes';
+
+  @override
+  String get hideDate => 'Hide date';
+
+  @override
+  String get hidePaymentMethod => 'Hide payment method';
+
+  @override
+  String get hideDueDate => 'Hide due date';
 }

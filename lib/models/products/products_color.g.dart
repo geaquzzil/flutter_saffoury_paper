@@ -9,8 +9,6 @@ part of 'products_color.dart';
 ProductsColor _$ProductsColorFromJson(Map<String, dynamic> json) =>
     ProductsColor()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..top = json['top'] as String?
       ..middle = json['middle'] as String?
@@ -19,7 +17,6 @@ ProductsColor _$ProductsColorFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ProductsColorToJson(ProductsColor instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'top': instance.top,
       'middle': instance.middle,

@@ -1928,4 +1928,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cancel => 'الفاء';
+
+  @override
+  String get hideAccountPhone => 'اخفاء رقم الهاتف';
+
+  @override
+  String get hideAccountAdress => 'اخفاء العنوان';
+
+  @override
+  String get hideCompanyTerms => 'إخفاء شروط الشركة';
+
+  @override
+  String get hideCompanyNotes => 'اخفاء الملاحظات';
+
+  @override
+  String get hideDate => 'إخفاء التاريخ';
+
+  @override
+  String get hidePaymentMethod => 'إخفاء طريقة الدفع';
+
+  @override
+  String get hideDueDate => 'إخفاء تاريخ الاستحقاق';
 }

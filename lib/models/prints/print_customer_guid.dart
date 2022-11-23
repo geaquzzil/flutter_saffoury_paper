@@ -3,6 +3,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable(explicitToJson: true)
 @reflector
 class PrintCustomerGuid extends PrintLocalSetting<PrintCustomerGuid> {
   @override

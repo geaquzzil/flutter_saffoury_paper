@@ -8,8 +8,6 @@ part of 'orders.dart';
 
 Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
@@ -47,7 +45,6 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -82,8 +79,6 @@ const _$InvoiceStatusEnumMap = {
 
 OrderDetails _$OrderDetailsFromJson(Map<String, dynamic> json) => OrderDetails()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..products = json['products'] == null
       ? null
@@ -103,7 +98,6 @@ OrderDetails _$OrderDetailsFromJson(Map<String, dynamic> json) => OrderDetails()
 Map<String, dynamic> _$OrderDetailsToJson(OrderDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),

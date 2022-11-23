@@ -10,8 +10,6 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
         Map<String, dynamic> json) =>
     SalesAnalysisDashboard()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..date = json['date'] == null
           ? null
@@ -83,7 +81,6 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
         SalesAnalysisDashboard instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'date': instance.date?.toJson(),
       'bestSellingSize':

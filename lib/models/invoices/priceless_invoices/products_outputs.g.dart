@@ -9,8 +9,6 @@ part of 'products_outputs.dart';
 ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -49,7 +47,6 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ProductOutputToJson(ProductOutput instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -83,8 +80,6 @@ ProductOutputDetails _$ProductOutputDetailsFromJson(
         Map<String, dynamic> json) =>
     ProductOutputDetails()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
@@ -106,7 +101,6 @@ Map<String, dynamic> _$ProductOutputDetailsToJson(
         ProductOutputDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),

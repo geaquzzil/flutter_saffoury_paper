@@ -52,8 +52,12 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
         boldItalic: await PdfGoogleFonts.tajawalBold());
   }
 
-  Future<Widget> buildHeader() async => pw.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}'));
+  Future<Widget> buildHeader() async {
+    mt.debugPrint(
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}');
+    return pw.Image(await networkImage(
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}'));
+  }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
@@ -166,6 +170,14 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
                 ])));
   }
 
+  PdfColor getSecondaryColor() {
+    return PdfColor.fromHex(printObj.getPrintableSecondaryColor());
+  }
+
+  PdfColor getPrimaryColor() {
+    return PdfColor.fromHex(printObj.getPrintablePrimaryColor());
+  }
+
   pw.Row buildTextWithIcon(InvoiceHeaderTitleAndDescriptionInfo item) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -220,18 +232,18 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
                     // width: 1.0,
                   )));
             },
-            headerCellDecoration: const BoxDecoration(
+            headerCellDecoration: BoxDecoration(
                 color: PdfColors.white,
                 border: Border(
                     bottom: BorderSide(
-                  //                    <--- top side
-                  color: PdfColors.green,
-                  // width: 2.0,
-                ))),
+                        //                    <--- top side
+                        color: getSecondaryColor()
+                        // width: 2.0,
+                        ))),
             //this is content table text color
             cellStyle: const TextStyle(color: PdfColors.black),
             headerStyle: TextStyle(
-                color: PdfColors.green,
+                color: getSecondaryColor(),
                 fontWeight: FontWeight.bold,
                 background: const BoxDecoration(color: PdfColors.white)),
             headerDecoration: const BoxDecoration(color: PdfColors.grey300),
@@ -251,7 +263,8 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
 
   Widget buildTitleOnInvoice(String title) {
     return Text(title,
-        style: TextStyle(fontWeight: FontWeight.bold, color: PdfColors.green));
+        style:
+            TextStyle(fontWeight: FontWeight.bold, color: getSecondaryColor()));
   }
 
   Widget buildInvoiceBottomInfoWithQrCode() {

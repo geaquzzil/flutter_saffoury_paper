@@ -11,6 +11,7 @@ import '../../new_components/loading_shimmer.dart';
 class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   AutoRest autoRest;
   Widget? title;
+  double customHeight;
   String? titleString;
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
@@ -18,6 +19,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
       required this.autoRest,
       this.title,
       this.titleString,
+      this.customHeight=230,
       this.listItembuilder})
       : super(key: key);
 
@@ -108,7 +110,7 @@ class _ListHorizontalApiWidgetState
   Widget wrapHeader(BuildContext context, Widget child) {
     return SizedBox(
         width: MediaQuery.of(context).size.width - 80,
-        height: 230,
+        height: widget.customHeight,
         child: Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

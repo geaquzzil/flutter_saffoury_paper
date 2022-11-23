@@ -101,12 +101,9 @@ class BaseHomeScreenLayout extends StatelessWidget {
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 10 : 2,
-              child: Container(
-                  // padding: const EdgeInsets.all(10),
-                  // decoration: getShadowBoxDecoration(),
-                  child: const Center(
+              child: const Center(
                 child: BaseSharedDetailsView(),
-              )))
+              ))
       ]),
     );
   }

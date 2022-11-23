@@ -10,6 +10,7 @@ PermissionActionAbstract _$PermissionActionAbstractFromJson(
         Map<String, dynamic> json) =>
     PermissionActionAbstract()
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..table_name = json['table_name'] as String?
       ..print = json['print'] as int?
       ..notification = json['notification'] as int?
@@ -23,6 +24,7 @@ Map<String, dynamic> _$PermissionActionAbstractToJson(
         PermissionActionAbstract instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'table_name': instance.table_name,
       'print': instance.print,
       'notification': instance.notification,

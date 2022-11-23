@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import '../cities/governorates.dart';
 import 'invoice_master.dart';
 import 'invoice_master_details.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
@@ -54,6 +56,25 @@ class Purchases extends InvoiceMaster<Purchases> {
           "purchases_refunds": List<PurchasesRefund>.empty(),
           "purchases_refunds_count": 0,
         });
+
+  @override
+  PrintableInvoiceInterface getModifiablePrintablePdfSetting(
+      BuildContext context) {
+    Purchases o = Purchases();
+    debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
+    (o).customers = Customer()..name = "Customer name";
+    o.customers?.address = "Damascus - Syria";
+    o.customers?.phone = "099999999";
+    o.cargo_transporters = CargoTransporter();
+    o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
+    o.cargo_transporters?.name = "Driver name";
+    o.cargo_transporters?.carNumber = "Driver car number";
+    o.employees = Employee()..name = "Employee name";
+    o.purchases_details ??= [];
+    o.purchases_details?.add(PurchasesDetails());
+    debugPrint("getModifiablePrintablePdfSetting $o");
+    return o;
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

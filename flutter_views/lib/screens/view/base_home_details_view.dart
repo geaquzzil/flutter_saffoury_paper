@@ -32,14 +32,18 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
         context.watch<ActionViewAbstractProvider>();
 
     ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
+    // if (viewAbstract != null)
+    //   return MasterHomeHorizontal(
+    //     viewAbstract: viewAbstract,
+    //   );
     Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
-
+    Widget? currentWidget;
     if (customWidget != null) {
-      return Center(
+      currentWidget = Center(
         child: customWidget,
       );
     } else if (viewAbstract == null) {
-      return Scaffold(body: getEmptyView(context));
+      currentWidget = Scaffold(body: getEmptyView(context));
     } else {
       switch (actionViewAbstractProvider.getServerActions) {
         case ServerActions.edit:
@@ -47,19 +51,27 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
           // return EditDetailsPage(
           //   object: viewAbstract,
           // );
-          return Container(
+          currentWidget = Container(
             color: Theme.of(context).colorScheme.background,
             child: BaseEditNewPage(
               viewAbstract: viewAbstract,
             ),
           );
+          break;
         case ServerActions.view:
-          return wrapHeaderAndFooter(
+          currentWidget = wrapHeaderAndFooter(
               MasterView(viewAbstract: viewAbstract), viewAbstract);
+          break;
         default:
-          return MasterHomeHorizontal(viewAbstract: viewAbstract);
+          currentWidget = MasterHomeHorizontal(viewAbstract: viewAbstract);
+          break;
       }
     }
+    return AnimatedSwitcher(
+      // key: UniqueKey(),
+      duration: Duration(milliseconds: 250),
+      child: currentWidget,
+    );
   }
 
   Widget wrapHeaderAndFooter(Widget main, ViewAbstract viewAbstract) {

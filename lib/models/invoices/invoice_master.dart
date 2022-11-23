@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
@@ -166,7 +169,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   double? getTotalDiscountFromList() {
     try {
       return getDetailListFromMaster()
-          ?.map((e) => e.discount)
+          .map((e) => e.discount)
           .reduce((value, element) => (value ?? 0) + (element ?? 0));
     } catch (e) {
       return 0;
@@ -176,7 +179,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   double? getTotalPriceFromList() {
     try {
       return getDetailListFromMaster()
-          ?.map((e) => e.price)
+          .map((e) => e.price)
           .reduce((value, element) => (value ?? 0) + (element ?? 0));
     } catch (e) {
       return 0;
@@ -186,7 +189,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   double? getTotalQuantityFromList() {
     try {
       return getDetailListFromMaster()
-          ?.map((e) => e.quantity)
+          .map((e) => e.quantity)
           .reduce((value, element) => (value ?? 0) + (element ?? 0));
     } catch (e) {
       return 0;
@@ -274,8 +277,65 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       return (this as ProductInput).products_inputs_details ?? [];
     } else if (runtimeType == ProductOutput) {
       return (this as ProductOutput).products_outputs_details ?? [];
+    } else if (runtimeType == ReservationInvoice) {
+      return (this as ReservationInvoice).reservation_invoice_details ?? [];
+    } else if (runtimeType == Transfers) {
+      return (this as Transfers).transfers_details ?? [];
+    } else if (runtimeType == CustomerRequestSize) {
+      return (this as CustomerRequestSize).customers_request_sizes_details ??
+          [];
     } else {
       return [];
+    }
+  }
+
+  List<InvoiceMasterDetails> getDetailListFromMasterSetNewOnList() {
+    if (runtimeType == Order) {
+      return (this as Order).orders_details ??= [];
+    } else if (runtimeType == Purchases) {
+      return (this as Purchases).purchases_details ??= [];
+    } else if (runtimeType == OrderRefund) {
+      return (this as OrderRefund).orders_refunds_order_details ??= [];
+    } else if (runtimeType == PurchasesRefund) {
+      return (this as PurchasesRefund).purchases_refunds_purchases_details ??=
+          [];
+    } else if (runtimeType == ProductInput) {
+      return (this as ProductInput).products_inputs_details ??= [];
+    } else if (runtimeType == ProductOutput) {
+      return (this as ProductOutput).products_outputs_details ??= [];
+    } else if (runtimeType == CustomerRequestSize) {
+      return (this as CustomerRequestSize).customers_request_sizes_details ??=
+          [];
+    } else if (runtimeType == ReservationInvoice) {
+      return (this as ReservationInvoice).reservation_invoice_details ??= [];
+    } else if (runtimeType == Transfers) {
+      return (this as Transfers).transfers_details ??= [];
+    } else {
+      return [];
+    }
+  }
+
+  InvoiceMasterDetails getDetailMasterNewInstance() {
+    if (runtimeType == Order) {
+      return OrderDetails();
+    } else if (runtimeType == Purchases) {
+      return PurchasesDetails();
+    } else if (runtimeType == OrderRefund) {
+      return OrderRefundDetails();
+    } else if (runtimeType == PurchasesRefund) {
+      return PurchasesRefundDetails();
+    } else if (runtimeType == ProductInput) {
+      return ProductInputDetails();
+    } else if (runtimeType == ProductOutput) {
+      return ProductOutputDetails();
+    } else if (runtimeType == CustomerRequestSize) {
+      return CustomerRequestSizeDetails();
+    } else if (runtimeType == ReservationInvoice) {
+      return ReservationInvoiceDetails();
+    } else if (runtimeType == Transfers) {
+      return TransfersDetails();
+    } else {
+      return OrderDetails();
     }
   }
 
@@ -294,6 +354,18 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       invCode = "INV-R";
     } else if (runtimeType == PurchasesRefund) {
       invCode = "PURCH-R";
+    } else if (runtimeType == ProductInput) {
+      invCode = "PRI";
+    } else if (runtimeType == ProductOutput) {
+      invCode = "PRO";
+    } else if (runtimeType == CustomerRequestSize) {
+      invCode = "CUS-S";
+    } else if (runtimeType == ReservationInvoice) {
+      invCode = "RES";
+    } else if (runtimeType == Transfers) {
+      invCode = "TR";
+    } else {
+      invCode = "N";
     }
     return "$invCode-$iD-$year";
   }
@@ -308,30 +380,43 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintablePrimaryColor() {
+  Color? getMainColor() {
     if (runtimeType == Order) {
-      return Colors.green.value.toRadixString(16).substring(2, 8);
+      return Colors.green;
+    } else if (runtimeType == Purchases) {
+      return Colors.red;
+    } else if (runtimeType == OrderRefund) {
+      return Colors.red;
+    } else if (runtimeType == PurchasesRefund) {
+      return Colors.green;
+    } else if (runtimeType == ProductInput) {
+      return Colors.red;
+    } else if (runtimeType == ProductOutput) {
+      return Colors.green;
+    } else if (runtimeType == ReservationInvoice) {
+      return Colors.purple;
+    } else if (runtimeType == CustomerRequestSize) {
+      return Colors.orange;
+    } else if (runtimeType == Transfers) {
+      return Colors.orange;
+    } else {
+      return Colors.orange;
     }
-    return "";
+  }
+
+  @override
+  String getPrintablePrimaryColor() {
+    return getMainColor()!.value.toRadixString(16).substring(2, 8);
   }
 
   @override
   String getPrintableSecondaryColor() {
-    if (runtimeType == Order) {
-      return const Color.fromARGB(255, 33, 140, 39)
-          .value
-          .toRadixString(16)
-          .substring(2, 8);
-    }
-    return "";
+    return getMainColor()!.darken(.1).value.toRadixString(16).substring(2, 8);
   }
 
   @override
   List<PrintableInvoiceInterfaceDetails> getPrintableInvoiceDetailsList() {
-    if (runtimeType == Order) {
-      return (this as Order).orders_details ?? [];
-    }
-    return [];
+    return getDetailListFromMaster();
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesSecRow(
@@ -356,19 +441,19 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.total_price,
           description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-          hexColor: Colors.green.toHex()
+          hexColor: getPrintablePrimaryColor()
           // icon: Icons.tag
           ),
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.balance,
           description: customers?.balance?.toStringAsFixed(2) ?? "",
-          hexColor: Colors.green.toHex()
+          hexColor: getPrintablePrimaryColor()
           // icon: Icons.balance
           ),
       InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.paymentMethod,
           description: "payment on advanced",
-          hexColor: Colors.green.toHex()
+          hexColor: getPrintablePrimaryColor()
           // icon: Icons.credit_card
           ),
     ];
@@ -455,16 +540,20 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   PrintableInvoiceInterface getModifiablePrintablePdfSetting(
       BuildContext context) {
-    Order o = Order();
-    o.customers = Customer()..name = "TEST";
+    T o = getNewInstance();
+    debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
+    (o as InvoiceMaster).customers = Customer()..name = "Customer name";
     o.customers?.address = "Damascus - Syria";
     o.customers?.phone = "099999999";
     o.cargo_transporters = CargoTransporter();
     o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
-    o.cargo_transporters?.name = "Test Driver";
-    o.cargo_transporters?.carNumber = "123-435";
-    o.employees = Employee()..name = "TEST";
-    return o..orders_details?.add(OrderDetails());
+    o.cargo_transporters?.name = "Driver name";
+    o.cargo_transporters?.carNumber = "Driver car number";
+    o.employees = Employee()..name = "Employee name";
+    List l = o.getDetailListFromMasterSetNewOnList();
+    l.add(o.getDetailMasterNewInstance());
+    debugPrint("getModifiablePrintablePdfSetting $o");
+    return o;
   }
 
   static double? convertToDouble(dynamic number) =>

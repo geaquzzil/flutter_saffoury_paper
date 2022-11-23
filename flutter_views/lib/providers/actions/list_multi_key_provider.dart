@@ -33,10 +33,12 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> delete(String key, ViewAbstract obj) async {
-    MultiListProviderHelper? multiListProviderHelper = listMap[key];
-    multiListProviderHelper?.objects
-        .removeWhere((element) => element.isEquals(obj));
+  Future<void> delete(ViewAbstract obj) async {
+    await Future.forEach(listMap.values, (element) {
+      (element as MultiListProviderHelper)
+          .objects
+          .removeWhere((element) => element.isEquals(obj));
+    });
 
     notifyListeners();
   }

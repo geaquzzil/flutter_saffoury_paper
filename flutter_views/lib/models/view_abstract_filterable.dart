@@ -5,8 +5,10 @@ import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
+  @JsonKey(ignore: true)
   String? searchByAutoCompleteTextInput;
   String? getSortByFieldName();
   SortByType getSortByType();

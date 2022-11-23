@@ -5,11 +5,15 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'cut_requests.g.dart';
@@ -55,8 +59,8 @@ class CutRequest extends ViewAbstract<CutRequest> {
         "sizes_cut_requests_count": 0
       };
 
-  @override
-  List<String>? isRequiredObjectsList() => ["cut_request_results"];
+  // @override
+  // List<String>? isRequiredObjectsList() => ["cut_request_results"];
   @override
   List<String> getMainFields() => [
         "products",
@@ -110,7 +114,9 @@ class CutRequest extends ViewAbstract<CutRequest> {
 
   @override
   ViewAbstractControllerInputType getInputType(String field) {
-    return field=="products" ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API:ViewAbstractControllerInputType.EDIT_TEXT;
+    return field == "products"
+        ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
+        : ViewAbstractControllerInputType.EDIT_TEXT;
   }
 
   @override
@@ -128,6 +134,19 @@ class CutRequest extends ViewAbstract<CutRequest> {
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {"quantity": 1};
+  @override
+  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+    if (action == ServerActions.view) {
+      return ListHorizontalApiAutoRestWidget(
+        customHeight: 800,
+        title: getMainHeaderText(context),
+        autoRest: AutoRest<CutRequest>(
+            obj: CutRequest()
+              ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+            key: "CustomerByCutRequest$iD"),
+      );
+    }
+  }
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {

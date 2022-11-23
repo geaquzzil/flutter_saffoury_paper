@@ -8,8 +8,6 @@ part of 'spendings.dart';
 
 Spendings _$SpendingsFromJson(Map<String, dynamic> json) => Spendings()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
@@ -34,7 +32,6 @@ Spendings _$SpendingsFromJson(Map<String, dynamic> json) => Spendings()
 
 Map<String, dynamic> _$SpendingsToJson(Spendings instance) => <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'fromBox': instance.fromBox,
       'isDirect': instance.isDirect,

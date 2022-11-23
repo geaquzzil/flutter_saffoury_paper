@@ -567,6 +567,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.2.0"
+  getwidget:
+    dependency: transitive
+    description:
+      name: getwidget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   glob:
     dependency: transitive
     description:

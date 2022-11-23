@@ -28,7 +28,16 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
             padding: const EdgeInsets.all(kDefaultPadding),
             child: Row(
               children: [
-                const BackButton(),
+                if (context
+                        .watch<ActionViewAbstractProvider>()
+                        .getStackedActions
+                        .length >
+                    1)
+                  BackButton(
+                    onPressed: () {
+                      context.read<ActionViewAbstractProvider>().pop();
+                    },
+                  ),
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),

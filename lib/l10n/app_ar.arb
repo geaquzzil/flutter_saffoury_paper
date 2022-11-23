@@ -87,6 +87,7 @@
   "printInvoiceLabelDes": "اضبط طابعة الملصقات من الكمبيوتر. وإلا ، فقد تتم طباعة الملصق في الطابعة الرئيسية",
   "hidePaymentAmount": "اخفاء قيمة الدفعة ( دولار )",
   "hideAccountBalance": "اخفاء الرصيد",
+
   "hideInvoiceUnitAndTotalPrice": "اخفاء السعر الفردي والإحمالي",
   "returnedProduct": "المرتجع",
   "purchases_price": "سعر الشراء",
@@ -661,5 +662,12 @@
   "subTotal":"المجموع الجزئي",
   "grandTotal":"المجموع العام",
   "ok":"حسنا",
-  "cancel":"الفاء"
+  "cancel":"الفاء",
+      "hideAccountPhone": "اخفاء رقم الهاتف",
+          "hideAccountAdress": "اخفاء العنوان",
+           "hideCompanyTerms": "إخفاء شروط الشركة",
+          "hideCompanyNotes": "اخفاء الملاحظات",
+             "hideDate": "إخفاء التاريخ",
+          "hideDueDate": "إخفاء تاريخ الاستحقاق",
+          "hidePaymentMethod":"إخفاء طريقة الدفع"
 }

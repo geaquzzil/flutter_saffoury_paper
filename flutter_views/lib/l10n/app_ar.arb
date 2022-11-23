@@ -651,5 +651,8 @@
   "tax": "ضريبة",
   "shipping":"نقل ومواصلات", 
   "ok":"حسنا",
-  "cancel":"الفاء"
+  "cancel":"الفاء",
+  "hideQrCode":"إخفاء الرمز الشريطي",
+  "primaryColor":"اللون الأساسي",
+  "secondaryColor":"اللون الثانوي"
 }

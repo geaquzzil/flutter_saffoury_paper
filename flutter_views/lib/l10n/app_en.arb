@@ -655,6 +655,9 @@
   "tax": "Tax",
   "shipping":"Shipping",
    "ok":"Ok",
-  "cancel":"Cancel"
+  "cancel":"Cancel",
+  "hideQrCode":"Hide QR Code",
+  "primaryColor":"Primary Color",
+  "secondaryColor":"Secondary Color"
 
 }

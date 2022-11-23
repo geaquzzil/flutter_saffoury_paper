@@ -8,8 +8,6 @@ part of 'cut_requests.dart';
 
 CutRequest _$CutRequestFromJson(Map<String, dynamic> json) => CutRequest()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..date = json['date'] as String?
   ..comments = json['comments'] as String?
@@ -36,7 +34,6 @@ CutRequest _$CutRequestFromJson(Map<String, dynamic> json) => CutRequest()
 Map<String, dynamic> _$CutRequestToJson(CutRequest instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'date': instance.date,
       'comments': instance.comments,

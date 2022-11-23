@@ -9,8 +9,6 @@ part of 'purchasers_refunds.dart';
 PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
     PurchasesRefund()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -50,7 +48,6 @@ PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PurchasesRefundToJson(PurchasesRefund instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -87,8 +84,6 @@ PurchasesRefundDetails _$PurchasesRefundDetailsFromJson(
         Map<String, dynamic> json) =>
     PurchasesRefundDetails()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
@@ -117,7 +112,6 @@ Map<String, dynamic> _$PurchasesRefundDetailsToJson(
         PurchasesRefundDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),

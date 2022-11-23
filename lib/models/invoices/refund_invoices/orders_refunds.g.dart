@@ -8,8 +8,6 @@ part of 'orders_refunds.dart';
 
 OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
@@ -46,7 +44,6 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
 Map<String, dynamic> _$OrderRefundToJson(OrderRefund instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -81,8 +78,6 @@ const _$InvoiceStatusEnumMap = {
 OrderRefundDetails _$OrderRefundDetailsFromJson(Map<String, dynamic> json) =>
     OrderRefundDetails()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
@@ -109,7 +104,6 @@ OrderRefundDetails _$OrderRefundDetailsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$OrderRefundDetailsToJson(OrderRefundDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),

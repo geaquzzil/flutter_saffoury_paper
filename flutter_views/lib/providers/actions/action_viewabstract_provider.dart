@@ -25,18 +25,22 @@ class ActionViewAbstractProvider with ChangeNotifier {
     this.object = object;
     this.serverActions = serverActions;
     if (stack.isNotEmpty) {
-      dynamic obj = stack.last;
-      if (obj != null) {
-        if (object.isEqualsAsType((obj as StackedActions).object)) {
-          stack.removeLast();
-        }
-      }
+      stack.removeWhere(
+          (element) => element?.object?.isEqualsAsType(object) ?? false);
     }
     stack.add(StackedActions(object, serverActions, stack.isEmpty));
     notifyListeners();
   }
 
-  void popUntil(StackedActions stack) {
+  void pop() {
+    if (stack.isNotEmpty) {
+      StackedActions? s = stack.removeLast();
+      if (s != null) {
+        object = s.object;
+        serverActions = s.serverActions;
+        notifyListeners();
+      }
+    }
     //TODO: this
   }
 }

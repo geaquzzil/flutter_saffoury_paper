@@ -10,8 +10,10 @@ import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart'
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
+import '../../providers/actions/list_multi_key_provider.dart';
 import '../../screens/base_shared_actions_header.dart';
 import '../lists/list_api_selected_searchable_widget.dart';
 import '../lists/list_static_editable.dart';
@@ -118,7 +120,6 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
                 );
               },
             ),
-            getAddToListFloatingButton(context),
             if (widget.viewAbstract is ListableInterface)
               getAddToListFloatingButton(context),
             const SizedBox(
@@ -177,7 +178,13 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
             msg: getMessage(),
             title: getTitle(),
             context: context,
-            onClose: (value) {},
+            onClose: (value) {
+              if (value != null) {
+                context
+                    .read<ListMultiKeyProvider>()
+                    .delete(widget.viewAbstract);
+              }
+            },
             actions: [
               TextButton(
                 onPressed: () {
@@ -297,7 +304,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
       return SingleChildScrollView(
           controller: ScrollController(),
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          // padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
           child: Column(
             children: [
               BaseSharedHeaderViewDetailsActions(

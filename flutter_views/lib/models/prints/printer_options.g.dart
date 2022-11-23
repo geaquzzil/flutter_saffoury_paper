@@ -16,6 +16,7 @@ PrinterOptions _$PrinterOptionsFromJson(Map<String, dynamic> json) =>
           PrintPaperSize.Default,
     )
       ..iD = json['iD'] as int
+      ..delete = json['delete'] as bool?
       ..startEndPage = json['startEndPage'] as String?
       ..printerName = json['printerName'] as String?
       ..printerNameLabel = json['printerNameLabel'] as String?;
@@ -23,6 +24,7 @@ PrinterOptions _$PrinterOptionsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PrinterOptionsToJson(PrinterOptions instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'language': _$LanguageEnumMap[instance.language]!,
       'copies': instance.copies,
       'startEndPage': instance.startEndPage,

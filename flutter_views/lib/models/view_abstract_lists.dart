@@ -18,6 +18,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   @JsonKey(ignore: true)
   bool isSelected = false;
 
+  Color? getMainColor() {
+    return null;
+  }
+
   IconData? getCardLeadingBottomIcon() {
     return null;
   }

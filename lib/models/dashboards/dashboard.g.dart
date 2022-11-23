@@ -8,8 +8,6 @@ part of 'dashboard.dart';
 
 Dashboard _$DashboardFromJson(Map<String, dynamic> json) => Dashboard()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..login = json['login'] as bool?
   ..permission = json['permission'] as bool?
@@ -202,7 +200,6 @@ Dashboard _$DashboardFromJson(Map<String, dynamic> json) => Dashboard()
 
 Map<String, dynamic> _$DashboardToJson(Dashboard instance) => <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'login': instance.login,
       'permission': instance.permission,

@@ -130,8 +130,9 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
       }),
     );
   }
-  Widget getShimmerLoadingGrid(BuildContext context){
-   return GridView.builder(
+
+  Widget getShimmerLoadingGrid(BuildContext context) {
+    return GridView.builder(
         controller: _scrollController,
         itemCount: 10,
         shrinkWrap: true,
@@ -148,11 +149,11 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
           ],
         ),
         itemBuilder: (context, index) {
-        
           return ShimmerLoadingListGrid();
           // return data[index].getCardView(context);
         });
   }
+
   Widget getShimmerLoading(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),

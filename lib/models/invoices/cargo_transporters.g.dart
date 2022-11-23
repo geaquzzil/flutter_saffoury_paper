@@ -9,8 +9,6 @@ part of 'cargo_transporters.dart';
 CargoTransporter _$CargoTransporterFromJson(Map<String, dynamic> json) =>
     CargoTransporter()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..name = json['name'] as String?
       ..phone = json['phone'] as String?
@@ -23,7 +21,6 @@ CargoTransporter _$CargoTransporterFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CargoTransporterToJson(CargoTransporter instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'name': instance.name,
       'phone': instance.phone,

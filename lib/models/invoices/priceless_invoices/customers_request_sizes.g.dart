@@ -9,8 +9,6 @@ part of 'customers_request_sizes.dart';
 CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
     CustomerRequestSize()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -48,7 +46,6 @@ Map<String, dynamic> _$CustomerRequestSizeToJson(
         CustomerRequestSize instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -84,9 +81,18 @@ CustomerRequestSizeDetails _$CustomerRequestSizeDetailsFromJson(
         Map<String, dynamic> json) =>
     CustomerRequestSizeDetails()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
+      ..products = json['products'] == null
+          ? null
+          : Product.fromJson(json['products'] as Map<String, dynamic>)
+      ..warehouse = json['warehouse'] == null
+          ? null
+          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
+      ..quantity = (json['quantity'] as num?)?.toDouble()
+      ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
+      ..discount = (json['discount'] as num?)?.toDouble()
+      ..price = (json['price'] as num?)?.toDouble()
+      ..comments = json['comments'] as String?
       ..customers_request_sizes = json['customers_request_sizes'] == null
           ? null
           : CustomerRequestSize.fromJson(
@@ -100,8 +106,14 @@ Map<String, dynamic> _$CustomerRequestSizeDetailsToJson(
         CustomerRequestSizeDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
+      'products': instance.products?.toJson(),
+      'warehouse': instance.warehouse?.toJson(),
+      'quantity': instance.quantity,
+      'unitPrice': instance.unitPrice,
+      'discount': instance.discount,
+      'price': instance.price,
+      'comments': instance.comments,
       'customers_request_sizes': instance.customers_request_sizes?.toJson(),
       'sizes': instance.sizes?.toJson(),
       'date': instance.date,

@@ -662,5 +662,13 @@
     "subTotal":"Sub total",
   "grandTotal":"Grand total",
   "ok":"Ok",
-  "cancel":"Cancel"
+  "cancel":"Cancel",
+  "hideAccountPhone": "Hide account phone",
+          "hideAccountAdress": "Hide account address",
+          "hideCompanyTerms": "Hide company terms",
+          "hideCompanyNotes": "Hide company notes" ,
+          "hideDate": "Hide date",
+           "hidePaymentMethod": "Hide payment method",
+          "hideDueDate": "Hide due date"
+          
 }

@@ -8,6 +8,7 @@ part of 'user_auth.dart';
 
 AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) => AuthUser<T>()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..login = json['login'] as bool?
   ..permission = json['permission'] as bool?
   ..response = json['response'] as int?
@@ -27,6 +28,7 @@ AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) => AuthUser<T>()
 Map<String, dynamic> _$AuthUserToJson<T>(AuthUser<T> instance) =>
     <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'login': instance.login,
       'permission': instance.permission,
       'response': instance.response,
@@ -34,5 +36,5 @@ Map<String, dynamic> _$AuthUserToJson<T>(AuthUser<T> instance) =>
       'password': instance.password,
       'userlevels': instance.userlevels?.toJson(),
       'setting': instance.setting?.toJson(),
-      'dealers': null
+      'dealers': instance.dealers?.toJson(),
     };

@@ -9,8 +9,6 @@ part of 'reservation_invoice.dart';
 ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
     ReservationInvoice()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -47,7 +45,6 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ReservationInvoiceToJson(ReservationInvoice instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -81,8 +78,6 @@ ReservationInvoiceDetails _$ReservationInvoiceDetailsFromJson(
         Map<String, dynamic> json) =>
     ReservationInvoiceDetails()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
@@ -104,7 +99,6 @@ Map<String, dynamic> _$ReservationInvoiceDetailsToJson(
         ReservationInvoiceDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),

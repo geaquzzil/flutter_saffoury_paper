@@ -37,19 +37,25 @@ class Configurations {
     } else if (value is double) {
       await prefs.setDouble(key, value);
     } else if (value is ViewAbstract) {
-      debugPrint("save value as ViewAbstract");
-      save(
-          value.runtimeType.toString(), jsonEncode(value.toJsonViewAbstract()));
+      key = value.runtimeType.toString() + key;
+      debugPrint("Configrations  save value as ViewAbstract key: $key");
+      save(key, jsonEncode(value.toJsonViewAbstract()));
     } else {
-      debugPrint("cant ! save value as ViewAbstract");
+      debugPrint("Configrations cant ! save value as ViewAbstract");
     }
   }
 
-  static Future<T> get<T extends ViewAbstract>(T obj) async {
-    String objectHistoryList =
-        await getValueString(T.runtimeType.toString()) ?? "";
+  static Future<T?> get<T extends ViewAbstract>(T obj,
+      {String? customKey}) async {
+    String key = (obj.runtimeType.toString()) + (customKey ?? "");
+    String? objectHistoryList = await getValueString(key);
+    if (objectHistoryList == null) {
+      debugPrint("Configrations  cant get saved value for key =>$key");
+      return null;
+    }
+    debugPrint("Configrations getting saved value for key =>$key");
     Map<String, dynamic> map = {};
-    map = jsonDecode(objectHistoryList) as Map<String, dynamic>;
+    map = jsonDecode(objectHistoryList!) as Map<String, dynamic>;
     return obj.fromJsonViewAbstract(map);
   }
 

@@ -50,7 +50,7 @@ class DealersEmails extends DealersDetailsApstract {
   factory DealersEmails.fromJson(Map<String, dynamic> data) =>
       _$DealersEmailsFromJson(data);
 
-  // Map<String, dynamic> toJson() => _$DealersEmailsToJson(this);
+  Map<String, dynamic> toJson() => _$DealersEmailsToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -63,7 +63,7 @@ class DealersPhone extends DealersDetailsApstract {
   factory DealersPhone.fromJson(Map<String, dynamic> data) =>
       _$DealersPhoneFromJson(data);
 
-  // Map<String, dynamic> toJson() => _$DealersPhoneToJson(this);
+  Map<String, dynamic> toJson() => _$DealersPhoneToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -75,5 +75,5 @@ class DealersSocial extends DealersDetailsApstract {
   factory DealersSocial.fromJson(Map<String, dynamic> data) =>
       _$DealersSocialFromJson(data);
 
-  // Map<String, dynamic> toJson() => _$DealersSocialToJson(this);
+  Map<String, dynamic> toJson() => _$DealersSocialToJson(this);
 }

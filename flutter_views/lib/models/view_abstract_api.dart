@@ -54,7 +54,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   int get getPageIndex => _page;
 
-  int get getPageItemCount => 20;
+  int get getPageItemCount => 5;
 
   String? getCustomAction() {
     return null;
@@ -104,9 +104,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     bool hasUser = await Configurations.hasSavedValue(AuthUser());
     if (hasUser) {
-      AuthUser authUser = await Configurations.get(AuthUser());
-      defaultHeaders['X-Authorization'] =
-          Encriptions.encypt(authUser.toJsonString());
+      AuthUser? authUser = await Configurations.get(AuthUser());
+      if (authUser != null) {
+        defaultHeaders['X-Authorization'] =
+            Encriptions.encypt(authUser.toJsonString());
+      }
     }
 
     return defaultHeaders;

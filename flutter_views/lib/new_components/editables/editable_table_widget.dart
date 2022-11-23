@@ -50,7 +50,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
   void didUpdateWidget(covariant EditableTableWidget oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    list_invoice_details = widget.viewAbstract.getListableList() ?? [];
+    list_invoice_details = widget.viewAbstract.getListableList();
     fields = (widget.viewAbstract as ViewAbstract).getMainFields();
   }
 

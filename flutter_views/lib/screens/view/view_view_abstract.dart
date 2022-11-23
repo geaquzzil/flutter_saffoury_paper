@@ -20,6 +20,8 @@ class MasterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget? topWidget =
+        viewAbstract.getCustomTopWidget(context, ServerActions.view);
     return Row(
       children: [
         // Expanded(flex: 1, child: Text("TEST")),
@@ -31,6 +33,7 @@ class MasterView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if(topWidget!=null)topWidget,
                 // BaseSharedHeaderViewDetailsActions(
                 //   viewAbstract: viewAbstract,
                 // ),

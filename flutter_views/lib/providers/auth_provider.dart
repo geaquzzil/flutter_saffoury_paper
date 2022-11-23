@@ -30,12 +30,12 @@ class AuthProvider with ChangeNotifier {
   late AuthUser _user;
   Status _status = Status.Initialization;
   late PermissionLevelAbstract _permissions;
-bool hasSavedUser=false;
+  bool hasSavedUser = false;
   Status get getStatus => _status;
   AuthUser get getUser => _user;
   Dealers? get getDealers => _user.dealers;
   String get getUserName => _user.getFieldValue("name");
-  String get getUserPermission => _user.userlevels?.userlevelname??"";
+  String get getUserPermission => _user.userlevels?.userlevelname ?? "";
   String get getUserImageUrl =>
       "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
   PermissionLevelAbstract get getPermissions => _permissions;
@@ -82,7 +82,7 @@ bool hasSavedUser=false;
       _user.login = true;
       _status = Status.Guest;
     } else {
-      _user = await Configurations.get<AuthUser>(_user);
+      _user = (await Configurations.get<AuthUser>(_user))!;
     }
     responseUser = await _user.getRespones(serverActions: ServerActions.add);
     if (responseUser == null) {
@@ -121,9 +121,8 @@ bool hasSavedUser=false;
     debugPrint(
         "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
 
-
     //  List<List<GrowthRate>> g=[];
-    //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )   
+    //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )
   }
 
   Future<bool> signIn() async {

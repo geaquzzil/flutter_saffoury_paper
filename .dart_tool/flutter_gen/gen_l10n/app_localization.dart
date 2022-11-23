@@ -3938,6 +3938,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @hideAccountPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide account phone'**
+  String get hideAccountPhone;
+
+  /// No description provided for @hideAccountAdress.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide account address'**
+  String get hideAccountAdress;
+
+  /// No description provided for @hideCompanyTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide company terms'**
+  String get hideCompanyTerms;
+
+  /// No description provided for @hideCompanyNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide company notes'**
+  String get hideCompanyNotes;
+
+  /// No description provided for @hideDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide date'**
+  String get hideDate;
+
+  /// No description provided for @hidePaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide payment method'**
+  String get hidePaymentMethod;
+
+  /// No description provided for @hideDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide due date'**
+  String get hideDueDate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

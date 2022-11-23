@@ -8,8 +8,6 @@ part of 'transfers.dart';
 
 Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
   ..iD = json['iD'] as int
-  ..searchByAutoCompleteTextInput =
-      json['searchByAutoCompleteTextInput'] as String?
   ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
@@ -46,7 +44,6 @@ Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
 
 Map<String, dynamic> _$TransfersToJson(Transfers instance) => <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'TermsID': instance.TermsID,
       'date': instance.date,
@@ -80,8 +77,6 @@ const _$InvoiceStatusEnumMap = {
 TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
     TransfersDetails()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
@@ -101,7 +96,6 @@ TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$TransfersDetailsToJson(TransfersDetails instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'products': instance.products?.toJson(),
       'warehouse': instance.warehouse?.toJson(),

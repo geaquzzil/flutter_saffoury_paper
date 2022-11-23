@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -13,21 +14,18 @@ import 'package:provider/provider.dart';
 
 import '../edit_new/base_edit_new.dart';
 
-class BaseSettingDetailsView extends StatefulWidget {
+class BaseSettingDetailsView extends StatelessWidget {
   const BaseSettingDetailsView({Key? key}) : super(key: key);
-
-  @override
-  State<BaseSettingDetailsView> createState() => _BaseModifadableState();
-}
-
-class _BaseModifadableState extends State<BaseSettingDetailsView>
-    with TickerProviderStateMixin {
-  late TabController _tabController;
-  List<Tab> tabs = [];
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: tabs.length);
+  Future<ViewAbstract?> getSetting(
+      BuildContext context, ModifiableInterface settingObject) async {
+    ViewAbstract? saved = await Configurations.get<ViewAbstract>(
+        settingObject.getModifibleSettingObject(context),
+        customKey: "_printsetting");
+    if (saved == null) {
+      return settingObject.getModifibleSettingObject(context);
+    } else {
+      return saved;
+    }
   }
 
   @override
@@ -37,9 +35,19 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
     if (settingObject == null) {
       return getEmptyView(context);
     }
-    return BaseEditWidget(
-      viewAbstract: settingObject.getModifibleSettingObject(context),
-      isTheFirst: true,
+    return FutureBuilder<ViewAbstract?>(
+      future: getSetting(context, settingObject),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return BaseEditWidget(
+              viewAbstract: snapshot.data!,
+              isTheFirst: true,
+              onValidate: (viewAbstract) =>
+                  Configurations.save("_printsetting", viewAbstract));
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 
@@ -48,42 +56,6 @@ class _BaseModifadableState extends State<BaseSettingDetailsView>
     return Center(
       child: Lottie.network(
           "https://assets4.lottiefiles.com/packages/lf20_gjvlmbzr.json"),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-  }
-
-  Widget getBodyView(BuildContext context, ViewAbstract viewAbstract) {
-    return Expanded(
-      flex: 2,
-      child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-          // fit: BoxFit.contain,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BaseSharedHeaderViewDetailsActions(
-                  viewAbstract: viewAbstract,
-                ),
-                ViewDetailsListWidget(
-                  viewAbstract: viewAbstract,
-                ),
-                if (viewAbstract is CartableInvoiceMasterObjectInterface)
-                  CartDataTableMaster(
-                      action: ServerActions.view,
-                      obj: viewAbstract
-                          as CartableInvoiceMasterObjectInterface),
-                if (viewAbstract.getTabs(context).isNotEmpty)
-                  TabBarWidget(
-                    viewAbstract: viewAbstract,
-                  )
-              ],
-            ),
-          ]),
     );
   }
 }

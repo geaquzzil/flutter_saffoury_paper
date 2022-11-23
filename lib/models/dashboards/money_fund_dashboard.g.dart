@@ -9,8 +9,6 @@ part of 'money_fund_dashboard.dart';
 MoneyFundDashbaord _$MoneyFundDashbaordFromJson(Map<String, dynamic> json) =>
     MoneyFundDashbaord()
       ..iD = json['iD'] as int
-      ..searchByAutoCompleteTextInput =
-          json['searchByAutoCompleteTextInput'] as String?
       ..delete = json['delete'] as bool?
       ..login = json['login'] as bool?
       ..permission = json['permission'] as bool?
@@ -206,7 +204,6 @@ MoneyFundDashbaord _$MoneyFundDashbaordFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$MoneyFundDashbaordToJson(MoneyFundDashbaord instance) =>
     <String, dynamic>{
       'iD': instance.iD,
-      'searchByAutoCompleteTextInput': instance.searchByAutoCompleteTextInput,
       'delete': instance.delete,
       'login': instance.login,
       'permission': instance.permission,

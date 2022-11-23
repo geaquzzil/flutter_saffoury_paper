@@ -1,0 +1,58 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'print_invoice.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
+  ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
+  ..printerOptions = json['printerOptions'] == null
+      ? null
+      : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)
+  ..reportOptions = json['reportOptions'] == null
+      ? null
+      : ReportOptions.fromJson(json['reportOptions'] as Map<String, dynamic>)
+  ..hideQrCode = json['hideQrCode'] as bool?
+  ..primaryColor = json['primaryColor'] as String?
+  ..secondaryColor = json['secondaryColor'] as String?
+  ..hideCustomerAddressInfo = json['hideCustomerAddressInfo'] as bool?
+  ..hideCustomerPhone = json['hideCustomerPhone'] as bool?
+  ..hideCustomerBalance = json['hideCustomerBalance'] as bool?
+  ..hideInvoicePaymentMethod = json['hideInvoicePaymentMethod'] as bool?
+  ..hideInvoiceDate = json['hideInvoiceDate'] as bool?
+  ..hideInvoiceDueDate = json['hideInvoiceDueDate'] as bool?
+  ..hideUnitPriceAndTotalPrice = json['hideUnitPriceAndTotalPrice'] as bool?
+  ..hideTermsOfService = json['hideTermsOfService'] as bool?
+  ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
+  ..sortByField = json['sortByField'] as String?
+  ..sortByType = $enumDecodeNullable(_$SortByTypeEnumMap, json['sortByType']);
+
+Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
+    <String, dynamic>{
+      'iD': instance.iD,
+      'delete': instance.delete,
+      'printerOptions': instance.printerOptions?.toJson(),
+      'reportOptions': instance.reportOptions?.toJson(),
+      'hideQrCode': instance.hideQrCode,
+      'primaryColor': instance.primaryColor,
+      'secondaryColor': instance.secondaryColor,
+      'hideCustomerAddressInfo': instance.hideCustomerAddressInfo,
+      'hideCustomerPhone': instance.hideCustomerPhone,
+      'hideCustomerBalance': instance.hideCustomerBalance,
+      'hideInvoicePaymentMethod': instance.hideInvoicePaymentMethod,
+      'hideInvoiceDate': instance.hideInvoiceDate,
+      'hideInvoiceDueDate': instance.hideInvoiceDueDate,
+      'hideUnitPriceAndTotalPrice': instance.hideUnitPriceAndTotalPrice,
+      'hideTermsOfService': instance.hideTermsOfService,
+      'hideAdditionalNotes': instance.hideAdditionalNotes,
+      'sortByField': instance.sortByField,
+      'sortByType': _$SortByTypeEnumMap[instance.sortByType],
+    };
+
+const _$SortByTypeEnumMap = {
+  SortByType.ASC: 'ASC',
+  SortByType.DESC: 'DESC',
+};

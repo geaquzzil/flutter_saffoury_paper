@@ -8,6 +8,7 @@ part of 'setting.dart';
 
 Setting _$SettingFromJson(Map<String, dynamic> json) => Setting()
   ..iD = json['iD'] as int
+  ..delete = json['delete'] as bool?
   ..ENABLE_APP = json['ENABLE_APP'] as int?
   ..DISABLE_NOTIFICATIONS = json['DISABLE_NOTIFICATIONS'] as int?
   ..ENABLE_MULTI_EDIT = json['ENABLE_MULTI_EDIT'] as int?
@@ -20,6 +21,7 @@ Setting _$SettingFromJson(Map<String, dynamic> json) => Setting()
 
 Map<String, dynamic> _$SettingToJson(Setting instance) => <String, dynamic>{
       'iD': instance.iD,
+      'delete': instance.delete,
       'ENABLE_APP': instance.ENABLE_APP,
       'DISABLE_NOTIFICATIONS': instance.DISABLE_NOTIFICATIONS,
       'ENABLE_MULTI_EDIT': instance.ENABLE_MULTI_EDIT,

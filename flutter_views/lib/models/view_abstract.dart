@@ -107,6 +107,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   }
 
   Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {}
+
+  Widget? getCustomTopWidget(BuildContext context, ServerActions action){
+    
+  }
 }
 
 class ListableDataRow {
