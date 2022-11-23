@@ -184,12 +184,15 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
             products?.gsms?.gsm.toString() ?? "0",
         AppLocalizations.of(context)!.quantity:
             quantity?.toStringAsFixed(2) ?? "0",
-        AppLocalizations.of(context)!.unit_price:
-            unitPrice?.toStringAsFixed(2) ?? "0",
-        AppLocalizations.of(context)!.discount:
-            discount?.toStringAsFixed(2) ?? "0",
-        AppLocalizations.of(context)!.total_price:
-            price?.toStringAsFixed(2) ?? "0",
+        if ((pca?.hideUnitPriceAndTotalPrice == false))
+          AppLocalizations.of(context)!.unit_price:
+              unitPrice?.toStringAsFixed(2) ?? "0",
+        if ((pca?.hideUnitPriceAndTotalPrice == false))
+          AppLocalizations.of(context)!.discount:
+              discount?.toStringAsFixed(2) ?? "0",
+        if ((pca?.hideUnitPriceAndTotalPrice == false))
+          AppLocalizations.of(context)!.total_price:
+              price?.toStringAsFixed(2) ?? "0",
       };
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};

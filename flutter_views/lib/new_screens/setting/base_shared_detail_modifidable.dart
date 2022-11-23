@@ -39,11 +39,21 @@ class BaseSettingDetailsView extends StatelessWidget {
       future: getSetting(context, settingObject),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return BaseEditWidget(
-              viewAbstract: snapshot.data!,
-              isTheFirst: true,
-              onValidate: (viewAbstract) =>
-                  Configurations.save("_printsetting", viewAbstract));
+          return SingleChildScrollView(
+            controller: ScrollController(),
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                BaseEditWidget(
+                    viewAbstract: snapshot.data!,
+                    isTheFirst: true,
+                    onValidate: (viewAbstract) {
+                      Configurations.save("_printsetting", viewAbstract);
+                      context.read<SettingProvider>().change(settingObject);
+                    }),
+              ],
+            ),
+          );
         } else {
           return CircularProgressIndicator();
         }

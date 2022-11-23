@@ -35,7 +35,7 @@ import 'orders.dart';
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
     implements
         PrintableInvoiceInterface<PrintInvoice>,
-        ModifiablePrintableInterface<PrintProduct> {
+        ModifiablePrintableInterface<PrintInvoice> {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -254,13 +254,14 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
                 description: customers?.iD.toString() ?? "",
                 // icon: Icons.numbers
               ),
-            if (cargo_transporters != null)
-              InvoiceHeaderTitleAndDescriptionInfo(
-                title: "${AppLocalizations.of(context)!.transfers}: ",
-                description:
-                    "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
-                // icon: Icons.numbers
-              )
+            if ((pca?.hideCargoInfo == false))
+              if (cargo_transporters != null)
+                InvoiceHeaderTitleAndDescriptionInfo(
+                  title: "${AppLocalizations.of(context)!.transfers}: ",
+                  description:
+                      "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
+                  // icon: Icons.numbers
+                )
           ];
 
   List<InvoiceMasterDetails> getDetailListFromMaster() {
@@ -427,35 +428,45 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         description: customers?.iD.toString() ?? "",
         // icon: Icons.numbers
       ),
-      InvoiceHeaderTitleAndDescriptionInfo(
-        title: AppLocalizations.of(context)!.date,
-        description: customers?.date.toString() ?? "",
-        // icon: Icons.date_range
-      ),
+      if ((pca?.hideInvoiceDate == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.date,
+          description: customers?.date.toString() ?? "",
+          // icon: Icons.date_range
+        ),
+      if ((pca?.hideInvoiceDueDate == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.termsDate,
+          description: "TODODODODO ",
+          // icon: Icons.date_range
+        ),
     ];
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesTherdRow(
       BuildContext context, PrintInvoice? pca) {
     return [
-      InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.total_price,
-          description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-          hexColor: getPrintablePrimaryColor()
-          // icon: Icons.tag
-          ),
-      InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.balance,
-          description: customers?.balance?.toStringAsFixed(2) ?? "",
-          hexColor: getPrintablePrimaryColor()
-          // icon: Icons.balance
-          ),
-      InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.paymentMethod,
-          description: "payment on advanced",
-          hexColor: getPrintablePrimaryColor()
-          // icon: Icons.credit_card
-          ),
+      if ((pca?.hideUnitPriceAndTotalPrice == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.total_price,
+            description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
+            hexColor: getPrintablePrimaryColor()
+            // icon: Icons.tag
+            ),
+      if ((pca?.hideCustomerBalance == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.balance,
+            description: customers?.balance?.toStringAsFixed(2) ?? "",
+            hexColor: getPrintablePrimaryColor()
+            // icon: Icons.balance
+            ),
+      if ((pca?.hideInvoicePaymentMethod == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.paymentMethod,
+            description: "payment on advanced",
+            hexColor: getPrintablePrimaryColor()
+            // icon: Icons.credit_card
+            ),
     ];
   }
 
@@ -468,18 +479,20 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         description: customers?.name ?? "",
         // icon: Icons.account_circle_rounded
       ),
-      if (customers?.address != null)
-        InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.addressInfo,
-          description: customers?.name ?? "",
-          // icon: Icons.map
-        ),
-      if (customers?.phone != null)
-        InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.phone_number,
-          description: customers?.phone ?? "",
-          // icon: Icons.phone
-        ),
+      if ((pca?.hideCustomerAddressInfo == false))
+        if (customers?.address != null)
+          InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.addressInfo,
+            description: customers?.name ?? "",
+            // icon: Icons.map
+          ),
+      if ((pca?.hideCustomerPhone == false))
+        if (customers?.phone != null)
+          InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.phone_number,
+            description: customers?.phone ?? "",
+            // icon: Icons.phone
+          ),
     ];
   }
 
@@ -508,6 +521,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
       BuildContext context, PrintInvoice? pca) {
+    if ((pca?.hideUnitPriceAndTotalPrice == true)) {
+      return [];
+    }
     return [
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
@@ -533,8 +549,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   IconData getModifibleIconData() => Icons.print;
 
   @override
-  PrintProduct getModifibleSettingObject(BuildContext context) {
-    return PrintProduct(printObject: this);
+  PrintInvoice getModifibleSettingObject(BuildContext context) {
+    return PrintInvoice()..invoice = this;
   }
 
   @override
@@ -551,6 +567,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     o.cargo_transporters?.carNumber = "Driver car number";
     o.employees = Employee()..name = "Employee name";
     List l = o.getDetailListFromMasterSetNewOnList();
+    l.clear();
     l.add(o.getDetailMasterNewInstance());
     debugPrint("getModifiablePrintablePdfSetting $o");
     return o;

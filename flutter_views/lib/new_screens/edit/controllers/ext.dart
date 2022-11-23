@@ -56,6 +56,16 @@ InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
   );
 }
 
+InputDecoration getDecorationIconLabel(BuildContext context,
+    {required IconData icon, required String label}) {
+  return InputDecoration(
+      // filled: true,
+      border: const OutlineInputBorder(),
+      icon: Icon(icon),
+      labelText: label);
+  // hintText: parent.getTextInputHint(context, field));
+}
+
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(

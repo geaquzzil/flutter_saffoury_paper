@@ -37,6 +37,10 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "primaryColor": AppLocalizations.of(context)!.primaryColor,
         "secondaryColor": AppLocalizations.of(context)!.secondaryColor
       };
+  @override
+  String getTextCheckBoxDescription(BuildContext context, String field) {
+    return "";
+  }
 
   @override
   ViewAbstractControllerInputType getInputType(String field) {

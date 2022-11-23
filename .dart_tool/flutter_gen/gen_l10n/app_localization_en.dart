@@ -512,19 +512,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get returnedProduct => 'Returned Product';
 
   @override
-  String get hideInvoiceUnitAndTotalPrice => 'Hide invoice unit and total price';
-
-  @override
-  String get hideAccountBalance => 'Hide account balance';
-
-  @override
   String get printInvoiceLabel => 'Print Invoice label';
 
   @override
   String get printInvoiceLabelDes => 'Set the invoice label printer from the pc. Otherwise, the label may print in the main printer';
-
-  @override
-  String get hidePaymentAmount => 'Hide payment amount';
 
   @override
   String get customs_clearnces => 'Customs Clearances';
@@ -552,12 +543,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showSubTotlas => 'Show subtotals';
-
-  @override
-  String get hideAccountAddressAndPhone => 'Hide account phone and address';
-
-  @override
-  String get hideCurrency => 'Hide currency';
 
   @override
   String get fillChangedProduct => 'Fill product(s) that changed its original status to another color';
@@ -908,9 +893,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get collectSimilarProducts => 'Collect similar products';
 
   @override
-  String get hideQuantity => 'Hide quantity';
-
-  @override
   String get totalInput => 'Total input';
 
   @override
@@ -1154,9 +1136,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get printAsCatalogDes => 'Show the first page as company profile';
 
   @override
-  String get hideQuantityDes => 'Hide product quantities available';
-
-  @override
   String get adminSetting => 'Administration';
 
   @override
@@ -1172,9 +1151,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dontPrintWasteProductLabel => 'Do not print the wasted product';
 
   @override
-  String get hideCustomerName => 'Hide customer name';
-
-  @override
   String get deletePcSoftware => 'Delete pc software';
 
   @override
@@ -1182,9 +1158,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completed => 'Completed';
-
-  @override
-  String get hideTerms => 'Hide terms';
 
   @override
   String get send_cut_request_info => 'Send cut request(s) info';
@@ -1230,9 +1203,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showBarcodesDes => 'Show all product barcodes details';
-
-  @override
-  String get hideEmployee => 'Hide employee name';
 
   @override
   String get errLaunchApp => 'Action not launching correctly';
@@ -1347,9 +1317,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seeMore => 'See more';
-
-  @override
-  String get hideCargoInfo => 'Hide transporter information';
 
   @override
   String get featuresMayBeUnAv => 'Some features may be unavailable. Please check that you have enable all permissions';
@@ -1933,20 +1900,110 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hideAccountPhone => 'Hide account phone';
 
   @override
+  String get hideAccountPhoneDes => 'Phone number will not appear on the invoice';
+
+  @override
   String get hideAccountAdress => 'Hide account address';
+
+  @override
+  String get hideAccountAdressDes => 'Address informations will not appear on the invoice';
 
   @override
   String get hideCompanyTerms => 'Hide company terms';
 
   @override
+  String get hideCompanyTermsDes => 'Company terms will not appear on the invoice';
+
+  @override
   String get hideCompanyNotes => 'Hide company notes';
+
+  @override
+  String get hideCompanyNotesDes => 'Company notes on the invoice footer will not appear';
 
   @override
   String get hideDate => 'Hide date';
 
   @override
+  String get hideDateDes => 'Date of the invoice will not appear on the invoice';
+
+  @override
   String get hidePaymentMethod => 'Hide payment method';
 
   @override
+  String get hidePaymentMethodDes => 'Payment method for the current account will not appear on the invoice';
+
+  @override
   String get hideDueDate => 'Hide due date';
+
+  @override
+  String get hideDueDateDes => 'Due date of the current invoice will not appear';
+
+  @override
+  String get hideQrCode => 'Hide QR Code';
+
+  @override
+  String get hideQrCodeDes => 'Main QR Code will not appear';
+
+  @override
+  String get hideCargoInfo => 'Hide transporter information';
+
+  @override
+  String get hideCargoInfoDes => 'Transporter information will not appear on the invoice';
+
+  @override
+  String get hideEmployee => 'Hide employee name';
+
+  @override
+  String get hideEmployeeDes => 'Employee name which server the invoice will not appear on the invoice';
+
+  @override
+  String get hideTerms => 'Hide terms';
+
+  @override
+  String get hideTermsDes => 'Hide terms';
+
+  @override
+  String get hideCustomerName => 'Hide customer name';
+
+  @override
+  String get hideCustomerNameDes => 'Customer name will not appear on the invoice';
+
+  @override
+  String get hideQuantityDes => 'Hide product quantities available';
+
+  @override
+  String get hideQuantity => 'Hide quantity';
+
+  @override
+  String get hideAccountAddressAndPhone => 'Hide account phone and address';
+
+  @override
+  String get hideCurrency => 'Hide currency';
+
+  @override
+  String get hideCurrencyDes => 'Currency of the bill will not show';
+
+  @override
+  String get hidePaymentAmount => 'Hide payment amount';
+
+  @override
+  String get hidePaymentAmountDes => 'Payment amount for the current bill will not appear';
+
+  @override
+  String get hideInvoiceUnitAndTotalPrice => 'Hide invoice unit and total price';
+
+  @override
+  String get hideInvoiceUnitAndTotalPriceDes => 'Invoice total or unit price will not appear';
+
+  @override
+  String get hideAccountBalance => 'Hide account balance';
+
+  @override
+  String get hideAccountBalanceDes => 'Account balance will not appear on the invoice';
+
+  @override
+  String get primaryColor => 'Primary Color';
+
+  @override
+  String get secondaryColor => 'Secondary Color';
 }

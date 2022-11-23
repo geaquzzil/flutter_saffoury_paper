@@ -14,6 +14,7 @@ import '../../interfaces/cartable_interface.dart';
 import '../../interfaces/listable_interface.dart';
 import '../../models/view_abstract.dart';
 import '../../models/view_abstract_inputs_validaters.dart';
+import '../../new_components/edit_listeners/controller_dropbox_list.dart';
 import '../../new_components/editables/editable_table_widget.dart';
 import '../../new_components/editables/paginated_data_table2.dart';
 import '../../new_components/tables_widgets/cart_data_table_master.dart';
@@ -263,6 +264,8 @@ class BaseEditWidget extends StatelessWidget {
     bool isAutoComplete = viewAbstract.getTextInputTypeIsAutoComplete(field);
     bool isAutoCompleteViewAbstract =
         viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);
+    bool isAutoCompleteByCustomList =
+        viewAbstract.getTextInputIsAutoCompleteCustomList(context, field);
     // if(fieldType== ViewAbstractEnum){
     //   return EditControllerDropdown(enumViewAbstract: enumViewAbstract, field: field)
     // }
@@ -271,6 +274,18 @@ class BaseEditWidget extends StatelessWidget {
           viewAbstract: viewAbstract,
           field: field,
           controller: getController(context, field: field, value: fieldValue));
+    }
+    if (isAutoCompleteByCustomList) {
+      return getControllerDropdownCustomList(
+        context,
+        field: field,
+        viewAbstract: viewAbstract,
+        list: viewAbstract
+            .getTextInputIsAutoCompleteCustomListMap(context)[field]!,
+        onSelected: (selectedObj) {
+          viewAbstract.setFieldValue(field, selectedObj);
+        },
+      );
     }
     if (isAutoCompleteViewAbstract) {
       return getControllerEditTextViewAbstractAutoComplete(
@@ -332,9 +347,18 @@ class BaseEditWidget extends StatelessWidget {
           parent: viewAbstract, enumViewAbstract: fieldValue, field: field);
     } else {
       if (textFieldTypeVA == ViewAbstractControllerInputType.CHECKBOX) {
-        return EditControllerCheckBox(viewAbstract: viewAbstract, field: field);
+        return getContollerCheckBox(context,
+            viewAbstract: viewAbstract,
+            field: field,
+            value: fieldValue,
+            enabled: isFieldEnabled(field));
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.COLOR_PICKER) {
+        return getContolerColorPicker(context,
+            viewAbstract: viewAbstract,
+            field: field,
+            value: fieldValue,
+            enabled: isFieldEnabled(field));
       } else if (textFieldTypeVA == ViewAbstractControllerInputType.IMAGE) {
         return EditControllerFilePicker(
           viewAbstract: viewAbstract,

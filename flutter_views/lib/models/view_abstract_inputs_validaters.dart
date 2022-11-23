@@ -16,6 +16,7 @@ abstract class ViewAbstractInputAndValidater<T>
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
   Map<String, int> getTextInputMaxLengthMap();
+  Map<String, List<dynamic>> getTextInputIsAutoCompleteCustomListMap(BuildContext context) => {};
 
   Map<String, bool> isFieldRequiredMap();
   Map<String, bool> isFieldCanBeNullableMap();
@@ -55,6 +56,10 @@ abstract class ViewAbstractInputAndValidater<T>
 
   bool getTextInputTypeIsAutoCompleteViewAbstract(String field) {
     return getTextInputIsAutoCompleteViewAbstractMap()[field] ?? false;
+  }
+
+  bool getTextInputIsAutoCompleteCustomList(BuildContext context,String field) {
+    return getTextInputIsAutoCompleteCustomListMap(context).containsKey(field);
   }
 
   String getTextInputChangeViewAbstractToAutoComplete() {
@@ -221,10 +226,12 @@ abstract class ViewAbstractInputAndValidater<T>
     debugPrint("onDropdownChanged field=> $field value=> $value");
     // setFieldValue(field, value);
   }
-void onAutoComplete(BuildContext context, String field, dynamic value) {
+
+  void onAutoComplete(BuildContext context, String field, dynamic value) {
     debugPrint("onAutoComplete field=> $field value=> $value");
     // setFieldValue(field, value);
   }
+
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
 
   void onTextChangeListener(BuildContext context, String field, String? value) {

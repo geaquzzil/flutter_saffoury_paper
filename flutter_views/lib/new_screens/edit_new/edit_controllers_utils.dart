@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type_ahead.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import '../../models/view_abstract_inputs_validaters.dart';
 import '../edit/controllers/ext.dart';
 
@@ -46,6 +47,60 @@ Widget getControllerFilePicker(BuildContext context,
   );
 }
 
+Widget getContollerCheckBox(BuildContext context,
+    {required ViewAbstract viewAbstract,
+    required String field,
+    required dynamic value,
+    bool enabled = true}) {
+  Type? fieldType = viewAbstract.getMirrorFieldType(field);
+  return FormBuilderCheckbox(
+    autovalidateMode: AutovalidateMode.always,
+    name: viewAbstract.getTag(field),
+    initialValue: fieldType == int ? (value == true ? 1 : 0) : value ?? false,
+    title: Text(viewAbstract.getTextCheckBoxTitle(context, field)),
+    subtitle: Text(viewAbstract.getTextCheckBoxDescription(context, field)),
+    onChanged: (value) {
+      viewAbstract.onCheckBoxChanged(context, field, value);
+    },
+    onSaved: (value) {
+      dynamic valueToSave =
+          fieldType == int ? (value == true ? 1 : 0) : value ?? false;
+      viewAbstract.setFieldValue(field, valueToSave);
+
+      if (viewAbstract.getFieldNameFromParent != null) {
+        viewAbstract.getParnet?.setFieldValue(
+            viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+      }
+    },
+  );
+}
+
+Widget getContolerColorPicker(BuildContext context,
+    {required ViewAbstract viewAbstract,
+    required String field,
+    required dynamic value,
+    bool enabled = true}) {
+  debugPrint("getContolerColorPicker field : $field value:$value");
+
+  return wrapController(
+    FormBuilderColorPickerField(
+      enabled: enabled,
+      initialValue: (value is String) ? value.fromHex() : value?.fromHex(),
+      name: viewAbstract.getTag(field),
+      // initialDate: (value as String?).toDateTime(),
+      decoration: getDecoration(context, viewAbstract, field: field),
+      onSaved: (newValue) {
+        viewAbstract.setFieldValue(field, newValue?.toHex2());
+        debugPrint('getContolerColorPicker onSave= ${field}:$newValue');
+        if (viewAbstract.getFieldNameFromParent != null) {
+          viewAbstract.getParnet?.setFieldValue(
+              viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+        }
+      },
+    ),
+  );
+}
+
 Widget getControllerDateTime(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
@@ -71,6 +126,37 @@ Widget getControllerDateTime(BuildContext context,
         }
       },
     ),
+  );
+}
+
+Widget getControllerDropdownCustomList(BuildContext context,
+    {required ViewAbstract viewAbstract,
+    required String field,
+    required List<dynamic> list,
+    required Function(dynamic selectedObj) onSelected}) {
+  debugPrint("getControllerDropdownCustomList field = $field  list=> $list");
+  return FormBuilderDropdown<dynamic>(
+    autovalidateMode: AutovalidateMode.always,
+    onChanged: (obj) {
+      viewAbstract.onDropdownChanged(context, field, obj);
+      viewAbstract.setFieldValue(field, obj);
+      debugPrint('getControllerDropdownCustomList onChanged=   $obj');
+      onSelected(obj);
+    },
+    validator: viewAbstract.getTextInputValidatorCompose(context, field),
+    name: viewAbstract.getTag(field),
+    initialValue: viewAbstract.getFieldValue(field),
+    decoration: getDecorationIconLabel(context,
+        label: viewAbstract.getFieldLabel(context, field),
+        icon: viewAbstract.getFieldIconData(field)),
+    items: list
+        .map((item) => DropdownMenuItem<dynamic>(
+              value: item,
+              child: Text(item == null
+                  ? "${AppLocalizations.of(context)!.enter} ${viewAbstract.getFieldLabel(context, field)}"
+                  : item.toString()),
+            ))
+        .toList(),
   );
 }
 

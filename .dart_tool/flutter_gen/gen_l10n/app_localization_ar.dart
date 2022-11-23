@@ -512,19 +512,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get returnedProduct => 'المرتجع';
 
   @override
-  String get hideInvoiceUnitAndTotalPrice => 'اخفاء السعر الفردي والإحمالي';
-
-  @override
-  String get hideAccountBalance => 'اخفاء الرصيد';
-
-  @override
   String get printInvoiceLabel => 'طباعة ملصق الفاتورة';
 
   @override
   String get printInvoiceLabelDes => 'اضبط طابعة الملصقات من الكمبيوتر. وإلا ، فقد تتم طباعة الملصق في الطابعة الرئيسية';
-
-  @override
-  String get hidePaymentAmount => 'اخفاء قيمة الدفعة ( دولار )';
 
   @override
   String get customs_clearnces => 'التخليص الجمركي';
@@ -552,12 +543,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get showSubTotlas => 'عرض المجاميع الفرعية';
-
-  @override
-  String get hideAccountAddressAndPhone => 'إخفاء رقم الهاتف والعنوان';
-
-  @override
-  String get hideCurrency => 'إخفاء العملة';
 
   @override
   String get fillChangedProduct => 'تلوين المنتجات المتغيره او بغير الحالة الأصلية بلون ثاني';
@@ -908,9 +893,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get collectSimilarProducts => 'اجمع المنتجات المماثلة';
 
   @override
-  String get hideQuantity => 'إخفاء الكميات';
-
-  @override
   String get totalInput => 'مجموع الداخل';
 
   @override
@@ -1154,9 +1136,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get printAsCatalogDes => 'اعرض الصفحة الأولى كملف تعريف للشركة';
 
   @override
-  String get hideQuantityDes => 'أخفاء كميات المنتج المتوفرة';
-
-  @override
   String get adminSetting => 'الادارة';
 
   @override
@@ -1172,9 +1151,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dontPrintWasteProductLabel => 'لا تطبع المنتج المهدر';
 
   @override
-  String get hideCustomerName => 'إخفاء اسم العميل';
-
-  @override
   String get deletePcSoftware => 'حذف البرنامج من الكمبيوتر';
 
   @override
@@ -1182,9 +1158,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get completed => 'مكتمل';
-
-  @override
-  String get hideTerms => 'اخفاء شروط الدفع';
 
   @override
   String get send_cut_request_info => 'ارسال معلومات طلب القص';
@@ -1230,9 +1203,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get showBarcodesDes => 'اظهار جميع  باركودات المنتج';
-
-  @override
-  String get hideEmployee => 'إخفاء إسم الموظف';
 
   @override
   String get errLaunchApp => 'الإجراء لا يبدأ بشكل صحيح';
@@ -1347,9 +1317,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get seeMore => 'شاهد المزيد';
-
-  @override
-  String get hideCargoInfo => 'اخفاء معلومات السائق';
 
   @override
   String get featuresMayBeUnAv => 'قد تكون بعض الميزات غير متوفرة. يرجى التحقق من تمكين جميع الأذونات';
@@ -1930,23 +1897,113 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cancel => 'الفاء';
 
   @override
-  String get hideAccountPhone => 'اخفاء رقم الهاتف';
+  String get hideAccountPhone => 'إخفاء هاتف الحساب';
 
   @override
-  String get hideAccountAdress => 'اخفاء العنوان';
+  String get hideAccountPhoneDes => 'رقم الهاتف لن يظهر على الفاتورة';
+
+  @override
+  String get hideAccountAdress => 'إخفاء عنوان الحساب';
+
+  @override
+  String get hideAccountAdressDes => 'لن تظهر معلومات العنوان على الفاتورة';
 
   @override
   String get hideCompanyTerms => 'إخفاء شروط الشركة';
 
   @override
-  String get hideCompanyNotes => 'اخفاء الملاحظات';
+  String get hideCompanyTermsDes => 'شروط الشركة لن تظهر في الفاتورة';
+
+  @override
+  String get hideCompanyNotes => 'إخفاء ملاحظات الشركة';
+
+  @override
+  String get hideCompanyNotesDes => 'لن تظهر ملاحظات الشركة في تذييل الفاتورة';
 
   @override
   String get hideDate => 'إخفاء التاريخ';
 
   @override
+  String get hideDateDes => 'لن يظهر تاريخ الفاتورة في الفاتورة';
+
+  @override
   String get hidePaymentMethod => 'إخفاء طريقة الدفع';
 
   @override
+  String get hidePaymentMethodDes => 'لن تظهر طريقة الدفع للحساب الجاري في الفاتورة';
+
+  @override
   String get hideDueDate => 'إخفاء تاريخ الاستحقاق';
+
+  @override
+  String get hideDueDateDes => 'لن يظهر تاريخ استحقاق الفاتورة الحالية';
+
+  @override
+  String get hideQrCode => 'إخفاء رمز الاستجابة السريعة';
+
+  @override
+  String get hideQrCodeDes => 'رمز الاستجابة السريعة الرئيسي لن يظهر';
+
+  @override
+  String get hideCargoInfo => 'إخفاء معلومات الناقل';
+
+  @override
+  String get hideCargoInfoDes => 'لن تظهر معلومات الناقل في الفاتورة';
+
+  @override
+  String get hideEmployee => 'إخفاء اسم الموظف';
+
+  @override
+  String get hideEmployeeDes => 'اسم الموظف الذي لن تظهر الفاتورة في الفاتورة';
+
+  @override
+  String get hideTerms => 'إخفاء المصطلحات';
+
+  @override
+  String get hideTermsDes => 'إخفاء المصطلحات';
+
+  @override
+  String get hideCustomerName => 'إخفاء اسم العميل';
+
+  @override
+  String get hideCustomerNameDes => 'اسم العميل لن يظهر في الفاتورة';
+
+  @override
+  String get hideQuantityDes => 'إخفاء كميات المنتج المتوفرة';
+
+  @override
+  String get hideQuantity => 'إخفاء الكمية';
+
+  @override
+  String get hideAccountAddressAndPhone => 'إخفاء العنوان ورقم الهاتف';
+
+  @override
+  String get hideCurrency => 'إخفاء العملة';
+
+  @override
+  String get hideCurrencyDes => 'عملة الفاتورة لن تظهر';
+
+  @override
+  String get hidePaymentAmount => 'إخفاء مبلغ الدفعة';
+
+  @override
+  String get hidePaymentAmountDes => 'مبلغ الدفع للفاتورة الحالية لن يظهر';
+
+  @override
+  String get hideInvoiceUnitAndTotalPrice => 'إخفاء وحدة الفاتورة والسعر الإجمالي';
+
+  @override
+  String get hideInvoiceUnitAndTotalPriceDes => 'إجمالي الفاتورة أو سعر الوحدة لن يظهر';
+
+  @override
+  String get hideAccountBalance => 'إخفاء رصيد الحساب';
+
+  @override
+  String get hideAccountBalanceDes => 'لن يظهر رصيد الحساب في الفاتورة';
+
+  @override
+  String get primaryColor => 'اللون الأساسي';
+
+  @override
+  String get secondaryColor => 'اللون الثانوي';
 }

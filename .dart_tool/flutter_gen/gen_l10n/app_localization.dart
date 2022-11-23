@@ -1107,18 +1107,6 @@ abstract class AppLocalizations {
   /// **'Returned Product'**
   String get returnedProduct;
 
-  /// No description provided for @hideInvoiceUnitAndTotalPrice.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide invoice unit and total price'**
-  String get hideInvoiceUnitAndTotalPrice;
-
-  /// No description provided for @hideAccountBalance.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide account balance'**
-  String get hideAccountBalance;
-
   /// No description provided for @printInvoiceLabel.
   ///
   /// In en, this message translates to:
@@ -1130,12 +1118,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set the invoice label printer from the pc. Otherwise, the label may print in the main printer'**
   String get printInvoiceLabelDes;
-
-  /// No description provided for @hidePaymentAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide payment amount'**
-  String get hidePaymentAmount;
 
   /// No description provided for @customs_clearnces.
   ///
@@ -1190,18 +1172,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show subtotals'**
   String get showSubTotlas;
-
-  /// No description provided for @hideAccountAddressAndPhone.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide account phone and address'**
-  String get hideAccountAddressAndPhone;
-
-  /// No description provided for @hideCurrency.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide currency'**
-  String get hideCurrency;
 
   /// No description provided for @fillChangedProduct.
   ///
@@ -1899,12 +1869,6 @@ abstract class AppLocalizations {
   /// **'Collect similar products'**
   String get collectSimilarProducts;
 
-  /// No description provided for @hideQuantity.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide quantity'**
-  String get hideQuantity;
-
   /// No description provided for @totalInput.
   ///
   /// In en, this message translates to:
@@ -2391,12 +2355,6 @@ abstract class AppLocalizations {
   /// **'Show the first page as company profile'**
   String get printAsCatalogDes;
 
-  /// No description provided for @hideQuantityDes.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide product quantities available'**
-  String get hideQuantityDes;
-
   /// No description provided for @adminSetting.
   ///
   /// In en, this message translates to:
@@ -2427,12 +2385,6 @@ abstract class AppLocalizations {
   /// **'Do not print the wasted product'**
   String get dontPrintWasteProductLabel;
 
-  /// No description provided for @hideCustomerName.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide customer name'**
-  String get hideCustomerName;
-
   /// No description provided for @deletePcSoftware.
   ///
   /// In en, this message translates to:
@@ -2450,12 +2402,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed'**
   String get completed;
-
-  /// No description provided for @hideTerms.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide terms'**
-  String get hideTerms;
 
   /// No description provided for @send_cut_request_info.
   ///
@@ -2546,12 +2492,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show all product barcodes details'**
   String get showBarcodesDes;
-
-  /// No description provided for @hideEmployee.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide employee name'**
-  String get hideEmployee;
 
   /// No description provided for @errLaunchApp.
   ///
@@ -2780,12 +2720,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'See more'**
   String get seeMore;
-
-  /// No description provided for @hideCargoInfo.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide transporter information'**
-  String get hideCargoInfo;
 
   /// No description provided for @featuresMayBeUnAv.
   ///
@@ -3945,11 +3879,23 @@ abstract class AppLocalizations {
   /// **'Hide account phone'**
   String get hideAccountPhone;
 
+  /// No description provided for @hideAccountPhoneDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number will not appear on the invoice'**
+  String get hideAccountPhoneDes;
+
   /// No description provided for @hideAccountAdress.
   ///
   /// In en, this message translates to:
   /// **'Hide account address'**
   String get hideAccountAdress;
+
+  /// No description provided for @hideAccountAdressDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Address informations will not appear on the invoice'**
+  String get hideAccountAdressDes;
 
   /// No description provided for @hideCompanyTerms.
   ///
@@ -3957,11 +3903,23 @@ abstract class AppLocalizations {
   /// **'Hide company terms'**
   String get hideCompanyTerms;
 
+  /// No description provided for @hideCompanyTermsDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Company terms will not appear on the invoice'**
+  String get hideCompanyTermsDes;
+
   /// No description provided for @hideCompanyNotes.
   ///
   /// In en, this message translates to:
   /// **'Hide company notes'**
   String get hideCompanyNotes;
+
+  /// No description provided for @hideCompanyNotesDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Company notes on the invoice footer will not appear'**
+  String get hideCompanyNotesDes;
 
   /// No description provided for @hideDate.
   ///
@@ -3969,17 +3927,173 @@ abstract class AppLocalizations {
   /// **'Hide date'**
   String get hideDate;
 
+  /// No description provided for @hideDateDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of the invoice will not appear on the invoice'**
+  String get hideDateDes;
+
   /// No description provided for @hidePaymentMethod.
   ///
   /// In en, this message translates to:
   /// **'Hide payment method'**
   String get hidePaymentMethod;
 
+  /// No description provided for @hidePaymentMethodDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method for the current account will not appear on the invoice'**
+  String get hidePaymentMethodDes;
+
   /// No description provided for @hideDueDate.
   ///
   /// In en, this message translates to:
   /// **'Hide due date'**
   String get hideDueDate;
+
+  /// No description provided for @hideDueDateDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date of the current invoice will not appear'**
+  String get hideDueDateDes;
+
+  /// No description provided for @hideQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide QR Code'**
+  String get hideQrCode;
+
+  /// No description provided for @hideQrCodeDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Main QR Code will not appear'**
+  String get hideQrCodeDes;
+
+  /// No description provided for @hideCargoInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide transporter information'**
+  String get hideCargoInfo;
+
+  /// No description provided for @hideCargoInfoDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Transporter information will not appear on the invoice'**
+  String get hideCargoInfoDes;
+
+  /// No description provided for @hideEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide employee name'**
+  String get hideEmployee;
+
+  /// No description provided for @hideEmployeeDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee name which server the invoice will not appear on the invoice'**
+  String get hideEmployeeDes;
+
+  /// No description provided for @hideTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide terms'**
+  String get hideTerms;
+
+  /// No description provided for @hideTermsDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide terms'**
+  String get hideTermsDes;
+
+  /// No description provided for @hideCustomerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide customer name'**
+  String get hideCustomerName;
+
+  /// No description provided for @hideCustomerNameDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer name will not appear on the invoice'**
+  String get hideCustomerNameDes;
+
+  /// No description provided for @hideQuantityDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide product quantities available'**
+  String get hideQuantityDes;
+
+  /// No description provided for @hideQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide quantity'**
+  String get hideQuantity;
+
+  /// No description provided for @hideAccountAddressAndPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide account phone and address'**
+  String get hideAccountAddressAndPhone;
+
+  /// No description provided for @hideCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide currency'**
+  String get hideCurrency;
+
+  /// No description provided for @hideCurrencyDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency of the bill will not show'**
+  String get hideCurrencyDes;
+
+  /// No description provided for @hidePaymentAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide payment amount'**
+  String get hidePaymentAmount;
+
+  /// No description provided for @hidePaymentAmountDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment amount for the current bill will not appear'**
+  String get hidePaymentAmountDes;
+
+  /// No description provided for @hideInvoiceUnitAndTotalPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide invoice unit and total price'**
+  String get hideInvoiceUnitAndTotalPrice;
+
+  /// No description provided for @hideInvoiceUnitAndTotalPriceDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice total or unit price will not appear'**
+  String get hideInvoiceUnitAndTotalPriceDes;
+
+  /// No description provided for @hideAccountBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide account balance'**
+  String get hideAccountBalance;
+
+  /// No description provided for @hideAccountBalanceDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Account balance will not appear on the invoice'**
+  String get hideAccountBalanceDes;
+
+  /// No description provided for @primaryColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Color'**
+  String get primaryColor;
+
+  /// No description provided for @secondaryColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary Color'**
+  String get secondaryColor;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

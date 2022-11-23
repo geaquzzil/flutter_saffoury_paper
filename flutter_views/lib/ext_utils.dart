@@ -26,7 +26,7 @@ extension HexColor on Color {
   }
 
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
-  static Color fromHex(String hexString) {
+  Color fromHex(String hexString) {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
     buffer.write(hexString.replaceFirst('#', ''));
@@ -36,11 +36,49 @@ extension HexColor on Color {
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
       value.toRadixString(16).substring(2, 8);
+
+  String _generateAlpha({required int alpha, required bool withAlpha}) {
+    if (withAlpha) {
+      return alpha.toRadixString(16).padLeft(2, '0');
+    } else {
+      return '';
+    }
+  }
+
+  String toHex2({bool leadingHashSign = false, bool withAlpha = false}) =>
+      '${leadingHashSign ? '#' : ''}'
+              '${_generateAlpha(alpha: alpha, withAlpha: withAlpha)}'
+              '${red.toRadixString(16).padLeft(2, '0')}'
+              '${green.toRadixString(16).padLeft(2, '0')}'
+              '${blue.toRadixString(16).padLeft(2, '0')}'
+          .toUpperCase();
 }
 
 String dateFormatString = "yyyy-MM-dd HH:mm:ss";
 
+extension StringsUtils2 on String {
+  Color? fromHex() {
+    try {
+      final buffer = StringBuffer();
+      if (length == 6 || length == 7) buffer.write('ff');
+      buffer.write(replaceFirst('#', ''));
+      return Color(int.parse(buffer.toString(), radix: 16));
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
 extension StringsUtils on String? {
+  Color? fromHex() {
+    if (this == null) return null;
+    if (this!.isEmpty) return null;
+    final buffer = StringBuffer();
+    if (this!.length == 6 || this!.length == 7) buffer.write('ff');
+    buffer.write(this!.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
   /// get Date time format from string
   /// if null return the now date
   DateTime toDateTime() {

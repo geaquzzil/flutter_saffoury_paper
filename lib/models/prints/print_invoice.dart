@@ -1,6 +1,7 @@
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
@@ -21,12 +22,16 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
   bool? hideInvoiceDate;
   bool? hideInvoiceDueDate;
   bool? hideUnitPriceAndTotalPrice;
-
+  bool? hideEmployeeName;
+  bool? hideCargoInfo;
   bool? hideTermsOfService = false;
   bool? hideAdditionalNotes = false;
 
   String? sortByField;
   SortByType? sortByType;
+  @JsonKey(ignore: true)
+  InvoiceMaster? invoice;
+
   PrintInvoice() : super();
 
   @override
@@ -35,6 +40,8 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
         ..addAll({
           "hideCustomerAddressInfo": false,
           "hideCustomerPhone": false,
+          "hideEmployeeName": false,
+          "hideCargoInfo": false,
           "hideCustomerBalance": false,
           "hideInvoicePaymentMethod": false,
           "hideUnitPriceAndTotalPrice": false,
@@ -53,6 +60,8 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       "hideCustomerAddressInfo",
       "hideCustomerPhone",
       "hideCustomerBalance",
+      "hideEmployeeName",
+      "hideCargoInfo",
       "hideInvoicePaymentMethod",
       "hideUnitPriceAndTotalPrice",
       "hideInvoiceDate",
@@ -64,6 +73,35 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       "sortByType",
     ]);
   @override
+  String getTextCheckBoxDescription(BuildContext context, String field) {
+    if (field == "hideCustomerAddressInfo") {
+      return AppLocalizations.of(context)!.hideAccountAdressDes;
+    } else if (field == "hideCustomerPhone") {
+      return AppLocalizations.of(context)!.hideCustomerNameDes;
+    } else if (field == "hideCustomerBalance") {
+      return AppLocalizations.of(context)!.hideAccountBalanceDes;
+    } else if (field == "hideInvoicePaymentMethod") {
+      return AppLocalizations.of(context)!.hidePaymentMethodDes;
+    } else if (field == "hideUnitPriceAndTotalPrice") {
+      return AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPriceDes;
+    } else if (field == "hideInvoiceDate") {
+      return AppLocalizations.of(context)!.hideDateDes;
+    } else if (field == "hideInvoiceDueDate") {
+      return AppLocalizations.of(context)!.hideDueDateDes;
+    } else if (field == "hideTermsOfService") {
+      return AppLocalizations.of(context)!.hideCompanyTermsDes;
+    } else if (field == "hideAdditionalNotes") {
+      return AppLocalizations.of(context)!.hideCompanyNotesDes;
+    } else if (field == "hideEmployeeName") {
+      return AppLocalizations.of(context)!.hideEmployeeDes;
+    } else if (field == "hideCargoInfo") {
+
+            return AppLocalizations.of(context)!.hideCargoInfoDes;
+    }
+    return super.getTextCheckBoxDescription(context, field);
+  }
+
+  @override
   Map<String, String> getFieldLabelMap(BuildContext context) =>
       super.getFieldLabelMap(context)
         ..addAll({
@@ -74,6 +112,8 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
               AppLocalizations.of(context)!.hideAccountBalance,
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideInvoiceDueDate": AppLocalizations.of(context)!.hideDueDate,
+          "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
+          "hideCargoInfo": AppLocalizations.of(context)!.hideCargoInfo,
           "hideInvoicePaymentMethod":
               AppLocalizations.of(context)!.hidePaymentMethod,
           "hideUnitPriceAndTotalPrice":
@@ -94,6 +134,18 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
+
+  @override
+  Map<String, List> getTextInputIsAutoCompleteCustomListMap(
+          BuildContext context) =>
+      {
+        "sortByField": invoice
+                ?.getDetailMasterNewInstance()
+                .getPrintableInvoiceTableHeaderAndContent(context, null)
+                .keys
+                .toList() ??
+            []
+      };
 
   @override
   Map<String, int> getTextInputMaxLengthMap() => {};

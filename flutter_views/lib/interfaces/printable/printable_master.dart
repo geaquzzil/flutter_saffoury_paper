@@ -3,16 +3,16 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 
 abstract class PrintableMaster<T extends PrintLocalSetting> {
   ///QR CODE CONTENT
-  String getPrintableQrCode();
+  String? getPrintableQrCode(T? pca);
 
   ///CONTAINS QR CODE TITLE
-  String getPrintableQrCodeID();
+  String? getPrintableQrCodeID(T? pca);
 
   ///HexColor
-  String getPrintablePrimaryColor();
+  String getPrintablePrimaryColor(T? pca);
 
   ///HexColor
-  String getPrintableSecondaryColor();
+  String getPrintableSecondaryColor(T? pca);
 
   String getPrintableInvoiceTitle(
       BuildContext context, T? pca);
