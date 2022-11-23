@@ -54,9 +54,9 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
 
   Future<Widget> buildHeader() async {
     mt.debugPrint(
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}');
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor(printCommand)}&darkColor=${printObj.getPrintableSecondaryColor(printCommand)}');
     return pw.Image(await networkImage(
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}'));
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${printObj.getPrintablePrimaryColor(printCommand)}&darkColor=${printObj.getPrintableSecondaryColor(printCommand)}'));
   }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
@@ -171,11 +171,11 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
   }
 
   PdfColor getSecondaryColor() {
-    return PdfColor.fromHex(printObj.getPrintableSecondaryColor());
+    return PdfColor.fromHex(printObj.getPrintableSecondaryColor(printCommand));
   }
 
   PdfColor getPrimaryColor() {
-    return PdfColor.fromHex(printObj.getPrintablePrimaryColor());
+    return PdfColor.fromHex(printObj.getPrintablePrimaryColor(printCommand));
   }
 
   pw.Row buildTextWithIcon(InvoiceHeaderTitleAndDescriptionInfo item) {
@@ -286,17 +286,18 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
           //   barcode: Barcode.qrCode(),
           //   data: printObj.getInvoiceQrCode(),
           // ),
-          Column(children: [
-            BarcodeWidget(
-              height: 50,
-              width: 50,
-              barcode: Barcode.qrCode(),
-              data: printObj.getPrintableQrCode(),
-            ),
-            SizedBox(height: .1 * (PdfPageFormat.cm)),
-            Text(printObj.getPrintableQrCodeID(),
-                style: const TextStyle(fontSize: 9))
-          ])
+          if (printCommand?.hideQrCode == false)
+            Column(children: [
+              BarcodeWidget(
+                height: 50,
+                width: 50,
+                barcode: Barcode.qrCode(),
+                data: printObj.getPrintableQrCode(),
+              ),
+              SizedBox(height: .1 * (PdfPageFormat.cm)),
+              Text(printObj.getPrintableQrCodeID(),
+                  style: const TextStyle(fontSize: 9))
+            ])
         ]);
   }
 

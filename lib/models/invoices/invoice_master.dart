@@ -406,13 +406,15 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintablePrimaryColor() {
-    return getMainColor()!.value.toRadixString(16).substring(2, 8);
+  String getPrintablePrimaryColor(PrintInvoice? setting) {
+    return setting?.primaryColor ??
+        getMainColor()!.value.toRadixString(16).substring(2, 8);
   }
 
   @override
-  String getPrintableSecondaryColor() {
-    return getMainColor()!.darken(.1).value.toRadixString(16).substring(2, 8);
+  String getPrintableSecondaryColor(PrintInvoice? setting) {
+    return setting?.secondaryColor ??
+        getMainColor()!.darken(.1).value.toRadixString(16).substring(2, 8);
   }
 
   @override
@@ -450,21 +452,21 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         InvoiceHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.total_price,
             description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-            hexColor: getPrintablePrimaryColor()
+            hexColor: getPrintablePrimaryColor(pca)
             // icon: Icons.tag
             ),
       if ((pca?.hideCustomerBalance == false))
         InvoiceHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.balance,
             description: customers?.balance?.toStringAsFixed(2) ?? "",
-            hexColor: getPrintablePrimaryColor()
+            hexColor: getPrintablePrimaryColor(pca)
             // icon: Icons.balance
             ),
       if ((pca?.hideInvoicePaymentMethod == false))
         InvoiceHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.paymentMethod,
             description: "payment on advanced",
-            hexColor: getPrintablePrimaryColor()
+            hexColor: getPrintablePrimaryColor(pca)
             // icon: Icons.credit_card
             ),
     ];
@@ -534,7 +536,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
           description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
-          hexColor: getPrintablePrimaryColor()),
+          hexColor: getPrintablePrimaryColor(pca)),
     ];
   }
 

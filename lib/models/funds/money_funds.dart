@@ -208,7 +208,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintablePrimaryColor() {
+  String getPrintablePrimaryColor(PrintReceipt? setting) {
     if (runtimeType == Credits) {
       return Colors.green.toHex();
     } else if (runtimeType == Debits) {
@@ -240,7 +240,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   }
 
   @override
-  String getPrintableSecondaryColor() {
+  String getPrintableSecondaryColor(PrintReceipt? setting) {
     if (runtimeType == Credits) {
       return Colors.green.toHex();
     } else if (runtimeType == Debits) {

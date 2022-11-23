@@ -108,12 +108,12 @@ class CustomerBalanceList
       [];
 
   @override
-  String getPrintablePrimaryColor() => Colors.orange.toHex();
+  String getPrintablePrimaryColor(PrintCustomerBalances ? setting) => Colors.orange.toHex();
   @override
-  String getPrintableSecondaryColor() => Colors.orange.shade500.toHex();
+  String getPrintableSecondaryColor(PrintCustomerBalances ? setting) => Colors.orange.shade500.toHex();
 
   @override
-  String getPrintableQrCode() => "TODO";
+  String getPrintableQrCode()  => "TODO";
 
   @override
   String getPrintableQrCodeID() => "TODO";

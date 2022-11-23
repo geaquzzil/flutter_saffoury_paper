@@ -124,13 +124,13 @@ class CustomerClinetGuide
   }
 
   @override
-  String getPrintablePrimaryColor() {
+  String getPrintablePrimaryColor(PrintCustomerGuid ? setting) {
     // TODO: implement getPrintablePrimaryColor
     throw UnimplementedError();
   }
 
   @override
-  String getPrintableQrCode() {
+ String getPrintableQrCode() {
     // TODO: implement getPrintableQrCode
     throw UnimplementedError();
   }
@@ -142,7 +142,7 @@ class CustomerClinetGuide
   }
 
   @override
-  String getPrintableSecondaryColor() {
+  String getPrintableSecondaryColor(PrintCustomerGuid ? setting) {
     // TODO: implement getPrintableSecondaryColor
     throw UnimplementedError();
   }

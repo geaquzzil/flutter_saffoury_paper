@@ -30,7 +30,7 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
   }
 
   Future<Widget> buildHeader() async => pw.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${printObj.getPrintablePrimaryColor()}&darkColor=${printObj.getPrintableSecondaryColor()}'));
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${printObj.getPrintablePrimaryColor(printCommand)}&darkColor=${printObj.getPrintableSecondaryColor(printCommand)}'));
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
@@ -238,7 +238,7 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
         printObj.getPrintableInvoiceTitle(context, printCommand),
         style: TextStyle(
             fontSize: 20,
-            color: PdfColor.fromHex(printObj.getPrintablePrimaryColor())),
+            color: PdfColor.fromHex(printObj.getPrintablePrimaryColor(printCommand))),
       ));
   Widget buildTitleOnInvoice(String title) {
     return Text(title,

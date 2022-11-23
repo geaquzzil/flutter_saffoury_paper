@@ -696,7 +696,7 @@ class Product extends ViewAbstract<Product>
   Future<
       pdfWidget
           .Widget> buildHeader() async => pdfWidget.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor()}&darkColor=${getPrintableSecondaryColor()}'));
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor(null)}&darkColor=${getPrintableSecondaryColor(null)}'));
 
   @override
   String getPrintableInvoiceTitle(BuildContext context, PrintProduct? pca) {
@@ -704,7 +704,7 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  String getPrintablePrimaryColor() => Colors.grey.toHex();
+  String getPrintablePrimaryColor(PrintProduct ? setting) => Colors.grey.toHex();
 
   @override
   String getPrintableQrCode() {
@@ -724,7 +724,7 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  String getPrintableSecondaryColor() => Colors.grey.toHex();
+  String getPrintableSecondaryColor(PrintProduct ? setting) => Colors.grey.toHex();
 
   @override
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {

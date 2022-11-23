@@ -14,7 +14,7 @@ Widget buildTitle<T extends PrintLocalSetting>(mt.BuildContext context, Printabl
               .toUpperCase(),
           style: TextStyle(
               fontSize: 20,
-              color: PdfColor.fromHex(printObj.getPrintablePrimaryColor())),
+              color: PdfColor.fromHex(printObj.getPrintablePrimaryColor(printCommandAbstract))),
         ));
 
 Widget buildQrCode<T extends PrintLocalSetting>(mt.BuildContext context, PrintableMaster printObj,
