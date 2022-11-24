@@ -36,37 +36,41 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
     var myTheme = await getThemeData();
     final header = await buildHeader();
 
-    final pdf = Document(
+    final pdf = Document( 
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
-    pdf.addPage(MultiPage(
-      footer: (_) =>
-          Container(width: double.infinity, height: 15, color: PdfColors.green),
-      pageFormat: format,
-      // orientation: PageOrientation.landscape,
-      margin: EdgeInsets.zero,
-
-      // pageTheme: ,
-      build: (context) => [
-        Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-            // alignment: ,
-            children: [header, buildTitle()]),
-        // header,
-        // buildInvoiceMainInfoHeader(),
-        Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(flex: 3, child: buildTable()),
-              Expanded(
-                  flex: 1,
-                  child: buildQrCode<E>(this.context, printObj,
-                      printCommandAbstract: printCommand))
-            ])
-        // buildInvoiceMainTable(),
-      ],
-    ));
+    pdf.addPage(getMultiPage(format, header));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+  }
+
+  pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
+    return MultiPage(
+    footer: (_) =>
+        Container(width: double.infinity, height: 15, color: PdfColors.green),
+    pageFormat: format,
+    // orientation: PageOrientation.landscape,
+    margin: EdgeInsets.zero,
+
+    // pageTheme: ,
+    build: (context) => [
+      Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+          // alignment: ,
+          children: [header, buildTitle()]),
+      // header,
+      // buildInvoiceMainInfoHeader(),
+      Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(flex: 3, child: buildTable()),
+            Expanded(
+                flex: 1,
+                child: buildQrCode<E>(this.context, printObj,
+                    printCommandAbstract: printCommand))
+          ])
+      // buildInvoiceMainTable(),
+    ],
+  );
   }
 
   List<String> getList(List<RecieptHeaderTitleAndDescriptionInfo> list) {

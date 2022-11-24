@@ -402,7 +402,7 @@ class Product extends ViewAbstract<Product>
     if (isRollCut()) {
       return "Saffoury Paper";
     }
-    return "TODO";
+    return countries_manufactures?.manufactures?.name ?? "";
   }
 
   bool isRollCut() {
@@ -415,15 +415,15 @@ class Product extends ViewAbstract<Product>
     if (isRollCut()) {
       return "Syria";
     }
-    return "TODO";
+    return countries_manufactures?.countries?.name ?? "";
   }
 
   String getCutRequestID() {
-    return "TODO";
+    return "";
   }
 
   String getCustomerNameIfCutRequest() {
-    return "TODO";
+    return "";
   }
 
   double getQuantity({Warehouse? warehouse}) {
@@ -611,7 +611,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   PrintProduct? getPrintCommand(BuildContext context) =>
-      PrintProduct(printObject: this);
+      PrintProduct();
 
   static String? intFromString(dynamic number) => number?.toString();
 
@@ -654,7 +654,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   getModifibleSettingObject(BuildContext context) =>
-      PrintProduct(printObject: this);
+      PrintProduct();
 
   @override
   String getModifibleTitleName(BuildContext context) =>
@@ -662,20 +662,20 @@ class Product extends ViewAbstract<Product>
 
   @override
   Future<pdfWidget.Widget?>? getPrintableCustomFooter(BuildContext context,
-          {pdf.PdfPageFormat? format}) =>
+          {pdf.PdfPageFormat? format, PrintProduct? setting}) =>
       null;
   // null;
 
   @override
   Future<pdfWidget.Widget?>? getPrintableCustomHeader(BuildContext context,
-          {pdf.PdfPageFormat? format}) =>
+          {pdf.PdfPageFormat? format, PrintProduct? setting}) =>
       null;
 
   @override
   Future<List<pdfWidget.Widget>> getPrintableCustomPage(BuildContext context,
-      {pdf.PdfPageFormat? format}) async {
+      {pdf.PdfPageFormat? format, PrintProduct? setting}) async {
     pdfWidget.Widget header = await buildHeader();
-
+    debugPrint("getPrintableCustomPage generating");
     return [
       pdfWidget.Stack(
           alignment: pdfWidget.Alignment.bottomRight,
@@ -704,7 +704,7 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  String getPrintablePrimaryColor(PrintProduct ? setting) => Colors.grey.toHex();
+  String getPrintablePrimaryColor(PrintProduct? setting) => Colors.grey.toHex();
 
   @override
   String getPrintableQrCode() {
@@ -724,7 +724,8 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  String getPrintableSecondaryColor(PrintProduct ? setting) => Colors.grey.toHex();
+  String getPrintableSecondaryColor(PrintProduct? setting) =>
+      Colors.grey.toHex();
 
   @override
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {

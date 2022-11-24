@@ -6,9 +6,13 @@ import 'package:pdf/widgets.dart';
 
 abstract class PrintableCustomInterface<T extends PrintLocalSetting> extends PrintableMaster<T> {
   Future<List<Widget>> getPrintableCustomPage(mt.BuildContext context,
-      {PdfPageFormat? format});
+      {PdfPageFormat? format,T? setting});
   Future<Widget?>? getPrintableCustomFooter(mt.BuildContext context,
-      {PdfPageFormat? format});
+      {PdfPageFormat? format,T? setting});
   Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
-      {PdfPageFormat? format});
+      {PdfPageFormat? format,T? setting});
+}
+abstract class PrintableCustomFromPDFInterface<T extends PrintLocalSetting> extends PrintableMaster<T> {
+  Future<Document> getPrintableCustomFromPDFPage(mt.BuildContext context,
+      {required ThemeData theme,PdfPageFormat? format,T? setting});
 }

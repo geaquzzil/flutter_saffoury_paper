@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
+import 'package:flutter_saffoury_paper/models/prints/printable_cut_request_product_label_pdf.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/helper_model/qr_code.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -14,13 +23,21 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:pdf/widgets.dart' as pdf;
+import 'package:pdf/src/widgets/document.dart';
+import 'package:pdf/src/pdf/page_format.dart';
+import 'package:pdf/src/widgets/theme.dart';
 part 'cut_requests.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class CutRequest extends ViewAbstract<CutRequest> {
+class CutRequest extends ViewAbstract<CutRequest>
+    implements
+        PrintableCustomFromPDFInterface<PrintCutRequest>,
+        ModifiablePrintableInterface<PrintCutRequest> {
   // int? ProductID;
   // int? CustomerID;
   // int? EmployeeID;
@@ -172,6 +189,98 @@ class CutRequest extends ViewAbstract<CutRequest> {
   @override
   CutRequest fromJsonViewAbstract(Map<String, dynamic> json) =>
       CutRequest.fromJson(json);
+
+  @override
+  String getModifiableMainGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.printerSetting;
+
+  @override
+  PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
+      BuildContext context) {
+    CutRequest o = CutRequest();
+    debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
+    (o).customers = Customer()..name = "Customer name";
+    o.customers?.address = "Damascus - Syria";
+    o.customers?.phone = "099999999";
+    o.employees = Employee()..name = "Employee name";
+    o.cut_request_results ??= [];
+    o.cut_request_results!.add(CutRequestResult());
+    o.cut_request_results![0].products_inputs = ProductInput();
+    o.cut_request_results![0].products_inputs!.products_inputs_details =
+        List.generate(
+            2,
+            (index) => ProductInputDetails()
+              ..setProduct(Product().getModifiablePrintablePdfSetting(context)
+                  as Product));
+
+    return o;
+  }
+
+  @override
+  IconData getModifibleIconData() => Icons.print;
+
+  @override
+  PrintCutRequest getModifibleSettingObject(BuildContext context) {
+    return PrintCutRequest();
+  }
+
+  @override
+  String getModifibleTitleName(BuildContext context) =>
+      getMainHeaderLabelTextOnly(context);
+
+  @override
+  String getPrintableInvoiceTitle(BuildContext context, PrintCutRequest? pca) {
+    return getMainHeaderLabelTextOnly(context);
+  }
+
+  @override
+  Color? getMainColor() {
+    return Colors.orange;
+  }
+
+  @override
+  String getPrintablePrimaryColor(PrintCutRequest? setting) {
+    return setting?.primaryColor ??
+        getMainColor()!.value.toRadixString(16).substring(2, 8);
+  }
+
+  @override
+  String getPrintableQrCode() {
+    var q = QRCodeID(
+      iD: iD,
+      action: getTableNameApi() ?? "",
+    );
+    return q.getQrCode();
+  }
+
+  @override
+  String getPrintableQrCodeID() {
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+
+    String year = "${dateFormat.parse(date ?? "").year}";
+    String invCode = "";
+    invCode = "CUT-R";
+    return "$invCode-$iD-$year";
+  }
+
+  @override
+  String getPrintableSecondaryColor(PrintCutRequest? setting) {
+    return setting?.secondaryColor ??
+        getMainColor()!.darken(.1).value.toRadixString(16).substring(2, 8);
+  }
+
+  @override
+  Future<Document> getPrintableCustomFromPDFPage(BuildContext context,
+      {required pdf.ThemeData theme,
+      PdfPageFormat? format,
+      PrintCutRequest? setting}) async {
+    CutRequestProductLabelPDF productsLabel = CutRequestProductLabelPDF(context,
+        cutRequest: getModifiablePrintablePdfSetting(context) as CutRequest,
+        setting: setting,
+        themeData: theme);
+
+    return await productsLabel.generate();
+  }
 }
 
 // enum CutStatus {

@@ -674,5 +674,6 @@
     "hideAccountBalance": "Hide account balance",
     "hideAccountBalanceDes": "Account balance will not appear on the invoice",
     "primaryColor": "Primary Color",
+    "changeInvoiceProductNameDes":"Change product name (Leave blank if you want to keep the original name)",
     "secondaryColor": "Secondary Color"
 }

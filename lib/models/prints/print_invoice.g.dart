@@ -25,8 +25,13 @@ PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..hideInvoiceDate = json['hideInvoiceDate'] as bool?
   ..hideInvoiceDueDate = json['hideInvoiceDueDate'] as bool?
   ..hideUnitPriceAndTotalPrice = json['hideUnitPriceAndTotalPrice'] as bool?
+  ..hideEmployeeName = json['hideEmployeeName'] as bool?
+  ..hideCargoInfo = json['hideCargoInfo'] as bool?
   ..hideTermsOfService = json['hideTermsOfService'] as bool?
   ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
+  ..changeProductNameTo = json['changeProductNameTo'] as String?
+  ..productNameOption =
+      $enumDecodeNullable(_$ProductNameOptionEnumMap, json['productNameOption'])
   ..sortByField = json['sortByField'] as String?
   ..sortByType = $enumDecodeNullable(_$SortByTypeEnumMap, json['sortByType']);
 
@@ -46,11 +51,21 @@ Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
       'hideInvoiceDate': instance.hideInvoiceDate,
       'hideInvoiceDueDate': instance.hideInvoiceDueDate,
       'hideUnitPriceAndTotalPrice': instance.hideUnitPriceAndTotalPrice,
+      'hideEmployeeName': instance.hideEmployeeName,
+      'hideCargoInfo': instance.hideCargoInfo,
       'hideTermsOfService': instance.hideTermsOfService,
       'hideAdditionalNotes': instance.hideAdditionalNotes,
+      'changeProductNameTo': instance.changeProductNameTo,
+      'productNameOption':
+          _$ProductNameOptionEnumMap[instance.productNameOption],
       'sortByField': instance.sortByField,
       'sortByType': _$SortByTypeEnumMap[instance.sortByType],
     };
+
+const _$ProductNameOptionEnumMap = {
+  ProductNameOption.NONE: 'NONE',
+  ProductNameOption.ONLY_CUT_REQUEST: 'ONLY_CUT_REQUEST',
+};
 
 const _$SortByTypeEnumMap = {
   SortByType.ASC: 'ASC',

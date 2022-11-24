@@ -2,6 +2,7 @@ import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
@@ -27,6 +28,9 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
   bool? hideTermsOfService = false;
   bool? hideAdditionalNotes = false;
 
+  String? changeProductNameTo;
+  ProductNameOption? productNameOption;
+
   String? sortByField;
   SortByType? sortByType;
   @JsonKey(ignore: true)
@@ -49,10 +53,18 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
           "hideInvoiceDate": false,
           "hideInvoiceDueDate": false,
           "hideAdditionalNotes": false,
-          "hideQrCode": false,
           "sortByField": "",
+          "productNameOption": ProductNameOption.NONE,
+          "changeProductNameTo": "",
           "sortByType": SortByType.ASC,
         });
+  @override
+  String? getTextInputHint(BuildContext context, {String? field}) {
+    if (field == "changeProductNameTo") {
+      return AppLocalizations.of(context)!.changeInvoiceProductNameDes;
+    }
+    super.getTextInputHint(context, field: field);
+  }
 
   @override
   List<String> getMainFields() => super.getMainFields()
@@ -68,9 +80,10 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       "hideInvoiceDueDate",
       "hideTermsOfService",
       "hideAdditionalNotes",
-      "hideQrCode",
       "sortByField",
       "sortByType",
+      "productNameOption",
+      "changeProductNameTo"
     ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
@@ -95,9 +108,11 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
     } else if (field == "hideEmployeeName") {
       return AppLocalizations.of(context)!.hideEmployeeDes;
     } else if (field == "hideCargoInfo") {
-
-            return AppLocalizations.of(context)!.hideCargoInfoDes;
+      return AppLocalizations.of(context)!.hideCargoInfoDes;
+    } else if (field == "changeProductNameTo") {
+      return AppLocalizations.of(context)!.change;
     }
+
     return super.getTextCheckBoxDescription(context, field);
   }
 

@@ -2005,5 +2005,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get primaryColor => 'اللون الأساسي';
 
   @override
+  String get changeInvoiceProductNameDes => 'تغيير اسم المنتج (اتركه فارغا إذا كنت تريد الاحتفاظ بالاسم الأصلي)';
+
+  @override
   String get secondaryColor => 'اللون الثانوي';
 }

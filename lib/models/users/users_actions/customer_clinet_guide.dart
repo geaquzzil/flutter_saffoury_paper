@@ -96,27 +96,6 @@ class CustomerClinetGuide
   }
 
   @override
-  Future<Widget?>? getPrintableCustomFooter(mt.BuildContext context,
-      {PdfPageFormat? format}) {
-    // TODO: implement getPrintableCustomFooter
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
-      {PdfPageFormat? format}) {
-    // TODO: implement getPrintableCustomHeader
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Widget>> getPrintableCustomPage(mt.BuildContext context,
-      {PdfPageFormat? format}) {
-    // TODO: implement getPrintableCustomPage
-    throw UnimplementedError();
-  }
-
-  @override
   String getPrintableInvoiceTitle(
       mt.BuildContext context, PrintCustomerGuid? pca) {
     // TODO: implement getPrintableInvoiceTitle
@@ -124,13 +103,13 @@ class CustomerClinetGuide
   }
 
   @override
-  String getPrintablePrimaryColor(PrintCustomerGuid ? setting) {
+  String getPrintablePrimaryColor(PrintCustomerGuid? setting) {
     // TODO: implement getPrintablePrimaryColor
     throw UnimplementedError();
   }
 
   @override
- String getPrintableQrCode() {
+  String getPrintableQrCode() {
     // TODO: implement getPrintableQrCode
     throw UnimplementedError();
   }
@@ -142,7 +121,7 @@ class CustomerClinetGuide
   }
 
   @override
-  String getPrintableSecondaryColor(PrintCustomerGuid ? setting) {
+  String getPrintableSecondaryColor(PrintCustomerGuid? setting) {
     // TODO: implement getPrintableSecondaryColor
     throw UnimplementedError();
   }
@@ -174,4 +153,25 @@ class CustomerClinetGuide
   @override
   List<mt.Widget>? getCustomeStandAloneSideWidget(mt.BuildContext context) =>
       null;
+
+  @override
+  Future<Widget?>? getPrintableCustomFooter(mt.BuildContext context,
+      {PdfPageFormat? format, PrintCustomerGuid? setting}) {
+    // TODO: implement getPrintableCustomFooter
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
+      {PdfPageFormat? format, PrintCustomerGuid? setting}) {
+    // TODO: implement getPrintableCustomHeader
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Widget>> getPrintableCustomPage(mt.BuildContext context,
+      {PdfPageFormat? format, PrintCustomerGuid? setting}) {
+    // TODO: implement getPrintableCustomPage
+    throw UnimplementedError();
+  }
 }

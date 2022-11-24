@@ -65,7 +65,13 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
 
     final pdf = Document(
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
-    pdf.addPage(MultiPage(
+    pdf.addPage(getMultiPage(format, header));
+    return pdf.save();
+    // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+  }
+
+  pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
+    return MultiPage(
       pageFormat: format,
 
       margin: EdgeInsets.zero,
@@ -87,9 +93,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
         buildMainTotal(),
       ],
       // footer: (context) => buildFooter(),
-    ));
-    return pdf.save();
-    // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+    );
   }
 
   Widget buildInvoiceMainInfoHeader() {

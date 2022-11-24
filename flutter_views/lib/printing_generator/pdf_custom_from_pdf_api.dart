@@ -8,12 +8,12 @@ import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 
-
-class PdfCustom<T extends PrintableCustomInterface,E extends PrintLocalSetting> {
+class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
+    E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
   E? printCommand;
-  PdfCustom(this.context, this.printObj, {this.printCommand});
+  PdfCustomFromPDF(this.context, this.printObj, {this.printCommand});
 
   Future<pw.ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
@@ -28,28 +28,8 @@ class PdfCustom<T extends PrintableCustomInterface,E extends PrintLocalSetting> 
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
-    Widget? footer =
-        await printObj.getPrintableCustomFooter(context, format: format);
-    Widget? header =
-        await printObj.getPrintableCustomHeader(context, format: format);
-    List<Widget> body =
-        await printObj.getPrintableCustomPage(context, format: format);
-
-    final pdf = Document(
-        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
-    pdf.addPage(MultiPage(
-      // footer: (_) {+
-      //   return footer!;
-      // },
-
-      // header: (context) => header,
-
-      pageFormat: format,
-      margin: EdgeInsets.zero,
-
-      // pageTheme: ,
-      build: (context) => body,
-    ));
-    return pdf.save();
+    return (await printObj.getPrintableCustomFromPDFPage(context,
+            format: format, setting: printCommand, theme: myTheme))
+        .save();
   }
 }

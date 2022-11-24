@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/widgets.dart';
@@ -9,7 +10,8 @@ import '../products/products.dart';
 class ProductLabelPDF {
   material.BuildContext context;
   Product product;
-  ProductLabelPDF(this.context, this.product);
+  PrintProduct? setting;
+  ProductLabelPDF(this.context, this.product, {this.setting});
 
   Widget generate() {
     return Container(
@@ -38,7 +40,7 @@ class ProductLabelPDF {
       Expanded(
           flex: 4,
           child: buildLabelAndText(AppLocalizations.of(context)!.description,
-              product.getProductTypeNameString())),
+              setting?.description ?? product.getProductTypeNameString())),
       Expanded(
           child: buildLabelAndText(
               AppLocalizations.of(context)!.grade, product.getGradeString())),
@@ -132,10 +134,10 @@ class ProductLabelPDF {
       Expanded(
           flex: 2,
           child: buildLabelAndText(AppLocalizations.of(context)!.customer,
-              product.getCustomerNameIfCutRequest())),
+              setting?.customerName ?? "")),
       Expanded(
           child: buildLabelAndText(AppLocalizations.of(context)!.cutRequest,
-              product.getCutRequestID())),
+              setting?.cutRequestID ?? product.getCutRequestID())),
     ]);
   }
 
@@ -144,10 +146,10 @@ class ProductLabelPDF {
       Expanded(
           flex: 2,
           child: buildLabelAndText(AppLocalizations.of(context)!.country,
-              product.getCountryNameString())),
+              setting?.country ?? product.getCountryNameString())),
       Expanded(
           child: buildLabelAndText(AppLocalizations.of(context)!.manufacture,
-              product.getManufactureNameString())),
+              setting?.manufacture ?? product.getManufactureNameString())),
     ]);
   }
 
@@ -157,7 +159,8 @@ class ProductLabelPDF {
           flex: 2,
           child: buildLabelAndText("", "MADE IN SYRIA\nصنع في سورية",
               fontSize: 24)),
-      Expanded(child: buildLabelAndText("", product.comments ?? "",fontSize: 20)),
+      Expanded(
+          child: buildLabelAndText("", product.comments ?? "", fontSize: 20)),
     ]);
   }
 
@@ -173,7 +176,8 @@ class ProductLabelPDF {
         child: Column(children: [
           Align(
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                   child: Text(label,
                       textDirection: TextDirection.rtl,
                       style: const TextStyle(fontSize: 10))),

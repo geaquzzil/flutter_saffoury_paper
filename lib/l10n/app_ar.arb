@@ -663,6 +663,7 @@
     "hideInvoiceUnitAndTotalPriceDes": "إجمالي الفاتورة أو سعر الوحدة لن يظهر" ,
     "hideAccountBalance": "إخفاء رصيد الحساب",
     "hideAccountBalanceDes": "لن يظهر رصيد الحساب في الفاتورة" ,
+    "changeInvoiceProductNameDes":"تغيير اسم المنتج (اتركه فارغا إذا كنت تريد الاحتفاظ بالاسم الأصلي)",
     "primaryColor": "اللون الأساسي",
     "secondaryColor": "اللون الثانوي"
 }

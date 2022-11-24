@@ -12,6 +12,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
 import '../../interfaces/printable/printable_master.dart';
+import '../pdf_custom_from_pdf_api.dart';
 import '../pdf_receipt_api.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
@@ -60,6 +61,18 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
           } else if (widget.invoiceObj is PrintableCustomInterface) {
             final pdf = PdfCustom<PrintableCustomInterface, T>(
                 context, widget.invoiceObj as PrintableCustomInterface);
+            return pdf.generate(format);
+          } else if (widget.invoiceObj is PrintableCustomFromPDFInterface) {
+            T? pls;
+            if (widget.invoiceObj is ModifiablePrintableInterface) {
+              pls = await Configurations.get<T>(
+                  (widget.invoiceObj as ModifiablePrintableInterface)
+                      .getModifibleSettingObject(context),
+                  customKey: "_printsetting") as T;
+            }
+            final pdf = PdfCustomFromPDF<PrintableCustomFromPDFInterface, T>(
+                context, widget.invoiceObj as PrintableCustomFromPDFInterface,
+                printCommand: pls);
             return pdf.generate(format);
           } else {
             final pdf = PdfReceipt<PrintableReceiptInterface, T>(

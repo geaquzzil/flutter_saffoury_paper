@@ -2005,5 +2005,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get primaryColor => 'Primary Color';
 
   @override
+  String get changeInvoiceProductNameDes => 'Change product name (Leave blank if you want to keep the original name)';
+
+  @override
   String get secondaryColor => 'Secondary Color';
 }

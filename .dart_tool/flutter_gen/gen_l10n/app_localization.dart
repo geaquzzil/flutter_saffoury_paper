@@ -4089,6 +4089,12 @@ abstract class AppLocalizations {
   /// **'Primary Color'**
   String get primaryColor;
 
+  /// No description provided for @changeInvoiceProductNameDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Change product name (Leave blank if you want to keep the original name)'**
+  String get changeInvoiceProductNameDes;
+
   /// No description provided for @secondaryColor.
   ///
   /// In en, this message translates to:
