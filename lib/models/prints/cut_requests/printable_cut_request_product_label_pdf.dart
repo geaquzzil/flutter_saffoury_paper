@@ -49,7 +49,7 @@ class CutRequestProductLabelPDF {
 
   PrintProduct getPrintProductSetting() {
     return PrintProduct()
-      ..country = "SYRIA"
+      ..country = "SYRIA TODO"
       ..description = getPrintProductName()
       ..manufacture = AppLocalizations.of(context)!.appTitle
       ..customerName = setting?.hideCustomerName == true
