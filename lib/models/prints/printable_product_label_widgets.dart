@@ -133,10 +133,14 @@ class ProductLabelPDF {
     return Row(children: [
       Expanded(
           flex: 2,
-          child: buildLabelAndText(AppLocalizations.of(context)!.customer,
+          child: buildLabelAndText(
+              AppLocalizations.of(context)!.customer,
+              fontSize: 20,
               setting?.customerName ?? "")),
       Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.cutRequest,
+          child: buildLabelAndText(
+              AppLocalizations.of(context)!.cutRequest,
+              fontSize: 20,
               setting?.cutRequestID ?? product.getCutRequestID())),
     ]);
   }
@@ -148,7 +152,9 @@ class ProductLabelPDF {
           child: buildLabelAndText(AppLocalizations.of(context)!.country,
               setting?.country ?? product.getCountryNameString())),
       Expanded(
-          child: buildLabelAndText(AppLocalizations.of(context)!.manufacture,
+          child: buildLabelAndText(
+              AppLocalizations.of(context)!.manufacture,
+              fontSize: 12,
               setting?.manufacture ?? product.getManufactureNameString())),
     ]);
   }

@@ -63,7 +63,7 @@ Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
     };
 
 const _$ProductNameOptionEnumMap = {
-  ProductNameOption.NONE: 'NONE',
+  ProductNameOption.ALL: 'ALL',
   ProductNameOption.ONLY_CUT_REQUEST: 'ONLY_CUT_REQUEST',
 };
 

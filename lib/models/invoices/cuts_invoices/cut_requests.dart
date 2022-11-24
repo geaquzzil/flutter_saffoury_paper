@@ -3,7 +3,7 @@ import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
-import 'package:flutter_saffoury_paper/models/prints/printable_cut_request_product_label_pdf.dart';
+import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_product_label_pdf.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';

@@ -54,7 +54,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
           "hideInvoiceDueDate": false,
           "hideAdditionalNotes": false,
           "sortByField": "",
-          "productNameOption": ProductNameOption.NONE,
+          "productNameOption": ProductNameOption.ALL,
           "changeProductNameTo": "",
           "sortByType": SortByType.ASC,
         });

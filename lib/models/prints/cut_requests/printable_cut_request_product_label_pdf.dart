@@ -9,7 +9,7 @@ import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import '../products/products.dart';
+import '../../products/products.dart';
 
 class CutRequestProductLabelPDF {
   material.BuildContext context;
@@ -41,13 +41,16 @@ class CutRequestProductLabelPDF {
 
     return pdf;
   }
-  String getPrintProductName(){
-    setting?.productNameOption==ProductNameOption.NONE
+
+  String? getPrintProductName() {
+    
+    return null; 
   }
+
   PrintProduct getPrintProductSetting() {
     return PrintProduct()
       ..country = "SYRIA"
-      ..description=getPrintProductName()
+      ..description = getPrintProductName()
       ..manufacture = AppLocalizations.of(context)!.appTitle
       ..customerName = setting?.hideCustomerName == true
           ? ""
