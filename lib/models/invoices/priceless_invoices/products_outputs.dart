@@ -1,5 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -38,7 +39,9 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   String? getTableNameApi() => "products_outputs";
 
   @override
-  List<String>? isRequiredObjectsList() => ["products_outputs_details"];
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["products_outputs_details"],
+      };
 
   @override
   List<String> getMainFields() {

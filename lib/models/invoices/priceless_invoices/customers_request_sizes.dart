@@ -5,6 +5,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -35,8 +36,11 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   @override
   String? getTableNameApi() => "customers_request_sizes";
 
+
   @override
-  List<String>? isRequiredObjectsList() => ["customers_request_sizes_details"];
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["customers_request_sizes_details"],
+      };
 
   @override
   List<String> getMainFields() =>

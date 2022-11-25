@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -40,9 +41,9 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
   String? getTableNameApi() => "purchasers_refunds";
 
   @override
-  List<String>? isRequiredObjectsList() =>
-      ["purchases_refunds_purchases_details"];
-
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["purchases_refunds_purchases_details"],
+      };
   @override
   List<String> getMainFields() =>
       ["purchases", "cargo_transporters", "date", "billNo", "comments"];

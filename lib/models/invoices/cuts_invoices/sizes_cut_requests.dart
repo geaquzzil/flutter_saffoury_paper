@@ -42,7 +42,7 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
       AppLocalizations.of(context)!.requestedSizeLabel;
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
-      "${sizes?.getMainHeaderLabelTextOnly(context)}";
+      "${sizes?.getMainHeaderTextOnly(context)}";
   @override
   IconData getMainIconData() => Icons.screen_rotation_alt_sharp;
   @override

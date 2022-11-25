@@ -20,16 +20,23 @@ class ListMultiKeyProvider with ChangeNotifier {
     return listMap[key]?.isLoading ?? false;
   }
 
-  Future<void> edit(String key, ViewAbstract obj) async {
-    MultiListProviderHelper? multiListProviderHelper = listMap[key];
-    try {
-      ViewAbstract? o = multiListProviderHelper?.objects
-          .firstWhereOrNull((element) => element.isEquals(obj));
+  Future<void> edit(ViewAbstract obj) async {
+    await Future.forEach<MultiListProviderHelper>(listMap.values, (element) {
+      ViewAbstract? o =
+          element.objects.firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
-        o = obj;
-      }
-    } catch (e) {}
+        int idx =
+            element.objects.indexWhere((element) => element.isEquals(obj));
+        element.objects[idx] = obj;
+        debugPrint("ListMultiKeyProvider changed element ");
 
+        // element.objects.insert(0, o);
+        debugPrint(
+            "ListMultiKeyProvider changed element required list=> ${o.isRequiredObjectsListChecker()} ");
+        // notifyListeners();
+        return;
+      }
+    });
     notifyListeners();
   }
 

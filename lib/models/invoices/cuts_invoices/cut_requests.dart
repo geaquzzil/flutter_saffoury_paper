@@ -6,6 +6,7 @@ import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_product_label_pdf.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -76,9 +77,31 @@ class CutRequest extends ViewAbstract<CutRequest>
         "sizes_cut_requests": List<SizesCutRequest>.empty(),
         "sizes_cut_requests_count": 0
       };
+  @override
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.edit: ["cut_request_results"],
+        ServerActions.view: ["cut_request_results"],
+      };
 
-  // @override
-  // List<String>? isRequiredObjectsList() => ["cut_request_results"];
+  @override
+  Text? getMainSubtitleHeaderText(BuildContext context) {
+    return Text(
+      customers?.name ?? "",
+    );
+  }
+
+  @override
+  bool isRequiredObjectsListChecker() {
+    return cut_request_results?.length == cut_request_results_count;
+  }
+
+  @override
+  Future<bool> hasPermissionDelete(BuildContext context,
+      {ViewAbstract? viewAbstract}) async {
+    if (cut_request_results_count.toNonNullable() > 0) return false;
+    return super.hasPermissionDelete(context);
+  }
+
   @override
   List<String> getMainFields() => [
         "products",
@@ -199,9 +222,16 @@ class CutRequest extends ViewAbstract<CutRequest>
   PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
       BuildContext context) {
     CutRequest o = CutRequest();
+    o.cut_status = CutStatus.COMPLETED;
+    ProductSize size = ProductSize();
+    size.width = 700;
+    size.length = 1000;
+    o.sizes_cut_requests = [];
+    o.sizes_cut_requests =
+        List.generate(5, (index) => SizesCutRequest()..sizes = size);
     o.products = Product().getModifiablePrintablePdfSetting(context) as Product;
     o.quantity = 231;
-    o.cut_status = CutStatus.PENDING;
+
     debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
     (o).customers = Customer()..name = "Customer name";
     o.customers?.address = "Damascus - Syria";
@@ -218,6 +248,29 @@ class CutRequest extends ViewAbstract<CutRequest>
                   as Product));
 
     return o;
+  }
+
+  String getRequestSizes(BuildContext context) {
+    List<String>? requestSizes = sizes_cut_requests?.map((element) {
+      return "- ${element.getMainHeaderTextOnly(context)}";
+    }).toList();
+    return requestSizes?.join("\n") ?? "-";
+  }
+
+  double? getTotalWaste() {
+    double? total;
+    cut_request_results?.forEach((element) {
+      try {
+        var d = element.products_inputs?.products_inputs_details
+            ?.where(
+                (element) => element.products?.status == ProductStatus.WASTED)
+            .map((e) => e.quantity)
+            .reduce((value, element) =>
+                value.toNonNullable() + element.toNonNullable());
+        total = total.toNonNullable() + d.toNonNullable();
+      } catch (e) {}
+    });
+    return total;
   }
 
   @override
@@ -293,9 +346,7 @@ class CutRequest extends ViewAbstract<CutRequest>
       PdfPageFormat? format,
       PrintCutRequest? setting}) async {
     CutRequestRecieptPDF productsLabel = CutRequestRecieptPDF(context,
-        cutRequest: getModifiablePrintablePdfSetting(context) as CutRequest,
-        setting: setting,
-        themeData: theme);
+        cutRequest: this, setting: setting, format: format, themeData: theme);
 
     return await productsLabel.generate();
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -29,7 +30,16 @@ class Purchases extends InvoiceMaster<Purchases> {
   String? getTableNameApi() => "purchases";
 
   @override
-  List<String>? isRequiredObjectsList() => ["purchases_details"];
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.add: ["purchases_details"],
+        ServerActions.edit: ["purchases_details"],
+        ServerActions.view: ["purchases_details"],
+      };
+
+  @override
+  bool isRequiredObjectsListChecker() {
+    return purchases_details?.length == purchases_details_count;
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

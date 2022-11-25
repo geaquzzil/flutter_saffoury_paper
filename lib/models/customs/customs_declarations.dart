@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations_images.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -47,7 +48,9 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override
-  List<String>? isRequiredObjectsList() => ["customs_declarations_images"];
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["customs_declarations_images"],
+      };
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {

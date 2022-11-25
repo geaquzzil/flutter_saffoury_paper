@@ -59,6 +59,7 @@ class _ListCardItemState<T extends ViewAbstract>
         onLongPress: () => widget.object.onCardLongClicked(context),
         title: (widget.object.getMainHeaderText(context)),
         subtitle: (widget.object.getMainSubtitleHeaderText(context)),
+      
         leading: widget.object.getCardLeadingCircleAvatar(context),
         trailing: widget.object.getPopupMenuActionListWidget(context));
   }

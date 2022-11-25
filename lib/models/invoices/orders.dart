@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -61,7 +62,9 @@ class Order extends InvoiceMaster<Order>
   String? getTableNameApi() => "orders";
 
   @override
-  List<String>? isRequiredObjectsList() => ["orders_details"];
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["orders_details"],
+      };
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -160,7 +163,6 @@ class Order extends InvoiceMaster<Order>
     ];
   }
 
-  
   @override
   List<CartableInvoiceDetailsInterface> getDetailList() {
     return orders_details ?? [];

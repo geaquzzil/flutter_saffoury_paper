@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
@@ -15,6 +16,7 @@ import '../../constants.dart';
 import '../../new_components/cards/outline_card.dart';
 import '../../providers/actions/list_multi_key_provider.dart';
 import '../../screens/base_shared_actions_header.dart';
+import '../home/components/empty_widget.dart';
 import '../lists/list_api_selected_searchable_widget.dart';
 import '../lists/list_static_editable.dart';
 import 'package:nil/nil.dart';
@@ -128,7 +130,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
             getAddFloatingButton2(context),
           ],
         ),
-        body: getBody());
+        body: getFutureBody());
   }
 
   FloatingActionButton getAddFloatingButton2(BuildContext context) {
@@ -258,6 +260,35 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
             ]);
       },
       child: const Icon(Icons.add),
+    );
+  }
+
+  Widget getFutureBody() {
+    if (getBodyWithoutApi()) {
+      return getBody();
+    }
+    return FutureBuilder(
+      future:
+          widget.viewAbstract.viewCallGetFirstFromList(widget.viewAbstract.iD),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data != null) {
+            widget.viewAbstract = snapshot.data as ViewAbstract;
+            context
+                .read<ListMultiKeyProvider>()
+                .edit(snapshot.data as ViewAbstract);
+
+            return getBody();
+          } else {
+            return EmptyWidget(
+                lottiUrl:
+                    "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+                title: AppLocalizations.of(context)!.cantConnect,
+                subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+          }
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -412,5 +443,19 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
 
   String getMessage() {
     return "${AppLocalizations.of(context)!.areYouSure}${getActionText()} ${getLabelViewAbstract()} ";
+  }
+
+  bool getBodyWithoutApi() {
+    bool canGetBody =
+        widget.viewAbstract.isRequiredObjectsList()?[ServerActions.edit] ==
+            null;
+    if (canGetBody) {
+      debugPrint("BaseEditWidget getBodyWithoutApi skiped");
+      return true;
+    }
+    bool res = widget.viewAbstract.isNew() ||
+        widget.viewAbstract.isRequiredObjectsListChecker();
+    debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
+    return res;
   }
 }

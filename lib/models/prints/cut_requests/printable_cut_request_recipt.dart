@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_product_label_pdf.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
@@ -18,10 +19,14 @@ import '../../products/products.dart';
 class CutRequestRecieptPDF {
   material.BuildContext context;
   CutRequest cutRequest;
+  PdfPageFormat? format;
   ThemeData themeData;
   PrintCutRequest? setting;
   CutRequestRecieptPDF(this.context,
-      {required this.cutRequest, required this.themeData, this.setting});
+      {required this.cutRequest,
+      required this.themeData,
+      this.setting,
+      this.format});
 
   Future<Document> generate() async {
     final pdf = Document(
@@ -29,7 +34,7 @@ class CutRequestRecieptPDF {
     final pdfRec = PdfReceipt(
         context, CutRequestRecipt(cutRequest: cutRequest, setting: setting));
     await pdfRec.initHeader();
-    pdf.addPage(pdfRec.getPage(PdfPageFormat.a4));
+    pdf.addPage(pdfRec.getPage(format));
     CutRequestProductLabelPDF cutRequestProductLabelPDF =
         CutRequestProductLabelPDF(context,
             cutRequest: cutRequest, themeData: themeData, setting: setting);
@@ -83,6 +88,11 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
 
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
+      getPrintableRecieptFooterTitleAndDescription(
+              material.BuildContext context, PrintCutRequest? pca) =>
+          {};
+  @override
+  Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
       getPrintableRecieptHeaderTitleAndDescription(
           material.BuildContext context, PrintCutRequest? pca) {
     var converter = NumberToCharacterConverter('en');
@@ -111,9 +121,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
       1: [
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.requestedSizeLabel,
-            description:
-                "${cutRequest.products?.getMainHeaderTextOnly(context)}\n ID" ??
-                    "-"),
+            description: cutRequest.getRequestSizes(context)),
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.quantity,
             description:
@@ -132,12 +140,67 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
                     ?.getFieldLabelString(context, cutRequest.cut_status!)
                     .toUpperCase() ??
                 ""),
+        if (cutRequest.cut_status == CutStatus.COMPLETED)
+          RecieptHeaderTitleAndDescriptionInfo(
+              title: AppLocalizations.of(context)!.totalWaste,
+              hexColor:
+                  material.Colors.red.value.toRadixString(16).substring(2, 8),
+              description:
+                  cutRequest.getTotalWaste().toCurrencyFormat(symbol: "kg")),
       ],
       3: [
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.comments,
-            description: cutRequest.comments ?? "")
+            description: cutRequest.comments ?? "-")
       ],
     };
+  }
+
+  Widget getProductDetailsWidget(material.BuildContext context,
+      ProductInputDetails pid, PrintCutRequest? setting) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Row(children: [
+          buildQrCode(context, Product(),
+              printCommandAbstract: setting, size: 40),
+          SizedBox(width: 1 * (PdfPageFormat.cm)),
+          Text(
+            pid.products?.getMainHeaderTextOnly(context) ?? "-",
+          ),
+          SizedBox(width: 1 * (PdfPageFormat.cm)),
+          Text(pid.quantity.toCurrencyFormat(symbol: "kg") ?? "-"),
+          SizedBox(width: 1 * (PdfPageFormat.cm)),
+          Text(pid.products?.status
+                  ?.getFieldLabelString(context, pid.products!.status!) ??
+              "-"),
+        ]));
+  }
+
+  @override
+  Widget? getPrintableRecieptCustomWidget(
+      material.BuildContext context, PrintCutRequest? pca) {
+    if (cutRequest.cut_status == CutStatus.COMPLETED) {
+      var d = cutRequest.cut_request_results?.map((e) => Column(children: [
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(e.getMainHeaderTextOnly(context),
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
+                  Expanded(child: Divider(height: 1, color: PdfColors.grey200))
+                ]),
+            if (e.products_inputs?.products_inputs_details != null)
+              ...e.products_inputs!.products_inputs_details!
+                  .map((e) => getProductDetailsWidget(context, e, pca))
+                  .toList()
+          ]));
+
+      return Column(children: [
+        // Divider(height: 1, color: PdfColors.grey200),
+        if (d != null) ...d.whereType<Column>().toList()
+      ]);
+    }
+    return null;
   }
 }

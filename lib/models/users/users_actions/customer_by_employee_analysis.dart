@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
@@ -31,9 +32,10 @@ class CustomerByEmployeeAnanlysis
     this.iD = iD;
     this.dateObject = dateObject;
   }
-
   @override
-  List<String>? isRequiredObjectsList() => ["orders"];
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["orders"],
+      };
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
     throw UnimplementedError();

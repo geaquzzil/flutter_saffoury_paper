@@ -64,8 +64,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return true;
   }
 
-  List<String>? isRequiredObjectsList() {
+  Map<ServerActions, List<String>>? isRequiredObjectsList() {
     return null;
+  }
+
+  /// call api to get objects list if its false
+  bool isRequiredObjectsListChecker() {
+    return false;
   }
 
   Map<String, String> getBodyExtenstionParams() => {};
@@ -169,7 +174,26 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  Future<T?> viewCall(int iD, {OnResponseCallback? onResponse}) async {
+  Future<T?> viewCallGetFirstFromList(
+    int iD,
+  ) async {
+    var response = await getRespones(serverActions: ServerActions.view);
+    if (response == null) return null;
+    if (response.statusCode == 200) {
+      Iterable l = convert.jsonDecode(response.body);
+      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+      return t[0];
+    } else if (response.statusCode == 401) {
+      return null;
+    } else {
+      return null;
+    }
+  }
+
+  Future<T?> viewCall(
+    int iD, {
+    OnResponseCallback? onResponse,
+  }) async {
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.view);
     if (response == null) return null;
@@ -406,9 +430,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  HttpWithMiddleware getHttp() => HttpWithMiddleware.build(middlewares: [
-        HttpLogger(logLevel: LogLevel.BODY),
-      ]);
+  HttpWithMiddleware getHttp() {
+    return HttpWithMiddleware.build(
+        requestTimeout: Duration(seconds: 60),
+        middlewares: [
+          HttpLogger(logLevel: LogLevel.BODY),
+        ]);
+  }
 
   Map<String, String> getBodyCurrentAction(ServerActions? action,
       {String? fieldBySearchQuery,
@@ -428,7 +456,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     mainBody['objectTables'] = convert.jsonEncode(isRequiredObjects());
     mainBody['detailTables'] = isRequiredObjectsList() == null
         ? convert.jsonEncode([])
-        : convert.jsonEncode(isRequiredObjectsList());
+        : convert.jsonEncode(isRequiredObjectsList()?[action] ?? []);
 
     String? table = getTableNameApi();
     if (table != null) {
