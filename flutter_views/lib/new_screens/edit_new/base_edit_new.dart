@@ -271,6 +271,7 @@ class BaseEditWidget extends StatelessWidget {
         "getControllerWidget field => $field isAutoComplete=> $isAutoComplete isAutoCompleteViewAbstract=>$isAutoCompleteViewAbstract  isAutoCompleteByCustomList=>$isAutoCompleteByCustomList");
     if (isAutoComplete) {
       return getControllerEditTextAutoComplete(context,
+          enabled: isFieldEnabled(field),
           viewAbstract: viewAbstract,
           field: field,
           controller: getController(context, field: field, value: fieldValue));
@@ -299,6 +300,7 @@ class BaseEditWidget extends StatelessWidget {
         context,
         viewAbstract: viewAbstract,
         withDecoration: _canBuildChildern(),
+        // enabled: isFieldEnabled(field),
         field: field,
         controller: getController(context,
             field: field, value: fieldValue, isAutoCompleteVA: true),
@@ -327,6 +329,7 @@ class BaseEditWidget extends StatelessWidget {
           autoCompleteBySearchQuery: true,
           context,
           viewAbstract: fieldValue,
+          // enabled: isFieldEnabled(field),
           field: field,
           type: AutoCompleteFor.NORMAL,
           controller: TextEditingController(),

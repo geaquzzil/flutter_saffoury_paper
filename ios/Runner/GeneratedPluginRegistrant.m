@@ -24,6 +24,12 @@
 @import flutter_keyboard_visibility;
 #endif
 
+#if __has_include(<flutter_share/FlutterSharePlugin.h>)
+#import <flutter_share/FlutterSharePlugin.h>
+#else
+@import flutter_share;
+#endif
+
 #if __has_include(<number_to_character/NumberToCharacterPlugin.h>)
 #import <number_to_character/NumberToCharacterPlugin.h>
 #else
@@ -60,6 +66,7 @@
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
   [FlutterCustomDialogPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterCustomDialogPlugin"]];
   [FlutterKeyboardVisibilityPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterKeyboardVisibilityPlugin"]];
+  [FlutterSharePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSharePlugin"]];
   [NumberToCharacterPlugin registerWithRegistrar:[registry registrarForPlugin:@"NumberToCharacterPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [PrintingPlugin registerWithRegistrar:[registry registrarForPlugin:@"PrintingPlugin"]];

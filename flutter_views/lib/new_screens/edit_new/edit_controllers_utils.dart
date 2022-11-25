@@ -198,10 +198,12 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     required String field,
     required TextEditingController controller,
     AutoCompleteFor? type,
+    bool enabled=true,
     bool withDecoration = true,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
+        enabled: enabled,
           controller: controller,
           onChangeGetObject: (text) => autoCompleteBySearchQuery
               ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)

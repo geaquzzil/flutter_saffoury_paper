@@ -197,7 +197,8 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "date": TextInputType.datetime,
-        "quantitiy": TextInputType.number,
+        "quantity": TextInputType.number,
+        
         "comments": TextInputType.text
       };
 

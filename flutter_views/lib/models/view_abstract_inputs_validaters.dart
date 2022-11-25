@@ -146,7 +146,7 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
-  String? Function(dynamic) getTextInputValidatorCompose(
+  String? Function(dynamic d) getTextInputValidatorCompose(
       BuildContext context, String field) {
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
@@ -154,6 +154,10 @@ abstract class ViewAbstractInputAndValidater<T>
       if (isFieldRequired(field)) FormBuilderValidators.required(),
       if (maxValue != null) FormBuilderValidators.max(maxValue),
       if (minValue != null) FormBuilderValidators.min(minValue),
+      // if (getTextInputType(field) == TextInputType.emailAddress)
+      //   FormBuilderValidators.email(),
+      if (getTextInputType(field) == TextInputType.phone)
+        FormBuilderValidators.equalLength(10),
     ]);
   }
 

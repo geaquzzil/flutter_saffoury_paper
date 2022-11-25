@@ -41,6 +41,11 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin flutter_plugin_android_lifecycle, io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin", e);
     }
     try {
+      flutterEngine.getPlugins().add(new com.example.fluttershare.FlutterSharePlugin());
+    } catch(Exception e) {
+      Log.e(TAG, "Error registering plugin flutter_share, com.example.fluttershare.FlutterSharePlugin", e);
+    }
+    try {
       flutterEngine.getPlugins().add(new com.makriaymenabderraouf.number_to_character.NumberToCharacterPlugin());
     } catch(Exception e) {
       Log.e(TAG, "Error registering plugin number_to_character, com.makriaymenabderraouf.number_to_character.NumberToCharacterPlugin", e);

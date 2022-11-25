@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
@@ -286,8 +287,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     onPopupMenuActionSelected(context, e);
   }
 
-  void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result) {
+  void onPopupMenuActionSelected(
+      BuildContext context, MenuItemBuild result) async {
     debugPrint("onPopupMenuActionSelected $result");
+    if (result.icon == Icons.share) {
+      await FlutterShare.share(title: "title");
+    }
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
 
