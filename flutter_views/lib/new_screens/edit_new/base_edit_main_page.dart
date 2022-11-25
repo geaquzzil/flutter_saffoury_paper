@@ -124,9 +124,10 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
             ),
             if (widget.viewAbstract is ListableInterface)
               getAddToListFloatingButton(context),
-            const SizedBox(
-              width: kDefaultPadding,
-            ),
+            if (widget.viewAbstract is ListableInterface)
+              const SizedBox(
+                width: kDefaultPadding,
+              ),
             getAddFloatingButton2(context),
           ],
         ),
@@ -268,7 +269,8 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
       child: const Icon(Icons.add),
     );
   }
- bool getBodyWithoutApi() {
+
+  bool getBodyWithoutApi() {
     bool canGetBody =
         widget.viewAbstract.isRequiredObjectsList()?[ServerActions.edit] ==
             null;
@@ -281,6 +283,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
     return res;
   }
+
   Widget getFutureBody() {
     if (getBodyWithoutApi()) {
       return getBody();
@@ -462,6 +465,4 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
   String getMessage() {
     return "${AppLocalizations.of(context)!.areYouSure}${getActionText()} ${getLabelViewAbstract()} ";
   }
-
- 
 }

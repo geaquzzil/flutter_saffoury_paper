@@ -291,7 +291,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       BuildContext context, MenuItemBuild result) async {
     debugPrint("onPopupMenuActionSelected $result");
     if (result.icon == Icons.share) {
-      await FlutterShare.share(title: "title");
+      try {
+        await FlutterShare.share(title: "title");
+      } catch (e) {}
     }
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
