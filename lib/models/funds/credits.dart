@@ -22,6 +22,12 @@ part 'credits.g.dart';
 @reflector
 class Credits extends MoneyFunds<Credits> {
   Credits() : super();
+
+  @override
+  Credits getSelfNewInstance() {
+    return Credits();
+  }
+
   @override
   List<String> getMainFields() =>
       ["customers", "employees", "date", "value", "equalities", "warehouse"];

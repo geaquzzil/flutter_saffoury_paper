@@ -47,6 +47,10 @@ class Order extends InvoiceMaster<Order>
   Order() : super() {
     orders_details = <OrderDetails>[];
   }
+  @override
+  Order getSelfNewInstance() {
+    return Order();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -258,6 +262,10 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
   // int? OrderID;
   Order? orders;
   OrderDetails() : super();
+  @override
+  OrderDetails getSelfNewInstance() {
+    return OrderDetails();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

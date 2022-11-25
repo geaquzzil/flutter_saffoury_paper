@@ -10,6 +10,10 @@ part 'governorates.g.dart';
 @reflector
 class Governorate extends BaseWithNameString<Governorate> {
   Governorate() : super();
+  @override
+  Governorate getSelfNewInstance() {
+    return Governorate();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

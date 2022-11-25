@@ -162,6 +162,11 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  Product getSelfNewInstance() {
+    return Product();
+  }
+
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.product;
   }
@@ -610,8 +615,7 @@ class Product extends ViewAbstract<Product>
   // }
 
   @override
-  PrintProduct? getPrintCommand(BuildContext context) =>
-      PrintProduct();
+  PrintProduct? getPrintCommand(BuildContext context) => PrintProduct();
 
   static String? intFromString(dynamic number) => number?.toString();
 
@@ -653,8 +657,7 @@ class Product extends ViewAbstract<Product>
   IconData getModifibleIconData() => getMainIconData();
 
   @override
-  getModifibleSettingObject(BuildContext context) =>
-      PrintProduct();
+  getModifibleSettingObject(BuildContext context) => PrintProduct();
 
   @override
   String getModifibleTitleName(BuildContext context) =>

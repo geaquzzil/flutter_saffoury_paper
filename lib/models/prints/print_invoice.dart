@@ -39,6 +39,11 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
   PrintInvoice() : super();
 
   @override
+  PrintInvoice getSelfNewInstance() {
+    return PrintInvoice();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({

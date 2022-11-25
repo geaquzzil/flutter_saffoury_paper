@@ -17,6 +17,13 @@ class CustomerClinetGuide
   Customer customer;
 
   CustomerClinetGuide(this.customer);
+
+  @override
+  CustomerClinetGuide getSelfNewInstance() {
+    //TODO
+    return CustomerClinetGuide(Customer());
+  }
+
   @override
   CustomerClinetGuide fromJsonViewAbstract(Map<String, dynamic> json) {
     // TODO: implement fromJsonViewAbstract

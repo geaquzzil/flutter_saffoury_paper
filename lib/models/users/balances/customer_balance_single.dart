@@ -15,6 +15,12 @@ class CustomerBalanceSingle extends Customer
   // bool requireTerms;
 
   CustomerBalanceSingle();
+
+  @override
+  CustomerBalanceSingle getSelfNewInstance() {
+    return CustomerBalanceSingle();
+  }
+
   @override
   CustomerBalanceSingle fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomerBalanceSingle.fromJson(json);

@@ -16,11 +16,16 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   String? name;
   String? phone;
   double? maxWeight;
-   @JsonKey(fromJson: intFromString)
+  @JsonKey(fromJson: intFromString)
   String? carNumber;
   Governorate? governorates;
 
   CargoTransporter() : super();
+
+  @override
+  CargoTransporter getSelfNewInstance() {
+    return CargoTransporter();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -124,5 +129,5 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   CargoTransporter fromJsonViewAbstract(Map<String, dynamic> json) =>
       CargoTransporter.fromJson(json);
 
-      static String? intFromString(dynamic number) => number?.toString();
+  static String? intFromString(dynamic number) => number?.toString();
 }

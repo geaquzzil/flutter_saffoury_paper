@@ -268,7 +268,19 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
       child: const Icon(Icons.add),
     );
   }
-
+ bool getBodyWithoutApi() {
+    bool canGetBody =
+        widget.viewAbstract.isRequiredObjectsList()?[ServerActions.edit] ==
+            null;
+    if (canGetBody) {
+      debugPrint("BaseEditWidget getBodyWithoutApi skiped");
+      return true;
+    }
+    bool res = widget.viewAbstract.isNew() ||
+        widget.viewAbstract.isRequiredObjectsListChecker();
+    debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
+    return res;
+  }
   Widget getFutureBody() {
     if (getBodyWithoutApi()) {
       return getBody();
@@ -451,17 +463,5 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     return "${AppLocalizations.of(context)!.areYouSure}${getActionText()} ${getLabelViewAbstract()} ";
   }
 
-  bool getBodyWithoutApi() {
-    bool canGetBody =
-        widget.viewAbstract.isRequiredObjectsList()?[ServerActions.edit] ==
-            null;
-    if (canGetBody) {
-      debugPrint("BaseEditWidget getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = widget.viewAbstract.isNew() ||
-        widget.viewAbstract.isRequiredObjectsListChecker();
-    debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
-    return res;
-  }
+ 
 }

@@ -16,6 +16,12 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   int? total;
   List<ChangesRecordGroup>? totalGrouped = [];
   ChangesRecords() : super();
+
+  @override
+  ChangesRecords getSelfNewInstance() {
+    return ChangesRecords();
+  }
+
   int getTotal() {
     return total.toNonNullable();
   }

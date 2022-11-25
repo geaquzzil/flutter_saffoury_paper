@@ -14,6 +14,12 @@ part 'debits.g.dart';
 @reflector
 class Debits extends MoneyFunds<Debits> {
   Debits() : super();
+
+  @override
+  Debits getSelfNewInstance() {
+    return Debits();
+  }
+
   @override
   List<String> getMainFields() =>
       ["customer", "employee", "date", "value", "equalities", "warehouse"];
@@ -36,6 +42,4 @@ class Debits extends MoneyFunds<Debits> {
   @override
   Debits fromJsonViewAbstract(Map<String, dynamic> json) =>
       Debits.fromJson(json);
-
-
 }

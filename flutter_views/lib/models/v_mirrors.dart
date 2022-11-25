@@ -21,12 +21,13 @@ class Reflector extends Reflectable {
 const reflector = Reflector();
 
 abstract class VMirrors<T> {
+  T getSelfNewInstance();
   Type getMirrorFieldsType(String field) {
     return getMirrorFieldsMapNewInstance()[field].runtimeType;
   }
 
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};
-  
+
   InstanceMirror getInstanceMirror() {
     return reflector.reflect(this);
   }

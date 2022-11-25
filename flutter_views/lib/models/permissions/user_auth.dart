@@ -23,6 +23,17 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   Setting? setting;
   Dealers? dealers;
 
+  AuthUser({bool? setPassword}) : super() {
+    // if (setPassword ?? false) {
+    //   setRandomPassword();
+    // }
+    setRandomPassword();
+  }
+  @override
+  AuthUser getSelfNewInstance() {
+    return AuthUser();
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "login": false,
@@ -33,13 +44,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
         "userlevels": PermissionLevelAbstract(),
         "setting": Setting()
       };
-
-  AuthUser({bool? setPassword}) : super() {
-    // if (setPassword ?? false) {
-    //   setRandomPassword();
-    // }
-    setRandomPassword();
-  }
   @override
   Map<String, dynamic> getMirrorFieldsNewInstance() => {
         "login": false,

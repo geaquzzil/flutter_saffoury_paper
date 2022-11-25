@@ -39,6 +39,12 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
   List<Manufacture>? manufactures;
 
   FilterableDataApi() : super();
+
+  @override
+  FilterableDataApi getSelfNewInstance() {
+    return FilterableDataApi();
+  }
+
   factory FilterableDataApi.fromJson(Map<String, dynamic> data) =>
       _$FilterableDataApiFromJson(data);
 
@@ -55,7 +61,7 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
   String? getTableNameApi() => "";
   @override
   String? getCustomAction() => "list_server_data";
-  
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() {
     // TODO: implement getMirrorFieldsMapNewInstance

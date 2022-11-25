@@ -10,7 +10,10 @@ part 'countries.g.dart';
 @reflector
 class Country extends BaseWithNameString<Country> {
   Country() : super();
-
+  @override
+  Country getSelfNewInstance() {
+    return  Country();
+  }
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance();

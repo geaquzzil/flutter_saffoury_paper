@@ -8,6 +8,14 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
+
+  PrintCustomerBalances():super();
+
+
+  @override
+  PrintCustomerBalances getSelfNewInstance() {
+    return PrintCustomerBalances();
+  }
   @override
   PrintCustomerBalances fromJsonViewAbstract(Map<String, dynamic> json) => this;
 

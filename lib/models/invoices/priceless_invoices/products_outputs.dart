@@ -25,6 +25,10 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   Warehouse? warehouse;
 
   ProductOutput() : super();
+  @override
+  ProductOutput getSelfNewInstance() {
+    return ProductOutput();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -76,6 +80,11 @@ class ProductOutputDetails extends InvoiceMasterDetails<ProductOutputDetails> {
   ProductOutput? products_outputs;
 
   ProductOutputDetails() : super();
+
+  @override
+  ProductOutputDetails getSelfNewInstance() {
+    return ProductOutputDetails();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

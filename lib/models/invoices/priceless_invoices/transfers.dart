@@ -23,6 +23,10 @@ class Transfers extends InvoiceMaster<Transfers> {
   int? trasfers_details_count;
 
   Transfers() : super();
+  @override
+  Transfers getSelfNewInstance() {
+    return Transfers();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -72,6 +76,10 @@ class TransfersDetails extends InvoiceMasterDetails<TransfersDetails> {
   // int? TransferID;
   Transfers? transfers;
   TransfersDetails() : super();
+  @override
+  TransfersDetails getSelfNewInstance() {
+    return TransfersDetails();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

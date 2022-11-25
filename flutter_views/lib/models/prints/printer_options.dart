@@ -23,6 +23,10 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
       this.copies = 1,
       this.printPaperSize = PrintPaperSize.Default})
       : super();
+  @override
+  PrinterOptions getSelfNewInstance() {
+    return PrinterOptions();
+  }
 
   @override
   List<String> getMainFields() =>

@@ -13,6 +13,10 @@ class Quality extends BaseWithNameString<Quality> {
   int? products_count;
 
   Quality() : super();
+  @override
+  Quality getSelfNewInstance() {
+    return Quality();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

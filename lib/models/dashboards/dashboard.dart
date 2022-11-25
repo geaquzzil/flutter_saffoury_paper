@@ -83,6 +83,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     date = dateObject;
   }
   @override
+  Dashboard getSelfNewInstance() {
+    return Dashboard();
+  }
+
+  @override
   Future<Dashboard?> callApi() async {
     return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
   }
@@ -292,7 +297,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             tabs: [
               TabControllerHelper(
                 "orders",
-              
                 widget:
                     ListStaticWidget(list: orders!, emptyWidget: Text("Empty")),
               ),

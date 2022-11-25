@@ -29,6 +29,11 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
 
   PrintCutRequest() : super();
 
+   @override
+  PrintCutRequest getSelfNewInstance() {
+    return PrintCutRequest();
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()

@@ -25,6 +25,11 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   CustomerRequestSize() : super();
 
   @override
+  CustomerRequestSize getSelfNewInstance() {
+    return CustomerRequestSize();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
@@ -35,7 +40,6 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
 
   @override
   String? getTableNameApi() => "customers_request_sizes";
-
 
   @override
   Map<ServerActions, List<String>>? isRequiredObjectsList() => {
@@ -75,6 +79,10 @@ class CustomerRequestSizeDetails
 
   CustomerRequestSizeDetails() : super() {
     date = "".toDateTimeNowString();
+  }
+  @override
+  CustomerRequestSizeDetails getSelfNewInstance() {
+    return CustomerRequestSizeDetails();
   }
 
   @override

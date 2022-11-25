@@ -163,6 +163,11 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
         "delete_action": 0
       };
 
+  @override
+  PermissionActionAbstract getSelfNewInstance() {
+    return  PermissionActionAbstract();
+  }
+
   // @override
   // Map<String, Type> getMirrorFieldsTypeMap() => {
   //       "table_name": String,

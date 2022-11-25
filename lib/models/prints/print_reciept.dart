@@ -23,6 +23,12 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
   MoneyFunds? moneyFund;
 
   PrintReceipt() : super();
+
+  @override
+  PrintReceipt getSelfNewInstance() {
+    return PrintReceipt();
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()

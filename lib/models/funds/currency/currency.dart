@@ -11,6 +11,10 @@ class Currency extends BaseWithNameString<Currency> {
   String? nameAr;
 
   Currency() : super();
+  @override
+  Currency getSelfNewInstance() {
+    return Currency();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

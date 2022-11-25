@@ -35,6 +35,11 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     this.enteryInteval = enteryInteval;
     customAction = customAction;
   }
+  @override
+  ChartRecordAnalysis getSelfNewInstance() {
+    return ChartRecordAnalysis();
+  }
+
   double getTotalListAnalysis() {
     try {
       return responseListAnalysis

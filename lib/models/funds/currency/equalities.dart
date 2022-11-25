@@ -21,6 +21,12 @@ class Equalities extends ViewAbstract<Equalities> {
   Equalities() : super() {
     date = "".toDateTimeNowString();
   }
+
+  @override
+  Equalities getSelfNewInstance() {
+    return Equalities();
+  }
+
   @override
   ViewAbstractControllerInputType getInputType(String field) {
     if (field == "currency")

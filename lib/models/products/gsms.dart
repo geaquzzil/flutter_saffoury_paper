@@ -19,6 +19,11 @@ class GSM extends ViewAbstract<GSM> {
   GSM() : super();
 
   @override
+  GSM getSelfNewInstance() {
+    return GSM();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"products": List<Product>.empty(), "products_count": 0, "gsm": 0};
 

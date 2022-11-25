@@ -81,6 +81,10 @@ class Setting extends ViewAbstract<Setting> {
     // TODO: implement getTableNameApi
     throw UnimplementedError();
   }
+  @override
+  Setting getSelfNewInstance() {
+    return  Setting();
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() {

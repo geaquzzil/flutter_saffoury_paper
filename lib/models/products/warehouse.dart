@@ -10,6 +10,10 @@ part 'warehouse.g.dart';
 @reflector
 class Warehouse extends BaseWithNameString<Warehouse> {
   Warehouse() : super();
+  @override
+  Warehouse getSelfNewInstance() {
+    return Warehouse();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

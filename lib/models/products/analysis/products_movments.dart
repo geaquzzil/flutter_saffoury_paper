@@ -54,6 +54,11 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
   }
 
   @override
+  ProductMovments getSelfNewInstance() {
+    return ProductMovments();
+  }
+
+  @override
   String getCustomViewKey() => "products_movments$iD";
   @override
   String? getCustomAction() => "list_products_movements";

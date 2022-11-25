@@ -102,4 +102,9 @@ class CountryManufacture extends ViewAbstract<CountryManufacture> {
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.product;
+
+  @override
+  CountryManufacture getSelfNewInstance() {
+    return CountryManufacture();
+  }
 }

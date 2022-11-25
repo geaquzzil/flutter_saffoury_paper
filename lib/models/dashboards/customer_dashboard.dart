@@ -45,6 +45,10 @@ class CustomerDashboard extends UserLists<CustomerDashboard> {
     this.iD = iD;
     this.dateObject = dateObject;
   }
+  @override
+  CustomerDashboard getSelfNewInstance() {
+    return CustomerDashboard();
+  }
 
   @override
   String? getCustomAction() => "view_customer_statment_by_employee";

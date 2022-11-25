@@ -161,7 +161,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(children: [
-          buildQrCode(context, Product(),
+          buildQrCode(context, pid.products!,
               printCommandAbstract: setting, size: 40),
           SizedBox(width: 1 * (PdfPageFormat.cm)),
           Text(
@@ -185,7 +185,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(e.getMainHeaderTextOnly(context),
+                  Text(e.getMainHeaderLabelWithText(context),
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
                   Expanded(child: Divider(height: 1, color: PdfColors.grey200))

@@ -19,6 +19,11 @@ class ReservationInvoice extends InvoiceMaster<ReservationInvoice> {
   ReservationInvoice() : super();
 
   @override
+  ReservationInvoice getSelfNewInstance() {
+    return ReservationInvoice();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
@@ -54,6 +59,10 @@ class ReservationInvoiceDetails
   // int? ReservationID;
   ReservationInvoice? reservation_invoice;
   ReservationInvoiceDetails() : super();
+  @override
+  ReservationInvoiceDetails getSelfNewInstance() {
+    return ReservationInvoiceDetails();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

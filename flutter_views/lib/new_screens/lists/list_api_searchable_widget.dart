@@ -55,14 +55,17 @@ class _ListApiWidgetState<T extends ViewAbstract>
     controller.text = "";
   }
 
-  Widget getRefreshWidget() =>
-    IconButton(
-        onPressed: () {
-          _refresh();
-        },
-        icon: const Icon(Icons.refresh));
-  
+  Widget getRefreshWidget() => IconButton(
+      onPressed: () {
+        _refresh();
+      },
+      icon: const Icon(Icons.refresh));
 
+  Widget getAddBotton() => IconButton(
+      onPressed: () {
+        drawerViewAbstractObsever.getObject.onDrawerLeadingItemClicked(context);
+      },
+      icon: const Icon(Icons.add));
   Widget getTrailingWidget() {
     return IconButton(
       icon: const Icon(Icons.cancel),
@@ -151,7 +154,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            children: [const Spacer(), getRefreshWidget()],
+            children: [const Spacer(), getAddBotton(), getRefreshWidget()],
           ),
         ),
         Expanded(

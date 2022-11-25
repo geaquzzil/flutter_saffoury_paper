@@ -19,7 +19,7 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
   bool? hideInvoiceDate;
   bool? hideEmployeeName;
 
-  bool ? hideCountry;
+  bool? hideCountry;
   bool? hideManufacture;
 
   String? customerName;
@@ -30,6 +30,12 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
   String? description;
 
   PrintProduct() : super();
+
+  @override
+  PrintProduct getSelfNewInstance() {
+    return PrintProduct();
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()

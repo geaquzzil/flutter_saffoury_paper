@@ -10,6 +10,10 @@ part 'manufactures.g.dart';
 @reflector
 class Manufacture extends BaseWithNameString<Manufacture> {
   Manufacture() : super();
+  @override
+  Manufacture getSelfNewInstance() {
+    return Manufacture();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

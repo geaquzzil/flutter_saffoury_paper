@@ -13,6 +13,13 @@ class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
   Customer customer;
   bool block;
   Blocking(this.customer, this.blockMood, this.block) : super();
+
+  @override
+  Blocking getSelfNewInstance() {
+    //TODO
+    return Blocking(Customer(),BlockMood.CUSTOMER,true);
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"blockMood": BlockMood.ALL, "customer": Customer(), "block": false};
@@ -92,7 +99,7 @@ class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
   }
 
   @override
- List<Widget>?  getCustomeStandAloneSideWidget(BuildContext context) => null;
+  List<Widget>? getCustomeStandAloneSideWidget(BuildContext context) => null;
 }
 
 const _$BlockMood = {

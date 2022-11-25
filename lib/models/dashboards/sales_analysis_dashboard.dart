@@ -51,6 +51,11 @@ class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard> {
   SalesAnalysisDashboard();
 
   @override
+  SalesAnalysisDashboard getSelfNewInstance() {
+    return SalesAnalysisDashboard();
+  }
+
+  @override
   Map<String, IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap
     throw UnimplementedError();

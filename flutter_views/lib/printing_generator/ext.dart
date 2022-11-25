@@ -32,7 +32,7 @@ Widget buildQrCode<T extends PrintLocalSetting>(
           barcode: Barcode.qrCode(),
           data: printObj.getPrintableQrCode(),
         )),
-    SizedBox(height: .4 * (PdfPageFormat.cm)),
+    SizedBox(height: .1 * (PdfPageFormat.cm)),
     Text(printObj.getPrintableQrCodeID(), style: const TextStyle(fontSize: 9)),
   ]);
 }

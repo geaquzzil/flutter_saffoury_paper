@@ -13,6 +13,10 @@ class AccountName extends BaseWithNameString<AccountName> {
   // int? TypeID;
   AccountNameType? account_names_types;
   AccountName() : super();
+  @override
+  AccountName getSelfNewInstance() {
+    return AccountName();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -67,6 +71,10 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
   int? account_names_count;
 
   AccountNameType() : super();
+  @override
+  AccountNameType getSelfNewInstance() {
+    return AccountNameType();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

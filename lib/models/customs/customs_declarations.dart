@@ -31,6 +31,10 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration> {
   CustomsDeclaration() : super() {
     date = "".toDateTimeNowString();
   }
+  @override
+  CustomsDeclaration getSelfNewInstance() {
+    return CustomsDeclaration();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

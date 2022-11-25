@@ -23,6 +23,11 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
   CutRequestResult() : super();
 
   @override
+  CutRequestResult getSelfNewInstance() {
+    return CutRequestResult();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "cut_requests": CutRequest(),
         "products_inputs": ProductInput(),
@@ -52,7 +57,7 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
-      "${getIDFormat(context)} : ${cut_requests?.getMainHeaderTextOnly(context)} ";
+      "${getIDFormat(context)}  ${cut_requests?.getMainHeaderTextOnly(context) ?? ""} ";
 
   @override
   IconData getMainIconData() => Icons.content_cut;

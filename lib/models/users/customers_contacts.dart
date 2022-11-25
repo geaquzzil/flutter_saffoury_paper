@@ -22,6 +22,11 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
   CustomerContacts() : super();
 
   @override
+  CustomerContacts getSelfNewInstance() {
+    return CustomerContacts();
+  }
+
+  @override
   Map<String, IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap
     throw UnimplementedError();

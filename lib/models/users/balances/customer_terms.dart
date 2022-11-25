@@ -25,6 +25,12 @@ class CustomerTerms extends Customer
   CustomerTerms.init(int iD) {
     this.iD = iD;
   }
+
+  @override
+  CustomerTerms getSelfNewInstance() {
+    return CustomerTerms();
+  }
+
   @override
   String? getCustomAction() => "list_customers_terms";
   @override

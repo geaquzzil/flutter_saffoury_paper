@@ -7,6 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     implements CustomViewHorizontalListResponse<UnusedRecords> {
+
   List<int> list = [];
   List<T>? listObjects = [];
   @JsonKey(ignore: true)
@@ -17,7 +18,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   UnusedRecords.init(T viewAbstract) {
     this.viewAbstract = viewAbstract;
   }
-
+  @override
+  UnusedRecords getSelfNewInstance() {
+  return  UnusedRecords();
+  }
   @override
   Map<String, String> get getCustomMap =>
       {if (requireObjects != null) "requireObjects": "true"};

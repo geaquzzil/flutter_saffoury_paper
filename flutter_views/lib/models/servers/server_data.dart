@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 class FilterableData<T> extends VObject<T> {
   FilterableData() : super();
+
   @JsonKey(ignore: true)
   Map<String, List<ViewAbstract>> filterableObjects = {};
 
@@ -18,10 +19,16 @@ class FilterableData<T> extends VObject<T> {
     // TODO: implement getTableNameApi
     throw UnimplementedError();
   }
-  
+
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     // TODO: implement toJsonViewAbstract
+    throw UnimplementedError();
+  }
+  
+  @override
+  T getSelfNewInstance() {
+    // TODO: implement getSelfNewInstance
     throw UnimplementedError();
   }
 }

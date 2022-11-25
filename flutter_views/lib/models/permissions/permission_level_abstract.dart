@@ -13,14 +13,19 @@ part 'permission_level_abstract.g.dart';
 class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   String? userlevelname;
 
-  static Map<String, PermissionActionAbstract> hashMapOfPermissionTableAction =
-      {};
-
-  List<PermissionActionAbstract>? permissions_levels;
   PermissionLevelAbstract() : super() {
     userlevelname = "-";
     permissions_levels = List.empty();
   }
+  @override
+  PermissionLevelAbstract getSelfNewInstance() {
+    return PermissionLevelAbstract();
+  }
+
+  static Map<String, PermissionActionAbstract> hashMapOfPermissionTableAction =
+      {};
+
+  List<PermissionActionAbstract>? permissions_levels;
 
   static bool containsStaticKey(String key) {
     return hashMapOfPermissionTableAction.containsKey(key);

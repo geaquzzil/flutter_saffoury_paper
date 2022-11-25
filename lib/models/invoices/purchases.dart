@@ -25,6 +25,10 @@ class Purchases extends InvoiceMaster<Purchases> {
   int? purchases_refunds_count;
 
   Purchases() : super();
+  @override
+  Purchases getSelfNewInstance() {
+    return Purchases();
+  }
 
   @override
   String? getTableNameApi() => "purchases";
@@ -94,6 +98,11 @@ class PurchasesDetails extends InvoiceMasterDetails<PurchasesDetails> {
 
   Purchases? purchases;
   PurchasesDetails() : super();
+
+  @override
+  PurchasesDetails getSelfNewInstance() {
+    return PurchasesDetails();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

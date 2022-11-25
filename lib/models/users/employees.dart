@@ -45,6 +45,10 @@ class Employee extends User<Employee> {
   Warehouse? warehouse;
 
   Employee() : super();
+  @override
+  Employee getSelfNewInstance() {
+    return Employee();
+  }
 
   @override
   List<String> getMainFields() {

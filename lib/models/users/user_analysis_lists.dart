@@ -75,6 +75,10 @@ class UserLists<T> extends AuthUser<T> {
   int? cargo_transporters_count;
 
   UserLists() : super();
+  @override
+  UserLists getSelfNewInstance() {
+    return UserLists();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsNewInstance() =>

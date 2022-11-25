@@ -47,6 +47,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     date = "".toDateTimeNowString();
   }
 
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "fromBox": 0.toInt(),

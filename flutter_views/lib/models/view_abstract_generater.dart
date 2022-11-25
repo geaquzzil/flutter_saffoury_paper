@@ -57,9 +57,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     debugPrint(
         'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}');
     if (SizeConfig.isDesktop(context)) {
-      context
-          .read<ActionViewAbstractProvider>()
-          .change(clickedObject ?? this as ViewAbstract, ServerActions.edit);
+      context.read<ActionViewAbstractProvider>().change(
+          clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
+          ServerActions.edit);
       return;
     }
   }

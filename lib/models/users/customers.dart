@@ -41,6 +41,10 @@ class Customer extends User<Customer> {
   Employee? employees;
 
   Customer() : super();
+  @override
+  Customer getSelfNewInstance() {
+    return Customer();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -69,7 +73,6 @@ class Customer extends User<Customer> {
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customer;
 
-      
   factory Customer.fromJson(Map<String, dynamic> data) =>
       _$CustomerFromJson(data);
 

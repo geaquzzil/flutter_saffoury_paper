@@ -14,6 +14,11 @@ class TransferAccount
   Customer customerFrom;
   Customer customerTo;
   TransferAccount(this.employee, this.customerFrom, this.customerTo);
+  @override
+  TransferAccount getSelfNewInstance() {
+    //TODO
+    return TransferAccount(Employee(), Customer(), Customer());
+  }
 
   @override
   TransferAccount fromJsonViewAbstract(Map<String, dynamic> json) {
@@ -88,7 +93,7 @@ class TransferAccount
   }
 
   @override
-   List<Widget>?  getCustomeStandAloneSideWidget(BuildContext context) => null;
+  List<Widget>? getCustomeStandAloneSideWidget(BuildContext context) => null;
 }
 
 // @RestOption(Action = "action_transfer_account", ChangeActionOnAdd = true)

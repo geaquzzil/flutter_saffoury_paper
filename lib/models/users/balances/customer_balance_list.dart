@@ -25,6 +25,11 @@ class CustomerBalanceList
   CustomerBalanceList();
 
   @override
+  CustomerBalanceList getSelfNewInstance() {
+    return CustomerBalanceList();
+  }
+
+  @override
   Future<CustomerBalanceList?> callApi() async {
     // TODO: implement callApi
     return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
@@ -108,12 +113,14 @@ class CustomerBalanceList
       [];
 
   @override
-  String getPrintablePrimaryColor(PrintCustomerBalances ? setting) => Colors.orange.toHex();
+  String getPrintablePrimaryColor(PrintCustomerBalances? setting) =>
+      Colors.orange.toHex();
   @override
-  String getPrintableSecondaryColor(PrintCustomerBalances ? setting) => Colors.orange.shade500.toHex();
+  String getPrintableSecondaryColor(PrintCustomerBalances? setting) =>
+      Colors.orange.shade500.toHex();
 
   @override
-  String getPrintableQrCode()  => "TODO";
+  String getPrintableQrCode() => "TODO";
 
   @override
   String getPrintableQrCodeID() => "TODO";

@@ -16,6 +16,10 @@ class ProductSize extends ViewAbstract<ProductSize> {
   int? length;
 
   ProductSize() : super();
+  @override
+  ProductSize getSelfNewInstance() {
+    return ProductSize();
+  }
 
   @override
   String? getMainDrawerGroupName(BuildContext context) {
@@ -100,7 +104,6 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   factory ProductSize.fromJson(Map<String, dynamic> data) =>
       _$ProductSizeFromJson(data);
-      
 
   Map<String, dynamic> toJson() => _$ProductSizeToJson(this);
 

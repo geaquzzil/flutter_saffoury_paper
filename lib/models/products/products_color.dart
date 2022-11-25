@@ -14,6 +14,10 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   String? middle;
   String? back;
   ProductsColor() : super();
+  @override
+  ProductsColor getSelfNewInstance() {
+    return ProductsColor();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

@@ -64,6 +64,11 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
+  CutRequest getSelfNewInstance() {
+    return CutRequest();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "date": "",
         "comments": "",
@@ -79,8 +84,8 @@ class CutRequest extends ViewAbstract<CutRequest>
       };
   @override
   Map<ServerActions, List<String>>? isRequiredObjectsList() => {
-        ServerActions.edit: ["cut_request_results"],
-        ServerActions.view: ["cut_request_results"],
+        ServerActions.edit: ["cut_request_results", "sizes_cut_requests"],
+        ServerActions.view: ["cut_request_results", "sizes_cut_requests"],
       };
 
   @override

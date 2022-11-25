@@ -12,6 +12,12 @@ class ReportOptions extends ViewAbstract<ReportOptions> {
   String? reportHeader;
   String? reportFooter;
   ReportOptions() : super();
+
+  @override
+  ReportOptions getSelfNewInstance() {
+    return ReportOptions();
+  }
+
   @override
   List<String> getMainFields() => ["reportHeader", "reportFooter"];
 

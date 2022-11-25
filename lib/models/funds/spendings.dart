@@ -16,12 +16,17 @@ class Spendings extends MoneyFunds<Spendings> {
   // int? NameID;
   AccountName? account_names;
 
+  Spendings() : super();
+
+  @override
+  Spendings getSelfNewInstance() {
+    return Spendings();
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({"account_names": AccountName()});
-
-  Spendings() : super();
 
   @override
   List<String> getMainFields() =>

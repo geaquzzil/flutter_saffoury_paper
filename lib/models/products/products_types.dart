@@ -35,7 +35,15 @@ class ProductType extends ViewAbstract<ProductType> {
   int? products_count;
 
   bool requestAvailablity = false;
+  ProductType() : super();
+  @override
+  ProductType getSelfNewInstance() {
+    return ProductType();
+  }
 
+  ProductType.init(bool requestAvailablity) {
+    this.requestAvailablity = requestAvailablity;
+  }
   @override
   Future<List<ProductType>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {
@@ -68,11 +76,6 @@ class ProductType extends ViewAbstract<ProductType> {
     return "ProductTypeID";
   }
 
-  ProductType() : super();
-
-  ProductType.init(bool requestAvailablity) {
-    this.requestAvailablity = requestAvailablity;
-  }
   @override
   String? getCustomAction() {
     if (requestAvailablity) {
@@ -90,8 +93,6 @@ class ProductType extends ViewAbstract<ProductType> {
   IconData getMainIconData() {
     return Icons.type_specimen_outlined;
   }
-
-  
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {

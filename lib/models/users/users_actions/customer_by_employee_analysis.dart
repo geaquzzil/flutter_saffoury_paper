@@ -32,6 +32,12 @@ class CustomerByEmployeeAnanlysis
     this.iD = iD;
     this.dateObject = dateObject;
   }
+
+  @override
+  CustomerByEmployeeAnanlysis getSelfNewInstance() {
+    return CustomerByEmployeeAnanlysis();
+  }
+
   @override
   Map<ServerActions, List<String>>? isRequiredObjectsList() => {
         ServerActions.list: ["orders"],

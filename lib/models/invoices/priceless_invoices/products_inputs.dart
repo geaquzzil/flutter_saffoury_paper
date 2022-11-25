@@ -31,6 +31,11 @@ class ProductInput extends InvoiceMaster<ProductInput>
   ProductInput() : super();
 
   @override
+  ProductInput getSelfNewInstance() {
+    return ProductInput();
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
@@ -121,6 +126,10 @@ class ProductInputDetails extends InvoiceMasterDetails<ProductInputDetails> {
   ProductInput? products_inputs;
 
   ProductInputDetails() : super();
+  @override
+  ProductInputDetails getSelfNewInstance() {
+    return ProductInputDetails();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

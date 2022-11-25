@@ -12,6 +12,10 @@ class Grades extends BaseWithNameString<Grades> {
   List<Product>? products;
   int? products_count;
   Grades() : super();
+  @override
+  Grades getSelfNewInstance() {
+    return Grades();
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
