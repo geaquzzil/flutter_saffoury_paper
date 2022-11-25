@@ -12,11 +12,16 @@ import 'package:intl/intl.dart' as intl;
 
 import 'ext.dart';
 
-class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetting> {
+class PdfReceipt<T extends PrintableReceiptInterface,
+    E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
   E? printCommand;
+  late final header;
   PdfReceipt(this.context, this.printObj, {this.printCommand});
+  Future<void> initHeader() async {
+    header = await buildHeader();
+  }
 
   Future<pw.ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
@@ -34,43 +39,69 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
-    final header = await buildHeader();
+    header = await buildHeader();
 
-    final pdf = Document( 
+    final pdf = Document(
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
-    pdf.addPage(getMultiPage(format, header));
+    pdf.addPage(getMultiPage(format));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
-  pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
-    return MultiPage(
-    footer: (_) =>
-        Container(width: double.infinity, height: 15, color: PdfColors.green),
-    pageFormat: format,
-    // orientation: PageOrientation.landscape,
-    margin: EdgeInsets.zero,
+  Page getPage(PdfPageFormat? format) {
+    return Page(
+        pageFormat: format,
+        margin: EdgeInsets.zero,
+        build: (context) => Column(
+              children: [
+                Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+                    // alignment: ,
+                    children: [header, buildTitle()]),
+                // header,
+                // buildInvoiceMainInfoHeader(),
+                Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 3, child: buildTable()),
+                      Expanded(
+                          flex: 1,
+                          child: buildQrCode<E>(this.context, printObj,
+                              printCommandAbstract: printCommand))
+                    ])
+                // buildInvoiceMainTable(),
+              ],
+            ));
+  }
 
-    // pageTheme: ,
-    build: (context) => [
-      Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-          // alignment: ,
-          children: [header, buildTitle()]),
-      // header,
-      // buildInvoiceMainInfoHeader(),
-      Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(flex: 3, child: buildTable()),
-            Expanded(
-                flex: 1,
-                child: buildQrCode<E>(this.context, printObj,
-                    printCommandAbstract: printCommand))
-          ])
-      // buildInvoiceMainTable(),
-    ],
-  );
+  pw.MultiPage getMultiPage(PdfPageFormat? format) {
+    return MultiPage(
+      footer: (_) =>
+          Container(width: double.infinity, height: 15, color: PdfColors.green),
+      pageFormat: format,
+      // orientation: PageOrientation.landscape,
+      margin: EdgeInsets.zero,
+
+      // pageTheme: ,
+      build: (context) => [
+        Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
+            // alignment: ,
+            children: [header, buildTitle()]),
+        // header,
+        // buildInvoiceMainInfoHeader(),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(flex: 3, child: buildTable()),
+              Expanded(
+                  flex: 1,
+                  child: buildQrCode<E>(this.context, printObj,
+                      printCommandAbstract: printCommand))
+            ])
+        // buildInvoiceMainTable(),
+      ],
+    );
   }
 
   List<String> getList(List<RecieptHeaderTitleAndDescriptionInfo> list) {
@@ -84,7 +115,7 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
 
   Widget buildTable() {
     return Column(
-        children: [buildInvoiceMainTable(), buildInvoiceBottomOfQr()]);
+        children: [buildInvoiceMainTable2(), buildInvoiceBottomOfQr()]);
   }
 
   Widget buildInvoiceBottomOfQr() {
@@ -157,6 +188,24 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
   // Widget buildTable() {
   //   return Column(children: [buildIdAndDate(), buildInvoiceMainTable()]);
   // }
+  Widget buildInvoiceMainTable2() {
+    final data = printObj
+        .getPrintableRecieptHeaderTitleAndDescription(context, null)
+        .entries
+        .map((e) => getList(e.value))
+        .toList();
+
+    final headerGenerater = List.generate(data[0].length, (index) => "");
+
+    return Table(border: TableBorder(),
+    children: [
+      TableRow(children: [
+        
+      ])
+    ]
+    
+    );
+  }
 
   Widget buildInvoiceMainTable() {
     // PrintableInvoiceInterfaceDetails head = details[0];
@@ -165,6 +214,8 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
         .entries
         .map((e) => getList(e.value))
         .toList();
+
+    final headerGenerater = List.generate(data[0].length, (index) => "");
 
     // return Table(children: [
     //   TableRow(children: [
@@ -177,14 +228,15 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0),
         child: Table.fromTextArray(
-            headers: ["", ""],
+            headers: headerGenerater,
             data: data,
             // cellStyle: TextStyle(fontSize: 14),
             border: null,
             // oddCellStyle: TextStyle(fontSize: 14),
             cellAlignment: Alignment.centerLeft,
-
             // oddCellStyle: TextStyle(fontWeight: FontWeight.bold),
+
+            // cellStyle: TextStyle(fontWeight: FontWeight.bold),
             cellDecoration: (index, data, rowNum) {
               mt.debugPrint("cellDecoration rownum $rowNum index= $index");
               return BoxDecoration(
@@ -216,7 +268,6 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
             // ),
 
             headerStyle: TextStyle(
-                color: PdfColors.green,
                 fontWeight: FontWeight.bold,
                 background: const BoxDecoration(color: PdfColors.white)),
             headerDecoration: const BoxDecoration(color: PdfColors.grey300),
@@ -242,43 +293,12 @@ class PdfReceipt<T extends PrintableReceiptInterface , E extends PrintLocalSetti
         printObj.getPrintableInvoiceTitle(context, printCommand),
         style: TextStyle(
             fontSize: 20,
-            color: PdfColor.fromHex(printObj.getPrintablePrimaryColor(printCommand))),
+            color: PdfColor.fromHex(
+                printObj.getPrintablePrimaryColor(printCommand))),
       ));
   Widget buildTitleOnInvoice(String title) {
     return Text(title,
         style: TextStyle(fontWeight: FontWeight.bold, color: PdfColors.green));
-  }
-
-  buildTotalText(
-      {required String title,
-      String? value,
-      PdfColor? color,
-      double width = double.infinity,
-      double? size,
-      bool withDivider = true}) {
-    return Container(
-      width: width,
-      height: 25,
-      decoration: getDividerBetweenContent(withDivider: withDivider),
-      child: Row(
-        children: [
-          Expanded(
-              child: Text(
-            title,
-            style: TextStyle(color: color, fontSize: size),
-            textDirection: getTextDirection(value),
-          )),
-          // RichText(text: text)
-          if (value != null)
-            Text(
-              value,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: color, fontSize: size),
-              textDirection: getTextDirection(value),
-            ),
-        ],
-      ),
-    );
   }
 
   TextDirection getTextDirection(String? value) {

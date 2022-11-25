@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:printing/printing.dart';
 import '../../products/products.dart';
 
 class CutRequestProductLabelPDF {
@@ -18,10 +19,13 @@ class CutRequestProductLabelPDF {
   PrintCutRequest? setting;
   CutRequestProductLabelPDF(this.context,
       {required this.cutRequest, required this.themeData, this.setting});
-
-  Future<Document> generate() async {
-    final pdf = Document(
-        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: themeData);
+  Future<Widget> buildHeader() async => Image(await networkImage(
+      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${cutRequest.getPrintablePrimaryColor(setting)}&darkColor=${cutRequest.getPrintableSecondaryColor(setting)}'));
+  Future<List<Page>> generate() async {
+    material.debugPrint("CutRequestProductLabelPDF start building");
+    Widget header = await buildHeader();
+    material.debugPrint("CutRequestProductLabelPDF image done building");
+    List<Page> pages = [];
 
     cutRequest.cut_request_results?.forEach((element) {
       material.debugPrint(
@@ -32,19 +36,23 @@ class CutRequestProductLabelPDF {
         Widget page = ProductLabelPDF(context, productInputDetails.products!,
                 setting: getPrintProductSetting())
             .generate();
-        pdf.addPage(Page(
+        pages.add(Page(
             pageFormat: PdfPageFormat.a4,
             margin: EdgeInsets.zero,
-            build: (context) => page));
+            build: (context) => Column(children: [
+                  Stack(alignment: Alignment.bottomRight, fit: StackFit.loose,
+                      // alignment: ,
+                      children: [header, buildTitle(this.context, Product())]),
+                  page
+                ])));
       });
     });
 
-    return pdf;
+    return pages;
   }
 
   String? getPrintProductName() {
-    
-    return null; 
+    return null;
   }
 
   PrintProduct getPrintProductSetting() {

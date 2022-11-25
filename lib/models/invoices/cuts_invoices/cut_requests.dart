@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_recipt.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_product_label_pdf.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
@@ -198,6 +199,9 @@ class CutRequest extends ViewAbstract<CutRequest>
   PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
       BuildContext context) {
     CutRequest o = CutRequest();
+    o.products = Product().getModifiablePrintablePdfSetting(context) as Product;
+    o.quantity = 231;
+    o.cut_status = CutStatus.PENDING;
     debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
     (o).customers = Customer()..name = "Customer name";
     o.customers?.address = "Damascus - Syria";
@@ -263,6 +267,20 @@ class CutRequest extends ViewAbstract<CutRequest>
     return "$invCode-$iD-$year";
   }
 
+  Color getCutStatusColor() {
+    switch (cut_status) {
+      case CutStatus.COMPLETED:
+        return Colors.green;
+      case CutStatus.PENDING:
+        return Colors.orange;
+      case CutStatus.PROCESSING:
+        return Colors.greenAccent;
+      default:
+        Colors.orange;
+    }
+    return Colors.orange;
+  }
+
   @override
   String getPrintableSecondaryColor(PrintCutRequest? setting) {
     return setting?.secondaryColor ??
@@ -274,7 +292,7 @@ class CutRequest extends ViewAbstract<CutRequest>
       {required pdf.ThemeData theme,
       PdfPageFormat? format,
       PrintCutRequest? setting}) async {
-    CutRequestProductLabelPDF productsLabel = CutRequestProductLabelPDF(context,
+    CutRequestRecieptPDF productsLabel = CutRequestRecieptPDF(context,
         cutRequest: getModifiablePrintablePdfSetting(context) as CutRequest,
         setting: setting,
         themeData: theme);
