@@ -16,7 +16,9 @@ abstract class ViewAbstractInputAndValidater<T>
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
   Map<String, int> getTextInputMaxLengthMap();
-  Map<String, List<dynamic>> getTextInputIsAutoCompleteCustomListMap(BuildContext context) => {};
+  Map<String, List<dynamic>> getTextInputIsAutoCompleteCustomListMap(
+          BuildContext context) =>
+      {};
 
   Map<String, bool> isFieldRequiredMap();
   Map<String, bool> isFieldCanBeNullableMap();
@@ -58,7 +60,8 @@ abstract class ViewAbstractInputAndValidater<T>
     return getTextInputIsAutoCompleteViewAbstractMap()[field] ?? false;
   }
 
-  bool getTextInputIsAutoCompleteCustomList(BuildContext context,String field) {
+  bool getTextInputIsAutoCompleteCustomList(
+      BuildContext context, String field) {
     return getTextInputIsAutoCompleteCustomListMap(context).containsKey(field);
   }
 
@@ -227,6 +230,25 @@ abstract class ViewAbstractInputAndValidater<T>
     // setFieldValue(field, value);
   }
 
+  void onMultiChipSelected(
+      BuildContext context, String field, List<dynamic>? selectedList) {
+    debugPrint("onMultiChipSelected field=> $field value=> $selectedList");
+    // setFieldValue(field, value);
+  }
+
+  List<dynamic> getMultiChipInitalValue(
+    BuildContext context,
+    String field,
+  ) {
+    throw UnimplementedError("getMultiChipInitalValue ");
+  }
+
+  void onMultiChipSaved(
+      BuildContext context, String field, List<dynamic>? selectedList) {
+    debugPrint("onMultiChipSaved field=> $field value=> $selectedList");
+    // setFieldValue(field, value);
+  }
+
   void onAutoComplete(BuildContext context, String field, dynamic value) {
     debugPrint("onAutoComplete field=> $field value=> $value");
     // setFieldValue(field, value);
@@ -261,6 +283,7 @@ enum ViewAbstractControllerInputType {
   COLOR_PICKER,
   FILE_PICKER,
   CHECKBOX,
+  MULTI_CHIPS_API,
   DROP_DOWN_API,
   DROP_DOWN_TEXT_SEARCH_API,
   IMAGE

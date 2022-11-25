@@ -68,6 +68,8 @@ class Customer extends User<Customer> {
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customer;
+
+      
   factory Customer.fromJson(Map<String, dynamic> data) =>
       _$CustomerFromJson(data);
 

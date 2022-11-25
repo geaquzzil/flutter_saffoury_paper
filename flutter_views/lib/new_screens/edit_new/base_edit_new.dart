@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -266,9 +267,8 @@ class BaseEditWidget extends StatelessWidget {
         viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);
     bool isAutoCompleteByCustomList =
         viewAbstract.getTextInputIsAutoCompleteCustomList(context, field);
-    // if(fieldType== ViewAbstractEnum){
-    //   return EditControllerDropdown(enumViewAbstract: enumViewAbstract, field: field)
-    // }
+    debugPrint(
+        "getControllerWidget field => $field isAutoComplete=> $isAutoComplete isAutoCompleteViewAbstract=>$isAutoCompleteViewAbstract  isAutoCompleteByCustomList=>$isAutoCompleteByCustomList");
     if (isAutoComplete) {
       return getControllerEditTextAutoComplete(context,
           viewAbstract: viewAbstract,
@@ -288,6 +288,13 @@ class BaseEditWidget extends StatelessWidget {
       );
     }
     if (isAutoCompleteViewAbstract) {
+      if (viewAbstract.getParnet == null) {
+        return getControllerEditText(context,
+            viewAbstract: viewAbstract,
+            field: field,
+            controller: getController(context, field: field, value: fieldValue),
+            enabled: isFieldEnabled(field));
+      }
       return getControllerEditTextViewAbstractAutoComplete(
         context,
         viewAbstract: viewAbstract,
@@ -307,12 +314,14 @@ class BaseEditWidget extends StatelessWidget {
     if (fieldValue is ViewAbstract) {
       fieldValue.setFieldNameFromParent(field);
       fieldValue.setParent(viewAbstract);
-
-      if (textFieldTypeVA == ViewAbstractControllerInputType.DROP_DOWN_API) {
+      if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
+        return EditControllerChipsFromViewAbstract(
+            parent: viewAbstract, viewAbstract: fieldValue, field: field);
+      } else if (textFieldTypeVA ==
+          ViewAbstractControllerInputType.DROP_DOWN_API) {
         return EditControllerDropdownFromViewAbstract(
             parent: viewAbstract, viewAbstract: fieldValue, field: field);
-      }
-      if (textFieldTypeVA ==
+      } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(
           autoCompleteBySearchQuery: true,

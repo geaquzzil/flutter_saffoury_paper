@@ -71,6 +71,12 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
           debugPrint("copyToUplode field=$key is Null ");
           jsonCopy[key] = null;
         }
+      } else if (o == null) {
+        jsonCopy[key] = null;
+      } else if (o == "null") {
+        jsonCopy[key] = null;
+      } else if (o == "") {
+        jsonCopy[key] = null;
       }
     });
 
@@ -108,9 +114,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {}
 
-  Widget? getCustomTopWidget(BuildContext context, ServerActions action){
-    
-  }
+  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {}
 }
 
 class ListableDataRow {

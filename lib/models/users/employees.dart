@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/user.dart';
 import 'package:flutter_saffoury_paper/models/users/users_actions/customer_by_employee_analysis.dart';
 import 'package:flutter_saffoury_paper/models/users/warehouse_employees.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -38,7 +41,20 @@ class Employee extends User<Employee> {
 
   List<WarehouseEmployee>? warehouse_employees;
 
+  @JsonKey(ignore: true)
+  Warehouse? warehouse;
+
   Employee() : super();
+
+  @override
+  List<String> getMainFields() {
+    return super.getMainFields()..addAll(["warehouse"]);
+  }
+
+  @override
+  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+        ServerActions.list: ["warehouse_employees"]
+      };
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -46,6 +62,8 @@ class Employee extends User<Employee> {
         ..addAll({
           "publish": 0,
           "employee": Employee(),
+          "warehouse": Warehouse(),
+          "warehouse_employees": List<WarehouseEmployee>.empty()
         });
 
   @override
@@ -79,11 +97,53 @@ class Employee extends User<Employee> {
       Employee.fromJson(json);
 
   @override
+  void onMultiChipSaved(
+      BuildContext context, String field, List? selectedList) {
+    warehouse_employees?.forEach((element) {
+      element.delete = true;
+    });
+    if (selectedList?.isEmpty ?? true) {
+      debugPrint("onMultiChipSaved employee is empty");
+    } else {
+      List<Warehouse> selectedWarehouse = selectedList!.cast<Warehouse>();
+      warehouse_employees ??= [];
+      for (var element in selectedWarehouse) {
+        warehouse_employees!.add(WarehouseEmployee()
+          ..employees = this
+          ..warehouse = element);
+      }
+      debugPrint("onMultiChipSaved warehouse_employees $warehouse_employees");
+    }
+  }
+
+  @override
+  void onMultiChipSelected(
+      BuildContext context, String field, List? selectedList) {
+    super.onMultiChipSelected(context, field, selectedList);
+  }
+
+  @override
+  List getMultiChipInitalValue(BuildContext context, String field) {
+    return warehouse_employees?.map((e) => e.warehouse).toList() ??
+        List<Warehouse>.empty();
+  }
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "warehouse") {
+      return ViewAbstractControllerInputType.MULTI_CHIPS_API;
+    }
+    return super.getInputType(field);
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
           "publish": 0,
           "employee": Employee(),
+          "warehouse": Warehouse(),
+          "warehouse_employees": List<WarehouseEmployee>.empty()
         });
 
   @override
@@ -95,7 +155,6 @@ class Employee extends User<Employee> {
           )),
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
-      
         widget: ListHorizontalCustomViewApiAutoRestWidget(
             // onResponseAddWidget: ((response) {
             //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;

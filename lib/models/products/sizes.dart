@@ -100,6 +100,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   factory ProductSize.fromJson(Map<String, dynamic> data) =>
       _$ProductSizeFromJson(data);
+      
 
   Map<String, dynamic> toJson() => _$ProductSizeToJson(this);
 

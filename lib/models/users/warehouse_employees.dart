@@ -19,6 +19,7 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   Employee? employees;
 
   WarehouseEmployee() : super();
+
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.warehouse;
@@ -76,6 +77,7 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
 
   @override
   Map<String, bool> isFieldRequiredMap() => {};
+  
   factory WarehouseEmployee.fromJson(Map<String, dynamic> data) =>
       _$WarehouseEmployeeFromJson(data);
 

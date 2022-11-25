@@ -150,7 +150,13 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               msg: getMessage(),
               title: getTitle(),
               context: context,
-              onClose: (value) {},
+              onClose: (value) {
+                if (value != null) {
+                  currentViewAbstract = currentViewAbstract!.copyToUplode();
+                  debugPrint(
+                      "onConfirm currentViewAbstract => $currentViewAbstract");
+                }
+              },
               actions: [
                 TextButton(
                   onPressed: () {
