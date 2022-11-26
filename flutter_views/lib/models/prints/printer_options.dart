@@ -176,6 +176,20 @@ enum PrintPaperSize implements ViewAbstractEnum<PrintPaperSize> {
   }
 
   @override
+  IconData getFieldLabelIconData(BuildContext context, PrintPaperSize field) {
+    switch (field) {
+      case PrintPaperSize.Default:
+        return Icons.disabled_by_default;
+      case PrintPaperSize.A3Size:
+        return Icons.format_size;
+      case PrintPaperSize.A4Size:
+        return Icons.format_size;
+      case PrintPaperSize.A5Size:
+        return Icons.format_size;
+    }
+  }
+
+  @override
   List<PrintPaperSize> getValues() {
     return PrintPaperSize.values;
   }
@@ -188,7 +202,7 @@ enum Language implements ViewAbstractEnum<Language> {
   Arabic;
 
   @override
-  IconData getMainIconData() => Icons.language;
+  IconData getMainIconData() => Icons.translate;
   @override
   String getMainLabelText(BuildContext context) =>
       AppLocalizations.of(context)!.language;
@@ -200,6 +214,16 @@ enum Language implements ViewAbstractEnum<Language> {
         return AppLocalizations.of(context)!.english;
       case Arabic:
         return AppLocalizations.of(context)!.arabic;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, Language field) {
+    switch (field) {
+      case English:
+        return Icons.language;
+      case Arabic:
+        return Icons.language;
     }
   }
 

@@ -5,7 +5,8 @@ import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 
 import '../text_bold.dart';
 
-class DropdownEnumControllerListener<T extends ViewAbstractEnum> extends StatelessWidget {
+class DropdownEnumControllerListener<T extends ViewAbstractEnum>
+    extends StatelessWidget {
   T viewAbstractEnum;
   void Function(T? object) onSelected;
 
@@ -18,12 +19,13 @@ class DropdownEnumControllerListener<T extends ViewAbstractEnum> extends Statele
     return FormBuilderDropdown(
       name: viewAbstractEnum.getMainLabelText(context),
       initialValue: viewAbstractEnum,
+      // decoration: getDecoration(context, viewAbstract)
       // hint: TextBold(
       //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
       //   regex: viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum),
       // ),
-      // decoration: getDecorationDropdownNewWithLabelAndValue(context,
-      //     viewAbstractEnum: viewAbstractEnum),
+      decoration: getDecorationDropdownNewWithLabelAndValue(context,
+          viewAbstractEnum: viewAbstractEnum),
       items: dropdownGetValues(viewAbstractEnum)
           .map((item) => DropdownMenuItem(
                 value: item,
@@ -38,7 +40,7 @@ class DropdownEnumControllerListener<T extends ViewAbstractEnum> extends Statele
                         : viewAbstractEnum.getFieldLabelString(context, item)),
               ))
           .toList(),
-      onChanged: (obj) => onSelected(obj as T ),
+      onChanged: (obj) => onSelected(obj as T),
     );
   }
 }

@@ -177,6 +177,16 @@ enum EnteryInteval implements ViewAbstractEnum<EnteryInteval> {
   }
 
   @override
+  IconData getFieldLabelIconData(BuildContext context, EnteryInteval field) {
+    switch (field) {
+      case EnteryInteval.monthy:
+        return Icons.date_range_outlined;
+      case EnteryInteval.daily:
+        return Icons.date_range;
+    }
+  }
+
+  @override
   List<EnteryInteval> getValues() {
     return EnteryInteval.values;
   }

@@ -17,7 +17,7 @@ class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
   @override
   Blocking getSelfNewInstance() {
     //TODO
-    return Blocking(Customer(),BlockMood.CUSTOMER,true);
+    return Blocking(Customer(), BlockMood.CUSTOMER, true);
   }
 
   @override
@@ -139,6 +139,21 @@ enum BlockMood implements ViewAbstractEnum<BlockMood> {
 
       case EMPLOYEE:
         return AppLocalizations.of(context)!.employee;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, BlockMood field) {
+    switch (field) {
+      case NONE:
+        return Icons.disabled_by_default;
+      case ALL:
+        return Icons.all_inbox;
+      case CUSTOMER:
+        return Icons.account_circle;
+
+      case EMPLOYEE:
+        return Icons.engineering;
     }
   }
 

@@ -79,7 +79,7 @@ enum SortByType implements ViewAbstractEnum<SortByType> {
   DESC;
 
   @override
-  IconData getMainIconData() => Icons.stacked_line_chart_outlined;
+  IconData getMainIconData() => Icons.sort;
   @override
   String getMainLabelText(BuildContext context) =>
       AppLocalizations.of(context)!.sortBy;
@@ -93,6 +93,16 @@ enum SortByType implements ViewAbstractEnum<SortByType> {
         return AppLocalizations.of(context)!.descSorting;
     }
     return " ";
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, SortByType field) {
+    switch (field) {
+      case ASC:
+        return Icons.text_rotate_up;
+      case DESC:
+        return Icons.text_rotate_vertical;
+    }
   }
 
   @override

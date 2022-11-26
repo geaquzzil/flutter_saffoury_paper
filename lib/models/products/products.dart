@@ -765,17 +765,17 @@ class Product extends ViewAbstract<Product>
         0;
   }
 
-  @override
-  Future<List<Product>?> listCall(
-      {int? count, int? page, OnResponseCallback? onResponse}) async {
-    try {
-      Iterable l = jsonDecode(jsonEncode(productsJson));
-      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-    } catch (e) {
-      debugPrint("listCallFake ${e.toString()}");
-    }
-    return null;
-  }
+  // @override
+  // Future<List<Product>?> listCall(
+  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
+  //   try {
+  //     Iterable l = jsonDecode(jsonEncode(productsJson));
+  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+  //   } catch (e) {
+  //     debugPrint("listCallFake ${e.toString()}");
+  //   }
+  //   return null;
+  // }
 
   @override
   Future getPosableInitObj(BuildContext context) {
@@ -958,6 +958,20 @@ enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
         return AppLocalizations.of(context)!.returnedProduct;
       case WASTED:
         return AppLocalizations.of(context)!.wasted;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, ProductStatus field) {
+    switch (field) {
+      case NONE:
+        return Icons.disabled_by_default;
+      case PENDING:
+        return Icons.pending;
+      case RETURNED:
+        return Icons.arrow_back;
+      case WASTED:
+        return Icons.delete;
     }
   }
 

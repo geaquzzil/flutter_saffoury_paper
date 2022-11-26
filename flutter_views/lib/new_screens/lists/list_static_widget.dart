@@ -15,7 +15,9 @@ class ListStaticWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return list.isEmpty ? emptyWidget : buildList(list, context);
+    return list.isEmpty
+        ? Expanded(child: emptyWidget)
+        : buildList(list, context);
   }
 
   Widget buildList(List<T> list, BuildContext context) {

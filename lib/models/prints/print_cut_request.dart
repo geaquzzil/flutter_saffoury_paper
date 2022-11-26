@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
@@ -29,7 +31,7 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
 
   PrintCutRequest() : super();
 
-   @override
+  @override
   PrintCutRequest getSelfNewInstance() {
     return PrintCutRequest();
   }
@@ -131,6 +133,19 @@ enum PrintCutRequestType implements ViewAbstractEnum<PrintCutRequestType> {
   }
 
   @override
+  IconData getFieldLabelIconData(
+      BuildContext context, PrintCutRequestType field) {
+    switch (field) {
+      case PrintCutRequestType.ALL:
+        return Icons.all_inbox;
+      case PrintCutRequestType.ONLY_PRODUCT_LABEL:
+        return Product().getMainIconData();
+      case PrintCutRequestType.ONLY_CUT_REQUEST:
+        return CutRequest().getMainIconData();
+    }
+  }
+
+  @override
   IconData getMainIconData() => Icons.abc;
 
   @override
@@ -152,6 +167,17 @@ enum ProductNameOption implements ViewAbstractEnum<ProductNameOption> {
         return AppLocalizations.of(context)!.all;
       case ProductNameOption.ONLY_CUT_REQUEST:
         return AppLocalizations.of(context)!.changeOnlyCutRoll;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(
+      BuildContext context, ProductNameOption field) {
+    switch (field) {
+      case ProductNameOption.ALL:
+        return Icons.all_inbox;
+      case ProductNameOption.ONLY_CUT_REQUEST:
+        return CutRequest().getMainIconData();
     }
   }
 

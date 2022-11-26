@@ -18,28 +18,36 @@ class NotificationPopupWidget extends StatelessWidget {
     String subtitle =
         "Check this section for updates exclusively offer and general notifications";
     return CustomPopupMenu(
-      arrowSize: 20,
-      arrowColor: Colors.white,
-      menuBuilder: () => popMenuBuilder(context, title, subtitle),
-      pressType: PressType.singleClick,
-      verticalMargin: -15,
-      controller: _controller,
-      child:
-      OnHoverWidget(
+        arrowSize: 20,
+        arrowColor: Theme.of(context).colorScheme.secondaryContainer,
+        menuBuilder: () => popMenuBuilder(context, title, subtitle),
+        pressType: PressType.singleClick,
+        verticalMargin: -15,
+        controller: _controller,
+        child: buildColapsedIcon(context, Icons.notifications, null));
+  }
+
+  OnHoverWidget buildColapsedIcon(
+      BuildContext context, IconData data, VoidCallback? onPress) {
+    return OnHoverWidget(
         scale: false,
-        builder: (isHovered) =>Icon(
-        Icons.notifications,
-              color: isHovered ? Colors.orange : Colors.black,
-      ) ,
-      )
-    );
+        builder: (onHover) {
+          return IconButton(
+              // padding: EdgeInsets.all(4),
+              onPressed: onPress,
+              iconSize: 25,
+              icon: Icon(data),
+              color: onHover
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondary);
+        });
   }
 
   Widget popMenuBuilder(BuildContext context, String title, String subtitle) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         child: IntrinsicWidth(
           child: SizedBox(
             width: 400,

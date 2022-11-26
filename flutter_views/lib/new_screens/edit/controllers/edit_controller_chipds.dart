@@ -72,21 +72,26 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
 
   FormBuilderFilterChip<T?> getDropdownController(
       BuildContext context, List<T?> list) {
-    List<T> initialValue = (widget.parent
-        .getMultiChipInitalValue(context, widget.field) as List<T>);
+    List<T?>? init;
+    try {
+      List<T> initialValue = (widget.parent
+          .getMultiChipInitalValue(context, widget.field) as List<T>);
 
-    var r = list
-        .where((element) =>
-            initialValue.firstWhereOrNull((s) => s.iD == element?.iD) != null)
-        .toList();
+      init = list
+          .where((element) =>
+              initialValue.firstWhereOrNull((s) => s.iD == element?.iD) != null)
+          .toList();
+    } catch (e) {
+      debugPrint("EditControllerChipsFromViewAbstract error=> $e");
+    }
 
-    debugPrint("EditControllerChipsFromViewAbstract $initialValue");
+    debugPrint("EditControllerChipsFromViewAbstract $init");
     return FormBuilderFilterChip<T?>(
       // valueTransformer: ,
-      autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.disabled,
       // labelPadding: EdgeInsets.all(5),
       // padding: EdgeInsets.all(5),
-      initialValue: r,
+      initialValue: init,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       onChanged: (obj) {
         widget.parent.onMultiChipSelected(context, widget.field, obj);
@@ -105,7 +110,11 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
       },
       name: widget.parent.getTag(widget.field),
       onSaved: (newValue) {
-        widget.parent.onMultiChipSaved(context, widget.field, newValue);
+        try {
+          widget.parent.onMultiChipSaved(context, widget.field, newValue);
+        } catch (e) {
+          debugPrint("EditControllerChipsFromViewAbstract  error =>$e");
+        }
       },
 
       decoration: getDecoration(context, widget.viewAbstract),

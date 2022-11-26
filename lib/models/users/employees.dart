@@ -31,7 +31,7 @@ import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 part 'employees.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true,)
 @reflector
 class Employee extends User<Employee> {
   // int? ParentID;
@@ -44,7 +44,9 @@ class Employee extends User<Employee> {
   @JsonKey(ignore: true)
   Warehouse? warehouse;
 
-  Employee() : super();
+  Employee() : super() {
+    warehouse_employees = [];
+  }
   @override
   Employee getSelfNewInstance() {
     return Employee();
@@ -103,6 +105,7 @@ class Employee extends User<Employee> {
   @override
   void onMultiChipSaved(
       BuildContext context, String field, List? selectedList) {
+    debugPrint("onMultiChipSaved warehouse_employees $selectedList");
     warehouse_employees?.forEach((element) {
       element.delete = true;
     });
@@ -113,17 +116,11 @@ class Employee extends User<Employee> {
       warehouse_employees ??= [];
       for (var element in selectedWarehouse) {
         warehouse_employees!.add(WarehouseEmployee()
-          ..employees = this
+          ..employees = copyWithReduceSize() as Employee
           ..warehouse = element);
       }
       debugPrint("onMultiChipSaved warehouse_employees $warehouse_employees");
     }
-  }
-
-  @override
-  void onMultiChipSelected(
-      BuildContext context, String field, List? selectedList) {
-    super.onMultiChipSelected(context, field, selectedList);
   }
 
   @override

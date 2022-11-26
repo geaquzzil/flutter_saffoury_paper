@@ -54,6 +54,12 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return newObject;
   }
 
+  ///only get iD
+  T copyWithReduceSize() {
+    Map<String, dynamic> jsonCopy = {"iD": iD};
+    return fromJsonViewAbstract(jsonCopy);
+  }
+
   T copyToUplode() {
     if (this is ListableInterface) {
       Iterable<ViewAbstract>? l = (this as ListableInterface).deletedList;

@@ -392,10 +392,6 @@ class BaseEditWidget extends StatelessWidget {
               enabled: isFieldEnabled(field));
         }
       }
-      return ListTile(
-        title: Text(field),
-        subtitle: Text(fieldValue.toString()),
-      );
     }
   }
 }

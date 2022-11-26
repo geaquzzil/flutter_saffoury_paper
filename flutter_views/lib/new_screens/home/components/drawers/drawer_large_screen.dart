@@ -186,7 +186,14 @@ class DrawerLargeScreens extends StatelessWidget {
                 .setCurrentPage(CurrentPage.settings),
           ),
           Badge(
-            badgeContent: Text("${context.watch<CartProvider>().getCount}"),
+            badgeColor: Theme.of(context).colorScheme.primary,
+            badgeContent: Text(
+              "${context.watch<CartProvider>().getCount}",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
             toAnimate: true,
             animationType: BadgeAnimationType.scale,
             showBadge: context.watch<CartProvider>().getCount > 0,
@@ -226,7 +233,10 @@ class DrawerLargeScreens extends StatelessWidget {
               icon: Icon(data),
               color: onHover
                   ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary);
+                  : Theme.of(context).colorScheme.secondary
+                  
+                  )
+                  ;
         });
   }
 }

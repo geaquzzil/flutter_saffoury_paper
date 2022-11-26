@@ -43,11 +43,8 @@ String dropdownGettLabelWithText(
 InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
     {ViewAbstractEnum? viewAbstractEnum}) {
   return const InputDecoration(
-    fillColor: Colors.white,
-    focusColor: Colors.white,
-
-    filled: true,
-    border: OutlineInputBorder(),
+    // filled: true,
+    border: OutlineInputBorder(gapPadding: 0),
     // label: TextBold(
     //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
     //   regex: viewAbstractEnum.getFieldLabelString(context, viewAbstractEnum),

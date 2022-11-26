@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -7,7 +10,9 @@ import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_lis
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import '../../new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import '../../new_components/loading_shimmer.dart';
+import '../home/components/ext_provider.dart';
 
 class ListApiSearchableWidget<T extends ViewAbstract> extends StatefulWidget {
   const ListApiSearchableWidget({Key? key}) : super(key: key);
@@ -154,7 +159,35 @@ class _ListApiWidgetState<T extends ViewAbstract>
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            children: [const Spacer(), getAddBotton(), getRefreshWidget()],
+            children: [
+              const Spacer(),
+              DropdownStringListControllerListenerByIcon(
+                  icon: Icons.sort_by_alpha,
+                  hint: AppLocalizations.of(context)!.sortBy,
+                  list: drawerViewAbstractObsever.getObject
+                      .getMainFieldsIconsAndValues(context),
+                  onSelected: (obj) {
+                    debugPrint("is selected ${obj.runtimeType}");
+                    if (obj == null) {
+                      removeFilterableSelected(
+                          context, drawerViewAbstractObsever.getObject);
+                    } else {
+                      addFilterableSortField(context, obj.value.toString());
+                    }
+                    notifyListApi(context);
+                    debugPrint("is selected $obj");
+                  }),
+              DropdownEnumControllerListenerByIcon<SortByType>(
+                viewAbstractEnum: SortByType.ASC,
+                onSelected: (object) {
+                  // listProvider.clear(findCustomKey());
+                  addFilterableSort(context, object as SortByType);
+                  notifyListApi(context);
+                },
+              ),
+              getAddBotton(),
+              getRefreshWidget()
+            ],
           ),
         ),
         Expanded(

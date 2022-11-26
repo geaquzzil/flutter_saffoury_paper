@@ -198,7 +198,6 @@ class CutRequest extends ViewAbstract<CutRequest>
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "date": TextInputType.datetime,
         "quantity": TextInputType.number,
-        
         "comments": TextInputType.text
       };
 
@@ -387,6 +386,18 @@ enum CutStatus implements ViewAbstractEnum<CutStatus> {
         return AppLocalizations.of(context)!.processing;
       case COMPLETED:
         return AppLocalizations.of(context)!.completed;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, CutStatus field) {
+    switch (field) {
+      case PENDING:
+        return Icons.pending;
+      case PROCESSING:
+        return Icons.settings;
+      case COMPLETED:
+        return Icons.done;
     }
   }
 

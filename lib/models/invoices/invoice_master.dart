@@ -609,5 +609,21 @@ enum InvoiceStatus implements ViewAbstractEnum<InvoiceStatus> {
   }
 
   @override
+  IconData getFieldLabelIconData(BuildContext context, InvoiceStatus field) {
+    switch (field) {
+      case InvoiceStatus.APPROVED:
+        return Icons.approval;
+      case InvoiceStatus.CANCELED:
+        return Icons.cancel;
+      case InvoiceStatus.NONE:
+        return Icons.disabled_by_default;
+      case InvoiceStatus.PENDING:
+        return Icons.pending;
+      case InvoiceStatus.PROCESSING:
+        return Icons.settings;
+    }
+  }
+
+  @override
   List<InvoiceStatus> getValues() => InvoiceStatus.values;
 }

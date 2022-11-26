@@ -28,16 +28,19 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
     _colorTween = ColorTween(begin: null, end: Colors.green)
         .animate(_animationController);
 
-    Provider.of<CartProvider>(context, listen: false).addListener(() {
-      CartProcessType providerType =
-          context.read<CartProvider>().getProcessType;
-      if (type == providerType) return;
-      type = providerType;
-      if (type == CartProcessType.CHECKOUT) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<CartProvider>(context, listen: false).addListener(() {
+        if (!mounted) return;
+        CartProcessType providerType =
+            context.read<CartProvider>().getProcessType;
+        if (type == providerType) return;
+        type = providerType;
+        if (type == CartProcessType.CHECKOUT) {
+          _animationController.forward();
+        } else {
+          _animationController.reverse();
+        }
+      });
     });
 
     super.initState();

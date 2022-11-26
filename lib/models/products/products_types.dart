@@ -236,6 +236,18 @@ enum ProductTypeUnit implements ViewAbstractEnum<ProductTypeUnit> {
   }
 
   @override
+  IconData getFieldLabelIconData(BuildContext context, ProductTypeUnit field) {
+    switch (field) {
+      case KG:
+        return Icons.scale;
+      case Sheet:
+        return Icons.line_weight_rounded;
+      case Ream:
+        return Icons.table_rows_rounded;
+    }
+  }
+
+  @override
   List<ProductTypeUnit> getValues() {
     return ProductTypeUnit.values;
   }
