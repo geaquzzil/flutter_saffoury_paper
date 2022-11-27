@@ -30,6 +30,7 @@ import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -766,6 +767,19 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  Future<List<MenuItemBuildGenirc>> getPopupMenuActionsThreeDot(
+      BuildContext c, ServerActions? action) async {
+    return [
+      if (await hasPermissionAdd(c, viewAbstract: CutRequest()))
+        MenuItemBuildGenirc<CutRequest>(
+            title: CutRequest().getAddToFormat(c),
+            icon: Icons.add,
+            route: "/edit",
+            value: CutRequest()..products = this)
+    ];
+  }
+
+  @override
   Future<List<Product>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {
     try {
@@ -907,7 +921,7 @@ class Product extends ViewAbstract<Product>
                 autoRest: AutoRest<Product>(
                     obj: Product()
                       ..setCustomMap({
-                        "<ProductTypeID>": "${e?.iD}",
+                        "<ProductTypeID>": "${e.iD}",
                         "requireInventory": "true"
                       }),
                     key: "productsByType${e.iD}"),

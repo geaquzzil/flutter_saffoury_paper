@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -95,6 +96,30 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         );
   }
 
+  Widget getHorizontalCardTitle(BuildContext context) {
+    return Column(
+      children: [
+        getMainLabelText(context),
+        Text(
+          getIDFormat(context),
+          style: Theme.of(context).textTheme.caption,
+        )
+      ],
+    );
+  }
+
+  Widget getHorizontalCardMainHeader(BuildContext context) {
+    return Text(getMainHeaderTextOnly(context));
+  }
+
+  Widget getHorizontalCardSubtitle(BuildContext context) {
+    return getMainSubtitleHeaderText(context) ??
+        Text(
+          "",
+          style: Theme.of(context).textTheme.caption,
+        );
+  }
+
   Text getMainLabelText(BuildContext context) {
     return Text(
       getMainHeaderLabelTextOnly(context),
@@ -121,6 +146,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String? getImageUrl(BuildContext context) {
     return null;
+  }
+
+  String getAddToFormat(BuildContext context) {
+    return AppLocalizations.of(context)!
+        .addToFormat(getMainHeaderLabelTextOnly(context).toLowerCase());
   }
 
   String getIDFormat(BuildContext context) {

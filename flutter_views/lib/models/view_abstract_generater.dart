@@ -45,6 +45,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     Navigator.push(
       context,
       MaterialPageRoute(
+        
         builder: (context) => ViewDetailsPage(
           object: this as ViewAbstract,
         ),

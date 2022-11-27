@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:http/http.dart';
 import 'package:reflectable/reflectable.dart';
 
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
@@ -100,6 +101,21 @@ abstract class VMirrors<T> {
     TypeMirror nonGenericClassMirrorImpl = vm.type;
     return reflector.reflectType(nonGenericClassMirrorImpl.reflectedType)
         as ClassMirror;
+  }
+
+  String getFieldValueCheckType(BuildContext context, String field) {
+    dynamic v = getMirrorNewInstance(field);
+    if (v is ViewAbstractEnum) {
+      if (getFieldValue(field) == null) return "";
+      return v.getFieldLabelString(context, v);
+    } else if (v is ViewAbstract) {
+      if (getFieldValue(field) == null) return "";
+      return (getFieldValue(field) as ViewAbstract)
+          .getMainHeaderTextOnly(context);
+    } else {
+      if (getFieldValue(field) == null) return "";
+      return getFieldValue(field).toString();
+    }
   }
 
   String getMirrorViewAbstractLabelText(BuildContext context, String field) {

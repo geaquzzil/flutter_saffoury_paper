@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
+import 'package:flutter_view_controller/screens/view/view_card_item.dart';
 import 'package:flutter_view_controller/screens/view/view_list_details.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/servers/server_helpers.dart';
+import '../../new_components/tables_widgets/editable_table_widget.dart';
 import '../../new_components/lists/search_card_item.dart';
 import '../../new_components/tab_bar/tab_bar.dart';
 import '../../new_components/tables_widgets/cart_data_table_master.dart';
@@ -17,11 +21,36 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class MasterView extends StatelessWidget {
   ViewAbstract viewAbstract;
   MasterView({Key? key, required this.viewAbstract}) : super(key: key);
+  Widget buildItem(BuildContext context, String field) {
+    debugPrint("MasterView buildItem $field");
+    dynamic fieldValue = viewAbstract.getFieldValue(field);
+    if (fieldValue == null) {
+      return ViewCardItem(title: field, description: "null", icon: Icons.abc);
+    } else if (fieldValue is ViewAbstract) {
+      return ViewCardItem(
+          title: "", description: "", icon: Icons.abc, object: fieldValue);
+    } else {
+      return ViewCardItem(
+          title: viewAbstract.getFieldLabel(context, field),
+          description: fieldValue.toString(),
+          icon: viewAbstract.getFieldIconData(field));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget? topWidget =
         viewAbstract.getCustomTopWidget(context, ServerActions.view);
+    final fields = viewAbstract.getMainFields();
+    return Column(
+      children: [
+        if (topWidget != null) topWidget,
+        ...fields.map((e) => buildItem(context, e)),
+        if (viewAbstract is ListableInterface)
+          ViewableTableWidget(viewAbstract: viewAbstract as ListableInterface),
+      ],
+    );
+
     return Column(
       children: [
         Row(

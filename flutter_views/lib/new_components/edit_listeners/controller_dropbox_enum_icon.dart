@@ -67,8 +67,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
               .map(
                 (e) => buildMenuItem(context, e),
               )
-              .toList() ??
-          [],
+              .toList(),
     );
   }
 }

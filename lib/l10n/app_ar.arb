@@ -587,6 +587,15 @@
         }
     },
     "addToFormat": "إضافة إلى {r}",
+    "@addToFormat": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
     "toFormat": "إلى {r}",
     "addFormat": "إضافة {r}",
     "errCantEditFormatFromTo": "لا يمكن تعديل {r} لأنه تم إنشاؤه من {r}",

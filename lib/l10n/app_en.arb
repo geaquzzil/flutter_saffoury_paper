@@ -607,6 +607,15 @@
     "maxWaste": "Max possible waste",
     "tow_strings": "{r} {r}",
     "addToFormat": "Add to {r}",
+    "@addToFormat": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
     "toFormat": "to {r}",
     "addFormat": "Add {r}",
     "sheets_string_f": "{r} Sheet(s)",

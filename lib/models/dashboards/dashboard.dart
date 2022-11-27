@@ -419,8 +419,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             icon: Icons.arrow_back_sharp,
             title: AppLocalizations.of(context)!.credits,
             description:
-                "${credits?.getTotalValue(currencyID: 2).toCurrencyFormat()}\n${credits?.getTotalValue(currencyID: 1).toCurrencyFormat()}" ??
-                    "",
+                "${credits?.getTotalValue(currencyID: 2).toCurrencyFormat()}\n${credits?.getTotalValue(currencyID: 1).toCurrencyFormat()}",
             footer: credits?.length.toString(),
             footerRightWidget: creditsAnalysis.getGrowthRateText(context),
           )),

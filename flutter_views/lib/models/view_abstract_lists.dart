@@ -12,7 +12,7 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../providers/actions/action_viewabstract_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
@@ -161,7 +161,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   MenuItemBuild getMenuItemPrint(BuildContext context) {
     return MenuItemBuild(
-      'Print',
+      AppLocalizations.of(context)!.print,
       Icons.print,
       '/print',
     );
@@ -169,7 +169,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   MenuItemBuild getMenuItemEdit(BuildContext context) {
     return MenuItemBuild(
-      'Edit',
+      AppLocalizations.of(context)!.edit,
       Icons.edit,
       'edit',
     );
@@ -177,7 +177,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   MenuItemBuild getMenuItemView(BuildContext context) {
     return MenuItemBuild(
-      'View',
+      AppLocalizations.of(context)!.view,
       Icons.view_agenda,
       '',
     );
@@ -185,7 +185,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   MenuItemBuild getMenuItemShare(BuildContext context) {
     return MenuItemBuild(
-      'Share',
+      AppLocalizations.of(context)!.share,
       Icons.share,
       'share',
     );
@@ -208,6 +208,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       return getPopupMenuActionsEdit(context);
     }
 
+    return [];
+  }
+
+  Future<List<MenuItemBuildGenirc>> getPopupMenuActionsThreeDot(
+      BuildContext context, ServerActions? action) async {
     return [];
   }
 
@@ -314,14 +319,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       //             )));
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EditDetailsPage(
-            object: this as ViewAbstract,
-          ),
-        ),
-      );
+      Navigator.pushNamed(context, "/edit", arguments: this);
     }
   }
 }

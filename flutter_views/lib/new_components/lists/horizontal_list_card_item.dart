@@ -24,21 +24,26 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 60 / 2.0),
+            padding: EdgeInsets.only(top: 60 / 2.0, bottom: 60 / 2),
             child: Container(
+              // margin: EdgeInsets.symmetric(vertical: kDefaultPadding),
               //replace this Container with your Card
               // color: Colors.white,
               height: 200.0,
               width: 200,
               child: Card(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                      height: 60 / 2,
+                      height: 30 / 2,
                     ),
-                    object.getMainHeaderText(context),
+
+                    object.getHorizontalCardTitle(context),
+                    // Spacer(),
+                    object.getHorizontalCardMainHeader(context),
                     // const Spacer(),
-                    object.getMainSubtitleHeaderText(context)!,
+                    object.getHorizontalCardSubtitle(context),
                   ],
                 ),
               ),

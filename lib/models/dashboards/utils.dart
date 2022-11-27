@@ -155,8 +155,7 @@ extension BalanceDueTotals<T extends BalanceDue> on List<T?>? {
       total[key] = value
               .reduce((value, element) =>
                   value.toNonNullable() + element.toNonNullable())
-              .toNonNullable() ??
-          0;
+              .toNonNullable();
     });
 
     return total;

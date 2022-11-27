@@ -60,7 +60,7 @@ class _ListCardItemState<T extends ViewAbstract>
         title: (widget.object.getMainHeaderText(context)),
         subtitle: (widget.object.getMainSubtitleHeaderText(context)),
       
-        leading: widget.object.getCardLeadingCircleAvatar(context),
+        leading: widget.object.getCardLeading(context),
         trailing: widget.object.getPopupMenuActionListWidget(context));
   }
 }

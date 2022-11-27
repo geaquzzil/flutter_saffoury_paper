@@ -9,48 +9,49 @@ class BaseSharedHeaderDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      CircleAvatar(
-          maxRadius: 24,
-          backgroundColor: Colors.transparent,
-          child: viewAbstract.getCardLeadingImage(context)),
-      const SizedBox(width: kDefaultPadding),
-      Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          children: [
-            Expanded(
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          viewAbstract.getCardLeading(context),
+          const SizedBox(width: kDefaultPadding),
+          Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text.rich(
-                    TextSpan(
-                      // text: viewAbstract.getMainHeaderTextOnly(context),
-                      style: Theme.of(context).textTheme.button,
-                      children: [
-                        TextSpan(
-                            text: viewAbstract
-                                .getMainHeaderLabelTextOnly(context),
-                            style: Theme.of(context).textTheme.caption),
-                      ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              // text: viewAbstract.getMainHeaderTextOnly(context),
+                              style: Theme.of(context).textTheme.button,
+                              children: [
+                                TextSpan(
+                                    text: viewAbstract
+                                        .getMainHeaderLabelTextOnly(context),
+                                    style: Theme.of(context).textTheme.caption),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            viewAbstract.getMainHeaderTextOnly(context),
+                            style: Theme.of(context).textTheme.headline6,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    viewAbstract.getMainHeaderTextOnly(context),
-                    style: Theme.of(context).textTheme.headline6,
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(width: kDefaultPadding / 2),
-            Text(
-              viewAbstract.getDateTextOnly() ?? "",
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ],
-        ),
-      ]))
-    ]);
+                    const SizedBox(width: kDefaultPadding / 2),
+                    Text(
+                      viewAbstract.getDateTextOnly() ?? "",
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
+                ),
+              ]))
+        ]);
   }
 }

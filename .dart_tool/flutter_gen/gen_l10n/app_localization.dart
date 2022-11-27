@@ -3681,11 +3681,11 @@ abstract class AppLocalizations {
   /// **'{r} {r}'**
   String get tow_strings;
 
-  /// No description provided for @addToFormat.
+  /// Greet the user by their name.
   ///
   /// In en, this message translates to:
   /// **'Add to {r}'**
-  String get addToFormat;
+  String addToFormat(String r);
 
   /// No description provided for @toFormat.
   ///

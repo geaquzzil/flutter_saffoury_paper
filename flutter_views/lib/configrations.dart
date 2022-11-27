@@ -55,7 +55,7 @@ class Configurations {
     }
     debugPrint("Configrations getting saved value for key =>$key");
     Map<String, dynamic> map = {};
-    map = jsonDecode(objectHistoryList!) as Map<String, dynamic>;
+    map = jsonDecode(objectHistoryList) as Map<String, dynamic>;
     return obj.fromJsonViewAbstract(map);
   }
 

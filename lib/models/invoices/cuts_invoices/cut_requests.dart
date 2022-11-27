@@ -184,7 +184,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
     if (action == ServerActions.view) {
       return ListHorizontalApiAutoRestWidget(
-        customHeight: 800,
+        customHeight: 300,
         title: getMainHeaderText(context),
         autoRest: AutoRest<CutRequest>(
             obj: CutRequest()

@@ -16,7 +16,7 @@ import '../../interfaces/listable_interface.dart';
 import '../../models/view_abstract.dart';
 import '../../models/view_abstract_inputs_validaters.dart';
 import '../../new_components/edit_listeners/controller_dropbox_list.dart';
-import '../../new_components/editables/editable_table_widget.dart';
+import '../../new_components/tables_widgets/editable_table_widget.dart';
 import '../../new_components/editables/paginated_data_table2.dart';
 import '../../new_components/tables_widgets/cart_data_table_master.dart';
 import '../../screens/base_shared_actions_header.dart';
@@ -196,7 +196,7 @@ class BaseEditWidget extends StatelessWidget {
           Spacer(),
           if (viewAbstract.isNew()) Icon(Icons.new_label_sharp),
           if (field != null)
-            if (viewAbstract.canBeNullableFromParentCheck(context, field!) ??
+            if (viewAbstract.canBeNullableFromParentCheck(context, field) ??
                 false)
               IconButton(
                   icon: Icon(

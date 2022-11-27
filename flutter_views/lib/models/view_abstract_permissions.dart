@@ -163,6 +163,25 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     return context.read<AuthProvider>().getPermissions;
   }
 
+  FutureBuilder<E> onFutureBuilder<E>(BuildContext context,
+      {required Future<E> function,
+      required Widget Function(E data) onHasPermissionWidget}) {
+    return FutureBuilder<E>(
+      future: function,
+      builder: (context, AsyncSnapshot<E> snapshot) {
+        if (snapshot.data == false) {
+          return nil;
+        } else {
+          if (snapshot.data != null) {
+            return onHasPermissionWidget(snapshot.data as E);
+          } else {
+            return nil;
+          }
+        }
+      },
+    );
+  }
+
   FutureBuilder<bool> onHasPermission(BuildContext context,
       {required Future<bool> function,
       required Widget Function() onHasPermissionWidget}) {

@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
 import 'package:flutter_view_controller/screens/header_action_icon.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import 'base_shared_drawer_navigation.dart';
@@ -35,30 +36,18 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
                     1)
                   BackButton(
                     onPressed: () {
-                      context.read<ActionViewAbstractProvider>().pop();
+                      if (SizeConfig.isDesktop(context)) {
+                        context.read<ActionViewAbstractProvider>().pop();
+                      } else {
+                        Navigator.of(context).pop();
+                      }
                     },
                   ),
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),
-                // Expanded(
-                //   child: TabBar(
-                //     labelColor: Colors.black87,
-                //     tabs: tabs,
-                //     controller: tabController,
-                //   ),
-                // ),
-                // const Spacer(),
-                // We don't need print option on mobile
                 buildList(context),
-                IconButton(
-                  icon: const Icon(Icons.more_horiz),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {},
-                ),
+                buildPopupMenu(context),
               ],
             ),
           ),
@@ -76,6 +65,40 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
         menuItemBuild: menuItemBuild,
       );
 
+  Widget buildPopupMenu(BuildContext context) {
+    final action = context.watch<ActionViewAbstractProvider>().getServerActions;
+    return viewAbstract.onFutureBuilder<List<MenuItemBuildGenirc>>(
+      context,
+      function: viewAbstract.getPopupMenuActionsThreeDot(context, action),
+      onHasPermissionWidget: (data) {
+        return PopupMenuButton<MenuItemBuildGenirc>(
+          onSelected: (MenuItemBuildGenirc result) {
+            Navigator.pushNamed(context, result.route, arguments: result.value);
+            // viewAbstract.onPopupMenuActionSelected(c, result);
+          },
+          itemBuilder: (BuildContext context) =>
+              data.map(buildPopupMenuItem).toList(),
+        );
+      },
+    );
+  }
+
+  PopupMenuItem<MenuItemBuildGenirc> buildPopupMenuItem(
+          MenuItemBuildGenirc e) =>
+      PopupMenuItem(
+        value: e,
+        child: Row(
+          children: [
+            Icon(
+              e.icon,
+              // color: Colors.black,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Text(e.title),
+          ],
+        ),
+      );
   Widget buildList(BuildContext context) {
     final action = context.watch<ActionViewAbstractProvider>().getServerActions;
     // final viewAbstract = context.watch<ActionViewAbstractProvider>().getObject;

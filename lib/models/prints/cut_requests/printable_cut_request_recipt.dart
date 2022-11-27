@@ -110,8 +110,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.product,
             description:
-                "${cutRequest.products?.getMainHeaderTextOnly(context)}\n ID" ??
-                    "-"),
+                "${cutRequest.products?.getMainHeaderTextOnly(context)}\n ID"),
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.quality,
             description: cutRequest.products?.qualities
@@ -125,8 +124,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.quantity,
             description:
-                "${cutRequest.quantity?.toCurrencyFormat(symbol: 'kg')}\n${converter.convertDouble(cutRequest.quantity ?? 0)}" ??
-                    "-"),
+                "${cutRequest.quantity?.toCurrencyFormat(symbol: 'kg')}\n${converter.convertDouble(cutRequest.quantity ?? 0)}"),
       ],
       2: [
         RecieptHeaderTitleAndDescriptionInfo(
@@ -168,7 +166,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
             pid.products?.getMainHeaderTextOnly(context) ?? "-",
           ),
           SizedBox(width: 1 * (PdfPageFormat.cm)),
-          Text(pid.quantity.toCurrencyFormat(symbol: "kg") ?? "-"),
+          Text(pid.quantity.toCurrencyFormat(symbol: "kg")),
           SizedBox(width: 1 * (PdfPageFormat.cm)),
           Text(pid.products?.status
                   ?.getFieldLabelString(context, pid.products!.status!) ??

@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
@@ -123,6 +124,9 @@ class _BaseViewNewPage extends State<BaseViewNewPage> {
               },
             ),
             getAddFloatingButton2(context),
+            const SizedBox(
+              width: kDefaultPadding,
+            ),
           ],
         ),
         body: getFutureBody());
@@ -250,6 +254,7 @@ class _BaseViewNewPage extends State<BaseViewNewPage> {
   }
 
   Widget getBody() {
+    // return MasterView(viewAbstract: widget.viewAbstract);
     return ListView(
       children: [
         BaseSharedHeaderViewDetailsActions(

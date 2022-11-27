@@ -1,0 +1,76 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_screens/sign_in.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+
+import '../models/view_abstract.dart';
+import '../providers/auth_provider.dart';
+import '../screens/view/view_view_main_page.dart';
+import 'authentecation/base_authentication_screen.dart';
+import 'edit_new/base_edit_main_page.dart';
+import 'home/base_home_main.dart';
+
+class RouteGenerator {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    final args = settings.arguments;
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(
+          builder: (context) {
+            Status authStatus = context.read<AuthProvider>().getStatus;
+            if (authStatus == Status.Authenticated) {
+              // return POSPage();
+              return const BaseHomeMainPage();
+            } else {
+              // return POSPage();
+              return BaseAuthenticatingScreen();
+            }
+          },
+        );
+      case '/sign_in':
+        return MaterialPageRoute(builder: (context) => const SignInPage());
+
+      //  case "/print":
+      //     return MaterialPageRoute(builder: (context) => const SignInPage());
+      case "/view":
+        return MaterialPageRoute(builder: (context) {
+          if (args == null) {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          } else if (args is ViewAbstract) {
+            return BaseViewNewPage(viewAbstract: args);
+          } else {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          }
+        });
+      case "/edit":
+        return MaterialPageRoute(builder: (context) {
+          if (args == null) {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          } else if (args is ViewAbstract) {
+            return BaseEditNewPage(viewAbstract: args);
+          } else {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          }
+        });
+    }
+    return _errorRoute();
+  }
+
+  static Route<dynamic> _errorRoute() {
+    return MaterialPageRoute(builder: (_) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Error'),
+        ),
+        body: Center(
+          child: Text('ERROR'),
+        ),
+      );
+    });
+  }
+}

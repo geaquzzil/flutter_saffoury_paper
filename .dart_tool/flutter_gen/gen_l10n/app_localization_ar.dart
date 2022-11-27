@@ -1801,7 +1801,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tow_strings => '{r} {r}';
 
   @override
-  String get addToFormat => 'إضافة إلى {r}';
+  String addToFormat(String r) {
+    return 'إضافة إلى $r';
+  }
 
   @override
   String get toFormat => 'إلى {r}';
