@@ -1806,6 +1806,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get inWords => 'كتابة';
+
+  @override
   String get toFormat => 'إلى {r}';
 
   @override
@@ -2011,4 +2014,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get secondaryColor => 'اللون الثانوي';
+
+  @override
+  String get accountInfo => 'معلومات الحساب';
 }

@@ -596,6 +596,7 @@
             }
         }
     },
+    "inWords":"كتابة",
     "toFormat": "إلى {r}",
     "addFormat": "إضافة {r}",
     "errCantEditFormatFromTo": "لا يمكن تعديل {r} لأنه تم إنشاؤه من {r}",
@@ -674,5 +675,6 @@
     "hideAccountBalanceDes": "لن يظهر رصيد الحساب في الفاتورة" ,
     "changeInvoiceProductNameDes":"تغيير اسم المنتج (اتركه فارغا إذا كنت تريد الاحتفاظ بالاسم الأصلي)",
     "primaryColor": "اللون الأساسي",
-    "secondaryColor": "اللون الثانوي"
+    "secondaryColor": "اللون الثانوي",
+    "accountInfo":"معلومات الحساب"
 }

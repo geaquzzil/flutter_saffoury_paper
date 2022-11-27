@@ -28,9 +28,23 @@ class BaseMaterialAppPage extends StatefulWidget {
 
   @override
   State<BaseMaterialAppPage> createState() => _BaseMaterialAppPageState();
+
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _BaseMaterialAppPageState? state =
+        context.findAncestorStateOfType<_BaseMaterialAppPageState>();
+
+    // var prefs = await SharedPreferences.getInstance();
+    // prefs.setString('languageCode', newLocale.languageCode);
+    // prefs.setString('countryCode', "");
+
+    // state?.setState(() {
+    //   state._locale = newLocale;
+    // });
+  }
 }
 
 class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
+  Locale _locale = Locale('ar', 'ps');
   @override
   Widget build(BuildContext context) {
     // Get.put(DashboardController());
@@ -84,7 +98,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
             PointerDeviceKind.unknown
           },
         ),
-        supportedLocales: L10n.all,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale('ar', ''),
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

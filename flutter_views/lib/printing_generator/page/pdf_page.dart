@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
@@ -90,6 +92,11 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         canChangeOrientation: true,
         // pdfPreviewPageDecoration:
         canDebug: false,
+        pageFormats: {
+          AppLocalizations.of(context)!.a3ProductLabel: PdfPageFormat.a3,
+          AppLocalizations.of(context)!.a4ProductLabel: PdfPageFormat.a4,
+          AppLocalizations.of(context)!.a5ProductLabel: PdfPageFormat.a5,
+        },
         scrollViewDecoration:
             BoxDecoration(color: Theme.of(context).colorScheme.outline),
         shareActionExtraBody: "shareActionExtraBody",
@@ -101,42 +108,37 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
 
         // shouldRepaint: ,
         build: (format) async {
-          if (widget.invoiceObj is PrintableInvoiceInterface) {
-            T? pls;
-            if (widget.invoiceObj is ModifiablePrintableInterface) {
-              pls = await Configurations.get<T>(
-                  (widget.invoiceObj as ModifiablePrintableInterface)
-                      .getModifibleSettingObject(context),
-                  customKey: "_printsetting" +
-                      widget.invoiceObj.runtimeType.toString()) as T?;
-              if (pls != null) {
-                pls = pls.onSavedModiablePrintableLoaded(
-                    context, widget.invoiceObj as ViewAbstract);
-              }
+          T? pls;
+          if (widget.invoiceObj is ModifiablePrintableInterface) {
+            pls = await Configurations.get<T>(
+                (widget.invoiceObj as ModifiablePrintableInterface)
+                    .getModifibleSettingObject(context),
+                customKey: "_printsetting" +
+                    widget.invoiceObj.runtimeType.toString()) as T?;
+            if (pls != null) {
+              pls = pls.onSavedModiablePrintableLoaded(
+                  context, widget.invoiceObj as ViewAbstract);
             }
+          }
+          if (widget.invoiceObj is PrintableInvoiceInterface) {
             final pdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
                 context, widget.invoiceObj as PrintableInvoiceInterface,
                 printCommand: pls);
             return pdf.generate(format);
           } else if (widget.invoiceObj is PrintableCustomInterface) {
             final pdf = PdfCustom<PrintableCustomInterface, T>(
-                context, widget.invoiceObj as PrintableCustomInterface);
+                context, widget.invoiceObj as PrintableCustomInterface,
+                printCommand: pls);
             return pdf.generate(format);
           } else if (widget.invoiceObj is PrintableCustomFromPDFInterface) {
-            T? pls;
-            if (widget.invoiceObj is ModifiablePrintableInterface) {
-              pls = await Configurations.get<T>(
-                  (widget.invoiceObj as ModifiablePrintableInterface)
-                      .getModifibleSettingObject(context),
-                  customKey: "_printsetting") as T;
-            }
             final pdf = PdfCustomFromPDF<PrintableCustomFromPDFInterface, T>(
                 context, widget.invoiceObj as PrintableCustomFromPDFInterface,
                 printCommand: pls);
             return pdf.generate(format);
           } else {
             final pdf = PdfReceipt<PrintableReceiptInterface, T>(
-                context, widget.invoiceObj as PrintableReceiptInterface);
+                context, widget.invoiceObj as PrintableReceiptInterface,
+                printCommand: pls);
             return pdf.generate(format);
           }
         });

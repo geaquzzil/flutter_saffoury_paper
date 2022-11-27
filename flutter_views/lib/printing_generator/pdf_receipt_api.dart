@@ -9,7 +9,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:intl/intl.dart' as intl;
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'ext.dart';
 
 class PdfReceipt<T extends PrintableReceiptInterface,
@@ -45,35 +45,49 @@ class PdfReceipt<T extends PrintableReceiptInterface,
     header = await buildHeader();
 
     final pdf = Document(
-        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
-    pdf.addPage(getMultiPage(format));
+      title: "TEST",
+      pageMode: PdfPageMode.fullscreen,
+      theme: myTheme,
+    );
+    pdf.addPage(getPage(format));
     return pdf.save();
     // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
   Page getPage(PdfPageFormat? format) {
+    
     return Page(
+        // textDirection: getTextDirection("يسش"),
         pageFormat: format,
         margin: EdgeInsets.zero,
         build: (context) {
           this.contextPDF = context;
           return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-                  // alignment: ,
+              Stack(
+                  alignment: Alignment.bottomCenter,
+                  fit: StackFit.loose,
                   children: [header, buildTitle()]),
-              // header,
-              // buildInvoiceMainInfoHeader(),
               Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Expanded(flex: 4, child: buildTable()),
+                    Expanded(flex: 4, child: buildInvoiceMainTable2()),
                     Expanded(
                         flex: 1,
                         child: buildQrCode<E>(this.context, printObj,
                             printCommandAbstract: printCommand))
-                  ])
+                  ]),
+              buildInvoiceBottom(),
+              Spacer(),
+
+              Container(
+                  width: double.infinity,
+                  height: 10,
+                  color: PdfColor.fromHex(
+                      printObj.getPrintableSecondaryColor(printCommand))),
               // buildInvoiceMainTable(),
             ],
           );
@@ -98,19 +112,53 @@ class PdfReceipt<T extends PrintableReceiptInterface,
           // header,
           // buildInvoiceMainInfoHeader(),
           Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(flex: 3, child: buildTable()),
+                Expanded(flex: 3, child: buildInvoiceMainTable2()),
                 Expanded(
                     flex: 1,
                     child: buildQrCode<E>(this.context, printObj,
+                        size: getQrCodeSize(format),
                         printCommandAbstract: printCommand))
               ])
           // buildInvoiceMainTable(),
         ];
       },
     );
+  }
+
+  double getQrCodeSize(PdfPageFormat? format) {
+    if (format == PdfPageFormat.a4) {
+      return 80;
+    } else if (format == PdfPageFormat.a3) {
+      return 80;
+    } else if (format == PdfPageFormat.a5) {
+      return 10;
+    } else {
+      return 10;
+    }
+  }
+
+  Widget buildInvoiceBottom() {
+    return Padding(
+        padding: const EdgeInsets.only(left: PdfPageFormat.cm),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
+              buildTitleOnInvoice("Terms and conditions"),
+              Text(
+                  "1- Please receipt invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of receipt date\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments.",
+                  style:
+                      const TextStyle(fontSize: 9, color: PdfColors.grey700)),
+              SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
+              buildTitleOnInvoice("Additional notes"),
+              Text(
+                  "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
+                  style: const TextStyle(fontSize: 9, color: PdfColors.grey700))
+            ]));
   }
 
   List<String> getList(List<RecieptHeaderTitleAndDescriptionInfo> list) {
@@ -122,82 +170,6 @@ class PdfReceipt<T extends PrintableReceiptInterface,
     return stringList;
   }
 
-  Widget buildTable() {
-    return buildInvoiceMainTable2();
-    return Column(
-        children: [buildInvoiceMainTable2(), buildInvoiceBottomOfQr()]);
-  }
-
-  Widget buildInvoiceBottomOfQr() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0),
-        child: Table.fromTextArray(
-          headers: ["", ""],
-          data: [
-            // ["iD", "23132"],
-            ["paymant amount", "21231"],
-            ["balance", "2421"],
-            ["served by", "Qussai Al-Saffoury"]
-          ],
-          border: null,
-          oddCellStyle: const TextStyle(color: PdfColors.green),
-          cellAlignment: Alignment.centerRight,
-          cellAlignments: {0: Alignment.centerLeft, 1: Alignment.centerRight},
-
-          // oddCellStyle: TextStyle(fontWeight: FontWeight.bold),
-          cellDecoration: (index, data, rowNum) {
-            mt.debugPrint("cellDecoration rownum $rowNum index= $index");
-            return const BoxDecoration(
-
-                // borderRadius: BorderRadius.circular(1),
-                // color: index % 2 != 0 ? PdfColors.grey200 : PdfColors.white,
-                border: Border(
-                    bottom: BorderSide(
-              width: 10,
-              //                    <--- top side
-              color: PdfColors.white,
-              // width: 1.0,
-            )));
-          },
-          headerCellDecoration: const BoxDecoration(
-              color: PdfColors.white,
-              border: Border(
-                  bottom: BorderSide(
-                //                    <--- top side
-                color: PdfColors.white,
-                // width: 2.0,
-              ))),
-          //this is content table text color
-          // cellFormat: ,
-          // cellStyle:
-          //     TextStyle(color: PdfColors.black, fontWeight: FontWeight.bold),
-          // oddCellStyle: TextStyle(
-          //   color: PdfColors.black,
-          // ),
-          headerStyle: TextStyle(
-              color: PdfColors.green,
-              fontWeight: FontWeight.bold,
-              background: const BoxDecoration(color: PdfColors.white)),
-          headerDecoration: const BoxDecoration(color: PdfColors.grey300),
-          // cellHeight: 20,
-          // cellAlignments: {0: Alignment.centerRight, 1: Alignment.centerLeft}
-          // cellAlignments: Map.fromIterable(headers, key: (e) {
-          //   int idx = headers.indexOf(e);
-          //   return idx;
-          // }, value: (e) {
-          //   int idx = headers.indexOf(e);
-          //   return idx == 0
-          //       ? Alignment.centerLeft
-          //       : (idx == headers.length - 1
-          //           ? Alignment.centerRight
-          //           : Alignment.center);
-          // })
-        ));
-  }
-
-  // Widget buildTable() {
-  //   return Column(children: [buildIdAndDate(), buildInvoiceMainTable()]);
-  // }
   Widget buildInvoiceMainTable2() {
     var table = printObj
         .getPrintableRecieptHeaderTitleAndDescription(context, printCommand)
@@ -219,7 +191,10 @@ class PdfReceipt<T extends PrintableReceiptInterface,
     //  var custom=
 
     return Padding(
-        padding: const EdgeInsets.only(left: 10),
+        padding: const EdgeInsets.only(
+            top: PdfPageFormat.cm,
+            bottom: PdfPageFormat.cm,
+            left: PdfPageFormat.cm),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -250,15 +225,18 @@ class PdfReceipt<T extends PrintableReceiptInterface,
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-          Text(recieptHeaderTitleAndDescriptionInfo.title),
+          Text(
+            recieptHeaderTitleAndDescriptionInfo.title,
+            textDirection:
+                getTextDirection(recieptHeaderTitleAndDescriptionInfo.title),
+          ),
           SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
           Expanded(
               child: Container(
                   constraints:
-                      const BoxConstraints(minHeight: 40, maxHeight: 80),
+                      const BoxConstraints(minHeight: 30, maxHeight: 80),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  // height: 40,
                   decoration: const BoxDecoration(
 
                       // borderRadius: BorderRadius.circular(1),
@@ -299,7 +277,11 @@ class PdfReceipt<T extends PrintableReceiptInterface,
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-          Text(recieptHeaderTitleAndDescriptionInfo.title),
+          Text(
+            recieptHeaderTitleAndDescriptionInfo.title,
+            textDirection:
+                getTextDirection(recieptHeaderTitleAndDescriptionInfo.title),
+          ),
           SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
           Expanded(
               child: Container(
@@ -338,96 +320,31 @@ class PdfReceipt<T extends PrintableReceiptInterface,
         ]));
   }
 
-  Widget buildInvoiceMainTable() {
-    // PrintableInvoiceInterfaceDetails head = details[0];
-    final data = printObj
-        .getPrintableRecieptHeaderTitleAndDescription(context, null)
-        .entries
-        .map((e) => getList(e.value))
-        .toList();
-
-    final headerGenerater = List.generate(data[0].length, (index) => "");
-
-    // return Table(children: [
-    //   TableRow(children: [
-    //     Text("iD"),
-    //     Text("231qq", style: TextStyle(fontWeight: FontWeight.bold))
-    //   ])
-    // ]);
-
-    // data.addAll(getTotalText(headers.length - 1));
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0),
-        child: Table.fromTextArray(
-            headers: headerGenerater,
-            data: data,
-            // cellStyle: TextStyle(fontSize: 14),
-            border: null,
-            // oddCellStyle: TextStyle(fontSize: 14),
-            cellAlignment: Alignment.centerLeft,
-            // oddCellStyle: TextStyle(fontWeight: FontWeight.bold),
-
-            // cellStyle: TextStyle(fontWeight: FontWeight.bold),
-            cellDecoration: (index, data, rowNum) {
-              mt.debugPrint("cellDecoration rownum $rowNum index= $index");
-              return BoxDecoration(
-
-                  // borderRadius: BorderRadius.circular(1),
-                  color: index % 2 != 0 ? PdfColors.grey200 : PdfColors.white,
-                  border: const Border(
-                      bottom: BorderSide(
-                    width: 10,
-                    //                    <--- top side
-                    color: PdfColors.white,
-                    // width: 1.0,
-                  )));
-            },
-            headerCellDecoration: const BoxDecoration(
-                color: PdfColors.white,
-                border: Border(
-                    bottom: BorderSide(
-                  //                    <--- top side
-                  color: PdfColors.white,
-                  // width: 2.0,
-                ))),
-            //this is content table text color
-            // cellFormat: ,
-            // cellStyle:
-            //     TextStyle(color: PdfColors.black, fontWeight: FontWeight.bold),
-            // oddCellStyle: TextStyle(
-            //   color: PdfColors.black,
-            // ),
-
-            headerStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                background: const BoxDecoration(color: PdfColors.white)),
-            headerDecoration: const BoxDecoration(color: PdfColors.grey300),
-            cellHeight: 30,
-            cellAlignments: {0: Alignment.centerRight, 1: Alignment.centerLeft}
-            // cellAlignments: Map.fromIterable(headers, key: (e) {
-            //   int idx = headers.indexOf(e);
-            //   return idx;
-            // }, value: (e) {
-            //   int idx = headers.indexOf(e);
-            //   return idx == 0
-            //       ? Alignment.centerLeft
-            //       : (idx == headers.length - 1
-            //           ? Alignment.centerRight
-            //           : Alignment.center);
-            // })
-            ));
+  PdfColor getSecondaryColor() {
+    return PdfColor.fromHex(printObj.getPrintableSecondaryColor(printCommand));
   }
 
-  Widget buildTitle() => Text(
-        printObj.getPrintableInvoiceTitle(context, printCommand),
-        style: TextStyle(
-            fontSize: 20,
-            color: PdfColor.fromHex(
-                printObj.getPrintablePrimaryColor(printCommand))),
-      );
+  PdfColor getPrimaryColor() {
+    return PdfColor.fromHex(printObj.getPrintablePrimaryColor(printCommand));
+  }
+
+  Widget buildTitle() {
+    String title = printObj.getPrintableInvoiceTitle(context, printCommand);
+    return Text(
+      title,
+      textDirection: getTextDirection(title),
+      style: TextStyle(
+          fontSize: 20,
+          color: PdfColor.fromHex(
+              printObj.getPrintablePrimaryColor(printCommand))),
+    );
+  }
+
   Widget buildTitleOnInvoice(String title) {
     return Text(title,
-        style: TextStyle(fontWeight: FontWeight.bold, color: PdfColors.green));
+        textDirection: getTextDirection(title),
+        style:
+            TextStyle(fontWeight: FontWeight.bold, color: getSecondaryColor()));
   }
 
   static pw.BoxDecoration getDividerBetweenContent({bool withDivider = true}) {

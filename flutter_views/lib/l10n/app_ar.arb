@@ -663,5 +663,6 @@
   "cancel":"الفاء",
   "hideQrCode":"إخفاء الرمز الشريطي",
   "primaryColor":"اللون الأساسي",
-  "secondaryColor":"اللون الثانوي"
+  "secondaryColor":"اللون الثانوي",
+   "accountInfo":"معلومات الحساب"
 }

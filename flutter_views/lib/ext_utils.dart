@@ -83,12 +83,12 @@ extension StringsUtils on String? {
   /// if null return the now date
   DateTime toDateTime() {
     if (this == null) return DateTime.now();
-    DateFormat dateFormat = DateFormat(dateFormatString);
+    DateFormat dateFormat = DateFormat(dateFormatString, 'en-US');
     return dateFormat.parse(this ?? "");
   }
 
   String toDateTimeNowString() {
-    DateFormat dateFormat = DateFormat(dateFormatString);
+    DateFormat dateFormat = DateFormat(dateFormatString, 'en-US');
     return dateFormat.format(DateTime.now());
   }
 
@@ -105,7 +105,7 @@ extension StringsUtils on String? {
 extension DatesDateTime on DateTime? {
   String toDateTimeString() {
     if (this == null) return "".toDateTimeNowString();
-    DateFormat dateFormat = DateFormat(dateFormatString);
+    DateFormat dateFormat = DateFormat(dateFormatString, 'en');
     return dateFormat.format(this ?? DateTime.now());
   }
 }

@@ -362,9 +362,9 @@
   "incomesThenExpences": "Income(s) then Expense(s)",
   "pendingFirst": "Pending first",
   "valueInDollar": "Value in (Dollar)",
-  "a3ProductLabel": "Print as A3 size (29.7 x 42.0)",
-  "a4ProductLabel": "Print as A4 size (21.0 x 29.7)",
-  "a5ProductLabel": "Print as A5 size (14.8 x 21.0)",
+  "a3ProductLabel": "A3 (29.7 x 42.0)",
+  "a4ProductLabel": "A4 (21.0 x 29.7)",
+  "a5ProductLabel": "A5 (14.8 x 21.0)",
   "tenByTwintyProductLabel": "Print as (20 x 10) size",
   "swipeUpToLogin": "Swipe up to login",
   "employeesWarehouse": "Employee\\'s warehouse",
@@ -667,6 +667,7 @@
   "cancel":"Cancel",
   "hideQrCode":"Hide QR Code",
   "primaryColor":"Primary Color",
-  "secondaryColor":"Secondary Color"
+  "secondaryColor":"Secondary Color",
+  "accountInfo":"Account Information"
 
 }

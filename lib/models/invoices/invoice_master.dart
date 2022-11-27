@@ -342,7 +342,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   String getPrintableQrCodeID() {
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss", 'en');
 
     String year = "${dateFormat.parse(date ?? "").year}";
     String invCode = "";

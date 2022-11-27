@@ -211,10 +211,18 @@ class DrawerLargeScreens extends StatelessWidget {
           NotificationPopupWidget(),
           buildColapsedIcon(
             context,
+            Icons.language,
+            () => context
+                .read<LargeScreenPageProvider>()
+                .setCurrentPage(CurrentPage.settings),
+          ),
+          buildColapsedIcon(
+            context,
             Icons.arrow_back_ios,
             () =>
                 context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
-          )
+          ),
+
           // oldCollapsedIcon(margin, alignemt, context, icon),
         ],
       ),
@@ -233,10 +241,7 @@ class DrawerLargeScreens extends StatelessWidget {
               icon: Icon(data),
               color: onHover
                   ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary
-                  
-                  )
-                  ;
+                  : Theme.of(context).colorScheme.secondary);
         });
   }
 }

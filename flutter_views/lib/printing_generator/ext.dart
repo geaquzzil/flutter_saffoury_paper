@@ -23,16 +23,18 @@ Widget buildQrCode<T extends PrintLocalSetting>(
     mt.BuildContext context, PrintableMaster printObj,
     {T? printCommandAbstract, bool withPaddingTop = true, double size = 80}) {
   return Column(children: [
-    // if (withPaddingTop) SizedBox(height: 80),
-    // Container(color: PdfColors.blue, width: 100, height: 100),
     SizedBox(
         width: size,
         height: size,
         child: BarcodeWidget(
+          height: size,
+          width: size,
           barcode: Barcode.qrCode(),
           data: printObj.getPrintableQrCode(),
         )),
     SizedBox(height: .1 * (PdfPageFormat.cm)),
-    Text(printObj.getPrintableQrCodeID(), style: const TextStyle(fontSize: 9)),
+    Text(
+      printObj.getPrintableQrCodeID(),
+    ),
   ]);
 }

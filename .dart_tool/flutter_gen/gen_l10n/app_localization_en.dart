@@ -1058,13 +1058,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get valueInDollar => 'Value in (Dollar)';
 
   @override
-  String get a3ProductLabel => 'Print as A3 size (29.7 x 42.0)';
+  String get a3ProductLabel => 'A3 (29.7 x 42.0)';
 
   @override
-  String get a4ProductLabel => 'Print as A4 size (21.0 x 29.7)';
+  String get a4ProductLabel => 'A4 (21.0 x 29.7)';
 
   @override
-  String get a5ProductLabel => 'Print as A5 size (14.8 x 21.0)';
+  String get a5ProductLabel => 'A5 (14.8 x 21.0)';
 
   @override
   String get tenByTwintyProductLabel => 'Print as (20 x 10) size';
@@ -1806,6 +1806,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get inWords => 'In words';
+
+  @override
   String get toFormat => 'to {r}';
 
   @override
@@ -2011,4 +2014,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get secondaryColor => 'Secondary Color';
+
+  @override
+  String get accountInfo => 'Account Information';
 }

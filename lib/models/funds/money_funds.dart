@@ -47,7 +47,6 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     date = "".toDateTimeNowString();
   }
 
-
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "fromBox": 0.toInt(),
@@ -132,8 +131,8 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
-    Credits c = Credits();
-    c.customers = Customer()..name = "Test";
+    T c = getSelfNewInstance();
+    (c as MoneyFunds).customers = Customer()..name = "Test";
     c.employees = Employee()..name = "Test";
     c.value = 29099;
     c.comments = "this is a comment";
@@ -167,33 +166,20 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     return {
       0: [
         RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.iD,
-            description: iD.toString()),
-        // RecieptHeaderTitleAndDescriptionInfo(
-        //     title: AppLocalizations.of(context)!.date,
-        //     description: date.toString()),
-      ],
-      10: [
-        // RecieptHeaderTitleAndDescriptionInfo(
-        //     title: AppLocalizations.of(context)!.iD,
-        //     description: iD.toString()),
-        RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.date,
-            description: date.toString()),
-      ],
-      1: [
-        RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.mr,
             description: customers?.name ?? ""),
+        RecieptHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.iD,
+            description: "${iD.toString()}\n${date.toString()}"),
       ],
       2: [
         RecieptHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.payemntAmount,
-            description: value?.toStringAsFixed(2) ?? ""),
+            description: value?.toCurrencyFormat() ?? ""),
       ],
       3: [
         RecieptHeaderTitleAndDescriptionInfo(
-            title: "IN WORDS",
+            title: AppLocalizations.of(context)!.inWords.toUpperCase(),
             description: converter.convertDouble(value ?? 0)),
       ],
       4: [
@@ -201,6 +187,18 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
             title: AppLocalizations.of(context)!.comments,
             description: comments ?? ""),
       ],
+      if ((pca?.hideCustomerBalance == false))
+        5: [
+          RecieptHeaderTitleAndDescriptionInfo(
+              title: AppLocalizations.of(context)!.balance,
+              description: customers?.balance.toCurrencyFormat() ?? "")
+        ],
+      if ((pca?.hideEmployeeName == false))
+        6: [
+          RecieptHeaderTitleAndDescriptionInfo(
+              title: AppLocalizations.of(context)!.employee,
+              description: employees?.name ?? "")
+        ],
     };
   }
 
@@ -233,7 +231,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   String getPrintableQrCodeID() {
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss",'en');
 
     String year = "${dateFormat.parse(date ?? "").year}";
     String invCode = "";

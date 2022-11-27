@@ -2202,19 +2202,19 @@ abstract class AppLocalizations {
   /// No description provided for @a3ProductLabel.
   ///
   /// In en, this message translates to:
-  /// **'Print as A3 size (29.7 x 42.0)'**
+  /// **'A3 (29.7 x 42.0)'**
   String get a3ProductLabel;
 
   /// No description provided for @a4ProductLabel.
   ///
   /// In en, this message translates to:
-  /// **'Print as A4 size (21.0 x 29.7)'**
+  /// **'A4 (21.0 x 29.7)'**
   String get a4ProductLabel;
 
   /// No description provided for @a5ProductLabel.
   ///
   /// In en, this message translates to:
-  /// **'Print as A5 size (14.8 x 21.0)'**
+  /// **'A5 (14.8 x 21.0)'**
   String get a5ProductLabel;
 
   /// No description provided for @tenByTwintyProductLabel.
@@ -3687,6 +3687,12 @@ abstract class AppLocalizations {
   /// **'Add to {r}'**
   String addToFormat(String r);
 
+  /// No description provided for @inWords.
+  ///
+  /// In en, this message translates to:
+  /// **'In words'**
+  String get inWords;
+
   /// No description provided for @toFormat.
   ///
   /// In en, this message translates to:
@@ -4100,6 +4106,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Secondary Color'**
   String get secondaryColor;
+
+  /// No description provided for @accountInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Information'**
+  String get accountInfo;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

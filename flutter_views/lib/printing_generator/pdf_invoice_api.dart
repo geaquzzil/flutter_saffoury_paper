@@ -10,7 +10,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:intl/intl.dart' as intl;
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../models/prints/print_local_setting.dart';
 
 class PdfInvoiceApi<T extends PrintableInvoiceInterface,
@@ -46,32 +46,22 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
     pdf.addPage(getMultiPage(format, header));
     return pdf.save();
-    // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
   pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
     return MultiPage(
       pageFormat: format,
-
       margin: EdgeInsets.zero,
-
-      // pageTheme: ,
       build: (context) => [
-        Stack(alignment: Alignment.bottomRight, fit: StackFit.loose,
-            // alignment: ,
-            children: [
-              header,
-              buildTitle(this.context, printObj,
-                  printCommandAbstract: printCommand)
-            ]),
-        // header,
+        Stack(alignment: Alignment.bottomRight, fit: StackFit.loose, children: [
+          header,
+          buildTitle(this.context, printObj, printCommandAbstract: printCommand)
+        ]),
         buildInvoiceMainInfoHeader(),
-
         SizedBox(height: .5 * (PdfPageFormat.cm)),
         buildInvoiceMainTable(),
         buildMainTotal(),
       ],
-      // footer: (context) => buildFooter(),
     );
   }
 
@@ -174,7 +164,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
             IconData(item.getCodeIcon()!, matchTextDirection: true),
           ),
         if (item.getCodeIcon() != null) SizedBox(width: 0.2 * PdfPageFormat.cm),
-        Text(item.title),
+        Text(item.title, textDirection: getTextDirection(item.title)),
       ],
     );
   }
@@ -272,6 +262,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
             //this is content table text color
             cellStyle: const TextStyle(color: PdfColors.black),
             headerStyle: TextStyle(
+                
                 color: getSecondaryColor(),
                 fontWeight: FontWeight.bold,
                 background: const BoxDecoration(color: PdfColors.white)),
@@ -292,6 +283,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
 
   Widget buildTitleOnInvoice(String title) {
     return Text(title,
+        textDirection: getTextDirection(title),
         style:
             TextStyle(fontWeight: FontWeight.bold, color: getSecondaryColor()));
   }
@@ -309,12 +301,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
                   .map((e) => buildBottomAccountInfo(
                       title: e.title, value: e.description))
                   .toList()),
-          // BarcodeWidget(
-          //   height: 50,
-          //   width: 50,
-          //   barcode: Barcode.qrCode(),
-          //   data: printObj.getInvoiceQrCode(),
-          // ),
           if (printCommand?.hideQrCode == false)
             Column(children: [
               BarcodeWidget(
@@ -338,7 +324,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(height: 1 * (PdfPageFormat.cm)),
-              buildTitleOnInvoice("ACCOUNT INFO"),
+              buildTitleOnInvoice(AppLocalizations.of(context)!.accountInfo),
               buildInvoiceBottomInfoWithQrCode(),
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice("Terms and conditions"),
@@ -438,7 +424,10 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(color: color, fontSize: 8)),
+          Text(title,
+              textDirection: getTextDirection(title),
+              style: TextStyle(color: color, fontSize: 8)),
+
           // RichText(text: text)
           if (value != null)
             Text(value,
