@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/screens/view/view_view_main_page.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -59,8 +60,11 @@ class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
           );
           break;
         case ServerActions.view:
-          currentWidget = wrapHeaderAndFooter(
-              MasterView(viewAbstract: viewAbstract), viewAbstract);
+          currentWidget = Container(
+              color: Theme.of(context).colorScheme.background,
+              child: BaseViewNewPage(
+                viewAbstract: viewAbstract,
+              ));
           break;
         default:
           currentWidget = MasterHomeHorizontal(viewAbstract: viewAbstract);

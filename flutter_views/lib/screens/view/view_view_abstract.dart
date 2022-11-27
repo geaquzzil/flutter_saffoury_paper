@@ -22,44 +22,44 @@ class MasterView extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget? topWidget =
         viewAbstract.getCustomTopWidget(context, ServerActions.view);
-    return Row(
+    return Column(
       children: [
-        // Expanded(flex: 1, child: Text("TEST")),
-        Expanded(
-          flex: 1,
-          child: SingleChildScrollView(
-            controller: ScrollController(),
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if(topWidget!=null)topWidget,
-                // BaseSharedHeaderViewDetailsActions(
-                //   viewAbstract: viewAbstract,
-                // ),
-                ViewDetailsListWidget(
-                  viewAbstract: viewAbstract,
-                ),
-                if (viewAbstract is CartableInvoiceMasterObjectInterface)
-                  CartDataTableMaster(
-                      action: ServerActions.view,
-                      obj:
-                          viewAbstract as CartableInvoiceMasterObjectInterface),
-                const SizedBox(
-                  height: 200,
-                )
-              ],
-            ),
-          ),
-        ),
-        if (viewAbstract.getTabs(context).isNotEmpty)
-          Expanded(
-            child: OutlinedCard(
-              child: TabBarWidget(
-                viewAbstract: viewAbstract,
+        Row(
+          children: [
+            // Expanded(flex: 1, child: Text("TEST")),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (topWidget != null) topWidget,
+                  // BaseSharedHeaderViewDetailsActions(
+                  //   viewAbstract: viewAbstract,
+                  // ),
+                  ViewDetailsListWidget(
+                    viewAbstract: viewAbstract,
+                  ),
+                  if (viewAbstract is CartableInvoiceMasterObjectInterface)
+                    CartDataTableMaster(
+                        action: ServerActions.view,
+                        obj: viewAbstract
+                            as CartableInvoiceMasterObjectInterface),
+                  const SizedBox(
+                    height: 200,
+                  )
+                ],
               ),
             ),
-          )
+            if (viewAbstract.getTabs(context).isNotEmpty)
+              Expanded(
+                child: OutlinedCard(
+                  child: TabBarWidget(
+                    viewAbstract: viewAbstract,
+                  ),
+                ),
+              )
+          ],
+        ),
       ],
     );
   }
