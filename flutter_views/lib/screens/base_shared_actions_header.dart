@@ -29,20 +29,19 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
             padding: const EdgeInsets.all(kDefaultPadding),
             child: Row(
               children: [
-                if (context
-                        .watch<ActionViewAbstractProvider>()
-                        .getStackedActions
-                        .length >
-                    1)
-                  BackButton(
-                    onPressed: () {
-                      if (SizeConfig.isDesktop(context)) {
-                        context.read<ActionViewAbstractProvider>().pop();
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  ),
+                BackButton(
+                  onPressed: () {
+                    if (context
+                            .read<ActionViewAbstractProvider>()
+                            .getStackedActions
+                            .length >
+                        1) {
+                      context.read<ActionViewAbstractProvider>().pop();
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),

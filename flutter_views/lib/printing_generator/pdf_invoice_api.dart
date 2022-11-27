@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -18,28 +19,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
   T printObj;
   E? printCommand;
   PdfInvoiceApi(this.context, this.printObj, {this.printCommand});
-  @deprecated
-  Future<Uint8List> generateFromImage(Uint8List? list) {
-    final pdf = Document();
-
-    pdf.addPage(MultiPage(
-      build: (context) => [
-        // buildHeader(),
-        if (list != null) pw.Image(MemoryImage(list)),
-
-        buildInvoiceMainInfoHeader(),
-        // buildSubHeaderInfo(invoice),
-        SizedBox(height: 3 * PdfPageFormat.cm),
-        buildTitle(this.context, printObj, printCommandAbstract: printCommand),
-        // buildInvoiceTable(),
-        // Divider(),
-        buildMainTotal(),
-      ],
-      // footer: (context) => buildFooter(invoice),
-    ));
-    return pdf.save();
-    // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
-  }
 
   Future<pw.ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
@@ -200,6 +179,50 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
     );
   }
 
+  bool hasSortBy() {
+    return printCommand?.getPrintableSortByName() != null;
+  }
+
+  void checkToSort(
+      PrintableInvoiceInterfaceDetails pid, List<List<String>> data) {
+    if (!hasSortBy()) return;
+    String field = printCommand!.getPrintableSortByName()!;
+    bool ascending = printCommand!.getPrintableHasSortBy() == SortByType.ASC;
+    int index = pid
+        .getPrintableInvoiceTableHeaderAndContent(context, printCommand)
+        .keys
+        .toList()
+        .indexOf(field);
+    material.debugPrint("checkToSort field => $field  indexOf =$index");
+    data.sort((a, b) => compareDynamic(ascending, a[index], b[index]));
+  }
+
+  int compareDynamic(bool ascending, dynamic value1, dynamic value2) {
+    material.debugPrint(
+        "checkToSort compareDynamic value1 => ${value1.toString()} , value2 => $value2");
+    if (value1 == null) {
+      return 0;
+    }
+    if (value1.runtimeType == int) {
+      return compareInt(ascending, value1, value2);
+    } else if (value1.runtimeType == double) {
+      return compareDouble(ascending, value1, value2);
+    } else if (value1.runtimeType == String) {
+      return compareString(ascending, value1, value2);
+    } else {
+      return 0;
+    }
+  }
+
+  int compareString(bool ascending, String value1, String value2) =>
+      ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+
+  int compareInt(bool ascending, int value1, int value2) =>
+      ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+
+  int compareDouble(bool ascending, double value1, double value2) =>
+      ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+
   Widget buildInvoiceMainTable() {
     List<PrintableInvoiceInterfaceDetails> details =
         printObj.getPrintableInvoiceDetailsList();
@@ -217,6 +240,8 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
             .values
             .toList())
         .toList();
+
+    checkToSort(head, data);
 
     // data.addAll(getTotalText(headers.length - 1));
     return Padding(

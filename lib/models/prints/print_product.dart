@@ -5,6 +5,8 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -30,6 +32,12 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
   String? description;
 
   PrintProduct() : super();
+
+  @override
+  String? getPrintableSortByName() => null;
+
+  @override
+  SortByType? getPrintableHasSortBy() => null;
 
   @override
   PrintProduct getSelfNewInstance() {
@@ -112,4 +120,12 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
       _$PrintProductFromJson(data);
 
   Map<String, dynamic> toJson() => _$PrintProductToJson(this);
+
+  @override
+  PrintProduct onSavedModiablePrintableLoaded(
+      BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
+    debugPrint(
+        "onSavedModiablePrintableLoaded ${viewAbstractThatCalledPDF.runtimeType}");
+    return this;
+  }
 }

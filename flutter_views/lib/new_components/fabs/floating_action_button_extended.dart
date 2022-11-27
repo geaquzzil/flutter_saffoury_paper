@@ -33,6 +33,7 @@ class _FloatingActionButtonExtendedState
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+        heroTag: UniqueKey(),
         onPressed: _onFabPress,
         label: AnimatedSwitcher(
           duration: const Duration(milliseconds: 250),

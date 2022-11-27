@@ -57,7 +57,8 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(1),
               child: DecoratedBox(
-                child: object.getCardLeading(context),
+                child: object.getCardLeading(context,
+                    addCustomHeroTag: "horizontal"),
                 decoration: ShapeDecoration(
                   shape: CircleBorder(),
                 ),

@@ -192,6 +192,7 @@ class CutRequest extends ViewAbstract<CutRequest>
             key: "CustomerByCutRequest$iD"),
       );
     }
+    return null;
   }
 
   @override

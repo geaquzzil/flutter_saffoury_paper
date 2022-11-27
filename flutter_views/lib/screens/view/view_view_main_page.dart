@@ -134,6 +134,7 @@ class _BaseViewNewPage extends State<BaseViewNewPage> {
 
   FloatingActionButton getAddFloatingButton2(BuildContext context) {
     return FloatingActionButton.extended(
+        heroTag: UniqueKey(),
         onPressed: () async {
           if (currentViewAbstract == null) {
             isCalledApi = false;
@@ -177,6 +178,7 @@ class _BaseViewNewPage extends State<BaseViewNewPage> {
   List<ViewAbstract> selectedList = [];
   FloatingActionButton getDeleteFloatingButton(BuildContext context) {
     return FloatingActionButton.small(
+      heroTag: UniqueKey(),
       onPressed: () {
         Dialogs.materialDialog(
             msgAlign: TextAlign.end,

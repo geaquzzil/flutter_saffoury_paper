@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
@@ -20,10 +21,15 @@ class BaseSettingDetailsView extends StatelessWidget {
       BuildContext context, ModifiableInterface settingObject) async {
     ViewAbstract? saved = await Configurations.get<ViewAbstract>(
         settingObject.getModifibleSettingObject(context),
-        customKey: "_printsetting");
+        customKey: "_printsetting" + settingObject.runtimeType.toString());
+
     if (saved == null) {
       return settingObject.getModifibleSettingObject(context);
     } else {
+      if (saved is PrintLocalSetting) {
+        return saved.onSavedModiablePrintableLoaded(
+            context, settingObject as ViewAbstract);
+      }
       return saved;
     }
   }
@@ -48,7 +54,10 @@ class BaseSettingDetailsView extends StatelessWidget {
                     viewAbstract: snapshot.data!,
                     isTheFirst: true,
                     onValidate: (viewAbstract) {
-                      Configurations.save("_printsetting", viewAbstract);
+                      Configurations.save(
+                          "_printsetting" +
+                              settingObject.runtimeType.toString(),
+                          viewAbstract);
                       context.read<SettingProvider>().change(settingObject);
                     }),
               ],

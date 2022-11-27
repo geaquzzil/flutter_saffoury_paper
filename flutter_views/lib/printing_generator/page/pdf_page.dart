@@ -81,6 +81,7 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
   }
 
   PdfPreview getBody(BuildContext context) {
+    // Printing.layoutPdf
     return PdfPreview(
         pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
         shareActionExtraEmails: const ["info@saffoury.com"],
@@ -93,6 +94,7 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
             BoxDecoration(color: Theme.of(context).colorScheme.outline),
         shareActionExtraBody: "shareActionExtraBody",
         dynamicLayout: true,
+        loadingWidget: CircularProgressIndicator(),
         // actions: [Icon(Icons.search), Icon(Icons.ac_unit_sharp)],
         // pdfPreviewPageDecoration: BoxDecoration(color: Colors.green),
         useActions: true,
@@ -105,7 +107,12 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
               pls = await Configurations.get<T>(
                   (widget.invoiceObj as ModifiablePrintableInterface)
                       .getModifibleSettingObject(context),
-                  customKey: "_printsetting") as T;
+                  customKey: "_printsetting" +
+                      widget.invoiceObj.runtimeType.toString()) as T?;
+              if (pls != null) {
+                pls = pls.onSavedModiablePrintableLoaded(
+                    context, widget.invoiceObj as ViewAbstract);
+              }
             }
             final pdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
                 context, widget.invoiceObj as PrintableInvoiceInterface,

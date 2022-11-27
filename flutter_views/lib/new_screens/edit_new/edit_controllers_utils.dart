@@ -84,22 +84,22 @@ Widget getContolerColorPicker(BuildContext context,
   debugPrint("getContolerColorPicker field : $field value:$value");
 
   return wrapController(
-    FormBuilderColorPickerField(
-      enabled: enabled,
-      initialValue: (value is String) ? value.fromHex() : value?.fromHex(),
-      name: viewAbstract.getTag(field),
-      // initialDate: (value as String?).toDateTime(),
-      decoration: getDecoration(context, viewAbstract, field: field),
-      onSaved: (newValue) {
-        viewAbstract.setFieldValue(field, newValue?.toHex2());
-        debugPrint('getContolerColorPicker onSave= ${field}:$newValue');
-        if (viewAbstract.getFieldNameFromParent != null) {
-          viewAbstract.getParnet?.setFieldValue(
-              viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
-        }
-      },
-    ),
-  );
+      FormBuilderColorPickerField(
+        enabled: enabled,
+        initialValue: (value is String) ? value.fromHex() : value?.fromHex(),
+        name: viewAbstract.getTag(field),
+        // initialDate: (value as String?).toDateTime(),
+        decoration: getDecoration(context, viewAbstract, field: field),
+        onSaved: (newValue) {
+          viewAbstract.setFieldValue(field, newValue?.toHex2());
+          debugPrint('getContolerColorPicker onSave= ${field}:$newValue');
+          if (viewAbstract.getFieldNameFromParent != null) {
+            viewAbstract.getParnet?.setFieldValue(
+                viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+          }
+        },
+      ),
+      requiredSpace: true);
 }
 
 Widget getControllerDateTime(BuildContext context,
@@ -136,29 +136,31 @@ Widget getControllerDropdownCustomList(BuildContext context,
     required List<dynamic> list,
     required Function(dynamic selectedObj) onSelected}) {
   debugPrint("getControllerDropdownCustomList field = $field  list=> $list");
-  return wrapController(FormBuilderDropdown<dynamic>(
-    autovalidateMode: AutovalidateMode.always,
-    onChanged: (obj) {
-      viewAbstract.onDropdownChanged(context, field, obj);
-      viewAbstract.setFieldValue(field, obj);
-      debugPrint('getControllerDropdownCustomList onChanged=   $obj');
-      onSelected(obj);
-    },
-    validator: viewAbstract.getTextInputValidatorCompose(context, field),
-    name: viewAbstract.getTag(field),
-    initialValue: viewAbstract.getFieldValue(field),
-    decoration: getDecorationIconLabel(context,
-        label: viewAbstract.getFieldLabel(context, field),
-        icon: viewAbstract.getFieldIconData(field)),
-    items: list
-        .map((item) => DropdownMenuItem<dynamic>(
-              value: item,
-              child: Text(item == null
-                  ? "${AppLocalizations.of(context)!.enter} ${viewAbstract.getFieldLabel(context, field)}"
-                  : item.toString()),
-            ))
-        .toList(),
-  ));
+  return wrapController(
+      FormBuilderDropdown<dynamic>(
+        autovalidateMode: AutovalidateMode.always,
+        onChanged: (obj) {
+          viewAbstract.onDropdownChanged(context, field, obj);
+          viewAbstract.setFieldValue(field, obj);
+          debugPrint('getControllerDropdownCustomList onChanged=   $obj');
+          onSelected(obj);
+        },
+        validator: viewAbstract.getTextInputValidatorCompose(context, field),
+        name: viewAbstract.getTag(field),
+        initialValue: viewAbstract.getFieldValue(field),
+        decoration: getDecorationIconLabel(context,
+            label: viewAbstract.getFieldLabel(context, field),
+            icon: viewAbstract.getFieldIconData(field)),
+        items: list
+            .map((item) => DropdownMenuItem<dynamic>(
+                  value: item,
+                  child: Text(item == null
+                      ? "${AppLocalizations.of(context)!.enter} ${viewAbstract.getFieldLabel(context, field)}"
+                      : item.toString()),
+                ))
+            .toList(),
+      ),
+      requiredSpace: true);
 }
 
 Widget getControllerDropdownViewAbstractEnum(BuildContext context,
@@ -198,12 +200,12 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     required String field,
     required TextEditingController controller,
     AutoCompleteFor? type,
-    bool enabled=true,
+    bool enabled = true,
     bool withDecoration = true,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
-        enabled: enabled,
+          enabled: enabled,
           controller: controller,
           onChangeGetObject: (text) => autoCompleteBySearchQuery
               ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)

@@ -53,13 +53,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   Widget getCardLeadingCircleAvatar(BuildContext context,
       {double width = 60, double height = 60}) {
-    return SizedBox(
-        width: width,
-        height: height,
-        child: CircleAvatar(
-            radius: 28,
-            backgroundColor: Theme.of(context).backgroundColor,
-            child: getCardLeadingImage(context)));
+    return CircleAvatar(
+        radius: 24,
+        backgroundColor: Theme.of(context).backgroundColor,
+        child: getCardLeadingImage(context));
   }
 
   Widget getCardLeadingCircleAvatarWithSelectedBorder(BuildContext context) {
@@ -76,8 +73,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         child: (getCardLeadingCircleAvatarWithSelectedBorder(context)));
   }
 
-  Widget getCardLeading(BuildContext context) {
-    return Hero(tag: this, child: (getCardLeadingCircleAvatar(context)));
+  Widget getCardLeading(BuildContext context, {String? addCustomHeroTag}) {
+    return Hero(
+        tag: getIDFormat(context) +
+            (getTableNameApi() ?? "") +
+            (addCustomHeroTag ?? ""),
+        child: (getCardLeadingCircleAvatar(context)));
   }
 
   DismissDirection getDismissibleDirection() {
@@ -171,7 +172,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return MenuItemBuild(
       AppLocalizations.of(context)!.edit,
       Icons.edit,
-      'edit',
+      '/edit',
     );
   }
 
@@ -179,7 +180,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return MenuItemBuild(
       AppLocalizations.of(context)!.view,
       Icons.view_agenda,
-      '',
+      '/view',
     );
   }
 
@@ -320,6 +321,8 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.pushNamed(context, "/edit", arguments: this);
+    } else if (result.icon == Icons.view_agenda) {
+      Navigator.pushNamed(context, "/view", arguments: this);
     }
   }
 }

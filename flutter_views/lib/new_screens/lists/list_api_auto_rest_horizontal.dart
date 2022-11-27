@@ -19,7 +19,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
       required this.autoRest,
       this.title,
       this.titleString,
-      this.customHeight=230,
+      this.customHeight = 230,
       this.listItembuilder})
       : super(key: key);
 
@@ -31,7 +31,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
 class _ListHorizontalApiWidgetState
     extends State<ListHorizontalApiAutoRestWidget> {
   final _scrollController = ScrollController();
-  final ListMultiKeyProvider listProvider = ListMultiKeyProvider();
+  late ListMultiKeyProvider listProvider;
 
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
@@ -39,10 +39,14 @@ class _ListHorizontalApiWidgetState
   @override
   void initState() {
     super.initState();
+    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     _scrollController.addListener(() => _onScroll());
-    if (listProvider.getCount(widget.autoRest.key) == 0) {
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
-    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (listProvider.getCount(widget.autoRest.key) == 0) {
+        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+      }
+    });
   }
 
   Widget _listItems(

@@ -19,6 +19,8 @@ class SettingProvider with ChangeNotifier {
         .whereType<ModifiableInterface>()
         .toList();
 
+        
+
     return printableSettingsObjects;
   }
 }

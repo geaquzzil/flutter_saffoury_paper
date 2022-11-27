@@ -25,6 +25,7 @@ class SettingPage extends StatelessWidget {
                 ],
               ),
             )),
+        VerticalDivider(),
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 8 : 10, child: desideLyout(context))

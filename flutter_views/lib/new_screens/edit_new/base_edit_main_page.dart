@@ -136,6 +136,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
 
   FloatingActionButton getAddFloatingButton2(BuildContext context) {
     return FloatingActionButton.extended(
+        heroTag: UniqueKey(),
         onPressed: () async {
           if (currentViewAbstract == null) {
             isCalledApi = false;
@@ -179,6 +180,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
   List<ViewAbstract> selectedList = [];
   FloatingActionButton getDeleteFloatingButton(BuildContext context) {
     return FloatingActionButton.small(
+      heroTag: UniqueKey(),
       onPressed: () {
         Dialogs.materialDialog(
             msgAlign: TextAlign.end,
@@ -214,6 +216,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
 
   FloatingActionButton getAddToListFloatingButton(BuildContext context) {
     return FloatingActionButton.small(
+      heroTag: UniqueKey(),
       onPressed: () {
         Dialogs.materialDialog(
             // isScrollControlled: true,

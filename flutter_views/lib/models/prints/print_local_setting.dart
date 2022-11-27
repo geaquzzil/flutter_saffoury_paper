@@ -15,6 +15,13 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   String? secondaryColor;
   PrintLocalSetting() : super();
 
+  SortByType? getPrintableHasSortBy();
+
+  String? getPrintableSortByName();
+
+  T onSavedModiablePrintableLoaded(
+      BuildContext context, ViewAbstract viewAbstractThatCalledPDF);
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "printOptions": PrinterOptions(),

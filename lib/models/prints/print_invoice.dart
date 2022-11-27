@@ -7,7 +7,9 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -33,10 +35,17 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
 
   String? sortByField;
   SortByType? sortByType;
+
   @JsonKey(ignore: true)
   InvoiceMaster? invoice;
 
   PrintInvoice() : super();
+
+  @override
+  String? getPrintableSortByName() => sortByField;
+
+  @override
+  SortByType getPrintableHasSortBy() => sortByType ?? SortByType.ASC;
 
   @override
   PrintInvoice getSelfNewInstance() {
@@ -63,32 +72,46 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
           "changeProductNameTo": "",
           "sortByType": SortByType.ASC,
         });
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "changeProductNameTo") {
+      return ViewAbstractControllerInputType.EDIT_TEXT;
+    }
+    return super.getInputType(field);
+  }
+
   @override
   String? getTextInputHint(BuildContext context, {String? field}) {
     if (field == "changeProductNameTo") {
       return AppLocalizations.of(context)!.changeInvoiceProductNameDes;
     }
-    super.getTextInputHint(context, field: field);
+    return super.getTextInputHint(context, field: field);
+  }
+
+  bool isPricelessInvoice() {
+    if (invoice == null) return false;
+    return invoice!.isPricelessInvoice();
   }
 
   @override
   List<String> getMainFields() => super.getMainFields()
     ..addAll([
-      "hideCustomerAddressInfo",
-      "hideCustomerPhone",
-      "hideCustomerBalance",
-      "hideEmployeeName",
-      "hideCargoInfo",
-      "hideInvoicePaymentMethod",
-      "hideUnitPriceAndTotalPrice",
-      "hideInvoiceDate",
-      "hideInvoiceDueDate",
-      "hideTermsOfService",
-      "hideAdditionalNotes",
       "sortByField",
       "sortByType",
       "productNameOption",
-      "changeProductNameTo"
+      "changeProductNameTo",
+      "hideCustomerAddressInfo",
+      "hideCustomerPhone",
+      if (isPricelessInvoice() == false) "hideCustomerBalance",
+      "hideEmployeeName",
+      "hideCargoInfo",
+      "hideInvoicePaymentMethod",
+      if (isPricelessInvoice() == false) "hideUnitPriceAndTotalPrice",
+      "hideInvoiceDate",
+      if (isPricelessInvoice() == false) "hideInvoiceDueDate",
+      if (isPricelessInvoice() == false) "hideTermsOfService",
+      "hideAdditionalNotes",
     ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
@@ -126,7 +149,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       super.getFieldLabelMap(context)
         ..addAll({
           "hideCustomerAddressInfo":
-              AppLocalizations.of(context)!.hideAccountAddressAndPhone,
+              AppLocalizations.of(context)!.hideAccountAdress,
           "hideCustomerPhone": AppLocalizations.of(context)!.hideAccountPhone,
           "hideCustomerBalance":
               AppLocalizations.of(context)!.hideAccountBalance,
@@ -161,7 +184,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       {
         "sortByField": invoice
                 ?.getDetailMasterNewInstance()
-                .getPrintableInvoiceTableHeaderAndContent(context, null)
+                .getPrintableInvoiceTableHeaderAndContent(context, this)
                 .keys
                 .toList() ??
             []
@@ -189,4 +212,13 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       _$PrintInvoiceFromJson(data);
 
   Map<String, dynamic> toJson() => _$PrintInvoiceToJson(this);
+
+  @override
+  PrintInvoice onSavedModiablePrintableLoaded(
+      BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
+    debugPrint(
+        "onSavedModiablePrintableLoaded ${viewAbstractThatCalledPDF.runtimeType}");
+    invoice = viewAbstractThatCalledPDF as InvoiceMaster;
+    return this;
+  }
 }

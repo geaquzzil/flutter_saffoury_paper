@@ -31,10 +31,34 @@ class CutRequestRecieptPDF {
   Future<Document> generate() async {
     final pdf = Document(
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: themeData);
+    switch (setting?.printCutRequestType) {
+      case PrintCutRequestType.ALL:
+        await addRecipt(pdf);
+        await addLabels(pdf);  
+        break;
+      case PrintCutRequestType.ONLY_CUT_REQUEST:
+        await addRecipt(pdf);
+        break;
+      case PrintCutRequestType.ONLY_PRODUCT_LABEL:
+        await addLabels(pdf);
+        break;
+      default:
+        await addRecipt(pdf);
+        await addLabels(pdf);
+        break;
+    }
+
+    return pdf;
+  }
+
+  Future<void> addRecipt(Document pdf) async {
     final pdfRec = PdfReceipt(
         context, CutRequestRecipt(cutRequest: cutRequest, setting: setting));
     await pdfRec.initHeader();
     pdf.addPage(pdfRec.getPage(format));
+  }
+
+  Future<void> addLabels(Document pdf) async {
     CutRequestProductLabelPDF cutRequestProductLabelPDF =
         CutRequestProductLabelPDF(context,
             cutRequest: cutRequest, themeData: themeData, setting: setting);
@@ -42,8 +66,6 @@ class CutRequestRecieptPDF {
     for (var element in (await cutRequestProductLabelPDF.generate())) {
       pdf.addPage(element);
     }
-
-    return pdf;
   }
 
   String? getPrintProductName() {

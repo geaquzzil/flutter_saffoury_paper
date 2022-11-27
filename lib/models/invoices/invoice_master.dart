@@ -405,6 +405,17 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     }
   }
 
+  bool isPricelessInvoice() {
+    bool result = this is CustomerRequestSize ||
+        this is ProductInput ||
+        this is ProductOutput ||
+        this is ReservationInvoice ||
+        this is Transfers;
+
+    debugPrint("isPricelessInvoice for $runtimeType result =>$result");
+    return result;
+  }
+
   @override
   String getPrintablePrimaryColor(PrintInvoice? setting) {
     return setting?.primaryColor ??
@@ -455,20 +466,22 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
             hexColor: getPrintablePrimaryColor(pca)
             // icon: Icons.tag
             ),
-      if ((pca?.hideCustomerBalance == false))
-        InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.balance,
-            description: customers?.balance?.toStringAsFixed(2) ?? "",
-            hexColor: getPrintablePrimaryColor(pca)
-            // icon: Icons.balance
-            ),
-      if ((pca?.hideInvoicePaymentMethod == false))
-        InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.paymentMethod,
-            description: "payment on advanced",
-            hexColor: getPrintablePrimaryColor(pca)
-            // icon: Icons.credit_card
-            ),
+      if (!isPricelessInvoice())
+        if ((pca?.hideCustomerBalance == false))
+          InvoiceHeaderTitleAndDescriptionInfo(
+              title: AppLocalizations.of(context)!.balance,
+              description: customers?.balance?.toStringAsFixed(2) ?? "",
+              hexColor: getPrintablePrimaryColor(pca)
+              // icon: Icons.balance
+              ),
+      if (!isPricelessInvoice())
+        if ((pca?.hideInvoicePaymentMethod == false))
+          InvoiceHeaderTitleAndDescriptionInfo(
+              title: AppLocalizations.of(context)!.paymentMethod,
+              description: "payment on advanced",
+              hexColor: getPrintablePrimaryColor(pca)
+              // icon: Icons.credit_card
+              ),
     ];
   }
 
@@ -478,7 +491,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
         title: AppLocalizations.of(context)!.mr,
-        description: customers?.name ?? "",
+        description: customers?.name ?? "TODO",
         // icon: Icons.account_circle_rounded
       ),
       if ((pca?.hideCustomerAddressInfo == false))
@@ -506,7 +519,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       InvoiceTotalTitleAndDescriptionInfo(
           size: 10,
           title: AppLocalizations.of(context)!.total_quantity.toUpperCase(),
-          description: quantity?.toStringAsFixed(2) ?? "0",
+          description: quantity?.toCurrencyFormat() ?? "0",
           hexColor: Colors.grey.toHex()),
       InvoiceTotalTitleAndDescriptionInfo(
           size: 8,
@@ -527,15 +540,17 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       return [];
     }
     return [
-      InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-          description: extendedPrice?.toStringAsFixed(2) ?? "0"),
-      InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.discount.toUpperCase(),
-          description: extendedDiscount?.toStringAsFixed(2) ?? "0"),
+      if (!isPricelessInvoice())
+        InvoiceTotalTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+            description: extendedPrice?.toCurrencyFormat() ?? "0"),
+      if (!isPricelessInvoice())
+        InvoiceTotalTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.discount.toUpperCase(),
+            description: extendedDiscount?.toCurrencyFormat() ?? "0"),
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-          description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
+          description: extendedNetPrice?.toCurrencyFormat() ?? "0",
           hexColor: getPrintablePrimaryColor(pca)),
     ];
   }

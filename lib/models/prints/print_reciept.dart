@@ -5,6 +5,8 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -23,6 +25,13 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
   MoneyFunds? moneyFund;
 
   PrintReceipt() : super();
+
+
+    @override
+  String? getPrintableSortByName() => null;
+
+  @override
+  SortByType? getPrintableHasSortBy() =>  SortByType.ASC;
 
   @override
   PrintReceipt getSelfNewInstance() {
@@ -105,4 +114,12 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
       _$PrintReceiptFromJson(data);
 
   Map<String, dynamic> toJson() => _$PrintReceiptToJson(this);
+
+  @override
+  PrintReceipt onSavedModiablePrintableLoaded(
+      BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
+    debugPrint(
+        "onSavedModiablePrintableLoaded ${viewAbstractThatCalledPDF.runtimeType}");
+    return this;
+  }
 }

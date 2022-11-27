@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
@@ -174,25 +179,40 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     // }
   }
 
+  bool isPricelessInvoice() {
+    bool result = this is CustomerRequestSizeDetails ||
+        this is ProductInputDetails ||
+        this is ProductOutputDetails ||
+        this is ReservationInvoiceDetails ||
+        this is TransfersDetails;
+
+    debugPrint("isPricelessInvoice for $runtimeType result =>$result");
+    return result;
+  }
+
   @override
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
           BuildContext context, PrintInvoice? pca) =>
       {
+        AppLocalizations.of(context)!.iD: getIDFormat(context),
         AppLocalizations.of(context)!.description:
             "${products?.getProductTypeNameString()}\n${products?.getSizeString(context)}",
         AppLocalizations.of(context)!.gsm:
             products?.gsms?.gsm.toString() ?? "0",
         AppLocalizations.of(context)!.quantity:
-            quantity?.toStringAsFixed(2) ?? "0",
-        if ((pca?.hideUnitPriceAndTotalPrice == false))
-          AppLocalizations.of(context)!.unit_price:
-              unitPrice?.toStringAsFixed(2) ?? "0",
-        if ((pca?.hideUnitPriceAndTotalPrice == false))
-          AppLocalizations.of(context)!.discount:
-              discount?.toStringAsFixed(2) ?? "0",
-        if ((pca?.hideUnitPriceAndTotalPrice == false))
-          AppLocalizations.of(context)!.total_price:
-              price?.toStringAsFixed(2) ?? "0",
+            quantity?.toCurrencyFormat() ?? "0",
+        if (!isPricelessInvoice())
+          if (((pca?.hideUnitPriceAndTotalPrice == false) ?? false))
+            AppLocalizations.of(context)!.unit_price:
+                unitPrice?.toStringAsFixed(2) ?? "0",
+        if (!isPricelessInvoice())
+          if (((pca?.hideUnitPriceAndTotalPrice == false) ?? false))
+            AppLocalizations.of(context)!.discount:
+                discount?.toStringAsFixed(2) ?? "0",
+        if (!isPricelessInvoice())
+          if (((pca?.hideUnitPriceAndTotalPrice == false) ?? false))
+            AppLocalizations.of(context)!.total_price:
+                price?.toCurrencyFormat() ?? "0",
       };
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
