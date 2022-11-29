@@ -51,7 +51,6 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
           "hideEmployeeName": false,
           "hideCustomerBalance": false,
           "hideInvoiceDate": false,
-          "hideAdditionalNotes": false,
         });
 
   @override
@@ -60,7 +59,6 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
       "hideCustomerBalance",
       "hideEmployeeName",
       "hideInvoiceDate",
-      "hideAdditionalNotes",
     ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
@@ -68,8 +66,6 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
       return AppLocalizations.of(context)!.hideAccountBalanceDes;
     } else if (field == "hideInvoiceDate") {
       return AppLocalizations.of(context)!.hideDateDes;
-    } else if (field == "hideAdditionalNotes") {
-      return AppLocalizations.of(context)!.hideCompanyNotesDes;
     } else if (field == "hideEmployeeName") {
       return AppLocalizations.of(context)!.hideEmployeeDes;
     }
@@ -84,7 +80,6 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
               AppLocalizations.of(context)!.hideAccountBalance,
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
-          "hideAdditionalNotes": AppLocalizations.of(context)!.hideCompanyNotes,
         });
   @override
   Map<String, IconData> getFieldIconDataMap() => {};

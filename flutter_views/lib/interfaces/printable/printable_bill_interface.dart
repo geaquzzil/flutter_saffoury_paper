@@ -4,6 +4,8 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdf;
 
+import '../../printing_generator/pdf_receipt_api.dart';
+
 abstract class PrintableReceiptInterface<T extends PrintLocalSetting>
     extends PrintableMaster<T> {
   ///for each int key is a column
@@ -16,7 +18,7 @@ abstract class PrintableReceiptInterface<T extends PrintLocalSetting>
       getPrintableRecieptFooterTitleAndDescription(
           BuildContext context, T? pca);
 
-  pdf.Widget? getPrintableRecieptCustomWidget(BuildContext context, T? pca);
+  pdf.Widget? getPrintableRecieptCustomWidget(BuildContext context, T? pca,PdfReceipt generator);
 }
 
 class RecieptHeaderTitleAndDescriptionInfo {

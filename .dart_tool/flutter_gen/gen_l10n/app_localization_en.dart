@@ -2017,4 +2017,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountInfo => 'Account Information';
+
+  @override
+  String get termsAndConitions => 'Terms and conditions';
+
+  @override
+  String get additionalNotes => 'Additional notes';
+
+  @override
+  String get invoiceTotalInWords => 'Invoice total (in words)';
 }

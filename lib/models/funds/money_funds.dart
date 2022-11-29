@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:number_to_character/number_to_character.dart';
@@ -151,7 +152,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   pdf.Widget? getPrintableRecieptCustomWidget(
-          BuildContext context, PrintReceipt? pca) =>
+          BuildContext context, PrintReceipt? pca,PdfReceipt generator) =>
       null;
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>

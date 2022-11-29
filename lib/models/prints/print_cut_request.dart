@@ -24,7 +24,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
   bool? hideCustomerName;
   bool? hideInvoiceDate;
   bool? hideEmployeeName;
-
   bool? skipWastedProduct;
 
   ProductNameOption? productNameOption;
@@ -51,7 +50,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
           "hideEmployeeName": false,
           "hideCustomerName": false,
           "hideInvoiceDate": false,
-          "hideAdditionalNotes": false,
           "printCutRequestType": PrintCutRequestType.ALL
         });
 
@@ -61,7 +59,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
       "hideCustomerName",
       "hideEmployeeName",
       "hideInvoiceDate",
-      "hideAdditionalNotes",
       "printCutRequestType"
     ]);
   @override
@@ -70,8 +67,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
       return AppLocalizations.of(context)!.hideCustomerNameDes;
     } else if (field == "hideInvoiceDate") {
       return AppLocalizations.of(context)!.hideDateDes;
-    } else if (field == "hideAdditionalNotes") {
-      return AppLocalizations.of(context)!.hideCompanyNotesDes;
     } else if (field == "hideEmployeeName") {
       return AppLocalizations.of(context)!.hideEmployeeDes;
     }
@@ -85,7 +80,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
           "hideCustomerName": AppLocalizations.of(context)!.hideCustomerName,
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
-          "hideAdditionalNotes": AppLocalizations.of(context)!.hideCompanyNotes,
         });
   @override
   Map<String, IconData> getFieldIconDataMap() => {};

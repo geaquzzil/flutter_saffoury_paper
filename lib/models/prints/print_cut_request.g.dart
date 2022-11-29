@@ -21,6 +21,8 @@ PrintCutRequest _$PrintCutRequestFromJson(Map<String, dynamic> json) =>
       ..hideQrCode = json['hideQrCode'] as bool?
       ..primaryColor = json['primaryColor'] as String?
       ..secondaryColor = json['secondaryColor'] as String?
+      ..hideTermsOfService = json['hideTermsOfService'] as bool?
+      ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
       ..hideCustomerName = json['hideCustomerName'] as bool?
       ..hideInvoiceDate = json['hideInvoiceDate'] as bool?
       ..hideEmployeeName = json['hideEmployeeName'] as bool?
@@ -39,6 +41,8 @@ Map<String, dynamic> _$PrintCutRequestToJson(PrintCutRequest instance) =>
       'hideQrCode': instance.hideQrCode,
       'primaryColor': instance.primaryColor,
       'secondaryColor': instance.secondaryColor,
+      'hideTermsOfService': instance.hideTermsOfService,
+      'hideAdditionalNotes': instance.hideAdditionalNotes,
       'hideCustomerName': instance.hideCustomerName,
       'hideInvoiceDate': instance.hideInvoiceDate,
       'hideEmployeeName': instance.hideEmployeeName,

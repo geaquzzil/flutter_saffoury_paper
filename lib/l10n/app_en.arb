@@ -686,5 +686,8 @@
     "primaryColor": "Primary Color",
     "changeInvoiceProductNameDes":"Change product name (Leave blank if you want to keep the original name)",
     "secondaryColor": "Secondary Color",
-      "accountInfo":"Account Information"
+    "accountInfo":"Account Information",
+    "termsAndConitions":"Terms and conditions",
+    "additionalNotes":"Additional notes",
+    "invoiceTotalInWords":"Invoice total (in words)"
 }

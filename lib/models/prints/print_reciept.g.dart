@@ -18,6 +18,8 @@ PrintReceipt _$PrintReceiptFromJson(Map<String, dynamic> json) => PrintReceipt()
   ..hideQrCode = json['hideQrCode'] as bool?
   ..primaryColor = json['primaryColor'] as String?
   ..secondaryColor = json['secondaryColor'] as String?
+  ..hideTermsOfService = json['hideTermsOfService'] as bool?
+  ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
   ..hideCustomerBalance = json['hideCustomerBalance'] as bool?
   ..hideInvoiceDate = json['hideInvoiceDate'] as bool?
   ..hideEmployeeName = json['hideEmployeeName'] as bool?;
@@ -31,6 +33,8 @@ Map<String, dynamic> _$PrintReceiptToJson(PrintReceipt instance) =>
       'hideQrCode': instance.hideQrCode,
       'primaryColor': instance.primaryColor,
       'secondaryColor': instance.secondaryColor,
+      'hideTermsOfService': instance.hideTermsOfService,
+      'hideAdditionalNotes': instance.hideAdditionalNotes,
       'hideCustomerBalance': instance.hideCustomerBalance,
       'hideInvoiceDate': instance.hideInvoiceDate,
       'hideEmployeeName': instance.hideEmployeeName,

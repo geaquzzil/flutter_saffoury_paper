@@ -2,6 +2,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
@@ -10,52 +11,21 @@ import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:intl/intl.dart' as intl;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'ext.dart';
+
+import 'ext.dart' as ext;
 
 class PdfReceipt<T extends PrintableReceiptInterface,
-    E extends PrintLocalSetting> {
-  material.BuildContext context;
-  late Context contextPDF;
-  T printObj;
-  E? printCommand;
-  late final header;
-  late final myTheme;
-  PdfReceipt(this.context, this.printObj, {this.printCommand});
-  Future<void> initHeader() async {
-    header = await buildHeader();
-    myTheme = await getThemeData();
-  }
-
-  Future<pw.ThemeData> getThemeData() async {
-    var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
-    final ttf = pw.Font.ttf(pathToFile);
-    return ThemeData.withFont(
-        icons: ttf,
-        base: await PdfGoogleFonts.tajawalRegular(),
-        bold: await PdfGoogleFonts.tajawalBold(),
-        italic: await PdfGoogleFonts.tajawalMedium(),
-        boldItalic: await PdfGoogleFonts.tajawalBold());
-  }
-
-  Future<Widget> buildHeader() async => pw.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${printObj.getPrintablePrimaryColor(printCommand)}&darkColor=${printObj.getPrintableSecondaryColor(printCommand)}'));
+    E extends PrintLocalSetting> extends PrintMasterPDF<T, E> {
+  PdfReceipt(material.BuildContext context, T printObj, {E? printCommand})
+      : super(context: context, printObj: printObj, setting: printCommand);
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
-    myTheme = await getThemeData();
-    header = await buildHeader();
-
-    final pdf = Document(
-      title: "TEST",
-      pageMode: PdfPageMode.fullscreen,
-      theme: myTheme,
-    );
-    pdf.addPage(getPage(format));
+    final pdf = await getDocument();
+    pdf.addPage(getPage(format, header));
     return pdf.save();
-    // return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
-  Page getPage(PdfPageFormat? format) {
-    
+  Page getPage(PdfPageFormat? format, Widget header) {
     return Page(
         // textDirection: getTextDirection("يسش"),
         pageFormat: format,
@@ -73,13 +43,7 @@ class PdfReceipt<T extends PrintableReceiptInterface,
               Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 4, child: buildInvoiceMainTable2()),
-                    Expanded(
-                        flex: 1,
-                        child: buildQrCode<E>(this.context, printObj,
-                            printCommandAbstract: printCommand))
-                  ]),
+                  children: checkListToReverse(getMainPageListRow)),
               buildInvoiceBottom(),
               Spacer(),
 
@@ -87,65 +51,35 @@ class PdfReceipt<T extends PrintableReceiptInterface,
                   width: double.infinity,
                   height: 10,
                   color: PdfColor.fromHex(
-                      printObj.getPrintableSecondaryColor(printCommand))),
+                      printObj.getPrintableSecondaryColor(setting))),
               // buildInvoiceMainTable(),
             ],
           );
         });
   }
 
-  pw.MultiPage getMultiPage(PdfPageFormat? format) {
-    return MultiPage(
-      footer: (_) =>
-          Container(width: double.infinity, height: 15, color: PdfColors.green),
-      pageFormat: format,
-      // orientation: PageOrientation.landscape,
-      margin: EdgeInsets.zero,
-
-      // pageTheme: ,
-      build: (context) {
-        this.contextPDF = context;
-        return [
-          Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-              // alignment: ,
-              children: [header, buildTitle()]),
-          // header,
-          // buildInvoiceMainInfoHeader(),
-          Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(flex: 3, child: buildInvoiceMainTable2()),
-                Expanded(
-                    flex: 1,
-                    child: buildQrCode<E>(this.context, printObj,
-                        size: getQrCodeSize(format),
-                        printCommandAbstract: printCommand))
-              ])
-          // buildInvoiceMainTable(),
-        ];
-      },
-    );
+  List<pw.Widget> get getMainPageListRow {
+    return [
+      Expanded(flex: 4, child: buildInvoiceMainTable2()),
+      Expanded(
+          flex: 1,
+          child: ext.buildQrCode<E>(this.context, printObj,
+              printCommandAbstract: setting))
+    ];
   }
 
-  double getQrCodeSize(PdfPageFormat? format) {
-    if (format == PdfPageFormat.a4) {
-      return 80;
-    } else if (format == PdfPageFormat.a3) {
-      return 80;
-    } else if (format == PdfPageFormat.a5) {
-      return 10;
-    } else {
-      return 10;
-    }
+  @override
+  Future<Widget> buildHeader() async {
+    return Image(await networkImage(
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${getPrimaryColor()}&darkColor=${getSecondaryColor()}'));
   }
 
   Widget buildInvoiceBottom() {
     return Padding(
         padding: const EdgeInsets.only(left: PdfPageFormat.cm),
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: getCrossAxis(),
+            mainAxisAlignment: getMainAxis(),
             children: [
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice("Terms and conditions"),
@@ -172,18 +106,23 @@ class PdfReceipt<T extends PrintableReceiptInterface,
 
   Widget buildInvoiceMainTable2() {
     var table = printObj
-        .getPrintableRecieptHeaderTitleAndDescription(context, printCommand)
+        .getPrintableRecieptHeaderTitleAndDescription(context, setting)
         .values
-        .map((e) => Row(children: e.map((e) => buildText(e)).toList()))
+        .map((e) => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: checkListToReverse(e.map((e) => buildText(e)).toList())))
         .toList();
 
     var footers = printObj
-        .getPrintableRecieptFooterTitleAndDescription(context, printCommand)
+        .getPrintableRecieptFooterTitleAndDescription(context, setting)
         .values
-        .map((e) => Row(children: e.map((e) => buildFooterText(e)).toList()))
+        .map((e) => Row(
+            children:
+                checkListToReverse(e.map((e) => buildFooterText(e)).toList())))
         .toList();
     var customWidget =
-        printObj.getPrintableRecieptCustomWidget(context, printCommand);
+        printObj.getPrintableRecieptCustomWidget(context, setting, this);
     if (footers.isNotEmpty) {
       table.addAll(footers);
     }
@@ -207,15 +146,6 @@ class PdfReceipt<T extends PrintableReceiptInterface,
             ]));
   }
 
-  TextDirection getTextDirection(String? value) {
-    return isRTL(value) ? TextDirection.rtl : TextDirection.ltr;
-  }
-
-  bool isRTL(String? text) {
-    if (text == null) return false;
-    return intl.Bidi.detectRtlDirectionality(text);
-  }
-
   Widget buildText(
       RecieptHeaderTitleAndDescriptionInfo
           recieptHeaderTitleAndDescriptionInfo) {
@@ -223,49 +153,52 @@ class PdfReceipt<T extends PrintableReceiptInterface,
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-          Text(
-            recieptHeaderTitleAndDescriptionInfo.title,
-            textDirection:
-                getTextDirection(recieptHeaderTitleAndDescriptionInfo.title),
-          ),
-          SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
-          Expanded(
-              child: Container(
-                  constraints:
-                      const BoxConstraints(minHeight: 30, maxHeight: 80),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  decoration: const BoxDecoration(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: checkListToReverse([
+              SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
+              Text(
+                recieptHeaderTitleAndDescriptionInfo.title,
+                textDirection: getTextDirection(
+                    recieptHeaderTitleAndDescriptionInfo.title),
+              ),
+              SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
+              Expanded(
+                  child: Container(
+                      constraints:
+                          const BoxConstraints(minHeight: 30, maxHeight: 80),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
+                      decoration: const BoxDecoration(
 
-                      // borderRadius: BorderRadius.circular(1),
-                      color: PdfColors.grey200,
-                      border: Border(
-                          bottom: BorderSide(
-                        width: 10,
-                        //                    <--- top side
-                        color: PdfColors.white,
-                        // width: 1.0,
+                          // borderRadius: BorderRadius.circular(1),
+                          color: PdfColors.grey200,
+                          border: Border(
+                              bottom: BorderSide(
+                            width: 10,
+                            //                    <--- top side
+                            color: PdfColors.white,
+                            // width: 1.0,
+                          ))),
+                      child: Text(
+                        overflow: TextOverflow.span,
+                        textDirection: getTextDirection(
+                            recieptHeaderTitleAndDescriptionInfo.description),
+                        style: Theme.of(contextPDF).tableHeader.copyWith(
+                            fontSize: 14,
+                            color:
+                                recieptHeaderTitleAndDescriptionInfo.hexColor ==
+                                        null
+                                    ? null
+                                    : PdfColor.fromHex(
+                                        recieptHeaderTitleAndDescriptionInfo
+                                            .hexColor!)),
+                        textAlign:
+                            isArabic() ? TextAlign.center : TextAlign.left,
+                        recieptHeaderTitleAndDescriptionInfo.description,
+                        // style: Theme.of(context).tableCell
                       ))),
-                  child: Text(
-                    overflow: TextOverflow.span,
-                    textDirection: getTextDirection(
-                        recieptHeaderTitleAndDescriptionInfo.description),
-                    style: Theme.of(contextPDF).tableHeader.copyWith(
-                        fontSize: 14,
-                        color: recieptHeaderTitleAndDescriptionInfo.hexColor ==
-                                null
-                            ? null
-                            : PdfColor.fromHex(
-                                recieptHeaderTitleAndDescriptionInfo
-                                    .hexColor!)),
-                    textAlign: TextAlign.left,
-                    recieptHeaderTitleAndDescriptionInfo.description,
-                    // style: Theme.of(context).tableCell
-                  ))),
-          SizedBox(width: 1 * (PdfPageFormat.cm / 3)),
-        ]));
+              SizedBox(width: 1 * (PdfPageFormat.cm / 3)),
+            ])));
   }
 
   Widget buildFooterText(
@@ -274,70 +207,53 @@ class PdfReceipt<T extends PrintableReceiptInterface,
     return Expanded(
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.max,
+            // mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-          Text(
-            recieptHeaderTitleAndDescriptionInfo.title,
-            textDirection:
-                getTextDirection(recieptHeaderTitleAndDescriptionInfo.title),
-          ),
-          SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
-          Expanded(
-              child: Container(
-                  constraints:
-                      const BoxConstraints(minHeight: 40, maxHeight: 80),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  // height: 40,
-                  decoration: const BoxDecoration(
+            children: checkListToReverse(
+                getFooterTextList(recieptHeaderTitleAndDescriptionInfo))));
+  }
 
-                      // borderRadius: BorderRadius.circular(1),
-                      color: PdfColors.grey200,
-                      border: Border(
-                          bottom: BorderSide(
-                        width: 10,
-                        //                    <--- top side
-                        color: PdfColors.white,
-                        // width: 1.0,
-                      ))),
-                  child: Text(
-                    overflow: TextOverflow.span,
+  List<pw.Widget> getFooterTextList(
+      RecieptHeaderTitleAndDescriptionInfo
+          recieptHeaderTitleAndDescriptionInfo) {
+    return [
+      Text(
+        recieptHeaderTitleAndDescriptionInfo.title,
+        textDirection:
+            getTextDirection(recieptHeaderTitleAndDescriptionInfo.title),
+      ),
+      SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
+      Expanded(
+          child: Container(
+              constraints: const BoxConstraints(minHeight: 40, maxHeight: 80),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              // height: 40,
+              decoration: const BoxDecoration(
 
-                    style: Theme.of(contextPDF).tableHeader.copyWith(
-                        fontSize: 14,
-                        color: recieptHeaderTitleAndDescriptionInfo.hexColor ==
-                                null
-                            ? null
-                            : PdfColor.fromHex(
-                                recieptHeaderTitleAndDescriptionInfo
-                                    .hexColor!)),
-                    textAlign: TextAlign.left,
-                    recieptHeaderTitleAndDescriptionInfo.description,
-                    // style: Theme.of(context).tableCell
+                  // borderRadius: BorderRadius.circular(1),
+                  color: PdfColors.grey200,
+                  border: Border(
+                      bottom: BorderSide(
+                    width: 10,
+                    //                    <--- top side
+                    color: PdfColors.white,
+                    // width: 1.0,
                   ))),
-          SizedBox(width: 1 * (PdfPageFormat.cm / 3)),
-        ]));
-  }
+              child: Text(
+                overflow: TextOverflow.span,
 
-  PdfColor getSecondaryColor() {
-    return PdfColor.fromHex(printObj.getPrintableSecondaryColor(printCommand));
-  }
-
-  PdfColor getPrimaryColor() {
-    return PdfColor.fromHex(printObj.getPrintablePrimaryColor(printCommand));
-  }
-
-  Widget buildTitle() {
-    String title = printObj.getPrintableInvoiceTitle(context, printCommand);
-    return Text(
-      title,
-      textDirection: getTextDirection(title),
-      style: TextStyle(
-          fontSize: 20,
-          color: PdfColor.fromHex(
-              printObj.getPrintablePrimaryColor(printCommand))),
-    );
+                style: Theme.of(contextPDF).tableHeader.copyWith(
+                    fontSize: 14,
+                    color: recieptHeaderTitleAndDescriptionInfo.hexColor == null
+                        ? null
+                        : PdfColor.fromHex(
+                            recieptHeaderTitleAndDescriptionInfo.hexColor!)),
+                textAlign: TextAlign.left,
+                recieptHeaderTitleAndDescriptionInfo.description,
+                // style: Theme.of(context).tableCell
+              ))),
+      SizedBox(width: 1 * (PdfPageFormat.cm / 3)),
+    ];
   }
 
   Widget buildTitleOnInvoice(String title) {

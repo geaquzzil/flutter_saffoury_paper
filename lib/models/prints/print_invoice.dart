@@ -27,8 +27,6 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
   bool? hideUnitPriceAndTotalPrice;
   bool? hideEmployeeName;
   bool? hideCargoInfo;
-  bool? hideTermsOfService = false;
-  bool? hideAdditionalNotes = false;
 
   String? changeProductNameTo;
   ProductNameOption? productNameOption;
@@ -63,10 +61,8 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
           "hideCustomerBalance": false,
           "hideInvoicePaymentMethod": false,
           "hideUnitPriceAndTotalPrice": false,
-          "hideTermsOfService": false,
           "hideInvoiceDate": false,
           "hideInvoiceDueDate": false,
-          "hideAdditionalNotes": false,
           "sortByField": "",
           "productNameOption": ProductNameOption.ALL,
           "changeProductNameTo": "",
@@ -110,8 +106,6 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       if (isPricelessInvoice() == false) "hideUnitPriceAndTotalPrice",
       "hideInvoiceDate",
       if (isPricelessInvoice() == false) "hideInvoiceDueDate",
-      if (isPricelessInvoice() == false) "hideTermsOfService",
-      "hideAdditionalNotes",
     ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
@@ -129,11 +123,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       return AppLocalizations.of(context)!.hideDateDes;
     } else if (field == "hideInvoiceDueDate") {
       return AppLocalizations.of(context)!.hideDueDateDes;
-    } else if (field == "hideTermsOfService") {
-      return AppLocalizations.of(context)!.hideCompanyTermsDes;
-    } else if (field == "hideAdditionalNotes") {
-      return AppLocalizations.of(context)!.hideCompanyNotesDes;
-    } else if (field == "hideEmployeeName") {
+    }  else if (field == "hideEmployeeName") {
       return AppLocalizations.of(context)!.hideEmployeeDes;
     } else if (field == "hideCargoInfo") {
       return AppLocalizations.of(context)!.hideCargoInfoDes;
@@ -161,8 +151,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
               AppLocalizations.of(context)!.hidePaymentMethod,
           "hideUnitPriceAndTotalPrice":
               AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
-          "hideTermsOfService": AppLocalizations.of(context)!.hideCompanyTerms,
-          "hideAdditionalNotes": AppLocalizations.of(context)!.hideCompanyNotes,
+
           "sortByField": AppLocalizations.of(context)!.sortBy,
         });
 

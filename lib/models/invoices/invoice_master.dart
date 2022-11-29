@@ -244,15 +244,15 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           [
             if (customers != null)
               InvoiceHeaderTitleAndDescriptionInfo(
-                title: "${AppLocalizations.of(context)!.name}: ",
-                description: customers?.name ?? "",
-                // icon: Icons.account_circle_rounded
-              ),
-            if (customers != null)
-              InvoiceHeaderTitleAndDescriptionInfo(
                 title: "${AppLocalizations.of(context)!.iD}: ",
                 description: customers?.iD.toString() ?? "",
                 // icon: Icons.numbers
+              ),
+            if (customers != null)
+              InvoiceHeaderTitleAndDescriptionInfo(
+                title: "${AppLocalizations.of(context)!.name}: ",
+                description: customers?.name ?? "",
+                // icon: Icons.account_circle_rounded
               ),
             if ((pca?.hideCargoInfo == false))
               if (cargo_transporters != null)
@@ -260,6 +260,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
                   title: "${AppLocalizations.of(context)!.transfers}: ",
                   description:
                       "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
+                  // icon: Icons.numbers
+                ),
+            if ((pca?.hideEmployeeName == false))
+              if (employees != null)
+                InvoiceHeaderTitleAndDescriptionInfo(
+                  title: "${AppLocalizations.of(context)!.employee}: ",
+                  description: "${employees?.name.toString()}",
                   // icon: Icons.numbers
                 )
           ];
@@ -438,13 +445,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
         title: AppLocalizations.of(context)!.iD,
-        description: customers?.iD.toString() ?? "",
+        description: getPrintableQrCodeID(),
         // icon: Icons.numbers
       ),
       if ((pca?.hideInvoiceDate == false))
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.date,
-          description: customers?.date.toString() ?? "",
+          description: date.toString() ?? "",
           // icon: Icons.date_range
         ),
       if ((pca?.hideInvoiceDueDate == false))
@@ -462,7 +469,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       if ((pca?.hideUnitPriceAndTotalPrice == false))
         InvoiceHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.total_price,
-            description: extendedNetPrice?.toStringAsFixed(2) ?? "0",
+            description: extendedNetPrice?.toCurrencyFormat() ?? "0",
             hexColor: getPrintablePrimaryColor(pca)
             // icon: Icons.tag
             ),
@@ -470,7 +477,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         if ((pca?.hideCustomerBalance == false))
           InvoiceHeaderTitleAndDescriptionInfo(
               title: AppLocalizations.of(context)!.balance,
-              description: customers?.balance?.toStringAsFixed(2) ?? "",
+              description: customers?.balance?.toCurrencyFormat() ?? "",
               hexColor: getPrintablePrimaryColor(pca)
               // icon: Icons.balance
               ),
@@ -523,7 +530,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           hexColor: Colors.grey.toHex()),
       InvoiceTotalTitleAndDescriptionInfo(
           size: 8,
-          title: "Invoice total (in words)",
+          title: AppLocalizations.of(context)!.invoiceTotalInWords,
           hexColor: Colors.grey.toHex(leadingHashSign: false)),
       InvoiceTotalTitleAndDescriptionInfo(
         // size: 12,

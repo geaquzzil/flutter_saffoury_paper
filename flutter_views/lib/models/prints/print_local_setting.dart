@@ -13,6 +13,10 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   bool? hideQrCode = false;
   String? primaryColor;
   String? secondaryColor;
+
+  bool? hideTermsOfService = false;
+  bool? hideAdditionalNotes = false;
+
   PrintLocalSetting() : super();
 
   SortByType? getPrintableHasSortBy();
@@ -27,7 +31,9 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "printOptions": PrinterOptions(),
         "reportOptions": ReportOptions(),
         "hideQrCode": false,
-        "sortByType": SortByType.DESC
+        "sortByType": SortByType.DESC,
+        "hideTermsOfService": false,
+        "hideAdditionalNotes": false,
       };
   @override
   List<String> getMainFields() => [
@@ -35,17 +41,26 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "reportOptions",
         "hideQrCode",
         "primaryColor",
-        "secondaryColor"
+        "secondaryColor",
+        "hideAdditionalNotes",
+        "hideTermsOfService",
       ];
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "hideQrCode": AppLocalizations.of(context)!.hideQrCode,
         "primaryColor": AppLocalizations.of(context)!.primaryColor,
-        "secondaryColor": AppLocalizations.of(context)!.secondaryColor
+        "secondaryColor": AppLocalizations.of(context)!.secondaryColor,
+        "hideTermsOfService": AppLocalizations.of(context)!.hideCompanyTerms,
+        "hideAdditionalNotes": AppLocalizations.of(context)!.hideCompanyNotes,
       };
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
+    if (field == "hideTermsOfService") {
+      return AppLocalizations.of(context)!.hideCompanyTermsDes;
+    } else if (field == "hideAdditionalNotes") {
+      return AppLocalizations.of(context)!.hideCompanyNotesDes;
+    }
     return "";
   }
 

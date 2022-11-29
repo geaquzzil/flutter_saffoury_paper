@@ -4112,6 +4112,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account Information'**
   String get accountInfo;
+
+  /// No description provided for @termsAndConitions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and conditions'**
+  String get termsAndConitions;
+
+  /// No description provided for @additionalNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional notes'**
+  String get additionalNotes;
+
+  /// No description provided for @invoiceTotalInWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice total (in words)'**
+  String get invoiceTotalInWords;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

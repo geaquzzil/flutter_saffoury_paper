@@ -379,12 +379,24 @@ class Product extends ViewAbstract<Product>
     return getQuantity().toInt();
   }
 
+  bool isRoll() {
+    return sizes?.length == 0;
+  }
+
+  bool hasGSM() {
+    return gsms != null;
+  }
+
   double getSheets() {
+    if (isRoll()) return 0;
+    if (!hasGSM()) return 0;
+
     return getQuantity() / (getSheetWeight() / 1000);
   }
 
   ///get sheet weight by  grsm
   double getSheetWeight() {
+    if (isRoll()) return 0;
     try {
       return (getWidth() * getLength() * getGSM()).toDouble() / 1000000;
     } catch (e) {
@@ -721,7 +733,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   String getPrintableQrCodeID() {
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss", "en");
 
     String year = "${dateFormat.parse(date ?? "").year}";
     return "PR-$iD-$year";

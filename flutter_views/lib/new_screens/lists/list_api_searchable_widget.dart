@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:provider/provider.dart';
@@ -58,6 +62,20 @@ class _ListApiWidgetState<T extends ViewAbstract>
   void didChangeDependencies() {
     super.didChangeDependencies();
     controller.text = "";
+  }
+
+  Widget getPrintWidget() {
+    return IconButton(
+        onPressed: () {
+          context
+              .read<ActionViewAbstractProvider>()
+              .changeCustomWidget(PdfListPage(
+                list: listProvider
+                    .getList(findCustomKey())
+                    .cast<PrintableMaster>(),
+              ));
+        },
+        icon: const Icon(Icons.print));
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -160,7 +178,6 @@ class _ListApiWidgetState<T extends ViewAbstract>
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              const Spacer(),
               DropdownStringListControllerListenerByIcon(
                   icon: Icons.sort_by_alpha,
                   hint: AppLocalizations.of(context)!.sortBy,
@@ -185,8 +202,10 @@ class _ListApiWidgetState<T extends ViewAbstract>
                   notifyListApi(context);
                 },
               ),
+              const Spacer(),
               getAddBotton(),
-              getRefreshWidget()
+              getRefreshWidget(),
+              getPrintWidget()
             ],
           ),
         ),

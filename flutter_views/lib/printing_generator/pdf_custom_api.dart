@@ -8,8 +8,8 @@ import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 
-
-class PdfCustom<T extends PrintableCustomInterface,E extends PrintLocalSetting> {
+class PdfCustom<T extends PrintableCustomInterface,
+    E extends PrintLocalSetting> {
   material.BuildContext context;
   T printObj;
   E? printCommand;
@@ -32,24 +32,20 @@ class PdfCustom<T extends PrintableCustomInterface,E extends PrintLocalSetting> 
         await printObj.getPrintableCustomFooter(context, format: format);
     Widget? header =
         await printObj.getPrintableCustomHeader(context, format: format);
-    List<Widget> body =
-        await printObj.getPrintableCustomPage(context, format: format);
 
     final pdf = Document(
         title: "TEST", pageMode: PdfPageMode.fullscreen, theme: myTheme);
-    pdf.addPage(MultiPage(
-      // footer: (_) {+
-      //   return footer!;
-      // },
+    pdf.addPage(await getPage(format));
+    return pdf.save();
+  }
 
-      // header: (context) => header,
-
+  Future<pw.Page> getPage(PdfPageFormat? format) async {
+    List<Widget> body =
+        await printObj.getPrintableCustomPage(context, format: format);
+    return Page(
       pageFormat: format,
       margin: EdgeInsets.zero,
-
-      // pageTheme: ,
-      build: (context) => body,
-    ));
-    return pdf.save();
+      build: (context) => Column(children: body),
+    );
   }
 }

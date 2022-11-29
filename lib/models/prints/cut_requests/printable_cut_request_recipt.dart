@@ -34,7 +34,7 @@ class CutRequestRecieptPDF {
     switch (setting?.printCutRequestType) {
       case PrintCutRequestType.ALL:
         await addRecipt(pdf);
-        await addLabels(pdf);  
+        await addLabels(pdf);
         break;
       case PrintCutRequestType.ONLY_CUT_REQUEST:
         await addRecipt(pdf);
@@ -55,7 +55,7 @@ class CutRequestRecieptPDF {
     final pdfRec = PdfReceipt(
         context, CutRequestRecipt(cutRequest: cutRequest, setting: setting));
     await pdfRec.initHeader();
-    pdf.addPage(pdfRec.getPage(format));
+    pdf.addPage(pdfRec.getPage(format, pdfRec.header));
   }
 
   Future<void> addLabels(Document pdf) async {
@@ -177,49 +177,59 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
   }
 
   Widget getProductDetailsWidget(material.BuildContext context,
-      ProductInputDetails pid, PrintCutRequest? setting) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: Row(children: [
-          buildQrCode(context, pid.products!,
-              printCommandAbstract: setting, size: 40),
-          SizedBox(width: 1 * (PdfPageFormat.cm)),
-          Text(
-            pid.products?.getMainHeaderTextOnly(context) ?? "-",
-          ),
-          SizedBox(width: 1 * (PdfPageFormat.cm)),
-          Text(pid.quantity.toCurrencyFormat(symbol: "kg")),
-          SizedBox(width: 1 * (PdfPageFormat.cm)),
-          Text(pid.products?.status
-                  ?.getFieldLabelString(context, pid.products!.status!) ??
-              "-"),
-        ]));
+      ProductInputDetails pid, PrintCutRequest? setting, PdfReceipt generator) {
+    return Column(children: [
+      SizedBox(height: .2 * (PdfPageFormat.cm)),
+      Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: PdfPageFormat.cm, vertical: 5),
+          child: Row(
+              mainAxisAlignment: generator.getMainAxis(),
+              children: generator.checkListToReverse([
+                buildQrCode(context, pid.products!,
+                    printCommandAbstract: setting, size: 40),
+                SizedBox(width: 1 * (PdfPageFormat.cm)),
+                generator.getDirections(
+                    child: Text(
+                  pid.products?.getMainHeaderTextOnly(context) ?? "-",
+                )),
+                SizedBox(width: 1 * (PdfPageFormat.cm)),
+                Text(pid.quantity.toCurrencyFormat(symbol: "kg")),
+                SizedBox(width: 1 * (PdfPageFormat.cm)),
+                generator.getDirections(
+                    child: Text(pid.products?.status?.getFieldLabelString(
+                            context, pid.products!.status!) ??
+                        "-")),
+              ]))),
+      Divider(height: 1, color: PdfColors.grey200)
+    ]);
   }
 
   @override
-  Widget? getPrintableRecieptCustomWidget(
-      material.BuildContext context, PrintCutRequest? pca) {
+  Widget? getPrintableRecieptCustomWidget(material.BuildContext context,
+      PrintCutRequest? pca, PdfReceipt generator) {
     if (cutRequest.cut_status == CutStatus.COMPLETED) {
       var d = cutRequest.cut_request_results?.map((e) => Column(children: [
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(e.getMainHeaderLabelWithText(context),
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                crossAxisAlignment: generator.getCrossAxis(),
+                children: generator.checkListToReverse([
+                  SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
+                  generator.getDirections(
+                      child: Text(e.getMainHeaderLabelWithText(context),
+                          style: TextStyle(fontWeight: FontWeight.bold))),
                   SizedBox(width: 1 * (PdfPageFormat.cm / 2)),
                   Expanded(child: Divider(height: 1, color: PdfColors.grey200))
-                ]),
+                ])),
             if (e.products_inputs?.products_inputs_details != null)
               ...e.products_inputs!.products_inputs_details!
-                  .map((e) => getProductDetailsWidget(context, e, pca))
+                  .map((e) =>
+                      getProductDetailsWidget(context, e, pca, generator))
                   .toList()
           ]));
 
-      return Column(children: [
-        // Divider(height: 1, color: PdfColors.grey200),
-        if (d != null) ...d.whereType<Column>().toList()
-      ]);
+      return Column(
+          children: [if (d != null) ...d.whereType<Column>().toList()]);
     }
     return null;
   }

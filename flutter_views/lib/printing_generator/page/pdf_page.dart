@@ -82,8 +82,9 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
     return body;
   }
 
-  PdfPreview getBody(BuildContext context) {
+  Widget getBody(BuildContext context) {
     // Printing.layoutPdf
+
     return PdfPreview(
         pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
         shareActionExtraEmails: const ["info@saffoury.com"],
@@ -93,6 +94,7 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         // pdfPreviewPageDecoration:
         canDebug: false,
         pageFormats: {
+          // AppLocalizations("en")!.a3ProductLabel:PdfPageFormat.a6,
           AppLocalizations.of(context)!.a3ProductLabel: PdfPageFormat.a3,
           AppLocalizations.of(context)!.a4ProductLabel: PdfPageFormat.a4,
           AppLocalizations.of(context)!.a5ProductLabel: PdfPageFormat.a5,

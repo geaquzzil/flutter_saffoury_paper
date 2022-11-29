@@ -18,6 +18,8 @@ PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..hideQrCode = json['hideQrCode'] as bool?
   ..primaryColor = json['primaryColor'] as String?
   ..secondaryColor = json['secondaryColor'] as String?
+  ..hideTermsOfService = json['hideTermsOfService'] as bool?
+  ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
   ..hideCustomerAddressInfo = json['hideCustomerAddressInfo'] as bool?
   ..hideCustomerPhone = json['hideCustomerPhone'] as bool?
   ..hideCustomerBalance = json['hideCustomerBalance'] as bool?
@@ -27,8 +29,6 @@ PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..hideUnitPriceAndTotalPrice = json['hideUnitPriceAndTotalPrice'] as bool?
   ..hideEmployeeName = json['hideEmployeeName'] as bool?
   ..hideCargoInfo = json['hideCargoInfo'] as bool?
-  ..hideTermsOfService = json['hideTermsOfService'] as bool?
-  ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
   ..changeProductNameTo = json['changeProductNameTo'] as String?
   ..productNameOption =
       $enumDecodeNullable(_$ProductNameOptionEnumMap, json['productNameOption'])
@@ -44,6 +44,8 @@ Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
       'hideQrCode': instance.hideQrCode,
       'primaryColor': instance.primaryColor,
       'secondaryColor': instance.secondaryColor,
+      'hideTermsOfService': instance.hideTermsOfService,
+      'hideAdditionalNotes': instance.hideAdditionalNotes,
       'hideCustomerAddressInfo': instance.hideCustomerAddressInfo,
       'hideCustomerPhone': instance.hideCustomerPhone,
       'hideCustomerBalance': instance.hideCustomerBalance,
@@ -53,8 +55,6 @@ Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
       'hideUnitPriceAndTotalPrice': instance.hideUnitPriceAndTotalPrice,
       'hideEmployeeName': instance.hideEmployeeName,
       'hideCargoInfo': instance.hideCargoInfo,
-      'hideTermsOfService': instance.hideTermsOfService,
-      'hideAdditionalNotes': instance.hideAdditionalNotes,
       'changeProductNameTo': instance.changeProductNameTo,
       'productNameOption':
           _$ProductNameOptionEnumMap[instance.productNameOption],

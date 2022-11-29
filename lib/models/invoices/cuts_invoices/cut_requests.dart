@@ -318,7 +318,7 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   String getPrintableQrCodeID() {
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss", "en");
 
     String year = "${dateFormat.parse(date ?? "").year}";
     String invCode = "";

@@ -2017,4 +2017,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get accountInfo => 'معلومات الحساب';
+
+  @override
+  String get termsAndConitions => 'الأحكام والشروط';
+
+  @override
+  String get additionalNotes => 'ملاحظات إضافية';
+
+  @override
+  String get invoiceTotalInWords => 'إجمالي الفاتورة (كتابة)';
 }

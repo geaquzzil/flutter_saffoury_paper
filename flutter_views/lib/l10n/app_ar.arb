@@ -664,5 +664,11 @@
   "hideQrCode":"إخفاء الرمز الشريطي",
   "primaryColor":"اللون الأساسي",
   "secondaryColor":"اللون الثانوي",
-   "accountInfo":"معلومات الحساب"
+  "accountInfo":"معلومات الحساب",
+  "termsAndConitions":"الأحكام والشروط",
+  "additionalNotes":"ملاحظات إضافية",
+    "hideCompanyTerms": "إخفاء شروط الشركة",
+    "hideCompanyTermsDes": "شروط الشركة لن تظهر في الفاتورة" ,
+    "hideCompanyNotes": "إخفاء ملاحظات الشركة",
+    "hideCompanyNotesDes": "لن تظهر ملاحظات الشركة في تذييل الفاتورة" 
 }

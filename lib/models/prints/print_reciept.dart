@@ -26,12 +26,11 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
 
   PrintReceipt() : super();
 
-
-    @override
+  @override
   String? getPrintableSortByName() => null;
 
   @override
-  SortByType? getPrintableHasSortBy() =>  SortByType.ASC;
+  SortByType? getPrintableHasSortBy() => SortByType.ASC;
 
   @override
   PrintReceipt getSelfNewInstance() {
@@ -45,7 +44,6 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
           "hideEmployeeName": false,
           "hideCustomerBalance": false,
           "hideInvoiceDate": false,
-          "hideAdditionalNotes": false,
         });
 
   @override
@@ -54,7 +52,6 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
       "hideCustomerBalance",
       "hideEmployeeName",
       "hideInvoiceDate",
-      "hideAdditionalNotes",
     ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
@@ -62,8 +59,6 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
       return AppLocalizations.of(context)!.hideAccountBalanceDes;
     } else if (field == "hideInvoiceDate") {
       return AppLocalizations.of(context)!.hideDateDes;
-    } else if (field == "hideAdditionalNotes") {
-      return AppLocalizations.of(context)!.hideCompanyNotesDes;
     } else if (field == "hideEmployeeName") {
       return AppLocalizations.of(context)!.hideEmployeeDes;
     }
@@ -78,7 +73,6 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
               AppLocalizations.of(context)!.hideAccountBalance,
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
-          "hideAdditionalNotes": AppLocalizations.of(context)!.hideCompanyNotes,
         });
   @override
   Map<String, IconData> getFieldIconDataMap() => {};

@@ -668,6 +668,12 @@
   "hideQrCode":"Hide QR Code",
   "primaryColor":"Primary Color",
   "secondaryColor":"Secondary Color",
-  "accountInfo":"Account Information"
+  "accountInfo":"Account Information",
+  "termsAndConitions":"Terms and conditions",
+  "additionalNotes":"Additional notes",
+  "hideCompanyTerms": "Hide company terms",
+  "hideCompanyTermsDes": "Company terms will not appear on the invoice",
+  "hideCompanyNotes": "Hide company notes",
+  "hideCompanyNotesDes": "Company notes on the invoice footer will not appear"
 
 }
