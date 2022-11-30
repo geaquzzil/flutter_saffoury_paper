@@ -31,7 +31,9 @@ import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 part 'employees.g.dart';
 
-@JsonSerializable(explicitToJson: true,)
+@JsonSerializable(
+  explicitToJson: true,
+)
 @reflector
 class Employee extends User<Employee> {
   // int? ParentID;
@@ -55,6 +57,11 @@ class Employee extends User<Employee> {
   @override
   List<String> getMainFields() {
     return super.getMainFields()..addAll(["warehouse"]);
+  }
+
+  @override
+  String getForeignKeyName() {
+    return "EmployeeID";
   }
 
   @override

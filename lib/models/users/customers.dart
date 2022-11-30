@@ -47,6 +47,11 @@ class Customer extends User<Customer> {
   }
 
   @override
+  String getForeignKeyName() {
+    return "CustomerID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({

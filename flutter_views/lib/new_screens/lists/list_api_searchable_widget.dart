@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_lis
 import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import '../../new_components/loading_shimmer.dart';
@@ -262,6 +264,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
                       removeFilterableSelected(
                           context, drawerViewAbstractObsever.getObject);
                     } else {
+                      listProvider.clear(findCustomKey());
                       addFilterableSortField(context, obj.value.toString());
                     }
                     notifyListApi(context);
@@ -317,9 +320,20 @@ class _ListApiWidgetState<T extends ViewAbstract>
   }
 
   Widget getShimmerLoading(BuildContext context) {
+    return Skeleton(
+      isLoading: true,
+
+      skeleton: SkeletonListView(
+        itemCount: 5,
+        
+      ),
+      child: Container(child: Center(child: Text("Content"))),
+    );
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
+      child: ListView.separated(
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: kDefaultPadding),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 10,

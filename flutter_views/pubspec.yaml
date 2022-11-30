@@ -88,6 +88,7 @@ dependencies:
   nil: ^1.1.1
   getwidget: ^3.0.1
   flutter_share: ^2.0.0
+  skeletons: ^0.0.3
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   
