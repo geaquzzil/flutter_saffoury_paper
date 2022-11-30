@@ -3,23 +3,39 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 
-abstract class PrintableSelfListInterface<E, T extends PrintLocalSetting>
-    extends PrintableMaster<T> {
-  List<List<InvoiceHeaderTitleAndDescriptionInfo>>? getPrintableSelfListHeaderInfo(
-      BuildContext context, List<E> list, T? pca);
+import '../../models/view_abstract.dart';
 
-  List<InvoiceTotalTitleAndDescriptionInfo>? getPrintableSelfListTotal(
-      BuildContext context, List<E> list, T? pca);
+abstract class PrintableSelfListInterface<T extends PrintLocalSetting> {
 
-  List<InvoiceTotalTitleAndDescriptionInfo>? getPrintableSelfListTotalDescripton(
-      BuildContext context, List<E> list, T? pca);
+  Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?
+      getPrintableSelfListHeaderInfo(
+          BuildContext context, List list, T? pca);
 
-  List<InvoiceHeaderTitleAndDescriptionInfo>?
+  Future<List<InvoiceTotalTitleAndDescriptionInfo>>? getPrintableSelfListTotal(
+      BuildContext context, List list, T? pca);
+
+  Future<List<InvoiceTotalTitleAndDescriptionInfo>>?
+      getPrintableSelfListTotalDescripton(
+          BuildContext context, List list, T? pca);
+
+  Future<List<InvoiceHeaderTitleAndDescriptionInfo>>?
       getPrintableSelfListAccountInfoInBottom(
-          BuildContext context, List<E> list, T? pca);
+          BuildContext context, List list, T? pca);
 
   Map<String, String> getPrintableSelfListTableHeaderAndContent(
-      BuildContext context, E item, T? pca);
+      BuildContext context, dynamic item, T? pca);
 
+  ///QR CODE CONTENT
+  String getPrintableSelfListQrCode();
 
+  ///CONTAINS QR CODE TITLE
+  String getPrintableSelfListQrCodeID();
+
+  ///HexColor
+  String getPrintableSelfListPrimaryColor(T? pca);
+
+  ///HexColor
+  String getPrintableSelfListSecondaryColor(T? pca);
+
+  String getPrintableSelfListInvoiceTitle(BuildContext context, T? pca);
 }

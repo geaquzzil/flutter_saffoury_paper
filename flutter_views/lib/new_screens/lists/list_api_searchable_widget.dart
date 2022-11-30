@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_self_list_api.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import '../../new_components/loading_shimmer.dart';
+import '../../printing_generator/page/pdf_self_list_page.dart';
 import '../home/components/ext_provider.dart';
 
 class ListApiSearchableWidget<T extends ViewAbstract> extends StatefulWidget {
@@ -64,18 +69,81 @@ class _ListApiWidgetState<T extends ViewAbstract>
     controller.text = "";
   }
 
+  List getList() {
+    return listProvider.getList(findCustomKey());
+  }
+
+  dynamic getFirstObject() {
+    List list = listProvider.getList(findCustomKey());
+    dynamic first = list[0];
+    return first;
+  }
+
+  bool hasItems() {
+    List l = getList();
+    return l.isNotEmpty && l.length > 2;
+  }
+
+  bool hasPrintWidget() {
+    if (!hasItems()) return false;
+    var first = getFirstObject();
+
+    return first is PrintableSelfListInterface || first is PrintableMaster;
+  }
+
   Widget getPrintWidget() {
-    return IconButton(
-        onPressed: () {
-          context
-              .read<ActionViewAbstractProvider>()
-              .changeCustomWidget(PdfListPage(
-                list: listProvider
-                    .getList(findCustomKey())
-                    .cast<PrintableMaster>(),
-              ));
+    var first = getFirstObject();
+    if (first is PrintableSelfListInterface && first is PrintableMaster) {
+      return DropdownStringListControllerListenerByIcon(
+        icon: Icons.print,
+        hint: AppLocalizations.of(context)!.printType,
+        list: [
+          DropdownStringListItem(Icons.print, "Self List"),
+          DropdownStringListItem(Icons.print, "Objects")
+        ],
+        onSelected: (object) {
+          if (object?.label == "Self List") {
+            changeToPrintPdfSelfList();
+          } else {
+            changeToPrintPdfList();
+          }
         },
-        icon: const Icon(Icons.print));
+      );
+    }
+    if (first is PrintableMaster) {
+      return IconButton(
+          onPressed: () {
+            changeToPrintPdfList();
+          },
+          icon: const Icon(Icons.print));
+    } else if (first is PrintableSelfListInterface) {
+      return IconButton(
+          onPressed: () {
+            changeToPrintPdfSelfList();
+          },
+          icon: const Icon(Icons.print));
+    } else {
+      return nil;
+    }
+  }
+
+  void changeToPrintPdfList() {
+    context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfListPage(
+        list: listProvider
+            .getList(findCustomKey())
+            .whereType<PrintableMaster>()
+            .toList()));
+  }
+
+  void changeToPrintPdfSelfList() {
+    context
+        .read<ActionViewAbstractProvider>()
+        .changeCustomWidget(PdfSelfListPage(
+          list: listProvider
+              .getList(findCustomKey())
+              .whereType<PrintableSelfListInterface>()
+              .toList(),
+        ));
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -205,7 +273,12 @@ class _ListApiWidgetState<T extends ViewAbstract>
               const Spacer(),
               getAddBotton(),
               getRefreshWidget(),
-              getPrintWidget()
+              if (context
+                      .watch<ListMultiKeyProvider>()
+                      .getList(findCustomKey())
+                      .length >
+                  2)
+                getPrintWidget()
             ],
           ),
         ),

@@ -7,33 +7,82 @@ import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/prints/print_local_setting.dart';
 
-class PrintMasterPDF<T extends PrintableMaster, E extends PrintLocalSetting> {
+class PrintMasterPDF<T extends PrintableMasterEmpty,
+    E extends PrintLocalSetting> extends PrintMasterPDFUtils<E> {
   T printObj;
-  E? setting;
-  late Context contextPDF;
-  material.BuildContext context;
 
-  late ThemeData themeData;
-  late Widget header;
+  PrintMasterPDF(
+      {required material.BuildContext context,
+      required this.printObj,
+      E? setting})
+      : super(context: context, setting: setting);
 
-  PrintMasterPDF({required this.context, required this.printObj, this.setting});
-
+  @override
   Future<Widget> buildHeader() async {
     return Image(await networkImage(
         'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColor()}&darkColor=${getSecondaryColor()}'));
   }
 
-  CrossAxisAlignment getCrossAxis() {
-    return isArabic() ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+  Widget buildTitle() {
+    assert(printObj is PrintableMaster);
+    String title = (printObj as PrintableMaster)
+        .getPrintableInvoiceTitle(context, setting)
+        .toUpperCase();
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
+        child: Text(
+          title,
+          textDirection: getTextDirection(title),
+          style: TextStyle(
+              fontSize: 20,
+              color: PdfColor.fromHex((printObj as PrintableMaster)
+                  .getPrintablePrimaryColor(setting))),
+        ));
   }
 
-  MainAxisAlignment getMainAxis() {
-    return isArabic() ? MainAxisAlignment.end : MainAxisAlignment.start;
+  PdfColor getSecondaryColor() {
+    assert(printObj is PrintableMaster);
+    return PdfColor.fromHex(
+        (printObj as PrintableMaster).getPrintableSecondaryColor(setting));
   }
+
+  PdfColor getPrimaryColor() {
+    assert(printObj is PrintableMaster);
+    return PdfColor.fromHex(
+        (printObj as PrintableMaster).getPrintablePrimaryColor(setting));
+  }
+}
+
+class PrintMasterPDFUtils<T extends PrintLocalSetting> {
+  T? setting;
+
+  late ThemeData themeData;
+  late Widget header;
+  late Context contextPDF;
+  material.BuildContext context;
+
+  PrintMasterPDFUtils({required this.context, this.setting});
 
   Future<void> initHeader() async {
     themeData = await getThemeData();
     header = await buildHeader();
+  }
+
+  Future<Widget> buildHeader() async {
+    return Image(await networkImage(""));
+  }
+
+  Future<Document> getDocument() async {
+    await initHeader();
+    final pdf = Document(
+        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: themeData);
+
+    return pdf;
+  }
+
+  bool isRTL(String? text) {
+    if (text == null) return false;
+    return intl.Bidi.detectRtlDirectionality(text);
   }
 
   Future<ThemeData> getThemeData() async {
@@ -47,35 +96,37 @@ class PrintMasterPDF<T extends PrintableMaster, E extends PrintLocalSetting> {
         boldItalic: await PdfGoogleFonts.tajawalBold());
   }
 
-  Future<Document> getDocument() async {
-    await initHeader();
-    final pdf = Document(
-        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: themeData);
-
-    return pdf;
+  bool hasSortBy() {
+    return setting?.getPrintableSortByName() != null;
   }
 
-  Widget buildTitle() {
-    String title =
-        printObj.getPrintableInvoiceTitle(context, setting).toUpperCase();
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
-        child: Text(
-          title,
-          textDirection: getTextDirection(title),
-          style: TextStyle(
-              fontSize: 20,
-              color:
-                  PdfColor.fromHex(printObj.getPrintablePrimaryColor(setting))),
-        ));
+  CrossAxisAlignment getCrossAxis() {
+    return isArabic() ? CrossAxisAlignment.end : CrossAxisAlignment.start;
   }
 
-  PdfColor getSecondaryColor() {
-    return PdfColor.fromHex(printObj.getPrintableSecondaryColor(setting));
+  MainAxisAlignment getMainAxis() {
+    return isArabic() ? MainAxisAlignment.end : MainAxisAlignment.start;
   }
 
-  PdfColor getPrimaryColor() {
-    return PdfColor.fromHex(printObj.getPrintablePrimaryColor(setting));
+  bool isArabic() {
+    return true;
+  }
+
+  int compareDynamic(bool ascending, dynamic value1, dynamic value2) {
+    material.debugPrint(
+        "checkToSort compareDynamic value1 => ${value1.toString()} , value2 => $value2");
+    if (value1 == null) {
+      return 0;
+    }
+    if (value1.runtimeType == int) {
+      return compareInt(ascending, value1, value2);
+    } else if (value1.runtimeType == double) {
+      return compareDouble(ascending, value1, value2);
+    } else if (value1.runtimeType == String) {
+      return compareString(ascending, value1, value2);
+    } else {
+      return 0;
+    }
   }
 
   TextDirection getTextDirection(String? value) {
@@ -97,19 +148,6 @@ class PrintMasterPDF<T extends PrintableMaster, E extends PrintLocalSetting> {
         child: child);
   }
 
-  bool isRTL(String? text) {
-    if (text == null) return false;
-    return intl.Bidi.detectRtlDirectionality(text);
-  }
-
-  bool hasSortBy() {
-    return setting?.getPrintableSortByName() != null;
-  }
-
-  bool isArabic() {
-    return true;
-  }
-
   double getQrCodeSize(PdfPageFormat? format) {
     if (format == PdfPageFormat.a4) {
       return 80;
@@ -119,23 +157,6 @@ class PrintMasterPDF<T extends PrintableMaster, E extends PrintLocalSetting> {
       return 10;
     } else {
       return 10;
-    }
-  }
-
-  int compareDynamic(bool ascending, dynamic value1, dynamic value2) {
-    material.debugPrint(
-        "checkToSort compareDynamic value1 => ${value1.toString()} , value2 => $value2");
-    if (value1 == null) {
-      return 0;
-    }
-    if (value1.runtimeType == int) {
-      return compareInt(ascending, value1, value2);
-    } else if (value1.runtimeType == double) {
-      return compareDouble(ascending, value1, value2);
-    } else if (value1.runtimeType == String) {
-      return compareString(ascending, value1, value2);
-    } else {
-      return 0;
     }
   }
 

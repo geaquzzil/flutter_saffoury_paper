@@ -689,5 +689,9 @@
     "accountInfo":"Account Information",
     "termsAndConitions":"Terms and conditions",
     "additionalNotes":"Additional notes",
-    "invoiceTotalInWords":"Invoice total (in words)"
+    "invoiceTotalInWords":"Invoice total (in words)",
+    "hideWarehouse":"Hide warehouse",
+    "hideWarehouseDes":"Warehouse details will not appear on the invoice",
+    "skipOutofStock":"Skip out of stock products",
+    "skipOutofStockDes":"Hide out of stock products"
 }

@@ -24,6 +24,8 @@ import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/posable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
@@ -64,6 +66,7 @@ import '../invoices/priceless_invoices/products_outputs.dart';
 import '../invoices/priceless_invoices/transfers.dart';
 import '../invoices/purchases.dart';
 import '../invoices/refund_invoices/purchasers_refunds.dart';
+import '../prints/print_product_list.dart';
 part 'products.g.dart';
 
 @JsonSerializable(
@@ -75,6 +78,7 @@ class Product extends ViewAbstract<Product>
         CartableProductItemInterface,
         ModifiablePrintableInterface<PrintProduct>,
         PrintableCustomInterface<PrintProduct>,
+        PrintableSelfListInterface<PrintProductList>,
         PosableInterface {
   // int? ParentID;
   // int? ProductTypeID;
@@ -943,6 +947,75 @@ class Product extends ViewAbstract<Product>
         ),
       ],
     );
+  }
+
+  @override
+  Future<List<InvoiceHeaderTitleAndDescriptionInfo>>?
+      getPrintableSelfListAccountInfoInBottom(
+          BuildContext context, List list, PrintProductList? pca) {
+    return null;
+  }
+
+  @override
+  Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?
+      getPrintableSelfListHeaderInfo(
+          BuildContext context, List list, PrintProductList? pca) {
+    return null;
+  }
+
+  @override
+  String getPrintableSelfListInvoiceTitle(
+      BuildContext context, PrintProductList? pca) {
+    return "TODO LIST PRODUCTS";
+  }
+
+  @override
+  String getPrintableSelfListPrimaryColor(PrintProductList? pca) {
+    return getPrintablePrimaryColor(
+        PrintProduct()..primaryColor = pca?.primaryColor);
+  }
+
+  @override
+  String getPrintableSelfListQrCode() {
+    return "TODO";
+  }
+
+  @override
+  String getPrintableSelfListQrCodeID() {
+    return "TODO";
+  }
+
+  @override
+  String getPrintableSelfListSecondaryColor(PrintProductList? pca) {
+    return getPrintableSecondaryColor(
+        PrintProduct()..secondaryColor = pca?.secondaryColor);
+  }
+
+  @override
+  Map<String, String> getPrintableSelfListTableHeaderAndContent(
+      BuildContext context, dynamic item, PrintProductList? pca) {
+    item = item as Product;
+    return {
+      AppLocalizations.of(context)!.iD: item.getIDFormat(context),
+      AppLocalizations.of(context)!.description:
+          "${item.getProductTypeNameString()}\n${item.getSizeString(context)}",
+      AppLocalizations.of(context)!.gsm: item.gsms?.gsm.toString() ?? "0",
+      AppLocalizations.of(context)!.quantity:
+          item.getQuantity().toCurrencyFormat(),
+    };
+  }
+
+  @override
+  Future<List<InvoiceTotalTitleAndDescriptionInfo>>? getPrintableSelfListTotal(
+      BuildContext context, List list, PrintProductList? pca) {
+    return null;
+  }
+
+  @override
+  Future<List<InvoiceTotalTitleAndDescriptionInfo>>?
+      getPrintableSelfListTotalDescripton(
+          BuildContext context, List list, PrintProductList? pca) {
+    return null;
   }
 }
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 
-abstract class PrintableMaster<T extends PrintLocalSetting> {
+abstract class PrintableMaster<T extends PrintLocalSetting>
+    extends PrintableMasterEmpty<T> {
   ///QR CODE CONTENT
   String getPrintableQrCode();
 
@@ -14,11 +15,7 @@ abstract class PrintableMaster<T extends PrintLocalSetting> {
   ///HexColor
   String getPrintableSecondaryColor(T? pca);
 
-  String getPrintableInvoiceTitle(
-      BuildContext context, T? pca);
-
-
-      
-
-      
+  String getPrintableInvoiceTitle(BuildContext context, T? pca);
 }
+
+class PrintableMasterEmpty<T extends PrintLocalSetting> {}

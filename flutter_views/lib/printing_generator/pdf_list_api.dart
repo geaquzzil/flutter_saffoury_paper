@@ -36,7 +36,7 @@ class PDFListApi<T extends PrintLocalSetting> {
         pageMode: PdfPageMode.fullscreen,
         theme: await getThemeData());
 
-    var header = null;
+    var header;
     await Future.forEach<PrintableMaster<T>>(list, (obj) async {
       if (obj is PrintableInvoiceInterface) {
         final itemPdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(

@@ -4130,6 +4130,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invoice total (in words)'**
   String get invoiceTotalInWords;
+
+  /// No description provided for @hideWarehouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide warehouse'**
+  String get hideWarehouse;
+
+  /// No description provided for @hideWarehouseDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Warehouse details will not appear on the invoice'**
+  String get hideWarehouseDes;
+
+  /// No description provided for @skipOutofStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip out of stock products'**
+  String get skipOutofStock;
+
+  /// No description provided for @skipOutofStockDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide out of stock products'**
+  String get skipOutofStockDes;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

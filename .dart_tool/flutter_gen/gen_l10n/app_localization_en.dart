@@ -2026,4 +2026,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoiceTotalInWords => 'Invoice total (in words)';
+
+  @override
+  String get hideWarehouse => 'Hide warehouse';
+
+  @override
+  String get hideWarehouseDes => 'Warehouse details will not appear on the invoice';
+
+  @override
+  String get skipOutofStock => 'Skip out of stock products';
+
+  @override
+  String get skipOutofStockDes => 'Hide out of stock products';
 }

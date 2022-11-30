@@ -26,17 +26,18 @@ import '../pdf_custom_from_pdf_api.dart';
 import '../pdf_receipt_api.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
-class PdfListPage<T extends PrintLocalSetting> extends StatefulWidget {
-  List<PrintableMaster<T>> list;
+class PdfSelfListPage<T extends PrintLocalSetting> extends StatefulWidget {
+  List<PrintableSelfListInterface<T>> list;
 
-  PdfListPage({super.key, required this.list});
+  PdfSelfListPage({super.key, required this.list});
 
   @override
-  State<StatefulWidget> createState() => _PdfListPage();
+  State<StatefulWidget> createState() => _PdfSelfListPage();
 }
 
-class _PdfListPage<T extends PrintLocalSetting> extends State<PdfListPage<T>> {
-  late PrintableMaster<T> firstObj;
+class _PdfSelfListPage<T extends PrintLocalSetting>
+    extends State<PdfSelfListPage<T>> {
+  late PrintableSelfListInterface firstObj;
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _PdfListPage<T extends PrintLocalSetting> extends State<PdfListPage<T>> {
   }
 
   @override
-  void didUpdateWidget(covariant PdfListPage<T> oldWidget) {
+  void didUpdateWidget(covariant PdfSelfListPage<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     firstObj = widget.list[0];
   }
@@ -55,49 +56,6 @@ class _PdfListPage<T extends PrintLocalSetting> extends State<PdfListPage<T>> {
     super.didChangeDependencies();
     firstObj = widget.list[0];
   }
-
-  // bool getBodyWithoutApi() {
-  //   bool canGetBody = (widget.invoiceObj as ViewAbstract)
-  //           .isRequiredObjectsList()?[ServerActions.view] ==
-  //       null;
-  //   if (canGetBody) {
-  //     debugPrint("BaseEditWidget getBodyWithoutApi skiped");
-  //     return true;
-  //   }
-  //   bool res = (widget.invoiceObj as ViewAbstract).isNew() ||
-  //       (widget.invoiceObj as ViewAbstract).isRequiredObjectsListChecker();
-  //   debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
-  //   return res;
-  // }
-
-  // Widget getFutureBody(BuildContext context) {
-  //   if (getBodyWithoutApi()) {
-  //     return getBody(context);
-  //   }
-  //   return FutureBuilder(
-  //     future: (widget.invoiceObj as ViewAbstract)
-  //         .viewCallGetFirstFromList((widget.invoiceObj as ViewAbstract).iD),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.done) {
-  //         if (snapshot.data != null) {
-  //           widget.invoiceObj = snapshot.data as PrintableMaster;
-  //           context
-  //               .read<ListMultiKeyProvider>()
-  //               .edit(snapshot.data as ViewAbstract);
-
-  //           return getBody(context);
-  //         } else {
-  //           return EmptyWidget(
-  //               lottiUrl:
-  //                   "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-  //               title: AppLocalizations.of(context)!.cantConnect,
-  //               subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-  //         }
-  //       }
-  //       return Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -131,15 +89,14 @@ class _PdfListPage<T extends PrintLocalSetting> extends State<PdfListPage<T>> {
 
         // shouldRepaint: ,
         build: (format) async {
-          T? setting = await getSetting();
-
-          return await PDFListApi(
-                  list: widget.list, context: context, setting: setting)
+          // PrintLocalSetting? setting = await getSetting();
+          return await PdfSelfListApi<T>(widget.list, context, firstObj,
+                  printCommand: null)
               .generate(format);
         });
   }
 
-  PrintableMaster getFirstObject() {
+  PrintableSelfListInterface getFirstObject() {
     return widget.list[0];
   }
 

@@ -2026,4 +2026,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invoiceTotalInWords => 'إجمالي الفاتورة (كتابة)';
+
+  @override
+  String get hideWarehouse => 'إخفاء المستودع';
+
+  @override
+  String get hideWarehouseDes => ' لن تظر معلومات المستودع';
+
+  @override
+  String get skipOutofStock => 'تخطي المنتجات المنتهية من المخزنة';
+
+  @override
+  String get skipOutofStockDes => 'لن تظهر المنتجات المنتهية من المخزون';
 }

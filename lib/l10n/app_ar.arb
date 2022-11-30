@@ -679,5 +679,9 @@
     "accountInfo":"معلومات الحساب",
     "termsAndConitions":"الأحكام والشروط",
     "additionalNotes":"ملاحظات إضافية",
-    "invoiceTotalInWords":"إجمالي الفاتورة (كتابة)"
+    "invoiceTotalInWords":"إجمالي الفاتورة (كتابة)",
+    "hideWarehouse":"إخفاء المستودع",
+    "hideWarehouseDes":" لن تظر معلومات المستودع",
+    "skipOutofStock":"تخطي المنتجات المنتهية من المخزنة",
+    "skipOutofStockDes":"لن تظهر المنتجات المنتهية من المخزون"
 }
