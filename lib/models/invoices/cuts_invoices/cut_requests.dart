@@ -356,6 +356,12 @@ class CutRequest extends ViewAbstract<CutRequest>
 
     return await productsLabel.generate();
   }
+  
+  @override
+  Future<List<pdf.Page>> getPrintableCustomFromPDFPageLIst(BuildContext context, {PdfPageFormat? format, PrintCutRequest? setting}) {
+    // TODO: implement getPrintableCustomFromPDFPageLIst
+    throw UnimplementedError();
+  }
 }
 
 // enum CutStatus {

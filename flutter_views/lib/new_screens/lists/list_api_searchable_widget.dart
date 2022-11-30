@@ -91,7 +91,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
     return first is PrintableSelfListInterface || first is PrintableMaster;
   }
 
-  Widget getPrintWidget() {
+  Widget? getPrintWidget() {
     var first = getFirstObject();
     if (first is PrintableSelfListInterface && first is PrintableMaster) {
       return DropdownStringListControllerListenerByIcon(
@@ -123,7 +123,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
           },
           icon: const Icon(Icons.print));
     } else {
-      return nil;
+      return null;
     }
   }
 
@@ -239,6 +239,11 @@ class _ListApiWidgetState<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
+    Widget? printButton =
+        (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
+                2)
+            ? getPrintWidget()
+            : null;
     return Column(
       children: <Widget>[
         Container(child: _buildSearchBox()),
@@ -273,12 +278,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
               const Spacer(),
               getAddBotton(),
               getRefreshWidget(),
-              if (context
-                      .watch<ListMultiKeyProvider>()
-                      .getList(findCustomKey())
-                      .length >
-                  2)
-                getPrintWidget()
+              if (printButton != null) printButton
             ],
           ),
         ),
