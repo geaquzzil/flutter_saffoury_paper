@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
@@ -23,6 +24,7 @@ import 'package:skeletons/skeletons.dart';
 import '../../new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import '../../new_components/loading_shimmer.dart';
 import '../../printing_generator/page/pdf_self_list_page.dart';
+import '../filterables/filterable_icon_widget.dart';
 import '../home/components/ext_provider.dart';
 
 class ListApiSearchableWidget<T extends ViewAbstract> extends StatefulWidget {
@@ -91,6 +93,10 @@ class _ListApiWidgetState<T extends ViewAbstract>
     var first = getFirstObject();
 
     return first is PrintableSelfListInterface || first is PrintableMaster;
+  }
+
+  Widget? getFilterWidget() {
+    return FilterablePopupIconWidget();
   }
 
   Widget? getPrintWidget() {
@@ -246,6 +252,12 @@ class _ListApiWidgetState<T extends ViewAbstract>
                 2)
             ? getPrintWidget()
             : null;
+
+    Widget? filterButton =
+        (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
+                2)
+            ? getFilterWidget()
+            : null;
     return Column(
       children: <Widget>[
         Container(child: _buildSearchBox()),
@@ -253,6 +265,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
+              if (filterButton != null) filterButton,
               DropdownStringListControllerListenerByIcon(
                   icon: Icons.sort_by_alpha,
                   hint: AppLocalizations.of(context)!.sortBy,
@@ -322,31 +335,10 @@ class _ListApiWidgetState<T extends ViewAbstract>
   Widget getShimmerLoading(BuildContext context) {
     return Skeleton(
       isLoading: true,
-
       skeleton: SkeletonListView(
         itemCount: 5,
-        
       ),
       child: Container(child: Center(child: Text("Content"))),
-    );
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.separated(
-          separatorBuilder: (context, index) =>
-              const SizedBox(height: kDefaultPadding),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
-                ShimmerLoadingList(),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-            );
-          }),
     );
   }
 

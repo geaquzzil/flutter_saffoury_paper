@@ -9,15 +9,7 @@ import 'package:flutter_view_controller/providers/filterables/fliterable_list_pr
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class BaseFilterableMainWidget extends StatefulWidget {
-  const BaseFilterableMainWidget({Key? key}) : super(key: key);
-
-  @override
-  State<BaseFilterableMainWidget> createState() =>
-      _BaseFilterableMainWidgetState();
-}
-
-class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
+class BaseFilterableMainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewAbstract drawerViewAbstract =
@@ -74,7 +66,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
           child: const Text("DONE"),
           onPressed: () {
             notifyListApi(context);
-            Navigator.pop(context);
+            // Navigator.pop(context);
             // debugPrint(context.read<FilterableProvider>().getList.toString());
           },
         )

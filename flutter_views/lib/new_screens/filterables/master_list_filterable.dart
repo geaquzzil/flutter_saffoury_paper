@@ -29,35 +29,13 @@ class MasterFilterableController extends StatelessWidget {
             spacing: 10,
             direction: Axis.horizontal,
             children: list.map((i) => getListItem(context, i)).toList()),
-
-        // [
-        //   ListView.builder(
-        //       itemCount: list.length,
-        //       itemBuilder: (context, index) => getListItem(context, list[index])
-
-        //       // CheckboxListTile(
-        //       //     secondary: (list[index] as ViewAbstract)
-        //       //         .getCardLeadingCircleAvatar(context),
-        //       //     title:
-        //       //         (list[index] as ViewAbstract).getMainHeaderText(context),
-        //       //     value: isFilterableSelected(context, list[index]),
-        //       //     onChanged: (value) {
-        //       //       if (value ?? false) {
-        //       //         addFilterableSelected(context, list[index]);
-        //       //       } else {
-        //       //         removeFilterableSelected(context, list[index]);
-        //       //       }
-        //       //     })
-
-        //       ),
-        // ]
       ],
     );
   }
 
   Widget getListItem(BuildContext context, ViewAbstract item) {
     return ChoiceChip(
-        selectedColor: Colors.green,
+    
         label: item.getMainHeaderText(context),
         avatar: item.getCardLeadingCircleAvatar(context),
         selected: isFilterableSelected(context, item),

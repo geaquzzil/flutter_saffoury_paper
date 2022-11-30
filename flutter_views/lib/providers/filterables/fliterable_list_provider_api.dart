@@ -25,6 +25,8 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
       debugPrint("setRequiredFilterList called with no filter data");
       return;
     }
+    _requiredFiltter.clear();
+
     List<String> fields = viewAbstract.getFilterableFields();
     List<String> filterFields = _filterData!.getFieldsDeclarations();
     List<String> sharedFields =
