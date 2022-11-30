@@ -22,6 +22,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
   bool? hideQuantity;
   bool? hideWarehouse;
   bool? skipOutOfStock;
+  bool? hideUnitPriceAndTotalPrice;
 
   String? sortByField;
   SortByType? sortByType;
@@ -50,6 +51,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "hideQuantity": false,
           "hideWarehouse": false,
           "skipOutOfStock": false,
+          "hideUnitPriceAndTotalPrice": false,
         });
 
   @override
@@ -58,6 +60,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
       "hideDate",
       "hideWarehouse",
       "hideQuantity",
+      "hideUnitPriceAndTotalPrice",
       "skipOutOfStock",
     ]);
 
@@ -82,7 +85,9 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
     } else if (field == "hideQuantity") {
       return AppLocalizations.of(context)!.hideQuantityDes;
     } else if (field == "skipOutOfStock") {
-      return AppLocalizations.of(context)!.skipOutOfStock;
+      return AppLocalizations.of(context)!.skipOutofStockDes;
+    } else if (field == "hideUnitPriceAndTotalPrice") {
+      return AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPriceDes;
     }
     return super.getTextCheckBoxDescription(context, field);
   }
@@ -94,7 +99,9 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "hideDate": AppLocalizations.of(context)!.hideDate,
           "hideWarehouse": AppLocalizations.of(context)!.hideWarehouse,
           "hideQuantity": AppLocalizations.of(context)!.hideQuantityDes,
-          "skipOutOfStock": AppLocalizations.of(context)!.skipOutOfStock,
+          "skipOutOfStock": AppLocalizations.of(context)!.skipOutofStock,
+          "hideUnitPriceAndTotalPrice":
+              AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
         });
   @override
   Map<String, IconData> getFieldIconDataMap() => {};

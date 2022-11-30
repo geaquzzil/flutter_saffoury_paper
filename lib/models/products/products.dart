@@ -1002,6 +1002,9 @@ class Product extends ViewAbstract<Product>
       AppLocalizations.of(context)!.gsm: item.gsms?.gsm.toString() ?? "0",
       AppLocalizations.of(context)!.quantity:
           item.getQuantity().toCurrencyFormat(),
+      if (((pca?.hideUnitPriceAndTotalPrice == false) ?? true))
+        AppLocalizations.of(context)!.unit_price:
+            item.getUnitSellPrice()?.toStringAsFixed(2) ?? "0",
     };
   }
 
