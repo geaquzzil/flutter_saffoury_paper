@@ -21,9 +21,7 @@ class CustomFilterableController extends StatelessWidget {
               const EdgeInsets.only(right: 40, top: 0, left: 40, bottom: 0),
           initiallyExpanded: true,
           leading: Badge(
-            badgeContent: 
-            
-            Text(getFilterableFieldsCountStringValue(
+            badgeContent: Text(getFilterableFieldsCountStringValue(
                     context, customFilterableField.field)
                 .toString()),
             toAnimate: true,
@@ -66,10 +64,17 @@ class CustomFilterableController extends StatelessWidget {
                           context, customFilterableField.field);
                     }
                     addFilterableSelectedStringValue(
-                        context, customFilterableField.field, i.toString());
+                        context,
+                        customFilterableField.field,
+                        i.toString(),
+                        customFilterableField.title,
+                        i.toString());
                   } else {
                     removeFilterableSelectedStringValue(
-                        context, customFilterableField.field, i.toString());
+                        context,
+                        customFilterableField.field,
+                        i.toString(),
+                        i.toString());
                   }
                 }))
             .toList());
@@ -84,7 +89,6 @@ class CustomFilterableController extends StatelessWidget {
         children: v
             .getValues()
             .map((i) => ChoiceChip(
-  
                 label: Text(v.getFieldLabelString(context, i)),
                 // avatar: item.getCardLeadingCircleAvatar(context),
                 selected: isFilterableSelectedStringValue(
@@ -96,10 +100,17 @@ class CustomFilterableController extends StatelessWidget {
                           context, customFilterableField.field);
                     }
                     addFilterableSelectedStringValue(
-                        context, customFilterableField.field, i.toString());
+                        context,
+                        customFilterableField.field,
+                        i.toString(),
+                        customFilterableField.title,
+                        i);
                   } else {
                     removeFilterableSelectedStringValue(
-                        context, customFilterableField.field, i.toString());
+                        context,
+                        customFilterableField.field,
+                        i.toString(),
+                        i.toString());
                   }
                 }))
             .toList());
@@ -112,8 +123,8 @@ class CustomFilterableController extends StatelessWidget {
       if (v == null) {
         clearFilterableSelected(context, customFilterableField.field);
       } else {
-        addFilterableSelectedStringValue(
-            context, customFilterableField.field, v);
+        addFilterableSelectedStringValue(context, customFilterableField.field,
+            v, customFilterableField.title, v);
       }
     });
   }

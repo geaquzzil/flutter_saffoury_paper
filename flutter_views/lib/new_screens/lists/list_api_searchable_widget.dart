@@ -25,6 +25,7 @@ import '../../new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import '../../new_components/loading_shimmer.dart';
 import '../../printing_generator/page/pdf_self_list_page.dart';
 import '../filterables/filterable_icon_widget.dart';
+import '../filterables/horizontal_selected_filterable.dart';
 import '../home/components/ext_provider.dart';
 
 class ListApiSearchableWidget<T extends ViewAbstract> extends StatefulWidget {
@@ -278,7 +279,8 @@ class _ListApiWidgetState<T extends ViewAbstract>
                           context, drawerViewAbstractObsever.getObject);
                     } else {
                       listProvider.clear(findCustomKey());
-                      addFilterableSortField(context, obj.value.toString());
+                      addFilterableSortField(
+                          context, obj.value.toString(), obj.label);
                     }
                     notifyListApi(context);
                     debugPrint("is selected $obj");
@@ -298,6 +300,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
             ],
           ),
         ),
+        HorizontalFilterableSelectedList(),
         Expanded(
             child: ChangeNotifierProvider.value(
           value: listProvider,

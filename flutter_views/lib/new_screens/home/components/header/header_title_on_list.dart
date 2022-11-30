@@ -62,7 +62,7 @@ class _HeaderTitleMainState extends State<HeaderTitleOnListMain> {
                             ),
                             centerTitle: true,
                           ),
-                          body: const BaseFilterableMainWidget()),
+                          body: BaseFilterableMainWidget()),
                     ),
                   );
                   // BaseFilterableMainWidget();
@@ -91,8 +91,10 @@ class _HeaderTitleMainState extends State<HeaderTitleOnListMain> {
                     list: viewAbstract.getMainFieldsIconsAndValues(context),
                     onSelected: (obj) {
                       debugPrint("is selected ${obj.runtimeType}");
-                      addFilterableSortField(context,
-                          (obj as DropdownStringListItem).value.toString());
+                      addFilterableSortField(
+                          context,
+                          (obj as DropdownStringListItem).value.toString(),
+                          obj.label);
                       notifyListApi(context);
                       debugPrint("is selected $obj");
                     }),

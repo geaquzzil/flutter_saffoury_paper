@@ -12,21 +12,30 @@ void notifyListApi(BuildContext context) {
 }
 
 void addFilterableSort(BuildContext context, SortByType selectedItem) {
-  context.read<FilterableProvider>().addSortBy(selectedItem);
+  context.read<FilterableProvider>().addSortBy(context, selectedItem);
 }
 
-void addFilterableSortField(BuildContext context, String selectedItem) {
-  context.read<FilterableProvider>().addSortFieldName(selectedItem);
+void addFilterableSortField(
+    BuildContext context, String selectedItem, String selectedItemMainValue) {
+  context
+      .read<FilterableProvider>()
+      .addSortFieldName(context, selectedItem, selectedItemMainValue);
 }
 
 void addFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
   addFilterableSelectedStringValue(
-      context, selectedItem.getForeignKeyName(), selectedItem.getIDString());
+      context,
+      selectedItem.getForeignKeyName(),
+      selectedItem.getIDString(),
+      selectedItem.getMainHeaderLabelTextOnly(context),
+      selectedItem.getMainHeaderTextOnly(context));
 }
 
-void addFilterableSelectedStringValue(
-    BuildContext context, String field, String value) {
-  context.read<FilterableProvider>().add(field, field, value);
+void addFilterableSelectedStringValue(BuildContext context, String field,
+    String value, String mainLabelName, String mainValueName) {
+  context
+      .read<FilterableProvider>()
+      .add(field, field, value, mainValueName, mainLabelName);
 }
 
 void clearFilterableSelected(BuildContext context, String field) {
@@ -34,13 +43,15 @@ void clearFilterableSelected(BuildContext context, String field) {
 }
 
 void removeFilterableSelectedStringValue(
-    BuildContext context, String field, String value) {
-  context.read<FilterableProvider>().remove(field, value: value);
+    BuildContext context, String field, String value, String mainValueName) {
+  context
+      .read<FilterableProvider>()
+      .remove(field, value: value, mainValueName: mainValueName);
 }
 
 void removeFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
-  removeFilterableSelectedStringValue(
-      context, selectedItem.getForeignKeyName(), selectedItem.getIDString());
+  removeFilterableSelectedStringValue(context, selectedItem.getForeignKeyName(),
+      selectedItem.getIDString(), selectedItem.getMainHeaderTextOnly(context));
 }
 
 bool isFilterableSelectedStringValue(
@@ -52,6 +63,11 @@ bool isFilterableSelected(BuildContext context, ViewAbstract item) {
   return context
       .watch<FilterableProvider>()
       .isSelected(item.getForeignKeyName(), item.getIDString());
+}
+
+bool isFilterableSelectedByField(
+    BuildContext context, String field, String value) {
+  return context.watch<FilterableProvider>().isSelected(field, value);
 }
 
 int getFilterableFieldsCount(BuildContext context, ViewAbstract item) {

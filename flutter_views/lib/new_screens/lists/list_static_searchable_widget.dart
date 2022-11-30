@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../filterables/horizontal_selected_filterable.dart';
+
 class ListStaticSearchableWidget<T> extends StatefulWidget {
   List<T> list;
   Widget Function(T item) listItembuilder;
@@ -86,6 +88,7 @@ class _ListStaticSearchableWidgetState<T>
             child: _searchResult.isNotEmpty || controller.text.isNotEmpty
                 ? _buildSearchResult()
                 : _buildUsersList()),
+                HorizontalFilterableSelectedList()
       ],
     );
   }

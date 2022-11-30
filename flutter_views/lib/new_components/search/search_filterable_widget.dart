@@ -42,7 +42,9 @@ class SearchFilterableWidget extends StatelessWidget {
               onSelected: (obj) {
                 debugPrint("is selected ${obj.runtimeType}");
                 addFilterableSortField(
-                    context, (obj as DropdownStringListItem).value.toString());
+                    context,
+                    (obj as DropdownStringListItem).value.toString(),
+                    (obj).label);
                 notifyListApi(context);
                 debugPrint("is selected $obj");
               }),
