@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../home/components/ext_provider.dart';
 
 class HorizontalFilterableSelectedList extends StatelessWidget {
@@ -83,6 +83,6 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
         onPressed: () {
           context.read<FilterableProvider>().clearAll();
         },
-        child: Text("Clear All"));
+        child: Text(AppLocalizations.of(context)!.clearFiltters));
   }
 }

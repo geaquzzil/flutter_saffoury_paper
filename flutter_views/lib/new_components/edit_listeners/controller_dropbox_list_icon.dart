@@ -33,26 +33,35 @@ class _DropdownStringListControllerListenerByIconState
           BuildContext context, DropdownStringListItem? e) =>
       PopupMenuItem<DropdownStringListItem>(
         value: e,
-        child: e == null
+        enabled: e != null ? (e.enabled ?? true) : false,
+        child: e != null && e.enabled == false
             ? Column(
-                children: [Text(widget.hint), PopupMenuDivider()],
-              )
-            : Row(
                 children: [
-                  if (e.icon != null)
-                    Icon(
-                      e.icon,
-                      // color: Colors.black,
-                      size: 20,
-                    ),
-                  const SizedBox(width: 12),
+                  PopupMenuDivider(),
                   Text(e.label),
-                  // TextBold(
-                  //   text: "${widget.hint}: ${e.label}",
-                  //   regex: e.label.toString(),
-                  // )
+                  PopupMenuDivider()
                 ],
-              ),
+              )
+            : e == null
+                ? Column(
+                    children: [Text(widget.hint), PopupMenuDivider()],
+                  )
+                : Row(
+                    children: [
+                      if (e.icon != null)
+                        Icon(
+                          e.icon,
+                          // color: Colors.black,
+                          size: 20,
+                        ),
+                      const SizedBox(width: 12),
+                      Text(e.label),
+                      // TextBold(
+                      //   text: "${widget.hint}: ${e.label}",
+                      //   regex: e.label.toString(),
+                      // )
+                    ],
+                  ),
       );
 
   @override
@@ -68,7 +77,6 @@ class _DropdownStringListControllerListenerByIconState
             : Theme.of(context).colorScheme.primary,
       ),
       onSelected: (DropdownStringListItem? result) {
-          
         widget.onSelected(result);
         // widget.viewAbstractEnum = result;
         setState(() {

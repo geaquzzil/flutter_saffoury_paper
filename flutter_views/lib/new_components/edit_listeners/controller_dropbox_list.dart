@@ -47,6 +47,6 @@ class DropdownStringListItem {
   IconData? icon;
   String label;
   Object? value;
-
-  DropdownStringListItem(this.icon, this.label, {this.value});
+  bool? enabled;
+  DropdownStringListItem(this.icon, this.label, {this.value, this.enabled});
 }

@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/screens/view/view_view_main_page.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:lottie/lottie.dart';
@@ -44,7 +45,20 @@ class BaseMaterialAppPage extends StatefulWidget {
 }
 
 class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
-  Locale _locale = Locale('ar', 'ps');
+  late LangaugeProvider langaugeProvider;
+  @override
+  void initState() {
+    super.initState();
+    langaugeProvider = Provider.of<LangaugeProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      langaugeProvider.addListener(() {
+        debugPrint(
+            "langaugeProvider changed  langaugeProvider= ${langaugeProvider.getLocale}");
+        setState(() {});
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get.put(DashboardController());
@@ -88,58 +102,63 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     // );
     // }
 
-    Widget widget = DynamicColorBuilder(
-      builder: (lightDynamic, darkDynamic) => MaterialApp(
-        scrollBehavior: const MaterialScrollBehavior().copyWith(
-          dragDevices: {
-            PointerDeviceKind.mouse,
-            PointerDeviceKind.touch,
-            PointerDeviceKind.stylus,
-            PointerDeviceKind.unknown
-          },
-        ),
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: Locale('ar', ''),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          FormBuilderLocalizations.delegate,
-        ],
-        builder: (context, widget) => ResponsiveWrapper.builder(
-          ClampingScrollWrapper.builder(context, widget!),
-          defaultScale: true,
-          breakpoints: [
-            const ResponsiveBreakpoint.resize(450, name: MOBILE),
-            const ResponsiveBreakpoint.resize(800, name: TABLET),
-            const ResponsiveBreakpoint.resize(1000, name: TABLET),
-            const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-            const ResponsiveBreakpoint.resize(2460, name: "4K"),
-          ],
-          background: Container(
-            color: kBackgroundColor,
-          ),
-        ),
-        // title: AppLocalizations.of(context)!.appTitle,
-        title: "SSSS",
-        debugShowCheckedModeBanner: false,
-        restorationScopeId: 'root',
-        initialRoute: '/',
-        // onGenerateTitle: (context) => "dff",
-        onGenerateRoute: RouteGenerator.generateRoute,
+    Widget widget = ChangeNotifierProvider.value(
+        value: langaugeProvider,
+        child:
+            Consumer<LangaugeProvider>(builder: (context, provider, listTile) {
+          return DynamicColorBuilder(
+            builder: (lightDynamic, darkDynamic) => MaterialApp(
+              scrollBehavior: const MaterialScrollBehavior().copyWith(
+                dragDevices: {
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.stylus,
+                  PointerDeviceKind.unknown
+                },
+              ),
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: langaugeProvider.getLocale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                FormBuilderLocalizations.delegate,
+              ],
+              builder: (context, widget) => ResponsiveWrapper.builder(
+                ClampingScrollWrapper.builder(context, widget!),
+                defaultScale: true,
+                breakpoints: [
+                  const ResponsiveBreakpoint.resize(450, name: MOBILE),
+                  const ResponsiveBreakpoint.resize(800, name: TABLET),
+                  const ResponsiveBreakpoint.resize(1000, name: TABLET),
+                  const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+                  const ResponsiveBreakpoint.resize(2460, name: "4K"),
+                ],
+                background: Container(
+                  color: kBackgroundColor,
+                ),
+              ),
+              // title: AppLocalizations.of(context)!.appTitle,
+              title: "SSSS",
+              debugShowCheckedModeBanner: false,
+              restorationScopeId: 'root',
+              initialRoute: '/',
+              // onGenerateTitle: (context) => "dff",
+              onGenerateRoute: RouteGenerator.generateRoute,
 
-        theme: ThemeData(
-          colorScheme: lightDynamic ?? defaultLightColorScheme,
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: darkDynamic ?? defaultDarkColorScheme,
-          useMaterial3: true,
-        ),
-        themeMode: ThemeMode.system,
-      ),
-    );
+              theme: ThemeData(
+                colorScheme: lightDynamic ?? defaultLightColorScheme,
+                useMaterial3: true,
+              ),
+              darkTheme: ThemeData(
+                colorScheme: darkDynamic ?? defaultDarkColorScheme,
+                useMaterial3: true,
+              ),
+              themeMode: ThemeMode.system,
+            ),
+          );
+        }));
 
     return widget;
   }

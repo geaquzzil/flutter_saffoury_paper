@@ -24,6 +24,7 @@ import 'package:skeletons/skeletons.dart';
 import '../../new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import '../../new_components/loading_shimmer.dart';
 import '../../printing_generator/page/pdf_self_list_page.dart';
+import '../../providers/filterables/filterable_provider.dart';
 import '../filterables/filterable_icon_widget.dart';
 import '../filterables/horizontal_selected_filterable.dart';
 import '../home/components/ext_provider.dart';
@@ -107,11 +108,29 @@ class _ListApiWidgetState<T extends ViewAbstract>
         icon: Icons.print,
         hint: AppLocalizations.of(context)!.printType,
         list: [
-          DropdownStringListItem(Icons.print, "Self List"),
-          DropdownStringListItem(Icons.print, "Objects")
+          DropdownStringListItem(
+              Icons.print,
+              AppLocalizations.of(context)!
+                  .printAllAs(AppLocalizations.of(context)!.list)),
+          DropdownStringListItem(
+              Icons.print,
+              AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever
+                  .getObject
+                  .getMainHeaderLabelTextOnly(context))),
+          DropdownStringListItem(
+              Icons.settings,
+              enabled: false,
+              AppLocalizations.of(context)!.printerSetting),
+          DropdownStringListItem(
+              Icons.print,
+              AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever
+                  .getObject
+                  .getMainHeaderLabelTextOnly(context))),
         ],
         onSelected: (object) {
-          if (object?.label == "Self List") {
+          if (object?.label ==
+              AppLocalizations.of(context)!
+                  .printAllAs(AppLocalizations.of(context)!.list)) {
             changeToPrintPdfSelfList();
           } else {
             changeToPrintPdfList();
@@ -246,6 +265,15 @@ class _ListApiWidgetState<T extends ViewAbstract>
     );
   }
 
+  bool hasFilterable() {
+    return context
+        .watch<FilterableProvider>()
+        .getList
+        .values
+        .toList()
+        .isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget? printButton =
@@ -300,7 +328,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
             ],
           ),
         ),
-        HorizontalFilterableSelectedList(),
+        if (hasFilterable()) HorizontalFilterableSelectedList(),
         Expanded(
             child: ChangeNotifierProvider.value(
           value: listProvider,

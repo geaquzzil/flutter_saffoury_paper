@@ -674,6 +674,17 @@
   "hideCompanyTerms": "Hide company terms",
   "hideCompanyTermsDes": "Company terms will not appear on the invoice",
   "hideCompanyNotes": "Hide company notes",
-  "hideCompanyNotesDes": "Company notes on the invoice footer will not appear"
-
+  "hideCompanyNotesDes": "Company notes on the invoice footer will not appear",
+  "clearFiltters":"Clear filters",
+"printAllAs": "Print all as {r}",
+    "@printAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "systemDefault":"System default"
 }

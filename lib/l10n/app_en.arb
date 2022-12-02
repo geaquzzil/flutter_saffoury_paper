@@ -693,5 +693,17 @@
     "hideWarehouse":"Hide warehouse",
     "hideWarehouseDes":"Warehouse details will not appear on the invoice",
     "skipOutofStock":"Skip out of stock products",
-    "skipOutofStockDes":"Hide out of stock products"
+    "skipOutofStockDes":"Hide out of stock products",
+    "clearFiltters":"Clear filters",
+    "printAllAs": "Print all as {r}",
+    "@printAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "systemDefault":"System default"
 }

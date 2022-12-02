@@ -2038,4 +2038,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get skipOutofStockDes => 'Hide out of stock products';
+
+  @override
+  String get clearFiltters => 'Clear filters';
+
+  @override
+  String printAllAs(String r) {
+    return 'Print all as $r';
+  }
+
+  @override
+  String get systemDefault => 'System default';
 }

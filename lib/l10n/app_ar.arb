@@ -683,5 +683,17 @@
     "hideWarehouse":"إخفاء المستودع",
     "hideWarehouseDes":" لن تظر معلومات المستودع",
     "skipOutofStock":"تخطي المنتجات المنتهية من المخزنة",
-    "skipOutofStockDes":"لن تظهر المنتجات المنتهية من المخزون"
+    "skipOutofStockDes":"لن تظهر المنتجات المنتهية من المخزون",
+    "clearFiltters":"محو جميع عوامل التصفية" ,
+     "printAllAs": "طباعة جميع ك{r}",
+    "@printAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "systemDefault":"النظام الافتراضي"
 }

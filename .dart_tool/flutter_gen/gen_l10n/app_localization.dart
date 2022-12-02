@@ -4154,6 +4154,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide out of stock products'**
   String get skipOutofStockDes;
+
+  /// No description provided for @clearFiltters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get clearFiltters;
+
+  /// Greet the user by their name.
+  ///
+  /// In en, this message translates to:
+  /// **'Print all as {r}'**
+  String printAllAs(String r);
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get systemDefault;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

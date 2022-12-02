@@ -2038,4 +2038,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get skipOutofStockDes => 'لن تظهر المنتجات المنتهية من المخزون';
+
+  @override
+  String get clearFiltters => 'محو جميع عوامل التصفية';
+
+  @override
+  String printAllAs(String r) {
+    return 'طباعة جميع ك$r';
+  }
+
+  @override
+  String get systemDefault => 'النظام الافتراضي';
 }

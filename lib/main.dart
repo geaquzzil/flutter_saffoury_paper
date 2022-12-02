@@ -32,6 +32,7 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
+import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/providers/therd_screen_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -98,11 +99,12 @@ void main() async {
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
-      ChangeNotifierProvider(create: (_) => ViewAbstractChangeProvider.init(Product())),
+      ChangeNotifierProvider(
+          create: (_) => ViewAbstractChangeProvider.init(Product())),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
-
+      ChangeNotifierProvider(create: (_) => LangaugeProvider()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
       ChangeNotifierProvider(
           create: (_) => DrawerViewAbstractListProvider(object: Product())),

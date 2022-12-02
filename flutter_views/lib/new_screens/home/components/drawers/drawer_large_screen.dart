@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
+import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
@@ -209,13 +212,7 @@ class DrawerLargeScreens extends StatelessWidget {
           ),
 
           NotificationPopupWidget(),
-          buildColapsedIcon(
-            context,
-            Icons.language,
-            () => context
-                .read<LargeScreenPageProvider>()
-                .setCurrentPage(CurrentPage.settings),
-          ),
+          buildLanguageIcon(context),
           buildColapsedIcon(
             context,
             Icons.arrow_back_ios,
@@ -243,6 +240,44 @@ class DrawerLargeScreens extends StatelessWidget {
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.secondary);
         });
+  }
+
+  Widget buildLanguageIcon(BuildContext context) {
+    return DropdownStringListControllerListenerByIcon(
+      icon: Icons.language,
+      hint: AppLocalizations.of(context)!.language,
+      list: [
+        DropdownStringListItem(
+            Icons.translate, AppLocalizations.of(context)!.systemDefault),
+        DropdownStringListItem(
+            Icons.translate, AppLocalizations.of(context)!.english),
+        DropdownStringListItem(
+            Icons.translate, AppLocalizations.of(context)!.arabic),
+      ],
+      onSelected: (object) {
+        if (object == null) {
+          context
+              .read<LangaugeProvider>()
+              .change(Localizations.localeOf(context));
+          return;
+        }
+        if (object.label == null) {
+          context
+              .read<LangaugeProvider>()
+              .change(Localizations.localeOf(context));
+        } else {
+          if (object.label == AppLocalizations.of(context)!.english) {
+            context.read<LangaugeProvider>().change(Locale('en', ''));
+          } else if (object.label == AppLocalizations.of(context)!.arabic) {
+            context.read<LangaugeProvider>().change(Locale('ar', ''));
+          } else {
+            context
+                .read<LangaugeProvider>()
+                .change(Localizations.localeOf(context));
+          }
+        }
+      },
+    );
   }
 }
 

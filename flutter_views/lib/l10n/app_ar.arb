@@ -670,5 +670,17 @@
     "hideCompanyTerms": "إخفاء شروط الشركة",
     "hideCompanyTermsDes": "شروط الشركة لن تظهر في الفاتورة" ,
     "hideCompanyNotes": "إخفاء ملاحظات الشركة",
-    "hideCompanyNotesDes": "لن تظهر ملاحظات الشركة في تذييل الفاتورة" 
+    "hideCompanyNotesDes": "لن تظهر ملاحظات الشركة في تذييل الفاتورة",
+    "clearFiltters":"محو جميع عوامل التصفية" ,
+      "printAllAs": "طباعة جميع ك{r}",
+    "@printAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "systemDefault":"النظام الافتراضي"
 }
