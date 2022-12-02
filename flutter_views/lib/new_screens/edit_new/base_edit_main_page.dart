@@ -23,8 +23,11 @@ import 'package:nil/nil.dart';
 
 class BaseEditNewPage extends StatefulWidget {
   ViewAbstract viewAbstract;
+  void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 
-  BaseEditNewPage({Key? key, required this.viewAbstract}) : super(key: key);
+  BaseEditNewPage(
+      {Key? key, required this.viewAbstract, this.onFabClickedConfirm})
+      : super(key: key);
 
   @override
   State<BaseEditNewPage> createState() => _BaseEditNewPageState();
@@ -155,6 +158,9 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               onClose: (value) {
                 if (value != null) {
                   currentViewAbstract = currentViewAbstract!.copyToUplode();
+                  if (widget.onFabClickedConfirm != null) {
+                    widget.onFabClickedConfirm!(currentViewAbstract);
+                  } else {}
                   debugPrint(
                       "onConfirm currentViewAbstract => $currentViewAbstract");
                 }

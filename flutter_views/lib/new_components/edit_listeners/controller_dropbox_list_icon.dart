@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 
 import '../text_bold.dart';
@@ -54,8 +55,8 @@ class _DropdownStringListControllerListenerByIconState
                           // color: Colors.black,
                           size: 20,
                         ),
-                      const SizedBox(width: 12),
-                      Text(e.label),
+                      const SizedBox(width: kDefaultPadding / 3),
+                      Text(e.label, overflow: TextOverflow.clip),
                       // TextBold(
                       //   text: "${widget.hint}: ${e.label}",
                       //   regex: e.label.toString(),

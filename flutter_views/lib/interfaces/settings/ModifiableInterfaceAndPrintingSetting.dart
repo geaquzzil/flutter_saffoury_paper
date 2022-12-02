@@ -8,15 +8,12 @@ abstract class ModifiableInterface<T> {
   String getModifibleTitleName(BuildContext context);
   IconData getModifibleIconData();
   T getModifibleSettingObject(BuildContext context);
-
-
 }
 
 abstract class ModifiablePrintableInterface<T> extends ModifiableInterface<T> {
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context);
-
-
 }
+
 
 class PrintPageSetting {
   PdfPageFormat? defaultPageFormat;

@@ -61,6 +61,8 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
       "hideWarehouse",
       "hideQuantity",
       "hideUnitPriceAndTotalPrice",
+      "sortByField",
+      "sortByType",
       "skipOutOfStock",
     ]);
 
@@ -143,6 +145,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
       BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
     debugPrint(
         "onSavedModiablePrintableLoaded ${viewAbstractThatCalledPDF.runtimeType}");
+    product = viewAbstractThatCalledPDF as Product;
     return this;
   }
 }

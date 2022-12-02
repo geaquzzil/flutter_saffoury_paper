@@ -6,10 +6,8 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import '../../models/view_abstract.dart';
 
 abstract class PrintableSelfListInterface<T extends PrintLocalSetting> {
-
   Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?
-      getPrintableSelfListHeaderInfo(
-          BuildContext context, List list, T? pca);
+      getPrintableSelfListHeaderInfo(BuildContext context, List list, T? pca);
 
   Future<List<InvoiceTotalTitleAndDescriptionInfo>>? getPrintableSelfListTotal(
       BuildContext context, List list, T? pca);
@@ -38,4 +36,6 @@ abstract class PrintableSelfListInterface<T extends PrintLocalSetting> {
   String getPrintableSelfListSecondaryColor(T? pca);
 
   String getPrintableSelfListInvoiceTitle(BuildContext context, T? pca);
+
+  T getModifiablePrintableSelfPdfSetting(BuildContext context);
 }

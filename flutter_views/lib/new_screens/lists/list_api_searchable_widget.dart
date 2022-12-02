@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
@@ -104,6 +105,11 @@ class _ListApiWidgetState<T extends ViewAbstract>
   Widget? getPrintWidget() {
     var first = getFirstObject();
     if (first is PrintableSelfListInterface && first is PrintableMaster) {
+      String? printListSetting =
+          "${AppLocalizations.of(context)!.printAllAs(AppLocalizations.of(context)!.list)} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
+      ;
+      String? printSelfListSetting =
+          "${AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever.getObject.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
       return DropdownStringListControllerListenerByIcon(
         icon: Icons.print,
         hint: AppLocalizations.of(context)!.printType,
@@ -121,17 +127,23 @@ class _ListApiWidgetState<T extends ViewAbstract>
               Icons.settings,
               enabled: false,
               AppLocalizations.of(context)!.printerSetting),
-          DropdownStringListItem(
-              Icons.print,
-              AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever
-                  .getObject
-                  .getMainHeaderLabelTextOnly(context))),
+          DropdownStringListItem(Icons.settings, printListSetting),
+          DropdownStringListItem(Icons.settings, printSelfListSetting),
         ],
         onSelected: (object) {
           if (object?.label ==
               AppLocalizations.of(context)!
                   .printAllAs(AppLocalizations.of(context)!.list)) {
             changeToPrintPdfSelfList();
+          } else if (object?.label == printSelfListSetting) {
+            context
+                .read<ActionViewAbstractProvider>()
+                .changeCustomWidget(BaseEditNewPage(
+                  viewAbstract: (drawerViewAbstractObsever.getObject
+                          as PrintableSelfListInterface)
+                      .getModifiablePrintableSelfPdfSetting(context),
+                ));
+          } else if (object?.label == printSelfListSetting) {
           } else {
             changeToPrintPdfList();
           }

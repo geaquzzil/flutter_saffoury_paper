@@ -48,7 +48,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
               child: ListTile(
                 leading: Badge(
                   badgeColor: Theme.of(context).colorScheme.primary,
-                  badgeContent: Text(
+                  badgeContent: Text( 
                     context
                         .watch<FilterableProvider>()
                         .getList

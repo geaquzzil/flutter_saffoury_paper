@@ -1020,6 +1020,11 @@ class Product extends ViewAbstract<Product>
           BuildContext context, List list, PrintProductList? pca) {
     return null;
   }
+
+  @override
+  PrintProductList getModifiablePrintableSelfPdfSetting(BuildContext context) {
+    return PrintProductList()..product = this;
+  }
 }
 
 // enum ProductStatus {

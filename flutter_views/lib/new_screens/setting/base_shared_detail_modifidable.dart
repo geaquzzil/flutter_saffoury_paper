@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 import '../edit_new/base_edit_new.dart';
 
 class BaseSettingDetailsView extends StatelessWidget {
-  const BaseSettingDetailsView({Key? key}) : super(key: key);
+  dynamic printSetting;
+  BaseSettingDetailsView({Key? key, this.printSetting}) : super(key: key);
   Future<ViewAbstract?> getSetting(
       BuildContext context, ModifiableInterface settingObject) async {
     ViewAbstract? saved = await Configurations.get<ViewAbstract>(
