@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 void notifyListApi(BuildContext context) {
   ViewAbstract? v = context.read<DrawerViewAbstractListProvider>().getObject;
   v.setFilterableMap(context.read<FilterableProvider>().getList);
-  context.read<DrawerViewAbstractListProvider>().change(context, v);
+  context
+      .read<DrawerViewAbstractListProvider>()
+      .changeWithFilterable(context, v);
 }
 
 void addFilterableSort(BuildContext context, SortByType selectedItem) {

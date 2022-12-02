@@ -19,7 +19,7 @@ class CustomFilterableController extends StatelessWidget {
         ExpansionTile(
           childrenPadding:
               const EdgeInsets.only(right: 40, top: 0, left: 40, bottom: 0),
-          initiallyExpanded: true,
+          initiallyExpanded: false,
           leading: Badge(
             badgeContent: Text(getFilterableFieldsCountStringValue(
                     context, customFilterableField.field)

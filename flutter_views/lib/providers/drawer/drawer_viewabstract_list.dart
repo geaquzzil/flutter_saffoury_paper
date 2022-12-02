@@ -20,4 +20,9 @@ class DrawerViewAbstractListProvider with ChangeNotifier {
     context.read<FilterableProvider>().init(context,object);
     context.read<DrawerViewAbstractStandAloneProvider>().change(context,null);
   }
+  void changeWithFilterable(BuildContext context, ViewAbstract object) {
+    this.object = object;
+    notifyListeners();
+    context.read<DrawerViewAbstractStandAloneProvider>().change(context,null);
+  }
 }
