@@ -12,27 +12,7 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var list = context.watch<FilterableProvider>().getList.values.toList();
-    var listSelectd = list
-        .map((master) => master.values
-            .map((e) => FilterableProviderHelper(
-                field: master.field,
-                fieldNameApi: master.fieldNameApi,
-                values: [e],
-                mainFieldName: master.mainFieldName,
-                mainValuesName: [
-                  master.mainValuesName[master.values.indexOf(e)]
-                ]))
-            .toList())
-        .toList();
-    List<FilterableProviderHelper> finalList = [];
-    for (var element in listSelectd) {
-      for (var element in element) {
-        finalList.add(element);
-      }
-    }
-
-    debugPrint("listSelected = $listSelectd");
+    List<FilterableProviderHelper> finalList = getAllSelectedFilters(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

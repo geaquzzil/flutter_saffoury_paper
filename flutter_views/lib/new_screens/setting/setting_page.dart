@@ -42,7 +42,7 @@ class SettingPage extends StatelessWidget {
           // color: Colors.grey,
           // padding: const EdgeInsets.all(10),
           // decoration: getShadowBoxDecoration(),
-          child: const Center(
+          child:  Center(
         child: BaseSettingDetailsView(),
       ));
     }
@@ -53,7 +53,7 @@ class SettingPage extends StatelessWidget {
         // decoration: getShadowBoxDecoration(),
         child: Row(
       children: [
-        const Expanded(
+         Expanded(
           child: Center(
             child: BaseSettingDetailsView(),
           ),

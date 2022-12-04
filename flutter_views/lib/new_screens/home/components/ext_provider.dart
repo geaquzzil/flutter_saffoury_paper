@@ -43,6 +43,50 @@ void addFilterableSelectedStringValue(BuildContext context, String field,
 void clearFilterableSelected(BuildContext context, String field) {
   context.read<FilterableProvider>().clear(field: field);
 }
+List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context) {
+  var list = context.read<FilterableProvider>().getList.values.toList();
+  var listSelectd = list
+      .map((master) => master.values
+          .map((e) => FilterableProviderHelper(
+              field: master.field,
+              fieldNameApi: master.fieldNameApi,
+              values: [e],
+              mainFieldName: master.mainFieldName,
+              mainValuesName: [
+                master.mainValuesName[master.values.indexOf(e)]
+              ]))
+          .toList())
+      .toList();
+  List<FilterableProviderHelper> finalList = [];
+  for (var element in listSelectd) {
+    for (var element in element) {
+      finalList.add(element);
+    }
+  }
+  return finalList;
+}
+List<FilterableProviderHelper> getAllSelectedFilters(BuildContext context) {
+  var list = context.watch<FilterableProvider>().getList.values.toList();
+  var listSelectd = list
+      .map((master) => master.values
+          .map((e) => FilterableProviderHelper(
+              field: master.field,
+              fieldNameApi: master.fieldNameApi,
+              values: [e],
+              mainFieldName: master.mainFieldName,
+              mainValuesName: [
+                master.mainValuesName[master.values.indexOf(e)]
+              ]))
+          .toList())
+      .toList();
+  List<FilterableProviderHelper> finalList = [];
+  for (var element in listSelectd) {
+    for (var element in element) {
+      finalList.add(element);
+    }
+  }
+  return finalList;
+}
 
 void removeFilterableSelectedStringValue(
     BuildContext context, String field, String value, String mainValueName) {

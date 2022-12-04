@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
@@ -135,10 +136,18 @@ class _ListApiWidgetState<T extends ViewAbstract>
               AppLocalizations.of(context)!
                   .printAllAs(AppLocalizations.of(context)!.list)) {
             changeToPrintPdfSelfList();
-          } else if (object?.label == printSelfListSetting) {
+          } else if (object?.label == printListSetting) {
             context
                 .read<ActionViewAbstractProvider>()
                 .changeCustomWidget(BaseEditNewPage(
+                  onFabClickedConfirm: (obj) {
+                    context
+                        .read<ActionViewAbstractProvider>()
+                        .changeCustomWidget(PdfSelfListPage(
+                            setting: obj as PrintLocalSetting,
+                            list:
+                                getList().cast<PrintableSelfListInterface>()));
+                  },
                   viewAbstract: (drawerViewAbstractObsever.getObject
                           as PrintableSelfListInterface)
                       .getModifiablePrintableSelfPdfSetting(context),

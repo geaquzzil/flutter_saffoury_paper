@@ -28,8 +28,9 @@ import '../pdf_receipt_api.dart';
 
 class PdfSelfListPage<T extends PrintLocalSetting> extends StatefulWidget {
   List<PrintableSelfListInterface<T>> list;
+  T? setting;
 
-  PdfSelfListPage({super.key, required this.list});
+  PdfSelfListPage({super.key, required this.list,this.setting});
 
   @override
   State<StatefulWidget> createState() => _PdfSelfListPage();
@@ -91,7 +92,7 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
         build: (format) async {
           // PrintLocalSetting? setting = await getSetting();
           return await PdfSelfListApi<T>(widget.list, context, firstObj,
-                  printCommand: null)
+                  printCommand: widget.setting)
               .generate(format);
         });
   }

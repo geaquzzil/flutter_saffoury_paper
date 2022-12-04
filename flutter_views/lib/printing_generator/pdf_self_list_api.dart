@@ -39,7 +39,13 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     accountInfoList = await printObj.getPrintableSelfListAccountInfoInBottom(
         context, list, setting);
 
-    material.debugPrint("pdfSelf => $list");
+    material.debugPrint("PdfSelfListApi pdfSelf => $list");
+    material.debugPrint("PdfSelfListApi hasHeaderInfo => ${hasHeaderInfo()}");
+    material.debugPrint("PdfSelfListApi hasTotal => ${hasTotal()}");
+    material.debugPrint(
+        "PdfSelfListApi hasAccountInfoBottom => ${hasAccountInfoBottom()}");
+    material.debugPrint(
+        "PdfSelfListApi hasTotalDescription => ${hasTotalDescription()}");
   }
 
   @override
@@ -57,6 +63,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
   }
 
   bool hasTotalDescription() {
+    // return false;
     return totalDescriptionList != null &&
         (totalDescriptionList?.isNotEmpty ?? false);
   }
@@ -227,7 +234,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
             .toList()))
         .toList();
 
-    checkToSort(head, data);
+    // checkToSort(head, data);
 
     // data.addAll(getTotalText(headers.length - 1));
     return Padding(
@@ -353,9 +360,6 @@ class PdfSelfListApi<T extends PrintLocalSetting>
                 isArabic() ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(height: 1 * (PdfPageFormat.cm)),
-              buildTitleOnInvoice(AppLocalizations.of(context)!.accountInfo),
-              buildInvoiceBottomInfoWithQrCode(),
               SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
               buildTitleOnInvoice(
                   AppLocalizations.of(context)!.termsAndConitions),

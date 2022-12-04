@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -195,4 +196,40 @@ class ProductSize extends ViewAbstract<ProductSize> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"width": 0, "length": 0};
+}
+
+enum ProductSizeType implements ViewAbstractEnum<ProductSizeType> {
+  PALLET,
+  REEL;
+
+  @override
+  IconData getMainIconData() => Icons.type_specimen;
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.type;
+
+  @override
+  String getFieldLabelString(BuildContext context, ProductSizeType field) {
+    switch (field) {
+      case PALLET:
+        return AppLocalizations.of(context)!.pallet;
+      case REEL:
+        return AppLocalizations.of(context)!.reel;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, ProductSizeType field) {
+    switch (field) {
+      case PALLET:
+        return Icons.stacked_line_chart_outlined;
+      case REEL:
+        return Icons.stacked_line_chart_outlined;
+    }
+  }
+
+  @override
+  List<ProductSizeType> getValues() {
+    return ProductSizeType.values;
+  }
 }

@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 import '../edit_new/base_edit_new.dart';
 
 class BaseSettingDetailsView extends StatelessWidget {
-  dynamic printSetting;
+  dynamic? printSetting;
   BaseSettingDetailsView({Key? key, this.printSetting}) : super(key: key);
   Future<ViewAbstract?> getSetting(
       BuildContext context, ModifiableInterface settingObject) async {

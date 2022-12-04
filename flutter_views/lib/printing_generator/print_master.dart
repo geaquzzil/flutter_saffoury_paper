@@ -109,7 +109,7 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
   }
 
   bool isArabic() {
-    return true;
+    return false;
   }
 
   int compareDynamic(bool ascending, dynamic value1, dynamic value2) {

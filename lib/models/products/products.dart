@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
@@ -43,6 +44,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/components/header.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
+import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
@@ -51,6 +53,7 @@ import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dar
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -59,6 +62,7 @@ import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:supercharged/supercharged.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/orders.dart';
 import '../invoices/priceless_invoices/products_inputs.dart';
@@ -169,6 +173,13 @@ class Product extends ViewAbstract<Product>
   @override
   Product getSelfNewInstance() {
     return Product();
+  }
+
+  ProductSizeType getSizeType() {
+    if (isRoll()) {
+      return ProductSizeType.REEL;
+    }
+    return ProductSizeType.PALLET;
   }
 
   @override
@@ -959,14 +970,100 @@ class Product extends ViewAbstract<Product>
   @override
   Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?
       getPrintableSelfListHeaderInfo(
-          BuildContext context, List list, PrintProductList? pca) {
-    return null;
+          BuildContext context, List list, PrintProductList? pca) async {
+    return [
+      getInvoicDesFirstRow(context, list.cast(), pca),
+      getInvoiceDesSecRow(context, list.cast(), pca),
+      getInvoiceDesTherdRow(context, list.cast(), pca)
+    ];
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesSecRow(
+      BuildContext context, List<Product> list, PrintProductList? pca) {
+    return [
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: AppLocalizations.of(context)!.iD,
+        description: getPrintableQrCodeID(),
+        // icon: Icons.numbers
+      ),
+      if ((pca?.hideDate == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.date,
+          description: "".toDateTimeNowString().toString(),
+          // icon: Icons.date_range
+        ),
+    ];
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesTherdRow(
+      BuildContext context, List<Product> list, PrintProductList? pca) {
+    return [
+      // if ((pca?.hideQuantity == false))
+      //   InvoiceHeaderTitleAndDescriptionInfo(
+      //       title: AppLocalizations.of(context)!.total_price,
+      //       description: extendedNetPrice?.toCurrencyFormat() ?? "0",
+      //       hexColor: getPrintablePrimaryColor(pca)
+      //       // icon: Icons.tag
+      //       ),
+      // if (!isPricelessInvoice())
+      //   if ((pca?.hideCustomerBalance == false))
+      //     InvoiceHeaderTitleAndDescriptionInfo(
+      //         title: AppLocalizations.of(context)!.balance,
+      //         description: customers?.balance?.toCurrencyFormat() ?? "",
+      //         hexColor: getPrintablePrimaryColor(pca)
+      //         // icon: Icons.balance
+      //         ),
+      // if (!isPricelessInvoice())
+      //   if ((pca?.hideInvoicePaymentMethod == false))
+      //     InvoiceHeaderTitleAndDescriptionInfo(
+      //         title: AppLocalizations.of(context)!.paymentMethod,
+      //         description: "payment on advanced",
+      //         hexColor: getPrintablePrimaryColor(pca)
+      //         // icon: Icons.credit_card
+      //         ),
+    ];
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
+      BuildContext context, List<Product> list, PrintProductList? pca) {
+    // if (customers == null) return [];
+    List<FilterableProviderHelper> finalList =
+        getAllSelectedFiltersRead(context);
+
+    var t = finalList.groupBy((item) => item.mainFieldName,
+        valueTransform: (v) => v.mainValuesName[0]);
+    List<String> results = [];
+    t.forEach((key, value) {
+      results.add(key + ":\n-" + value.toString() + "\n");
+    });
+
+    return [
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: AppLocalizations.of(context)!.filter,
+        description: results.join("\n\n"),
+        // icon: Icons.account_circle_rounded
+      ),
+      // if ((pca?.hideCustomerAddressInfo == false))
+      //   if (customers?.address != null)
+      //     InvoiceHeaderTitleAndDescriptionInfo(
+      //       title: AppLocalizations.of(context)!.addressInfo,
+      //       description: customers?.name ?? "",
+      //       // icon: Icons.map
+      //     ),
+      // if ((pca?.hideCustomerPhone == false))
+      //   if (customers?.phone != null)
+      //     InvoiceHeaderTitleAndDescriptionInfo(
+      //       title: AppLocalizations.of(context)!.phone_number,
+      //       description: customers?.phone ?? "",
+      //       // icon: Icons.phone
+      //     ),
+    ];
   }
 
   @override
   String getPrintableSelfListInvoiceTitle(
       BuildContext context, PrintProductList? pca) {
-    return "TODO LIST PRODUCTS";
+    return getMainHeaderLabelTextOnly(context);
   }
 
   @override
@@ -1000,18 +1097,39 @@ class Product extends ViewAbstract<Product>
       AppLocalizations.of(context)!.description:
           "${item.getProductTypeNameString()}\n${item.getSizeString(context)}",
       AppLocalizations.of(context)!.gsm: item.gsms?.gsm.toString() ?? "0",
-      AppLocalizations.of(context)!.quantity:
-          item.getQuantity().toCurrencyFormat(),
-      if (((pca?.hideUnitPriceAndTotalPrice == false) ?? true))
+      if (((pca?.hideQuantity == false)))
+        AppLocalizations.of(context)!.quantity:
+            item.getQuantity().toCurrencyFormat(),
+      if (((pca?.hideUnitPriceAndTotalPrice == false)))
         AppLocalizations.of(context)!.unit_price:
-            item.getUnitSellPrice()?.toStringAsFixed(2) ?? "0",
+            item.getUnitSellPrice().toStringAsFixed(2),
     };
   }
 
   @override
   Future<List<InvoiceTotalTitleAndDescriptionInfo>>? getPrintableSelfListTotal(
-      BuildContext context, List list, PrintProductList? pca) {
-    return null;
+      BuildContext context, List list, PrintProductList? pca) async {
+    // return null;
+    List<Product> items = list.cast<Product>();
+    double total = items.map((e) => (e).getQuantity()).reduce(
+        (value, element) => value.toNonNullable() + element.toNonNullable());
+    // double total = 231231;
+    return [
+      InvoiceTotalTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+          description: total.toCurrencyFormat()),
+      InvoiceTotalTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.no_summary.toUpperCase(),
+          description:
+              items.getTotalQuantityGroupedSizeTypeFormattedText(context)),
+      InvoiceTotalTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.total.toUpperCase(),
+          description: items.getTotalQuantityGroupedFormattedText(context)),
+      // InvoiceTotalTitleAndDescriptionInfo(
+      //     title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+      //     description: total.toCurrencyFormat(),
+      //     hexColor: getPrintableSelfListPrimaryColor(pca)),
+    ];
   }
 
   @override

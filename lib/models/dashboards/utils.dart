@@ -9,6 +9,101 @@ import 'package:supercharged/supercharged.dart';
 import '../funds/money_funds.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
+import '../products/products.dart';
+import '../products/sizes.dart';
+
+extension ProductUtils<T extends Product> on List<T?>? {
+  String getTotalQuantityGroupedSizeTypeFormattedText(BuildContext context) {
+    List<String> list = [];
+    Map<ProductSizeType, double> total = getTotalQuantitySizeTypeGrouped();
+    total.forEach((key, value) {
+      list.add(value.toCurrencyFormat(
+          symbol: key.getFieldLabelString(context, key)));
+    });
+    return list.join("\n");
+  }
+
+  String getTotalQuantityGroupedFormattedText(BuildContext context) {
+    List<String> list = [];
+    Map<ProductTypeUnit, double> total = getTotalQuantityGrouped();
+    total.forEach((key, value) {
+      list.add(value.toCurrencyFormat(
+          symbol: key.getFieldLabelString(context, key)));
+    });
+    return list.join("\n");
+  }
+
+  Map<ProductSizeType, double> getTotalQuantityGroupedBySizeType() {
+    if (this == null) return {};
+    try {
+      Map<ProductSizeType, double> total = {};
+      Map<ProductSizeType, List<double>> quantity = this!.groupBy(
+          (item) => item!.getSizeType(),
+          valueTransform: (v) => v!.getQuantity().toNonNullable());
+      quantity.forEach((key, value) {
+        total[key] = value.reduce((value, element) =>
+            value.toNonNullable() + element.toNonNullable());
+      });
+      return total;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  Map<ProductTypeUnit, double> getTotalQuantityGroupedByProductType() {
+    if (this == null) return {};
+    try {
+      Map<ProductTypeUnit, double> total = {};
+      Map<ProductTypeUnit, List<double>> quantity = this!.groupBy(
+          (item) => item!.products_types!.unit!,
+          valueTransform: (v) => v!.getQuantity().toNonNullable());
+      quantity.forEach((key, value) {
+        total[key] = value.reduce((value, element) =>
+            value.toNonNullable() + element.toNonNullable());
+      });
+      return total;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  Map<ProductSizeType, double> getTotalQuantitySizeTypeGrouped() {
+    if (this == null) return {};
+    Map<ProductSizeType, double> map = {};
+
+    Map<ProductSizeType, double> detailMap =
+        getTotalQuantityGroupedBySizeType();
+
+    detailMap.forEach((key, value) {
+      if (map.containsKey(key)) {
+        map[key] = value + map[key]!;
+      } else {
+        map[key] = value;
+      }
+    });
+
+    return map;
+  }
+
+  Map<ProductTypeUnit, double> getTotalQuantityGrouped() {
+    if (this == null) return {};
+    Map<ProductTypeUnit, double> map = {};
+
+    Map<ProductTypeUnit, double> detailMap =
+        getTotalQuantityGroupedByProductType();
+
+    detailMap.forEach((key, value) {
+      if (map.containsKey(key)) {
+        map[key] = value + map[key]!;
+      } else {
+        map[key] = value;
+      }
+    });
+
+    return map;
+  }
+}
+
 extension InvoiceMasterUtils<T extends InvoiceMaster> on List<T?>? {
   String getTotalQuantityGroupedFormattedText(BuildContext context) {
     List<String> list = [];
@@ -153,9 +248,9 @@ extension BalanceDueTotals<T extends BalanceDue> on List<T?>? {
 
     t.forEach((key, value) {
       total[key] = value
-              .reduce((value, element) =>
-                  value.toNonNullable() + element.toNonNullable())
-              .toNonNullable();
+          .reduce((value, element) =>
+              value.toNonNullable() + element.toNonNullable())
+          .toNonNullable();
     });
 
     return total;
