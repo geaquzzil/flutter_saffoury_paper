@@ -1034,7 +1034,7 @@ class Product extends ViewAbstract<Product>
         valueTransform: (v) => v.mainValuesName[0]);
     List<String> results = [];
     t.forEach((key, value) {
-      results.add(key + ":\n-" + value.toString() + "\n");
+      results.add("-$key:\n$value\n");
     });
 
     return [

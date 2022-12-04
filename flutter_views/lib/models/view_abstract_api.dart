@@ -54,7 +54,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   int get getPageIndex => _page;
 
-  int get getPageItemCount => 5;
+  int get getPageItemCount => 20;
 
   String? getCustomAction() {
     return null;
