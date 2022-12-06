@@ -111,7 +111,32 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         "comments": TextInputType.text
       };
   @override
-  String getMainHeaderTextOnly(BuildContext context) => getIDFormat(context);
+  String getMainHeaderTextOnly(BuildContext context) =>
+      "${getIDFormat(context)} ${getMainHeaderLabelTextOnly(context)}";
+
+  @override
+  Widget? getMainSubtitleHeaderText(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text("Customer : ${customers?.name}"),
+        Text("Total:" + extendedNetPrice.toCurrencyFormat()),
+        // Align(
+        //     alignment: AlignmentDirectional.centerEnd,
+        //     child: Text("Date: $date")),
+        Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Text(
+              "items: ${getDetailListFromMasterItemsCount()}",
+              style: Theme.of(context)
+                  .textTheme
+                  .caption!
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
+            ))
+      ],
+    );
+  }
 
   @override
   String? getSortByFieldName() => "date";
@@ -270,6 +295,34 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
                   // icon: Icons.numbers
                 )
           ];
+  int getDetailListFromMasterItemsCount() {
+    if (runtimeType == Order) {
+      return (this as Order).orders_details_count ?? 0;
+    } else if (runtimeType == Purchases) {
+      return (this as Purchases).purchases_details_count ?? 0;
+    } else if (runtimeType == OrderRefund) {
+      return (this as OrderRefund).orders_refunds_order_details_count ?? 0;
+    } else if (runtimeType == PurchasesRefund) {
+      return (this as PurchasesRefund)
+              .purchases_refunds_purchases_details_count ??
+          0;
+    } else if (runtimeType == ProductInput) {
+      return (this as ProductInput).products_inputs_details_count ?? 0;
+    } else if (runtimeType == ProductOutput) {
+      return (this as ProductOutput).products_outputs_details_count ?? 0;
+    } else if (runtimeType == ReservationInvoice) {
+      return (this as ReservationInvoice).reservation_invoice_details_count ??
+          0;
+    } else if (runtimeType == Transfers) {
+      return (this as Transfers).trasfers_details_count ?? 0;
+    } else if (runtimeType == CustomerRequestSize) {
+      return (this as CustomerRequestSize)
+              .customers_request_sizes_details_count ??
+          0;
+    } else {
+      return 0;
+    }
+  }
 
   List<InvoiceMasterDetails> getDetailListFromMaster() {
     if (runtimeType == Order) {

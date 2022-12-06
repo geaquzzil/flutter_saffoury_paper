@@ -68,7 +68,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Icon(getMainIconData());
   }
 
-  Text? getMainSubtitleHeaderText(BuildContext context) {
+  Widget? getMainSubtitleHeaderText(BuildContext context) {
     return Text(
       getMainHeaderLabelTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
