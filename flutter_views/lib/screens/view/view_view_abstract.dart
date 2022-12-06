@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
@@ -29,6 +30,12 @@ class MasterView extends StatelessWidget {
     } else if (fieldValue is ViewAbstract) {
       return ViewCardItem(
           title: "", description: "", icon: Icons.abc, object: fieldValue);
+    } else if (fieldValue is ViewAbstractEnum) {
+      return ViewCardItem(
+          title: fieldValue.getMainLabelText(context),
+          description: fieldValue.getFieldLabelString(context, fieldValue),
+          icon: fieldValue.getFieldLabelIconData(context, fieldValue),
+          object: null);
     } else {
       return ViewCardItem(
           title: viewAbstract.getFieldLabel(context, field),
@@ -45,7 +52,9 @@ class MasterView extends StatelessWidget {
     return Column(
       children: [
         if (topWidget != null) topWidget,
-        ...fields.map((e) => buildItem(context, e)),
+        ...fields
+            .where((element) => viewAbstract.getFieldValue(element) != null)
+            .map((e) => buildItem(context, e)),
         if (viewAbstract is ListableInterface)
           ViewableTableWidget(viewAbstract: viewAbstract as ListableInterface),
       ],

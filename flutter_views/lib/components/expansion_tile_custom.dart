@@ -17,6 +17,7 @@ class ExpansionTileCustom extends StatefulWidget {
   bool? hasError;
   bool? isEnabled;
   bool initiallyExpanded;
+  bool wrapWithCardOrOutlineCard;
   List<Widget> children;
   bool Function()? canExpand;
   ExpansionTileCustom(
@@ -25,6 +26,7 @@ class ExpansionTileCustom extends StatefulWidget {
       this.leading,
       this.subtitle,
       this.trailing,
+      this.wrapWithCardOrOutlineCard = true,
       required this.children,
       this.initiallyExpanded = false,
       this.isEnabled = true,
@@ -161,6 +163,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     return ListTile(
       leading: widget.leading,
       title: ClippedCard(
+        wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
         borderSide: BorderSideColor.START,
         color: (widget.hasError ?? false)
             ? Theme.of(context).colorScheme.onError

@@ -8,10 +8,9 @@ class OutlinedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: fillColor ? null : Theme.of(context).colorScheme.onPrimary,
+        color: fillColor ? null : Theme.of(context).colorScheme.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          
           side: BorderSide(
             color: Theme.of(context).colorScheme.outline,
           ),

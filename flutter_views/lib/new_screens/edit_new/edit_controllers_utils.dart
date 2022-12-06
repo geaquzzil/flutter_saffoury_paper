@@ -15,7 +15,13 @@ import '../edit/controllers/ext.dart';
 
 Widget wrapController(Widget controller, {bool? requiredSpace}) {
   return Column(
-    children: [controller, if (requiredSpace ?? false) getSpace()],
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: controller,
+      ),
+      if (requiredSpace ?? false) getSpace()
+    ],
   );
 }
 

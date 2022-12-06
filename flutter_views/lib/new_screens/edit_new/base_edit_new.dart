@@ -155,7 +155,7 @@ class BaseEditWidget extends StatelessWidget {
         return isTheFirst
             ? form
             : ExpansionTileCustom(
-
+                wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
                 // initiallyExpanded: !viewAbstract.isNull,
                 // isExpanded: false,
                 hasError: hasError(context),

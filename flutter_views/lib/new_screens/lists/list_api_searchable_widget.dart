@@ -31,6 +31,7 @@ import '../../providers/filterables/filterable_provider.dart';
 import '../filterables/filterable_icon_widget.dart';
 import '../filterables/horizontal_selected_filterable.dart';
 import '../home/components/ext_provider.dart';
+import 'list_api_master.dart';
 
 class ListApiSearchableWidget<T extends ViewAbstract> extends StatefulWidget {
   const ListApiSearchableWidget({Key? key}) : super(key: key);
@@ -164,6 +165,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
+    //  return ListApiMaster();
     return Column(
       children: <Widget>[
         Container(child: _buildSearchBox()),
@@ -182,11 +184,11 @@ class _ListApiWidgetState<T extends ViewAbstract>
                 return getEmptyWidget(context);
               } else {}
             }
-            return _listItems(
-                listProvider.getList(findCustomKey()), listProvider);
+            // return _listItems(
+            //     listProvider.getList(findCustomKey()), listProvider);
 
             // debugPrint("List api provider loaded ${listProvider.isLoading}");
-            return Column(
+            return ListView(
               children: [
                 FiltersAndSelectionListHeader(
                   customKey: findCustomKey(),
