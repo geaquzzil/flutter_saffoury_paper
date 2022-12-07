@@ -17,6 +17,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
       : super(context: context, printObj: printObj, setting: printCommand);
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
+    this.format = format;
     var pdf = await getDocument();
     pdf.addPage(getMultiPage(format, header));
     return pdf.save();
@@ -34,7 +35,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
               fit: StackFit.loose,
               children: [header, buildTitle()]),
           buildInvoiceMainInfoHeader(),
-          SizedBox(height: .5 * (PdfPageFormat.cm)),
+          buildSpaceOnInvoice(cm: .5),
           buildInvoiceMainTable(),
           buildMainTotal(),
         ];
@@ -187,10 +188,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
         child: Directionality(
             textDirection: isArabic() ? TextDirection.rtl : TextDirection.ltr,
             child: Table.fromTextArray(
-                // columnWidths: {
-                //   0: FixedColumnWidth(50),
-                //   1: FixedColumnWidth(300)
-                // },
                 headers: headers,
                 data: data,
                 border: null,
@@ -200,24 +197,18 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
                       color: PdfColors.white,
                       border: Border(
                           bottom: BorderSide(
-                        //                    <--- top side
+                        width: 1.25,
                         color: PdfColors.grey,
-                        // width: 1.0,
                       )));
                 },
                 headerCellDecoration: BoxDecoration(
                     color: PdfColors.white,
                     border: Border(
-                        bottom: BorderSide(
-                            //                    <--- top side
-                            color: getSecondaryColor()
-                            // width: 2.0,
-                            ))),
-                //this is content table text color
-                cellStyle: const TextStyle(color: PdfColors.black),
-                headerStyle: TextStyle(
-                    color: getSecondaryColor(),
-                    fontWeight: FontWeight.bold,
+                        bottom:
+                            BorderSide(width: 2, color: getPrimaryColor()))),
+                cellStyle: Theme.of(contextPDF).tableCell,
+                headerStyle: Theme.of(contextPDF).tableHeader.copyWith(
+                    color: getPrimaryColor(),
                     background: const BoxDecoration(color: PdfColors.white)),
                 headerDecoration: const BoxDecoration(color: PdfColors.grey300),
                 cellHeight: 30,
@@ -232,13 +223,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
                           ? Alignment.centerRight
                           : Alignment.center);
                 }))));
-  }
-
-  Widget buildTitleOnInvoice(String title) {
-    return Text(title,
-        textDirection: getTextDirection(title),
-        style:
-            TextStyle(fontWeight: FontWeight.bold, color: getSecondaryColor()));
   }
 
   Widget buildInvoiceBottomInfoWithQrCode() {
@@ -286,19 +270,18 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
               SizedBox(height: 1 * (PdfPageFormat.cm)),
               buildTitleOnInvoice(AppLocalizations.of(context)!.accountInfo),
               buildInvoiceBottomInfoWithQrCode(),
-              SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
+              buildSpaceOnInvoice(cm: .5),
               buildTitleOnInvoice(
                   AppLocalizations.of(context)!.termsAndConitions),
-              Text(
-                  "1- Please quote invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of purchase\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments.",
-                  style:
-                      const TextStyle(fontSize: 9, color: PdfColors.grey700)),
-              SizedBox(height: 1 * (PdfPageFormat.cm / 2)),
+              buildSpaceOnInvoice(cm: .2),
+              buildDescriptionOnInvoice(
+                  "1- Please quote invoice number when remitting funds, otherwise no item will be replaced or refunded after 2 days of purchase\n\n2- Please pay before the invoice expiry date mentioned above, @ 14% late interest will be charged on late payments."),
+              buildSpaceOnInvoice(cm: .5),
               buildTitleOnInvoice(
                   AppLocalizations.of(context)!.additionalNotes),
-              Text(
-                  "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381",
-                  style: const TextStyle(fontSize: 9, color: PdfColors.grey700))
+              buildSpaceOnInvoice(cm: .2),
+              buildDescriptionOnInvoice(
+                  "Thank you for your business!\nFor any enquiries, email us on paper@saffoury.com or call us on\n+963 989944381")
             ]));
   }
 
@@ -328,7 +311,6 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
           flex: 1,
           child: Container(
             decoration: const BoxDecoration(color: PdfColors.grey),
-            // color: PdfColors.grey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

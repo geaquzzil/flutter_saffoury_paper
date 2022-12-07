@@ -11,7 +11,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..delete = json['delete'] as bool?
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
-  ..billNo = json['billNo'] as String?
+  ..billNo = InvoiceMaster.intFromString(json['billNo'])
   ..comments = json['comments'] as String?
   ..employees = json['employees'] == null
       ? null

@@ -13,6 +13,13 @@ void notifyListApi(BuildContext context) {
       .changeWithFilterable(context, v);
 }
 
+void notifyFilterableListApiIsCleared(BuildContext context) {
+  ViewAbstract? v = context.read<DrawerViewAbstractListProvider>().getObject;
+  context
+      .read<DrawerViewAbstractListProvider>()
+      .change(context, v.getSelfNewInstance());
+}
+
 void addFilterableSort(BuildContext context, SortByType selectedItem) {
   context.read<FilterableProvider>().addSortBy(context, selectedItem);
 }
@@ -43,6 +50,7 @@ void addFilterableSelectedStringValue(BuildContext context, String field,
 void clearFilterableSelected(BuildContext context, String field) {
   context.read<FilterableProvider>().clear(field: field);
 }
+
 List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context) {
   var list = context.read<FilterableProvider>().getList.values.toList();
   var listSelectd = list
@@ -65,6 +73,7 @@ List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context) {
   }
   return finalList;
 }
+
 List<FilterableProviderHelper> getAllSelectedFilters(BuildContext context) {
   var list = context.watch<FilterableProvider>().getList.values.toList();
   var listSelectd = list

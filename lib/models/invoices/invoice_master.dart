@@ -42,6 +42,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   int? TermsID;
 
   String? date;
+  @JsonKey(fromJson: intFromString)
   String? billNo; //255
   String? comments;
 
@@ -499,6 +500,12 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         description: getPrintableQrCodeID(),
         // icon: Icons.numbers
       ),
+      if (billNo != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.product_bill,
+          description: billNo.toString(),
+          // icon: Icons.date_range
+        ),
       if ((pca?.hideInvoiceDate == false))
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.date,
@@ -650,6 +657,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   static double? convertToDouble(dynamic number) =>
       number == null ? 0 : double.tryParse(number.toString());
+
+  static String? intFromString(dynamic number) => number?.toString();
 }
 
 enum InvoiceStatus implements ViewAbstractEnum<InvoiceStatus> {

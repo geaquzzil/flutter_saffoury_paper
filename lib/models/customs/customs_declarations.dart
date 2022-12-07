@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/src/widgets/theme.dart';
@@ -76,6 +77,41 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       };
 
   @override
+  material.Widget? getMainSubtitleHeaderText(material.BuildContext context) {
+    return material.Column(
+      crossAxisAlignment: material.CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        getLabelWithTextWidget(
+            AppLocalizations.of(context)!.customsNumber, number.toString(),
+            context: context),
+        if (comments != null)
+          getLabelWithTextWidget(
+              AppLocalizations.of(context)!.comments, comments.toString(),
+              context: context),
+
+        if ((customs_declarations_images_count ?? 0) > 0)
+          getLabelWithTextWidget(AppLocalizations.of(context)!.itemCount,
+              customs_declarations_images_count.toString(),
+              context: context,
+              color: material.Theme.of(context).colorScheme.tertiary),
+
+        // Text("Total:" + extendedNetPrice.toCurrencyFormat()),
+        // // Align(
+        // //     alignment: AlignmentDirectional.centerEnd,
+        // //     child: Text("Date: $date")),
+        // Text(
+        //   "items: ${getDetailListFromMasterItemsCount()}",
+        //   style: Theme.of(context)
+        //       .textTheme
+        //       .caption!
+        //       .copyWith(color: Theme.of(context).colorScheme.primary),
+        // )
+      ],
+    );
+  }
+
+  @override
   Map<String, String> getFieldLabelMap(material.BuildContext context) => {
         "number": AppLocalizations.of(context)!.customsNumber,
         "date": AppLocalizations.of(context)!.date,
@@ -92,9 +128,9 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   String getMainHeaderLabelTextOnly(material.BuildContext context) =>
       AppLocalizations.of(context)!.customs_clearnces;
 
-  @override
-  String getMainHeaderTextOnly(material.BuildContext context) =>
-      "$number : $comments";
+  // @override
+  // String getMainHeaderTextOnly(material.BuildContext context) =>
+  //     "$number : $comments";
 
   @override
   material.IconData getMainIconData() => material.Icons.document_scanner;
@@ -224,4 +260,8 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
     }
     return pages;
   }
+
+  @override
+  String getMainHeaderTextOnly(material.BuildContext context) =>
+      "${getIDFormat(context)} ${getMainHeaderLabelTextOnly(context)}";
 }

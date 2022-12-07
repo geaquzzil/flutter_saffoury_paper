@@ -65,6 +65,7 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
     return TextButton(
         onPressed: () {
           context.read<FilterableProvider>().clearAll();
+          notifyFilterableListApiIsCleared(context);
         },
         child: Text(AppLocalizations.of(context)!.clearFiltters));
   }

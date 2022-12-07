@@ -70,10 +70,10 @@ class _ViewableTableWidget extends State<ViewableTableWidget> {
           title: AppLocalizations.of(context)!.noItems,
           subtitle: AppLocalizations.of(context)!.error_empty);
     }
-    return ScrollableWidget(child: buildForm());
+    return SizedBox(
+        width: double.infinity, child: ScrollableWidget(child: buildForm()));
   }
 
-  final DataTableSource _data = MyData();
   Widget buildForm() {
     return FormBuilder(
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -123,7 +123,12 @@ class _ViewableTableWidget extends State<ViewableTableWidget> {
           },
           cells: e
               .getMainFields()
-              .map((ee) => DataCell(Text(e.getFieldValueCheckType(context, ee)),
+              .map((ee) => DataCell(
+                  Text(
+                    e.getFieldValueCheckType(context, ee),
+                    overflow: TextOverflow.visible,
+                    softWrap: true,
+                  ),
                   showEditIcon: false))
               .toList());
     }).toList();

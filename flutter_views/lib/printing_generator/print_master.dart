@@ -29,15 +29,27 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
         .getPrintableInvoiceTitle(context, setting)
         .toUpperCase();
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
-        child: Text(
-          title,
-          textDirection: getTextDirection(title),
-          style: TextStyle(
-              fontSize: 20,
-              color: PdfColor.fromHex((printObj as PrintableMaster)
-                  .getPrintablePrimaryColor(setting))),
-        ));
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 0),
+        child: Text(title,
+            textDirection: getTextDirection(title),
+            style: Theme.of(contextPDF)
+                .header1
+                .copyWith(color: getPrimaryColor())));
+  }
+
+  Widget buildTitleOnInvoice(String title) {
+    return Text(title,
+        textDirection: getTextDirection(title),
+        style: Theme.of(contextPDF)
+            .tableHeader
+            .copyWith(color: getPrimaryColor()));
+  }
+
+  Widget buildDescriptionOnInvoice(String title) {
+    return Text(title,
+        textDirection: getTextDirection(title),
+        style:
+            Theme.of(contextPDF).tableCell.copyWith(color: PdfColors.grey700));
   }
 
   PdfColor getSecondaryColor() {
@@ -55,7 +67,7 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
 
 class PrintMasterPDFUtils<T extends PrintLocalSetting> {
   T? setting;
-
+  PdfPageFormat? format;
   late ThemeData themeData;
   late Widget header;
   late Context contextPDF;
@@ -127,6 +139,10 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
     } else {
       return 0;
     }
+  }
+
+  Widget buildSpaceOnInvoice({double cm = 1}) {
+    return SizedBox(height: cm * (PdfPageFormat.cm));
   }
 
   TextDirection getTextDirection(String? value) {

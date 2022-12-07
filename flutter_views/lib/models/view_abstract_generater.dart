@@ -45,7 +45,6 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        
         builder: (context) => ViewDetailsPage(
           object: this as ViewAbstract,
         ),
@@ -70,7 +69,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     //Navigator.of(context).pop();
     context
         .read<DrawerViewAbstractListProvider>()
-        .change(context, this as ViewAbstract);
+        .change(context, getSelfNewInstance() as ViewAbstract);
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

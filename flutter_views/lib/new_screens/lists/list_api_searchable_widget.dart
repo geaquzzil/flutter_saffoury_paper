@@ -206,13 +206,19 @@ class _ListApiWidgetState<T extends ViewAbstract>
   }
 
   Widget getEmptyWidget(BuildContext context) {
-    return Center(
-      child: EmptyWidget(
-          lottiUrl:
-              "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-          title: AppLocalizations.of(context)!.noItems,
-          subtitle: AppLocalizations.of(context)!.error_empty),
-    );
+    return ListView(children: [
+      FiltersAndSelectionListHeader(
+        customKey: findCustomKey(),
+        listProvider: listProvider,
+      ),
+      Center(
+        child: EmptyWidget(
+            lottiUrl:
+                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+            title: AppLocalizations.of(context)!.noItems,
+            subtitle: AppLocalizations.of(context)!.error_empty),
+      ),
+    ]);
   }
 
   Widget getShimmerLoading(BuildContext context) {
