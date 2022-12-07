@@ -14,12 +14,13 @@ class FilterablePopupIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPopupMenu(
-        arrowSize: 20,
-        arrowColor: Theme.of(context).colorScheme.secondaryContainer,
+        // arrowSize: 20,
+        // arrowColor: Theme.of(context).colorScheme.secondaryContainer,
         menuBuilder: () => getWidget(context),
         pressType: PressType.singleClick,
+        showArrow: false,
         
-        verticalMargin: -15,
+        // verticalMargin: -15,
         controller: _controller,
         child: buildColapsedIcon(context, Icons.filter_alt_rounded, null));
   }

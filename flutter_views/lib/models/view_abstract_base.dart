@@ -52,6 +52,23 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "${getMainHeaderLabelTextOnly(context)}:${getMainHeaderTextOnly(context)}";
   }
 
+  Text getMainHeaderLabelWithTextWidgt({required BuildContext context}) {
+    return Text(getMainHeaderLabelWithText(context),
+        style: Theme.of(context).textTheme.caption!);
+  }
+
+  String getLabelWithText(String label, String text) {
+    return "$label: $text";
+  }
+
+  Text getLabelWithTextWidget(String label, String text,
+      {BuildContext? context, Color? color}) {
+    return Text(getLabelWithText(label, text),
+        style: context != null && color != null
+            ? Theme.of(context).textTheme.caption!.copyWith(color: color)
+            : Theme.of(context!).textTheme.caption!);
+  }
+
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
     try {
       return getFieldValue(field) as ViewAbstract;

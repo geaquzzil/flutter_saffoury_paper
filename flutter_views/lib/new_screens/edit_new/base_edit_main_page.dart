@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
+import '../../new_components/add_from_list_popup_icon_widget.dart';
 import '../../new_components/cards/outline_card.dart';
 import '../../providers/actions/list_multi_key_provider.dart';
 import '../../screens/base_shared_actions_header.dart';
@@ -224,58 +225,66 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: () {
-        Dialogs.materialDialog(
-            // isScrollControlled: true,
-            msgAlign: TextAlign.end,
-            customView: Align(
-              alignment: Alignment(0, 1),
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: double.infinity,
-                  child: ListApiSelectedSearchableWidget(
-                    viewAbstract: (widget.viewAbstract as ListableInterface)
-                        .getListablePickObject(),
-                    onSelected: (sList) {
-                      selectedList = sList.cast();
-                      // setState(() {
-                      //   selectedList=sList.cast();
-                      // });
-                    },
-                  )),
-            ),
-            dialogShape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.outline,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-            ),
-            dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
-            useSafeArea: false,
-            onClose: (value) {
-              if (value != null) {
-                setState(() {
-                  (widget.viewAbstract as ListableInterface)
-                      .onListableSelectedListAdded(selectedList);
-                });
-              }
-            },
-            color: Theme.of(context).colorScheme.background,
-            context: context,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(AppLocalizations.of(context)!.cancel),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop("dasda");
-                  },
-                  child: Text(AppLocalizations.of(context)!.ok)),
-            ]);
+        // Dialogs.materialDialog(
+        //     // isScrollControlled: true,
+        //     msgAlign: TextAlign.end,
+        //     customView: Align(
+        //       alignment: Alignment(0, 1),
+        //       child: SizedBox(
+        //           height: MediaQuery.of(context).size.height / 2,
+        //           width: double.infinity,
+        //           child: ListApiSelectedSearchableWidget(
+        //             viewAbstract: (widget.viewAbstract as ListableInterface)
+        //                 .getListablePickObject(),
+        //             onSelected: (sList) {
+        //               selectedList = sList.cast();
+        //               // setState(() {
+        //               //   selectedList=sList.cast();
+        //               // });
+        //             },
+        //           )),
+        //     ),
+        //     dialogShape: RoundedRectangleBorder(
+        //       side: BorderSide(
+        //         color: Theme.of(context).colorScheme.outline,
+        //       ),
+        //       borderRadius: const BorderRadius.all(Radius.circular(12)),
+        //     ),
+        //     dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
+        //     useSafeArea: false,
+        //     onClose: (value) {
+        //       if (value != null) {
+        //         setState(() {
+        //           (widget.viewAbstract as ListableInterface)
+        //               .onListableSelectedListAdded(selectedList);
+        //         });
+        //       }
+        //     },
+        //     color: Theme.of(context).colorScheme.background,
+        //     context: context,
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () {
+        //           Navigator.of(context).pop();
+        //         },
+        //         child: Text(AppLocalizations.of(context)!.cancel),
+        //       ),
+        //       ElevatedButton(
+        //           onPressed: () {
+        //             Navigator.of(context).pop("dasda");
+        //           },
+        //           child: Text(AppLocalizations.of(context)!.ok)),
+        //     ]);
       },
-      child: const Icon(Icons.add),
+      child: AddFromListPopupIconWidget(
+        viewAbstract: widget.viewAbstract,
+        onSelected: (selectedList) {
+          setState(() {
+            (widget.viewAbstract as ListableInterface)
+                .onListableSelectedListAdded(selectedList);
+          });
+        },
+      ),
     );
   }
 

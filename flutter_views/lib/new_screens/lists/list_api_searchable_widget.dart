@@ -64,8 +64,9 @@ class _ListApiWidgetState<T extends ViewAbstract>
   }
 
   String getCustomKey({String? searchTextKey}) {
-    String key =
-        "${drawerViewAbstractObsever.getObject.getTableNameApi()}listAPI";
+    String key = drawerViewAbstractObsever.getObject.getListableKey();
+
+    debugPrint("getCustomKey $key");
     return searchTextKey == null ? key : key + searchTextKey;
   }
 
@@ -271,7 +272,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
 
   void onChangedViewAbstract() {
     if (mounted) {
-      listProvider.fetchList(getCustomKey(), drawerViewAbstractObsever.object);
+      listProvider.fetchList(findCustomKey(), drawerViewAbstractObsever.object);
       debugPrint("ViewAbstractProvider CHANGED");
     }
   }

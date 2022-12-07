@@ -42,8 +42,11 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
                 item.mainFieldName + " :" + item.mainValuesName[0].toString()),
 
             // avatar:Text(item.field),
-            onDeleted: () => removeFilterableSelectedStringValue(
-                context, item.field, item.values[0], item.mainValuesName[0]),
+            onDeleted: () {
+              removeFilterableSelectedStringValue(
+                  context, item.field, item.values[0], item.mainValuesName[0]);
+              notifyListApi(context);
+            },
             // onSelected: (v) {
             //   if (v) {
             //     addFilterableSelected(context, item);

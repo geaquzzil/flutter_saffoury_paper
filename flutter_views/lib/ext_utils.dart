@@ -155,9 +155,7 @@ extension NonNullableDouble on double? {
   }
 
   String toCurrencyFormat({String symbol = ""}) {
-    return NumberFormat.currency(
-            // locale: "en_US",
-            symbol: "$symbol ")
+    return NumberFormat.currency(locale: "en", symbol: symbol)
         .format(toNonNullable())
         .replaceFirst(RegExp(r'\.?0*$'), '');
   }

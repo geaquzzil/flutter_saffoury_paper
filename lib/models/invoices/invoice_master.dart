@@ -125,15 +125,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         // Align(
         //     alignment: AlignmentDirectional.centerEnd,
         //     child: Text("Date: $date")),
-        Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: Text(
-              "items: ${getDetailListFromMasterItemsCount()}",
-              style: Theme.of(context)
-                  .textTheme
-                  .caption!
-                  .copyWith(color: Theme.of(context).colorScheme.primary),
-            ))
+        Text(
+          "items: ${getDetailListFromMasterItemsCount()}",
+          style: Theme.of(context)
+              .textTheme
+              .caption!
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        )
       ],
     );
   }

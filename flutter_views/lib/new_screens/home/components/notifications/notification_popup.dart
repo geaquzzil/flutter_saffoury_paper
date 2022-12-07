@@ -18,6 +18,7 @@ class NotificationPopupWidget extends StatelessWidget {
     String subtitle =
         "Check this section for updates exclusively offer and general notifications";
     return CustomPopupMenu(
+      
         arrowSize: 20,
         arrowColor: Theme.of(context).colorScheme.secondaryContainer,
         menuBuilder: () => popMenuBuilder(context, title, subtitle),

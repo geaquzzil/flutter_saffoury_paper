@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../new_components/lists/list_card_item_selected.dart';
 import '../../new_components/loading_shimmer.dart';
@@ -223,22 +224,10 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
   }
 
   Widget getShimmerLoading(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
-                ShimmerLoadingList(),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-            );
-          }),
+    return Skeleton(
+      isLoading: true,
+      skeleton: SkeletonListView(itemCount: 10),
+      child: Container(child: Center(child: Text("Content"))),
     );
   }
 

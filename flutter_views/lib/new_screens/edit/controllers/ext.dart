@@ -133,8 +133,8 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
   }
 }
 
-Widget getSpace() {
-  return const SizedBox(height: 26);
+Widget getSpace({double? height = 26}) {
+  return SizedBox(height: height);
 }
 
 bool canSubmitChanges(ViewAbstract viewAbstract) =>

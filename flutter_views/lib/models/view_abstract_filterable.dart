@@ -10,6 +10,10 @@ import 'package:json_annotation/json_annotation.dart';
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(ignore: true)
   String? searchByAutoCompleteTextInput;
+
+  @JsonKey(ignore: true)
+  Map<String, FilterableProviderHelper>? _lastFilterableMap;
+
   String? getSortByFieldName();
   SortByType getSortByType();
 
@@ -53,14 +57,19 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return true;
   }
 
+  String getListableKey() {
+    return "${getTableNameApi()}listAPI$_lastFilterableMap";
+  }
+
   void setFilterableMap(Map<String, FilterableProviderHelper> map) {
+    _lastFilterableMap = map;
     debugPrint("setFilterableMap=> $map");
     Map<String, String> bodyMap = {};
     map.forEach((key, value) {
       if (key == FilterableProvider.SORTKEY) {
         bodyMap[map[key]!.fieldNameApi] = map[key]!.getValue();
       } else {
-        bodyMap[map[key]!.fieldNameApi] = map[key]!.getValue();
+        bodyMap["<${map[key]!.fieldNameApi}>"] = map[key]!.getValue();
       }
     });
     debugPrint("setFilterableMap bodyMap $bodyMap");

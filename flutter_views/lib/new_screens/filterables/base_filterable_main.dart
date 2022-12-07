@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseFilterableMainWidget extends StatelessWidget {
   @override
@@ -48,7 +49,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
               child: ListTile(
                 leading: Badge(
                   badgeColor: Theme.of(context).colorScheme.primary,
-                  badgeContent: Text( 
+                  badgeContent: Text(
                     context
                         .watch<FilterableProvider>()
                         .getList
@@ -63,7 +64,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
                   animationType: BadgeAnimationType.slide,
                   child: Icon(Icons.filter_alt),
                 ),
-                title: Text("Filter"),
+                title: getTitle(context, drawerViewAbstract),
               ),
             ),
             Expanded(
@@ -119,4 +120,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
       ),
     );
   }
+
+  Text getTitle(BuildContext context, ViewAbstract v) => Text(
+      "${AppLocalizations.of(context)!.filter} ${v.getMainHeaderLabelTextOnly(context).toLowerCase()}");
 }

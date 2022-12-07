@@ -193,6 +193,6 @@ class FilterableProviderHelper {
 
   @override
   String toString() {
-    return "field:$field , fieldApi: $fieldNameApi ";
+    return "{field:$field,fieldApi:$fieldNameApi,value:$values}";
   }
 }

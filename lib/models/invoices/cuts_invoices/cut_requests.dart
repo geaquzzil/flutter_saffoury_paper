@@ -23,8 +23,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -89,15 +91,30 @@ class CutRequest extends ViewAbstract<CutRequest>
       };
 
   @override
-  Text? getMainSubtitleHeaderText(BuildContext context) {
-    return Text(
-      customers?.name ?? "",
-    );
+  bool isRequiredObjectsListChecker() {
+    return cut_request_results?.length == cut_request_results_count;
   }
 
   @override
-  bool isRequiredObjectsListChecker() {
-    return cut_request_results?.length == cut_request_results_count;
+  Widget? getMainSubtitleHeaderText(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        if (customers != null)
+          customers!.getMainHeaderLabelWithTextWidgt(context: context),
+        getSpace(height: 4),
+        getLabelWithTextWidget(AppLocalizations.of(context)!.quantity,
+            quantity.toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg),
+            context: context),
+        getSpace(height: 4),
+        if (cut_status != null)
+          getLabelWithTextWidget(cut_status!.getMainLabelText(context),
+              cut_status!.getFieldLabelString(context, cut_status!),
+              color: getCutStatusColor(), context: context),
+      ],
+    );
   }
 
   @override
@@ -356,9 +373,10 @@ class CutRequest extends ViewAbstract<CutRequest>
 
     return await productsLabel.generate();
   }
-  
+
   @override
-  Future<List<pdf.Page>> getPrintableCustomFromPDFPageLIst(BuildContext context, {PdfPageFormat? format, PrintCutRequest? setting}) {
+  Future<List<pdf.Page>> getPrintableCustomFromPDFPageLIst(BuildContext context,
+      {PdfPageFormat? format, PrintCutRequest? setting}) {
     // TODO: implement getPrintableCustomFromPDFPageLIst
     throw UnimplementedError();
   }
