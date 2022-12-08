@@ -49,12 +49,12 @@ class _FloatingActionButtonExtendedState
           child: !_isExtended
               ? const Icon(Icons.arrow_forward)
               : Row(
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(right: 4.0),
                       child: Icon(Icons.add),
                     ),
-                    Text("Add To Order")
+                    widget.expandedWidget
                   ],
                 ),
         ));

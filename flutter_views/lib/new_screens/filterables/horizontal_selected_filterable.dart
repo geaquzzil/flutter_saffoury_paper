@@ -39,7 +39,7 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
           return Chip(
             // selected: true,
             label: Text(
-                item.mainFieldName + " :" + item.mainValuesName[0].toString()),
+                "${item.mainFieldName} :${item.mainValuesName[0]}"),
 
             // avatar:Text(item.field),
             onDeleted: () {

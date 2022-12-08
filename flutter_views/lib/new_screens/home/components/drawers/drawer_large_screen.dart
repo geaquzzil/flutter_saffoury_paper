@@ -90,12 +90,14 @@ class DrawerLargeScreens extends StatelessWidget {
                       width: 24,
                     ),
                     FlutterLogo(
+                      style: FlutterLogoStyle.markOnly,
+                      textColor: Colors.orange,
                       size: 48,
                     ),
                     SizedBox(
                       width: 16,
                     ),
-                    Text("Flutter")
+                    Text("SaffouryPaper")
                   ],
                 )),
     );

@@ -283,6 +283,7 @@ class BaseEditWidget extends StatelessWidget {
         viewAbstract: viewAbstract,
         list: viewAbstract
             .getTextInputIsAutoCompleteCustomListMap(context)[field]!,
+        formKey: _formKey,
         onSelected: (selectedObj) {
           viewAbstract.setFieldValue(field, selectedObj);
         },

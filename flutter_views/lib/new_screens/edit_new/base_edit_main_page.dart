@@ -5,9 +5,11 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/file_reader_popup_icon_widget.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -15,6 +17,8 @@ import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../new_components/add_from_list_popup_icon_widget.dart';
 import '../../new_components/cards/outline_card.dart';
+import '../../new_components/fabs/floating_action_button_extended.dart';
+import '../../providers/actions/action_viewabstract_provider.dart';
 import '../../providers/actions/list_multi_key_provider.dart';
 import '../../screens/base_shared_actions_header.dart';
 import '../home/components/empty_widget.dart';
@@ -112,6 +116,8 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            getFileReaderFloatingButton(context),
+            getFileExporterFloatingButton(context),
             widget.viewAbstract.onHasPermission(
               context,
               function: widget.viewAbstract.hasPermissionDelete(context),
@@ -138,7 +144,71 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         body: getFutureBody());
   }
 
-  FloatingActionButton getAddFloatingButton2(BuildContext context) {
+  Widget getFileExporterFloatingButton(BuildContext context) {
+    return FloatingActionButton.small(
+        heroTag: UniqueKey(),
+        onPressed: () {
+          context
+              .read<ActionViewAbstractProvider>()
+              .changeCustomWidget(FileReaderPage(
+                viewAbstract: widget.viewAbstract,
+              ));
+          // context.read().change()
+        },
+        child: Icon(Icons.send)
+
+        //  FileReaderPopupIconWidget(
+        //   viewAbstract: widget.viewAbstract,
+        //   // onSelected: (selectedList) {
+        //   //   setState(() {
+        //   //     (widget.viewAbstract as ListableInterface)
+        //   //         .onListableSelectedListAdded(selectedList);
+        //   //   });
+        //   // },
+        // ),
+        );
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () {},
+      child: const Icon(Icons.file_present_rounded),
+    );
+  }
+
+  Widget getFileReaderFloatingButton(BuildContext context) {
+    return FloatingActionButton.small(
+        heroTag: UniqueKey(),
+        onPressed: () {
+          context
+              .read<ActionViewAbstractProvider>()
+              .changeCustomWidget(FileReaderPage(
+                viewAbstract: widget.viewAbstract,
+              ));
+          // context.read().change()
+        },
+        child: Icon(Icons.file_copy)
+
+        //  FileReaderPopupIconWidget(
+        //   viewAbstract: widget.viewAbstract,
+        //   // onSelected: (selectedList) {
+        //   //   setState(() {
+        //   //     (widget.viewAbstract as ListableInterface)
+        //   //         .onListableSelectedListAdded(selectedList);
+        //   //   });
+        //   // },
+        // ),
+        );
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () {},
+      child: const Icon(Icons.file_present_rounded),
+    );
+  }
+
+  Widget getAddFloatingButton2(BuildContext context) {
+    return FloatingActionButtonExtended(
+      expandedWidget: Text("Confirm"),
+      onPress: () {},
+    );
     return FloatingActionButton.extended(
         heroTag: UniqueKey(),
         onPressed: () async {
@@ -224,58 +294,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
   FloatingActionButton getAddToListFloatingButton(BuildContext context) {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
-      onPressed: () {
-        // Dialogs.materialDialog(
-        //     // isScrollControlled: true,
-        //     msgAlign: TextAlign.end,
-        //     customView: Align(
-        //       alignment: Alignment(0, 1),
-        //       child: SizedBox(
-        //           height: MediaQuery.of(context).size.height / 2,
-        //           width: double.infinity,
-        //           child: ListApiSelectedSearchableWidget(
-        //             viewAbstract: (widget.viewAbstract as ListableInterface)
-        //                 .getListablePickObject(),
-        //             onSelected: (sList) {
-        //               selectedList = sList.cast();
-        //               // setState(() {
-        //               //   selectedList=sList.cast();
-        //               // });
-        //             },
-        //           )),
-        //     ),
-        //     dialogShape: RoundedRectangleBorder(
-        //       side: BorderSide(
-        //         color: Theme.of(context).colorScheme.outline,
-        //       ),
-        //       borderRadius: const BorderRadius.all(Radius.circular(12)),
-        //     ),
-        //     dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.5 : null,
-        //     useSafeArea: false,
-        //     onClose: (value) {
-        //       if (value != null) {
-        //         setState(() {
-        //           (widget.viewAbstract as ListableInterface)
-        //               .onListableSelectedListAdded(selectedList);
-        //         });
-        //       }
-        //     },
-        //     color: Theme.of(context).colorScheme.background,
-        //     context: context,
-        //     actions: [
-        //       TextButton(
-        //         onPressed: () {
-        //           Navigator.of(context).pop();
-        //         },
-        //         child: Text(AppLocalizations.of(context)!.cancel),
-        //       ),
-        //       ElevatedButton(
-        //           onPressed: () {
-        //             Navigator.of(context).pop("dasda");
-        //           },
-        //           child: Text(AppLocalizations.of(context)!.ok)),
-        //     ]);
-      },
+      onPressed: () {},
       child: AddFromListPopupIconWidget(
         viewAbstract: widget.viewAbstract,
         onSelected: (selectedList) {

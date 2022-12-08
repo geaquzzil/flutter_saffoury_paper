@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 @deprecated
 abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
   dynamic requestIDs;
@@ -55,7 +57,8 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
     printerOptions = PrinterOptions();
   }
   @override
-  void onDropdownChanged(BuildContext context, String field, value) {
+  void onDropdownChanged(BuildContext context, String field, value,
+      {GlobalKey<FormBuilderState>? formKey}) {
     if (field == "sortByType") {
       SortByType v = value as SortByType;
       fieldSortByAscDesc = v.toString();

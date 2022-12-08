@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
@@ -229,7 +230,8 @@ abstract class ViewAbstractInputAndValidater<T>
     return getFieldLabel(context, field);
   }
 
-  void onDropdownChanged(BuildContext context, String field, dynamic value) {
+  void onDropdownChanged(BuildContext context, String field, dynamic value,
+      {GlobalKey<FormBuilderState>? formKey}) {
     debugPrint("onDropdownChanged field=> $field value=> $value");
     // setFieldValue(field, value);
   }
