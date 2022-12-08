@@ -79,17 +79,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       var f = excel.tables[value.toString()]?.rows;
       if (f != null && f.isNotEmpty) {
         fileColumns = f[0].map((e) => e!.value.toString()).toList();
-        debugPrint("fileColumns $fileColumns");
-        debugPrint("formKey fields  ${formKey?.currentState?.fields}");
-        // formKey?.currentState?.();
-        formKey?.currentState?.fields.forEach((key, value) {
-          debugPrint("formKey $key => $key");
-          // value.activate();
-          // value.initState();
-          // value.build(context);
-          (value.widget as FormBuilderDropdown).();
-        });
-        // formKey?.currentState?.fields["gsms"]?.setState(() {});
+        notifyOtherControllers(context: context, formKey: formKey);
       }
     }
   }

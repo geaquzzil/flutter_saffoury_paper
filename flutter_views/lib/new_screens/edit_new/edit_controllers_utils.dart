@@ -144,47 +144,34 @@ Widget getControllerDropdownCustomList(BuildContext context,
     required Function(dynamic selectedObj) onSelected}) {
   debugPrint("getControllerDropdownCustomList field = $field  list=> $list");
   return wrapController(
-      DropdownCustomList(),
+      FormBuilderDropdown<dynamic>(
+        autovalidateMode: AutovalidateMode.always,
+        onChanged: (obj) {
+          viewAbstract.onDropdownChanged(context, field, obj, formKey: formKey);
+          viewAbstract.setFieldValue(field, obj);
+          debugPrint('getControllerDropdownCustomList onChanged=   $obj');
+          onSelected(obj);
+        },
+        onReset: () {
+          debugPrint("getControllerDropdownCustomList onReset");
+        },
+        validator: viewAbstract.getTextInputValidatorCompose(context, field),
+        name: viewAbstract.getTag(field),
+        initialValue: list
+            .firstWhereOrNull((p0) => viewAbstract.getFieldValue(field) == p0),
+        decoration: getDecorationIconLabel(context,
+            label: viewAbstract.getFieldLabel(context, field),
+            icon: viewAbstract.getFieldIconData(field)),
+        items: list
+            .map((item) => DropdownMenuItem<dynamic>(
+                  value: item,
+                  child: Text(item == null
+                      ? "${AppLocalizations.of(context)!.enter} ${viewAbstract.getFieldLabel(context, field)}"
+                      : item.toString()),
+                ))
+            .toList(),
+      ),
       requiredSpace: true);
-}
-
-class DropdownCustomList extends StatelessWidget {
-  const DropdownCustomList({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FormBuilderDropdown<dynamic>(
-      autovalidateMode: AutovalidateMode.always,
-      onChanged: (obj) {
-        viewAbstract.onDropdownChanged(context, field, obj, formKey: formKey);
-        viewAbstract.setFieldValue(field, obj);
-        debugPrint('getControllerDropdownCustomList onChanged=   $obj');
-        onSelected(obj);
-      },
-      onReset: () {
-        
-        debugPrint("getControllerDropdownCustomList onReset");
-      },
-    
-      validator: viewAbstract.getTextInputValidatorCompose(context, field),
-      name: viewAbstract.getTag(field),
-      initialValue: list
-          .firstWhereOrNull((p0) => viewAbstract.getFieldValue(field) == p0),
-      decoration: getDecorationIconLabel(context,
-          label: viewAbstract.getFieldLabel(context, field),
-          icon: viewAbstract.getFieldIconData(field)),
-      items: list
-          .map((item) => DropdownMenuItem<dynamic>(
-                value: item,
-                child: Text(item == null
-                    ? "${AppLocalizations.of(context)!.enter} ${viewAbstract.getFieldLabel(context, field)}"
-                    : item.toString()),
-              ))
-          .toList(),
-    );
-  }
 }
 
 Widget getControllerDropdownViewAbstractEnum(BuildContext context,

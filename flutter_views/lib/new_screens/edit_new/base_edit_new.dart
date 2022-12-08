@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_custom_list.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
 import 'package:provider/provider.dart';
@@ -277,6 +278,14 @@ class BaseEditWidget extends StatelessWidget {
           controller: getController(context, field: field, value: fieldValue));
     }
     if (isAutoCompleteByCustomList) {
+      return DropdownCustomListWithFormListener(
+        viewAbstract: viewAbstract,
+        field: field,
+        formKey: _formKey,
+        onSelected: (selectedObj) {
+          viewAbstract.setFieldValue(field, selectedObj);
+        },
+      );
       return getControllerDropdownCustomList(
         context,
         field: field,

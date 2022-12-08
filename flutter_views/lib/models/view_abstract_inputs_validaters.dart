@@ -242,6 +242,19 @@ abstract class ViewAbstractInputAndValidater<T>
     // setFieldValue(field, value);
   }
 
+  void notifyOtherControllers(
+      {required BuildContext context, GlobalKey<FormBuilderState>? formKey}) {
+    formKey?.currentState?.fields.forEach((key, value) {
+      debugPrint("notifyOtherControllers  formKey $key => $key");
+      debugPrint("notifyOtherControllers form ${value.widget}");
+      if (value.widget is FormBuilderDropdown) {
+        (value.widget as FormBuilderDropdown).onReset!();
+      } else {
+        debugPrint("notifyOtherControllers not supported yet");
+      }
+    });
+  }
+
   List<dynamic> getMultiChipInitalValue(
     BuildContext context,
     String field,
