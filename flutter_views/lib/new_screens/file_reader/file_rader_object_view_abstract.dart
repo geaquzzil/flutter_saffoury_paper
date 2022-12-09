@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../models/v_mirrors.dart';
+import '../../models/view_abstract_base.dart';
 
 @reflector
 class FileReaderObject extends ViewAbstract<FileReaderObject> {
@@ -26,13 +28,17 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   Map<String, String> selectedFields = {};
 
+  Map<GroupItem, List<String>> generatedGroupItems = {};
+
   FileReaderObject({required this.viewAbstract, required this.filePath})
       : super() {
     var bytes = File(filePath).readAsBytesSync();
     excel = Excel.decodeBytes(bytes);
     fileSheets = excel.tables.keys.toList();
   }
-
+  @override
+  Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) =>
+      generatedGroupItems;
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"selectedSheet": ""}
     ..addAll(viewAbstract.getMirrorFieldsMapNewInstance());
@@ -53,8 +59,34 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  List<String> getMainFields() =>
-      ["selectedSheet", ...viewAbstract.getMainFields()];
+  List<String> getMainFields({BuildContext? context}) {
+    List<String> listOfFields = viewAbstract.getMainFields(context: context);
+    List<String> allFields = [];
+    listOfFields.forEach((element) {
+      if (viewAbstract.isViewAbstract(element)) {
+        ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
+
+        generatedGroupItems[GroupItem(view.getMainHeaderLabelTextOnly(context!),
+            view.getMainIconData())] = view.getMainFields(context: context);
+        // bool hasViewAbstract = view
+        //         .getMainFields(context: context)
+        //         .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
+        //     null;
+        // if (!hasViewAbstract) {
+        //   allFields.addAll(
+        //       view.getMainFields(context: context).map((e) => e).toList());
+        //   // allFields.add(value)
+        // } else {
+        //   allFields.add(element);
+        // }
+
+        //check that no other view abstract or else
+      } else {
+        allFields.add(element);
+      }
+    });
+    return ["selectedSheet", ...allFields];
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -105,7 +137,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     Map<String, List> list = {};
 
     list["selectedSheet"] = fileSheets;
-    viewAbstract.getMainFields().forEach((element) {
+    viewAbstract.getMainFields(context: context).forEach((element) {
       list[element] = fileColumns;
     });
     return list;

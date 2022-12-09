@@ -28,7 +28,7 @@ abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     // TODO: implement getMainFields
     throw UnimplementedError();
   }

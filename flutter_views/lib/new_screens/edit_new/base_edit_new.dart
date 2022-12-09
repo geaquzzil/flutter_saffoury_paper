@@ -34,6 +34,8 @@ class BaseEditWidget extends StatelessWidget {
   bool isTheFirst;
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   late List<String> fields;
+  late Map<GroupItem, List<String>> groupedFields;
+
   Map<String, TextEditingController> controllers = {};
   late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
@@ -52,11 +54,12 @@ class BaseEditWidget extends StatelessWidget {
     //     .getFormBuilderState;
     if (!isRequiredSubViewAbstract) {
       fields = viewAbstract
-          .getMainFields()
+          .getMainFields(context: context)
           .where((element) => !viewAbstract.isViewAbstract(element))
           .toList();
     } else {
-      fields = viewAbstract.getMainFields();
+      fields = viewAbstract.getMainFields(context: context);
+      groupedFields = viewAbstract.getMainFieldsGroups(context);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -82,6 +85,18 @@ class BaseEditWidget extends StatelessWidget {
         });
       }
     });
+  }
+
+  bool hasErrorGroupWidget(BuildContext context, List<String> groupedFields) {
+    for (var element in groupedFields) {
+      bool? res = _formKey.currentState?.fields[element]?.validate();
+      if (res != null) {
+        if (res == false) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   bool hasError(BuildContext context) {
@@ -153,28 +168,31 @@ class BaseEditWidget extends StatelessWidget {
           ],
         );
 
-        return isTheFirst
-            ? form
-            : ExpansionTileCustom(
-                wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
-                // initiallyExpanded: !viewAbstract.isNull,
-                // isExpanded: false,
-                hasError: hasError(context),
-                canExpand: () => true,
-                leading: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: viewAbstract.getCardLeadingImage(context)),
-                subtitle: !_canBuildChildern()
-                    ? null
-                    : viewAbstract.getMainLabelSubtitleText(context),
-                trailing: getTrailing(context),
-                title: !_canBuildChildern()
-                    ? form
-                    : viewAbstract.getMainHeaderTextOnEdit(context),
-                children: [if (_canBuildChildern()) form else Text("dsa")]);
+        return isTheFirst ? form : getExpansionTileCustom(context, form);
       }),
     );
+  }
+
+  ExpansionTileCustom getExpansionTileCustom(
+      BuildContext context, Widget form) {
+    return ExpansionTileCustom(
+        wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
+        // initiallyExpanded: !viewAbstract.isNull,
+        // isExpanded: false,
+        hasError: hasError(context),
+        canExpand: () => true,
+        leading: SizedBox(
+            width: 40,
+            height: 40,
+            child: viewAbstract.getCardLeadingImage(context)),
+        subtitle: !_canBuildChildern()
+            ? null
+            : viewAbstract.getMainLabelSubtitleText(context),
+        trailing: getTrailing(context),
+        title: !_canBuildChildern()
+            ? form
+            : viewAbstract.getMainHeaderTextOnEdit(context),
+        children: [if (_canBuildChildern()) form else Text("dsa")]);
   }
 
   bool canExpand(BuildContext context) {
@@ -242,6 +260,17 @@ class BaseEditWidget extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 24.0),
               ...fields.map((e) => getControllerWidget(context, e)).toList(),
+              ...groupedFields.entries
+                  .map((e) => ExpansionTileCustom(
+                      canExpand: () => true,
+                      hasError: hasErrorGroupWidget(context, e.value),
+                      title: Text(e.key.label),
+                      leading: Icon(e.key.icon),
+                      children: e.value
+                          .map((e) => getControllerWidget(context, e))
+                          .toList()))
+                  .toList(),
+
               // ElevatedButton(
               //   onPressed: () {
               //     // validate();
@@ -253,7 +282,7 @@ class BaseEditWidget extends StatelessWidget {
 
   bool _canBuildChildern() {
     return true;
-    return viewAbstract.getMainFields().length > 1;
+    // return viewAbstract.getMainFields(context: context).length > 1;
   }
 
   Widget getControllerWidget(BuildContext context, String field) {
@@ -422,53 +451,3 @@ class ViewAbstractChangeProvider with ChangeNotifier {
     // viewAbstract.isNul
   }
 }
-
-
-
-
-  // Widget? _buildSubtitle(BuildContext context) {
-  //   ViewAbstract viewAbstractWatched = getViewAbstractReturnSameIfNull(context,
-  //       widget.viewAbstract, widget.viewAbstract.getFieldNameFromParent ?? "");
-  //   return Text(viewAbstractWatched.isNew()
-  //       ? "IS NEW"
-  //       : viewAbstractWatched.getMainHeaderLabelTextOnly(context));
-  // }
-
-  // Widget? _buildTitle(BuildContext context) {
-  //   ViewAbstract? viewAbstractWatched = getViewAbstract(
-  //       context, widget.viewAbstract.getFieldNameFromParent ?? "");
-
-  //   return (viewAbstractWatched?.isNew() ?? true)
-  //       ? getIsNullable(
-  //               context, widget.viewAbstract.getFieldNameFromParent ?? "")
-  //           ? widget.viewAbstract.getMainNullableText(context)
-  //           : viewAbstractWatched == null
-  //               ? widget.viewAbstract.getMainHeaderText(context)
-  //               : viewAbstractWatched.getMainHeaderText(context)
-  //       : viewAbstractWatched!.getMainHeaderText(context);
-  // }
-
-  // Widget _buildLeadingIcon(BuildContext context) {
-  //   ViewAbstract? viewAbstractWatched =
-  //       getViewAbstract(context, getFieldNameFromParent(widget.viewAbstract));
-  //   // return RoundedIconButtonTowChilds(
-  //   //   largChild: viewAbstractWatched == null
-  //   //       ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
-  //   //       : viewAbstractWatched.getCardLeadingCircleAvatar(context),
-  //   //   smallIcon: Icons.add,
-  //   // );
-  //   Widget mainLeading = RotationTransition(
-  //     turns: _iconTurns,
-  //     child: viewAbstractWatched == null
-  //         ? widget.viewAbstract.getCardLeadingCircleAvatar(context)
-  //         : viewAbstractWatched.getCardLeadingCircleAvatar(context),
-  //   );
-  //   if (_isExpanded) {
-  //     return RoundedIconButtonTowChilds2(
-  //       largChild: mainLeading,
-  //       smallIcon: Icons.add,
-  //     );
-  //   } else {
-  //     return mainLeading;
-  //   }
-  // }

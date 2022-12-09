@@ -33,7 +33,7 @@ class CountryManufacture extends ViewAbstract<CountryManufacture> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {};
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return ["countries", "manufactures"];
   }
 

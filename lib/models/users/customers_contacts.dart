@@ -45,7 +45,7 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     // TODO: implement getMainFields
     throw UnimplementedError();
   }

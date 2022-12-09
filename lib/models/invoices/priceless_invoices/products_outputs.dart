@@ -48,8 +48,8 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
       };
 
   @override
-  List<String> getMainFields() {
-    List<String> list = super.getMainFields();
+  List<String> getMainFields({BuildContext? context}) {
+    List<String> list = super.getMainFields(context: context);
     list.remove("status");
     list.add("warehouse");
     return list;
@@ -95,7 +95,8 @@ class ProductOutputDetails extends InvoiceMasterDetails<ProductOutputDetails> {
   String? getTableNameApi() => "products_outputs";
 
   @override
-  List<String> getMainFields() => ["products", "quantity", "comments"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["products", "quantity", "comments"];
 
   factory ProductOutputDetails.fromJson(Map<String, dynamic> data) =>
       _$ProductOutputDetailsFromJson(data);

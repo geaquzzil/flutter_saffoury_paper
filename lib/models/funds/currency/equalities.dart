@@ -38,7 +38,8 @@ class Equalities extends ViewAbstract<Equalities> {
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"value": 0.toDouble(), "date": "", "currency": Currency()};
   @override
-  List<String> getMainFields() => ["currency", "value", "date"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["currency", "value", "date"];
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {

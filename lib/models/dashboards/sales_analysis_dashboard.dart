@@ -74,7 +74,7 @@ class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     // TODO: implement getMainFields
     throw UnimplementedError();
   }

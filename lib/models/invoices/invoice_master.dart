@@ -82,7 +82,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         "status": InvoiceStatus.NONE
       };
   @override
-  List<String> getMainFields() => [
+  List<String> getMainFields({BuildContext? context}) => [
         "customers",
         "cargo_transporters",
         "employees",

@@ -42,7 +42,7 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return [
       "table_name",
       "print",
@@ -165,7 +165,7 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
 
   @override
   PermissionActionAbstract getSelfNewInstance() {
-    return  PermissionActionAbstract();
+    return PermissionActionAbstract();
   }
 
   // @override

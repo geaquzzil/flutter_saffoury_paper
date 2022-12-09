@@ -59,7 +59,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
         "employees": Employee(),
       };
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({material.BuildContext? context}) =>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override

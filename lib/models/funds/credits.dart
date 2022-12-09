@@ -29,7 +29,7 @@ class Credits extends MoneyFunds<Credits> {
   }
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["customers", "employees", "date", "value", "equalities", "warehouse"];
 
   @override

@@ -25,13 +25,13 @@ class Incomes extends MoneyFunds<Incomes> {
 
   Incomes() : super();
 
-   @override
- Incomes getSelfNewInstance() {
+  @override
+  Incomes getSelfNewInstance() {
     return Incomes();
   }
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["account_names", "employee", "date", "value", "equalities", "warehouse"];
 
   @override

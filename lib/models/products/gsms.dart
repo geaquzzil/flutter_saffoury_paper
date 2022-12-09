@@ -53,7 +53,7 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return ['gsm'];
   }
 

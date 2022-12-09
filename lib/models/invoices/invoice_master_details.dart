@@ -60,7 +60,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       ];
 
   @override
-  List<String> getMainFields() => [
+  List<String> getMainFields({BuildContext? context}) => [
         "products",
         "warehouse",
         "quantity",

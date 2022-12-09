@@ -72,7 +72,8 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
         "sortByType": SortByType.DESC
       };
   @override
-  List<String> getMainFields() => ["printerOptions", "reportOptions"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["printerOptions", "reportOptions"];
 
   bool isList() {
     return printObject is List;

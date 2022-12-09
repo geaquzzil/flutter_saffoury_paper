@@ -36,7 +36,7 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "hideAdditionalNotes": false,
       };
   @override
-  List<String> getMainFields() => [
+  List<String> getMainFields({BuildContext? context}) => [
         "printerOptions",
         "reportOptions",
         "hideQrCode",

@@ -35,7 +35,7 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
       };
 
   @override
-  List<String> getMainFields() => [
+  List<String> getMainFields({BuildContext? context}) => [
         "cut_requests",
         "products_inputs",
         "products_outputs",

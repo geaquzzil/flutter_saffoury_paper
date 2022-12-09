@@ -78,7 +78,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return ["login", "permissions", "response"];
   }
 

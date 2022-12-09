@@ -47,7 +47,7 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
       };
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["customers", "employees", "date", "comments"];
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -93,7 +93,7 @@ class CustomerRequestSizeDetails
       };
 
   @override
-  List<String> getMainFields() => ["sizes", "date"];
+  List<String> getMainFields({BuildContext? context}) => ["sizes", "date"];
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "date": AppLocalizations.of(context)!.date,

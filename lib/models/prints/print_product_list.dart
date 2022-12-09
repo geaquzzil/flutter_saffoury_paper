@@ -55,16 +55,17 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
         });
 
   @override
-  List<String> getMainFields() => super.getMainFields()
-    ..addAll([
-      "hideDate",
-      "hideWarehouse",
-      "hideQuantity",
-      "hideUnitPriceAndTotalPrice",
-      "sortByField",
-      "sortByType",
-      "skipOutOfStock",
-    ]);
+  List<String> getMainFields({BuildContext? context}) =>
+      super.getMainFields(context: context)
+        ..addAll([
+          "hideDate",
+          "hideWarehouse",
+          "hideQuantity",
+          "hideUnitPriceAndTotalPrice",
+          "sortByField",
+          "sortByType",
+          "skipOutOfStock",
+        ]);
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(

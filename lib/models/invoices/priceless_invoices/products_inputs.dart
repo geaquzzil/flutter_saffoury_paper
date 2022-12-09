@@ -52,8 +52,8 @@ class ProductInput extends InvoiceMaster<ProductInput>
       };
 
   @override
-  List<String> getMainFields() {
-    List<String> list = super.getMainFields();
+  List<String> getMainFields({BuildContext? context}) {
+    List<String> list = super.getMainFields(context: context);
     list.remove("status");
     list.add("warehouse");
     return list;
@@ -139,7 +139,8 @@ class ProductInputDetails extends InvoiceMasterDetails<ProductInputDetails> {
         });
 
   @override
-  List<String> getMainFields() => ["products", "quantity", "comments"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["products", "quantity", "comments"];
   @override
   String? getTableNameApi() => "products_inputs_details";
 

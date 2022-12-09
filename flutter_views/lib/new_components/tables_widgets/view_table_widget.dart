@@ -50,14 +50,16 @@ class _ViewableTableWidget extends State<ViewableTableWidget> {
   void didUpdateWidget(covariant ViewableTableWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     list_invoice_details = widget.viewAbstract.getListableList();
-    fields = (widget.viewAbstract as ViewAbstract).getMainFields();
+    fields =
+        (widget.viewAbstract as ViewAbstract).getMainFields(context: context);
   }
 
   @override
   void initState() {
     super.initState();
     list_invoice_details = widget.viewAbstract.getListableList();
-    fields = (widget.viewAbstract as ViewAbstract).getMainFields();
+    fields =
+        (widget.viewAbstract as ViewAbstract).getMainFields(context: context);
     _formKey = GlobalKey<FormBuilderState>();
   }
 
@@ -99,7 +101,7 @@ class _ViewableTableWidget extends State<ViewableTableWidget> {
   List<DataColumn> getColumns(BuildContext context) {
     ViewAbstract first = list_invoice_details[0];
     return first
-        .getMainFields()
+        .getMainFields(context: context)
         .map((e) => DataColumn(
               numeric: true,
               label: Text(first.getFieldLabel(context, e)),
@@ -122,7 +124,7 @@ class _ViewableTableWidget extends State<ViewableTableWidget> {
             });
           },
           cells: e
-              .getMainFields()
+              .getMainFields(context: context)
               .map((ee) => DataCell(
                   Text(
                     e.getFieldValueCheckType(context, ee),
@@ -139,9 +141,10 @@ class _ViewableTableWidget extends State<ViewableTableWidget> {
         "onSort: columnIndex $columnIndex  listsize=> ${list_invoice_details.length} ");
     list_invoice_details.sort((obj1, obj2) => compareDynamic(
         ascending,
-        obj1.getFieldValueCheckType(context, obj1.getMainFields()[columnIndex]),
+        obj1.getFieldValueCheckType(
+            context, obj1.getMainFields(context: context)[columnIndex]),
         obj2.getFieldValueCheckType(
-            context, obj2.getMainFields()[columnIndex])));
+            context, obj2.getMainFields(context: context)[columnIndex])));
 
     setState(() {
       sortColumnIndex = columnIndex;

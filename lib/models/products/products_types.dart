@@ -105,7 +105,7 @@ class ProductType extends ViewAbstract<ProductType> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return [
       'name',
       'grades',

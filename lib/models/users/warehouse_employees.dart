@@ -50,7 +50,8 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {};
 
   @override
-  List<String> getMainFields() => ["warehouse", "employee"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["warehouse", "employee"];
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>

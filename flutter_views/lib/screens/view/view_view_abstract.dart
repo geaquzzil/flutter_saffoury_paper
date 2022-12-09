@@ -48,7 +48,7 @@ class MasterView extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget? topWidget =
         viewAbstract.getCustomTopWidget(context, ServerActions.view);
-    final fields = viewAbstract.getMainFields();
+    final fields = viewAbstract.getMainFields(context: context);
     return Column(
       children: [
         if (topWidget != null) topWidget,

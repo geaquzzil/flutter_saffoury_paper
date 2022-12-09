@@ -24,7 +24,7 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
   // Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"name": ""};
 
   @override
-  List<String> getMainFields() => ["name"];
+  List<String> getMainFields({BuildContext? context}) => ["name"];
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
@@ -32,10 +32,11 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
 
   @override
   String? getSortByFieldName() => "name";
-@override
+  @override
   String getFieldToReduceSize() {
     return "name";
   }
+
   @override
   SortByType getSortByType() => SortByType.DESC;
 

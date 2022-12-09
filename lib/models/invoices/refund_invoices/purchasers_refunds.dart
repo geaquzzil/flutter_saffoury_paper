@@ -49,7 +49,7 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
         ServerActions.list: ["purchases_refunds_purchases_details"],
       };
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["purchases", "cargo_transporters", "date", "billNo", "comments"];
 
   factory PurchasesRefund.fromJson(Map<String, dynamic> data) =>
@@ -102,7 +102,7 @@ class PurchasesRefundDetails
   String? getTableNameApi() => "purchases_refunds_purchases_details";
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["products", "warehouse", "quantity", "comments"];
 
   factory PurchasesRefundDetails.fromJson(Map<String, dynamic> data) =>

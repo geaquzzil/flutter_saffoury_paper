@@ -21,7 +21,7 @@ class Currency extends BaseWithNameString<Currency> {
       super.getMirrorFieldsMapNewInstance()..addAll({"nameAr": ""});
 
   @override
-  List<String> getMainFields() => ["name", "nameAr"];
+  List<String> getMainFields({BuildContext? context}) => ["name", "nameAr"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {

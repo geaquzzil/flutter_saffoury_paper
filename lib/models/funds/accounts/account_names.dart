@@ -29,7 +29,8 @@ class AccountName extends BaseWithNameString<AccountName> {
   Map<String, bool> isFieldCanBeNullableMap() => {"account_names_types": true};
 
   @override
-  List<String> getMainFields() => ["name", "account_names_types"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["name", "account_names_types"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
@@ -95,7 +96,7 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
       };
 
   @override
-  List<String> getMainFields() => ["type", "typeAr"];
+  List<String> getMainFields({BuildContext? context}) => ["type", "typeAr"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {

@@ -54,12 +54,13 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
         });
 
   @override
-  List<String> getMainFields() => super.getMainFields()
-    ..addAll([
-      "hideCustomerBalance",
-      "hideEmployeeName",
-      "hideInvoiceDate",
-    ]);
+  List<String> getMainFields({BuildContext? context}) =>
+      super.getMainFields(context: context)
+        ..addAll([
+          "hideCustomerBalance",
+          "hideEmployeeName",
+          "hideInvoiceDate",
+        ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
     if (field == "hideCustomerBalance") {

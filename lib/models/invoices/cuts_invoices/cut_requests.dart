@@ -125,7 +125,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  List<String> getMainFields() => [
+  List<String> getMainFields({BuildContext? context}) => [
         "products",
         "customers",
         "employee",

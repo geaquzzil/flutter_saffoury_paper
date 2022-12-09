@@ -54,13 +54,14 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
         });
 
   @override
-  List<String> getMainFields() => super.getMainFields()
-    ..addAll([
-      "hideCustomerName",
-      "hideEmployeeName",
-      "hideInvoiceDate",
-      "printCutRequestType"
-    ]);
+  List<String> getMainFields({BuildContext? context}) =>
+      super.getMainFields(context: context)
+        ..addAll([
+          "hideCustomerName",
+          "hideEmployeeName",
+          "hideInvoiceDate",
+          "printCutRequestType"
+        ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
     if (field == "hideCustomerName") {

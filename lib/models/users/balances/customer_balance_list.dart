@@ -57,7 +57,7 @@ class CustomerBalanceList
       AppLocalizations.of(context)!.users;
 
   @override
-  List<String> getMainFields() => [];
+  List<String> getMainFields({BuildContext? context}) => [];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

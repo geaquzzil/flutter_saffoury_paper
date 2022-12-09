@@ -29,7 +29,7 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
   }
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["language", "copies", "startEndPage", "printPaperSize"];
 
   @override

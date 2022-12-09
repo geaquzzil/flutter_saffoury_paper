@@ -43,7 +43,7 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return ['top', 'middle', 'back'];
   }
 

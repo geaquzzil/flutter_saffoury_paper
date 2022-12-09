@@ -41,7 +41,7 @@ class Setting extends ViewAbstract<Setting> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     // TODO: implement getMainFields
     throw UnimplementedError();
   }
@@ -81,9 +81,10 @@ class Setting extends ViewAbstract<Setting> {
     // TODO: implement getTableNameApi
     throw UnimplementedError();
   }
+
   @override
   Setting getSelfNewInstance() {
-    return  Setting();
+    return Setting();
   }
 
   @override

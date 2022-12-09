@@ -21,7 +21,7 @@ class Debits extends MoneyFunds<Debits> {
   }
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["customer", "employee", "date", "value", "equalities", "warehouse"];
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

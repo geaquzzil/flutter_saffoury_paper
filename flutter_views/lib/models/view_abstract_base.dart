@@ -9,10 +9,11 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dar
 import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:supercharged/supercharged.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
-  List<String> getMainFields();
+  List<String> getMainFields({BuildContext? context});
   String getMainHeaderTextOnly(BuildContext context);
   String getMainHeaderLabelTextOnly(BuildContext context);
 
@@ -213,11 +214,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     ];
   }
 
-  Map<String, List<String>> getMainFieldsGroups(BuildContext context) => {};
+  Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) => {};
 
   List<String> getMainFieldsWithOutGroups(BuildContext context) {
-    Map<String, List<String>> map = getMainFieldsGroups(context);
-    List<String> mainField = getMainFields();
+    Map<GroupItem, List<String>> map = getMainFieldsGroups(context);
+    if (map.isEmpty) return getMainFields(context: context);
+    List<String> mainField = getMainFields(context: context);
     map.forEach((key, value) {
       for (var element in value) {
         if (mainField.contains(element)) {
@@ -251,7 +253,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<DropdownStringListItem> getMainFieldsIconsAndValues(
       BuildContext context) {
-    return getMainFields()
+    return getMainFields(context: context)
         .map((e) => DropdownStringListItem(
             getFieldIconData(e), getFieldLabel(context, e),
             value: isViewAbstract(e)
@@ -259,6 +261,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
                 : e))
         .toList();
   }
+}
+
+class GroupItem {
+  String label;
+  IconData icon;
+
+  GroupItem(this.label, this.icon);
 }
 
 class TabControllerHelper extends Tab {

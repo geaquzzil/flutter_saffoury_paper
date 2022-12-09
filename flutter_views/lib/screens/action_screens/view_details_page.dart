@@ -16,7 +16,6 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
     required T object,
   }) : super(key: key, object: object);
 
-
   // Widget getBody(BuildContext context) {
   //   List<String> fields = getFields();
   //   return SizedBox(
@@ -59,7 +58,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   }
 
   SizedBox _body(BuildContext context) {
-    List<String> fields = getFields();
+    List<String> fields = getFields(context);
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -168,7 +167,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
 
   @override
   Widget? getBodyActionView(BuildContext context) {
-    List<String> fields = getFields();
+    List<String> fields = getFields(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

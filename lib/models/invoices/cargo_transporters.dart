@@ -36,7 +36,7 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
         "governorates": Governorate()
       };
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["name", "phone", "maxWeight", "carNumber", "governorates"];
 
   @override

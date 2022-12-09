@@ -29,7 +29,7 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"cut_requests": CutRequest(), "sizes": ProductSize(), "quantity": 0};
   @override
-  List<String> getMainFields() => ["sizes", "quantity"];
+  List<String> getMainFields({BuildContext? context}) => ["sizes", "quantity"];
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {"quantity": Icons.scale};

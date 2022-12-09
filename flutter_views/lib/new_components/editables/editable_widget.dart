@@ -22,7 +22,7 @@ class EditableWidget extends StatefulWidget {
 
 class _EditableWidget extends State<EditableWidget> {
   late List<String> fields;
-  late Map<String, List<String>> fieldsGroups;
+  // late Map<String, List<String>> fieldsGroups;
   late GlobalKey<FormBuilderState> _formKey;
   Map<String, TextEditingController> controllers = {};
   Map<String, FocusNode> focusNodes = {};
@@ -43,9 +43,9 @@ class _EditableWidget extends State<EditableWidget> {
     super.initState();
     _formKey = GlobalKey<FormBuilderState>();
     fields = widget.viewAbstract.getMainFieldsWithOutGroups(context);
-    fieldsGroups = widget.viewAbstract.getMainFieldsGroups(context);
+    // fieldsGroups = widget.viewAbstract.getMainFieldsGroups(context);
 
-    debugPrint("initState $fieldsGroups");
+    // debugPrint("initState $fieldsGroups");
   }
 
   @override

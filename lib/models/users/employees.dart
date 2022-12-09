@@ -55,8 +55,8 @@ class Employee extends User<Employee> {
   }
 
   @override
-  List<String> getMainFields() {
-    return super.getMainFields()..addAll(["warehouse"]);
+  List<String> getMainFields({BuildContext? context}) {
+    return super.getMainFields(context: context)..addAll(["warehouse"]);
   }
 
   @override

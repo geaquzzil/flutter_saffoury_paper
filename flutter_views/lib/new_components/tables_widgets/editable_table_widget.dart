@@ -51,14 +51,16 @@ class _EditableTableWidget extends State<EditableTableWidget> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     list_invoice_details = widget.viewAbstract.getListableList();
-    fields = (widget.viewAbstract as ViewAbstract).getMainFields();
+    fields =
+        (widget.viewAbstract as ViewAbstract).getMainFields(context: context);
   }
 
   @override
   void initState() {
     super.initState();
     list_invoice_details = widget.viewAbstract.getListableList();
-    fields = (widget.viewAbstract as ViewAbstract).getMainFields();
+    fields =
+        (widget.viewAbstract as ViewAbstract).getMainFields(context: context);
     _formKey = GlobalKey<FormBuilderState>();
   }
 
@@ -109,7 +111,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
   List<DataColumn> getColumns(BuildContext context) {
     ViewAbstract first = list_invoice_details[0];
     return first
-        .getMainFields()
+        .getMainFields(context: context)
         .map((e) => DataColumn(
               numeric: true,
               label: Text(first.getFieldLabel(context, e)),
@@ -132,7 +134,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
             });
           },
           cells: e
-              .getMainFields()
+              .getMainFields(context: context)
               .map((ee) => DataCell(
                   SizedBox(
                     width: 200,

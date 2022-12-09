@@ -79,7 +79,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return ['userlevelname', 'permissions_levels'];
   }
 

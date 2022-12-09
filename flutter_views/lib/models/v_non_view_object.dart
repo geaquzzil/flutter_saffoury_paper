@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+
 ///is non editable view
 abstract class VObject<T> extends ViewAbstract<T> {
   VObject() : super();
@@ -14,7 +15,7 @@ abstract class VObject<T> extends ViewAbstract<T> {
   String? getMainDrawerGroupName(BuildContext context) => "_none view $T";
 
   @override
-  List<String> getMainFields() => [];
+  List<String> getMainFields({BuildContext? context}) => [];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) => "_none_view $T";
@@ -54,5 +55,4 @@ abstract class VObject<T> extends ViewAbstract<T> {
 
   @override
   Map<String, bool> isFieldRequiredMap() => {};
-
 }

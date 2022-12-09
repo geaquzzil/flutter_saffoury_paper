@@ -29,7 +29,7 @@ class Spendings extends MoneyFunds<Spendings> {
         ..addAll({"account_names": AccountName()});
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["account_names", "employee", "date", "value", "equalities", "warehouse"];
 
   @override

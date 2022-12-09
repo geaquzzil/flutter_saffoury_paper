@@ -37,7 +37,7 @@ class User<T> extends UserLists<T> {
     date = "".toDateTimeNowString();
   }
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return [
       "name",
       "phone",

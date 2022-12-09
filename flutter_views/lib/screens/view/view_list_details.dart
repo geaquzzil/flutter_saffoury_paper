@@ -10,7 +10,7 @@ class ViewDetailsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fields = viewAbstract.getMainFields();
+    final fields = viewAbstract.getMainFields(context: context);
     return ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: ScrollController(),

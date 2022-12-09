@@ -19,7 +19,8 @@ class ReportOptions extends ViewAbstract<ReportOptions> {
   }
 
   @override
-  List<String> getMainFields() => ["reportHeader", "reportFooter"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["reportHeader", "reportFooter"];
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {

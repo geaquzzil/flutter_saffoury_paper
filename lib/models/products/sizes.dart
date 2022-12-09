@@ -43,7 +43,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  List<String> getMainFields() {
+  List<String> getMainFields({BuildContext? context}) {
     return ['width', 'length'];
   }
 

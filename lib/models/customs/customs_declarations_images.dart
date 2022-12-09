@@ -31,7 +31,8 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages> {
       };
 
   @override
-  List<String> getMainFields() => ["customs_declarations", "image", "comments"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["customs_declarations", "image", "comments"];
 
   @override
   Map<String, IconData> getFieldIconDataMap() =>

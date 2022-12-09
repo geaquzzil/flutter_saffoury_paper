@@ -91,22 +91,23 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
   }
 
   @override
-  List<String> getMainFields() => super.getMainFields()
-    ..addAll([
-      "sortByField",
-      "sortByType",
-      "productNameOption",
-      "changeProductNameTo",
-      "hideCustomerAddressInfo",
-      "hideCustomerPhone",
-      if (isPricelessInvoice() == false) "hideCustomerBalance",
-      "hideEmployeeName",
-      "hideCargoInfo",
-      "hideInvoicePaymentMethod",
-      if (isPricelessInvoice() == false) "hideUnitPriceAndTotalPrice",
-      "hideInvoiceDate",
-      if (isPricelessInvoice() == false) "hideInvoiceDueDate",
-    ]);
+  List<String> getMainFields({BuildContext? context}) =>
+      super.getMainFields(context: context)
+        ..addAll([
+          "sortByField",
+          "sortByType",
+          "productNameOption",
+          "changeProductNameTo",
+          "hideCustomerAddressInfo",
+          "hideCustomerPhone",
+          if (isPricelessInvoice() == false) "hideCustomerBalance",
+          "hideEmployeeName",
+          "hideCargoInfo",
+          "hideInvoicePaymentMethod",
+          if (isPricelessInvoice() == false) "hideUnitPriceAndTotalPrice",
+          "hideInvoiceDate",
+          if (isPricelessInvoice() == false) "hideInvoiceDueDate",
+        ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
     if (field == "hideCustomerAddressInfo") {
@@ -123,7 +124,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
       return AppLocalizations.of(context)!.hideDateDes;
     } else if (field == "hideInvoiceDueDate") {
       return AppLocalizations.of(context)!.hideDueDateDes;
-    }  else if (field == "hideEmployeeName") {
+    } else if (field == "hideEmployeeName") {
       return AppLocalizations.of(context)!.hideEmployeeDes;
     } else if (field == "hideCargoInfo") {
       return AppLocalizations.of(context)!.hideCargoInfoDes;
@@ -151,7 +152,6 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
               AppLocalizations.of(context)!.hidePaymentMethod,
           "hideUnitPriceAndTotalPrice":
               AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
-
           "sortByField": AppLocalizations.of(context)!.sortBy,
         });
 

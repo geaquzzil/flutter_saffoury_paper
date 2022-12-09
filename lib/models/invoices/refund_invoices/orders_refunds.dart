@@ -50,7 +50,7 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
       };
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["orders", "cargo_transporters", "date", "billNo", "comments"];
 
   factory OrderRefund.fromJson(Map<String, dynamic> data) =>
@@ -102,7 +102,7 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
   String? getTableNameApi() => "orders_refunds_order_details";
 
   @override
-  List<String> getMainFields() =>
+  List<String> getMainFields({BuildContext? context}) =>
       ["products", "warehouse", "quantity", "comments"];
 
   factory OrderRefundDetails.fromJson(Map<String, dynamic> data) =>

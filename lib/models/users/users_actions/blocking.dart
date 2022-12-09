@@ -34,7 +34,8 @@ class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  List<String> getMainFields() => ["customer", "blockMood", "block"];
+  List<String> getMainFields({BuildContext? context}) =>
+      ["customer", "blockMood", "block"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
