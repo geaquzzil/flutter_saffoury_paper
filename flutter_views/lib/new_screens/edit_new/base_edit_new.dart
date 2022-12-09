@@ -232,7 +232,7 @@ class BaseEditWidget extends StatelessWidget {
             bool validate = _formKey.currentState!.validate();
             if (validate) {
               _formKey.currentState!.save();
-              onValidate!(viewAbstract);
+              onValidate!(viewAbstract.onAfterValidate(context));
             }
           }
         },

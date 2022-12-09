@@ -24,6 +24,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   String filePath;
   late Excel excel;
 
+  Map<String, String> selectedFields = {};
+
   FileReaderObject({required this.viewAbstract, required this.filePath})
       : super() {
     var bytes = File(filePath).readAsBytesSync();
@@ -71,6 +73,14 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   @override
+  FileReaderObject? onAfterValidate(BuildContext context) {
+    debugPrint("onAfterValidate fileColumns $fileColumns");
+    if (fileColumns.isEmpty) return null;
+
+    return super.onAfterValidate(context);
+  }
+
+  @override
   void onDropdownChanged(BuildContext context, String field, value,
       {GlobalKey<FormBuilderState>? formKey}) {
     super.onDropdownChanged(context, field, value);
@@ -79,8 +89,13 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       var f = excel.tables[value.toString()]?.rows;
       if (f != null && f.isNotEmpty) {
         fileColumns = f[0].map((e) => e!.value.toString()).toList();
-        notifyOtherControllers(context: context, formKey: formKey);
+      } else {
+        fileColumns = [];
       }
+      notifyOtherControllers(context: context, formKey: formKey);
+    } else {
+      selectedFields[field] = value.toString();
+      debugPrint("selectedFields $selectedFields");
     }
   }
 
@@ -126,7 +141,21 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   Map<String, bool> isFieldCanBeNullableMap() => {};
 
   @override
-  bool isFieldRequired(String field) => true;
+  bool isFieldRequired(String field) {
+    if (field == "selectedSheet") {
+      return true;
+    }
+    if (viewAbstract.isViewAbstract(field)) {
+      bool? res = viewAbstract.isFieldCanBeNullableMap()[field];
+      if (res != null) {
+        return res == false;
+      }
+      return true;
+    } else {
+      return viewAbstract.isFieldRequired(field);
+    }
+  }
+
   @override
   Map<String, bool> isFieldRequiredMap() => {};
 

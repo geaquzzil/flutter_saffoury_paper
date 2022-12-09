@@ -41,6 +41,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return ob;
   }
 
+  T? onAfterValidate(BuildContext context) {
+    return this as T;
+  }
+
   T copyWithSetNew(String field, dynamic value) {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy[field] = castFieldValue(field, value);

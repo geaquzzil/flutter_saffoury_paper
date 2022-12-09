@@ -8,6 +8,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../models/view_abstract.dart';
 import 'excel_dropbox_generator.dart';
+import 'file_reader_validation.dart';
 
 class FileReaderPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -20,6 +21,8 @@ class FileReaderPage extends StatefulWidget {
 class _FileReaderPageState extends State<FileReaderPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
   String? _filePath;
+
+  ViewAbstract? validateViewAbstract;
 
   void _onIntroEnd(context) {
     // Navigator.of(context).push(
@@ -79,9 +82,11 @@ class _FileReaderPageState extends State<FileReaderPage> {
     return IntroductionScreen(
       key: introKey,
       canProgress: (page) {
-        int _currentPage = page.round();
-        if (_currentPage == 0) {
+        int currentPage = page.round();
+        if (currentPage == 0) {
           return _filePath != null;
+        } else if (currentPage == 1) {
+          return validateViewAbstract != null;
         }
         return true;
       },
@@ -141,6 +146,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
               if (_filePath != null)
                 BaseEditWidget(
                   isTheFirst: true,
+                  onValidate: (viewAbstract) {
+                    validateViewAbstract = viewAbstract;
+                  },
                   viewAbstract: FileReaderObject(
                       viewAbstract: widget.viewAbstract, filePath: _filePath!),
                 )
@@ -148,14 +156,14 @@ class _FileReaderPageState extends State<FileReaderPage> {
           ),
           // body:
           //     "Download the Stockpile app and master the market with our mini-lesson.",
-          image: _buildImage(Icons.abc_sharp, 50),
+          // image: _buildImage(Icons.abc_sharp, 50),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Kids and teens",
-          body:
-              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
-          image: _buildImage(Icons.access_time),
+          title: "Validations",
+          bodyWidget: FileReaderValidationWidget(
+              fileReaderObject: validateViewAbstract as FileReaderObject),
+          // image: _buildImage(Icons.access_time),
           decoration: pageDecoration,
         ),
         PageViewModel(
