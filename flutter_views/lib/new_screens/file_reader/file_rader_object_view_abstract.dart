@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:excel/excel.dart';
@@ -201,15 +202,43 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       int index = fileColumns.indexOf(value);
       Data? data = list[index];
       dynamic dataValue = data?.value;
-      debugPrint("getObjectFromRow value:$value index:$index  data:$dataValue");
+      debugPrint(
+          "getObjectFromRow selectedKey=>$key value:$value index:$index  data:$dataValue");
 
       // checking if the main viewAbstract has main field
       String? field = view.getMainFields().firstWhereOrNull((p0) => p0 == key);
 
       if (field == null) {
+        debugPrint(
+            "getObjectFromRow field == null searching for main viewAbstract in the subViewAbstract");
+        var obj = view
+            .getMainFields()
+            .where((element) => view.isViewAbstract(element) == true)
+            .map((e) => view.getMirrorNewInstance(e))
+            .cast<ViewAbstract>();
+
+        for (var element in obj) {
+          debugPrint(
+              "getObjectFromRow field == null searching for main object from => ${element.runtimeType} for field =>  $key");
+
+          String? field =
+              element.getMainFields().firstWhereOrNull((p0) => p0 == key);
+          if (field != null) {
+            debugPrint(
+                "getObjectFromRow field == null founded main object is => ${element.runtimeType} for field =>  $key");
+          }
+        }
+
         //then its from subViewAbstract;
       } else {
         if (view.isViewAbstract(field)) {
+          generatedJsonData[field] =
+              (((view.getMirrorNewInstance(field) as ViewAbstract)
+                      .getSelfNewInstanceFileImporter(
+                          context: context,
+                          field: field,
+                          value: dataValue) as ViewAbstract)
+                  .toJsonViewAbstract());
           debugPrint(
               "getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, value)}  type: ${view.getMirrorFieldType(field)}");
         } else {

@@ -12,8 +12,16 @@ class Country extends BaseWithNameString<Country> {
   Country() : super();
   @override
   Country getSelfNewInstance() {
-    return  Country();
+    return Country();
   }
+
+  @override
+  Country getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, value}) {
+    // TODO: implement getSelfNewInstanceFileImporter
+    throw UnimplementedError();
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance();

@@ -23,6 +23,11 @@ const reflector = Reflector();
 
 abstract class VMirrors<T> {
   T getSelfNewInstance();
+  T getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, dynamic value}) {
+    return getSelfNewInstance();
+  }
+
   Type getMirrorFieldsType(String field) {
     return getMirrorFieldsMapNewInstance()[field].runtimeType;
   }
@@ -165,7 +170,7 @@ abstract class VMirrors<T> {
 
   /// Get the type of the field based on its value
   /// if the field is null the type is null use [getMirrorFieldType] instead
-  /// 
+  ///
   @deprecated
   Type getFieldType(String field) {
     return getInstanceMirror().invokeGetter(field).runtimeType;

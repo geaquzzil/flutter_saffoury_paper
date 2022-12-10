@@ -48,6 +48,19 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   }
 
   @override
+  CustomsDeclaration getSelfNewInstanceFileImporter(
+      {required material.BuildContext context, String? field, value}) {
+    int? parsedValue = int.tryParse(value);
+    if (parsedValue != null) {
+      number = parsedValue.toString();
+      return this;
+    } else {
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)} Can't convert number to value of $value");
+    }
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "number": "",
         "date": "",

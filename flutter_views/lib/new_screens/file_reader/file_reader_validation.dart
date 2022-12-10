@@ -61,11 +61,24 @@ class FileReaderValidationWidget extends StatelessWidget {
     Excel excel = fileReaderObject.excel;
     var f = excel.tables[fileReaderObject.selectedSheet]?.rows;
     var columns = fileReaderObject.fileColumns;
+    List<String> exceptions = [];
     if (f != null) {
       var rows = f.sublist(0 + 1, f.length - 1);
       rows.forEach((element) {
-        fileReaderObject.getObjectFromRow(context, element);
+        int rowNumber = rows.indexOf(element) + 1;
+
+        try {
+          var obj = fileReaderObject.getObjectFromRow(context, element);
+        } catch (e) {
+          debugPrint(e.toString());
+          exceptions.add("in row number $rowNumber: ${e.toString()}");
+        }
+
+        // debugPrint("FileReaderValidationWidget=> getObjectFromRow=> $obj");
       });
+      if (exceptions.isNotEmpty) {
+        return Text(exceptions.join("\n"));
+      }
       // List<ViewAbstract> generatedObjects=List.generate(rows.length,fileReaderObject.viewAbstract.getSelfNewInstance())
       return ScrollableWidget(
         child: DataTable(

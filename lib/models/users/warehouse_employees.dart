@@ -100,4 +100,6 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"warehouse": Warehouse(), "employee": Employee()};
+
+  
 }

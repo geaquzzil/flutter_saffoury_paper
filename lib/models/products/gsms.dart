@@ -24,6 +24,18 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
+  GSM getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, value}) {
+    int? gs = int.tryParse(value);
+    if (gs != null) {
+      gsm = gs;
+      return this;
+    } else {
+      throw Exception("Cannot convert value of $value to a number");
+    }
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"products": List<Product>.empty(), "products_count": 0, "gsm": 0};
 
