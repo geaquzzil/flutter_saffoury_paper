@@ -29,6 +29,12 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   Map<String, String> selectedFields = {};
 
   Map<GroupItem, List<String>> generatedGroupItems = {};
+  Map<String, dynamic> generatedMirrorNewInstance = {};
+  Map<String, IconData> generatedFieldsIconMap = {};
+  Map<String, String> generatedFieldsLabels = {};
+
+  Map<String, List> generatedFieldsAutoCompleteCustom = {};
+  List<String> generatedMainFields = [];
 
   FileReaderObject({required this.viewAbstract, required this.filePath})
       : super() {
@@ -36,6 +42,44 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     excel = Excel.decodeBytes(bytes);
     fileSheets = excel.tables.keys.toList();
   }
+  void init(BuildContext context) {
+    List<String> listOfFields = viewAbstract.getMainFields(context: context);
+    refreshDropdownList(context);
+    for (var element in listOfFields) {
+      if (viewAbstract.isViewAbstract(element)) {
+        ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
+
+        generatedMirrorNewInstance.addAll(view.getMirrorFieldsMapNewInstance());
+        generatedFieldsIconMap.addAll(view.getFieldIconDataMap());
+        generatedFieldsLabels.addAll(view.getFieldLabelMap(context));
+
+        bool hasViewAbstract = view
+                .getMainFields(context: context)
+                .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
+            null;
+        if (!hasViewAbstract) {
+          generatedGroupItems[GroupItem(
+                      view.getMainHeaderLabelTextOnly(context),
+                      view.getMainIconData())] =
+                  view.getMainFields(context: context)
+              // .map((e) => element + "_" + e)
+              // .toList()
+              ;
+          // generatedMainFields.addAll(
+          //     view.getMainFields(context: context).map((e) => e).toList());
+
+          // allFields.add(value)
+        } else {
+          generatedMainFields.add(element);
+        }
+
+        //check that no other view abstract or else
+      } else {
+        generatedMainFields.add(element);
+      }
+    }
+  }
+
   @override
   Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) =>
       generatedGroupItems;
@@ -46,13 +90,13 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   @override
   Map<String, IconData> getFieldIconDataMap() {
     return {"selectedSheet": Icons.document_scanner}
-      ..addAll(viewAbstract.getFieldIconDataMap());
+      ..addAll(generatedFieldsIconMap);
   }
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) {
     return {"selectedSheet": AppLocalizations.of(context)!.sheets}
-      ..addAll(viewAbstract.getFieldLabelMap(context));
+      ..addAll(generatedFieldsLabels);
   }
 
   @override
@@ -60,32 +104,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   @override
   List<String> getMainFields({BuildContext? context}) {
-    List<String> listOfFields = viewAbstract.getMainFields(context: context);
-    List<String> allFields = [];
-    listOfFields.forEach((element) {
-      if (viewAbstract.isViewAbstract(element)) {
-        ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
-
-        generatedGroupItems[GroupItem(view.getMainHeaderLabelTextOnly(context!),
-            view.getMainIconData())] = view.getMainFields(context: context);
-        // bool hasViewAbstract = view
-        //         .getMainFields(context: context)
-        //         .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
-        //     null;
-        // if (!hasViewAbstract) {
-        //   allFields.addAll(
-        //       view.getMainFields(context: context).map((e) => e).toList());
-        //   // allFields.add(value)
-        // } else {
-        //   allFields.add(element);
-        // }
-
-        //check that no other view abstract or else
-      } else {
-        allFields.add(element);
-      }
-    });
-    return ["selectedSheet", ...allFields];
+    return ["selectedSheet", ...generatedMainFields];
   }
 
   @override
@@ -102,6 +121,33 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   @override
   FileReaderObject getSelfNewInstance() {
     return FileReaderObject(viewAbstract: viewAbstract, filePath: filePath);
+  }
+
+  void refreshDropdownList(BuildContext context) {
+    List<String> listOfFields = viewAbstract.getMainFields(context: context);
+    generatedFieldsAutoCompleteCustom = {};
+
+    for (var element in listOfFields) {
+      if (viewAbstract.isViewAbstract(element)) {
+        ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
+        view.getMainFields().forEach((element) {
+          generatedFieldsAutoCompleteCustom[element] = fileColumns;
+        });
+
+        bool hasViewAbstract = view
+                .getMainFields(context: context)
+                .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
+            null;
+        if (!hasViewAbstract) {
+        } else {
+          generatedFieldsAutoCompleteCustom[element] = fileColumns;
+        }
+
+        //check that no other view abstract or else
+      } else {
+        generatedFieldsAutoCompleteCustom[element] = fileColumns;
+      }
+    }
   }
 
   @override
@@ -124,6 +170,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       } else {
         fileColumns = [];
       }
+      //  generatedFieldsAutoCompleteCustom[field] = fileColumns;
       notifyOtherControllers(context: context, formKey: formKey);
     } else {
       selectedFields[field] = value.toString();
@@ -135,11 +182,9 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
       BuildContext context) {
     Map<String, List> list = {};
-
     list["selectedSheet"] = fileSheets;
-    viewAbstract.getMainFields(context: context).forEach((element) {
-      list[element] = fileColumns;
-    });
+    refreshDropdownList(context);
+    list.addAll(generatedFieldsAutoCompleteCustom);
     return list;
   }
 

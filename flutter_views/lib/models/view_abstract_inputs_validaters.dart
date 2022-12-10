@@ -246,9 +246,13 @@ abstract class ViewAbstractInputAndValidater<T>
       {required BuildContext context, GlobalKey<FormBuilderState>? formKey}) {
     formKey?.currentState?.fields.forEach((key, value) {
       debugPrint("notifyOtherControllers  formKey $key => $key");
-      debugPrint("notifyOtherControllers form ${value.widget}");
       if (value.widget is FormBuilderDropdown) {
-        (value.widget as FormBuilderDropdown).onReset!();
+        if ((value.widget as FormBuilderDropdown).onReset != null) {
+          (value.widget as FormBuilderDropdown).onReset!();
+        } else {
+          debugPrint(
+              "notifyOtherControllers  onReset not implemented $key => $key");
+        }
       } else {
         debugPrint("notifyOtherControllers not supported yet");
       }

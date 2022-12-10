@@ -150,7 +150,8 @@ class _FileReaderPageState extends State<FileReaderPage> {
                     validateViewAbstract = viewAbstract;
                   },
                   viewAbstract: FileReaderObject(
-                      viewAbstract: widget.viewAbstract, filePath: _filePath!),
+                      viewAbstract: widget.viewAbstract, filePath: _filePath!)
+                    ..init(context),
                 )
             ],
           ),
