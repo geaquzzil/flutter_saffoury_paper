@@ -123,6 +123,13 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     return FileReaderObject(viewAbstract: viewAbstract, filePath: filePath);
   }
 
+  bool checkHasViewAbstract(BuildContext context, ViewAbstract view) {
+    return view
+            .getMainFields(context: context)
+            .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
+        null;
+  }
+
   void refreshDropdownList(BuildContext context) {
     List<String> listOfFields = viewAbstract.getMainFields(context: context);
     generatedFieldsAutoCompleteCustom = {};
@@ -134,10 +141,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
           generatedFieldsAutoCompleteCustom[element] = fileColumns;
         });
 
-        bool hasViewAbstract = view
-                .getMainFields(context: context)
-                .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
-            null;
+        bool hasViewAbstract = checkHasViewAbstract(context, view);
         if (!hasViewAbstract) {
         } else {
           generatedFieldsAutoCompleteCustom[element] = fileColumns;
@@ -188,6 +192,50 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     return list;
   }
 
+  ViewAbstract getObjectFromRow(BuildContext context, List<Data?> list) {
+    debugPrint("getObjectFromRow started");
+    ViewAbstract view = viewAbstract.getSelfNewInstance();
+    Map<String, dynamic> generatedJsonData = {};
+
+    selectedFields.forEach((key, value) {
+      int index = fileColumns.indexOf(value);
+      Data? data = list[index];
+      dynamic dataValue = data?.value;
+      debugPrint("getObjectFromRow value:$value index:$index  data:$dataValue");
+
+      // checking if the main viewAbstract has main field
+      String? field = view.getMainFields().firstWhereOrNull((p0) => p0 == key);
+
+      if (field == null) {
+        //then its from subViewAbstract;
+      } else {
+        if (view.isViewAbstract(field)) {
+          debugPrint(
+              "getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, value)}  type: ${view.getMirrorFieldType(field)}");
+        } else {
+          debugPrint(
+              "getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, value)}  type: ${view.getMirrorFieldType(field)}");
+          generatedJsonData[field] = view.castFieldValue(field, value);
+        }
+      }
+
+      // view.getMainFields().forEach((element) {
+      //   if (view.isViewAbstract(element)) {
+      //     ViewAbstract subViewAbstract = view.getMirrorNewInstance(element);
+      //     bool hasViewAbstract = checkHasViewAbstract(context, view);
+      //     if (!hasViewAbstract) {
+      //     } else {
+      //     }
+      //   } else {
+
+      //     generatedJsonData[]
+      //   }
+      // });
+    });
+    debugPrint("getObjectFromRow finished\n");
+    return view.fromJsonViewAbstract(generatedJsonData);
+  }
+
   @override
   String? getSortByFieldName() => null;
 
@@ -219,6 +267,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   @override
   bool isFieldRequired(String field) {
+    return false;
     if (field == "selectedSheet") {
       return true;
     }
@@ -231,6 +280,11 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     } else {
       return viewAbstract.isFieldRequired(field);
     }
+  }
+
+  @override
+  String toString() {
+    return "viewAbstract: $viewAbstract , selectedSheet : $selectedSheet , fileColumns: $fileColumns, excel: $excel selectedFields: $selectedFields";
   }
 
   @override

@@ -21,8 +21,8 @@ class FileReaderPage extends StatefulWidget {
 class _FileReaderPageState extends State<FileReaderPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
   String? _filePath;
-
-  ViewAbstract? validateViewAbstract;
+  late FileReaderObject fileReaderObject;
+  FileReaderObject? validatefileReaderObject;
 
   void _onIntroEnd(context) {
     // Navigator.of(context).push(
@@ -58,6 +58,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
       String? path = result.files.single.path;
       setState(() {
         _filePath = path;
+        fileReaderObject = FileReaderObject(
+            viewAbstract: widget.viewAbstract, filePath: _filePath!);
+        fileReaderObject.init(context);
       });
 
       debugPrint("file path: $path");
@@ -78,15 +81,17 @@ class _FileReaderPageState extends State<FileReaderPage> {
       // pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
-
     return IntroductionScreen(
       key: introKey,
       canProgress: (page) {
         int currentPage = page.round();
         if (currentPage == 0) {
-          return _filePath != null;
+          bool res = _filePath != null;
+          if (res) {}
+          return res;
         } else if (currentPage == 1) {
-          return validateViewAbstract != null;
+          bool res = validatefileReaderObject != null;
+          return res;
         }
         return true;
       },
@@ -143,15 +148,22 @@ class _FileReaderPageState extends State<FileReaderPage> {
           bodyWidget: Column(
             children: [
               Text("SOSO"),
-              if (_filePath != null)
+              if (_filePath != null && fileReaderObject != null)
                 BaseEditWidget(
                   isTheFirst: true,
                   onValidate: (viewAbstract) {
-                    validateViewAbstract = viewAbstract;
+                    setState(() {
+                      validatefileReaderObject =
+                          viewAbstract as FileReaderObject?;
+                    });
+
+                    // if (validatefileReaderObject != null) {
+                    //   (validatefileReaderObject as FileReaderObject)
+                    //       .viewAbstract = widget.viewAbstract;
+
+                    // }
                   },
-                  viewAbstract: FileReaderObject(
-                      viewAbstract: widget.viewAbstract, filePath: _filePath!)
-                    ..init(context),
+                  viewAbstract: fileReaderObject,
                 )
             ],
           ),
@@ -162,8 +174,10 @@ class _FileReaderPageState extends State<FileReaderPage> {
         ),
         PageViewModel(
           title: "Validations",
-          bodyWidget: FileReaderValidationWidget(
-              fileReaderObject: validateViewAbstract as FileReaderObject),
+          bodyWidget: validatefileReaderObject == null
+              ? Text("NULL validatefileReaderObject ")
+              : FileReaderValidationWidget(
+                  fileReaderObject: fileReaderObject as FileReaderObject),
           // image: _buildImage(Icons.access_time),
           decoration: pageDecoration,
         ),
