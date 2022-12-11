@@ -35,6 +35,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   Map<String, String> generatedFieldsLabels = {};
 
   Map<String, List> generatedFieldsAutoCompleteCustom = {};
+  Map<String, bool> generatedRequiredFields = {};
   List<String> generatedMainFields = [];
 
   FileReaderObject({required this.viewAbstract, required this.filePath})
@@ -54,6 +55,10 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         generatedFieldsIconMap.addAll(view.getFieldIconDataMap());
         generatedFieldsLabels.addAll(view.getFieldLabelMap(context));
 
+        bool canBeNull = (viewAbstract.isFieldCanBeNullable(context, element));
+        if (canBeNull == false) {
+          generatedRequiredFields.addAll(view.isFieldRequiredMap());
+        }
         bool hasViewAbstract = view
                 .getMainFields(context: context)
                 .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
@@ -71,14 +76,26 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
           // allFields.add(value)
         } else {
+          // generatedRequiredFields[element] =
+          //     (viewAbstract.isFieldCanBeNullableMap()[element]) == false ??
+          //         false;
+
+          bool canBeNull =
+              (viewAbstract.isFieldCanBeNullable(context, element));
+          generatedRequiredFields[element] = canBeNull == false;
+
           generatedMainFields.add(element);
         }
 
         //check that no other view abstract or else
       } else {
+        generatedRequiredFields[element] =
+            viewAbstract.isFieldRequired(element);
         generatedMainFields.add(element);
       }
     }
+    debugPrint(
+        "FileReaderObject generated generatedRequiredFields $generatedRequiredFields");
   }
 
   @override
@@ -226,6 +243,45 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
           if (field != null) {
             debugPrint(
                 "getObjectFromRow field == null founded main object is => ${element.runtimeType} for field =>  $key");
+
+            var allFieldsThatFromSameObj = element
+                .getMainFields()
+                .where((element) =>
+                    selectedFields.keys.firstWhereOrNull((k) => k == element) !=
+                    null)
+                .toList();
+
+            debugPrint(
+                "getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields that from same object are => $allFieldsThatFromSameObj");
+
+            Map<String, dynamic> fieldsValues = {};
+            allFieldsThatFromSameObj.forEach((element) {
+              var s = selectedFields.entries
+                  .firstWhereOrNull((p0) => p0.key == element);
+              if (s != null) {
+                int index = fileColumns.indexOf(s.value);
+                Data? data = list[index];
+                dynamic dataValue = data?.value;
+                fieldsValues[element] = dataValue;
+              }
+            });
+
+            debugPrint(
+                "getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues");
+
+            if (fieldsValues.entries.length == 1) {
+              generatedJsonData[field] =
+                  (((view.getMirrorNewInstance(field) as ViewAbstract)
+                              .getSelfNewInstanceFileImporter(
+                                  context: context,
+                                  field: fieldsValues.keys.toList().first,
+                                  value: fieldsValues.values.toList().first)
+                          as ViewAbstract)
+                      .toJsonViewAbstract());
+            } else {
+todo
+
+            }
           }
         }
 
@@ -295,29 +351,13 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   Map<String, bool> isFieldCanBeNullableMap() => {};
 
   @override
-  bool isFieldRequired(String field) {
-    return false;
-    if (field == "selectedSheet") {
-      return true;
-    }
-    if (viewAbstract.isViewAbstract(field)) {
-      bool? res = viewAbstract.isFieldCanBeNullableMap()[field];
-      if (res != null) {
-        return res == false;
-      }
-      return true;
-    } else {
-      return viewAbstract.isFieldRequired(field);
-    }
-  }
-
-  @override
   String toString() {
     return "viewAbstract: $viewAbstract , selectedSheet : $selectedSheet , fileColumns: $fileColumns, excel: $excel selectedFields: $selectedFields";
   }
 
   @override
-  Map<String, bool> isFieldRequiredMap() => {};
+  Map<String, bool> isFieldRequiredMap() =>
+      {"selectedSheet": true}..addAll(generatedRequiredFields);
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
