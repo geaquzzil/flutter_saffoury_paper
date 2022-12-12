@@ -40,7 +40,7 @@ abstract class VMirrors<T> {
     return reflector.reflect(this);
   }
 
-  dynamic getFieldValue(String field) {
+  dynamic getFieldValue(String field, {BuildContext? context}) {
     try {
       dynamic value = getInstanceMirror().invokeGetter(field);
       return value;
@@ -113,15 +113,15 @@ abstract class VMirrors<T> {
   String getFieldValueCheckType(BuildContext context, String field) {
     dynamic v = getMirrorNewInstance(field);
     if (v is ViewAbstractEnum) {
-      if (getFieldValue(field) == null) return "";
+      if (getFieldValue(field, context: context) == null) return "";
       return v.getFieldLabelString(context, v);
     } else if (v is ViewAbstract) {
-      if (getFieldValue(field) == null) return "";
-      return (getFieldValue(field) as ViewAbstract)
+      if (getFieldValue(field, context: context) == null) return "";
+      return (getFieldValue(field, context: context) as ViewAbstract)
           .getMainHeaderTextOnly(context);
     } else {
-      if (getFieldValue(field) == null) return "";
-      return getFieldValue(field).toString();
+      if (getFieldValue(field, context: context) == null) return "";
+      return getFieldValue(field, context: context).toString();
     }
   }
 

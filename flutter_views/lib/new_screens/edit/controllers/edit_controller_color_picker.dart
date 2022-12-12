@@ -12,7 +12,8 @@ class EditControllerColorPicker extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<EditControllerColorPicker> createState() => _EditControllerColorPicker();
+  State<EditControllerColorPicker> createState() =>
+      _EditControllerColorPicker();
 }
 
 class _EditControllerColorPicker extends State<EditControllerColorPicker> {
@@ -25,12 +26,11 @@ class _EditControllerColorPicker extends State<EditControllerColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic fieldValue = widget.viewAbstract.getFieldValue(widget.field);
+    dynamic fieldValue =
+        widget.viewAbstract.getFieldValue(widget.field, context: context);
     return Column(children: [
       FormBuilderColorPickerField(
         name: widget.viewAbstract.getTag(widget.field),
-        
-
       ),
       getSpace()
     ]);

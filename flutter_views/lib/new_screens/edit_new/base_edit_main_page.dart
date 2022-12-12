@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.d
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -116,7 +117,14 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            getFileImportFloatingButton(context),
+            const SizedBox(
+              width: kDefaultPadding,
+            ),
             getFileReaderFloatingButton(context),
+            const SizedBox(
+              width: kDefaultPadding,
+            ),
             getFileExporterFloatingButton(context),
             widget.viewAbstract.onHasPermission(
               context,
@@ -174,6 +182,20 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     );
   }
 
+  Widget getFileImportFloatingButton(BuildContext context) {
+    return FloatingActionButton.small(
+        heroTag: UniqueKey(),
+        onPressed: () {
+          context
+              .read<ActionViewAbstractProvider>()
+              .changeCustomWidget(FileExporterPage(
+                viewAbstract: widget.viewAbstract,
+              ));
+          // context.read().change()
+        },
+        child: Icon(Icons.file_upload_outlined));
+  }
+
   Widget getFileReaderFloatingButton(BuildContext context) {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
@@ -185,23 +207,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               ));
           // context.read().change()
         },
-        child: Icon(Icons.file_copy)
-
-        //  FileReaderPopupIconWidget(
-        //   viewAbstract: widget.viewAbstract,
-        //   // onSelected: (selectedList) {
-        //   //   setState(() {
-        //   //     (widget.viewAbstract as ListableInterface)
-        //   //         .onListableSelectedListAdded(selectedList);
-        //   //   });
-        //   // },
-        // ),
-        );
-    return FloatingActionButton.small(
-      heroTag: UniqueKey(),
-      onPressed: () {},
-      child: const Icon(Icons.file_present_rounded),
-    );
+        child: Icon(Icons.file_download_outlined));
   }
 
   Widget getAddFloatingButton2(BuildContext context) {

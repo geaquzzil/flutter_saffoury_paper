@@ -105,8 +105,8 @@ class _EditableWidget extends State<EditableWidget> {
         //   // modifieController(key);
         // });
         // controllers[key]!.removeListener(() {});
-        String v =
-            getEditControllerText(widget.viewAbstract.getFieldValue(key));
+        String v = getEditControllerText(
+            widget.viewAbstract.getFieldValue(key, context: context));
         debugPrint("modifieController for key=>$key value => $v");
         controllers[key]!.value = TextEditingValue(
             selection:
@@ -182,7 +182,7 @@ class _EditableWidget extends State<EditableWidget> {
             focusNode: getFocusNode(field: fieldName),
             controller: getController(
                 field: fieldName,
-                value: widget.viewAbstract.getFieldValue(fieldName)),
+                value: widget.viewAbstract.getFieldValue(fieldName,context:  context)),
             valueTransformer: (value) {
               return value?.trim();
             },
@@ -190,8 +190,8 @@ class _EditableWidget extends State<EditableWidget> {
             maxLength: widget.viewAbstract.getTextInputMaxLength(fieldName),
             textCapitalization:
                 widget.viewAbstract.getTextInputCapitalization(fieldName),
-            decoration: getDecoration(context, widget.viewAbstract,field: 
-             fieldName),
+            decoration:
+                getDecoration(context, widget.viewAbstract, field: fieldName),
             keyboardType: widget.viewAbstract.getTextInputType(fieldName),
             inputFormatters:
                 widget.viewAbstract.getTextInputFormatter(fieldName),

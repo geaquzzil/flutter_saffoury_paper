@@ -68,8 +68,10 @@ class _DropdownCustomListWithFormListenerState
           validator: widget.viewAbstract
               .getTextInputValidatorCompose(context, widget.field),
           name: widget.viewAbstract.getTag(widget.field),
-          initialValue: list.firstWhereOrNull(
-              (p0) => widget.viewAbstract.getFieldValue(widget.field) == p0),
+          initialValue: list.firstWhereOrNull((p0) =>
+              widget.viewAbstract
+                  .getFieldValue(widget.field, context: context) ==
+              p0),
           decoration: getDecorationIconLabel(context,
               label: widget.viewAbstract.getFieldLabel(context, widget.field),
               icon: widget.viewAbstract.getFieldIconData(widget.field)),

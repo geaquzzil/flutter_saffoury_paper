@@ -24,7 +24,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
         onChanged: (obj) => parent.onDropdownChanged(context, field, obj),
         validator: parent.getTextInputValidatorCompose(context, field),
         name: parent.getTag(field),
-        initialValue: parent.getFieldValue(field),
+        initialValue: parent.getFieldValue(field, context: context),
         onSaved: (newValue) {
           parent.setFieldValue(field, newValue);
           debugPrint('FormBuilderDropdown onSave=   $newValue');

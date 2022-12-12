@@ -342,6 +342,14 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   @override
+  dynamic getFieldValue(String field, {BuildContext? context}) {
+    var value =
+        selectedFields.entries.firstWhereOrNull((p0) => p0.key == field);
+    if (value != null) return value.value;
+    return super.getFieldValue(field);
+  }
+
+  @override
   String? getSortByFieldName() => null;
 
   @override

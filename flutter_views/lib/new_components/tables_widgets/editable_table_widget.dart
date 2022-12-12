@@ -172,7 +172,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
       if (isAutoCompleteVA) {
         if (controllers[controllerKey]!.text ==
             getEditControllerText(
-                (widget.viewAbstract as ViewAbstract).getFieldValue(field))) {
+                (widget.viewAbstract as ViewAbstract).getFieldValue(field,context:  context))) {
           return;
         }
         //TODO viewAbstract =
@@ -198,7 +198,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
 
   Widget getControllerWidget(
       BuildContext context, ViewAbstract parent, String field, int idx) {
-    dynamic fieldValue = parent.getFieldValue(field);
+    dynamic fieldValue = parent.getFieldValue(field,context:  context);
     fieldValue ??= parent.getMirrorNewInstance(field);
     TextInputType? textInputType = parent.getTextInputType(field);
     ViewAbstractControllerInputType textFieldTypeVA =
@@ -282,7 +282,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
             .forEach((field, value) {
           if (key == field) {
             controllers[key]!.text = getEditControllerText(
-                (widget.viewAbstract as ViewAbstract).getFieldValue(field));
+                (widget.viewAbstract as ViewAbstract).getFieldValue(field,context:  context));
           }
         });
       }
