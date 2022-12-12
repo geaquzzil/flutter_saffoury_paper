@@ -44,6 +44,25 @@ class ProductType extends ViewAbstract<ProductType> {
   ProductType.init(bool requestAvailablity) {
     this.requestAvailablity = requestAvailablity;
   }
+
+  @override
+  ProductType getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, value}) {
+    debugPrint("getSelfNewInstanceFileImporter $runtimeType value=>$value");
+    if (value is int) {
+      iD = value;
+      return this;
+    }
+    int? gs = int.tryParse("$value");
+    if (gs != null) {
+      iD = gs;
+      return this;
+    } else {
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)}: Cannot convert value of iD to => $value to a number");
+    }
+  }
+
   @override
   Future<List<ProductType>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {

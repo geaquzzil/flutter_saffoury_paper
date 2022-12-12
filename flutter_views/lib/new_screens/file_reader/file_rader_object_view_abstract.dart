@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -20,6 +21,7 @@ import '../../models/view_abstract_base.dart';
 @reflector
 class FileReaderObject extends ViewAbstract<FileReaderObject> {
   ViewAbstract viewAbstract;
+  late ExcelableReaderInterace obj;
   String? selectedSheet;
 
   late List<String> fileSheets;
@@ -40,14 +42,20 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   FileReaderObject({required this.viewAbstract, required this.filePath})
       : super() {
+    assert(viewAbstract is ExcelableReaderInterace);
     var bytes = File(filePath).readAsBytesSync();
     excel = Excel.decodeBytes(bytes);
     fileSheets = excel.tables.keys.toList();
+    obj = viewAbstract as ExcelableReaderInterace;
   }
   void init(BuildContext context) {
     List<String> listOfFields = viewAbstract.getMainFields(context: context);
     refreshDropdownList(context);
     for (var element in listOfFields) {
+      if (obj
+              .getExcelableRemovedFields()
+              .firstWhereOrNull((p0) => p0 == element) !=
+          null) continue;
       if (viewAbstract.isViewAbstract(element)) {
         ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
 
@@ -59,13 +67,16 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         if (canBeNull == false) {
           generatedRequiredFields.addAll(view.isFieldRequiredMap());
         }
+        int lengthOfChilds = view.getMainFields(context: context).length;
+
         bool hasViewAbstract = view
                 .getMainFields(context: context)
                 .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
             null;
-        if (!hasViewAbstract) {
+
+        if (!hasViewAbstract && lengthOfChilds > 1) {
           generatedGroupItems[GroupItem(
-                      view.getMainHeaderLabelTextOnly(context),
+                      view.getMainHeaderLabelFileImporter(context),
                       view.getMainIconData())] =
                   view.getMainFields(context: context)
               // .map((e) => element + "_" + e)
@@ -96,6 +107,11 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     }
     debugPrint(
         "FileReaderObject generated generatedRequiredFields $generatedRequiredFields");
+  }
+
+  @override
+  String getTag(String field) {
+    return super.getTag(field);
   }
 
   @override
@@ -158,9 +174,9 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         view.getMainFields().forEach((element) {
           generatedFieldsAutoCompleteCustom[element] = fileColumns;
         });
-
+        int lengthOfChilds = view.getMainFields(context: context).length;
         bool hasViewAbstract = checkHasViewAbstract(context, view);
-        if (!hasViewAbstract) {
+        if (!hasViewAbstract && lengthOfChilds > 1) {
         } else {
           generatedFieldsAutoCompleteCustom[element] = fileColumns;
         }
@@ -270,17 +286,19 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
                 "getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues");
 
             if (fieldsValues.entries.length == 1) {
-              generatedJsonData[field] =
-                  (((view.getMirrorNewInstance(field) as ViewAbstract)
-                              .getSelfNewInstanceFileImporter(
-                                  context: context,
-                                  field: fieldsValues.keys.toList().first,
-                                  value: fieldsValues.values.toList().first)
+              generatedJsonData[element.getTableNameApi()!] =
+                  ((element.getSelfNewInstanceFileImporter(
+                              context: context,
+                              field: fieldsValues.keys.toList().first,
+                              value: fieldsValues.values.toList().first)
                           as ViewAbstract)
                       .toJsonViewAbstract());
             } else {
-todo
-
+              generatedJsonData[element.getTableNameApi()!] =
+                  ((element.getSelfNewInstanceFileImporter(
+                          context: context,
+                          value: fieldsValues) as ViewAbstract)
+                      .toJsonViewAbstract());
             }
           }
         }
@@ -288,7 +306,7 @@ todo
         //then its from subViewAbstract;
       } else {
         if (view.isViewAbstract(field)) {
-          generatedJsonData[field] =
+          generatedJsonData[view.getTableNameApi()!] =
               (((view.getMirrorNewInstance(field) as ViewAbstract)
                       .getSelfNewInstanceFileImporter(
                           context: context,
@@ -318,7 +336,9 @@ todo
       // });
     });
     debugPrint("getObjectFromRow finished\n");
-    return view.fromJsonViewAbstract(generatedJsonData);
+
+    return (view.fromJsonViewAbstract(generatedJsonData) as ViewAbstract)
+        .copyWithSetNewFileReader();
   }
 
   @override

@@ -17,6 +17,8 @@ class Grades extends BaseWithNameString<Grades> {
     return Grades();
   }
 
+
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()

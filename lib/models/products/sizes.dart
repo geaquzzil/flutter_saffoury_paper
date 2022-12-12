@@ -23,6 +23,47 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
+  ProductSize getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, value}) {
+    debugPrint("getSelfNewInstanceFileImporter $runtimeType value=>$value");
+    if (value is Map) {
+      int? isIntWidth = value is int ? value['width'] : null;
+      int? isIntLength = value is int ? value['length'] : null;
+
+      int? lengthMap = isIntLength ?? int.tryParse("${value['length']}");
+      int? widthMap = isIntWidth ?? int.tryParse("${value['width']}");
+
+      if (lengthMap == null && widthMap == null) {
+        throw Exception(
+            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['length']} and the value of width to =${value['width']} to a number");
+      } else if (lengthMap == null) {
+        throw Exception(
+            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['length']} to a number");
+      } else if (widthMap == null) {
+        throw Exception(
+            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['widthMap']} to a number");
+      } else {
+        width = widthMap;
+        length = lengthMap;
+
+        String? errorInWidth =
+            getTextInputValidator(context, "width", width.toString());
+        String? errorInLength =
+            getTextInputValidator(context, "length", length.toString());
+
+        if (errorInLength != null || errorInWidth != null) {
+          throw Exception(
+              "${getMainHeaderLabelTextOnly(context)}: error on validate one or more field(s)=> $errorInLength , $errorInWidth");
+        }
+        return this;
+      }
+    } else {
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)}: ProductSize.getSelfNewInstance is not a Map");
+    }
+  }
+
+  @override
   String? getMainDrawerGroupName(BuildContext context) {
     return AppLocalizations.of(context)!.product;
   }
@@ -88,17 +129,18 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() =>
-      // {"width": true, "length": true};
       {};
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() => {};
+  Map<String, double> getTextInputMaxValidateMap() =>
+      {"width": 9999, "length": 9999};
 
   @override
-  Map<String, double> getTextInputMinValidateMap() => {"width": 10};
+  Map<String, double> getTextInputMinValidateMap() =>
+      {"width": 10, "length": 0};
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};

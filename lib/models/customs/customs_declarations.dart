@@ -56,7 +56,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       return this;
     } else {
       throw Exception(
-          "${getMainHeaderLabelTextOnly(context)} Can't convert number to value of $value");
+          "${getMainHeaderLabelTextOnly(context)}: Can't convert number to value of $value");
     }
   }
 

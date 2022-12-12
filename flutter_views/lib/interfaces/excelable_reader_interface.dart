@@ -1,3 +1,5 @@
 import 'listable_interface.dart';
 
-abstract class ExcelableReaderInterace<T extends ListableInterface> {}
+abstract class ExcelableReaderInterace {
+  List<String> getExcelableRemovedFields();
+}

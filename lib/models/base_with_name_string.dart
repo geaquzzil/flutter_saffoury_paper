@@ -14,9 +14,26 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
   String? name;
 
   BaseWithNameString() : super();
+  @override
+  T getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, value}) {
+    if (value == null) {
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)} cant convert empty value for the field => name");
+    } else if (value.toString().isEmpty) {
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)} cant convert empty value for the field => name");
+    } else if (value.toString() == "null") {
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)} cant convert empty value for the field => name");
+    } else {
+      name = value.toString();
+    }
+    return this as T;
+  }
 
   @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() => {
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "name": "",
       };
 

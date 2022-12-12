@@ -20,6 +20,30 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
+  ProductsColor getSelfNewInstanceFileImporter(
+      {required BuildContext context, String? field, value}) {
+    if (value is Map) {
+      String hexValidation = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\$";
+      final alphanumeric = RegExp(hexValidation);
+      bool topHex = alphanumeric.hasMatch(value['top']);
+      bool middleHex = alphanumeric.hasMatch(value['middle']);
+      bool bottomHex = alphanumeric.hasMatch(value['back']);
+      int? widthMap = int.tryParse(value['width']);
+      if (topHex == false || middleHex == false || bottomHex == false) {
+        throw Exception(
+            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of top to =${value['top']} or the value of middle to =${value['middle']}  or the value of back to =${value['back']} to a hex color \nex:#f2f4f2");
+      } else {
+        top = value['top'];
+        middle = value['middle'];
+        back = value['back'];
+        return this;
+      }
+    } else {
+      throw Exception("${getMainHeaderLabelTextOnly(context)}: ProductsColor.getSelfNewInstance is not a Map");
+    }
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"top": "", "middle": "", "back": ""};
   @override

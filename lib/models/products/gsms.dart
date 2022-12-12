@@ -26,12 +26,12 @@ class GSM extends ViewAbstract<GSM> {
   @override
   GSM getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, value}) {
-    int? gs = int.tryParse(value);
+    int? gs = int.tryParse(value.toString());
     if (gs != null) {
       gsm = gs;
       return this;
     } else {
-      throw Exception("Cannot convert value of $value to a number");
+      throw Exception("${getMainHeaderLabelTextOnly(context)}: Cannot convert value of gsm to => $value to a number");
     }
   }
 

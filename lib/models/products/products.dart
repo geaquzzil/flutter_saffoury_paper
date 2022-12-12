@@ -23,6 +23,7 @@ import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.da
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/posable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
@@ -83,7 +84,8 @@ class Product extends ViewAbstract<Product>
         ModifiablePrintableInterface<PrintProduct>,
         PrintableCustomInterface<PrintProduct>,
         PrintableSelfListInterface<PrintProductList>,
-        PosableInterface {
+        PosableInterface,
+        ExcelableReaderInterace {
   // int? ParentID;
   // int? ProductTypeID;
   // int? CustomsDeclarationID;
@@ -168,6 +170,13 @@ class Product extends ViewAbstract<Product>
 
   Product() : super() {
     date = "".toDateTimeNowString();
+    status = ProductStatus.NONE;
+  }
+  @override
+  Product copyWithSetNewFileReader() {
+    date = "".toDateTimeNowString();
+    status = ProductStatus.NONE;
+    return this;
   }
 
   @override
@@ -1142,6 +1151,11 @@ class Product extends ViewAbstract<Product>
   @override
   PrintProductList getModifiablePrintableSelfPdfSetting(BuildContext context) {
     return PrintProductList()..product = this;
+  }
+
+  @override
+  List<String> getExcelableRemovedFields() {
+    return ["date", "status"];
   }
 }
 

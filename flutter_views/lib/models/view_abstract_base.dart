@@ -49,6 +49,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         getMirrorViewAbstractLabelText(context, field);
   }
 
+  String getMainHeaderLabelFileImporter(BuildContext context) {
+    return getMainHeaderLabelTextOnly(context);
+  }
+
   String getMainHeaderLabelWithText(BuildContext context) {
     return "${getMainHeaderLabelTextOnly(context)}:${getMainHeaderTextOnly(context)}";
   }
