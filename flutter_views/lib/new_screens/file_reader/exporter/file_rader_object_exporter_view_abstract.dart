@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:path/path.dart';
 
 @reflector
 class FileExporterObject extends ViewAbstract<FileExporterObject> {
@@ -35,12 +36,9 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
   Map<String, bool> generatedRequiredFields = {};
   List<String> generatedMainFields = [];
 
-  FileExporterObject({required this.viewAbstract}) : super() {
-    assert(viewAbstract is ExcelableReaderInterace);
-
-    excel = Excel.createExcel();
-  }
+  FileExporterObject({required this.viewAbstract}) : super();
   void init(BuildContext context) {
+    if (fileName != null) return;
     exportOptions = [
       AppLocalizations.of(context)!.enable,
       AppLocalizations.of(context)!.disable,
@@ -152,6 +150,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
   void onDropdownChanged(BuildContext context, String field, value,
       {GlobalKey<FormBuilderState>? formKey}) {
     super.onDropdownChanged(context, field, value);
+
     selectedFields[field] = value.toString();
     debugPrint("selectedFields $selectedFields");
   }
@@ -159,13 +158,35 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
       BuildContext context) {
-    Map<String, List> list = {};
-    refreshDropdownList(context);
-    list.addAll(generatedFieldsAutoCompleteCustom);
-    return list;
+    return generatedFieldsAutoCompleteCustom;
   }
 
-  Future<void> generateExcel(BuildContext context) async {}
+  Future<void> generateExcel(BuildContext context) async {
+    Stopwatch stopwatch = new Stopwatch()..start();
+    excel = Excel.createExcel();
+    Sheet sh = excel['Sheet1'];
+    List<String> fields = viewAbstract.getMainFields();
+    for (int i = 0; i < fields.length - 1; i++) {
+      sh.cell(CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: i)).value =
+          viewAbstract.getFieldLabel(context, fields[i]);
+    }
+    for (int i = 0; i < fields.length - 1; i++) {
+      sh.cell(CellIndex.indexByColumnRow(rowIndex: 1, columnIndex: i)).value =
+          viewAbstract.getFieldValueCheckType(context, fields[i]);
+    }
+    debugPrint('generateExcel Generating executed in ${stopwatch.elapsed}');
+    stopwatch.reset();
+    var fileBytes = excel.encode();
+
+    debugPrint('generateExcel Encoding executed in ${stopwatch.elapsed}');
+    stopwatch.reset();
+    if (fileBytes != null) {
+      File(join("/Users/kawal/Desktop/r2.xlsx"))
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(fileBytes);
+    }
+    debugPrint('generateExcel Downloaded executed in ${stopwatch.elapsed}');
+  }
 
   @override
   String? getSortByFieldName() => null;

@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/screens/action_screens/edit_details_page
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:share_plus/share_plus.dart';
 import '../new_components/views/view_popup_icon_widget.dart';
 import '../providers/actions/action_viewabstract_provider.dart';
 
@@ -301,8 +302,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     debugPrint("onPopupMenuActionSelected $result");
     if (result.icon == Icons.share) {
       try {
-        await FlutterShare.share(title: "title");
-      } catch (e) {}
+        await Share.share(
+            subject: "sad", 'check out my website https://example.com');
+        //  await FlutterShare.share(title: "title");
+      } catch (e) {
+        debugPrint("$e");
+      }
     }
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");

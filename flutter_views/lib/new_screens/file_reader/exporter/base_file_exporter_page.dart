@@ -18,30 +18,20 @@ class FileExporterPage extends StatefulWidget {
 
 class _FileExporterPage extends State<FileExporterPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
-  String? _filePath;
   late FileExporterObject fileReaderObject;
-  FileReaderObject? validatefileReaderObject;
+  FileExporterObject? validatefileReaderObject;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    fileReaderObject = FileExporterObject(viewAbstract: widget.viewAbstract);
   }
 
   void _onIntroEnd(context) {
     // Navigator.of(context).push(
     //   MaterialPageRoute(builder: (_) => HomePage()),
     // );
-  }
-
-  Widget _buildFullscreenImage() {
-    return Image.asset(
-      'assets/fullscreen.jpg',
-      fit: BoxFit.cover,
-      height: double.infinity,
-      width: double.infinity,
-      alignment: Alignment.center,
-    );
   }
 
   Widget _buildImage(IconData assetName, [double width = 350]) {
@@ -76,8 +66,7 @@ class _FileExporterPage extends State<FileExporterPage> {
 
   @override
   Widget build(BuildContext context) {
-    fileReaderObject = FileExporterObject(viewAbstract: widget.viewAbstract)
-      ..init(context);
+    fileReaderObject.init(context);
     const bodyStyle = TextStyle(fontSize: 19.0);
 
     var pageDecoration = PageDecoration(
@@ -92,8 +81,7 @@ class _FileExporterPage extends State<FileExporterPage> {
       canProgress: (page) {
         int currentPage = page.round();
         if (currentPage == 0) {
-          bool res = _filePath != null;
-          if (res) {}
+          bool res = validatefileReaderObject != null;
           return res;
         } else if (currentPage == 1) {
           bool res = validatefileReaderObject != null;
@@ -137,7 +125,7 @@ class _FileExporterPage extends State<FileExporterPage> {
                 onValidate: (viewAbstract) {
                   setState(() {
                     validatefileReaderObject =
-                        viewAbstract as FileReaderObject?;
+                        viewAbstract as FileExporterObject?;
                   });
 
                   // if (validatefileReaderObject != null) {
@@ -155,28 +143,17 @@ class _FileExporterPage extends State<FileExporterPage> {
           // image: _buildImage(Icons.abc_sharp, 50),
           decoration: pageDecoration,
         ),
-        // PageViewModel(
-        //     title: "Import file",
-        //     body: "Let\'s go right away! and import the file\n",
-        //     image: _buildImage(Icons.file_copy),
-        //     decoration: pageDecoration,
-        //     footer: Column(
-        //       children: [
-        //         ElevatedButton(
-        //           child: Text("Import"),
-        //           onPressed: () async {
-        //             // pickFile();
-        //           },
-        //         ),
-        //         getSpace(),
-        //         if (_filePath != null)
-        //           Text(
-        //             _filePath!,
-        //             style: Theme.of(context).textTheme.caption!.copyWith(
-        //                 color: Theme.of(context).colorScheme.tertiary),
-        //           )
-        //       ],
-        //     )),
+        PageViewModel(
+            title: "Import file",
+            decoration: pageDecoration,
+            bodyWidget: validatefileReaderObject == null
+                ? Text("NULL")
+                : FutureBuilder(
+                    future: fileReaderObject.generateExcel(context),
+                    builder: (context, snapshot) {
+                      return Text("DONE");
+                    },
+                  )),
         PageViewModel(
           title: "Full Screen Page",
           body:
