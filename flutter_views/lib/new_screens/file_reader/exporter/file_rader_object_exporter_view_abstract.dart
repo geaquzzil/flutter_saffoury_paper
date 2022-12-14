@@ -49,7 +49,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
       AppLocalizations.of(context)!.details,
     ];
     fileName =
-        "${"".toDateTimeNowString()}-${viewAbstract.getMainHeaderLabelTextOnly(context)}";
+        "${"".toDateString()}-${viewAbstract.getMainHeaderLabelTextOnly(context)}";
 
     List<String> listOfFields = viewAbstract.getMainFields(context: context);
 
@@ -272,7 +272,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
     debugPrint('generateExcel Encoding executed in ${stopwatch.elapsed}');
     stopwatch.reset();
     if (fileBytes != null) {
-      File(join("/Users/kawal/Desktop/r2.xlsx"))
+      File(join("/Users/kawal/Desktop/$fileName.xlsx"))
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }

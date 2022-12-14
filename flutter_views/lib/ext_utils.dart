@@ -55,6 +55,7 @@ extension HexColor on Color {
 }
 
 String dateFormatString = "yyyy-MM-dd HH:mm:ss";
+String dateOnlyFormatString = "yyyy-MM-dd";
 
 extension StringsUtils2 on String {
   Color? fromHex() {
@@ -89,6 +90,11 @@ extension StringsUtils on String? {
 
   String toDateTimeNowString() {
     DateFormat dateFormat = DateFormat(dateFormatString, 'en-US');
+    return dateFormat.format(DateTime.now());
+  }
+
+  String toDateString() {
+    DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
     return dateFormat.format(DateTime.now());
   }
 
