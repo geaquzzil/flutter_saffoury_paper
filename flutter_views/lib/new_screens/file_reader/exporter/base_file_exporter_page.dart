@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart'
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/file_rader_object_exporter_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class FileExporterPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -144,61 +145,27 @@ class _FileExporterPage extends State<FileExporterPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-            title: "Import file",
-            decoration: pageDecoration,
-            bodyWidget: validatefileReaderObject == null
-                ? Text("NULL")
-                : FutureBuilder(
-                    future: fileReaderObject.generateExcel(context),
-                    builder: (context, snapshot) {
-                      return Text("DONE");
-                    },
-                  )),
-        PageViewModel(
-          title: "Full Screen Page",
+          title: "Exporting verfication",
           body:
               "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
           // image: _buildFullscreenImage(),
+          footer: FutureBuilder(
+            future: fileReaderObject.generateExcel(context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return OutlinedButton(
+                    onPressed: () {},
+                    child: Text(AppLocalizations.of(context)!.ok));
+              }
+              return Text("ERRRo");
+            },
+          ),
           decoration: pageDecoration.copyWith(
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),
             fullScreen: true,
             bodyFlex: 2,
             imageFlex: 3,
           ),
-        ),
-        PageViewModel(
-          title: "Another title page",
-          body: "Another beautiful body text for this example onboarding",
-          image: _buildImage(Icons.sos),
-          footer: ElevatedButton(
-            onPressed: () {
-              introKey.currentState?.animateScroll(0);
-            },
-            child: const Text(
-              'FooButton',
-              // style: TextStyle(color: Colors.white),
-            ),
-          ),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "Title of last page - reversed",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Click on ", style: bodyStyle),
-              Icon(Icons.edit),
-              Text(" to edit a post", style: bodyStyle),
-            ],
-          ),
-          decoration: pageDecoration.copyWith(
-            bodyFlex: 2,
-            imageFlex: 4,
-            bodyAlignment: Alignment.bottomCenter,
-            imageAlignment: Alignment.topCenter,
-          ),
-          image: _buildImage(Icons.face),
-          reverse: true,
         ),
       ],
       onDone: () => _onIntroEnd(context),
