@@ -126,6 +126,9 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               width: kDefaultPadding,
             ),
             getFileExporterFloatingButton(context),
+            const SizedBox(
+              width: kDefaultPadding,
+            ),
             widget.viewAbstract.onHasPermission(
               context,
               function: widget.viewAbstract.hasPermissionDelete(context),

@@ -9,9 +9,13 @@ import 'package:flutter_view_controller/new_screens/file_reader/file_rader_objec
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import 'file_raderl_list_object_exporter_view_abstract.dart';
+
 class FileExporterPage extends StatefulWidget {
   ViewAbstract viewAbstract;
-  FileExporterPage({super.key, required this.viewAbstract});
+  List<ViewAbstract>? list;
+
+  FileExporterPage({super.key, required this.viewAbstract, this.list});
 
   @override
   State<StatefulWidget> createState() => _FileExporterPage();
@@ -24,9 +28,13 @@ class _FileExporterPage extends State<FileExporterPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    fileReaderObject = FileExporterObject(viewAbstract: widget.viewAbstract);
+    if (widget.list != null) {
+      fileReaderObject = FileExporterListObject(
+          viewAbstract: widget.viewAbstract, list: widget.list!);
+    } else {
+      fileReaderObject = FileExporterObject(viewAbstract: widget.viewAbstract);
+    }
   }
 
   void _onIntroEnd(context) {

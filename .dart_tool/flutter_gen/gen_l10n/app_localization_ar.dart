@@ -2048,5 +2048,19 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get exportAll => 'تصدير الكل';
+
+  @override
+  String exportAllAs(String r) {
+    return 'تصدير الكل بتنسيق $r';
+  }
+
+  @override
+  String get pdf => 'PDF';
+
+  @override
+  String get excel => 'Excel';
+
+  @override
   String get systemDefault => 'النظام الافتراضي';
 }

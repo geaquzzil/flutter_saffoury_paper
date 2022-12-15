@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -48,6 +50,12 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 2)
             ? getFilterWidget()
             : null;
+
+    Widget? exportButton =
+        (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
+                2)
+            ? getExportButton(context)
+            : null;
     return Column(
       children: [
         Padding(
@@ -84,6 +92,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               const Spacer(),
               getAddBotton(context),
               getRefreshWidget(),
+              if (exportButton != null) exportButton,
               if (printButton != null) printButton
             ],
           ),
@@ -143,12 +152,68 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     return FilterablePopupIconWidget();
   }
 
+  Widget? getExportButton(BuildContext context) {
+    var first = getFirstObject();
+    if (first is! ExcelableReaderInterace && first is! PrintableMaster) {
+      return null;
+    }
+
+    return DropdownStringListControllerListenerByIcon(
+      icon: Icons.file_upload_outlined,
+      hint: AppLocalizations.of(context)!.exportAll,
+      list: [
+        DropdownStringListItem(
+            Icons.picture_as_pdf,
+            AppLocalizations.of(context)!
+                .exportAllAs(AppLocalizations.of(context)!.pdf)),
+        DropdownStringListItem(
+            Icons.source,
+            AppLocalizations.of(context)!
+                .exportAllAs(AppLocalizations.of(context)!.excel)),
+      ],
+      onSelected: (object) {
+        if (object?.label ==
+            AppLocalizations.of(context)!
+                .exportAllAs(AppLocalizations.of(context)!.excel)) {
+          context
+              .read<ActionViewAbstractProvider>()
+              .changeCustomWidget(FileExporterPage(
+                viewAbstract: drawerViewAbstractObsever.getObject,
+                list: getList().cast(),
+              ));
+        }
+        // if (object?.label ==
+        //     AppLocalizations.of(context)!
+        //         .printAllAs(AppLocalizations.of(context)!.list)) {
+        //   changeToPrintPdfSelfList(context);
+        // } else if (object?.label == printListSetting) {
+        //   context
+        //       .read<ActionViewAbstractProvider>()
+        //       .changeCustomWidget(BaseEditNewPage(
+        //         onFabClickedConfirm: (obj) {
+        //           context.read<ActionViewAbstractProvider>().changeCustomWidget(
+        //               PdfSelfListPage(
+        //                   setting: obj as PrintLocalSetting,
+        //                   list: getList().cast<PrintableSelfListInterface>()));
+        //         },
+        //         viewAbstract: (drawerViewAbstractObsever.getObject
+        //                 as PrintableSelfListInterface)
+        //             .getModifiablePrintableSelfPdfSetting(context),
+        //       ));
+        // } else if (object?.label == printSelfListSetting) {
+        // } else {
+        //   changeToPrintPdfList(context);
+        // }
+      },
+    );
+  }
+
   Widget? getPrintWidget(BuildContext context) {
     var first = getFirstObject();
     if (first is PrintableSelfListInterface && first is PrintableMaster) {
       String? printListSetting =
           "${AppLocalizations.of(context)!.printAllAs(AppLocalizations.of(context)!.list)} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
-      ;
+
       String? printSelfListSetting =
           "${AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever.getObject.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
       return DropdownStringListControllerListenerByIcon(

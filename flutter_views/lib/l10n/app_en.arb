@@ -686,5 +686,18 @@
             }
         }
     },
+"exportAll": "Export all",
+    "exportAllAs": "Export all as {r}",
+    "@exportAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "pdf":"PDF",
+    "excel":"Excel",
     "systemDefault":"System default"
 }

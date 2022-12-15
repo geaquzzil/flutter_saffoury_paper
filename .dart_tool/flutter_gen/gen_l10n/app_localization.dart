@@ -4167,6 +4167,30 @@ abstract class AppLocalizations {
   /// **'Print all as {r}'**
   String printAllAs(String r);
 
+  /// No description provided for @exportAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all'**
+  String get exportAll;
+
+  /// Greet the user by their name.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all as {r}'**
+  String exportAllAs(String r);
+
+  /// No description provided for @pdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get pdf;
+
+  /// No description provided for @excel.
+  ///
+  /// In en, this message translates to:
+  /// **'Excel'**
+  String get excel;
+
   /// No description provided for @systemDefault.
   ///
   /// In en, this message translates to:

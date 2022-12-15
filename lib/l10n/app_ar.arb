@@ -695,5 +695,18 @@
             }
         }
     },
+    "exportAll": "تصدير الكل",
+     "exportAllAs": "تصدير الكل بتنسيق {r}",
+    "@exportAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "pdf":"PDF",
+    "excel":"Excel",
     "systemDefault":"النظام الافتراضي"
 }
