@@ -209,8 +209,13 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       {required ThemeData theme,
       PdfPageFormat? format,
       PrintLocalSetting? setting}) async {
-    final pdf =
-        Document(title: "TEST", pageMode: PdfPageMode.fullscreen, theme: theme);
+    final pdf = Document(
+        title: getMainHeaderTextOnly(context),
+        author: AppLocalizations.of(context)!.appTitle,
+        creator: AppLocalizations.of(context)!.appTitle,
+        subject: getMainHeaderLabelTextOnly(context),
+        pageMode: PdfPageMode.fullscreen,
+        theme: theme);
 
     await Future.forEach<Page>(await getPrintableCustomFromPDFPageLIst(context),
         (element) async {

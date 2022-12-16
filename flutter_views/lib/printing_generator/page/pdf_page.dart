@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
@@ -21,6 +22,7 @@ import '../../interfaces/printable/printable_master.dart';
 import '../../models/servers/server_helpers.dart';
 import '../pdf_custom_from_pdf_api.dart';
 import '../pdf_receipt_api.dart';
+import 'ext.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
 class PdfPage<T extends PrintLocalSetting> extends StatefulWidget {
@@ -110,69 +112,9 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
 
         // shouldRepaint: ,
         build: (format) async {
-          T? pls;
-          if (widget.invoiceObj is ModifiablePrintableInterface) {
-            pls = await Configurations.get<T>(
-                (widget.invoiceObj as ModifiablePrintableInterface)
-                    .getModifibleSettingObject(context),
-                customKey: "_printsetting" +
-                    widget.invoiceObj.runtimeType.toString()) as T?;
-            if (pls != null) {
-              pls = pls.onSavedModiablePrintableLoaded(
-                  context, widget.invoiceObj as ViewAbstract);
-            }
-          }
-          if (widget.invoiceObj is PrintableInvoiceInterface) {
-            final pdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
-                context, widget.invoiceObj as PrintableInvoiceInterface,
-                printCommand: pls);
-            return pdf.generate(format);
-          } else if (widget.invoiceObj is PrintableCustomInterface) {
-            final pdf = PdfCustom<PrintableCustomInterface, T>(
-                context, widget.invoiceObj as PrintableCustomInterface,
-                printCommand: pls);
-            return pdf.generate(format);
-          } else if (widget.invoiceObj is PrintableCustomFromPDFInterface) {
-            final pdf = PdfCustomFromPDF<PrintableCustomFromPDFInterface, T>(
-                context, widget.invoiceObj as PrintableCustomFromPDFInterface,
-                printCommand: pls);
-            return pdf.generate(format);
-          } else {
-            final pdf = PdfReceipt<PrintableReceiptInterface, T>(
-                context, widget.invoiceObj as PrintableReceiptInterface,
-                printCommand: pls);
-            return pdf.generate(format);
-          }
+          return await getExcelFileUinit(context, widget.invoiceObj, format);
         });
   }
-  //   Container(
-  //     padding: EdgeInsets.all(32),
-  //     child: Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           TitleWidget(
-  //             icon: Icons.picture_as_pdf,
-  //             text: 'Generate Invoice',
-  //           ),
-  //           const SizedBox(height: 48),
-  //           ButtonWidget(
-  //             text: 'Invoice PDF',
-  //             onClicked: () async {
-  //               final date = DateTime.now();
-  //               final dueDate = date.add(Duration(days: 7));
-  //               final pdfInvoice =
-  //                   PdfInvoiceApi(context, widget.invoiceObj);
-
-  //               final pdfFile = await pdfInvoice.generate();
-
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   ),
-  // );
 }
 
 class TitleWidget extends StatelessWidget {

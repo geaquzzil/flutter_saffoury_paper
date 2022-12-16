@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/interfaces/excelable_reader_interface.da
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
@@ -16,12 +17,17 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
+import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
 class FiltersAndSelectionListHeader extends StatelessWidget {
@@ -157,7 +163,6 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     if (first is! ExcelableReaderInterace && first is! PrintableMaster) {
       return null;
     }
-
     return DropdownStringListControllerListenerByIcon(
       icon: Icons.file_upload_outlined,
       hint: AppLocalizations.of(context)!.exportAll,
@@ -171,7 +176,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
             AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.excel)),
       ],
-      onSelected: (object) {
+      onSelected: (object) async {
         if (object?.label ==
             AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.excel)) {
@@ -179,8 +184,23 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               .read<ActionViewAbstractProvider>()
               .changeCustomWidget(FileExporterPage(
                 viewAbstract: drawerViewAbstractObsever.getObject,
-                list: getList().cast(),
+                list: listProvider.getList(findCustomKey()).cast(),
               ));
+        } else {
+          ViewAbstract first = getFirstObject();
+
+          var pdfList = PDFListApi(
+              list: listProvider
+                  .getList(findCustomKey())
+                  .whereType<PrintableMaster>()
+                  .toList(),
+              context: context,
+              setting: await getSetting(context, getFirstObject()));
+          Printing.sharePdf(
+              emails: ["paper@saffoury.com"],
+              filename: first.getMainHeaderLabelTextOnly(context),
+              subject: first.getMainHeaderLabelTextOnly(context),
+              bytes: await pdfList.generate(PdfPageFormat.a4));
         }
         // if (object?.label ==
         //     AppLocalizations.of(context)!

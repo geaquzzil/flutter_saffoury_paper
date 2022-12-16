@@ -1,3 +1,4 @@
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_from_pdf_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart'
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../interfaces/printable/printable_bill_interface.dart';
 import '../interfaces/printable/printable_custom_interface.dart';
 import '../interfaces/printable/printable_invoice_interface.dart';
@@ -32,7 +33,11 @@ class PDFListApi<T extends PrintLocalSetting> {
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     final pdf = Document(
-        title: "listof$T",
+        title:
+            "${(list[0] as ViewAbstract).getMainHeaderLabelTextOnly(context)} ${AppLocalizations.of(context)!.list}",
+        author: AppLocalizations.of(context)!.appTitle,
+        creator: AppLocalizations.of(context)!.appTitle,
+        subject: (list[0] as ViewAbstract).getMainHeaderLabelTextOnly(context),
         pageMode: PdfPageMode.fullscreen,
         theme: await getThemeData());
 

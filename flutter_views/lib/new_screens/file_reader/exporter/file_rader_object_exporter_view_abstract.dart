@@ -62,6 +62,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
 
     generatedMainFields.addAll(viewAbstract.getMainFields());
     generatedRequiredFields.addAll(viewAbstract.isFieldCanBeNullableMap());
+
     refreshDropdownList(context);
     for (var element in listOfFields) {
       if (viewAbstract.isViewAbstract(element)) {
@@ -150,7 +151,6 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
   void onDropdownChanged(BuildContext context, String field, value,
       {GlobalKey<FormBuilderState>? formKey}) {
     super.onDropdownChanged(context, field, value);
-
     selectedFields[field] = value.toString();
     debugPrint("selectedFields $selectedFields");
   }

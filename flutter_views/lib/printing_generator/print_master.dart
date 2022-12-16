@@ -1,4 +1,5 @@
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:pdf/pdf.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:pdf/widgets.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/prints/print_local_setting.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class PrintMasterPDF<T extends PrintableMasterEmpty,
     E extends PrintLocalSetting> extends PrintMasterPDFUtils<E> {
@@ -21,6 +23,20 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
   Future<Widget> buildHeader() async {
     return Image(await networkImage(
         'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColor()}&darkColor=${getSecondaryColor()}'));
+  }
+
+  @override
+  Future<Document> getDocument() async {
+    await initHeader();
+    final pdf = Document(
+        title: (printObj as ViewAbstract).getMainHeaderTextOnly(context),
+        author: AppLocalizations.of(context)!.appTitle,
+        creator: AppLocalizations.of(context)!.appTitle,
+        subject: (printObj as ViewAbstract).getMainHeaderLabelTextOnly(context),
+        pageMode: PdfPageMode.fullscreen,
+        theme: themeData);
+
+    return pdf;
   }
 
   Widget buildTitle() {

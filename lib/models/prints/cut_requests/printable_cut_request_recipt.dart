@@ -30,7 +30,12 @@ class CutRequestRecieptPDF {
 
   Future<Document> generate() async {
     final pdf = Document(
-        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: themeData);
+        title: cutRequest.getMainHeaderTextOnly(context),
+        author: AppLocalizations.of(context)!.appTitle,
+        creator: AppLocalizations.of(context)!.appTitle,
+        subject: cutRequest.getMainHeaderLabelTextOnly(context),
+        pageMode: PdfPageMode.fullscreen,
+        theme: themeData);
     switch (setting?.printCutRequestType) {
       case PrintCutRequestType.ALL:
         await addRecipt(pdf);
