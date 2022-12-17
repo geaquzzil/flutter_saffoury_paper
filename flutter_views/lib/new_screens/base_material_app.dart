@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/screens/view/view_view_main_page.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -29,19 +30,6 @@ class BaseMaterialAppPage extends StatefulWidget {
 
   @override
   State<BaseMaterialAppPage> createState() => _BaseMaterialAppPageState();
-
-  static void setLocale(BuildContext context, Locale newLocale) async {
-    _BaseMaterialAppPageState? state =
-        context.findAncestorStateOfType<_BaseMaterialAppPageState>();
-
-    // var prefs = await SharedPreferences.getInstance();
-    // prefs.setString('languageCode', newLocale.languageCode);
-    // prefs.setString('countryCode', "");
-
-    // state?.setState(() {
-    //   state._locale = newLocale;
-    // });
-  }
 }
 
 class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
@@ -108,14 +96,16 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
             Consumer<LangaugeProvider>(builder: (context, provider, listTile) {
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) => MaterialApp(
-              scrollBehavior: const MaterialScrollBehavior().copyWith(
-                dragDevices: {
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.stylus,
-                  PointerDeviceKind.unknown
-                },
-              ),
+              scrollBehavior: SizeConfig.isDesktop(context)
+                  ? const MaterialScrollBehavior().copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.mouse,
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.stylus,
+                        PointerDeviceKind.unknown
+                      },
+                    )
+                  : null,
               supportedLocales: AppLocalizations.supportedLocales,
               locale: langaugeProvider.getLocale,
               localizationsDelegates: const [
@@ -144,7 +134,6 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
               debugShowCheckedModeBanner: false,
               restorationScopeId: 'root',
               initialRoute: '/',
-              // onGenerateTitle: (context) => "dff",
               onGenerateRoute: RouteGenerator.generateRoute,
 
               theme: ThemeData(
@@ -161,25 +150,6 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         }));
 
     return widget;
-  }
-
-  LayoutBuilder getLayoutBuilder() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return const Text("HomeMobilePage ");
-        // return const HomeMobilePage();
-        // if (kIsWeb) {
-        //   return const HomeWebPage();
-        // } else
-        // if (SizeConfig.isMobile(context)) {
-
-        // } else if (SizeConfig.isTablet(context)) {
-        //   return HomeSmallTabletPage(drawerItems: widget.drawerItems);
-        // } else {
-        //   return HomeLargeTabletPage(drawerItems: widget.drawerItems);
-        // }
-      },
-    );
   }
 }
 

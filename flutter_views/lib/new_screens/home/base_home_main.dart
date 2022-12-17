@@ -5,6 +5,8 @@ import 'package:flutter_view_controller/new_screens/home/components/drawers/draw
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 
+import 'components/drawers/drawer_large_screen.dart';
+
 class BaseHomeMainPage extends StatefulWidget {
   const BaseHomeMainPage({Key? key}) : super(key: key);
 
@@ -18,7 +20,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return Scaffold(
       // resizeToAvoidBottomInset: true,
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
-      drawer: const DrawerMobile(),
+      drawer: DrawerLargeScreens(),
       endDrawer: const BaseHomeCartPage(),
       body: const SafeArea(child: BaseHomeScreenLayout()),
     );

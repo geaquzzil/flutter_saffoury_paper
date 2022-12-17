@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/providers/page_large_screens_provider.da
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
@@ -35,7 +36,7 @@ class DrawerLargeScreens extends StatelessWidget {
       curve: Curves.easeInOut,
       child: SizedBox(
         height: double.maxFinite,
-        width: isOpen ? 256 : 60,
+        width: isOpen ? getOpenWidthSize(context) : 60,
         // color: Colors.blueGrey,
         child: Card(
           child: Stack(
@@ -54,6 +55,13 @@ class DrawerLargeScreens extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double getOpenWidthSize(BuildContext context) {
+    if (SizeConfig.isDesktop(context)) {
+      return 256;
+    }
+    return MediaQuery.of(context).size.width * .75;
   }
 
   Widget buildDrawerFooter(BuildContext context, bool isOpen) {
@@ -215,12 +223,14 @@ class DrawerLargeScreens extends StatelessWidget {
 
           NotificationPopupWidget(),
           buildLanguageIcon(context),
-          buildColapsedIcon(
-            context,
-            Icons.arrow_back_ios,
-            () =>
-                context.read<DrawerMenuSelectedItemController>().toggleIsOpen(),
-          ),
+          if (SizeConfig.isDesktop(context))
+            buildColapsedIcon(
+              context,
+              Icons.arrow_back_ios,
+              () => context
+                  .read<DrawerMenuSelectedItemController>()
+                  .toggleIsOpen(),
+            ),
 
           // oldCollapsedIcon(margin, alignemt, context, icon),
         ],
@@ -296,16 +306,9 @@ class DrawerListTileDesktopGroupOpen extends StatelessWidget {
     return ExpansionTile(
       title: Text(title),
       children: [
-        ListView.separated(
-            // padding: const EdgeInsets.symmetric(horizontal: 20),
-            separatorBuilder: (context, index) {
-              return const SizedBox(
-                height: 8,
-              );
-            },
+        ListView.builder(
             itemCount: groupedDrawerItems.length,
             shrinkWrap: true,
-            primary: false,
             itemBuilder: (context, index) {
               ViewAbstract viewAbstract = groupedDrawerItems[index];
               return DrawerListTileDesktopOpen(
@@ -388,34 +391,61 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
   Widget build(BuildContext context) {
     DrawerMenuSelectedItemController ds =
         context.watch<DrawerMenuSelectedItemController>();
-    return OnHoverWidget(
-        scale: false,
-        builder: (onHover) {
-          return Material(
-            color: Colors.transparent,
-            child: ListTile(
-              leading: InkWell(
-                  onTap: () {
-                    viewAbstract.onDrawerLeadingItemClicked(context);
-                    debugPrint("onLeading ListTile tapped");
-                  },
-                  child: Container(
-                      child: onHover
-                          ? const Icon(Icons.plus_one_sharp)
-                          : viewAbstract.getIcon())),
-              selected: ds.getIndex == viewAbstract.hashCode,
-              title: ds.getSideMenuIsClosed
-                  ? null
-                  : Container(child: viewAbstract.getMainLabelText(context)),
-              onTap: () {
-                context
-                    .read<DrawerMenuSelectedItemController>()
-                    .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
-                viewAbstract.onDrawerItemClicked(context);
-              },
-            ),
-          );
-        });
+
+    if (SizeConfig.isDesktop(context)) {
+      return OnHoverWidget(
+          scale: false,
+          builder: (onHover) {
+            return Material(
+              color: Colors.transparent,
+              child: ListTile(
+                leading: InkWell(
+                    onTap: () {
+                      viewAbstract.onDrawerLeadingItemClicked(context);
+                      debugPrint("onLeading ListTile tapped");
+                    },
+                    child: Container(
+                        child: onHover
+                            ? const Icon(Icons.plus_one_sharp)
+                            : viewAbstract.getIcon())),
+                selected: ds.getIndex == viewAbstract.hashCode,
+                title: ds.getSideMenuIsClosed
+                    ? null
+                    : Container(child: viewAbstract.getMainLabelText(context)),
+                onTap: () {
+                  if (SizeConfig.isDesktop(context)) {
+                    context
+                        .read<DrawerMenuSelectedItemController>()
+                        .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+                  } else {
+                    context
+                        .read<DrawerMenuControllerProvider>()
+                        .controlStartDrawerMenu();
+                  }
+                  viewAbstract.onDrawerItemClicked(context);
+                },
+              ),
+            );
+          });
+    } else {
+      return ListTile(
+        leading: viewAbstract.getIcon(),
+        selected: ds.getIndex == viewAbstract.hashCode,
+        title: viewAbstract.getMainLabelText(context),
+        onTap: () {
+          if (SizeConfig.isDesktop(context)) {
+            context
+                .read<DrawerMenuSelectedItemController>()
+                .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+          } else {
+            context
+                .read<DrawerMenuControllerProvider>()
+                .controlStartDrawerMenu();
+          }
+          viewAbstract.onDrawerItemClicked(context);
+        },
+      );
+    }
   }
 }
 

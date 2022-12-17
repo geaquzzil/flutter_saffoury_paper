@@ -39,16 +39,13 @@ class _BaseSharedDrawerNewState extends State<BaseSharedDrawerNew> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              child: Expanded(
-                  child: ListView.builder(
-                      itemCount: widget.drawerItems.length,
-                      itemBuilder: ((context, index) =>
-                          DrawerListTileDesktopOpen(
-                            viewAbstract: widget.drawerItems[index],
-                            idx: index,
-                          )))),
-            ),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: widget.drawerItems.length,
+                    itemBuilder: ((context, index) => DrawerListTileDesktopOpen(
+                          viewAbstract: widget.drawerItems[index],
+                          idx: index,
+                        )))),
             const BottomNavigationBarItem()
           ],
         ),

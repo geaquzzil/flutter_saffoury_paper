@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_self_list_api.dart';
@@ -81,45 +82,6 @@ class _ListApiWidgetState<T extends ViewAbstract>
     controller.text = "";
   }
 
-  Widget getTrailingWidget() {
-    return IconButton(
-      icon: const Icon(Icons.cancel),
-      onPressed: () {
-        controller.clear();
-        onSearchTextChanged('');
-      },
-    );
-    return controller.text.isEmpty
-        ? IconButton(
-            icon: const Icon(Icons.cancel),
-            onPressed: () {
-              controller.clear();
-              onSearchTextChanged('');
-            },
-          )
-        : const CircularProgressIndicator(
-            strokeWidth: 2,
-          );
-  }
-
-  Widget _buildSearchBox() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        child: ListTile(
-          leading: const Icon(Icons.search),
-          title: TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-                hintText: 'Search', border: InputBorder.none),
-            onChanged: onSearchTextChanged,
-          ),
-          trailing: getTrailingWidget(),
-        ),
-      ),
-    );
-  }
-
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
     var listView = ListView.builder(
@@ -169,7 +131,13 @@ class _ListApiWidgetState<T extends ViewAbstract>
     //  return ListApiMaster();
     return Column(
       children: <Widget>[
-        Container(child: _buildSearchBox()),
+        Container(
+            child: SearchWidgetComponent(
+          controller: controller,
+          onSearchTextChanged: (p0) {
+            onSearchTextChanged(p0);
+          },
+        )),
         // FiltersAndSelectionListHeader(),
         Expanded(
             child: ChangeNotifierProvider.value(
@@ -256,7 +224,8 @@ class _ListApiWidgetState<T extends ViewAbstract>
     }
   }
 
-  onSearchTextChanged(String text) async {
+  onSearchTextChanged(String? text) async {
+    if (text == null) return;
     await Future.delayed(
       const Duration(milliseconds: 750),
       () {
