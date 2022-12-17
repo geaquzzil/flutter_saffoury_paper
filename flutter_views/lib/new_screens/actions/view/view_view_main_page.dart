@@ -7,28 +7,45 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
-import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
-import '../../constants.dart';
-import '../../new_components/cards/outline_card.dart';
-import '../../new_screens/lists/list_static_editable.dart';
-import '../../providers/actions/list_multi_key_provider.dart';
-import '../../screens/base_shared_actions_header.dart';
+import '../../../constants.dart';
+import '../../../new_components/cards/outline_card.dart';
+import '../../lists/list_static_editable.dart';
+import '../../../providers/actions/list_multi_key_provider.dart';
+import '../../../screens/base_shared_actions_header.dart';
 import 'package:nil/nil.dart';
 
-class BaseViewNewPage extends StatefulWidget {
+class BaseViewNewPage extends BaseActionScreenPage {
   ViewAbstract viewAbstract;
 
-  BaseViewNewPage({Key? key, required this.viewAbstract}) : super(key: key);
+  BaseViewNewPage({Key? key, required this.viewAbstract})
+      : super(key: key, viewAbstract: viewAbstract);
 
   @override
-  State<BaseViewNewPage> createState() => _BaseViewNewPage();
+  Widget getBody(BuildContext context) {
+    return MasterView(viewAbstract: viewAbstract);
+  }
+
+  @override
+  List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
+    return [getAddFloatingButton2(context)];
+  }
+
+  FloatingActionButton getAddFloatingButton2(BuildContext context) {
+    return FloatingActionButton.extended(
+        heroTag: UniqueKey(),
+        onPressed: () async {},
+        icon: Icon(Icons.edit),
+        label: Text(AppLocalizations.of(context)!.edit));
+  }
 }
 
 class _BaseViewNewPage extends State<BaseViewNewPage> {
@@ -36,7 +53,6 @@ class _BaseViewNewPage extends State<BaseViewNewPage> {
   bool isCalledApi = false;
 
   ViewAbstract? currentViewAbstract;
-  ViewAbstract? responseViewAbstract;
 
   @override
   void initState() {
@@ -53,51 +69,6 @@ class _BaseViewNewPage extends State<BaseViewNewPage> {
     isExtended = true;
     if (widget.viewAbstract.isEditing()) {
       currentViewAbstract = widget.viewAbstract;
-    }
-  }
-
-  Widget getLoadingWidget() {
-    if (currentViewAbstract != null) {
-      if (isCalledApi == true) {
-        if (responseViewAbstract == null) {
-          return Row(
-            children: [
-              const Padding(
-                  padding: EdgeInsets.only(right: 4.0),
-                  child: Icon(Icons.cancel)),
-              const Text("faild to added")
-            ],
-          );
-        } else {
-          return Row(
-            children: [
-              const Padding(
-                  padding: EdgeInsets.only(right: 4.0),
-                  child: Icon(Icons.done)),
-              const Text("Successfully added")
-            ],
-          );
-        }
-      } else {
-        return const SizedBox(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-          ),
-        );
-      }
-    } else {
-      return Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child:
-                Icon(widget.viewAbstract.isEditing() ? Icons.edit : Icons.add),
-          ),
-          Text(widget.viewAbstract.getActionText(context))
-        ],
-      );
     }
   }
 

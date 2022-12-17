@@ -9,11 +9,11 @@ import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/view/view_list_details.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../edit_new/base_edit_new.dart';
+import '../actions/edit_new/base_edit_new.dart';
 
 class BaseSettingDetailsView extends StatelessWidget {
   dynamic? printSetting;

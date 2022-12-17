@@ -4,8 +4,8 @@ import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/actions/action_viewabstract_provider.dart';
-import '../base_shared_actions_header.dart';
+import '../../../providers/actions/action_viewabstract_provider.dart';
+import '../../../screens/base_shared_actions_header.dart';
 
 class MasterViewStandAlone extends StatelessWidget {
   ViewAbstractStandAloneCustomView viewAbstract;

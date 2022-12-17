@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
@@ -8,12 +9,11 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_wi
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
-import 'package:flutter_view_controller/screens/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/view_abstract_non_list.dart';
-import '../../screens/view/view_stand_alone.dart';
+import '../actions/view/base_home_details_view.dart';
 import '../dashboard2/dashboard.dart';
 import '../setting/setting_page.dart';
 

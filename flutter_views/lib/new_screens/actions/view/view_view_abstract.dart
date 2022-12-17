@@ -8,15 +8,15 @@ import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/view/view_card_item.dart';
-import 'package:flutter_view_controller/screens/view/view_list_details.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_list_details.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/servers/server_helpers.dart';
-import '../../new_components/tables_widgets/editable_table_widget.dart';
-import '../../new_components/lists/search_card_item.dart';
-import '../../new_components/tab_bar/tab_bar.dart';
-import '../../new_components/tables_widgets/cart_data_table_master.dart';
+import '../../../models/servers/server_helpers.dart';
+import '../../../new_components/tables_widgets/editable_table_widget.dart';
+import '../../../new_components/lists/search_card_item.dart';
+import '../../../new_components/tab_bar/tab_bar.dart';
+import '../../../new_components/tables_widgets/cart_data_table_master.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class MasterView extends StatelessWidget {

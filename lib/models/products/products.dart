@@ -650,6 +650,20 @@ class Product extends ViewAbstract<Product>
   //     // ),
   //   ];
   // }
+ @override
+  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+    if (action == ServerActions.view) {
+      return ListHorizontalApiAutoRestWidget(
+        customHeight: 300,
+        title: getMainHeaderText(context),
+        autoRest: AutoRest<Product>(
+            obj: Product()
+              ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+            key: "similarProducts$iD"),
+      );
+    }
+    return null;
+  }
 
   @override
   PrintProduct? getPrintCommand(BuildContext context) => PrintProduct();

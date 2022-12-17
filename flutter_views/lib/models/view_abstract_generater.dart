@@ -42,14 +42,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           .change(this as ViewAbstract, ServerActions.view);
       return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewDetailsPage(
-          object: this as ViewAbstract,
-        ),
-      ),
-    );
+    Navigator.pushNamed(context, "/view", arguments: this);
   }
 
   void onDrawerLeadingItemClicked(BuildContext context,

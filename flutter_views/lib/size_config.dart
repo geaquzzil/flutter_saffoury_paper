@@ -35,6 +35,9 @@ class SizeConfig {
   static bool isTablet(BuildContext context) => Device.get().isTablet;
 
   static bool isWeb() => kIsWeb;
+
+  static bool isDesktopOrWeb(BuildContext context) =>
+      isDesktop(context) || isWeb();
   static bool isDesktop(BuildContext context) =>
       Platform.isWindows || Platform.isLinux || Platform.isMacOS;
 }

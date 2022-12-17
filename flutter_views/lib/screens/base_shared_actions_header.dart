@@ -4,6 +4,8 @@ import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_popup_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
@@ -45,8 +47,8 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),
-                buildList(context),
-                buildPopupMenu(context),
+                ActionsOnHeaderWidget(viewAbstract: viewAbstract),
+                ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
               ],
             ),
           ),
@@ -57,72 +59,5 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
         // const BaseSharedActionDrawerNavigation()
       ],
     );
-  }
-
-  Widget buildMenuItem(MenuItemBuild menuItemBuild) => HeaderIconBuilder(
-        viewAbstract: viewAbstract,
-        menuItemBuild: menuItemBuild,
-      );
-
-  Widget buildPopupMenu(BuildContext context) {
-    final action = context.watch<ActionViewAbstractProvider>().getServerActions;
-    return viewAbstract.onFutureBuilder<List<MenuItemBuildGenirc>>(
-      context,
-      function: viewAbstract.getPopupMenuActionsThreeDot(context, action),
-      onHasPermissionWidget: (data) {
-        return PopupMenuButton<MenuItemBuildGenirc>(
-          onSelected: (MenuItemBuildGenirc result) {
-            Navigator.pushNamed(context, result.route, arguments: result.value);
-            // viewAbstract.onPopupMenuActionSelected(c, result);
-          },
-          itemBuilder: (BuildContext context) =>
-              data.map(buildPopupMenuItem).toList(),
-        );
-      },
-    );
-  }
-
-  PopupMenuItem<MenuItemBuildGenirc> buildPopupMenuItem(
-          MenuItemBuildGenirc e) =>
-      PopupMenuItem(
-        value: e,
-        child: Row(
-          children: [
-            Icon(
-              e.icon,
-              // color: Colors.black,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Text(e.title),
-          ],
-        ),
-      );
-  Widget buildList(BuildContext context) {
-    final action = context.watch<ActionViewAbstractProvider>().getServerActions;
-    // final viewAbstract = context.watch<ActionViewAbstractProvider>().getObject;
-
-    return FutureBuilder(
-        future: action == ServerActions.view
-            ? viewAbstract.getPopupMenuActionsView(context)
-            : viewAbstract.getPopupMenuActionsEdit(context),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<MenuItemBuild>> snapshot) {
-          debugPrint("shared header build List ${snapshot.data}");
-          if (snapshot.hasData) {
-            return Row(
-              children: [...?snapshot.data?.map(buildMenuItem).toList()],
-            );
-            // return ListView.builder(
-
-            //     shrinkWrap: true,
-            //     itemCount: snapshot.data?.length,
-            //     itemBuilder: (context, index) => HeaderIconBuilder(
-            //           menuItemBuild: snapshot.data?[index] ??
-            //               MenuItemBuild("", Icons.abc, ""),
-            //         ));
-          }
-          return const Text("");
-        });
   }
 }

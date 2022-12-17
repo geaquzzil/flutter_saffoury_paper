@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
-import '../screens/view/view_view_main_page.dart';
+
+import 'actions/view/view_view_main_page.dart';
 import 'authentecation/base_authentication_screen.dart';
-import 'edit_new/base_edit_main_page.dart';
+import 'actions/edit_new/base_edit_main_page.dart';
 import 'home/base_home_main.dart';
 
 class RouteGenerator {
@@ -33,6 +38,22 @@ class RouteGenerator {
 
       //  case "/print":
       //     return MaterialPageRoute(builder: (context) => const SignInPage());
+
+      case "/print":
+        return MaterialPageRoute(builder: (context) {
+          if (args == null) {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          } else if (args is ViewAbstract) {
+            return PdfPage(
+              invoiceObj: args as PrintableMaster,
+            );
+          } else {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          }
+        });
+
       case "/view":
         return MaterialPageRoute(builder: (context) {
           if (args == null) {
@@ -52,6 +73,35 @@ class RouteGenerator {
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
           } else if (args is ViewAbstract) {
             return BaseEditNewPage(viewAbstract: args);
+          } else {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          }
+        });
+
+      case "/import":
+        return MaterialPageRoute(builder: (context) {
+          if (args == null) {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          } else if (args is ViewAbstract) {
+            return FileReaderPage(
+              viewAbstract: args,
+            );
+          } else {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          }
+        });
+      case "/export":
+        return MaterialPageRoute(builder: (context) {
+          if (args == null) {
+            return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
+          } else if (args is ViewAbstract) {
+            return FileExporterPage(
+              viewAbstract: args,
+            );
           } else {
             return Lottie.network(
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");

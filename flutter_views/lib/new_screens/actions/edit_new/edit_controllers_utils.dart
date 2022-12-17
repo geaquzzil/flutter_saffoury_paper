@@ -8,10 +8,10 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/custom_type_ahead.dart';
+import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
-import '../../models/view_abstract_inputs_validaters.dart';
-import '../edit/controllers/ext.dart';
+import '../../../models/view_abstract_inputs_validaters.dart';
+import '../../edit/controllers/ext.dart';
 
 Widget wrapController(Widget controller, {bool? requiredSpace}) {
   return Column(

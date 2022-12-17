@@ -22,7 +22,7 @@ import '../../new_screens/edit/controllers/edit_controller_dropdown.dart';
 import '../../new_screens/edit/controllers/edit_controller_dropdown_api.dart';
 import '../../new_screens/edit/controllers/edit_controller_file_picker.dart';
 import '../../new_screens/edit/controllers/ext.dart';
-import '../../new_screens/edit_new/edit_controllers_utils.dart';
+import '../../new_screens/actions/edit_new/edit_controllers_utils.dart';
 
 @immutable
 class EditableTableWidget extends StatefulWidget {

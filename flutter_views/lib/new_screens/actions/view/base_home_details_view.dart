@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit_new/base_edit_main_page.dart';
-import 'package:flutter_view_controller/new_screens/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/screens/view/view_view_abstract.dart';
-import 'package:flutter_view_controller/screens/view/view_view_main_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../action_screens/edit_details_page.dart';
-import '../base_shared_actions_header.dart';
+import '../../../screens/action_screens/edit_details_page.dart';
+import '../../../screens/base_shared_actions_header.dart';
 
 class BaseSharedDetailsView extends StatefulWidget {
   const BaseSharedDetailsView({Key? key}) : super(key: key);

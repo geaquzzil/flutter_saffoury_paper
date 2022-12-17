@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -311,21 +312,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
-
-      // context.read<EndDrawerProvider>().changeAndOpen(
-      //     context,
-      //     PdfPage(
-      //       invoiceObj: this as PrintableInterface,
-      //     ));
-      context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
-            invoiceObj: this as PrintableMaster,
-          ));
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => PdfPage(
-      //               invoiceObj: this as PrintableMaster,
-      //             )));
+      if (SizeConfig.isDesktopOrWeb(context)) {
+        context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
+              invoiceObj: this as PrintableMaster,
+            ));
+      } else {
+        Navigator.pushNamed(context, "/print", arguments: this);
+      }
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.pushNamed(context, "/edit", arguments: this);

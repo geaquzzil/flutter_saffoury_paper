@@ -11,21 +11,21 @@ import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.d
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants.dart';
-import '../../interfaces/cartable_interface.dart';
-import '../../interfaces/listable_interface.dart';
-import '../../models/view_abstract.dart';
-import '../../models/view_abstract_inputs_validaters.dart';
-import '../../new_components/edit_listeners/controller_dropbox_list.dart';
-import '../../new_components/tables_widgets/editable_table_widget.dart';
-import '../../new_components/editables/paginated_data_table2.dart';
-import '../../new_components/tables_widgets/cart_data_table_master.dart';
-import '../../screens/base_shared_actions_header.dart';
-import '../edit/controllers/edit_controller_checkbox.dart';
-import '../edit/controllers/edit_controller_dropdown.dart';
-import '../edit/controllers/edit_controller_dropdown_api.dart';
-import '../edit/controllers/edit_controller_file_picker.dart';
-import '../edit/controllers/ext.dart';
+import '../../../constants.dart';
+import '../../../interfaces/cartable_interface.dart';
+import '../../../interfaces/listable_interface.dart';
+import '../../../models/view_abstract.dart';
+import '../../../models/view_abstract_inputs_validaters.dart';
+import '../../../new_components/edit_listeners/controller_dropbox_list.dart';
+import '../../../new_components/tables_widgets/editable_table_widget.dart';
+import '../../../new_components/editables/paginated_data_table2.dart';
+import '../../../new_components/tables_widgets/cart_data_table_master.dart';
+import '../../../screens/base_shared_actions_header.dart';
+import '../../edit/controllers/edit_controller_checkbox.dart';
+import '../../edit/controllers/edit_controller_dropdown.dart';
+import '../../edit/controllers/edit_controller_dropdown_api.dart';
+import '../../edit/controllers/edit_controller_file_picker.dart';
+import '../../edit/controllers/ext.dart';
 import 'edit_controllers_utils.dart';
 
 @immutable
