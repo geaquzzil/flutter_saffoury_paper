@@ -65,6 +65,7 @@ class AuthProvider with ChangeNotifier {
       _user.login = true;
       _user = _user.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)));
       _status = Status.Authenticated;
+      _permissions = _user.userlevels ?? PermissionLevelAbstract();
       notifyListeners();
     } catch (ex) {
       debugPrint("Error initial $ex");

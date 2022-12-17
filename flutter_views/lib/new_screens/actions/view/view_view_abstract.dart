@@ -48,6 +48,8 @@ class MasterView extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget? topWidget =
         viewAbstract.getCustomTopWidget(context, ServerActions.view);
+    Widget? bottomWidget =
+        viewAbstract.getCustomBottomWidget(context, ServerActions.view);
     final fields = viewAbstract.getMainFields(context: context);
     return Column(
       children: [
@@ -57,6 +59,7 @@ class MasterView extends StatelessWidget {
             .map((e) => buildItem(context, e)),
         if (viewAbstract is ListableInterface)
           ViewableTableWidget(viewAbstract: viewAbstract as ListableInterface),
+        if (bottomWidget != null) bottomWidget
       ],
     );
 

@@ -155,7 +155,8 @@ class Employee extends User<Employee> {
         });
 
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context) {
+  List<TabControllerHelper> getCustomTabList(BuildContext context,
+      {ServerActions? action}) {
     return [
       TabControllerHelper(AppLocalizations.of(context)!.size_analyzer,
           widget: Center(

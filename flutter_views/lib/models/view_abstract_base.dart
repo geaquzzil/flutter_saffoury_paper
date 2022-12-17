@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
@@ -30,7 +31,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value?.toString() ?? "";
   }
 
-  List<TabControllerHelper> getCustomTabList(BuildContext context) =>
+  List<TabControllerHelper> getCustomTabList(BuildContext context,
+          {ServerActions? action}) =>
       List<TabControllerHelper>.empty();
 
   IconData getFieldIconData(String field) {
@@ -208,12 +210,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }).toList();
   }
 
-  List<TabControllerHelper> getTabs(BuildContext context) {
+  List<TabControllerHelper> getTabs(BuildContext context,
+      {ServerActions? action}) {
     return [
-      // TabControllerHelper(
-      //   getMainHeaderTextOnly(context),
-      //   getMainIconData(),
-      // ),
+      TabControllerHelper(
+        getMainHeaderTextOnly(context),
+        // getMainIconData(),
+      ),
       ...getCustomTabList(context)
     ];
   }

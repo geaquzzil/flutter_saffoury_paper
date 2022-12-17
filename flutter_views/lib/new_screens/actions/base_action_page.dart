@@ -45,7 +45,7 @@ abstract class BaseActionScreenPage extends StatefulWidget {
 class _BaseActionScreenPageState extends State<BaseActionScreenPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  List<Tab> tabs = <Tab>[];
+  List<TabControllerHelper> _tabs = <TabControllerHelper>[];
   @override
   void dispose() {
     _tabController.dispose();
@@ -53,10 +53,16 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
   }
 
   @override
+  void didUpdateWidget(covariant BaseActionScreenPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint("didUpdateWidget tabController");
+    _tabs.clear();
+    _tabs.addAll(widget.viewAbstract.getTabs(context));
+  }
+
+  @override
   void initState() {
     super.initState();
-    tabs.addAll([TabControllerHelper("TITLE")]);
-    _tabController = TabController(vsync: this, length: tabs.length);
   }
 
   bool getBodyWithoutApi() {
@@ -100,7 +106,7 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
             flexibleSpace: getSilverAppBarBackground(context),
             bottom: TabBar(
               labelColor: Theme.of(context).textTheme.titleLarge!.color,
-              tabs: tabs,
+              tabs: _tabs,
               // indicator: DotIndicator(
               //   color: Theme.of(context).colorScheme.primary,
               //   distanceFromCenter: 16,
@@ -138,32 +144,39 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
         ],
       );
     } else {
+      _tabs.clear();
+      _tabs.addAll(widget.viewAbstract.getTabs(context));
+      _tabController = TabController(length: _tabs.length, vsync: this);
       return NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 getSilverAppBar(context, innerBoxIsScrolled),
               ],
           body: SafeArea(
-            child: TabBarView(controller: _tabController, children: [
-              Builder(builder: (BuildContext context) {
-                return CustomScrollView(slivers: [
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(8.0),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return widget.getBody(context);
-                        },
-                        childCount: 1,
-                      ),
-                    ),
-                  )
-                ]);
-              })
-            ]),
+            child: TabBarView(
+                controller: _tabController,
+                children: _tabs
+                    .map((e) => Builder(builder: (BuildContext context) {
+                          return CustomScrollView(slivers: [
+                            SliverOverlapInjector(
+                              handle: NestedScrollView
+                                  .sliverOverlapAbsorberHandleFor(context),
+                            ),
+                            SliverPadding(
+                              padding: const EdgeInsets.all(8.0),
+                              sliver: SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return _tabs.indexOf(e) == 0
+                                        ? widget.getBody(context)
+                                        : e.widget;
+                                  },
+                                  childCount: 1,
+                                ),
+                              ),
+                            )
+                          ]);
+                        }))
+                    .toList()),
           ));
     }
   }

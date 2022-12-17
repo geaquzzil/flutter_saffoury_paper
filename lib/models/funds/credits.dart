@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
@@ -54,7 +55,7 @@ class Credits extends MoneyFunds<Credits> {
       Credits.fromJson(json);
 
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context) {
+  List<TabControllerHelper> getCustomTabList(BuildContext context,{ServerActions ? action}) {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,

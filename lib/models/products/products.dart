@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -568,8 +569,70 @@ class Product extends ViewAbstract<Product>
     return "ProductID";
   }
 
+  Map<String, String> getSimilarWithSameSizeCustomParams(BuildContext context) {
+    Map<String, String> hashMap = getCustomMap;
+    hashMap["<maxWaste>"] = ("[\"100\"]");
+    hashMap["<width>"] = ("[\"${getWidth()}\"]");
+    hashMap["<width>"] = ("[\"${getLength()}\"]");
+    hashMap["requireInventory"] = "yes";
+    if (!isGeneralEmployee(context)) {
+      hashMap["<status>"] = "[\"NONE\"]";
+    }
+    return hashMap;
+  }
+
+  bool hasSheetWeight() {
+    return gsms != null;
+  }
+
+  Map<String, String> getSimilarCustomParams(BuildContext context) {
+    Map<String, String> hashMap = getCustomMap;
+    hashMap["<maxWaste>"] = ("[\"100\"]");
+    if (hasSheetWeight()) {
+      hashMap["<GSMID>"] = "[\"${gsms?.iD}\"]";
+    }
+    if (!isGeneralEmployee(context)) {
+      hashMap["<status>"] = "[\"NONE\"]";
+    }
+    hashMap["<width>"] = ("[\"${getWidth()}\"]");
+    hashMap["<width>"] = ("[\"${getLength()}\"]");
+    hashMap["<ProductTypeID>"] = "[\"${products_types?.iD}\"]";
+    hashMap["requireInventory"] = "yes";
+    return hashMap;
+  }
+
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context) => [
+  Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {
+    return Column(
+      children: [
+        ListHorizontalApiAutoRestWidget(
+          customHeight: 300,
+          titleString: AppLocalizations.of(context)!.simialrProducts,
+          autoRest: AutoRest<Product>(
+              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
+              key: "similarProducts$iD"),
+        ),
+        ListHorizontalApiAutoRestWidget(
+          customHeight: 300,
+          titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
+          autoRest: AutoRest<Product>(
+              obj: Product()
+                ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
+              key: "productsWithSimilarSize$iD"),
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+    return super.getCustomTopWidget(context, action);
+  }
+
+  @override
+  List<TabControllerHelper> getCustomTabList(BuildContext context,
+          {ServerActions? action}) =>
+      [
         TabControllerHelper(AppLocalizations.of(context)!.descSorting,
             widget: Text("$iD")),
         TabControllerHelper(AppLocalizations.of(context)!.movments,
@@ -650,20 +713,20 @@ class Product extends ViewAbstract<Product>
   //     // ),
   //   ];
   // }
- @override
-  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
-    if (action == ServerActions.view) {
-      return ListHorizontalApiAutoRestWidget(
-        customHeight: 300,
-        title: getMainHeaderText(context),
-        autoRest: AutoRest<Product>(
-            obj: Product()
-              ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-            key: "similarProducts$iD"),
-      );
-    }
-    return null;
-  }
+//  @override
+//   Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+//     if (action == ServerActions.view) {
+//       return ListHorizontalApiAutoRestWidget(
+//         customHeight: 300,
+//         title: getMainHeaderText(context),
+//         autoRest: AutoRest<Product>(
+//             obj: Product()
+//               ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+//             key: "similarProducts$iD"),
+//       );
+//     }
+//     return null;
+//   }
 
   @override
   PrintProduct? getPrintCommand(BuildContext context) => PrintProduct();

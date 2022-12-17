@@ -81,7 +81,8 @@ class Order extends InvoiceMaster<Order>
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context) {
+  List<TabControllerHelper> getCustomTabList(BuildContext context,
+      {ServerActions? action}) {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
