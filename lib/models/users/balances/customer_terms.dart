@@ -91,7 +91,7 @@ class CustomerTerms extends Customer
 
   @override
   Widget? getCustomViewSingleResponseWidget(
-      BuildContext context, CustomerTerms item) {
+      BuildContext context) {
     // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();
   }

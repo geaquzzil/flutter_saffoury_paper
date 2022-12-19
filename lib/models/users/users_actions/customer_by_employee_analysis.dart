@@ -104,22 +104,22 @@ class CustomerByEmployeeAnanlysis
 
   @override
   Widget? getCustomViewSingleResponseWidget(
-      BuildContext context, CustomerByEmployeeAnanlysis item) {
+      BuildContext context) {
     return Column(
       children: [
         LineChartItem<GrowthRate, DateTime>(
           title: "title",
-          list: item.ordersAnalysisGeneral ?? [],
+          list: ordersAnalysisGeneral ?? [],
           xValueMapper: (item, value) =>
               DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
           yValueMapper: (item, n) => item.total,
         ),
         StorageInfoCardCustom(
             title: AppLocalizations.of(context)!.total,
-            description: GrowthRate.getTotal(item.ordersAnalysisGeneral)
+            description: GrowthRate.getTotal(ordersAnalysisGeneral)
                 .toCurrencyFormat(),
             trailing: GrowthRate.getGrowthRateText(
-                context, item.ordersAnalysisGeneral),
+                context, ordersAnalysisGeneral),
             svgSrc: Icons.monitor_weight),
         ExpansionTile(
           initiallyExpanded: true,
@@ -128,7 +128,7 @@ class CustomerByEmployeeAnanlysis
               fontWeight: FontWeight.bold),
           children: [
             ListStaticWidget<Customer>(
-              list: item.customers
+              list: customers
                       ?.where((c) =>
                           c.ordersAnalysis != null &&
                           (c.ordersAnalysis?.isNotEmpty ?? false))

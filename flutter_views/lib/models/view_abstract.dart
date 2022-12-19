@@ -123,6 +123,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return toJsonString();
   }
 
+  String toStringValues() {
+    return toJsonViewAbstract().values.toString();
+  }
+
   String getActionText(BuildContext context) {
     if (isEditing()) {
       return "${AppLocalizations.of(context)!.edit} ${getMainHeaderLabelTextOnly(context)}";

@@ -30,7 +30,7 @@ class _ListStaticSearchableWidgetState<T>
     _userDetails = widget.list;
   }
 
-  Widget _buildUsersList() {
+  Widget _buildList() {
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       controller: ScrollController(),
@@ -44,6 +44,9 @@ class _ListStaticSearchableWidgetState<T>
   }
 
   Widget _buildSearchResult() {
+    if (_searchResult.isEmpty) {
+      return Text("EMPTY");
+    }
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       controller: ScrollController(),
@@ -64,8 +67,8 @@ class _ListStaticSearchableWidgetState<T>
           leading: const Icon(Icons.search),
           title: TextField(
             controller: controller,
-            decoration:
-                const InputDecoration(hintText: 'Search', border: InputBorder.none),
+            decoration: const InputDecoration(
+                hintText: 'Search', border: InputBorder.none),
             onChanged: onSearchTextChanged,
           ),
           trailing: IconButton(
@@ -87,8 +90,8 @@ class _ListStaticSearchableWidgetState<T>
         Expanded(
             child: _searchResult.isNotEmpty || controller.text.isNotEmpty
                 ? _buildSearchResult()
-                : _buildUsersList()),
-                HorizontalFilterableSelectedList()
+                : _buildList()),
+        // HorizontalFilterableSelectedList()
       ],
     );
   }

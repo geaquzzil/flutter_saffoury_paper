@@ -11,11 +11,15 @@ import 'package:flutter_view_controller/new_screens/home/components/ext_provider
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseFilterableMainWidget extends StatelessWidget {
+  bool useDraggableWidget;
+  BaseFilterableMainWidget({super.key, this.useDraggableWidget = false});
+
   @override
   Widget build(BuildContext context) {
     ViewAbstract drawerViewAbstract =
@@ -39,88 +43,140 @@ class BaseFilterableMainWidget extends StatelessWidget {
     Map<ViewAbstract, List<dynamic>> list = context
         .read<FilterableListApiProvider<FilterableData>>()
         .getRequiredFiltter;
-
+    if (useDraggableWidget) {
+      return getDraggableWidget(context, list, drawerViewAbstract);
+    }
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(kDefaultPadding),
         child: Column(
           children: [
-            Card(
-              child: ListTile(
-                leading: Badge(
-                  badgeColor: Theme.of(context).colorScheme.primary,
-                  badgeContent: Text(
-                    context
-                        .watch<FilterableProvider>()
-                        .getList
-                        .length
-                        .toString(),
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
-                  ),
-                  toAnimate: true,
-                  showBadge:
-                      context.watch<FilterableProvider>().getList.length > 0,
-                  animationType: BadgeAnimationType.slide,
-                  child: Icon(Icons.filter_alt),
-                ),
-                title: getTitle(context, drawerViewAbstract),
-              ),
-            ),
+            getHeader(context, drawerViewAbstract),
+            if (SizeConfig.isMobile(context)) Divider(),
             Expanded(
-              child: ListView(
-                children: [
-                  ListView.builder(
-                    // separatorBuilder: (context, index) {
-                    //   return const Divider();
-                    // },
-                    itemCount: list.length,
-                    shrinkWrap: true,
-                    primary: false,
-                    itemBuilder: (context, index) {
-                      ViewAbstract viewAbstract = list.keys.elementAt(index);
-                      List<dynamic> itemsViewAbstract =
-                          list[viewAbstract] ?? [];
-                      debugPrint(
-                          "getListFilterableControlers is => ${viewAbstract.runtimeType.toString()} count is ${itemsViewAbstract.length}");
-                      return MasterFilterableController(
-                          viewAbstract: viewAbstract, list: itemsViewAbstract);
-                    },
-                  ),
-                  ListView.builder(
-                      itemCount: drawerViewAbstract
-                          .getCustomFilterableFields(context)
-                          .length,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemBuilder: (context, index) {
-                        return CustomFilterableController(
-                            customFilterableField: drawerViewAbstract
-                                .getCustomFilterableFields(context)[index]);
-                      }),
-                ],
-              ),
+              child: getControllers(list, drawerViewAbstract, context),
             ),
             Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  child: const Text("DONE"),
-                  onPressed: () {
-                    notifyListApi(context);
-                    // Navigator.pop(context);
-                    // debugPrint(context.read<FilterableProvider>().getList.toString());
-                  },
-                )
-              ],
-            )
+            getButtons(context)
           ],
         ),
       ),
     );
   }
 
+  ListView getControllers(Map<ViewAbstract<dynamic>, List<dynamic>> list,
+      ViewAbstract<dynamic> drawerViewAbstract, BuildContext context,
+      {ScrollController? scrollController}) {
+    return ListView(
+      children: [
+        ListView.builder(
+          controller: scrollController,
+          // separatorBuilder: (context, index) {
+          //   return const Divider();
+          // },
+          itemCount: list.length,
+          shrinkWrap: true,
+          primary: false,
+          itemBuilder: (context, index) {
+            ViewAbstract viewAbstract = list.keys.elementAt(index);
+            List<dynamic> itemsViewAbstract = list[viewAbstract] ?? [];
+            debugPrint(
+                "getListFilterableControlers is => ${viewAbstract.runtimeType.toString()} count is ${itemsViewAbstract.length}");
+            return MasterFilterableController(
+                viewAbstract: viewAbstract, list: itemsViewAbstract);
+          },
+        ),
+        ListView.builder(
+            itemCount:
+                drawerViewAbstract.getCustomFilterableFields(context).length,
+            shrinkWrap: true,
+            primary: false,
+            itemBuilder: (context, index) {
+              return CustomFilterableController(
+                  customFilterableField: drawerViewAbstract
+                      .getCustomFilterableFields(context)[index]);
+            }),
+      ],
+    );
+  }
+
+  Row getButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ElevatedButton(
+          child: const Text("DONE"),
+          onPressed: () {
+            notifyListApi(context);
+            if (SizeConfig.isMobile(context)) {
+              Navigator.pop(context);
+            }
+            // Navigator.pop(context);
+            // debugPrint(context.read<FilterableProvider>().getList.toString());
+          },
+        )
+      ],
+    );
+  }
+
+  Widget getHeader(
+      BuildContext context, ViewAbstract<dynamic> drawerViewAbstract) {
+    if (SizeConfig.isMobile(context)) {
+      return ListTile(
+        leading: Badge(
+          badgeColor: Theme.of(context).colorScheme.primary,
+          badgeContent: Text(
+            context.watch<FilterableProvider>().getList.length.toString(),
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+          toAnimate: true,
+          showBadge: context.watch<FilterableProvider>().getList.length > 0,
+          animationType: BadgeAnimationType.slide,
+          child: Icon(Icons.filter_alt),
+        ),
+        title: getTitle(context, drawerViewAbstract),
+      );
+    }
+    return Card(
+      child: ListTile(
+        leading: Badge(
+          badgeColor: Theme.of(context).colorScheme.primary,
+          badgeContent: Text(
+            context.watch<FilterableProvider>().getList.length.toString(),
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+          toAnimate: true,
+          showBadge: context.watch<FilterableProvider>().getList.length > 0,
+          animationType: BadgeAnimationType.slide,
+          child: Icon(Icons.filter_alt),
+        ),
+        title: getTitle(context, drawerViewAbstract),
+      ),
+    );
+  }
+
   Text getTitle(BuildContext context, ViewAbstract v) => Text(
       "${AppLocalizations.of(context)!.filter} ${v.getMainHeaderLabelTextOnly(context).toLowerCase()}");
+
+  Widget getDraggableWidget(BuildContext context,
+      Map<ViewAbstract, List<dynamic>> list, ViewAbstract drawerViewAbstract) {
+    return Scaffold(
+      appBar: AppBar(title: getHeader(context, drawerViewAbstract)),
+      body: SizedBox.expand(
+        child: DraggableScrollableSheet(
+          initialChildSize: .3,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return getControllers(list, drawerViewAbstract, context,
+                scrollController: scrollController);
+          },
+        ),
+      ),
+    );
+  }
 }

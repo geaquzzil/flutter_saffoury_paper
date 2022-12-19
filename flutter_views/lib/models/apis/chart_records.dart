@@ -102,13 +102,13 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   Widget? getCustomViewSingleResponseWidget(
-      BuildContext context, ChartRecordAnalysis item) {
+      BuildContext context) {
     debugPrint(
-        "getCustomViewSingleResponseWidget ${item.responseListAnalysis?.length}");
+        "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}");
     return LineChartItem<GrowthRate, DateTime>(
       title:
-          "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",
-      list: item.responseListAnalysis ?? [],
+          "${AppLocalizations.of(context)!.total}: ${responseListAnalysis?.length} ",
+      list: responseListAnalysis ?? [],
       xValueMapper: (item, value) =>
           DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
       yValueMapper: (item, n) => item.total,
@@ -138,8 +138,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
         ),
         LineChartItem<GrowthRate, DateTime>(
           title:
-              "${AppLocalizations.of(context)!.total}: ${item.responseListAnalysis?.length} ",
-          list: item.responseListAnalysis ?? [],
+              "${AppLocalizations.of(context)!.total}: ${responseListAnalysis?.length} ",
+          list: responseListAnalysis ?? [],
           xValueMapper: (item, value) =>
               DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
           yValueMapper: (item, n) => item.total,

@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
+import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -26,6 +27,8 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +57,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     Widget? filterButton =
         (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
                 2)
-            ? getFilterWidget()
+            ? getFilterWidget(context)
             : null;
 
     Widget? exportButton =
@@ -154,7 +157,24 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
         drawerViewAbstractObsever.getObject.onDrawerLeadingItemClicked(context);
       },
       icon: const Icon(Icons.add));
-  Widget? getFilterWidget() {
+  Widget? getFilterWidget(BuildContext context) {
+    if (SizeConfig.isMobile(context)) {
+      return IconButton(
+        icon: Icon(Icons.filter_alt_rounded),
+        onPressed: () async {
+          showBottomSheetExt(
+            context: context,
+            builder: (p0) {
+              return BaseFilterableMainWidget(
+                useDraggableWidget: false,
+              );
+            },
+          );
+          // Navigator.pushNamed(context, "/search");
+        },
+      );
+    }
+
     return FilterablePopupIconWidget();
   }
 

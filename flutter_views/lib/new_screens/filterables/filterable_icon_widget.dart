@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/size_config.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:nil/nil.dart';
 
 import '../../screens/on_hover_button.dart';
 import 'base_filterable_main.dart';
@@ -17,10 +20,10 @@ class FilterablePopupIconWidget extends StatelessWidget {
         // arrowSize: 20,
         // arrowColor: Theme.of(context).colorScheme.secondaryContainer,
         menuBuilder: () => getWidget(context),
+        enablePassEvent: true,
         pressType: PressType.singleClick,
         showArrow: false,
-        
-        // verticalMargin: -15,
+        verticalMargin: -100,
         controller: _controller,
         child: buildColapsedIcon(context, Icons.filter_alt_rounded, null));
   }
@@ -32,8 +35,9 @@ class FilterablePopupIconWidget extends StatelessWidget {
             // color: Theme.of(context).colorScheme.secondaryContainer,
             child: IntrinsicWidth(
               child: SizedBox(
-                  width: MediaQuery.of(context).size.width * .25,
-                  height: MediaQuery.of(context).size.height * .75,
+                  width: MediaQuery.of(context).size.width *
+                      (SizeConfig.isTablet(context) ? 0.5 : 0.25),
+                  height: MediaQuery.of(context).size.height * .8,
                   child: BaseFilterableMainWidget()),
             ),
           ),

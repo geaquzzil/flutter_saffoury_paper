@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
@@ -20,6 +22,7 @@ import 'package:flutter_view_controller/test_var.dart';
 import '../../invoices/orders.dart';
 import '../../invoices/priceless_invoices/transfers.dart';
 
+//TODO ADD DATE
 class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
     implements CustomViewHorizontalListResponse<ProductMovments> {
   Product? products;
@@ -47,6 +50,9 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
 
   List<CutRequest>? cut_requests;
   List<GrowthRate>? cut_requestsAnalysis;
+
+  List<ReservationInvoice>? reservation_invoice;
+  List<GrowthRate>? reservation_invoiceAnalysis;
 
   ProductMovments();
   ProductMovments.init(int iD) {
@@ -77,6 +83,8 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
   Widget wrapContainer(
       {required String title,
       required String description,
+      required BuildContext context,
+      required List<ViewAbstract> list,
       Color? color,
       String? footer,
       String? footerRight}) {
@@ -87,28 +95,60 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
         description: description,
         footer: footer,
         footerRight: footerRight,
+        onTap: () {
+          Navigator.pushNamed(context, "/list", arguments: list);
+        },
       ),
     );
   }
 
+  List<String> getAnalysisChartTitle(BuildContext context) {
+    return [
+      if (ordersAnalysis?.isNotEmpty ?? false)
+        Order().getMainHeaderLabelTextOnly(context),
+      if (purchasesAnalysis?.isNotEmpty ?? false)
+        Purchases().getMainHeaderLabelTextOnly(context),
+      if (purchases_refundsAnalysis?.isNotEmpty ?? false)
+        PurchasesRefund().getMainHeaderLabelTextOnly(context),
+      if (orders_refundsAnalysis?.isNotEmpty ?? false)
+        OrderRefund().getMainHeaderLabelTextOnly(context),
+      if (products_inputsAnalysis?.isNotEmpty ?? false)
+        ProductInput().getMainHeaderLabelTextOnly(context),
+      if (products_outputsAnalysis?.isNotEmpty ?? false)
+        ProductOutput().getMainHeaderLabelTextOnly(context),
+      if (transfersAnalysis?.isNotEmpty ?? false)
+        Transfers().getMainHeaderLabelTextOnly(context),
+      if (reservation_invoiceAnalysis?.isNotEmpty ?? false)
+        ReservationInvoice().getMainHeaderLabelTextOnly(context),
+      if (cut_requestsAnalysis?.isNotEmpty ?? false)
+        CutRequest().getMainHeaderLabelTextOnly(context),
+      // if (spendingsAnalysis?.isNotEmpty ??false) spendingsAnalysis ?? [],
+      // if (incomesAnalysis?.isNotEmpty ??false) incomesAnalysis ?? []
+    ];
+  }
+
   List<List<GrowthRate>> getAnalysisChart() {
     return [
-      if (ordersAnalysis != null) ordersAnalysis ?? [],
-      if (purchasesAnalysis != null) purchasesAnalysis ?? [],
-      if (purchases_refundsAnalysis != null) purchases_refundsAnalysis ?? [],
-      if (orders_refundsAnalysis != null) orders_refundsAnalysis ?? [],
-      if (products_inputsAnalysis != null) products_inputsAnalysis ?? [],
-      if (products_outputsAnalysis != null) products_outputsAnalysis ?? [],
-      if (transfersAnalysis != null) transfersAnalysis ?? [],
-      if (cut_requestsAnalysis != null) cut_requestsAnalysis ?? []
+      if (ordersAnalysis?.isNotEmpty ?? false) ordersAnalysis ?? [],
+      if (purchasesAnalysis?.isNotEmpty ?? false) purchasesAnalysis ?? [],
+      if (purchases_refundsAnalysis?.isNotEmpty ?? false)
+        purchases_refundsAnalysis ?? [],
+      if (orders_refundsAnalysis?.isNotEmpty ?? false)
+        orders_refundsAnalysis ?? [],
+      if (products_inputsAnalysis?.isNotEmpty ?? false)
+        products_inputsAnalysis ?? [],
+      if (products_outputsAnalysis?.isNotEmpty ?? false)
+        products_outputsAnalysis ?? [],
+      if (transfersAnalysis?.isNotEmpty ?? false) transfersAnalysis ?? [],
+      if (cut_requestsAnalysis?.isNotEmpty ?? false) cut_requestsAnalysis ?? [],
+      if (reservation_invoiceAnalysis?.isNotEmpty ?? false)
+        cut_requestsAnalysis ?? []
     ];
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(
-      BuildContext context, ProductMovments item) {
-    return Column(
-      children: [
+  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+    return
         // MultiLineChartItem<GrowthRate, DateTime>(
         //   title: "title",
         //   list: item.getAnalysisChart(),
@@ -117,79 +157,110 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
         //   yValueMapper: (item, n, indexInsideList) => n.total,
         // ),
         StaggeredGrid.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 2,
-          crossAxisSpacing: 2,
-          children: [
-            if (item.purchases!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.purchases![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.purchases?.length}")),
-            if (item.purchases_refunds!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.purchases_refunds![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.purchases_refunds?.length}")),
-            if (item.orders!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title:
-                          item.orders![0].getMainHeaderLabelTextOnly(context),
-                      description:
-                          "${GrowthRate.getTotal(item.ordersAnalysis).toCurrencyFormat(symbol: "kg")} ",
-                      footer: "${item.orders?.length}",
-                      footerRight: "23%")),
-            if (item.orders_refunds!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.orders_refunds![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.orders_refunds?.length}")),
-            if (item.products_inputs!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.products_inputs![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.products_inputs?.length}")),
-            if (item.products_outputs!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.products_outputs![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.products_outputs?.length}")),
-            if (item.transfers!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.transfers![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.transfers?.length}")),
-            if (item.cut_requests!.isNotEmpty)
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
-                  child: wrapContainer(
-                      title: item.cut_requests![0]
-                          .getMainHeaderLabelTextOnly(context),
-                      description: "${item.cut_requests?.length}")),
-          ],
-        ),
+      crossAxisCount: 2,
+      mainAxisSpacing: 2,
+      crossAxisSpacing: 2,
+      children: [
+        StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 1,
+            child: MultiLineChartItem<GrowthRate, DateTime>(
+              title: "T",
+              list: getAnalysisChart(),
+              titles: getAnalysisChartTitle(context),
+              dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
+              xValueMapper: (item, value, indexInsideList) => DateTime(
+                  value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+              yValueMapper: (item, n, indexInsideList) => n.total,
+            )),
+        if (purchases!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: purchases?.cast() ?? [],
+                  title: purchases![0].getMainHeaderLabelTextOnly(context),
+                  description: "${purchases?.length}")),
+        if (purchases_refunds!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: purchases_refunds?.cast() ?? [],
+                  title:
+                      purchases_refunds![0].getMainHeaderLabelTextOnly(context),
+                  description: "${purchases_refunds?.length}")),
+        if (orders!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: orders?.cast() ?? [],
+                  title: orders![0].getMainHeaderLabelTextOnly(context),
+                  description:
+                      "${GrowthRate.getTotal(ordersAnalysis).toCurrencyFormat(symbol: "kg")} ",
+                  footer: "${orders?.length}",
+                  footerRight: "23%")),
+        if (orders_refunds!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: orders_refunds?.cast() ?? [],
+                  title: orders_refunds![0].getMainHeaderLabelTextOnly(context),
+                  description: "${orders_refunds?.length}")),
+        if (products_inputs!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: products_inputs?.cast() ?? [],
+                  title:
+                      products_inputs![0].getMainHeaderLabelTextOnly(context),
+                  description: "${products_inputs?.length}")),
+        if (products_outputs!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: products_outputs?.cast() ?? [],
+                  title:
+                      products_outputs![0].getMainHeaderLabelTextOnly(context),
+                  description: "${products_outputs?.length}")),
+        if (transfers!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: transfers?.cast() ?? [],
+                  title: transfers![0].getMainHeaderLabelTextOnly(context),
+                  description: "${transfers?.length}")),
+        if (cut_requests!.isNotEmpty)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: cut_requests?.cast() ?? [],
+                  title: cut_requests![0].getMainHeaderLabelTextOnly(context),
+                  description: "${cut_requests?.length}")),
+        if (reservation_invoice?.isNotEmpty ?? false)
+          StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: wrapContainer(
+                  context: context,
+                  list: reservation_invoice?.cast() ?? [],
+                  title: reservation_invoice![0]
+                      .getMainHeaderLabelTextOnly(context),
+                  description: "${reservation_invoice?.length}")),
       ],
     );
   }

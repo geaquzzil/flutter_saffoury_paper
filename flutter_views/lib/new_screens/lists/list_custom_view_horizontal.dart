@@ -95,8 +95,9 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     if (widget.onResponse != null) {
       widget.onResponse!(listProvider.getList(key)[0]);
     }
-    return widget.autoRest.getCustomViewSingleResponseWidget(
-            context, listProvider.getList(key)[0]) ??
+    return (listProvider.getList(key)[0] as T)
+            .getCustomViewSingleResponseWidget(
+                context) ??
         const Text("Not emplemented getCustomViewSingleResponseWidget");
   }
 

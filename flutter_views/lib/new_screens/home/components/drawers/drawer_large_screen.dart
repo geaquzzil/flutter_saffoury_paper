@@ -57,9 +57,12 @@ class DrawerLargeScreens extends StatelessWidget {
     );
   }
 
-  double getOpenWidthSize(BuildContext context) {
+  double? getOpenWidthSize(BuildContext context) {
     if (SizeConfig.isDesktop(context)) {
       return 256;
+    }
+    if (SizeConfig.isTablet(context)) {
+      return MediaQuery.of(context).size.width * .25;
     }
     return MediaQuery.of(context).size.width * .75;
   }

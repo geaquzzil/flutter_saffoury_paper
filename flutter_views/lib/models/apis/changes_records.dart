@@ -116,12 +116,12 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   Widget? getCustomViewSingleResponseWidget(
-      BuildContext context, ChangesRecords item) {
-    debugPrint("getCustomViewSingleResponseWidget ${item.totalGrouped}");
+      BuildContext context) {
+    debugPrint("getCustomViewSingleResponseWidget ${totalGrouped}");
     return CirculeChartItem<ChangesRecordGroup, String>(
       title:
-          "${AppLocalizations.of(context)!.total}: ${item.total.toCurrencyFormat()} ",
-      list: item.totalGrouped ?? [],
+          "${AppLocalizations.of(context)!.total}: ${total.toCurrencyFormat()} ",
+      list: totalGrouped ?? [],
       xValueMapper: (item, value) => item.groupBy,
       yValueMapper: (item, n) => item.count,
     );

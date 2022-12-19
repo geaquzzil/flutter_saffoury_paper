@@ -10,7 +10,7 @@ class AutoRest<T extends ViewAbstract> {
 
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
-  Widget? getCustomViewSingleResponseWidget(BuildContext context, T item);
+  Widget? getCustomViewSingleResponseWidget(BuildContext context);
   void onCustomViewCardClicked(BuildContext context, T istem);
   double? getCustomViewHeight();
   ResponseType getCustomViewResponseType();
