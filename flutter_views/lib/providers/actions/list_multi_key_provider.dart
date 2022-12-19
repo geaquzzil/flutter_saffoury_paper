@@ -129,7 +129,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future fetchList(String key, ViewAbstract viewAbstract) async {
+  Future fetchList(String key, ViewAbstract viewAbstract,
+      {AutoRest? autoRest}) async {
     late MultiListProviderHelper? multiListProviderHelper;
     if (listMap.containsKey(key)) {
       multiListProviderHelper = listMap[key];
@@ -142,7 +143,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.isLoading = true;
     notifyListeners();
     List? list = await viewAbstract.listCall(
-        count: viewAbstract.getPageItemCount,
+        count: autoRest?.range ?? viewAbstract.getPageItemCount,
         page: multiListProviderHelper.page);
     multiListProviderHelper.isLoading = false;
     multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;

@@ -129,7 +129,8 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
     return FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.only(bottom: 62),
-        title: widget.viewAbstract.getMainHeaderText(context),
+        title: Text(widget.viewAbstract.getBaseTitle(context,
+            descriptionIsId: true, serverAction: widget.getServerAction())),
         background: widget.viewAbstract.getCardLeading(context));
   }
 

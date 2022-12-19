@@ -65,10 +65,10 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
   @override
   Map<String, String> get getCustomMap => {"<ProductID>": iD.toString()};
 
-  @override
-  Future<ProductMovments?> callApi() async {
-    return fromJsonViewAbstract(jsonDecode(jsonEncode(productMovement)));
-  }
+  // @override
+  // Future<ProductMovments?> callApi() async {
+  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(productMovement)));
+  // }
 
   @override
   Widget? getCustomViewListResponseWidget(

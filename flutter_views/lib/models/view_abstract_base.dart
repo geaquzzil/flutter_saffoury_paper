@@ -268,6 +268,54 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
                 : e))
         .toList();
   }
+
+  String getBaseActionText(BuildContext context,
+      {ServerActions? serverAction}) {
+    if (serverAction != null) {
+      switch (serverAction) {
+        case ServerActions.add:
+          return AppLocalizations.of(context)!.add.toLowerCase();
+        case ServerActions.edit:
+          return AppLocalizations.of(context)!.edit.toLowerCase();
+        case ServerActions.view:
+          return AppLocalizations.of(context)!.view.toLowerCase();
+        case ServerActions.delete_action:
+          return AppLocalizations.of(context)!.delete.toLowerCase();
+        default:
+          return "";
+      }
+    } else {
+      if (isNew()) {
+        return AppLocalizations.of(context)!.add.toLowerCase();
+      } else {
+        return AppLocalizations.of(context)!.edit.toLowerCase();
+      }
+    }
+    return "";
+  }
+
+  String getBaseTitle(BuildContext context,
+      {ServerActions? serverAction, bool descriptionIsId = false}) {
+    String descripon = "";
+    if (descriptionIsId) {
+      descripon = getIDFormat(context);
+    } else {
+      if (isEditing()) {
+        descripon = getMainHeaderTextOnly(context).toLowerCase();
+      } else {
+        descripon = getMainHeaderLabelTextOnly(context).toLowerCase();
+      }
+    }
+    return "${getBaseActionText(context, serverAction: serverAction).toUpperCase()} $descripon ";
+  }
+
+  String getBaseLabelViewAbstract(BuildContext context) {
+    return getMainHeaderLabelTextOnly(context).toLowerCase();
+  }
+
+  String getBaseMessage(BuildContext context) {
+    return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context)} ${getBaseLabelViewAbstract(context)} ";
+  }
 }
 
 class GroupItem {

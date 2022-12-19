@@ -44,7 +44,8 @@ class _ListHorizontalApiWidgetState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {
-        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj,
+            autoRest: widget.autoRest);
       }
     });
   }
@@ -165,7 +166,8 @@ class _ListHorizontalApiWidgetState
   void _onScroll() {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj,
+          autoRest: widget.autoRest);
     }
   }
 

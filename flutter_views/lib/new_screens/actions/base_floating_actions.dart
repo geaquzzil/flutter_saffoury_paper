@@ -66,8 +66,8 @@ class BaseFloatingActionButtons extends StatelessWidget {
             msgAlign: TextAlign.end,
             dialogWidth: SizeConfig.isDesktopOrWeb(context) ? 0.3 : null,
             color: Theme.of(context).colorScheme.background,
-            msg: getMessage(context),
-            title: getTitle(context),
+            msg: viewAbstract.getBaseMessage(context),
+            title: viewAbstract.getBaseTitle(context),
             context: context,
             onClose: (value) {
               if (value != null) {
@@ -128,35 +128,5 @@ class BaseFloatingActionButtons extends StatelessWidget {
           // context.read().change()
         },
         child: Icon(Icons.file_download_outlined));
-  }
-
-  String getActionText(BuildContext context) {
-    if (viewAbstract == null) {
-      return "NOT FOUND";
-    }
-    if (viewAbstract!.isNew()) {
-      return AppLocalizations.of(context)!.add.toLowerCase();
-    } else {
-      return AppLocalizations.of(context)!.edit.toLowerCase();
-    }
-  }
-
-  String getTitle(BuildContext context) {
-    String descripon = "";
-    if (viewAbstract.isEditing()) {
-      descripon = viewAbstract.getMainHeaderTextOnly(context).toLowerCase();
-    } else {
-      descripon =
-          viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase();
-    }
-    return "${getActionText(context).toUpperCase()} $descripon ";
-  }
-
-  String getLabelViewAbstract(BuildContext context) {
-    return viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase();
-  }
-
-  String getMessage(BuildContext context) {
-    return "${AppLocalizations.of(context)!.areYouSure}${getActionText(context)} ${getLabelViewAbstract(context)} ";
   }
 }

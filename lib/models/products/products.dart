@@ -609,6 +609,7 @@ class Product extends ViewAbstract<Product>
           customHeight: 300,
           titleString: AppLocalizations.of(context)!.simialrProducts,
           autoRest: AutoRest<Product>(
+              range: 5,
               obj: Product()..setCustomMap(getSimilarCustomParams(context)),
               key: "similarProducts$iD"),
         ),
@@ -616,6 +617,7 @@ class Product extends ViewAbstract<Product>
           customHeight: 300,
           titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
           autoRest: AutoRest<Product>(
+              range: 5,
               obj: Product()
                 ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
               key: "productsWithSimilarSize$iD"),
@@ -633,8 +635,6 @@ class Product extends ViewAbstract<Product>
   List<TabControllerHelper> getCustomTabList(BuildContext context,
           {ServerActions? action}) =>
       [
-        TabControllerHelper(AppLocalizations.of(context)!.descSorting,
-            widget: Text("$iD")),
         TabControllerHelper(AppLocalizations.of(context)!.movments,
             widget: ListHorizontalCustomViewApiAutoRestWidget(
                 titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
