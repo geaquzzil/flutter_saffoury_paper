@@ -12,9 +12,10 @@ import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
-import 'package:material_dialogs/material_dialogs.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../new_components/cards/outline_card.dart';
