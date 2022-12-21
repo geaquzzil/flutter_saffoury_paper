@@ -29,7 +29,7 @@ class RouteGenerator {
           builder: (context) {
             Status authStatus = context.read<AuthProvider>().getStatus;
             if (authStatus == Status.Authenticated) {
-              return POSPage();
+              // return POSPage();
               return const BaseHomeMainPage();
             } else {
               // return POSPage();

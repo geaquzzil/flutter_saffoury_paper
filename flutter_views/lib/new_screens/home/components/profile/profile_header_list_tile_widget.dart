@@ -4,8 +4,8 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class ProfileListTileWidget extends StatelessWidget {
-  const ProfileListTileWidget({Key? key}) : super(key: key);
+class ProfileHeaderListTileWidget extends StatelessWidget {
+  const ProfileHeaderListTileWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

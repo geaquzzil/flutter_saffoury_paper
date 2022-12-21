@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
@@ -19,7 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
 import '../../../../providers/cart/cart_provider.dart';
-import '../profile/profile_list_tile_widget.dart';
+import '../profile/profile_header_list_tile_widget.dart';
 import '../profile/profile_pic_popup_menu.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
@@ -33,7 +34,7 @@ class DrawerLargeScreens extends StatelessWidget {
     // bool isHovered = context.watch<IsHoveredOnDrawerClosed>().isHovered;
     return AnimatedSize(
       duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
+      curve: Curves.fastOutSlowIn,
       child: SizedBox(
         height: double.maxFinite,
         width: isOpen ? getOpenWidthSize(context) : 60,
@@ -43,11 +44,16 @@ class DrawerLargeScreens extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             fit: StackFit.loose,
             children: [
-              Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                buildHeader(context, isOpen),
-                buildList(context, isOpen),
-                // const Spacer(),
-              ]),
+              ListView(
+                children: [
+                  buildHeader(context, isOpen),
+                  buildList(context, isOpen),
+                ],
+              ),
+              // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+
+              //   // const Spacer(),
+              // ]),
               buildDrawerFooter(context, isOpen),
               // buildProfilePic(context, isOpen),
             ],
@@ -72,10 +78,16 @@ class DrawerLargeScreens extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        const Divider(),
-        buildProfilePic(context, isOpen),
-        const Divider(),
-        buildCollapseIcon(context, isOpen),
+        // const Divider(),
+        Container(
+            color: Theme.of(context).colorScheme.background,
+            child: buildProfilePic(context, isOpen)),
+        Container(
+            color: Theme.of(context).colorScheme.background,
+            child: const Divider()),
+        Container(
+            color: Theme.of(context).colorScheme.background,
+            child: buildCollapseIcon(context, isOpen)),
       ],
     );
   }
@@ -122,47 +134,45 @@ class DrawerLargeScreens extends StatelessWidget {
         "getDrawerItemsGrouped current length=> ${authProvider.getDrawerItemsGrouped.length}");
     debugPrint(
         "getDrawerItemsGrouped current entires length=> ${authProvider.getDrawerItemsGrouped.entries.length}");
-    return SingleChildScrollView(
-      child: Expanded(
-          // height: MediaQuery.of(context).size.height - 80,
-          child: ListView.separated(
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: isClosed ? EdgeInsets.zero : padding,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemCount: authProvider.getDrawerItemsGrouped.length,
-              shrinkWrap: true,
-              primary: false,
-              itemBuilder: (context, index) {
-                String? groupLabel =
-                    authProvider.getDrawerItemsGrouped.keys.elementAt(index);
+    return Expanded(
+        // height: MediaQuery.of(context).size.height - 80,
+        child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            physics: const AlwaysScrollableScrollPhysics(),
+            // padding: isClosed ? EdgeInsets.zero : padding,
+            // separatorBuilder: (context, index) {
+            //   return const SizedBox(
+            //     height: 8,
+            //   );
+            // },
+            itemCount: authProvider.getDrawerItemsGrouped.length,
+            shrinkWrap: true,
+            primary: false,
+            itemBuilder: (context, index) {
+              String? groupLabel =
+                  authProvider.getDrawerItemsGrouped.keys.elementAt(index);
 
-                debugPrint(
-                    "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
-                if (groupLabel != null) {
-                  return isOpen
-                      ? DrawerListTileDesktopGroupOpen(
-                          groupedDrawerItems:
-                              authProvider.getDrawerItemsGrouped[groupLabel] ??
-                                  [],
-                          idx: index)
-                      : DrawerListTileDesktopGroupClosed(
-                          groupedDrawerItems:
-                              authProvider.getDrawerItemsGrouped[groupLabel] ??
-                                  [],
-                          idx: index,
-                        );
-                }
-                ViewAbstract viewAbstract =
-                    authProvider.getDrawerItemsGrouped[groupLabel]!.first;
-                return DrawerListTileDesktopOpen(
-                    viewAbstract: viewAbstract, idx: index);
-              })),
-    );
+              debugPrint(
+                  "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
+              if (groupLabel != null) {
+                return isOpen
+                    ? DrawerListTileDesktopGroupOpen(
+                        groupedDrawerItems:
+                            authProvider.getDrawerItemsGrouped[groupLabel] ??
+                                [],
+                        idx: index)
+                    : DrawerListTileDesktopGroupClosed(
+                        groupedDrawerItems:
+                            authProvider.getDrawerItemsGrouped[groupLabel] ??
+                                [],
+                        idx: index,
+                      );
+              }
+              ViewAbstract viewAbstract =
+                  authProvider.getDrawerItemsGrouped[groupLabel]!.first;
+              return DrawerListTileDesktopOpen(
+                  viewAbstract: viewAbstract, idx: index);
+            }));
   }
 
   Widget buildProfilePic(BuildContext context, bool isOpen) {
@@ -172,7 +182,7 @@ class DrawerLargeScreens extends StatelessWidget {
     final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
     final width = isOpen ? size : double.infinity;
     return isOpen
-        ? const ProfileListTileWidget()
+        ? ProfileOnOpenDrawerWidget()
         : const ProfilePicturePopupMenu();
   }
 

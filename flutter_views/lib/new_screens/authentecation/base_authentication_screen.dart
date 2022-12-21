@@ -41,7 +41,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-              return POSPage();
+              // return POSPage();
               return const BaseHomeMainPage();
             default:
               if (snapshot.hasError) {

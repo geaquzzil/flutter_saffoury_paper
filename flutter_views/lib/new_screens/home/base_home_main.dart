@@ -20,7 +20,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return Scaffold(
       // resizeToAvoidBottomInset: true,
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
-      drawer: DrawerLargeScreens(),
+      drawer: SafeArea(child: DrawerLargeScreens()),
       endDrawer: const BaseHomeCartPage(),
       body: const SafeArea(child: BaseHomeScreenLayout()),
     );
