@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_stateless.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -34,35 +35,27 @@ import '../filterables/horizontal_selected_filterable.dart';
 import '../home/components/ext_provider.dart';
 import 'list_api_master.dart';
 
-class ListApiSearchableWidget<T extends ViewAbstract> extends StatefulWidget {
-  const ListApiSearchableWidget({Key? key}) : super(key: key);
+class ListApiSearchableWidgetTestScrolling<T extends ViewAbstract>
+    extends StatefulWidget {
+  ListApiSearchableWidgetTestScrolling({Key? key}) : super(key: key);
 
   @override
-  State<ListApiSearchableWidget> createState() => _ListApiWidgetState();
+  State<ListApiSearchableWidgetTestScrolling<T>> createState() =>
+      _ListApiSearchableWidgetTestScrollingState<T>();
 }
 
-class _ListApiWidgetState<T extends ViewAbstract>
-    extends State<ListApiSearchableWidget<T>> {
+class _ListApiSearchableWidgetTestScrollingState<T extends ViewAbstract>
+    extends State<ListApiSearchableWidgetTestScrolling<T>> {
   final _scrollController = ScrollController();
+
   late ListMultiKeyProvider listProvider;
+
   late DrawerViewAbstractListProvider drawerViewAbstractObsever;
+
   TextEditingController controller = TextEditingController();
+
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() => _onScroll());
-
-    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    drawerViewAbstractObsever =
-        Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
-    drawerViewAbstractObsever.addListener(onChangedViewAbstract);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      listProvider.fetchList(
-          getCustomKey(), drawerViewAbstractObsever.getObject);
-    });
-  }
 
   String getCustomKey({String? searchTextKey}) {
     String key = drawerViewAbstractObsever.getObject.getListableKey();
@@ -76,12 +69,6 @@ class _ListApiWidgetState<T extends ViewAbstract>
         searchTextKey: controller.text.isEmpty ? null : controller.text);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    controller.text = "";
-  }
-
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
     var listView = ListView.builder(
@@ -89,36 +76,18 @@ class _ListApiWidgetState<T extends ViewAbstract>
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       controller: _scrollController,
-      itemCount: listProvider.isLoading(findCustomKey())
+      itemCount: listProvider.isLoading(findCustomKey()) ||
+              listProvider.isHasError(findCustomKey())
           ? (data.length + 1)
           : (data.length),
       itemBuilder: (context, index) {
         if (listProvider.isLoading(findCustomKey()) && index == data.length) {
-          return Text("LOADING");
-          return Center(
-              child: Padding(
-            padding: const EdgeInsets.all(kDefaultPadding),
-            child: CircularProgressIndicator(),
-          ));
-          return Center(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("Loading..."),
-                SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                    )),
-              ],
-            ),
-          ));
+          // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+          return getLoadingItem();
+        } else if (listProvider.isHasError(findCustomKey())) {
+          return Text("ERROR");
         }
-        return ListCardItem(object: data[index]);
+        return ListCardItemStateless(object: data[index]);
         // return data[index].getCardView(context);
       },
       // ),
@@ -127,52 +96,67 @@ class _ListApiWidgetState<T extends ViewAbstract>
   }
 
   @override
-  Widget build(BuildContext context) {
-    //  return ListApiMaster();
-    return Column(
-      children: <Widget>[
-        SearchWidgetComponent(
-          controller: controller,
-          onSearchTextChanged: (p0) {
-        onSearchTextChanged(p0);
-          },
-        ),
-        // FiltersAndSelectionListHeader(),
-        Expanded(
-            child: ChangeNotifierProvider.value(
-          value: listProvider,
-          child: Consumer<ListMultiKeyProvider>(
-              builder: (context, provider, listTile) {
-            if (provider.isLoading(findCustomKey())) {
-              if (provider.getCount(findCustomKey()) == 0) {
-                return getShimmerLoading(context);
-              }
-            } else {
-              if (provider.getCount(findCustomKey()) == 0) {
-                return getEmptyWidget(context);
-              } else {}
-            }
-            // return _listItems(
-            //     listProvider.getList(findCustomKey()), listProvider);
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() => _onScroll());
+    drawerViewAbstractObsever =
+        Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
+    drawerViewAbstractObsever.addListener(onChangedViewAbstract);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<ListMultiKeyProvider>()
+          .fetchList(getCustomKey(), drawerViewAbstractObsever.getObject);
+    });
+    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+  }
 
-            // debugPrint("List api provider loaded ${listProvider.isLoading}");
-            return ListView(
-              children: [
-                FiltersAndSelectionListHeader(
-                  customKey: findCustomKey(),
-                  listProvider: listProvider,
-                ),
-                Divider(),
-                _listItems(listProvider.getList(findCustomKey()), listProvider),
-              ],
-            );
-          }),
-        )),
-      ],
+  @override
+  Widget build(BuildContext context) {
+    debugPrint("ListApiSearchableWidgetTestScrolling");
+    return ChangeNotifierProvider.value(
+      value: listProvider,
+      child: Consumer<ListMultiKeyProvider>(
+          builder: (context, provider, listTile) {
+        debugPrint(
+            "ListApiSearchableWidgetTestScrolling ChangeNotifierProvider");
+        if (provider.isLoading(findCustomKey())) {
+          if (provider.getCount(findCustomKey()) == 0) {
+            return getShimmerLoading();
+          }
+        } else {
+          if (provider.getCount(findCustomKey()) == 0 &&
+              provider.isHasError(findCustomKey())) {
+            return getErrorWidget();
+          } else if (provider.getCount(findCustomKey()) == 0) {
+            return getEmptyWidget();
+          }
+        }
+        return _listItems(listProvider.getList(findCustomKey()), listProvider);
+      }),
     );
   }
 
-  Widget getEmptyWidget(BuildContext context) {
+  Widget getErrorWidget() {
+    return ListView(children: [
+      FiltersAndSelectionListHeader(
+        customKey: findCustomKey(),
+        listProvider: listProvider,
+      ),
+      Center(
+        child: EmptyWidget(
+            onSubtitleClicked: () {
+              listProvider.fetchList(
+                  getCustomKey(), drawerViewAbstractObsever.getObject);
+            },
+            lottiUrl:
+                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+            title: AppLocalizations.of(context)!.cantConnect,
+            subtitle: AppLocalizations.of(context)!.cantConnectConnectToRetry),
+      ),
+    ]);
+  }
+
+  Widget getEmptyWidget() {
     return ListView(children: [
       FiltersAndSelectionListHeader(
         customKey: findCustomKey(),
@@ -188,7 +172,7 @@ class _ListApiWidgetState<T extends ViewAbstract>
     ]);
   }
 
-  Widget getShimmerLoading(BuildContext context) {
+  Widget getShimmerLoading() {
     return Skeleton(
       isLoading: true,
       skeleton: SkeletonListView(
@@ -198,17 +182,8 @@ class _ListApiWidgetState<T extends ViewAbstract>
     );
   }
 
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
-
   void _onScroll() {
     debugPrint(" IS _onScroll $_isBottom");
-
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
@@ -245,9 +220,14 @@ class _ListApiWidgetState<T extends ViewAbstract>
   }
 
   void onChangedViewAbstract() {
-    if (mounted) {
-      listProvider.fetchList(findCustomKey(), drawerViewAbstractObsever.object);
-      debugPrint("ViewAbstractProvider CHANGED");
-    }
+    listProvider.fetchList(findCustomKey(), drawerViewAbstractObsever.object);
+    debugPrint("ViewAbstractProvider CHANGED");
+  }
+
+  Widget getLoadingItem() {
+    return SkeletonItem(
+        child: Center(
+      child: Text(AppLocalizations.of(context)!.loading),
+    ));
   }
 }

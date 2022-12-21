@@ -20,6 +20,10 @@ class ListMultiKeyProvider with ChangeNotifier {
     return listMap[key]?.isLoading ?? false;
   }
 
+  bool isHasError(String key) {
+    return listMap[key]?.hasError ?? false;
+  }
+
   Future<void> edit(ViewAbstract obj) async {
     await Future.forEach<MultiListProviderHelper>(listMap.values, (element) {
       ViewAbstract? o =
@@ -92,7 +96,12 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
     if (multiListProviderHelper!.isLoading) return;
     multiListProviderHelper.isLoading = true;
-    notifyListeners();
+    await Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        notifyListeners();
+      },
+    );
     List? list = await viewAbstract.search(
         viewAbstract.getPageItemCount, multiListProviderHelper.page, query);
     multiListProviderHelper.isLoading = false;
@@ -140,16 +149,33 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
     if (multiListProviderHelper!.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
+    multiListProviderHelper.hasError = false;
     multiListProviderHelper.isLoading = true;
-    notifyListeners();
-    List? list = await viewAbstract.listCall(
-        count: autoRest?.range ?? viewAbstract.getPageItemCount,
-        page: multiListProviderHelper.page);
-    multiListProviderHelper.isLoading = false;
-    multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
-    if (list != null) {
-      multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
-      multiListProviderHelper.page = multiListProviderHelper.page + 1;
+    await Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        notifyListeners();
+      },
+    );
+
+    try {
+      List? list = await viewAbstract.listCall(
+          count: autoRest?.range ?? viewAbstract.getPageItemCount,
+          page: multiListProviderHelper.page);
+      multiListProviderHelper.isLoading = false;
+      multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
+      if (list != null) {
+        multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+        multiListProviderHelper.page = multiListProviderHelper.page + 1;
+        notifyListeners();
+      } else {
+        multiListProviderHelper.isLoading = false;
+        multiListProviderHelper.hasError = true;
+        notifyListeners();
+      }
+    } catch (e) {
+      multiListProviderHelper.isLoading = false;
+      multiListProviderHelper.hasError = true;
       notifyListeners();
     }
   }
@@ -165,7 +191,12 @@ class ListMultiKeyProvider with ChangeNotifier {
     if (multiListProviderHelper!.isLoading) return;
 
     multiListProviderHelper.isLoading = true;
-    notifyListeners();
+    await Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        notifyListeners();
+      },
+    );
     dynamic list = await viewAbstract.callApi();
     multiListProviderHelper.isLoading = false;
     if (list != null) {
@@ -180,6 +211,7 @@ class MultiListProviderHelper {
   bool isLoading = false;
   bool isFetching = false;
   bool isNoMoreItem = false;
+  bool hasError = false;
   // All movies (that will be displayed on the Home screen)
   final List<ViewAbstract> objects = [];
   int page = 0;

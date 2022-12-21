@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -86,8 +87,8 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
         sliver: SliverAppBar(
             floating: true,
             automaticallyImplyLeading: true,
-            pinned: true,
-            snap: false,
+            pinned: false,
+            snap: true,
             expandedHeight: MediaQuery.of(context).size.height * .25,
             actions: [
               ActionsOnHeaderWidget(
@@ -126,6 +127,40 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
+    // return FlexibleSpaceBar(
+    //   background: Column(
+    //     children: <Widget>[
+    //       SizedBox(height: 90.0),
+    //       Padding(
+    //         padding: const EdgeInsets.fromLTRB(16.0, 6.0, 16.0, 16.0),
+    //         child: Container(
+    //           height: 36.0,
+    //           width: double.infinity,
+    //           child: CupertinoTextField(
+    //             keyboardType: TextInputType.text,
+    //             placeholder: 'Filtrar por nombre o nombre corto',
+    //             placeholderStyle: TextStyle(
+    //               color: Color(0xffC4C6CC),
+    //               fontSize: 14.0,
+    //               fontFamily: 'Brutal',
+    //             ),
+    //             prefix: Padding(
+    //               padding: const EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
+    //               child: Icon(
+    //                 Icons.search,
+    //                 color: Color(0xffC4C6CC),
+    //               ),
+    //             ),
+    //             decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(8.0),
+    //               color: Color(0xffF0F1F5),
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
     return FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.only(bottom: 62),

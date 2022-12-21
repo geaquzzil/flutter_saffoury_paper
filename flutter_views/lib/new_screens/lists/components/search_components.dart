@@ -34,19 +34,18 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Card(
-        child: ListTile(
-          leading: getLeadingWidget(),
-          title: TextField(
-            onEditingComplete: () {
-              FocusScope.of(context).unfocus();
+      child: Hero(
+        tag: "/search",
+        child: Card(
+          color: Theme.of(context).colorScheme.primary,
+          child: ListTile(
+            leading: getLeadingWidget(),
+            onTap: () {
+              Navigator.pushNamed(context, "/search", arguments: null);
             },
-            controller: widget.controller,
-            decoration: const InputDecoration(
-                hintText: 'Search', border: InputBorder.none),
-            onChanged: widget.onSearchTextChanged,
+            title: Text("Serach"),
+            trailing: getTrailingWidget(),
           ),
-          trailing: getTrailingWidget(),
         ),
       ),
     );

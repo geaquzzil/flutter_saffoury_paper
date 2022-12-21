@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
+import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:lottie/lottie.dart';
@@ -37,6 +38,9 @@ class RouteGenerator {
             }
           },
         );
+
+        case "/search":
+          return MaterialPageRoute(builder: (context) => const SearchPage());
       case '/sign_in':
         return MaterialPageRoute(builder: (context) => const SignInPage());
 

@@ -6,8 +6,11 @@ class EmptyWidget extends StatelessWidget {
   String lottiUrl;
   String title;
   String subtitle;
+
+  Function()? onSubtitleClicked;
   EmptyWidget(
       {Key? key,
+      this.onSubtitleClicked,
       required this.lottiUrl,
       required this.title,
       required this.subtitle})
@@ -20,7 +23,8 @@ class EmptyWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Lottie.network(lottiUrl, height: 200, width: 200),
+          // Lottie.network(lottiUrl, height: 200, width: 200),
+          Text("TODO Lottie.network"),
           const SizedBox(
             height: kDefaultPadding,
           ),
@@ -32,8 +36,17 @@ class EmptyWidget extends StatelessWidget {
           const SizedBox(
             height: kDefaultPadding,
           ),
-          Text(subtitle,
-              textAlign: TextAlign.center, style: themeData.textTheme.caption),
+          if (onSubtitleClicked != null)
+            TextButton(
+              child: Text(subtitle,
+                  textAlign: TextAlign.center,
+                  style: themeData.textTheme.caption),
+              onPressed: () => onSubtitleClicked!.call(),
+            )
+          else
+            Text(subtitle,
+                textAlign: TextAlign.center,
+                style: themeData.textTheme.caption),
         ],
       ),
     );

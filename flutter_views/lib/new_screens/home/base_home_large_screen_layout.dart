@@ -17,11 +17,12 @@ import '../actions/view/base_home_details_view.dart';
 import '../dashboard2/dashboard.dart';
 import '../setting/setting_page.dart';
 
-class BaseHomeScreenLayout extends StatelessWidget {
-  const BaseHomeScreenLayout({Key? key}) : super(key: key);
+class BaseHomeLargeScreenLayout extends StatelessWidget {
+  const BaseHomeLargeScreenLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (SizeConfig.isMobile(context)) {}
     return Row(children: [
       if (SizeConfig.isTablet(context)) DrawerLargeScreens(),
       Expanded(
