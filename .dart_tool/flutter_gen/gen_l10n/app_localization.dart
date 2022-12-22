@@ -3753,11 +3753,11 @@ abstract class AppLocalizations {
   /// **'Can not edit {r} because it\\\'s generated from {r}'**
   String get errCantEditFormatFromTo;
 
-  /// No description provided for @searchInFormat.
+  /// Greet the user by their name.
   ///
   /// In en, this message translates to:
   /// **'Search in {r}…'**
-  String get searchInFormat;
+  String searchInFormat(String r);
 
   /// No description provided for @errSomeOperationField.
   ///

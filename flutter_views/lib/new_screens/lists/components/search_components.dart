@@ -1,10 +1,13 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchWidgetComponent extends StatefulWidget {
   TextEditingController controller;
@@ -33,17 +36,29 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(
+          top: kDefaultPadding / 2,
+          left: kDefaultPadding / 2,
+          right: kDefaultPadding / 2),
       child: Hero(
         tag: "/search",
         child: Card(
-          color: Theme.of(context).colorScheme.primary,
+          // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
-            onTap: () {
-              Navigator.pushNamed(context, "/search", arguments: null);
-            },
-            title: Text("Serach"),
+            onTap: SizeConfig.isMobile(context)
+                ? () {
+                    Navigator.pushNamed(context, "/search", arguments: null);
+                  }
+                : null,
+            title: SizeConfig.isMobile(context)
+                ? Text(AppLocalizations.of(context)!.searchInFormat(context
+                    .watch<DrawerViewAbstractListProvider>()
+                    .getObject
+                    .getMainHeaderLabelTextOnly(context)))
+                : TextField(
+                    controller: widget.controller,
+                  ),
             trailing: getTrailingWidget(),
           ),
         ),

@@ -113,27 +113,44 @@ class _ListApiSearchableWidgetTestScrollingState<T extends ViewAbstract>
   @override
   Widget build(BuildContext context) {
     debugPrint("ListApiSearchableWidgetTestScrolling");
-    return ChangeNotifierProvider.value(
-      value: listProvider,
-      child: Consumer<ListMultiKeyProvider>(
-          builder: (context, provider, listTile) {
-        debugPrint(
-            "ListApiSearchableWidgetTestScrolling ChangeNotifierProvider");
-        if (provider.isLoading(findCustomKey())) {
-          if (provider.getCount(findCustomKey()) == 0) {
-            return getShimmerLoading();
-          }
-        } else {
-          if (provider.getCount(findCustomKey()) == 0 &&
-              provider.isHasError(findCustomKey())) {
-            return getErrorWidget();
-          } else if (provider.getCount(findCustomKey()) == 0) {
-            return getEmptyWidget();
-          }
-        }
-        return _listItems(listProvider.getList(findCustomKey()), listProvider);
-      }),
-    );
+    return Stack(
+        alignment: Alignment.topCenter,
+        fit: StackFit.loose,
+        children: [
+          ChangeNotifierProvider.value(
+            value: listProvider,
+            child: Consumer<ListMultiKeyProvider>(
+                builder: (context, provider, listTile) {
+              debugPrint(
+                  "ListApiSearchableWidgetTestScrolling ChangeNotifierProvider");
+              if (provider.isLoading(findCustomKey())) {
+                if (provider.getCount(findCustomKey()) == 0) {
+                  return getShimmerLoading();
+                }
+              } else {
+                if (provider.getCount(findCustomKey()) == 0 &&
+                    provider.isHasError(findCustomKey())) {
+                  return getErrorWidget();
+                } else if (provider.getCount(findCustomKey()) == 0) {
+                  return getEmptyWidget();
+                }
+              }
+              return _listItems(
+                  listProvider.getList(findCustomKey()), listProvider);
+            }),
+          ),
+          Column(
+            children: [
+              SearchWidgetComponent(
+                  controller: controller,
+                  onSearchTextChanged: onSearchTextChanged),
+              FiltersAndSelectionListHeader(
+                customKey: findCustomKey(),
+                listProvider: listProvider,
+              ),
+            ],
+          )
+        ]);
   }
 
   Widget getErrorWidget() {

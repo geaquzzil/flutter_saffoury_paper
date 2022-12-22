@@ -1839,7 +1839,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errCantEditFormatFromTo => 'لا يمكن تعديل {r} لأنه تم إنشاؤه من {r}';
 
   @override
-  String get searchInFormat => 'ابحث في {r}…';
+  String searchInFormat(String r) {
+    return 'ابحث في $r…';
+  }
 
   @override
   String get errSomeOperationField => 'فشل بعض العنصار من اتمام عملية {r}, لسبب ما !';

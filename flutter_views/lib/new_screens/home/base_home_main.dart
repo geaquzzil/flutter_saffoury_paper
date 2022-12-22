@@ -3,9 +3,14 @@ import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.d
 import 'package:flutter_view_controller/new_screens/home/base_home_large_screen_layout.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_small_screen_layout.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_small_screen.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget_test_scrolling.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
+import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -32,7 +37,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       body: SizeConfig.isMobile(context)
           ? SafeArea(
               child: IndexedStack(index: _currentIndex, children: [
-                ListApiSearchableWidget(),
+                ListApiSearchableWidgetTestScrolling(),
+                // SearchPage(),
+                NotificationWidget()
                 // ListApiSearchableWidgetTestScrolling(),
                 // ListApiSearchableWidgetTestScrolling(),
               ]),
@@ -54,8 +61,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               AppLocalizations.of(context)!.home),
           getBottomNavigationBarItem(Icons.search_outlined, Icons.search,
               AppLocalizations.of(context)!.search),
-          getBottomNavigationBarItem(Icons.account_circle_outlined,
-              Icons.account_circle, AppLocalizations.of(context)!.profile)
+          getBottomNavigationBarItem(Icons.notifications, Icons.account_circle,
+              AppLocalizations.of(context)!.notification)
         ]);
   }
 

@@ -655,6 +655,7 @@
   "noti_message_3_F": "هذه رسالة تذكير ودية بأن فاتورتك [#] يجب أن تُسدد خلال الأسبوع القادم ، مع العلم أن آخر دفعة لك كانت: {r}\\nالرصيد المتبقي هو {r}",
   "noti_message_4_F": "الرجاء إخبارنا إذا كانت لديك أي أسئلة حول الفاتورة أو إذا كان هناك أي شيء يمكنني فعله لك ، مع العلم أن آخر دفعة لك كانت: {r}\\n\nالرصيد المتبقي هو {r}",
   "searchInFormat": "ابحث في {r}…",
+  
   "errSomeOperationField": "فشل بعض العنصار من اتمام عملية {r}, لسبب ما !"
   ,"checkout":"المتابعة",
   "tax": "ضريبة",
@@ -685,6 +686,15 @@
         "exportAll": "تصدير الكل",
      "exportAllAs": "تصدير الكل بتنسيق {r}",
     "@exportAllAs": {
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "@searchInFormat":{
         "description": "Greet the user by their name.",
         "placeholders": {
             "r": {

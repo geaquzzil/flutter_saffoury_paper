@@ -1839,7 +1839,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errCantEditFormatFromTo => 'Can not edit {r} because it\\\'s generated from {r}';
 
   @override
-  String get searchInFormat => 'Search in {r}…';
+  String searchInFormat(String r) {
+    return 'Search in $r…';
+  }
 
   @override
   String get errSomeOperationField => 'Some items fields to {r}, for some reason !';

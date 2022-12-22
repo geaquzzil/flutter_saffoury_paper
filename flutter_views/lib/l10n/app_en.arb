@@ -651,6 +651,15 @@
   "rowCountFormat": "{r} row(s) was",
   "errCantEditFormatFromTo": "Can not edit {r} because it\\'s generated from {r}",
   "searchInFormat": "Search in {r}…",
+  "@searchInFormat":{
+        "description": "Greet the user by their name.",
+        "placeholders": {
+            "r": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
   "errSomeOperationField": "Some items fields to {r}, for some reason !",
   "errCantListBeEmpty": "Error, {r} list is empty or contains one or more wrong items",
   "chooseActionYouLike": "Choose the action you would like to do for \\n{r}\\nTo complete the operation",

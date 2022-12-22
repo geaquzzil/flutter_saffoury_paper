@@ -68,7 +68,10 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(kDefaultPadding / 2),
+          padding: const EdgeInsets.only(
+              bottom: kDefaultPadding / 2,
+              left: kDefaultPadding / 2,
+              right: kDefaultPadding / 2),
           child: Row(
             children: [
               if (filterButton != null) filterButton,

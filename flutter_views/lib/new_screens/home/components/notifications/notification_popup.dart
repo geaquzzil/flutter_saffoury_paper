@@ -7,21 +7,15 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPopupWidget extends StatelessWidget {
-  String notifiactionLottie =
-      "https://assets6.lottiefiles.com/packages/lf20_heejrebm.json";
   NotificationPopupWidget({Key? key}) : super(key: key);
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
   @override
   Widget build(BuildContext context) {
-    String title = "No New Notifications";
-    String subtitle =
-        "Check this section for updates exclusively offer and general notifications";
     return CustomPopupMenu(
-      
         arrowSize: 20,
         arrowColor: Theme.of(context).colorScheme.secondaryContainer,
-        menuBuilder: () => popMenuBuilder(context, title, subtitle),
+        menuBuilder: () => NotificationWidget(),
         pressType: PressType.singleClick,
         verticalMargin: -15,
         controller: _controller,
@@ -43,8 +37,20 @@ class NotificationPopupWidget extends StatelessWidget {
                   : Theme.of(context).colorScheme.secondary);
         });
   }
+}
 
-  Widget popMenuBuilder(BuildContext context, String title, String subtitle) {
+class NotificationWidget extends StatelessWidget {
+  NotificationWidget({
+    Key? key,
+  }) : super(key: key);
+
+  String title = "No New Notifications";
+  String subtitle =
+      "Check this section for updates exclusively offer and general notifications";
+  String notifiactionLottie =
+      "https://assets6.lottiefiles.com/packages/lf20_heejrebm.json";
+  @override
+  Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
