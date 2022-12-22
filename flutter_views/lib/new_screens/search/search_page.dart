@@ -12,6 +12,8 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: getBackFloatingActionButton(context),
         body: Hero(
             tag: "/search",
             child: Material(
@@ -28,5 +30,12 @@ class SearchPage extends StatelessWidget {
                 ))
               ]))),
             )));
+  }
+
+  Widget getBackFloatingActionButton(BuildContext context) {
+    return FloatingActionButton.small(
+        heroTag: UniqueKey(),
+        child: Icon(Icons.arrow_back),
+        onPressed: () => {Navigator.pop(context)});
   }
 }

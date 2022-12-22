@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:provider/provider.dart';
 
 class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
   final T object;
-  const ListCardItem({
+  Key? listState;
+  ListCardItem({
     Key? key,
+    this.listState,
     required this.object,
   }) : super(key: key);
 
@@ -41,9 +45,8 @@ class _ListCardItemState<T extends ViewAbstract>
           widget.object.onCardDismissedView(context, direction),
       child: isSelected
           ? ClippedCard(
-            borderSide: BorderSideColor.END,
+              borderSide: BorderSideColor.END,
               elevation: 0,
-
               color: Theme.of(context).colorScheme.primary,
               child: getListTile(isSelected, context),
             )
@@ -56,10 +59,15 @@ class _ListCardItemState<T extends ViewAbstract>
         selected: isSelected,
         selectedTileColor: Theme.of(context).colorScheme.onSecondary,
         onTap: () => widget.object.onCardClicked(context),
-        onLongPress: () => widget.object.onCardLongClicked(context),
+        onLongPress: () {
+          (widget.listState as GlobalKey<ListApiMasterState>)
+              .currentState
+              ?.toggleSelectMood();
+          context.read<ListActionsProvider>().toggleSelectMood();
+          widget.object.onCardLongClicked(context);
+        },
         title: (widget.object.getMainHeaderText(context)),
         subtitle: (widget.object.getMainSubtitleHeaderText(context)),
-      
         leading: widget.object.getCardLeading(context),
         trailing: widget.object.getPopupMenuActionListWidget(context));
   }

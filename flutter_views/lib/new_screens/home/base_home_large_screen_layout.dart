@@ -75,7 +75,7 @@ class BaseHomeLargeScreenLayout extends StatelessWidget {
             // It takes 5/6 part of the screen
             flex: size.width > 1340 ? 4 : 1,
             // flex: 4,
-            child: const ListApiSearchableWidget()),
+            child:  ListApiSearchableWidget()),
 
         VerticalDivider(),
 

@@ -28,6 +28,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_n
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
@@ -92,6 +93,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => EndDrawerProvider()),
       ChangeNotifierProvider(
           create: (context) => DrawerMenuControllerProvider()),
+      ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
           create: (context) => AuthProvider.initialize(views)),

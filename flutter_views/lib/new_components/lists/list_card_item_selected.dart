@@ -14,15 +14,28 @@ class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
 
 class _ListCardItemSelected<T extends ViewAbstract>
     extends State<ListCardItemSelected<T>> {
+  late bool isSelected;
   @override
   void initState() {
     super.initState();
     // checkEnable();
+    isSelected = widget.object.isSelected;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    isSelected = widget.object.isSelected;
+  }
+
+  @override
+  void didUpdateWidget(covariant ListCardItemSelected<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    isSelected = widget.object.isSelected;
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = widget.object.isSelected;
     return CheckboxListTile(
       controlAffinity: ListTileControlAffinity.leading,
       value: isSelected,

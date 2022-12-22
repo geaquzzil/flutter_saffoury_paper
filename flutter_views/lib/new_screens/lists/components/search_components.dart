@@ -11,9 +11,13 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchWidgetComponent extends StatefulWidget {
   TextEditingController controller;
+  bool forceSearchBarAsEditText;
   Function(String?) onSearchTextChanged;
   SearchWidgetComponent(
-      {super.key, required this.controller, required this.onSearchTextChanged});
+      {super.key,
+      required this.controller,
+      required this.onSearchTextChanged,
+      this.forceSearchBarAsEditText = false});
 
   @override
   State<SearchWidgetComponent> createState() => _SearchWidgetComponentState();
@@ -46,19 +50,21 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
-            onTap: SizeConfig.isMobile(context)
+            onTap: SizeConfig.isMobile(context) &&
+                    !widget.forceSearchBarAsEditText
                 ? () {
                     Navigator.pushNamed(context, "/search", arguments: null);
                   }
                 : null,
-            title: SizeConfig.isMobile(context)
-                ? Text(AppLocalizations.of(context)!.searchInFormat(context
-                    .watch<DrawerViewAbstractListProvider>()
-                    .getObject
-                    .getMainHeaderLabelTextOnly(context)))
-                : TextField(
-                    controller: widget.controller,
-                  ),
+            title:
+                SizeConfig.isMobile(context) && !widget.forceSearchBarAsEditText
+                    ? Text(AppLocalizations.of(context)!.searchInFormat(context
+                        .watch<DrawerViewAbstractListProvider>()
+                        .getObject
+                        .getMainHeaderLabelTextOnly(context)))
+                    : TextField(
+                        controller: widget.controller,
+                      ),
             trailing: getTrailingWidget(),
           ),
         ),
