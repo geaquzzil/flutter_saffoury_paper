@@ -92,6 +92,7 @@ dependencies:
   excel: any
   introduction_screen: ^3.1.1
   share_plus: ^6.3.0
+  dual_screen: ^1.0.3
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   

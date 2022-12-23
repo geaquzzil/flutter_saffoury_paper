@@ -281,6 +281,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.3"
+  dual_screen:
+    dependency: transitive
+    description:
+      name: dual_screen
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   dynamic_color:
     dependency: transitive
     description:

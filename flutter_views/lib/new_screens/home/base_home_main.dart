@@ -1,3 +1,4 @@
+import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_view_controller/providers/notifications/notification_pro
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import '../actions/view/base_home_details_view.dart';
 import 'components/drawers/drawer_large_screen.dart';
 
 class BaseHomeMainPage extends StatefulWidget {
@@ -29,6 +31,38 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   bool lastStateIsSelectMood = false;
   @override
   Widget build(BuildContext context) {
+    bool singleScreen = MediaQuery.of(context).hinge == null &&
+        MediaQuery.of(context).size.width < 1000;
+    var panePriority = TwoPanePriority.both;
+    if (singleScreen) {
+      panePriority = TwoPanePriority.start;
+    }
+
+    return TwoPane(
+      startPane: Scaffold(
+        bottomNavigationBar: getBottomNavigationBar(),
+        // resizeToAvoidBottomInset: true,
+        appBar: getAppBar(),
+        key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
+        drawer: SafeArea(child: DrawerLargeScreens()),
+        endDrawer: const BaseHomeCartPage(),
+        body: SizeConfig.isMobile(context)
+            ? SafeArea(
+                child: IndexedStack(index: _currentIndex, children: [
+                  ListApiSearchableWidget(
+                      key: context.read<ListActionsProvider>().getListStateKey),
+                  // SearchPage(),
+                  NotificationWidget()
+                  // ListApiSearchableWidgetTestScrolling(),
+                  // ListApiSearchableWidgetTestScrolling(),
+                ]),
+              )
+            : SafeArea(child: ListApiSearchableWidget()),
+      ),
+      endPane: BaseSharedDetailsView(),
+      paneProportion: SizeConfig.getPaneProportion(context),
+      panePriority: panePriority,
+    );
     return WillPopScope(
       onWillPop: () async {
         if (!SizeConfig.isMobile(context)) return Future.value(true);

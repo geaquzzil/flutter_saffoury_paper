@@ -37,7 +37,7 @@ class DrawerLargeScreens extends StatelessWidget {
       curve: Curves.fastOutSlowIn,
       child: SizedBox(
         height: double.maxFinite,
-        width: isOpen ? getOpenWidthSize(context) : 60,
+        width: isOpen ? SizeConfig.getDrawerWidth(context) : 60,
         // color: Colors.blueGrey,
         child: Card(
           child: Stack(

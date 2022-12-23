@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
@@ -8,6 +9,9 @@ import 'dart:math' as Math;
 class SizeConfig {
   static double screenWidth = 0;
   static double screenHeight = 0;
+  static const mobileWidth = 599;
+  static const foldableSmallTablet = 839;
+  static const largeTablet = 840;
 
   void init(BoxConstraints constraints) {
     screenWidth = constraints.maxWidth;
@@ -26,11 +30,48 @@ class SizeConfig {
     return (actualWidth / 375.0) * screenWidth;
   }
 
-  static const mobileWidth = 599;
-  static const foldableSmallTablet = 839;
-  static const largeTablet = 840;
+  static double getPaneProportion(BuildContext context) {
+    if (MediaQuery.of(context).hinge != null) return 0.5;
+    if (SizeConfig.isDesktopOrWeb(context)) return 0.4;
+    if (SizeConfig.isTablet(context)) return 0.4;
+    return 0.4;
+  }
 
-  static bool isMobile(BuildContext context) => Device.get().isPhone;
+  static bool isFoldableWithSingleScreen(BuildContext context) {
+    return MediaQuery.of(context).hinge == null && isSingleScreen(context);
+  }
+
+  static bool isFoldableWithOpenDualScreen(BuildContext context) {
+    return MediaQuery.of(context).hinge != null && !isSingleScreen(context);
+  }
+
+  static bool isSingleScreen(BuildContext context) {
+    return MediaQuery.of(context).size.width < 1000;
+  }
+
+  static bool isFoldable(BuildContext context) {
+    return MediaQuery.of(context).hinge != null;
+  }
+
+  static double? getDrawerWidth(BuildContext context) {
+    if (MediaQuery.of(context).hinge != null) {
+      return isSingleScreen(context)
+          ? MediaQuery.of(context).size.width * .75
+          : MediaQuery.of(context).size.width * .25;
+    }
+
+    if (SizeConfig.isDesktop(context)) {
+      return 256;
+    }
+    if (SizeConfig.isTablet(context)) {
+      return MediaQuery.of(context).size.width * .25;
+    }
+    return MediaQuery.of(context).size.width * .75;
+  }
+
+  static bool isMobile(BuildContext context) {
+    return Device.get().isPhone || isFoldableWithSingleScreen(context);
+  }
 
   static bool isTablet(BuildContext context) => Device.get().isTablet;
 

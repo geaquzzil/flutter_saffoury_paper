@@ -10,9 +10,11 @@ import 'package:provider/provider.dart';
 class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   Key? listState;
+  bool selectionMood;
   ListCardItem({
     Key? key,
     this.listState,
+    this.selectionMood = false,
     required this.object,
   }) : super(key: key);
 
