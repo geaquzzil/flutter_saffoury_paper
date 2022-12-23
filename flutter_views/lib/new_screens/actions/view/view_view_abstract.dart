@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
+import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
@@ -51,16 +52,19 @@ class MasterView extends StatelessWidget {
     Widget? bottomWidget =
         viewAbstract.getCustomBottomWidget(context, ServerActions.view);
     final fields = viewAbstract.getMainFields(context: context);
-    return Column(
-      children: [
-        if (topWidget != null) topWidget,
-        ...fields
-            .where((element) => viewAbstract.getFieldValue(element) != null)
-            .map((e) => buildItem(context, e)),
-        if (viewAbstract is ListableInterface)
-          ViewableTableWidget(viewAbstract: viewAbstract as ListableInterface),
-        if (bottomWidget != null) bottomWidget
-      ],
+    return TowPaneExt(
+      startPane: Column(
+        children: [
+          if (topWidget != null) topWidget,
+          ...fields
+              .where((element) => viewAbstract.getFieldValue(element) != null)
+              .map((e) => buildItem(context, e)),
+          if (viewAbstract is ListableInterface)
+            ViewableTableWidget(
+                viewAbstract: viewAbstract as ListableInterface),
+        ],
+      ),
+      endPane: bottomWidget,
     );
 
     return Column(

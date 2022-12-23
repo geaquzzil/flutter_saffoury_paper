@@ -101,7 +101,8 @@ class DrawerLargeScreens extends StatelessWidget {
       elevation: 0,
       child: Container(
           // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
-          padding: const EdgeInsets.symmetric(vertical: 24).add(safeArea),
+          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+          // .add(safeArea),
           width: double.infinity,
           child: !isOpen
               ? const FlutterLogo(

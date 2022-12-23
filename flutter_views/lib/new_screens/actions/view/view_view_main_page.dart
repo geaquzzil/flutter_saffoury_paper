@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
@@ -32,7 +33,10 @@ class BaseViewNewPage extends BaseActionScreenPage {
 
   @override
   Widget getBody(BuildContext context) {
-    return MasterView(viewAbstract: viewAbstract);
+    
+    return
+    
+     MasterView(viewAbstract: viewAbstract);
   }
 
   @override

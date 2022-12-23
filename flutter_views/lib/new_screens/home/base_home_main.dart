@@ -1,6 +1,7 @@
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_large_screen_layout.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_small_screen.dart';
@@ -31,20 +32,13 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   bool lastStateIsSelectMood = false;
   @override
   Widget build(BuildContext context) {
-    bool singleScreen = MediaQuery.of(context).hinge == null &&
-        MediaQuery.of(context).size.width < 1000;
-    var panePriority = TwoPanePriority.both;
-    if (singleScreen) {
-      panePriority = TwoPanePriority.start;
-    }
-
-    return TwoPane(
+    return TowPaneExt(
       startPane: Scaffold(
         bottomNavigationBar: getBottomNavigationBar(),
         // resizeToAvoidBottomInset: true,
         appBar: getAppBar(),
         key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
-        drawer: SafeArea(child: DrawerLargeScreens()),
+        drawer: DrawerLargeScreens(),
         endDrawer: const BaseHomeCartPage(),
         body: SizeConfig.isMobile(context)
             ? SafeArea(
@@ -60,8 +54,6 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             : SafeArea(child: ListApiSearchableWidget()),
       ),
       endPane: BaseSharedDetailsView(),
-      paneProportion: SizeConfig.getPaneProportion(context),
-      panePriority: panePriority,
     );
     return WillPopScope(
       onWillPop: () async {
@@ -108,11 +100,12 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     if (!SizeConfig.isMobile(context)) return null;
 
     AppLocalizations.of(context)!.appTitle;
-    return BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        currentIndex: _currentIndex,
-        onTap: (int index) => setState(() => _currentIndex = index),
-        items: [
+    return NavigationBar(
+        // type: BottomNavigationBarType.fixed,
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (int index) =>
+            setState(() => _currentIndex = index),
+        destinations: [
           getBottomNavigationBarItem(Icons.home_outlined, Icons.home,
               AppLocalizations.of(context)!.home),
           getBottomNavigationBarItem(Icons.search_outlined, Icons.search,
@@ -122,10 +115,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ]);
   }
 
-  BottomNavigationBarItem getBottomNavigationBarItem(
+  NavigationDestination getBottomNavigationBarItem(
           IconData icon, IconData activeIcon, String? label) =>
-      BottomNavigationBarItem(
-          icon: Icon(icon), activeIcon: Icon(activeIcon), label: label);
+      NavigationDestination(icon: Icon(icon), label: label ?? "");
 
   PreferredSizeWidget? getAppBar() {
     if (!SizeConfig.isMobile(context)) return null;

@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
@@ -87,7 +88,7 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
         sliver: SliverAppBar(
             floating: true,
             automaticallyImplyLeading: true,
-            pinned: false,
+            pinned: true,
             snap: true,
             expandedHeight: MediaQuery.of(context).size.height * .25,
             actions: [
@@ -100,7 +101,7 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
                 serverActions: widget.getServerAction(),
               ),
             ],
-            elevation: 10,
+            elevation: 4,
             // title: widget.object.getMainHeaderText(context),
             // centerTitle: true,
             forceElevated: innerBoxIsScrolled,
@@ -183,38 +184,44 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
       _tabs.clear();
       _tabs.addAll(widget.viewAbstract.getTabs(context));
       _tabController = TabController(length: _tabs.length, vsync: this);
-      return NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                getSilverAppBar(context, innerBoxIsScrolled),
-              ],
-          body: SafeArea(
-            child: TabBarView(
-                controller: _tabController,
-                children: _tabs
-                    .map((e) => Builder(builder: (BuildContext context) {
-                          return CustomScrollView(slivers: [
-                            SliverOverlapInjector(
-                              handle: NestedScrollView
-                                  .sliverOverlapAbsorberHandleFor(context),
-                            ),
-                            SliverPadding(
-                              padding: const EdgeInsets.all(8.0),
-                              sliver: SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return _tabs.indexOf(e) == 0
-                                        ? widget.getBody(context)
-                                        : e.widget;
-                                  },
-                                  childCount: 1,
-                                ),
-                              ),
-                            )
-                          ]);
-                        }))
-                    .toList()),
-          ));
+      // return TowPaneExt(startPane: startPane, endPane: endPane)
+      return getNastedScrollView();
     }
+  }
+
+  NestedScrollView getNastedScrollView() {
+    return NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              getSilverAppBar(context, innerBoxIsScrolled),
+            ],
+        body: SafeArea(
+          child: TabBarView(
+              controller: _tabController,
+              children: _tabs
+                  .map((e) => Builder(builder: (BuildContext context) {
+                        return CustomScrollView(slivers: [
+                          SliverOverlapInjector(
+                            handle: NestedScrollView
+                                .sliverOverlapAbsorberHandleFor(context),
+                          ),
+                          SliverPadding(
+                            padding:
+                                const EdgeInsets.all(kDefaultPadding / 2),
+                            sliver: SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return _tabs.indexOf(e) == 0
+                                      ? widget.getBody(context)
+                                      : e.widget;
+                                },
+                                childCount: 1,
+                              ),
+                            ),
+                          )
+                        ]);
+                      }))
+                  .toList()),
+        ));
   }
 
   Widget getFutureBody() {

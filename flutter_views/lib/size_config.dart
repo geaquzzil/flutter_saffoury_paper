@@ -30,7 +30,8 @@ class SizeConfig {
     return (actualWidth / 375.0) * screenWidth;
   }
 
-  static double getPaneProportion(BuildContext context) {
+  static double getPaneProportion(BuildContext context,
+      {Orientation? orientation}) {
     if (MediaQuery.of(context).hinge != null) return 0.5;
     if (SizeConfig.isDesktopOrWeb(context)) return 0.4;
     if (SizeConfig.isTablet(context)) return 0.4;
