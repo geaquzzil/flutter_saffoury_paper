@@ -57,8 +57,12 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return true;
   }
 
+  String getListableKeyWithoutCustomMap() {
+    return "${getTableNameApi()}listAPI$_lastFilterableMap";
+  }
+
   String getListableKey() {
-    return "${getTableNameApi()}listAPI$_lastFilterableMap${getCustomMap}";
+    return "${getTableNameApi()}listAPI$_lastFilterableMap$getCustomMap";
   }
 
   void setFilterableMap(Map<String, FilterableProviderHelper> map) {

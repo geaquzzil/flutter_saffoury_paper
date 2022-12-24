@@ -138,10 +138,12 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
               onGenerateRoute: RouteGenerator.generateRoute,
 
               theme: ThemeData(
+                scaffoldBackgroundColor: darkDynamic?.background,
                 colorScheme: lightDynamic ?? defaultLightColorScheme,
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
+                scaffoldBackgroundColor: darkDynamic?.background,
                 colorScheme: darkDynamic ?? defaultDarkColorScheme,
                 useMaterial3: true,
               ),

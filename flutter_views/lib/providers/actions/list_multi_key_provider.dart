@@ -142,6 +142,58 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future fetchListOfObjectAutoRest(List<AutoRest> list) async {
+    return fetchListOfObject(list.map((e) => e.obj).toList(), range: 5);
+  }
+
+  Future fetchListOfObject(List<ViewAbstract> list, {int? range}) async {
+    ViewAbstract first = list[0];
+
+    String key = first.getListableKeyWithoutCustomMap();
+
+    late MultiListProviderHelper? multiListProviderHelper;
+    if (listMap.containsKey(key)) {
+      multiListProviderHelper = listMap[key];
+    } else {
+      listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = listMap[key];
+    }
+    if (multiListProviderHelper!.isLoading) return;
+    int page = getPage(key);
+    multiListProviderHelper.isNoMoreItem = page > list.length - 1;
+    if (multiListProviderHelper.isNoMoreItem) return;
+    multiListProviderHelper.hasError = false;
+    multiListProviderHelper.isLoading = true;
+    ViewAbstract viewAbstract = list[page];
+    await Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        notifyListeners();
+      },
+    );
+
+    try {
+      List? list = await viewAbstract.listCall(
+          count: range ?? viewAbstract.getPageItemCount,
+          page: 0);
+      multiListProviderHelper.isLoading = false;
+
+      if (list != null) {
+        multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+        multiListProviderHelper.page = multiListProviderHelper.page + 1;
+        notifyListeners();
+      } else {
+        multiListProviderHelper.isLoading = false;
+        multiListProviderHelper.hasError = true;
+        notifyListeners();
+      }
+    } catch (e) {
+      multiListProviderHelper.isLoading = false;
+      multiListProviderHelper.hasError = true;
+      notifyListeners();
+    }
+  }
+
   Future fetchList(String key, ViewAbstract viewAbstract,
       {AutoRest? autoRest}) async {
     late MultiListProviderHelper? multiListProviderHelper;

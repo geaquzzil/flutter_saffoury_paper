@@ -4,9 +4,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_master_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -100,11 +103,11 @@ class _SearchPageState extends State<SearchPage> {
                       buildSearchWidget: false,
                     ),
                   ),
-            Expanded(
-              child: EmptyWidget(
-                  lottiUrl:
-                      "https://assets8.lottiefiles.com/packages/lf20_xbf1be8x.json"),
-            )
+            // Expanded(
+            //   child: EmptyWidget(
+            //       lottiUrl:
+            //           "https://assets8.lottiefiles.com/packages/lf20_xbf1be8x.json"),
+            // )
             // Expanded(
             //   child: ListView.builder(
             //     itemCount: 10,
@@ -122,8 +125,8 @@ class _SearchPageState extends State<SearchPage> {
   ListStickyItem getBasedOnYourSearchListItem(BuildContext context) {
     return ListStickyItem(
         groupItem: ListStickyGroupItem(
-            groupName: AppLocalizations.of(context)!.suggestionList,
-            icon: Icons.saved_search_outlined),
+            groupName: AppLocalizations.of(context)!.basedOnYourLastSearch,
+            icon: Icons.search),
         itemBuilder: (context) => FutureBuilder<List<String>>(
               future: Configurations.loadListQuery(
                   drawerViewAbstractObsever.getObject),
@@ -133,31 +136,15 @@ class _SearchPageState extends State<SearchPage> {
                     return Text(AppLocalizations.of(context)!.noItems);
                   }
                   return SizedBox(
-                    height: 50,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: kDefaultPadding / 2,
-                      ),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        var item = snapshot.data![index];
-                        {
-                          return Chip(
-                            deleteIcon: Icon(Icons.done),
-                            label: Text(item),
-                            onDeleted: () {
-                              _controller.text = item;
-                              onSearchTextChanged(item);
-                            },
-                          );
-                        }
-                      },
-                      // ),
-                    ),
-                  );
+                      height: 300,
+                      child: ListApiMasterHorizontal<List<AutoRest>>(
+                          object: snapshot.data!
+                              .map((e) => AutoRest(
+                                  obj: getNewInstance()
+                                    ..setCustomMapAsSearchable(e),
+                                  key: drawerViewAbstractObsever.getObject
+                                      .getListableKeyWithoutCustomMap()))
+                              .toList()));
                 }
                 return Center(
                   child: CircularProgressIndicator(),
@@ -166,11 +153,15 @@ class _SearchPageState extends State<SearchPage> {
             ));
   }
 
+  ViewAbstract getNewInstance() {
+    return drawerViewAbstractObsever.getObject.getSelfNewInstance();
+  }
+
   ListStickyItem getSuggestionListItem(BuildContext context) {
     return ListStickyItem(
         groupItem: ListStickyGroupItem(
             groupName: AppLocalizations.of(context)!.suggestionList,
-            icon: Icons.saved_search_outlined),
+            icon: Icons.info_outline),
         itemBuilder: (context) => FutureBuilder<List<String>>(
               future: Configurations.loadListQuery(
                   drawerViewAbstractObsever.getObject),
@@ -222,10 +213,10 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> onSearchTextChanged(String value) async {
     if (value.isEmpty) return;
-    _debouncer.run(() async {
-      await Configurations.saveQueryHistory(
-          drawerViewAbstractObsever.getObject, value);
-      setState(() {});
-    });
+    // _debouncer.run(() async {
+    //   await Configurations.saveQueryHistory(
+    //       drawerViewAbstractObsever.getObject, value);
+    //   setState(() {});
+    // });
   }
 }

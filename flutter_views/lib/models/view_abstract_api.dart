@@ -40,7 +40,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   void setCustomMapAsSearchable(String? searchQuery) {
-    _customMap = Map<String, String>();
+    _customMap = <String, String>{};
     _customMap!["searchStringQuery"] = searchQuery ?? "";
   }
 

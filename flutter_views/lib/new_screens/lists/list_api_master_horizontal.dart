@@ -3,8 +3,10 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ListApiMasterHorizontal<T> extends StatefulWidget {
   T object;
@@ -28,40 +30,75 @@ class _ListApiMasterHorizontalState<T>
     super.initState();
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     _scrollController.addListener(() => _onScroll());
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
     });
   }
-  String getKey(){
-    
+
+  String findCustomKey() {
+    if (widget.object is List<ViewAbstract>) {
+      return (widget.object as List<ViewAbstract>)[0]
+          .getListableKeyWithoutCustomMap();
+    } else if (widget.object is List<AutoRest>) {
+      return (widget.object as List<AutoRest>)[0]
+          .obj
+          .getListableKeyWithoutCustomMap();
+    } else {
+      var checkType = widget.object;
+      if (checkType is AutoRest) {
+        return checkType.key;
+      } else if (checkType is ViewAbstract) {
+        return checkType.getListableKey();
+      }
+    }
+    return "";
   }
 
   void fetshList() {
-    var checkType;
-    if (T is List) {
-      checkType = (widget.object as List)[0];
-    } else {
-      checkType = widget.object;
-    }
-    if (checkType is AutoRest) {
-      if (listProvider.getCount(checkType.key) == 0) {
-        listProvider.fetchList(checkType.key, checkType.obj,
-            autoRest: checkType);
+    if (widget.object is List<ViewAbstract>) {
+      debugPrint("listApiMasterHorizontal is List<ViewAbstract>");
+      if (listProvider.getCount(findCustomKey()) == 0) {
+        listProvider.fetchListOfObject(widget.object as List<ViewAbstract>);
       }
-    } else if (checkType is ViewAbstract) {
-      if (listProvider.getCount(checkType.getListableKey()) == 0) {
-        listProvider.fetchList(checkType.getListableKey(), checkType);
+    } else if (widget.object is List<AutoRest>) {
+      debugPrint("listApiMasterHorizontal is List<AutoRest>");
+      if (listProvider.getCount(findCustomKey()) == 0) {
+        listProvider.fetchListOfObjectAutoRest(widget.object as List<AutoRest>);
+      }
+    } else {
+      var checkType = widget.object;
+      if (checkType is AutoRest) {
+        if (listProvider.getCount(findCustomKey()) == 0) {
+          listProvider.fetchList(checkType.key, checkType.obj,
+              autoRest: checkType);
+        }
+      } else if (checkType is ViewAbstract) {
+        if (listProvider.getCount(findCustomKey()) == 0) {
+          listProvider.fetchList(checkType.getListableKey(), checkType);
+        }
       }
     }
   }
 
   void fetshListOnScroll() {
-
+    if (widget.object is List<ViewAbstract>) {
+      listProvider.fetchListOfObject(widget.object as List<ViewAbstract>);
+    } else if (widget.object is List<AutoRest>) {
+      listProvider.fetchListOfObjectAutoRest(widget.object as List<AutoRest>);
+    } else {
+      var checkType = widget.object;
+      if (checkType is AutoRest) {
+        listProvider.fetchList(checkType.key, checkType.obj,
+            autoRest: checkType);
+      } else if (checkType is ViewAbstract) {
+        listProvider.fetchList(checkType.getListableKey(), checkType);
+      }
+    }
   }
+
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
-    bool isLoading = listProvider.isLoading(widget.autoRest.key);
+    bool isLoading = listProvider.isLoading(findCustomKey());
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -88,9 +125,7 @@ class _ListApiMasterHorizontalState<T>
             ),
           ));
         }
-        return widget.listItembuilder == null
-            ? ListCardItemHorizontal(object: data[index])
-            : widget.listItembuilder!(data[index]);
+        return ListCardItemHorizontal(object: data[index]);
         // return data[index].getCardView(context);
       },
       // ),
@@ -103,64 +138,18 @@ class _ListApiMasterHorizontalState<T>
       value: listProvider,
       child: Consumer<ListMultiKeyProvider>(
           builder: (context, provider, listTile) {
-        if (provider.getCount(widget.autoRest.key) == 0) {
-          return wrapHeader(
-              context,
-              Center(
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                ),
-              ));
+        debugPrint(
+            "listApiMasterHorizontal List api provider loaded ${findCustomKey()} count=> ${provider.getCount(findCustomKey())}");
+        if (provider.getCount(findCustomKey()) == 0) {
+          return Center(
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          );
         }
-        debugPrint("List api provider loaded ${listProvider.isLoading}");
-        return wrapHeader(
-            context,
-            _listItems(
-                listProvider.getList(widget.autoRest.key), listProvider));
+
+        return _listItems(listProvider.getList(findCustomKey()), listProvider);
       }),
-    );
-  }
-
-  Widget wrapHeader(BuildContext context, Widget child) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width - 80,
-        height: widget.customHeight,
-        child: Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [buildHeader(context), Expanded(child: child)],
-          ),
-        ));
-  }
-
-  Widget buildHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
-      child: widget.title ??
-          Text(
-            widget.titleString ?? "NONT",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-    );
-  }
-
-  Widget getShimmerLoading(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
-                ShimmerLoadingList(),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-            );
-          }),
     );
   }
 
@@ -175,8 +164,7 @@ class _ListApiMasterHorizontalState<T>
   void _onScroll() {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj,
-          autoRest: widget.autoRest);
+      fetshListOnScroll();
     }
   }
 
