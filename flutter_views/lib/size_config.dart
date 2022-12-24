@@ -75,6 +75,9 @@ class SizeConfig {
   }
 
   static bool isTablet(BuildContext context) => Device.get().isTablet;
+  static bool hasSecondScreen(BuildContext context) {
+    return isDesktop(context) || isFoldable(context);
+  }
 
   static bool isWeb() => kIsWeb;
 

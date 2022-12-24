@@ -52,19 +52,16 @@ class MasterView extends StatelessWidget {
     Widget? bottomWidget =
         viewAbstract.getCustomBottomWidget(context, ServerActions.view);
     final fields = viewAbstract.getMainFields(context: context);
-    return TowPaneExt(
-      startPane: Column(
-        children: [
-          if (topWidget != null) topWidget,
-          ...fields
-              .where((element) => viewAbstract.getFieldValue(element) != null)
-              .map((e) => buildItem(context, e)),
-          if (viewAbstract is ListableInterface)
-            ViewableTableWidget(
-                viewAbstract: viewAbstract as ListableInterface),
-        ],
-      ),
-      endPane: bottomWidget,
+    return Column(
+      children: [
+        if (topWidget != null) topWidget,
+        ...fields
+            .where((element) => viewAbstract.getFieldValue(element) != null)
+            .map((e) => buildItem(context, e)),
+        if (viewAbstract is ListableInterface)
+          ViewableTableWidget(viewAbstract: viewAbstract as ListableInterface),
+        if (bottomWidget != null) bottomWidget,
+      ],
     );
 
     return Column(

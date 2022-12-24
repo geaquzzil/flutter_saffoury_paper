@@ -33,10 +33,7 @@ class BaseViewNewPage extends BaseActionScreenPage {
 
   @override
   Widget getBody(BuildContext context) {
-    
-    return
-    
-     MasterView(viewAbstract: viewAbstract);
+    return MasterView(viewAbstract: viewAbstract);
   }
 
   @override

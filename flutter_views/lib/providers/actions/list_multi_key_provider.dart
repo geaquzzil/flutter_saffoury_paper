@@ -20,6 +20,10 @@ class ListMultiKeyProvider with ChangeNotifier {
     return listMap[key]?.isLoading ?? false;
   }
 
+  int getPage(String key) {
+    return listMap[key]?.page ?? 0;
+  }
+
   bool isHasError(String key) {
     return listMap[key]?.hasError ?? false;
   }

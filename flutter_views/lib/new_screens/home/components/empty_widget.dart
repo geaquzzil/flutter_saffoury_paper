@@ -4,16 +4,16 @@ import 'package:lottie/lottie.dart';
 
 class EmptyWidget extends StatelessWidget {
   String lottiUrl;
-  String title;
-  String subtitle;
+  String? title;
+  String? subtitle;
 
   Function()? onSubtitleClicked;
   EmptyWidget(
       {Key? key,
       this.onSubtitleClicked,
       required this.lottiUrl,
-      required this.title,
-      required this.subtitle})
+      this.title,
+      this.subtitle})
       : super(key: key);
 
   @override
@@ -23,30 +23,33 @@ class EmptyWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Lottie.network(lottiUrl, height: 200, width: 200),
-          Text("TODO Lottie.network"),
+          Lottie.network(lottiUrl),
+          // Text("TODO Lottie.network"),
           const SizedBox(
             height: kDefaultPadding,
           ),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: themeData.textTheme.titleSmall,
-          ),
-          const SizedBox(
-            height: kDefaultPadding,
-          ),
-          if (onSubtitleClicked != null)
-            TextButton(
-              child: Text(subtitle,
+          if (title != null)
+            Text(
+              title!,
+              textAlign: TextAlign.center,
+              style: themeData.textTheme.titleSmall,
+            ),
+          if (title != null)
+            const SizedBox(
+              height: kDefaultPadding,
+            ),
+          if (subtitle != null)
+            if (onSubtitleClicked != null)
+              TextButton(
+                child: Text(subtitle!,
+                    textAlign: TextAlign.center,
+                    style: themeData.textTheme.caption),
+                onPressed: () => onSubtitleClicked!.call(),
+              )
+            else
+              Text(subtitle!,
                   textAlign: TextAlign.center,
                   style: themeData.textTheme.caption),
-              onPressed: () => onSubtitleClicked!.call(),
-            )
-          else
-            Text(subtitle,
-                textAlign: TextAlign.center,
-                style: themeData.textTheme.caption),
         ],
       ),
     );

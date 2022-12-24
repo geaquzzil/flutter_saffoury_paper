@@ -29,6 +29,7 @@ import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
@@ -91,6 +92,7 @@ void main() async {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => TherdScreenProvider()),
       ChangeNotifierProvider(create: (context) => EndDrawerProvider()),
+      ChangeNotifierProvider(create: (context) => ListScrollProvider()),
       ChangeNotifierProvider(
           create: (context) => DrawerMenuControllerProvider()),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),

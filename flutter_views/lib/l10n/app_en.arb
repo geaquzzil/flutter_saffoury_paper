@@ -708,5 +708,6 @@
     },
     "pdf":"PDF",
     "excel":"Excel",
-    "systemDefault":"System default"
+    "systemDefault":"System default",
+    "suggestionList":"Suggestions"
 }

@@ -2065,4 +2065,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get systemDefault => 'System default';
+
+  @override
+  String get suggestionList => 'Suggestions';
 }

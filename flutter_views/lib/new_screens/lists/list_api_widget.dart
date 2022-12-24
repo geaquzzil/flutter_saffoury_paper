@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../new_components/loading_shimmer.dart';
 
 class ListApiWidget extends StatefulWidget {
-  const ListApiWidget({Key? key}) : super(key: key);
 
   @override
   State<ListApiWidget> createState() => _ListApiWidgetState();

@@ -705,5 +705,6 @@
     },
     "pdf":"PDF",
     "excel":"Excel",
-    "systemDefault":"النظام الافتراضي"
+    "systemDefault":"النظام الافتراضي",
+    "suggestionList":"قائمة الاقتراحات"
 }

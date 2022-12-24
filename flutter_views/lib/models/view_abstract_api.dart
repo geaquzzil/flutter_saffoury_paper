@@ -39,6 +39,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     _customMap = customMap;
   }
 
+  void setCustomMapAsSearchable(String? searchQuery) {
+    _customMap = Map<String, String>();
+    _customMap!["searchStringQuery"] = searchQuery ?? "";
+  }
+
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
     debugPrint(
         "getListSearchViewByTextInputList list=>$getLastSearchViewByTextInputList");

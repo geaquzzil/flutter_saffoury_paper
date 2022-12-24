@@ -2065,4 +2065,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get systemDefault => 'النظام الافتراضي';
+
+  @override
+  String get suggestionList => 'قائمة الاقتراحات';
 }

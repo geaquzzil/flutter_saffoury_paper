@@ -26,6 +26,31 @@ class Configurations {
     return prefs.getString(key);
   }
 
+  static Future<void> saveQueryHistory(
+      ViewAbstract viewAbstract, String? query) async {
+    if (query == null) return;
+    if (query.isEmpty) return;
+    List<String> objectHistory = await loadListQuery(viewAbstract);
+    bool isSearchBefore = false;
+    for (int i = 0; i < objectHistory.length; i++) {
+      if (objectHistory[(i)] == (query)) {
+        objectHistory.remove(query);
+        objectHistory.insert(0, query);
+        isSearchBefore = true;
+        break;
+      }
+    }
+    if (!isSearchBefore) {
+      objectHistory.insert(0, query);
+    }
+    _saveListOfQuery(objectHistory, viewAbstract);
+  }
+
+  static void _saveListOfQuery(
+      List<String> objects, ViewAbstract viewAbstract) {
+    save("${viewAbstract.runtimeType}list-query", jsonEncode(objects));
+  }
+
   static void save(String key, dynamic value) async {
     final prefs = await SharedPreferences.getInstance();
     if (value is String) {
@@ -59,6 +84,16 @@ class Configurations {
     return obj.fromJsonViewAbstract(map);
   }
 
+  static Future<List<String>> loadListQuery(ViewAbstract t) async {
+    String? objectHistoryList =
+        await getValueString("${t.runtimeType}list-query");
+    if (objectHistoryList == null) {
+      return [];
+    } else {
+      return (jsonDecode(objectHistoryList) as List<dynamic>).cast<String>();
+    }
+  }
+
   //  static <T> T loadMulti( String key, Class<T> tClass) {
   //     String objectHistoryList = getValueString(, key);
   //     if (objectHistoryList == null) return null;
@@ -75,27 +110,6 @@ class Configurations {
 
   //  static void saveList( List<?> objects, ViewAbstract<?> viewAbstract) {
   //     save(, viewAbstract.getClass().getName() + "list", new Gson().toJson(objects));
-  // }
-  //  static void saveListOfQuery( List<?> objects, ViewAbstract<?> viewAbstract) {
-  //     save(, viewAbstract.getClass().getName() + "list-query", new Gson().toJson(objects));
-  // }
-
-  //  static void saveQueryHistory( ViewAbstract<?> viewAbstract, String query) {
-  //     if(isEmpty(query)) return;
-  //     List<String> objectHistory = loadListQuery(, viewAbstract);
-  //     bool isSearchBefore = false;
-  //     for (int i = 0; i < objectHistory.size(); i++) {
-  //         if (objectHistory.get(i).equals(query)) {
-  //             objectHistory.remove(i);
-  //             objectHistory.add(0, query);
-  //             isSearchBefore = true;
-  //             break;
-  //         }
-  //     }
-  //     if (!isSearchBefore) {
-  //         objectHistory.add(0, query);
-  //     }
-  //     saveListOfQuery(, objectHistory, viewAbstract);
   // }
 
   //  static void saveHistory( ViewAbstract<?> viewAbstract) {
@@ -133,16 +147,6 @@ class Configurations {
 
   //  static void saveNotificationList( List<NotificationHistory> objects) {
   //     save(, "notiHistList", new Gson().toJson(objects));
-  // }
-
-  //  static List<String> loadListQuery( ViewAbstract<?> t) {
-  //     String objectHistoryList = getValueString(, t.getClass().getName() + "list-query");
-  //     if (objectHistoryList == null) {
-  //         return new ArrayList<>();
-
-  //     } else {
-  //         return new Gson().fromJson(objectHistoryList, Objects.makeGenericList(String.class));
-  //     }
   // }
 
   //  static List<ViewAbstract<?>> loadList( ViewAbstract<?> t) {

@@ -603,7 +603,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {
-    return ListView(
+    return Column(
       children: [
         ListHorizontalApiAutoRestWidget(
           customHeight: 300,

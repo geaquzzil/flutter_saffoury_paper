@@ -4196,6 +4196,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System default'**
   String get systemDefault;
+
+  /// No description provided for @suggestionList.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get suggestionList;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -52,7 +52,7 @@ class ListStickySettingWidget extends StatelessWidget {
   Widget _getGroupSeparator(BuildContext ctx, ModifiableInterface element) {
     return Text(
       element.getModifiableMainGroupName(ctx).toString(),
-      style: const TextStyle(color: Colors.grey),
+      style: Theme.of(ctx).textTheme.titleMedium!.copyWith(color: Colors.grey),
     );
   }
 }

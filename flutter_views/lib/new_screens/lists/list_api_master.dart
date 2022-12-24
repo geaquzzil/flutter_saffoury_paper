@@ -1,11 +1,15 @@
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +21,13 @@ import 'components/search_components.dart';
 
 abstract class ListApiMaster extends StatefulWidget {
   ViewAbstract? viewAbstract;
-
-  ListApiMaster({super.key, this.viewAbstract});
+  bool buildSearchWidget;
+  bool buildFabIfMobile;
+  ListApiMaster(
+      {super.key,
+      this.viewAbstract,
+      this.buildSearchWidget = true,
+      this.buildFabIfMobile = true});
 
   void onScroll(
       {required BuildContext context,
@@ -59,6 +68,8 @@ class ListApiMasterState extends State<ListApiMaster> {
   late ListMultiKeyProvider listProvider;
   late DrawerViewAbstractListProvider drawerViewAbstractObsever;
   TextEditingController controller = TextEditingController();
+  GlobalKey<FabsOnListWidgetState> fabsOnListWidgetState =
+      GlobalKey<FabsOnListWidgetState>();
   bool _selectMood = false;
   bool get isSelectedMode => _selectMood;
 
@@ -122,6 +133,12 @@ class ListApiMasterState extends State<ListApiMaster> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    debugPrint("listApiMaster didChangeDependencies ");
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (SizeConfig.isMobile(context)) {
       return getSmallScreenWidget();
@@ -133,8 +150,10 @@ class ListApiMasterState extends State<ListApiMaster> {
   Widget getLargeScreenWidget() {
     return Column(
       children: <Widget>[
-        SearchWidgetComponent(
-            controller: controller, onSearchTextChanged: _onSearchTextChanged),
+        if (widget.buildSearchWidget)
+          SearchWidgetComponent(
+              controller: controller,
+              onSearchTextChanged: _onSearchTextChanged),
         // FiltersAndSelectionListHeader(),
         Expanded(
             child: ChangeNotifierProvider.value(
@@ -170,60 +189,82 @@ class ListApiMasterState extends State<ListApiMaster> {
     );
   }
 
+  void _refresh() {
+    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObject);
+  }
+
+  Widget getRefreshWidget() => IconButton(
+      onPressed: () {
+        _refresh();
+      },
+      icon: const Icon(Icons.refresh));
   Widget getSmallScreenWidget() {
-    return Stack(
-        alignment: Alignment.topCenter,
-        fit: StackFit.loose,
-        children: [
-          ChangeNotifierProvider.value(
-            value: listProvider,
-            child: Consumer<ListMultiKeyProvider>(
-                builder: (context, provider, listTile) {
-              if (provider.isLoading(findCustomKey())) {
-                if (provider.getCount(findCustomKey()) == 0) {
-                  return getShimmerLoading();
-                }
-              } else {
-                if (provider.getCount(findCustomKey()) == 0 &&
-                    provider.isHasError(findCustomKey())) {
-                  return getErrorWidget();
-                } else if (provider.getCount(findCustomKey()) == 0) {
-                  return getEmptyWidget();
-                }
-              }
-              return AnimatedSwitcher(
-                // transitionBuilder: (child, animation) => ScaleTransition(
-                //   scale: animation,
-                //   child: child,
-                // ),
-                duration: Duration(milliseconds: 500),
-                child: isSelectedMode
-                    ? widget.getListSelectedViewWidget(
-                        key: findCustomKey(),
-                        scrollController: _scrollController,
-                        context: context,
-                        listProvider: listProvider)
-                    : widget.getListViewWidget(
-                        key: findCustomKey(),
-                        scrollController: _scrollController,
-                        context: context,
-                        listProvider: listProvider),
-              );
-            }),
-          ),
-          if (!isSelectedMode)
-            Column(
-              children: [
+    return WillPopScope(
+      onWillPop: () async {
+        if (fabsOnListWidgetState.currentState?.isDialOpen.value ?? false) {
+          fabsOnListWidgetState.currentState?.isDialOpen.value = false;
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        floatingActionButton: widget.buildFabIfMobile
+            ? FabsOnListWidget(
+                customKey: findCustomKey(),
+                listProvider: listProvider,
+                key: fabsOnListWidgetState)
+            : null,
+        body: Stack(
+            alignment: Alignment.topCenter,
+            fit: StackFit.loose,
+            children: [
+              ChangeNotifierProvider.value(
+                value: listProvider,
+                child: Consumer<ListMultiKeyProvider>(
+                    builder: (context, provider, listTile) {
+                  if (provider.isLoading(findCustomKey())) {
+                    if (provider.getCount(findCustomKey()) == 0) {
+                      return getShimmerLoading();
+                    }
+                  } else {
+                    if (provider.getCount(findCustomKey()) == 0 &&
+                        provider.isHasError(findCustomKey())) {
+                      return getErrorWidget();
+                    } else if (provider.getCount(findCustomKey()) == 0) {
+                      return getEmptyWidget();
+                    }
+                  }
+                  return AnimatedSwitcher(
+                      // transitionBuilder: (child, animation) => ScaleTransition(
+                      //   scale: animation,
+                      //   child: child,
+                      // ),
+                      duration: Duration(milliseconds: 500),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          _refresh();
+                        },
+                        child: isSelectedMode
+                            ? widget.getListSelectedViewWidget(
+                                key: findCustomKey(),
+                                scrollController: _scrollController,
+                                context: context,
+                                listProvider: listProvider)
+                            : widget.getListViewWidget(
+                                key: findCustomKey(),
+                                scrollController: _scrollController,
+                                context: context,
+                                listProvider: listProvider),
+                      ));
+                }),
+              ),
+              if (!isSelectedMode && widget.buildSearchWidget)
                 SearchWidgetComponent(
                     controller: controller,
                     onSearchTextChanged: _onSearchTextChanged),
-                FiltersAndSelectionListHeader(
-                  customKey: findCustomKey(),
-                  listProvider: listProvider,
-                ),
-              ],
-            )
-        ]);
+            ]),
+      ),
+    );
   }
 
   Widget getErrorWidget() {
@@ -313,6 +354,12 @@ class ListApiMasterState extends State<ListApiMaster> {
   }
 
   void _onScroll() {
+    final direction = _scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      context.read<ListScrollProvider>().setScrollDirection = direction;
+    } else if (direction == ScrollDirection.reverse) {
+      context.read<ListScrollProvider>().setScrollDirection = direction;
+    }
     // debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       // debugPrint(" IS BOTTOM $_isBottom");

@@ -41,7 +41,7 @@ class MyHomePage extends StatelessWidget {
               search: const _Search(),
             ),
           ),
-          const SliverFillRemaining(hasScrollBody: true, child: ListApiWidget())
+          SliverFillRemaining(hasScrollBody: true, child: ListApiWidget())
         ],
       ),
     );

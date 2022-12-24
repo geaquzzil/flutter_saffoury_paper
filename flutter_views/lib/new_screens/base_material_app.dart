@@ -49,6 +49,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("build_MaterialAppPage");
     // Get.put(DashboardController());
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarColor: Colors.transparent,

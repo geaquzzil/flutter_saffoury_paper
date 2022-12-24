@@ -39,8 +39,8 @@ class RouteGenerator {
           },
         );
 
-        case "/search":
-          return MaterialPageRoute(builder: (context) => const SearchPage());
+      case "/search":
+        return MaterialPageRoute(builder: (context) =>  SearchPage());
       case '/sign_in':
         return MaterialPageRoute(builder: (context) => const SignInPage());
 
@@ -75,6 +75,7 @@ class RouteGenerator {
           }
         });
       case "/edit":
+      case "/add":
         return MaterialPageRoute(builder: (context) {
           if (args == null) {
             return Lottie.network(

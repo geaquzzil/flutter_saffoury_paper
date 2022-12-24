@@ -36,7 +36,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   void onCardClicked(BuildContext context) {
     debugPrint("Card Clicked");
-    if (SizeConfig.isDesktop(context)) {
+    if (SizeConfig.hasSecondScreen(context)) {
       context
           .read<ActionViewAbstractProvider>()
           .change(this as ViewAbstract, ServerActions.view);
@@ -54,6 +54,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
           ServerActions.edit);
       return;
+    } else {
+      Navigator.pushNamed(context, "/add",
+          arguments:
+              clickedObject ?? (this as ViewAbstract).getSelfNewInstance());
     }
   }
 

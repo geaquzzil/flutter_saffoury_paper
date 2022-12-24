@@ -6,9 +6,18 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 
 import 'list_api_master.dart';
 
+@immutable
 class ListApiSearchableWidget extends ListApiMaster {
-  ListApiSearchableWidget({Key? key, ViewAbstract? viewAbstract})
-      : super(key: key, viewAbstract: viewAbstract);
+  ListApiSearchableWidget(
+      {Key? key,
+      ViewAbstract? viewAbstract,
+      bool? buildSearchWidget,
+      bool? buildFabs})
+      : super(
+            key: key,
+            viewAbstract: viewAbstract,
+            buildFabIfMobile: buildFabs ?? true,
+            buildSearchWidget: buildSearchWidget ?? true);
 
   @override
   void onScroll(

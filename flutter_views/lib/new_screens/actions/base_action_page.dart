@@ -201,22 +201,18 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
                   .map((e) => Builder(builder: (BuildContext context) {
                         return CustomScrollView(slivers: [
                           SliverOverlapInjector(
-                            handle: NestedScrollView
-                                .sliverOverlapAbsorberHandleFor(context),
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                    context),
                           ),
                           SliverPadding(
-                            padding:
-                                const EdgeInsets.all(kDefaultPadding / 2),
-                            sliver: SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return _tabs.indexOf(e) == 0
-                                      ? widget.getBody(context)
-                                      : e.widget;
-                                },
-                                childCount: 1,
-                              ),
-                            ),
+                            padding: const EdgeInsets.all(kDefaultPadding / 2),
+                            sliver: SliverFillRemaining(
+                                fillOverscroll: true,
+                                hasScrollBody: true,
+                                child: _tabs.indexOf(e) == 0
+                                    ? widget.getBody(context)
+                                    : e.widget),
                           )
                         ]);
                       }))
