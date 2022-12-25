@@ -94,6 +94,7 @@ dependencies:
   share_plus: ^6.3.0
   dual_screen: ^1.0.3
   flutter_speed_dial: ^6.2.0
+  qr_code_scanner: ^1.0.1
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   

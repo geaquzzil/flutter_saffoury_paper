@@ -10,7 +10,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ListApiMasterHorizontal<T> extends StatefulWidget {
   T object;
-  ListApiMasterHorizontal({super.key, required this.object});
+  bool useOutLineCards;
+  ListApiMasterHorizontal(
+      {super.key, required this.object, this.useOutLineCards = false});
 
   @override
   State<ListApiMasterHorizontal<T>> createState() =>
@@ -125,7 +127,10 @@ class _ListApiMasterHorizontalState<T>
             ),
           ));
         }
-        return ListCardItemHorizontal(object: data[index]);
+        return ListCardItemHorizontal(
+          object: data[index],
+          useOutlineCard: widget.useOutLineCards,
+        );
         // return data[index].getCardView(context);
       },
       // ),

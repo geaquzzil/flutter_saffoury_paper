@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
@@ -62,7 +63,15 @@ void main() async {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
   // ]);
-
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    // statusBarIconBrightness: Brightness.dark,
+    // statusBarBrightness:
+    //     !kIsWeb && Platform.isAndroid ? Brightness.dark : Brightness.light,
+    // systemNavigationBarColor: Colors.white,
+    // systemNavigationBarDividerColor: Colors.transparent,
+    // systemNavigationBarIconBrightness: Brightness.dark,
+  ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
     Product(),
     ProductSize(),

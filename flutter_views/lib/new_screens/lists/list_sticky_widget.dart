@@ -22,6 +22,7 @@ class ListStickyWidget extends ListStaticMaster<ListStickyItem> {
       {required BuildContext context, required List<ListStickyItem> list}) {
     return StickyGroupedListView<ListStickyItem, String>(
       elements: list,
+      stickyHeaderBackgroundColor: Colors.transparent,
       order: StickyGroupedListOrder.ASC,
       groupBy: (ListStickyItem element) => element.groupItem.groupName,
       groupComparator: (String value1, String value2) =>

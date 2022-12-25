@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
+import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master_horizontal.dart';
@@ -36,9 +37,9 @@ class _SearchPageState extends State<SearchPage> {
     drawerViewAbstractObsever =
         Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
 
-    _debouncer = Debouncer(
-      milliseconds: 1000,
-    );
+    // _debouncer = Debouncer(
+    //   milliseconds: 1000,
+    // );
   }
 
   Widget _buildSearchBox(BuildContext context) {
@@ -47,6 +48,13 @@ class _SearchPageState extends State<SearchPage> {
       child: ListTile(
         leading: const Icon(Icons.search),
         title: TextField(
+          textInputAction: TextInputAction.search,
+          onSubmitted: (value) async {
+            debugPrint("onSubmitted $value");
+            await Configurations.saveQueryHistory(
+                drawerViewAbstractObsever.getObject, value);
+            setState(() {});
+          },
           controller: _controller,
           decoration: InputDecoration(
               hintText: AppLocalizations.of(context)?.search,
@@ -57,7 +65,8 @@ class _SearchPageState extends State<SearchPage> {
           icon: const Icon(Icons.cancel),
           onPressed: () {
             _controller.clear();
-            onSearchTextChanged('');
+            setState(() {});
+            // onSearchTextChanged('');
           },
         ),
       ),
@@ -74,14 +83,27 @@ class _SearchPageState extends State<SearchPage> {
             Hero(
                 tag: "/search",
                 child: Material(
-                  child: Card(
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.shadow,
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                          )
+                        ],
+                        // borderRadius: BorderRadius.only(
+                        //     bottomRight: Radius.circular(15),
+                        //     bottomLeft: Radius.circular(15)),
+                      ),
                       // height: 100,
                       // color: Theme.of(context).colorScheme.primary,
                       child: SafeArea(
                           child: Row(children: [
-                    BackButton(),
-                    Expanded(child: _buildSearchBox(context))
-                  ]))),
+                        BackButton(),
+                        Expanded(child: _buildSearchBox(context))
+                      ]))),
                 )),
 
             _controller.text.isEmpty
@@ -136,8 +158,9 @@ class _SearchPageState extends State<SearchPage> {
                     return Text(AppLocalizations.of(context)!.noItems);
                   }
                   return SizedBox(
-                      height: 300,
+                      height: 200,
                       child: ListApiMasterHorizontal<List<AutoRest>>(
+                          useOutLineCards: true,
                           object: snapshot.data!
                               .map((e) => AutoRest(
                                   obj: getNewInstance()
@@ -183,13 +206,21 @@ class _SearchPageState extends State<SearchPage> {
                       itemBuilder: (context, index) {
                         var item = snapshot.data![index];
                         {
-                          return Chip(
-                            deleteIcon: Icon(Icons.done),
-                            label: Text(item),
-                            onDeleted: () {
+                          return ActionChip(
+                            elevation: 1,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surface,
+                            shadowColor: Theme.of(context).colorScheme.shadow,
+                            surfaceTintColor:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            avatar: Icon(Icons.search),
+                            onPressed: () {
                               _controller.text = item;
                               onSearchTextChanged(item);
                             },
+                            // deleteIcon: Icon(Icons.done),
+                            label: Text(item),
+                            // onDeleted: () {},
                           );
                         }
                       },
@@ -213,6 +244,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> onSearchTextChanged(String value) async {
     if (value.isEmpty) return;
+
     // _debouncer.run(() async {
     //   await Configurations.saveQueryHistory(
     //       drawerViewAbstractObsever.getObject, value);

@@ -163,11 +163,21 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
     //   ),
     // );
     return FlexibleSpaceBar(
+        stretchModes: [StretchMode.fadeTitle],
         centerTitle: true,
         titlePadding: EdgeInsets.only(bottom: 62),
-        title: Text(widget.viewAbstract.getBaseTitle(context,
-            descriptionIsId: true, serverAction: widget.getServerAction())),
-        background: widget.viewAbstract.getCardLeading(context));
+        title: Text(
+          widget.viewAbstract.getBaseTitle(context,
+              descriptionIsId: true, serverAction: widget.getServerAction()),
+          // style: Theme.of(context)
+          //     .textTheme
+          //     .titleLarge!
+          //     .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
+        background: widget.viewAbstract.getHeroTag(
+            context: context,
+            child: widget.viewAbstract
+                .getBlurringImage(context, addBottomWidget: false)));
   }
 
   Widget getBodyDetermineLayout() {
@@ -209,7 +219,7 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
                             padding: const EdgeInsets.all(kDefaultPadding / 2),
                             sliver: SliverFillRemaining(
                                 fillOverscroll: true,
-                                hasScrollBody: true,
+                                hasScrollBody: false,
                                 child: _tabs.indexOf(e) == 0
                                     ? widget.getBody(context)
                                     : e.widget),

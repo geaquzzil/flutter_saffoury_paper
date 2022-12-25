@@ -6,67 +6,55 @@ import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:getwidget/getwidget.dart';
 
+import '../cards/card_clicked.dart';
+
 class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
   final T object;
-  final Function? press;
+  final Function? onPress;
+  final bool useOutlineCard;
   const ListCardItemHorizontal({
     Key? key,
     required this.object,
-    this.press,
+    this.onPress,
+    this.useOutlineCard = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 210,
-      // height: 10,
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 60 / 2.0, bottom: 60 / 2),
-            child: Container(
-              // margin: EdgeInsets.symmetric(vertical: kDefaultPadding),
-              //replace this Container with your Card
-              // color: Colors.white,
-              height: 200.0,
-              width: 200,
-              child: Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      height: 30 / 2,
-                    ),
-
-                    object.getHorizontalCardTitle(context),
-                    // Spacer(),
-                    object.getHorizontalCardMainHeader(context),
-                    // const Spacer(),
-                    object.getHorizontalCardSubtitle(context),
-                  ],
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 60 / 2.0,
+            bottom: 60 / 2,
+          ),
+          child: useOutlineCard
+              ? OutlinedCard(
+                  onPress: onPress ?? () => object.onCardClicked(context),
+                  child: getCardBody(context))
+              : CardClicked(
+                  onPress:  onPress ?? () => object.onCardClicked(context),
+                  child: getCardBody(context),
                 ),
+        ),
+        Container(
+          width: 60,
+          height: 60,
+          decoration:
+              const ShapeDecoration(shape: CircleBorder(), color: Colors.white),
+          child: Padding(
+            padding: const EdgeInsets.all(1),
+            child: DecoratedBox(
+              child: object.getCardLeading(context,
+                  addCustomHeroTag: "horizontal"),
+              decoration: const ShapeDecoration(
+                shape: CircleBorder(),
               ),
             ),
           ),
-          Container(
-            width: 60,
-            height: 60,
-            decoration:
-                ShapeDecoration(shape: CircleBorder(), color: Colors.white),
-            child: Padding(
-              padding: EdgeInsets.all(1),
-              child: DecoratedBox(
-                child: object.getCardLeading(context,
-                    addCustomHeroTag: "horizontal"),
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
     return Card(
       child: SizedBox(
@@ -90,6 +78,29 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
             // )
           ],
         ),
+      ),
+    );
+  }
+
+  Container getCardBody(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const SizedBox(
+            height: 60 / 2,
+          ),
+
+          object.getHorizontalCardTitle(context),
+          const SizedBox(
+            height: kDefaultPadding / 2,
+          ),
+          // Spacer(),
+          object.getHorizontalCardMainHeader(context),
+          // const Spacer(),
+          object.getHorizontalCardSubtitle(context),
+        ],
       ),
     );
   }

@@ -606,7 +606,7 @@ class Product extends ViewAbstract<Product>
     return Column(
       children: [
         ListHorizontalApiAutoRestWidget(
-          customHeight: 300,
+          customHeight: 250,
           titleString: AppLocalizations.of(context)!.simialrProducts,
           autoRest: AutoRest<Product>(
               range: 5,
@@ -614,7 +614,7 @@ class Product extends ViewAbstract<Product>
               key: "similarProducts$iD"),
         ),
         ListHorizontalApiAutoRestWidget(
-          customHeight: 300,
+          customHeight: 250,
           titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
           autoRest: AutoRest<Product>(
               range: 5,

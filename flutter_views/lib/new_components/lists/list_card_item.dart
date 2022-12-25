@@ -56,7 +56,7 @@ class _ListCardItemState<T extends ViewAbstract>
     );
   }
 
-  ListTile getListTile(bool isSelected, BuildContext context) {
+  Widget getListTile(bool isSelected, BuildContext context) {
     return ListTile(
         selected: isSelected,
         selectedTileColor: Theme.of(context).colorScheme.onSecondary,

@@ -1,6 +1,7 @@
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
@@ -37,6 +38,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return TowPaneExt(
       startPane: Scaffold(
         bottomNavigationBar: getBottomNavigationBar(),
+
+        // bottomSheet: SizeConfig.isMobile(context) ? QrCodeReader() : null,
         // resizeToAvoidBottomInset: true,
         appBar: getAppBar(),
         key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,

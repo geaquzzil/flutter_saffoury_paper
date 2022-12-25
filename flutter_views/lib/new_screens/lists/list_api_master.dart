@@ -7,6 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
+import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
@@ -234,28 +235,31 @@ class ListApiMasterState extends State<ListApiMaster> {
                       return getEmptyWidget();
                     }
                   }
-                  return AnimatedSwitcher(
-                      // transitionBuilder: (child, animation) => ScaleTransition(
-                      //   scale: animation,
-                      //   child: child,
-                      // ),
-                      duration: Duration(milliseconds: 500),
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          _refresh();
-                        },
-                        child: isSelectedMode
-                            ? widget.getListSelectedViewWidget(
-                                key: findCustomKey(),
-                                scrollController: _scrollController,
-                                context: context,
-                                listProvider: listProvider)
-                            : widget.getListViewWidget(
-                                key: findCustomKey(),
-                                scrollController: _scrollController,
-                                context: context,
-                                listProvider: listProvider),
-                      ));
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 75),
+                    child: AnimatedSwitcher(
+                        // transitionBuilder: (child, animation) => ScaleTransition(
+                        //   scale: animation,
+                        //   child: child,
+                        // ),
+                        duration: Duration(milliseconds: 500),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            _refresh();
+                          },
+                          child: isSelectedMode
+                              ? widget.getListSelectedViewWidget(
+                                  key: findCustomKey(),
+                                  scrollController: _scrollController,
+                                  context: context,
+                                  listProvider: listProvider)
+                              : widget.getListViewWidget(
+                                  key: findCustomKey(),
+                                  scrollController: _scrollController,
+                                  context: context,
+                                  listProvider: listProvider),
+                        )),
+                  );
                 }),
               ),
               if (!isSelectedMode && widget.buildSearchWidget)
@@ -303,12 +307,15 @@ class ListApiMasterState extends State<ListApiMaster> {
   }
 
   Widget getShimmerLoading() {
-    return Skeleton(
-      isLoading: true,
-      skeleton: SkeletonListView(
-        itemCount: viewAbstract.getPageItemCount,
+    return Padding(
+      padding: const EdgeInsets.only(top: 75),
+      child: Skeleton(
+        isLoading: true,
+        skeleton: SkeletonListView(
+          itemCount: viewAbstract.getPageItemCount,
+        ),
+        child: Container(child: Center(child: Text("Content"))),
       ),
-      child: Container(child: Center(child: Text("Content"))),
     );
   }
 

@@ -1071,6 +1071,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  qr_code_scanner:
+    dependency: transitive
+    description:
+      name: qr_code_scanner
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   reflectable:
     dependency: "direct main"
     description:

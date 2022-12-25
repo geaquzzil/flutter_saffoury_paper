@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -30,12 +32,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return null;
   }
 
-  Widget getCardLeadingSearch(BuildContext context) {
-    return getCardLeadingCircleAvatar(context);
+  Widget getCardLeadingSearch(BuildContext context,
+      {bool addBottomWidget = true}) {
+    return getCardLeadingCircleAvatar(context,
+        addBottomWidget: addBottomWidget);
   }
 
-  Widget getCardLeadingDropdown(BuildContext context) {
-    return getCardLeadingCircleAvatar(context);
+  Widget getCardLeadingDropdown(BuildContext context,
+      {bool addBottomWidget = true}) {
+    return getCardLeadingCircleAvatar(context,
+        addBottomWidget: addBottomWidget);
   }
 
   String getCardItemDropdownSubtitle(BuildContext context) {
@@ -55,11 +61,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getCardLeadingCircleAvatar(BuildContext context,
-      {double width = 60, double height = 60}) {
+      {double width = 60, double height = 60, bool addBottomWidget = true}) {
     return CircleAvatar(
         radius: 24,
         backgroundColor: Theme.of(context).backgroundColor,
-        child: getCardLeadingImage(context));
+        child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
   }
 
   Widget getCardLeadingCircleAvatarWithSelectedBorder(BuildContext context) {
@@ -76,12 +82,23 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         child: (getCardLeadingCircleAvatarWithSelectedBorder(context)));
   }
 
-  Widget getCardLeading(BuildContext context, {String? addCustomHeroTag}) {
+  Widget getHeroTag(
+      {required BuildContext context,
+      required Widget child,
+      String? addCustomHeroTag}) {
     return Hero(
         tag: getIDFormat(context) +
             (getTableNameApi() ?? "") +
             (addCustomHeroTag ?? ""),
-        child: (getCardLeadingCircleAvatar(context)));
+        child: child);
+  }
+
+  Widget getCardLeading(BuildContext context,
+      {String? addCustomHeroTag, bool addBottomWidget = true}) {
+    return getHeroTag(
+        context: context,
+        child: getCardLeadingCircleAvatar(context,
+            addBottomWidget: addBottomWidget));
   }
 
   DismissDirection getDismissibleDirection() {
@@ -125,22 +142,62 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  Widget getCardLeadingImageWithFutureSelected(BuildContext context) {
+  Widget getCardLeadingImageWithFutureSelected(BuildContext context,
+      {bool addBottomWidget = true}) {
     bool isSelected = context
             .watch<ActionViewAbstractProvider>()
             .getObject
             ?.isEquals(this as ViewAbstract) ??
         false;
 
-    return getCardLeadingImage(context, isSelected: isSelected);
+    return getCardLeadingImage(context,
+        isSelected: isSelected, addBottomWidget: addBottomWidget);
   }
 
-  Widget getCardLeadingImage(BuildContext context, {bool? isSelected}) {
+  Widget getBlurringImage(BuildContext context, {bool addBottomWidget = true}) {
     String? imageUrl = getImageUrl(context);
     if (imageUrl == null) {
       return Icon(getMainIconData());
     }
-    IconData? iconOnButton = getCardLeadingBottomIcon();
+    IconData? iconOnButton =
+        addBottomWidget ? getCardLeadingBottomIcon() : null;
+    Widget image = CachedNetworkImage(
+      color: Theme.of(context).colorScheme.onBackground,
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onBackground,
+          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        ),
+        child: new BackdropFilter(
+          filter: new ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: new Container(
+            decoration: new BoxDecoration(
+                color:
+                    Theme.of(context).colorScheme.onPrimary.withOpacity(0.75)),
+          ),
+        ),
+      ),
+      placeholder: (context, url) => const CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(getMainIconData()),
+    );
+    if (iconOnButton != null) {
+      return TowIcons(
+        largChild: image,
+        smallIcon: iconOnButton,
+      );
+    }
+    return image;
+  }
+
+  Widget getCardLeadingImage(BuildContext context,
+      {bool? isSelected, bool addBottomWidget = true}) {
+    String? imageUrl = getImageUrl(context);
+    if (imageUrl == null) {
+      return Icon(getMainIconData());
+    }
+    IconData? iconOnButton =
+        addBottomWidget ? getCardLeadingBottomIcon() : null;
     Widget image = CachedNetworkImage(
       color: Theme.of(context).colorScheme.onBackground,
       imageUrl: imageUrl,

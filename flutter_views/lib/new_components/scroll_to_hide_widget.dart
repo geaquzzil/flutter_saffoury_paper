@@ -29,6 +29,7 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
   @override
   void initState() {
     super.initState();
+    
     widget.controller?.addListener(listen);
   }
 
