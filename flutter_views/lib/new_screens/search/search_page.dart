@@ -9,13 +9,17 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
+import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
+import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/debouncer.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 
 import '../lists/list_api_master.dart';
@@ -61,15 +65,41 @@ class _SearchPageState extends State<SearchPage> {
               border: InputBorder.none),
           onChanged: onSearchTextChanged,
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.cancel),
-          onPressed: () {
-            _controller.clear();
-            setState(() {});
-            // onSearchTextChanged('');
-          },
-        ),
+        trailing: getFilterWidget(context),
       ),
+    );
+  }
+
+  Widget getFilterWidget(BuildContext context) {
+    if (SizeConfig.isMobile(context)) {
+      return IconButton(
+        icon: Icon(Icons.filter_alt_rounded),
+        onPressed: () async {
+          showBottomSheetExt(
+            context: context,
+            builder: (p0) {
+              return BaseFilterableMainWidget(
+                useDraggableWidget: false,
+              );
+            },
+          );
+          // Navigator.pushNamed(context, "/search");
+        },
+      );
+    }
+
+    return FilterablePopupIconWidget();
+  }
+
+  Widget getSearchTraling() {
+    // return FilterablePopupIconWidget();
+    return IconButton(
+      icon: const Icon(Icons.cancel),
+      onPressed: () {
+        _controller.clear();
+        setState(() {});
+        // onSearchTextChanged('');
+      },
     );
   }
 
@@ -112,6 +142,16 @@ class _SearchPageState extends State<SearchPage> {
                       list: [
                         getSuggestionListItem(context),
                         getBasedOnYourSearchListItem(context),
+                        ListStickyItem(
+                          buildGroupNameInsideItemBuilder: false,
+                          groupItem: ListStickyGroupItem(groupName: ""),
+                          itemBuilder: (context) {
+                            return Expanded(
+                                child: EmptyWidget(
+                                    lottiUrl:
+                                        "https://assets1.lottiefiles.com/private_files/lf30_jo7huq2d.json"));
+                          },
+                        )
                       ],
                     ),
                   )

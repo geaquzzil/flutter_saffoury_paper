@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/providers/actions/list_scroll_provider.d
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../actions/view/base_home_details_view.dart';
@@ -33,30 +34,48 @@ class BaseHomeMainPage extends StatefulWidget {
 class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   int _currentIndex = 0;
   bool lastStateIsSelectMood = false;
+  bool cameraView = false;
   @override
   Widget build(BuildContext context) {
     return TowPaneExt(
-      startPane: Scaffold(
-        bottomNavigationBar: getBottomNavigationBar(),
+      startPane: GestureDetector(
+        onVerticalDragUpdate: (details) {
+          int sensitivity = 8;
+          if (details.delta.dy > sensitivity) {
+            debugPrint("BaseHomePage downSwipe");
+            showBottomSheetExt(
+              context: context,
+              builder: (p0) {
+                return QrCodeReader();
+              },
+            );
+            // setState(() {
+            //   cameraView = true;
+            // });
+            // Down Swipe
+          } else if (details.delta.dy < -sensitivity) {
+            debugPrint("BaseHomePage Up Swipe");
+            // Up Swipe
+            // setState(() {
+            //   cameraView = false;
+            // });
+          }
+        },
+        child: Scaffold(
+          bottomNavigationBar: getBottomNavigationBar(),
 
-        // bottomSheet: SizeConfig.isMobile(context) ? QrCodeReader() : null,
-        // resizeToAvoidBottomInset: true,
-        appBar: getAppBar(),
-        key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
-        drawer: DrawerLargeScreens(),
-        endDrawer: const BaseHomeCartPage(),
-        body: SizeConfig.isMobile(context)
-            ? SafeArea(
-                child: IndexedStack(index: _currentIndex, children: [
-                  ListApiSearchableWidget(
-                      key: context.read<ListActionsProvider>().getListStateKey),
-                  // SearchPage(),
-                  NotificationWidget()
-                  // ListApiSearchableWidgetTestScrolling(),
-                  // ListApiSearchableWidgetTestScrolling(),
-                ]),
-              )
-            : SafeArea(child: ListApiSearchableWidget()),
+          // bottomSheet: SizeConfig.isMobile(context) ? QrCodeReader() : null,
+          // resizeToAvoidBottomInset: true,
+          appBar: getAppBar(),
+          key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
+          drawer: DrawerLargeScreens(),
+          endDrawer: const BaseHomeCartPage(),
+          body: SizeConfig.isMobile(context)
+              ? SafeArea(
+                  child: getMainBodyIndexedStack(context),
+                )
+              : SafeArea(child: ListApiSearchableWidget()),
+        ),
       ),
       endPane: BaseSharedDetailsView(),
     );
@@ -98,6 +117,40 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               )
             : const SafeArea(child: BaseHomeLargeScreenLayout()),
       ),
+    );
+  }
+
+  Widget getMainBodyIndexedStack(BuildContext context) {
+    if (cameraView) {
+      return AnimatedContainer(
+        duration: Duration(milliseconds: 500),
+        child: Column(
+          children: [
+            Expanded(child: QrCodeReader()),
+            Expanded(
+              child: IndexedStack(index: _currentIndex, children: [
+                ListApiSearchableWidget(
+                    key: context.read<ListActionsProvider>().getListStateKey),
+                // SearchPage(),
+                NotificationWidget()
+                // ListApiSearchableWidgetTestScrolling(),
+                // ListApiSearchableWidgetTestScrolling(),
+              ]),
+            )
+          ],
+        ),
+      );
+    }
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
+      child: IndexedStack(index: _currentIndex, children: [
+        ListApiSearchableWidget(
+            key: context.read<ListActionsProvider>().getListStateKey),
+        // SearchPage(),
+        NotificationWidget()
+        // ListApiSearchableWidgetTestScrolling(),
+        // ListApiSearchableWidgetTestScrolling(),
+      ]),
     );
   }
 
