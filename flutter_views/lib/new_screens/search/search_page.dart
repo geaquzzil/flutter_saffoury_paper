@@ -1,3 +1,4 @@
+import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -8,18 +9,21 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
+import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_multible_views.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/debouncer.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
+import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
 import '../lists/list_api_master.dart';
@@ -35,6 +39,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
   late DrawerViewAbstractListProvider drawerViewAbstractObsever;
   late Debouncer _debouncer;
+  Widget? startPane;
   @override
   void initState() {
     super.initState();
@@ -50,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
     return Padding(
       padding: const EdgeInsets.all(kDefaultPadding / 2),
       child: ListTile(
+        // tileColor: Colors.transparent,
         leading: const Icon(Icons.search),
         title: TextField(
           textInputAction: TextInputAction.search,
@@ -57,10 +63,11 @@ class _SearchPageState extends State<SearchPage> {
             debugPrint("onSubmitted $value");
             await Configurations.saveQueryHistory(
                 drawerViewAbstractObsever.getObject, value);
-            setState(() {});
+            // setState(() {});
           },
           controller: _controller,
           decoration: InputDecoration(
+              fillColor: Colors.transparent,
               hintText: AppLocalizations.of(context)?.search,
               border: InputBorder.none),
           onChanged: onSearchTextChanged,
@@ -97,7 +104,7 @@ class _SearchPageState extends State<SearchPage> {
       icon: const Icon(Icons.cancel),
       onPressed: () {
         _controller.clear();
-        setState(() {});
+        // setState(() {});
         // onSearchTextChanged('');
       },
     );
@@ -105,83 +112,102 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    startPane ??= getFirstPane(context);
+    Widget endPane =
+        _controller.text.isEmpty ? getEmptyWidget() : getSearchList();
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: getBackFloatingActionButton(context),
-        body: Column(
-          children: [
-            Hero(
-                tag: "/search",
-                child: Material(
-                  child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.shadow,
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                          )
-                        ],
-                        // borderRadius: BorderRadius.only(
-                        //     bottomRight: Radius.circular(15),
-                        //     bottomLeft: Radius.circular(15)),
-                      ),
-                      // height: 100,
-                      // color: Theme.of(context).colorScheme.primary,
-                      child: SafeArea(
-                          child: Row(children: [
-                        BackButton(),
-                        Expanded(child: _buildSearchBox(context))
-                      ]))),
-                )),
-
-            _controller.text.isEmpty
-                ? Expanded(
-                    child: ListStickyWidget(
-                      list: [
-                        getSuggestionListItem(context),
-                        getBasedOnYourSearchListItem(context),
-                        ListStickyItem(
-                          buildGroupNameInsideItemBuilder: false,
-                          groupItem: ListStickyGroupItem(groupName: ""),
-                          itemBuilder: (context) {
-                            return Expanded(
-                                child: EmptyWidget(
-                                    lottiUrl:
-                                        "https://assets1.lottiefiles.com/private_files/lf30_jo7huq2d.json"));
-                          },
-                        )
-                      ],
-                    ),
-                  )
-                : Expanded(
-                    child: ListApiSearchableWidget(
-                      key: GlobalKey<ListApiMasterState>(),
-                      viewAbstract: drawerViewAbstractObsever.getObject
-                          .getSelfNewInstance()
-                        ..setCustomMapAsSearchable(_controller.text),
-                      buildFabs: false,
-                      buildSearchWidget: false,
-                    ),
-                  ),
-            // Expanded(
-            //   child: EmptyWidget(
-            //       lottiUrl:
-            //           "https://assets8.lottiefiles.com/packages/lf20_xbf1be8x.json"),
-            // )
-            // Expanded(
-            //   child: ListView.builder(
-            //     itemCount: 10,
-            //     itemBuilder: (context, index) {
-            //       return ListTile(
-            //         title: Text("$index"),
-            //       );
-            //     },
-            //   ),
-            // )
-          ],
+        resizeToAvoidBottomInset: false,
+        // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        // // floatingActionButton: getBackFloatingActionButton(context),
+        appBar: getAppBar(context),
+        body: TowPaneExt(
+          startPane: startPane!,
+          endPane: endPane,
         ));
+  }
+
+  Widget getBody(BuildContext context) {
+    // return Text("Dsad");
+    return TowPaneExt(
+      startPane: getFirstPane(context),
+      endPane: getEmptyWidget(),
+    );
+  }
+
+  Widget getFirstPane(BuildContext context) {
+    Widget listStickyWidget = ListMultibleViews(
+      // key: UniqueKey(),
+      list: [
+        // getSearchListItem(context),
+        if (SizeConfig.isFoldable(context)) getFilterableListItem(context),
+        getSuggestionListItem(context),
+        getBasedOnYourSearchListItem(context),
+        if (SizeConfig.isMobile(context)) getEmptyListStickyItem(),
+      ],
+    );
+    if (SizeConfig.isFoldable(context)) return listStickyWidget;
+    return _controller.text.isEmpty ? listStickyWidget : getSearchList();
+  }
+
+  Widget getSearchList() {
+    return ListApiSearchableWidget(
+      key: GlobalKey<ListApiMasterState>(),
+      viewAbstract: drawerViewAbstractObsever.getObject.getSelfNewInstance()
+        ..setCustomMapAsSearchable(_controller.text),
+      buildFabs: false,
+      buildSearchWidget: false,
+    );
+  }
+
+  AppBar getAppBar(BuildContext context) {
+    return AppBar(
+      // backgroundColor: Theme.of(context).colorScheme.primary,
+      automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
+      toolbarHeight: 100,
+      flexibleSpace: Hero(
+          tag: "/search",
+          child: Material(
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Theme.of(context).colorScheme.shadow,
+                          spreadRadius: 2,
+                          blurRadius: 10)
+                    ]
+                    // borderRadius: BorderRadius.only(
+                    //     bottomRight: Radius.circular(15),
+                    //     bottomLeft: Radius.circular(15)),
+                    ),
+                height: 100,
+                // color: Theme.of(context).colorScheme.primary,
+                child: SafeArea(child: _buildSearchBox(context))),
+          )),
+    );
+  }
+
+  // Widget oldAppBar(){
+
+  // }
+
+  ListStickyItem getEmptyListStickyItem() {
+    return ListStickyItem(
+      buildGroupNameInsideItemBuilder: false,
+      groupItem: ListStickyGroupItem(groupName: ""),
+      itemBuilder: (context) {
+        return getEmptyWidget();
+      },
+    );
+  }
+
+  Widget getEmptyWidget() {
+    return Center(
+      child: EmptyWidget(
+          lottiUrl:
+              "https://assets1.lottiefiles.com/private_files/lf30_jo7huq2d.json"),
+    );
   }
 
   ListStickyItem getBasedOnYourSearchListItem(BuildContext context) {
@@ -218,6 +244,33 @@ class _SearchPageState extends State<SearchPage> {
 
   ViewAbstract getNewInstance() {
     return drawerViewAbstractObsever.getObject.getSelfNewInstance();
+  }
+
+  ListStickyItem getSearchListItem(BuildContext context) {
+    return ListStickyItem(
+      buildGroupNameInsideItemBuilder: false,
+      groupItem: ListStickyGroupItem(groupName: ""),
+      itemBuilder: (context) {
+        return Hero(
+            tag: "/search",
+            child: Material(child: Card(child: _buildSearchBox(context))));
+      },
+    );
+  }
+
+  ListStickyItem getFilterableListItem(BuildContext context) {
+    return ListStickyItem(
+        useExpansionTile: true,
+        groupItem: ListStickyGroupItem(
+            groupName: AppLocalizations.of(context)!.filter,
+            icon: Icons.filter_alt),
+        itemBuilder: (context) => SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: BaseFilterableMainWidget(
+                setHeaderTitle: false,
+                useDraggableWidget: false,
+              ),
+            ));
   }
 
   ListStickyItem getSuggestionListItem(BuildContext context) {

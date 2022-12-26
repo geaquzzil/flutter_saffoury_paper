@@ -18,7 +18,13 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseFilterableMainWidget extends StatelessWidget {
   bool useDraggableWidget;
-  BaseFilterableMainWidget({super.key, this.useDraggableWidget = false});
+  bool setHeaderTitle;
+  Function()? onDoneCliced;
+  BaseFilterableMainWidget(
+      {super.key,
+      this.useDraggableWidget = false,
+      this.setHeaderTitle = true,
+      this.onDoneCliced});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +57,8 @@ class BaseFilterableMainWidget extends StatelessWidget {
         padding: const EdgeInsets.all(kDefaultPadding),
         child: Column(
           children: [
-            getHeader(context, drawerViewAbstract),
-            if (SizeConfig.isMobile(context)) Divider(),
+            if (setHeaderTitle) getHeader(context, drawerViewAbstract),
+            if (SizeConfig.isMobile(context) && (setHeaderTitle)) Divider(),
             Expanded(
               child: getControllers(list, drawerViewAbstract, context),
             ),
@@ -107,6 +113,10 @@ class BaseFilterableMainWidget extends StatelessWidget {
         ElevatedButton(
           child: const Text("DONE"),
           onPressed: () {
+            if (onDoneCliced != null) {
+              onDoneCliced!();
+              return;
+            }
             notifyListApi(context);
             if (SizeConfig.isMobile(context)) {
               Navigator.pop(context);

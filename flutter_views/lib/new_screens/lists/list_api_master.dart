@@ -141,7 +141,7 @@ class ListApiMasterState extends State<ListApiMaster> {
 
   @override
   Widget build(BuildContext context) {
-    if (SizeConfig.isMobile(context)) {
+    if (SizeConfig.isMobile(context) || SizeConfig.isFoldable(context)) {
       return getSmallScreenWidget();
     } else {
       return getLargeScreenWidget();
@@ -310,6 +310,7 @@ class ListApiMasterState extends State<ListApiMaster> {
     return Padding(
       padding: const EdgeInsets.only(top: 75),
       child: Skeleton(
+        // darkShimmerGradient: ,
         isLoading: true,
         skeleton: SkeletonListView(
           itemCount: viewAbstract.getPageItemCount,

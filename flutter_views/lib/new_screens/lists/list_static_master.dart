@@ -89,7 +89,7 @@ class ListStaticMasterState<T> extends State<ListStaticMaster<T>> {
   }
 
   Widget _buildBody() {
-    return Column(
+    return ListView(
       children: <Widget>[
         if (widget.isSearchable) Container(child: _buildSearchBox()),
         Expanded(

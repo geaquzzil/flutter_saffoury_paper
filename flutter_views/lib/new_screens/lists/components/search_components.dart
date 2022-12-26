@@ -50,21 +50,23 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
-            onTap: SizeConfig.isMobile(context) &&
-                    !widget.forceSearchBarAsEditText
+            onTap: SizeConfig.isMobile(context) ||
+                    SizeConfig.isFoldable(context) &&
+                        !widget.forceSearchBarAsEditText
                 ? () {
                     Navigator.pushNamed(context, "/search", arguments: null);
                   }
                 : null,
-            title:
-                SizeConfig.isMobile(context) && !widget.forceSearchBarAsEditText
-                    ? Text(AppLocalizations.of(context)!.searchInFormat(context
-                        .watch<DrawerViewAbstractListProvider>()
-                        .getObject
-                        .getMainHeaderLabelTextOnly(context)))
-                    : TextField(
-                        controller: widget.controller,
-                      ),
+            title: (SizeConfig.isMobile(context) ||
+                        SizeConfig.isFoldable(context)) &&
+                    !widget.forceSearchBarAsEditText
+                ? Text(AppLocalizations.of(context)!.searchInFormat(context
+                    .watch<DrawerViewAbstractListProvider>()
+                    .getObject
+                    .getMainHeaderLabelTextOnly(context)))
+                : TextField(
+                    controller: widget.controller,
+                  ),
             trailing: getTrailingWidget(),
           ),
         ),

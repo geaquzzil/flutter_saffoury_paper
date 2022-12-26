@@ -18,7 +18,9 @@ class ExpansionTileCustom extends StatefulWidget {
   bool? isEnabled;
   bool initiallyExpanded;
   bool wrapWithCardOrOutlineCard;
+  bool useLeadingOutSideCard;
   List<Widget> children;
+  bool padding;
   bool Function()? canExpand;
   ExpansionTileCustom(
       {Key? key,
@@ -26,6 +28,8 @@ class ExpansionTileCustom extends StatefulWidget {
       this.leading,
       this.subtitle,
       this.trailing,
+      this.useLeadingOutSideCard = true,
+      this.padding = true,
       this.wrapWithCardOrOutlineCard = true,
       required this.children,
       this.initiallyExpanded = false,
@@ -59,7 +63,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   void initState() {
     super.initState();
 
-    childrenPadding = const EdgeInsets.all(kDefaultPadding);
+    childrenPadding = EdgeInsets.all(widget.padding ? kDefaultPadding : 0);
     _controller = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
 
@@ -153,16 +157,56 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     // widget.onExpansionChanged?.call(_isExpanded);
   }
 
+  Widget? _buildIcon(BuildContext context) {
+    return RotationTransition(
+      turns: _iconTurns,
+      child: const Icon(Icons.expand_more),
+    );
+  }
+
   Widget _buildChildren(BuildContext context, Widget? child) {
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
     final Color borderSideColor = _isExpanded
         ? Theme.of(context).colorScheme.primary
         : Colors.transparent;
-
-    return ListTile(
-      leading: widget.leading,
-      title: ClippedCard(
+    if (widget.useLeadingOutSideCard) {
+      return ListTile(
+        leading: widget.leading,
+        title: ClippedCard(
+          wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
+          borderSide: BorderSideColor.START,
+          color: (widget.hasError ?? false)
+              ? Theme.of(context).colorScheme.onError
+              : borderSideColor,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTileTheme.merge(
+                iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
+                textColor: _iconColor.value,
+                child: ListTile(
+                    onTap: () => _handleTap(context),
+                    // contentPadding: expansionTileTheme.tilePadding,
+                    // leading: widget.leading,
+                    title: widget.title,
+                    subtitle: widget.subtitle,
+                    trailing: widget.trailing ?? _buildIcon(context)),
+              ),
+              if (_isExpanded) Divider(),
+              ClipRect(
+                child: Align(
+                  alignment: Alignment.center,
+                  heightFactor: _heightFactor.value,
+                  child: child,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return ClippedCard(
         wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
         borderSide: BorderSideColor.START,
         color: (widget.hasError ?? false)
@@ -177,10 +221,10 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
               child: ListTile(
                   onTap: () => _handleTap(context),
                   // contentPadding: expansionTileTheme.tilePadding,
-                  // leading: widget.leading,
+                  leading: widget.leading,
                   title: widget.title,
                   subtitle: widget.subtitle,
-                  trailing: widget.trailing),
+                  trailing: widget.trailing ?? _buildIcon(context)),
             ),
             if (_isExpanded) Divider(),
             ClipRect(
@@ -192,7 +236,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
             ),
           ],
         ),
-      ),
-    );
+      );
+    }
   }
 }

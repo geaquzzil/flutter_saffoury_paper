@@ -63,7 +63,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         },
         child: Scaffold(
           bottomNavigationBar: getBottomNavigationBar(),
-
+          resizeToAvoidBottomInset: false,                                    
           // bottomSheet: SizeConfig.isMobile(context) ? QrCodeReader() : null,
           // resizeToAvoidBottomInset: true,
           appBar: getAppBar(),
