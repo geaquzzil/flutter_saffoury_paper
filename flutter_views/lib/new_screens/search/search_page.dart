@@ -38,17 +38,14 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
   late DrawerViewAbstractListProvider drawerViewAbstractObsever;
-  late Debouncer _debouncer;
+  GlobalKey<ListApiMasterState> searchKey = GlobalKey<ListApiMasterState>();
   Widget? startPane;
+  Widget? searchPane;
   @override
   void initState() {
     super.initState();
     drawerViewAbstractObsever =
         Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
-
-    // _debouncer = Debouncer(
-    //   milliseconds: 1000,
-    // );
   }
 
   Widget _buildSearchBox(BuildContext context) {
@@ -64,13 +61,13 @@ class _SearchPageState extends State<SearchPage> {
             await Configurations.saveQueryHistory(
                 drawerViewAbstractObsever.getObject, value);
             // setState(() {});
+            searchKey.currentState?.fetshListSearch(value);
           },
           controller: _controller,
           decoration: InputDecoration(
               fillColor: Colors.transparent,
               hintText: AppLocalizations.of(context)?.search,
               border: InputBorder.none),
-          onChanged: onSearchTextChanged,
         ),
         trailing: getFilterWidget(context),
       ),
@@ -113,8 +110,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     startPane ??= getFirstPane(context);
-    Widget endPane =
-        _controller.text.isEmpty ? getEmptyWidget() : getSearchList();
+    searchPane ??= getSearchList();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -122,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
         appBar: getAppBar(context),
         body: TowPaneExt(
           startPane: startPane!,
-          endPane: endPane,
+          endPane: searchPane,
         ));
   }
 
@@ -151,7 +147,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget getSearchList() {
     return ListApiSearchableWidget(
-      key: GlobalKey<ListApiMasterState>(),
+      key: searchKey,
       viewAbstract: drawerViewAbstractObsever.getObject.getSelfNewInstance()
         ..setCustomMapAsSearchable(_controller.text),
       buildFabs: false,

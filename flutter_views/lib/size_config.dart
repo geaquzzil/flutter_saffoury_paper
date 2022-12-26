@@ -55,12 +55,12 @@ class SizeConfig {
   }
 
   static double? getDrawerWidth(BuildContext context) {
-    if (MediaQuery.of(context).hinge != null) {
-      return isSingleScreen(context)
-          ? MediaQuery.of(context).size.width * .75
-          : MediaQuery.of(context).size.width * .25;
+    if (SizeConfig.isMobile(context) ||
+        SizeConfig.isFoldableWithSingleScreen(context)) {
+      return MediaQuery.of(context).size.width * .75;
+    } else if (SizeConfig.isFoldableWithOpenDualScreen(context)) {
+      return MediaQuery.of(context).size.width * .40;
     }
-
     if (SizeConfig.isDesktop(context)) {
       return 256;
     }

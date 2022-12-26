@@ -24,10 +24,12 @@ abstract class ListApiMaster extends StatefulWidget {
   ViewAbstract? viewAbstract;
   bool buildSearchWidget;
   bool buildFabIfMobile;
+  bool fetshListAsSearc;
   ListApiMaster(
       {super.key,
       this.viewAbstract,
       this.buildSearchWidget = true,
+      this.fetshListAsSearc = false,
       this.buildFabIfMobile = true});
 
   void onScroll(
@@ -102,9 +104,11 @@ class ListApiMasterState extends State<ListApiMaster> {
   }
 
   void toggleSelectMood() {
-    setState(() {
-      _selectMood = !_selectMood;
-    });
+    if (mounted) {
+      setState(() {
+        _selectMood = !_selectMood;
+      });
+    }
   }
 
   void clearSelection() {
@@ -117,8 +121,11 @@ class ListApiMasterState extends State<ListApiMaster> {
   @override
   void initState() {
     super.initState();
+    debugPrint("listApiMaster initState ");
     _scrollController.addListener(_onScroll);
+    // Future.delayed(Duration.zero,() {
 
+    // },);
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     drawerViewAbstractObsever =
         Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
@@ -131,6 +138,16 @@ class ListApiMasterState extends State<ListApiMaster> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       listProvider.fetchList(getCustomKey(), viewAbstract);
     });
+  }
+
+  @override
+  void dispose() {
+    debugPrint("listApiMaster dispose");
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    // listProvider.dispose();
+    // drawerViewAbstractObsever.c();
+    super.dispose();
   }
 
   @override
@@ -325,13 +342,16 @@ class ListApiMasterState extends State<ListApiMaster> {
     await Future.delayed(
       const Duration(milliseconds: 750),
       () {
-        listProvider.fetchListSearch(
-            getCustomKey(searchTextKey: controller.text),
-            viewAbstract,
-            controller.text);
+        fetshListSearch(text);
         // setState(() {});
       },
     );
+  }
+
+  void fetshListSearch(String query) {
+    controller.text = query;
+    listProvider.fetchListSearch(
+        getCustomKey(searchTextKey: query), viewAbstract, query);
   }
 
   void _onChangedViewAbstract() {
