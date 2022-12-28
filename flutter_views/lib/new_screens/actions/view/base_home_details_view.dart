@@ -13,19 +13,8 @@ import 'package:provider/provider.dart';
 import '../../../screens/action_screens/edit_details_page.dart';
 import '../../../screens/base_shared_actions_header.dart';
 
-class BaseSharedDetailsView extends StatefulWidget {
-  const BaseSharedDetailsView({Key? key}) : super(key: key);
-
-  @override
-  State<BaseSharedDetailsView> createState() => _BaseSharedDetailsViewState();
-}
-
-class _BaseSharedDetailsViewState extends State<BaseSharedDetailsView>
-    with TickerProviderStateMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
+class BaseSharedDetailsView extends StatelessWidget {
+  BaseSharedDetailsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

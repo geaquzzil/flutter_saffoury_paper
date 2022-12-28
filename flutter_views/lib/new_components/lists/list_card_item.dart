@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:provider/provider.dart';
 
-class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
+class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   Key? listState;
   bool selectionMood;
@@ -19,32 +19,20 @@ class ListCardItem<T extends ViewAbstract> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ListCardItem> createState() => _ListCardItemState();
-}
-
-class _ListCardItemState<T extends ViewAbstract>
-    extends State<ListCardItem<T>> {
-  @override
-  void initState() {
-    super.initState();
-    // checkEnable();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool isSelected = context
             .watch<ActionViewAbstractProvider>()
             .getObject
-            ?.isEquals(widget.object) ??
+            ?.isEquals(object) ??
         false;
     return Dismissible(
       key: UniqueKey(),
-      direction: widget.object.getDismissibleDirection(),
-      background: widget.object.getDismissibleBackground(context),
+      direction: object.getDismissibleDirection(),
+      background: object.getDismissibleBackground(context),
       secondaryBackground:
-          widget.object.getDismissibleSecondaryBackground(context),
+          object.getDismissibleSecondaryBackground(context),
       onDismissed: (direction) =>
-          widget.object.onCardDismissedView(context, direction),
+          object.onCardDismissedView(context, direction),
       child: isSelected
           ? ClippedCard(
               borderSide: BorderSideColor.END,
@@ -60,17 +48,17 @@ class _ListCardItemState<T extends ViewAbstract>
     return ListTile(
         selected: isSelected,
         selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-        onTap: () => widget.object.onCardClicked(context),
+        onTap: () => object.onCardClicked(context),
         onLongPress: () {
-          (widget.listState as GlobalKey<ListApiMasterState>)
+          (listState as GlobalKey<ListApiMasterState>)
               .currentState
               ?.toggleSelectMood();
           context.read<ListActionsProvider>().toggleSelectMood();
-          widget.object.onCardLongClicked(context);
+          object.onCardLongClicked(context);
         },
-        title: (widget.object.getMainHeaderText(context)),
-        subtitle: (widget.object.getMainSubtitleHeaderText(context)),
-        leading: widget.object.getCardLeading(context),
-        trailing: widget.object.getPopupMenuActionListWidget(context));
+        title: (object.getMainHeaderText(context)),
+        subtitle: (object.getMainSubtitleHeaderText(context)),
+        leading: object.getCardLeading(context),
+        trailing: object.getPopupMenuActionListWidget(context));
   }
 }

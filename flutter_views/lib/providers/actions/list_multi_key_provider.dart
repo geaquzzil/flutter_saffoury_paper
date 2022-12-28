@@ -100,12 +100,13 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
     if (multiListProviderHelper!.isLoading) return;
     multiListProviderHelper.isLoading = true;
-    await Future.delayed(
-      const Duration(milliseconds: 200),
-      () {
-        notifyListeners();
-      },
-    );
+    notifyListeners();
+    // await Future.delayed(
+    //   const Duration(milliseconds: 200),
+    //   () {
+    //     notifyListeners();
+    //   },
+    // );
     List? list = await viewAbstract.search(
         viewAbstract.getPageItemCount, multiListProviderHelper.page, query);
     multiListProviderHelper.isLoading = false;
@@ -165,17 +166,17 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.hasError = false;
     multiListProviderHelper.isLoading = true;
     ViewAbstract viewAbstract = list[page];
-    await Future.delayed(
-      const Duration(milliseconds: 200),
-      () {
-        notifyListeners();
-      },
-    );
+    notifyListeners();
+    // await Future.delayed(
+    //   const Duration(milliseconds: 200),
+    //   () {
+    //     notifyListeners();
+    //   },
+    // );
 
     try {
       List? list = await viewAbstract.listCall(
-          count: range ?? viewAbstract.getPageItemCount,
-          page: 0);
+          count: range ?? viewAbstract.getPageItemCount, page: 0);
       multiListProviderHelper.isLoading = false;
 
       if (list != null) {
@@ -207,12 +208,13 @@ class ListMultiKeyProvider with ChangeNotifier {
     if (multiListProviderHelper.isNoMoreItem) return;
     multiListProviderHelper.hasError = false;
     multiListProviderHelper.isLoading = true;
-    await Future.delayed(
-      const Duration(milliseconds: 200),
-      () {
-        notifyListeners();
-      },
-    );
+    notifyListeners();
+    // await Future.delayed(
+    //   const Duration(milliseconds: 200),
+    //   () {
+    //     notifyListeners();
+    //   },
+    // );
 
     try {
       List? list = await viewAbstract.listCall(
@@ -247,12 +249,13 @@ class ListMultiKeyProvider with ChangeNotifier {
     if (multiListProviderHelper!.isLoading) return;
 
     multiListProviderHelper.isLoading = true;
-    await Future.delayed(
-      const Duration(milliseconds: 200),
-      () {
-        notifyListeners();
-      },
-    );
+    notifyListeners();
+    // await Future.delayed(
+    //   const Duration(milliseconds: 200),
+    //   () {
+    //     notifyListeners();
+    //   },
+    // );
     dynamic list = await viewAbstract.callApi();
     multiListProviderHelper.isLoading = false;
     if (list != null) {

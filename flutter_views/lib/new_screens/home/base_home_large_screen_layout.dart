@@ -102,7 +102,7 @@ class BaseHomeLargeScreenLayout extends StatelessWidget {
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 10 : 2,
-              child: const Center(
+              child:  Center(
                 child: BaseSharedDetailsView(),
               ))
       ]),

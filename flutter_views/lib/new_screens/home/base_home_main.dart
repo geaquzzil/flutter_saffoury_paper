@@ -148,7 +148,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
                 ListApiSearchableWidget(
                     key: context.read<ListActionsProvider>().getListStateKey),
                 // SearchPage(),
-                NotificationWidget()
+                // NotificationWidget()
                 // ListApiSearchableWidgetTestScrolling(),
                 // ListApiSearchableWidgetTestScrolling(),
               ]),
@@ -163,7 +163,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ListApiSearchableWidget(
             key: context.read<ListActionsProvider>().getListStateKey),
         // SearchPage(),
-        NotificationWidget()
+        // NotificationWidget()
         // ListApiSearchableWidgetTestScrolling(),
         // ListApiSearchableWidgetTestScrolling(),
       ]),

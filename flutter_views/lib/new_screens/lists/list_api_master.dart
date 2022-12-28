@@ -136,8 +136,12 @@ class ListApiMasterState extends State<ListApiMaster> {
       viewAbstract = drawerViewAbstractObsever.getObject;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      listProvider.fetchList(getCustomKey(), viewAbstract);
+      if(listProvider.getPage(getCustomKey())==0) {
+        listProvider.fetchList(getCustomKey(), viewAbstract);
+      }
     });
+
+
   }
 
   @override

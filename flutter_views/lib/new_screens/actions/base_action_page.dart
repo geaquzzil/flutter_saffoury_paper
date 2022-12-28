@@ -266,13 +266,37 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        // floatingActionButton: FloatingActionButton.extended(
+        //   elevation: 4.0,
+        //   icon: const Icon(Icons.add),
+        //   label: const Text('Add a task'),
+        //   onPressed: () {},
+        // ),
         floatingActionButton: BaseFloatingActionButtons(
           viewAbstract: widget.viewAbstract,
           serverActions: widget.getServerAction(),
           addOnList: widget.getFloatingActionWidgetAddOns(context),
         ),
+        // bottomNavigationBar: BottomAppBar(
+        //   shape: CircularNotchedRectangle(),
+        //   notchMargin: 4.0,
+        //   child: new Row(
+        //     mainAxisSize: MainAxisSize.max,
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: <Widget>[
+        //       IconButton(
+        //         icon: Icon(Icons.menu),
+        //         onPressed: () {},
+        //       ),
+        //       IconButton(
+        //         icon: Icon(Icons.search),
+        //         onPressed: () {},
+        //       ),
+        //     ],
+        //   ),
+        // ),
         body: SafeArea(child: getFutureBody()));
   }
 }

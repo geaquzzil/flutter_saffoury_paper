@@ -28,6 +28,7 @@ class RouteGenerator {
       case '/':
         return MaterialPageRoute(
           builder: (context) {
+            // return BaseHomeMainPage();
             Status authStatus = context.read<AuthProvider>().getStatus;
             if (authStatus == Status.Authenticated) {
               // return POSPage();
@@ -40,7 +41,7 @@ class RouteGenerator {
         );
 
       case "/search":
-        return MaterialPageRoute(builder: (context) =>  SearchPage());
+        return MaterialPageRoute(builder: (context) => SearchPage());
       case '/sign_in':
         return MaterialPageRoute(builder: (context) => const SignInPage());
 
