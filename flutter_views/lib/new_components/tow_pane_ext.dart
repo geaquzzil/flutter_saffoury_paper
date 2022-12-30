@@ -7,7 +7,12 @@ import 'package:flutter_view_controller/size_config.dart';
 class TowPaneExt extends StatelessWidget {
   Widget startPane;
   Widget? endPane;
-  TowPaneExt({super.key, required this.startPane, this.endPane});
+  double? customPaneProportion;
+  TowPaneExt(
+      {super.key,
+      required this.startPane,
+      this.endPane,
+      this.customPaneProportion});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class TowPaneExt extends StatelessWidget {
             direction: orientation == Orientation.landscape
                 ? Axis.horizontal
                 : Axis.vertical,
-            paneProportion:
+            paneProportion: customPaneProportion ??
                 SizeConfig.getPaneProportion(context, orientation: orientation),
             startPane: startPane,
             endPane: endPane ?? Text("its not going to be visible"));

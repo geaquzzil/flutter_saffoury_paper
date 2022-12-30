@@ -28,6 +28,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
+import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/actions_providers.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
@@ -103,6 +104,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => TherdScreenProvider()),
       ChangeNotifierProvider(create: (context) => EndDrawerProvider()),
       ChangeNotifierProvider(create: (context) => ListScrollProvider()),
+      ChangeNotifierProvider(
+          create: (context) => PrintSettingLargeScreenProvider()),
       ChangeNotifierProvider(
           create: (context) => DrawerMenuControllerProvider()),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),

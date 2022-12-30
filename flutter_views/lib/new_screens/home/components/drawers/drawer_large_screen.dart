@@ -53,7 +53,7 @@ class DrawerLargeScreens extends StatelessWidget {
 
               //   // const Spacer(),
               // ]),
-              
+
               buildDrawerFooter(context, isOpen),
               // buildProfilePic(context, isOpen),
             ],
@@ -206,9 +206,12 @@ class DrawerLargeScreens extends StatelessWidget {
           buildColapsedIcon(
             context,
             Icons.settings,
-            () => context
-                .read<LargeScreenPageProvider>()
-                .setCurrentPage(CurrentPage.settings),
+            () {
+              Navigator.of(context).pushNamed("/settings");
+              // context
+              //     .read<LargeScreenPageProvider>()
+              //     .setCurrentPage(CurrentPage.settings);
+            },
           ),
           Badge(
             badgeColor: Theme.of(context).colorScheme.primary,

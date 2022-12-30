@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
@@ -109,6 +110,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   void onDrawerItemClicked(BuildContext context) {
     debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
+    if (this is DashableInterface) {
+      Navigator.pushNamed(context, "/dashboard", arguments: this);
+      return;
+    }
     //Navigator.of(context).pop();
     context
         .read<DrawerViewAbstractListProvider>()

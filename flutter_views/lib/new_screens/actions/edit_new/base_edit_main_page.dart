@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:flutter_view_controller/customs_widget/expandable_sliver_list.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/file_reader_popup_icon_widget.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
+import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../new_components/add_from_list_popup_icon_widget.dart';
@@ -29,24 +32,59 @@ import '../../lists/list_api_selected_searchable_widget.dart';
 import '../../lists/list_static_editable.dart';
 import 'package:nil/nil.dart';
 
-class BaseEditNewPage extends StatefulWidget {
+class BaseEditNewPage extends BaseActionScreenPage {
   ViewAbstract viewAbstract;
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 
   BaseEditNewPage(
       {Key? key, required this.viewAbstract, this.onFabClickedConfirm})
-      : super(key: key);
+      : super(key: key, viewAbstract: viewAbstract);
 
   @override
   State<BaseEditNewPage> createState() => _BaseEditNewPageState();
 }
 
-class _BaseEditNewPageState extends State<BaseEditNewPage> {
+class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   late bool isExtended;
   bool isCalledApi = false;
 
   ViewAbstract? currentViewAbstract;
   ViewAbstract? responseViewAbstract;
+
+  @override
+  Widget getBody(BuildContext context) {
+
+
+    return SliverFillRemaining(
+      fillOverscroll: true,
+      hasScrollBody: false,
+      child: BaseEditWidget(
+        onValidate: (viewAbstract) {
+          currentViewAbstract = viewAbstract;
+        },
+        viewAbstract: widget.viewAbstract,
+        isTheFirst: true,
+        // onSubmit: (obj) {
+        //   if (obj != null) {
+        //     debugPrint("baseEditPage onSubmit $obj");
+        //   }
+        // },
+      ),
+    );
+  }
+
+  @override
+  List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
+    return [
+      if (widget.viewAbstract is ListableInterface)
+        getAddToListFloatingButton(context),
+      if (widget.viewAbstract is ListableInterface)
+        const SizedBox(
+          width: kDefaultPadding,
+        ),
+      getAddFloatingButton2(context),
+    ];
+  }
 
   @override
   void initState() {
@@ -66,154 +104,50 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     }
   }
 
-  Widget getLoadingWidget() {
-    if (currentViewAbstract != null) {
-      if (isCalledApi == true) {
-        if (responseViewAbstract == null) {
-          return Row(
-            children: [
-              const Padding(
-                  padding: EdgeInsets.only(right: 4.0),
-                  child: Icon(Icons.cancel)),
-              const Text("faild to added")
-            ],
-          );
-        } else {
-          return Row(
-            children: [
-              const Padding(
-                  padding: EdgeInsets.only(right: 4.0),
-                  child: Icon(Icons.done)),
-              const Text("Successfully added")
-            ],
-          );
-        }
-      } else {
-        return const SizedBox(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-          ),
-        );
-      }
-    } else {
-      return Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child:
-                Icon(widget.viewAbstract.isEditing() ? Icons.edit : Icons.add),
-          ),
-          Text(widget.viewAbstract.getActionText(context))
-        ],
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            getFileImportFloatingButton(context),
-            const SizedBox(
-              width: kDefaultPadding,
-            ),
-            getFileReaderFloatingButton(context),
-            const SizedBox(
-              width: kDefaultPadding,
-            ),
-            getFileExporterFloatingButton(context),
-            const SizedBox(
-              width: kDefaultPadding,
-            ),
-            widget.viewAbstract.onHasPermission(
-              context,
-              function: widget.viewAbstract.hasPermissionDelete(context),
-              onHasPermissionWidget: () {
-                return Row(
-                  children: [
-                    getDeleteFloatingButton(context),
-                    const SizedBox(
-                      width: kDefaultPadding,
-                    ),
-                  ],
-                );
-              },
-            ),
-            if (widget.viewAbstract is ListableInterface)
-              getAddToListFloatingButton(context),
-            if (widget.viewAbstract is ListableInterface)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            getAddFloatingButton2(context),
-          ],
-        ),
-        body: getFutureBody());
-  }
-
-  Widget getFileExporterFloatingButton(BuildContext context) {
-    return FloatingActionButton.small(
-        heroTag: UniqueKey(),
-        onPressed: () {
-          context
-              .read<ActionViewAbstractProvider>()
-              .changeCustomWidget(FileReaderPage(
-                viewAbstract: widget.viewAbstract,
-              ));
-          // context.read().change()
-        },
-        child: Icon(Icons.send)
-
-        //  FileReaderPopupIconWidget(
-        //   viewAbstract: widget.viewAbstract,
-        //   // onSelected: (selectedList) {
-        //   //   setState(() {
-        //   //     (widget.viewAbstract as ListableInterface)
-        //   //         .onListableSelectedListAdded(selectedList);
-        //   //   });
-        //   // },
-        // ),
-        );
-    return FloatingActionButton.small(
-      heroTag: UniqueKey(),
-      onPressed: () {},
-      child: const Icon(Icons.file_present_rounded),
-    );
-  }
-
-  Widget getFileImportFloatingButton(BuildContext context) {
-    return FloatingActionButton.small(
-        heroTag: UniqueKey(),
-        onPressed: () {
-          context
-              .read<ActionViewAbstractProvider>()
-              .changeCustomWidget(FileExporterPage(
-                viewAbstract: widget.viewAbstract,
-              ));
-          // context.read().change()
-        },
-        child: Icon(Icons.file_upload_outlined));
-  }
-
-  Widget getFileReaderFloatingButton(BuildContext context) {
-    return FloatingActionButton.small(
-        heroTag: UniqueKey(),
-        onPressed: () {
-          context
-              .read<ActionViewAbstractProvider>()
-              .changeCustomWidget(FileReaderPage(
-                viewAbstract: widget.viewAbstract,
-              ));
-          // context.read().change()
-        },
-        child: Icon(Icons.file_download_outlined));
-  }
+  // Widget getLoadingWidget() {
+  //   if (currentViewAbstract != null) {
+  //     if (isCalledApi == true) {
+  //       if (responseViewAbstract == null) {
+  //         return Row(
+  //           children: [
+  //             const Padding(
+  //                 padding: EdgeInsets.only(right: 4.0),
+  //                 child: Icon(Icons.cancel)),
+  //             const Text("faild to added")
+  //           ],
+  //         );
+  //       } else {
+  //         return Row(
+  //           children: [
+  //             const Padding(
+  //                 padding: EdgeInsets.only(right: 4.0),
+  //                 child: Icon(Icons.done)),
+  //             const Text("Successfully added")
+  //           ],
+  //         );
+  //       }
+  //     } else {
+  //       return const SizedBox(
+  //         width: 20,
+  //         height: 20,
+  //         child: CircularProgressIndicator(
+  //           strokeWidth: 2,
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     return Row(
+  //       children: [
+  //         Padding(
+  //           padding: const EdgeInsets.only(right: 4.0),
+  //           child:
+  //               Icon(widget.viewAbstract.isEditing() ? Icons.edit : Icons.add),
+  //         ),
+  //         Text(widget.viewAbstract.getActionText(context))
+  //       ],
+  //     );
+  //   }
+  // }
 
   Widget getAddFloatingButton2(BuildContext context) {
     return FloatingActionButtonExtended(
@@ -234,8 +168,8 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
               msgAlign: TextAlign.end,
               dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
               color: Theme.of(context).colorScheme.background,
-              msg: getMessage(),
-              title: getTitle(),
+              msg: widget.viewAbstract.getBaseMessage(context),
+              title: widget.viewAbstract.getBaseTitle(context),
               context: context,
               onClose: (value) {
                 if (value != null) {
@@ -275,8 +209,8 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
             msgAlign: TextAlign.end,
             dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
             color: Theme.of(context).colorScheme.background,
-            msg: getMessage(),
-            title: getTitle(),
+            msg: widget.viewAbstract.getBaseMessage(context),
+            title: widget.viewAbstract.getBaseTitle(context),
             context: context,
             onClose: (value) {
               if (value != null) {
@@ -319,142 +253,98 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
     );
   }
 
-  bool getBodyWithoutApi() {
-    bool canGetBody =
-        widget.viewAbstract.isRequiredObjectsList()?[ServerActions.edit] ==
-            null;
-    if (canGetBody) {
-      debugPrint("BaseEditWidget getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = widget.viewAbstract.isNew() ||
-        widget.viewAbstract.isRequiredObjectsListChecker();
-    debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
-    return res;
-  }
-
-  Widget getFutureBody() {
-    if (getBodyWithoutApi()) {
-      return getBody();
-    }
-    return FutureBuilder(
-      future:
-          widget.viewAbstract.viewCallGetFirstFromList(widget.viewAbstract.iD),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data != null) {
-            widget.viewAbstract = snapshot.data as ViewAbstract;
-            context
-                .read<ListMultiKeyProvider>()
-                .edit(snapshot.data as ViewAbstract);
-
-            return getBody();
-          } else {
-            return EmptyWidget(
-                lottiUrl:
-                    "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-                title: AppLocalizations.of(context)!.cantConnect,
-                subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-          }
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  Widget getBody() {
-    bool isListable = widget.viewAbstract is ListableInterface;
-    if (isListable) {
-      return Column(
-        children: [
-          BaseSharedHeaderViewDetailsActions(
-            viewAbstract: widget.viewAbstract,
-          ),
-          Expanded(
-            child: TabBarByListWidget(
-              tabs: [
-                TabControllerHelper(
-                  "EDIT",
-                  widget: ListView(
-                      // controller: ScrollController(),
-                      // physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kDefaultPadding),
-                      children: [
-                        BaseEditWidget(
-                          onValidate: (viewAbstract) {
-                            currentViewAbstract = viewAbstract;
-                          },
-                          viewAbstract: widget.viewAbstract,
-                          isTheFirst: true,
-                          // onSubmit: (obj) {
-                          //   if (obj != null) {
-                          //     debugPrint("baseEditPage onSubmit $obj");
-                          //   }
-                          // },
-                        )
-                      ]),
-                ),
-                TabControllerHelper("LIST", widget: getEditableList())
-              ],
-            ),
-          ),
-        ],
-      );
-    } else {
-      return SingleChildScrollView(
-          controller: ScrollController(),
-          physics: const AlwaysScrollableScrollPhysics(),
-          // padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-          child: Column(
-            children: [
-              BaseSharedHeaderViewDetailsActions(
-                viewAbstract: widget.viewAbstract,
-              ),
-              BaseEditWidget(
-                onValidate: (viewAbstract) {
-                  currentViewAbstract = viewAbstract;
-                },
-                viewAbstract: widget.viewAbstract,
-                isTheFirst: true,
-                // onSubmit: (obj) {
-                //   if (obj != null) {
-                //     debugPrint("baseEditPage onSubmit $obj");
-                //   }
-                // },
-              ),
-            ],
-          ));
-    }
-    // return Row(
-    //   children: [
-    //     // Expanded(flex: 1, child: Text("TEST")),
-    //     Expanded(
-    //       flex: 2,
-    //       child: BaseEditWidget(
-    //         onValidate: (viewAbstract) {
-    //           currentViewAbstract = viewAbstract;
-    //         },
-    //         viewAbstract: widget.viewAbstract,
-    //         isTheFirst: true,
-    //         // onSubmit: (obj) {
-    //         //   if (obj != null) {
-    //         //     debugPrint("baseEditPage onSubmit $obj");
-    //         //   }
-    //         // },
-    //       ),
-    //     ),
-    //     if (widget.viewAbstract.getTabs(context).isNotEmpty)
-    //       Expanded(
-    //         child: OutlinedCard(
-    //           child: TabBarWidget(
-    //             viewAbstract: widget.viewAbstract,
-    //           ),
-    //         ),
-    //       )
-    //   ],
-    // );
-  }
+  // Widget getBody() {
+  //   bool isListable = widget.viewAbstract is ListableInterface;
+  //   if (isListable) {
+  //     return Column(
+  //       children: [
+  //         BaseSharedHeaderViewDetailsActions(
+  //           viewAbstract: widget.viewAbstract,
+  //         ),
+  //         Expanded(
+  //           child: TabBarByListWidget(
+  //             tabs: [
+  //               TabControllerHelper(
+  //                 "EDIT",
+  //                 widget: ListView(
+  //                     // controller: ScrollController(),
+  //                     // physics: const AlwaysScrollableScrollPhysics(),
+  //                     padding: const EdgeInsets.symmetric(
+  //                         horizontal: kDefaultPadding),
+  //                     children: [
+  //                       BaseEditWidget(
+  //                         onValidate: (viewAbstract) {
+  //                           currentViewAbstract = viewAbstract;
+  //                         },
+  //                         viewAbstract: widget.viewAbstract,
+  //                         isTheFirst: true,
+  //                         // onSubmit: (obj) {
+  //                         //   if (obj != null) {
+  //                         //     debugPrint("baseEditPage onSubmit $obj");
+  //                         //   }
+  //                         // },
+  //                       )
+  //                     ]),
+  //               ),
+  //               TabControllerHelper("LIST", widget: getEditableList())
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   } else {
+  //     return SingleChildScrollView(
+  //         controller: ScrollController(),
+  //         physics: const AlwaysScrollableScrollPhysics(),
+  //         // padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+  //         child: Column(
+  //           children: [
+  //             BaseSharedHeaderViewDetailsActions(
+  //               viewAbstract: widget.viewAbstract,
+  //             ),
+  //             BaseEditWidget(
+  //               onValidate: (viewAbstract) {
+  //                 currentViewAbstract = viewAbstract;
+  //               },
+  //               viewAbstract: widget.viewAbstract,
+  //               isTheFirst: true,
+  //               // onSubmit: (obj) {
+  //               //   if (obj != null) {
+  //               //     debugPrint("baseEditPage onSubmit $obj");
+  //               //   }
+  //               // },
+  //             ),
+  //           ],
+  //         ));
+  //   }
+  // return Row(
+  //   children: [
+  //     // Expanded(flex: 1, child: Text("TEST")),
+  //     Expanded(
+  //       flex: 2,
+  //       child: BaseEditWidget(
+  //         onValidate: (viewAbstract) {
+  //           currentViewAbstract = viewAbstract;
+  //         },
+  //         viewAbstract: widget.viewAbstract,
+  //         isTheFirst: true,
+  //         // onSubmit: (obj) {
+  //         //   if (obj != null) {
+  //         //     debugPrint("baseEditPage onSubmit $obj");
+  //         //   }
+  //         // },
+  //       ),
+  //     ),
+  //     if (widget.viewAbstract.getTabs(context).isNotEmpty)
+  //       Expanded(
+  //         child: OutlinedCard(
+  //           child: TabBarWidget(
+  //             viewAbstract: widget.viewAbstract,
+  //           ),
+  //         ),
+  //       )
+  //   ],
+  // );
 
   Widget getEditableList() {
     return ListableStaticEditable(
@@ -480,38 +370,5 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
         ],
       ),
     );
-  }
-
-  String getActionText() {
-    if (currentViewAbstract == null) {
-      return "NOT FOUND";
-    }
-    if (currentViewAbstract!.isNew()) {
-      return AppLocalizations.of(context)!.add.toLowerCase();
-    } else {
-      return AppLocalizations.of(context)!.edit.toLowerCase();
-    }
-  }
-
-  String getTitle() {
-    String descripon = "";
-    if (widget.viewAbstract.isEditing()) {
-      descripon =
-          widget.viewAbstract.getMainHeaderTextOnly(context).toLowerCase();
-    } else {
-      descripon =
-          widget.viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase();
-    }
-    return "${getActionText().toUpperCase()} $descripon ";
-  }
-
-  String getLabelViewAbstract() {
-    return widget.viewAbstract
-        .getMainHeaderLabelTextOnly(context)
-        .toLowerCase();
-  }
-
-  String getMessage() {
-    return "${AppLocalizations.of(context)!.areYouSure}${getActionText()} ${getLabelViewAbstract()} ";
   }
 }

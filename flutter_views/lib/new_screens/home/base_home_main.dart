@@ -46,8 +46,6 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       drawer: DrawerLargeScreens(),
       endDrawer: const BaseHomeCartPage(),
       body: TowPaneExt(
-        
-
         startPane: firstPane!,
         endPane: endPane,
       ),

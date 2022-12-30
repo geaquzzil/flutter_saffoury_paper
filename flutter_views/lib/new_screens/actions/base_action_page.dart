@@ -22,11 +22,7 @@ import 'components/action_on_header_popup_widget.dart';
 abstract class BaseActionScreenPage extends StatefulWidget {
   ViewAbstract viewAbstract;
 
-  List<Widget>? getFloatingActionWidgetAddOns(BuildContext context);
-
   BaseActionScreenPage({super.key, required this.viewAbstract});
-
-  Widget getBody(BuildContext context);
 
   ServerActions getServerAction() {
     if (this is BaseEditNewPage) {
@@ -35,13 +31,13 @@ abstract class BaseActionScreenPage extends StatefulWidget {
       return ServerActions.view;
     }
   }
-
-  @override
-  State<BaseActionScreenPage> createState() => _BaseActionScreenPageState();
 }
 
-class _BaseActionScreenPageState extends State<BaseActionScreenPage>
-    with TickerProviderStateMixin {
+abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
+    extends State<T> with TickerProviderStateMixin {
+  Widget getBody(BuildContext context);
+  List<Widget>? getFloatingActionWidgetAddOns(BuildContext context);
+
   late TabController _tabController;
   final List<TabControllerHelper> _tabs = <TabControllerHelper>[];
 
@@ -54,11 +50,12 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
   }
 
   @override
-  void didUpdateWidget(covariant BaseActionScreenPage oldWidget) {
+  void didUpdateWidget(covariant T oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("didUpdateWidget tabController");
     _tabs.clear();
-    _tabs.addAll(widget.viewAbstract.getTabs(context));
+    _tabs.addAll(
+        widget.viewAbstract.getTabs(context, action: widget.getServerAction()));
   }
 
   @override
@@ -127,51 +124,13 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
-    // return FlexibleSpaceBar(
-    //   background: Column(
-    //     children: <Widget>[
-    //       SizedBox(height: 90.0),
-    //       Padding(
-    //         padding: const EdgeInsets.fromLTRB(16.0, 6.0, 16.0, 16.0),
-    //         child: Container(
-    //           height: 36.0,
-    //           width: double.infinity,
-    //           child: CupertinoTextField(
-    //             keyboardType: TextInputType.text,
-    //             placeholder: 'Filtrar por nombre o nombre corto',
-    //             placeholderStyle: TextStyle(
-    //               color: Color(0xffC4C6CC),
-    //               fontSize: 14.0,
-    //               fontFamily: 'Brutal',
-    //             ),
-    //             prefix: Padding(
-    //               padding: const EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
-    //               child: Icon(
-    //                 Icons.search,
-    //                 color: Color(0xffC4C6CC),
-    //               ),
-    //             ),
-    //             decoration: BoxDecoration(
-    //               borderRadius: BorderRadius.circular(8.0),
-    //               color: Color(0xffF0F1F5),
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
     return FlexibleSpaceBar(
-        stretchModes: [StretchMode.fadeTitle],
+        stretchModes: const [StretchMode.fadeTitle],
         centerTitle: true,
-        titlePadding: EdgeInsets.only(bottom: 62),
+        titlePadding: const EdgeInsets.only(bottom: 62),
         title: Text(
           widget.viewAbstract.getBaseTitle(context,
               descriptionIsId: true, serverAction: widget.getServerAction()),
-          // style: Theme.of(context)
-          //     .textTheme
-          //     .titleLarge!
-          //     .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         background: widget.viewAbstract.getHeroTag(
             context: context,
@@ -186,12 +145,13 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
           BaseSharedHeaderViewDetailsActions(
             viewAbstract: widget.viewAbstract,
           ),
-          widget.getBody(context)
+          getBody(context)
         ],
       );
     } else {
       _tabs.clear();
-      _tabs.addAll(widget.viewAbstract.getTabs(context));
+      _tabs.addAll(widget.viewAbstract
+          .getTabs(context, action: widget.getServerAction()));
       _tabController = TabController(length: _tabs.length, vsync: this);
       // return TowPaneExt(startPane: startPane, endPane: endPane)
       return getNastedScrollView();
@@ -208,33 +168,40 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
               controller: _tabController,
               children: _tabs
                   .map((e) => Builder(builder: (BuildContext context) {
-                        return CustomScrollView(slivers: [
-                          SliverOverlapInjector(
-                            handle:
-                                NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                    context),
-                          ),
-                          if (_tabs.indexOf(e) == 0) ...getTopWidget(),
-                          _tabs.indexOf(e) == 0
-                              ? SliverPadding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: kDefaultPadding / 2),
-                                  sliver: widget.getBody(context))
-                              : SliverPadding(
-                                  padding:
-                                      const EdgeInsets.all(kDefaultPadding / 2),
-                                  sliver: SliverFillRemaining(
-                                      fillOverscroll: true,
-                                      hasScrollBody: false,
-                                      child: _tabs.indexOf(e) == 0
-                                          ? widget.getBody(context)
-                                          : e.widget),
-                                ),
-                          if (_tabs.indexOf(e) == 0) ...getBottomWidget()
-                        ]);
+                        return CustomScrollView(
+                            slivers: getTabWidget(context, e));
                       }))
                   .toList()),
         ));
+  }
+
+  List<Widget> getTabWidget(BuildContext context, TabControllerHelper e) {
+    return [
+      SliverOverlapInjector(
+        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      ),
+      if (_tabs.indexOf(e) == 0) ...getTopWidget(),
+      _tabs.indexOf(e) == 0
+          ? SliverPadding(
+              padding: const EdgeInsets.only(
+                  top: kDefaultPadding / 2,
+                  right: kDefaultPadding / 2,
+                  bottom: 80,
+                  left: kDefaultPadding / 2),
+              sliver: getBody(context))
+          : SliverPadding(
+              padding: const EdgeInsets.only(
+                  top: kDefaultPadding / 2,
+                  right: kDefaultPadding / 2,
+                  bottom: 80,
+                  left: kDefaultPadding / 2),
+              sliver: SliverFillRemaining(
+                  fillOverscroll: true,
+                  hasScrollBody: false,
+                  child: _tabs.indexOf(e) == 0 ? getBody(context) : e.widget),
+            ),
+      if (_tabs.indexOf(e) == 0) ...getBottomWidget()
+    ];
   }
 
   List<Widget> getBottomWidget() {
@@ -300,7 +267,7 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
                   : BaseFloatingActionButtons(
                       viewAbstract: widget.viewAbstract,
                       serverActions: widget.getServerAction(),
-                      addOnList: widget.getFloatingActionWidgetAddOns(context),
+                      addOnList: getFloatingActionWidgetAddOns(context),
                     );
             })),
 

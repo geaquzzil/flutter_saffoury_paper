@@ -602,27 +602,30 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context, ServerActions action) {
-    return  [
-        ListHorizontalApiAutoRestWidget(
-          customHeight: 200,
-          titleString: AppLocalizations.of(context)!.simialrProducts,
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-              key: "similarProducts$iD"),
-        ),
-        ListHorizontalApiAutoRestWidget(
-          customHeight: 200,
-          titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()
-                ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
-              key: "productsWithSimilarSize$iD"),
-        )
-      ];
-
+  List<Widget>? getCustomBottomWidget(
+      BuildContext context, ServerActions action) {
+    if (action == ServerActions.add || action == ServerActions.edit) {
+      return null;
+    }
+    return [
+      ListHorizontalApiAutoRestWidget(
+        customHeight: 200,
+        titleString: AppLocalizations.of(context)!.simialrProducts,
+        autoRest: AutoRest<Product>(
+            range: 5,
+            obj: Product()..setCustomMap(getSimilarCustomParams(context)),
+            key: "similarProducts$iD"),
+      ),
+      ListHorizontalApiAutoRestWidget(
+        customHeight: 200,
+        titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
+        autoRest: AutoRest<Product>(
+            range: 5,
+            obj: Product()
+              ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
+            key: "productsWithSimilarSize$iD"),
+      )
+    ];
   }
 
   @override
@@ -632,19 +635,20 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context,
-          {ServerActions? action}) =>
-      [
-        TabControllerHelper(AppLocalizations.of(context)!.movments,
-            widget: ListHorizontalCustomViewApiAutoRestWidget(
-                titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
-        // TabControllerHelper(
-        //   AppLocalizations.of(context)!.movments,
-        //   widget: ListHorizontalCustomViewApiAutoRestWidget(
-        //     titleString: "TEST1 ",
-        //     autoRest: ProductMovments.init(iD),
-        //   ),
-        // ),
-      ];
+      {ServerActions? action}) {
+    return [
+      TabControllerHelper(AppLocalizations.of(context)!.movments,
+          widget: ListHorizontalCustomViewApiAutoRestWidget(
+              titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
+      // TabControllerHelper(
+      //   AppLocalizations.of(context)!.movments,
+      //   widget: ListHorizontalCustomViewApiAutoRestWidget(
+      //     titleString: "TEST1 ",
+      //     autoRest: ProductMovments.init(iD),
+      //   ),
+      // ),
+    ];
+  }
   // @override
   // List<TabControllerHelper> getCustomTabList(BuildContext context) {
   //   return [

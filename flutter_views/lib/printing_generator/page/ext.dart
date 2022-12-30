@@ -57,6 +57,32 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
   }
 }
 
+Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
+    BuildContext context, PrintableMaster firstObj) async {
+  T? pls;
+  if (firstObj is ModifiablePrintableInterface) {
+    pls = await Configurations.get<T>(
+        (firstObj as ModifiablePrintableInterface)
+            .getModifibleSettingObject(context),
+        customKey: "_printsetting${firstObj.runtimeType}");
+    if (pls != null) {
+      pls =
+          pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
+    }
+  }
+  if (pls == null) {
+    if (firstObj is ModifiablePrintableInterface) {
+      pls = (firstObj as ModifiablePrintableInterface)
+          .getModifibleSettingObject(context);
+      if (pls != null) {
+        pls = pls.onSavedModiablePrintableLoaded(
+            context, firstObj as ViewAbstract);
+      }
+    }
+  }
+  return pls;
+}
+
 Future<T?> getSetting<T extends PrintLocalSetting>(
     BuildContext context, PrintableMaster firstObj) async {
   T? pls;
@@ -70,5 +96,6 @@ Future<T?> getSetting<T extends PrintLocalSetting>(
           pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
     }
   }
+
   return pls;
 }

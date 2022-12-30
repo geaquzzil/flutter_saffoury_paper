@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
+import 'package:flutter_view_controller/customs_widget/expandable_sliver_list.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_custom_list.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -155,27 +157,29 @@ class BaseEditWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     init(context);
+
     return ChangeNotifierProvider.value(
       value: viewAbstractChangeProvider,
       child: Consumer<ViewAbstractChangeProvider>(
           builder: (context, provider, listTile) {
-        Widget? customBottom =null;
-            // viewAbstract.getCustomBottomWidget(context, ServerActions.edit);
-        Widget form = Column(
-          children: [
-            buildForm(context),
-            if (isTheFirst && customBottom != null) customBottom
-          ],
-        );
-
-        return isTheFirst ? form : getExpansionTileCustom(context, form);
+        Widget form = buildForm(context);
+        if (isTheFirst) {
+          return form;
+        } else {
+          return getExpansionTileCustom(context, form);
+        }
       }),
     );
   }
 
-  ExpansionTileCustom getExpansionTileCustom(
-      BuildContext context, Widget form) {
+  List<int> _nums = [0];
+
+  int _num = 3;
+  ExpandableSliverListController<int> _controller =
+      ExpandableSliverListController<int>();
+  Widget getExpansionTileCustom(BuildContext context, Widget form) {
     return ExpansionTileCustom(
+        useLeadingOutSideCard: SizeConfig.isLargeScreen(context),
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
         // initiallyExpanded: !viewAbstract.isNull,
         // isExpanded: false,
@@ -206,41 +210,37 @@ class BaseEditWidget extends StatelessWidget {
 
   Widget getTrailing(BuildContext context) {
     String? field = viewAbstract.getFieldNameFromParent;
-    return SizedBox(
-      width: 200,
-      height: double.infinity,
-      child: Row(
-        children: [
-          // AnimatedIcon(icon: AnimatedIcons.add_event, progress: progress)
-          Spacer(),
-          if (viewAbstract.isNew()) Icon(Icons.new_label_sharp),
-          if (field != null)
-            if (viewAbstract.canBeNullableFromParentCheck(context, field) ??
-                false)
-              IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: !viewAbstract.isNull
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onError,
-                  ),
-                  onPressed: () {
-                    viewAbstract.toggleIsNullable();
-                    viewAbstract.parent!.setFieldValue(
-                        viewAbstract.fieldNameFromParent!, viewAbstract);
-                    viewAbstractChangeProvider.toggleNullbale();
+    return Wrap(
+      children: [
+        // AnimatedIcon(icon: AnimatedIcons.add_event, progress: progress)
+        Spacer(),
+        if (viewAbstract.isNew()) Icon(Icons.new_label_sharp),
+        if (field != null)
+          if (viewAbstract.canBeNullableFromParentCheck(context, field) ??
+              false)
+            IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: !viewAbstract.isNull
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onError,
+                ),
+                onPressed: () {
+                  viewAbstract.toggleIsNullable();
+                  viewAbstract.parent!.setFieldValue(
+                      viewAbstract.fieldNameFromParent!, viewAbstract);
+                  viewAbstractChangeProvider.toggleNullbale();
 
-                    debugPrint(
-                        "onToggleNullbale pressed null ${viewAbstract.isNull}");
-                  }),
-          if (viewAbstract.isEditing())
-            viewAbstract.getPopupMenuActionWidget(context, ServerActions.edit)
-        ],
-      ),
+                  debugPrint(
+                      "onToggleNullbale pressed null ${viewAbstract.isNull}");
+                }),
+        if (viewAbstract.isEditing())
+          viewAbstract.getPopupMenuActionWidget(context, ServerActions.edit)
+      ],
     );
   }
 
-  FormBuilder buildForm(BuildContext context) {
+  Widget buildForm(BuildContext context) {
     debugPrint("_BaseEdit buildForm ${viewAbstract.runtimeType}");
     return FormBuilder(
         autovalidateMode: AutovalidateMode.always,
@@ -254,30 +254,38 @@ class BaseEditWidget extends StatelessWidget {
             }
           }
         },
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const SizedBox(height: 24.0),
-              ...fields.map((e) => getControllerWidget(context, e)).toList(),
-              ...groupedFields.entries
-                  .map((e) => ExpansionTileCustom(
-                      canExpand: () => true,
-                      hasError: hasErrorGroupWidget(context, e.value),
-                      title: Text(e.key.label),
-                      leading: Icon(e.key.icon),
-                      children: e.value
-                          .map((e) => getControllerWidget(context, e))
-                          .toList()))
-                  .toList(),
+        child: getFormContent(context));
+  }
 
-              // ElevatedButton(
-              //   onPressed: () {
-              //     // validate();
-              //   },
-              //   child: const Text('Subment'),
-              // )
-            ]));
+  Widget getFormContent(BuildContext context) {
+    // return SliverList(
+    //     delegate: SliverChildBuilderDelegate((context, index) {
+    //   return getControllerWidget(context, fields[index]);
+    // }, childCount: fields.length));
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          const SizedBox(height: 24.0),
+          ...fields.map((e) => getControllerWidget(context, e)).toList(),
+          ...groupedFields.entries
+              .map((e) => ExpansionTileCustom(
+                  canExpand: () => true,
+                  hasError: hasErrorGroupWidget(context, e.value),
+                  title: Text(e.key.label),
+                  leading: Icon(e.key.icon),
+                  children: e.value
+                      .map((e) => getControllerWidget(context, e))
+                      .toList()))
+              .toList(),
+
+          // ElevatedButton(
+          //   onPressed: () {
+          //     // validate();
+          //   },
+          //   child: const Text('Subment'),
+          // )
+        ]);
   }
 
   bool _canBuildChildern() {

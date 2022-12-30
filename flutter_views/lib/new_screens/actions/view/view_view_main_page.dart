@@ -32,8 +32,13 @@ class BaseViewNewPage extends BaseActionScreenPage {
       : super(key: key, viewAbstract: viewAbstract);
 
   @override
+  State<BaseActionScreenPage> createState() => _BaseViewNewPage();
+}
+
+class _BaseViewNewPage extends BaseActionScreenPageState {
+  @override
   Widget getBody(BuildContext context) {
-    return MasterView(viewAbstract: viewAbstract);
+    return MasterView(viewAbstract: widget.viewAbstract);
   }
 
   @override
@@ -44,9 +49,7 @@ class BaseViewNewPage extends BaseActionScreenPage {
   FloatingActionButton getAddFloatingButton2(BuildContext context) {
     return FloatingActionButton.extended(
         heroTag: UniqueKey(),
-        onPressed: () async {
-
-        },
+        onPressed: () async {},
         icon: Icon(Icons.edit),
         label: Text(AppLocalizations.of(context)!.edit));
   }

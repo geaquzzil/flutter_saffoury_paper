@@ -66,6 +66,7 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
 
   @override
   Widget getFutureBody(BuildContext context) {
+    context.watch<PrintSettingLargeScreenProvider>().getViewAbstract;
     if (getBodyWithoutApi()) {
       return getBody(context);
     }
@@ -218,6 +219,7 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
         dynamicLayout: true,
         loadingWidget: const CircularProgressIndicator(),
         useActions: false,
+        
         onError: (context, error) {
           return EmptyWidget(
               lottiUrl:
@@ -259,7 +261,12 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
   }
 
   @override
-  ViewAbstract? getSettingObject(BuildContext context) {
+  Future<ViewAbstract?> getSettingObject(BuildContext context) {
+    return getSettingLoadDefaultIfNull(context, widget.invoiceObj);
+  }
+
+  @override
+  ViewAbstract getMainObject() {
     return widget.invoiceObj as ViewAbstract;
   }
 }
