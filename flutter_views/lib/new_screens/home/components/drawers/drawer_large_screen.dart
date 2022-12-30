@@ -1,11 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
-import 'package:flutter_view_controller/new_components/shadow_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -14,17 +15,14 @@ import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_co
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 
 import '../../../../providers/cart/cart_provider.dart';
-import '../profile/profile_header_list_tile_widget.dart';
 import '../profile/profile_pic_popup_menu.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
-  final padding = const EdgeInsets.symmetric(horizontal: 20);
+  final padding = const EdgeInsets.symmetric(horizontal: kDefaultPadding);
 
   @override
   Widget build(BuildContext context) {
@@ -44,16 +42,18 @@ class DrawerLargeScreens extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             fit: StackFit.loose,
             children: [
-              ListView(
-                children: [
-                  buildHeader(context, isOpen),
-                  buildList(context, isOpen),
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(child: buildHeader(context, isOpen)),
+                  // buildList(context, isOpen),
+                  buildListSliver(context, isOpen)
                 ],
               ),
               // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
 
               //   // const Spacer(),
               // ]),
+              
               buildDrawerFooter(context, isOpen),
               // buildProfilePic(context, isOpen),
             ],
@@ -99,81 +99,79 @@ class DrawerLargeScreens extends StatelessWidget {
     return Card(
       color: Theme.of(context).colorScheme.outline.withOpacity(.1),
       elevation: 0,
-      child: Container(
-          // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
-          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-          // .add(safeArea),
-          width: double.infinity,
-          child: !isOpen
-              ? const FlutterLogo(
-                  size: 48,
-                )
-              : Row(
-                  children: const [
-                    SizedBox(
-                      width: 24,
-                    ),
-                    FlutterLogo(
-                      style: FlutterLogoStyle.markOnly,
-                      textColor: Colors.orange,
-                      size: 48,
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Text("SaffouryPaper")
-                  ],
-                )),
+      child: SafeArea(
+        child: Container(
+            // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+            // .add(safeArea),
+            width: double.infinity,
+            child: !isOpen
+                ? const FlutterLogo(
+                    size: 48,
+                  )
+                : Row(
+                    children: const [
+                      SizedBox(
+                        width: 24,
+                      ),
+                      FlutterLogo(
+                        style: FlutterLogoStyle.markOnly,
+                        textColor: Colors.orange,
+                        size: 48,
+                      ),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      Text("SaffouryPaper")
+                    ],
+                  )),
+      ),
     );
+  }
+
+  Widget buildListSliver(BuildContext context, bool isOpen) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+            (context, index) =>
+                buildSubList(context, index, isOpen, authProvider),
+            childCount: authProvider.getDrawerItemsGrouped.length));
   }
 
   Widget buildList(BuildContext context, bool isOpen) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    return ListView.builder(
+        itemCount: authProvider.getDrawerItemsGrouped.length,
+        shrinkWrap: true,
+        primary: false,
+        itemBuilder: (context, index) {
+          return buildSubList(context, index, isOpen, authProvider);
+        });
+  }
 
+  Widget buildSubList(
+      BuildContext context, int index, bool isOpen, AuthProvider authProvider) {
     bool isClosed = !isOpen;
-    debugPrint(
-        "getDrawerItemsGrouped current length=> ${authProvider.getDrawerItemsGrouped.length}");
-    debugPrint(
-        "getDrawerItemsGrouped current entires length=> ${authProvider.getDrawerItemsGrouped.entries.length}");
-    return Expanded(
-        // height: MediaQuery.of(context).size.height - 80,
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            physics: const AlwaysScrollableScrollPhysics(),
-            // padding: isClosed ? EdgeInsets.zero : padding,
-            // separatorBuilder: (context, index) {
-            //   return const SizedBox(
-            //     height: 8,
-            //   );
-            // },
-            itemCount: authProvider.getDrawerItemsGrouped.length,
-            shrinkWrap: true,
-            primary: false,
-            itemBuilder: (context, index) {
-              String? groupLabel =
-                  authProvider.getDrawerItemsGrouped.keys.elementAt(index);
+    String? groupLabel =
+        authProvider.getDrawerItemsGrouped.keys.elementAt(index);
 
-              debugPrint(
-                  "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
-              if (groupLabel != null) {
-                return isOpen
-                    ? DrawerListTileDesktopGroupOpen(
-                        groupedDrawerItems:
-                            authProvider.getDrawerItemsGrouped[groupLabel] ??
-                                [],
-                        idx: index)
-                    : DrawerListTileDesktopGroupClosed(
-                        groupedDrawerItems:
-                            authProvider.getDrawerItemsGrouped[groupLabel] ??
-                                [],
-                        idx: index,
-                      );
-              }
-              ViewAbstract viewAbstract =
-                  authProvider.getDrawerItemsGrouped[groupLabel]!.first;
-              return DrawerListTileDesktopOpen(
-                  viewAbstract: viewAbstract, idx: index);
-            }));
+    debugPrint(
+        "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
+    if (groupLabel != null) {
+      return isOpen
+          ? DrawerListTileDesktopGroupOpen(
+              groupedDrawerItems:
+                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
+              idx: index)
+          : DrawerListTileDesktopGroupClosed(
+              groupedDrawerItems:
+                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
+              idx: index,
+            );
+    }
+    ViewAbstract viewAbstract =
+        authProvider.getDrawerItemsGrouped[groupLabel]!.first;
+    return DrawerListTileDesktopOpen(viewAbstract: viewAbstract, idx: index);
   }
 
   Widget buildProfilePic(BuildContext context, bool isOpen) {

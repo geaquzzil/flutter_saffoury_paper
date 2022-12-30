@@ -134,9 +134,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return "${AppLocalizations.of(context)!.add_new} ${getMainHeaderLabelTextOnly(context)}";
   }
 
-  Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {}
+  List<Widget>? getCustomBottomWidget(BuildContext context, ServerActions action) {}
 
-  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {}
+  List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {}
 }
 
 class ListableDataRow {

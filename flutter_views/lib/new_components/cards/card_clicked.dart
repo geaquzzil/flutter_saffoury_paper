@@ -8,11 +8,11 @@ class CardClicked extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (onPress == null) return getCard(context);
-    return GestureDetector(
-      onTap: () => onPress,
-      
-      child: getCard(context),
-    );
+    return Card(
+        child: InkWell(
+      onTap: () => onPress!(),
+      child: Ink(child: getCard(context)),
+    ));
   }
 
   Card getCard(BuildContext context) {

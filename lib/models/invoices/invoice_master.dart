@@ -221,13 +221,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {
+  List<Widget>? getCustomBottomWidget(BuildContext context, ServerActions action) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
     double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
 
-    return ExpansionTile(
+    return [ExpansionTile(
       initiallyExpanded: true,
       leading: Icon(Icons.summarize),
       title: Text(AppLocalizations.of(context)!.no_summary),
@@ -251,7 +251,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           ],
         )
       ],
-    );
+    )];
   }
 
   Widget getListTile({required String title, required String description}) {

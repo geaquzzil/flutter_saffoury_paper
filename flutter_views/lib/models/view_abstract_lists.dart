@@ -167,7 +167,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onBackground,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
         child: new BackdropFilter(
           filter: new ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
@@ -369,13 +369,14 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
-      if (SizeConfig.isDesktopOrWeb(context)) {
+      if (SizeConfig.hasSecondScreen(context)) {
         context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
               invoiceObj: this as PrintableMaster,
             ));
-      } else {
-        Navigator.pushNamed(context, "/print", arguments: this);
+        return;
       }
+
+      Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.pushNamed(context, "/edit", arguments: this);

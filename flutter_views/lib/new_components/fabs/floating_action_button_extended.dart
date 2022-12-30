@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class FloatingActionButtonExtended extends StatefulWidget {
-  FloatingActionButtonExtended(
-      {super.key,
-      this.colapsed = Icons.arrow_forward,
-      required this.onPress,
-      required this.expandedWidget});
-
   IconData colapsed;
   Widget expandedWidget;
   void Function() onPress;
+  IconData onExpandIcon;
+  FloatingActionButtonExtended(
+      {super.key,
+      this.colapsed = Icons.arrow_forward,
+      this.onExpandIcon = Icons.add,
+      required this.onPress,
+      required this.expandedWidget});
 
   @override
   State<FloatingActionButtonExtended> createState() =>
@@ -47,12 +48,12 @@ class _FloatingActionButtonExtendedState
             ),
           ),
           child: !_isExtended
-              ? const Icon(Icons.arrow_forward)
+              ? Icon(widget.colapsed)
               : Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 4.0),
-                      child: Icon(Icons.add),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Icon(widget.onExpandIcon),
                     ),
                     widget.expandedWidget
                   ],

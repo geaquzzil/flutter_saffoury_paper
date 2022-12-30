@@ -281,6 +281,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
           return AppLocalizations.of(context)!.view.toLowerCase();
         case ServerActions.delete_action:
           return AppLocalizations.of(context)!.delete.toLowerCase();
+
+        case ServerActions.print:
+          return AppLocalizations.of(context)!.print.toLowerCase();
         default:
           return "";
       }

@@ -10,7 +10,7 @@ import '../cards/card_clicked.dart';
 
 class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
   final T object;
-  final Function? onPress;
+  final Function()? onPress;
   final bool useOutlineCard;
   const ListCardItemHorizontal({
     Key? key,
@@ -55,30 +55,6 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
           ),
         ),
       ],
-    );
-    return Card(
-      child: SizedBox(
-        width: 500,
-        // height: 70,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            SizedBox(
-              width: 70,
-              height: 70,
-              child: object.getCardLeading(context),
-            ),
-            object.getMainHeaderText(context),
-            // const Spacer(),
-            object.getMainSubtitleHeaderText(context)!,
-            // Text(
-            //   "product.price",
-            //   style: TextStyle(fontWeight: FontWeight.bold),
-            // )
-          ],
-        ),
-      ),
     );
   }
 

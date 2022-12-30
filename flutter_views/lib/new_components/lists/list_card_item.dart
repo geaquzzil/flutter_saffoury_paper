@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
@@ -20,17 +20,18 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = context
-            .watch<ActionViewAbstractProvider>()
-            .getObject
-            ?.isEquals(object) ??
-        false;
+    bool isSelected = SizeConfig.isLargeScreen(context)
+        ? context
+                .watch<ActionViewAbstractProvider>()
+                .getObject
+                ?.isEquals(object) ??
+            false
+        : false;
     return Dismissible(
       key: UniqueKey(),
       direction: object.getDismissibleDirection(),
       background: object.getDismissibleBackground(context),
-      secondaryBackground:
-          object.getDismissibleSecondaryBackground(context),
+      secondaryBackground: object.getDismissibleSecondaryBackground(context),
       onDismissed: (direction) =>
           object.onCardDismissedView(context, direction),
       child: isSelected

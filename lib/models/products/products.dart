@@ -602,11 +602,10 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Widget? getCustomBottomWidget(BuildContext context, ServerActions action) {
-    return Column(
-      children: [
+  List<Widget>? getCustomBottomWidget(BuildContext context, ServerActions action) {
+    return  [
         ListHorizontalApiAutoRestWidget(
-          customHeight: 250,
+          customHeight: 200,
           titleString: AppLocalizations.of(context)!.simialrProducts,
           autoRest: AutoRest<Product>(
               range: 5,
@@ -614,7 +613,7 @@ class Product extends ViewAbstract<Product>
               key: "similarProducts$iD"),
         ),
         ListHorizontalApiAutoRestWidget(
-          customHeight: 250,
+          customHeight: 200,
           titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
           autoRest: AutoRest<Product>(
               range: 5,
@@ -622,12 +621,12 @@ class Product extends ViewAbstract<Product>
                 ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
               key: "productsWithSimilarSize$iD"),
         )
-      ],
-    );
+      ];
+
   }
 
   @override
-  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+  List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {
     return super.getCustomTopWidget(context, action);
   }
 

@@ -159,8 +159,8 @@ class BaseEditWidget extends StatelessWidget {
       value: viewAbstractChangeProvider,
       child: Consumer<ViewAbstractChangeProvider>(
           builder: (context, provider, listTile) {
-        Widget? customBottom =
-            viewAbstract.getCustomBottomWidget(context, ServerActions.edit);
+        Widget? customBottom =null;
+            // viewAbstract.getCustomBottomWidget(context, ServerActions.edit);
         Widget form = Column(
           children: [
             buildForm(context),

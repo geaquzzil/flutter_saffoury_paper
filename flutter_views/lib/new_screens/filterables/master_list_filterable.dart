@@ -35,7 +35,12 @@ class MasterFilterableController extends StatelessWidget {
 
   Widget getListItem(BuildContext context, ViewAbstract item) {
     return ChoiceChip(
-    
+      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        shadowColor: Theme.of(context).colorScheme.shadow,
+       selectedColor: Theme.of(context).colorScheme.primary,
+
+
         label: item.getMainHeaderText(context),
         avatar: item.getCardLeadingCircleAvatar(context),
         selected: isFilterableSelected(context, item),

@@ -1,26 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/providers/actions/actions_providers.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
-import 'package:flutter_view_controller/screens/header_action_icon.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
-import '../../models/menu_item.dart';
-import '../../providers/actions/action_viewabstract_provider.dart';
 import 'components/action_on_header_popup_widget.dart';
 
 abstract class BaseActionScreenPage extends StatefulWidget {
@@ -47,7 +43,10 @@ abstract class BaseActionScreenPage extends StatefulWidget {
 class _BaseActionScreenPageState extends State<BaseActionScreenPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  List<TabControllerHelper> _tabs = <TabControllerHelper>[];
+  final List<TabControllerHelper> _tabs = <TabControllerHelper>[];
+
+  BaseActionProviders baseActionProviders = BaseActionProviders();
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -215,19 +214,41 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
                                 NestedScrollView.sliverOverlapAbsorberHandleFor(
                                     context),
                           ),
-                          SliverPadding(
-                            padding: const EdgeInsets.all(kDefaultPadding / 2),
-                            sliver: SliverFillRemaining(
-                                fillOverscroll: true,
-                                hasScrollBody: false,
-                                child: _tabs.indexOf(e) == 0
-                                    ? widget.getBody(context)
-                                    : e.widget),
-                          )
+                          if (_tabs.indexOf(e) == 0) ...getTopWidget(),
+                          _tabs.indexOf(e) == 0
+                              ? SliverPadding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: kDefaultPadding / 2),
+                                  sliver: widget.getBody(context))
+                              : SliverPadding(
+                                  padding:
+                                      const EdgeInsets.all(kDefaultPadding / 2),
+                                  sliver: SliverFillRemaining(
+                                      fillOverscroll: true,
+                                      hasScrollBody: false,
+                                      child: _tabs.indexOf(e) == 0
+                                          ? widget.getBody(context)
+                                          : e.widget),
+                                ),
+                          if (_tabs.indexOf(e) == 0) ...getBottomWidget()
                         ]);
                       }))
                   .toList()),
         ));
+  }
+
+  List<Widget> getBottomWidget() {
+    List<Widget>? bottomWidget = widget.viewAbstract
+        .getCustomBottomWidget(context, widget.getServerAction());
+    if (bottomWidget == null) return [];
+    return bottomWidget.map((e) => SliverToBoxAdapter(child: e)).toList();
+  }
+
+  List<Widget> getTopWidget() {
+    List<Widget>? topWidget = widget.viewAbstract
+        .getCustomTopWidget(context, widget.getServerAction());
+    if (topWidget == null) return [];
+    return topWidget.map((e) => SliverToBoxAdapter(child: e)).toList();
   }
 
   Widget getFutureBody() {
@@ -244,6 +265,8 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
             context
                 .read<ListMultiKeyProvider>()
                 .edit(snapshot.data as ViewAbstract);
+            // baseActionProviders.setIsLoaded = (true);
+
             return getBodyDetermineLayout();
           } else {
             return getEmptyWidget(context);
@@ -266,37 +289,41 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        // floatingActionButton: FloatingActionButton.extended(
-        //   elevation: 4.0,
-        //   icon: const Icon(Icons.add),
-        //   label: const Text('Add a task'),
-        //   onPressed: () {},
-        // ),
-        floatingActionButton: BaseFloatingActionButtons(
-          viewAbstract: widget.viewAbstract,
-          serverActions: widget.getServerAction(),
-          addOnList: widget.getFloatingActionWidgetAddOns(context),
-        ),
-        // bottomNavigationBar: BottomAppBar(
-        //   shape: CircularNotchedRectangle(),
-        //   notchMargin: 4.0,
-        //   child: new Row(
-        //     mainAxisSize: MainAxisSize.max,
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: <Widget>[
-        //       IconButton(
-        //         icon: Icon(Icons.menu),
-        //         onPressed: () {},
+        floatingActionButton: ChangeNotifierProvider.value(
+            value: baseActionProviders,
+            child: Consumer<BaseActionProviders>(
+                builder: (context, provider, baseActionProviders) {
+              return provider.getIsLoaded
+                  ? nil
+                  : BaseFloatingActionButtons(
+                      viewAbstract: widget.viewAbstract,
+                      serverActions: widget.getServerAction(),
+                      addOnList: widget.getFloatingActionWidgetAddOns(context),
+                    );
+            })),
+
+        // provider.getIsLoaded
+        //     ? null
+        //     : BaseFloatingActionButtons(
+        //         viewAbstract: widget.viewAbstract,
+        //         serverActions: widget.getServerAction(),
+        //         addOnList: widget.getFloatingActionWidgetAddOns(context),
         //       ),
-        //       IconButton(
-        //         icon: Icon(Icons.search),
-        //         onPressed: () {},
-        //       ),
-        //     ],
-        //   ),
-        // ),
         body: SafeArea(child: getFutureBody()));
+  }
+}
+
+class BaseActionProviders with ChangeNotifier {
+  bool _isLoaded = false;
+
+  get getIsLoaded {
+    return _isLoaded;
+  }
+
+  set setIsLoaded(bool isLoaded) {
+    _isLoaded = isLoaded;
+    notifyListeners();
   }
 }

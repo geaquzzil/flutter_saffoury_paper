@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -47,63 +48,13 @@ class MasterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget? topWidget =
-        viewAbstract.getCustomTopWidget(context, ServerActions.view);
-    Widget? bottomWidget =
-        viewAbstract.getCustomBottomWidget(context, ServerActions.view);
-    final fields = viewAbstract.getMainFields(context: context);
-    return Column(
-      children: [
-        if (topWidget != null) topWidget,
-        ...fields
-            .where((element) => viewAbstract.getFieldValue(element) != null)
-            .map((e) => buildItem(context, e)),
-        if (viewAbstract is ListableInterface)
-          ViewableTableWidget(viewAbstract: viewAbstract as ListableInterface),
-        if (bottomWidget != null) bottomWidget,
-      ],
-    );
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            // Expanded(flex: 1, child: Text("TEST")),
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (topWidget != null) topWidget,
-                  // BaseSharedHeaderViewDetailsActions(
-                  //   viewAbstract: viewAbstract,
-                  // ),
-                  ViewDetailsListWidget(
-                    viewAbstract: viewAbstract,
-                  ),
-                  if (viewAbstract is CartableInvoiceMasterObjectInterface)
-                    CartDataTableMaster(
-                        action: ServerActions.view,
-                        obj: viewAbstract
-                            as CartableInvoiceMasterObjectInterface),
-                  const SizedBox(
-                    height: 200,
-                  )
-                ],
-              ),
-            ),
-            if (viewAbstract.getTabs(context).isNotEmpty)
-              Expanded(
-                child: OutlinedCard(
-                  child: TabBarWidget(
-                    viewAbstract: viewAbstract,
-                  ),
-                ),
-              )
-          ],
-        ),
-      ],
-    );
+    final fields = viewAbstract.getMainFields(context: context).where((element) => viewAbstract.getFieldValue(element) != null).toList();
+    return SliverList(delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+        return buildItem(context, fields[index]);
+      },
+      // 40 list items
+      childCount: fields.length, ));
   }
 }
 

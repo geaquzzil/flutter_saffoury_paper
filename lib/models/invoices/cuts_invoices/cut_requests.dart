@@ -197,17 +197,21 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {"quantity": 1};
+
   @override
-  Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+  List<Widget>? getCustomBottomWidget(
+      BuildContext context, ServerActions action) {
     if (action == ServerActions.view) {
-      return ListHorizontalApiAutoRestWidget(
-        customHeight: 300,
-        title: getMainHeaderText(context),
-        autoRest: AutoRest<CutRequest>(
-            obj: CutRequest()
-              ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-            key: "CustomerByCutRequest$iD"),
-      );
+      return [
+        ListHorizontalApiAutoRestWidget(
+          customHeight: 250,
+          title: getMainHeaderText(context),
+          autoRest: AutoRest<CutRequest>(
+              obj: CutRequest()
+                ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+              key: "CustomerByCutRequest$iD"),
+        )
+      ];
     }
     return null;
   }

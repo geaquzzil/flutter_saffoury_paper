@@ -7,7 +7,7 @@ class DropdownStringListControllerListener extends StatelessWidget {
   String tag;
   String hint;
   List<DropdownStringListItem?> list;
-  void Function(Object? object) onSelected;
+  void Function(DropdownStringListItem? object) onSelected;
 
   DropdownStringListControllerListener(
       {Key? key,
@@ -37,7 +37,7 @@ class DropdownStringListControllerListener extends StatelessWidget {
           .toList(),
       onChanged: (obj) {
         debugPrint("changed: $obj");
-        onSelected(obj);
+        onSelected(obj as DropdownStringListItem);
       },
     );
   }

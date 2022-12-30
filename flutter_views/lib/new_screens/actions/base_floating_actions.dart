@@ -32,28 +32,33 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        getFileImportFloatingButton(context),
-        const SizedBox(
-          width: kDefaultPadding,
-        ),
-        getFileReaderFloatingButton(context),
-        const SizedBox(
-          width: kDefaultPadding,
-        ),
-        viewAbstract.onHasPermission(
-          context,
-          function: viewAbstract.hasPermissionDelete(context),
-          onHasPermissionWidget: () {
-            return Row(
-              children: [
-                getDeleteFloatingButton(context),
-                const SizedBox(
-                  width: kDefaultPadding,
-                ),
-              ],
-            );
-          },
-        ),
+        if (serverActions != ServerActions.print)
+          getFileImportFloatingButton(context),
+        if (serverActions != ServerActions.print)
+          const SizedBox(
+            width: kDefaultPadding,
+          ),
+        if (serverActions != ServerActions.print)
+          getFileReaderFloatingButton(context),
+        if (serverActions != ServerActions.print)
+          const SizedBox(
+            width: kDefaultPadding,
+          ),
+        if (serverActions != ServerActions.print)
+          viewAbstract.onHasPermission(
+            context,
+            function: viewAbstract.hasPermissionDelete(context),
+            onHasPermissionWidget: () {
+              return Row(
+                children: [
+                  getDeleteFloatingButton(context),
+                  const SizedBox(
+                    width: kDefaultPadding,
+                  ),
+                ],
+              );
+            },
+          ),
         if (addOnList != null) ...addOnList!
       ],
     );

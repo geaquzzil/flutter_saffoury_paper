@@ -1,10 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_view_controller/providers/filterables/fliterable_list_pr
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseFilterableMainWidget extends StatelessWidget {
   bool useDraggableWidget;
@@ -52,6 +50,18 @@ class BaseFilterableMainWidget extends StatelessWidget {
     if (useDraggableWidget) {
       return getDraggableWidget(context, list, drawerViewAbstract);
     }
+
+    return CustomScrollView(
+      slivers: [
+        if (setHeaderTitle)
+          SliverToBoxAdapter(
+            child: getHeader(context, drawerViewAbstract),
+          ),
+        if (SizeConfig.isMobile(context) && (setHeaderTitle)) Divider(),
+        ...getControllersSliver(list, drawerViewAbstract, context),
+        // SliverFillRemaining(child: getButtons(context),)
+      ],
+    );
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(kDefaultPadding),
@@ -70,7 +80,40 @@ class BaseFilterableMainWidget extends StatelessWidget {
     );
   }
 
-  ListView getControllers(Map<ViewAbstract<dynamic>, List<dynamic>> list,
+  List<Widget> getControllersSliver(
+      Map<ViewAbstract<dynamic>, List<dynamic>> list,
+      ViewAbstract<dynamic> drawerViewAbstract,
+      BuildContext context,
+      {ScrollController? scrollController}) {
+    return [
+      SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+        sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          ViewAbstract viewAbstract = list.keys.elementAt(index);
+          List<dynamic> itemsViewAbstract = list[viewAbstract] ?? [];
+          debugPrint(
+              "getListFilterableControlers is => ${viewAbstract.runtimeType.toString()} count is ${itemsViewAbstract.length}");
+          return MasterFilterableController(
+              viewAbstract: viewAbstract, list: itemsViewAbstract);
+        }, childCount: list.length)),
+      ),
+      SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+        sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return CustomFilterableController(
+              customFilterableField:
+                  drawerViewAbstract.getCustomFilterableFields(context)[index]);
+        },
+                childCount: drawerViewAbstract
+                    .getCustomFilterableFields(context)
+                    .length)),
+      ),
+    ];
+  }
+
+  Widget getControllers(Map<ViewAbstract<dynamic>, List<dynamic>> list,
       ViewAbstract<dynamic> drawerViewAbstract, BuildContext context,
       {ScrollController? scrollController}) {
     return ListView(
