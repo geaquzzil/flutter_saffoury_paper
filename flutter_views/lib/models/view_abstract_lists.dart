@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:share_plus/share_plus.dart';
@@ -289,11 +290,26 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   Future<List<MenuItemBuild>> getPopupMenuActionsList(
       BuildContext context) async {
     return [
+      if (await hasPermissionShare(context)) getMenuItemShare(context),
       if (await hasPermissionPrint(context)) getMenuItemPrint(context),
       if (await hasPermissionEdit(context)) getMenuItemEdit(context),
       if (await hasPermissionView(context)) getMenuItemView(context),
-      if (await hasPermissionShare(context)) getMenuItemShare(context),
     ];
+  }
+
+  Widget onFutureAllPopupMenuLoaded(BuildContext context, ServerActions action,
+      {required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded}) {
+    return FutureBuilder<List<MenuItemBuild>>(
+      future: action == ServerActions.edit
+          ? getPopupMenuActionsEdit(context)
+          : getPopupMenuActionsList(context),
+      builder: (context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return onPopupMenuListLoaded(snapshot.data!);
+        }
+        return nil;
+      },
+    );
   }
 
   Widget getPopupMenuActionWidget(BuildContext c, ServerActions action) {
@@ -307,7 +323,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
-              snapshot.data?.map(buildMenuItem).toList() ?? [],
+              snapshot.data?.map((r)=>buildMenuItem(c,r)).toList() ?? [],
         );
       },
       future: action == ServerActions.edit
@@ -317,10 +333,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getPopupMenuActionListWidget(BuildContext c) {
-    //TODO for divider use PopupMenuDivider()
-    // return ViewPopupIconWidget(
-    //   viewAbstract: this as ViewAbstract,
-    // );
     return FutureBuilder(
       builder:
           (BuildContext context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
@@ -329,27 +341,23 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
-              snapshot.data?.map(buildMenuItem).toList() ?? [],
+              snapshot.data?.map((r)=>buildMenuItem(c,r)).toList() ?? [],
         );
       },
       future: getPopupMenuActionsList(c),
     );
   }
 
-  PopupMenuItem<MenuItemBuild> buildMenuItem(MenuItemBuild e) => PopupMenuItem(
-        value: e,
-        child: Row(
-          children: [
-            Icon(
-              e.icon,
-              // color: Colors.black,
-              size: 20,
-            ),
-            const SizedBox(width: 12),
-            Text(e.title),
-          ],
-        ),
-      );
+  ListTile buildMenuItemListTile(BuildContext context,MenuItemBuild e) {
+    return ListTile(
+      leading: Icon(e.icon),
+      title: Text(e.title),
+      onTap: () => onPopupMenuActionSelected(context,e),
+    );
+  }
+
+  PopupMenuItem<MenuItemBuild> buildMenuItem(BuildContext context, MenuItemBuild e) =>
+      PopupMenuItem(value: e, child: buildMenuItemListTile(context,e));
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {
     onPopupMenuActionSelected(context, e);

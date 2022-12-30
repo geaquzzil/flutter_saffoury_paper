@@ -4,11 +4,13 @@ class FloatingActionButtonExtended extends StatefulWidget {
   IconData colapsed;
   Widget expandedWidget;
   void Function() onPress;
+  void Function()? onToggle;
   IconData onExpandIcon;
   FloatingActionButtonExtended(
       {super.key,
       this.colapsed = Icons.arrow_forward,
       this.onExpandIcon = Icons.add,
+      this.onToggle,
       required this.onPress,
       required this.expandedWidget});
 
@@ -36,20 +38,21 @@ class _FloatingActionButtonExtendedState
     return FloatingActionButton.extended(
         heroTag: UniqueKey(),
         onPressed: _onFabPress,
-        label: AnimatedSwitcher(
+        label: AnimatedSize(
           duration: const Duration(milliseconds: 250),
-          transitionBuilder: (Widget child, Animation<double> animation) =>
-              FadeTransition(
-            opacity: animation,
-            child: SizeTransition(
-              sizeFactor: animation,
-              axis: Axis.horizontal,
-              child: child,
-            ),
-          ),
+          // transitionBuilder: (Widget child, Animation<double> animation) =>
+          //     FadeTransition(
+          //   opacity: animation,
+          //   child: SizeTransition(
+          //     sizeFactor: animation,
+          //     axis: Axis.horizontal,
+          //     child: child,
+          //   ),
+          // ),
           child: !_isExtended
               ? Icon(widget.colapsed)
-              : Row(
+              : Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 4.0),
@@ -62,6 +65,9 @@ class _FloatingActionButtonExtendedState
   }
 
   void _onFabPress() {
+    if (widget.onToggle != null) {
+      widget.onToggle!();
+    }
     if (_isExtended) {
       widget.onPress();
     }

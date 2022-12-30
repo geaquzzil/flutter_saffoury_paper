@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -17,12 +19,13 @@ import '../actions/edit_new/base_edit_new.dart';
 
 class BaseSettingDetailsView extends StatelessWidget {
   dynamic? printSetting;
+  
   BaseSettingDetailsView({Key? key, this.printSetting}) : super(key: key);
   Future<ViewAbstract?> getSetting(
       BuildContext context, ModifiableInterface settingObject) async {
     ViewAbstract? saved = await Configurations.get<ViewAbstract>(
         settingObject.getModifibleSettingObject(context),
-        customKey: "_printsetting" + settingObject.runtimeType.toString());
+        customKey: "_printsetting${settingObject.runtimeType}");
 
     if (saved == null) {
       return settingObject.getModifibleSettingObject(context);
@@ -56,8 +59,7 @@ class BaseSettingDetailsView extends StatelessWidget {
                     isTheFirst: true,
                     onValidate: (viewAbstract) {
                       Configurations.save(
-                          "_printsetting" +
-                              settingObject.runtimeType.toString(),
+                          "_printsetting${settingObject.runtimeType}",
                           viewAbstract);
                       context.read<SettingProvider>().change(settingObject);
                     }),

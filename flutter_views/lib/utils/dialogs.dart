@@ -3,9 +3,11 @@ import 'package:flutter_view_controller/size_config.dart';
 
 Future<T?> showBottomSheetExt<T>(
     {required BuildContext context,
+    bool isScrollable = true,
+    bool withHeightFactor = true,
     required Widget Function(BuildContext) builder}) {
   return showModalBottomSheet<T>(
-    isScrollControlled: true,
+    isScrollControlled: isScrollable,
     context: context,
     elevation: 4,
     enableDrag: true,
@@ -13,8 +15,10 @@ Future<T?> showBottomSheetExt<T>(
       borderRadius: BorderRadius.circular(10.0),
     ),
     builder: (context) {
-      return FractionallySizedBox(
-          heightFactor: 0.9, child: builder.call(context));
+      return withHeightFactor
+          ? FractionallySizedBox(
+              heightFactor: 0.9, child: builder.call(context))
+          : builder.call(context);
     },
   );
 }

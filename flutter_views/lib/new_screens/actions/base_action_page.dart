@@ -311,7 +311,7 @@ class _BaseActionScreenPageState extends State<BaseActionScreenPage>
         //         serverActions: widget.getServerAction(),
         //         addOnList: widget.getFloatingActionWidgetAddOns(context),
         //       ),
-        body: SafeArea(child: getFutureBody()));
+        body: getFutureBody());
   }
 }
 

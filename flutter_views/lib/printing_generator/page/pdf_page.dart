@@ -19,6 +19,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -44,6 +45,7 @@ class PdfPage<T extends PrintLocalSetting> extends StatefulWidget {
 class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
   late Future<Uint8List> loadedFile;
   late Uint8List loadedFileBytes;
+  bool isOtherFabVisible = true;
 
   PdfPageFormat _selectedFormat = PdfPageFormat.a4;
   bool getBodyWithoutApi() {
@@ -68,7 +70,16 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
       future: (widget.invoiceObj as ViewAbstract)
           .viewCallGetFirstFromList((widget.invoiceObj as ViewAbstract).iD),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasError) {
+          return EmptyWidget(
+              lottiUrl:
+                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+              onSubtitleClicked: () {
+                setState(() {});
+              },
+              title: AppLocalizations.of(context)!.cantConnect,
+              subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+        } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             widget.invoiceObj = snapshot.data as PrintableMaster;
             context
@@ -80,23 +91,31 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
             return EmptyWidget(
                 lottiUrl:
                     "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+                onSubtitleClicked: () {
+                  setState(() {});
+                },
                 title: AppLocalizations.of(context)!.cantConnect,
                 subtitle: AppLocalizations.of(context)!.cantConnectRetry);
           }
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return Text("TOTODO");
         }
-        return const Center(child: CircularProgressIndicator());
       },
     );
   }
 
   Widget getPrintShareFloating(BuildContext context) {
     return FloatingActionButton.small(
+        heroTag: UniqueKey(),
         child: const Icon(Icons.share),
         onPressed: () async => await Printing.sharePdf(bytes: loadedFileBytes));
   }
 
   Widget getPrintFloating(BuildContext context) {
     return FloatingActionButton(
+        heroTag: UniqueKey(),
         child: const Icon(Icons.print),
         onPressed: () async => await Printing.layoutPdf(
             onLayout: (PdfPageFormat format) async => loadedFile!));
@@ -106,58 +125,66 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
   Widget build(BuildContext context) {
     Widget body = getFutureBody(context);
 
-    return SafeArea(
-      child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-          floatingActionButton: BaseFloatingActionButtons(
-            viewAbstract: widget.invoiceObj as ViewAbstract,
-            serverActions: ServerActions.print,
-            addOnList: [
-              getPrintShareFloating(context),
+    return Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        floatingActionButton: BaseFloatingActionButtons(
+          viewAbstract: widget.invoiceObj as ViewAbstract,
+          serverActions: ServerActions.print,
+          addOnList: [
+            if (isOtherFabVisible) getPrintShareFloating(context),
+            if (isOtherFabVisible)
               const SizedBox(
                 width: kDefaultPadding,
               ),
-              getPrintFloating(context),
+            if (isOtherFabVisible) getPrintFloating(context),
+            if (isOtherFabVisible)
               const SizedBox(
                 width: kDefaultPadding,
               ),
-              getPrintPageO()
-            ],
-          ),
+            getPrintPageO()
+          ],
+        ),
+        bottomNavigationBar: BottomAppBar(),
 
-          // provider.getIsLoaded
-          //     ? null
-          //     : BaseFloatingActionButtons(
-          //         viewAbstract: widget.viewAbstract,
-          //         serverActions: widget.getServerAction(),
-          //         addOnList: widget.getFloatingActionWidgetAddOns(context),
-          //       ),
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 300,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    (widget.invoiceObj as ViewAbstract).getBaseTitle(context,
-                        serverAction: ServerActions.print,
-                        descriptionIsId: true),
-                  ),
+        // provider.getIsLoaded
+        //     ? null
+        //     : BaseFloatingActionButtons(
+        //         viewAbstract: widget.viewAbstract,
+        //         serverActions: widget.getServerAction(),
+        //         addOnList: widget.getFloatingActionWidgetAddOns(context),
+        //       ),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              elevation: 4,
+              pinned: true,
+              primary: true,
+              expandedHeight: 300,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  (widget.invoiceObj as ViewAbstract).getBaseTitle(context,
+                      serverAction: ServerActions.print, descriptionIsId: true),
                 ),
               ),
-              SliverFillRemaining(
-                child: Center(child: body),
-              )
-            ],
-          )),
-    );
+            ),
+            SliverFillRemaining(
+              child: Center(child: body),
+            )
+          ],
+        ));
   }
 
   FloatingActionButtonExtended getPrintPageO() {
     return FloatingActionButtonExtended(
         colapsed: Icons.settings,
         onExpandIcon: Icons.settings,
-        onPress: () => {},
+        onPress: () {},
+        onToggle: () {
+          setState(() {
+            isOtherFabVisible = !isOtherFabVisible;
+          });
+        },
         expandedWidget: Row(
           children: [
             IconButton(
@@ -186,7 +213,7 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
               ),
             ),
             SizedBox(
-              width: 200,
+              width: getSizeOfController(),
               child: DropdownStringListControllerListener(
                 tag: "printOptions",
                 onSelected: (object) {
@@ -222,6 +249,14 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         ));
   }
 
+  double getSizeOfController() {
+    if (SizeConfig.isFoldableWithOpenDualScreen(context)) {
+      Size size = MediaQuery.of(context).size;
+      return ((size.width / 2) / 3) - kDefaultPadding;
+    }
+    return (MediaQuery.of(context).size.width / 3) - kDefaultPadding;
+  }
+
   Widget getBody(BuildContext context) {
     // Printing.layoutPdf
     return PdfPreview(
@@ -234,7 +269,16 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         dynamicLayout: true,
         loadingWidget: const CircularProgressIndicator(),
         useActions: false,
-
+        onError: (context, error) {
+          return EmptyWidget(
+              lottiUrl:
+                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+              onSubtitleClicked: () {
+                setState(() {});
+              },
+              title: AppLocalizations.of(context)!.cantConnect,
+              subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+        },
         // shouldRepaint: ,
         build: (format) async {
           loadedFile =

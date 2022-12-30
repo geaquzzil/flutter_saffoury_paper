@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -64,9 +65,9 @@ class _ListHorizontalApiWidgetState
         if (isLoading && index == data.length) {
           return const Center(
               child: Padding(
-                padding:  EdgeInsets.all(kDefaultPadding),
-                child: CircularProgressIndicator(),
-              ));
+            padding: EdgeInsets.all(kDefaultPadding),
+            child: CircularProgressIndicator(),
+          ));
         }
         return widget.listItembuilder == null
             ? ListCardItemHorizontal(object: data[index])
@@ -77,19 +78,59 @@ class _ListHorizontalApiWidgetState
     );
   }
 
+  Widget getErrorWidget(BuildContext context) {
+    return getEmptyWidget(context, isError: true);
+  }
+
+  Widget getEmptyWidget(BuildContext context, {bool isError = false}) {
+    return wrapHeader(
+        context,
+        EmptyWidget(
+            onSubtitleClicked: isError
+                ? () {
+                    listProvider.fetchList(
+                        widget.autoRest.key, widget.autoRest.obj,
+                        autoRest: widget.autoRest);
+                  }
+                : null,
+            lottiUrl:
+                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+            title: isError
+                ? AppLocalizations.of(context)!.cantConnect
+                : AppLocalizations.of(context)!.noItems,
+            subtitle: isError
+                ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+                : AppLocalizations.of(context)!.no_content));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: listProvider,
       child: Consumer<ListMultiKeyProvider>(
           builder: (context, provider, listTile) {
-        if (provider.getCount(widget.autoRest.key) == 0) {
+        int count = provider.getCount(widget.autoRest.key);
+        bool isLoading = provider.isLoading(widget.autoRest.key);
+        if (isLoading) {
           return wrapHeader(
               context,
               const Center(
                 child: CircularProgressIndicator(),
               ));
+        } else {
+          if (count == 0 && provider.isHasError(widget.autoRest.key)) {
+            return getErrorWidget(context);
+          } else if (count == 0) {
+            return getEmptyWidget(context);
+          }
         }
+        if (count == 0 && isLoading) {
+          return wrapHeader(
+              context,
+              const Center(
+                child: CircularProgressIndicator(),
+              ));
+        } else if (count == 0 && !isLoading) {}
         debugPrint("List api provider loaded ${listProvider.isLoading}");
         return wrapHeader(
             context,
@@ -102,15 +143,17 @@ class _ListHorizontalApiWidgetState
   Widget wrapHeader(BuildContext context, Widget child) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [buildHeader(context), SizedBox(
-          height: widget.customHeight,
-          child: child)],
+      children: [
+        buildHeader(context),
+        SizedBox(height: widget.customHeight, child: child)
+      ],
     );
   }
 
   Widget buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: kDefaultPadding, horizontal: kDefaultPadding),
+      padding: const EdgeInsets.symmetric(
+          vertical: kDefaultPadding, horizontal: kDefaultPadding),
       child: widget.title ??
           Text(
             widget.titleString ?? "NONT",

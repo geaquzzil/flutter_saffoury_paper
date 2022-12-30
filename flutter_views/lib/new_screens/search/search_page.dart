@@ -131,7 +131,6 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget getFirstPane(BuildContext context) {
-
     Widget listStickyWidget = ListMultibleViews(
       // key: UniqueKey(),
       list: [

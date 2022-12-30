@@ -16,7 +16,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
     this.listState,
     this.selectionMood = false,
     required this.object,
-  }) : super(key: key);
+  }) : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +47,16 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
 
   Widget getListTile(bool isSelected, BuildContext context) {
     return ListTile(
-        selected: isSelected,
-        selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-        onTap: () => object.onCardClicked(context),
-        onLongPress: () {
-          (listState as GlobalKey<ListApiMasterState>)
-              .currentState
-              ?.toggleSelectMood();
-          context.read<ListActionsProvider>().toggleSelectMood();
-          object.onCardLongClicked(context);
-        },
-        title: (object.getMainHeaderText(context)),
-        subtitle: (object.getMainSubtitleHeaderText(context)),
-        leading: object.getCardLeading(context),
-        trailing: object.getPopupMenuActionListWidget(context));
+      selected: isSelected,
+      selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+      onTap: () => object.onCardClicked(context),
+      onLongPress: () {
+        object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
+      },
+      title: (object.getMainHeaderText(context)),
+      subtitle: (object.getMainSubtitleHeaderText(context)),
+      leading: object.getCardLeading(context),
+    );
+    // trailing: object.getPopupMenuActionListWidget(context));
   }
 }
