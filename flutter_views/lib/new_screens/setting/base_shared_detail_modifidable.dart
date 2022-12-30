@@ -18,9 +18,10 @@ import 'package:provider/provider.dart';
 import '../actions/edit_new/base_edit_new.dart';
 
 class BaseSettingDetailsView extends StatelessWidget {
-  dynamic? printSetting;
-  
-  BaseSettingDetailsView({Key? key, this.printSetting}) : super(key: key);
+  ModifiableInterface? viewAbstract;
+  Function(ViewAbstract? viewAbstract)? onValidate;
+  BaseSettingDetailsView({Key? key, this.viewAbstract, this.onValidate})
+      : super(key: key);
   Future<ViewAbstract?> getSetting(
       BuildContext context, ModifiableInterface settingObject) async {
     ViewAbstract? saved = await Configurations.get<ViewAbstract>(
@@ -41,7 +42,7 @@ class BaseSettingDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ModifiableInterface? settingObject =
-        context.watch<SettingProvider>().getSelectedObject;
+        viewAbstract ?? context.watch<SettingProvider>().getSelectedObject;
     if (settingObject == null) {
       return getEmptyView(context);
     }
@@ -61,7 +62,11 @@ class BaseSettingDetailsView extends StatelessWidget {
                       Configurations.save(
                           "_printsetting${settingObject.runtimeType}",
                           viewAbstract);
-                      context.read<SettingProvider>().change(settingObject);
+                      if (onValidate != null) {
+                        onValidate!(viewAbstract);
+                      } else {
+                        context.read<SettingProvider>().change(settingObject);
+                      }
                     }),
               ],
             ),

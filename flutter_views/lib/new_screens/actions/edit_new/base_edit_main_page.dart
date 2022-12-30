@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
+import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../new_components/add_from_list_popup_icon_widget.dart';
@@ -270,6 +271,7 @@ class _BaseEditNewPageState extends State<BaseEditNewPage> {
       heroTag: UniqueKey(),
       onPressed: () {
         Dialogs.materialDialog(
+            customViewPosition: CustomViewPosition.BEFORE_TITLE,
             msgAlign: TextAlign.end,
             dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
             color: Theme.of(context).colorScheme.background,

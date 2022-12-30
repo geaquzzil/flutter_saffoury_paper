@@ -29,20 +29,22 @@ import '../../interfaces/printable/printable_master.dart';
 import '../../models/servers/server_helpers.dart';
 import '../pdf_custom_from_pdf_api.dart';
 import '../pdf_receipt_api.dart';
+import 'base_pdf_page.dart';
 import 'ext.dart';
 import 'dart:math' as math;
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
-class PdfPage<T extends PrintLocalSetting> extends StatefulWidget {
+class PdfPage<T extends PrintLocalSetting> extends BasePdfPage {
   PrintableMaster<T> invoiceObj;
 
-  PdfPage({super.key, required this.invoiceObj});
+  PdfPage({Key? key, required this.invoiceObj})
+      : super(key: key, title: "test");
 
   @override
   _PdfPageState createState() => _PdfPageState();
 }
 
-class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
+class _PdfPageState extends BasePdfPageState<PdfPage> {
   late Future<Uint8List> loadedFile;
   late Uint8List loadedFileBytes;
   bool isOtherFabVisible = true;
@@ -62,6 +64,7 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
     return res;
   }
 
+  @override
   Widget getFutureBody(BuildContext context) {
     if (getBodyWithoutApi()) {
       return getBody(context);
@@ -119,60 +122,6 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
         child: const Icon(Icons.print),
         onPressed: () async => await Printing.layoutPdf(
             onLayout: (PdfPageFormat format) async => loadedFile!));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget body = getFutureBody(context);
-
-    return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: BaseFloatingActionButtons(
-          viewAbstract: widget.invoiceObj as ViewAbstract,
-          serverActions: ServerActions.print,
-          addOnList: [
-            if (isOtherFabVisible) getPrintShareFloating(context),
-            if (isOtherFabVisible)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            if (isOtherFabVisible) getPrintFloating(context),
-            if (isOtherFabVisible)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            getPrintPageO()
-          ],
-        ),
-        bottomNavigationBar: BottomAppBar(),
-
-        // provider.getIsLoaded
-        //     ? null
-        //     : BaseFloatingActionButtons(
-        //         viewAbstract: widget.viewAbstract,
-        //         serverActions: widget.getServerAction(),
-        //         addOnList: widget.getFloatingActionWidgetAddOns(context),
-        //       ),
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              elevation: 4,
-              pinned: true,
-              primary: true,
-              expandedHeight: 300,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  (widget.invoiceObj as ViewAbstract).getBaseTitle(context,
-                      serverAction: ServerActions.print, descriptionIsId: true),
-                ),
-              ),
-            ),
-            SliverFillRemaining(
-              child: Center(child: body),
-            )
-          ],
-        ));
   }
 
   FloatingActionButtonExtended getPrintPageO() {
@@ -286,6 +235,32 @@ class _PdfPageState<T extends PrintLocalSetting> extends State<PdfPage> {
           loadedFileBytes = await loadedFile;
           return loadedFileBytes;
         });
+  }
+
+  @override
+  Widget getFloatingActions(BuildContext context) {
+    return BaseFloatingActionButtons(
+      viewAbstract: widget.invoiceObj as ViewAbstract,
+      serverActions: ServerActions.print,
+      addOnList: [
+        if (isOtherFabVisible) getPrintShareFloating(context),
+        if (isOtherFabVisible)
+          const SizedBox(
+            width: kDefaultPadding,
+          ),
+        if (isOtherFabVisible) getPrintFloating(context),
+        if (isOtherFabVisible)
+          const SizedBox(
+            width: kDefaultPadding,
+          ),
+        getPrintPageO()
+      ],
+    );
+  }
+
+  @override
+  ViewAbstract? getSettingObject(BuildContext context) {
+    return widget.invoiceObj as ViewAbstract;
   }
 }
 

@@ -323,7 +323,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
-              snapshot.data?.map((r)=>buildMenuItem(c,r)).toList() ?? [],
+              snapshot.data?.map((r) => buildMenuItem(c, r)).toList() ?? [],
         );
       },
       future: action == ServerActions.edit
@@ -341,23 +341,24 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
             onPopupMenuActionSelected(c, result);
           },
           itemBuilder: (BuildContext context) =>
-              snapshot.data?.map((r)=>buildMenuItem(c,r)).toList() ?? [],
+              snapshot.data?.map((r) => buildMenuItem(c, r)).toList() ?? [],
         );
       },
       future: getPopupMenuActionsList(c),
     );
   }
 
-  ListTile buildMenuItemListTile(BuildContext context,MenuItemBuild e) {
+  ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e) {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
-      onTap: () => onPopupMenuActionSelected(context,e),
+      onTap: () => onPopupMenuActionSelected(context, e),
     );
   }
 
-  PopupMenuItem<MenuItemBuild> buildMenuItem(BuildContext context, MenuItemBuild e) =>
-      PopupMenuItem(value: e, child: buildMenuItemListTile(context,e));
+  PopupMenuItem<MenuItemBuild> buildMenuItem(
+          BuildContext context, MenuItemBuild e) =>
+      PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {
     onPopupMenuActionSelected(context, e);
@@ -377,12 +378,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected $result");
-      if (SizeConfig.hasSecondScreen(context)) {
-        context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
-              invoiceObj: this as PrintableMaster,
-            ));
-        return;
-      }
+      // if (SizeConfig.hasSecondScreen(context)) {
+      //   context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
+      //         invoiceObj: this as PrintableMaster,
+      //       ));
+      //   return;
+      // }
 
       Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {

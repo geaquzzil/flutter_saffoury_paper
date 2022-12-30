@@ -22,17 +22,17 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
     PrintableMaster<T> invoiceObj,
     PdfPageFormat format) async {
   {
-    T? pls;
-    if (invoiceObj is ModifiablePrintableInterface) {
-      pls = await Configurations.get<T>(
-          (invoiceObj as ModifiablePrintableInterface)
-              .getModifibleSettingObject(context),
-          customKey: "_printsetting${invoiceObj.runtimeType}");
-      if (pls != null) {
-        pls = pls.onSavedModiablePrintableLoaded(
-            context, invoiceObj as ViewAbstract);
-      }
-    }
+    T? pls = await getSetting(context, invoiceObj);
+    // if (invoiceObj is ModifiablePrintableInterface) {
+    //   pls = await Configurations.get<T>(
+    //       (invoiceObj as ModifiablePrintableInterface)
+    //           .getModifibleSettingObject(context),
+    //       customKey: "_printsetting${invoiceObj.runtimeType}");
+    //   if (pls != null) {
+    //     pls = pls.onSavedModiablePrintableLoaded(
+    //         context, invoiceObj as ViewAbstract);
+    //   }
+    // }
     if (invoiceObj is PrintableInvoiceInterface) {
       final pdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
           context, invoiceObj as PrintableInvoiceInterface,
