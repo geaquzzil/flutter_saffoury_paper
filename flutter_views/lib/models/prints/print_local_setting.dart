@@ -13,6 +13,7 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   bool? hideQrCode = false;
   String? primaryColor;
   String? secondaryColor;
+  bool hasMultiplePageFormats = true;
 
   bool? hideTermsOfService = false;
   bool? hideAdditionalNotes = false;

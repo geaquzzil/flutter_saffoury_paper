@@ -47,9 +47,6 @@ class PdfPage<T extends PrintLocalSetting> extends BasePdfPage {
 class _PdfPageState extends BasePdfPageState<PdfPage> {
   late Future<Uint8List> loadedFile;
   late Uint8List loadedFileBytes;
-  bool isOtherFabVisible = true;
-
-  PdfPageFormat _selectedFormat = PdfPageFormat.a4;
   bool getBodyWithoutApi() {
     bool canGetBody = (widget.invoiceObj as ViewAbstract)
             .isRequiredObjectsList()?[ServerActions.view] ==
@@ -66,7 +63,6 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
 
   @override
   Widget getFutureBody(BuildContext context) {
-    context.watch<PrintSettingLargeScreenProvider>().getViewAbstract;
     if (getBodyWithoutApi()) {
       return getBody(context);
     }
@@ -125,23 +121,20 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
             onLayout: (PdfPageFormat format) async => loadedFile!));
   }
 
-  FloatingActionButtonExtended getPrintPageO() {
+  FloatingActionButtonExtended getPrintPageOptions() {
     return FloatingActionButtonExtended(
         colapsed: Icons.settings,
         onExpandIcon: Icons.settings,
         onPress: () {},
         onToggle: () {
-          setState(() {
-            isOtherFabVisible = !isOtherFabVisible;
-          });
+          notifyToggleFloatingButton(context);
         },
         expandedWidget: Row(
           children: [
             IconButton(
               onPressed: () {
-                setState(() {
-                  _selectedFormat = _selectedFormat.portrait;
-                });
+                notifyNewSelectedFormat(
+                    context, printSettingListener.getSelectedFormat.portrait);
               },
               icon: Transform.rotate(
                 angle: -math.pi / 2,
@@ -153,9 +146,8 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
             ),
             IconButton(
               onPressed: () {
-                setState(() {
-                  _selectedFormat = _selectedFormat.landscape;
-                });
+                notifyNewSelectedFormat(
+                    context, printSettingListener.getSelectedFormat.landscape);
               },
               icon: Icon(
                 Icons.note_outlined,
@@ -178,10 +170,9 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
                     } else {
                       chosedPageFormat = PdfPageFormat.a5;
                     }
-                    if (chosedPageFormat == _selectedFormat) return;
-                    setState(() {
-                      _selectedFormat = chosedPageFormat;
-                    });
+                    if (chosedPageFormat ==
+                        printSettingListener.getSelectedFormat) return;
+                    notifyNewSelectedFormat(context, chosedPageFormat);
                   }
                 },
                 hint: "Select size",
@@ -208,56 +199,61 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
   }
 
   Widget getBody(BuildContext context) {
-    // Printing.layoutPdf
-    return PdfPreview(
-        pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
-        shareActionExtraEmails: const ["info@saffoury.com"],
-        initialPageFormat: _selectedFormat,
-        canDebug: false,
-        scrollViewDecoration:
-            BoxDecoration(color: Theme.of(context).colorScheme.background),
-        dynamicLayout: true,
-        loadingWidget: const CircularProgressIndicator(),
-        useActions: false,
-        
-        onError: (context, error) {
-          return EmptyWidget(
-              lottiUrl:
-                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-              onSubtitleClicked: () {
-                setState(() {});
-              },
-              title: AppLocalizations.of(context)!.cantConnect,
-              subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-        },
-        // shouldRepaint: ,
-        build: (format) async {
-          loadedFile =
-              getExcelFileUinit(context, widget.invoiceObj, _selectedFormat);
-          loadedFileBytes = await loadedFile;
-          return loadedFileBytes;
-        });
+    return getPdfPageSelectedFormatConsumer(
+      context,
+      builder: (_, selectedFormat) {
+        return PdfPreview(
+            pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
+            shareActionExtraEmails: const ["info@saffoury.com"],
+            initialPageFormat: selectedFormat,
+            canDebug: false,
+            scrollViewDecoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.background),
+            dynamicLayout: true,
+            loadingWidget: const CircularProgressIndicator(),
+            useActions: false,
+            onError: (context, error) {
+              return EmptyWidget(
+                  lottiUrl:
+                      "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+                  onSubtitleClicked: () {
+                    setState(() {});
+                  },
+                  title: AppLocalizations.of(context)!.cantConnect,
+                  subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+            },
+            // shouldRepaint: ,
+            build: (format) async {
+              loadedFile =
+                  getExcelFileUinit(context, widget.invoiceObj, selectedFormat);
+              loadedFileBytes = await loadedFile;
+              return loadedFileBytes;
+            });
+      },
+    );
   }
 
   @override
   Widget getFloatingActions(BuildContext context) {
-    return BaseFloatingActionButtons(
-      viewAbstract: widget.invoiceObj as ViewAbstract,
-      serverActions: ServerActions.print,
-      addOnList: [
-        if (isOtherFabVisible) getPrintShareFloating(context),
-        if (isOtherFabVisible)
-          const SizedBox(
-            width: kDefaultPadding,
-          ),
-        if (isOtherFabVisible) getPrintFloating(context),
-        if (isOtherFabVisible)
-          const SizedBox(
-            width: kDefaultPadding,
-          ),
-        getPrintPageO()
-      ],
-    );
+    return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
+      return BaseFloatingActionButtons(
+        viewAbstract: widget.invoiceObj as ViewAbstract,
+        serverActions: ServerActions.print,
+        addOnList: [
+          if (!isExpanded) getPrintShareFloating(context),
+          if (!isExpanded)
+            const SizedBox(
+              width: kDefaultPadding,
+            ),
+          if (!isExpanded) getPrintFloating(context),
+          if (!isExpanded)
+            const SizedBox(
+              width: kDefaultPadding,
+            ),
+          getPrintPageOptions()
+        ],
+      );
+    });
   }
 
   @override

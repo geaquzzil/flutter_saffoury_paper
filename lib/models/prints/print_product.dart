@@ -31,7 +31,9 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
 
   String? description;
 
-  PrintProduct() : super();
+  PrintProduct() : super() {
+    hasMultiplePageFormats = false;
+  }
 
   @override
   String? getPrintableSortByName() => null;
