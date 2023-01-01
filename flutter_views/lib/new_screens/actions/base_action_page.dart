@@ -10,13 +10,12 @@ import 'package:flutter_view_controller/new_screens/actions/base_floating_action
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/providers/actions/actions_providers.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
+import '../../screens/base_shared_actions_header.dart';
 import 'components/action_on_header_popup_widget.dart';
 
 abstract class BaseActionScreenPage extends StatefulWidget {

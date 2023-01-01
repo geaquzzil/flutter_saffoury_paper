@@ -25,7 +25,7 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_pa
 import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
@@ -33,8 +33,10 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/drawer/drawer_controler.dart';
+
 class FiltersAndSelectionListHeader extends StatelessWidget {
-  late DrawerViewAbstractListProvider drawerViewAbstractObsever;
+  late DrawerMenuControllerProvider drawerViewAbstractObsever;
   String customKey;
   ListMultiKeyProvider listProvider;
   FiltersAndSelectionListHeader(
@@ -47,7 +49,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     drawerViewAbstractObsever =
-        Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
+        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
     Widget? printButton =
         (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
                 2)

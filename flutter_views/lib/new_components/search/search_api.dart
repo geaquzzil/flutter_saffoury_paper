@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
 import 'package:endless/endless.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/drawer/drawer_controler.dart';
 
 class SearchWidgetApi extends StatelessWidget {
   String? _searchQuery;
@@ -14,7 +15,7 @@ class SearchWidgetApi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.read<DrawerViewAbstractListProvider>().getObject;
+        context.read<DrawerMenuControllerProvider>().getObject;
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(20),

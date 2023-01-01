@@ -19,7 +19,8 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_wi
 import 'package:flutter_view_controller/new_screens/lists/list_multible_views.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/debouncer.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
@@ -37,7 +38,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
-  late DrawerViewAbstractListProvider drawerViewAbstractObsever;
+  late DrawerMenuControllerProvider drawerViewAbstractObsever;
   GlobalKey<ListApiMasterState> searchKey = GlobalKey<ListApiMasterState>();
   Widget? startPane;
   Widget? searchPane;
@@ -45,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     drawerViewAbstractObsever =
-        Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
+        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
   }
 
   Widget _buildSearchBox(BuildContext context) {

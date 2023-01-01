@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/actions/action_viewabstract_provider.dart';
-import '../../../screens/base_shared_actions_header.dart';
 
 class MasterViewStandAlone extends StatelessWidget {
   ViewAbstractStandAloneCustomView viewAbstract;
@@ -32,8 +31,6 @@ class MasterViewStandAlone extends StatelessWidget {
             Size size = MediaQuery.of(context).size;
             return Expanded(
               child: Row(children: [
-
-                
                 Expanded(
                     flex: size.width > 1340 ? 8 : 2,
                     child: getMainWidget(context)),
@@ -48,31 +45,6 @@ class MasterViewStandAlone extends StatelessWidget {
 
   Widget getMainWidget(BuildContext context) {
     return viewAbstract.getCustomStandAloneWidget(context);
-    return Row(
-      children: [
-        // Expanded(flex: 1, child: Text("TEST")),
-        Expanded(
-          flex: 1,
-          child: Stack(alignment: Alignment.bottomCenter, fit: StackFit.loose,
-              // fit: BoxFit.contain,
-              children: [
-                SingleChildScrollView(
-                  controller: ScrollController(),
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BaseSharedHeaderViewDetailsActions(
-                        viewAbstract: viewAbstract,
-                      ),
-                      viewAbstract.getCustomStandAloneWidget(context)
-                    ],
-                  ),
-                ),
-              ]),
-        ),
-      ],
-    );
   }
 
   Widget getSideWidget(BuildContext context, Widget? hasCustomWidget) {

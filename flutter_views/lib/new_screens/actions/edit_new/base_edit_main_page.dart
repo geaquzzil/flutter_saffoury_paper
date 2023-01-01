@@ -26,7 +26,7 @@ import '../../../new_components/cards/outline_card.dart';
 import '../../../new_components/fabs/floating_action_button_extended.dart';
 import '../../../providers/actions/action_viewabstract_provider.dart';
 import '../../../providers/actions/list_multi_key_provider.dart';
-import '../../../screens/base_shared_actions_header.dart';
+
 import '../../home/components/empty_widget.dart';
 import '../../lists/list_api_selected_searchable_widget.dart';
 import '../../lists/list_static_editable.dart';
@@ -53,8 +53,6 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   Widget getBody(BuildContext context) {
-
-
     return SliverFillRemaining(
       fillOverscroll: true,
       hasScrollBody: false,

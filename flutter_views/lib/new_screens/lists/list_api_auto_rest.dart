@@ -29,9 +29,6 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     _scrollController.addListener(() => _onScroll());
 
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    listProvider.addListener(() {
-      debugPrint("list provider is changed ${listProvider.listMap}");
-    });
     _scrollController.addListener(() => _onScroll());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {

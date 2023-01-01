@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -34,9 +34,6 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
     _scrollController.addListener(() => _onScroll());
 
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    listProvider.addListener(() {
-      debugPrint("list provider is changed ${listProvider.listMap}");
-    });
     _scrollController.addListener(() => _onScroll());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
@@ -20,29 +21,29 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = SizeConfig.isLargeScreen(context)
-        ? context
-                .watch<ActionViewAbstractProvider>()
-                .getObject
-                ?.isEquals(object) ??
-            false
-        : false;
     return Dismissible(
-      key: UniqueKey(),
-      direction: object.getDismissibleDirection(),
-      background: object.getDismissibleBackground(context),
-      secondaryBackground: object.getDismissibleSecondaryBackground(context),
-      onDismissed: (direction) =>
-          object.onCardDismissedView(context, direction),
-      child: isSelected
-          ? ClippedCard(
-              borderSide: BorderSideColor.END,
-              elevation: 0,
-              color: Theme.of(context).colorScheme.primary,
-              child: getListTile(isSelected, context),
-            )
-          : getListTile(isSelected, context),
-    );
+        key: UniqueKey(),
+        direction: object.getDismissibleDirection(),
+        background: object.getDismissibleBackground(context),
+        secondaryBackground: object.getDismissibleSecondaryBackground(context),
+        onDismissed: (direction) =>
+            object.onCardDismissedView(context, direction),
+        child: Selector<ActionViewAbstractProvider, ViewAbstract?>(
+          builder: (context, value, child) {
+            bool isLargeScreen = SizeConfig.isLargeScreen(context);
+            bool isSelected =
+                (value?.isEquals(object) ?? false) && isLargeScreen;
+            return isSelected
+                ? ClippedCard(
+                    borderSide: BorderSideColor.END,
+                    elevation: 0,
+                    color: Theme.of(context).colorScheme.primary,
+                    child: getListTile(isSelected, context),
+                  )
+                : getListTile(isSelected, context);
+          },
+          selector: (p0, p1) => p1.getObject,
+        ));
   }
 
   Widget getListTile(bool isSelected, BuildContext context) {

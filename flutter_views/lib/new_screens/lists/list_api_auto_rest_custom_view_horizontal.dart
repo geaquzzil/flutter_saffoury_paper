@@ -42,9 +42,6 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     key = widget.autoRest.getCustomViewKey();
     debugPrint("_ListHorizontalApiWidgetState $key");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    listProvider.addListener(() {
-      debugPrint("list provider is changed ${listProvider.listMap}");
-    });
     _scrollController.addListener(() => _onScroll());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(key) == 0) {

@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item_sele
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 
 import 'list_api_master.dart';
-import 'list_api_master_stateless.dart';
 
 @immutable
 class ListApiSearchableWidget extends ListApiMaster {

@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/new_screens/home/components/notification
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -25,7 +25,7 @@ class _HeaderMainState extends State<HeaderMain> {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.read<DrawerViewAbstractListProvider>().getObject;
+        context.read<DrawerMenuControllerProvider>().getObject;
 
     // return ProfileMenu(icon: "", text: "dsa", press: () {});
     // return  SearchWidgetApi();

@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
 
 void notifyListApi(BuildContext context) {
-  ViewAbstract? v = context.read<DrawerViewAbstractListProvider>().getObject;
+  ViewAbstract? v = context.read<DrawerMenuControllerProvider>().getObject;
   v.setFilterableMap(context.read<FilterableProvider>().getList);
-  context
-      .read<DrawerViewAbstractListProvider>()
-      .changeWithFilterable(context, v);
+  context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
 }
 
 void notifyFilterableListApiIsCleared(BuildContext context) {
-  ViewAbstract? v = context.read<DrawerViewAbstractListProvider>().getObject;
+  ViewAbstract? v = context.read<DrawerMenuControllerProvider>().getObject;
   context
-      .read<DrawerViewAbstractListProvider>()
+      .read<DrawerMenuControllerProvider>()
       .change(context, v.getSelfNewInstance());
 }
 

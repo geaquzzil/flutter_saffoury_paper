@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -116,7 +116,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
     //Navigator.of(context).pop();
     context
-        .read<DrawerViewAbstractListProvider>()
+        .read<DrawerMenuControllerProvider>()
         .change(context, getSelfNewInstance() as ViewAbstract);
   }
 

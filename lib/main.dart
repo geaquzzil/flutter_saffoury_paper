@@ -30,11 +30,10 @@ import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/actions/actions_providers.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
@@ -45,7 +44,6 @@ import 'package:flutter_view_controller/providers/filterables/fliterable_list_pr
 import 'package:flutter_view_controller/providers/server_data.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_selected_item_controler.dart';
 
 import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
@@ -107,12 +105,11 @@ void main() async {
       ChangeNotifierProvider(
           create: (context) => PrintSettingLargeScreenProvider()),
       ChangeNotifierProvider(
-          create: (context) => DrawerMenuControllerProvider()),
+          create: (context) => DrawerMenuControllerProvider(initViewAbstract: Product())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
           create: (context) => AuthProvider.initialize(views)),
-      ChangeNotifierProvider(create: (_) => DrawerMenuSelectedItemController()),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
@@ -123,8 +120,6 @@ void main() async {
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
       ChangeNotifierProvider(create: (_) => LangaugeProvider()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
-      ChangeNotifierProvider(
-          create: (_) => DrawerViewAbstractListProvider(object: Product())),
       ChangeNotifierProvider(
           create: (_) => DrawerViewAbstractStandAloneProvider(null)),
       ChangeNotifierProvider(create: (_) => ListProvider()),

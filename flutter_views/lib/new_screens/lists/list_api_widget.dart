@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../new_components/loading_shimmer.dart';
 
 class ListApiWidget extends StatefulWidget {
-
   @override
   State<ListApiWidget> createState() => _ListApiWidgetState();
 }
@@ -16,7 +16,7 @@ class ListApiWidget extends StatefulWidget {
 class _ListApiWidgetState extends State<ListApiWidget> {
   final _scrollController = ScrollController();
   final ListProvider listProvider = ListProvider();
-  late DrawerViewAbstractListProvider drawerViewAbstractObsever;
+  late DrawerMenuControllerProvider drawerViewAbstractObsever;
 
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
@@ -26,10 +26,10 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     super.initState();
     _scrollController.addListener(() => _onScroll());
     drawerViewAbstractObsever =
-        Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
+        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
     drawerViewAbstractObsever.addListener(onChangedViewAbstract);
     listProvider
-        .fetchList(context.read<DrawerViewAbstractListProvider>().getObject);
+        .fetchList(context.read<DrawerMenuControllerProvider>().getObject);
   }
 
   Widget _listItems(List<ViewAbstract> data, ListProvider listProvider) {
@@ -133,7 +133,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider
-          .fetchList(context.read<DrawerViewAbstractListProvider>().getObject);
+          .fetchList(context.read<DrawerMenuControllerProvider>().getObject);
       // context
       //     .read<ListProvider>()
       //     .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
@@ -149,7 +149,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
 
   void onChangedViewAbstract() {
     if (mounted) {
-      listProvider.clear(viewAbstract: drawerViewAbstractObsever.object);
+      listProvider.clear(viewAbstract: drawerViewAbstractObsever.getObject);
       debugPrint("ViewAbstractProvider CHANGED");
     }
   }

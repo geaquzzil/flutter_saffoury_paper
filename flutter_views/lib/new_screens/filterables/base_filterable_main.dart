@@ -7,7 +7,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -26,20 +27,22 @@ class BaseFilterableMainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ViewAbstract drawerViewAbstract =
-        context.watch<DrawerViewAbstractListProvider>().getObject;
-
-    return FutureBuilder(
-        future: context
-            .read<FilterableListApiProvider<FilterableData>>()
-            .getServerData(drawerViewAbstract),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return getListFilterableControlers(context, drawerViewAbstract);
-          }
-          return Lottie.network(
-              "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json");
-        }));
+    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+      builder: (context, value, child) {
+        return FutureBuilder(
+            future: context
+                .read<FilterableListApiProvider<FilterableData>>()
+                .getServerData(value),
+            builder: ((context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return getListFilterableControlers(context, value);
+              }
+              return Lottie.network(
+                  "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json");
+            }));
+      },
+      selector: (p0, p1) => p1.getObject,
+    );
   }
 
   Widget getListFilterableControlers(

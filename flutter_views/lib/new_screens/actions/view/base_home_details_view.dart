@@ -11,86 +11,71 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../screens/action_screens/edit_details_page.dart';
-import '../../../screens/base_shared_actions_header.dart';
 
 class BaseSharedDetailsView extends StatelessWidget {
   BaseSharedDetailsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ActionViewAbstractProvider actionViewAbstractProvider =
-        context.watch<ActionViewAbstractProvider>();
+    return Selector<ActionViewAbstractProvider, ViewAbstract?>(
+      builder: (context, value, child) {
+        ActionViewAbstractProvider actionViewAbstractProvider =
+            context.read<ActionViewAbstractProvider>();
 
-    ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
-    // if (viewAbstract != null)
-    //   return MasterHomeHorizontal(
-    //     viewAbstract: viewAbstract,
-    //   );
-    Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
-    Widget? currentWidget;
-    if (customWidget != null) {
-      currentWidget = Center(
-        child: customWidget,
-      );
-    } else if (viewAbstract == null) {
-      currentWidget = Scaffold(body: getEmptyView(context));
-    } else {
-      switch (actionViewAbstractProvider.getServerActions) {
-        case ServerActions.edit:
-          debugPrint("ServerActions.edit ${viewAbstract.runtimeType} ");
-          // return EditDetailsPage(
-          //   object: viewAbstract,
-          // );
-          currentWidget = Container(
-            color: Theme.of(context).colorScheme.background,
-            child: BaseEditNewPage(
-              viewAbstract: viewAbstract,
-            ),
-          );
-          break;
-        case ServerActions.view:
-          currentWidget = Container(
-              color: Theme.of(context).colorScheme.background,
-              child: BaseViewNewPage(
-                viewAbstract: viewAbstract,
-              ));
-          break;
-        default:
-          currentWidget = MasterHomeHorizontal(viewAbstract: viewAbstract);
-          break;
-      }
-    }
-    return AnimatedSwitcher(
-      // key: UniqueKey(),
-      duration: Duration(milliseconds: 250),
-      child: currentWidget,
+        // ViewAbstract? viewAbstract = actionViewAbstractProvider.getObject;
+        // // if (viewAbstract != null)
+        // //   return MasterHomeHorizontal(
+        // //     viewAbstract: viewAbstract,
+        // //   );
+        // Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
+        // Widget? currentWidget;
+        // if (customWidget != null) {
+        //   currentWidget = Center(
+        //     child: customWidget,
+        //   );
+        // }
+        // else
+        Widget? currentWidget;
+        if (value == null) {
+          currentWidget = Scaffold(body: getEmptyView(context));
+        } else {
+          switch (actionViewAbstractProvider.getServerActions) {
+            case ServerActions.edit:
+              currentWidget = Container(
+                key: UniqueKey(),
+                color: Theme.of(context).colorScheme.background,
+                child: BaseEditNewPage(
+                  viewAbstract: value,
+                ),
+              );
+              break;
+            case ServerActions.view:
+              currentWidget = Container(
+                  key: UniqueKey(),
+                  color: Theme.of(context).colorScheme.background,
+                  child: BaseViewNewPage(
+                    viewAbstract: value,
+                  ));
+              break;
+            default:
+              currentWidget = MasterHomeHorizontal(viewAbstract: value);
+              break;
+          }
+        }
+        return AnimatedSwitcher(
+          // key: UniqueKey(),
+          duration: Duration(milliseconds: 250),
+          child: currentWidget,
+        );
+      },
+      selector: (p0, p1) => p1.getObject,
     );
-  }
-
-  Widget wrapHeaderAndFooter(Widget main, ViewAbstract viewAbstract) {
-    return Stack(
-        alignment: Alignment.bottomCenter,
-        fit: StackFit.loose,
-        children: [
-          Column(
-            children: [
-              BaseSharedHeaderViewDetailsActions(
-                viewAbstract: viewAbstract,
-              ),
-              Expanded(child: main)
-            ],
-          ),
-          if (viewAbstract is CartableProductItemInterface)
-            BottomWidgetOnViewIfCartable(
-                viewAbstract: viewAbstract as CartableProductItemInterface)
-          else
-            BottomWidgetOnViewIfViewAbstract(viewAbstract: viewAbstract)
-        ]);
   }
 
   Widget getEmptyView(BuildContext context) {
     //create a empty view with lottie
     return Center(
+      key: UniqueKey(),
       child: Lottie.network(
           "https://assets3.lottiefiles.com/private_files/lf30_gctc76jz.json"),
     );

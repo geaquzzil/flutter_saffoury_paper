@@ -1,10 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -61,10 +62,13 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
             title: (SizeConfig.isMobile(context) ||
                         SizeConfig.isFoldable(context)) &&
                     !widget.forceSearchBarAsEditText
-                ? Text(AppLocalizations.of(context)!.searchInFormat(context
-                    .watch<DrawerViewAbstractListProvider>()
-                    .getObject
-                    .getMainHeaderLabelTextOnly(context)))
+                ? Selector<DrawerMenuControllerProvider, ViewAbstract>(
+                    builder: (context, value, child) {
+                      return Text(AppLocalizations.of(context)!.searchInFormat(
+                          value.getMainHeaderLabelTextOnly(context)));
+                    },
+                    selector: (p0, p1) => p1.getObject,
+                  )
                 : TextField(
                     controller: widget.controller,
                   ),

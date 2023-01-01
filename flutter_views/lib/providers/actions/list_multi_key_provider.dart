@@ -6,30 +6,30 @@ import '../../models/auto_rest.dart';
 
 class ListMultiKeyProvider with ChangeNotifier {
   // ListMultiKeyProvider list= ListMultiKeyProvider();
-  Map<String, MultiListProviderHelper> listMap = {};
+  Map<String, MultiListProviderHelper> _listMap = {};
 
   int getCount(String key) {
-    return listMap[key]?.getCount ?? 0;
+    return _listMap[key]?.getCount ?? 0;
   }
 
   List<ViewAbstract> getList(String key) {
-    return listMap[key]?.getObjects ?? [];
+    return _listMap[key]?.getObjects ?? [];
   }
 
   bool isLoading(String key) {
-    return listMap[key]?.isLoading ?? false;
+    return _listMap[key]?.isLoading ?? false;
   }
 
   int getPage(String key) {
-    return listMap[key]?.page ?? 0;
+    return _listMap[key]?.page ?? 0;
   }
 
   bool isHasError(String key) {
-    return listMap[key]?.hasError ?? false;
+    return _listMap[key]?.hasError ?? false;
   }
 
   Future<void> edit(ViewAbstract obj) async {
-    await Future.forEach<MultiListProviderHelper>(listMap.values, (element) {
+    await Future.forEach<MultiListProviderHelper>(_listMap.values, (element) {
       ViewAbstract? o =
           element.objects.firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
@@ -49,7 +49,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   Future<void> delete(ViewAbstract obj) async {
-    await Future.forEach(listMap.values, (element) {
+    await Future.forEach(_listMap.values, (element) {
       (element as MultiListProviderHelper)
           .objects
           .removeWhere((element) => element.isEquals(obj));
@@ -60,7 +60,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   ///clear all the objects list and load the other objects list from viewAbstract if not null
   Future<void> clear(String key) async {
-    MultiListProviderHelper? multiListProviderHelper = listMap[key];
+    MultiListProviderHelper? multiListProviderHelper = _listMap[key];
     multiListProviderHelper?.objects.clear();
 
     notifyListeners();
@@ -68,7 +68,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   ///clear all the objects list and load the other objects list from viewAbstract if not null
   Future<void> recall(String key, ViewAbstract t, ResponseType type) async {
-    MultiListProviderHelper? multiListProviderHelper = listMap[key];
+    MultiListProviderHelper? multiListProviderHelper = _listMap[key];
     multiListProviderHelper?.objects.clear();
     multiListProviderHelper?.page = 0;
     multiListProviderHelper?.isLoading = false;
@@ -92,11 +92,11 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future fetchListSearch(
       String key, ViewAbstract viewAbstract, String query) async {
     late MultiListProviderHelper? multiListProviderHelper;
-    if (listMap.containsKey(key)) {
-      multiListProviderHelper = listMap[key];
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
     } else {
-      listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = listMap[key];
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
     multiListProviderHelper.isLoading = true;
@@ -117,11 +117,11 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   void addCustomList(String key, List<ViewAbstract> viewAbstract) async {
     late MultiListProviderHelper? multiListProviderHelper;
-    if (listMap.containsKey(key)) {
-      multiListProviderHelper = listMap[key];
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
     } else {
-      listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = listMap[key];
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper!.isLoading = false;
     multiListProviderHelper.objects.addAll(viewAbstract);
@@ -131,11 +131,11 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   void addCustomSingle(String key, ViewAbstract viewAbstract) async {
     late MultiListProviderHelper? multiListProviderHelper;
-    if (listMap.containsKey(key)) {
-      multiListProviderHelper = listMap[key];
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
     } else {
-      listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = listMap[key];
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper!.isLoading = false;
     multiListProviderHelper.objects.add(viewAbstract);
@@ -153,11 +153,11 @@ class ListMultiKeyProvider with ChangeNotifier {
     String key = first.getListableKeyWithoutCustomMap();
 
     late MultiListProviderHelper? multiListProviderHelper;
-    if (listMap.containsKey(key)) {
-      multiListProviderHelper = listMap[key];
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
     } else {
-      listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = listMap[key];
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
     int page = getPage(key);
@@ -198,11 +198,11 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future fetchList(String key, ViewAbstract viewAbstract,
       {AutoRest? autoRest}) async {
     late MultiListProviderHelper? multiListProviderHelper;
-    if (listMap.containsKey(key)) {
-      multiListProviderHelper = listMap[key];
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
     } else {
-      listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = listMap[key];
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
@@ -240,11 +240,11 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   Future fetchView(String key, ViewAbstract viewAbstract) async {
     late MultiListProviderHelper? multiListProviderHelper;
-    if (listMap.containsKey(key)) {
-      multiListProviderHelper = listMap[key];
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
     } else {
-      listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = listMap[key];
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
 

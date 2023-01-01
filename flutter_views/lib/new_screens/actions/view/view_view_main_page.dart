@@ -22,7 +22,7 @@ import '../../../constants.dart';
 import '../../../new_components/cards/outline_card.dart';
 import '../../lists/list_static_editable.dart';
 import '../../../providers/actions/list_multi_key_provider.dart';
-import '../../../screens/base_shared_actions_header.dart';
+
 import 'package:nil/nil.dart';
 
 class BaseViewNewPage extends BaseActionScreenPage {

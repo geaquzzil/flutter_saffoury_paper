@@ -6,7 +6,8 @@ import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.d
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -38,7 +39,7 @@ class BaseHomeLargeScreenLayout extends StatelessWidget {
         context.watch<LargeScreenPageProvider>().getCurrentPage;
 
     ViewAbstract viewAbstract =
-        context.watch<DrawerViewAbstractListProvider>().getObject;
+        context.watch<DrawerMenuControllerProvider>().getObject;
 
     ViewAbstractStandAloneCustomView? viewAbstractStandAloneCustomView =
         context.watch<DrawerViewAbstractStandAloneProvider>().getObject;
@@ -75,7 +76,7 @@ class BaseHomeLargeScreenLayout extends StatelessWidget {
             // It takes 5/6 part of the screen
             flex: size.width > 1340 ? 4 : 1,
             // flex: 4,
-            child:  ListApiSearchableWidget()),
+            child: ListApiSearchableWidget()),
 
         VerticalDivider(),
 
@@ -102,7 +103,7 @@ class BaseHomeLargeScreenLayout extends StatelessWidget {
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 10 : 2,
-              child:  Center(
+              child: Center(
                 child: BaseSharedDetailsView(),
               ))
       ]),

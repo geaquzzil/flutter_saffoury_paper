@@ -6,7 +6,6 @@ import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dar
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_large_screen_layout.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_small_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';

@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:provider/provider.dart';
 
 void main() => runApp(MultiProvider(providers: [
       ChangeNotifierProvider(
-          create: (_) => DrawerViewAbstractListProvider(object: Product()))
+          create: (_) =>
+              DrawerMenuControllerProvider(initViewAbstract: Product()))
     ], child: MyApp()));
 
 class MyApp extends StatelessWidget {

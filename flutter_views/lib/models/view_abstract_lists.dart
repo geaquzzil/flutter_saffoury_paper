@@ -69,19 +69,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
   }
 
-  Widget getCardLeadingCircleAvatarWithSelectedBorder(BuildContext context) {
-    return SizedBox(
-        width: 60,
-        height: 60,
-        child: CircleAvatar(
-            radius: 28, child: getCardLeadingImageWithFutureSelected(context)));
-  }
 
-  Widget getCardLeadingWithSelecedBorder(BuildContext context) {
-    return Hero(
-        tag: this,
-        child: (getCardLeadingCircleAvatarWithSelectedBorder(context)));
-  }
 
   Widget getHeroTag(
       {required BuildContext context,
@@ -143,17 +131,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  Widget getCardLeadingImageWithFutureSelected(BuildContext context,
-      {bool addBottomWidget = true}) {
-    bool isSelected = context
-            .watch<ActionViewAbstractProvider>()
-            .getObject
-            ?.isEquals(this as ViewAbstract) ??
-        false;
-
-    return getCardLeadingImage(context,
-        isSelected: isSelected, addBottomWidget: addBottomWidget);
-  }
 
   Widget getBlurringImage(BuildContext context, {bool addBottomWidget = true}) {
     String? imageUrl = getImageUrl(context);

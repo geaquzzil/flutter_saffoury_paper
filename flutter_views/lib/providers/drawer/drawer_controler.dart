@@ -1,8 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:provider/provider.dart';
+
+import 'drawer_viewabstract_stand_alone.dart';
 
 class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
+  ViewAbstract _object;
+  bool sideMenuOpen = true;
+  int _idx = 0;
+
   GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
+  DrawerMenuControllerProvider({required ViewAbstract initViewAbstract})
+      : _object = initViewAbstract;
+  int get getIndex => _idx;
+  bool get getSideMenuIsOpen => sideMenuOpen;
+  bool get getSideMenuIsClosed => !sideMenuOpen;
+  ViewAbstract get getObject => _object;
+
+  String getTitle(BuildContext context) =>
+      _object.getMainHeaderLabelTextOnly(context).toLowerCase();
+
+  void change(BuildContext context, ViewAbstract object) {
+    this._object = object;
+    notifyListeners();
+    context.read<FilterableProvider>().init(context, object);
+    context.read<DrawerViewAbstractStandAloneProvider>().change(context, null);
+  }
+
+  void changeWithFilterable(BuildContext context, ViewAbstract object) {
+    this._object = object;
+    notifyListeners();
+    context.read<DrawerViewAbstractStandAloneProvider>().change(context, null);
+  }
+
+  void changeDrawerIndex(int idx) {
+    _idx = idx;
+    notifyListeners();
+  }
+
+  void toggleIsOpen() {
+    sideMenuOpen = !sideMenuOpen;
+    notifyListeners();
+  }
+
+  void setSideMenuIsClosed({int? byIdx}) {
+    sideMenuOpen = false;
+    if (byIdx != null) {
+      _idx = byIdx;
+    }
+    notifyListeners();
+  }
+
+  void setSideMenuIsOpen() {
+    sideMenuOpen = true;
+    notifyListeners();
+  }
 
   void controlStartDrawerMenu() {
     if (!_startDrawerKey.currentState!.isDrawerOpen) {

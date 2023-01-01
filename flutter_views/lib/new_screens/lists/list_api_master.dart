@@ -11,7 +11,8 @@ import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dar
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -69,7 +70,7 @@ class ListApiMasterState extends State<ListApiMaster> {
   late ViewAbstract viewAbstract;
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
-  late DrawerViewAbstractListProvider drawerViewAbstractObsever;
+  late DrawerMenuControllerProvider drawerViewAbstractObsever;
   TextEditingController controller = TextEditingController();
   GlobalKey<FabsOnListWidgetState> fabsOnListWidgetState =
       GlobalKey<FabsOnListWidgetState>();
@@ -128,7 +129,7 @@ class ListApiMasterState extends State<ListApiMaster> {
     // },);
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     drawerViewAbstractObsever =
-        Provider.of<DrawerViewAbstractListProvider>(context, listen: false);
+        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
     drawerViewAbstractObsever.addListener(_onChangedViewAbstract);
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
@@ -136,12 +137,10 @@ class ListApiMasterState extends State<ListApiMaster> {
       viewAbstract = drawerViewAbstractObsever.getObject;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if(listProvider.getPage(getCustomKey())==0) {
+      if (listProvider.getPage(getCustomKey()) == 0) {
         listProvider.fetchList(getCustomKey(), viewAbstract);
       }
     });
-
-
   }
 
   @override
@@ -230,12 +229,12 @@ class ListApiMasterState extends State<ListApiMaster> {
         return true;
       },
       child: Scaffold(
-        floatingActionButton: widget.buildFabIfMobile
-            ? FabsOnListWidget(
-                customKey: findCustomKey(),
-                listProvider: listProvider,
-                key: fabsOnListWidgetState)
-            : null,
+        // floatingActionButton: widget.buildFabIfMobile
+        //     ? FabsOnListWidget(
+        //         customKey: findCustomKey(),
+        //         listProvider: listProvider,
+        //         key: fabsOnListWidgetState)
+        //     : null,
         body: Stack(
             alignment: Alignment.topCenter,
             fit: StackFit.loose,
@@ -362,7 +361,7 @@ class ListApiMasterState extends State<ListApiMaster> {
     //if we get viewAbstract from constructor then we dont need to do anything
     if (widget.viewAbstract != null) return;
 
-    viewAbstract = drawerViewAbstractObsever.object;
+    viewAbstract = drawerViewAbstractObsever.getObject;
     listProvider.fetchList(findCustomKey(), viewAbstract);
     debugPrint("ViewAbstractProvider CHANGED");
   }
