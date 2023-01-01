@@ -42,7 +42,11 @@ const String profileRouteName = 'profile';
 const String profileSigninInfoRouteName = 'profile-signin';
 const String subDetailsRouteName = 'shop-details';
 const String shoppingRouteName = 'shopping';
+const String printRouteName = 'print';
+const String viewRouteName = 'view';
+const String searchRouteName = "search";
 
+//https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
 class RouteGenerator {
   static final GoRouter goRouter = GoRouter(
     initialLocation: '/',
@@ -78,6 +82,43 @@ class RouteGenerator {
             // return POSPage();
             return const MaterialPage(child: BaseAuthenticatingScreen());
           }
+        },
+      ),
+      GoRoute(
+        name: printRouteName,
+        path: "/print/:tableName/:id",
+        pageBuilder: (context, state) {
+          return MaterialPage(
+              key: state.pageKey,
+              child: PdfPage(
+                iD: int.tryParse(state.params['id'] ?? "-"),
+                tableName: state.params['tableName'],
+                invoiceObj: state.extra as PrintableMaster,
+              ));
+        },
+      ),
+      GoRoute(
+        name: viewRouteName,
+        path: "/view/:tableName/:id",
+        pageBuilder: (context, state) {
+          return MaterialPage(
+              key: state.pageKey,
+              child: BaseViewNewPage(
+                viewAbstract: state.extra as ViewAbstract,
+              ));
+        },
+      ),
+      GoRoute(
+        name: searchRouteName,
+        path: "/search/:tableName",
+      
+        pageBuilder: (context, state) {
+          return MaterialPage(
+              key: state.pageKey,
+              child: SearchPage(
+                tableName: state.params["tableName"],
+                viewAbstract: state.extra as ViewAbstract?,
+              ));
         },
       ),
       GoRoute(
@@ -131,6 +172,8 @@ class RouteGenerator {
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
           } else if (args is ViewAbstract) {
             return PdfPage(
+              iD: null,
+              tableName: null,
               invoiceObj: args as PrintableMaster,
             );
           } else {
@@ -230,8 +273,10 @@ class RouteGenerator {
     return _errorRoute();
   }
 
-  static MaterialPageRoute<dynamic> getSearchPage() =>
-      MaterialPageRoute(builder: (context) => SearchPage());
+  static MaterialPageRoute<dynamic> getSearchPage() => MaterialPageRoute(
+      builder: (context) => SearchPage(
+            viewAbstract: null,
+          ));
 
   static MaterialPageRoute<dynamic> getHomePage() {
     return MaterialPageRoute(

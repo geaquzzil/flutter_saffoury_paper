@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:tuple/tuple.dart';
 import '../../new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import '../home/components/empty_widget.dart';
 import 'components/search_components.dart';
@@ -51,6 +53,12 @@ abstract class ListApiMaster extends StatefulWidget {
       required ListMultiKeyProvider listProvider});
 
   Widget getSharedLoadingItem(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(kDefaultPadding),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
     return SkeletonItem(
         child: Center(
       child: Text(AppLocalizations.of(context)!.loading),
@@ -181,6 +189,8 @@ class ListApiMasterState extends State<ListApiMaster> {
           value: listProvider,
           child: Consumer<ListMultiKeyProvider>(
               builder: (context, provider, listTile) {
+            debugPrint(
+                "ListApiMasterState building widget: ${findCustomKey()}");
             if (provider.isLoading(findCustomKey())) {
               if (provider.getCount(findCustomKey()) == 0) {
                 return getShimmerLoading();
@@ -239,55 +249,67 @@ class ListApiMasterState extends State<ListApiMaster> {
             alignment: Alignment.topCenter,
             fit: StackFit.loose,
             children: [
-              ChangeNotifierProvider.value(
-                value: listProvider,
-                child: Consumer<ListMultiKeyProvider>(
-                    builder: (context, provider, listTile) {
-                  if (provider.isLoading(findCustomKey())) {
-                    if (provider.getCount(findCustomKey()) == 0) {
-                      return getShimmerLoading();
-                    }
-                  } else {
-                    if (provider.getCount(findCustomKey()) == 0 &&
-                        provider.isHasError(findCustomKey())) {
-                      return getErrorWidget();
-                    } else if (provider.getCount(findCustomKey()) == 0) {
-                      return getEmptyWidget();
-                    }
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 75),
-                    child: AnimatedSwitcher(
-                        // transitionBuilder: (child, animation) => ScaleTransition(
-                        //   scale: animation,
-                        //   child: child,
-                        // ),
-                        duration: Duration(milliseconds: 500),
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            _refresh();
-                          },
-                          child: isSelectedMode
-                              ? widget.getListSelectedViewWidget(
-                                  key: findCustomKey(),
-                                  scrollController: _scrollController,
-                                  context: context,
-                                  listProvider: listProvider)
-                              : widget.getListViewWidget(
-                                  key: findCustomKey(),
-                                  scrollController: _scrollController,
-                                  context: context,
-                                  listProvider: listProvider),
-                        )),
-                  );
-                }),
-              ),
+              getConsumer(),
               if (!isSelectedMode && widget.buildSearchWidget)
                 SearchWidgetComponent(
                     controller: controller,
                     onSearchTextChanged: _onSearchTextChanged),
             ]),
       ),
+    );
+  }
+
+  Widget getConsumer() {
+    return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
+      builder: (context, value, child) {
+        debugPrint("ListApiMasterState building widget: ${findCustomKey()}");
+        bool isLoading = value.item1;
+        int count = value.item2;
+        bool isError = value.item3;
+
+        if (isLoading) {
+          if (count == 0) {
+            return getShimmerLoading();
+          }
+        } else {
+          if (count == 0 && isError) {
+            return getErrorWidget();
+          } else if (count == 0) {
+            return getEmptyWidget();
+          }
+        }
+        return getListBody(context);
+      },
+      selector: (p0, p1) => Tuple3(p1.isLoading(findCustomKey()),
+          p1.getCount(findCustomKey()), p1.isHasError(findCustomKey())),
+    );
+  }
+
+  Padding getListBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 75),
+      child: AnimatedSwitcher(
+          // transitionBuilder: (child, animation) => ScaleTransition(
+          //   scale: animation,
+          //   child: child,
+          // ),
+          duration: Duration(milliseconds: 500),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              _refresh();
+            },
+            child: isSelectedMode
+                ? widget.getListSelectedViewWidget(
+                    key: findCustomKey(),
+                    scrollController: _scrollController,
+                    context: context,
+                    listProvider: listProvider)
+                : widget.getListViewWidget(
+                    key: findCustomKey(),
+                    scrollController: _scrollController,
+                    context: context,
+                    listProvider: listProvider),
+          )),
     );
   }
 

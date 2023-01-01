@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
@@ -106,38 +107,51 @@ class _ListHorizontalApiWidgetState
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: listProvider,
-      child: Consumer<ListMultiKeyProvider>(
-          builder: (context, provider, listTile) {
-        int count = provider.getCount(widget.autoRest.key);
-        bool isLoading = provider.isLoading(widget.autoRest.key);
-        if (isLoading) {
-          return wrapHeader(
-              context,
-              const Center(
-                child: CircularProgressIndicator(),
-              ));
-        } else {
-          if (count == 0 && provider.isHasError(widget.autoRest.key)) {
-            return getErrorWidget(context);
-          } else if (count == 0) {
-            return getEmptyWidget(context);
-          }
-        }
-        if (count == 0 && isLoading) {
-          return wrapHeader(
-              context,
-              const Center(
-                child: CircularProgressIndicator(),
-              ));
-        } else if (count == 0 && !isLoading) {}
-        debugPrint("List api provider loaded ${listProvider.isLoading}");
-        return wrapHeader(
-            context,
-            _listItems(
-                listProvider.getList(widget.autoRest.key), listProvider));
-      }),
-    );
+        value: listProvider,
+        child: Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
+          builder: (context, value, child) {
+            debugPrint(
+                "ListHorizontalApiAutoRestWidget building widget: ${widget.autoRest.key}");
+            bool isLoading = value.item1;
+            int count = value.item2;
+            bool isError = value.item3;
+            if (isError) {
+              if (count == 0) {
+                return getErrorWidget(context);
+              } else {
+                return wrapHeader(
+                    context,
+                    _listItems(listProvider.getList(widget.autoRest.key),
+                        listProvider));
+              }
+            } else if (isLoading) {
+              if (count == 0) {
+                return wrapHeader(
+                    context,
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ));
+              } else {
+                return wrapHeader(
+                    context,
+                    _listItems(listProvider.getList(widget.autoRest.key),
+                        listProvider));
+              }
+            } else {
+              if (count == 0) {
+                return getEmptyWidget(context);
+              }
+              return wrapHeader(
+                  context,
+                  _listItems(
+                      listProvider.getList(widget.autoRest.key), listProvider));
+            }
+          },
+          selector: (p0, p1) => Tuple3(
+              p1.isLoading(widget.autoRest.key),
+              p1.getCount(widget.autoRest.key),
+              p1.isHasError(widget.autoRest.key)),
+        ));
   }
 
   Widget wrapHeader(BuildContext context, Widget child) {

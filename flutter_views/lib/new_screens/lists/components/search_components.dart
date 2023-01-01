@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -52,26 +54,21 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
-            onTap: SizeConfig.isMobile(context) ||
-                    SizeConfig.isFoldable(context) &&
-                        !widget.forceSearchBarAsEditText
-                ? () {
-                    Navigator.pushNamed(context, "/search", arguments: null);
-                  }
-                : null,
-            title: (SizeConfig.isMobile(context) ||
-                        SizeConfig.isFoldable(context)) &&
-                    !widget.forceSearchBarAsEditText
-                ? Selector<DrawerMenuControllerProvider, ViewAbstract>(
-                    builder: (context, value, child) {
-                      return Text(AppLocalizations.of(context)!.searchInFormat(
-                          value.getMainHeaderLabelTextOnly(context)));
-                    },
-                    selector: (p0, p1) => p1.getObject,
-                  )
-                : TextField(
-                    controller: widget.controller,
-                  ),
+            onTap: () => context.goNamed(searchRouteName,
+                extra: context.read<DrawerMenuControllerProvider>().getObject,
+                params: {
+                  "tableName": context
+                      .read<DrawerMenuControllerProvider>()
+                      .getObject
+                      .getTableNameApi()!
+                }),
+            title: Selector<DrawerMenuControllerProvider, ViewAbstract>(
+              builder: (context, value, child) {
+                return Text(AppLocalizations.of(context)!
+                    .searchInFormat(value.getMainHeaderLabelTextOnly(context)));
+              },
+              selector: (p0, p1) => p1.getObject,
+            ),
             trailing: CartIconWidget(
               onPressed: () {
                 context
@@ -94,7 +91,8 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     });
   }
 
-  Widget getLeadingWidget() {
+  Widget? getLeadingWidget() {
+    if (SizeConfig.isLargeScreen(context)) return null;
     return IconButton(
       icon: AnimatedIcon(
         icon: AnimatedIcons.arrow_menu,

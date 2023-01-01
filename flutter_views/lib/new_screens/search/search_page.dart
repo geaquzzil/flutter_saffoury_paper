@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
+import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_wi
 import 'package:flutter_view_controller/new_screens/lists/list_multible_views.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
@@ -30,7 +32,9 @@ import 'package:provider/provider.dart';
 import '../lists/list_api_master.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({super.key});
+  String? tableName;
+  ViewAbstract? viewAbstract;
+  SearchPage({super.key, required this.viewAbstract, this.tableName});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -38,40 +42,48 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
-  late DrawerMenuControllerProvider drawerViewAbstractObsever;
+
   GlobalKey<ListApiMasterState> searchKey = GlobalKey<ListApiMasterState>();
   Widget? startPane;
   Widget? searchPane;
+  late ViewAbstract viewAbstract;
   @override
   void initState() {
     super.initState();
-    drawerViewAbstractObsever =
-        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
+    if (widget.viewAbstract != null) {
+      viewAbstract = widget.viewAbstract!;
+    } else {
+      viewAbstract =
+          context.read<AuthProvider>().getNewInstance(widget.tableName!)!;
+    }
   }
 
   Widget _buildSearchBox(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(kDefaultPadding / 2),
       child: ListTile(
-        // tileColor: Colors.transparent,
-        leading: const Icon(Icons.search),
-        title: TextField(
-          textInputAction: TextInputAction.search,
-          onSubmitted: (value) async {
-            debugPrint("onSubmitted $value");
-            await Configurations.saveQueryHistory(
-                drawerViewAbstractObsever.getObject, value);
-            // setState(() {});
-            searchKey.currentState?.fetshListSearch(value);
-          },
-          controller: _controller,
-          decoration: InputDecoration(
-              fillColor: Colors.transparent,
-              hintText: AppLocalizations.of(context)?.search,
-              border: InputBorder.none),
-        ),
-        trailing: getFilterWidget(context),
-      ),
+          // tileColor: Colors.transparent,
+          leading: const Icon(Icons.search),
+          title: TextField(
+            textInputAction: TextInputAction.search,
+            onSubmitted: (value) async {
+              debugPrint("onSubmitted $value");
+              await Configurations.saveQueryHistory(viewAbstract, value);
+              // setState(() {});
+              searchKey.currentState?.fetshListSearch(value);
+            },
+            controller: _controller,
+            decoration: InputDecoration(
+                fillColor: Colors.transparent,
+                hintText: AppLocalizations.of(context)?.search,
+                border: InputBorder.none),
+          ),
+          trailing: CartIconWidget(
+            returnNillIfZero: true,
+            onPressed: () {
+              debugPrint("onPressed cart");
+            },
+          )),
     );
   }
 
@@ -149,7 +161,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget getSearchList() {
     return ListApiSearchableWidget(
       key: searchKey,
-      viewAbstract: drawerViewAbstractObsever.getObject.getSelfNewInstance()
+      viewAbstract: viewAbstract.getSelfNewInstance()
         ..setCustomMapAsSearchable(_controller.text),
       buildFabs: false,
       buildSearchWidget: false,
@@ -161,7 +173,6 @@ class _SearchPageState extends State<SearchPage> {
       // backgroundColor: Theme.of(context).colorScheme.primary,
       automaticallyImplyLeading: false,
       surfaceTintColor: Colors.transparent,
-      toolbarHeight: 100,
       flexibleSpace: Hero(
           tag: "/search",
           child: Material(
@@ -213,8 +224,7 @@ class _SearchPageState extends State<SearchPage> {
             groupName: AppLocalizations.of(context)!.basedOnYourLastSearch,
             icon: Icons.search),
         itemBuilder: (context) => FutureBuilder<List<String>>(
-              future: Configurations.loadListQuery(
-                  drawerViewAbstractObsever.getObject),
+              future: Configurations.loadListQuery(viewAbstract),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.data!.isEmpty) {
@@ -228,7 +238,7 @@ class _SearchPageState extends State<SearchPage> {
                               .map((e) => AutoRest(
                                   obj: getNewInstance()
                                     ..setCustomMapAsSearchable(e),
-                                  key: drawerViewAbstractObsever.getObject
+                                  key: viewAbstract
                                       .getListableKeyWithoutCustomMap()))
                               .toList()));
                 }
@@ -240,7 +250,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   ViewAbstract getNewInstance() {
-    return drawerViewAbstractObsever.getObject.getSelfNewInstance();
+    return viewAbstract.getSelfNewInstance();
   }
 
   ListStickyItem getSearchListItem(BuildContext context) {
@@ -276,8 +286,7 @@ class _SearchPageState extends State<SearchPage> {
             groupName: AppLocalizations.of(context)!.suggestionList,
             icon: Icons.info_outline),
         itemBuilder: (context) => FutureBuilder<List<String>>(
-              future: Configurations.loadListQuery(
-                  drawerViewAbstractObsever.getObject),
+              future: Configurations.loadListQuery(viewAbstract),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.data!.isEmpty) {

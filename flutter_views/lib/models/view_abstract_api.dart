@@ -182,6 +182,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<T?> viewCallGetFirstFromList(
     int iD,
   ) async {
+    this.iD = iD;
     var response = await getRespones(serverActions: ServerActions.view);
     if (response == null) return null;
     if (response.statusCode == 200) {
@@ -199,6 +200,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     int iD, {
     OnResponseCallback? onResponse,
   }) async {
+    this.iD = iD;
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.view);
     if (response == null) return null;

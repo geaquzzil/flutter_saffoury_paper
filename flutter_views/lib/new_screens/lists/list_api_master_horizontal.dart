@@ -4,9 +4,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:tuple/tuple.dart';
 
 class ListApiMasterHorizontal<T> extends StatefulWidget {
   T object;
@@ -139,23 +141,56 @@ class _ListApiMasterHorizontalState<T>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: listProvider,
-      child: Consumer<ListMultiKeyProvider>(
-          builder: (context, provider, listTile) {
+    return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
+      builder: (context, value, child) {
         debugPrint(
-            "listApiMasterHorizontal List api provider loaded ${findCustomKey()} count=> ${provider.getCount(findCustomKey())}");
-        if (provider.getCount(findCustomKey()) == 0) {
-          return Center(
-            child: const CircularProgressIndicator(
-              strokeWidth: 2,
-            ),
-          );
+            "ListHorizontalApiAutoRestWidget building widget: ${findCustomKey()}");
+        bool isLoading = value.item1;
+        int count = value.item2;
+        bool isError = value.item3;
+        if (isError) {
+          if (count == 0) {
+            return getEmptyWidget(context, isError: true);
+          } else {
+            return _listItems(
+                listProvider.getList(findCustomKey()), listProvider);
+          }
+        } else if (isLoading) {
+          if (count == 0) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return _listItems(
+                listProvider.getList(findCustomKey()), listProvider);
+          }
+        } else {
+          if (count == 0) {
+            return getEmptyWidget(context);
+          }
+          return _listItems(
+              listProvider.getList(findCustomKey()), listProvider);
         }
-
-        return _listItems(listProvider.getList(findCustomKey()), listProvider);
-      }),
+      },
+      selector: (p0, p1) => Tuple3(p1.isLoading(findCustomKey()),
+          p1.getCount(findCustomKey()), p1.isHasError(findCustomKey())),
     );
+  }
+
+  Widget getEmptyWidget(BuildContext context, {bool isError = false}) {
+    return EmptyWidget(
+        onSubtitleClicked: isError
+            ? () {
+                fetshList();
+              }
+            : null,
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        title: isError
+            ? AppLocalizations.of(context)!.cantConnect
+            : AppLocalizations.of(context)!.noItems,
+        subtitle: isError
+            ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+            : AppLocalizations.of(context)!.no_content);
   }
 
   @override

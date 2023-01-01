@@ -138,6 +138,12 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   Widget getBodyDetermineLayout() {
+    _tabs.clear();
+    _tabs.addAll(
+        widget.viewAbstract.getTabs(context, action: widget.getServerAction()));
+    _tabController = TabController(length: _tabs.length, vsync: this);
+    // return TowPaneExt(startPane: startPane, endPane: endPane)
+    return getNastedScrollView();
     if (SizeConfig.isDesktopOrWeb(context)) {
       return ListView(
         children: [

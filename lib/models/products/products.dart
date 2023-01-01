@@ -573,7 +573,7 @@ class Product extends ViewAbstract<Product>
     Map<String, String> hashMap = getCustomMap;
     hashMap["<maxWaste>"] = ("[\"100\"]");
     hashMap["<width>"] = ("[\"${getWidth()}\"]");
-    hashMap["<width>"] = ("[\"${getLength()}\"]");
+    hashMap["<length>"] = ("[\"${getLength()}\"]");
     hashMap["requireInventory"] = "yes";
     if (!isGeneralEmployee(context)) {
       hashMap["<status>"] = "[\"NONE\"]";
@@ -595,7 +595,7 @@ class Product extends ViewAbstract<Product>
       hashMap["<status>"] = "[\"NONE\"]";
     }
     hashMap["<width>"] = ("[\"${getWidth()}\"]");
-    hashMap["<width>"] = ("[\"${getLength()}\"]");
+    hashMap["<length>"] = ("[\"${getLength()}\"]");
     hashMap["<ProductTypeID>"] = "[\"${products_types?.iD}\"]";
     hashMap["requireInventory"] = "yes";
     return hashMap;
@@ -614,7 +614,7 @@ class Product extends ViewAbstract<Product>
         autoRest: AutoRest<Product>(
             range: 5,
             obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-            key: "similarProducts$iD"),
+            key: "similarProducts${getSimilarCustomParams(context)}"),
       ),
       ListHorizontalApiAutoRestWidget(
         customHeight: 200,
@@ -623,7 +623,8 @@ class Product extends ViewAbstract<Product>
             range: 5,
             obj: Product()
               ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
-            key: "productsWithSimilarSize$iD"),
+            key:
+                "productsWithSimilarSize${getSimilarWithSameSizeCustomParams(context)}"),
       )
     ];
   }

@@ -18,7 +18,9 @@ import 'package:flutter_view_controller/new_screens/actions/base_floating_action
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
+import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -35,40 +37,81 @@ import 'dart:math' as math;
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
 class PdfPage<T extends PrintLocalSetting> extends BasePdfPage {
-  PrintableMaster<T> invoiceObj;
+  int? iD;
+  String? tableName;
+  PrintableMaster<T>? invoiceObj;
 
-  PdfPage({Key? key, required this.invoiceObj})
+  PdfPage(
+      {Key? key,
+      required this.invoiceObj,
+      required this.iD,
+      required this.tableName})
       : super(key: key, title: "test");
 
   @override
-  _PdfPageState createState() => _PdfPageState();
+  _PdfPageState<T> createState() => _PdfPageState<T>();
 }
 
-class _PdfPageState extends BasePdfPageState<PdfPage> {
+class _PdfPageState<T extends PrintLocalSetting>
+    extends BasePdfPageState<PdfPage, PrintableMaster<T>?> {
   late Future<Uint8List> loadedFile;
   late Uint8List loadedFileBytes;
+
+  _PdfPageState({super.iD, super.tableName, super.extras});
+
+  @override
+  void initState() {
+    iD = widget.iD;
+    tableName = widget.tableName;
+    extras = widget.invoiceObj as PrintableMaster<T>?;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    iD = widget.iD;
+    tableName = widget.tableName;
+    extras = widget.invoiceObj as PrintableMaster<T>?;
+    super.didChangeDependencies();
+  }
+
   bool getBodyWithoutApi() {
-    bool canGetBody = (widget.invoiceObj as ViewAbstract)
+    bool canGetBody = (getExtras() as ViewAbstract)
             .isRequiredObjectsList()?[ServerActions.view] ==
         null;
     if (canGetBody) {
       debugPrint("BaseEditWidget getBodyWithoutApi skiped");
       return true;
     }
-    bool res = (widget.invoiceObj as ViewAbstract).isNew() ||
-        (widget.invoiceObj as ViewAbstract).isRequiredObjectsListChecker();
+    bool res = (getExtras() as ViewAbstract).isNew() ||
+        (getExtras() as ViewAbstract).isRequiredObjectsListChecker();
     debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
     return res;
   }
 
   @override
-  Widget getFutureBody(BuildContext context) {
+  Future<PrintableMaster<T>?> getCallApiFunctionIfNull(BuildContext context) {
+    if (getExtras() == null) {
+      ViewAbstract newViewAbstract =
+          context.read<AuthProvider>().getNewInstance(tableName!)!;
+      return newViewAbstract.viewCallGetFirstFromList(iD!)
+          as Future<PrintableMaster<T>>;
+    } else {
+      return (getExtras() as ViewAbstract)
+              .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD)
+          as Future<PrintableMaster<T>>;
+    }
+  }
+
+  @override
+  Widget getFutureBody(BuildContext context, PrintableMaster<T>? newObject,
+      PdfPageFormat formt) {
     if (getBodyWithoutApi()) {
-      return getBody(context);
+      return getBody(context, formt);
     }
     return FutureBuilder(
-      future: (widget.invoiceObj as ViewAbstract)
-          .viewCallGetFirstFromList((widget.invoiceObj as ViewAbstract).iD),
+      future: (newObject as ViewAbstract)
+          .viewCallGetFirstFromList((newObject as ViewAbstract).iD),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return EmptyWidget(
@@ -82,11 +125,12 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
         } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             widget.invoiceObj = snapshot.data as PrintableMaster;
+
             context
                 .read<ListMultiKeyProvider>()
                 .edit(snapshot.data as ViewAbstract);
 
-            return getBody(context);
+            return getBody(context, formt);
           } else {
             return EmptyWidget(
                 lottiUrl:
@@ -198,46 +242,40 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
     return (MediaQuery.of(context).size.width / 3) - kDefaultPadding;
   }
 
-  Widget getBody(BuildContext context) {
-    return getPdfPageSelectedFormatConsumer(
-      context,
-      builder: (_, selectedFormat) {
-        return PdfPreview(
-            pdfFileName: widget.invoiceObj.getPrintableQrCodeID(),
-            shareActionExtraEmails: const ["info@saffoury.com"],
-            initialPageFormat: selectedFormat,
-            canDebug: false,
-            scrollViewDecoration:
-                BoxDecoration(color: Theme.of(context).colorScheme.background),
-            dynamicLayout: true,
-            loadingWidget: const CircularProgressIndicator(),
-            useActions: false,
-            onError: (context, error) {
-              return EmptyWidget(
-                  lottiUrl:
-                      "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-                  onSubtitleClicked: () {
-                    setState(() {});
-                  },
-                  title: AppLocalizations.of(context)!.cantConnect,
-                  subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-            },
-            // shouldRepaint: ,
-            build: (format) async {
-              loadedFile =
-                  getExcelFileUinit(context, widget.invoiceObj, selectedFormat);
-              loadedFileBytes = await loadedFile;
-              return loadedFileBytes;
-            });
-      },
-    );
+  Widget getBody(BuildContext contextm, PdfPageFormat selectedFormat) {
+    return PdfPreview(
+        pdfFileName: getExtras()!.getPrintableQrCodeID(),
+        shareActionExtraEmails: const ["info@saffoury.com"],
+        initialPageFormat: selectedFormat,
+        canDebug: false,
+        scrollViewDecoration:
+            BoxDecoration(color: Theme.of(context).colorScheme.background),
+        dynamicLayout: true,
+        loadingWidget: const CircularProgressIndicator(),
+        useActions: false,
+        onError: (context, error) {
+          return EmptyWidget(
+              lottiUrl:
+                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+              onSubtitleClicked: () {
+                setState(() {});
+              },
+              title: AppLocalizations.of(context)!.cantConnect,
+              subtitle: error.toString());
+        },
+        // shouldRepaint: ,
+        build: (format) async {
+          loadedFile = getExcelFileUinit(context, getExtras()!, selectedFormat);
+          loadedFileBytes = await loadedFile;
+          return loadedFileBytes;
+        });
   }
 
   @override
   Widget getFloatingActions(BuildContext context) {
     return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
       return BaseFloatingActionButtons(
-        viewAbstract: widget.invoiceObj as ViewAbstract,
+        viewAbstract: getExtras() as ViewAbstract,
         serverActions: ServerActions.print,
         addOnList: [
           if (!isExpanded) getPrintShareFloating(context),
@@ -257,13 +295,14 @@ class _PdfPageState extends BasePdfPageState<PdfPage> {
   }
 
   @override
-  Future<ViewAbstract?> getSettingObject(BuildContext context) {
-    return getSettingLoadDefaultIfNull(context, widget.invoiceObj);
+  Future<ViewAbstract?>? getSettingObject(BuildContext context) {
+    if (getExtras() == null) return null;
+    return getSettingLoadDefaultIfNull(context, getExtras()!);
   }
 
   @override
   ViewAbstract getMainObject() {
-    return widget.invoiceObj as ViewAbstract;
+    return getExtras() as ViewAbstract;
   }
 }
 

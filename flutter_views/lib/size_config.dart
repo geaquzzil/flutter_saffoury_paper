@@ -39,7 +39,10 @@ class SizeConfig {
   }
 
   static bool isLargeScreen(BuildContext context) {
-    return isDesktop(context) || isFoldableWithOpenDualScreen(context);
+    bool isSupported =
+        isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
+    if (!isSupported) return false;
+    return MediaQuery.of(context).size.width >= 500;
   }
 
   static bool isFoldableWithSingleScreen(BuildContext context) {
@@ -61,6 +64,7 @@ class SizeConfig {
   }
 
   static double? getDrawerWidth(BuildContext context) {
+    if (kIsWeb) return 256;
     if (SizeConfig.isMobile(context) ||
         SizeConfig.isFoldableWithSingleScreen(context)) {
       return MediaQuery.of(context).size.width * .75;
@@ -83,13 +87,16 @@ class SizeConfig {
 
   static bool isTablet(BuildContext context) => Device.get().isTablet;
   static bool hasSecondScreen(BuildContext context) {
-    return isDesktop(context) || isFoldable(context);
+    return isDesktopOrWeb(context) || isFoldable(context);
   }
 
   static bool isWeb() => kIsWeb;
 
-  static bool isDesktopOrWeb(BuildContext context) =>
-      isDesktop(context) || isWeb();
+  static bool isDesktopOrWeb(BuildContext context) {
+    if (isWeb()) return true;
+    return isDesktop(context);
+  }
+
   static bool isDesktop(BuildContext context) =>
       Platform.isWindows || Platform.isLinux || Platform.isMacOS;
 }

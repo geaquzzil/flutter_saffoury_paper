@@ -17,18 +17,7 @@ class TowPaneExt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      // return Text("Dasd");
-      return TwoPane(
-          // padding: EdgeInsets.only(
-          //     top: kToolbarHeight + MediaQuery.of(context).padding.top),
-          panePriority: TwoPanePriority.both,
-          direction: Axis.horizontal,
-          paneProportion: customPaneProportion ?? .3,
-          startPane: startPane,
-          endPane: endPane ?? Text("its not going to be visible"));
-    }
-    bool isSingleScreen = SizeConfig.isMobile(context);
+    bool isSingleScreen = !SizeConfig.isLargeScreen(context);
     var panePriority = TwoPanePriority.both;
     if (isSingleScreen || endPane == null) {
       panePriority = TwoPanePriority.start;

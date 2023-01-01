@@ -8,7 +8,7 @@ import 'drawer_viewabstract_stand_alone.dart';
 class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
   ViewAbstract _object;
-  bool sideMenuOpen = true;
+  bool sideMenuOpen = false;
   int _idx = 0;
 
   GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;

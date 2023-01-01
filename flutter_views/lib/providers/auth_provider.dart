@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -56,6 +57,13 @@ class AuthProvider with ChangeNotifier {
     _drawerItems = drawerItems;
     initFakeData();
   }
+
+  ViewAbstract? getNewInstance(String tableName) {
+    return _drawerItems.firstWhereOrNull(
+      (p0) => p0.getTableNameApi() == tableName,
+    );
+  }
+
   void initFakeData() async {
     await Future.delayed(const Duration(seconds: 2));
     try {

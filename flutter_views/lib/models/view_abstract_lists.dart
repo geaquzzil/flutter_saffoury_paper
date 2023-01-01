@@ -10,9 +10,11 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
@@ -68,8 +70,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         backgroundColor: Theme.of(context).backgroundColor,
         child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
   }
-
-
 
   Widget getHeroTag(
       {required BuildContext context,
@@ -130,7 +130,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       ),
     );
   }
-
 
   Widget getBlurringImage(BuildContext context, {bool addBottomWidget = true}) {
     String? imageUrl = getImageUrl(context);
@@ -361,8 +360,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       //       ));
       //   return;
       // }
-
-      Navigator.pushNamed(context, "/print", arguments: this);
+      // context.goNamed(printRouteName,
+      //     extra: this,
+      //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
+      context.pushNamed(printRouteName,
+          params: {"tableName": getTableNameApi()!, "id": "$iD"}, extra: this);
+      // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       Navigator.pushNamed(context, "/edit", arguments: this);

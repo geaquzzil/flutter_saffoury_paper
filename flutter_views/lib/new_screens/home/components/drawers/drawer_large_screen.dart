@@ -29,54 +29,48 @@ class DrawerLargeScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-
+    // return getBody(false, context);
     // bool isHovered = context.watch<IsHoveredOnDrawerClosed>().isHovered;
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
-        return AnimatedSize(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.fastOutSlowIn,
-          child: SizedBox(
-            height: double.maxFinite,
-            width: isOpen ? SizeConfig.getDrawerWidth(context) : 60,
-            // color: Colors.blueGrey,
-            child: Card(
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                fit: StackFit.loose,
-                children: [
-                  CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(child: buildHeader(context, isOpen)),
-                      // buildList(context, isOpen),
-                      buildListSliver(context, isOpen)
-                    ],
-                  ),
-                  // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-
-                  //   // const Spacer(),
-                  // ]),
-
-                  buildDrawerFooter(context, isOpen),
-                  // buildProfilePic(context, isOpen),
-                ],
-              ),
-            ),
-          ),
-        );
+        return getBody(isOpen, __);
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
   }
 
-  double? getOpenWidthSize(BuildContext context) {
-    if (SizeConfig.isDesktop(context)) {
-      return 256;
-    }
-    if (SizeConfig.isTablet(context)) {
-      return MediaQuery.of(context).size.width * .25;
-    }
-    return MediaQuery.of(context).size.width * .75;
+  AnimatedSize getBody(bool isOpen, BuildContext context) {
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.fastOutSlowIn,
+      child: SizedBox(
+        height: double.maxFinite,
+        width: isOpen ? SizeConfig.getDrawerWidth(context) : 60,
+        // color: Colors.blueGrey,
+        child: Card(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            fit: StackFit.loose,
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(child: buildHeader(context, isOpen)),
+                  // buildList(context, isOpen),
+                  buildListSliver(context, isOpen)
+                ],
+              ),
+              // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+
+              //   // const Spacer(),
+              // ]),
+
+              buildDrawerFooter(context, isOpen),
+              // buildProfilePic(context, isOpen),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildDrawerFooter(BuildContext context, bool isOpen) {
@@ -86,13 +80,13 @@ class DrawerLargeScreens extends StatelessWidget {
       children: [
         // const Divider(),
         Container(
-            color: Theme.of(context).colorScheme.background,
+            color: isOpen ? Theme.of(context).colorScheme.background : null,
             child: buildProfilePic(context, isOpen)),
         Container(
-            color: Theme.of(context).colorScheme.background,
+            color: isOpen ? Theme.of(context).colorScheme.background : null,
             child: const Divider()),
         Container(
-            color: Theme.of(context).colorScheme.background,
+            color: isOpen ? Theme.of(context).colorScheme.background : null,
             child: buildCollapseIcon(context, isOpen)),
       ],
     );
@@ -230,7 +224,7 @@ class DrawerLargeScreens extends StatelessWidget {
 
           NotificationPopupWidget(),
           buildLanguageIcon(context),
-          if (SizeConfig.isDesktop(context))
+          if (SizeConfig.isDesktopOrWeb(context))
             buildColapsedIcon(
               context,
               Icons.arrow_back_ios,
@@ -425,7 +419,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
     DrawerMenuControllerProvider ds =
         context.watch<DrawerMenuControllerProvider>();
 
-    if (SizeConfig.isDesktop(context)) {
+    if (SizeConfig.isDesktopOrWeb(context)) {
       return OnHoverWidget(
           scale: false,
           builder: (onHover) {
@@ -446,7 +440,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
                     ? null
                     : Container(child: viewAbstract.getMainLabelText(context)),
                 onTap: () {
-                  if (SizeConfig.isDesktop(context)) {
+                  if (SizeConfig.isDesktopOrWeb(context)) {
                     context
                         .read<DrawerMenuControllerProvider>()
                         .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
@@ -466,7 +460,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
         selected: ds.getIndex == viewAbstract.hashCode,
         title: viewAbstract.getMainLabelText(context),
         onTap: () {
-          if (SizeConfig.isDesktop(context)) {
+          if (SizeConfig.isDesktopOrWeb(context)) {
             context
                 .read<DrawerMenuControllerProvider>()
                 .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);

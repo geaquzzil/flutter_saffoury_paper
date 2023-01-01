@@ -4,9 +4,11 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../configrations.dart';
 import '../../new_screens/setting/base_shared_detail_modifidable.dart';
@@ -16,30 +18,33 @@ abstract class BasePdfPage extends StatefulWidget {
   BasePdfPage({super.key, required this.title});
 }
 
-abstract class BasePdfPageState<T extends BasePdfPage> extends State<T> {
+abstract class BasePdfPageState<T extends BasePdfPage, C>
+    extends BaseApiCallPageState<T, C> {
+  BasePdfPageState({super.iD, super.tableName, super.extras});
+
   Widget getFloatingActions(BuildContext context);
 
-  Widget getFutureBody(BuildContext context);
+  Widget getFutureBody(BuildContext context, C newObject, PdfPageFormat format);
   Future<ViewAbstract?>? getSettingObject(BuildContext context);
   ViewAbstract getMainObject();
   late PrintSettingLargeScreenProvider printSettingListener;
   // bool hasSetting
 
   @override
+  Widget buildAfterCall(BuildContext context, C newObject) {
+    return TowPaneExt(
+      startPane: SizeConfig.isMobile(context)
+          ? getFirstPane(context, newObject)
+          : (getEndPane(context) ?? getFirstPane(context, newObject)),
+      endPane: getFirstPane(context, newObject),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     printSettingListener =
         Provider.of<PrintSettingLargeScreenProvider>(context, listen: false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TowPaneExt(
-      startPane: SizeConfig.isMobile(context)
-          ? getFirstPane(context)
-          : (getEndPane(context) ?? getFirstPane(context)),
-      endPane: getFirstPane(context),
-    );
   }
 
   Widget? getEndPane(BuildContext context) {
@@ -78,19 +83,6 @@ abstract class BasePdfPageState<T extends BasePdfPage> extends State<T> {
     );
   }
 
-  Widget getPdfPageSelectedFormatConsumer(
-      BuildContext context,
-      {required Widget Function(BuildContext, PdfPageFormat) builder}) {
-    return Selector<PrintSettingLargeScreenProvider, PdfPageFormat>(
-      builder: (_, selectedFormat, __) {
-        debugPrint(
-            "BasePdfPageConsumer Selector => getPdfPageSelectedFormatConsumer");
-        return builder(_, selectedFormat);
-      },
-      selector: (ctx, provider) => provider.getSelectedFormat,
-    );
-  }
-
   void notifyNewSelectedFormat(
       BuildContext context, PdfPageFormat selectedFormat) {
     printSettingListener.setSelectedFormat = selectedFormat;
@@ -107,25 +99,27 @@ abstract class BasePdfPageState<T extends BasePdfPage> extends State<T> {
     printSettingListener.setViewAbstract = viewAbstract;
   }
 
-  Widget getPdfPageConsumer(BuildContext context) {
-    return Selector<PrintSettingLargeScreenProvider, ViewAbstract?>(
+  Widget getPdfPageConsumer(BuildContext context, C newObject) {
+    return Selector<PrintSettingLargeScreenProvider,
+        Tuple2<ViewAbstract?, PdfPageFormat>>(
       builder: (_, provider, __) {
         debugPrint("BasePdfPageConsumer Selector =>  getPdfPageConsumer");
-        return getFutureBody(context);
+        return getFutureBody(context, newObject, provider.item2);
       },
-      selector: (ctx, provider) => provider.getViewAbstract,
+      selector: (ctx, provider) =>
+          Tuple2(provider.getViewAbstract, provider.getSelectedFormat),
     );
   }
 
-  Widget getFirstPane(BuildContext context) {
+  Widget getFirstPane(BuildContext context, C newObject) {
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getFloatingActions(context),
-        body: getPdfPreview(context));
+        body: getPdfPreview(context, newObject));
   }
 
-  CustomScrollView getPdfPreview(BuildContext context) {
+  CustomScrollView getPdfPreview(BuildContext context, C newObject) {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -138,7 +132,7 @@ abstract class BasePdfPageState<T extends BasePdfPage> extends State<T> {
           ),
         ),
         SliverFillRemaining(
-          child: Center(child: getPdfPageConsumer(context)),
+          child: Center(child: getPdfPageConsumer(context, newObject)),
         )
       ],
     );

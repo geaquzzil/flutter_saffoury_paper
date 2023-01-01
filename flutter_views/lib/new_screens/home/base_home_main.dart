@@ -38,7 +38,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget? endPane;
   @override
   Widget build(BuildContext context) {
-    firstPane ??= getFirstPane(context);
+    firstPane = getFirstPane(context);
     endPane ??= getEndPane();
     return Scaffold(
       key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
@@ -90,47 +90,49 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     );
   }
 
-  BaseSharedDetailsView getEndPane() => BaseSharedDetailsView();
+  Widget getEndPane() => BaseSharedDetailsView();
 
   GestureDetector getFirstPane(BuildContext context) {
     return GestureDetector(
-      onVerticalDragUpdate: (details) {
-        int sensitivity = 8;
-        if (details.delta.dy > sensitivity) {
-          debugPrint("BaseHomePage downSwipe");
-          showBottomSheetExt(
-            context: context,
-            builder: (p0) {
-              return QrCodeReader();
-            },
-          );
-          // setState(() {
-          //   cameraView = true;
-          // });
-          // Down Swipe
-        } else if (details.delta.dy < -sensitivity) {
-          debugPrint("BaseHomePage Up Swipe");
-          // Up Swipe
-          // setState(() {
-          //   cameraView = false;
-          // });
-        }
-      },
-      child: Scaffold(
-        bottomNavigationBar: getBottomNavigationBar(),
-
-        resizeToAvoidBottomInset: false,
-        // bottomSheet: SizeConfig.isMobile(context) ? QrCodeReader() : null,
-        // resizeToAvoidBottomInset: true,
-        appBar: getAppBar(),
-
-        body: SizeConfig.isMobile(context)
-            ? SafeArea(
-                child: getMainBodyIndexedStack(context),
-              )
-            : SafeArea(child: ListApiSearchableWidget()),
-      ),
-    );
+        onVerticalDragUpdate: (details) {
+          int sensitivity = 8;
+          if (details.delta.dy > sensitivity) {
+            debugPrint("BaseHomePage downSwipe");
+            showBottomSheetExt(
+              context: context,
+              builder: (p0) {
+                return QrCodeReader();
+              },
+            );
+            // setState(() {
+            //   cameraView = true;
+            // });
+            // Down Swipe
+          } else if (details.delta.dy < -sensitivity) {
+            debugPrint("BaseHomePage Up Swipe");
+            // Up Swipe
+            // setState(() {
+            //   cameraView = false;
+            // });
+          }
+        },
+        child: Scaffold(
+            bottomNavigationBar: getBottomNavigationBar(),
+            resizeToAvoidBottomInset: false,
+            // bottomSheet: SizeConfig.isMobile(context) ? QrCodeReader() : null,
+            // resizeToAvoidBottomInset: true,
+            appBar: getAppBar(),
+            body: SizeConfig.isLargeScreen(context)
+                ? SafeArea(
+                    child: Row(
+                    children: [
+                      DrawerLargeScreens(),
+                      Expanded(child: ListApiSearchableWidget()),
+                    ],
+                  ))
+                : SafeArea(
+                    child: getMainBodyIndexedStack(context),
+                  )));
   }
 
   Widget getMainBodyIndexedStack(BuildContext context) {
