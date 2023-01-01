@@ -5,21 +5,18 @@ import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 
 class CartProvider with ChangeNotifier {
   late CartableInvoiceMasterObjectInterface _cartObject;
-
+  Widget? _checkoutWidget;
   CartableInvoiceMasterObjectInterface get getCartableInvoice => _cartObject;
-
+  CartProcessType _cartType = CartProcessType.PROCESS;
+  
   CartProvider.init(CartableInvoiceMasterObjectInterface cartObject) {
     _cartObject = cartObject;
   }
-  // List<CartableProductItemInterface> list = [];
-  Widget? _checkoutWidget;
 
   List<CartableInvoiceDetailsInterface> get getList =>
       _cartObject.getDetailList();
 
   int get getCount => getList.length;
-
-  CartProcessType _cartType = CartProcessType.PROCESS;
 
   CartProcessType get getProcessType => _cartType;
 
@@ -37,7 +34,7 @@ class CartProvider with ChangeNotifier {
     _cartObject.onCartItemAdded(context, idx, detail, quantiy: qu);
     notifyListeners();
   }
-  
+
   void onCartItemChanged(
       BuildContext context, int idx, CartableInvoiceDetailsInterface detail) {
     _cartObject.onCartItemChanged(context, idx, detail);

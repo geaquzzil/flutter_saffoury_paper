@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_list.dart';
@@ -67,7 +68,13 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
                 : TextField(
                     controller: widget.controller,
                   ),
-            trailing: getTrailingWidget(),
+            trailing: CartIconWidget(
+              onPressed: () {
+                context
+                    .read<DrawerMenuControllerProvider>()
+                    .controlEndDrawerMenu();
+              },
+            ),
           ),
         ),
       ),
@@ -91,46 +98,6 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       ),
       onPressed: () {
         context.read<DrawerMenuControllerProvider>().controlStartDrawerMenu();
-      },
-    );
-  }
-
-  Widget? getTrailingWidget() {
-    if (SizeConfig.isMobile(context)) {
-      if (context.watch<CartProvider>().getCount == 0) return null;
-      return Badge(
-        badgeColor: Theme.of(context).colorScheme.primary,
-        badgeContent: Text(
-          "${context.watch<CartProvider>().getCount}",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-        ),
-        toAnimate: true,
-        animationType: BadgeAnimationType.scale,
-        animationDuration: const Duration(milliseconds: 50),
-        showBadge: context.watch<CartProvider>().getCount > 0,
-        child: buildColapsedIcon(
-          context,
-          Icons.shopping_cart_rounded,
-          () {
-            context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu();
-          },
-        ),
-      );
-    } else {
-      return null;
-    }
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.close_menu,
-        progress: _animationController,
-      ),
-      onPressed: () {
-        widget.controller.clear();
-        widget.onSearchTextChanged('');
-        _handleOnPressed();
       },
     );
   }

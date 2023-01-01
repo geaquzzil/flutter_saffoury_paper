@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
@@ -213,27 +214,13 @@ class DrawerLargeScreens extends StatelessWidget {
               //     .setCurrentPage(CurrentPage.settings);
             },
           ),
-          Badge(
-            badgeColor: Theme.of(context).colorScheme.primary,
-            badgeContent: Text(
-              "${context.watch<CartProvider>().getCount}",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-            ),
-            toAnimate: true,
-            animationType: BadgeAnimationType.scale,
-            showBadge: context.watch<CartProvider>().getCount > 0,
-            child: buildColapsedIcon(
-              context,
-              Icons.shopping_cart_rounded,
-              () {
-                context
-                    .read<DrawerMenuControllerProvider>()
-                    .controlEndDrawerMenu();
-              },
-            ),
+          CartIconWidget(
+            returnNillIfZero: false,
+            onPressed: () {
+              context
+                  .read<DrawerMenuControllerProvider>()
+                  .controlEndDrawerMenu();
+            },
           ),
 
           NotificationPopupWidget(),

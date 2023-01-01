@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
@@ -24,24 +25,10 @@ class CollapsedIcons extends StatelessWidget {
         // const SizedBox(
         //   width: kDefaultPadding / 2,
         // ),
-        Badge(
-          badgeContent: Text("${context.watch<CartProvider>().getCount}"),
-          toAnimate: true,
-          animationType: BadgeAnimationType.scale,
-          showBadge: context.watch<CartProvider>().getCount > 0,
-          child: RoundedIconButton(
-              onTap: () {
-                // context
-                //     .read<EndDrawerProvider>()
-                //     .change();
-                context
-                    .read<DrawerMenuControllerProvider>()
-                    .controlEndDrawerMenu();
-              },
-              // onTap: () => context
-              //     .read<EndDrawerProvider>()
-              //     .changeAndOpen(context, BaseHomeCartPage()),
-              icon: Icons.shopping_cart_rounded),
+        CartIconWidget(
+          onPressed: () {
+            context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu();
+          },
         ),
         const SizedBox(
           width: kDefaultPadding / 2,
