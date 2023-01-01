@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -24,27 +25,90 @@ import 'authentecation/base_authentication_screen.dart';
 import 'actions/edit_new/base_edit_main_page.dart';
 import 'home/base_home_main.dart';
 
+const String rootRouteName = 'root';
+const String cartRouteName = 'cart';
+const String createAccountRouteName = 'create-account';
+const String detailsRouteName = 'details';
+const String homeRouteName = 'home';
+const String loggedInKey = 'LoggedIn';
+const String loginRouteName = 'login';
+const String moreInfoRouteName = 'moreInfo';
+const String paymentRouteName = 'payment';
+const String personalRouteName = 'personal';
+const String profileMoreInfoRouteName = 'profile-moreInfo';
+const String profilePaymentRouteName = 'profile-payment';
+const String profilePersonalRouteName = 'profile-personal';
+const String profileRouteName = 'profile';
+const String profileSigninInfoRouteName = 'profile-signin';
+const String subDetailsRouteName = 'shop-details';
+const String shoppingRouteName = 'shopping';
+
 class RouteGenerator {
+  static final GoRouter goRouter = GoRouter(
+    initialLocation: '/',
+    // redirect: (context, state) async {
+    //   Status authStatus = context.read<AuthProvider>().getStatus;
+    //   if (authStatus == Status.Initialization) {
+    //     return "/home";
+    //   }
+    //   return "/";
+    // },
+    errorPageBuilder: (context, state) => MaterialPage(
+      key: state.pageKey,
+      child: getErrorPage(),
+    ),
+    // redirect: (context, state) {
+
+    // },
+    routes: <RouteBase>[
+      GoRoute(
+        name: homeRouteName,
+        path: "/home",
+        pageBuilder: (context, state) =>
+            MaterialPage(child: BaseHomeMainPage()),
+      ),
+      GoRoute(
+        path: '/',
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          Status authStatus = context.read<AuthProvider>().getStatus;
+          if (authStatus == Status.Authenticated) {
+            // return POSPage();
+            return const MaterialPage(child: BaseHomeMainPage());
+          } else {
+            // return POSPage();
+            return const MaterialPage(child: BaseAuthenticatingScreen());
+          }
+        },
+      ),
+      GoRoute(
+        name: loginRouteName,
+        path: "/login",
+        pageBuilder: (context, state) {
+          return MaterialPage(key: state.pageKey, child: SignInPage());
+        },
+      )
+    ],
+  );
+
+  static Scaffold getErrorPage() {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Error'),
+      ),
+      body: const Center(
+        child: Text('ERROR'),
+      ),
+    );
+  }
+
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(
-          builder: (context) {
-            // return BaseHomeMainPage();
-            Status authStatus = context.read<AuthProvider>().getStatus;
-            if (authStatus == Status.Authenticated) {
-              // return POSPage();
-              return const BaseHomeMainPage();
-            } else {
-              // return POSPage();
-              return BaseAuthenticatingScreen();
-            }
-          },
-        );
+        return getHomePage();
 
       case "/search":
-        return MaterialPageRoute(builder: (context) => SearchPage());
+        return getSearchPage();
       case '/sign_in':
         return MaterialPageRoute(builder: (context) => const SignInPage());
 
@@ -52,7 +116,7 @@ class RouteGenerator {
       //     return MaterialPageRoute(builder: (context) => const SignInPage());
       case "/settings":
         return MaterialPageRoute(builder: (context) {
-          return SettingPage();
+          return const SettingPage();
         });
       case "/dashboard":
         return MaterialPageRoute(builder: (context) {
@@ -166,13 +230,32 @@ class RouteGenerator {
     return _errorRoute();
   }
 
+  static MaterialPageRoute<dynamic> getSearchPage() =>
+      MaterialPageRoute(builder: (context) => SearchPage());
+
+  static MaterialPageRoute<dynamic> getHomePage() {
+    return MaterialPageRoute(
+      builder: (context) {
+        // return BaseHomeMainPage();
+        Status authStatus = context.read<AuthProvider>().getStatus;
+        if (authStatus == Status.Authenticated) {
+          // return POSPage();
+          return const BaseHomeMainPage();
+        } else {
+          // return POSPage();
+          return const BaseAuthenticatingScreen();
+        }
+      },
+    );
+  }
+
   static Route<dynamic> _errorRoute() {
     return MaterialPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Error'),
+          title: const Text('Error'),
         ),
-        body: Center(
+        body: const Center(
           child: Text('ERROR'),
         ),
       );

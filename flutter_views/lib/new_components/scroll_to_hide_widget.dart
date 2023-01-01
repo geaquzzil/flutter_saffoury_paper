@@ -29,7 +29,7 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
   @override
   void initState() {
     super.initState();
-    
+
     widget.controller?.addListener(listen);
   }
 
@@ -68,11 +68,12 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: widget.duration,
-      height: getHeight(),
+      height: 0,
       child: Wrap(children: [widget.child]),
     );
   }
 
+  //TODO NOT WATCH
   double getHeight() {
     if (widget.controller == null) {
       return context.watch<ListScrollProvider>().isScrollForward()

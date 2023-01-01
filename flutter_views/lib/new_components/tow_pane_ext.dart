@@ -1,5 +1,6 @@
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -16,6 +17,17 @@ class TowPaneExt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      // return Text("Dasd");
+      return TwoPane(
+          // padding: EdgeInsets.only(
+          //     top: kToolbarHeight + MediaQuery.of(context).padding.top),
+          panePriority: TwoPanePriority.both,
+          direction: Axis.horizontal,
+          paneProportion: customPaneProportion ?? .3,
+          startPane: startPane,
+          endPane: endPane ?? Text("its not going to be visible"));
+    }
     bool isSingleScreen = SizeConfig.isMobile(context);
     var panePriority = TwoPanePriority.both;
     if (isSingleScreen || endPane == null) {

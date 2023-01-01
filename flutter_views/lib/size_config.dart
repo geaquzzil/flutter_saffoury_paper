@@ -37,9 +37,11 @@ class SizeConfig {
     if (SizeConfig.isTablet(context)) return 0.4;
     return 0.4;
   }
-  static bool isLargeScreen(BuildContext context){
+
+  static bool isLargeScreen(BuildContext context) {
     return isDesktop(context) || isFoldableWithOpenDualScreen(context);
   }
+
   static bool isFoldableWithSingleScreen(BuildContext context) {
     return MediaQuery.of(context).hinge == null && isSingleScreen(context);
   }
@@ -49,7 +51,7 @@ class SizeConfig {
   }
 
   static bool isSingleScreen(BuildContext context) {
-    double width= MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     debugPrint("isSingleScreen screenWidth $width");
     return width < 500;
   }
@@ -75,6 +77,7 @@ class SizeConfig {
   }
 
   static bool isMobile(BuildContext context) {
+    if (kIsWeb) return false;
     return Device.get().isPhone || isFoldableWithSingleScreen(context);
   }
 

@@ -96,17 +96,17 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         child:
             Consumer<LangaugeProvider>(builder: (context, provider, listTile) {
           return DynamicColorBuilder(
-            builder: (lightDynamic, darkDynamic) => MaterialApp(
-              scrollBehavior: SizeConfig.isDesktop(context)
-                  ? const MaterialScrollBehavior().copyWith(
-                      dragDevices: {
-                        PointerDeviceKind.mouse,
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.stylus,
-                        PointerDeviceKind.unknown
-                      },
-                    )
-                  : null,
+            builder: (lightDynamic, darkDynamic) => MaterialApp.router(
+              // scrollBehavior: SizeConfig.isDesktop(context)
+              //     ? const MaterialScrollBehavior().copyWith(
+              //         dragDevices: {
+              //           PointerDeviceKind.mouse,
+              //           PointerDeviceKind.touch,
+              //           PointerDeviceKind.stylus,
+              //           PointerDeviceKind.unknown
+              //         },
+              //       )
+              //     : null,
               supportedLocales: AppLocalizations.supportedLocales,
               locale: langaugeProvider.getLocale,
               localizationsDelegates: const [
@@ -134,8 +134,14 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
               title: "SSSS",
               debugShowCheckedModeBanner: false,
               restorationScopeId: 'root',
-              initialRoute: '/',
-              onGenerateRoute: RouteGenerator.generateRoute,
+              // routeInformationParser:
+              //     RouteGenerator.goRouter.routeInformationParser,
+              // routerDelegate: RouteGenerator.goRouter.routerDelegate,
+              // routeInformationProvider:
+              //     RouteGenerator.goRouter.routeInformationProvider,
+              routerConfig: RouteGenerator.goRouter,
+              // initialRoute: '/',
+              // onGenerateRoute: RouteGenerator.generateRoute,
 
               theme: ThemeData(
                 scaffoldBackgroundColor: lightDynamic?.background,
