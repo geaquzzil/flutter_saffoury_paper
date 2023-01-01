@@ -68,6 +68,7 @@ dependencies:
   nil: ^1.1.1
   go_router: ^6.0.0
   tuple: ^2.0.1
+  animations: ^2.0.7
   
   
 dev_dependencies:

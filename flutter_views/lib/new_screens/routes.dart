@@ -72,18 +72,42 @@ class RouteGenerator {
             MaterialPage(child: BaseHomeMainPage()),
       ),
       GoRoute(
-        path: '/',
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          Status authStatus = context.read<AuthProvider>().getStatus;
-          if (authStatus == Status.Authenticated) {
-            // return POSPage();
-            return const MaterialPage(child: BaseHomeMainPage());
-          } else {
-            // return POSPage();
-            return const MaterialPage(child: BaseAuthenticatingScreen());
-          }
-        },
-      ),
+          path: '/',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            Status authStatus = context.read<AuthProvider>().getStatus;
+            if (authStatus == Status.Authenticated) {
+              // return POSPage();
+              return const MaterialPage(child: BaseHomeMainPage());
+            } else {
+              // return POSPage();
+              return const MaterialPage(child: BaseAuthenticatingScreen());
+            }
+          },
+          routes: [
+            GoRoute(
+              name: viewRouteName,
+              path: "view/:tableName/:id",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: BaseViewNewPage(
+                      viewAbstract: state.extra as ViewAbstract,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: searchRouteName,
+              path: "search/:tableName",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: SearchPage(
+                      tableName: state.params["tableName"],
+                      viewAbstract: state.extra as ViewAbstract?,
+                    ));
+              },
+            ),
+          ]),
       GoRoute(
         name: printRouteName,
         path: "/print/:tableName/:id",
@@ -94,30 +118,6 @@ class RouteGenerator {
                 iD: int.tryParse(state.params['id'] ?? "-"),
                 tableName: state.params['tableName'],
                 invoiceObj: state.extra as PrintableMaster,
-              ));
-        },
-      ),
-      GoRoute(
-        name: viewRouteName,
-        path: "/view/:tableName/:id",
-        pageBuilder: (context, state) {
-          return MaterialPage(
-              key: state.pageKey,
-              child: BaseViewNewPage(
-                viewAbstract: state.extra as ViewAbstract,
-              ));
-        },
-      ),
-      GoRoute(
-        name: searchRouteName,
-        path: "/search/:tableName",
-      
-        pageBuilder: (context, state) {
-          return MaterialPage(
-              key: state.pageKey,
-              child: SearchPage(
-                tableName: state.params["tableName"],
-                viewAbstract: state.extra as ViewAbstract?,
               ));
         },
       ),
@@ -305,5 +305,76 @@ class RouteGenerator {
         ),
       );
     });
+  }
+}
+
+class HeroPageRoute extends PageRouteBuilder {
+  final String tag;
+  final Widget child;
+  HeroPageRoute({
+    required this.tag,
+    required this.child,
+  }) : super(
+          transitionDuration: Duration(milliseconds: 1000),
+          reverseTransitionDuration: Duration(milliseconds: 1000),
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) {
+            return Hero(
+              tag: tag,
+              createRectTween: (Rect? begin, Rect? end) {
+                return CurvedRectArcTween(begin: begin, end: end);
+              },
+              child: PageRouteTransition(
+                child: child,
+                animation: animation,
+              ),
+            );
+          },
+        );
+}
+
+class CurvedRectArcTween extends MaterialRectArcTween {
+  CurvedRectArcTween({
+    Rect? begin,
+    Rect? end,
+  }) : super(begin: begin, end: end);
+  @override
+  Rect lerp(double t) {
+    Cubic easeInOut = Cubic(0.42, 0.0, 0.58, 1.0);
+    double curvedT = easeInOut.transform(t);
+    return super.lerp(curvedT);
+  }
+}
+
+class PageRouteTransition extends AnimatedWidget {
+  const PageRouteTransition({
+    Key? key,
+    required this.child,
+    required this.animation,
+  }) : super(key: key, listenable: animation);
+  final Widget child;
+  final Animation<double> animation;
+  static final opacityTween = Tween<double>(begin: 0.0, end: 1.0);
+  static final elevationTween = Tween<double>(begin: 6.0, end: 0.0);
+  static final borderRadiusTween = BorderRadiusTween(
+    begin: BorderRadius.circular(100.0),
+    end: BorderRadius.zero,
+  );
+  @override
+  Widget build(BuildContext context) {
+    final animation = listenable as Animation<double>;
+    return Material(
+      color: Colors.blue,
+      clipBehavior: Clip.antiAlias,
+      elevation: elevationTween.evaluate(animation),
+      borderRadius: borderRadiusTween.evaluate(animation),
+      child: Opacity(
+        opacity: opacityTween.evaluate(animation),
+        child: child,
+      ),
+    );
   }
 }
