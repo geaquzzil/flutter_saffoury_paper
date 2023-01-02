@@ -11,26 +11,45 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   bool sideMenuOpen = false;
   int _idx = 0;
 
-  GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
+  int _navigationIndex = 0;
+  bool _navigationRailIsOpen = false;
+
   DrawerMenuControllerProvider({required ViewAbstract initViewAbstract})
       : _object = initViewAbstract;
   int get getIndex => _idx;
   bool get getSideMenuIsOpen => sideMenuOpen;
   bool get getSideMenuIsClosed => !sideMenuOpen;
   ViewAbstract get getObject => _object;
+  GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
+  int get getNavigationIndex => _navigationIndex;
+  bool get getNavigationRailIsOpen => _navigationRailIsOpen;
+
+  set setNavigationIndex(int index) {
+    _navigationIndex = index;
+    notifyListeners();
+  }
+
+  void setNavigationRailIsOpen({bool? isOpen}) {
+    if (isOpen == null) {
+      _navigationRailIsOpen = !_navigationRailIsOpen;
+    } else {
+      _navigationRailIsOpen = isOpen!;
+    }
+    notifyListeners();
+  }
 
   String getTitle(BuildContext context) =>
       _object.getMainHeaderLabelTextOnly(context).toLowerCase();
 
   void change(BuildContext context, ViewAbstract object) {
-    this._object = object;
+    _object = object;
     notifyListeners();
     context.read<FilterableProvider>().init(context, object);
     context.read<DrawerViewAbstractStandAloneProvider>().change(context, null);
   }
 
   void changeWithFilterable(BuildContext context, ViewAbstract object) {
-    this._object = object;
+    _object = object;
     notifyListeners();
     context.read<DrawerViewAbstractStandAloneProvider>().change(context, null);
   }

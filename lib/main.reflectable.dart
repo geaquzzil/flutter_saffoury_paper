@@ -33973,7 +33973,8 @@ final _data = <r.Reflectable, r.ReflectorData>{
         r'setFilterableMap': (dynamic instance) => instance.setFilterableMap,
         r'searchByAutoCompleteTextInput': (dynamic instance) =>
             instance.searchByAutoCompleteTextInput,
-        r'getHorizotalList': (dynamic instance) => instance.getHorizotalList,
+        r'getHorizotalList': (dynamic instance) =>
+            instance.getHomeHorizotalList,
         r'isEqualsAsType': (dynamic instance) => instance.isEqualsAsType,
         r'isEquals': (dynamic instance) => instance.isEquals,
         r'copyWithNewSuggestion': (dynamic instance) =>

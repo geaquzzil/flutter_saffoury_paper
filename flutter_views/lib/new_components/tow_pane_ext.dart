@@ -17,6 +17,9 @@ class TowPaneExt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (endPane == null) {
+      return startPane;
+    }
     bool isSingleScreen = !SizeConfig.isLargeScreen(context);
     var panePriority = TwoPanePriority.both;
     if (isSingleScreen || endPane == null) {

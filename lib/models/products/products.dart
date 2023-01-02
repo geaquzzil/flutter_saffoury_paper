@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -65,6 +67,7 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:supercharged/supercharged.dart';
+import '../../widgets/list_product_type_category.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/orders.dart';
 import '../invoices/priceless_invoices/products_inputs.dart';
@@ -511,7 +514,8 @@ class Product extends ViewAbstract<Product>
     return SortByType.DESC;
   }
 
-  Widget getWelcomHome(BuildContext context) {
+  @override
+  Widget? getHomeHeaderWidget(BuildContext context) {
     return const ListTile(
       leading: Icon(Icons.account_circle),
       title: Text("Welcom back"),
@@ -520,27 +524,67 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  List<Widget> getHorizotalList(BuildContext context) {
+  List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
     return [
-      getWelcomHome(context),
-      Row(
-        children: [
-          Expanded(
-            child: ListHorizontalCustomViewApiAutoRestWidget(
-                titleString: "TEST1 ",
-                autoRest: ChangesRecords.init(Product(), "status")),
-          ),
-          Expanded(
-            child: ListHorizontalCustomViewApiAutoRestWidget(
-                titleString: "TEST1 ",
-                autoRest: ChangesRecords.init(Product(), "ProductTypeID")),
-          )
-        ],
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: 1,
+        child: ListHorizontalApiAutoRestWidget(
+          isSliver: true,
+          titleString: "Category",
+          listItembuilder: (v) =>
+              ListItemProductTypeCategory(productType: v as ProductType),
+          autoRest: AutoRest<ProductType>(
+              obj: ProductType.init(true), key: "ProductType<Category>"),
+        ),
       ),
-      ListHorizontalCustomViewApiAutoRestWidget(
-          titleString: "TEST1 ",
-          autoRest: ChartRecordAnalysis.init(
-              Order(), DateObject(), EnteryInteval.monthy)),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 1,
+        mainAxisCellCount: 1,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            titleString: "TEST1 ",
+            autoRest: ChangesRecords.init(Product(), "status")),
+      ),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 1,
+        mainAxisCellCount: 1,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            titleString: "TEST1 ",
+            autoRest: ChartRecordAnalysis.init(
+                Order(), DateObject(), EnteryInteval.monthy)),
+      ),
+
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: 1,
+        child: ListHorizontalApiAutoRestWidget(
+          isSliver: true,
+          titleString: "Today",
+          // listItembuilder: (v) => SizedBox(
+          //     width: 100, height: 100, child: POSListCardItem(object: v)),
+          autoRest: AutoRest<Product>(
+              obj: Product()
+                ..setCustomMap(
+                    {"<dateEnum>": "[\"Today\"]", "requireInventory": "true"}),
+              key: "productsByType<dateEnum>thisDay"),
+        ),
+      ),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: 1,
+        child: ListHorizontalApiAutoRestWidget(
+          isSliver: true,
+          titleString: "This week",
+          listItembuilder: (v) => PosCardSquareItem(object: v),
+          autoRest: AutoRest<Product>(
+              obj: Product()
+                ..setCustomMap({
+                  "<dateEnum>": "[\"This week\"]",
+                  "requireInventory": "true"
+                }),
+              key: "productsByType<dateEnum>thisWeek"),
+        ),
+      ),
 
       // ListHorizontalCustomViewApiAutoRestWidget(
       //     titleString: "TEST1 ", autoRest: UnusedRecords.init(Product())),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -11,7 +12,11 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   bool? selected;
   ViewAbstract() : super();
 
-  List<Widget> getHorizotalList(BuildContext context) => [];
+  List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) => [];
+
+  Widget? getHomeHeaderWidget(BuildContext context) {
+    return null;
+  }
 
   bool isEqualsAsType(ViewAbstract? object) {
     if (object == null) {
@@ -134,9 +139,11 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return "${AppLocalizations.of(context)!.add_new} ${getMainHeaderLabelTextOnly(context)}";
   }
 
-  List<Widget>? getCustomBottomWidget(BuildContext context, ServerActions action) {}
+  List<Widget>? getCustomBottomWidget(
+      BuildContext context, ServerActions action) {}
 
-  List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {}
+  List<Widget>? getCustomTopWidget(
+      BuildContext context, ServerActions action) {}
 }
 
 class ListableDataRow {

@@ -93,6 +93,6 @@ class MasterHomeHorizontal extends StatelessWidget {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: viewAbstract.getHorizotalList(context)));
+            children: viewAbstract.getHomeHorizotalList(context)));
   }
 }

@@ -16,12 +16,14 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   Widget? title;
   double customHeight;
   String? titleString;
+  bool isSliver;
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
       {Key? key,
       required this.autoRest,
       this.title,
       this.titleString,
+      this.isSliver = false,
       this.customHeight = 230,
       this.listItembuilder})
       : super(key: key);
@@ -159,6 +161,9 @@ class _ListHorizontalApiWidgetState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildHeader(context),
+        // if (widget.isSliver)
+        //   child
+        // else
         SizedBox(height: widget.customHeight, child: child)
       ],
     );
