@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as Math;
+
+import 'package:flutter_view_controller/ext_utils.dart';
 
 class SizeConfig {
   static double screenWidth = 0;
@@ -37,17 +40,22 @@ class SizeConfig {
     if (SizeConfig.isTablet(context)) return 0.4;
     return 0.4;
   }
- static bool isSoLargeScreen(BuildContext context) {
+
+  static bool isSoLargeScreen(BuildContext context) {
+    debugSize(context);
     bool isSupported =
         isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
-    return MediaQuery.of(context).size.width >= 800;
+    return MediaQuery.of(context).size.width >= largeTablet;
   }
+
   static bool isLargeScreen(BuildContext context) {
+    debugSize(context);
     bool isSupported =
         isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
-    return MediaQuery.of(context).size.width >= 500;
+    bool hasSpace = MediaQuery.of(context).size.width >= 500;
+    return hasSpace;
   }
 
   static bool isFoldableWithSingleScreen(BuildContext context) {
@@ -55,17 +63,29 @@ class SizeConfig {
   }
 
   static bool isFoldableWithOpenDualScreen(BuildContext context) {
-    return MediaQuery.of(context).hinge != null && !isSingleScreen(context);
+    return isFoldable(context) && !isSingleScreen(context);
+  }
+
+  static void debugSize(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    debugPrint(
+        "debugSize screenWidth ${size.width} screenHeight ${size.height}");
+
+    debugPrint(
+        "debugSize displayFeatures ${MediaQuery.of(context).displayFeatures}");
   }
 
   static bool isSingleScreen(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    debugPrint("isSingleScreen screenWidth $width");
     return width < 500;
   }
 
   static bool isFoldable(BuildContext context) {
-    return MediaQuery.of(context).hinge != null;
+    bool isFold = MediaQuery.of(context).displayFeatures.firstWhereOrNull(
+            (element) => element.type == DisplayFeatureType.fold) !=
+        null;
+
+    return MediaQuery.of(context).hinge != null || isFold;
   }
 
   static double? getDrawerWidth(BuildContext context) {
