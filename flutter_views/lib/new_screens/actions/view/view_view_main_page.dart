@@ -26,10 +26,7 @@ import '../../../providers/actions/list_multi_key_provider.dart';
 import 'package:nil/nil.dart';
 
 class BaseViewNewPage extends BaseActionScreenPage {
-  ViewAbstract viewAbstract;
-
-  BaseViewNewPage({Key? key, required this.viewAbstract})
-      : super(key: key, viewAbstract: viewAbstract);
+  BaseViewNewPage({super.key, required super.viewAbstract}) : super();
 
   @override
   State<BaseActionScreenPage> createState() => _BaseViewNewPage();
@@ -52,5 +49,10 @@ class _BaseViewNewPage extends BaseActionScreenPageState {
         onPressed: () async {},
         icon: Icon(Icons.edit),
         label: Text(AppLocalizations.of(context)!.edit));
+  }
+
+  @override
+  Widget? getSliverImageBackground(BuildContext context) {
+    return null;
   }
 }

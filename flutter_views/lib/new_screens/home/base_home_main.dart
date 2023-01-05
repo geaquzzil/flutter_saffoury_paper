@@ -27,6 +27,7 @@ import 'package:tuple/tuple.dart';
 import '../actions/view/base_home_details_view.dart';
 import 'components/drawers/drawer_large_screen.dart';
 import 'components/profile/profile_pic_popup_menu.dart';
+import 'home_notification_widget.dart';
 
 class BaseHomeMainPage extends StatefulWidget {
   const BaseHomeMainPage({Key? key}) : super(key: key);
@@ -106,7 +107,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             showBottomSheetExt(
               context: context,
               builder: (p0) {
-                return QrCodeReader();
+                return QrCodeReader(
+                  onRead: (qr) {},
+                );
               },
             );
             // setState(() {
@@ -192,7 +195,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       builder: (context, value, child) => IndexedStack(index: value, children: [
         shouldWrapNavigatorChild(context, HomeNavigationPage()),
         shouldWrapNavigatorChild(context, ListToDetailsPage()),
+        shouldWrapNavigatorChild(context, HomeNotificationPage()),
         shouldWrapNavigatorChild(context, HomeCameraNavigationWidget()),
+        // shouldWrapNavigatorChild(context, HomeSettingPage()),
 
         // SearchPage(),
         // NotificationWidget()
@@ -269,7 +274,12 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           ? getNavigationRailBarItem(Icons.notifications, Icons.account_circle,
               AppLocalizations.of(context)!.notification)
           : getBottomNavigationBarItem(Icons.notifications,
-              Icons.account_circle, AppLocalizations.of(context)!.notification)
+              Icons.account_circle, AppLocalizations.of(context)!.notification),
+      isNavigationRail
+          ? getNavigationRailBarItem(Icons.qr_code, Icons.qr_code_2,
+              AppLocalizations.of(context)!.barcode)
+          : getBottomNavigationBarItem(Icons.qr_code, Icons.qr_code_2,
+              AppLocalizations.of(context)!.notification)
     ];
   }
 

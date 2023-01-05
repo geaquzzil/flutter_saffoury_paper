@@ -1,7 +1,11 @@
 import 'dart:ui';
 
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/new_screens/actions/master_to_list_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -21,16 +25,31 @@ class ListItemProductTypeCategory extends StatelessWidget {
         future: PaletteGenerator.fromImageProvider(
           CachedNetworkImageProvider(imgUrl!),
         ),
-        builder: (context, snapshot) => getBody(context, color: snapshot.data),
+        builder: (context, snapshot) =>
+            openContainer(context, color: snapshot.data),
       );
     }
 
-    return getBody(context);
+    return openContainer(context);
+  }
+
+  Widget openContainer(BuildContext context, {PaletteGenerator? color}) {
+    return OpenContainer(
+        closedColor: Colors.transparent,
+        transitionDuration: Duration(milliseconds: 500),
+        transitionType: ContainerTransitionType.fade,
+        closedBuilder: (context, action) => getBody(context, color: color),
+        openBuilder: (context, action) => MasterToListPage(
+          master: productType,
+            detail: Product()
+              ..products_types = productType
+              ..setProductsByCategoryCustomParams(context, productType),
+            color: color));
   }
 
   Widget getBody(BuildContext context, {PaletteGenerator? color}) {
     return Container(
-        width: 150,
+        width: 200,
         margin: EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
             image: imgUrl == null

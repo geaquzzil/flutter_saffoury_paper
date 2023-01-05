@@ -1,10 +1,13 @@
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../cards/card_clicked.dart';
 
@@ -12,15 +15,104 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   final Function()? onPress;
   final bool useOutlineCard;
-  const ListCardItemHorizontal({
+  bool useImageAsBackground;
+  PaletteGenerator? color;
+  String? imgUrl;
+  ListCardItemHorizontal({
     Key? key,
     required this.object,
     this.onPress,
+    this.useImageAsBackground = false,
     this.useOutlineCard = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    init(context);
+    if (useImageAsBackground) {
+      if (imgUrl != null) {
+        return FutureBuilder<PaletteGenerator>(
+          future: PaletteGenerator.fromImageProvider(
+            CachedNetworkImageProvider(imgUrl!),
+          ),
+          builder: (context, snapshot) {
+            color = snapshot.data;
+            return openContainer(context);
+          },
+        );
+      }
+
+      return openContainer(context);
+    }
+    return getNormalCard(context);
+  }
+
+  Widget getCardAsBackground(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Card(
+          // color: color,
+          child: Container(
+              width: 150,
+              height: 125,
+              decoration: BoxDecoration(
+                  image: imgUrl == null
+                      ? null
+                      : DecorationImage(
+                          image: CachedNetworkImageProvider(imgUrl!),
+                          fit: BoxFit.cover),
+                  color: imgUrl == null
+                      ? Theme.of(context).colorScheme.primary
+                      : color?.darkVibrantColor?.color,
+                  borderRadius: BorderRadius.all(Radius.circular(12))),
+              child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Spacer(),
+                      object.getHorizontalCardTitle(context,
+                          isImageAsBackground: true, color: color),
+
+                      // Spacer(),
+
+                      // Text(
+                      //   productType.name!,
+                      //   style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      //       color: color?.darkVibrantColor?.titleTextColor),
+                      // ),
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      // Text(
+                      //   "${productType.availability?.toStringAsFixed(0)} ${AppLocalizations.of(context)!.itemCount}",
+                      //   style: Theme.of(context)
+                      //       .textTheme
+                      //       .titleLarge
+                      //       ?.copyWith(color: color?.darkVibrantColor?.bodyTextColor),
+                      // ),
+                    ],
+                  ))),
+        ),
+        object.getHorizontalCardMainHeader(context),
+        // const Spacer(),
+        object.getHorizontalCardSubtitle(context),
+      ],
+    );
+  }
+
+  Widget openContainer(BuildContext context) {
+    return OpenContainer(
+        closedColor: Colors.transparent,
+        transitionDuration: Duration(milliseconds: 500),
+        transitionType: ContainerTransitionType.fade,
+        closedBuilder: (context, action) => getCardAsBackground(context),
+        openBuilder: (context, action) =>
+            BaseViewNewPage(viewAbstract: object));
+  }
+
+  Stack getNormalCard(BuildContext context) {
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
@@ -34,7 +126,7 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
                   onPress: onPress ?? () => object.onCardClicked(context),
                   child: getCardBody(context))
               : CardClicked(
-                  onPress:  onPress ?? () => object.onCardClicked(context),
+                  onPress: onPress ?? () => object.onCardClicked(context),
                   child: getCardBody(context),
                 ),
         ),
@@ -56,6 +148,11 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void init(BuildContext context) async {
+    imgUrl = object.getImageUrl(context);
+    if (imgUrl == null) return;
   }
 
   Container getCardBody(BuildContext context) {

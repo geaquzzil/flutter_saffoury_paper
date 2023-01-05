@@ -63,18 +63,18 @@ class ProductType extends ViewAbstract<ProductType> {
     }
   }
 
-  // @override
-  // Future<List<ProductType>?> listCall(
-  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
-  //   try {
-  //     Iterable l = jsonDecode(jsonEncode(availabilityType));
-  //     return List<ProductType>.from(
-  //         l.map((model) => fromJsonViewAbstract(model)));
-  //   } catch (e) {
-  //     debugPrint("listCallFake ${e.toString()}");
-  //   }
-  //   return null;
-  // }
+  @override
+  Future<List<ProductType>?> listCall(
+      {int? count, int? page, OnResponseCallback? onResponse}) async {
+    try {
+      Iterable l = jsonDecode(jsonEncode(availabilityType));
+      return List<ProductType>.from(
+          l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint("listCallFake ${e.toString()}");
+    }
+    return null;
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

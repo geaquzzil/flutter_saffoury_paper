@@ -175,43 +175,37 @@ class BaseFilterableMainWidget extends StatelessWidget {
     );
   }
 
+  Widget getBadge(BuildContext context) {
+    return Selector<FilterableProvider, int>(
+      builder: (context, value, child) => Badge(
+        badgeColor: Theme.of(context).colorScheme.primary,
+        badgeContent: Text(
+          value.toString(),
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall!
+              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+        ),
+        toAnimate: true,
+        showBadge: value > 0,
+        animationType: BadgeAnimationType.slide,
+        child: Icon(Icons.filter_alt),
+      ),
+      selector: (p0, p1) => p1.getList.length,
+    );
+  }
+
   Widget getHeader(
       BuildContext context, ViewAbstract<dynamic> drawerViewAbstract) {
     if (SizeConfig.isMobile(context)) {
       return ListTile(
-        leading: Badge(
-          badgeColor: Theme.of(context).colorScheme.primary,
-          badgeContent: Text(
-            context.watch<FilterableProvider>().getList.length.toString(),
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-          toAnimate: true,
-          showBadge: context.watch<FilterableProvider>().getList.length > 0,
-          animationType: BadgeAnimationType.slide,
-          child: Icon(Icons.filter_alt),
-        ),
+        leading: getBadge(context),
         title: getTitle(context, drawerViewAbstract),
       );
     }
     return Card(
       child: ListTile(
-        leading: Badge(
-          badgeColor: Theme.of(context).colorScheme.primary,
-          badgeContent: Text(
-            context.watch<FilterableProvider>().getList.length.toString(),
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-          toAnimate: true,
-          showBadge: context.watch<FilterableProvider>().getList.length > 0,
-          animationType: BadgeAnimationType.slide,
-          child: Icon(Icons.filter_alt),
-        ),
+        leading: getBadge(context),
         title: getTitle(context, drawerViewAbstract),
       ),
     );

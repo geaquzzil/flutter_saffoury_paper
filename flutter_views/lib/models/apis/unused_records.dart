@@ -3,7 +3,9 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     implements CustomViewHorizontalListResponse<UnusedRecords> {
@@ -14,9 +16,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   bool? requireObjects;
   UnusedRecords() : super();
 
-  UnusedRecords.init(T viewAbstract) {
-    this.viewAbstract = viewAbstract;
-  }
+  UnusedRecords.init(T this.viewAbstract);
   @override
   UnusedRecords getSelfNewInstance() {
     return UnusedRecords();
@@ -69,14 +69,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
 
   @override
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
-    return ListTile(
-      hoverColor: Colors.orange,
-      leading: getLeading(context),
-      // trailing: getTrailing(context),
-      // title: getTitle(context),
-      title: getDecription(context, this),
-      // title: Text("${item.list.length} dasdas"),
-    );
+    return CardBackgroundWithTitle(
+        title: AppLocalizations.of(context)!.unUsed,
+        leading: Icons.info_outline,
+        child: getDecription(context, this));
   }
 
   Widget? getLeading(BuildContext context) {
@@ -90,17 +86,26 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   }
 
   Widget getDecription(BuildContext context, UnusedRecords item) {
-    return RichText(
-      text: TextSpan(
-        text: AppLocalizations.of(context)!.youHave,
-        // style: TextStyle(fontWeight: FontWeight.bold),
-        children: <TextSpan>[
-          TextSpan(
-              text:
-                  "${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          // TextSpan(text: ' world!'),
-        ],
+    return ListTile(
+      trailing: ElevatedButton(
+        child: Text("DELETE"),
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+            side: BorderSide(
+                width: 1, color: Theme.of(context).colorScheme.outline)),
+      ),
+      title: RichText(
+        text: TextSpan(
+          text: AppLocalizations.of(context)!.youHave,
+          // style: TextStyle(fontWeight: FontWeight.bold),
+          children: <TextSpan>[
+            TextSpan(
+                text:
+                    "${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            // TextSpan(text: ' world!'),
+          ],
+        ),
       ),
     );
   }

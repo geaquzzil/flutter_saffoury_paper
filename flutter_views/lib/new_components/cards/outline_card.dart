@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class OutlinedCard extends StatelessWidget {
   Widget child;
   bool fillColor;
+  PaletteGenerator? color;
   final Function()? onPress;
   OutlinedCard(
-      {super.key, required this.child, this.fillColor = true, this.onPress});
+      {super.key,
+      required this.child,
+      this.color,
+      this.fillColor = true,
+      this.onPress});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +21,13 @@ class OutlinedCard extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
+            color: color != null
+                ? color!.darkVibrantColor!.color
+                : Theme.of(context).colorScheme.outline,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
-        child: InkWell(onTap:()=>onPress!(),child: child));
+        child: InkWell(onTap: () => onPress!(), child: child));
   }
 
   Card getCard(BuildContext context) {

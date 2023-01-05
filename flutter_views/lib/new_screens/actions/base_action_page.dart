@@ -9,10 +9,12 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:nil/nil.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 
 import '../../screens/base_shared_actions_header.dart';
@@ -20,14 +22,16 @@ import 'components/action_on_header_popup_widget.dart';
 
 abstract class BaseActionScreenPage extends StatefulWidget {
   ViewAbstract viewAbstract;
-
-  BaseActionScreenPage({super.key, required this.viewAbstract});
+  PaletteGenerator? color;
+  BaseActionScreenPage({super.key, required this.viewAbstract, this.color});
 
   ServerActions getServerAction() {
     if (this is BaseEditNewPage) {
       return ServerActions.edit;
-    } else {
+    } else if (this is BaseViewNewPage) {
       return ServerActions.view;
+    } else {
+      return ServerActions.list;
     }
   }
 }
@@ -36,6 +40,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     extends State<T> with TickerProviderStateMixin {
   Widget getBody(BuildContext context);
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context);
+
+  /// if null then we get the main viewabstract getBlurringImage
+  Widget? getSliverImageBackground(BuildContext context);
 
   late TabController _tabController;
   final List<TabControllerHelper> _tabs = <TabControllerHelper>[];
@@ -62,7 +69,12 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     super.initState();
   }
 
+  bool hasNotApiToCall() {
+    return widget.getServerAction() == ServerActions.list;
+  }
+
   bool getBodyWithoutApi() {
+    if (hasNotApiToCall()) return true;
     bool canGetBody = widget.viewAbstract
             .isRequiredObjectsList()?[widget.getServerAction()] ==
         null;
@@ -104,19 +116,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             bottom: TabBar(
               labelColor: Theme.of(context).textTheme.titleLarge!.color,
               tabs: _tabs,
-              // indicator: DotIndicator(
-              //   color: Theme.of(context).colorScheme.primary,
-              //   distanceFromCenter: 16,
-              //   radius: 3,
-              //   paintingStyle: PaintingStyle.fill,
-              // ),
-              //   RectangularIndicator(
-              // bottomLeftRadius: 100,
-              // bottomRightRadius: 100,
-              // topLeftRadius: 100,
-              // topRightRadius: 100,
-              // paintingStyle: PaintingStyle.stroke,
-
               isScrollable: true,
               controller: _tabController,
             )));
@@ -133,8 +132,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ),
         background: widget.viewAbstract.getHeroTag(
             context: context,
-            child: widget.viewAbstract
-                .getBlurringImage(context, addBottomWidget: false)));
+            child: getSliverImageBackground(context) ??
+                widget.viewAbstract
+                    .getBlurringImage(context, addBottomWidget: false)));
   }
 
   Widget getBodyDetermineLayout() {
@@ -225,6 +225,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   Widget getFutureBody() {
     if (getBodyWithoutApi()) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        baseActionProviders.setIsLoaded = (true);
+      });
       return getBodyDetermineLayout();
     }
     return FutureBuilder(
@@ -237,7 +240,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             context
                 .read<ListMultiKeyProvider>()
                 .edit(snapshot.data as ViewAbstract);
-            // baseActionProviders.setIsLoaded = (true);
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              baseActionProviders.setIsLoaded = (true);
+            });
 
             return getBodyDetermineLayout();
           } else {
@@ -261,13 +266,14 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // backgroundColor: widget.color?.darkVibrantColor?.color,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: ChangeNotifierProvider.value(
             value: baseActionProviders,
             child: Consumer<BaseActionProviders>(
                 builder: (context, provider, baseActionProviders) {
-              return provider.getIsLoaded
+              return !provider.getIsLoaded
                   ? nil
                   : BaseFloatingActionButtons(
                       viewAbstract: widget.viewAbstract,

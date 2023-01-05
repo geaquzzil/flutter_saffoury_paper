@@ -28,10 +28,12 @@ abstract class ListApiMaster extends StatefulWidget {
   bool buildSearchWidget;
   bool buildFabIfMobile;
   bool fetshListAsSearc;
+  bool useSlivers;
   ListApiMaster(
       {super.key,
       this.viewAbstract,
       this.buildSearchWidget = true,
+      this.useSlivers = false,
       this.fetshListAsSearc = false,
       this.buildFabIfMobile = true});
 
@@ -74,7 +76,7 @@ abstract class ListApiMaster extends StatefulWidget {
   State<ListApiMaster> createState() => ListApiMasterState();
 }
 
-class ListApiMasterState extends State<ListApiMaster> {
+class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   late ViewAbstract viewAbstract;
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
@@ -169,6 +171,9 @@ class ListApiMasterState extends State<ListApiMaster> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.useSlivers) {
+      return getConsumer();
+    }
     if (SizeConfig.isMobile(context) || SizeConfig.isFoldable(context)) {
       return getSmallScreenWidget();
     } else {
@@ -272,10 +277,8 @@ class ListApiMasterState extends State<ListApiMaster> {
             return getShimmerLoading();
           }
         } else {
-          if (count == 0 && isError) {
-            return getErrorWidget();
-          } else if (count == 0) {
-            return getEmptyWidget();
+          if (count == 0 || isError) {
+            return getEmptyWidget(isError: isError);
           }
         }
         return getListBody(context);
@@ -285,7 +288,14 @@ class ListApiMasterState extends State<ListApiMaster> {
     );
   }
 
-  Padding getListBody(BuildContext context) {
+  Widget getListBody(BuildContext context) {
+    if (widget.useSlivers) {
+      return widget.getListSelectedViewWidget(
+          key: findCustomKey(),
+          scrollController: _scrollController,
+          context: context,
+          listProvider: listProvider);
+    }
     return Padding(
       padding: const EdgeInsets.only(top: 75),
       child: AnimatedSwitcher(
@@ -313,42 +323,47 @@ class ListApiMasterState extends State<ListApiMaster> {
     );
   }
 
-  Widget getErrorWidget() {
-    return ListView(children: [
-      FiltersAndSelectionListHeader(
-        customKey: findCustomKey(),
-        listProvider: listProvider,
-      ),
-      Center(
-        child: EmptyWidget(
-            onSubtitleClicked: () {
-              listProvider.fetchList(getCustomKey(), viewAbstract);
-            },
-            lottiUrl:
-                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-            title: AppLocalizations.of(context)!.cantConnect,
-            subtitle: AppLocalizations.of(context)!.cantConnectConnectToRetry),
-      ),
-    ]);
+  Widget getEmptyWidget({bool isError = false}) {
+    return widget.useSlivers
+        ? SliverToBoxAdapter(
+            child: _getEmptyWidget(isError),
+          )
+        : _getEmptyWidget(isError);
   }
 
-  Widget getEmptyWidget() {
-    return ListView(children: [
-      FiltersAndSelectionListHeader(
-        customKey: findCustomKey(),
-        listProvider: listProvider,
-      ),
-      Center(
-        child: EmptyWidget(
-            lottiUrl:
-                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-            title: AppLocalizations.of(context)!.noItems,
-            subtitle: AppLocalizations.of(context)!.error_empty),
-      ),
-    ]);
+  EmptyWidget _getEmptyWidget(bool isError) {
+    return EmptyWidget(
+        onSubtitleClicked: isError
+            ? () {
+                fetshList();
+              }
+            : null,
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        title: isError
+            ? AppLocalizations.of(context)!.cantConnect
+            : AppLocalizations.of(context)!.noItems,
+        subtitle: isError
+            ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+            : AppLocalizations.of(context)!.no_content);
+  }
+
+  void fetshList() {
+    if (listProvider.getCount(getCustomKey()) == 0) {
+      listProvider.fetchList(getCustomKey(), viewAbstract);
+    }
   }
 
   Widget getShimmerLoading() {
+    return widget.useSlivers
+        ? SliverFillRemaining(
+            child: SkeletonListView(
+              itemCount: viewAbstract.getPageItemCount,
+            ),
+          )
+        : _getShimmerLoadingBody();
+  }
+
+  Padding _getShimmerLoadingBody() {
     return Padding(
       padding: const EdgeInsets.only(top: 75),
       child: Skeleton(

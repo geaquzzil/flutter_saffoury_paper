@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 
 class QRCodeID {
-  int iD;
-  String action;
+  late int iD;
+  late String action;
   int? quantity;
   QRCodeID({required this.iD, required this.action, this.quantity});
   String getQrCode() {
@@ -13,10 +14,24 @@ class QRCodeID {
       "action": action,
       if (quantity != null) "quantity": quantity
     };
-    var myString = map.toString();
-    final enCodedJson = utf8.encode(map.toString());
+    final enCodedJson = utf8.encode(jsonEncode(map));
     final gZipJson = gzip.encode(enCodedJson);
     return base64.encode(gZipJson);
+  }
+
+  QRCodeID.init(String scaned) {
+    final decodeBase64Json = base64.decode(scaned);
+    final decodegZipJson = gzip.decode(decodeBase64Json);
+    final originalJson = utf8.decode(decodegZipJson);
+    Map<String, dynamic> map = jsonDecode(originalJson);
+    iD = map["iD"];
+    action = map["action"];
+    quantity = map["quantity"];
+  }
+
+  @override
+  String toString() {
+    return "{iD:$iD,action:$action,quantity:$quantity}";
   }
 }
 

@@ -128,7 +128,7 @@ void main() async {
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),
       )
-    ], child: const BaseMaterialAppPage()));
+    ], child:  BaseMaterialAppPage()));
   } catch (e) {
     debugPrint("exception => $e");
   }

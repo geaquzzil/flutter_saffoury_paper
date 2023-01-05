@@ -48,89 +48,91 @@ const String searchRouteName = "search";
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
 class RouteGenerator {
-  static final GoRouter goRouter = GoRouter(
-    initialLocation: '/',
-    // redirect: (context, state) async {
-    //   Status authStatus = context.read<AuthProvider>().getStatus;
-    //   if (authStatus == Status.Initialization) {
-    //     return "/home";
-    //   }
-    //   return "/";
-    // },
-    errorPageBuilder: (context, state) => MaterialPage(
-      key: state.pageKey,
-      child: getErrorPage(),
-    ),
-    // redirect: (context, state) {
-
-    // },
-    routes: <RouteBase>[
-      GoRoute(
-        name: homeRouteName,
-        path: "/home",
-        pageBuilder: (context, state) =>
-            MaterialPage(child: BaseHomeMainPage()),
+  static GoRouter getGoRouter({List<RouteBase>? addonRoutes}) {
+    return GoRouter(
+      initialLocation: '/',
+      // redirect: (context, state) async {
+      //   Status authStatus = context.read<AuthProvider>().getStatus;
+      //   if (authStatus == Status.Initialization) {
+      //     return "/home";
+      //   }
+      //   return "/";
+      // },
+      errorPageBuilder: (context, state) => MaterialPage(
+        key: state.pageKey,
+        child: getErrorPage(),
       ),
-      GoRoute(
-          path: '/',
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            Status authStatus = context.read<AuthProvider>().getStatus;
-            if (authStatus == Status.Authenticated) {
-              // return POSPage();
-              return const MaterialPage(child: BaseHomeMainPage());
-            } else {
-              // return POSPage();
-              return const MaterialPage(child: BaseAuthenticatingScreen());
-            }
+      // redirect: (context, state) {
+
+      // },
+      routes: <RouteBase>[
+        GoRoute(
+          name: homeRouteName,
+          path: "/home",
+          pageBuilder: (context, state) =>
+              MaterialPage(child: BaseHomeMainPage()),
+        ),
+        GoRoute(
+            path: '/',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              Status authStatus = context.read<AuthProvider>().getStatus;
+              if (authStatus == Status.Authenticated) {
+                // return POSPage();
+                return const MaterialPage(child: BaseHomeMainPage());
+              } else {
+                // return POSPage();
+                return const MaterialPage(child: BaseAuthenticatingScreen());
+              }
+            },
+            routes: [
+              GoRoute(
+                name: viewRouteName,
+                path: "view/:tableName/:id",
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: BaseViewNewPage(
+                        viewAbstract: state.extra as ViewAbstract,
+                      ));
+                },
+              ),
+              GoRoute(
+                name: searchRouteName,
+                path: "search/:tableName",
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: SearchPage(
+                        tableName: state.params["tableName"],
+                        viewAbstract: state.extra as ViewAbstract?,
+                      ));
+                },
+              ),
+            ]),
+        GoRoute(
+          name: printRouteName,
+          path: "/print/:tableName/:id",
+          pageBuilder: (context, state) {
+            return MaterialPage(
+                key: state.pageKey,
+                child: PdfPage(
+                  iD: int.tryParse(state.params['id'] ?? "-"),
+                  tableName: state.params['tableName'],
+                  invoiceObj: state.extra as PrintableMaster,
+                ));
           },
-          routes: [
-            GoRoute(
-              name: viewRouteName,
-              path: "view/:tableName/:id",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: BaseViewNewPage(
-                      viewAbstract: state.extra as ViewAbstract,
-                    ));
-              },
-            ),
-            GoRoute(
-              name: searchRouteName,
-              path: "search/:tableName",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: SearchPage(
-                      tableName: state.params["tableName"],
-                      viewAbstract: state.extra as ViewAbstract?,
-                    ));
-              },
-            ),
-          ]),
-      GoRoute(
-        name: printRouteName,
-        path: "/print/:tableName/:id",
-        pageBuilder: (context, state) {
-          return MaterialPage(
-              key: state.pageKey,
-              child: PdfPage(
-                iD: int.tryParse(state.params['id'] ?? "-"),
-                tableName: state.params['tableName'],
-                invoiceObj: state.extra as PrintableMaster,
-              ));
-        },
-      ),
-      GoRoute(
-        name: loginRouteName,
-        path: "/login",
-        pageBuilder: (context, state) {
-          return MaterialPage(key: state.pageKey, child: SignInPage());
-        },
-      )
-    ],
-  );
-
+        ),
+        GoRoute(
+          name: loginRouteName,
+          path: "/login",
+          pageBuilder: (context, state) {
+            return MaterialPage(key: state.pageKey, child: SignInPage());
+          },
+        ),
+        if (addonRoutes != null) ...addonRoutes
+      ],
+    );
+  }
   static Scaffold getErrorPage() {
     return Scaffold(
       appBar: AppBar(

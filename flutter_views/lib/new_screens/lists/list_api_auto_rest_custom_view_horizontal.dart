@@ -169,21 +169,23 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         custom = widget.onResponseAddWidget!(obj);
       }
     }
+    if (widget.title == null && widget.titleString == null) {
+      return Column(
+        children: [child, if (custom != null) custom],
+      );
+    }
 
     return SizedBox(
-        width: MediaQuery.of(context).size.width - 80,
-        height: widget.autoRest.getCustomViewHeight() ??
-            MediaQuery.of(context).size.height,
         child: Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildHeader(context),
-              Expanded(child: child),
-              if (custom != null) custom
-            ],
-          ),
-        ));
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildHeader(context),
+          Expanded(child: child),
+          if (custom != null) custom
+        ],
+      ),
+    ));
   }
 
   Widget buildHeader(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_master.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
@@ -57,25 +58,11 @@ class ListStickyWidget extends ListStaticMaster<ListStickyItem> {
                       : Icon(element.groupItem.icon),
                   children: [element.itemBuilder(context)],
                 )
-              : Card(
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      title: _getGroupSeparator(context, element),
-                      leading: element.groupItem.icon == null
-                          ? null
-                          : Icon(element.groupItem.icon),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: kDefaultPadding * 2,
-                        vertical: kDefaultPadding / 2,
-                      ),
-                      child: element.itemBuilder(context),
-                    )
-                  ],
-                ));
+              : CardBackgroundWithTitle(
+                  title: element.groupItem.groupName,
+                  leading: element.groupItem.icon,
+                  child: element.itemBuilder(context),
+                );
         }
         return element.itemBuilder(context);
       },

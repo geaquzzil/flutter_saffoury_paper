@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -120,13 +121,29 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         );
   }
 
-  Widget getHorizontalCardTitle(BuildContext context) {
+  Widget getHorizontalCardTitle(BuildContext context,
+      {bool isImageAsBackground = false, PaletteGenerator? color}) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        getMainLabelText(context),
+        Text(
+          getMainHeaderLabelTextOnly(context),
+          style: isImageAsBackground
+              ? Theme.of(context).textTheme.caption?.copyWith(
+                  color: color != null
+                      ? color.lightMutedColor?.color
+                      : Theme.of(context).colorScheme.onPrimary)
+              : Theme.of(context).textTheme.caption,
+          // style: const TextStyle(color: kTextLightColor)
+        ),
         Text(
           getIDFormat(context),
-          style: Theme.of(context).textTheme.caption,
+          style: isImageAsBackground
+              ? Theme.of(context).textTheme.caption?.copyWith(
+                  color: color != null
+                      ? color.lightMutedColor?.color
+                      : Theme.of(context).colorScheme.onPrimary)
+              : Theme.of(context).textTheme.caption,
         )
       ],
     );
@@ -281,6 +298,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
           return AppLocalizations.of(context)!.view.toLowerCase();
         case ServerActions.delete_action:
           return AppLocalizations.of(context)!.delete.toLowerCase();
+        case ServerActions.list:
+          return AppLocalizations.of(context)!.list.toLowerCase();
 
         case ServerActions.print:
           return AppLocalizations.of(context)!.print.toLowerCase();

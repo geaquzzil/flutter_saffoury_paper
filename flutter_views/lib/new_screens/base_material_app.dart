@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/providers/settings/language_provider.dar
 
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -26,7 +27,8 @@ import '../theming/text_field_theming.dart';
 import 'home/base_home_main.dart';
 
 class BaseMaterialAppPage extends StatefulWidget {
-  const BaseMaterialAppPage({Key? key}) : super(key: key);
+  List<RouteBase>? addOnRoutes;
+  BaseMaterialAppPage({Key? key, this.addOnRoutes}) : super(key: key);
 
   @override
   State<BaseMaterialAppPage> createState() => _BaseMaterialAppPageState();
@@ -139,7 +141,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
               // routerDelegate: RouteGenerator.goRouter.routerDelegate,
               // routeInformationProvider:
               //     RouteGenerator.goRouter.routeInformationProvider,
-              routerConfig: RouteGenerator.goRouter,
+              routerConfig: RouteGenerator.getGoRouter(
+                  addonRoutes: this.widget.addOnRoutes),
               // initialRoute: '/',
               // onGenerateRoute: RouteGenerator.generateRoute,
 

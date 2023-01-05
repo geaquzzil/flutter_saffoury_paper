@@ -17,12 +17,14 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   double customHeight;
   String? titleString;
   bool isSliver;
+  bool useCardAsImageBackgroud;
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
       {Key? key,
       required this.autoRest,
       this.title,
       this.titleString,
+      this.useCardAsImageBackgroud = false,
       this.isSliver = false,
       this.customHeight = 230,
       this.listItembuilder})
@@ -73,7 +75,10 @@ class _ListHorizontalApiWidgetState
           ));
         }
         return widget.listItembuilder == null
-            ? ListCardItemHorizontal(object: data[index])
+            ? ListCardItemHorizontal(
+                object: data[index],
+                useImageAsBackground: widget.useCardAsImageBackgroud,
+              )
             : widget.listItembuilder!(data[index]);
         // return data[index].getCardView(context);
       },
@@ -176,7 +181,7 @@ class _ListHorizontalApiWidgetState
       child: widget.title ??
           Text(
             widget.titleString ?? "NONT",
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
     );
   }

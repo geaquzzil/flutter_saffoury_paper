@@ -369,4 +369,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       ),
     );
   }
+
+  @override
+  Widget? getSliverImageBackground(BuildContext context) {
+    return null;
+  }
 }

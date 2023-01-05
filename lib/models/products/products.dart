@@ -36,6 +36,7 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -539,6 +540,12 @@ class Product extends ViewAbstract<Product>
         ),
       ),
       StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: .5,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            autoRest: UnusedRecords.init(Product())),
+      ),
+      StaggeredGridTile.count(
         crossAxisCellCount: 1,
         mainAxisCellCount: 1,
         child: ListHorizontalCustomViewApiAutoRestWidget(
@@ -629,6 +636,19 @@ class Product extends ViewAbstract<Product>
     return gsms != null;
   }
 
+  void setProductsByCategoryCustomParams(
+      BuildContext context, ProductType category) {
+    Map<String, String> hashMap = getCustomMap;
+
+    if (!isGeneralEmployee(context)) {
+      hashMap["<status>"] = "[\"NONE\"]";
+    }
+    hashMap["<ProductTypeID>"] = "[\"${category.iD}\"]";
+    hashMap["requireInventory"] = "yes";
+
+    setCustomMap(hashMap);
+  }
+
   Map<String, String> getSimilarCustomParams(BuildContext context) {
     Map<String, String> hashMap = getCustomMap;
     hashMap["<maxWaste>"] = ("[\"100\"]");
@@ -648,12 +668,15 @@ class Product extends ViewAbstract<Product>
   @override
   List<Widget>? getCustomBottomWidget(
       BuildContext context, ServerActions action) {
-    if (action == ServerActions.add || action == ServerActions.edit) {
+    if (action == ServerActions.add ||
+        action == ServerActions.edit ||
+        action == ServerActions.list) {
       return null;
     }
     return [
       ListHorizontalApiAutoRestWidget(
         customHeight: 200,
+        useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
             range: 5,
@@ -661,6 +684,7 @@ class Product extends ViewAbstract<Product>
             key: "similarProducts${getSimilarCustomParams(context)}"),
       ),
       ListHorizontalApiAutoRestWidget(
+        useCardAsImageBackgroud: true,
         customHeight: 200,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
@@ -681,6 +705,7 @@ class Product extends ViewAbstract<Product>
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context,
       {ServerActions? action}) {
+    if (action == ServerActions.list) return [];
     return [
       TabControllerHelper(AppLocalizations.of(context)!.movments,
           widget: ListHorizontalCustomViewApiAutoRestWidget(

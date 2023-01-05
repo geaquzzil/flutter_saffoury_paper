@@ -73,6 +73,7 @@ List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context) {
   return finalList;
 }
 
+@Deprecated("will be removed in a future release")
 List<FilterableProviderHelper> getAllSelectedFilters(BuildContext context) {
   var list = context.watch<FilterableProvider>().getList.values.toList();
   var listSelectd = list
@@ -106,28 +107,4 @@ void removeFilterableSelectedStringValue(
 void removeFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
   removeFilterableSelectedStringValue(context, selectedItem.getForeignKeyName(),
       selectedItem.getIDString(), selectedItem.getMainHeaderTextOnly(context));
-}
-
-bool isFilterableSelectedStringValue(
-    BuildContext context, String field, String value) {
-  return context.watch<FilterableProvider>().isSelected(field, value);
-}
-
-bool isFilterableSelected(BuildContext context, ViewAbstract item) {
-  return context
-      .watch<FilterableProvider>()
-      .isSelected(item.getForeignKeyName(), item.getIDString());
-}
-
-bool isFilterableSelectedByField(
-    BuildContext context, String field, String value) {
-  return context.watch<FilterableProvider>().isSelected(field, value);
-}
-
-int getFilterableFieldsCount(BuildContext context, ViewAbstract item) {
-  return context.read<FilterableProvider>().getCount(item.getForeignKeyName());
-}
-
-int getFilterableFieldsCountStringValue(BuildContext context, String field) {
-  return context.read<FilterableProvider>().getCount(field);
 }
