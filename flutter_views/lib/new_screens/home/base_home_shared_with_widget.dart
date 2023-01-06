@@ -14,7 +14,8 @@ import '../lists/components/search_components.dart';
 
 abstract class BaseHomeSharedWithWidgets extends StatelessWidget {
   Widget? firstPane;
-  BaseHomeSharedWithWidgets({super.key});
+  bool wrapWithScaffold;
+  BaseHomeSharedWithWidgets({super.key, this.wrapWithScaffold = false});
 
   Widget? getSilverAppBarTitle(BuildContext context);
   Widget? getSliverHeader(BuildContext context);
@@ -42,7 +43,7 @@ abstract class BaseHomeSharedWithWidgets extends StatelessWidget {
       );
     }
     return TowPaneExt(
-      startPane: firstPane!,
+      startPane: wrapWithScaffold ? Scaffold(body: firstPane!) : firstPane!,
       endPane: getEndPane(context),
     );
   }

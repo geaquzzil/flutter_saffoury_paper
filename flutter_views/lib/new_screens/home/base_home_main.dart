@@ -2,10 +2,13 @@ import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/home_camera_widget.dart';
@@ -17,6 +20,7 @@ import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.
 import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -41,6 +45,10 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   late DrawerMenuControllerProvider drawerMenuControllerProvider;
   Widget? drawerWidget;
   Widget? navigationRailWidget;
+  Widget? dashboardWidget;
+  Widget? homeWidget;
+  Widget? shopingWidget;
+
   @override
   void initState() {
     super.initState();
@@ -192,18 +200,26 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
 
   Widget getMainBodyIndexedStack(BuildContext context) {
     return Selector<DrawerMenuControllerProvider, int>(
-      builder: (context, value, child) => IndexedStack(index: value, children: [
-        shouldWrapNavigatorChild(context, HomeNavigationPage()),
-        shouldWrapNavigatorChild(context, ListToDetailsPage()),
-        shouldWrapNavigatorChild(context, HomeNotificationPage()),
-        shouldWrapNavigatorChild(context, HomeCameraNavigationWidget()),
-        // shouldWrapNavigatorChild(context, HomeSettingPage()),
+      builder: (context, value, child) {
+        dashboardWidget ??= BaseDashboard(
+            title: "TEST",
+            dashboard: context.read<AuthProvider>().getDashableInterface());
+        homeWidget ??= HomeNavigationPage();
+        shopingWidget ??= ListToDetailsPage();
+        return IndexedStack(index: value, children: [
+          shouldWrapNavigatorChild(context, dashboardWidget!),
+          shouldWrapNavigatorChild(context, homeWidget!),
+          shouldWrapNavigatorChild(context, shopingWidget!),
+          shouldWrapNavigatorChild(context, HomeNotificationPage()),
+          // shouldWrapNavigatorChild(context, HomeCameraNavigationWidget()),
+          // shouldWrapNavigatorChild(context, HomeSettingPage()),
 
-        // SearchPage(),
-        // NotificationWidget()
-        // ListApiSearchableWidgetTestScrolling(),
-        // ListApiSearchableWidgetTestScrolling(),
-      ]),
+          // SearchPage(),
+          // NotificationWidget()
+          // ListApiSearchableWidgetTestScrolling(),
+          // ListApiSearchableWidgetTestScrolling(),
+        ]);
+      },
       selector: (p0, p1) => p1.getNavigationIndex,
     );
   }
@@ -213,19 +229,14 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       builder: (context, value, child) {
         return NavigationRail(
           groupAlignment: 0,
-          leading: FloatingActionButton(
+          leading: CompanyLogo(),
+          trailing: FloatingActionButton(
             elevation: 0,
             onPressed: () {
               drawerMenuControllerProvider.setNavigationRailIsOpen();
               // Add your onPressed code here!
             },
             child: const Icon(Icons.add),
-          ),
-          trailing: IconButton(
-            onPressed: () {
-              // Add your onPressed code here!
-            },
-            icon: const Icon(Icons.more_horiz_rounded),
           ),
           extended: value.item2,
           elevation: 4,
@@ -258,6 +269,11 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
 
   List getNavigationDesinations({bool isNavigationRail = false}) {
     return [
+      isNavigationRail
+          ? getNavigationRailBarItem(Icons.dashboard, Icons.dashboard,
+              AppLocalizations.of(context)!.dashboard_and_rep)
+          : getBottomNavigationBarItem(Icons.dashboard, Icons.dashboard,
+              AppLocalizations.of(context)!.dashboard_and_rep),
       isNavigationRail
           ? getNavigationRailBarItem(Icons.home_outlined, Icons.home,
               AppLocalizations.of(context)!.home)

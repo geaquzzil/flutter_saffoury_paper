@@ -10,6 +10,12 @@ abstract class DashableInterface<T extends ViewAbstract> {
 
 class DashableGridHelper {
   String title;
+  Widget? onTitleButton;
   List<StaggeredGridTile> widgets;
-  DashableGridHelper(this.title, this.widgets);
+  List<List<ViewAbstract>>? sectionsListToTabbar;
+  DashableGridHelper(
+      {required this.title,
+      required this.widgets,
+      this.onTitleButton,
+      this.sectionsListToTabbar});
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -56,6 +57,9 @@ class AuthProvider with ChangeNotifier {
   AuthProvider.initialize(List<ViewAbstract> drawerItems) {
     _drawerItems = drawerItems;
     initFakeData();
+  }
+  DashableInterface getDashableInterface() {
+    return _drawerItems.whereType<DashableInterface>().first;
   }
 
   ViewAbstract? getNewInstance(String tableName) {

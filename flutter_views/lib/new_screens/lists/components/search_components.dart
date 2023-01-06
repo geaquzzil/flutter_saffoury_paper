@@ -14,12 +14,12 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchWidgetComponent extends StatefulWidget {
-  TextEditingController controller;
+  TextEditingController? controller;
   bool forceSearchBarAsEditText;
   Function(String?) onSearchTextChanged;
   SearchWidgetComponent(
       {super.key,
-      required this.controller,
+      this.controller,
       required this.onSearchTextChanged,
       this.forceSearchBarAsEditText = false});
 
@@ -34,12 +34,14 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
 
   @override
   void initState() {
-    super.initState();
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     _animationController.forward();
-    widget.controller.addListener(() {});
+    widget.controller?.addListener(() {});
+    super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

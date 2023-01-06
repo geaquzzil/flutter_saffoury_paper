@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:intl/intl.dart';
 
 class TodayText extends StatelessWidget {
@@ -12,7 +13,7 @@ class TodayText extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Today",
+            AppLocalizations.of(context)!.today,
             style: Theme.of(context).textTheme.caption,
           ),
           Text(

@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
@@ -98,72 +100,121 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         child:
             Consumer<LangaugeProvider>(builder: (context, provider, listTile) {
           return DynamicColorBuilder(
-            builder: (lightDynamic, darkDynamic) => MaterialApp.router(
-              // scrollBehavior: SizeConfig.isDesktop(context)
-              //     ? const MaterialScrollBehavior().copyWith(
-              //         dragDevices: {
-              //           PointerDeviceKind.mouse,
-              //           PointerDeviceKind.touch,
-              //           PointerDeviceKind.stylus,
-              //           PointerDeviceKind.unknown
-              //         },
-              //       )
-              //     : null,
-              supportedLocales: AppLocalizations.supportedLocales,
-              locale: langaugeProvider.getLocale,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                FormBuilderLocalizations.delegate,
-              ],
-              builder: (context, widget) => ResponsiveWrapper.builder(
-                ClampingScrollWrapper.builder(context, widget!),
-                defaultScale: true,
-                breakpoints: [
-                  const ResponsiveBreakpoint.resize(450, name: MOBILE),
-                  const ResponsiveBreakpoint.resize(800, name: TABLET),
-                  const ResponsiveBreakpoint.resize(1000, name: TABLET),
-                  const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-                  const ResponsiveBreakpoint.resize(2460, name: "4K"),
+            builder: (lightDynamic, darkDynamic) {
+              notifyLogoColor(context, lightDynamic, darkDynamic);
+              return MaterialApp.router(
+                // scrollBehavior: SizeConfig.isDesktop(context)
+                //     ? const MaterialScrollBehavior().copyWith(
+                //         dragDevices: {
+                //           PointerDeviceKind.mouse,
+                //           PointerDeviceKind.touch,
+                //           PointerDeviceKind.stylus,
+                //           PointerDeviceKind.unknown
+                //         },
+                //       )
+                //     : null,
+                supportedLocales: AppLocalizations.supportedLocales,
+                locale: langaugeProvider.getLocale,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  FormBuilderLocalizations.delegate,
                 ],
-                background: Container(
-                  color: kBackgroundColor,
+                builder: (context, widget) => ResponsiveWrapper.builder(
+                  ClampingScrollWrapper.builder(context, widget!),
+                  defaultScale: true,
+                  breakpoints: [
+                    const ResponsiveBreakpoint.resize(450, name: MOBILE),
+                    const ResponsiveBreakpoint.resize(800, name: TABLET),
+                    const ResponsiveBreakpoint.resize(1000, name: TABLET),
+                    const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
+                    const ResponsiveBreakpoint.resize(2460, name: "4K"),
+                  ],
+                  background: Container(
+                    color: kBackgroundColor,
+                  ),
                 ),
-              ),
-              // title: AppLocalizations.of(context)!.appTitle,
-              title: "SSSS",
-              debugShowCheckedModeBanner: false,
-              restorationScopeId: 'root',
-              // routeInformationParser:
-              //     RouteGenerator.goRouter.routeInformationParser,
-              // routerDelegate: RouteGenerator.goRouter.routerDelegate,
-              // routeInformationProvider:
-              //     RouteGenerator.goRouter.routeInformationProvider,
-              routerConfig: RouteGenerator.getGoRouter(
-                  addonRoutes: this.widget.addOnRoutes),
-              // initialRoute: '/',
-              // onGenerateRoute: RouteGenerator.generateRoute,
+                // title: AppLocalizations.of(context)!.appTitle,
+                title: "SSSS",
+                debugShowCheckedModeBanner: false,
+                restorationScopeId: 'root',
 
-              theme: ThemeData(
-                scaffoldBackgroundColor: lightDynamic?.background,
-                shadowColor: lightDynamic?.shadow,
-                colorScheme: lightDynamic ?? defaultLightColorScheme,
-                useMaterial3: true,
-              ),
-              darkTheme: ThemeData(
-                scaffoldBackgroundColor: darkDynamic?.background,
-                shadowColor: darkDynamic?.shadow,
-                colorScheme: darkDynamic ?? defaultDarkColorScheme,
-                useMaterial3: true,
-              ),
-              themeMode: ThemeMode.system,
-            ),
+                // routeInformationParser:
+                //     RouteGenerator.goRouter.routeInformationParser,
+                // routerDelegate: RouteGenerator.goRouter.routerDelegate,
+                // routeInformationProvider:
+                //     RouteGenerator.goRouter.routeInformationProvider,
+                routerConfig: RouteGenerator.getGoRouter(
+                    addonRoutes: this.widget.addOnRoutes),
+                // initialRoute: '/',
+                // onGenerateRoute: RouteGenerator.generateRoute,
+
+                theme: ThemeData(
+                  scaffoldBackgroundColor: lightDynamic?.background,
+                  shadowColor: lightDynamic?.shadow,
+                  colorScheme: lightDynamic ?? defaultLightColorScheme,
+                  useMaterial3: true,
+                  pageTransitionsTheme: const PageTransitionsTheme(
+                    builders: {
+                      TargetPlatform.android: CustomTransitionBuilder(),
+                      TargetPlatform.iOS: CustomTransitionBuilder(),
+                      TargetPlatform.macOS: CustomTransitionBuilder(),
+                      TargetPlatform.windows: CustomTransitionBuilder(),
+                      TargetPlatform.linux: CustomTransitionBuilder(),
+                    },
+                  ),
+                ),
+                darkTheme: ThemeData(
+                  scaffoldBackgroundColor: darkDynamic?.background,
+                  shadowColor: darkDynamic?.shadow,
+                  colorScheme: darkDynamic ?? defaultDarkColorScheme,
+                  useMaterial3: true,
+                  pageTransitionsTheme: const PageTransitionsTheme(
+                    builders: {
+                      TargetPlatform.android: CustomTransitionBuilder(),
+                      TargetPlatform.iOS: CustomTransitionBuilder(),
+                      TargetPlatform.macOS: CustomTransitionBuilder(),
+                      TargetPlatform.windows: CustomTransitionBuilder(),
+                      TargetPlatform.linux: CustomTransitionBuilder(),
+                    },
+                  ),
+                ),
+                themeMode: ThemeMode.system,
+              );
+            },
           );
         }));
 
     return widget;
+  }
+
+  void notifyLogoColor(
+      BuildContext context, ColorScheme? lightScheme, ColorScheme? darkScheme) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      var brightness = SchedulerBinding.instance.window.platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+      CompanyLogo.updateLogoColor(
+          context, isDarkMode ? darkScheme?.secondary : lightScheme?.secondary);
+    });
+  }
+}
+
+class CustomTransitionBuilder extends PageTransitionsBuilder {
+  const CustomTransitionBuilder();
+  @override
+  Widget buildTransitions<T>(
+      PageRoute<T> route,
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    final tween =
+        Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.ease));
+    return ScaleTransition(
+        scale: animation.drive(tween),
+        child: FadeTransition(opacity: animation, child: child));
   }
 }
 

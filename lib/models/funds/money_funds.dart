@@ -152,7 +152,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   pdf.Widget? getPrintableRecieptCustomWidget(
-          BuildContext context, PrintReceipt? pca,PdfReceipt generator) =>
+          BuildContext context, PrintReceipt? pca, PdfReceipt generator) =>
       null;
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
@@ -218,6 +218,19 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   }
 
   @override
+  Color? getMainColor() {
+    if (runtimeType == Credits) {
+      return Colors.green;
+    } else if (runtimeType == Debits) {
+      return Colors.red;
+    } else if (runtimeType == Spendings) {
+      return Colors.red;
+    } else {
+      return Colors.green;
+    }
+  }
+
+  @override
   String getPrintablePrimaryColor(PrintReceipt? setting) {
     if (runtimeType == Credits) {
       return Colors.green.toHex();
@@ -232,7 +245,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   String getPrintableQrCodeID() {
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss",'en');
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss", 'en');
 
     String year = "${dateFormat.parse(date ?? "").year}";
     String invCode = "";

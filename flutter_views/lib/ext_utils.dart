@@ -33,6 +33,9 @@ extension HexColor on Color {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
+  String colorToHexString() =>
+      '#${this.value.toRadixString(16).substring(2)}';
+
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
       value.toRadixString(16).substring(2, 8);

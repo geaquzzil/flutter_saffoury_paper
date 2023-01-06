@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.da
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import '../dashboard/components/header.dart';
+import '../actions/dashboard/compontents/header.dart';
 import 'my_files.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -116,14 +116,17 @@ class Responsive extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     // If our width is more than 1100 then we consider it a desktop
     if (size.width >= 1100) {
+      debugPrint("ResponsiveWidget desktop");
       return desktop;
     }
     // If width it less then 1100 and more then 850 we consider it as tablet
     else if (size.width >= 850 && tablet != null) {
+      debugPrint("ResponsiveWidget tablet");
       return tablet!;
     }
     // Or less then that we called it mobile
     else {
+      debugPrint("ResponsiveWidget mobile");
       return mobile;
     }
   }

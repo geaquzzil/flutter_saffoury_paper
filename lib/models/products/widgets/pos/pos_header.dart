@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/shared_components/search_field.dart';
-import 'package:flutter_view_controller/shared_components/today_text.dart';
 
 class PosHeader extends StatelessWidget {
   const PosHeader({Key? key}) : super(key: key);
@@ -13,9 +13,9 @@ class PosHeader extends StatelessWidget {
         Expanded(child: SearchField(onSearch: (value) {})),
         const TodayText(),
         const SizedBox(width: kSpacing),
-        IconButton(onPressed: (){}, icon: Icon(Icons.info)),
-          const SizedBox(width: kSpacing),
-        IconButton(onPressed: (){}, icon: Icon(Icons.camera_alt))
+        IconButton(onPressed: () {}, icon: Icon(Icons.info)),
+        const SizedBox(width: kSpacing),
+        IconButton(onPressed: () {}, icon: Icon(Icons.camera_alt))
       ],
     );
   }

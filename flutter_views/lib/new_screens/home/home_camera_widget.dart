@@ -63,7 +63,7 @@ class HomeCameraNavigationWidget extends BaseHomeSharedWithWidgets {
 
   @override
   EdgeInsets? hasBodyPadding(BuildContext context) {
-    return null;
+    return EdgeInsets.symmetric(horizontal: 40, vertical: 80);
   }
 
   @override

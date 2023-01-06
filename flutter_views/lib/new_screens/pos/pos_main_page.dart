@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/view_abstract_base.dart';
 import '../cart/cart_description/cart_description.dart';
-import '../dashboard/components/header.dart';
+import '../actions/dashboard/compontents/header.dart';
 
 class POSPage extends StatelessWidget {
   POSPage({Key? key}) : super(key: key);

@@ -24,6 +24,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_de
 import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/priceless_invoices/reservation_invoice.dart';
@@ -136,6 +137,15 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     ];
   }
 
+  List<List<ViewAbstract>> getListOfTabbarFunds() {
+    return [
+      if (credits?.isNotEmpty ?? false) credits!,
+      if (debits?.isNotEmpty ?? false) debits!,
+      if (spendings?.isNotEmpty ?? false) spendings!,
+      if (incomes?.isNotEmpty ?? false) incomes!,
+    ];
+  }
+
   List<List<GrowthRate>> getAnalysisChartFunds() {
     return [
       if (creditsAnalysis != null) creditsAnalysis ?? [],
@@ -242,10 +252,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   }
 
   List<StaggeredGridTile> getInvoicesWidgets(BuildContext context) {
+
     return [
       StaggeredGridTile.count(
           crossAxisCellCount: 6,
-          mainAxisCellCount: 1.5,
+          mainAxisCellCount: .5,
           child: MultiLineChartItem<GrowthRate, DateTime>(
             title: "T",
             list: getAnalysisChart(),
@@ -259,11 +270,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            color: Order().getMainColor(),
             // color: Colors.green.withOpacity(0.2),
             icon: Order().getMainIconData(),
             title: AppLocalizations.of(context)!.orders,
             description:
-                "${orders.getTotalQuantityGroupedFormattedText(context)}",
+                "${orders?.getTotalQuantityGroupedFormattedText(context)}",
             footer: orders?.length.toString(),
             footerRightWidget: ordersAnalysis.getGrowthRateText(context),
           )),
@@ -271,10 +283,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            color: Purchases().getMainColor(),
             icon: Purchases().getMainIconData(),
             title: AppLocalizations.of(context)!.purchases,
             description:
-                "${purchases.getTotalQuantityGroupedFormattedText(context)}",
+                "${purchases?.getTotalQuantityGroupedFormattedText(context)}",
             footer: purchases?.length.toString(),
             footerRightWidget: purchasesAnalysis.getGrowthRateText(context),
           )),
@@ -402,7 +415,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return [
       StaggeredGridTile.count(
           crossAxisCellCount: 6,
-          mainAxisCellCount: 1.5,
+          mainAxisCellCount: 1.2,
           child: MultiLineChartItem<GrowthRate, DateTime>(
             title: "T",
             list: getAnalysisChartFunds(),
@@ -416,6 +429,8 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            list: credits,
+            color: Credits().getMainColor(),
             icon: Icons.arrow_back_sharp,
             title: AppLocalizations.of(context)!.credits,
             description:
@@ -427,48 +442,38 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            color: Debits().getMainColor(),
             icon: Icons.arrow_forward_rounded,
             title: AppLocalizations.of(context)!.debits,
             description: debits?.getTotalValue().toCurrencyFormat() ?? "",
             footer: debits?.length.toString(),
             footerRightWidget: debitsAnalysis.getGrowthRateText(context),
           )),
-      StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: 2,
-          child: MultiLineChartItem<GrowthRate, DateTime>(
-            title: "T",
-            list: getAnalysisChart(),
-            titles: getAnalysisChartTitle(context),
-            dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
-            xValueMapper: (item, value, indexInsideList) =>
-                DateTime(value.year ?? 0, value.month ?? 0, value.day ?? 1),
-            yValueMapper: (item, n, indexInsideList) => n.total,
-          )),
-      StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: 3,
-          child: StorageDetailsCustom(list: [
-            StorageInfoCardCustom(
-                title: AppLocalizations.of(context)!.previousBalance,
-                description: getTotalPreviousBalance(),
-                trailing: Text(""),
-                svgSrc: Icons.preview),
-            StorageInfoCardCustom(
-                title: AppLocalizations.of(context)!.this_day,
-                description: getTotalTodayBalance(),
-                trailing: Text(""),
-                svgSrc: Icons.today),
-            StorageInfoCardCustom(
-                title: AppLocalizations.of(context)!.balance_due,
-                description: getTotalDueBalance(),
-                trailing: Text(""),
-                svgSrc: Icons.balance)
-          ], chart: Text(""))),
+      // StaggeredGridTile.count(
+      //     crossAxisCellCount: 2,
+      //     mainAxisCellCount: 3,
+      //     child: StorageDetailsCustom(list: [
+      //       StorageInfoCardCustom(
+      //           title: AppLocalizations.of(context)!.previousBalance,
+      //           description: getTotalPreviousBalance(),
+      //           trailing: Text(""),
+      //           svgSrc: Icons.preview),
+      //       StorageInfoCardCustom(
+      //           title: AppLocalizations.of(context)!.this_day,
+      //           description: getTotalTodayBalance(),
+      //           trailing: Text(""),
+      //           svgSrc: Icons.today),
+      //       StorageInfoCardCustom(
+      //           title: AppLocalizations.of(context)!.balance_due,
+      //           description: getTotalDueBalance(),
+      //           trailing: Text(""),
+      //           svgSrc: Icons.balance)
+      //     ], chart: Text(""))),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            color: Spendings().getMainColor(),
             icon: Icons.arrow_forward_rounded,
             title: AppLocalizations.of(context)!.spendings,
             description: spendings?.getTotalValue().toCurrencyFormat() ?? "",
@@ -480,6 +485,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             icon: Icons.arrow_back_sharp,
+            color: Incomes().getMainColor(),
             title: AppLocalizations.of(context)!.incomes,
             description: incomes?.getTotalValue().toCurrencyFormat() ?? "",
             footer: incomes?.length.toString(),
@@ -489,6 +495,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: 2,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
+            color: Colors.blue,
             icon: Icons.today,
             title: AppLocalizations.of(context)!.this_day,
             description: getTotalTodayBalance(),
@@ -500,6 +507,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             icon: Icons.balance,
+            color: Colors.orange,
             title: AppLocalizations.of(context)!.balance_due,
             description: getTotalDueBalance(),
             // footer: incomes?.length.toString(),
@@ -510,7 +518,15 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
 
   @override
   List<DashableGridHelper> getDashboardSections(BuildContext context) => [
-        DashableGridHelper(AppLocalizations.of(context)!.overview,
-            [...getFundWidgets(context), ...getInvoicesWidgets(context)])
+        DashableGridHelper(
+            sectionsListToTabbar: getListOfTabbarFunds(),
+            title: AppLocalizations.of(context)!.overview,
+            widgets: [
+              ...getFundWidgets(context),
+              // ...getInvoicesWidgets(context)
+            ]),
+        DashableGridHelper(
+            title: AppLocalizations.of(context)!.invoice,
+            widgets: [...getInvoicesWidgets(context)])
       ];
 }

@@ -164,6 +164,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<T?> callApi() async {
     var response = await getRespones(serverActions: ServerActions.call);
     debugPrint("callApi $response");
+
     debugPrint("callApi status code ${response?.statusCode}");
     debugPrint("callApi response =>${response?.body}");
 

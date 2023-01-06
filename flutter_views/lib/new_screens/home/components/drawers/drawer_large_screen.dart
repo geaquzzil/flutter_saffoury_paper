@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
@@ -106,19 +107,13 @@ class DrawerLargeScreens extends StatelessWidget {
             // .add(safeArea),
             width: double.infinity,
             child: !isOpen
-                ? const FlutterLogo(
-                    size: 48,
-                  )
+                ? CompanyLogo()
                 : Row(
                     children: const [
                       SizedBox(
                         width: 24,
                       ),
-                      FlutterLogo(
-                        style: FlutterLogoStyle.markOnly,
-                        textColor: Colors.orange,
-                        size: 48,
-                      ),
+                      CompanyLogo(),
                       SizedBox(
                         width: 16,
                       ),

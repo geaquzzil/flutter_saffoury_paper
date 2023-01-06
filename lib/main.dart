@@ -25,6 +25,7 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
@@ -54,10 +55,12 @@ import 'package:provider/provider.dart';
 import 'models/funds/credits.dart';
 import 'models/products/products_types.dart';
 
+String svgCode = '';
 void main() async {
   initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
+  svgCode = await rootBundle.loadString("assets/images/vector/logoOnly.svg");
   //TODO what is this ?
   // await SystemChrome.setPreferredOrientations([
   //   DeviceOrientation.portraitUp,
@@ -99,13 +102,16 @@ void main() async {
   ]);
   try {
     runApp(MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => SVGData(svgCode)),
+      ChangeNotifierProvider(create: (context) => PreviousColor('#7EB642')),
       ChangeNotifierProvider(create: (context) => TherdScreenProvider()),
       ChangeNotifierProvider(create: (context) => EndDrawerProvider()),
       ChangeNotifierProvider(create: (context) => ListScrollProvider()),
       ChangeNotifierProvider(
           create: (context) => PrintSettingLargeScreenProvider()),
       ChangeNotifierProvider(
-          create: (context) => DrawerMenuControllerProvider(initViewAbstract: Product())),
+          create: (context) =>
+              DrawerMenuControllerProvider(initViewAbstract: Product())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
@@ -128,7 +134,7 @@ void main() async {
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),
       )
-    ], child:  BaseMaterialAppPage()));
+    ], child: BaseMaterialAppPage()));
   } catch (e) {
     debugPrint("exception => $e");
   }

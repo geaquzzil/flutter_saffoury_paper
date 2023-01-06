@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
@@ -45,6 +46,7 @@ const String shoppingRouteName = 'shopping';
 const String printRouteName = 'print';
 const String viewRouteName = 'view';
 const String searchRouteName = "search";
+const String dashboardRouteName = "dashboard";
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
 class RouteGenerator {
@@ -123,6 +125,18 @@ class RouteGenerator {
           },
         ),
         GoRoute(
+          name: dashboardRouteName,
+          path: "/dashboard/list/:tableName",
+          pageBuilder: (context, state) {
+            return MaterialPage(
+                key: state.pageKey,
+                child: DashboardListDetails(
+                  list: (state.extra as List)[1],
+                  header: (state.extra as List)[0],
+                ));
+          },
+        ),
+        GoRoute(
           name: loginRouteName,
           path: "/login",
           pageBuilder: (context, state) {
@@ -133,6 +147,7 @@ class RouteGenerator {
       ],
     );
   }
+
   static Scaffold getErrorPage() {
     return Scaffold(
       appBar: AppBar(

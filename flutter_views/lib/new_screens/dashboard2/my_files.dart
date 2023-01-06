@@ -53,7 +53,7 @@ class MyFiles extends StatelessWidget {
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
-        SizedBox(height: defaultPadding )
+        SizedBox(height: kDefaultPadding )
       ],
     );
   }
