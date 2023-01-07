@@ -158,12 +158,37 @@ class Employee extends User<Employee> {
   List<TabControllerHelper> getCustomTabList(BuildContext context,
       {ServerActions? action}) {
     return [
-      TabControllerHelper(AppLocalizations.of(context)!.size_analyzer,
-          widget: Center(
-            child: Text("sdad $iD"),
-          )),
       TabControllerHelper(
-        AppLocalizations.of(context)!.size_analyzer,
+        AppLocalizations.of(context)!.sales_analysis,
+        slivers: [
+          SliverFillRemaining(
+            child: ListHorizontalCustomViewApiAutoRestWidget(
+                // onResponseAddWidget: ((response) {
+                //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
+                //   double total = i.getTotalListAnalysis();
+                //   return Column(
+                //     children: [
+                //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+                //       //     titleString: "TEST1 ",
+                //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+                //       StorageInfoCardCustom(
+                //           title: AppLocalizations.of(context)!.total,
+                //           description: total.toCurrencyFormat(),
+                //           trailing: "kg",
+                //           svgSrc: Icons.monitor_weight),
+                //       StorageInfoCardCustom(
+                //           title: AppLocalizations.of(context)!.balance,
+                //           description:
+                //               customers?.balance?.toCurrencyFormat() ?? "0",
+                //           trailing: "trailing",
+                //           svgSrc: Icons.balance),
+                //     ],
+                //   );
+                // }),
+
+                autoRest: CustomerByEmployeeAnanlysis.init(iD)),
+          )
+        ],
         widget: ListHorizontalCustomViewApiAutoRestWidget(
             // onResponseAddWidget: ((response) {
             //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
@@ -187,7 +212,7 @@ class Employee extends User<Employee> {
             //     ],
             //   );
             // }),
-            titleString: "TEST1 ",
+
             autoRest: CustomerByEmployeeAnanlysis.init(iD)),
       ),
 

@@ -708,7 +708,7 @@ class Product extends ViewAbstract<Product>
     return [
       TabControllerHelper(AppLocalizations.of(context)!.movments,
           widget: ListHorizontalCustomViewApiAutoRestWidget(
-              titleString: "TEST1 ", autoRest: ProductMovments.init(iD))),
+              autoRest: ProductMovments.init(iD))),
       // TabControllerHelper(
       //   AppLocalizations.of(context)!.movments,
       //   widget: ListHorizontalCustomViewApiAutoRestWidget(

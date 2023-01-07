@@ -152,7 +152,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ],
       ));
     } else if (SizeConfig.isLargeScreen(context)) {
-      navigationRailWidget ??= getNavigationRail();
+      navigationRailWidget ??= DrawerLargeScreens();
 
       return SafeArea(
           child: Row(
@@ -252,8 +252,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   }
 
   Widget? getBottomNavigationBar() {
-    if (SizeConfig.isLargeScreen(context)) return null;
-    if (SizeConfig.isSoLargeScreen(context)) return null;
+    // if (SizeConfig.isLargeScreen(context)) return null;
+    // if (SizeConfig.isSoLargeScreen(context)) return null;
 
     AppLocalizations.of(context)!.appTitle;
     return Selector<DrawerMenuControllerProvider, int>(

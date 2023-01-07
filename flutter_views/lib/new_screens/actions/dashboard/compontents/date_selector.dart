@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -16,14 +19,11 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
     return Row(
       children: [
         IconButton(
-            onPressed: () {
-              
-            },
+            onPressed: () {},
             icon: Icon(
               Icons.arrow_back_ios_new,
               color: Theme.of(context).colorScheme.primary,
             )),
-    
         ElevatedButton.icon(
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(
@@ -65,6 +65,9 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
       setState(() {
         _startDate.value = newSelectedDate.start;
         _endDate.value = newSelectedDate.end;
+        selectDateChanged.value = DateObject(
+            from: newSelectedDate.start.toDateTimeStringOnlyDate(),
+            to: newSelectedDate.end.toDateTimeStringOnlyDate());
       });
     }
   }

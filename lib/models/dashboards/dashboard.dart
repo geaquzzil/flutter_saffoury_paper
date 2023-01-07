@@ -105,8 +105,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       AppLocalizations.of(context)!.dashboard_and_rep;
   @override
   Map<String, String> get getCustomMap => {
-        "date": jsonEncode(
-            DateObject(from: "2022-08-02", to: "2022-08-02").toJson()),
+        "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
       };
 
   @override
@@ -252,7 +251,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   }
 
   List<StaggeredGridTile> getInvoicesWidgets(BuildContext context) {
-
     return [
       StaggeredGridTile.count(
           crossAxisCellCount: 6,
@@ -520,6 +518,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   List<DashableGridHelper> getDashboardSections(BuildContext context) => [
         DashableGridHelper(
             sectionsListToTabbar: getListOfTabbarFunds(),
+            headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
             title: AppLocalizations.of(context)!.overview,
             widgets: [
               ...getFundWidgets(context),
@@ -527,6 +526,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             ]),
         DashableGridHelper(
             title: AppLocalizations.of(context)!.invoice,
+            headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
             widgets: [...getInvoicesWidgets(context)])
       ];
+
+  @override
+  void setDate(DateObject? date) {
+    this.date = date;
+  }
 }

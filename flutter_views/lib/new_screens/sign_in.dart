@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -57,7 +58,7 @@ class SignInPage extends BaseWebPage {
             ),
           ],
         ),
-        const FlutterLogo(
+        CompanyLogo(
           size: 300,
         )
       ],

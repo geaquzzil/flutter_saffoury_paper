@@ -103,8 +103,7 @@ class CustomerByEmployeeAnanlysis
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(
-      BuildContext context) {
+  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     return Column(
       children: [
         LineChartItem<GrowthRate, DateTime>(
@@ -116,37 +115,37 @@ class CustomerByEmployeeAnanlysis
         ),
         StorageInfoCardCustom(
             title: AppLocalizations.of(context)!.total,
-            description: GrowthRate.getTotal(ordersAnalysisGeneral)
-                .toCurrencyFormat(),
-            trailing: GrowthRate.getGrowthRateText(
-                context, ordersAnalysisGeneral),
+            description:
+                GrowthRate.getTotal(ordersAnalysisGeneral).toCurrencyFormat(),
+            trailing:
+                GrowthRate.getGrowthRateText(context, ordersAnalysisGeneral),
             svgSrc: Icons.monitor_weight),
-        ExpansionTile(
-          initiallyExpanded: true,
-          title: TitleText(
-              text: AppLocalizations.of(context)!.mostPopular,
-              fontWeight: FontWeight.bold),
-          children: [
-            ListStaticWidget<Customer>(
-              list: customers
-                      ?.where((c) =>
-                          c.ordersAnalysis != null &&
-                          (c.ordersAnalysis?.isNotEmpty ?? false))
-                      .toList() ??
-                  [],
-              emptyWidget: const Text("no customers"),
-              listItembuilder: (cust) => ListTile(
-                leading: cust.getCardLeading(context),
-                title: Text(cust.name ?? ""),
-                trailing:
-                    GrowthRate.getGrowthRateText(context, cust.ordersAnalysis),
-                subtitle: Text(cust
-                    .getTotalAnalsis(cust.ordersAnalysis)
-                    .toCurrencyFormat()),
-              ),
-            )
-          ],
-        )
+        // ExpansionTile(
+        //   initiallyExpanded: true,
+        //   title: TitleText(
+        //       text: AppLocalizations.of(context)!.mostPopular,
+        //       fontWeight: FontWeight.bold),
+        //   children: [
+        //     ListStaticWidget<Customer>(
+        //       list: customers
+        //               ?.where((c) =>
+        //                   c.ordersAnalysis != null &&
+        //                   (c.ordersAnalysis?.isNotEmpty ?? false))
+        //               .toList() ??
+        //           [],
+        //       emptyWidget: const Text("no customers"),
+        //       listItembuilder: (cust) => ListTile(
+        //         leading: cust.getCardLeading(context),
+        //         title: Text(cust.name ?? ""),
+        //         trailing:
+        //             GrowthRate.getGrowthRateText(context, cust.ordersAnalysis),
+        //         subtitle: Text(cust
+        //             .getTotalAnalsis(cust.ordersAnalysis)
+        //             .toCurrencyFormat()),
+        //       ),
+        //     )
+        //   ],
+        // )
         // StaggeredGrid.count(
         //   crossAxisCount: 2,
         //   crossAxisSpacing: 2,

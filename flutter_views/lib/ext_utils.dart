@@ -33,8 +33,7 @@ extension HexColor on Color {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
-  String colorToHexString() =>
-      '#${this.value.toRadixString(16).substring(2)}';
+  String colorToHexString() => '#${this.value.toRadixString(16).substring(2)}';
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
@@ -91,6 +90,17 @@ extension StringsUtils on String? {
     return dateFormat.parse(this ?? "");
   }
 
+  DateTime toDateTimeOnlyDate() {
+    if (this == null) return DateTime.now();
+    DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
+    return dateFormat.parse(this ?? "");
+  }
+
+  String toDateTimeOnlyDateString() {
+    DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
+    return dateFormat.format(DateTime.now());
+  }
+
   String toDateTimeNowString() {
     DateFormat dateFormat = DateFormat(dateFormatString, 'en-US');
     return dateFormat.format(DateTime.now());
@@ -115,6 +125,11 @@ extension DatesDateTime on DateTime? {
   String toDateTimeString() {
     if (this == null) return "".toDateTimeNowString();
     DateFormat dateFormat = DateFormat(dateFormatString, 'en');
+    return dateFormat.format(this ?? DateTime.now());
+  }
+  String toDateTimeStringOnlyDate() {
+    if (this == null) return "".toDateTimeNowString();
+    DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en');
     return dateFormat.format(this ?? DateTime.now());
   }
 }

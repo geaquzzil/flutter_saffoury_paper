@@ -89,7 +89,7 @@ class Order extends InvoiceMaster<Order>
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Order>(
               obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-              key: "CustomerByOrder$iD"),
+              key: "CustomerByOrder${customers?.iD}"),
         ),
       ),
       TabControllerHelper(

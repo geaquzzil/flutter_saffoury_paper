@@ -41,6 +41,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     var list = await (this as ViewAbstract).getPopupMenuActionsList(context);
     await showMenu<MenuItemBuild>(
       context: context,
+      
       position: RelativeRect.fromLTRB(
         offset.dx,
         offset.dy + size.height,

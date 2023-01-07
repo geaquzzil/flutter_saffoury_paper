@@ -43,6 +43,7 @@ class SizeConfig {
 
   static bool isSoLargeScreen(BuildContext context) {
     debugSize(context);
+    if (MediaQuery.of(context).size.width >= largeTablet) return true;
     bool isSupported =
         isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
@@ -51,6 +52,7 @@ class SizeConfig {
 
   static bool isLargeScreen(BuildContext context) {
     debugSize(context);
+    if (MediaQuery.of(context).size.width >= 500) return true;
     bool isSupported =
         isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;

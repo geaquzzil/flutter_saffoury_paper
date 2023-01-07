@@ -11,7 +11,7 @@ class PosHeader extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: SearchField(onSearch: (value) {})),
-        const TodayText(),
+         TodayText(),
         const SizedBox(width: kSpacing),
         IconButton(onPressed: () {}, icon: Icon(Icons.info)),
         const SizedBox(width: kSpacing),

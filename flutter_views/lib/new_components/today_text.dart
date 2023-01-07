@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:intl/intl.dart';
 
+import '../models/apis/date_object.dart';
+
 class TodayText extends StatelessWidget {
-  const TodayText({Key? key}) : super(key: key);
+  DateObject? dateObject;
+  TodayText({Key? key, this.dateObject}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +15,32 @@ class TodayText extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 200),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.today,
-            style: Theme.of(context).textTheme.caption,
-          ),
-          Text(
-            DateFormat.yMMMEd().format(DateTime.now()),
-          )
-        ],
+        children: [getTitle(context), getDate(context)],
       ),
+    );
+  }
+
+  Widget getTitle(BuildContext context) {
+    String title = "";
+
+    if (dateObject != null) {
+      title = dateObject!.getTitle(context);
+    } else {
+      title = AppLocalizations.of(context)!.today;
+    }
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.caption,
+    );
+  }
+
+  Widget getDate(BuildContext context) {
+    String date = DateFormat.yMMMEd().format(DateTime.now());
+    if (dateObject != null) {
+      date = dateObject!.getDate(context);
+    }
+    return Text(
+      date,
     );
   }
 }

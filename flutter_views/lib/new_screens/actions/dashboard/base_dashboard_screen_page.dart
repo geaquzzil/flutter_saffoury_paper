@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 
 final selectDateChanged = ValueNotifier<DateObject?>(null);
 
@@ -93,55 +95,62 @@ class _BaseDashboardState extends State<BaseDashboard>
   }
 
   Widget getMainBody(BuildContext context) {
-    return FutureBuilder(
-      future: viewAbstract.callApi(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          widget.dashboard = snapshot.data as DashableInterface;
-          setTabbar();
-          var size = MediaQuery.of(context).size;
-          List<DashableGridHelper> list =
-              widget.dashboard.getDashboardSections(context);
-          List<Widget> widgets = List.empty(growable: true);
-          for (var element in list) {
-            var group = [
-              DashableItemHeaderBuilder(
-                dgh: element,
-              ),
-              SliverToBoxAdapter(
-                child: Responsive(
-                  mobile: FileInfoStaggerdGridView(
-                    list: element.widgets,
-                    crossAxisCount: size.width < 750 ? 2 : 4,
-                    childAspectRatio:
-                        size.width < 750 && size.width > 350 ? 1.3 : 1,
-                  ),
-                  tablet: FileInfoStaggerdGridView(
-                    list: element.widgets,
-                  ),
-                  desktop: FileInfoStaggerdGridView(
-                    list: element.widgets,
-                    crossAxisCount: 6,
-                    childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
-                  ),
-                ),
-              )
-            ];
-            widgets.addAll(group);
-          }
-          return CustomScrollView(
-            slivers: widgets,
+    return ValueListenableBuilder<DateObject?>(
+        valueListenable: selectDateChanged,
+        builder: (context, value, child) {
+          widget.dashboard.setDate(value);
+          init(context);
+          return FutureBuilder(
+            future: viewAbstract.callApi(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                widget.dashboard = snapshot.data as DashableInterface;
+                init(context);
+                setTabbar();
+                var size = MediaQuery.of(context).size;
+                List<DashableGridHelper> list =
+                    widget.dashboard.getDashboardSections(context);
+                List<Widget> widgets = List.empty(growable: true);
+                for (var element in list) {
+                  var group = [
+                    DashableItemHeaderBuilder(
+                      dgh: element,
+                    ),
+                    SliverToBoxAdapter(
+                      child: Responsive(
+                        mobile: FileInfoStaggerdGridView(
+                          list: element.widgets,
+                          crossAxisCount: size.width < 750 ? 2 : 4,
+                          childAspectRatio:
+                              size.width < 750 && size.width > 350 ? 1.3 : 1,
+                        ),
+                        tablet: FileInfoStaggerdGridView(
+                          list: element.widgets,
+                        ),
+                        desktop: FileInfoStaggerdGridView(
+                          list: element.widgets,
+                          crossAxisCount: 6,
+                          childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
+                        ),
+                      ),
+                    )
+                  ];
+                  widgets.addAll(group);
+                }
+                return CustomScrollView(
+                  slivers: widgets,
+                );
+              }
+              return Center(
+                child: EmptyWidget(
+                    lottiUrl:
+                        "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
+                    title: AppLocalizations.of(context)!.loading,
+                    subtitle: AppLocalizations.of(context)!.pleaseWait),
+              );
+            },
           );
-        }
-        return Center(
-          child: EmptyWidget(
-              lottiUrl:
-                  "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
-              title: AppLocalizations.of(context)!.loading,
-              subtitle: AppLocalizations.of(context)!.pleaseWait),
-        );
-      },
-    );
+        });
   }
 
   Widget getFirstPane(BuildContext context) {
@@ -313,7 +322,6 @@ class _BaseDashboardState extends State<BaseDashboard>
 
     _tabController = TabController(length: _tabs.length, vsync: this);
   }
-  
 }
 
 class DashableItemHeaderBuilder extends StatelessWidget {
@@ -322,6 +330,7 @@ class DashableItemHeaderBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey buttonKey = GlobalKey();
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       sliver: SliverPersistentHeader(
@@ -342,15 +351,30 @@ class DashableItemHeaderBuilder extends StatelessWidget {
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     ElevatedButton.icon(
+                      key: buttonKey,
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.symmetric(
                           horizontal: kDefaultPadding * 1.5,
                           vertical: kDefaultPadding / 2,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (dgh.headerListToAdd == null) return;
+                        await showPopupMenu(context, buttonKey,
+                                list: dgh.headerListToAdd!
+                                    .map((e) => buildMenuItem(
+                                        context,
+                                        MenuItemBuild(
+                                            e.getMainHeaderLabelTextOnly(
+                                                context),
+                                            Icons.add,
+                                            "")))
+                                    .toList())
+                            .then(
+                                (value) => debugPrint("showPopupMenu $value"));
+                      },
                       icon: const Icon(Icons.add),
-                      label: const Text("Add New"),
+                      label: Text(AppLocalizations.of(context)!.add_new),
                     ),
                   ],
                 ),

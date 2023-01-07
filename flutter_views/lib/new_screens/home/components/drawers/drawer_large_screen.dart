@@ -109,7 +109,7 @@ class DrawerLargeScreens extends StatelessWidget {
             child: !isOpen
                 ? CompanyLogo()
                 : Row(
-                    children: const [
+                    children: [
                       SizedBox(
                         width: 24,
                       ),

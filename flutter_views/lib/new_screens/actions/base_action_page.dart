@@ -181,32 +181,39 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   List<Widget> getTabWidget(BuildContext context, TabControllerHelper e) {
+    if (_tabs.indexOf(e) == 0) {
+      return [
+        SliverOverlapInjector(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        ),
+        ...getTopWidget(),
+        getPadding(context, getBody(context)),
+        ...getBottomWidget()
+      ];
+    }
+    bool hasSlivers = e.slivers != null;
     return [
       SliverOverlapInjector(
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
       ),
-      if (_tabs.indexOf(e) == 0) ...getTopWidget(),
-      _tabs.indexOf(e) == 0
-          ? SliverPadding(
-              padding: const EdgeInsets.only(
-                  top: kDefaultPadding / 2,
-                  right: kDefaultPadding / 2,
-                  bottom: 80,
-                  left: kDefaultPadding / 2),
-              sliver: getBody(context))
-          : SliverPadding(
-              padding: const EdgeInsets.only(
-                  top: kDefaultPadding / 2,
-                  right: kDefaultPadding / 2,
-                  bottom: 80,
-                  left: kDefaultPadding / 2),
-              sliver: SliverFillRemaining(
-                  fillOverscroll: true,
-                  hasScrollBody: false,
-                  child: _tabs.indexOf(e) == 0 ? getBody(context) : e.widget),
-            ),
-      if (_tabs.indexOf(e) == 0) ...getBottomWidget()
+      if (!hasSlivers)
+        getPadding(
+            context,
+            SliverFillRemaining(
+                fillOverscroll: true, hasScrollBody: false, child: e.widget)),
+                
+      ...?e.slivers?.map((e) => getPadding(context, e)).toList()
     ];
+  }
+
+  SliverPadding getPadding(BuildContext context, Widget sliver) {
+    return SliverPadding(
+        padding: const EdgeInsets.only(
+            top: kDefaultPadding / 2,
+            right: kDefaultPadding / 2,
+            bottom: 80,
+            left: kDefaultPadding / 2),
+        sliver: sliver);
   }
 
   List<Widget> getBottomWidget() {

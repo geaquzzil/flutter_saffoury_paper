@@ -4,14 +4,20 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:provider/provider.dart';
 
 class CompanyLogo extends StatelessWidget {
-  const CompanyLogo({super.key});
+  double? size;
+  CompanyLogo({super.key, this.size});
 
   @override
   Widget build(BuildContext context) {
     final svg = context.watch<SVGData>();
     // debugPrint("CompanyLogo=> $svg.code");
     return svg.code.isNotEmpty
-        ? Center(child: SvgPicture.string(svg.code))
+        ? Center(
+            child: SvgPicture.string(
+            svg.code,
+            height: size,
+            width: size,
+          ))
         : const Center(child: CircularProgressIndicator.adaptive());
   }
 

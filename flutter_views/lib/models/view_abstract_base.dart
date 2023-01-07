@@ -356,12 +356,13 @@ class TabControllerHelper extends Tab {
   AutoRest? autoRest;
 
   Widget? widget;
-
+  List<Widget>? slivers;
   TabControllerHelper(String title,
       {super.key,
       Widget? icon,
       this.fieldThatHasList,
       this.autoRest,
+      this.slivers,
       this.widget})
       : super(icon: icon, text: title);
 }

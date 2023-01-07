@@ -1,5 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/size_config.dart';
+
+ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e) {
+  return ListTile(
+    leading: Icon(e.icon),
+    title: Text(e.title),
+  );
+}
+
+PopupMenuItem<MenuItemBuild> buildMenuItem(
+        BuildContext context, MenuItemBuild e) =>
+    PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));
+Future<MenuItemBuild?> showPopupMenu(
+    BuildContext context, GlobalKey clickedWidget,
+    {required List<PopupMenuEntry<MenuItemBuild>> list}) {
+  RenderBox renderBox =
+      clickedWidget.currentContext?.findRenderObject() as RenderBox;
+  final Size size = renderBox.size;
+  final Offset offset = renderBox.localToGlobal(Offset.zero);
+  return showMenu(
+    context: context,
+    position: RelativeRect.fromLTRB(
+      offset.dx,
+      offset.dy + size.height,
+      offset.dx,
+      offset.dy,
+    ), //
+    items: list,
+    elevation: 8.0,
+  );
+}
 
 Future<T?> showBottomSheetExt<T>(
     {required BuildContext context,
