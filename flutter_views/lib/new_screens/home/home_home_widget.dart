@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_shared_with_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,8 @@ class HomeNavigationPage extends BaseHomeSharedWithWidgets {
             mainAxisSpacing: 2,
             crossAxisSpacing: 2,
             children: homeList),
-      )
+      ),
+      // SliverApiMaster(),
     ];
   }
 
@@ -67,8 +69,9 @@ class HomeNavigationPage extends BaseHomeSharedWithWidgets {
   EdgeInsets? hasBodyPadding(BuildContext context) {
     return null;
   }
+
   @override
   EdgeInsets? hasMainBodyPadding(BuildContext context) {
-     return null;
+    return null;
   }
 }

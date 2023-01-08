@@ -4,9 +4,9 @@ import 'package:flutter_view_controller/constants.dart';
 
 class RoundedIconButtonNetwork extends StatelessWidget {
   double size;
-   RoundedIconButtonNetwork({
+  RoundedIconButtonNetwork({
     Key? key,
-    this.size = 20,
+    this.size = 18,
     required this.onTap,
     required this.imageUrl,
   }) : super(key: key);

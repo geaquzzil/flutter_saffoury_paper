@@ -125,10 +125,11 @@ class _PdfPageState<T extends PrintLocalSetting>
         } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             widget.invoiceObj = snapshot.data as PrintableMaster;
-
-            context
-                .read<ListMultiKeyProvider>()
-                .edit(snapshot.data as ViewAbstract);
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              context
+                  .read<ListMultiKeyProvider>()
+                  .edit(snapshot.data as ViewAbstract);
+            });
 
             return getBody(context, formt);
           } else {

@@ -154,6 +154,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 theme: ThemeData(
                   scaffoldBackgroundColor: lightDynamic?.background,
                   shadowColor: lightDynamic?.shadow,
+                  cardColor: lightDynamic?.surfaceVariant,
                   colorScheme: lightDynamic ?? defaultLightColorScheme,
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(
@@ -169,6 +170,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 darkTheme: ThemeData(
                   scaffoldBackgroundColor: darkDynamic?.background,
                   shadowColor: darkDynamic?.shadow,
+                  cardColor: darkDynamic?.surfaceVariant,
+        
                   colorScheme: darkDynamic ?? defaultDarkColorScheme,
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(

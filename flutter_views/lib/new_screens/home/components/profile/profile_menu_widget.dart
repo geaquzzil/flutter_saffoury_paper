@@ -22,7 +22,7 @@ class ProfileMenuWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).cardColor,
         child: IntrinsicWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

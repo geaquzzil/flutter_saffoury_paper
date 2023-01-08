@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -32,13 +33,16 @@ class SliverApiMaster extends StatefulWidget {
   bool buildSearchWidget;
   bool buildAppBar;
   bool buildFabIfMobile;
-  bool fetshListAsSearc;
+  bool buildFilterableView;
+  @Deprecated("message")
+  bool fetshListAsSearch;
   SliverApiMaster(
       {super.key,
       this.viewAbstract,
       this.buildAppBar = true,
       this.buildSearchWidget = true,
-      this.fetshListAsSearc = false,
+      this.buildFilterableView = false,
+      this.fetshListAsSearch = false,
       this.buildFabIfMobile = true});
 
   @override
@@ -111,6 +115,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     } else {
       viewAbstract = drawerViewAbstractObsever.getObject;
     }
+    fetshListWidgetBinding();
+  }
+
+  void fetshListWidgetBinding() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
     });
@@ -131,6 +139,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       slivers: [
         if (widget.buildAppBar) getAppBar(context),
         if (widget.buildSearchWidget) getSearchWidget(),
+        if (widget.buildFilterableView) getFilterableWidget(),
         Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
           builder: (context, value, child) {
             // List<Widget> widgets;
@@ -159,6 +168,19 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         )
       ],
     );
+  }
+
+  SliverPersistentHeader getFilterableWidget() {
+    return SliverPersistentHeader(
+        pinned: true,
+        delegate: SliverAppBarDelegatePreferedSize(
+            child: PreferredSize(
+          preferredSize: const Size.fromHeight(70.0),
+          child: FiltersAndSelectionListHeader(
+            listProvider: listProvider,
+            customKey: findCustomKey(),
+          ),
+        )));
   }
 
   SliverPersistentHeader getSearchWidget() {

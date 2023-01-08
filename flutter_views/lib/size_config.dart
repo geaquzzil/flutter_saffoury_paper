@@ -41,6 +41,10 @@ class SizeConfig {
     return 0.4;
   }
 
+  static bool isLargeScreenGeneral(BuildContext context) {
+    return isLargeScreen(context) || isSoLargeScreen(context);
+  }
+
   static bool isSoLargeScreen(BuildContext context) {
     debugSize(context);
     if (MediaQuery.of(context).size.width >= largeTablet) return true;

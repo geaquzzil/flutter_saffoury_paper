@@ -9,6 +9,9 @@ import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/complex_drawer.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/home_camera_widget.dart';
@@ -60,6 +63,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return Scaffold(
       key: drawerMenuControllerProvider.getStartDrawableKey,
       drawer: DrawerLargeScreens(),
+      // drawerScrimColor: Colors.transparent,
+      // backgroundColor: compexDrawerCanvasColor,
       endDrawer: const BaseHomeCartPage(),
       bottomNavigationBar: getBottomNavigationBar(),
       appBar: getAppBar(),
@@ -152,12 +157,13 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ],
       ));
     } else if (SizeConfig.isLargeScreen(context)) {
-      navigationRailWidget ??= DrawerLargeScreens();
+      navigationRailWidget ??= getNavigationRail();
 
       return SafeArea(
           child: Row(
         children: [
           navigationRailWidget!,
+          VerticalDivider(width: 1),
           Expanded(child: child),
         ],
       ));
@@ -225,18 +231,63 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   }
 
   Widget getNavigationRail() {
+    return Stack(
+      children: [
+        Selector<DrawerMenuControllerProvider, Tuple2<int, bool>>(
+          builder: (context, value, child) {
+            return NavigationRail(
+              groupAlignment: 0,
+              leading: SizedBox(
+                  height: 70,
+                  width: 70,
+                  child: DrawerHeaderLogo(isOpen: false)),
+              // trailing: Align(
+              //   alignment: Alignment.bottomCenter,
+              //   child: IconButton(
+              //     icon: Icon(Icons.menu),
+              //     onPressed: () {},
+              //   ),
+              // ),
+              extended: value.item2,
+              elevation: 4,
+              selectedIndex: value.item1,
+              onDestinationSelected: (int index) =>
+                  drawerMenuControllerProvider.setNavigationIndex = index,
+              destinations:
+                  getNavigationDesinations(isNavigationRail: true).cast(),
+            );
+          },
+          selector: (p0, p1) =>
+              Tuple2(p1.getNavigationIndex, p1.getNavigationRailIsOpen),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            // color: Colors.amber,
+            height: 160,
+            child: Column(children: [
+              DrawerSettingButton(),
+              DrawerLanguageButton(),
+              ProfilePicturePopupMenu()
+            ]),
+          ),
+        )
+      ],
+    );
     return Selector<DrawerMenuControllerProvider, Tuple2<int, bool>>(
       builder: (context, value, child) {
         return NavigationRail(
           groupAlignment: 0,
-          leading: CompanyLogo(),
-          trailing: FloatingActionButton(
-            elevation: 0,
-            onPressed: () {
-              drawerMenuControllerProvider.setNavigationRailIsOpen();
-              // Add your onPressed code here!
-            },
-            child: const Icon(Icons.add),
+          leading: SizedBox(
+              height: 70, width: 70, child: DrawerHeaderLogo(isOpen: false)),
+          trailing: Align(
+            alignment: Alignment.bottomCenter,
+            child: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {},
+            ),
           ),
           extended: value.item2,
           elevation: 4,
@@ -252,8 +303,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   }
 
   Widget? getBottomNavigationBar() {
-    // if (SizeConfig.isLargeScreen(context)) return null;
-    // if (SizeConfig.isSoLargeScreen(context)) return null;
+    if (SizeConfig.isLargeScreen(context)) return null;
+    if (SizeConfig.isSoLargeScreen(context)) return null;
 
     AppLocalizations.of(context)!.appTitle;
     return Selector<DrawerMenuControllerProvider, int>(
@@ -295,7 +346,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           ? getNavigationRailBarItem(Icons.qr_code, Icons.qr_code_2,
               AppLocalizations.of(context)!.barcode)
           : getBottomNavigationBarItem(Icons.qr_code, Icons.qr_code_2,
-              AppLocalizations.of(context)!.notification)
+              AppLocalizations.of(context)!.notification),
     ];
   }
 

@@ -67,52 +67,56 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 2)
             ? getExportButton(context)
             : null;
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-              bottom: kDefaultPadding / 2,
-              left: kDefaultPadding / 2,
-              right: kDefaultPadding / 2),
-          child: Row(
-            children: [
-              if (filterButton != null) filterButton,
-              DropdownStringListControllerListenerByIcon(
-                  icon: Icons.sort_by_alpha,
-                  hint: AppLocalizations.of(context)!.sortBy,
-                  list: drawerViewAbstractObsever.getObject
-                      .getMainFieldsIconsAndValues(context),
-                  onSelected: (obj) {
-                    debugPrint("is selected ${obj.runtimeType}");
-                    if (obj == null) {
-                      removeFilterableSelected(
-                          context, drawerViewAbstractObsever.getObject);
-                    } else {
-                      listProvider.clear(findCustomKey());
-                      addFilterableSortField(
-                          context, obj.value.toString(), obj.label);
-                    }
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+                // bottom: kDefaultPadding * .25,
+                top: kDefaultPadding * .25,
+                left: kDefaultPadding / 2,
+                right: kDefaultPadding / 2),
+            child: Row(
+              children: [
+                if (filterButton != null) filterButton,
+                DropdownStringListControllerListenerByIcon(
+                    icon: Icons.sort_by_alpha,
+                    hint: AppLocalizations.of(context)!.sortBy,
+                    list: drawerViewAbstractObsever.getObject
+                        .getMainFieldsIconsAndValues(context),
+                    onSelected: (obj) {
+                      debugPrint("is selected ${obj.runtimeType}");
+                      if (obj == null) {
+                        removeFilterableSelected(
+                            context, drawerViewAbstractObsever.getObject);
+                      } else {
+                        listProvider.clear(findCustomKey());
+                        addFilterableSortField(
+                            context, obj.value.toString(), obj.label);
+                      }
+                      notifyListApi(context);
+                      debugPrint("is selected $obj");
+                    }),
+                DropdownEnumControllerListenerByIcon<SortByType>(
+                  viewAbstractEnum: SortByType.ASC,
+                  onSelected: (object) {
+                    // listProvider.clear(findCustomKey());
+                    addFilterableSort(context, object as SortByType);
                     notifyListApi(context);
-                    debugPrint("is selected $obj");
-                  }),
-              DropdownEnumControllerListenerByIcon<SortByType>(
-                viewAbstractEnum: SortByType.ASC,
-                onSelected: (object) {
-                  // listProvider.clear(findCustomKey());
-                  addFilterableSort(context, object as SortByType);
-                  notifyListApi(context);
-                },
-              ),
-              const Spacer(),
-              getAddBotton(context),
-              getRefreshWidget(),
-              if (exportButton != null) exportButton,
-              if (printButton != null) printButton
-            ],
+                  },
+                ),
+                const Spacer(),
+                getAddBotton(context),
+                getRefreshWidget(),
+                if (exportButton != null) exportButton,
+                if (printButton != null) printButton
+              ],
+            ),
           ),
-        ),
-        if (hasFilterable(context)) HorizontalFilterableSelectedList(),
-      ],
+          if (hasFilterable(context)) HorizontalFilterableSelectedList(),
+        ],
+      ),
     );
   }
 

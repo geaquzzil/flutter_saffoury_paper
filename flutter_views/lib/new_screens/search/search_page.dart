@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_wi
 import 'package:flutter_view_controller/new_screens/lists/list_multible_views.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_search_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
@@ -42,25 +44,42 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = TextEditingController();
-
-  GlobalKey<ListApiMasterState> searchKey = GlobalKey<ListApiMasterState>();
+  ValueNotifier<String> _notiferSearch = ValueNotifier<String>("");
   Widget? startPane;
   Widget? searchPane;
+  final Debouncer _debouncer = Debouncer(milliseconds: 1000);
   late ViewAbstract viewAbstract;
   @override
   void initState() {
-    super.initState();
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
       viewAbstract =
           context.read<AuthProvider>().getNewInstance(widget.tableName!)!;
     }
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SearchPage oldWidget) {
+    if (widget.viewAbstract != null) {
+      viewAbstract = widget.viewAbstract!;
+    } else {
+      viewAbstract =
+          context.read<AuthProvider>().getNewInstance(widget.tableName!)!;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void callDebouncer(String query) {
+    _debouncer.run(() async {
+      _notiferSearch.value = query;
+    });
   }
 
   Widget _buildSearchBox(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(kDefaultPadding / 2),
+      padding: EdgeInsets.zero,
       child: ListTile(
           // tileColor: Colors.transparent,
           leading: const Icon(Icons.search),
@@ -69,8 +88,7 @@ class _SearchPageState extends State<SearchPage> {
             onSubmitted: (value) async {
               debugPrint("onSubmitted $value");
               await Configurations.saveQueryHistory(viewAbstract, value);
-              // setState(() {});
-              searchKey.currentState?.fetshListSearch(value);
+              callDebouncer(value);
             },
             controller: _controller,
             decoration: InputDecoration(
@@ -122,12 +140,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    startPane ??= getFirstPane(context);
+    startPane ??= SizeConfig.isLargeScreenGeneral(context)
+        ? getFirstPane(context)
+        : getFirstPaneMobile(context);
     searchPane ??= getSearchList();
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        // // floatingActionButton: getBackFloatingActionButton(context),
         appBar: getAppBar(context),
         body: TowPaneExt(
           startPane: startPane!,
@@ -135,65 +153,93 @@ class _SearchPageState extends State<SearchPage> {
         ));
   }
 
-  Widget getBody(BuildContext context) {
-    // return Text("Dsad");
-    return TowPaneExt(
-      startPane: getFirstPane(context),
-      endPane: getEmptyWidget(),
-    );
-  }
-
   Widget getFirstPane(BuildContext context) {
-    Widget listStickyWidget = ListMultibleViews(
-      // key: UniqueKey(),
-      list: [
-        // getSearchListItem(context),
-        if (SizeConfig.isFoldable(context)) getFilterableListItem(context),
-        getSuggestionListItem(context),
-        getBasedOnYourSearchListItem(context),
-        if (SizeConfig.isMobile(context)) getEmptyListStickyItem(),
+    return CustomScrollView(
+      slivers: [
+        if (SizeConfig.isLargeScreenGeneral(context))
+          SliverToBoxAdapter(
+            child: Hero(
+                tag: "/search", child: Card(child: _buildSearchBox(context))),
+          ),
+        // SliverToBoxAdapter(
+        //   child: BaseFilterableMainWidget(
+        //     setHeaderTitle: false,
+        //     useDraggableWidget: false,
+        //   ),
+        // ),
+        SliverToBoxAdapter(
+          child: CardBackgroundWithTitle(
+              useHorizontalPadding: false,
+              title: AppLocalizations.of(context)!.suggestionList,
+              leading: Icons.info_outline,
+              child: _getSuggestionWidget()),
+        ),
+
+        SliverToBoxAdapter(
+          child: CardBackgroundWithTitle(
+              useHorizontalPadding: false,
+              title: AppLocalizations.of(context)!.basedOnYourLastSearch,
+              leading: Icons.search,
+              child: _getBasedOnSearchWidget()),
+        ),
+        if (!SizeConfig.isLargeScreenGeneral(context))
+          SliverFillRemaining(
+            child: getEmptyWidget(),
+          )
       ],
     );
-    if (SizeConfig.isFoldable(context)) return listStickyWidget;
-    return _controller.text.isEmpty ? listStickyWidget : getSearchList();
   }
 
-  Widget getSearchList() {
-    return ListApiSearchableWidget(
-      key: searchKey,
-      viewAbstract: viewAbstract.getSelfNewInstance()
-        ..setCustomMapAsSearchable(_controller.text),
-      buildFabs: false,
-      buildSearchWidget: false,
+  Widget getFirstPaneMobile(BuildContext context) {
+    return ValueListenableBuilder<String>(
+      valueListenable: _notiferSearch,
+      builder: (context, value, child) => value.isEmpty
+          ? getFirstPane(context)
+          : SliverSearchApi(viewAbstract: viewAbstract, searchQuery: value),
     );
   }
 
-  AppBar getAppBar(BuildContext context) {
+  Widget? getSearchList() {
+    if (!SizeConfig.isLargeScreenGeneral(context)) return null;
+    return ValueListenableBuilder<String>(
+      valueListenable: _notiferSearch,
+      builder: (context, value, child) =>
+          SliverSearchApi(viewAbstract: viewAbstract, searchQuery: value),
+    );
+  }
+
+  AppBar? getAppBar(BuildContext context) {
+    bool isLargeScree = SizeConfig.isLargeScreenGeneral(context);
     return AppBar(
+      title: isLargeScree ? Text(AppLocalizations.of(context)!.search) : null,
       // backgroundColor: Theme.of(context).colorScheme.primary,
-      automaticallyImplyLeading: false,
-      surfaceTintColor: Colors.transparent,
-      flexibleSpace: Hero(
-          tag: "/search",
-          child: Material(
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Theme.of(context).colorScheme.shadow,
-                          spreadRadius: 2,
-                          blurRadius: 10)
-                    ]
-                    // borderRadius: BorderRadius.only(
-                    //     bottomRight: Radius.circular(15),
-                    //     bottomLeft: Radius.circular(15)),
-                    ),
-                height: 100,
-                // color: Theme.of(context).colorScheme.primary,
-                child: SafeArea(child: _buildSearchBox(context))),
-          )),
+      automaticallyImplyLeading: isLargeScree ? true : false,
+      surfaceTintColor: isLargeScree ? null : Colors.transparent,
+      flexibleSpace: isLargeScree ? null : _getFlexibleSpace(context),
     );
+  }
+
+  Hero _getFlexibleSpace(BuildContext context) {
+    return Hero(
+        tag: "/search",
+        child: Material(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Theme.of(context).colorScheme.shadow,
+                        spreadRadius: 2,
+                        blurRadius: 10)
+                  ]
+                  // borderRadius: BorderRadius.only(
+                  //     bottomRight: Radius.circular(15),
+                  //     bottomLeft: Radius.circular(15)),
+                  ),
+              height: 100,
+              // color: Theme.of(context).colorScheme.primary,
+              child: SafeArea(child: _buildSearchBox(context))),
+        ));
   }
 
   // Widget oldAppBar(){
@@ -223,30 +269,32 @@ class _SearchPageState extends State<SearchPage> {
         groupItem: ListStickyGroupItem(
             groupName: AppLocalizations.of(context)!.basedOnYourLastSearch,
             icon: Icons.search),
-        itemBuilder: (context) => FutureBuilder<List<String>>(
-              future: Configurations.loadListQuery(viewAbstract),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data!.isEmpty) {
-                    return Text(AppLocalizations.of(context)!.noItems);
-                  }
-                  return SizedBox(
-                      height: 200,
-                      child: ListApiMasterHorizontal<List<AutoRest>>(
-                          useOutLineCards: true,
-                          object: snapshot.data!
-                              .map((e) => AutoRest(
-                                  obj: getNewInstance()
-                                    ..setCustomMapAsSearchable(e),
-                                  key: viewAbstract
-                                      .getListableKeyWithoutCustomMap()))
-                              .toList()));
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ));
+        itemBuilder: (context) => _getBasedOnSearchWidget());
+  }
+
+  FutureBuilder<List<String>> _getBasedOnSearchWidget() {
+    return FutureBuilder<List<String>>(
+      future: Configurations.loadListQuery(viewAbstract),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data!.isEmpty) {
+            return Text(AppLocalizations.of(context)!.noItems);
+          }
+          return SizedBox(
+              height: 200,
+              child: ListApiMasterHorizontal<List<AutoRest>>(
+                  useOutLineCards: true,
+                  object: snapshot.data!
+                      .map((e) => AutoRest(
+                          obj: getNewInstance()..setCustomMapAsSearchable(e),
+                          key: viewAbstract.getListableKeyWithoutCustomMap()))
+                      .toList()));
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 
   ViewAbstract getNewInstance() {
@@ -285,53 +333,56 @@ class _SearchPageState extends State<SearchPage> {
         groupItem: ListStickyGroupItem(
             groupName: AppLocalizations.of(context)!.suggestionList,
             icon: Icons.info_outline),
-        itemBuilder: (context) => FutureBuilder<List<String>>(
-              future: Configurations.loadListQuery(viewAbstract),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data!.isEmpty) {
-                    return Text(AppLocalizations.of(context)!.noItems);
-                  }
-                  return SizedBox(
-                    height: 50,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                        width: kDefaultPadding / 2,
-                      ),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        var item = snapshot.data![index];
-                        {
-                          return ActionChip(
-                            elevation: 1,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                            shadowColor: Theme.of(context).colorScheme.shadow,
-                            surfaceTintColor:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            avatar: Icon(Icons.search),
-                            onPressed: () {
-                              _controller.text = item;
-                              onSearchTextChanged(item);
-                            },
-                            // deleteIcon: Icon(Icons.done),
-                            label: Text(item),
-                            // onDeleted: () {},
-                          );
-                        }
-                      },
-                      // ),
-                    ),
+        itemBuilder: (context) => _getSuggestionWidget());
+  }
+
+  FutureBuilder<List<String>> _getSuggestionWidget() {
+    return FutureBuilder<List<String>>(
+      future: Configurations.loadListQuery(viewAbstract),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data!.isEmpty) {
+            return Text(AppLocalizations.of(context)!.noItems);
+          }
+          return SizedBox(
+            height: 50,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(
+                width: kDefaultPadding / 2,
+              ),
+              physics: const AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                var item = snapshot.data![index];
+                {
+                  return ActionChip(
+                    elevation: 1,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    shadowColor: Theme.of(context).colorScheme.shadow,
+                    surfaceTintColor:
+                        Theme.of(context).colorScheme.onSurfaceVariant,
+                    avatar: Icon(Icons.search),
+                    onPressed: () {
+                      _controller.text = item;
+                      callDebouncer(item);
+                    },
+                    // deleteIcon: Icon(Icons.done),
+                    label: Text(item),
+                    // onDeleted: () {},
                   );
                 }
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
               },
-            ));
+              // ),
+            ),
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 
   Widget getBackFloatingActionButton(BuildContext context) {
@@ -343,11 +394,5 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> onSearchTextChanged(String value) async {
     if (value.isEmpty) return;
-
-    // _debouncer.run(() async {
-    //   await Configurations.saveQueryHistory(
-    //       drawerViewAbstractObsever.getObject, value);
-    //   setState(() {});
-    // });
   }
 }

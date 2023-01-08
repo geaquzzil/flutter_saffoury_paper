@@ -14,17 +14,22 @@ PopupMenuItem<MenuItemBuild> buildMenuItem(
     PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));
 Future<MenuItemBuild?> showPopupMenu(
     BuildContext context, GlobalKey clickedWidget,
-    {required List<PopupMenuEntry<MenuItemBuild>> list}) {
+    {required List<PopupMenuEntry<MenuItemBuild>> list, Alignment? alignment}) {
   RenderBox renderBox =
       clickedWidget.currentContext?.findRenderObject() as RenderBox;
   final Size size = renderBox.size;
   final Offset offset = renderBox.localToGlobal(Offset.zero);
+  debugPrint(
+      "showPopupMenu renderBox:size=> width: ${size.width} , height: ${size.height} offset.dx  => ${offset.dx} offset.dY=> ${offset.dy} ");
   return showMenu(
     context: context,
     position: RelativeRect.fromLTRB(
-      offset.dx,
-      offset.dy + size.height,
-      offset.dx,
+      offset.dx + (alignment == Alignment.centerRight ? size.width : 0),
+      offset.dy +
+          (alignment == Alignment.centerRight
+              ? (size.height / 2)
+              : size.height),
+      offset.dx + (alignment == Alignment.centerRight ? size.width : 0),
       offset.dy,
     ), //
     items: list,
@@ -59,4 +64,30 @@ Future<T?> showDialogExt<T>(
     required Widget Function(BuildContext) builder}) {
   return showDialog(
       context: context, barrierDismissible: false, builder: builder);
+}
+
+class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
+  final Color? color;
+
+  const CustomPopupMenuItem({
+    Key? key,
+    T? value,
+    bool enabled = true,
+    Widget? child,
+    this.color,
+  }) : super(key: key, value: value, enabled: enabled, child: child);
+
+  @override
+  _CustomPopupMenuItemState<T> createState() => _CustomPopupMenuItemState<T>();
+}
+
+class _CustomPopupMenuItemState<T>
+    extends PopupMenuItemState<T, CustomPopupMenuItem<T>> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: super.build(context),
+      color: widget.color ?? Theme.of(context).cardColor,
+    );
+  }
 }

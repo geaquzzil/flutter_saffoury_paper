@@ -201,7 +201,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             context,
             SliverFillRemaining(
                 fillOverscroll: true, hasScrollBody: false, child: e.widget)),
-                
       ...?e.slivers?.map((e) => getPadding(context, e)).toList()
     ];
   }
@@ -244,11 +243,12 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             widget.viewAbstract = snapshot.data as ViewAbstract;
-            context
-                .read<ListMultiKeyProvider>()
-                .edit(snapshot.data as ViewAbstract);
+
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               baseActionProviders.setIsLoaded = (true);
+              context
+                  .read<ListMultiKeyProvider>()
+                  .edit(snapshot.data as ViewAbstract);
             });
 
             return getBodyDetermineLayout();

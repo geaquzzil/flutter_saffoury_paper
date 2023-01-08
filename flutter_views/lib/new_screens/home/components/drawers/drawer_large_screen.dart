@@ -9,6 +9,8 @@ import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -21,6 +23,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../providers/cart/cart_provider.dart';
 import '../profile/profile_pic_popup_menu.dart';
+import 'components/ext.dart';
 
 class DrawerLargeScreens extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: kDefaultPadding);
@@ -94,33 +97,9 @@ class DrawerLargeScreens extends StatelessWidget {
   }
 
   Widget buildHeader(BuildContext context, bool isOpen) {
-    final safeArea =
-        EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
     // AnimatedSize(,)
-    return Card(
-      color: Theme.of(context).colorScheme.outline.withOpacity(.1),
-      elevation: 0,
-      child: SafeArea(
-        child: Container(
-            // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
-            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-            // .add(safeArea),
-            width: double.infinity,
-            child: !isOpen
-                ? CompanyLogo()
-                : Row(
-                    children: [
-                      SizedBox(
-                        width: 24,
-                      ),
-                      CompanyLogo(),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text("SaffouryPaper")
-                    ],
-                  )),
-      ),
+    return DrawerHeaderLogo(
+      isOpen: isOpen,
     );
   }
 
@@ -198,16 +177,7 @@ class DrawerLargeScreens extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildColapsedIcon(
-            context,
-            Icons.settings,
-            () {
-              Navigator.of(context).pushNamed("/settings");
-              // context
-              //     .read<LargeScreenPageProvider>()
-              //     .setCurrentPage(CurrentPage.settings);
-            },
-          ),
+          const DrawerSettingButton(),
           CartIconWidget(
             returnNillIfZero: false,
             onPressed: () {
@@ -218,7 +188,7 @@ class DrawerLargeScreens extends StatelessWidget {
           ),
 
           NotificationPopupWidget(),
-          buildLanguageIcon(context),
+          const DrawerLanguageButton(),
           if (SizeConfig.isDesktopOrWeb(context))
             buildColapsedIcon(
               context,
@@ -231,58 +201,41 @@ class DrawerLargeScreens extends StatelessWidget {
       ),
     ]);
   }
+}
 
-  OnHoverWidget buildColapsedIcon(
-      BuildContext context, IconData data, VoidCallback? onPress) {
-    return OnHoverWidget(
-        scale: false,
-        builder: (onHover) {
-          return IconButton(
-              // padding: EdgeInsets.all(4),
-              onPressed: onPress,
-              iconSize: 25,
-              icon: Icon(data),
-              color: onHover
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary);
-        });
-  }
+class DrawerHeaderLogo extends StatelessWidget {
+  bool isOpen;
+  DrawerHeaderLogo({
+    Key? key,
+    required this.isOpen,
+  }) : super(key: key);
 
-  Widget buildLanguageIcon(BuildContext context) {
-    return DropdownStringListControllerListenerByIcon(
-      icon: Icons.language,
-      hint: AppLocalizations.of(context)!.language,
-      list: [
-        DropdownStringListItem(
-            Icons.translate, AppLocalizations.of(context)!.systemDefault),
-        DropdownStringListItem(
-            Icons.translate, AppLocalizations.of(context)!.english),
-        DropdownStringListItem(
-            Icons.translate, AppLocalizations.of(context)!.arabic),
-      ],
-      onSelected: (object) {
-        if (object == null) {
-          context
-              .read<LangaugeProvider>()
-              .change(Localizations.localeOf(context));
-          return;
-        }
-        if (object.label == null) {
-          context
-              .read<LangaugeProvider>()
-              .change(Localizations.localeOf(context));
-        } else {
-          if (object.label == AppLocalizations.of(context)!.english) {
-            context.read<LangaugeProvider>().change(Locale('en', ''));
-          } else if (object.label == AppLocalizations.of(context)!.arabic) {
-            context.read<LangaugeProvider>().change(Locale('ar', ''));
-          } else {
-            context
-                .read<LangaugeProvider>()
-                .change(Localizations.localeOf(context));
-          }
-        }
-      },
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+      elevation: 0,
+      child: SafeArea(
+        child: Container(
+            // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+            // .add(safeArea),
+            width: double.infinity,
+            child: !isOpen
+                ? CompanyLogo()
+                : Row(
+                    children: [
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      CompanyLogo(),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      const Text("SaffouryPaper")
+                    ],
+                  )),
+      ),
     );
   }
 }

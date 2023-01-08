@@ -24,6 +24,9 @@ class CartIconWidget extends StatelessWidget {
                   .titleSmall!
                   .copyWith(color: Theme.of(context).colorScheme.onPrimary),
             ),
+            // padding: EdgeInsets.zero,
+            position: BadgePosition.topEnd(top: -4, end: -5),
+            // stackFit: StackFit.passthrough,
             toAnimate: true,
             animationType: BadgeAnimationType.scale,
             animationDuration: const Duration(milliseconds: 50),
@@ -33,7 +36,7 @@ class CartIconWidget extends StatelessWidget {
                 onPressed: onPressed,
                 iconSize: 25,
                 icon: Icon(Icons.shopping_cart_rounded),
-                color: Theme.of(context).colorScheme.secondary));
+                color: Theme.of(context).colorScheme.onSurfaceVariant));
       }),
       selector: (p0, p1) => p1.getCount,
     );

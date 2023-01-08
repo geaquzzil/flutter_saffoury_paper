@@ -68,6 +68,7 @@ class _DropdownStringListControllerListenerByIconState
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<DropdownStringListItem>(
+      position: PopupMenuPosition.under,
       tooltip: widget.hint,
       icon: Icon(
         lastSelected == null || firstRun

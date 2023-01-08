@@ -29,7 +29,8 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   Future<void> edit(ViewAbstract obj) async {
-    await Future.forEach<MultiListProviderHelper>(_listMap.values, (element) {
+    _listMap.entries.forEach((i) async {
+      var element = i.value;
       ViewAbstract? o =
           element.objects.firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
@@ -37,15 +38,21 @@ class ListMultiKeyProvider with ChangeNotifier {
             element.objects.indexWhere((element) => element.isEquals(obj));
         element.objects[idx] = obj;
         debugPrint("ListMultiKeyProvider changed element ");
-
+        _listMap[i.key]?.page = getPage(i.key);
         // element.objects.insert(0, o);
         debugPrint(
             "ListMultiKeyProvider changed element required list=> ${o.isRequiredObjectsListChecker()} ");
-        // notifyListeners();
+        _listMap[i.key]?.isLoading = true;
+        notifyListeners();
+        await Future.delayed(const Duration(milliseconds: 500), () {
+          _listMap[i.key]?.isLoading = false;
+          notifyListeners();
+// Here you can write your code
+        });
+
         return;
       }
     });
-    notifyListeners();
   }
 
   Future<void> delete(ViewAbstract obj) async {

@@ -41,8 +41,6 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,6 +51,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       child: Hero(
         tag: "/search",
         child: Card(
+          elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
@@ -66,8 +65,12 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
                 }),
             title: Selector<DrawerMenuControllerProvider, ViewAbstract>(
               builder: (context, value, child) {
-                return Text(AppLocalizations.of(context)!
-                    .searchInFormat(value.getMainHeaderLabelTextOnly(context)));
+                return Text(
+                  AppLocalizations.of(context)!.searchInFormat(
+                      value.getMainHeaderLabelTextOnly(context)),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                );
               },
               selector: (p0, p1) => p1.getObject,
             ),
