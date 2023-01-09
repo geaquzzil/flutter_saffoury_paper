@@ -33,6 +33,7 @@ class HomeNavigationPage extends BaseHomeSharedWithWidgets {
   @override
   Widget? getSliverHeader(BuildContext context) {
     return SearchWidgetComponent(
+      heroTag:"home/search",
       controller: TextEditingController(),
       onSearchTextChanged: (p0) {},
     );

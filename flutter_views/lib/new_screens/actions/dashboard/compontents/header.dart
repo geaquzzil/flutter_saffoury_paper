@@ -14,6 +14,7 @@ class DashboardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.background,
+      
       child: Column(
         children: [
           Row(
@@ -25,8 +26,8 @@ class DashboardHeader extends StatelessWidget {
                   builder: ((context, value, child) => TodayText(
                         dateObject: value,
                       ))),
-              Spacer(),
-              DateSelector(),
+              const Spacer(),
+              // DateSelector(),
             ],
           ),
         ],

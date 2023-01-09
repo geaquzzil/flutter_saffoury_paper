@@ -30,6 +30,33 @@ class EmptyWidget extends StatelessWidget {
                 ))
               : Lottie.network(lottiUrl, height: 100));
     }
+    var children2 = [
+      const SizedBox(
+        height: kSpaceWithText,
+      ),
+      // expand? Expanded(flex: 2,child: ,):
+      if (title != null)
+        Text(
+          title!,
+          textAlign: TextAlign.center,
+          style: themeData.textTheme.titleSmall,
+        ),
+      if (title != null)
+        const SizedBox(
+          height: kSpaceWithText,
+        ),
+      if (subtitle != null)
+        if (onSubtitleClicked != null)
+          TextButton(
+            child: Text(subtitle!,
+                textAlign: TextAlign.center,
+                style: themeData.textTheme.caption),
+            onPressed: () => onSubtitleClicked!.call(),
+          )
+        else
+          Text(subtitle!,
+              textAlign: TextAlign.center, style: themeData.textTheme.caption),
+    ];
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,35 +64,18 @@ class EmptyWidget extends StatelessWidget {
           // Text("TODO Lottie.network"),
           expand
               ? Expanded(
+                  flex: 1,
                   child: Lottie.network(
-                  lottiUrl,
-                ))
+                    lottiUrl,
+                  ))
               : Lottie.network(lottiUrl, height: 100),
-          const SizedBox(
-            height: kSpaceWithText,
-          ),
-          if (title != null)
-            Text(
-              title!,
-              textAlign: TextAlign.center,
-              style: themeData.textTheme.titleSmall,
-            ),
-          if (title != null)
-            const SizedBox(
-              height: kSpaceWithText,
-            ),
-          if (subtitle != null)
-            if (onSubtitleClicked != null)
-              TextButton(
-                child: Text(subtitle!,
-                    textAlign: TextAlign.center,
-                    style: themeData.textTheme.caption),
-                onPressed: () => onSubtitleClicked!.call(),
-              )
-            else
-              Text(subtitle!,
-                  textAlign: TextAlign.center,
-                  style: themeData.textTheme.caption),
+          if (expand)
+            Expanded(
+              flex: 2,
+              child: Column(children: children2),
+            )
+          else
+            ...children2
         ],
       ),
     );

@@ -9,6 +9,11 @@ import 'dart:math' as Math;
 
 import 'package:flutter_view_controller/ext_utils.dart';
 
+enum MainAxisType {
+  ListHorizontal,
+  Chart,
+}
+
 class SizeConfig {
   static double screenWidth = 0;
   static double screenHeight = 0;
@@ -72,9 +77,27 @@ class SizeConfig {
     return isFoldable(context) && !isSingleScreen(context);
   }
 
-  static num getMainAxisCellCount(BuildContext context) {
-    if (isLargeScreen(context) || isSoLargeScreen(context)) return 1;
-    return 1.5;
+  static num getMainAxisCellCount(BuildContext context,
+      {MainAxisType? mainAxisType}) {
+    bool isLargeScreenAS = isLargeScreen(context) || isSoLargeScreen(context);
+    if (isLargeScreenAS) {
+      return mainAxisType == null
+          ? 1
+          : getMainAxisCellPassedOnType(isLargeScreenAS, mainAxisType);
+    }
+    return mainAxisType == null
+        ? 1.5
+        : getMainAxisCellPassedOnType(isLargeScreenAS, mainAxisType);
+  }
+
+  static num getMainAxisCellPassedOnType(
+      bool isLargeScreen, MainAxisType mainAxisType) {
+    switch (mainAxisType) {
+      case MainAxisType.ListHorizontal:
+        return isLargeScreen ? 0.9 : 1.4;
+      case MainAxisType.Chart:
+        return 1;
+    }
   }
 
   static void debugSize(BuildContext context) {
@@ -239,11 +262,12 @@ class Device {
   }
 
   static double _calWidth() {
-    if (width > height)
+    if (width > height) {
       return (width +
           (ui.window.viewPadding.left + ui.window.viewPadding.right) *
               width /
               height);
+    }
     return (width + ui.window.viewPadding.left + ui.window.viewPadding.right);
   }
 

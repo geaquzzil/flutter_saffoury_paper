@@ -16,9 +16,11 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class SearchWidgetComponent extends StatefulWidget {
   TextEditingController? controller;
   bool forceSearchBarAsEditText;
+  String heroTag;
   Function(String?) onSearchTextChanged;
   SearchWidgetComponent(
       {super.key,
+      this.heroTag = "/search",
       this.controller,
       required this.onSearchTextChanged,
       this.forceSearchBarAsEditText = false});
@@ -49,20 +51,21 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           left: kDefaultPadding / 2,
           right: kDefaultPadding / 2),
       child: Hero(
-        tag: "/search",
+        tag: widget.heroTag,
         child: Card(
           // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
-            onTap: () => context.goNamed(searchRouteName,
-                extra: context.read<DrawerMenuControllerProvider>().getObject,
-                params: {
-                  "tableName": context
-                      .read<DrawerMenuControllerProvider>()
-                      .getObject
-                      .getTableNameApi()!
-                }),
+            onTap: () => context.goNamed(searchRouteName, extra: [
+              context.read<DrawerMenuControllerProvider>().getObject,
+              widget.heroTag
+            ], params: {
+              "tableName": context
+                  .read<DrawerMenuControllerProvider>()
+                  .getObject
+                  .getTableNameApi()!
+            }),
             title: Selector<DrawerMenuControllerProvider, ViewAbstract>(
               builder: (context, value, child) {
                 return Text(

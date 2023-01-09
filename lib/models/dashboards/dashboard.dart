@@ -425,7 +425,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           )),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
+          mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             list: credits,
             color: Credits().getMainColor(),
@@ -438,7 +438,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           )),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
+          mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             color: Debits().getMainColor(),
             icon: Icons.arrow_forward_rounded,
@@ -469,7 +469,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       //     ], chart: Text(""))),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
+          mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             color: Spendings().getMainColor(),
             icon: Icons.arrow_forward_rounded,
@@ -480,7 +480,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           )),
       StaggeredGridTile.count(
           crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
+          mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             icon: Icons.arrow_back_sharp,
             color: Incomes().getMainColor(),
@@ -491,7 +491,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           )),
       StaggeredGridTile.count(
           crossAxisCellCount: 2,
-          mainAxisCellCount: 1,
+          mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             color: Colors.blue,
             icon: Icons.today,
@@ -502,7 +502,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           )),
       StaggeredGridTile.count(
           crossAxisCellCount: 2,
-          mainAxisCellCount: 1,
+          mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             icon: Icons.balance,
             color: Colors.orange,

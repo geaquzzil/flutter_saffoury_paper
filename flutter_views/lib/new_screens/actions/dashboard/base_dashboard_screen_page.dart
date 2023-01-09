@@ -281,8 +281,10 @@ class _BaseDashboardState extends State<BaseDashboard>
 
   @override
   void didUpdateWidget(covariant BaseDashboard oldWidget) {
-    viewAbstract = oldWidget.dashboard as ViewAbstract;
-    initTabbar();
+    if (!viewAbstract.isEquals(oldWidget.dashboard as ViewAbstract)) {
+      viewAbstract = oldWidget.dashboard as ViewAbstract;
+      initTabbar();
+    }
     super.didUpdateWidget(oldWidget);
   }
 

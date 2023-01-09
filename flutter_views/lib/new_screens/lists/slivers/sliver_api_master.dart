@@ -119,7 +119,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     drawerViewAbstractObsever =
         Provider.of<DrawerMenuControllerProvider>(context, listen: false);
-    drawerViewAbstractObsever.addListener(_onChangedViewAbstract);
+    // drawerViewAbstractObsever.addListener(_onChangedViewAbstract);
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
@@ -150,6 +150,23 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
+    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+      builder: (context, value, child) {
+        debugPrint(
+            "SliverList ViewAbstract has changed from DrawerMenuController");
+        if (widget.viewAbstract == null) {
+          viewAbstract = value;
+          fetshListWidgetBinding();
+          debugPrint(
+              "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
+        }
+        return getBody(context);
+      },
+      selector: (p0, p1) => p1.getObject,
+    );
+  }
+
+  CustomScrollView getBody(BuildContext context) {
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
@@ -165,9 +182,18 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 scanedQr = null;
                 return getListSelector();
               }
+              _scrollTop();
               return getQrCodeSelector();
             })
       ],
+    );
+  }
+
+  void _scrollTop() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
     );
   }
 
@@ -305,6 +331,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             child: PreferredSize(
           preferredSize: const Size.fromHeight(70.0),
           child: SearchWidgetComponent(
+            heroTag: "list/search",
             controller: TextEditingController(),
             onSearchTextChanged: (p0) {},
           ),

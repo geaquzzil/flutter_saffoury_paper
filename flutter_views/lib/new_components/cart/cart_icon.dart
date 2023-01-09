@@ -14,7 +14,7 @@ class CartIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<CartProvider, int>(
       builder: ((_, value, __) {
-        if (value == 0 && returnNillIfZero) return nil;
+        if (value == 0 && returnNillIfZero) return SizedBox();
         return Badge(
             badgeColor: Theme.of(context).colorScheme.primary,
             badgeContent: Text(
@@ -35,7 +35,7 @@ class CartIconWidget extends StatelessWidget {
                 // padding: EdgeInsets.all(4),
                 onPressed: onPressed,
                 iconSize: 25,
-                icon: Icon(Icons.shopping_cart_rounded),
+                icon: const Icon(Icons.shopping_cart_rounded),
                 color: Theme.of(context).colorScheme.onSurfaceVariant));
       }),
       selector: (p0, p1) => p1.getCount,

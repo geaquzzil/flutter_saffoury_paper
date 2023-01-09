@@ -547,10 +547,12 @@ class Product extends ViewAbstract<Product>
   @override
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
+        mainAxisType: MainAxisType.ListHorizontal);
     return [
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount,
+        mainAxisCellCount: mainAxisCellCountList,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "Category",
@@ -568,26 +570,25 @@ class Product extends ViewAbstract<Product>
             autoRest: UnusedRecords.init(Product())),
       ),
       StaggeredGridTile.count(
-        crossAxisCellCount: 1,
+        crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            titleString: "TEST1 ",
             autoRest: ChangesRecords.init(Product(), "status")),
       ),
       StaggeredGridTile.count(
-        crossAxisCellCount: 1,
+        crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            titleString: "TEST1 ",
             autoRest: ChartRecordAnalysis.init(
                 Order(), DateObject(), EnteryInteval.monthy)),
       ),
 
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount,
+        mainAxisCellCount: mainAxisCellCountList,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
+          useCardAsImageBackgroud: true,
           titleString: "Today",
           // listItembuilder: (v) => SizedBox(
           //     width: 100, height: 100, child: POSListCardItem(object: v)),
@@ -600,11 +601,11 @@ class Product extends ViewAbstract<Product>
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount,
+        mainAxisCellCount: mainAxisCellCountList,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
+          useCardAsImageBackgroud: true,
           titleString: "This week",
-          listItembuilder: (v) => PosCardSquareItem(object: v),
           autoRest: AutoRest<Product>(
               obj: Product()
                 ..setCustomMap({
@@ -964,17 +965,17 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  // @override
-  // Future<List<Product>?> listCall(
-  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
-  //   try {
-  //     Iterable l = jsonDecode(jsonEncode(productsJson));
-  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-  //   } catch (e) {
-  //     debugPrint("listCallFake ${e.toString()}");
-  //   }
-  //   return null;
-  // }
+  @override
+  Future<List<Product>?> listCall(
+      {int? count, int? page, OnResponseCallback? onResponse}) async {
+    try {
+      Iterable l = jsonDecode(jsonEncode(productsJson));
+      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint("listCallFake ${e.toString()}");
+    }
+    return null;
+  }
 
   @override
   Future getPosableInitObj(BuildContext context) {

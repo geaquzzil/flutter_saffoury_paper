@@ -174,18 +174,20 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         children: [child, if (custom != null) custom],
       );
     }
-
-    return SizedBox(
-        child: Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildHeader(context),
-          Expanded(child: child),
-          if (custom != null) custom
-        ],
-      ),
-    ));
+    return Column(
+      children: [buildHeader(context), child, if (custom != null) custom],
+    );
+    // return SizedBox(
+    //     child: Expanded(
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       buildHeader(context),
+    //       Expanded(child: child),
+    //       if (custom != null) custom
+    //     ],
+    //   ),
+    // ));
   }
 
   Widget buildHeader(BuildContext context) {

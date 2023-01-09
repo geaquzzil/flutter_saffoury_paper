@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
@@ -36,7 +39,12 @@ import '../lists/list_api_master.dart';
 class SearchPage extends StatefulWidget {
   String? tableName;
   ViewAbstract? viewAbstract;
-  SearchPage({super.key, required this.viewAbstract, this.tableName});
+  String? heroTag;
+  SearchPage(
+      {super.key,
+      required this.viewAbstract,
+      this.heroTag = "/search",
+      this.tableName});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -108,7 +116,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget getFilterWidget(BuildContext context) {
     if (SizeConfig.isMobile(context)) {
       return IconButton(
-        icon: Icon(Icons.filter_alt_rounded),
+        icon: const Icon(Icons.filter_alt_rounded),
         onPressed: () async {
           showBottomSheetExt(
             context: context,
@@ -146,7 +154,6 @@ class _SearchPageState extends State<SearchPage> {
     searchPane ??= getSearchList();
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: getAppBar(context),
         body: TowPaneExt(
           startPane: startPane!,
           endPane: searchPane,
@@ -159,20 +166,26 @@ class _SearchPageState extends State<SearchPage> {
         if (SizeConfig.isLargeScreenGeneral(context))
           SliverToBoxAdapter(
             child: Hero(
-                tag: "/search", child: Card(child: _buildSearchBox(context))),
-          ),
+                tag: widget.heroTag ?? "${Random().nextInt(50)}",
+                child: Card(child: _buildSearchBox(context))),
+          )
+        else
+          getAppBar(context),
         // SliverToBoxAdapter(
         //   child: BaseFilterableMainWidget(
         //     setHeaderTitle: false,
         //     useDraggableWidget: false,
         //   ),
         // ),
-        SliverToBoxAdapter(
-          child: CardBackgroundWithTitle(
-              useHorizontalPadding: false,
-              title: AppLocalizations.of(context)!.suggestionList,
-              leading: Icons.info_outline,
-              child: _getSuggestionWidget()),
+        SliverPadding(
+          padding: const EdgeInsets.only(top: kDefaultPadding),
+          sliver: SliverToBoxAdapter(
+            child: CardBackgroundWithTitle(
+                useHorizontalPadding: false,
+                title: AppLocalizations.of(context)!.suggestionList,
+                leading: Icons.info_outline,
+                child: _getSuggestionWidget()),
+          ),
         ),
 
         SliverToBoxAdapter(
@@ -208,10 +221,31 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  AppBar? getAppBar(BuildContext context) {
+  Widget getAppBar(BuildContext context) {
+    return SliverPersistentHeader(
+        pinned: true,
+        delegate: SliverAppBarDelegatePreferedSize(
+            child: PreferredSize(
+                preferredSize: const Size.fromHeight(90.0),
+                child: Hero(
+                    tag: widget.heroTag ?? "${Random().nextInt(50)}",
+                    child: Container(
+                        padding: const EdgeInsets.only(
+                          bottom: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15)),
+                        ),
+                        child: SafeArea(child: _buildSearchBox(context)))))));
+
     bool isLargeScree = SizeConfig.isLargeScreenGeneral(context);
-    return AppBar(
+    return SliverAppBar(
+      pinned: true,
       title: isLargeScree ? Text(AppLocalizations.of(context)!.search) : null,
+      expandedHeight: 100,
       // backgroundColor: Theme.of(context).colorScheme.primary,
       automaticallyImplyLeading: isLargeScree ? true : false,
       surfaceTintColor: isLargeScree ? null : Colors.transparent,
@@ -219,11 +253,33 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Hero _getFlexibleSpace(BuildContext context) {
+  Widget _getFlexibleSpace(BuildContext context) {
+    return FlexibleSpaceBar(
+        stretchModes: const [
+          StretchMode.blurBackground,
+          StretchMode.zoomBackground,
+          StretchMode.fadeTitle
+        ],
+        centerTitle: true,
+        // background: Text("Welcome back"),
+        // titlePadding: const EdgeInsets.only(bottom: 62),
+        background: Hero(
+            tag: widget.heroTag ?? "${Random().nextInt(50)}",
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15)),
+                ),
+                child: SafeArea(child: _buildSearchBox(context)))));
     return Hero(
-        tag: "/search",
+        tag: widget.heroTag ?? "${Random().nextInt(50)}",
         child: Material(
           child: Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding / 2,
+                  vertical: kDefaultPadding / 2),
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   boxShadow: [
@@ -290,7 +346,7 @@ class _SearchPageState extends State<SearchPage> {
                           key: viewAbstract.getListableKeyWithoutCustomMap()))
                       .toList()));
         }
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -363,7 +419,7 @@ class _SearchPageState extends State<SearchPage> {
                     shadowColor: Theme.of(context).colorScheme.shadow,
                     surfaceTintColor:
                         Theme.of(context).colorScheme.onSurfaceVariant,
-                    avatar: Icon(Icons.search),
+                    avatar: const Icon(Icons.search),
                     onPressed: () {
                       _controller.text = item;
                       callDebouncer(item);
@@ -378,7 +434,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           );
         }
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -388,7 +444,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget getBackFloatingActionButton(BuildContext context) {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
-        child: Icon(Icons.arrow_back),
+        child: const Icon(Icons.arrow_back),
         onPressed: () => {Navigator.pop(context)});
   }
 
