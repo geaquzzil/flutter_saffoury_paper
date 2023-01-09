@@ -51,49 +51,56 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Card(
-          // color: color,
-          child: Container(
-              width: 150,
-              height: 125,
-              decoration: BoxDecoration(
-                  image: imgUrl == null
-                      ? null
-                      : DecorationImage(
-                          image: CachedNetworkImageProvider(imgUrl!),
-                          fit: BoxFit.cover),
-                  color: imgUrl == null
-                      ? Theme.of(context).colorScheme.primary
-                      : color?.darkVibrantColor?.color,
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Spacer(),
-                      object.getHorizontalCardTitle(context,
-                          isImageAsBackground: true, color: color),
+        Expanded(
+          child: Card(
+              child: Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            fit: StackFit.loose,
+            children: [
+              Container(
+                  // width: 150,
+                  // height: 100,
+                  decoration: BoxDecoration(
+                      image: imgUrl == null
+                          ? null
+                          : DecorationImage(
+                              image: CachedNetworkImageProvider(imgUrl!),
+                              fit: BoxFit.contain),
+                      color: imgUrl == null
+                          ? null
+                          : color?.darkVibrantColor?.color,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20)))),
+              Container(
+                // padding: const EdgeInsets.all(5.0),
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                    gradient: imgUrl == null
+                        ? null
+                        : LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[
+                              Colors.black.withAlpha(0),
+                              Colors.black12,
+                              Colors.black87
+                            ],
+                          ),
+                    color: imgUrl == null
+                        ? null
+                        : color?.darkVibrantColor?.titleTextColor,
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(18),
+                        bottomRight: Radius.circular(18))),
+                // height: 50,
+                padding: const EdgeInsets.all(kDefaultPadding * .3),
+                // width: double.infinity,
 
-                      // Spacer(),
-
-                      // Text(
-                      //   productType.name!,
-                      //   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      //       color: color?.darkVibrantColor?.titleTextColor),
-                      // ),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // Text(
-                      //   "${productType.availability?.toStringAsFixed(0)} ${AppLocalizations.of(context)!.itemCount}",
-                      //   style: Theme.of(context)
-                      //       .textTheme
-                      //       .titleLarge
-                      //       ?.copyWith(color: color?.darkVibrantColor?.bodyTextColor),
-                      // ),
-                    ],
-                  ))),
+                child: object.getHorizontalCardTitleSameLine(context,
+                    isImageAsBackground: true, color: color),
+              )
+            ],
+          )),
         ),
         object.getHorizontalCardMainHeader(context),
         // const Spacer(),
@@ -105,8 +112,9 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
   Widget openContainer(BuildContext context) {
     return OpenContainer(
         closedColor: Colors.transparent,
-        transitionDuration: Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 500),
         transitionType: ContainerTransitionType.fade,
+        
         closedBuilder: (context, action) => getCardAsBackground(context),
         openBuilder: (context, action) =>
             BaseViewNewPage(viewAbstract: object));
@@ -157,7 +165,7 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatelessWidget {
 
   Container getCardBody(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

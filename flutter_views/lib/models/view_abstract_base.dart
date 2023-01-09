@@ -121,18 +121,37 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         );
   }
 
+  Widget getHorizontalCardTitleSameLine(
+    BuildContext context, {
+    PaletteGenerator? color,
+    bool isImageAsBackground = true,
+  }) {
+    return Text(
+      "${getMainHeaderLabelTextOnly(context)} ${getIDFormat(context)}",
+      style: isImageAsBackground
+          ? Theme.of(context).textTheme.caption?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: color != null
+                  ? color.darkMutedColor?.color
+                  : Theme.of(context).colorScheme.onPrimaryContainer)
+          : Theme.of(context).textTheme.caption,
+      // style: const TextStyle(color: kTextLightColor)
+    );
+  }
+
   Widget getHorizontalCardTitle(BuildContext context,
       {bool isImageAsBackground = false, PaletteGenerator? color}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           getMainHeaderLabelTextOnly(context),
           style: isImageAsBackground
               ? Theme.of(context).textTheme.caption?.copyWith(
+                  fontWeight: FontWeight.bold,
                   color: color != null
                       ? color.lightMutedColor?.color
-                      : Theme.of(context).colorScheme.onPrimary)
+                      : Theme.of(context).colorScheme.onPrimaryContainer)
               : Theme.of(context).textTheme.caption,
           // style: const TextStyle(color: kTextLightColor)
         ),
@@ -142,7 +161,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
               ? Theme.of(context).textTheme.caption?.copyWith(
                   color: color != null
                       ? color.lightMutedColor?.color
-                      : Theme.of(context).colorScheme.onPrimary)
+                      : Theme.of(context).colorScheme.onPrimaryContainer)
               : Theme.of(context).textTheme.caption,
         )
       ],

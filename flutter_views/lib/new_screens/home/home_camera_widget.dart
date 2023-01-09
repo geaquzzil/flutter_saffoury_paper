@@ -9,11 +9,11 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 
 class HomeCameraNavigationWidget extends BaseHomeSharedWithWidgets {
   HomeCameraNavigationWidget({super.key});
-  final _readerViewAbstract = ValueNotifier<ViewAbstract?>(null);
+
   @override
   Widget? getEndPane(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: _readerViewAbstract,
+      valueListenable: readerViewAbstract,
       builder: (context, value, _) {
         if (value == null) {
           return EmptyWidget(
@@ -54,7 +54,7 @@ class HomeCameraNavigationWidget extends BaseHomeSharedWithWidgets {
         getViewAbstract: true,
         onRead: (qr) {
           if (qr != null) {
-            _readerViewAbstract.value = qr;
+            readerViewAbstract.value = qr;
           }
         },
       ))

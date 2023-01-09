@@ -58,6 +58,7 @@ import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -237,6 +238,17 @@ class Product extends ViewAbstract<Product>
 
   @override
   IconData? getMainDrawerGroupIconData() => Icons.waterfall_chart_outlined;
+  @override
+  Widget getHorizontalCardMainHeader(BuildContext context) {
+    String? productType = products_types?.getMainHeaderTextOnly(context);
+    String? size = sizes?.getMainHeaderTextOnly(context);
+    String? gsm = gsms?.getMainHeaderTextOnly(context);
+    String res = "$productType\n$size X $gsm";
+    return Text(
+      res,
+      textAlign: TextAlign.center,
+    );
+  }
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
@@ -516,44 +528,55 @@ class Product extends ViewAbstract<Product>
 
   @override
   Widget? getHomeHeaderWidget(BuildContext context) {
-    return const ListTile(
-      leading: Icon(Icons.account_circle),
-      title: Text("Welcom back"),
-      trailing: Icon(Icons.arrow_right_outlined),
+    return ListTile(
+      leading: Icon(
+        Icons.account_circle,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      title: Text("Welcom back",
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              )),
+      trailing: Icon(
+        Icons.arrow_right_outlined,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 
   @override
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
+    num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
     return [
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: 1,
+        mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "Category",
-          listItembuilder: (v) =>
-              ListItemProductTypeCategory(productType: v as ProductType),
+          useCardAsImageBackgroud: true,
+          // listItembuilder: (v) =>
+          //     ListItemProductTypeCategory(productType: v as ProductType),
           autoRest: AutoRest<ProductType>(
               obj: ProductType.init(true), key: "ProductType<Category>"),
         ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: .5,
+        mainAxisCellCount: mainAxisCellCount / 2,
         child: ListHorizontalCustomViewApiAutoRestWidget(
             autoRest: UnusedRecords.init(Product())),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 1,
-        mainAxisCellCount: 1,
+        mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
             titleString: "TEST1 ",
             autoRest: ChangesRecords.init(Product(), "status")),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 1,
-        mainAxisCellCount: 1,
+        mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
             titleString: "TEST1 ",
             autoRest: ChartRecordAnalysis.init(
@@ -562,7 +585,7 @@ class Product extends ViewAbstract<Product>
 
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: 1,
+        mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "Today",
@@ -577,7 +600,7 @@ class Product extends ViewAbstract<Product>
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: 1,
+        mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "This week",
@@ -674,7 +697,7 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
-        customHeight: 200,
+        customHeight: 150,
         useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
@@ -684,7 +707,7 @@ class Product extends ViewAbstract<Product>
       ),
       ListHorizontalApiAutoRestWidget(
         useCardAsImageBackgroud: true,
-        customHeight: 200,
+        customHeight: 150,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,

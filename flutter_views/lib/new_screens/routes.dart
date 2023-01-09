@@ -47,6 +47,7 @@ const String printRouteName = 'print';
 const String viewRouteName = 'view';
 const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
 class RouteGenerator {

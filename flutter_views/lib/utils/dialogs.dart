@@ -9,6 +9,22 @@ ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e) {
   );
 }
 
+Size getSize(GlobalKey key) {
+  RenderBox renderBox = key.currentContext?.findRenderObject() as RenderBox;
+  return renderBox.size;
+}
+
+Offset getOffset(GlobalKey key) {
+  RenderBox renderBox = key.currentContext?.findRenderObject() as RenderBox;
+  return renderBox.localToGlobal(Offset.zero);
+}
+
+Rect getRect(GlobalKey key) {
+  Offset offset = getOffset(key);
+  Size size = getSize(key);
+  return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
+}
+
 PopupMenuItem<MenuItemBuild> buildMenuItem(
         BuildContext context, MenuItemBuild e) =>
     PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));

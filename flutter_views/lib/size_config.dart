@@ -72,13 +72,18 @@ class SizeConfig {
     return isFoldable(context) && !isSingleScreen(context);
   }
 
+  static num getMainAxisCellCount(BuildContext context) {
+    if (isLargeScreen(context) || isSoLargeScreen(context)) return 1;
+    return 1.5;
+  }
+
   static void debugSize(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    debugPrint(
-        "debugSize screenWidth ${size.width} screenHeight ${size.height}");
+    // debugPrint(
+    //     "debugSize screenWidth ${size.width} screenHeight ${size.height}");
 
-    debugPrint(
-        "debugSize displayFeatures ${MediaQuery.of(context).displayFeatures}");
+    // debugPrint(
+    //     "debugSize displayFeatures ${MediaQuery.of(context).displayFeatures}");
   }
 
   static bool isSingleScreen(BuildContext context) {

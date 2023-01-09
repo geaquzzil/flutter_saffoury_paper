@@ -23,9 +23,9 @@ class OutlinedCard extends StatelessWidget {
           side: BorderSide(
             color: color != null
                 ? color!.darkVibrantColor!.color
-                : Theme.of(context).colorScheme.outline,
+                : Theme.of(context).colorScheme.outline.withOpacity(.5),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: InkWell(onTap: () => onPress!(), child: child));
   }

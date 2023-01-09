@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
@@ -57,9 +60,61 @@ class _ListHorizontalApiWidgetState
     });
   }
 
+  Widget listShimmerItems() {
+    return GridView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 5 + Random().nextInt(10 - 5),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        crossAxisSpacing: kDefaultPadding / 2,
+        mainAxisSpacing: kDefaultPadding / 2,
+        childAspectRatio: 3 / 2,
+
+        maxCrossAxisExtent: 250,
+        // childAspectRatio: 3 / 2,
+      ),
+      itemBuilder: (context, index) {
+        return GridTile(
+            // footer: Text("foot"),
+            child: ListHorizontalItemShimmer(
+          lines: 3,
+        ));
+      },
+    );
+  }
+
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
     bool isLoading = listProvider.isLoading(widget.autoRest.key);
+    return GridView.builder(
+      controller: _scrollController,
+      scrollDirection: Axis.horizontal,
+      itemCount: isLoading ? (data.length + 3) : (data.length),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        crossAxisSpacing: kDefaultPadding / 2,
+        mainAxisSpacing: kDefaultPadding / 2,
+        childAspectRatio: 3 / 2,
+
+        maxCrossAxisExtent: 250,
+        // childAspectRatio: 3 / 2,
+      ),
+      itemBuilder: (context, index) {
+        if (isLoading && index > data.length - 1) {
+          return GridTile(
+              child: ListHorizontalItemShimmer(
+            lines: 3,
+          ));
+        }
+        return GridTile(
+            // footer: Text("foot"),
+            child: widget.listItembuilder == null
+                ? ListCardItemHorizontal(
+                    object: data[index],
+                    useImageAsBackground: widget.useCardAsImageBackgroud,
+                  )
+                : widget.listItembuilder!(data[index]));
+      },
+    );
+
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -133,11 +188,7 @@ class _ListHorizontalApiWidgetState
               }
             } else if (isLoading) {
               if (count == 0) {
-                return wrapHeader(
-                    context,
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ));
+                return wrapHeader(context, listShimmerItems());
               } else {
                 return wrapHeader(
                     context,
@@ -166,6 +217,7 @@ class _ListHorizontalApiWidgetState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildHeader(context),
+
         // if (widget.isSliver)
         //   child
         // else

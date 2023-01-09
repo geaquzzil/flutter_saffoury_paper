@@ -26,8 +26,14 @@ class HomeNotificationPage extends BaseHomeSharedWithWidgets {
   @override
   Widget? getSilverAppBarTitle(BuildContext context) {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.notification),
-      leading: Icon(Icons.notifications_rounded),
+      title: Text(AppLocalizations.of(context)!.notification,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              )),
+      leading: Icon(
+        Icons.notifications_rounded,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 

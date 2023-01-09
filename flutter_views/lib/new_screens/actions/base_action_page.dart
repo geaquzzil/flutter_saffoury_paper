@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -6,10 +7,13 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
+import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -38,6 +42,9 @@ abstract class BaseActionScreenPage extends StatefulWidget {
 
 abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     extends State<T> with TickerProviderStateMixin {
+  ValueNotifier<PaletteGenerator?> valueNotifierColor =
+      ValueNotifier<PaletteGenerator?>(null);
+  String? imgUrl;
   Widget getBody(BuildContext context);
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context);
 
@@ -67,6 +74,15 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   @override
   void initState() {
     super.initState();
+
+    _updatePaletter();
+  }
+
+  Future<void> _updatePaletter() async {
+    imgUrl = widget.viewAbstract.getImageUrl(context);
+    valueNotifierColor.value = await PaletteGenerator.fromImageProvider(
+      CachedNetworkImageProvider(imgUrl!),
+    );
   }
 
   bool hasNotApiToCall() {
@@ -94,6 +110,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         sliver: SliverAppBar(
             floating: true,
+            stretch: true,
+            stretchTriggerOffset: 150,
             automaticallyImplyLeading: true,
             pinned: true,
             snap: true,
@@ -114,7 +132,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             forceElevated: innerBoxIsScrolled,
             flexibleSpace: getSilverAppBarBackground(context),
             bottom: TabBar(
-              labelColor: Theme.of(context).textTheme.titleLarge!.color,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              labelColor: Theme.of(context).colorScheme.primary,
               tabs: _tabs,
               isScrollable: true,
               controller: _tabController,
@@ -123,7 +142,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
     return FlexibleSpaceBar(
-        stretchModes: const [StretchMode.fadeTitle],
+        stretchModes: const [
+          StretchMode.blurBackground,
+          StretchMode.zoomBackground,
+          StretchMode.fadeTitle
+        ],
         centerTitle: true,
         titlePadding: const EdgeInsets.only(bottom: 62),
         title: Text(
@@ -132,9 +155,58 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ),
         background: widget.viewAbstract.getHeroTag(
             context: context,
-            child: getSliverImageBackground(context) ??
-                widget.viewAbstract
-                    .getBlurringImage(context, addBottomWidget: false)));
+            child: getSliverImageBackground(context) ?? getAppBarBackground()));
+  }
+
+  Widget getAppBarBackground() {
+    String? imgUrl = widget.viewAbstract.getImageUrl(context);
+    return ValueListenableBuilder<PaletteGenerator?>(
+      valueListenable: valueNotifierColor,
+      builder: (__, color, ___) => Stack(
+        alignment: AlignmentDirectional.bottomStart,
+        fit: StackFit.loose,
+        children: [
+          Container(
+              // width: 150,
+              // height: 100,
+              decoration: BoxDecoration(
+            image: imgUrl == null
+                ? null
+                : DecorationImage(
+                    image: CachedNetworkImageProvider(imgUrl!),
+                    fit: BoxFit.contain),
+            color: imgUrl == null ? null : color?.darkVibrantColor?.color,
+            // borderRadius: const BorderRadius.all(Radius.circular(20))
+          )),
+          Container(
+            // padding: const EdgeInsets.all(5.0),
+            alignment: Alignment.bottomCenter,
+            decoration: BoxDecoration(
+              gradient: imgUrl == null
+                  ? null
+                  : LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.black.withAlpha(0),
+                        Colors.black12,
+                        Colors.black87
+                      ],
+                    ),
+              color: imgUrl == null
+                  ? null
+                  : color?.darkVibrantColor?.titleTextColor,
+              // borderRadius: const BorderRadius.only(
+              //     bottomLeft: Radius.circular(18),
+              //     bottomRight: Radius.circular(18))
+            ),
+            // height: 50,
+            padding: const EdgeInsets.all(kDefaultPadding * .3),
+            // width: double.infinity,
+          )
+        ],
+      ),
+    );
   }
 
   Widget getBodyDetermineLayout() {
@@ -187,8 +259,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         ),
         ...getTopWidget(),
-        getPadding(context, getBody(context)),
-        ...getBottomWidget()
+        getBody(context),
+        ...getBottomWidget(),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 80),
+        )
       ];
     }
     bool hasSlivers = e.slivers != null;
@@ -219,7 +294,16 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     List<Widget>? bottomWidget = widget.viewAbstract
         .getCustomBottomWidget(context, widget.getServerAction());
     if (bottomWidget == null) return [];
-    return bottomWidget.map((e) => SliverToBoxAdapter(child: e)).toList();
+    return bottomWidget.map((e) {
+      if (bottomWidget.indexOf(e) == bottomWidget.length) {
+        return getPadding(
+            context,
+            SliverToBoxAdapter(
+              child: e,
+            ));
+      }
+      return SliverToBoxAdapter(child: e);
+    }).toList();
   }
 
   List<Widget> getTopWidget() {

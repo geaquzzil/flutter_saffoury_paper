@@ -24,6 +24,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../theming/text_field_theming.dart';
 import 'home/base_home_main.dart';
@@ -171,7 +172,6 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   scaffoldBackgroundColor: darkDynamic?.background,
                   shadowColor: darkDynamic?.shadow,
                   cardColor: darkDynamic?.surfaceVariant,
-        
                   colorScheme: darkDynamic ?? defaultDarkColorScheme,
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(

@@ -77,6 +77,9 @@ abstract class BaseHomeSharedWithWidgets extends StatelessWidget {
             leading: SizedBox(),
             flexibleSpace: getSilverAppBarBackground(context),
           ),
+        SliverToBoxAdapter(
+          child: Divider(),
+        ),
         if (getSliverHeader(context) != null)
           wrapWithPadding(
               context, SliverToBoxAdapter(child: getSliverHeader(context))),

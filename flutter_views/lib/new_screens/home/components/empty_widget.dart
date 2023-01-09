@@ -14,7 +14,7 @@ class EmptyWidget extends StatelessWidget {
       this.onSubtitleClicked,
       required this.lottiUrl,
       this.title,
-      this.expand = false,
+      this.expand = true,
       this.subtitle})
       : super(key: key);
 
@@ -34,10 +34,15 @@ class EmptyWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Lottie.network(lottiUrl, height: 100),
           // Text("TODO Lottie.network"),
+          expand
+              ? Expanded(
+                  child: Lottie.network(
+                  lottiUrl,
+                ))
+              : Lottie.network(lottiUrl, height: 100),
           const SizedBox(
-            height: kDefaultPadding,
+            height: kSpaceWithText,
           ),
           if (title != null)
             Text(
@@ -47,7 +52,7 @@ class EmptyWidget extends StatelessWidget {
             ),
           if (title != null)
             const SizedBox(
-              height: kDefaultPadding,
+              height: kSpaceWithText,
             ),
           if (subtitle != null)
             if (onSubtitleClicked != null)

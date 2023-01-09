@@ -146,12 +146,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           color: Theme.of(context).colorScheme.onBackground,
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
-        child: new BackdropFilter(
-          filter: new ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-          child: new Container(
-            decoration: new BoxDecoration(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+          child: Container(
+            decoration: BoxDecoration(
                 color:
-                    Theme.of(context).colorScheme.onPrimary.withOpacity(0.75)),
+                    Theme.of(context).colorScheme.onPrimary.withOpacity(0.9)),
           ),
         ),
       ),

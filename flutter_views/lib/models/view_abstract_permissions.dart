@@ -170,12 +170,12 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
       future: function,
       builder: (context, AsyncSnapshot<E> snapshot) {
         if (snapshot.data == false) {
-          return nil;
+          return Container();
         } else {
           if (snapshot.data != null) {
             return onHasPermissionWidget(snapshot.data as E);
           } else {
-            return nil;
+            return Container();
           }
         }
       },

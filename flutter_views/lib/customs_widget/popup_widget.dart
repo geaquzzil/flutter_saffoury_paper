@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 
 enum PressType {
   longPress,
@@ -73,65 +75,118 @@ class _PopupWidget extends State<PopupWidget> {
   bool _canResponse = true;
 
   _showMenu() {
-    _overlayEntry = OverlayEntry(
-      builder: (context) {
-        Widget menu = Center(
-          child: Container(
-            constraints: BoxConstraints(
-              // maxHeight: MediaQuery.of(context).size.height / 2,
-              // minHeight: 10,
-              maxWidth: _parentBox!.size.width - 2 * widget.horizontalMargin,
-              minWidth: 0,
-            ),
-            child: CustomMultiChildLayout(
-              delegate: _MenuLayoutDelegate(
-                screenSize: MediaQuery.of(context).size,
-                anchorSize: _childBox!.size,
-                anchorOffset: _childBox!.localToGlobal(
-                  Offset(-widget.horizontalMargin, 0),
-                ),
-                verticalMargin: widget.verticalMargin,
-                position: widget.position,
+    GlobalKey key = GlobalKey();
+    _overlayEntry = OverlayEntry(builder: (context) {
+      Widget menu = Container(
+        color: Colors.black12,
+        child: Positioned(
+          top: 60.0,
+          left: 60,
+          child: OutlinedCard(
+            key: key,
+            child: Container(
+              color: Colors.black12,
+              constraints: BoxConstraints(
+                minHeight: 10,
+                minWidth: 10,
+                maxWidth: MediaQuery.of(context).size.width / 2,
+                maxHeight: MediaQuery.of(context).size.height * .75,
               ),
-              children: <Widget>[
-                LayoutId(
-                  id: _MenuLayoutId.content,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Material(
-                        color: Colors.transparent,
-                        child: widget.menuBuilder(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              child: Material(
+                color: Colors.transparent,
+                child: widget.menuBuilder.call(),
+              ),
             ),
           ),
-        );
-        return Listener(
-            behavior: widget.enablePassEvent
-                ? HitTestBehavior.translucent
-                : HitTestBehavior.opaque,
-            onPointerDown: (PointerDownEvent event) {
-              Offset offset = event.localPosition;
-              // If tap position in menu
-              if (_menuRect.contains(
-                  Offset(offset.dx - widget.horizontalMargin, offset.dy))) {
-                return;
-              }
-              _controller?.hideMenu();
-              // When [enablePassEvent] works and we tap the [child] to [hideMenu],
-              // but the passed event would trigger [showMenu] again.
-              // So, we use time threshold to solve this bug.
-              _canResponse = false;
-              Future.delayed(Duration(milliseconds: 300))
-                  .then((_) => _canResponse = true);
-            },
-            child: menu);
-      },
-    );
+        ),
+      );
+
+      return Listener(
+          behavior: widget.enablePassEvent
+              ? HitTestBehavior.translucent
+              : HitTestBehavior.opaque,
+          onPointerDown: (PointerDownEvent event) {
+            Offset offset = event.localPosition;
+            debugPrint("OnPointerDown $offset");
+            // If tap position in menu
+
+            if (getRect(key).contains(
+                Offset(offset.dx - widget.horizontalMargin, offset.dy))) {
+              return;
+            }
+            _controller?.hideMenu();
+            // When [enablePassEvent] works and we tap the [child] to [hideMenu],
+            // but the passed event would trigger [showMenu] again.
+            // So, we use time threshold to solve this bug.
+            _canResponse = false;
+            Future.delayed(Duration(milliseconds: 300))
+                .then((_) => _canResponse = true);
+          },
+          child: Container(
+            color: Colors.black38,
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: Padding(padding: EdgeInsets.all(60), child: menu)),
+          ));
+    });
+
+    //   Widget menu = Center(
+    //     child: Container(
+    //       constraints: BoxConstraints(
+    //         // maxHeight: MediaQuery.of(context).size.height / 2,
+    //         // minHeight: 10,
+    //         maxWidth: _parentBox!.size.width - 2 * widget.horizontalMargin,
+    //         minWidth: 0,
+    //       ),
+    //       child: CustomMultiChildLayout(
+    //         delegate: _MenuLayoutDelegate(
+    //           screenSize: MediaQuery.of(context).size,
+    //           anchorSize: _childBox!.size,
+    //           anchorOffset: _childBox!.localToGlobal(
+    //             Offset(-widget.horizontalMargin, 0),
+    //           ),
+    //           verticalMargin: widget.verticalMargin,
+    //           position: widget.position,
+    //         ),
+    //         children: <Widget>[
+    //           LayoutId(
+    //             id: _MenuLayoutId.content,
+    //             child: Column(
+    //               mainAxisSize: MainAxisSize.min,
+    //               children: <Widget>[
+    //                 Material(
+    //                   color: Colors.transparent,
+    //                   child: widget.menuBuilder(),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    //   return Listener(
+    //       behavior: widget.enablePassEvent
+    //           ? HitTestBehavior.translucent
+    //           : HitTestBehavior.opaque,
+    //       onPointerDown: (PointerDownEvent event) {
+    //         Offset offset = event.localPosition;
+    //         // If tap position in menu
+    //         if (_menuRect.contains(
+    //             Offset(offset.dx - widget.horizontalMargin, offset.dy))) {
+    //           return;
+    //         }
+    //         _controller?.hideMenu();
+    //         // When [enablePassEvent] works and we tap the [child] to [hideMenu],
+    //         // but the passed event would trigger [showMenu] again.
+    //         // So, we use time threshold to solve this bug.
+    //         _canResponse = false;
+    //         Future.delayed(Duration(milliseconds: 300))
+    //             .then((_) => _canResponse = true);
+    //       },
+    //       child: menu);
+    // },
+    // );
     if (_overlayEntry != null) {
       Overlay.of(context)!.insert(_overlayEntry!);
     }

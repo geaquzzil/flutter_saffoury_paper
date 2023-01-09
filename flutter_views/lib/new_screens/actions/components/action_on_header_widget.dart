@@ -11,8 +11,9 @@ import 'package:provider/provider.dart';
 class ActionsOnHeaderWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
   ServerActions? serverActions;
+  bool removeSharedWithFabs;
   ActionsOnHeaderWidget(
-      {super.key, required this.viewAbstract, this.serverActions});
+      {super.key, required this.viewAbstract, this.serverActions,this.removeSharedWithFabs=true});
 
   @override
   Widget build(BuildContext context) {

@@ -51,7 +51,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       child: Hero(
         tag: "/search",
         child: Card(
-          elevation: 3,
+          // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),

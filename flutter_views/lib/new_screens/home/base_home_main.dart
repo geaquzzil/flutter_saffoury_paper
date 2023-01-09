@@ -1,5 +1,6 @@
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
@@ -35,6 +36,8 @@ import '../actions/view/base_home_details_view.dart';
 import 'components/drawers/drawer_large_screen.dart';
 import 'components/profile/profile_pic_popup_menu.dart';
 import 'home_notification_widget.dart';
+
+ValueNotifier<bool> valueNotifierCameraMode = ValueNotifier<bool>(false);
 
 class BaseHomeMainPage extends StatefulWidget {
   const BaseHomeMainPage({Key? key}) : super(key: key);
@@ -163,7 +166,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           child: Row(
         children: [
           navigationRailWidget!,
-          VerticalDivider(width: 1),
+          const VerticalDivider(width: 1),
           Expanded(child: child),
         ],
       ));
@@ -266,11 +269,25 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           right: 0,
           child: Container(
             // color: Colors.amber,
-            height: 160,
+            height: 200,
             child: Column(children: [
-              DrawerSettingButton(),
-              DrawerLanguageButton(),
-              ProfilePicturePopupMenu()
+              IconButton(
+                onPressed: () => valueNotifierCameraMode.value =
+                    !valueNotifierCameraMode.value,
+                icon: const Icon(Icons.camera),
+              ),
+              const SizedBox(
+                height: kDefaultPadding / 3,
+              ),
+              const DrawerSettingButton(),
+              const SizedBox(
+                height: kDefaultPadding / 3,
+              ),
+              const DrawerLanguageButton(),
+              const SizedBox(
+                height: kDefaultPadding / 3,
+              ),
+              const ProfilePicturePopupMenu()
             ]),
           ),
         )
@@ -285,7 +302,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           trailing: Align(
             alignment: Alignment.bottomCenter,
             child: IconButton(
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () {},
             ),
           ),
@@ -311,8 +328,10 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       builder: (context, value, child) => NavigationBar(
           // type: BottomNavigationBarType.fixed,
           selectedIndex: value,
-          onDestinationSelected: (int index) =>
-              drawerMenuControllerProvider.setNavigationIndex = index,
+          onDestinationSelected: (int index) {
+            valueNotifierCameraMode.value = false;
+            drawerMenuControllerProvider.setNavigationIndex = index;
+          },
           destinations: getNavigationDesinations().cast()),
       selector: (p0, p1) => p1.getNavigationIndex,
     );
@@ -342,11 +361,6 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               AppLocalizations.of(context)!.notification)
           : getBottomNavigationBarItem(Icons.notifications,
               Icons.account_circle, AppLocalizations.of(context)!.notification),
-      isNavigationRail
-          ? getNavigationRailBarItem(Icons.qr_code, Icons.qr_code_2,
-              AppLocalizations.of(context)!.barcode)
-          : getBottomNavigationBarItem(Icons.qr_code, Icons.qr_code_2,
-              AppLocalizations.of(context)!.notification),
     ];
   }
 
@@ -377,7 +391,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       leading: BackButton(onPressed: (() {
         exitSelectionMood(key);
       })),
-      actions: [IconButton(onPressed: () => {}, icon: Icon(Icons.delete))],
+      actions: [
+        IconButton(onPressed: () => {}, icon: const Icon(Icons.delete))
+      ],
     );
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 const primaryColor = Color(0xFF2697FF);
 const secondaryColor = Color(0xFF2A2D3E);
 const bgColor = Color(0xFF212332);
@@ -19,6 +18,7 @@ const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 
 const kDefaultPadding = 20.0;
+const kSpaceWithText = 4.0;
 
 const Color kBackgroundColor = Color.fromRGBO(7, 17, 26, 1);
 const Color kDangerColor = Color.fromRGBO(249, 77, 30, 1);
@@ -29,7 +29,6 @@ const double kDesktopMaxWidth = 1000.0;
 const double kTabletMaxWidth = 760.0;
 double getMobileMaxWidth(BuildContext context) =>
     MediaQuery.of(context).size.width * .8;
-
 
 const kBorderRadius = 20.0;
 const kSpacing = 20.0;

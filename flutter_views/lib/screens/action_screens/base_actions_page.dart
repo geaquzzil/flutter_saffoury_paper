@@ -43,6 +43,7 @@ class _BaseActionPageState<T extends ViewAbstract>
         floating: true,
         expandedHeight: 200.0,
         snap: true,
+        stretchTriggerOffset: 150,
         // title: widget.object.getMainHeaderText(context),
         // centerTitle: true,
         forceElevated: innerBoxIsScrolled,
@@ -56,6 +57,11 @@ class _BaseActionPageState<T extends ViewAbstract>
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
     return FlexibleSpaceBar(
+        stretchModes: const [
+          StretchMode.blurBackground,
+          StretchMode.zoomBackground,
+          StretchMode.fadeTitle
+        ],
         title: Text(widget.object.getMainHeaderTextOnly(context)),
         background: Hero(
             tag: widget.object,
