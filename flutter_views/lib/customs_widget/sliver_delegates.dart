@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class SliverAppBarDelegatePreferedSize extends SliverPersistentHeaderDelegate {
   PreferredSizeWidget child;
+  bool shouldRebuildWidget;
   SliverAppBarDelegatePreferedSize({
+    this.shouldRebuildWidget = false,
     required this.child,
   });
 
@@ -22,7 +24,7 @@ class SliverAppBarDelegatePreferedSize extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+    return shouldRebuildWidget;
   }
 }
 

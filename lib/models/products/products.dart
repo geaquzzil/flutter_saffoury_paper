@@ -545,6 +545,23 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
+    // TODO: implement getHomeListHeaderWidgetList
+    return [
+      ListHorizontalApiAutoRestWidget(
+        useCardAsOutLine: true,
+        isSliver: true,
+        titleString: "Category",
+        useCardAsImageBackgroud: true,
+        // listItembuilder: (v) =>
+        //     ListItemProductTypeCategory(productType: v as ProductType),
+        autoRest: AutoRest<ProductType>(
+            obj: ProductType.init(true), key: "ProductType<Category>"),
+      ),
+    ];
+  }
+
+  @override
   List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
     num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
@@ -552,7 +569,7 @@ class Product extends ViewAbstract<Product>
     return [
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCountList,
+        mainAxisCellCount: 1,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "Category",
@@ -720,7 +737,7 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
-        customHeight: 150,
+        customHeight: 175,
         useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
@@ -730,7 +747,7 @@ class Product extends ViewAbstract<Product>
       ),
       ListHorizontalApiAutoRestWidget(
         useCardAsImageBackgroud: true,
-        customHeight: 150,
+        customHeight: 175,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,

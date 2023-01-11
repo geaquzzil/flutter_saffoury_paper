@@ -77,29 +77,16 @@ class ChartCardItemCustom extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (icon != null)
-                    Container(
-                        padding: const EdgeInsets.all(defaultPadding / 8),
-                        height: 10,
-                        width: 10,
-                        decoration: const BoxDecoration(
-                          // color: Colors.orange.withOpacity(0.1),
-                          // color: info.color!.withOpacity(0.1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Icon(icon)),
-                  if (icon != null)
-                    Icon(
-                      Icons.deblur_outlined,
-                    )
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.caption!,
+                  ),
+                  if (icon != null) Icon(icon)
                 ],
               ),
-              Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.caption!,
-              ),
+
               Text(
                 description,
                 maxLines: 2,

@@ -11,8 +11,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @JsonKey(ignore: true)
   bool? selected;
   ViewAbstract() : super();
+  @Deprecated("could be replaced with getHomeListHeaderWidgetList")
   List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) =>
       null;
+  List<Widget>? getHomeListHeaderWidgetList(BuildContext context) => null;
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) => [];
 
   Widget? getHomeHeaderWidget(BuildContext context) {

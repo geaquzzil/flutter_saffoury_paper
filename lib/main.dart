@@ -23,6 +23,7 @@ import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
@@ -56,6 +57,7 @@ import 'models/funds/credits.dart';
 import 'models/products/products_types.dart';
 
 String svgCode = '';
+
 void main() async {
   initializeReflectable();
 
@@ -109,6 +111,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ListScrollProvider()),
       ChangeNotifierProvider(
           create: (context) => PrintSettingLargeScreenProvider()),
+      // ChangeNotifierProvider(
+      //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
           create: (context) =>
               DrawerMenuControllerProvider(initViewAbstract: Product())),

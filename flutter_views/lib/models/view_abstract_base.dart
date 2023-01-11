@@ -124,6 +124,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Widget getHorizontalCardTitleSameLine(
     BuildContext context, {
     PaletteGenerator? color,
+    Animation<Color?>? animatedColor,
     bool isImageAsBackground = true,
   }) {
     return Text(
@@ -131,9 +132,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       style: isImageAsBackground
           ? Theme.of(context).textTheme.caption?.copyWith(
               fontWeight: FontWeight.bold,
-              color: color != null
-                  ? color.darkMutedColor?.color
-                  : Theme.of(context).colorScheme.onPrimaryContainer)
+              color: animatedColor != null
+                  ? animatedColor.value
+                  : color != null
+                      ? color.darkMutedColor?.color
+                      : Theme.of(context).colorScheme.onPrimaryContainer)
           : Theme.of(context).textTheme.caption,
       // style: const TextStyle(color: kTextLightColor)
     );

@@ -6,9 +6,11 @@ class OutlinedCard extends StatelessWidget {
   bool fillColor;
   PaletteGenerator? color;
   final Function()? onPress;
+  final double reduce;
   OutlinedCard(
       {super.key,
       required this.child,
+      this.reduce = 20,
       this.color,
       this.fillColor = true,
       this.onPress});
@@ -22,10 +24,11 @@ class OutlinedCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           side: BorderSide(
             color: color != null
-                ? color!.darkVibrantColor!.color
-                : Theme.of(context).colorScheme.outline.withOpacity(.5),
+                ? color!.darkMutedColor?.color ??
+                    Theme.of(context).colorScheme.outline.withOpacity(.8)
+                : Theme.of(context).colorScheme.outline.withOpacity(.8),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(reduce)),
         ),
         child: InkWell(onTap: () => onPress!(), child: child));
   }
@@ -36,9 +39,12 @@ class OutlinedCard extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
+            color: color != null
+                ? color!.darkMutedColor?.color ??
+                    Theme.of(context).colorScheme.outline.withOpacity(.8)
+                : Theme.of(context).colorScheme.outline.withOpacity(.8),
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(reduce)),
         ),
         child: child);
   }

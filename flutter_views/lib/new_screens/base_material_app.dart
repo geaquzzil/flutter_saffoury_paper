@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
@@ -28,6 +29,7 @@ import 'package:skeletons/skeletons.dart';
 
 import '../theming/text_field_theming.dart';
 import 'home/base_home_main.dart';
+
 
 class BaseMaterialAppPage extends StatefulWidget {
   List<RouteBase>? addOnRoutes;

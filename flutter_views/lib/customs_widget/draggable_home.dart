@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_screens/base_material_app.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum ExpandType { CLOSED, HALF_EXPANDED, EXPANDED }
@@ -85,6 +88,9 @@ class DraggableHome extends StatefulWidget {
   final ScrollPhysics? physics;
 
   final ValueNotifier<ExpandType>? valueNotifierExpandType;
+  final ValueNotifier<ExpandType>? valueNotifierExpandTypeOnExpandOny;
+
+  final bool showAppbarOnTopOnly;
 
   /// This will create DraggableHome.
   const DraggableHome(
@@ -94,8 +100,10 @@ class DraggableHome extends StatefulWidget {
       this.centerTitle = true,
       this.actions,
       this.alwaysShowLeadingAndAction = false,
+      this.showAppbarOnTopOnly = true,
+      this.valueNotifierExpandTypeOnExpandOny,
       this.alwaysShowTitle = false,
-      this.headerExpandedHeight = 0.3,
+      this.headerExpandedHeight = 0.4,
       this.scrollController,
       this.headerWidget,
       this.headerBottomBar,
@@ -106,9 +114,9 @@ class DraggableHome extends StatefulWidget {
       required this.slivers,
       this.drawer,
       this.fullyStretchable = false,
-      this.stretchTriggerOffset = 200,
+      this.stretchTriggerOffset = 100,
       this.expandedBody,
-      this.stretchMaxHeight = 0.9,
+      this.stretchMaxHeight = 0.5,
       this.bottomSheet,
       this.bottomNavigationBarHeight = kBottomNavigationBarHeight,
       this.bottomNavigationBar,
@@ -124,7 +132,10 @@ class DraggableHome extends StatefulWidget {
         super(key: key);
 }
 
-class _DraggableHomeState extends State<DraggableHome> {
+class _DraggableHomeState extends State<DraggableHome>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  bool isPlaying = false;
   final BehaviorSubject<bool> isFullyExpanded =
       BehaviorSubject<bool>.seeded(false);
   final BehaviorSubject<bool> isFullyCollapsed =
@@ -138,13 +149,21 @@ class _DraggableHomeState extends State<DraggableHome> {
   }
 
   @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double appBarHeight =
         AppBar().preferredSize.height + widget.curvedBodyRadius;
 
     final double topPadding = MediaQuery.of(context).padding.top;
 
-    final double expandedHeight =
+    double expandedHeight =
         MediaQuery.of(context).size.height * widget.headerExpandedHeight;
 
     final double fullyExpandedHeight =
@@ -155,31 +174,57 @@ class _DraggableHomeState extends State<DraggableHome> {
           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
       body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.metrics.axis == Axis.vertical) {
-            // isFullyCollapsed
-            if ((isFullyExpanded.value) &&
-                notification.metrics.extentBefore > 100) {
-              isFullyExpanded.add(false);
+          onNotification: (notification) {
+            // debugPrint("DraggableHome  ${notification.metrics.extentBefore}");
+            // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
+            //   debugPrint(
+            //       "DraggableHome ${widget.scrollController!.position.pixels}");
+            //   if (widget.scrollController!.position.pixels >= 200) {
+            //     if (isFullyExpanded.value) isFullyExpanded.add(false);
+            //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
+            //     // expandedHeight = 0;
+            //     return false;
+            //   }
+            // }
+            if (notification.metrics.axis == Axis.vertical) {
+              // isFullyCollapsed
+              if ((isFullyExpanded.value) &&
+                  notification.metrics.extentBefore > 100) {
+                isFullyExpanded.add(false);
+              }
+              //isFullyCollapsed
+              if (notification.metrics.extentBefore >
+                  expandedHeight - AppBar().preferredSize.height - 40) {
+                if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
+              } else {
+                if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
+              }
             }
-            //isFullyCollapsed
-            if (notification.metrics.extentBefore >
-                expandedHeight - AppBar().preferredSize.height - 40) {
-              if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
-            } else {
-              if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
-            }
-          }
-          return false;
-        },
-        child: sliver(context, appBarHeight, fullyExpandedHeight,
-            expandedHeight, topPadding),
-      ),
+            return false;
+          },
+          child: sliver(context, appBarHeight, fullyExpandedHeight,
+              expandedHeight, topPadding)),
       bottomSheet: widget.bottomSheet,
       bottomNavigationBar: widget.bottomNavigationBar,
-      floatingActionButton: widget.floatingActionButton,
+      floatingActionButton: getScaffoldFloatingActionButton(),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
+    );
+  }
+
+  Widget? getScaffoldFloatingActionButton() {
+    Widget? child = widget.floatingActionButton;
+    if (widget.valueNotifierExpandType == null) {
+      return child;
+    }
+    return child;
+    return ValueListenableBuilder(
+      valueListenable: widget.valueNotifierExpandType!,
+      builder: (context, value, child) => AnimatedOpacity(
+        opacity: value == ExpandType.EXPANDED ? 1 : 0,
+        duration: Duration(milliseconds: 300),
+        child: child,
+      ),
     );
   }
 
@@ -203,23 +248,27 @@ class _DraggableHomeState extends State<DraggableHome> {
             final List<bool> streams = (snapshot.data ?? [false, false]);
             final bool fullyCollapsed = streams[0];
             final bool fullyExpanded = streams[1];
-            notifyListeners(fullyCollapsed, fullyExpanded);
+            notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
 
             return SliverAppBar(
-              backgroundColor:
-                  !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
-              leading: widget.alwaysShowLeadingAndAction
-                  ? widget.leading
-                  : !fullyCollapsed
-                      ? const SizedBox()
-                      : widget.leading,
+              automaticallyImplyLeading: true,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              // surfaceTintColor: Theme.of(context).colorScheme.primary,
+              // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
+              leading: getLeadingAppBar(context),
+              // leading: widget.alwaysShowLeadingAndAction
+              //     ? widget.leading
+              //     : !fullyCollapsed
+              //         ? const SizedBox()
+              //         : widget.leading,
               actions: widget.alwaysShowLeadingAndAction
                   ? widget.actions
                   : !fullyCollapsed
                       ? []
                       : widget.actions,
               elevation: 0,
-              pinned: true,
+              pinned: false,
+              // floating: true,
               stretch: true,
               centerTitle: widget.centerTitle,
               title: widget.title == null
@@ -246,10 +295,39 @@ class _DraggableHomeState extends State<DraggableHome> {
             );
           },
         ),
+        SliverToBoxAdapter(
+          child: expandedUpArrow(),
+        ),
         ...widget.slivers,
         // sliverList(context, appBarHeight + topPadding),
       ],
     );
+  }
+
+  Widget? getLeadingAppBar(BuildContext context) {
+    Widget icon = IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.arrow_menu,
+        progress: _animationController,
+      ),
+      onPressed: () {
+        context.read<DrawerMenuControllerProvider>().controlStartDrawerMenu();
+      },
+    );
+    if (widget.valueNotifierExpandType == null) {
+      return icon;
+    } else {
+      return ValueListenableBuilder<ExpandType>(
+        valueListenable: widget.valueNotifierExpandType!,
+        builder: (context, value, child) {
+          return AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: value == ExpandType.HALF_EXPANDED ? 1 : 0,
+            child: icon,
+          );
+        },
+      );
+    }
   }
 
   Stack getSliverSpace(
@@ -257,11 +335,16 @@ class _DraggableHomeState extends State<DraggableHome> {
     return Stack(
       children: [
         FlexibleSpaceBar(
-          background: Container(
-            margin: const EdgeInsets.only(bottom: 0.2),
-            child: fullyExpanded
-                ? (widget.expandedBody ?? const SizedBox())
-                : widget.headerWidget,
+          background: Card(
+            child: Container(
+                // color: Theme.of(context).colorScheme.surfaceVariant,
+                margin: const EdgeInsets.only(bottom: 0.2),
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 300),
+                  child: fullyExpanded
+                      ? (widget.expandedBody ?? const SizedBox())
+                      : widget.headerWidget,
+                )),
           ),
         ),
         Positioned(
@@ -325,7 +408,7 @@ class _DraggableHomeState extends State<DraggableHome> {
                 children: [
                   expandedUpArrow(),
                   //Body
-                  Text("this is  abody")
+                  const Text("this is  abody")
                 ],
               ),
             ],
@@ -354,16 +437,53 @@ class _DraggableHomeState extends State<DraggableHome> {
     );
   }
 
+  void notifyListenerWidgetBinding(bool fullyCollapsed, bool fullyExpanded) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      notifyListeners(fullyCollapsed, fullyExpanded);
+    });
+  }
+
   void notifyListeners(bool fullyCollapsed, bool fullyExpanded) {
+    // final provider = context.read<DraggableHomeExpandProvider>();
     // false false half expanded
     //false true expanded
     //true false collapsed
     if (!fullyCollapsed && !fullyExpanded) {
-      widget.valueNotifierExpandType?.value = ExpandType.HALF_EXPANDED;
+      debugPrint("DraggableHome notifying ${ExpandType.HALF_EXPANDED}");
+      // provider.type = ExpandType.HALF_EXPANDED;
+      if (widget.valueNotifierExpandType?.value != ExpandType.HALF_EXPANDED) {
+        widget.valueNotifierExpandType?.value = ExpandType.HALF_EXPANDED;
+      }
     } else if (!fullyCollapsed && fullyExpanded) {
-      widget.valueNotifierExpandType?.value = ExpandType.EXPANDED;
+      // provider.type = ExpandType.EXPANDED;
+      debugPrint("DraggableHome notifying ${ExpandType.EXPANDED}");
+      if (widget.valueNotifierExpandType?.value != ExpandType.EXPANDED) {
+        widget.valueNotifierExpandType?.value = ExpandType.EXPANDED;
+      }
+      if (widget.valueNotifierExpandTypeOnExpandOny?.value !=
+          ExpandType.EXPANDED) {
+        widget.valueNotifierExpandTypeOnExpandOny?.value = ExpandType.EXPANDED;
+      }
     } else {
-      widget.valueNotifierExpandType?.value = ExpandType.CLOSED;
+      // provider.type = ExpandType.CLOSED;
+      debugPrint("DraggableHome notifying ${ExpandType.CLOSED}");
+      if (widget.valueNotifierExpandType?.value != ExpandType.CLOSED) {
+        widget.valueNotifierExpandType?.value = ExpandType.CLOSED;
+      }
+      if (widget.valueNotifierExpandTypeOnExpandOny?.value !=
+          ExpandType.CLOSED) {
+        widget.valueNotifierExpandTypeOnExpandOny?.value = ExpandType.CLOSED;
+      }
     }
   }
 }
+
+// class DraggableHomeExpandProvider with ChangeNotifier {
+//   ExpandType _type = ExpandType.HALF_EXPANDED;
+//   ExpandType get type => _type;
+
+//   set type(ExpandType value) {
+//     _type = value;
+//     notifyListeners();
+//   }
+// }

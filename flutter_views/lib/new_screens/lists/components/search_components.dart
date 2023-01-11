@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -18,10 +19,12 @@ class SearchWidgetComponent extends StatefulWidget {
   bool forceSearchBarAsEditText;
   String heroTag;
   Function(String?) onSearchTextChanged;
+  ValueNotifier<ExpandType>? appBardExpandType;
   SearchWidgetComponent(
       {super.key,
       this.heroTag = "/search",
       this.controller,
+      this.appBardExpandType,
       required this.onSearchTextChanged,
       this.forceSearchBarAsEditText = false});
 
@@ -56,7 +59,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
-            leading: getLeadingWidget(),
+            leading: getLeadingWidget(context),
             onTap: () => context.goNamed(searchRouteName, queryParams: {
               "query": "q"
             },
@@ -103,9 +106,22 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     });
   }
 
-  Widget? getLeadingWidget() {
-    if (SizeConfig.isLargeScreen(context)) return null;
-    return IconButton(
+  // Widget? getLeadingWidget() {
+  //   // if (SizeConfig.isLargeScreen(context)) return null;
+  //   return IconButton(
+  //     icon: AnimatedIcon(
+  //       icon: AnimatedIcons.arrow_menu,
+  //       progress: _animationController,
+  //     ),
+  //     onPressed: () {
+  //       context.read<DrawerMenuControllerProvider>().controlStartDrawerMenu();
+  //     },
+  //   );
+  // }
+
+  Widget? getLeadingWidget(BuildContext context) {
+    // if (SizeConfig.isLargeScreen(context)) return null;
+    Widget icon = IconButton(
       icon: AnimatedIcon(
         icon: AnimatedIcons.arrow_menu,
         progress: _animationController,
@@ -114,6 +130,20 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
         context.read<DrawerMenuControllerProvider>().controlStartDrawerMenu();
       },
     );
+    if (widget.appBardExpandType == null) {
+      return icon;
+    } else {
+      return ValueListenableBuilder<ExpandType>(
+        valueListenable: widget.appBardExpandType!,
+        builder: (context, value, child) {
+          return AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: value == ExpandType.CLOSED ? 1 : 0,
+            child: icon,
+          );
+        },
+      );
+    }
   }
 
   OnHoverWidget buildColapsedIcon(

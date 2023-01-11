@@ -17,19 +17,21 @@ import '../../new_components/loading_shimmer.dart';
 class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   AutoRest autoRest;
   Widget? title;
-  double customHeight;
+  double? customHeight;
   String? titleString;
   bool isSliver;
   bool useCardAsImageBackgroud;
+  bool useCardAsOutLine;
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
       {Key? key,
       required this.autoRest,
       this.title,
       this.titleString,
+      this.useCardAsOutLine = false,
       this.useCardAsImageBackgroud = false,
       this.isSliver = false,
-      this.customHeight = 230,
+      this.customHeight,
       this.listItembuilder})
       : super(key: key);
 
@@ -69,7 +71,7 @@ class _ListHorizontalApiWidgetState
         mainAxisSpacing: kDefaultPadding / 2,
         childAspectRatio: 3 / 2,
 
-        maxCrossAxisExtent: 250,
+        maxCrossAxisExtent: 300,
         // childAspectRatio: 3 / 2,
       ),
       itemBuilder: (context, index) {
@@ -93,7 +95,7 @@ class _ListHorizontalApiWidgetState
         crossAxisSpacing: kDefaultPadding / 2,
         mainAxisSpacing: kDefaultPadding / 2,
         childAspectRatio: 3 / 2,
-
+        // mainAxisExtent: 100,
         maxCrossAxisExtent: 250,
         // childAspectRatio: 3 / 2,
       ),
@@ -108,6 +110,7 @@ class _ListHorizontalApiWidgetState
             // footer: Text("foot"),
             child: widget.listItembuilder == null
                 ? ListCardItemHorizontal(
+                    useOutlineCard: widget.useCardAsOutLine,
                     object: data[index],
                     useImageAsBackground: widget.useCardAsImageBackgroud,
                   )
@@ -217,11 +220,14 @@ class _ListHorizontalApiWidgetState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildHeader(context),
-
+        if (widget.customHeight != null)
+          SizedBox(height: widget.customHeight, child: child)
+        else
+          Expanded(child: child)
         // if (widget.isSliver)
         //   child
         // else
-        SizedBox(height: widget.customHeight, child: child)
+        // SizedBox(height: widget.customHeight, child: child)
       ],
     );
   }

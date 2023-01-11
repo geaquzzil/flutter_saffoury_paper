@@ -19,18 +19,18 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/camera_preview.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/components/qr_code_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:skeletons/skeletons.dart';
@@ -77,7 +77,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   List<ViewAbstract> _selectedList = [];
 
   List<ViewAbstract> get getSelectedList => _selectedList;
-
+  ValueNotifier<ExpandType> expandType =
+      ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
+  ValueNotifier<ExpandType> expandTypeOnlyOnExpand =
+      ValueNotifier<ExpandType>(ExpandType.CLOSED);
   void onSelectedItem(ViewAbstract obj) {
     if (obj.isSelected) {
       ViewAbstract? isFounded;
@@ -160,49 +163,85 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   Widget? getHeaderWidget() {
-    List<StaggeredGridTile>? homeList =
-        viewAbstract.getHomeListHeaderWidget(context);
-    if (homeList == null) return null;
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: StaggeredGrid.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 1,
-          crossAxisSpacing: 2,
-          children: homeList),
+    List<Widget>? homeList = viewAbstract.getHomeListHeaderWidgetList(context);
+    // if (homeList == null) return null;
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * .35,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(kDefaultPadding),
+            child: Text(
+              "SaffouryPaper",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          if (homeList != null)
+            ...homeList
+                .map((e) => SizedBox(
+                      height: MediaQuery.of(context).size.height * .25,
+                      // height: MediaQuery.of(context).size.height * .1,
+                      child: e,
+                    ))
+                .toList()
+          // StaggeredGrid.count(
+          //     crossAxisCount: 2,
+          //     mainAxisSpacing: 1,
+          //     crossAxisSpacing: 1,
+          //     children: [if (homeList != null) ...homeList]),
+        ],
+      ),
     );
   }
 
   Widget getBuildBodyDraggable() {
     return DraggableHome(
+        valueNotifierExpandType: expandType,
+        valueNotifierExpandTypeOnExpandOny: expandTypeOnlyOnExpand,
+        // drawer: DrawerLargeScreens(),
         scrollController: _scrollController,
+        floatingActionButton: FloatingActionButton.small(
+            child: Icon(Icons.arrow_drop_up_rounded),
+            heroTag: UniqueKey(),
+            onPressed: () => _scrollTop()),
+        actions: [
+          IconButton(
+              onPressed: () {
+                valueNotifierGrid.value = !valueNotifierGrid.value;
+              },
+              icon: const Icon(Icons.grid_view_rounded))
+        ],
         // backgroundColor: Colors.red,
-        title: Text("Welcome back"),
+        title: const Text("Welcome back"),
         fullyStretchable: true,
         headerWidget: getHeaderWidget(),
-        expandedBody: Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          child: QrCodeReader(
-            getViewAbstract: true,
-            currentHeight: 20,
-            onRead: (qr) {
-              readerViewAbstract.value = qr as ViewAbstract;
-            },
-          ),
+        expandedBody: QrCodeReader(
+          getViewAbstract: true,
+          currentHeight: 20,
+          onRead: (qr) {
+            readerViewAbstract.value = qr as ViewAbstract;
+            // scanedQr = qr as ViewAbstract;
+            // scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
+            // fetshList();
+          },
         ),
         slivers: [
           if (widget.buildSearchWidget) getSearchWidget(),
           if (widget.buildFilterableView) getFilterableWidget(),
           if (widget.buildToggleView) getToggleView(),
-          ValueListenableBuilder<bool>(
-              valueListenable: valueNotifierCameraMode,
+          ValueListenableBuilder<ExpandType>(
+              valueListenable: expandTypeOnlyOnExpand,
               builder: (context, value, child) {
-                if (!value) {
-                  scanedQr = null;
-                  return getListSelector();
+                debugPrint("SliverApiMaster valueListenable expandType");
+                if (value == ExpandType.EXPANDED) {
+                  _scrollTop();
+                  return getQrCodeSelector();
                 }
-                _scrollTop();
-                return getQrCodeSelector();
+                scanedQr = null;
+                return getListSelector();
               })
         ]);
   }
@@ -227,7 +266,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           // backgroundColor: Colors.black,
           children: [
             SpeedDialChild(
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           ],
         ),
@@ -261,16 +300,16 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         if (widget.buildSearchWidget) getSearchWidget(),
         if (widget.buildFilterableView) getFilterableWidget(),
         if (widget.buildToggleView) getToggleView(),
-        ValueListenableBuilder<bool>(
-            valueListenable: valueNotifierCameraMode,
-            builder: (context, value, child) {
-              if (!value) {
-                scanedQr = null;
-                return getListSelector();
-              }
-              _scrollTop();
-              return getQrCodeSelector();
-            })
+        // ValueListenableBuilder<bool>(
+        //     valueListenable: valueNotifierCameraMode,
+        //     builder: (context, value, child) {
+        //       if (!value) {
+        //         scanedQr = null;
+        //         return getListSelector();
+        //       }
+        //       _scrollTop();
+        //       return getQrCodeSelector();
+        //     })
       ],
     );
   }
@@ -410,18 +449,83 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 ))));
   }
 
-  SliverPersistentHeader getSearchWidget() {
-    return SliverPersistentHeader(
-        pinned: true,
-        delegate: SliverAppBarDelegatePreferedSize(
-            child: PreferredSize(
-          preferredSize: const Size.fromHeight(70.0),
-          child: SearchWidgetComponent(
-            heroTag: "list/search",
-            controller: TextEditingController(),
-            onSearchTextChanged: (p0) {},
-          ),
-        )));
+  Widget getSearchWidget() {
+    // return SliverPersistentHeader(
+    //   delegate: SliverAppBarDelegatePreferedSize(
+    //       child: PreferredSize(
+    //           preferredSize: const Size.fromHeight(70.0),
+    //           child: ValueListenableBuilder<ExpandType>(
+    //               valueListenable: expandType,
+    //               builder: (__, value, ____) {
+    //                 debugPrint("SliverApiMaster expandType $expandType ");
+    //                 return AnimatedSwitcher(
+    //                   duration: Duration(milliseconds: 750),
+    //                   transitionBuilder: (child, animation) => ScaleTransition(
+    //                     scale: animation,
+    //                     child: child,
+    //                   ),
+    //                   child: value == ExpandType.EXPANDED
+    //                       ? Text("Qr CODE")
+    //                       : SearchWidgetComponent(
+    //                           heroTag: "list/search",
+    //                           controller: TextEditingController(),
+    //                           onSearchTextChanged: (p0) {},
+    //                         ),
+    //                 );
+    //               }))),
+    // );
+    return ValueListenableBuilder<ExpandType>(
+        valueListenable: expandType,
+        builder: (__, value, ____) {
+          debugPrint("SliverApiMaster expanmd ${value} ");
+          return SliverPersistentHeader(
+              pinned: true,
+              delegate: SliverAppBarDelegatePreferedSize(
+                shouldRebuildWidget: true,
+                child: PreferredSize(
+                  preferredSize: Size.fromHeight(70),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    transitionBuilder: (child, animation) => ScaleTransition(
+                      scale: animation,
+                      child: child,
+                    ),
+                    child: value == ExpandType.EXPANDED
+                        ? const Text(key: ValueKey(1), "Qri CIODE")
+                        : SearchWidgetComponent(
+                            appBardExpandType: expandType,
+                            key: const ValueKey(2),
+                            heroTag: "list/search",
+                            controller: TextEditingController(),
+                            onSearchTextChanged: (p0) {},
+                          ),
+                  ),
+                ),
+              ));
+        });
+    // return Consumer<DraggableHomeExpandProvider>(builder: (__, value, ____) {
+    //   debugPrint("SliverApiMaster expanmd ${value.type} ");
+    //   return SliverPersistentHeader(
+    //       delegate: SliverAppBarDelegate(
+    //     maxHeight: 70,
+    //     minHeight: 70,
+    //     child: AnimatedSwitcher(
+    //       duration: Duration(milliseconds: 750),
+    //       transitionBuilder: (child, animation) => ScaleTransition(
+    //         scale: animation,
+    //         child: child,
+    //       ),
+    //       child: value.type == ExpandType.EXPANDED
+    //           ? Text(key: ValueKey(1), "Qri CIODE")
+    //           : SearchWidgetComponent(
+    //               key: ValueKey(2),
+    //               heroTag: "list/search",
+    //               controller: TextEditingController(),
+    //               onSearchTextChanged: (p0) {},
+    //             ),
+    //     ),
+    //   ));
+    // });
   }
 
   SliverAppBar getAppBar(BuildContext context) {
@@ -441,8 +545,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
-    return FlexibleSpaceBar(
-      stretchModes: const [
+    return const FlexibleSpaceBar(
+      stretchModes: [
         StretchMode.blurBackground,
         StretchMode.zoomBackground,
         StretchMode.fadeTitle
@@ -450,23 +554,23 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       centerTitle: true,
       // background: Text("Welcome back"),
       // titlePadding: const EdgeInsets.only(bottom: 62),
-      title: ValueListenableBuilder<bool>(
-        valueListenable: valueNotifierCameraMode,
-        builder: (context, value, child) {
-          if (value) {
-            return Text("Qr code back",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ));
-          }
-          return Text(
-            "Welcome back",
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-          );
-        },
-      ),
+      // title: ValueListenableBuilder<bool>(
+      //   valueListenable: valueNotifierCameraMode,
+      //   builder: (context, value, child) {
+      //     if (value) {
+      //       return Text("Qr code back",
+      //           style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      //                 color: Theme.of(context).colorScheme.primary,
+      //               ));
+      //     }
+      //     return Text(
+      //       "Welcome back",
+      //       style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      //             color: Theme.of(context).colorScheme.primary,
+      //           ),
+      //     );
+      //   },
+      // ),
     );
   }
 

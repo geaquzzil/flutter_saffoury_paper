@@ -323,6 +323,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     AppLocalizations.of(context)!.appTitle;
     return Selector<DrawerMenuControllerProvider, int>(
       builder: (context, value, child) => NavigationBar(
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           // type: BottomNavigationBarType.fixed,
           selectedIndex: value,
           onDestinationSelected: (int index) {
