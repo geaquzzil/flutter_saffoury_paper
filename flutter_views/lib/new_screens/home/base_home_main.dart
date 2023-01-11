@@ -152,10 +152,12 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget shouldWrapNavigatorChild(BuildContext context, Widget child) {
     if (SizeConfig.isSoLargeScreen(context)) {
       drawerWidget ??= DrawerLargeScreens();
+      navigationRailWidget ??= getNavigationRail();
       return SafeArea(
           child: Row(
         children: [
           drawerWidget!,
+          navigationRailWidget!,
           Expanded(child: child),
         ],
       ));
@@ -185,10 +187,11 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ],
       ));
     } else if (SizeConfig.isLargeScreen(context)) {
+      navigationRailWidget ??= getNavigationRail();
       return SafeArea(
           child: Row(
         children: [
-          getNavigationRail(),
+          navigationRailWidget!,
           Expanded(child: ListApiSearchableWidget()),
         ],
       ));

@@ -57,15 +57,19 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(),
-            onTap: () => context.goNamed(searchRouteName, extra: [
-              context.read<DrawerMenuControllerProvider>().getObject,
-              widget.heroTag
-            ], params: {
-              "tableName": context
-                  .read<DrawerMenuControllerProvider>()
-                  .getObject
-                  .getTableNameApi()!
-            }),
+            onTap: () => context.goNamed(searchRouteName, queryParams: {
+              "query": "q"
+            },
+                // extra: [
+                //   context.read<DrawerMenuControllerProvider>().getObject,
+                //   widget.heroTag
+                // ] ,
+                params: {
+                  "tableName": context
+                      .read<DrawerMenuControllerProvider>()
+                      .getObject
+                      .getTableNameApi()!
+                }),
             title: Selector<DrawerMenuControllerProvider, ViewAbstract>(
               builder: (context, value, child) {
                 return Text(

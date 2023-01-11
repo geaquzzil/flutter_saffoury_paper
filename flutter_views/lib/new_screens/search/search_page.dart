@@ -148,12 +148,19 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    startPane ??= SizeConfig.isLargeScreenGeneral(context)
-        ? getFirstPane(context)
-        : getFirstPaneMobile(context);
+    bool largeScreen = SizeConfig.isLargeScreenGeneral(context);
+    startPane ??=
+        largeScreen ? getFirstPane(context) : getFirstPaneMobile(context);
     searchPane ??= getSearchList();
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        appBar: largeScreen
+            ? AppBar(
+                title: Text(AppLocalizations.of(context)!.search),
+                // backgroundColor: Theme.of(context).colorScheme.primary,
+                automaticallyImplyLeading: true,
+              )
+            : null,
         body: TowPaneExt(
           startPane: startPane!,
           endPane: searchPane,

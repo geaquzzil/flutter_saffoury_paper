@@ -7,6 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
@@ -59,6 +61,7 @@ class SliverApiMaster extends StatefulWidget {
 
 class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   late ViewAbstract viewAbstract;
+  final isDialOpen = ValueNotifier(false);
   ViewAbstract? scanedQr;
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
@@ -150,6 +153,39 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        if (isDialOpen.value) {
+          isDialOpen.value = false;
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        floatingActionButton: SpeedDial(
+          openCloseDial: isDialOpen,
+          animatedIcon: AnimatedIcons.menu_close,
+          overlayColor: Colors.black,
+          overlayOpacity: .4,
+          spacing: 12,
+          spaceBetweenChildren: 12,
+          // backgroundColor: Colors.black,
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.add),
+            ),
+            SpeedDialChild(
+                child: Icon(Icons.camera),
+                onTap: () => valueNotifierCameraMode.value =
+                    !valueNotifierCameraMode.value),
+          ],
+        ),
+        body: getBuildBody(),
+      ),
+    );
+  }
+
+  Selector<DrawerMenuControllerProvider, ViewAbstract<dynamic>> getBuildBody() {
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) {
         debugPrint(

@@ -115,7 +115,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
 
           // context.read().change()
         },
-        child: Icon(Icons.file_upload_outlined));
+        child: const Icon(Icons.file_upload_outlined));
   }
 
   Widget getFileReaderFloatingButton(BuildContext context) {
@@ -134,6 +134,6 @@ class BaseFloatingActionButtons extends StatelessWidget {
 
           // context.read().change()
         },
-        child: Icon(Icons.file_download_outlined));
+        child: const Icon(Icons.file_download_outlined));
   }
 }

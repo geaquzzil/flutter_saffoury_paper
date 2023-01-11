@@ -106,9 +106,10 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: SearchPage(
-                        heroTag: (state.extra as List)[1],
+                        // heroTag: (state.extra as List)[1],
                         tableName: state.params["tableName"],
-                        viewAbstract: (state.extra as List)[0],
+                        viewAbstract: null,
+                        // viewAbstract: (state.extra as List)[0],
                       ));
                 },
               ),
