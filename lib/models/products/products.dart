@@ -545,6 +545,28 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) {
+    num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
+        mainAxisType: MainAxisType.ListHorizontal);
+    return [
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: mainAxisCellCountList,
+        child: ListHorizontalApiAutoRestWidget(
+          isSliver: true,
+          titleString: "Category",
+          useCardAsImageBackgroud: true,
+          // listItembuilder: (v) =>
+          //     ListItemProductTypeCategory(productType: v as ProductType),
+          autoRest: AutoRest<ProductType>(
+              obj: ProductType.init(true), key: "ProductType<Category>"),
+        ),
+      ),
+    ];
+  }
+
+  @override
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
     num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
@@ -965,17 +987,17 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  @override
-  Future<List<Product>?> listCall(
-      {int? count, int? page, OnResponseCallback? onResponse}) async {
-    try {
-      Iterable l = jsonDecode(jsonEncode(productsJson));
-      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-    } catch (e) {
-      debugPrint("listCallFake ${e.toString()}");
-    }
-    return null;
-  }
+  // @override
+  // Future<List<Product>?> listCall(
+  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
+  //   try {
+  //     Iterable l = jsonDecode(jsonEncode(productsJson));
+  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+  //   } catch (e) {
+  //     debugPrint("listCallFake ${e.toString()}");
+  //   }
+  //   return null;
+  // }
 
   @override
   Future getPosableInitObj(BuildContext context) {

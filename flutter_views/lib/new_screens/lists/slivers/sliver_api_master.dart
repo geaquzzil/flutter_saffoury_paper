@@ -1,10 +1,11 @@
-import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/camera_preview.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
@@ -153,6 +155,59 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
+    return getBuildBodyDraggable();
+    return getBuildBodyNormal();
+  }
+
+  Widget? getHeaderWidget() {
+    List<StaggeredGridTile>? homeList =
+        viewAbstract.getHomeListHeaderWidget(context);
+    if (homeList == null) return null;
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: StaggeredGrid.count(
+          crossAxisCount: 2,
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 2,
+          children: homeList),
+    );
+  }
+
+  Widget getBuildBodyDraggable() {
+    return DraggableHome(
+        scrollController: _scrollController,
+        // backgroundColor: Colors.red,
+        title: Text("Welcome back"),
+        fullyStretchable: true,
+        headerWidget: getHeaderWidget(),
+        expandedBody: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: QrCodeReader(
+            getViewAbstract: true,
+            currentHeight: 20,
+            onRead: (qr) {
+              readerViewAbstract.value = qr as ViewAbstract;
+            },
+          ),
+        ),
+        slivers: [
+          if (widget.buildSearchWidget) getSearchWidget(),
+          if (widget.buildFilterableView) getFilterableWidget(),
+          if (widget.buildToggleView) getToggleView(),
+          ValueListenableBuilder<bool>(
+              valueListenable: valueNotifierCameraMode,
+              builder: (context, value, child) {
+                if (!value) {
+                  scanedQr = null;
+                  return getListSelector();
+                }
+                _scrollTop();
+                return getQrCodeSelector();
+              })
+        ]);
+  }
+
+  WillPopScope getBuildBodyNormal() {
     return WillPopScope(
       onWillPop: () async {
         if (isDialOpen.value) {
@@ -174,10 +229,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             SpeedDialChild(
               child: Icon(Icons.add),
             ),
-            SpeedDialChild(
-                child: Icon(Icons.camera),
-                onTap: () => valueNotifierCameraMode.value =
-                    !valueNotifierCameraMode.value),
           ],
         ),
         body: getBuildBody(),
@@ -206,7 +257,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
-        const QrCodeWidgetListner(),
         if (widget.buildAppBar) getAppBar(context),
         if (widget.buildSearchWidget) getSearchWidget(),
         if (widget.buildFilterableView) getFilterableWidget(),

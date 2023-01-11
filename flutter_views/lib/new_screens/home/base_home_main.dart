@@ -21,6 +21,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
@@ -37,7 +38,6 @@ import 'components/drawers/drawer_large_screen.dart';
 import 'components/profile/profile_pic_popup_menu.dart';
 import 'home_notification_widget.dart';
 
-ValueNotifier<bool> valueNotifierCameraMode = ValueNotifier<bool>(false);
 
 class BaseHomeMainPage extends StatefulWidget {
   const BaseHomeMainPage({Key? key}) : super(key: key);
@@ -63,6 +63,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // return SliverApiMaster();
     return Scaffold(
       key: drawerMenuControllerProvider.getStartDrawableKey,
       drawer: DrawerLargeScreens(),
@@ -274,14 +275,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             // color: Colors.amber,
             height: 200,
             child: Column(children: [
-              IconButton(
-                onPressed: () => valueNotifierCameraMode.value =
-                    !valueNotifierCameraMode.value,
-                icon: const Icon(Icons.camera),
-              ),
-              const SizedBox(
-                height: kDefaultPadding / 3,
-              ),
+              
               const DrawerSettingButton(),
               const SizedBox(
                 height: kDefaultPadding / 3,
@@ -332,7 +326,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           // type: BottomNavigationBarType.fixed,
           selectedIndex: value,
           onDestinationSelected: (int index) {
-            valueNotifierCameraMode.value = false;
+     
             drawerMenuControllerProvider.setNavigationIndex = index;
           },
           destinations: getNavigationDesinations().cast()),

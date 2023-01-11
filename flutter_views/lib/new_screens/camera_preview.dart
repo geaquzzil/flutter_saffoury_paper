@@ -13,7 +13,7 @@ class CameraPreview extends StatelessWidget {
         SafeArea(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white60,
+              color: Colors.green,
               borderRadius: BorderRadius.circular(50),
             ),
             child: Stack(
@@ -28,7 +28,7 @@ class CameraPreview extends StatelessWidget {
                           backgroundColor: Colors.black.withOpacity(.5),
                           child: const Icon(
                             Icons.bolt,
-                            color: Colors.white,
+                            color: Colors.red,
                           ),
                         )
                       ],
@@ -51,7 +51,7 @@ class CameraPreview extends StatelessWidget {
                             alignment: Alignment.center,
                             child: const CircleAvatar(
                               radius: 40,
-                              backgroundColor: Colors.white,
+                              backgroundColor: Colors.red,
                             ),
                           ),
                         ),

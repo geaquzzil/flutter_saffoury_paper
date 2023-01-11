@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+enum ExpandType { CLOSED, HALF_EXPANDED, EXPANDED }
+
 class DraggableHome extends StatefulWidget {
   @override
   _DraggableHomeState createState() => _DraggableHomeState();
@@ -8,8 +10,10 @@ class DraggableHome extends StatefulWidget {
   /// Leading: A widget to display before the toolbar's title.
   final Widget? leading;
 
+  final ScrollController? scrollController;
+
   /// Title: A Widget to display title in AppBar
-  final Widget title;
+  final Widget? title;
 
   /// Center Title: Allows toggling of title from the center. By default title is in the center.
   final bool centerTitle;
@@ -30,7 +34,7 @@ class DraggableHome extends StatefulWidget {
   final double headerExpandedHeight;
 
   /// Header Widget: A widget to display Header above body.
-  final Widget headerWidget;
+  final Widget? headerWidget;
 
   /// headerBottomBar: AppBar or toolBar like widget just above the body.
 
@@ -46,7 +50,7 @@ class DraggableHome extends StatefulWidget {
   final double curvedBodyRadius;
 
   /// body: A widget to Body
-  final List<Widget> body;
+  final List<Widget> slivers;
 
   /// fullyStretchable: Allows toggling of fully expand draggability of the DraggableHome. Set this to true to allow the user to fully expand the header.
   final bool fullyStretchable;
@@ -80,22 +84,26 @@ class DraggableHome extends StatefulWidget {
 
   final ScrollPhysics? physics;
 
+  final ValueNotifier<ExpandType>? valueNotifierExpandType;
+
   /// This will create DraggableHome.
   const DraggableHome(
       {Key? key,
       this.leading,
-      required this.title,
+      this.title,
       this.centerTitle = true,
       this.actions,
       this.alwaysShowLeadingAndAction = false,
       this.alwaysShowTitle = false,
-      this.headerExpandedHeight = 0.35,
-      required this.headerWidget,
+      this.headerExpandedHeight = 0.3,
+      this.scrollController,
+      this.headerWidget,
       this.headerBottomBar,
       this.backgroundColor,
+      this.valueNotifierExpandType,
       this.appBarColor,
       this.curvedBodyRadius = 20,
-      required this.body,
+      required this.slivers,
       this.drawer,
       this.fullyStretchable = false,
       this.stretchTriggerOffset = 200,
@@ -183,6 +191,7 @@ class _DraggableHomeState extends State<DraggableHome> {
     double topPadding,
   ) {
     return CustomScrollView(
+      controller: widget.scrollController,
       physics: widget.physics ?? const BouncingScrollPhysics(),
       slivers: [
         StreamBuilder<List<bool>>(
@@ -194,6 +203,7 @@ class _DraggableHomeState extends State<DraggableHome> {
             final List<bool> streams = (snapshot.data ?? [false, false]);
             final bool fullyCollapsed = streams[0];
             final bool fullyExpanded = streams[1];
+            notifyListeners(fullyCollapsed, fullyExpanded);
 
             return SliverAppBar(
               backgroundColor:
@@ -212,53 +222,21 @@ class _DraggableHomeState extends State<DraggableHome> {
               pinned: true,
               stretch: true,
               centerTitle: widget.centerTitle,
-              title: widget.alwaysShowTitle
-                  ? widget.title
-                  : AnimatedOpacity(
-                      opacity: fullyCollapsed ? 1 : 0,
-                      duration: const Duration(milliseconds: 100),
-                      child: widget.title,
-                    ),
+              title: widget.title == null
+                  ? null
+                  : widget.alwaysShowTitle
+                      ? widget.title
+                      : AnimatedOpacity(
+                          opacity: fullyCollapsed ? 1 : 0,
+                          duration: const Duration(milliseconds: 100),
+                          child: widget.title,
+                        ),
               collapsedHeight: appBarHeight,
               expandedHeight:
                   fullyExpanded ? fullyExpandedHeight : expandedHeight,
-              flexibleSpace: Stack(
-                children: [
-                  FlexibleSpaceBar(
-                    background: Container(
-                      margin: const EdgeInsets.only(bottom: 0.2),
-                      child: fullyExpanded
-                          ? (widget.expandedBody ?? const SizedBox())
-                          : widget.headerWidget,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: -1,
-                    left: 0,
-                    right: 0,
-                    child: roundedCorner(context),
-                  ),
-                  Positioned(
-                    bottom: 0 + widget.curvedBodyRadius,
-                    child: AnimatedContainer(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      curve: Curves.easeInOutCirc,
-                      duration: const Duration(milliseconds: 100),
-                      height: fullyCollapsed
-                          ? 0
-                          : fullyExpanded
-                              ? 0
-                              : kToolbarHeight,
-                      width: MediaQuery.of(context).size.width,
-                      child: fullyCollapsed
-                          ? const SizedBox()
-                          : fullyExpanded
-                              ? const SizedBox()
-                              : widget.headerBottomBar ?? Container(),
-                    ),
-                  )
-                ],
-              ),
+              flexibleSpace: widget.headerWidget != null
+                  ? getSliverSpace(fullyExpanded, context, fullyCollapsed)
+                  : null,
               stretchTriggerOffset: widget.stretchTriggerOffset,
               onStretchTrigger: widget.fullyStretchable
                   ? () async {
@@ -268,7 +246,49 @@ class _DraggableHomeState extends State<DraggableHome> {
             );
           },
         ),
-        sliverList(context, appBarHeight + topPadding),
+        ...widget.slivers,
+        // sliverList(context, appBarHeight + topPadding),
+      ],
+    );
+  }
+
+  Stack getSliverSpace(
+      bool fullyExpanded, BuildContext context, bool fullyCollapsed) {
+    return Stack(
+      children: [
+        FlexibleSpaceBar(
+          background: Container(
+            margin: const EdgeInsets.only(bottom: 0.2),
+            child: fullyExpanded
+                ? (widget.expandedBody ?? const SizedBox())
+                : widget.headerWidget,
+          ),
+        ),
+        Positioned(
+          bottom: -1,
+          left: 0,
+          right: 0,
+          child: roundedCorner(context),
+        ),
+        Positioned(
+          bottom: 0 + widget.curvedBodyRadius,
+          child: AnimatedContainer(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            curve: Curves.easeInOutCirc,
+            duration: const Duration(milliseconds: 100),
+            height: fullyCollapsed
+                ? 0
+                : fullyExpanded
+                    ? 0
+                    : kToolbarHeight,
+            width: MediaQuery.of(context).size.width,
+            child: fullyCollapsed
+                ? const SizedBox()
+                : fullyExpanded
+                    ? const SizedBox()
+                    : widget.headerBottomBar ?? Container(),
+          ),
+        )
       ],
     );
   }
@@ -305,7 +325,7 @@ class _DraggableHomeState extends State<DraggableHome> {
                 children: [
                   expandedUpArrow(),
                   //Body
-                  ...widget.body
+                  Text("this is  abody")
                 ],
               ),
             ],
@@ -332,5 +352,18 @@ class _DraggableHomeState extends State<DraggableHome> {
         );
       },
     );
+  }
+
+  void notifyListeners(bool fullyCollapsed, bool fullyExpanded) {
+    // false false half expanded
+    //false true expanded
+    //true false collapsed
+    if (!fullyCollapsed && !fullyExpanded) {
+      widget.valueNotifierExpandType?.value = ExpandType.HALF_EXPANDED;
+    } else if (!fullyCollapsed && fullyExpanded) {
+      widget.valueNotifierExpandType?.value = ExpandType.EXPANDED;
+    } else {
+      widget.valueNotifierExpandType?.value = ExpandType.CLOSED;
+    }
   }
 }
