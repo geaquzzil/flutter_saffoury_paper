@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
+import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -131,13 +133,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             // centerTitle: true,
             forceElevated: innerBoxIsScrolled,
             flexibleSpace: getSilverAppBarBackground(context),
-            bottom: TabBar(
-              indicatorColor: Theme.of(context).colorScheme.primary,
-              labelColor: Theme.of(context).colorScheme.primary,
-              tabs: _tabs,
-              isScrollable: true,
-              controller: _tabController,
-            )));
+            bottom: null));
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
@@ -237,9 +233,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   NestedScrollView getNastedScrollView() {
     return NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              getSilverAppBar(context, innerBoxIsScrolled),
-            ],
+        headerSliverBuilder: (context, innerBoxIsScrolled) =>
+            [getSilverAppBar(context, innerBoxIsScrolled), getTabbar(context)],
         body: SafeArea(
           child: TabBarView(
               controller: _tabController,
@@ -252,6 +247,35 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ));
   }
 
+  SliverPadding getTabbar(BuildContext context) {
+    return SliverPadding(
+      padding:
+          const EdgeInsets.only(top: kDefaultPadding, left: kDefaultPadding),
+      sliver: SliverPersistentHeader(
+          pinned: true,
+          delegate: SliverAppBarDelegatePreferedSize(
+              child: ColoredTabBar(
+            useCard: true,
+            cornersIfCard: 80.0,
+            // color: Theme.of(context).colorScheme.surfaceVariant,
+            tabBar: TabBar(
+              // padding: EdgeInsets.all(kDefaultPadding),
+              labelStyle: Theme.of(context).textTheme.titleSmall,
+              indicatorColor:
+                  Theme.of(context).colorScheme.primary.withOpacity(.2),
+              labelColor: Theme.of(context).colorScheme.primary,
+              tabs: _tabs,
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(80.0),
+                color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
+              ),
+              isScrollable: true,
+              controller: _tabController,
+            ),
+          ))),
+    );
+  }
+
   List<Widget> getTabWidget(BuildContext context, TabControllerHelper e) {
     if (_tabs.indexOf(e) == 0) {
       return [
@@ -259,9 +283,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         ),
         ...getTopWidget(),
+        // getTabbar(context),
         getBody(context),
         ...getBottomWidget(),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: SizedBox(height: 80),
         )
       ];
@@ -273,19 +298,21 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       ),
       if (!hasSlivers)
         getPadding(
-            context,
-            SliverFillRemaining(
-                fillOverscroll: true, hasScrollBody: false, child: e.widget)),
+          context,
+          SliverFillRemaining(
+              fillOverscroll: true, hasScrollBody: false, child: e.widget),
+        ),
       ...?e.slivers?.map((e) => getPadding(context, e)).toList()
     ];
   }
 
-  SliverPadding getPadding(BuildContext context, Widget sliver) {
+  SliverPadding getPadding(BuildContext context, Widget sliver,
+      {double? bottom}) {
     return SliverPadding(
-        padding: const EdgeInsets.only(
+        padding: EdgeInsets.only(
             top: kDefaultPadding / 2,
             right: kDefaultPadding / 2,
-            bottom: 80,
+            bottom: bottom ?? 0,
             left: kDefaultPadding / 2),
         sliver: sliver);
   }
@@ -300,7 +327,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             context,
             SliverToBoxAdapter(
               child: e,
-            ));
+            ),
+            bottom: 80);
       }
       return SliverToBoxAdapter(child: e);
     }).toList();
@@ -310,7 +338,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     List<Widget>? topWidget = widget.viewAbstract
         .getCustomTopWidget(context, widget.getServerAction());
     if (topWidget == null) return [];
-    return topWidget.map((e) => SliverToBoxAdapter(child: e)).toList();
+    return topWidget
+        .map((e) => getPadding(context, SliverToBoxAdapter(child: e)))
+        .toList();
   }
 
   Widget getFutureBody() {

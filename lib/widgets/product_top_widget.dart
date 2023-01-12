@@ -19,13 +19,13 @@ class ProductTopWidget extends StatelessWidget {
     TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge;
     TextStyle? descriptionStyle = Theme.of(context).textTheme.caption;
 
-    return Padding(
-      padding: const EdgeInsets.all(kDefaultPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -34,6 +34,7 @@ class ProductTopWidget extends StatelessWidget {
                   child: SizedBox(height: 200, child: Card()),
                 ),
                 Expanded(
+                  flex: 2,
                   child: Column(
                     children: [
                       ListTile(
@@ -65,65 +66,65 @@ class ProductTopWidget extends StatelessWidget {
                   ),
                 ),
               ]),
-          ListTile(
-            title: Text(
-              "About",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            subtitle: Text(
-              "dsadasdkasjdlk;jaskldjalskjdklasjdaskljlawskjlaskjsdklajsladkjlaskasdjsakjdasjdjkhaskjdhjkashdjksahjkashjkashjkasdhjkashdjksahsdjkahjkasdhkj",
-              // style: Theme.of(context).textTheme.bodyMedium,
-            ),
+        ),
+        ListTile(
+          title: Text(
+            "About",
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: kDefaultPadding),
-          getRow(context, [
-            TitleAndDescription(
-                title: "Grade", description: "GT A - dsasdsasdds"),
-            TitleAndDescription(title: "Size", description: "800 x 700 (mm)")
-          ]),
-          getRow(context, [
-            TitleAndDescription(
-                title: "weight per on sheet", description: "125 g"),
-            TitleAndDescription(
-                title: "prie per on sheet", description: "1200 SYP")
-          ]),
-          Text(r"oneSheet price : $2312.4"),
-          SizedBox(height: kDefaultPadding),
-          Row(
-            children: [
-              Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title: Text("totla quantity"),
-                    subtitle: Text(
-                      r"322.00 kg",
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title: Text("totla price"),
-                    subtitle: Text(
-                      r"$227.22 / $0.2 ",
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  )),
-              Expanded(
-                child: ElevatedButton(
-                  child: Text("Add to Card"),
-                  onPressed: () {},
-                ),
-              )
-            ],
-          )
-          // BottomWidgetOnViewIfCartable(
-          //   viewAbstract: product,
-          // )
-        ],
-      ),
+          subtitle: Text(
+            "dsadasdkasjdlk;jaskldjalskjdklasjdaskljlawskjlaskjsdklajsladkjlaskasdjsakjdasjdjkhaskjdhjkashdjksahjkashjkashjkasdhjkashdjksahsdjkahjkasdhkj",
+            // style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        SizedBox(height: kDefaultPadding),
+        getRow(context, [
+          TitleAndDescription(
+              title: "Grade", description: "GT A - dsasdsasdds"),
+          TitleAndDescription(title: "Size", description: "800 x 700 (mm)")
+        ]),
+        getRow(context, [
+          TitleAndDescription(
+              title: "weight per on sheet", description: "125 g"),
+          TitleAndDescription(
+              title: "prie per on sheet", description: "1200 SYP")
+        ]),
+        Text(r"oneSheet price : $2312.4"),
+        SizedBox(height: kDefaultPadding),
+        Row(
+          children: [
+            Expanded(
+                flex: 1,
+                child: ListTile(
+                  title: Text("totla quantity"),
+                  subtitle: Text(
+                    r"322.00 kg",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                )),
+            Expanded(
+                flex: 1,
+                child: ListTile(
+                  title: Text("totla price"),
+                  subtitle: Text(
+                    r"$227.22 / $0.2 ",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                )),
+            Expanded(
+              child: OutlinedButton(
+                child: Text("Add to Card"),
+                onPressed: () {},
+              ),
+            )
+          ],
+        )
+        // BottomWidgetOnViewIfCartable(
+        //   viewAbstract: product,
+        // )
+      ],
     );
   }
 
