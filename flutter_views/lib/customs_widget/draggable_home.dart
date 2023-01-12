@@ -424,16 +424,29 @@ class _DraggableHomeState extends State<DraggableHome>
       builder: (context, snapshot) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 500),
-          height: (snapshot.data ?? false) ? 25 : 0,
+          height: (snapshot.data ?? false) ? 40 : 0,
           width: MediaQuery.of(context).size.width,
           child: Center(
-            child: Icon(
-              Icons.keyboard_arrow_up_rounded,
-              color: (snapshot.data ?? false) ? null : Colors.transparent,
+            child: IconButton(
+              icon: Icon(
+                Icons.keyboard_arrow_up_rounded,
+              ),
+              onPressed: () {
+                _scrollDown();
+              },
+              // color: (snapshot.data ?? false) ? null : Colors.transparent,
             ),
           ),
         );
       },
+    );
+  }
+
+  void _scrollDown() {
+    widget.scrollController?.animateTo(
+      widget.scrollController!.position.maxScrollExtent,
+      duration: Duration(milliseconds: 400),
+      curve: Curves.fastOutSlowIn,
     );
   }
 

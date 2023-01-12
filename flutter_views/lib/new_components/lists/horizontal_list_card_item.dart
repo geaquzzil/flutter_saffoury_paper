@@ -31,8 +31,7 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatefulWidget {
 }
 
 class _ListCardItemHorizontalState<T extends ViewAbstract>
-    extends State<ListCardItemHorizontal<T>>
-    with SingleTickerProviderStateMixin {
+    extends State<ListCardItemHorizontal<T>> with TickerProviderStateMixin {
   PaletteGenerator? color;
 
   final ColorTween _borderColorTween = ColorTween();
@@ -61,11 +60,14 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
           ),
           builder: (context, snapshot) {
             color = snapshot.data;
-            _borderColorTween
-              ..begin = Theme.of(context).colorScheme.onPrimaryContainer
-              ..end = color?.darkMutedColor?.color;
+
             WidgetsBinding.instance.addPostFrameCallback(
-              (timeStamp) => _controller.forward(),
+              (timeStamp) {
+                _borderColorTween
+                  ..begin = Theme.of(context).colorScheme.onPrimaryContainer
+                  ..end = color?.darkMutedColor?.color;
+                _controller.forward();
+              },
             );
             return openContainer(context);
           },

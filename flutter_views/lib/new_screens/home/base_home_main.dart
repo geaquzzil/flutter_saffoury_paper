@@ -125,7 +125,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               context: context,
               builder: (p0) {
                 return QrCodeReader(
-                  onRead: (qr) {},
+         
                 );
               },
             );

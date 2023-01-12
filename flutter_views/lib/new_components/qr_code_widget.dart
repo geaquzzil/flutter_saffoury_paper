@@ -10,15 +10,21 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-final readerViewAbstract = ValueNotifier<ViewAbstract?>(null);
+enum QrCodeCurrentState { NONE, LOADING, DONE }
+
+class QrCodeNotifierState {
+  ViewAbstract? viewAbstract;
+  QrCodeCurrentState state;
+  QrCodeNotifierState({required this.state, this.viewAbstract});
+}
 
 class QrCodeReader extends StatefulWidget {
-  Function(dynamic qr) onRead;
   bool getViewAbstract;
   double currentHeight;
+  ValueNotifier<QrCodeNotifierState?>? valueNotifierQrState;
   QrCodeReader(
       {super.key,
-      required this.onRead,
+      this.valueNotifierQrState,
       this.getViewAbstract = true,
       this.currentHeight = 0});
 
@@ -80,6 +86,10 @@ class _QrCodeReaderState extends State<QrCodeReader> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
       if (hasScanedBefore(scanData)) return;
+      if (checkCurrentState(QrCodeCurrentState.NONE)) {
+        widget.valueNotifierQrState?.value =
+            QrCodeNotifierState(state: QrCodeCurrentState.NONE);
+      }
       QRCodeID? qrCodeID;
       if (scanData.format == BarcodeFormat.qrcode) {
         if (scanData.code != null) {
@@ -88,19 +98,28 @@ class _QrCodeReaderState extends State<QrCodeReader> {
         }
       }
       if (qrCodeID != null) {
+        if (checkCurrentState(QrCodeCurrentState.LOADING)) {
+          widget.valueNotifierQrState?.value =
+              QrCodeNotifierState(state: QrCodeCurrentState.LOADING);
+        }
         // await controller.pauseCamera();
         if (widget.getViewAbstract) {
           ViewAbstract? v =
               context.read<AuthProvider>().getNewInstance(qrCodeID.action);
 
           v = await v?.viewCallGetFirstFromList(qrCodeID.iD);
-          widget.onRead(v);
-        } else {
-          widget.onRead(qrCodeID);
+          if (checkCurrentState(QrCodeCurrentState.DONE)) {
+            widget.valueNotifierQrState?.value = QrCodeNotifierState(
+                state: QrCodeCurrentState.DONE, viewAbstract: v);
+          }
         }
         // await controller.resumeCamera();
       }
     });
+  }
+
+  bool checkCurrentState(QrCodeCurrentState state) {
+    return state != widget.valueNotifierQrState?.value?.state;
   }
 
   @override

@@ -3,20 +3,28 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:lottie/lottie.dart';
 
 class EmptyWidget extends StatelessWidget {
-  String lottiUrl;
-  String? title;
-  String? subtitle;
-  bool expand;
+  final String? lottiUrl;
 
-  Function()? onSubtitleClicked;
-  EmptyWidget(
+  final String? lottieJson;
+
+  final String? title;
+
+  final String? subtitle;
+
+  final bool expand;
+  final String lottieAssetPath = "assets/lotties/";
+
+  final Function()? onSubtitleClicked;
+  const EmptyWidget(
       {Key? key,
       this.onSubtitleClicked,
-      required this.lottiUrl,
+      this.lottiUrl,
       this.title,
       this.expand = true,
-      this.subtitle})
-      : super(key: key);
+      this.subtitle,
+      this.lottieJson})
+      : assert(lottiUrl != null || lottieJson != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +33,10 @@ class EmptyWidget extends StatelessWidget {
       return Center(
           child: expand
               ? Expanded(
-                  child: Lottie.network(
-                  lottiUrl,
+                  child: getLottieWidget(
+                  context,
                 ))
-              : Lottie.network(lottiUrl, height: 100));
+              : getLottieWidget(context, height: 100));
     }
     var children2 = [
       const SizedBox(
@@ -65,10 +73,10 @@ class EmptyWidget extends StatelessWidget {
           expand
               ? Expanded(
                   flex: 1,
-                  child: Lottie.network(
-                    lottiUrl,
+                  child: getLottieWidget(
+                    context,
                   ))
-              : Lottie.network(lottiUrl, height: 100),
+              : getLottieWidget(context, height: 100),
           if (expand)
             Expanded(
               flex: 2,
@@ -79,5 +87,25 @@ class EmptyWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget getLottieWidget(BuildContext context, {double? height}) {
+    Widget widget;
+    if (lottiUrl != null) {
+      widget = Lottie.network(
+        lottiUrl!,
+        height: height,
+      );
+    } else {
+      widget = Lottie.asset(
+        lottieAssetPath + lottieJson!,
+      );
+    }
+    return ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          Theme.of(context).colorScheme.onBackground,
+          BlendMode.modulate,
+        ),
+        child: widget);
   }
 }

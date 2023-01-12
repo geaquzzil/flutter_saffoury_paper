@@ -94,6 +94,7 @@ flutter:
   - assets/images/
   - assets/images/vector/
   - assets/images/raster/
+  - assets/lotties/
   - assets/fonts/materialIcons.ttf
 
   # To add assets to your application, add an assets section, like this:

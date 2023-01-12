@@ -81,6 +81,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
   ValueNotifier<ExpandType> expandTypeOnlyOnExpand =
       ValueNotifier<ExpandType>(ExpandType.CLOSED);
+
+  ValueNotifier<QrCodeNotifierState> valueNotifierQrState =
+      ValueNotifier<QrCodeNotifierState>(
+          QrCodeNotifierState(state: QrCodeCurrentState.NONE));
   void onSelectedItem(ViewAbstract obj) {
     if (obj.isSelected) {
       ViewAbstract? isFounded;
@@ -170,7 +174,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(kDefaultPadding),
+            padding: const EdgeInsets.all(kDefaultPadding),
             child: Text(
               "SaffouryPaper",
               style: Theme.of(context)
@@ -204,7 +208,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         // drawer: DrawerLargeScreens(),
         scrollController: _scrollController,
         floatingActionButton: FloatingActionButton.small(
-            child: Icon(Icons.arrow_drop_up_rounded),
+            child: const Icon(Icons.arrow_drop_up_rounded),
             heroTag: UniqueKey(),
             onPressed: () => _scrollTop()),
         actions: [
@@ -221,12 +225,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         expandedBody: QrCodeReader(
           getViewAbstract: true,
           currentHeight: 20,
-          onRead: (qr) {
-            readerViewAbstract.value = qr as ViewAbstract;
-            // scanedQr = qr as ViewAbstract;
-            // scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
-            // fetshList();
-          },
+          valueNotifierQrState: valueNotifierQrState,
         ),
         slivers: [
           if (widget.buildSearchWidget) getSearchWidget(),
@@ -237,10 +236,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               builder: (context, value, child) {
                 debugPrint("SliverApiMaster valueListenable expandType");
                 if (value == ExpandType.EXPANDED) {
-                  _scrollTop();
                   return getQrCodeSelector();
                 }
-                scanedQr = null;
+
                 return getListSelector();
               })
         ]);
@@ -323,21 +321,36 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   Widget getQrCodeSelector() {
-    return ValueListenableBuilder(
-      valueListenable: readerViewAbstract,
+    return ValueListenableBuilder<QrCodeNotifierState>(
+      valueListenable: valueNotifierQrState,
       builder: (context, value, _) {
-        if (value == null) {
-          return SliverFillRemaining(
-            child: EmptyWidget(
-              expand: true,
-              lottiUrl:
-                  "https://assets3.lottiefiles.com/packages/lf20_oqfmttib.json",
-            ),
-          );
+        switch (value.state) {
+          case QrCodeCurrentState.LOADING:
+            scanedQr = null;
+
+            return const SliverFillRemaining(
+              child: EmptyWidget(
+                expand: true,
+                lottieJson: "loading_indecator.json",
+              ),
+            );
+
+          case QrCodeCurrentState.NONE:
+            scanedQr = null;
+            return const SliverFillRemaining(
+              child: EmptyWidget(
+                expand: true,
+                lottiUrl:
+                    "https://assets3.lottiefiles.com/packages/lf20_oqfmttib.json",
+              ),
+            );
+
+          case QrCodeCurrentState.DONE:
+            scanedQr = value.viewAbstract as ViewAbstract;
+            scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
+            fetshListWidgetBinding();
+            break;
         }
-        scanedQr = value as ViewAbstract;
-        scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
-        fetshList();
         return getListSelector();
       },
     );
@@ -483,7 +496,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               delegate: SliverAppBarDelegatePreferedSize(
                 shouldRebuildWidget: true,
                 child: PreferredSize(
-                  preferredSize: Size.fromHeight(70),
+                  preferredSize: const Size.fromHeight(70),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 400),
                     transitionBuilder: (child, animation) => ScaleTransition(
