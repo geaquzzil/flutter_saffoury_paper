@@ -48,13 +48,18 @@ class MasterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fields = viewAbstract.getMainFields(context: context).where((element) => viewAbstract.getFieldValue(element) != null).toList();
-    return SliverList(delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
+    final fields = viewAbstract
+        .getMainFields(context: context)
+        .where((element) => viewAbstract.getFieldValue(element) != null)
+        .toList();
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+      (BuildContext context, int index) {
         return buildItem(context, fields[index]);
       },
       // 40 list items
-      childCount: fields.length, ));
+      childCount: fields.length,
+    ));
   }
 }
 
@@ -73,61 +78,68 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
         width: double.maxFinite,
         height: 100,
         // color: Colors.white,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: SearchCardItem(
-                    viewAbstract: viewAbstract as ViewAbstract,
-                    searchQuery: ""),
-              ),
-              Expanded(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(AppLocalizations.of(context)!.add_to_cart),
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          controller: controller,
-                        ),
-                      )
-                      // Text(viewAbstract
-                      //     .getCartItemQuantity()
-                      //     .toStringAsFixed(2))
-                    ]),
-              ),
-              FutureBuilder<bool>(
-                future: context.watch<CartProvider>().hasItem(viewAbstract),
+        child: Column(
+          children: [
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: SearchCardItem(
+                        viewAbstract: viewAbstract as ViewAbstract,
+                        searchQuery: ""),
+                  ),
+                  Expanded(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(AppLocalizations.of(context)!.add_to_cart),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              controller: controller,
+                            ),
+                          )
+                          // Text(viewAbstract
+                          //     .getCartItemQuantity()
+                          //     .toStringAsFixed(2))
+                        ]),
+                  ),
+                  FutureBuilder<bool>(
+                    future: context.watch<CartProvider>().hasItem(viewAbstract),
 
-                builder: (context, snapshot) => ElevatedButton(
-                  style: snapshot.data ?? false
-                      ? ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.orange),
-                        )
-                      : null,
-                  onPressed: () {
-                    context.read<CartProvider>().onCartItemAdded(context, -1,
-                        viewAbstract, double.tryParse(controller.text) ?? 0);
-                  },
-                  child: const Text("ADD TO CART"),
-                  // icon: Icon(Icons.plus_one_outlined),
-                  // label: Text("ADD TO CART")
-                ),
-                // child: ElevatedButton(
-                //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
+                    builder: (context, snapshot) => ElevatedButton(
+                      style: snapshot.data ?? false
+                          ? ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.orange),
+                            )
+                          : null,
+                      onPressed: () {
+                        context.read<CartProvider>().onCartItemAdded(
+                            context,
+                            -1,
+                            viewAbstract,
+                            double.tryParse(controller.text) ?? 0);
+                      },
+                      child: const Text("ADD TO CART"),
+                      // icon: Icon(Icons.plus_one_outlined),
+                      // label: Text("ADD TO CART")
+                    ),
+                    // child: ElevatedButton(
+                    //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
 
-                //   ButtonStyle():null,
-                //   onPressed: () {},
-                //   child: Text("ADD TO CART"),
-                //   // icon: Icon(Icons.plus_one_outlined),
-                //   // label: Text("ADD TO CART")
-                // ),
-              )
-            ]),
+                    //   ButtonStyle():null,
+                    //   onPressed: () {},
+                    //   child: Text("ADD TO CART"),
+                    //   // icon: Icon(Icons.plus_one_outlined),
+                    //   // label: Text("ADD TO CART")
+                    // ),
+                  )
+                ]),
+          ],
+        ),
       ),
     );
   }

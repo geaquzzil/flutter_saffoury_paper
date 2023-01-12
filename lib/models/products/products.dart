@@ -22,6 +22,7 @@ import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.dart';
+import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
@@ -761,6 +762,11 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {
+    return [
+      ProductTopWidget(
+        product: this,
+      )
+    ];
     return super.getCustomTopWidget(context, action);
   }
 

@@ -19,8 +19,10 @@ class ViewCardItem extends StatelessWidget {
     return ListTile(
       onTap: () => object?.onCardClickedView(context),
       onLongPress: () => object?.onCardLongClickedView(context),
-      title: (object?.getMainLabelText(context) ?? Text(title)),
-      subtitle: (object?.getMainHeaderText(context) ?? Text(description)),
+      title: getTextTitle(
+          context, object?.getMainHeaderLabelTextOnly(context) ?? title),
+      subtitle: getTextSubTitle(
+          context, object?.getMainHeaderTextOnly(context) ?? description),
       leading: object != null
           ? Hero(tag: object!, child: Icon(object?.getMainIconData()))
           : Icon(icon),
@@ -30,5 +32,13 @@ class ViewCardItem extends StatelessWidget {
               child: const Icon(Icons.arrow_forward_ios))
           : null,
     );
+  }
+
+  Text getTextTitle(BuildContext context, String text) {
+    return Text(text, style: Theme.of(context).textTheme.caption);
+  }
+
+  Text getTextSubTitle(BuildContext context, String text) {
+    return Text(text, style: Theme.of(context).textTheme.bodyMedium);
   }
 }

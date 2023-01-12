@@ -11,24 +11,24 @@ class BaseSharedDetailsRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 1,
-          child: FormBuilderRatingBar(
-           
-            name: "name",
-            itemSize: 20,
+        RatingBarIndicator(
+          rating: 2.75,
+          itemBuilder: (context, index) => Icon(
+            Icons.star,
+            color: Theme.of(context).colorScheme.primary,
           ),
+          itemCount: 5,
+          itemSize: 15,
+          direction: Axis.horizontal,
         ),
         const SizedBox(width: kDefaultPadding / 2),
-        Expanded(
-          flex: 2,
-          child: Text(
-            "4.4 (328 reviews)",
-            style: Theme.of(context).textTheme.caption,
-          ),
+        Text(
+          "4.4 (328 reviews)",
+          style: Theme.of(context).textTheme.caption,
         ),
       ],
     );
