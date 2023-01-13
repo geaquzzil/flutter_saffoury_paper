@@ -718,5 +718,8 @@
     "pdf":"PDF",
     "excel":"Excel",
     "systemDefault":"النظام الافتراضي",
-    "suggestionList":"قائمة الاقتراحات"
+    "suggestionList":"قائمة الاقتراحات",
+    
+    "addedToCart":"تمت الإضافة إلى عربة التسوق",
+    "gramSymbol":"غرام"
 }

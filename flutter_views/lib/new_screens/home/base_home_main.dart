@@ -38,7 +38,6 @@ import 'components/drawers/drawer_large_screen.dart';
 import 'components/profile/profile_pic_popup_menu.dart';
 import 'home_notification_widget.dart';
 
-
 class BaseHomeMainPage extends StatefulWidget {
   const BaseHomeMainPage({Key? key}) : super(key: key);
 
@@ -124,9 +123,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             showBottomSheetExt(
               context: context,
               builder: (p0) {
-                return QrCodeReader(
-         
-                );
+                return QrCodeReader();
               },
             );
             // setState(() {
@@ -275,7 +272,6 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             // color: Colors.amber,
             height: 200,
             child: Column(children: [
-              
               const DrawerSettingButton(),
               const SizedBox(
                 height: kDefaultPadding / 3,
@@ -323,11 +319,10 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     AppLocalizations.of(context)!.appTitle;
     return Selector<DrawerMenuControllerProvider, int>(
       builder: (context, value, child) => NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           // type: BottomNavigationBarType.fixed,
           selectedIndex: value,
           onDestinationSelected: (int index) {
-     
             drawerMenuControllerProvider.setNavigationIndex = index;
           },
           destinations: getNavigationDesinations().cast()),

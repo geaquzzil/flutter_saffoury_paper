@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'setting.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -20,6 +21,36 @@ class Setting extends ViewAbstract<Setting> {
   CurrencySetting? currency;
   Setting() : super() {
     date = "".toDateTimeNowString();
+  }
+  String getPriceAndCurrency(BuildContext context, double value) {
+    return getPriceFromSetting(value)
+        .toCurrencyFormat(symbol: " ${getPriceCurrencyFromSetting(context)} ");
+  }
+
+  double getPriceFromSetting(double value) {
+    switch (currency) {
+      case CurrencySetting.DOLLAR:
+        return value;
+      case CurrencySetting.SYP:
+        return value * EXCHANGE_RATE.toNonNullable();
+      case CurrencySetting.DOLLAR_THREE_ZERO:
+        return value * 1000;
+      default:
+        return value * 1000;
+    }
+  }
+
+  String getPriceCurrencyFromSetting(BuildContext context) {
+    switch (currency) {
+      case CurrencySetting.DOLLAR:
+        return AppLocalizations.of(context)!.dollarSymbol;
+      case CurrencySetting.SYP:
+        return AppLocalizations.of(context)!.syp;
+      case CurrencySetting.DOLLAR_THREE_ZERO:
+        return AppLocalizations.of(context)!.sypDots;
+      default:
+        return AppLocalizations.of(context)!.sypDots;
+    }
   }
 
   @override

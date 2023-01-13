@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -55,7 +56,8 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           right: kDefaultPadding / 2),
       child: Hero(
         tag: widget.heroTag,
-        child: Card(
+        child: CardCorner(
+          
           // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(

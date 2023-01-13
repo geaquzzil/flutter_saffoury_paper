@@ -1,9 +1,10 @@
+import 'package:animate_do/animate_do.dart' as animate;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProductTopWidget extends StatelessWidget {
   final Product product;
@@ -35,49 +36,59 @@ class ProductTopWidget extends StatelessWidget {
           ),
         ),
         SizedBox(height: kDefaultPadding),
+        ListTile(
+          title: Text(
+            "Overview",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          leading: Icon(Icons.info_outline),
+          trailing: IconButton(icon: Icon(Icons.calculate), onPressed: () {}),
+        ),
         getRow(context, [
           TitleAndDescription(
-              title: "Grade", description: "GT A - dsasdsasdds"),
-          TitleAndDescription(title: "Size", description: "800 x 700 (mm)")
+              title: product.sizes!.getMainHeaderLabelTextOnly(context),
+              description: product.sizes!.getMainHeaderTextOnly(context)),
+          TitleAndDescription(
+              title: AppLocalizations.of(context)!.grainOn,
+              description: product.getGrainOn())
         ]),
+        if (!product.isRoll())
+          getRow(context, [
+            TitleAndDescription(
+                title: AppLocalizations.of(context)!.weightPerSheet,
+                description:
+                    product.getSheetWeight().toCurrencyFormat(symbol: "g ")),
+            TitleAndDescription(
+                title: AppLocalizations.of(context)!.pricePerSheet,
+                description: product
+                    .getOneSheetPrice()
+                    .toCurrencyFormatFromSetting(context))
+          ]),
         getRow(context, [
           TitleAndDescription(
-              title: "weight per on sheet", description: "125 g"),
+              title:
+                  "${AppLocalizations.of(context)!.unit_price} (${AppLocalizations.of(context)!.per_each} ${product.getProductTypeUnit(context)})",
+              description: product
+                  .getUnitSellPrice()
+                  .toCurrencyFormatFromSetting(context)),
           TitleAndDescription(
-              title: "prie per on sheet", description: "1200 SYP")
+            title: AppLocalizations.of(context)!.total_price,
+            descriptionWidget: Text(
+              product.getTotalSellPrice().toCurrencyFormatFromSetting(context),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
+          )
         ]),
-        Text(r"oneSheet price : $2312.4"),
         SizedBox(height: kDefaultPadding),
-        Row(
-          children: [
-            Expanded(
-                flex: 1,
-                child: ListTile(
-                  title: Text("totla quantity"),
-                  subtitle: Text(
-                    r"322.00 kg",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.primary),
-                  ),
-                )),
-            Expanded(
-                flex: 1,
-                child: ListTile(
-                  title: Text("totla price"),
-                  subtitle: Text(
-                    r"$227.22 / $0.2 ",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.primary),
-                  ),
-                )),
-            Expanded(
-              child: OutlinedButton(
-                child: Text("Add to Card"),
-                onPressed: () {},
-              ),
-            )
-          ],
-        )
+
+        // BottomWidgetOnViewIfCartable(viewAbstract: product),
+        Text(
+          "More info",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         // BottomWidgetOnViewIfCartable(
         //   viewAbstract: product,
         // )
@@ -95,10 +106,11 @@ class ProductTopWidget extends StatelessWidget {
                 child: ListTile(
                   title:
                       Text(e.title, style: Theme.of(context).textTheme.caption),
-                  subtitle: Text(
-                    e.description,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+                  subtitle: e.descriptionWidget ??
+                      Text(
+                        e.description ?? "",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                   leading: e.icon == null ? null : Icon(e.icon),
                 ),
               ))
@@ -127,20 +139,25 @@ class ProductHeaderToggle extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  child: SizedBox(height: 200, child: Card()),
+                  child: SizedBox(
+                      height: 100, child: product.getCardLeadingImage(context)),
                 ),
                 Expanded(
                   flex: 2,
                   child: Column(
                     children: [
-                      ListTile(
-                        title: Text(
-                          product.products_types!.name ?? "",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        subtitle: Text(
-                          product.products_types!.comments ?? "",
-                          // style: Theme.of(context).textTheme.bodyMedium,
+                      // FadeInLeftBig(child: child)
+                      animate.FadeInLeft(
+                        duration: Duration(milliseconds: 500),
+                        child: ListTile(
+                          title: Text(
+                            product.products_types!.name ?? "",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          subtitle: Text(
+                            product.products_types!.comments ?? "",
+                            // style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ),
                       ),
                       BaseSharedDetailsRating(
@@ -170,8 +187,12 @@ class ProductHeaderToggle extends StatelessWidget {
 
 class TitleAndDescription {
   String title;
-  String description;
+  String? description;
+  Widget? descriptionWidget;
   IconData? icon;
   TitleAndDescription(
-      {required this.title, required this.description, this.icon});
+      {required this.title,
+      this.description,
+      this.descriptionWidget,
+      this.icon});
 }

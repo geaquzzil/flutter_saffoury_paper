@@ -25,7 +25,6 @@ class BaseSharedDetailsRating extends StatelessWidget {
           itemSize: 15,
           direction: Axis.horizontal,
         ),
-        const SizedBox(width: kDefaultPadding / 2),
         Text(
           "4.4 (328 reviews)",
           style: Theme.of(context).textTheme.caption,

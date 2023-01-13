@@ -25,12 +25,14 @@ import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:skeletons/skeletons.dart';
@@ -224,7 +226,11 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         floatingActionButton: FloatingActionButton.small(
             child: const Icon(Icons.arrow_drop_up_rounded),
             heroTag: UniqueKey(),
-            onPressed: () => _scrollTop()),
+            onPressed: () {
+              _scrollTop();
+
+              context.goNamed(posRouteName);
+            }),
         actions: [
           IconButton(
               onPressed: () {
@@ -510,7 +516,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               delegate: SliverAppBarDelegatePreferedSize(
                 shouldRebuildWidget: true,
                 child: PreferredSize(
-                  preferredSize: const Size.fromHeight(70),
+                  preferredSize: const Size.fromHeight(60),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 400),
                     transitionBuilder: (child, animation) => ScaleTransition(

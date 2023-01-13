@@ -221,6 +221,11 @@ class ProductType extends ViewAbstract<ProductType> {
   SortByType getSortByType() {
     return SortByType.ASC;
   }
+
+  String getUnit(BuildContext context) {
+    if (unit == null) return "-";
+    return unit!.getFieldLabelString(context, unit!);
+  }
 }
 
 // enum ProductTypeUnit {

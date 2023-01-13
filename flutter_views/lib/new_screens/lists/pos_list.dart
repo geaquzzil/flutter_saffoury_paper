@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/square_card.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -45,7 +47,7 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
     bool isLoading = listProvider.isLoading(widget.autoRest.key);
-
+    const sh = 4;
     return GridView.builder(
         controller: _scrollController,
         itemCount: listProvider.isLoading(widget.autoRest.key)
@@ -54,13 +56,13 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
         shrinkWrap: true,
         gridDelegate: SliverQuiltedGridDelegate(
           crossAxisCount: 4,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
+          mainAxisSpacing: 3,
+          crossAxisSpacing: 3,
           repeatPattern: QuiltedGridRepeatPattern.inverted,
           pattern: [
+            QuiltedGridTile(2, 2),
+            QuiltedGridTile(2, 2),
             QuiltedGridTile(1, 2),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
             QuiltedGridTile(1, 2),
           ],
         ),
@@ -146,7 +148,9 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
           ],
         ),
         itemBuilder: (context, index) {
-          return ShimmerLoadingListGrid();
+          return ListHorizontalItemShimmer(
+            lines: 2,
+          );
           // return data[index].getCardView(context);
         });
   }

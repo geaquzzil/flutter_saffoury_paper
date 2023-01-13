@@ -729,5 +729,7 @@
     "pdf":"PDF",
     "excel":"Excel",
     "systemDefault":"System default",
-    "suggestionList":"Suggestions"
+    "suggestionList":"Suggestions",
+    "addedToCart":"Added to cart",
+    "gramSymbol":"g"
 }

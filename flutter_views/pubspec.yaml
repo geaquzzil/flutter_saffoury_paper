@@ -99,6 +99,7 @@ dependencies:
   animations: ^2.0.7
   icon_decoration: ^1.0.1
   auto_animated: ^3.1.0
+  animate_do: ^3.0.2
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   

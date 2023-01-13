@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'dart:math';
 
 import 'models/view_abstract.dart';
@@ -127,6 +129,7 @@ extension DatesDateTime on DateTime? {
     DateFormat dateFormat = DateFormat(dateFormatString, 'en');
     return dateFormat.format(this ?? DateTime.now());
   }
+
   String toDateTimeStringOnlyDate() {
     if (this == null) return "".toDateTimeNowString();
     DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en');
@@ -179,9 +182,15 @@ extension NonNullableDouble on double? {
   }
 
   String toCurrencyFormat({String symbol = ""}) {
-    return NumberFormat.currency(locale: "en", symbol: symbol)
+    return NumberFormat.currency(locale: "en", symbol: " $symbol ")
         .format(toNonNullable())
         .replaceFirst(RegExp(r'\.?0*$'), '');
+  }
+
+  String toCurrencyFormatFromSetting(BuildContext context) {
+    return context
+        .read<AuthProvider>()
+        .getPriceFromSetting(context, toNonNullable());
   }
 }
 

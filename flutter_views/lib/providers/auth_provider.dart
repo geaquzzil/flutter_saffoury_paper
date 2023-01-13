@@ -201,6 +201,11 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String getPriceFromSetting(BuildContext context, double value) {
+    if (_user.setting == null) return value.toCurrencyFormat();
+    return _user.setting!.getPriceAndCurrency(context, value);
+  }
+
   String? validateEmail(String value) {
     value = value.trim();
 

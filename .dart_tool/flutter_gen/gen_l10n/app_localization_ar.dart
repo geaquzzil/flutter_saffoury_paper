@@ -2068,4 +2068,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get suggestionList => 'قائمة الاقتراحات';
+
+  @override
+  String get addedToCart => 'تمت الإضافة إلى عربة التسوق';
+
+  @override
+  String get gramSymbol => 'غرام';
 }

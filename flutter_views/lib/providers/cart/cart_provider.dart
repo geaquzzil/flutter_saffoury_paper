@@ -1,6 +1,7 @@
 //create product cart provider class
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 
 class CartProvider with ChangeNotifier {
@@ -8,7 +9,7 @@ class CartProvider with ChangeNotifier {
   Widget? _checkoutWidget;
   CartableInvoiceMasterObjectInterface get getCartableInvoice => _cartObject;
   CartProcessType _cartType = CartProcessType.PROCESS;
-  
+
   CartProvider.init(CartableInvoiceMasterObjectInterface cartObject) {
     _cartObject = cartObject;
   }
@@ -45,6 +46,29 @@ class CartProvider with ChangeNotifier {
       BuildContext context, CartableInvoiceDetailsInterface detail) {
     _cartObject.onCartItemRemoved(context, -1, detail);
     notifyListeners();
+  }
+
+  void onCartItemRemovedProduct(
+      BuildContext context, CartableProductItemInterface product) {
+    CartableInvoiceDetailsInterface? detail = getFromProduct(product);
+    if (detail != null) {
+      _cartObject.onCartItemRemoved(context, -1, detail);
+      notifyListeners();
+    }
+  }
+
+  CartableInvoiceDetailsInterface? getFromProduct(
+      CartableProductItemInterface product) {
+    return _cartObject
+        .getDetailList()
+        .firstWhereOrNull((p0) => p0.isCartProductFounded(product));
+  }
+
+  bool hasItemOnCart(CartableProductItemInterface detail) {
+    return _cartObject
+            .getDetailList()
+            .firstWhereOrNull((p0) => p0.isCartProductFounded(detail)) !=
+        null;
   }
 
   Future<bool> hasItem(CartableProductItemInterface product) async {

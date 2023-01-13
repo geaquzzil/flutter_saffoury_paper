@@ -17,6 +17,9 @@ abstract class CartableInvoiceMasterObjectInterface {
 
   List<CartableInvoiceDetailsInterface> getDetailList();
 
+  CartableInvoiceDetailsInterface getCartableNewInstance(
+      CartableProductItemInterface product);
+
   Widget onCartCheckout(
       BuildContext context, List<CartableProductItemInterface> items);
 }
@@ -27,6 +30,8 @@ abstract class CartableInvoiceDetailsInterface {
   Map<String, DataTableContent> getCartInvoiceTableHeaderAndContent(
       BuildContext context);
   bool isCartEquals(CartableInvoiceDetailsInterface other);
+
+  bool isCartProductFounded(CartableProductItemInterface product);
 
   String? Function(dynamic) getCartableEditableValidateItemCell(
       BuildContext context, String field);
@@ -45,4 +50,5 @@ class DataTableContent {
 
 abstract class CartableProductItemInterface {
   double getCartableProductQuantity();
+  String getCartableQuantityUnit(BuildContext context);
 }

@@ -221,6 +221,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   Html getSizeHtmlFormat(BuildContext context, {String? fiberLines}) {
     return Html(
+      
       data: getSizeHtmlFormatString(context, fiberLines: fiberLines),
     );
   }

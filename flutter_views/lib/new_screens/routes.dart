@@ -47,6 +47,7 @@ const String printRouteName = 'print';
 const String viewRouteName = 'view';
 const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
+const String posRouteName = "pos";
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
@@ -137,6 +138,13 @@ class RouteGenerator {
                   list: (state.extra as List)[1],
                   header: (state.extra as List)[0],
                 ));
+          },
+        ),
+        GoRoute(
+          name: posRouteName,
+          path: "/pos",
+          pageBuilder: (context, state) {
+            return MaterialPage(key: state.pageKey, child: POSPage());
           },
         ),
         GoRoute(

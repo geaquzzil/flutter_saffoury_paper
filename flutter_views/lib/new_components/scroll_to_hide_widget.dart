@@ -11,10 +11,12 @@ class ScrollToHideWidget extends StatefulWidget {
   final Widget child;
   final ScrollController? controller;
   final Duration duration;
+  final bool showOnlyWhenCloseToTop;
   final double height;
   ScrollToHideWidget(
       {super.key,
       required this.child,
+      this.showOnlyWhenCloseToTop = true,
       this.controller,
       this.duration = const Duration(milliseconds: 200),
       this.height = 80});
@@ -41,10 +43,18 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
 
   void listen() {
     final direction = widget.controller?.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      show();
-    } else if (direction == ScrollDirection.reverse) {
-      hide();
+    if (widget.showOnlyWhenCloseToTop) {
+      if ((widget.controller?.position.pixels ?? 0) > 100) {
+        hide();
+      } else {
+        show();
+      }
+    } else {
+      if (direction == ScrollDirection.forward) {
+        show();
+      } else if (direction == ScrollDirection.reverse) {
+        hide();
+      }
     }
   }
 
@@ -68,7 +78,7 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: widget.duration,
-      height: 0,
+      height: isVisible ? widget.height : 0,
       child: Wrap(children: [widget.child]),
     );
   }

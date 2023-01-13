@@ -77,9 +77,13 @@ Future<T?> showBottomSheetExt<T>(
 
 Future<T?> showDialogExt<T>(
     {required BuildContext context,
-    required Widget Function(BuildContext) builder}) {
+    required Widget Function(BuildContext) builder,
+    Offset? anchorPoint}) {
   return showDialog(
-      context: context, barrierDismissible: false, builder: builder);
+      anchorPoint: anchorPoint,
+      context: context,
+      barrierDismissible: false,
+      builder: builder);
 }
 
 class CustomPopupMenuItem<T> extends PopupMenuItem<T> {

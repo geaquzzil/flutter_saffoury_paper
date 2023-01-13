@@ -2068,4 +2068,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get suggestionList => 'Suggestions';
+
+  @override
+  String get addedToCart => 'Added to cart';
+
+  @override
+  String get gramSymbol => 'g';
 }

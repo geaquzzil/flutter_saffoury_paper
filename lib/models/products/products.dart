@@ -399,6 +399,10 @@ class Product extends ViewAbstract<Product>
     return toJson();
   }
 
+  String getProductTypeUnit(BuildContext context) {
+    return products_types?.getUnit(context) ?? "-";
+  }
+
   double getTotalPurchasesPrice({Warehouse? warehouse}) {
     return getUnitPurchasesPrice() * getQuantity(warehouse: warehouse);
   }
@@ -443,6 +447,10 @@ class Product extends ViewAbstract<Product>
     } catch (e) {
       return 0;
     }
+  }
+
+  double getOneSheetPrice() {
+    return (getSheetWeight() / 1000) * getUnitSellPrice();
   }
 
   int getWidth() {
@@ -1365,6 +1373,11 @@ class Product extends ViewAbstract<Product>
   @override
   List<String> getExcelableRemovedFields() {
     return ["date", "status"];
+  }
+
+  @override
+  String getCartableQuantityUnit(BuildContext context) {
+    return getProductTypeUnit(context);
   }
 }
 

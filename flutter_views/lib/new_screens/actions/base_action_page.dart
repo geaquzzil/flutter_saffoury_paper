@@ -7,9 +7,11 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
@@ -28,6 +30,7 @@ import 'package:provider/provider.dart';
 
 import '../../screens/base_shared_actions_header.dart';
 import 'components/action_on_header_popup_widget.dart';
+import 'view/view_view_abstract.dart';
 
 abstract class BaseActionScreenPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -426,8 +429,19 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     ];
     return DraggableHome(
         valueNotifierExpandType: expandType,
+        // bottomNavigationBarHeight: 80,
+        bottomNavigationBar: BottomAppBar(
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 2,
+            shape: AutomaticNotchedShape(RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+            )),
+            child: BottomWidgetOnViewIfCartable(
+                viewAbstract: getExtras() as CartableProductItemInterface)),
         // headerBottomBar: Text("sdd"),
-        stretchMaxHeight: .41,
+        headerExpandedHeight: .3,
+        stretchMaxHeight: .31,
         scrollController: ScrollController(),
         fullyStretchable: false,
         headerWidget: widget.viewAbstract.getHeroTag(

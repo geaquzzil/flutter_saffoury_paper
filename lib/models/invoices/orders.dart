@@ -205,6 +205,12 @@ class Order extends InvoiceMaster<Order>
   }
 
   @override
+  CartableInvoiceDetailsInterface getCartableNewInstance(
+      CartableProductItemInterface product) {
+    return OrderDetails()..setProduct(product as Product);
+  }
+
+  @override
   void onCartItemAdded(
       BuildContext context, int index, CartableProductItemInterface cii,
       {double? quantiy}) {
@@ -350,5 +356,10 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
       if (maxValue != null) FormBuilderValidators.max(maxValue),
       if (minValue != null) FormBuilderValidators.min(minValue),
     ]);
+  }
+
+  @override
+  bool isCartProductFounded(CartableProductItemInterface product) {
+    return (product as ViewAbstract).iD == products?.iD;
   }
 }

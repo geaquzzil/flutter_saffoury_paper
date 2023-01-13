@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
+import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +93,7 @@ class DraggableHome extends StatefulWidget {
   final FloatingActionButtonAnimator? floatingActionButtonAnimator;
 
   final ScrollPhysics? physics;
-
+  final bool hideBottomNavigationBarOnScroll;
   final List<TabControllerHelper>? tabs;
 
   final ValueNotifier<ExpandType>? valueNotifierExpandType;
@@ -114,6 +116,7 @@ class DraggableHome extends StatefulWidget {
       this.scrollController,
       this.headerWidget,
       this.headerBottomBar,
+      this.hideBottomNavigationBarOnScroll = true,
       this.backgroundColor,
       this.valueNotifierExpandType,
       this.appBarColor,
@@ -155,6 +158,10 @@ class _DraggableHomeState extends State<DraggableHome>
   final GlobalKey<SliverAnimatedListState> _listKey =
       GlobalKey<SliverAnimatedListState>();
   int currentPage = 0;
+
+  ValueNotifier<bool> hideWhenScroll = ValueNotifier<bool>(false);
+
+  List<Widget> animatedWidgets = [];
 
   @override
   void dispose() {
@@ -210,7 +217,7 @@ class _DraggableHomeState extends State<DraggableHome>
             fullyExpandedHeight, topPadding),
       ),
       bottomSheet: widget.bottomSheet,
-      bottomNavigationBar: widget.bottomNavigationBar,
+      bottomNavigationBar: getBottomNavigationBar(),
       floatingActionButton: getScaffoldFloatingActionButton(),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
@@ -285,12 +292,25 @@ class _DraggableHomeState extends State<DraggableHome>
           //     return false;
           //   }
           // }
+
           if (notification.metrics.axis == Axis.vertical) {
             // isFullyCollapsed
             if ((isFullyExpanded.value) &&
                 notification.metrics.extentBefore > 100) {
               isFullyExpanded.add(false);
             }
+            // if (widget.hideBottomNavigationBarOnScroll) {
+            //   if (notification.metrics.extentBefore > 100) {
+            //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            //       hideWhenScroll.value = true;
+            //     });
+            //   } else {
+            //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            //       hideWhenScroll.value = false;
+            //     });
+            //   }
+            // }
+
             //isFullyCollapsed
             if (notification.metrics.extentBefore >
                 expandedHeight - AppBar().preferredSize.height - 40) {
@@ -303,6 +323,18 @@ class _DraggableHomeState extends State<DraggableHome>
         },
         child: sliver(context, appBarHeight, fullyExpandedHeight,
             expandedHeight, topPadding));
+  }
+
+  Widget? getBottomNavigationBar() {
+    Widget? child = widget.bottomNavigationBar;
+    if (widget.bottomNavigationBar == null ||
+        !widget.hideBottomNavigationBarOnScroll) {
+      return child;
+    }
+    return ScrollToHideWidget(
+        height: widget.bottomNavigationBarHeight ?? kBottomNavigationBarHeight,
+        controller: widget.scrollController,
+        child: child!);
   }
 
   Widget? getScaffoldFloatingActionButton() {
@@ -333,8 +365,7 @@ class _DraggableHomeState extends State<DraggableHome>
       builder: (_, value, ___) {
         Widget? toggleWidget;
         if (_tabs != null) {
-          toggleWidget =
-              SliverToBoxAdapter(child: getToggleWidget(_tabs![value]));
+          toggleWidget = getToggleWidget(_tabs![value]);
         }
         return CustomScrollView(
           key: const PageStorageKey<String>('saveState'),
@@ -351,6 +382,22 @@ class _DraggableHomeState extends State<DraggableHome>
                 final List<bool> streams = (snapshot.data ?? [false, false]);
                 final bool fullyCollapsed = streams[0];
                 final bool fullyExpanded = streams[1];
+                if (toggleWidget != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    if (!fullyCollapsed && !fullyExpanded) {
+                      if (animatedWidgets.isEmpty) return;
+                      Widget removed = animatedWidgets.removeAt(0);
+                      _listKey.currentState?.removeItem(
+                          0,
+                          (context, animation) => SliverAnimatedCard(
+                              animation: animation, child: removed));
+                    } else if (fullyCollapsed && !fullyExpanded) {
+                      animatedWidgets.add(_tabs![value]
+                          .draggableSwithHeaderFromAppbarToScroll!);
+                      _listKey.currentState?.insertItem(0);
+                    }
+                  });
+                }
                 notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
 
                 return SliverAppBar(
@@ -447,6 +494,14 @@ class _DraggableHomeState extends State<DraggableHome>
     debugPrint("DraggableHome draggableSwithHeaderFromAppbarToScroll ");
     if (widget.valueNotifierExpandType == null) return null;
     debugPrint("DraggableHome valueNotifierExpandType ");
+    return SliverAnimatedList(
+      initialItemCount: animatedWidgets.length,
+      key: _listKey,
+      itemBuilder: (context, index, animation) {
+        return SliverAnimatedCard(
+            animation: animation, child: animatedWidgets[index]);
+      },
+    );
     // SliverAnimatedList(itemBuilder: itemBuilder)
     return ValueListenableBuilder<ExpandType>(
       valueListenable: widget.valueNotifierExpandType!,
@@ -501,51 +556,54 @@ class _DraggableHomeState extends State<DraggableHome>
     }
   }
 
-  Stack getSliverSpace(
+  Widget getSliverSpace(
       bool fullyExpanded, BuildContext context, bool fullyCollapsed,
       {Widget? tabFullyExpanded, Widget? tabHeaderWidget}) {
-    return Stack(
-      children: [
-        FlexibleSpaceBar(
-          background: Card(
-            child: Container(
-                // color: Theme.of(context).colorScheme.surfaceVariant,
-                margin: const EdgeInsets.only(bottom: 0.2),
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300),
-                  child: fullyExpanded
-                      ? tabFullyExpanded ??
-                          (widget.expandedBody ?? const SizedBox())
-                      : tabHeaderWidget ?? widget.headerWidget,
-                )),
+    return Center(
+      child: Stack(
+        children: [
+          FlexibleSpaceBar(
+            background: Card(
+              child: Container(
+                  // color: Theme.of(context).colorScheme.surfaceVariant,
+                  margin: EdgeInsets.only(
+                      bottom: 0.2, top: AppBar().preferredSize.height),
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: fullyExpanded
+                        ? tabFullyExpanded ??
+                            (widget.expandedBody ?? const SizedBox())
+                        : tabHeaderWidget ?? widget.headerWidget,
+                  )),
+            ),
           ),
-        ),
-        Positioned(
-          bottom: -1,
-          left: 0,
-          right: 0,
-          child: roundedCorner(context),
-        ),
-        Positioned(
-          bottom: 0 + widget.curvedBodyRadius,
-          child: AnimatedContainer(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            curve: Curves.easeInOutCirc,
-            duration: const Duration(milliseconds: 100),
-            height: fullyCollapsed
-                ? 0
-                : fullyExpanded
-                    ? 0
-                    : kToolbarHeight,
-            width: MediaQuery.of(context).size.width,
-            child: fullyCollapsed
-                ? const SizedBox()
-                : fullyExpanded
-                    ? const SizedBox()
-                    : widget.headerBottomBar ?? Container(),
+          Positioned(
+            bottom: -1,
+            left: 0,
+            right: 0,
+            child: roundedCorner(context),
           ),
-        )
-      ],
+          Positioned(
+            bottom: 0 + widget.curvedBodyRadius,
+            child: AnimatedContainer(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              curve: Curves.easeInOutCirc,
+              duration: const Duration(milliseconds: 100),
+              height: fullyCollapsed
+                  ? 0
+                  : fullyExpanded
+                      ? 0
+                      : kToolbarHeight,
+              width: MediaQuery.of(context).size.width,
+              child: fullyCollapsed
+                  ? const SizedBox()
+                  : fullyExpanded
+                      ? const SizedBox()
+                      : widget.headerBottomBar ?? Container(),
+            ),
+          )
+        ],
+      ),
     );
   }
 

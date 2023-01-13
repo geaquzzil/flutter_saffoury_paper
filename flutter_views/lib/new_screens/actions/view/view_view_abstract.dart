@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_list_details.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/servers/server_helpers.dart';
@@ -73,75 +76,145 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.text =
         viewAbstract.getCartableProductQuantity().toStringAsFixed(2);
-    return FilledCard(
-      child: SizedBox(
-        width: double.maxFinite,
-        height: 100,
-        // color: Colors.white,
-        child: Column(
-          children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: SearchCardItem(
-                        viewAbstract: viewAbstract as ViewAbstract,
-                        searchQuery: ""),
-                  ),
-                  Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(AppLocalizations.of(context)!.add_to_cart),
-                          SizedBox(
-                            width: 100,
-                            child: TextFormField(
-                              controller: controller,
-                            ),
-                          )
-                          // Text(viewAbstract
-                          //     .getCartItemQuantity()
-                          //     .toStringAsFixed(2))
-                        ]),
-                  ),
-                  FutureBuilder<bool>(
-                    future: context.watch<CartProvider>().hasItem(viewAbstract),
-
-                    builder: (context, snapshot) => ElevatedButton(
-                      style: snapshot.data ?? false
-                          ? ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.orange),
-                            )
-                          : null,
-                      onPressed: () {
-                        context.read<CartProvider>().onCartItemAdded(
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+              child: ListTile(
+            // subtitle: Text(AppLocalizations.of(context)!.total),
+            title: Text(
+              viewAbstract.getCartableProductQuantity().toCurrencyFormat(
+                  symbol: viewAbstract.getCartableQuantityUnit(context)),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
+          )),
+          Selector<CartProvider, bool>(
+            builder: (context, value, child) => value
+                ? OutlinedButton(
+                    onPressed: () {
+                      context.read<CartProvider>().onCartItemRemovedProduct(
                             context,
-                            -1,
                             viewAbstract,
-                            double.tryParse(controller.text) ?? 0);
-                      },
-                      child: const Text("ADD TO CART"),
-                      // icon: Icon(Icons.plus_one_outlined),
-                      // label: Text("ADD TO CART")
-                    ),
-                    // child: ElevatedButton(
-                    //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
-
-                    //   ButtonStyle():null,
-                    //   onPressed: () {},
-                    //   child: Text("ADD TO CART"),
-                    //   // icon: Icon(Icons.plus_one_outlined),
-                    //   // label: Text("ADD TO CART")
-                    // ),
+                          );
+                    },
+                    child: Text(value
+                        ? AppLocalizations.of(context)!
+                            .addedToCart
+                            .toUpperCase()
+                        : AppLocalizations.of(context)!
+                            .add_to_cart
+                            .toUpperCase()),
+                    // icon: Icon(Icons.plus_one_outlined),
+                    // label: Text("ADD TO CART")
                   )
-                ]),
-          ],
-        ),
-      ),
-    );
+                : ElevatedButton(
+                    onPressed: () {
+                      showDialogExt(
+                          anchorPoint: Offset(1000, 1000),
+                          context: context,
+                          builder: (context) {
+                            final TextEditingController _textEditingController =
+                                TextEditingController();
+                            bool isChecked = false;
+                            final GlobalKey<FormState> _formKey =
+                                GlobalKey<FormState>();
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                              return AlertDialog(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.surface,
+                                content: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextFormField(
+                                          autofocus: true,
+                                          controller: _textEditingController,
+                                          validator: context
+                                              .read<CartProvider>()
+                                              .getCartableInvoice
+                                              .getCartableNewInstance(
+                                                  viewAbstract)
+                                              .getCartableEditableValidateItemCell(
+                                                  context, "quantity"),
+                                          decoration: InputDecoration(
+                                              hintText: "Enter Some Text"),
+                                        ),
+                                      ],
+                                    )),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(
+                                        AppLocalizations.of(context)!.subment),
+                                    onPressed: () {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        context
+                                            .read<CartProvider>()
+                                            .onCartItemAdded(
+                                                context,
+                                                -1,
+                                                viewAbstract,
+                                                double.tryParse(
+                                                        _textEditingController
+                                                            .text) ??
+                                                    0);
+                                        // Do something like updating SharedPreferences or User Settings etc.
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                          });
+                    },
+                    child: Text(value
+                        ? AppLocalizations.of(context)!
+                            .addedToCart
+                            .toUpperCase()
+                        : AppLocalizations.of(context)!
+                            .add_to_cart
+                            .toUpperCase()),
+                    // icon: Icon(Icons.plus_one_outlined),
+                    // label: Text("ADD TO CART")
+                  ),
+            selector: (p0, p1) => p1.hasItemOnCart(viewAbstract),
+          ),
+          // FutureBuilder<bool>(
+          //   future: context.watch<CartProvider>().hasItem(viewAbstract),
+
+          //   builder: (context, snapshot) => OutlinedButton(
+          //     style: snapshot.data ?? false
+          //         ? ButtonStyle(
+          //             backgroundColor: MaterialStateProperty.all(
+          //                 Theme.of(context).colorScheme.tertiary),
+          //           )
+          //         : null,
+          //     onPressed: () {
+          //       context.read<CartProvider>().onCartItemAdded(context, -1,
+          //           viewAbstract, double.tryParse(controller.text) ?? 0);
+          //     },
+          //     child: const Text("ADD TO CART"),
+          //     // icon: Icon(Icons.plus_one_outlined),
+          //     // label: Text("ADD TO CART")
+          //   ),
+          //   // child: ElevatedButton(
+          //   //   style: context.watch<CartProvider>().hasItem(viewAbstract)?
+
+          //   //   ButtonStyle():null,
+          //   //   onPressed: () {},
+          //   //   child: Text("ADD TO CART"),
+          //   //   // icon: Icon(Icons.plus_one_outlined),
+          //   //   // label: Text("ADD TO CART")
+          //   // ),
+          // )
+        ]);
   }
 }
 

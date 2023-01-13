@@ -184,7 +184,7 @@ class ListModel<E> {
 // The card turns gray when [selected] is true. This widget's height
 // is based on the [animation] parameter. It varies as the animation value
 // transitions from 0.0 to 1.0.
-class CardItem extends StatefulWidget {
+class CardItem extends StatelessWidget {
   const CardItem({
     super.key,
     this.onTap,
@@ -199,32 +199,6 @@ class CardItem extends StatefulWidget {
   final bool selected;
 
   @override
-  State<CardItem> createState() => _CardItemState();
-}
-
-class _CardItemState extends State<CardItem>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  double value = 1.0;
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
-    _animation = Tween(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -232,20 +206,19 @@ class _CardItemState extends State<CardItem>
         right: 2.0,
         top: 2.0,
       ),
-      child: ScaleTransition(
-        scale: widget.animation,
-        // sizeFactor: widget.animation,
+      child: SizeTransition(
+        sizeFactor: animation,
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: onTap,
           child: SizedBox(
             height: 80.0,
             child: Card(
-              color: widget.selected
+              color: selected
                   ? Colors.black12
-                  : Colors.primaries[widget.item % Colors.primaries.length],
+                  : Colors.primaries[item % Colors.primaries.length],
               child: Center(
                 child: Text(
-                  'Item ${widget.item}',
+                  'Item $item',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
