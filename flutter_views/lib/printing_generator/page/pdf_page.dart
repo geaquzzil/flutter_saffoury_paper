@@ -75,19 +75,6 @@ class _PdfPageState<T extends PrintLocalSetting>
     super.didChangeDependencies();
   }
 
-  bool getBodyWithoutApi() {
-    bool canGetBody = (getExtras() as ViewAbstract)
-            .isRequiredObjectsList()?[ServerActions.view] ==
-        null;
-    if (canGetBody) {
-      debugPrint("BaseEditWidget getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = (getExtras() as ViewAbstract).isNew() ||
-        (getExtras() as ViewAbstract).isRequiredObjectsListChecker();
-    debugPrint("BaseEditWidget getBodyWithoutApi result => $res");
-    return res;
-  }
 
   @override
   Future<PrintableMaster<T>?> getCallApiFunctionIfNull(BuildContext context) {
@@ -304,6 +291,11 @@ class _PdfPageState<T extends PrintLocalSetting>
   @override
   ViewAbstract getMainObject() {
     return getExtras() as ViewAbstract;
+  }
+
+  @override
+  ServerActions getServerActions() {
+    return ServerActions.view;
   }
 }
 

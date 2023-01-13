@@ -23,50 +23,7 @@ class ProductTopWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
-          child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: SizedBox(height: 200, child: Card()),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          product.products_types!.name ?? "",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        subtitle: Text(
-                          product.products_types!.comments ?? "",
-                          // style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                      BaseSharedDetailsRating(
-                        viewAbstract: product,
-                      ),
-                      Row(
-                        children: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.email)),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.call)),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.share))
-                        ],
-                      )
-                      // Spacer(),
-                      // ElevatedButton(
-                      //   child: Text("Add to Card"),
-                      //   onPressed: () {},
-                      // )
-                    ],
-                  ),
-                ),
-              ]),
-        ),
+        // ProductHeaderToggle(product: product),
         ListTile(
           title: Text(
             "About",
@@ -146,6 +103,67 @@ class ProductTopWidget extends StatelessWidget {
                 ),
               ))
           .toList(),
+    );
+  }
+}
+
+class ProductHeaderToggle extends StatelessWidget {
+  const ProductHeaderToggle({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final Product product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(height: 200, child: Card()),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          product.products_types!.name ?? "",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        subtitle: Text(
+                          product.products_types!.comments ?? "",
+                          // style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                      BaseSharedDetailsRating(
+                        viewAbstract: product,
+                      ),
+                      Row(
+                        children: [
+                          IconButton(onPressed: () {}, icon: Icon(Icons.email)),
+                          IconButton(onPressed: () {}, icon: Icon(Icons.call)),
+                          IconButton(onPressed: () {}, icon: Icon(Icons.share))
+                        ],
+                      )
+                      // Spacer(),
+                      // ElevatedButton(
+                      //   child: Text("Add to Card"),
+                      //   onPressed: () {},
+                      // )
+                    ],
+                  ),
+                ),
+              ]),
+        ),
+      ],
     );
   }
 }

@@ -249,11 +249,17 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }).toList();
   }
 
+  Widget? getTabControllerFirstHeaderWidget(BuildContext context) {
+    return null;
+  }
+
   List<TabControllerHelper> getTabs(BuildContext context,
       {ServerActions? action}) {
     return [
       TabControllerHelper(
         getMainHeaderTextOnly(context),
+
+        draggableSwithHeaderFromAppbarToScroll: getTabControllerFirstHeaderWidget(context),
         // getMainIconData(),
       ),
       ...getCustomTabList(context)
@@ -379,12 +385,19 @@ class TabControllerHelper extends Tab {
 
   Widget? widget;
   List<Widget>? slivers;
+
+  Widget? draggableHeaderWidget;
+  Widget? draggableSwithHeaderFromAppbarToScroll;
+  Widget? draggableExtendedWidget;
   TabControllerHelper(String title,
       {super.key,
       Widget? icon,
       this.fieldThatHasList,
       this.autoRest,
       this.slivers,
+      this.draggableHeaderWidget,
+      this.draggableExtendedWidget,
+      this.draggableSwithHeaderFromAppbarToScroll,
       this.widget})
       : super(icon: icon, text: title);
 }

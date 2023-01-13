@@ -162,6 +162,20 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
+    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+      builder: (context, value, child) {
+        debugPrint(
+            "SliverList ViewAbstract has changed from DrawerMenuController");
+        if (widget.viewAbstract == null) {
+          viewAbstract = value;
+          fetshListWidgetBinding();
+          debugPrint(
+              "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
+        }
+        return getBuildBodyDraggable();
+      },
+      selector: (p0, p1) => p1.getObject,
+    );
     return getBuildBodyDraggable();
     return getBuildBodyNormal();
   }

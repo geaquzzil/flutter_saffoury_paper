@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
+import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -15,9 +16,11 @@ import 'package:flutter_view_controller/new_screens/actions/base_floating_action
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
+import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:nil/nil.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -43,7 +46,8 @@ abstract class BaseActionScreenPage extends StatefulWidget {
 }
 
 abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
-    extends State<T> with TickerProviderStateMixin {
+    extends BaseApiCallPageState<T, ViewAbstract?>
+    with TickerProviderStateMixin {
   ValueNotifier<PaletteGenerator?> valueNotifierColor =
       ValueNotifier<PaletteGenerator?>(null);
   String? imgUrl;
@@ -57,7 +61,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   final List<TabControllerHelper> _tabs = <TabControllerHelper>[];
 
   BaseActionProviders baseActionProviders = BaseActionProviders();
-
+  ValueNotifier<ExpandType> expandType =
+      ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
   @override
   void dispose() {
     _tabController.dispose();
@@ -68,20 +73,26 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   void didUpdateWidget(covariant T oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("didUpdateWidget tabController");
+    extras = widget.viewAbstract;
+    iD = widget.viewAbstract.iD;
+    tableName = widget.viewAbstract.getTableNameApi();
     _tabs.clear();
     _tabs.addAll(
-        widget.viewAbstract.getTabs(context, action: widget.getServerAction()));
+        getExtras()!.getTabs(context, action: widget.getServerAction()));
   }
 
   @override
   void initState() {
+    extras = widget.viewAbstract;
+    iD = widget.viewAbstract.iD;
+    tableName = widget.viewAbstract.getTableNameApi();
     super.initState();
 
-    _updatePaletter();
+    // _updatePaletter();
   }
 
   Future<void> _updatePaletter() async {
-    imgUrl = widget.viewAbstract.getImageUrl(context);
+    imgUrl = getExtras()!.getImageUrl(context);
     valueNotifierColor.value = await PaletteGenerator.fromImageProvider(
       CachedNetworkImageProvider(imgUrl!),
     );
@@ -91,19 +102,28 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     return widget.getServerAction() == ServerActions.list;
   }
 
+  @override
+  ServerActions getServerActions() {
+    return widget.getServerAction();
+  }
+
+  @override
+  Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
+    if (getExtras() == null) {
+      ViewAbstract newViewAbstract =
+          context.read<AuthProvider>().getNewInstance(tableName!)!;
+      return newViewAbstract.viewCallGetFirstFromList(iD!)
+          as Future<ViewAbstract>;
+    } else {
+      return (getExtras())!.viewCallGetFirstFromList((getExtras()!).iD)
+          as Future<ViewAbstract>;
+    }
+  }
+
+  @override
   bool getBodyWithoutApi() {
     if (hasNotApiToCall()) return true;
-    bool canGetBody = widget.viewAbstract
-            .isRequiredObjectsList()?[widget.getServerAction()] ==
-        null;
-    if (canGetBody) {
-      debugPrint("BaseActionScreenPage getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = widget.viewAbstract.isNew() ||
-        widget.viewAbstract.isRequiredObjectsListChecker();
-    debugPrint("BaseActionScreenPage getBodyWithoutApi result => $res");
-    return res;
+    return super.getBodyWithoutApi();
   }
 
   SliverOverlapAbsorber getSilverAppBar(
@@ -120,11 +140,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             expandedHeight: MediaQuery.of(context).size.height * .25,
             actions: [
               ActionsOnHeaderWidget(
-                viewAbstract: widget.viewAbstract,
+                viewAbstract: getExtras()!,
                 serverActions: widget.getServerAction(),
               ),
               ActionsOnHeaderPopupWidget(
-                viewAbstract: widget.viewAbstract,
+                viewAbstract: getExtras()!,
                 serverActions: widget.getServerAction(),
               ),
             ],
@@ -343,37 +363,37 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         .toList();
   }
 
-  Widget getFutureBody() {
-    if (getBodyWithoutApi()) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        baseActionProviders.setIsLoaded = (true);
-      });
-      return getBodyDetermineLayout();
-    }
-    return FutureBuilder(
-      future:
-          widget.viewAbstract.viewCallGetFirstFromList(widget.viewAbstract.iD),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data != null) {
-            widget.viewAbstract = snapshot.data as ViewAbstract;
+  // Widget getFutureBody() {
+  //   if (getBodyWithoutApi()) {
+  //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //       baseActionProviders.setIsLoaded = (true);
+  //     });
+  //     return getBodyDetermineLayout();
+  //   }
+  //   return FutureBuilder(
+  //     future:
+  //         widget.viewAbstract.viewCallGetFirstFromList(widget.viewAbstract.iD),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.done) {
+  //         if (snapshot.data != null) {
+  //           widget.viewAbstract = snapshot.data as ViewAbstract;
 
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              baseActionProviders.setIsLoaded = (true);
-              context
-                  .read<ListMultiKeyProvider>()
-                  .edit(snapshot.data as ViewAbstract);
-            });
+  //           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //             baseActionProviders.setIsLoaded = (true);
+  //             context
+  //                 .read<ListMultiKeyProvider>()
+  //                 .edit(snapshot.data as ViewAbstract);
+  //           });
 
-            return getBodyDetermineLayout();
-          } else {
-            return getEmptyWidget(context);
-          }
-        }
-        return getLoadingWidget();
-      },
-    );
-  }
+  //           return getBodyDetermineLayout();
+  //         } else {
+  //           return getEmptyWidget(context);
+  //         }
+  //       }
+  //       return getLoadingWidget();
+  //     },
+  //   );
+  // }
 
   Center getLoadingWidget() => const Center(child: CircularProgressIndicator());
 
@@ -385,7 +405,47 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildAfterCall(BuildContext context, ViewAbstract? newObject) {
+    _tabs.clear();
+    _tabs.addAll(newObject!.getTabs(context, action: getServerActions()));
+    _tabController = TabController(length: _tabs.length, vsync: this);
+    return getDraggableHomeBody();
+  }
+
+  DraggableHome getDraggableHomeBody() {
+    List<TabControllerHelper> tabs =
+        getExtras()!.getTabs(context, action: getServerActions());
+    tabs[0].slivers = [
+      ...getTopWidget(),
+      // getTabbar(context),
+      getBody(context),
+      ...getBottomWidget(),
+      const SliverToBoxAdapter(
+        child: SizedBox(height: 80),
+      )
+    ];
+    return DraggableHome(
+        valueNotifierExpandType: expandType,
+        // headerBottomBar: Text("sdd"),
+        stretchMaxHeight: .41,
+        scrollController: ScrollController(),
+        fullyStretchable: false,
+        headerWidget: widget.viewAbstract.getHeroTag(
+            context: context,
+            child: getSliverImageBackground(context) ?? getAppBarBackground()),
+        slivers: [],
+        tabs: tabs,
+        alwaysShowLeadingAndAction: false,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        floatingActionButton: BaseFloatingActionButtons(
+          viewAbstract: widget.viewAbstract,
+          serverActions: widget.getServerAction(),
+          addOnList: getFloatingActionWidgetAddOns(context),
+        ));
+  }
+
+  Scaffold getBuildBody() {
     return Scaffold(
         // backgroundColor: widget.color?.darkVibrantColor?.color,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -410,7 +470,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         //         serverActions: widget.getServerAction(),
         //         addOnList: widget.getFloatingActionWidgetAddOns(context),
         //       ),
-        body: getFutureBody());
+        body: getBodyDetermineLayout());
   }
 }
 

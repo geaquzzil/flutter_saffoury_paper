@@ -761,6 +761,13 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  Widget? getTabControllerFirstHeaderWidget(BuildContext context) {
+    return ProductHeaderToggle(
+      product: this,
+    );
+  }
+
+  @override
   List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {
     return [
       ProductTopWidget(
@@ -776,6 +783,13 @@ class Product extends ViewAbstract<Product>
     if (action == ServerActions.list) return [];
     return [
       TabControllerHelper(AppLocalizations.of(context)!.movments,
+          draggableHeaderWidget: Text(
+            "Movments",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
           widget: ListHorizontalCustomViewApiAutoRestWidget(
               autoRest: ProductMovments.init(iD))),
       // TabControllerHelper(

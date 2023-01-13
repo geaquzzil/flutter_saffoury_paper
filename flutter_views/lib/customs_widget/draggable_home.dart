@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'sliver_delegates.dart';
 
 enum ExpandType { CLOSED, HALF_EXPANDED, EXPANDED }
 
@@ -87,9 +92,11 @@ class DraggableHome extends StatefulWidget {
 
   final ScrollPhysics? physics;
 
+  final List<TabControllerHelper>? tabs;
+
   final ValueNotifier<ExpandType>? valueNotifierExpandType;
   final ValueNotifier<ExpandType>? valueNotifierExpandTypeOnExpandOny;
-
+  // final Widget? tabbar;
   final bool showAppbarOnTopOnly;
 
   /// This will create DraggableHome.
@@ -112,6 +119,7 @@ class DraggableHome extends StatefulWidget {
       this.appBarColor,
       this.curvedBodyRadius = 20,
       required this.slivers,
+      this.tabs,
       this.drawer,
       this.fullyStretchable = false,
       this.stretchTriggerOffset = 100,
@@ -140,11 +148,18 @@ class _DraggableHomeState extends State<DraggableHome>
       BehaviorSubject<bool>.seeded(false);
   final BehaviorSubject<bool> isFullyCollapsed =
       BehaviorSubject<bool>.seeded(false);
+  TabController? _tabController;
+  List<TabControllerHelper>? _tabs;
+  final bucket = PageStorageBucket();
+  ValueNotifier<int> onTabSelected = ValueNotifier<int>(0);
+
+  int currentPage = 0;
 
   @override
   void dispose() {
     isFullyExpanded.close();
     isFullyCollapsed.close();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -153,6 +168,21 @@ class _DraggableHomeState extends State<DraggableHome>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     _animationController.forward();
+    if (widget.tabs != null) {
+      _tabs = <TabControllerHelper>[];
+      _tabs!.clear();
+      _tabs!.addAll(widget.tabs!);
+      _tabController = TabController(length: _tabs!.length, vsync: this)
+        ..addListener(() async {
+          onTabSelected.value = _tabController!.index;
+          // await widget.scrollController?.animateTo(
+          //   0,
+          //   duration: Duration(seconds: 1),
+          //   curve: Curves.ease,
+          // );
+        });
+      ;
+    }
     super.initState();
   }
 
@@ -173,43 +203,105 @@ class _DraggableHomeState extends State<DraggableHome>
       backgroundColor:
           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
-      body: NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            // debugPrint("DraggableHome  ${notification.metrics.extentBefore}");
-            // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
-            //   debugPrint(
-            //       "DraggableHome ${widget.scrollController!.position.pixels}");
-            //   if (widget.scrollController!.position.pixels >= 200) {
-            //     if (isFullyExpanded.value) isFullyExpanded.add(false);
-            //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
-            //     // expandedHeight = 0;
-            //     return false;
-            //   }
-            // }
-            if (notification.metrics.axis == Axis.vertical) {
-              // isFullyCollapsed
-              if ((isFullyExpanded.value) &&
-                  notification.metrics.extentBefore > 100) {
-                isFullyExpanded.add(false);
-              }
-              //isFullyCollapsed
-              if (notification.metrics.extentBefore >
-                  expandedHeight - AppBar().preferredSize.height - 40) {
-                if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
-              } else {
-                if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
-              }
-            }
-            return false;
-          },
-          child: sliver(context, appBarHeight, fullyExpandedHeight,
-              expandedHeight, topPadding)),
+      body: PageStorage(
+        bucket: bucket,
+        child: getNotificationListener(expandedHeight, context, appBarHeight,
+            fullyExpandedHeight, topPadding),
+      ),
       bottomSheet: widget.bottomSheet,
       bottomNavigationBar: widget.bottomNavigationBar,
       floatingActionButton: getScaffoldFloatingActionButton(),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
     );
+  }
+
+  SliverPadding getTabbar(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.only(
+          top: kDefaultPadding, left: kDefaultPadding / 2),
+      sliver: SliverPersistentHeader(
+          pinned: true,
+          delegate: SliverAppBarDelegatePreferedSize(
+              child: ColoredTabBar(
+            useCard: true,
+            cornersIfCard: 80.0,
+            // color: Theme.of(context).colorScheme.surfaceVariant,
+            tabBar: TabBar(
+              // padding: EdgeInsets.all(kDefaultPadding),
+              labelStyle: Theme.of(context).textTheme.titleSmall,
+              indicatorColor:
+                  Theme.of(context).colorScheme.primary.withOpacity(.2),
+              labelColor: Theme.of(context).colorScheme.primary,
+              tabs: _tabs!,
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(80.0),
+                color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
+              ),
+              isScrollable: true,
+              controller: _tabController,
+            ),
+          ))),
+    );
+  }
+
+  Widget getTabsNotificationListener(
+      double expandedHeight,
+      BuildContext context,
+      double appBarHeight,
+      double fullyExpandedHeight,
+      double topPadding) {
+    return NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [],
+        body: TabBarView(
+            controller: _tabController,
+            children: _tabs!
+                .map((e) => Builder(builder: (BuildContext context) {
+                      return getNotificationListener(expandedHeight, context,
+                          appBarHeight, fullyExpandedHeight, topPadding,
+                          tab: e);
+                    }))
+                .toList()));
+  }
+
+  NotificationListener<ScrollNotification> getNotificationListener(
+      double expandedHeight,
+      BuildContext context,
+      double appBarHeight,
+      double fullyExpandedHeight,
+      double topPadding,
+      {TabControllerHelper? tab}) {
+    return NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          // debugPrint("DraggableHome  ${notification.metrics.extentBefore}");
+          // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
+          //   debugPrint(
+          //       "DraggableHome ${widget.scrollController!.position.pixels}");
+          //   if (widget.scrollController!.position.pixels >= 200) {
+          //     if (isFullyExpanded.value) isFullyExpanded.add(false);
+          //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
+          //     // expandedHeight = 0;
+          //     return false;
+          //   }
+          // }
+          if (notification.metrics.axis == Axis.vertical) {
+            // isFullyCollapsed
+            if ((isFullyExpanded.value) &&
+                notification.metrics.extentBefore > 100) {
+              isFullyExpanded.add(false);
+            }
+            //isFullyCollapsed
+            if (notification.metrics.extentBefore >
+                expandedHeight - AppBar().preferredSize.height - 40) {
+              if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
+            } else {
+              if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
+            }
+          }
+          return false;
+        },
+        child: sliver(context, appBarHeight, fullyExpandedHeight,
+            expandedHeight, topPadding));
   }
 
   Widget? getScaffoldFloatingActionButton() {
@@ -228,80 +320,158 @@ class _DraggableHomeState extends State<DraggableHome>
     );
   }
 
-  CustomScrollView sliver(
+  Widget sliver(
     BuildContext context,
     double appBarHeight,
     double fullyExpandedHeight,
     double expandedHeight,
     double topPadding,
   ) {
-    return CustomScrollView(
-      controller: widget.scrollController,
-      physics: widget.physics ?? const BouncingScrollPhysics(),
-      slivers: [
-        StreamBuilder<List<bool>>(
-          stream: CombineLatestStream.list<bool>([
-            isFullyCollapsed.stream,
-            isFullyExpanded.stream,
-          ]),
-          builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-            final List<bool> streams = (snapshot.data ?? [false, false]);
-            final bool fullyCollapsed = streams[0];
-            final bool fullyExpanded = streams[1];
-            notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
+    Widget child = ValueListenableBuilder<int>(
+      valueListenable: onTabSelected,
+      builder: (_, value, ___) {
+        Widget? toggleWidget;
+        if (_tabs != null) {
+          toggleWidget =
+              SliverToBoxAdapter(child: getToggleWidget(_tabs![value]));
+        }
+        return CustomScrollView(
+          key: const PageStorageKey<String>('saveState'),
+          controller: widget.scrollController,
+          physics: widget.physics ?? const BouncingScrollPhysics(),
+          slivers: [
+            StreamBuilder<List<bool>>(
+              stream: CombineLatestStream.list<bool>([
+                isFullyCollapsed.stream,
+                isFullyExpanded.stream,
+              ]),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                final List<bool> streams = (snapshot.data ?? [false, false]);
+                final bool fullyCollapsed = streams[0];
+                final bool fullyExpanded = streams[1];
+                notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
 
-            return SliverAppBar(
-              automaticallyImplyLeading: true,
-              backgroundColor: Theme.of(context).colorScheme.background,
-              // surfaceTintColor: Theme.of(context).colorScheme.primary,
-              // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
-              leading: getLeadingAppBar(context),
-              // leading: widget.alwaysShowLeadingAndAction
-              //     ? widget.leading
-              //     : !fullyCollapsed
-              //         ? const SizedBox()
-              //         : widget.leading,
-              actions: widget.alwaysShowLeadingAndAction
-                  ? widget.actions
-                  : !fullyCollapsed
-                      ? []
-                      : widget.actions,
-              elevation: 0,
-              pinned: false,
-              // floating: true,
-              stretch: true,
-              centerTitle: widget.centerTitle,
-              title: widget.title == null
-                  ? null
-                  : widget.alwaysShowTitle
-                      ? widget.title
-                      : AnimatedOpacity(
-                          opacity: fullyCollapsed ? 1 : 0,
-                          duration: const Duration(milliseconds: 100),
-                          child: widget.title,
-                        ),
-              collapsedHeight: appBarHeight,
-              expandedHeight:
-                  fullyExpanded ? fullyExpandedHeight : expandedHeight,
-              flexibleSpace: widget.headerWidget != null
-                  ? getSliverSpace(fullyExpanded, context, fullyCollapsed)
-                  : null,
-              stretchTriggerOffset: widget.stretchTriggerOffset,
-              onStretchTrigger: widget.fullyStretchable
-                  ? () async {
-                      if (!fullyExpanded) isFullyExpanded.add(true);
-                    }
-                  : null,
-            );
-          },
-        ),
-        SliverToBoxAdapter(
-          child: expandedUpArrow(),
-        ),
-        ...widget.slivers,
-        // sliverList(context, appBarHeight + topPadding),
-      ],
+                return SliverAppBar(
+                  automaticallyImplyLeading: true,
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  // surfaceTintColor: Theme.of(context).colorScheme.primary,
+                  // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
+                  leading: getLeadingAppBar(context),
+                  // leading: widget.alwaysShowLeadingAndAction
+                  //     ? widget.leading
+                  //     : !fullyCollapsed
+                  //         ? const SizedBox()
+                  //         : widget.leading,
+                  actions: widget.alwaysShowLeadingAndAction
+                      ? widget.actions
+                      : !fullyCollapsed
+                          ? []
+                          : widget.actions,
+                  elevation: 0,
+                  pinned: false,
+                  // floating: true,
+                  stretch: true,
+                  centerTitle: widget.centerTitle,
+                  title: widget.title == null
+                      ? null
+                      : widget.alwaysShowTitle
+                          ? widget.title
+                          : AnimatedOpacity(
+                              opacity: fullyCollapsed ? 1 : 0,
+                              duration: const Duration(milliseconds: 100),
+                              child: widget.title,
+                            ),
+
+                  collapsedHeight: appBarHeight,
+                  expandedHeight:
+                      fullyExpanded ? fullyExpandedHeight : expandedHeight,
+                  flexibleSpace: _tabs != null
+                      ? ValueListenableBuilder<int>(
+                          valueListenable: onTabSelected,
+                          builder: (context, value, child) => getSliverSpace(
+                              fullyExpanded, context, fullyCollapsed,
+                              tabFullyExpanded:
+                                  _tabs![value].draggableExtendedWidget,
+                              tabHeaderWidget: _tabs![value]
+                                      .draggableSwithHeaderFromAppbarToScroll ??
+                                  _tabs![value].draggableHeaderWidget),
+                        )
+                      : widget.headerWidget != null
+                          ? getSliverSpace(
+                              fullyExpanded, context, fullyCollapsed)
+                          : null,
+                  stretchTriggerOffset: widget.stretchTriggerOffset,
+                  onStretchTrigger: widget.fullyStretchable
+                      ? () async {
+                          if (!fullyExpanded) isFullyExpanded.add(true);
+                        }
+                      : null,
+                );
+              },
+            ),
+            if (_tabs != null) getTabbar(context),
+            if (toggleWidget != null) toggleWidget,
+            SliverToBoxAdapter(
+              child: expandedUpArrow(),
+            ),
+            // TabBarView(children: children)
+            if (_tabs != null)
+              ...getTabWidget(_tabs![value])
+            else
+              ...widget.slivers,
+            // sliverList(context, appBarHeight + topPadding),
+          ],
+        );
+      },
     );
+    if (_tabs != null) {
+      return GestureDetector(
+          onHorizontalDragEnd: (dragDetails) {
+            if (dragDetails.primaryVelocity != 0) {
+              final int val = dragDetails.primaryVelocity!.sign.toInt();
+              if (currentPage - val >= 0 &&
+                  currentPage - val < _tabController!.length) {
+                _tabController!.animateTo(currentPage - val);
+              }
+            }
+          },
+          child: child);
+    }
+    return child;
+  }
+
+  Widget? getToggleWidget(TabControllerHelper tab) {
+    if (tab.draggableSwithHeaderFromAppbarToScroll == null) return null;
+    debugPrint("DraggableHome draggableSwithHeaderFromAppbarToScroll ");
+    if (widget.valueNotifierExpandType == null) return null;
+    debugPrint("DraggableHome valueNotifierExpandType ");
+    // SliverAnimatedList(itemBuilder: itemBuilder)
+    return ValueListenableBuilder<ExpandType>(
+      valueListenable: widget.valueNotifierExpandType!,
+      builder: (__, v, _) {
+        debugPrint("DraggableHome getToggleWidget $v");
+        return AnimatedContainer(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          // curve: Curves.easeInOutCirc,
+          duration: const Duration(milliseconds: 750),
+          height: v == ExpandType.CLOSED ? null : 0,
+          child: v == ExpandType.CLOSED
+              ? tab.draggableSwithHeaderFromAppbarToScroll
+              : SizedBox(),
+        );
+      },
+    );
+  }
+
+  List<Widget> getTabWidget(TabControllerHelper tab) {
+    bool hasSlivers = tab.slivers != null;
+    return [
+      if (!hasSlivers)
+        SliverFillRemaining(
+            fillOverscroll: true, hasScrollBody: false, child: tab.widget),
+      ...?tab.slivers?.map((e) => e).toList()
+    ];
   }
 
   Widget? getLeadingAppBar(BuildContext context) {
@@ -331,7 +501,8 @@ class _DraggableHomeState extends State<DraggableHome>
   }
 
   Stack getSliverSpace(
-      bool fullyExpanded, BuildContext context, bool fullyCollapsed) {
+      bool fullyExpanded, BuildContext context, bool fullyCollapsed,
+      {Widget? tabFullyExpanded, Widget? tabHeaderWidget}) {
     return Stack(
       children: [
         FlexibleSpaceBar(
@@ -342,8 +513,9 @@ class _DraggableHomeState extends State<DraggableHome>
                 child: AnimatedSwitcher(
                   duration: Duration(milliseconds: 300),
                   child: fullyExpanded
-                      ? (widget.expandedBody ?? const SizedBox())
-                      : widget.headerWidget,
+                      ? tabFullyExpanded ??
+                          (widget.expandedBody ?? const SizedBox())
+                      : tabHeaderWidget ?? widget.headerWidget,
                 )),
           ),
         ),
@@ -462,30 +634,46 @@ class _DraggableHomeState extends State<DraggableHome>
     //false true expanded
     //true false collapsed
     if (!fullyCollapsed && !fullyExpanded) {
-      debugPrint("DraggableHome notifying ${ExpandType.HALF_EXPANDED}");
       // provider.type = ExpandType.HALF_EXPANDED;
       if (widget.valueNotifierExpandType?.value != ExpandType.HALF_EXPANDED) {
-        widget.valueNotifierExpandType?.value = ExpandType.HALF_EXPANDED;
+        debugPrint("DraggableHome notifying ${ExpandType.HALF_EXPANDED}");
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          widget.valueNotifierExpandType?.value = ExpandType.HALF_EXPANDED;
+        });
       }
     } else if (!fullyCollapsed && fullyExpanded) {
       // provider.type = ExpandType.EXPANDED;
-      debugPrint("DraggableHome notifying ${ExpandType.EXPANDED}");
+
       if (widget.valueNotifierExpandType?.value != ExpandType.EXPANDED) {
-        widget.valueNotifierExpandType?.value = ExpandType.EXPANDED;
+        debugPrint("DraggableHome notifying ${ExpandType.EXPANDED}");
+
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          widget.valueNotifierExpandType?.value = ExpandType.EXPANDED;
+        });
       }
       if (widget.valueNotifierExpandTypeOnExpandOny?.value !=
           ExpandType.EXPANDED) {
-        widget.valueNotifierExpandTypeOnExpandOny?.value = ExpandType.EXPANDED;
+        debugPrint("DraggableHome notifying ${ExpandType.EXPANDED}");
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          widget.valueNotifierExpandTypeOnExpandOny?.value =
+              ExpandType.EXPANDED;
+        });
       }
     } else {
       // provider.type = ExpandType.CLOSED;
-      debugPrint("DraggableHome notifying ${ExpandType.CLOSED}");
+
       if (widget.valueNotifierExpandType?.value != ExpandType.CLOSED) {
-        widget.valueNotifierExpandType?.value = ExpandType.CLOSED;
+        debugPrint("DraggableHome notifying ${ExpandType.CLOSED}");
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          widget.valueNotifierExpandType?.value = ExpandType.CLOSED;
+        });
       }
       if (widget.valueNotifierExpandTypeOnExpandOny?.value !=
           ExpandType.CLOSED) {
-        widget.valueNotifierExpandTypeOnExpandOny?.value = ExpandType.CLOSED;
+        debugPrint("DraggableHome notifying ${ExpandType.CLOSED}");
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          widget.valueNotifierExpandTypeOnExpandOny?.value = ExpandType.CLOSED;
+        });
       }
     }
   }
