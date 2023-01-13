@@ -152,7 +152,8 @@ class _DraggableHomeState extends State<DraggableHome>
   List<TabControllerHelper>? _tabs;
   final bucket = PageStorageBucket();
   ValueNotifier<int> onTabSelected = ValueNotifier<int>(0);
-
+  final GlobalKey<SliverAnimatedListState> _listKey =
+      GlobalKey<SliverAnimatedListState>();
   int currentPage = 0;
 
   @override

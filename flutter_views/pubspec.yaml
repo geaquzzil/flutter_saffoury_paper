@@ -98,6 +98,7 @@ dependencies:
   tuple: ^2.0.1
   animations: ^2.0.7
   icon_decoration: ^1.0.1
+  auto_animated: ^3.1.0
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   
