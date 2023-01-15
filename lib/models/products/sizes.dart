@@ -128,8 +128,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
       };
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() =>
-      {};
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
@@ -162,7 +161,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   ///check fiberLines if on the width then return length
   ///
-  String getWidth(String? fibrelines) {
+  String getWidth({String? fibrelines}) {
     if (fibrelines == null) {
       return width.toNonNullable().toString();
     }
@@ -175,7 +174,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   ///check fiberLines if on the width then return length
   ///
-  String getLength(String? fibrelines) {
+  String getLength({String? fibrelines}) {
     if (fibrelines == null) {
       return length.toNonNullable().toString();
     }
@@ -189,11 +188,11 @@ class ProductSize extends ViewAbstract<ProductSize> {
   pdf.Widget getSizeTextRichWidget(BuildContext context, {String? fiberLines}) {
     return pdf.RichText(
       text: pdf.TextSpan(
-        text: "${getWidth(fiberLines)} X ",
+        text: "${getWidth(fibrelines: fiberLines)} X ",
         style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 32),
         children: <pdf.TextSpan>[
           pdf.TextSpan(
-              text: getLength(fiberLines),
+              text: getLength(fibrelines: fiberLines),
               style:
                   pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 42)),
           // TextSpan(text: ' world!'),
@@ -219,9 +218,12 @@ class ProductSize extends ViewAbstract<ProductSize> {
     }
   }
 
+  bool isRoll() {
+    return length == 0;
+  }
+
   Html getSizeHtmlFormat(BuildContext context, {String? fiberLines}) {
     return Html(
-      
       data: getSizeHtmlFormatString(context, fiberLines: fiberLines),
     );
   }

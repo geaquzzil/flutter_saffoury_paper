@@ -3,10 +3,12 @@ import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/dialogs.dart';
@@ -41,7 +43,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     var list = await (this as ViewAbstract).getPopupMenuActionsList(context);
     await showMenu<MenuItemBuild>(
       context: context,
-      
+
       position: RelativeRect.fromLTRB(
         offset.dx,
         offset.dy + size.height,
@@ -90,7 +92,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           .change(this as ViewAbstract, ServerActions.view);
       return;
     }
-    Navigator.pushNamed(context, "/view", arguments: this);
+    context.pushNamed(viewRouteName,
+        params: {"tableName": getTableNameApi() ?? "", "id": iD.toString()},
+        extra: this);
   }
 
   void onDrawerLeadingItemClicked(BuildContext context,

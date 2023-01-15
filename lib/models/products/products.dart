@@ -7,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
@@ -411,12 +412,26 @@ class Product extends ViewAbstract<Product>
     return getUnitSellPrice() * getQuantity(warehouse: warehouse);
   }
 
+  String getTotalSellPriceStringFormat(
+      {required BuildContext context, Warehouse? warehouse}) {
+    return getTotalSellPrice(warehouse: warehouse)
+        .toCurrencyFormatFromSetting(context);
+  }
+
   double getUnitPurchasesPrice() {
     return products_types?.purchasePrice ?? 0;
   }
 
+  String getUnitPurchasesPriceStringFormat({required BuildContext context}) {
+    return getUnitPurchasesPrice().toCurrencyFormatFromSetting(context);
+  }
+
   double getUnitSellPrice() {
     return products_types?.sellPrice ?? 0;
+  }
+
+  String getUnitSellPriceStringFormat({required BuildContext context}) {
+    return getUnitSellPrice().toCurrencyFormatFromSetting(context);
   }
 
   int getReams() {
@@ -425,22 +440,41 @@ class Product extends ViewAbstract<Product>
   }
 
   bool isRoll() {
-    return sizes?.length == 0;
+    return sizes?.isRoll() ?? true;
   }
 
   bool hasGSM() {
     return gsms != null;
   }
 
-  double getSheets() {
+  double getSheets({ProductSize? customSize, double? customQuantity}) {
+    if (customSize != null) {
+      if (customSize.isRoll()) return 0;
+      if (!hasGSM()) return 0;
+      return ((customQuantity ?? getQuantity()) /
+              (getSheetWeight(customSize: customSize) / 1000))
+          .toInt()
+          .toDouble();
+    }
     if (isRoll()) return 0;
     if (!hasGSM()) return 0;
 
-    return getQuantity() / (getSheetWeight() / 1000);
+    return ((customQuantity ?? getQuantity()) / (getSheetWeight() / 1000))
+        .toInt()
+        .toDouble();
   }
 
   ///get sheet weight by  grsm
-  double getSheetWeight() {
+  double getSheetWeight({ProductSize? customSize}) {
+    if (customSize != null) {
+      if (customSize.isRoll()) return 0;
+      try {
+        return (customSize.width! * customSize.length! * getGSM()).toDouble() /
+            1000000;
+      } catch (e) {
+        return 0;
+      }
+    }
     if (isRoll()) return 0;
     try {
       return (getWidth() * getLength() * getGSM()).toDouble() / 1000000;
@@ -449,8 +483,20 @@ class Product extends ViewAbstract<Product>
     }
   }
 
-  double getOneSheetPrice() {
-    return (getSheetWeight() / 1000) * getUnitSellPrice();
+  String getSheetWeightStringFormat(
+      {required BuildContext context, ProductSize? customSize}) {
+    return getSheetWeight(customSize: customSize)
+        .toCurrencyFormat(symbol: AppLocalizations.of(context)!.gramSymbol);
+  }
+
+  double getOneSheetPrice({ProductSize? customSize}) {
+    return (getSheetWeight(customSize: customSize) / 1000) * getUnitSellPrice();
+  }
+
+  String getOneSheetPriceStringFormat(
+      {required BuildContext context, ProductSize? customSize}) {
+    return getOneSheetPrice(customSize: customSize)
+        .toCurrencyFormatFromSetting(context);
   }
 
   int getWidth() {
@@ -491,6 +537,12 @@ class Product extends ViewAbstract<Product>
 
   String getCustomerNameIfCutRequest() {
     return "";
+  }
+
+  String getQuantityStringFormat(
+      {required BuildContext context, Warehouse? warehouse}) {
+    return getQuantity(warehouse: warehouse)
+        .toCurrencyFormat(symbol: getProductTypeUnit(context));
   }
 
   double getQuantity({Warehouse? warehouse}) {

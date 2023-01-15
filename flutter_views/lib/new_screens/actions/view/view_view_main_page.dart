@@ -35,7 +35,7 @@ class BaseViewNewPage extends BaseActionScreenPage {
 class _BaseViewNewPage extends BaseActionScreenPageState {
   @override
   Widget getBody(BuildContext context) {
-    return MasterView(viewAbstract: widget.viewAbstract);
+    return MasterView(viewAbstract: getExtras() as ViewAbstract);
   }
 
   @override

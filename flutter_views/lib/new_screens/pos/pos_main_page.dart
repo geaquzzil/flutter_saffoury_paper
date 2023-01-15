@@ -28,19 +28,21 @@ class POSPage extends StatelessWidget {
     //     " ${context.read<AuthProvider>().getDrawerItemsPermissions}  =>pos $pos");
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: TowPaneExt(
-      customPaneProportion: SizeConfig.getPaneProportion(context),
-      startPane: FutureBuilder(
-        future: (pos[0]).getPosableInitObj(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return (pos[0]).getPosableMainWidget(context, snapshot);
-          }
-          return Expanded(child: Center(child: CircularProgressIndicator()));
-        },
-      ),
-      endPane: POSDescription(),
-    ));
+          customPaneProportion: SizeConfig.getPaneProportion(context),
+          startPane: FutureBuilder(
+            future: (pos[0]).getPosableInitObj(context),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return (pos[0]).getPosableMainWidget(context, snapshot);
+              }
+              return Expanded(
+                  child: Center(child: CircularProgressIndicator()));
+            },
+          ),
+          endPane: POSDescription(),
+        ));
 
     SafeArea(
       child: Container(

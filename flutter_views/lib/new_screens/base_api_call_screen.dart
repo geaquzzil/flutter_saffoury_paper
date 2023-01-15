@@ -6,6 +6,9 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/actions/list_multi_key_provider.dart';
 
 abstract class BaseApiCallPageState<T extends StatefulWidget, C>
     extends State<T> {
@@ -57,6 +60,13 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
         } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             extras = snapshot.data;
+            if (extras is ViewAbstract) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                context
+                    .read<ListMultiKeyProvider>()
+                    .edit(extras as ViewAbstract);
+              });
+            }
             return buildAfterCall(context, snapshot.data as C);
           } else {
             return EmptyWidget(

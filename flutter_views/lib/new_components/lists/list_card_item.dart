@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
@@ -34,10 +35,11 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
             bool isSelected =
                 (value?.isEquals(object) ?? false) && isLargeScreen;
             return isSelected
-                ? ClippedCard(
-                    borderSide: BorderSideColor.END,
-                    elevation: 0,
-                    color: Theme.of(context).colorScheme.primary,
+                ? CardCorner(
+                    key: UniqueKey(),
+                    // borderSide: BorderSideColor.END,
+                    // elevation: 0,
+                    // color: Theme.of(context).colorScheme.primary,
                     child: getListTile(isSelected, context),
                   )
                 : getListTile(isSelected, context);
@@ -49,7 +51,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   Widget getListTile(bool isSelected, BuildContext context) {
     return ListTile(
       selected: isSelected,
-      selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+      // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
       onTap: () => object.onCardClicked(context),
       onLongPress: () {
         object.onCardLongClicked(context, clickedWidget: key as GlobalKey);

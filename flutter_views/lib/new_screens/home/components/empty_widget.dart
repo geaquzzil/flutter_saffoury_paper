@@ -30,13 +30,14 @@ class EmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
     if (title == null && subtitle == null) {
-      return Center(
-          child: expand
-              ? Expanded(
-                  child: getLottieWidget(
-                  context,
-                ))
-              : getLottieWidget(context, height: 100));
+      return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        expand
+            ? Expanded(
+                child: getLottieWidget(
+                context,
+              ))
+            : getLottieWidget(context, height: 100)
+      ]);
     }
     var children2 = [
       const SizedBox(
@@ -67,19 +68,20 @@ class EmptyWidget extends StatelessWidget {
     ];
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Text("TODO Lottie.network"),
           expand
               ? Expanded(
-                  flex: 1,
+                  flex: 4,
                   child: getLottieWidget(
                     context,
                   ))
               : getLottieWidget(context, height: 100),
           if (expand)
             Expanded(
-              flex: 2,
+              flex: 8,
               child: Column(children: children2),
             )
           else

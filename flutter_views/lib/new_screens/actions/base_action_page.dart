@@ -274,28 +274,32 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     return SliverPadding(
       padding:
           const EdgeInsets.only(top: kDefaultPadding, left: kDefaultPadding),
-      sliver: SliverPersistentHeader(
-          pinned: true,
-          delegate: SliverAppBarDelegatePreferedSize(
-              child: ColoredTabBar(
-            useCard: true,
-            cornersIfCard: 80.0,
-            // color: Theme.of(context).colorScheme.surfaceVariant,
-            tabBar: TabBar(
-              // padding: EdgeInsets.all(kDefaultPadding),
-              labelStyle: Theme.of(context).textTheme.titleSmall,
-              indicatorColor:
-                  Theme.of(context).colorScheme.primary.withOpacity(.2),
-              labelColor: Theme.of(context).colorScheme.primary,
-              tabs: _tabs,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(80.0),
-                color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
+      sliver: SliverSafeArea(
+        sliver: SliverPersistentHeader(
+            pinned: true,
+            floating: false,
+            delegate: SliverAppBarDelegatePreferedSize(
+                child: ColoredTabBar(
+              useCard: true,
+              cornersIfCard: 80.0,
+              // color: Theme.of(context).colorScheme.surfaceVariant,
+              child: TabBar(
+                // padding: EdgeInsets.all(kDefaultPadding),
+                labelStyle: Theme.of(context).textTheme.titleSmall,
+                indicatorColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(.2),
+                labelColor: Theme.of(context).colorScheme.primary,
+                tabs: _tabs,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(80.0),
+                  color:
+                      Theme.of(context).colorScheme.secondary.withOpacity(.2),
+                ),
+                isScrollable: true,
+                controller: _tabController,
               ),
-              isScrollable: true,
-              controller: _tabController,
-            ),
-          ))),
+            ))),
+      ),
     );
   }
 
@@ -341,8 +345,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   List<Widget> getBottomWidget() {
-    List<Widget>? bottomWidget = widget.viewAbstract
-        .getCustomBottomWidget(context, widget.getServerAction());
+    List<Widget>? bottomWidget =
+        getExtras()?.getCustomBottomWidget(context, widget.getServerAction());
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (bottomWidget.indexOf(e) == bottomWidget.length) {
@@ -358,8 +362,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   List<Widget> getTopWidget() {
-    List<Widget>? topWidget = widget.viewAbstract
-        .getCustomTopWidget(context, widget.getServerAction());
+    List<Widget>? topWidget =
+        getExtras()?.getCustomTopWidget(context, widget.getServerAction());
     if (topWidget == null) return [];
     return topWidget
         .map((e) => getPadding(context, SliverToBoxAdapter(child: e)))
@@ -430,15 +434,18 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     return DraggableHome(
         valueNotifierExpandType: expandType,
         // bottomNavigationBarHeight: 80,
-        bottomNavigationBar: BottomAppBar(
-            color: Theme.of(context).colorScheme.surface,
-            elevation: 2,
-            shape: AutomaticNotchedShape(RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-            )),
-            child: BottomWidgetOnViewIfCartable(
-                viewAbstract: getExtras() as CartableProductItemInterface)),
+        bottomNavigationBar: getExtras() is CartableProductItemInterface
+            ? BottomAppBar(
+                color: Theme.of(context).colorScheme.surface,
+                elevation: 2,
+                shape: AutomaticNotchedShape(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
+                )),
+                child: BottomWidgetOnViewIfCartable(
+                    viewAbstract: getExtras() as CartableProductItemInterface))
+            : null,
         // headerBottomBar: Text("sdd"),
         headerExpandedHeight: .3,
         stretchMaxHeight: .31,

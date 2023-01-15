@@ -202,7 +202,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           if (homeList != null)
             ...homeList
                 .map((e) => SizedBox(
-                      height: MediaQuery.of(context).size.height * .25,
+                      height: MediaQuery.of(context).size.height * .24,
                       // height: MediaQuery.of(context).size.height * .1,
                       child: e,
                     ))
@@ -229,7 +229,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             onPressed: () {
               _scrollTop();
 
-              context.goNamed(posRouteName);
+              // context.goNamed(posRouteName);
             }),
         actions: [
           IconButton(
@@ -258,7 +258,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 if (value == ExpandType.EXPANDED) {
                   return getQrCodeSelector();
                 }
-
+                scanedQr = null;
                 return getListSelector();
               })
         ]);
@@ -340,6 +340,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     );
   }
 
+  void _scrollToCollapsed() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   Widget getQrCodeSelector() {
     return ValueListenableBuilder<QrCodeNotifierState>(
       valueListenable: valueNotifierQrState,
@@ -368,10 +376,20 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           case QrCodeCurrentState.DONE:
             scanedQr = value.viewAbstract as ViewAbstract;
             scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
-            fetshListWidgetBinding();
+            return SliverFillRemaining(
+              child: Center(
+                child: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: ListCardItemHorizontal<ViewAbstract>(
+                      useImageAsBackground: true,
+                      object: scanedQr as ViewAbstract),
+                ),
+              ),
+            );
             break;
         }
-        return getListSelector();
+        // return getListSelector();
       },
     );
   }
@@ -438,14 +456,18 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         }, childCount: count + (isLoading ? 5 : 0)));
   }
 
-  SliverList getSliverList(int count, bool isLoading) {
-    return SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-      if (isLoading && index == count) {
-        return getSharedLoadingItem(context);
-      }
-      return ListCardItem(object: listProvider.getList(findCustomKey())[index]);
-    }, childCount: count + (isLoading ? 1 : 0)));
+  Widget getSliverList(int count, bool isLoading) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
+      sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        if (isLoading && index == count) {
+          return getSharedLoadingItem(context);
+        }
+        return ListCardItem(
+            object: listProvider.getList(findCustomKey())[index]);
+      }, childCount: count + (isLoading ? 1 : 0))),
+    );
   }
 
   SliverPersistentHeader getFilterableWidget() {
@@ -453,7 +475,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         pinned: true,
         delegate: SliverAppBarDelegatePreferedSize(
             child: PreferredSize(
-          preferredSize: const Size.fromHeight(70.0),
+          preferredSize: const Size.fromHeight(60.0),
           child: FiltersAndSelectionListHeader(
             listProvider: listProvider,
             customKey: findCustomKey(),
@@ -461,25 +483,35 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         )));
   }
 
-  SliverPersistentHeader getToggleView() {
-    return SliverPersistentHeader(
-        pinned: false,
-        delegate: SliverAppBarDelegatePreferedSize(
-            child: PreferredSize(
-                preferredSize: const Size.fromHeight(70.0),
-                child: Container(
-                  color: Theme.of(context).colorScheme.background,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  child:
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    IconButton(
-                        onPressed: () {
-                          valueNotifierGrid.value = !valueNotifierGrid.value;
-                        },
-                        icon: const Icon(Icons.grid_view_rounded))
-                  ]),
-                ))));
+  Widget getToggleView() {
+    return ValueListenableBuilder<ExpandType>(
+        valueListenable: expandTypeOnlyOnExpand,
+        builder: (context, value, child) {
+          debugPrint("SliverApiMaster valueListenable expandType");
+          if (value == ExpandType.EXPANDED) {
+            return const SliverToBoxAdapter(child: SizedBox());
+          }
+          return SliverPersistentHeader(
+              pinned: false,
+              delegate: SliverAppBarDelegatePreferedSize(
+                  child: PreferredSize(
+                      preferredSize: const Size.fromHeight(70.0),
+                      child: Container(
+                        color: Theme.of(context).colorScheme.background,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: kDefaultPadding),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    valueNotifierGrid.value =
+                                        !valueNotifierGrid.value;
+                                  },
+                                  icon: const Icon(Icons.grid_view_rounded))
+                            ]),
+                      ))));
+        });
   }
 
   Widget getSearchWidget() {
@@ -524,7 +556,11 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                       child: child,
                     ),
                     child: value == ExpandType.EXPANDED
-                        ? const Text(key: ValueKey(1), "Qri CIODE")
+                        ? Text(
+                            key: const ValueKey(1),
+                            AppLocalizations.of(context)!.scan,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          )
                         : SearchWidgetComponent(
                             appBardExpandType: expandType,
                             key: const ValueKey(2),

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar(
       {this.color,
-      required this.tabBar,
+      required this.child,
       this.useCard = true,
       this.cornersIfCard});
   bool useCard;
   double? cornersIfCard;
   final Color? color;
-  final TabBar tabBar;
+  final TabBar child;
 
   @override
-  Size get preferredSize => tabBar.preferredSize;
+  Size get preferredSize => child.preferredSize;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +30,12 @@ class ColoredTabBar extends Container implements PreferredSizeWidget {
                 borderRadius: BorderRadius.all(Radius.circular(cornersIfCard!)),
               ),
         color: color,
-        child: tabBar,
+        child: child,
       );
     } else {
       return Container(
         color: color,
-        child: tabBar,
+        child: child,
       );
     }
   }

@@ -12,6 +12,8 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_re
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_invoice.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -137,6 +139,17 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     );
   }
 
+  List<Product> getProductsFromDetailList() {
+    var products = getDetailListFromMaster()
+        .map((e) => e.products!.copyWith({
+              "inStock": List<Stocks>.from([e.getStockFromDetails()])
+                  .map((e) => e.toJson())
+                  .toList()
+            }))
+        .toList();
+    return products;
+  }
+
   @override
   String? getSortByFieldName() => "date";
 
@@ -221,37 +234,40 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context, ServerActions action) {
+  List<Widget>? getCustomBottomWidget(
+      BuildContext context, ServerActions action) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
     double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
 
-    return [ExpansionTile(
-      initiallyExpanded: true,
-      leading: Icon(Icons.summarize),
-      title: Text(AppLocalizations.of(context)!.no_summary),
-      children: [
-        Column(
-          children: [
-            getListTile(
-                title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-                description: totalPrice?.toStringAsFixed(2) ?? "0"),
-            getListTile(
-                title: AppLocalizations.of(context)!.discount.toUpperCase(),
-                description: totalDiscount?.toStringAsFixed(2) ?? "0"),
-            getListTile(
-                title: AppLocalizations.of(context)!.quantity.toUpperCase(),
-                description: getDetailListFromMaster()
-                    .cast<InvoiceMasterDetails>()
-                    .getTotalQuantityGroupedFormattedText(context)),
-            getListTile(
-                title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-                description: totalNetPrice.toStringAsFixed(2)),
-          ],
-        )
-      ],
-    )];
+    return [
+      ExpansionTile(
+        initiallyExpanded: true,
+        leading: Icon(Icons.summarize),
+        title: Text(AppLocalizations.of(context)!.no_summary),
+        children: [
+          Column(
+            children: [
+              getListTile(
+                  title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+                  description: totalPrice?.toStringAsFixed(2) ?? "0"),
+              getListTile(
+                  title: AppLocalizations.of(context)!.discount.toUpperCase(),
+                  description: totalDiscount?.toStringAsFixed(2) ?? "0"),
+              getListTile(
+                  title: AppLocalizations.of(context)!.quantity.toUpperCase(),
+                  description: getDetailListFromMaster()
+                      .cast<InvoiceMasterDetails>()
+                      .getTotalQuantityGroupedFormattedText(context)),
+              getListTile(
+                  title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+                  description: totalNetPrice.toStringAsFixed(2)),
+            ],
+          )
+        ],
+      )
+    ];
   }
 
   Widget getListTile({required String title, required String description}) {

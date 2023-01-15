@@ -3,16 +3,22 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class SliverAppBarDelegatePreferedSize extends SliverPersistentHeaderDelegate {
-  PreferredSizeWidget child;
-  bool shouldRebuildWidget;
+  final PreferredSizeWidget child;
+  final bool shouldRebuildWidget;
+  final bool wrapWithSafeArea;
   SliverAppBarDelegatePreferedSize({
     this.shouldRebuildWidget = false,
+    this.wrapWithSafeArea = false,
     required this.child,
   });
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+    if (wrapWithSafeArea) {
+      return SafeArea(bottom: false, child: SizedBox.expand(child: child));
+    }
+
     return SizedBox.expand(child: child);
   }
 
@@ -23,8 +29,16 @@ class SliverAppBarDelegatePreferedSize extends SliverPersistentHeaderDelegate {
   double get minExtent => child.preferredSize.height;
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return shouldRebuildWidget;
+  bool shouldRebuild(SliverAppBarDelegatePreferedSize oldDelegate) {
+    if (wrapWithSafeArea) {
+      //todo
+      if (oldDelegate.child != child) {
+        return true;
+      }
+      return false;
+    } else {
+      return shouldRebuildWidget;
+    }
   }
 }
 

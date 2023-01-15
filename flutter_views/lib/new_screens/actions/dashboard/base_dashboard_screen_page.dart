@@ -56,7 +56,7 @@ class _BaseDashboardState extends State<BaseDashboard>
                   delegate: SliverAppBarDelegatePreferedSize(
                     child: ColoredTabBar(
                       color: Theme.of(context).colorScheme.background,
-                      tabBar: TabBar(
+                      child: TabBar(
                         // labelColor: Colors.black,
                         tabs: _tabs,
                         controller: _tabController,
@@ -170,7 +170,7 @@ class _BaseDashboardState extends State<BaseDashboard>
         delegate: SliverAppBarDelegatePreferedSize(
           child: ColoredTabBar(
             color: Theme.of(context).colorScheme.background,
-            tabBar: TabBar(
+            child: TabBar(
               // labelColor: Colors.black,
               tabs: _tabs,
               controller: _tabController,

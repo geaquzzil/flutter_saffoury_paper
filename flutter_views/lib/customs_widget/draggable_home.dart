@@ -224,32 +224,39 @@ class _DraggableHomeState extends State<DraggableHome>
     );
   }
 
-  SliverPadding getTabbar(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.only(
-          top: kDefaultPadding, left: kDefaultPadding / 2),
-      sliver: SliverPersistentHeader(
-          pinned: true,
-          delegate: SliverAppBarDelegatePreferedSize(
-              child: ColoredTabBar(
-            useCard: true,
-            cornersIfCard: 80.0,
-            // color: Theme.of(context).colorScheme.surfaceVariant,
-            tabBar: TabBar(
-              // padding: EdgeInsets.all(kDefaultPadding),
-              labelStyle: Theme.of(context).textTheme.titleSmall,
-              indicatorColor:
-                  Theme.of(context).colorScheme.primary.withOpacity(.2),
-              labelColor: Theme.of(context).colorScheme.primary,
-              tabs: _tabs!,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(80.0),
-                color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
-              ),
-              isScrollable: true,
-              controller: _tabController,
-            ),
-          ))),
+  Widget getTabbar(BuildContext context) {
+    // final availableHeight = MediaQuery.of(context).padding.top;
+    return SliverSafeArea(
+      sliver: SliverPadding(
+        padding: const EdgeInsets.only(
+            top: kDefaultPadding, left: kDefaultPadding / 2),
+        sliver: SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverAppBarDelegatePreferedSize(
+                wrapWithSafeArea: true,
+                child: ColoredTabBar(
+                  useCard: true,
+                  cornersIfCard: 80.0,
+                  // color: Theme.of(context).colorScheme.surfaceVariant,
+                  child: TabBar(
+                    // padding: EdgeInsets.all(kDefaultPadding),
+                    labelStyle: Theme.of(context).textTheme.titleSmall,
+                    indicatorColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(.2),
+                    labelColor: Theme.of(context).colorScheme.primary,
+                    tabs: _tabs!,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(80.0),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withOpacity(.2),
+                    ),
+                    isScrollable: true,
+                    controller: _tabController,
+                  ),
+                ))),
+      ),
     );
   }
 
@@ -347,7 +354,7 @@ class _DraggableHomeState extends State<DraggableHome>
       valueListenable: widget.valueNotifierExpandType!,
       builder: (context, value, child) => AnimatedOpacity(
         opacity: value == ExpandType.EXPANDED ? 1 : 0,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         child: child,
       ),
     );
@@ -367,109 +374,111 @@ class _DraggableHomeState extends State<DraggableHome>
         if (_tabs != null) {
           toggleWidget = getToggleWidget(_tabs![value]);
         }
-        return CustomScrollView(
-          key: const PageStorageKey<String>('saveState'),
-          controller: widget.scrollController,
-          physics: widget.physics ?? const BouncingScrollPhysics(),
-          slivers: [
-            StreamBuilder<List<bool>>(
-              stream: CombineLatestStream.list<bool>([
-                isFullyCollapsed.stream,
-                isFullyExpanded.stream,
-              ]),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-                final List<bool> streams = (snapshot.data ?? [false, false]);
-                final bool fullyCollapsed = streams[0];
-                final bool fullyExpanded = streams[1];
-                if (toggleWidget != null) {
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    if (!fullyCollapsed && !fullyExpanded) {
-                      if (animatedWidgets.isEmpty) return;
-                      Widget removed = animatedWidgets.removeAt(0);
-                      _listKey.currentState?.removeItem(
-                          0,
-                          (context, animation) => SliverAnimatedCard(
-                              animation: animation, child: removed));
-                    } else if (fullyCollapsed && !fullyExpanded) {
-                      animatedWidgets.add(_tabs![value]
-                          .draggableSwithHeaderFromAppbarToScroll!);
-                      _listKey.currentState?.insertItem(0);
-                    }
-                  });
-                }
-                notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
+        return SafeArea(
+          child: CustomScrollView(
+            key: const PageStorageKey<String>('saveState'),
+            controller: widget.scrollController,
+            physics: widget.physics ?? const BouncingScrollPhysics(),
+            slivers: [
+              StreamBuilder<List<bool>>(
+                stream: CombineLatestStream.list<bool>([
+                  isFullyCollapsed.stream,
+                  isFullyExpanded.stream,
+                ]),
+                builder:
+                    (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                  final List<bool> streams = (snapshot.data ?? [false, false]);
+                  final bool fullyCollapsed = streams[0];
+                  final bool fullyExpanded = streams[1];
+                  if (toggleWidget != null) {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      if (!fullyCollapsed && !fullyExpanded) {
+                        if (animatedWidgets.isEmpty) return;
+                        Widget removed = animatedWidgets.removeAt(0);
+                        _listKey.currentState?.removeItem(
+                            0,
+                            (context, animation) => SliverAnimatedCard(
+                                animation: animation, child: removed));
+                      } else if (fullyCollapsed && !fullyExpanded) {
+                        animatedWidgets.add(_tabs![value]
+                            .draggableSwithHeaderFromAppbarToScroll!);
+                        _listKey.currentState?.insertItem(0);
+                      }
+                    });
+                  }
+                  notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
 
-                return SliverAppBar(
-                  automaticallyImplyLeading: true,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  // surfaceTintColor: Theme.of(context).colorScheme.primary,
-                  // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
-                  leading: getLeadingAppBar(context),
-                  // leading: widget.alwaysShowLeadingAndAction
-                  //     ? widget.leading
-                  //     : !fullyCollapsed
-                  //         ? const SizedBox()
-                  //         : widget.leading,
-                  actions: widget.alwaysShowLeadingAndAction
-                      ? widget.actions
-                      : !fullyCollapsed
-                          ? []
-                          : widget.actions,
-                  elevation: 0,
-                  pinned: false,
-                  // floating: true,
-                  stretch: true,
-                  centerTitle: widget.centerTitle,
-                  title: widget.title == null
-                      ? null
-                      : widget.alwaysShowTitle
-                          ? widget.title
-                          : AnimatedOpacity(
-                              opacity: fullyCollapsed ? 1 : 0,
-                              duration: const Duration(milliseconds: 100),
-                              child: widget.title,
-                            ),
+                  return SliverAppBar(
+                    automaticallyImplyLeading: true,
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    // surfaceTintColor: Theme.of(context).colorScheme.primary,
+                    // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
+                    leading: getLeadingAppBar(context),
+                    // leading: widget.alwaysShowLeadingAndAction
+                    //     ? widget.leading
+                    //     : !fullyCollapsed
+                    //         ? const SizedBox()
+                    //         : widget.leading,
+                    actions: widget.alwaysShowLeadingAndAction
+                        ? widget.actions
+                        : !fullyCollapsed
+                            ? []
+                            : widget.actions,
+                    elevation: 0,
+                    pinned: false,
+                    // floating: true,
+                    stretch: true,
+                    centerTitle: widget.centerTitle,
+                    title: widget.title == null
+                        ? null
+                        : widget.alwaysShowTitle
+                            ? widget.title
+                            : AnimatedOpacity(
+                                opacity: fullyCollapsed ? 1 : 0,
+                                duration: const Duration(milliseconds: 100),
+                                child: widget.title,
+                              ),
 
-                  collapsedHeight: appBarHeight,
-                  expandedHeight:
-                      fullyExpanded ? fullyExpandedHeight : expandedHeight,
-                  flexibleSpace: _tabs != null
-                      ? ValueListenableBuilder<int>(
-                          valueListenable: onTabSelected,
-                          builder: (context, value, child) => getSliverSpace(
-                              fullyExpanded, context, fullyCollapsed,
-                              tabFullyExpanded:
-                                  _tabs![value].draggableExtendedWidget,
-                              tabHeaderWidget: _tabs![value]
-                                      .draggableSwithHeaderFromAppbarToScroll ??
-                                  _tabs![value].draggableHeaderWidget),
-                        )
-                      : widget.headerWidget != null
-                          ? getSliverSpace(
-                              fullyExpanded, context, fullyCollapsed)
-                          : null,
-                  stretchTriggerOffset: widget.stretchTriggerOffset,
-                  onStretchTrigger: widget.fullyStretchable
-                      ? () async {
-                          if (!fullyExpanded) isFullyExpanded.add(true);
-                        }
-                      : null,
-                );
-              },
-            ),
-            if (_tabs != null) getTabbar(context),
-            if (toggleWidget != null) toggleWidget,
-            SliverToBoxAdapter(
-              child: expandedUpArrow(),
-            ),
-            // TabBarView(children: children)
-            if (_tabs != null)
-              ...getTabWidget(_tabs![value])
-            else
-              ...widget.slivers,
-            // sliverList(context, appBarHeight + topPadding),
-          ],
+                    collapsedHeight: appBarHeight,
+                    expandedHeight:
+                        fullyExpanded ? fullyExpandedHeight : expandedHeight,
+                    flexibleSpace: _tabs != null
+                        ? ValueListenableBuilder<int>(
+                            valueListenable: onTabSelected,
+                            builder: (context, value, child) => getSliverSpace(
+                                fullyExpanded, context, fullyCollapsed,
+                                tabFullyExpanded:
+                                    _tabs![value].draggableExtendedWidget,
+                                tabHeaderWidget: _tabs![value]
+                                        .draggableSwithHeaderFromAppbarToScroll ??
+                                    _tabs![value].draggableHeaderWidget),
+                          )
+                        : widget.headerWidget != null
+                            ? getSliverSpace(
+                                fullyExpanded, context, fullyCollapsed)
+                            : null,
+                    stretchTriggerOffset: widget.stretchTriggerOffset,
+                    onStretchTrigger: widget.fullyStretchable
+                        ? () async {
+                            if (!fullyExpanded) isFullyExpanded.add(true);
+                          }
+                        : null,
+                  );
+                },
+              ),
+              if (_tabs != null) getTabbar(context),
+              if (toggleWidget != null) toggleWidget,
+              SliverToBoxAdapter(
+                child: expandedUpArrow(),
+              ),
+              // TabBarView(children: children)
+              if (_tabs != null)
+                ...getTabWidget(_tabs![value])
+              else
+                ...widget.slivers,
+              // sliverList(context, appBarHeight + topPadding),
+            ],
+          ),
         );
       },
     );
@@ -514,7 +523,7 @@ class _DraggableHomeState extends State<DraggableHome>
           height: v == ExpandType.CLOSED ? null : 0,
           child: v == ExpandType.CLOSED
               ? tab.draggableSwithHeaderFromAppbarToScroll
-              : SizedBox(),
+              : const SizedBox(),
         );
       },
     );
@@ -569,7 +578,7 @@ class _DraggableHomeState extends State<DraggableHome>
                   margin: EdgeInsets.only(
                       bottom: 0.2, top: AppBar().preferredSize.height),
                   child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     child: fullyExpanded
                         ? tabFullyExpanded ??
                             (widget.expandedBody ?? const SizedBox())
@@ -659,10 +668,11 @@ class _DraggableHomeState extends State<DraggableHome>
           width: MediaQuery.of(context).size.width,
           child: Center(
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.keyboard_arrow_up_rounded,
               ),
               onPressed: () {
+                // _scrollDown();
                 _scrollDown();
               },
               // color: (snapshot.data ?? false) ? null : Colors.transparent,
@@ -676,9 +686,21 @@ class _DraggableHomeState extends State<DraggableHome>
   void _scrollDown() {
     widget.scrollController?.animateTo(
       widget.scrollController!.position.maxScrollExtent,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.fastOutSlowIn,
     );
+  }
+
+  void _scrollTop() {
+    widget.scrollController?.animateTo(
+      widget.scrollController!.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollToCollapsed() {
+    widget.scrollController?.jumpTo(500);
   }
 
   void notifyListenerWidgetBinding(bool fullyCollapsed, bool fullyExpanded) {

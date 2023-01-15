@@ -5,6 +5,7 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/produc
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -48,6 +49,12 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     this.quantity = quantity ?? products.getCartableProductQuantity();
     discount = 0;
     return this;
+  }
+
+  Stocks getStockFromDetails() {
+    return Stocks()
+      ..quantity = quantity
+      ..warehouse = warehouse;
   }
 
   @override

@@ -1,17 +1,22 @@
 import 'package:animate_do/animate_do.dart' as animate;
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
+import 'package:flutter_view_controller/new_components/header_description_as_expanstion.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class ProductTopWidget extends StatelessWidget {
-  final Product product;
-  const ProductTopWidget({super.key, required this.product});
+class CutRequestTopWidget extends StatelessWidget {
+  CutRequest object;
+  CutRequestTopWidget({super.key, required this.object});
 
   ///weight per on sheet
   ///prie per on sheet
@@ -20,70 +25,69 @@ class ProductTopWidget extends StatelessWidget {
   ///total price
   @override
   Widget build(BuildContext context) {
+    debugPrint("CutRequestTopWidget ${object.toString()}");
     TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge;
     TextStyle? descriptionStyle = Theme.of(context).textTheme.caption;
-
+    bool hasCutResult = ((object.cut_request_results_count ?? 0) > 0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        // ProductHeaderToggle(product: product),
-        HeaderDescription(
-          iconData: Icons.announcement_rounded,
-          title: AppLocalizations.of(context)!.about,
-          description:
-              product.comments ?? AppLocalizations.of(context)!.no_content,
-        ),
-        Divider(),
-        // SizedBox(height: kDefaultPadding),
-
         HeaderDescription(
           iconData: Icons.info_outline,
           title: AppLocalizations.of(context)!.overview,
-          trailing: IconButton(icon: Icon(Icons.calculate), onPressed: () {}),
+          description: "Overview of the cut request requested sizes",
         ),
-        getRow(context, [
-          TitleAndDescription(
-              title: product.sizes!.getMainHeaderLabelTextOnly(context),
-              description: product.sizes!.getMainHeaderTextOnly(context)),
-          TitleAndDescription(
-              title: AppLocalizations.of(context)!.grainOn,
-              description: product.getGrainOn())
-        ]),
-        if (!product.isRoll())
-          getRow(context, [
-            TitleAndDescription(
-                title: AppLocalizations.of(context)!.weightPerSheet,
-                description:
-                    product.getSheetWeightStringFormat(context: context)),
-            TitleAndDescription(
-                title: AppLocalizations.of(context)!.pricePerSheet,
-                description:
-                    product.getOneSheetPriceStringFormat(context: context))
-          ]),
-        getRow(context, [
-          TitleAndDescription(
-              title:
-                  "${AppLocalizations.of(context)!.unit_price} (${AppLocalizations.of(context)!.per_each} ${product.getProductTypeUnit(context)})",
-              description:
-                  product.getUnitSellPriceStringFormat(context: context)),
-          TitleAndDescription(
-            title: AppLocalizations.of(context)!.total_price,
-            descriptionWidget: Text(
-              product.getTotalSellPriceStringFormat(context: context),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
-            ),
+        ...object.sizes_cut_requests!
+            .map((e) => getSizeWidget(context, e))
+            .toList(),
+        if (hasCutResult)
+          HeaderDescriptionAsExpanstion(
+            isTitleLarge: false,
+            iconData: Icons.done,
+            children: object.cut_request_results![0].products_inputs!
+                .getProductsFromDetailList()!
+                .map((e) => getCutResultWidtget(context, e))
+                .toList(),
+            title: AppLocalizations.of(context)!.cutRequestResult,
+            description: "Overview of the cut request results sizes",
           )
-        ]),
-        Divider(),
-        HeaderDescription(
-          iconData: Icons.insert_drive_file_outlined,
-          title: AppLocalizations.of(context)!.hideCargoInfo,
-        ),
       ],
+    );
+  }
+
+  Widget getCutResultWidtget(BuildContext context, Product cutRequestResult) {
+    return ListCardItem(object: cutRequestResult);
+  }
+
+  Widget getSizeWidget(BuildContext context, SizesCutRequest productSize) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 40),
+      child: Column(children: [
+        HeaderDescription(
+            isTitleLarge: false,
+            title: productSize.sizes!.getMainHeaderLabelWithText(context)),
+        getRow(context, [
+          TitleAndDescription(
+              title: AppLocalizations.of(context)!.weightPerSheet,
+              description: object.getSheetWeightStirngFormat(
+                  context: context, size: productSize)),
+          TitleAndDescription(
+              title: AppLocalizations.of(context)!.pricePerSheet,
+              description: object.getOnSheetPriceSringFormat(
+                  context: context, size: productSize))
+        ]),
+        getRow(context, [
+          TitleAndDescription(
+              title: AppLocalizations.of(context)!.quantity,
+              description: productSize.quantity
+                  .toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg)),
+          TitleAndDescription(
+              title: AppLocalizations.of(context)!.sheets,
+              description:
+                  object.getSheetsNumber(productSize).toCurrencyFormat())
+        ])
+      ]),
     );
   }
 
@@ -139,7 +143,7 @@ class ProductHeaderToggle extends StatelessWidget {
                     children: [
                       // FadeInLeftBig(child: child)
                       animate.FadeInLeft(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: ListTile(
                           title: Text(
                             product.products_types!.name ?? "",
@@ -154,17 +158,16 @@ class ProductHeaderToggle extends StatelessWidget {
                       BaseSharedDetailsRating(
                         viewAbstract: product,
                       ),
-                      ActionsOnHeaderWidget(
-                        viewAbstract: product,
-                        serverActions: ServerActions.view,
-                      ),
-                      // Row(
-                      //   children: [
-                      //     IconButton(onPressed: () {}, icon: Icon(Icons.email)),
-                      //     IconButton(onPressed: () {}, icon: Icon(Icons.call)),
-                      //     IconButton(onPressed: () {}, icon: Icon(Icons.share))
-                      //   ],
-                      // )
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.email)),
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.call)),
+                          IconButton(
+                              onPressed: () {}, icon: const Icon(Icons.share))
+                        ],
+                      )
                       // Spacer(),
                       // ElevatedButton(
                       //   child: Text("Add to Card"),

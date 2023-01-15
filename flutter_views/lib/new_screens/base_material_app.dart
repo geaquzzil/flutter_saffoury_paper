@@ -30,7 +30,6 @@ import 'package:skeletons/skeletons.dart';
 import '../theming/text_field_theming.dart';
 import 'home/base_home_main.dart';
 
-
 class BaseMaterialAppPage extends StatefulWidget {
   List<RouteBase>? addOnRoutes;
   BaseMaterialAppPage({Key? key, this.addOnRoutes}) : super(key: key);
@@ -144,13 +143,22 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 debugShowCheckedModeBanner: false,
                 restorationScopeId: 'root',
 
-                // routeInformationParser:
-                //     RouteGenerator.goRouter.routeInformationParser,
+                routeInformationParser: RouteGenerator.instance(
+                        addonRoutes: this.widget.addOnRoutes)
+                    .routeInformationParser,
+
+                routerDelegate: RouteGenerator.instance(
+                        addonRoutes: this.widget.addOnRoutes)
+                    .routerDelegate,
+
+                routeInformationProvider: RouteGenerator.instance(
+                        addonRoutes: this.widget.addOnRoutes)
+                    .routeInformationProvider,
                 // routerDelegate: RouteGenerator.goRouter.routerDelegate,
                 // routeInformationProvider:
                 //     RouteGenerator.goRouter.routeInformationProvider,
-                routerConfig: RouteGenerator.getGoRouter(
-                    addonRoutes: this.widget.addOnRoutes),
+                // routerConfig: RouteGenerator.instance(
+                //     addonRoutes: this.widget.addOnRoutes),
                 // initialRoute: '/',
                 // onGenerateRoute: RouteGenerator.generateRoute,
 

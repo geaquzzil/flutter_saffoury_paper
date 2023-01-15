@@ -9,6 +9,8 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_saffoury_paper/widgets/cut_request_top_widget.dart';
+import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
@@ -150,6 +152,48 @@ class CutRequest extends ViewAbstract<CutRequest>
         "cut_status": AppLocalizations.of(context)!.status,
         "comments": AppLocalizations.of(context)!.comments,
       };
+  @override
+  String? getImageUrl(BuildContext context) {
+    return products?.getImageUrl(context);
+  }
+
+  @override
+  List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {
+    if (action == ServerActions.view &&
+        products != null &&
+        cut_status == CutStatus.COMPLETED) {
+      return [CutRequestTopWidget(object: this)];
+    }
+    return null;
+  }
+
+  double getSheetWeight(SizesCutRequest size) {
+    return products?.getSheetWeight(customSize: size.sizes) ?? 0;
+  }
+
+  String getSheetWeightStirngFormat(
+      {required BuildContext context, required SizesCutRequest size}) {
+    return products?.getSheetWeightStringFormat(
+            context: context, customSize: size.sizes) ??
+        "-";
+  }
+
+  double getOnSheetPrice(SizesCutRequest size) {
+    return products?.getOneSheetPrice(customSize: size.sizes) ?? 0;
+  }
+
+  String getOnSheetPriceSringFormat(
+      {required BuildContext context, required SizesCutRequest size}) {
+    return products?.getOneSheetPriceStringFormat(
+            context: context, customSize: size.sizes) ??
+        "-";
+  }
+
+  double getSheetsNumber(SizesCutRequest size) {
+    return products?.getSheets(
+            customSize: size.sizes, customQuantity: size.quantity) ??
+        0;
+  }
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
