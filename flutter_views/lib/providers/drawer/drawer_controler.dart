@@ -24,6 +24,10 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   int get getNavigationIndex => _navigationIndex;
   bool get getNavigationRailIsOpen => _navigationRailIsOpen;
 
+  String get getObjectID => getObject.getIDString();
+
+  String get getObjectTableName => getObject.getTableNameApi() ?? "-";
+
   set setNavigationIndex(int index) {
     _navigationIndex = index;
     notifyListeners();

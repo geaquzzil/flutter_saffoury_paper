@@ -66,7 +66,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'orders_refunds':
           instance.orders_refunds?.map((e) => e.toJson()).toList(),
       'orders_refunds_count': instance.orders_refunds_count,
-      'deletedList': instance.deletedList?.map((e) => e.toJson()).toList(),
+      // 'deletedList': instance.deletedList?.map((e) => e.toJson()).toList(),
     };
 
 const _$InvoiceStatusEnumMap = {

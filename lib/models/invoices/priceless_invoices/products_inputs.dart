@@ -19,8 +19,7 @@ part 'products_inputs.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class ProductInput extends InvoiceMaster<ProductInput>
-    implements ListableInterface<ProductInputDetails> {
+class ProductInput extends InvoiceMaster<ProductInput> {
   // int? WarehouseID;
 
   List<ProductInputDetails>? products_inputs_details;
@@ -28,7 +27,9 @@ class ProductInput extends InvoiceMaster<ProductInput>
 
   Warehouse? warehouse;
 
-  ProductInput() : super();
+  ProductInput() : super() {
+    products_inputs_details = <ProductInputDetails>[];
+  }
 
   @override
   ProductInput getSelfNewInstance() {
@@ -80,43 +81,43 @@ class ProductInput extends InvoiceMaster<ProductInput>
     return products_inputs_details ?? [];
   }
 
-  @override
-  void onListableDelete(ProductInputDetails item) {
-    if (item.isEditing()) {
-      deletedList ??= [];
-      item.delete = true;
-      deletedList?.add(item);
-    }
-    products_inputs_details
-        ?.removeWhere((element) => item.products?.iD == element.products?.iD);
-  }
+  // @override
+  // void onListableDelete(ProductInputDetails item) {
+  //   if (item.isEditing()) {
+  //     deletedList ??= [];
+  //     item.delete = true;
+  //     deletedList?.add(item);
+  //   }
+  //   products_inputs_details
+  //       ?.removeWhere((element) => item.products?.iD == element.products?.iD);
+  // }
 
-  @override
-  void onListableUpdate(ProductInputDetails item) {
-    try {
-      ProductInputDetails? d = products_inputs_details!.firstWhereOrNull(
-        (element) => element.products?.iD == item.products?.iD,
-      );
-      d = item;
-    } catch (e) {}
-  }
+  // @override
+  // void onListableUpdate(ProductInputDetails item) {
+  //   try {
+  //     ProductInputDetails? d = products_inputs_details!.firstWhereOrNull(
+  //       (element) => element.products?.iD == item.products?.iD,
+  //     );
+  //     d = item;
+  //   } catch (e) {}
+  // }
 
-  @override
-  List<ProductInputDetails>? deletedList;
+  // @override
+  // List<ProductInputDetails>? deletedList;
 
-  @override
-  Product getListablePickObject() {
-    return Product();
-  }
+  // @override
+  // Product getListablePickObject() {
+  //   return Product();
+  // }
 
-  @override
-  void onListableSelectedListAdded(List<ViewAbstract> list) {
-    List<Product> products = list.cast();
-    products_inputs_details ??= [];
-    for (var element in products) {
-      products_inputs_details!.add(ProductInputDetails()..setProduct(element));
-    }
-  }
+  // @override
+  // void onListableSelectedListAdded(List<ViewAbstract> list) {
+  //   List<Product> products = list.cast();
+  //   products_inputs_details ??= [];
+  //   for (var element in products) {
+  //     products_inputs_details!.add(ProductInputDetails()..setProduct(element));
+  //   }
+  // }
 }
 
 @JsonSerializable(explicitToJson: true)

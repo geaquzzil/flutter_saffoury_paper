@@ -22,7 +22,9 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   List<CustomerRequestSizeDetails>? customers_request_sizes_details;
   int? customers_request_sizes_details_count;
 
-  CustomerRequestSize() : super();
+  CustomerRequestSize() : super() {
+    customers_request_sizes_details = <CustomerRequestSizeDetails>[];
+  }
 
   @override
   CustomerRequestSize getSelfNewInstance() {

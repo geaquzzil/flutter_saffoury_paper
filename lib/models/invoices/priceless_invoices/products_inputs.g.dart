@@ -66,7 +66,7 @@ Map<String, dynamic> _$ProductInputToJson(ProductInput instance) =>
           instance.products_inputs_details?.map((e) => e.toJson()).toList(),
       'products_inputs_details_count': instance.products_inputs_details_count,
       'warehouse': instance.warehouse?.toJson(),
-      'deletedList': instance.deletedList?.map((e) => e.toJson()).toList(),
+      // 'deletedList': instance.deletedList?.map((e) => e.toJson()).toList(),
     };
 
 const _$InvoiceStatusEnumMap = {

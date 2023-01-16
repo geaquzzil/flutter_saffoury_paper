@@ -18,6 +18,7 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -37,7 +38,8 @@ import 'orders.dart';
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
     implements
         PrintableInvoiceInterface<PrintInvoice>,
-        ModifiablePrintableInterface<PrintInvoice> {
+        ModifiablePrintableInterface<PrintInvoice>,
+        ListableInterface<InvoiceMasterDetails> {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -669,6 +671,46 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     l.add(o.getDetailMasterNewInstance());
     debugPrint("getModifiablePrintablePdfSetting $o");
     return o;
+  }
+
+  @override
+  List<InvoiceMasterDetails>? deletedList;
+
+  @override
+  List<InvoiceMasterDetails> getListableList() => getDetailListFromMaster();
+
+  @override
+  void onListableDelete(InvoiceMasterDetails item) {
+    if (item.isEditing()) {
+      deletedList ??= [];
+      item.delete = true;
+      deletedList?.add(item);
+    }
+    getDetailListFromMaster()
+        .removeWhere((element) => item.products?.iD == element.products?.iD);
+  }
+
+  @override
+  void onListableUpdate(InvoiceMasterDetails item) {
+    try {
+      InvoiceMasterDetails? d = getDetailListFromMaster()!.firstWhereOrNull(
+        (element) => element.products?.iD == item.products?.iD,
+      );
+      d = item;
+    } catch (e) {}
+  }
+
+  @override
+  Product getListablePickObject() {
+    return Product();
+  }
+
+  @override
+  void onListableSelectedListAdded(List<ViewAbstract> list) {
+    List<Product> products = list.cast();
+    for (var element in products) {
+      getDetailListFromMaster().add(getDetailMasterNewInstance()..setProduct(element));
+    }
   }
 
   static double? convertToDouble(dynamic number) =>

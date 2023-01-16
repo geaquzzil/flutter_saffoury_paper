@@ -363,14 +363,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       // context.goNamed(printRouteName,
       //     extra: this,
       //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
-      context.pushNamed(printRouteName,
+      context.goNamed(printRouteName,
           params: {"tableName": getTableNameApi()!, "id": "$iD"}, extra: this);
       // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
-      Navigator.pushNamed(context, "/edit", arguments: this);
+      context.goNamed(editRouteName,
+          params: {"tableName": getTableNameApi()!, "id": "$iD"}, extra: this);
     } else if (result.icon == Icons.view_agenda) {
-      Navigator.pushNamed(context, "/view", arguments: this);
+      context.goNamed(viewRouteName,
+          params: {"tableName": getTableNameApi()!, "id": "$iD"}, extra: this);
     }
   }
 }

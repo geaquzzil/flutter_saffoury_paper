@@ -24,7 +24,9 @@ class Purchases extends InvoiceMaster<Purchases> {
   List<PurchasesRefund>? purchases_refunds;
   int? purchases_refunds_count;
 
-  Purchases() : super();
+  Purchases() : super() {
+    purchases_details = <PurchasesDetails>[];
+  }
   @override
   Purchases getSelfNewInstance() {
     return Purchases();

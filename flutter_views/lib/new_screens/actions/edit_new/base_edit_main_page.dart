@@ -33,12 +33,11 @@ import '../../lists/list_static_editable.dart';
 import 'package:nil/nil.dart';
 
 class BaseEditNewPage extends BaseActionScreenPage {
-  ViewAbstract viewAbstract;
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 
   BaseEditNewPage(
-      {Key? key, required this.viewAbstract, this.onFabClickedConfirm})
-      : super(key: key, viewAbstract: viewAbstract);
+      {Key? key, required super.viewAbstract, this.onFabClickedConfirm})
+      : super(key: key);
 
   @override
   State<BaseEditNewPage> createState() => _BaseEditNewPageState();
@@ -53,14 +52,18 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   Widget getBody(BuildContext context) {
+    // return SliverFillRemaining(
+    //   child: Text("dsad"),
+    //
+    // );
     return SliverFillRemaining(
-      fillOverscroll: true,
-      hasScrollBody: false,
+      // fillOverscroll: true,
+      // hasScrollBody: false,
       child: BaseEditWidget(
         onValidate: (viewAbstract) {
           currentViewAbstract = viewAbstract;
         },
-        viewAbstract: widget.viewAbstract,
+        viewAbstract: getExtras() as ViewAbstract,
         isTheFirst: true,
         // onSubmit: (obj) {
         //   if (obj != null) {
@@ -74,9 +77,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   @override
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
     return [
-      if (widget.viewAbstract is ListableInterface)
-        getAddToListFloatingButton(context),
-      if (widget.viewAbstract is ListableInterface)
+      if (getExtras() is ListableInterface) getAddToListFloatingButton(context),
+      if (getExtras() is ListableInterface)
         const SizedBox(
           width: kDefaultPadding,
         ),
@@ -88,8 +90,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   void initState() {
     super.initState();
     isExtended = true;
-    if (widget.viewAbstract.isEditing()) {
-      currentViewAbstract = widget.viewAbstract;
+    if (getExtras().isEditing()) {
+      currentViewAbstract = getExtras() as ViewAbstract;
     }
   }
 
@@ -97,8 +99,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     isExtended = true;
-    if (widget.viewAbstract.isEditing()) {
-      currentViewAbstract = widget.viewAbstract;
+    if (getExtras().isEditing()) {
+      currentViewAbstract = getExtras() as ViewAbstract;
     }
   }
 
@@ -139,9 +141,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   //         Padding(
   //           padding: const EdgeInsets.only(right: 4.0),
   //           child:
-  //               Icon(widget.viewAbstract.isEditing() ? Icons.edit : Icons.add),
+  //               Icon(getExtras().isEditing() ? Icons.edit : Icons.add),
   //         ),
-  //         Text(widget.viewAbstract.getActionText(context))
+  //         Text(getExtras().getActionText(context))
   //       ],
   //     );
   //   }
@@ -166,8 +168,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
               msgAlign: TextAlign.end,
               dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
               color: Theme.of(context).colorScheme.background,
-              msg: widget.viewAbstract.getBaseMessage(context),
-              title: widget.viewAbstract.getBaseTitle(context),
+              msg: getExtras().getBaseMessage(context),
+              title: getExtras().getBaseTitle(context),
               context: context,
               onClose: (value) {
                 if (value != null) {
@@ -207,14 +209,12 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
             msgAlign: TextAlign.end,
             dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
             color: Theme.of(context).colorScheme.background,
-            msg: widget.viewAbstract.getBaseMessage(context),
-            title: widget.viewAbstract.getBaseTitle(context),
+            msg: getExtras().getBaseMessage(context),
+            title: getExtras().getBaseTitle(context),
             context: context,
             onClose: (value) {
               if (value != null) {
-                context
-                    .read<ListMultiKeyProvider>()
-                    .delete(widget.viewAbstract);
+                context.read<ListMultiKeyProvider>().delete(getExtras());
               }
             },
             actions: [
@@ -240,10 +240,10 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       heroTag: UniqueKey(),
       onPressed: () {},
       child: AddFromListPopupIconWidget(
-        viewAbstract: widget.viewAbstract,
+        viewAbstract: getExtras(),
         onSelected: (selectedList) {
           setState(() {
-            (widget.viewAbstract as ListableInterface)
+            (getExtras() as ListableInterface)
                 .onListableSelectedListAdded(selectedList);
           });
         },
@@ -252,12 +252,12 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   }
 
   // Widget getBody() {
-  //   bool isListable = widget.viewAbstract is ListableInterface;
+  //   bool isListable = getExtras() is ListableInterface;
   //   if (isListable) {
   //     return Column(
   //       children: [
   //         BaseSharedHeaderViewDetailsActions(
-  //           viewAbstract: widget.viewAbstract,
+  //           viewAbstract: getExtras(),
   //         ),
   //         Expanded(
   //           child: TabBarByListWidget(
@@ -274,7 +274,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   //                         onValidate: (viewAbstract) {
   //                           currentViewAbstract = viewAbstract;
   //                         },
-  //                         viewAbstract: widget.viewAbstract,
+  //                         viewAbstract: getExtras(),
   //                         isTheFirst: true,
   //                         // onSubmit: (obj) {
   //                         //   if (obj != null) {
@@ -298,13 +298,13 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   //         child: Column(
   //           children: [
   //             BaseSharedHeaderViewDetailsActions(
-  //               viewAbstract: widget.viewAbstract,
+  //               viewAbstract: getExtras(),
   //             ),
   //             BaseEditWidget(
   //               onValidate: (viewAbstract) {
   //                 currentViewAbstract = viewAbstract;
   //               },
-  //               viewAbstract: widget.viewAbstract,
+  //               viewAbstract: getExtras(),
   //               isTheFirst: true,
   //               // onSubmit: (obj) {
   //               //   if (obj != null) {
@@ -324,7 +324,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   //         onValidate: (viewAbstract) {
   //           currentViewAbstract = viewAbstract;
   //         },
-  //         viewAbstract: widget.viewAbstract,
+  //         viewAbstract: getExtras(),
   //         isTheFirst: true,
   //         // onSubmit: (obj) {
   //         //   if (obj != null) {
@@ -333,11 +333,11 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   //         // },
   //       ),
   //     ),
-  //     if (widget.viewAbstract.getTabs(context).isNotEmpty)
+  //     if (getExtras().getTabs(context).isNotEmpty)
   //       Expanded(
   //         child: OutlinedCard(
   //           child: TabBarWidget(
-  //             viewAbstract: widget.viewAbstract,
+  //             viewAbstract: getExtras(),
   //           ),
   //         ),
   //       )
@@ -346,11 +346,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   Widget getEditableList() {
     return ListableStaticEditable(
-        onDelete: (v) =>
-            (widget.viewAbstract as ListableInterface).onListableDelete(v),
-        onUpdate: (v) =>
-            (widget.viewAbstract as ListableInterface).onListableUpdate(v),
-        list: (widget.viewAbstract as ListableInterface).getListableList());
+        onDelete: (v) => (getExtras() as ListableInterface).onListableDelete(v),
+        onUpdate: (v) => (getExtras() as ListableInterface).onListableUpdate(v),
+        list: (getExtras() as ListableInterface).getListableList());
   }
 
   void _showToast(BuildContext context) {

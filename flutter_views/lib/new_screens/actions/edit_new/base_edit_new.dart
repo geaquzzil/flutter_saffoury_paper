@@ -172,14 +172,9 @@ class BaseEditWidget extends StatelessWidget {
     );
   }
 
-  List<int> _nums = [0];
-
-  int _num = 3;
-  ExpandableSliverListController<int> _controller =
-      ExpandableSliverListController<int>();
   Widget getExpansionTileCustom(BuildContext context, Widget form) {
     return ExpansionTileCustom(
-        useLeadingOutSideCard: SizeConfig.isLargeScreen(context),
+        useLeadingOutSideCard: SizeConfig.isSoLargeScreen(context),
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
         // initiallyExpanded: !viewAbstract.isNull,
         // isExpanded: false,
@@ -196,7 +191,7 @@ class BaseEditWidget extends StatelessWidget {
         title: !_canBuildChildern()
             ? form
             : viewAbstract.getMainHeaderTextOnEdit(context),
-        children: [if (_canBuildChildern()) form else Text("dsa")]);
+        children: [if (_canBuildChildern()) form else const Text("dsa")]);
   }
 
   bool canExpand(BuildContext context) {
@@ -213,8 +208,8 @@ class BaseEditWidget extends StatelessWidget {
     return Wrap(
       children: [
         // AnimatedIcon(icon: AnimatedIcons.add_event, progress: progress)
-        Spacer(),
-        if (viewAbstract.isNew()) Icon(Icons.new_label_sharp),
+        const Spacer(),
+        if (viewAbstract.isNew()) const Icon(Icons.new_label_sharp),
         if (field != null)
           if (viewAbstract.canBeNullableFromParentCheck(context, field) ??
               false)
@@ -262,30 +257,31 @@ class BaseEditWidget extends StatelessWidget {
     //     delegate: SliverChildBuilderDelegate((context, index) {
     //   return getControllerWidget(context, fields[index]);
     // }, childCount: fields.length));
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const SizedBox(height: 24.0),
-          ...fields.map((e) => getControllerWidget(context, e)).toList(),
-          ...groupedFields.entries
-              .map((e) => ExpansionTileCustom(
-                  canExpand: () => true,
-                  hasError: hasErrorGroupWidget(context, e.value),
-                  title: Text(e.key.label),
-                  leading: Icon(e.key.icon),
-                  children: e.value
-                      .map((e) => getControllerWidget(context, e))
-                      .toList()))
-              .toList(),
+    var child = <Widget>[
+      const SizedBox(height: kDefaultPadding),
+      ...fields.map((e) => getControllerWidget(context, e)).toList(),
+      ...groupedFields.entries
+          .map((e) => ExpansionTileCustom(
+              canExpand: () => true,
+              hasError: hasErrorGroupWidget(context, e.value),
+              title: Text(e.key.label),
+              leading: Icon(e.key.icon),
+              children:
+                  e.value.map((e) => getControllerWidget(context, e)).toList()))
+          .toList(),
+    ];
+    if (isTheFirst) {
+      return ListView(
+          shrinkWrap: true,
 
-          // ElevatedButton(
-          //   onPressed: () {
-          //     // validate();
-          //   },
-          //   child: const Text('Subment'),
-          // )
-        ]);
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: child);
+    } else {
+      return Column(
+        children: child,
+      );
+    }
   }
 
   bool _canBuildChildern() {

@@ -115,7 +115,7 @@ void main() async {
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
           create: (context) =>
-              DrawerMenuControllerProvider(initViewAbstract: Product())),
+              DrawerMenuControllerProvider(initViewAbstract: ProductInput())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(

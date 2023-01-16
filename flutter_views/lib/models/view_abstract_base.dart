@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_static_editable.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -258,12 +260,39 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return [
       TabControllerHelper(
         getMainHeaderTextOnly(context),
-
-        draggableSwithHeaderFromAppbarToScroll: getTabControllerFirstHeaderWidget(context),
+        draggableSwithHeaderFromAppbarToScroll:
+            getTabControllerFirstHeaderWidget(context),
         // getMainIconData(),
       ),
+      if (isListable())
+        TabControllerHelper(
+          widget: Column(
+            children: [
+              Expanded(
+                child: ListableStaticEditable(
+                    onDelete: (v) =>
+                        (getListableInterface()).onListableDelete(v),
+                    onUpdate: (v) =>
+                        (getListableInterface()).onListableUpdate(v),
+                    list: (getListableInterface()).getListableList()),
+              ),
+            ],
+          ),
+          AppLocalizations.of(context)!.details,
+          // draggableSwithHeaderFromAppbarToScroll:
+          //     getTabControllerFirstHeaderWidget(context),
+          // getMainIconData(),
+        ),
       ...getCustomTabList(context)
     ];
+  }
+
+  ListableInterface getListableInterface() {
+    return this as ListableInterface;
+  }
+
+  bool isListable() {
+    return this is ListableInterface;
   }
 
   Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) => {};

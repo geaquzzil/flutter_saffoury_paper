@@ -35,8 +35,7 @@ part 'orders.g.dart';
 @reflector
 class Order extends InvoiceMaster<Order>
     implements
-        CartableInvoiceMasterObjectInterface,
-        ListableInterface<OrderDetails> {
+        CartableInvoiceMasterObjectInterface{
   List<OrderDetails>? orders_details;
   int? orders_details_count;
 
@@ -224,41 +223,7 @@ class Order extends InvoiceMaster<Order>
     orders_details?.clear();
   }
 
-  @override
-  List<OrderDetails>? deletedList;
 
-  @override
-  List<OrderDetails> getListableList() => orders_details ?? [];
-
-  @override
-  void onListableDelete(OrderDetails item) {
-    if (item.isEditing()) {
-      deletedList ??= [];
-      item.delete = true;
-      deletedList?.add(item);
-    }
-    orders_details
-        ?.removeWhere((element) => item.products?.iD == element.products?.iD);
-  }
-
-  @override
-  void onListableUpdate(OrderDetails item) {
-    // TODO: implement onListableUpdate
-  }
-
-  @override
-  Product getListablePickObject() {
-    return Product();
-  }
-
-  @override
-  void onListableSelectedListAdded(List<ViewAbstract> list) {
-    List<Product> products = list.cast();
-    orders_details ??= [];
-    for (var element in products) {
-      orders_details!.add(OrderDetails()..setProduct(element));
-    }
-  }
 }
 
 @JsonSerializable(explicitToJson: true)

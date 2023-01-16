@@ -23,6 +23,7 @@ class ExpansionTileCustom extends StatefulWidget {
   List<Widget> children;
   bool padding;
   bool Function()? canExpand;
+  void Function()? onTap;
   ExpansionTileCustom(
       {Key? key,
       this.title,
@@ -109,8 +110,6 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   @override
   Widget build(BuildContext context) {
     final bool closed = !_isExpanded && _controller.isDismissed;
-    const bool shouldRemoveChildren = false;
-
     final Widget result = Offstage(
       offstage: closed,
       child: TickerMode(
@@ -128,7 +127,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     return AnimatedBuilder(
       animation: _controller.view,
       builder: _buildChildren,
-      child: shouldRemoveChildren ? null : result,
+      child: result,
     );
   }
 

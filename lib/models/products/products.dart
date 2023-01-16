@@ -206,7 +206,7 @@ class Product extends ViewAbstract<Product>
   String getQuantityStringAndLabel(BuildContext context) {
     double quantity = getQuantity();
     if (quantity > 0) {
-      return "${AppLocalizations.of(context)!.instock}: ${quantity.toStringAsFixed(2)}";
+      return "${AppLocalizations.of(context)!.instock}: ${getQuantityStringFormat(context: context)}";
     }
     return AppLocalizations.of(context)!.outOfStock;
   }

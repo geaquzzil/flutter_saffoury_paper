@@ -23,7 +23,9 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   List<OrderRefundDetails>? orders_refunds_order_details;
   int? orders_refunds_order_details_count;
 
-  OrderRefund() : super();
+  OrderRefund() : super() {
+    orders_refunds_order_details = <OrderRefundDetails>[];
+  }
   @override
   OrderRefund getSelfNewInstance() {
     return OrderRefund();

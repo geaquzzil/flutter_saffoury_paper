@@ -22,7 +22,9 @@ class Transfers extends InvoiceMaster<Transfers> {
   List<TransfersDetails>? transfers_details;
   int? trasfers_details_count;
 
-  Transfers() : super();
+  Transfers() : super() {
+    transfers_details = <TransfersDetails>[];
+  }
   @override
   Transfers getSelfNewInstance() {
     return Transfers();

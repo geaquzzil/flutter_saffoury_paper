@@ -376,7 +376,7 @@ class _DraggableHomeState extends State<DraggableHome>
         }
         return SafeArea(
           child: CustomScrollView(
-            key: const PageStorageKey<String>('saveState'),
+            // key: const PageStorageKey<String>('saveState'),
             controller: widget.scrollController,
             physics: widget.physics ?? const BouncingScrollPhysics(),
             slivers: [
@@ -532,9 +532,7 @@ class _DraggableHomeState extends State<DraggableHome>
   List<Widget> getTabWidget(TabControllerHelper tab) {
     bool hasSlivers = tab.slivers != null;
     return [
-      if (!hasSlivers)
-        SliverFillRemaining(
-            fillOverscroll: true, hasScrollBody: false, child: tab.widget),
+      if (!hasSlivers) SliverFillRemaining(child: tab.widget),
       ...?tab.slivers?.map((e) => e).toList()
     ];
   }

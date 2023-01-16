@@ -466,6 +466,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ));
   }
 
+  @override
+  ViewAbstract getExtras() {
+    return super.getExtras() as ViewAbstract;
+  }
+
   Scaffold getBuildBody() {
     return Scaffold(
         // backgroundColor: widget.color?.darkVibrantColor?.color,

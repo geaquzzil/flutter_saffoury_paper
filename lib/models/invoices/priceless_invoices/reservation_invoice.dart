@@ -16,7 +16,9 @@ part 'reservation_invoice.g.dart';
 class ReservationInvoice extends InvoiceMaster<ReservationInvoice> {
   List<ReservationInvoiceDetails>? reservation_invoice_details;
   int? reservation_invoice_details_count;
-  ReservationInvoice() : super();
+  ReservationInvoice() : super() {
+    reservation_invoice_details = <ReservationInvoiceDetails>[];
+  }
 
   @override
   ReservationInvoice getSelfNewInstance() {

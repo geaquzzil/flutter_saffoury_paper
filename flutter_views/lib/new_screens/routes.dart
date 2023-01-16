@@ -45,6 +45,8 @@ const String subDetailsRouteName = 'shop-details';
 const String shoppingRouteName = 'shopping';
 const String printRouteName = 'print';
 const String viewRouteName = 'view';
+const String editRouteName = 'edit';
+const String addRouteName = 'add';
 const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
 const String posRouteName = "pos";
@@ -95,6 +97,28 @@ class RouteGenerator {
               }
             },
             routes: [
+              GoRoute(
+                name: editRouteName,
+                path: "edit/:tableName/:id",
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: BaseEditNewPage(
+                        viewAbstract: state.extra as ViewAbstract,
+                      ));
+                },
+              ),
+              GoRoute(
+                name: addRouteName,
+                path: "add/:tableName",
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: BaseEditNewPage(
+                        viewAbstract: state.extra as ViewAbstract,
+                      ));
+                },
+              ),
               GoRoute(
                 name: viewRouteName,
                 path: "view/:tableName/:id",
