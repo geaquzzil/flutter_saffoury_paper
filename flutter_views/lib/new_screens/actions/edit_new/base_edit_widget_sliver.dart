@@ -31,18 +31,18 @@ import '../../edit/controllers/ext.dart';
 import 'edit_controllers_utils.dart';
 
 @immutable
-class BaseEditWidget extends StatelessWidget {
+class BaseEditWidgetSliver extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isTheFirst;
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   late List<String> fields;
   late Map<GroupItem, List<String>> groupedFields;
-
+  List<Widget> widgets = [];
   Map<String, TextEditingController> controllers = {};
   late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
   bool isRequiredSubViewAbstract;
-  BaseEditWidget(
+  BaseEditWidgetSliver(
       {Key? key,
       required this.viewAbstract,
       required this.isTheFirst,
@@ -237,6 +237,7 @@ class BaseEditWidget extends StatelessWidget {
 
   Widget buildForm(BuildContext context) {
     debugPrint("_BaseEdit buildForm ${viewAbstract.runtimeType}");
+
     return FormBuilder(
         autovalidateMode: AutovalidateMode.always,
         key: _formKey,
@@ -270,9 +271,6 @@ class BaseEditWidget extends StatelessWidget {
                   e.value.map((e) => getControllerWidget(context, e)).toList()))
           .toList(),
     ];
-    return Column(
-      children: child,
-    );
     if (isTheFirst) {
       return ListView(
           shrinkWrap: true,
@@ -391,7 +389,7 @@ class BaseEditWidget extends StatelessWidget {
           },
         );
       }
-      return BaseEditWidget(
+      return BaseEditWidgetSliver(
         viewAbstract: fieldValue,
         isTheFirst: false,
         onValidate: ((ob) {

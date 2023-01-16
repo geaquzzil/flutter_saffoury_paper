@@ -55,6 +55,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       ValueNotifier<PaletteGenerator?>(null);
   String? imgUrl;
   Widget getBody(BuildContext context);
+
+  bool getBodyIsSliver();
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context);
 
   /// if null then we get the main viewabstract getBlurringImage
@@ -80,8 +82,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     iD = widget.viewAbstract.iD;
     tableName = widget.viewAbstract.getTableNameApi();
     _tabs.clear();
-    _tabs.addAll(
-        getExtras()!.getTabs(context, action: widget.getServerAction()));
+    _tabs
+        .addAll(getExtras().getTabs(context, action: widget.getServerAction()));
   }
 
   @override
@@ -95,7 +97,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   Future<void> _updatePaletter() async {
-    imgUrl = getExtras()!.getImageUrl(context);
+    imgUrl = getExtras().getImageUrl(context);
     valueNotifierColor.value = await PaletteGenerator.fromImageProvider(
       CachedNetworkImageProvider(imgUrl!),
     );
@@ -118,7 +120,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       return newViewAbstract.viewCallGetFirstFromList(iD!)
           as Future<ViewAbstract>;
     } else {
-      return (getExtras())!.viewCallGetFirstFromList((getExtras()!).iD)
+      return (getExtras()).viewCallGetFirstFromList((getExtras()).iD)
           as Future<ViewAbstract>;
     }
   }
@@ -143,11 +145,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             expandedHeight: MediaQuery.of(context).size.height * .25,
             actions: [
               ActionsOnHeaderWidget(
-                viewAbstract: getExtras()!,
+                viewAbstract: getExtras(),
                 serverActions: widget.getServerAction(),
               ),
               ActionsOnHeaderPopupWidget(
-                viewAbstract: getExtras()!,
+                viewAbstract: getExtras(),
                 serverActions: widget.getServerAction(),
               ),
             ],
@@ -192,7 +194,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             image: imgUrl == null
                 ? null
                 : DecorationImage(
-                    image: CachedNetworkImageProvider(imgUrl!),
+                    image: CachedNetworkImageProvider(imgUrl),
                     fit: BoxFit.contain),
             color: imgUrl == null ? null : color?.darkVibrantColor?.color,
             // borderRadius: const BorderRadius.all(Radius.circular(20))
@@ -421,16 +423,20 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   DraggableHome getDraggableHomeBody() {
     List<TabControllerHelper> tabs =
-        getExtras()!.getTabs(context, action: getServerActions());
-    tabs[0].slivers = [
-      ...getTopWidget(),
-      // getTabbar(context),
-      getBody(context),
-      ...getBottomWidget(),
-      const SliverToBoxAdapter(
-        child: SizedBox(height: 80),
-      )
-    ];
+        getExtras().getTabs(context, action: getServerActions());
+    if (getBodyIsSliver()) {
+      tabs[0].slivers = [
+        ...getTopWidget(),
+        // getTabbar(context),
+        getBody(context),
+        ...getBottomWidget(),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 80),
+        )
+      ];
+    } else {
+      tabs[0].widget = getBody(context);
+    }
     return DraggableHome(
         valueNotifierExpandType: expandType,
         // bottomNavigationBarHeight: 80,

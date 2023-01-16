@@ -55,4 +55,9 @@ class _BaseViewNewPage extends BaseActionScreenPageState {
   Widget? getSliverImageBackground(BuildContext context) {
     return null;
   }
+
+  @override
+  bool getBodyIsSliver() {
+    return true;
+  }
 }

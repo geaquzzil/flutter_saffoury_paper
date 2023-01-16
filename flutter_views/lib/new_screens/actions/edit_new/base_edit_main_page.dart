@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/file_reader_popup_icon_widget.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_widget_sliver.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
@@ -52,30 +53,31 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   Widget getBody(BuildContext context) {
+    // return BaseEditWidgetSliver(
+    //   viewAbstract: getExtras(),
+    //   isTheFirst: true,
+    // );
     // return SliverFillRemaining(
     //   child: Text("dsad"),
     //
     // );
-    return SliverFillRemaining(
-      // fillOverscroll: true,
-      // hasScrollBody: false,
-      child: BaseEditWidget(
-        onValidate: (viewAbstract) {
-          currentViewAbstract = viewAbstract;
-        },
-        viewAbstract: getExtras() as ViewAbstract,
-        isTheFirst: true,
-        // onSubmit: (obj) {
-        //   if (obj != null) {
-        //     debugPrint("baseEditPage onSubmit $obj");
-        //   }
-        // },
-      ),
+    return BaseEditWidget(
+      onValidate: (viewAbstract) {
+        currentViewAbstract = viewAbstract;
+      },
+      viewAbstract: getExtras(),
+      isTheFirst: true,
+      // onSubmit: (obj) {
+      //   if (obj != null) {
+      //     debugPrint("baseEditPage onSubmit $obj");
+      //   }
+      // },
     );
   }
 
   @override
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
+    return null;
     return [
       if (getExtras() is ListableInterface) getAddToListFloatingButton(context),
       if (getExtras() is ListableInterface)
@@ -91,7 +93,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     super.initState();
     isExtended = true;
     if (getExtras().isEditing()) {
-      currentViewAbstract = getExtras() as ViewAbstract;
+      currentViewAbstract = getExtras();
     }
   }
 
@@ -100,7 +102,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     super.didChangeDependencies();
     isExtended = true;
     if (getExtras().isEditing()) {
-      currentViewAbstract = getExtras() as ViewAbstract;
+      currentViewAbstract = getExtras();
     }
   }
 
@@ -371,5 +373,10 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   @override
   Widget? getSliverImageBackground(BuildContext context) {
     return null;
+  }
+
+  @override
+  bool getBodyIsSliver() {
+    return false;
   }
 }
