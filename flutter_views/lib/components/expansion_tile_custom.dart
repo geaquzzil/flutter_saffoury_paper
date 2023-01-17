@@ -41,10 +41,10 @@ class ExpansionTileCustom extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ExpansionTileCustom> createState() => _EditSubViewAbstractHeaderState();
+  State<ExpansionTileCustom> createState() => EditSubViewAbstractHeaderState();
 }
 
-class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
+class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     with SingleTickerProviderStateMixin {
   final ColorTween _borderColorTween = ColorTween();
   static final Animatable<double> _easeOutTween =
@@ -64,6 +64,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
 
   @override
   void initState() {
+    debugPrint("initState ExpanstionTileCustom ");
     super.initState();
 
     childrenPadding = EdgeInsets.all(widget.padding ? kDefaultPadding : 0);
@@ -78,7 +79,11 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) {
-      _controller.value = 1.0;
+      if (!canExpand(context)) {
+        _controller.value = 0.0;
+      } else {
+        _controller.value = 1.0;
+      }
     }
   }
 
@@ -90,6 +95,7 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
 
   @override
   void didChangeDependencies() {
+    debugPrint("didChangeDependencies ExpanstionTileCustom ");
     final ThemeData theme = Theme.of(context);
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
@@ -101,8 +107,13 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       ..end = expansionTileTheme.iconColor ?? colorScheme.primary;
     _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
         widget.initiallyExpanded;
+
     if (_isExpanded) {
-      _controller.value = 1.0;
+      if (!canExpand(context)) {
+        _controller.value = 0.0;
+      } else {
+        _controller.value = 1.0;
+      }
     }
     super.didChangeDependencies();
   }
@@ -129,6 +140,41 @@ class _EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       builder: _buildChildren,
       child: result,
     );
+  }
+
+  void collapsedOnlyIfExpanded() {
+    if (!_isExpanded) return;
+    setState(() {
+      _isExpanded = false;
+      if (_isExpanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse().then<void>((void value) {
+          if (!mounted) return;
+          setState(() {
+            // Rebuild without widget.children.
+          });
+        });
+      }
+      PageStorage.of(context)?.writeState(context, _isExpanded);
+    });
+  }
+
+  void manualExpand(bool expand) {
+    setState(() {
+      _isExpanded = expand;
+      if (_isExpanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse().then<void>((void value) {
+          if (!mounted) return;
+          setState(() {
+            // Rebuild without widget.children.
+          });
+        });
+      }
+      PageStorage.of(context)?.writeState(context, _isExpanded);
+    });
   }
 
   bool canExpand(BuildContext context) {

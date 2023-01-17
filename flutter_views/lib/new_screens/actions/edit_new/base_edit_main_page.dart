@@ -77,7 +77,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
-    return null;
+    // return null;
     return [
       if (getExtras() is ListableInterface) getAddToListFloatingButton(context),
       if (getExtras() is ListableInterface)

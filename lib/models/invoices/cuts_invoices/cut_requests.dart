@@ -158,7 +158,8 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  List<Widget>? getCustomTopWidget(BuildContext context, ServerActions action) {
+  List<Widget>? getCustomTopWidget(BuildContext context,
+      {ServerActions? action}) {
     if (action == ServerActions.view &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {
@@ -244,7 +245,7 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<Widget>? getCustomBottomWidget(
-      BuildContext context, ServerActions action) {
+      BuildContext context,  {ServerActions ?action}) {
     if (action == ServerActions.view) {
       return [
         ListHorizontalApiAutoRestWidget(

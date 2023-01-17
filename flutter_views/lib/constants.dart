@@ -18,6 +18,7 @@ const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 
 const kDefaultPadding = 20.0;
+const kDefaultSearchHeight = 60.0;
 const kSpaceWithText = 4.0;
 
 const Color kBackgroundColor = Color.fromRGBO(7, 17, 26, 1);

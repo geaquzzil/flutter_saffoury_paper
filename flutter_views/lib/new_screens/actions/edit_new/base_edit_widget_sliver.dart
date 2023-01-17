@@ -362,11 +362,17 @@ class BaseEditWidgetSliver extends StatelessWidget {
       fieldValue.setParent(viewAbstract);
       if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
         return EditControllerChipsFromViewAbstract(
-            parent: viewAbstract, viewAbstract: fieldValue, field: field);
+            enabled: isFieldEnabled(field),
+            parent: viewAbstract,
+            viewAbstract: fieldValue,
+            field: field);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_API) {
         return EditControllerDropdownFromViewAbstract(
-            parent: viewAbstract, viewAbstract: fieldValue, field: field);
+            enabled: isFieldEnabled(field),
+            parent: viewAbstract,
+            viewAbstract: fieldValue,
+            field: field);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(

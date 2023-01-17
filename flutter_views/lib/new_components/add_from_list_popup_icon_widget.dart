@@ -40,7 +40,7 @@ class AddFromListPopupIconWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           child: IntrinsicWidth(
             child: SizedBox(
-                width: MediaQuery.of(context).size.width * .3,
+                width: MediaQuery.of(context).size.width * .5,
                 height: MediaQuery.of(context).size.height * .85,
                 child: ListApiSelectedSearchableWidget(
                   viewAbstract: (viewAbstract as ListableInterface)

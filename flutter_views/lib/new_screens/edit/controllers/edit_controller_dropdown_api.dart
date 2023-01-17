@@ -9,10 +9,12 @@ class EditControllerDropdownFromViewAbstract<T extends ViewAbstract>
     extends StatefulWidget {
   T viewAbstract;
   ViewAbstract parent;
+  bool enabled;
   String field;
   EditControllerDropdownFromViewAbstract(
       {Key? key,
       required this.parent,
+      required this.enabled,
       required this.viewAbstract,
       required this.field})
       : super(key: key);
@@ -75,6 +77,7 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   FormBuilderDropdown<T?> getDropdownController(
       BuildContext context, List<T?> list) {
     return FormBuilderDropdown<T?>(
+      enabled: widget.enabled,
       // valueTransformer: ,
       autovalidateMode: AutovalidateMode.always,
       onChanged: (obj) {

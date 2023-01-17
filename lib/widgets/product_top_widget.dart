@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart' as animate;
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/widgets/cut_request_top_widget.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -180,14 +181,3 @@ class ProductHeaderToggle extends StatelessWidget {
   }
 }
 
-class TitleAndDescription {
-  String title;
-  String? description;
-  Widget? descriptionWidget;
-  IconData? icon;
-  TitleAndDescription(
-      {required this.title,
-      this.description,
-      this.descriptionWidget,
-      this.icon});
-}

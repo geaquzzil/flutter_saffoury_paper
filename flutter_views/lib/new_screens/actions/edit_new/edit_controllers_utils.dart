@@ -17,7 +17,7 @@ Widget wrapController(Widget controller, {bool? requiredSpace}) {
   return Column(
     children: [
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         child: controller,
       ),
       if (requiredSpace ?? false) getSpace()

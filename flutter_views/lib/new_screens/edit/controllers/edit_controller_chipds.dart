@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -11,9 +12,11 @@ class EditControllerChipsFromViewAbstract<T extends ViewAbstract>
   T viewAbstract;
   ViewAbstract parent;
   String field;
+  bool enabled;
   EditControllerChipsFromViewAbstract(
       {Key? key,
       required this.parent,
+      required this.enabled,
       required this.viewAbstract,
       required this.field})
       : super(key: key);
@@ -52,7 +55,7 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
             if (snapshot.connectionState == ConnectionState.done) {
               return getDropdownController(context, snapshot.data as List<T?>);
             }
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           },
         ),
       getSpace()
@@ -87,6 +90,9 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
 
     debugPrint("EditControllerChipsFromViewAbstract $init");
     return FormBuilderFilterChip<T?>(
+      direction: Axis.horizontal,
+      spacing: kDefaultPadding,
+      enabled: widget.enabled,
       // valueTransformer: ,
       autovalidateMode: AutovalidateMode.disabled,
       // labelPadding: EdgeInsets.all(5),
@@ -117,16 +123,28 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
         }
       },
 
-      decoration: getDecoration(context, widget.viewAbstract),
+      decoration: InputDecoration(
+        border: null,
+        filled: false,
+
+        // errorText: "err",
+        icon: widget.viewAbstract.getIcon(),
+        // iconColor: context
+        //         .watch<ErrorFieldsProvider>()
+        //         .hasErrorField(viewAbstract, field)
+        //     ? Theme.of(context).colorScheme.error
+        //     : null,
+        hintText: widget.viewAbstract.getTextInputHint(context),
+        // labelText: viewAbstract.getMainHeaderLabelTextOnly(context),
+      ),
       // hint: Text(viewAbstract.getMainHeaderLabelTextOnly(context)),
       options: list
           .map((item) => FormBuilderChipOption<T?>(
                 value: item,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                  child: Text(item == null
+                child: Text(
+                  item == null
                       ? widget.viewAbstract.getTextInputHint(context) ?? ""
-                      : item.getMainHeaderTextOnly(context)),
+                      : item.getMainHeaderTextOnly(context),
                 ),
               ))
           .toList(),

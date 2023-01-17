@@ -47,11 +47,13 @@ class SliverApiMaster extends StatefulWidget {
   bool buildFabIfMobile;
   bool buildToggleView;
   bool buildFilterableView;
+
   @Deprecated("message")
   bool fetshListAsSearch;
   SliverApiMaster(
       {super.key,
       this.viewAbstract,
+
       this.buildAppBar = true,
       this.buildSearchWidget = true,
       this.buildFilterableView = false,
@@ -231,13 +233,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
               // context.goNamed(posRouteName);
             }),
-        actions: [
-          IconButton(
-              onPressed: () {
-                valueNotifierGrid.value = !valueNotifierGrid.value;
-              },
-              icon: const Icon(Icons.grid_view_rounded))
-        ],
+     
         // backgroundColor: Colors.red,
         title: const Text("Welcome back"),
         fullyStretchable: true,

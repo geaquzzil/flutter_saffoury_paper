@@ -13,6 +13,10 @@ abstract class ListableInterface<T extends ViewAbstract> {
 
   ViewAbstract getListablePickObject();
 
+  String? getListableTotalQuantity(BuildContext context);
+  double? getListableTotalPrice(BuildContext context);
+  double? getListableTotalDiscount(BuildContext context);
+
   void onListableDelete(T item);
 
   void onListableUpdate(T item);

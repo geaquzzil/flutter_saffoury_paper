@@ -67,12 +67,12 @@ class _SliverSearchApiState extends SliverApiMasterState<SliverSearchApi> {
 
   @override
   void didUpdateWidget(covariant SliverSearchApi oldWidget) {
-    super.didUpdateWidget(oldWidget);
     if (searchQuery != widget.searchQuery) {
       searchQuery = widget.searchQuery;
       debugPrint("SliverSearchApi.didUpdateWidget $searchQuery");
       fetshListWidgetBinding();
       // setState(() {});
     }
+    super.didUpdateWidget(oldWidget);
   }
 }

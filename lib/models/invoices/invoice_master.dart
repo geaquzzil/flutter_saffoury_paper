@@ -236,8 +236,25 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(
-      BuildContext context, ServerActions action) {
+  double? getListableTotalPrice(BuildContext context) {
+    return getTotalPriceFromList();
+  }
+
+  @override
+  String? getListableTotalQuantity(BuildContext context) {
+    return getDetailListFromMaster()
+        .cast<InvoiceMasterDetails>()
+        .getTotalQuantityGroupedFormattedText(context);
+  }
+
+  @override
+  double? getListableTotalDiscount(BuildContext context) {
+    return getTotalDiscountFromList();
+  }
+
+  @override
+  List<Widget>? getCustomBottomWidget(BuildContext context,
+      {ServerActions? action}) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
@@ -709,7 +726,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   void onListableSelectedListAdded(List<ViewAbstract> list) {
     List<Product> products = list.cast();
     for (var element in products) {
-      getDetailListFromMaster().add(getDetailMasterNewInstance()..setProduct(element));
+      getDetailListFromMaster()
+          .add(getDetailMasterNewInstance()..setProduct(element));
     }
   }
 

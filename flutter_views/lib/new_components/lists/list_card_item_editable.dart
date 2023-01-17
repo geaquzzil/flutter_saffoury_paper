@@ -79,10 +79,10 @@ class _ListCardItemEditable<T extends ViewAbstract>
                           isTheFirst: true,
                           // isRequiredSubViewAbstract: false,
                           onValidate: (viewAbstract) {
-                            // widget.onUpdate(validated as T);
-                            // setState(() {
-                            //   validated = viewAbstract;
-                            // });
+                            widget.onUpdate(validated as T);
+                            setState(() {
+                              validated = viewAbstract;
+                            });
                           }),
                     )),
               );

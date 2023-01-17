@@ -7,13 +7,17 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_components/listable_draggable_header.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_editable.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_static.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:supercharged/supercharged.dart';
+
+import '../new_components/lists/list_card_item_editable.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -266,18 +270,39 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       ),
       if (isListable())
         TabControllerHelper(
-          widget: Column(
-            children: [
-              Expanded(
-                child: ListableStaticEditable(
-                    onDelete: (v) =>
-                        (getListableInterface()).onListableDelete(v),
-                    onUpdate: (v) =>
-                        (getListableInterface()).onListableUpdate(v),
-                    list: (getListableInterface()).getListableList()),
-              ),
-            ],
+          draggableSwithHeaderFromAppbarToScroll: HeaderListableDraggable(
+            listableInterface: getListableInterface(),
           ),
+          slivers: [
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (context, index) => ListCardItemEditable<ViewAbstract>(
+                          object:
+                              getListableInterface().getListableList()[index],
+                          useDialog: true,
+                          onDelete: (object) =>
+                              (getListableInterface()).onListableDelete(object),
+                          onUpdate: (object) =>
+                              (getListableInterface()).onListableUpdate(object),
+                        ),
+                    childCount:
+                        getListableInterface().getListableList().length))
+          ],
+          widget: SliverListStatic(
+            list: getListableInterface().getListableList(),
+          ),
+          // widget: Column(
+          //   children: [
+          //     Expanded(
+          //       child: ListableStaticEditable(
+          //           onDelete: (v) =>
+          //               (getListableInterface()).onListableDelete(v),
+          //           onUpdate: (v) =>
+          //               (getListableInterface()).onListableUpdate(v),
+          //           list: (getListableInterface()).getListableList()),
+          //     ),
+          //   ],
+          // ),
           AppLocalizations.of(context)!.details,
           // draggableSwithHeaderFromAppbarToScroll:
           //     getTabControllerFirstHeaderWidget(context),

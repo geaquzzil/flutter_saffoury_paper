@@ -41,6 +41,8 @@ class BaseEditWidget extends StatelessWidget {
   Map<String, TextEditingController> controllers = {};
   late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
+
+  late GlobalKey<EditSubViewAbstractHeaderState> keyExpansionTile;
   bool isRequiredSubViewAbstract;
   BaseEditWidget(
       {Key? key,
@@ -50,6 +52,8 @@ class BaseEditWidget extends StatelessWidget {
       this.onValidate})
       : super(key: key);
   void init(BuildContext context) {
+    keyExpansionTile = GlobalKey<EditSubViewAbstractHeaderState>(
+        debugLabel: "${viewAbstract.runtimeType}");
     viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
 
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
@@ -69,6 +73,14 @@ class BaseEditWidget extends StatelessWidget {
         viewAbstractChangeProvider.notifyListeners();
       }
     });
+  }
+
+  bool isFieldEnableSubViewAbstract() {
+    if (viewAbstract.hasParent()) {
+      return viewAbstract.getParnet!
+          .isFieldEnabled(viewAbstract.getFieldNameFromParent!);
+    }
+    return true;
   }
 
   bool isFieldEnabled(String field) {
@@ -174,15 +186,17 @@ class BaseEditWidget extends StatelessWidget {
 
   Widget getExpansionTileCustom(BuildContext context, Widget form) {
     return ExpansionTileCustom(
+        key: keyExpansionTile,
+        padding: false,
         useLeadingOutSideCard: SizeConfig.isSoLargeScreen(context),
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
         // initiallyExpanded: !viewAbstract.isNull,
         // isExpanded: false,
         hasError: hasError(context),
-        canExpand: () => true,
+        canExpand: () => isFieldEnableSubViewAbstract(),
         leading: SizedBox(
-            width: 40,
-            height: 40,
+            width: 25,
+            height: 25,
             child: viewAbstract.getCardLeadingImage(context)),
         subtitle: !_canBuildChildern()
             ? null
@@ -206,18 +220,20 @@ class BaseEditWidget extends StatelessWidget {
   Widget getTrailing(BuildContext context) {
     String? field = viewAbstract.getFieldNameFromParent;
     return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      alignment: WrapAlignment.end,
       children: [
-        // AnimatedIcon(icon: AnimatedIcons.add_event, progress: progress)
-        const Spacer(),
-        if (viewAbstract.isNew()) const Icon(Icons.new_label_sharp),
+        if (viewAbstract.isNew()) const Icon(Icons.fiber_new_outlined),
         if (field != null)
           if (viewAbstract.canBeNullableFromParentCheck(context, field) ??
               false)
             IconButton(
                 icon: Icon(
-                  Icons.delete,
+                  !viewAbstract.isNull
+                      ? Icons.delete
+                      : Icons.delete_forever_rounded,
                   color: !viewAbstract.isNull
-                      ? Theme.of(context).colorScheme.primary
+                      ? Theme.of(context).colorScheme.onSurfaceVariant
                       : Theme.of(context).colorScheme.onError,
                 ),
                 onPressed: () {
@@ -225,7 +241,9 @@ class BaseEditWidget extends StatelessWidget {
                   viewAbstract.parent!.setFieldValue(
                       viewAbstract.fieldNameFromParent!, viewAbstract);
                   viewAbstractChangeProvider.toggleNullbale();
-
+                  if (viewAbstract.isNull) {
+                    keyExpansionTile.currentState?.collapsedOnlyIfExpanded();
+                  }
                   debugPrint(
                       "onToggleNullbale pressed null ${viewAbstract.isNull}");
                 }),
@@ -363,12 +381,22 @@ class BaseEditWidget extends StatelessWidget {
       fieldValue.setFieldNameFromParent(field);
       fieldValue.setParent(viewAbstract);
       if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
-        return EditControllerChipsFromViewAbstract(
-            parent: viewAbstract, viewAbstract: fieldValue, field: field);
+        return wrapController(
+            EditControllerChipsFromViewAbstract(
+                enabled: isFieldEnabled(field),
+                parent: viewAbstract,
+                viewAbstract: fieldValue,
+                field: field),
+            requiredSpace: true);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_API) {
-        return EditControllerDropdownFromViewAbstract(
-            parent: viewAbstract, viewAbstract: fieldValue, field: field);
+        return wrapController(
+            EditControllerDropdownFromViewAbstract(
+                enabled: isFieldEnabled(field),
+                parent: viewAbstract,
+                viewAbstract: fieldValue,
+                field: field),
+            requiredSpace: true);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(

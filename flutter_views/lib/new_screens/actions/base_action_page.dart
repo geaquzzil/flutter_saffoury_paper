@@ -347,8 +347,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   List<Widget> getBottomWidget() {
-    List<Widget>? bottomWidget =
-        getExtras()?.getCustomBottomWidget(context, widget.getServerAction());
+    List<Widget>? bottomWidget = getExtras()
+        .getCustomBottomWidget(context, action: widget.getServerAction());
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (bottomWidget.indexOf(e) == bottomWidget.length) {
@@ -364,8 +364,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   List<Widget> getTopWidget() {
-    List<Widget>? topWidget =
-        getExtras()?.getCustomTopWidget(context, widget.getServerAction());
+    List<Widget>? topWidget = getExtras()
+        .getCustomTopWidget(context, action: widget.getServerAction());
     if (topWidget == null) return [];
     return topWidget
         .map((e) => getPadding(context, SliverToBoxAdapter(child: e)))
