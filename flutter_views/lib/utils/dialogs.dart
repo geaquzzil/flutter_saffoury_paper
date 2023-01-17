@@ -75,6 +75,44 @@ Future<T?> showBottomSheetExt<T>(
   );
 }
 
+Future<T?> showFullScreenDialogExt<T>(
+    {required BuildContext context,
+    required Widget Function(BuildContext) builder,
+    Offset? anchorPoint}) {
+  if (SizeConfig.isLargeScreenGeneral(context)) {
+    return showGeneralDialog(
+      anchorPoint: anchorPoint,
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black45,
+      transitionBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+      ) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          builder.call(context),
+    );
+  } else {
+    return Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) {
+          return builder.call(context);
+        },
+        fullscreenDialog: true));
+  }
+}
+
 Future<T?> showDialogExt<T>(
     {required BuildContext context,
     required Widget Function(BuildContext) builder,

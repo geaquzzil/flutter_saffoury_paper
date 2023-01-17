@@ -507,12 +507,13 @@ class FormBuilderTypeAheadState<T>
   }
 
   String _getTextString(T? value) {
+    debugPrint("CustomTypeAhed  before => $value");
     var text = value == null
         ? ''
         : widget.selectionToTextTransformer != null
             ? widget.selectionToTextTransformer!(value)
             : value.toString();
-
+    debugPrint("CustomTypeAhed  after text => $text");
     return text;
   }
 }

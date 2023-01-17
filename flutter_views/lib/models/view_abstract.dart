@@ -109,6 +109,19 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return fromJsonViewAbstract(jsonCopy);
   }
 
+  T getCopyInstance() {
+    Map<String, dynamic> jsonCopy = toJsonViewAbstract();
+    T newObject = fromJsonViewAbstract(jsonCopy);
+
+    ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
+    (newObject).setParent(parent);
+    (newObject).setLastSearchViewAbstractByTextInputList(
+        getLastSearchViewByTextInputList);
+    (newObject).textFieldController = textFieldController;
+
+    return newObject;
+  }
+
   T copyWith(Map<String, dynamic> map) {
     Map<String, dynamic> jsonCopy = toJsonViewAbstract();
     jsonCopy.forEach((key, value) {
@@ -142,11 +155,11 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return "${AppLocalizations.of(context)!.add_new} ${getMainHeaderLabelTextOnly(context)}";
   }
 
-  List<Widget>? getCustomBottomWidget(
-      BuildContext context, {ServerActions ?action}) {}
+  List<Widget>? getCustomBottomWidget(BuildContext context,
+      {ServerActions? action}) {}
 
-  List<Widget>? getCustomTopWidget(
-      BuildContext context, {ServerActions? action}) {}
+  List<Widget>? getCustomTopWidget(BuildContext context,
+      {ServerActions? action}) {}
 }
 
 class ListableDataRow {

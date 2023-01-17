@@ -29,6 +29,7 @@ class ListableStaticEditable extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (context, index) => ListCardItemEditable<ViewAbstract>(
               object: list[index],
+              index: index,
               useDialog: true,
               onDelete: onDelete,
               onUpdate: onUpdate,

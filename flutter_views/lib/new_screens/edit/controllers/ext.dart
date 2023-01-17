@@ -90,8 +90,11 @@ InputDecoration getDecorationForAutoComplete(
     BuildContext context, ViewAbstract viewAbstract) {
   return InputDecoration(
     filled: true,
-    icon:
-        viewAbstract.getCardLeadingCircleAvatar(context, height: 40, width: 40),
+    icon: SizedBox(
+        height: 25,
+        width: 25,
+        child: viewAbstract.getCardLeadingCircleAvatar(context,
+            height: 25, width: 25)),
     hintText: viewAbstract.getTextInputHint(context),
     labelText: viewAbstract.getMainHeaderLabelTextOnly(context),
   );

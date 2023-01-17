@@ -17,6 +17,9 @@ abstract class ListableInterface<T extends ViewAbstract> {
   double? getListableTotalPrice(BuildContext context);
   double? getListableTotalDiscount(BuildContext context);
 
+
+  Widget? getListableCustomHeader(BuildContext context);
+
   void onListableDelete(T item);
 
   void onListableUpdate(T item);

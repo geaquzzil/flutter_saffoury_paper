@@ -77,8 +77,9 @@ class BaseEditWidget extends StatelessWidget {
 
   bool isFieldEnableSubViewAbstract() {
     if (viewAbstract.hasParent()) {
-      return viewAbstract.getParnet!
+      bool isEnabled = viewAbstract.getParnet!
           .isFieldEnabled(viewAbstract.getFieldNameFromParent!);
+      return isEnabled;
     }
     return true;
   }
@@ -402,11 +403,15 @@ class BaseEditWidget extends StatelessWidget {
         return getControllerEditTextViewAbstractAutoComplete(
           autoCompleteBySearchQuery: true,
           context,
+          enabled: isFieldEnabled(field),
           viewAbstract: fieldValue,
           // enabled: isFieldEnabled(field),
           field: field,
           type: AutoCompleteFor.NORMAL,
-          controller: TextEditingController(),
+          controller: TextEditingController(
+              text: fieldValue.isEditing()
+                  ? fieldValue.getMainHeaderTextOnly(context)
+                  : ''),
           onSelected: (selectedViewAbstract) {
             // viewAbstract = selectedViewAbstract;
             fieldValue.parent?.setFieldValue(field, selectedViewAbstract);

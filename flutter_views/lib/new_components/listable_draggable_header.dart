@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
@@ -11,25 +12,32 @@ class HeaderListableDraggable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        getRow(context, [
-          TitleAndDescription(
-              title: AppLocalizations.of(context)!.total_quantity,
-              description: listableInterface.getListableTotalQuantity(context)),
-        ]),
-        getRow(context, [
-          TitleAndDescription(
-              title: AppLocalizations.of(context)!.discount,
-              description: listableInterface
-                  .getListableTotalDiscount(context)
-                  .toNonNullable()
-                  .toCurrencyFormatFromSetting(context)),
-          TitleAndDescription(
-              title: AppLocalizations.of(context)!.total_price,
-              description: listableInterface
-                  .getListableTotalDiscount(context)
-                  ?.toNonNullable()
-                  .toCurrencyFormatFromSetting(context)),
-        ]),
+        FadeInLeft(
+          duration: const Duration(milliseconds: 500),
+          child: getRow(context, [
+            TitleAndDescription(
+                title: AppLocalizations.of(context)!.total_quantity,
+                description:
+                    listableInterface.getListableTotalQuantity(context)),
+          ]),
+        ),
+        FadeInLeft(
+          duration: const Duration(milliseconds: 500),
+          child: getRow(context, [
+            TitleAndDescription(
+                title: AppLocalizations.of(context)!.discount,
+                description: listableInterface
+                    .getListableTotalDiscount(context)
+                    .toNonNullable()
+                    .toCurrencyFormatFromSetting(context)),
+            TitleAndDescription(
+                title: AppLocalizations.of(context)!.total_price,
+                description: listableInterface
+                    .getListableTotalPrice(context)
+                    ?.toNonNullable()
+                    .toCurrencyFormatFromSetting(context)),
+          ]),
+        ),
       ],
     );
   }

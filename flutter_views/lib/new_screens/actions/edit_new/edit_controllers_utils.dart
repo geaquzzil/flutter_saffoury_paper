@@ -225,11 +225,17 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
                   : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
                       viewAbstract.fieldNameFromParent!)
             ..setFieldValue(field, text),
-          selectionToTextTransformer: (suggestion) => autoCompleteBySearchQuery
-              ? suggestion.isNew()
-                  ? suggestion.searchByAutoCompleteTextInput ?? ""
-                  : suggestion.getMainHeaderTextOnly(context)
-              : getEditControllerText(suggestion.getFieldValue(field)),
+          selectionToTextTransformer: (suggestion) {
+            debugPrint(
+                "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
+            debugPrint(
+                "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
+            return autoCompleteBySearchQuery
+                ? suggestion.isNew()
+                    ? suggestion.searchByAutoCompleteTextInput ?? ""
+                    : suggestion.getMainHeaderTextOnly(context)
+                : getEditControllerText(suggestion.getFieldValue(field));
+          },
           name: viewAbstract.getTag(field),
           initialValue: viewAbstract,
           decoration: type == AutoCompleteFor.NORMAL

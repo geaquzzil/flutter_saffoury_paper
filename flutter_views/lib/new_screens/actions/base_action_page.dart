@@ -8,11 +8,14 @@ import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/listable_draggable_header.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_editable.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
@@ -68,6 +71,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   BaseActionProviders baseActionProviders = BaseActionProviders();
   ValueNotifier<ExpandType> expandType =
       ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
+
+  ValueNotifier<ViewAbstract?> onEditListableItem =
+      ValueNotifier<ViewAbstract?>(null);
   @override
   void dispose() {
     _tabController.dispose();
@@ -421,6 +427,40 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     return getDraggableHomeBody();
   }
 
+  TabControllerHelper getListableTab() {
+    return TabControllerHelper(
+      draggableSwithHeaderFromAppbarToScroll: ValueListenableBuilder(
+        valueListenable: onEditListableItem,
+        builder: (context, value, child) =>
+            getListableInterface().getListableCustomHeader(context) ??
+            HeaderListableDraggable(
+              listableInterface: getListableInterface(),
+            ),
+      ),
+      slivers: [
+        SliverList(
+            delegate: SliverChildBuilderDelegate(
+                (context, index) => ListCardItemEditable<ViewAbstract>(
+                      index: index,
+                      object: getListableInterface().getListableList()[index],
+                      useDialog: true,
+                      onDelete: (object) {
+                        debugPrint(
+                            "getListableInterface index => $index is removed");
+                        (getListableInterface()).onListableDelete(object);
+                        onEditListableItem.value = object;
+                      },
+                      onUpdate: (object) {
+                        (getListableInterface()).onListableUpdate(object);
+                        onEditListableItem.value = object;
+                      },
+                    ),
+                childCount: getListableInterface().getListableList().length))
+      ],
+      AppLocalizations.of(context)!.details,
+    );
+  }
+
   DraggableHome getDraggableHomeBody() {
     List<TabControllerHelper> tabs =
         getExtras().getTabs(context, action: getServerActions());
@@ -436,6 +476,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       ];
     } else {
       tabs[0].widget = getBody(context);
+    }
+    if (getExtras().isListable()) {
+      tabs.insert(1, getListableTab());
     }
     return DraggableHome(
         valueNotifierExpandType: expandType,
@@ -475,6 +518,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   @override
   ViewAbstract getExtras() {
     return super.getExtras() as ViewAbstract;
+  }
+
+  ListableInterface getListableInterface() {
+    return getExtras().getListableInterface();
   }
 
   Scaffold getBuildBody() {

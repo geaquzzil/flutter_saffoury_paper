@@ -268,46 +268,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
             getTabControllerFirstHeaderWidget(context),
         // getMainIconData(),
       ),
-      if (isListable())
-        TabControllerHelper(
-          draggableSwithHeaderFromAppbarToScroll: HeaderListableDraggable(
-            listableInterface: getListableInterface(),
-          ),
-          slivers: [
-            SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (context, index) => ListCardItemEditable<ViewAbstract>(
-                          object:
-                              getListableInterface().getListableList()[index],
-                          useDialog: true,
-                          onDelete: (object) =>
-                              (getListableInterface()).onListableDelete(object),
-                          onUpdate: (object) =>
-                              (getListableInterface()).onListableUpdate(object),
-                        ),
-                    childCount:
-                        getListableInterface().getListableList().length))
-          ],
-          widget: SliverListStatic(
-            list: getListableInterface().getListableList(),
-          ),
-          // widget: Column(
-          //   children: [
-          //     Expanded(
-          //       child: ListableStaticEditable(
-          //           onDelete: (v) =>
-          //               (getListableInterface()).onListableDelete(v),
-          //           onUpdate: (v) =>
-          //               (getListableInterface()).onListableUpdate(v),
-          //           list: (getListableInterface()).getListableList()),
-          //     ),
-          //   ],
-          // ),
-          AppLocalizations.of(context)!.details,
-          // draggableSwithHeaderFromAppbarToScroll:
-          //     getTabControllerFirstHeaderWidget(context),
-          // getMainIconData(),
-        ),
       ...getCustomTabList(context)
     ];
   }

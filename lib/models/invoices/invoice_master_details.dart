@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 
 import '../prints/print_invoice.dart';
 
@@ -223,6 +224,19 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       };
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    return field == "products"
+        ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
+        : super.getInputType(field);
+  }
+
+  @override
+  bool isFieldEnabled(String field) {
+    // if (field == "products") return false;
+    return super.isFieldEnabled(field);
+  }
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>

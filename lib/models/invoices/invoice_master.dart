@@ -253,6 +253,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  Widget? getListableCustomHeader(BuildContext context) {
+    return null;
+  }
+
+  @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action}) {
     double? totalPrice = getTotalPriceFromList();
@@ -703,14 +708,20 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       item.delete = true;
       deletedList?.add(item);
     }
-    getDetailListFromMaster()
-        .removeWhere((element) => item.products?.iD == element.products?.iD);
+    getDetailListFromMaster().remove(item);
+    // if (item.isEditing()) {
+    //   getDetailListFromMaster().remove(item);
+    // } else {
+    //   getDetailListFromMaster()
+    //       .removeWhere((element) => item.products?.iD == element.products?.iD);
+    // }
   }
 
   @override
   void onListableUpdate(InvoiceMasterDetails item) {
     try {
-      InvoiceMasterDetails? d = getDetailListFromMaster()!.firstWhereOrNull(
+      // getDetailListFromMaster().((element) => false)
+      InvoiceMasterDetails? d = getDetailListFromMaster().firstWhereOrNull(
         (element) => element.products?.iD == item.products?.iD,
       );
       d = item;
