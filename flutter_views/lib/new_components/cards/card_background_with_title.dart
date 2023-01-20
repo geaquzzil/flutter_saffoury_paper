@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
 
 class CardBackgroundWithTitle extends StatelessWidget {
   String title;
@@ -19,17 +20,14 @@ class CardBackgroundWithTitle extends StatelessWidget {
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          title: Text(
-            title,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          leading: leading == null ? null : Icon(leading),
+        HeaderDescription(
+          title: title,
+          iconData: leading,
         ),
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: useHorizontalPadding ? kDefaultPadding * 2 : 0,
-            vertical: kDefaultPadding / 2,
+            vertical: kDefaultPadding * .3,
           ),
           child: child,
         )

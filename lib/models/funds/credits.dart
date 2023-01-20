@@ -92,7 +92,6 @@ class Credits extends MoneyFunds<Credits> {
                   ],
                 );
               }),
-              titleString: "TEST1 ",
               autoRest: ChartRecordAnalysis.init(
                   Credits(), DateObject(), EnteryInteval.monthy,
                   customAction: {"CustomerID": customers?.iD})),

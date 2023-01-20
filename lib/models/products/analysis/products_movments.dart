@@ -365,4 +365,12 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
 
   @override
   double? getCustomViewHeight() => 700;
+
+  @override
+  Widget? getCustomViewTitleWidget(
+      BuildContext context,
+      ValueNotifier
+          valueNotifier) {
+    return null;
+  }
 }

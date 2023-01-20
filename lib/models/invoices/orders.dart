@@ -129,7 +129,6 @@ class Order extends InvoiceMaster<Order>
               ],
             );
           }),
-          titleString: "TEST1 ",
           autoRest: ChartRecordAnalysis.init(
               Order(), DateObject(), obj ?? EnteryInteval.monthy,
               customAction: {"CustomerID": customers?.iD})),

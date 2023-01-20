@@ -275,4 +275,12 @@ class CustomerByEmployeeAnanlysis
       BuildContext context, List<CustomerByEmployeeAnanlysis> item) {
     return null;
   }
+
+  @override
+  Widget? getCustomViewTitleWidget(
+      BuildContext context,
+      ValueNotifier
+          valueNotifier) {
+    return null;
+  }
 }

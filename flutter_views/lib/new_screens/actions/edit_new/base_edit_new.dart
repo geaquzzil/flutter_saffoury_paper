@@ -434,8 +434,10 @@ class BaseEditWidget extends StatelessWidget {
         }),
       );
     } else if (fieldValue is ViewAbstractEnum) {
-      return EditControllerDropdown(
-          parent: viewAbstract, enumViewAbstract: fieldValue, field: field);
+      return wrapController(
+          EditControllerDropdown(
+              parent: viewAbstract, enumViewAbstract: fieldValue, field: field),
+          requiredSpace: true);
     } else {
       if (textFieldTypeVA == ViewAbstractControllerInputType.CHECKBOX) {
         return getContollerCheckBox(context,

@@ -3,7 +3,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -91,6 +94,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   factory ChangesRecords.fromJson(Map<String, dynamic> data) => ChangesRecords()
+    // ..viewAbstract = this.viewAbstract
     ..total = data["total"] as int?
     ..fieldToGroupBy = data["fieldToGroupBy"] as String?
     ..totalGrouped = (data['totalGrouped'] as List<dynamic>?)
@@ -101,7 +105,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   String getCustomViewKey() {
-    return "changesRecords$T";
+    return "changesRecords$T$fieldToGroupBy";
   }
 
   @override
@@ -115,9 +119,15 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   ResponseType getCustomViewResponseType() => ResponseType.SINGLE;
 
   @override
-  Widget? getCustomViewSingleResponseWidget(
-      BuildContext context) {
+  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     debugPrint("getCustomViewSingleResponseWidget ${totalGrouped}");
+
+    return LineChartItem<ChangesRecordGroup, String>(
+      title: "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
+      list: totalGrouped ?? [],
+      xValueMapper: (item, value) => "${item.groupBy}",
+      yValueMapper: (item, n) => item.count,
+    );
     return CirculeChartItem<ChangesRecordGroup, String>(
       title:
           "${AppLocalizations.of(context)!.total}: ${total.toCurrencyFormat()} ",
@@ -134,6 +144,28 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   double? getCustomViewHeight() => 200;
+
+  @override
+  Widget? getCustomViewTitleWidget(
+      BuildContext context, ValueNotifier valueNotifier) {
+    Widget? dropDownTile;
+    if (viewAbstract != null) {
+      dropDownTile = DropdownStringListControllerListenerByIcon(
+          icon: Icons.sort_by_alpha,
+          hint: AppLocalizations.of(context)!.sortBy,
+          list: viewAbstract!.getMainFieldsIconsAndValues(context),
+          onSelected: (obj) {
+            if (obj == null) return;
+            valueNotifier.value =
+                ChangesRecords.init(viewAbstract!, obj.value.toString());
+          });
+    }
+
+    return HeaderDescription(
+      title: "Changes records",
+      trailing: dropDownTile,
+    );
+  }
   // @Override
   // public ViewAbstract<?> onReadNewObject(Context context, ViewAbstract<?> newObject, ViewAbstract<?> oldCalledViewAbstract) {
   //     ((ChangesRecords) newObject).viewAbstract = ((ChangesRecords) oldCalledViewAbstract).viewAbstract;

@@ -828,13 +828,14 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  List<Widget>? getCustomTopWidget(BuildContext context,  {ServerActions ?action}) {
+  List<Widget>? getCustomTopWidget(BuildContext context,
+      {ServerActions? action}) {
     return [
       ProductTopWidget(
         product: this,
       )
     ];
-    return super.getCustomTopWidget(context, action:action);
+    return super.getCustomTopWidget(context, action: action);
   }
 
   @override

@@ -214,8 +214,14 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     bool enabled = true,
     bool withDecoration = true,
     required Function(ViewAbstract selectedViewAbstract) onSelected}) {
+  // controller.selection = TextSelection(
+  //   baseOffset: 0,
+  //   extentOffset: controller.text.length,
+  // );
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
+          onTap: () => controller.selection = TextSelection(
+              baseOffset: 0, extentOffset: controller.value.text.length),
           enabled: enabled,
           controller: controller,
           onChangeGetObject: (text) => autoCompleteBySearchQuery

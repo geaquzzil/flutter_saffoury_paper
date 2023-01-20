@@ -2,6 +2,7 @@ import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
@@ -208,13 +209,27 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           );
   }
 
+  Widget getSelectorViewAbstract(BuildContext context,
+      {required Widget Function(
+        ViewAbstract<dynamic>,
+      )
+          builder}) {
+    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+      builder: (context, value, child) => builder.call(value),
+      selector: (p0, p1) => p1.getObject,
+    );
+  }
+
   Widget getMainBodyIndexedStack(BuildContext context) {
     return Selector<DrawerMenuControllerProvider, int>(
       builder: (context, value, child) {
         dashboardWidget ??= BaseDashboard(
             title: "TEST",
             dashboard: context.read<AuthProvider>().getDashableInterface());
-        homeWidget ??= HomeNavigationPage();
+        homeWidget ??= getSelectorViewAbstract(context,
+            builder: (viewAbstract) => HomeNavigationPage(
+                  viewAbstract: viewAbstract,
+                ));
         shopingWidget ??= ListToDetailsPage();
         return IndexedStack(index: value, children: [
           shouldWrapNavigatorChild(context, dashboardWidget!),

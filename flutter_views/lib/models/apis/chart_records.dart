@@ -8,6 +8,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_date.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -59,7 +63,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       };
 
   @override
-  String? getCustomAction() => "list_dashboard_single_item";
+  String? getCustomAction() =>
+      "list_dashboard_single_item";
   @override
   String? getTableNameApi() => viewAbstract?.getTableNameApi();
 
@@ -101,8 +106,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(
-      BuildContext context) {
+  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     debugPrint(
         "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}");
     return LineChartItem<GrowthRate, DateTime>(
@@ -150,6 +154,51 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   double? getCustomViewHeight() => 600;
+
+  @override
+  Widget? getCustomViewTitleWidget(
+      BuildContext context, ValueNotifier valueNotifier) {
+    Widget? dropDownTile;
+    Widget? dateWidget;
+    if (viewAbstract != null) {
+      dropDownTile = DropdownEnumControllerListenerByIcon<EnteryInteval>(
+          viewAbstractEnum: EnteryInteval.monthy,
+          onSelected: (obj) {
+            if (obj == null) return;
+            if (obj == enteryInteval) return;
+            valueNotifier.value = ChartRecordAnalysis.init(
+                viewAbstract!, date ?? DateObject.initFirstDateOfYear(), obj);
+          });
+      // dateWidget = DropdownDateControllerListener(
+      //   viewAbstractEnum: DateEnum.this_year,
+      //   onSelected: (o) {},
+      //   onSelectedDateObject: (dateObject) {
+      //     if (dateObject == null) return;
+      //     if (dateObject.isEqual(date)) return;
+      //     valueNotifier.value = ChartRecordAnalysis.init(
+      //         viewAbstract!, dateObject, enteryInteval ?? EnteryInteval.monthy);
+      //   },
+      // );
+    }
+
+    Widget row = SizedBox(
+      width: 200,
+      height: 40,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (dropDownTile != null) dropDownTile,
+          // if (dateWidget != null) dateWidget
+        ],
+      ),
+    );
+    return HeaderDescription(
+      title: "Changes records",
+      trailing: row,
+    );
+  }
 }
 
 enum EnteryInteval implements ViewAbstractEnum<EnteryInteval> {

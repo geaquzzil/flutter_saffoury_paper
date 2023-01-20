@@ -1,6 +1,8 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 
 import '../text_bold.dart';
@@ -9,12 +11,14 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   String hint;
   IconData icon;
   List<DropdownStringListItem?> list;
+  bool showSelectedValueBeside;
   void Function(DropdownStringListItem? object) onSelected;
 
   DropdownStringListControllerListenerByIcon(
       {Key? key,
       required this.hint,
       required this.list,
+      this.showSelectedValueBeside = true,
       required this.icon,
       required this.onSelected})
       : super(key: key) {
@@ -30,22 +34,25 @@ class _DropdownStringListControllerListenerByIconState
     extends State<DropdownStringListControllerListenerByIcon> {
   bool firstRun = true;
   DropdownStringListItem? lastSelected;
-  PopupMenuItem<DropdownStringListItem> buildMenuItem(
+  CustomPopupMenuItem<DropdownStringListItem> buildMenuItem(
           BuildContext context, DropdownStringListItem? e) =>
-      PopupMenuItem<DropdownStringListItem>(
+      CustomPopupMenuItem<DropdownStringListItem>(
         value: e,
+        color: lastSelected?.label == e?.label
+            ? Theme.of(context).highlightColor
+            : null,
         enabled: e != null ? (e.enabled ?? true) : false,
         child: e != null && e.enabled == false
             ? Column(
                 children: [
-                  PopupMenuDivider(),
+                  const PopupMenuDivider(),
                   Text(e.label),
-                  PopupMenuDivider()
+                  const PopupMenuDivider()
                 ],
               )
             : e == null
                 ? Column(
-                    children: [Text(widget.hint), PopupMenuDivider()],
+                    children: [Text(widget.hint), const PopupMenuDivider()],
                   )
                 : Row(
                     children: [
@@ -67,7 +74,7 @@ class _DropdownStringListControllerListenerByIconState
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<DropdownStringListItem>(
+    Widget pop = PopupMenuButton<DropdownStringListItem>(
       position: PopupMenuPosition.under,
       tooltip: widget.hint,
       icon: Icon(
@@ -94,5 +101,21 @@ class _DropdownStringListControllerListenerByIconState
           )
           .toList(),
     );
+    if (widget.showSelectedValueBeside && lastSelected != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FadeInLeft(
+              key: UniqueKey(),
+              duration: const Duration(milliseconds: 500),
+              child: Text(
+                lastSelected!.label,
+                style: Theme.of(context).textTheme.caption,
+              )),
+          pop
+        ],
+      );
+    }
+    return pop;
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_components/buttons/api_button.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -86,13 +87,15 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   }
 
   Widget getDecription(BuildContext context, UnusedRecords item) {
+    ValueNotifier<List<ViewAbstract>> notifier =
+        ValueNotifier<List<ViewAbstract>>([]);
     return ListTile(
-      trailing: ElevatedButton(
-        child: Text("DELETE"),
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-            side: BorderSide(
-                width: 1, color: Theme.of(context).colorScheme.outline)),
+      trailing: ApiButton(
+        onResult: notifier,
+        futureBuilder: Future.delayed(Duration(milliseconds: 2000)),
+        title: AppLocalizations.of(context)!.delete,
+        icon: Icons.delete,
+        onResultFunction: (onResult) {},
       ),
       title: RichText(
         text: TextSpan(
@@ -101,7 +104,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
           children: <TextSpan>[
             TextSpan(
                 text:
-                    "${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
+                    " ${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             // TextSpan(text: ' world!'),
           ],
@@ -116,4 +119,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
 
   @override
   double? getCustomViewHeight() => 200;
+
+  @override
+  Widget? getCustomViewTitleWidget(
+      BuildContext context, ValueNotifier valueNotifier) {
+    return null;
+  }
 }

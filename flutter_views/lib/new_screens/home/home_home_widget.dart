@@ -17,7 +17,7 @@ import '../lists/components/search_components.dart';
 class HomeNavigationPage extends BaseHomeSharedWithWidgets {
   ViewAbstract? viewAbstract;
   late DrawerMenuControllerProvider drawerMenuControllerProvider;
-  HomeNavigationPage({super.key});
+  HomeNavigationPage({super.key,this.viewAbstract});
 
   @override
   void init(BuildContext context) {
@@ -49,9 +49,11 @@ class HomeNavigationPage extends BaseHomeSharedWithWidgets {
   List<Widget> getSliverList(BuildContext context) {
     List<StaggeredGridTile> homeList =
         viewAbstract!.getHomeHorizotalList(context);
+        
     return [
       SliverToBoxAdapter(
         child: StaggeredGrid.count(
+          
             crossAxisCount: 2,
             mainAxisSpacing: 2,
             crossAxisSpacing: 2,

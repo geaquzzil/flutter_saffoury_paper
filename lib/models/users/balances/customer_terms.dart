@@ -90,8 +90,7 @@ class CustomerTerms extends Customer
   ResponseType getCustomViewResponseType() => ResponseType.LIST;
 
   @override
-  Widget? getCustomViewSingleResponseWidget(
-      BuildContext context) {
+  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();
   }
@@ -99,5 +98,13 @@ class CustomerTerms extends Customer
   @override
   void onCustomViewCardClicked(BuildContext context, CustomerTerms istem) {
     // TODO: implement onCustomViewCardClicked
+  }
+
+  @override
+  Widget? getCustomViewTitleWidget(
+      BuildContext context,
+      ValueNotifier
+          valueNotifier) {
+    return null;
   }
 }

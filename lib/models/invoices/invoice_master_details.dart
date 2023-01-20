@@ -229,7 +229,9 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   ViewAbstractControllerInputType getInputType(String field) {
     return field == "products"
         ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
-        : super.getInputType(field);
+        : field == "warehouse"
+            ? ViewAbstractControllerInputType.DROP_DOWN_API
+            : super.getInputType(field);
   }
 
   @override

@@ -53,7 +53,6 @@ class SliverApiMaster extends StatefulWidget {
   SliverApiMaster(
       {super.key,
       this.viewAbstract,
-
       this.buildAppBar = true,
       this.buildSearchWidget = true,
       this.buildFilterableView = false,
@@ -225,15 +224,37 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         valueNotifierExpandTypeOnExpandOny: expandTypeOnlyOnExpand,
         // drawer: DrawerLargeScreens(),
         scrollController: _scrollController,
-        floatingActionButton: FloatingActionButton.small(
-            child: const Icon(Icons.arrow_drop_up_rounded),
-            heroTag: UniqueKey(),
-            onPressed: () {
-              _scrollTop();
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ScrollToHideWidget(
+                height: 40,
+                useAnimatedSwitcher: true,
+                showOnlyWhenCloseToTop: false,
+                controller: _scrollController,
+                child: FloatingActionButton.small(
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .surfaceVariant
+                        .withOpacity(.5),
+                    foregroundColor:
+                        Theme.of(context).colorScheme.onSurfaceVariant,
+                    key: UniqueKey(),
+                    child: const Icon(Icons.arrow_drop_up_rounded),
+                    heroTag: UniqueKey(),
+                    onPressed: () {
+                      _scrollTop();
 
-              // context.goNamed(posRouteName);
-            }),
-     
+                      // context.goNamed(posRouteName);
+                    }),
+              )
+            ],
+          ),
+        ),
+
         // backgroundColor: Colors.red,
         title: const Text("Welcome back"),
         fullyStretchable: true,
@@ -471,7 +492,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         pinned: true,
         delegate: SliverAppBarDelegatePreferedSize(
             child: PreferredSize(
-          preferredSize: const Size.fromHeight(60.0),
+          preferredSize: const Size.fromHeight(200.0),
           child: FiltersAndSelectionListHeader(
             listProvider: listProvider,
             customKey: findCustomKey(),

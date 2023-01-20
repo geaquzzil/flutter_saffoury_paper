@@ -18,9 +18,13 @@ class CirculeChartItem<T, E> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCircularChart(
-        title: ChartTitle(alignment: ChartAlignment.near, text: title),
-        legend:
-            Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+        margin: EdgeInsets.zero,
+        title: ChartTitle(
+            alignment: ChartAlignment.center,
+            text: title,
+            textStyle: Theme.of(context).textTheme.titleSmall),
+        legend: Legend(
+            isVisible: true, overflowMode: LegendItemOverflowMode.scroll),
         // Initialize category axis
         // primaryXAxis: CategoryAxis(),
         tooltipBehavior: TooltipBehavior(),

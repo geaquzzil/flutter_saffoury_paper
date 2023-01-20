@@ -11,6 +11,35 @@ class DateObject {
     from = from.isEmpty ? "".toDateTimeNowString() : from;
     to = to.isEmpty ? "".toDateTimeNowString() : to;
   }
+  DateObject.initFirstDateOfYear({this.from = "", this.to = ""}) {
+    from = "".toDateTimeFirstDateYearString();
+    to = "".toDateTimeNowString();
+  }
+  DateObject.initThisWeek({this.from = "", this.to = ""}) {
+    from = findFirstDateOfTheWeek(DateTime.now()).toDateTimeStringOnlyDate();
+    to = findLastDateOfTheWeek(DateTime.now()).toDateTimeStringOnlyDate();
+  }
+  DateObject.initThisMonth({this.from = "", this.to = ""}) {
+    from = findFirstDateOfTheMonth(DateTime.now()).toDateTimeStringOnlyDate();
+    to = findLastDateOfTheMonth(DateTime.now()).toDateTimeStringOnlyDate();
+  }
+  static DateTime findLastDateOfTheMonth(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month + 1, 0);
+  }
+
+  static DateTime findFirstDateOfTheMonth(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month, 1);
+  }
+
+  static DateTime findFirstDateOfTheWeek(DateTime dateTime) {
+    return dateTime.subtract(Duration(days: dateTime.weekday - 1));
+  }
+
+  static DateTime findLastDateOfTheWeek(DateTime dateTime) {
+    return dateTime
+        .add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+  }
+
   factory DateObject.fromJson(Map<String, dynamic> data) => DateObject()
     ..from = data["from"] as String
     ..to = data["to"] as String;
@@ -40,6 +69,11 @@ class DateObject {
           "${AppLocalizations.of(context)!.to} ${DateFormat.yMMMEd().format(to.toDateTimeOnlyDate())}";
     }
     return date;
+  }
+
+  bool isEqual(DateObject? object) {
+    if (object == null) return false;
+    return (from + to) == (object.from + object.to);
   }
 
   @override

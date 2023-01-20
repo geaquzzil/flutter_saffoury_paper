@@ -328,6 +328,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// {@macro flutter.widgets.editableText.inputFormatters}
   final List<TextInputFormatter>? inputFormatters;
 
+  final void Function()? onTap;
   T Function(String text) onChangeGetObject;
 
   /// Creates text field that auto-completes user input from a list of items
@@ -344,6 +345,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     required String name,
     required this.itemBuilder,
     required this.suggestionsCallback,
+    this.onTap,
     T? initialValue,
     ValueChanged<T?>? onChanged,
     ValueTransformer<T?>? valueTransformer,
@@ -387,6 +389,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
           validator: validator,
           valueTransformer: valueTransformer,
           onChanged: onChanged,
+          
           autovalidateMode: autovalidateMode,
           onSaved: onSaved,
           enabled: enabled,
@@ -398,6 +401,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
             final theme = Theme.of(state.context);
 
             return TypeAheadField<T>(
+            
               textFieldConfiguration: textFieldConfiguration.copyWith(
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,
@@ -406,6 +410,8 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                 keyboardType: keyboardType,
                 enabled: state.enabled,
                 controller: state._typeAheadController,
+                // autofocus: true,//TODO i add this for auto select all text for AutComplete ViewAbstract
+                onTap: onTap,
                 style: state.enabled
                     ? textFieldConfiguration.style
                     : theme.textTheme.subtitle1!.copyWith(

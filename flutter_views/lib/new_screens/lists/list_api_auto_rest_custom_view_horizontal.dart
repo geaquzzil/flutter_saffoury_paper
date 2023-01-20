@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -12,15 +13,11 @@ import '../../new_components/loading_shimmer.dart';
 class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
     T extends CustomViewHorizontalListResponse<E>> extends StatefulWidget {
   T autoRest;
-  Widget? title;
-  String? titleString;
   Function(dynamic response)? onResponse;
   Widget? Function(dynamic response)? onResponseAddWidget;
   ListHorizontalCustomViewApiAutoRestWidget(
       {Key? key,
       required this.autoRest,
-      this.title,
-      this.titleString,
       this.onResponse,
       this.onResponseAddWidget})
       : super(key: key);
@@ -35,17 +32,24 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     extends State<ListHorizontalCustomViewApiAutoRestWidget<E, T>> {
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
+  Widget? header;
+  late ValueNotifier valueNotifier;
   late String key;
+  late T autoRest;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
 
   @override
   void initState() {
     super.initState();
-    key = widget.autoRest.getCustomViewKey();
+    autoRest = widget.autoRest;
+    key = autoRest.getCustomViewKey();
     debugPrint("_ListHorizontalApiWidgetState $key");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     _scrollController.addListener(() => _onScroll());
+    valueNotifier = ValueNotifier(autoRest);
+
+    valueNotifier.addListener(onValueChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
     });
@@ -58,7 +62,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
           listProvider.fetchList(key, widget.autoRest as ViewAbstract);
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(key, widget.autoRest as ViewAbstract);
+          listProvider.fetchView(key, autoRest as ViewAbstract);
           break;
       }
     }
@@ -69,8 +73,8 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       covariant ListHorizontalCustomViewApiAutoRestWidget<E, T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("ListHorizontalCustomViewApiAutoRestWidget didUpdateWidget");
-    if (key != widget.autoRest.getCustomViewKey()) {
-      key = widget.autoRest.getCustomViewKey();
+    if (key != autoRest.getCustomViewKey()) {
+      key = autoRest.getCustomViewKey();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         fetshList();
       });
@@ -101,18 +105,17 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
-
         if (isLoading) {
           if (count == 0) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return wrapHeader(
+                context, CircularProgressIndicator(), listProvider);
           }
         } else {
           if (count == 0 && isError) {
-            return getEmptyWidget(context, isError: true);
+            return wrapHeader(
+                context, getEmptyWidget(context, isError: true), listProvider);
           } else if (count == 0) {
-            return getEmptyWidget(context);
+            return wrapHeader(context, getEmptyWidget(context), listProvider);
           }
         }
         return wrapHeader(context, getWidget(listProvider), listProvider);
@@ -123,7 +126,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
   }
 
   Widget getWidget(ListMultiKeyProvider listProvider) {
-    switch (widget.autoRest.getCustomViewResponseType()) {
+    switch (autoRest.getCustomViewResponseType()) {
       case ResponseType.LIST:
         return getListWidget(listProvider);
 
@@ -145,7 +148,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     if (widget.onResponse != null) {
       widget.onResponse!(listProvider.getList(key) as List<T>);
     }
-    return widget.autoRest.getCustomViewListResponseWidget(
+    return autoRest.getCustomViewListResponseWidget(
             context, listProvider.getList(key).cast()) ??
         const Text("Not emplemented getCustomViewListToSingle");
   }
@@ -156,20 +159,36 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
     if (widget.onResponseAddWidget != null) {
       if (listProvider.getList(key).isNotEmpty) {
-        dynamic obj =
-            widget.autoRest.getCustomViewResponseType() == ResponseType.LIST
-                ? listProvider.getList(key)
-                : listProvider.getList(key)[0];
+        dynamic obj = autoRest.getCustomViewResponseType() == ResponseType.LIST
+            ? listProvider.getList(key)
+            : listProvider.getList(key)[0];
         custom = widget.onResponseAddWidget!(obj);
       }
     }
-    if (widget.title == null && widget.titleString == null) {
+    header ??= autoRest.getCustomViewTitleWidget(context, valueNotifier);
+    if (header == null) {
       return Column(
-        children: [child, if (custom != null) custom],
+        children: [
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
+            child: child,
+          )),
+          if (custom != null) custom
+        ],
       );
     }
     return Column(
-      children: [buildHeader(context), child, if (custom != null) custom],
+      children: [
+        header!,
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          child: child,
+        )),
+        if (custom != null) custom
+      ],
     );
     // return SizedBox(
     //     child: Expanded(
@@ -184,22 +203,13 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     // ));
   }
 
-  Widget buildHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
-      child: widget.title ??
-          Text(
-            widget.titleString ?? "NONT",
-            style: const TextStyle(fontWeight: FontWeight.w200),
-          ),
-    );
-  }
-
   @override
   void dispose() {
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
+
+    valueNotifier.removeListener(onValueChanged);
     super.dispose();
   }
 
@@ -207,7 +217,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      // listProvider.fetchList(key, widget.autoRest.getCustomViewKey());
+      // listProvider.fetchList(key, autoRest.getCustomViewKey());
     }
   }
 
@@ -216,5 +226,17 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
+  }
+
+  void onValueChanged() {
+    debugPrint(
+        "ListHorizontalCustomViewApiAutoRestWidget onValueNotifierChanged");
+    setState(() {
+      autoRest = valueNotifier.value;
+      key = autoRest.getCustomViewKey();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        fetshList();
+      });
+    });
   }
 }
