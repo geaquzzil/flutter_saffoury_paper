@@ -48,6 +48,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -529,6 +530,15 @@ class Product extends ViewAbstract<Product>
       return "Syria";
     }
     return countries_manufactures?.countries?.name ?? "";
+  }
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    // TODO: implement getInputType
+    // if (field == "grades") {
+    //   return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
+    // }
+    return super.getInputType(field);
   }
 
   String getCutRequestID() {

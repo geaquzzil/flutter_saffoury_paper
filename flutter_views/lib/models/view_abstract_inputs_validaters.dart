@@ -309,5 +309,6 @@ enum ViewAbstractControllerInputType {
   MULTI_CHIPS_API,
   DROP_DOWN_API,
   DROP_DOWN_TEXT_SEARCH_API,
+  VIEW_ABSTRACT_AS_ONE_FIELD,
   IMAGE
 }

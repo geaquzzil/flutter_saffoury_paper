@@ -29,12 +29,17 @@ class TowPaneExt extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         return TwoPane(
+            allowedOverrides: const {
+              TwoPaneAllowedOverrides.paneProportion,
+              // TwoPaneAllowedOverrides.direction,
+              TwoPaneAllowedOverrides.panePriority,
+            },
             // padding: EdgeInsets.only(
             //     top: kToolbarHeight + MediaQuery.of(context).padding.top),
             panePriority: panePriority,
             direction: orientation == Orientation.landscape
                 ? Axis.horizontal
-                : Axis.vertical,
+                : Axis.horizontal,
             paneProportion: customPaneProportion ??
                 SizeConfig.getPaneProportion(context, orientation: orientation),
             startPane: startPane,

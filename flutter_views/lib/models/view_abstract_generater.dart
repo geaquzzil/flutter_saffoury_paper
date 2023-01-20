@@ -101,7 +101,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       {ViewAbstract? clickedObject}) {
     debugPrint(
         'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}');
-    if (SizeConfig.isDesktop(context)) {
+    if (SizeConfig.hasSecondScreen(context)) {
       context.read<ActionViewAbstractProvider>().change(
           clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
           ServerActions.edit);

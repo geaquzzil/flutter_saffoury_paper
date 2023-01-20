@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_custom_list.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_view_abstract_asonefield.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -34,6 +35,7 @@ import 'edit_controllers_utils.dart';
 class BaseEditWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isTheFirst;
+  bool isStandAloneField;
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   late List<String> fields;
   late Map<GroupItem, List<String>> groupedFields;
@@ -46,6 +48,7 @@ class BaseEditWidget extends StatelessWidget {
   bool isRequiredSubViewAbstract;
   BaseEditWidget(
       {Key? key,
+      this.isStandAloneField = false,
       required this.viewAbstract,
       required this.isTheFirst,
       this.isRequiredSubViewAbstract = true,
@@ -178,6 +181,11 @@ class BaseEditWidget extends StatelessWidget {
         Widget form = buildForm(context);
         if (isTheFirst) {
           return form;
+        } else if (isStandAloneField) {
+          return ControllerViewAbstractAsOneField(
+              viewAbstract: viewAbstract,
+              parent: viewAbstract.parent!,
+              children: form);
         } else {
           return getExpansionTileCustom(context, form);
         }
@@ -364,7 +372,7 @@ class BaseEditWidget extends StatelessWidget {
       return getControllerEditTextViewAbstractAutoComplete(
         context,
         viewAbstract: viewAbstract,
-        withDecoration: _canBuildChildern(),
+        withDecoration: !isStandAloneField,
         // enabled: isFieldEnabled(field),
         field: field,
         controller: getController(context,
@@ -398,6 +406,18 @@ class BaseEditWidget extends StatelessWidget {
                 viewAbstract: fieldValue,
                 field: field),
             requiredSpace: true);
+      } else if (textFieldTypeVA ==
+          ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD) {
+        return BaseEditWidget(
+          viewAbstract: fieldValue,
+          isStandAloneField: true,
+          isTheFirst: false,
+          onValidate: ((ob) {
+            // String? fieldName = ob?.getFieldNameFromParent()!;
+            debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
+            viewAbstract.setFieldValue(field, ob);
+          }),
+        );
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(

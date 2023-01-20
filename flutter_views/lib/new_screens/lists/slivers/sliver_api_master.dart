@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
@@ -228,7 +229,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ScrollToHideWidget(
                 height: 40,
@@ -250,7 +252,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
                       // context.goNamed(posRouteName);
                     }),
-              )
+              ),
+              Spacer(),
+              FloatingActionButtonExtended(
+                  onPress: () => {
+                        drawerViewAbstractObsever.getObject
+                            .onDrawerLeadingItemClicked(context)
+                      },
+                  expandedWidget: Text(viewAbstract.getBaseTitle(context)))
             ],
           ),
         ),
@@ -499,6 +508,12 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           ),
         )));
   }
+
+  Widget getAddBotton(BuildContext context) => IconButton(
+      onPressed: () {
+        drawerViewAbstractObsever.getObject.onDrawerLeadingItemClicked(context);
+      },
+      icon: const Icon(Icons.add));
 
   Widget getToggleView() {
     return ValueListenableBuilder<ExpandType>(
