@@ -20,6 +20,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../new_components/add_from_list_popup_icon_widget.dart';
@@ -154,7 +155,28 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   Widget getAddFloatingButton2(BuildContext context) {
     return FloatingActionButtonExtended(
       expandedWidget: Text("Confirm"),
-      onPress: () {},
+      onPress: () async {
+        if (currentViewAbstract == null) {
+          final snackBar = SnackBar(
+            
+            
+            content: const Text('Yay! A SnackBar!'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            ),
+          );
+
+          // Find the ScaffoldMessenger in the widget tree
+          // and use it to show a SnackBar.
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          return;
+        }
+        currentViewAbstract = getExtras().copyToUplode();
+        await currentViewAbstract!.addCall();
+      },
     );
     return FloatingActionButton.extended(
         heroTag: UniqueKey(),
@@ -244,10 +266,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       child: AddFromListPopupIconWidget(
         viewAbstract: getExtras(),
         onSelected: (selectedList) {
-          setState(() {
-            (getExtras() as ListableInterface)
-                .onListableSelectedListAdded(selectedList);
-          });
+          getListableInterface().onListableSelectedListAdded(selectedList);
+          onListableSelectedItem.value = selectedList;
+          onEditListableItem.value = null;
         },
       ),
     );

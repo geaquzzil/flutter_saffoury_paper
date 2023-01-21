@@ -73,6 +73,7 @@ class _ListCardItemEditable<T extends ViewAbstract>
 
   Future<void> getEditDialog(BuildContext context) async {
     await showFullScreenDialogExt<ViewAbstract?>(
+      
         anchorPoint: const Offset(1000, 1000),
         context: context,
         builder: (p0) {

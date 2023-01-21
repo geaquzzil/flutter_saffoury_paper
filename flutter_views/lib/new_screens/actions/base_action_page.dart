@@ -74,6 +74,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   ValueNotifier<ViewAbstract?> onEditListableItem =
       ValueNotifier<ViewAbstract?>(null);
+  ValueNotifier<List<ViewAbstract>?> onListableSelectedItem =
+      ValueNotifier<List<ViewAbstract>?>(null);
   @override
   void dispose() {
     _tabController.dispose();
@@ -429,6 +431,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   TabControllerHelper getListableTab() {
     return TabControllerHelper(
+      draggableSwithHeaderFromAppbarToScrollAlignment:
+          AlignmentDirectional.bottomCenter,
       draggableSwithHeaderFromAppbarToScroll: ValueListenableBuilder(
         valueListenable: onEditListableItem,
         builder: (context, value, child) =>
@@ -438,24 +442,31 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             ),
       ),
       slivers: [
-        SliverList(
-            delegate: SliverChildBuilderDelegate(
-                (context, index) => ListCardItemEditable<ViewAbstract>(
-                      index: index,
-                      object: getListableInterface().getListableList()[index],
-                      useDialog: true,
-                      onDelete: (object) {
-                        debugPrint(
-                            "getListableInterface index => $index is removed");
-                        (getListableInterface()).onListableDelete(object);
-                        onEditListableItem.value = object;
-                      },
-                      onUpdate: (object) {
-                        (getListableInterface()).onListableUpdate(object);
-                        onEditListableItem.value = object;
-                      },
-                    ),
-                childCount: getListableInterface().getListableList().length))
+        ValueListenableBuilder(
+            valueListenable: onListableSelectedItem,
+            builder: (context, value, child) => SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                  debugPrint(
+                      "getListableInterface SliverList index => $index is added");
+
+                  return ListCardItemEditable<ViewAbstract>(
+                    index: index,
+                    object: getListableInterface().getListableList()[index],
+                    useDialog: true,
+                    onDelete: (object) {
+                      debugPrint(
+                          "getListableInterface index => $index is removed");
+                      (getListableInterface()).onListableDelete(object);
+                      onEditListableItem.value = object;
+                    },
+                    onUpdate: (object) {
+                      (getListableInterface()).onListableUpdate(object);
+                      onEditListableItem.value = object;
+                    },
+                  );
+                },
+                        childCount:
+                            getListableInterface().getListableList().length))),
       ],
       AppLocalizations.of(context)!.details,
     );
@@ -487,7 +498,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             ? BottomAppBar(
                 color: Theme.of(context).colorScheme.surface,
                 elevation: 2,
-                shape: AutomaticNotchedShape(RoundedRectangleBorder(
+                shape: const AutomaticNotchedShape(RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25)),

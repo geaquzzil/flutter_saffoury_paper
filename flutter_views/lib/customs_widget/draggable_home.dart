@@ -467,7 +467,12 @@ class _DraggableHomeState extends State<DraggableHome>
                 },
               ),
               if (_tabs != null) getTabbar(context),
-              if (toggleWidget != null) toggleWidget,
+
+              if (toggleWidget != null)
+                if (_tabs![value]
+                        .draggableSwithHeaderFromAppbarToScrollAlignment ==
+                    AlignmentDirectional.topCenter)
+                  toggleWidget,
               SliverToBoxAdapter(
                 child: expandedUpArrow(),
               ),
@@ -476,6 +481,12 @@ class _DraggableHomeState extends State<DraggableHome>
                 ...getTabWidget(_tabs![value])
               else
                 ...widget.slivers,
+
+              if (toggleWidget != null)
+                if (_tabs![value]
+                        .draggableSwithHeaderFromAppbarToScrollAlignment ==
+                    AlignmentDirectional.bottomCenter)
+                  toggleWidget,
               // sliverList(context, appBarHeight + topPadding),
             ],
           ),
@@ -512,21 +523,6 @@ class _DraggableHomeState extends State<DraggableHome>
       },
     );
     // SliverAnimatedList(itemBuilder: itemBuilder)
-    return ValueListenableBuilder<ExpandType>(
-      valueListenable: widget.valueNotifierExpandType!,
-      builder: (__, v, _) {
-        debugPrint("DraggableHome getToggleWidget $v");
-        return AnimatedContainer(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          // curve: Curves.easeInOutCirc,
-          duration: const Duration(milliseconds: 750),
-          height: v == ExpandType.CLOSED ? null : 0,
-          child: v == ExpandType.CLOSED
-              ? tab.draggableSwithHeaderFromAppbarToScroll
-              : const SizedBox(),
-        );
-      },
-    );
   }
 
   List<Widget> getTabWidget(TabControllerHelper tab) {

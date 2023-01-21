@@ -206,7 +206,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Color getColor(BuildContext context) => Colors.red;
 
   Widget? getCardTrailing(BuildContext context) {
-    return const Icon(Icons.more_vert_outlined);
+    return null;
   }
 
   bool hasImageLoadButton() {
@@ -402,6 +402,7 @@ class TabControllerHelper extends Tab {
 
   Widget? draggableHeaderWidget;
   Widget? draggableSwithHeaderFromAppbarToScroll;
+  AlignmentDirectional? draggableSwithHeaderFromAppbarToScrollAlignment;
   Widget? draggableExtendedWidget;
   TabControllerHelper(String title,
       {super.key,
@@ -411,6 +412,8 @@ class TabControllerHelper extends Tab {
       this.slivers,
       this.draggableHeaderWidget,
       this.draggableExtendedWidget,
+      this.draggableSwithHeaderFromAppbarToScrollAlignment =
+          AlignmentDirectional.topCenter,
       this.draggableSwithHeaderFromAppbarToScroll,
       this.widget})
       : super(icon: icon, text: title);

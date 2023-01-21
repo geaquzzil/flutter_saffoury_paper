@@ -37,6 +37,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
             return isSelected
                 ? CardCorner(
                     key: UniqueKey(),
+                    // color: Theme.of(context).highlightColor,
                     // borderSide: BorderSideColor.END,
                     // elevation: 0,
                     // color: Theme.of(context).colorScheme.primary,
@@ -50,16 +51,15 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
 
   Widget getListTile(bool isSelected, BuildContext context) {
     return ListTile(
-      selected: isSelected,
-      // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-      onTap: () => object.onCardClicked(context),
-      onLongPress: () {
-        object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
-      },
-      title: (object.getMainHeaderText(context)),
-      subtitle: (object.getMainSubtitleHeaderText(context)),
-      leading: object.getCardLeading(context),
-    );
-    // trailing: object.getPopupMenuActionListWidget(context));
+        selected: isSelected,
+        // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+        onTap: () => object.onCardClicked(context),
+        onLongPress: () {
+          object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
+        },
+        title: (object.getMainHeaderText(context)),
+        subtitle: (object.getMainSubtitleHeaderText(context)),
+        leading: object.getCardLeading(context),
+        trailing: object.getCardTrailing(context));
   }
 }

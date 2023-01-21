@@ -83,7 +83,7 @@ Future<T?> showFullScreenDialogExt<T>(
     return showGeneralDialog(
       anchorPoint: anchorPoint,
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black45,
       transitionBuilder: (

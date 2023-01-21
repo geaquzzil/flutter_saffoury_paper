@@ -36,7 +36,7 @@ class BaseEditWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isTheFirst;
   bool isStandAloneField;
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState>? formKey;
   late List<String> fields;
   late Map<GroupItem, List<String>> groupedFields;
 
@@ -46,15 +46,20 @@ class BaseEditWidget extends StatelessWidget {
 
   late GlobalKey<EditSubViewAbstractHeaderState> keyExpansionTile;
   bool isRequiredSubViewAbstract;
+
+  bool requireOnValidateEvenIfNull;
   BaseEditWidget(
       {Key? key,
       this.isStandAloneField = false,
       required this.viewAbstract,
       required this.isTheFirst,
+      this.formKey,
+      this.requireOnValidateEvenIfNull = false,
       this.isRequiredSubViewAbstract = true,
       this.onValidate})
       : super(key: key);
   void init(BuildContext context) {
+    formKey = formKey ?? GlobalKey<FormBuilderState>();
     keyExpansionTile = GlobalKey<EditSubViewAbstractHeaderState>(
         debugLabel: "${viewAbstract.runtimeType}");
     viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
@@ -107,7 +112,7 @@ class BaseEditWidget extends StatelessWidget {
 
   bool hasErrorGroupWidget(BuildContext context, List<String> groupedFields) {
     for (var element in groupedFields) {
-      bool? res = _formKey.currentState?.fields[element]?.validate();
+      bool? res = formKey?.currentState?.fields[element]?.validate();
       if (res != null) {
         if (res == false) {
           return true;
@@ -121,7 +126,7 @@ class BaseEditWidget extends StatelessWidget {
     bool isFieldCanBeNullable = viewAbstract.parent!
         .isFieldCanBeNullable(context, viewAbstract.getFieldNameFromParent!);
 
-    bool hasErr = _formKey.currentState?.validate() == false;
+    bool hasErr = formKey?.currentState?.validate() == false;
     bool isNull = viewAbstract.isNull;
     if (!isFieldCanBeNullable) {
       return hasErr;
@@ -146,9 +151,9 @@ class BaseEditWidget extends StatelessWidget {
       viewAbstract.onTextChangeListener(
           context, field, controllers[field]!.text);
       bool? validate =
-          _formKey.currentState!.fields[viewAbstract.getTag(field)]?.validate();
+          formKey?.currentState!.fields[viewAbstract.getTag(field)]?.validate();
       if (validate ?? false) {
-        _formKey.currentState!.fields[viewAbstract.getTag(field)]?.save();
+        formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
       if (isAutoCompleteVA) {
@@ -266,13 +271,15 @@ class BaseEditWidget extends StatelessWidget {
     debugPrint("_BaseEdit buildForm ${viewAbstract.runtimeType}");
     return FormBuilder(
         autovalidateMode: AutovalidateMode.always,
-        key: _formKey,
+        key: formKey,
         onChanged: () {
           if (onValidate != null) {
-            bool validate = _formKey.currentState!.validate();
-            if (validate) {
-              _formKey.currentState!.save();
+            bool? validate = formKey?.currentState!.validate();
+            if (validate ?? false) {
+              formKey?.currentState!.save();
               onValidate!(viewAbstract.onAfterValidate(context));
+            } else {
+              onValidate!(null);
             }
           }
         },
@@ -344,7 +351,7 @@ class BaseEditWidget extends StatelessWidget {
       return DropdownCustomListWithFormListener(
         viewAbstract: viewAbstract,
         field: field,
-        formKey: _formKey,
+        formKey: formKey,
         onSelected: (selectedObj) {
           viewAbstract.setFieldValue(field, selectedObj);
         },
@@ -355,7 +362,7 @@ class BaseEditWidget extends StatelessWidget {
         viewAbstract: viewAbstract,
         list: viewAbstract
             .getTextInputIsAutoCompleteCustomListMap(context)[field]!,
-        formKey: _formKey,
+        formKey: formKey,
         onSelected: (selectedObj) {
           viewAbstract.setFieldValue(field, selectedObj);
         },
@@ -503,7 +510,7 @@ class ViewAbstractChangeProvider with ChangeNotifier {
     this.viewAbstract = viewAbstract;
   }
   void change(ViewAbstract view) {
-    this.viewAbstract = view;
+    viewAbstract = view;
     notifyListeners();
   }
 

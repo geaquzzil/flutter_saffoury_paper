@@ -130,13 +130,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         // Align(
         //     alignment: AlignmentDirectional.centerEnd,
         //     child: Text("Date: $date")),
-        Text(
-          "items: ${getDetailListFromMasterItemsCount()}",
-          style: Theme.of(context)
-              .textTheme
-              .caption!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-        )
       ],
     );
   }
@@ -734,12 +727,27 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  Widget? getCardTrailing(BuildContext context) {
+    // TODO: implement getCardTrailing
+    return Text(
+      "items: ${getDetailListFromMasterItemsCount()}",
+      style: Theme.of(context)
+          .textTheme
+          .caption!
+          .copyWith(color: Theme.of(context).colorScheme.primary),
+    );
+  }
+
+  @override
   void onListableSelectedListAdded(List<ViewAbstract> list) {
     List<Product> products = list.cast();
     for (var element in products) {
+      debugPrint("onListableSelectedListAdded  added ${element.iD}");
       getDetailListFromMaster()
           .add(getDetailMasterNewInstance()..setProduct(element));
     }
+    debugPrint(
+        "onListableSelectedListAdded  getDetailListFromMaster length= >  ${getDetailListFromMaster().length}");
   }
 
   static double? convertToDouble(dynamic number) =>
