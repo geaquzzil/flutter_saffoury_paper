@@ -13,45 +13,41 @@ class BaseEditDialog extends StatelessWidget {
   BaseEditDialog({super.key, required this.viewAbstract});
 
   @override
-  Widget build(BuildContext _) {
+  Widget build(BuildContext context) {
     onValidate = ValueNotifier<ViewAbstract?>(viewAbstract);
-    return Builder(
-      builder: (context) {
-        return Center(
-          child: Scaffold(
-            key: scaffoldKey,
-            floatingActionButton: ValueListenableBuilder<ViewAbstract?>(
-              builder: (context, value, child) {
-                return FloatingActionButton.small(
-                    heroTag: null,
-                    child: Icon(Icons.save),
-                    onPressed: value == null ? null : () => _onPress(context));
-              },
-              valueListenable: onValidate,
-            ),
-            appBar:
-                AppBar(title: Text(viewAbstract.getBaseTitle(context)), actions: [
-              TextButton(
-                  onPressed: () => _onPress(context),
-                  child: Text(AppLocalizations.of(context)!.save))
-            ]),
-            resizeToAvoidBottomInset: false,
-            body: BaseEditWidget(
-                viewAbstract: viewAbstract,
-                isTheFirst: true,
-                // isRequiredSubViewAbstract: false,
-                onValidate: (viewAbstract) {
-                  onValidate.value = viewAbstract;
-                  debugPrint("BaseEditDialog onValidate");
-                  _updatedViewAbstract = viewAbstract;
-                  // widget.onUpdate(validated as T);
-                  // setState(() {
-                  //   validated = viewAbstract;
-                  // });
-                }),
-          ),
-        );
-      }
+    return Center(
+      child: Scaffold(
+        key: scaffoldKey,
+        floatingActionButton: ValueListenableBuilder<ViewAbstract?>(
+          builder: (context, value, child) {
+            return FloatingActionButton.small(
+                heroTag: null,
+                child: Icon(Icons.save),
+                onPressed: value == null ? null : () => _onPress(context));
+          },
+          valueListenable: onValidate,
+        ),
+        appBar:
+            AppBar(title: Text(viewAbstract.getBaseTitle(context)), actions: [
+          TextButton(
+              onPressed: () => _onPress(context),
+              child: Text(AppLocalizations.of(context)!.save))
+        ]),
+        resizeToAvoidBottomInset: false,
+        body: BaseEditWidget(
+            viewAbstract: viewAbstract,
+            isTheFirst: true,
+            // isRequiredSubViewAbstract: false,
+            onValidate: (viewAbstract) {
+              onValidate.value = viewAbstract;
+              debugPrint("BaseEditDialog onValidate");
+              _updatedViewAbstract = viewAbstract;
+              // widget.onUpdate(validated as T);
+              // setState(() {
+              //   validated = viewAbstract;
+              // });
+            }),
+      ),
     );
   }
 
