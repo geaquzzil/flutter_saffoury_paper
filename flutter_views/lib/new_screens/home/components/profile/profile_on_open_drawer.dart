@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'profile_menu_widget.dart';
 
 class ProfileOnOpenDrawerWidget extends StatelessWidget {
@@ -14,7 +14,7 @@ class ProfileOnOpenDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = context.watch<AuthProvider>();
+    AuthProvider auth = context.watch<AuthProvider<AuthUser>>();
     return CustomPopupMenu(
         showArrow: false,
         position: PreferredPosition.top,

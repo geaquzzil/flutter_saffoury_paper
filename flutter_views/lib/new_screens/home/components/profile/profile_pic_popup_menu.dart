@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 class ItemModel {
   String title;
   IconData icon;
@@ -27,7 +27,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = context.read<AuthProvider>();
+    AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     return AnimatedSwitcher(
       transitionBuilder: (child, animation) => ScaleTransition(
         scale: animation,

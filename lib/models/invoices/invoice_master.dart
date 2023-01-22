@@ -739,12 +739,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  void onListableSelectedListAdded(List<ViewAbstract> list) {
+  void onListableSelectedListAdded(
+      BuildContext context, List<ViewAbstract> list) {
     List<Product> products = list.cast();
     for (var element in products) {
       debugPrint("onListableSelectedListAdded  added ${element.iD}");
       getDetailListFromMaster()
-          .add(getDetailMasterNewInstance()..setProduct(element));
+          .add(getDetailMasterNewInstance()..setProduct(context, element));
     }
     debugPrint(
         "onListableSelectedListAdded  getDetailListFromMaster length= >  ${getDetailListFromMaster().length}");

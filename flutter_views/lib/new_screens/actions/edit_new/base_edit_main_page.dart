@@ -174,7 +174,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           return;
         }
-        currentViewAbstract = getExtras().copyToUplode();
+        currentViewAbstract = currentViewAbstract!.copyToUplode();
         await currentViewAbstract!.addCall();
       },
     );
@@ -266,7 +266,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       child: AddFromListPopupIconWidget(
         viewAbstract: getExtras(),
         onSelected: (selectedList) {
-          getListableInterface().onListableSelectedListAdded(selectedList);
+          getListableInterface().onListableSelectedListAdded(context,selectedList);
           onListableSelectedItem.value = selectedList;
           onEditListableItem.value = null;
         },

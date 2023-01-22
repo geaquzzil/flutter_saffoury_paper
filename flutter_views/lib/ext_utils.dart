@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
@@ -189,7 +190,7 @@ extension NonNullableDouble on double? {
 
   String toCurrencyFormatFromSetting(BuildContext context) {
     return context
-        .read<AuthProvider>()
+        .read<AuthProvider<AuthUser>>()
         .getPriceFromSetting(context, toNonNullable());
   }
 }

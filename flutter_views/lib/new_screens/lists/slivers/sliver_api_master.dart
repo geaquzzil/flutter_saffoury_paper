@@ -56,7 +56,7 @@ class SliverApiMaster extends StatefulWidget {
       this.viewAbstract,
       this.buildAppBar = true,
       this.buildSearchWidget = true,
-      this.buildFilterableView = false,
+      this.buildFilterableView = true,
       this.buildToggleView = true,
       this.fetshListAsSearch = false,
       this.buildFabIfMobile = true});

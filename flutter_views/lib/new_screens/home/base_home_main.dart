@@ -2,6 +2,7 @@ import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
@@ -225,7 +226,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       builder: (context, value, child) {
         dashboardWidget ??= BaseDashboard(
             title: "TEST",
-            dashboard: context.read<AuthProvider>().getDashableInterface());
+            dashboard:
+                context.read<AuthProvider<AuthUser>>().getDashableInterface());
         homeWidget ??= getSelectorViewAbstract(context,
             builder: (viewAbstract) => HomeNavigationPage(
                   viewAbstract: viewAbstract,

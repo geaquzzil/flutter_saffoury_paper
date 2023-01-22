@@ -17,7 +17,7 @@ abstract class CartableInvoiceMasterObjectInterface {
 
   List<CartableInvoiceDetailsInterface> getDetailList();
 
-  CartableInvoiceDetailsInterface getCartableNewInstance(
+  CartableInvoiceDetailsInterface getCartableNewInstance(BuildContext context,
       CartableProductItemInterface product);
 
   Widget onCartCheckout(

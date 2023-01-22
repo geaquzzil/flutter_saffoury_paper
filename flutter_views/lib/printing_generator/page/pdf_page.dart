@@ -26,7 +26,7 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../../interfaces/printable/printable_master.dart';
 import '../../models/servers/server_helpers.dart';
 import '../pdf_custom_from_pdf_api.dart';
@@ -75,12 +75,11 @@ class _PdfPageState<T extends PrintLocalSetting>
     super.didChangeDependencies();
   }
 
-
   @override
   Future<PrintableMaster<T>?> getCallApiFunctionIfNull(BuildContext context) {
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =
-          context.read<AuthProvider>().getNewInstance(tableName!)!;
+          context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
       return newViewAbstract.viewCallGetFirstFromList(iD!)
           as Future<PrintableMaster<T>>;
     } else {

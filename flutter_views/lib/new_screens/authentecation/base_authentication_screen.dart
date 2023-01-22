@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
@@ -12,7 +13,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
     switch (authProvider.getStatus) {
       case Status.Initialization:
         return getLoadingWidget();

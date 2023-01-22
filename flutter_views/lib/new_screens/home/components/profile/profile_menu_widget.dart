@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProfileMenuWidget extends StatelessWidget {
@@ -119,7 +119,7 @@ class ProfileMenuWidget extends StatelessWidget {
   }
 
   void init(BuildContext context) {
-    AuthProvider authProvider = context.read<AuthProvider>();
+    AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     if (authProvider.hasSavedUser) {
       menuItems = [
         ItemModel(authProvider.getUserName, Icons.chat_bubble),

@@ -8,7 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 final List<FooterItem> footerItems = [
   FooterItem(
     icon: const Icon(Icons.add_home_work, size: 25),
@@ -50,7 +50,7 @@ class Footer extends StatelessWidget {
 }
 
 Widget _buildUi(double width, BuildContext context) {
-  Dealers? dealersInfo = context.read<AuthProvider>().getDealers;
+  Dealers? dealersInfo = context.read<AuthProvider<AuthUser>>().getDealers;
   return Center(
     child: ResponsiveWrapper(
       maxWidth: width,

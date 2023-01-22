@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'models/view_abstract.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 class ViewHelper {
   static SafeArea getDrawerSafeArea(
       BuildContext context, List<ViewAbstract> list) {
@@ -52,9 +52,8 @@ class ViewHelper {
             )));
   }
 
-  static Drawer getDrawer(
-      BuildContext context) {
-            AuthProvider authProvider = Provider.of<AuthProvider>(context);
+  static Drawer getDrawer(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
     return Drawer(
       child: getDrawableListView(context, authProvider.getDrawerItems),
     );

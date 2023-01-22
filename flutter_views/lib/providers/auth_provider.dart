@@ -25,18 +25,19 @@ enum Status {
   Guest
 }
 
-class AuthProvider with ChangeNotifier {
+class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late List<ViewAbstract> _drawerItems;
   late Map<String?, List<ViewAbstract>> __drawerItemsGrouped;
   final List<ViewAbstract> _drawerItemsPermissions = [];
-  late AuthUser _user;
+  late T _user;
+  late T _initUser;
   Status _status = Status.Initialization;
-  late PermissionLevelAbstract _permissions;
   bool hasSavedUser = false;
+  late PermissionLevelAbstract _permissions;
   Status get getStatus => _status;
-  AuthUser get getUser => _user;
+  T get getUser => _user;
   Dealers? get getDealers => _user.dealers;
-  String get getUserName => _user.getFieldValue("name");
+  String get getUserName => _user.getFieldValue("name") ?? "_UNKONW";
   String get getUserPermission => _user.userlevels?.userlevelname ?? "";
   String get getUserImageUrl =>
       "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
@@ -54,8 +55,9 @@ class AuthProvider with ChangeNotifier {
   TextEditingController password = TextEditingController();
   TextEditingController name = TextEditingController();
 
-  AuthProvider.initialize(List<ViewAbstract> drawerItems) {
+  AuthProvider.initialize(T initUser, List<ViewAbstract> drawerItems) {
     _drawerItems = drawerItems;
+    _initUser = initUser;
     initFakeData();
   }
   DashableInterface getDashableInterface() {
@@ -69,15 +71,13 @@ class AuthProvider with ChangeNotifier {
   }
 
   void initFakeData() async {
-    await Future.delayed(const Duration(seconds: 2));
+    // await Future.delayed(const Duration(seconds: 2));
     try {
-      _user = AuthUser();
-      _user.password = "0933326880";
-      _user.phone = "0933326882";
-      _user.login = true;
-      _user = _user.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)));
+      _user = _initUser.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)))
+          as T;
       _status = Status.Authenticated;
       _permissions = _user.userlevels ?? PermissionLevelAbstract();
+      hasSavedUser = true;
       notifyListeners();
     } catch (ex) {
       debugPrint("Error initial $ex");
@@ -86,24 +86,27 @@ class AuthProvider with ChangeNotifier {
 
   //Todo on publish use this method
   void init() async {
-    hasSavedUser = await Configurations.hasSavedValue(AuthUser());
+    hasSavedUser = await Configurations.hasSavedValue(_initUser);
     final Response? responseUser;
     if (hasSavedUser == false) {
-      _user = AuthUser();
+      _user = _initUser;
+
       _user.password = "0933326880";
       _user.phone = "0933326882";
       _user.login = true;
       _status = Status.Guest;
     } else {
-      _user = (await Configurations.get<AuthUser>(_user))!;
+      _user = (await Configurations.get<T>(_initUser))!;
     }
-    responseUser = await _user.getRespones(serverActions: ServerActions.add);
+    responseUser =
+        await _initUser.getRespones(serverActions: ServerActions.add);
     if (responseUser == null) {
       _status = Status.Faild;
     } else if (responseUser.statusCode == 401) {
       _status = Status.Faild;
     } else {
-      _user = _user.fromJsonViewAbstract(jsonDecode(responseUser.body));
+      _user =
+          _initUser.fromJsonViewAbstract(jsonDecode(responseUser.body)) as T;
       bool isLogin = _user.login ?? false;
       bool hasPermission = _user.permission ?? false;
       _status = isLogin ? Status.Authenticated : Status.Guest;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
@@ -104,7 +105,7 @@ class DrawerLargeScreens extends StatelessWidget {
   }
 
   Widget buildListSliver(BuildContext context, bool isOpen) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
     return SliverList(
         delegate: SliverChildBuilderDelegate(
             (context, index) =>
@@ -113,7 +114,7 @@ class DrawerLargeScreens extends StatelessWidget {
   }
 
   Widget buildList(BuildContext context, bool isOpen) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
     return ListView.builder(
         itemCount: authProvider.getDrawerItemsGrouped.length,
         shrinkWrap: true,

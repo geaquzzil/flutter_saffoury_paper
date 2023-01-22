@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
@@ -7,13 +8,16 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-
+import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../prints/print_invoice.dart';
 
 abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
@@ -43,11 +47,16 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       };
 
   InvoiceMasterDetails() : super();
-  InvoiceMasterDetails setProduct(Product products, {double? quantity}) {
+  InvoiceMasterDetails setProduct(BuildContext context, Product products,
+      {double? quantity}) {
     this.products = products;
     this.unitPrice = products.getUnitSellPrice();
     this.price = products.getTotalSellPrice();
     this.quantity = quantity ?? products.getCartableProductQuantity();
+    this.warehouse =
+        (context.read<AuthProvider<AuthUser>>().getUser as Employee)
+            .warehouse_employees?[0]
+            .warehouse;
     discount = 0;
     return this;
   }
@@ -56,6 +65,12 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     return Stocks()
       ..quantity = quantity
       ..warehouse = warehouse;
+  }
+
+  @override
+  void onDropdownChanged(BuildContext context, String field, value,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    super.onDropdownChanged(context, field, value);
   }
 
   @override
@@ -253,7 +268,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   double getMaxQuantityValue() {
-    return products?.getQuantity() ?? 0;
+    return products?.getQuantity(warehouse: warehouse) ?? 0;
   }
 
   @override

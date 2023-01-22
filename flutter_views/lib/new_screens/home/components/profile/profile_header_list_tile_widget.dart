@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +10,12 @@ class ProfileHeaderListTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = context.watch<AuthProvider>();
+    AuthProvider auth = context.watch<AuthProvider<AuthUser>>();
 
     return ListTile(
       leading: RoundedIconButtonNetwork(
-          onTap: () {}, imageUrl: context.read<AuthProvider>().getUserImageUrl),
+          onTap: () {},
+          imageUrl: context.read<AuthProvider<AuthUser>>().getUserImageUrl),
       title: Text(
         auth.hasSavedUser
             ? auth.getUserName

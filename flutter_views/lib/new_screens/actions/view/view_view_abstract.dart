@@ -138,7 +138,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                                           validator: context
                                               .read<CartProvider>()
                                               .getCartableInvoice
-                                              .getCartableNewInstance(
+                                              .getCartableNewInstance(context,
                                                   viewAbstract)
                                               .getCartableEditableValidateItemCell(
                                                   context, "quantity"),

@@ -30,7 +30,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:nil/nil.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../../screens/base_shared_actions_header.dart';
 import 'components/action_on_header_popup_widget.dart';
 import 'view/view_view_abstract.dart';
@@ -124,7 +124,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =
-          context.read<AuthProvider>().getNewInstance(tableName!)!;
+          context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
       return newViewAbstract.viewCallGetFirstFromList(iD!)
           as Future<ViewAbstract>;
     } else {

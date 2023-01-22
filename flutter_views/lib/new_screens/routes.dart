@@ -20,7 +20,7 @@ import 'package:provider/provider.dart';
 import '../interfaces/dashable_interface.dart';
 import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'actions/view/view_view_main_page.dart';
 import 'authentecation/base_authentication_screen.dart';
 import 'actions/edit_new/base_edit_main_page.dart';
@@ -64,7 +64,7 @@ class RouteGenerator {
     return GoRouter(
       initialLocation: '/',
       // redirect: (context, state) async {
-      //   Status authStatus = context.read<AuthProvider>().getStatus;
+      //   Status authStatus = context.read<AuthProvider<AuthUser>>().getStatus;
       //   if (authStatus == Status.Initialization) {
       //     return "/home";
       //   }
@@ -87,7 +87,8 @@ class RouteGenerator {
         GoRoute(
             path: '/',
             pageBuilder: (BuildContext context, GoRouterState state) {
-              Status authStatus = context.read<AuthProvider>().getStatus;
+              Status authStatus =
+                  context.read<AuthProvider<AuthUser>>().getStatus;
               if (authStatus == Status.Authenticated) {
                 // return POSPage();
                 return const MaterialPage(child: BaseHomeMainPage());
@@ -340,7 +341,7 @@ class RouteGenerator {
     return MaterialPageRoute(
       builder: (context) {
         // return BaseHomeMainPage();
-        Status authStatus = context.read<AuthProvider>().getStatus;
+        Status authStatus = context.read<AuthProvider<AuthUser>>().getStatus;
         if (authStatus == Status.Authenticated) {
           // return POSPage();
           return const BaseHomeMainPage();

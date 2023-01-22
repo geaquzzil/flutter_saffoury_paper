@@ -203,9 +203,9 @@ class Order extends InvoiceMaster<Order>
   }
 
   @override
-  CartableInvoiceDetailsInterface getCartableNewInstance(
+  CartableInvoiceDetailsInterface getCartableNewInstance(BuildContext context,
       CartableProductItemInterface product) {
-    return OrderDetails()..setProduct(product as Product);
+    return OrderDetails()..setProduct(context,product as Product);
   }
 
   @override
@@ -213,7 +213,7 @@ class Order extends InvoiceMaster<Order>
       BuildContext context, int index, CartableProductItemInterface cii,
       {double? quantiy}) {
     orders_details?.add(OrderDetails()
-      ..setProduct(cii as Product,
+      ..setProduct(context,cii as Product,
           quantity: quantiy ?? (cii).getCartableProductQuantity()));
   }
 

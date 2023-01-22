@@ -9,7 +9,7 @@ abstract class ListableInterface<T extends ViewAbstract> {
 
   /// get future that fired when pos widget is created
   List<T> getListableList();
-  void onListableSelectedListAdded(List<ViewAbstract> list);
+  void onListableSelectedListAdded(BuildContext context,List<ViewAbstract> list);
 
   ViewAbstract getListablePickObject();
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -104,8 +105,9 @@ class _QrCodeReaderState extends State<QrCodeReader> {
         }
         // await controller.pauseCamera();
         if (widget.getViewAbstract) {
-          ViewAbstract? v =
-              context.read<AuthProvider>().getNewInstance(qrCodeID.action);
+          ViewAbstract? v = context
+              .read<AuthProvider<AuthUser>>()
+              .getNewInstance(qrCodeID.action);
 
           v = await v?.viewCallGetFirstFromList(qrCodeID.iD);
           if (checkCurrentState(QrCodeCurrentState.DONE)) {

@@ -244,8 +244,8 @@ class CutRequest extends ViewAbstract<CutRequest>
   Map<String, double> getTextInputMinValidateMap() => {"quantity": 1};
 
   @override
-  List<Widget>? getCustomBottomWidget(
-      BuildContext context,  {ServerActions ?action}) {
+  List<Widget>? getCustomBottomWidget(BuildContext context,
+      {ServerActions? action}) {
     if (action == ServerActions.view) {
       return [
         ListHorizontalApiAutoRestWidget(
@@ -316,8 +316,10 @@ class CutRequest extends ViewAbstract<CutRequest>
         List.generate(
             2,
             (index) => ProductInputDetails()
-              ..setProduct(Product().getModifiablePrintablePdfSetting(context)
-                  as Product));
+              ..setProduct(
+                  context,
+                  Product().getModifiablePrintablePdfSetting(context)
+                      as Product));
 
     return o;
   }

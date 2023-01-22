@@ -24,6 +24,7 @@ import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_li
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
@@ -115,11 +116,11 @@ void main() async {
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
           create: (context) =>
-              DrawerMenuControllerProvider(initViewAbstract: Product())),
+              DrawerMenuControllerProvider(initViewAbstract: Order())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
-          create: (context) => AuthProvider.initialize(views)),
+          create: (context) => AuthProvider<AuthUser>.initialize(Employee(),views)),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),

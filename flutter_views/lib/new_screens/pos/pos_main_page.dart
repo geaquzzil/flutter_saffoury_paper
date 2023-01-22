@@ -8,7 +8,7 @@ import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../../models/view_abstract_base.dart';
 import '../cart/cart_description/cart_description.dart';
 import '../actions/dashboard/compontents/header.dart';
@@ -19,13 +19,13 @@ class POSPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var pos = context
-        .read<AuthProvider>()
+        .read<AuthProvider<AuthUser>>()
         .getDrawerItemsPermissions
         .whereType<PosableInterface>()
         .toList();
 
     // debugPrint(
-    //     " ${context.read<AuthProvider>().getDrawerItemsPermissions}  =>pos $pos");
+    //     " ${context.read<AuthProvider<AuthUser>>().getDrawerItemsPermissions}  =>pos $pos");
 
     return Scaffold(
         resizeToAvoidBottomInset: false,

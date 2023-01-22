@@ -472,6 +472,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
     switch (action) {
       case ServerActions.add:
+      case ServerActions.edit:
         //TODO multiple add
         mainBody['data'] = convert.jsonEncode(toJsonViewAbstract());
         break;

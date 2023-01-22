@@ -441,7 +441,7 @@ packages:
     source: hosted
     version: "2.0.0"
   flutter_form_builder:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_form_builder
       url: "https://pub.dartlang.org"
@@ -1390,14 +1390,14 @@ packages:
       name: syncfusion_flutter_charts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "20.3.50"
+    version: "20.4.44"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "20.3.50"
+    version: "20.4.44"
   synchronized:
     dependency: transitive
     description:

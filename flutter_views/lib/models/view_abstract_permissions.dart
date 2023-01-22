@@ -10,6 +10,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
+import 'permissions/user_auth.dart';
+
 abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(ignore: true)
   String? fieldNameFromParent;
@@ -160,7 +162,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   PermissionLevelAbstract getUserPermissionLevel(BuildContext context) {
-    return context.read<AuthProvider>().getPermissions;
+    return context.read<AuthProvider<AuthUser>>().getPermissions;
   }
 
   FutureBuilder<E> onFutureBuilder<E>(BuildContext context,

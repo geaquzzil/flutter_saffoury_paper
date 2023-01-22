@@ -33,7 +33,7 @@ import 'package:flutter_view_controller/utils/debouncer.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../lists/list_api_master.dart';
 
 class SearchPage extends StatefulWidget {
@@ -62,8 +62,9 @@ class _SearchPageState extends State<SearchPage> {
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
-      viewAbstract =
-          context.read<AuthProvider>().getNewInstance(widget.tableName!)!;
+      viewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(widget.tableName!)!;
     }
     super.initState();
   }
@@ -73,8 +74,9 @@ class _SearchPageState extends State<SearchPage> {
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
-      viewAbstract =
-          context.read<AuthProvider>().getNewInstance(widget.tableName!)!;
+      viewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(widget.tableName!)!;
     }
     super.didUpdateWidget(oldWidget);
   }

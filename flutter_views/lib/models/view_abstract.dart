@@ -105,6 +105,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
         jsonCopy[key] = null;
       }
     });
+    debugPrint("copyToUplode $jsonCopy");
 
     return fromJsonViewAbstract(jsonCopy);
   }
