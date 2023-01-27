@@ -78,7 +78,8 @@ class BaseEditWidget extends StatelessWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (viewAbstract.hasParent()) {
-        viewAbstractChangeProvider.notifyListeners();
+        //TODO viewAbstractChangeProvider.notifyListeners();
+        keyExpansionTile.currentState?.setError(hasError(context));
       }
     });
   }
@@ -277,9 +278,22 @@ class BaseEditWidget extends StatelessWidget {
             bool? validate = formKey?.currentState!.validate();
             if (validate ?? false) {
               formKey?.currentState!.save();
-              onValidate!(viewAbstract.onAfterValidate(context));
+              ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
+              onValidate!(objcet);
+              debugPrint(
+                  "BaseEdit main form onValidate => ${objcet?.toJsonString()}");
+              if (viewAbstract.parent != null) {
+                debugPrint(
+                    "BaseEdit main form onValidate => ${objcet?.getTableNameApi()}  has parent and has error=> false");
+                keyExpansionTile.currentState?.setError(false);
+              }
             } else {
               onValidate!(null);
+              if (viewAbstract.parent != null) {
+                debugPrint(
+                    "BaseEdit main form onValidate =>  has parent and has error=> true");
+                keyExpansionTile.currentState?.setError(true);
+              }
             }
           }
         },
@@ -459,6 +473,9 @@ class BaseEditWidget extends StatelessWidget {
           // String? fieldName = ob?.getFieldNameFromParent()!;
           debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
           viewAbstract.setFieldValue(field, ob);
+          // if (ob != null) {
+          //   viewAbstractChangeProvider.change(viewAbstract);
+          // }
         }),
       );
     } else if (fieldValue is ViewAbstractEnum) {

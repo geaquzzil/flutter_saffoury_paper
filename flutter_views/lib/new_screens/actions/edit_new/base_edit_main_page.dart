@@ -65,6 +65,10 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     return BaseEditWidget(
       onValidate: (viewAbstract) {
         currentViewAbstract = viewAbstract;
+        if (currentViewAbstract != null) {
+          debugPrint(
+              "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}");
+        }
       },
       viewAbstract: getExtras(),
       isTheFirst: true,

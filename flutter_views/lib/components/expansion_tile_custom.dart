@@ -54,6 +54,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   static final Animatable<double> _halfTween =
       Tween<double>(begin: 0.0, end: .85);
   late EdgeInsets childrenPadding;
+  late bool hasError;
   final ColorTween _iconColorTween = ColorTween();
   late Animation<double> _iconTurns;
   late Animation<Color?> _borderColor;
@@ -75,7 +76,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
-
+    hasError = widget.hasError ?? false;
     _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) {
@@ -107,7 +108,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       ..end = expansionTileTheme.iconColor ?? colorScheme.primary;
     _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
         widget.initiallyExpanded;
-
+    hasError = widget.hasError ?? false;
     if (_isExpanded) {
       if (!canExpand(context)) {
         _controller.value = 0.0;
@@ -157,6 +158,12 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
         });
       }
       PageStorage.of(context)?.writeState(context, _isExpanded);
+    });
+  }
+
+  void setError(bool hasError) {
+    setState(() {
+      this.hasError = hasError;
     });
   }
 
@@ -223,7 +230,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
         title: ClippedCard(
           wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
           borderSide: BorderSideColor.START,
-          color: (widget.hasError ?? false)
+          color: (hasError)
               ? Theme.of(context).colorScheme.onError
               : borderSideColor,
           child: Column(
@@ -256,7 +263,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       return ClippedCard(
         wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
         borderSide: BorderSideColor.START,
-        color: (widget.hasError ?? false)
+        color: (hasError)
             ? Theme.of(context).colorScheme.onError
             : borderSideColor,
         child: Column(

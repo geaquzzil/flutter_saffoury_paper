@@ -32,9 +32,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     _listMap.entries.forEach((i) {
       if (i.key == viewAbstract.getListableKey()) {
         _listMap.remove(i.key);
-
         notifyListeners();
-
         fetchList(i.key, viewAbstract);
       }
     });
