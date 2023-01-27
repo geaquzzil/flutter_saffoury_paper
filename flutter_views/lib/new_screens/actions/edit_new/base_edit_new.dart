@@ -281,7 +281,7 @@ class BaseEditWidget extends StatelessWidget {
               ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
               onValidate!(objcet);
               debugPrint(
-                  "BaseEdit main form onValidate => ${objcet?.toJsonString()}");
+                  "BaseEdit main form onValidate => ${objcet?.toJsonString()}",wrapWidth: 1024);
               if (viewAbstract.parent != null) {
                 debugPrint(
                     "BaseEdit main form onValidate => ${objcet?.getTableNameApi()}  has parent and has error=> false");
