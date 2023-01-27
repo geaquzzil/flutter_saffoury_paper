@@ -158,8 +158,6 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       onPress: () async {
         if (currentViewAbstract == null) {
           final snackBar = SnackBar(
-            
-            
             content: const Text('Yay! A SnackBar!'),
             action: SnackBarAction(
               label: 'Undo',
@@ -175,7 +173,28 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
           return;
         }
         currentViewAbstract = currentViewAbstract!.copyToUplode();
-        await currentViewAbstract!.addCall();
+        currentViewAbstract = await currentViewAbstract!.addCall(
+            onResponse: OnResponseCallback(
+                onServerNoMoreItems: () {},
+                onServerFailure: (d) {},
+                onServerFailureResponse: (s) {
+                  final snackBar = SnackBar(
+                    content: Text(s.serverResponse.message ?? " ___"),
+                    action: SnackBarAction(
+                      label: 'Retry',
+                      onPressed: () {
+                        // Some code to undo the change.
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }));
+        if (currentViewAbstract != null) {
+          extras = currentViewAbstract;
+          currentViewAbstract!.onCardClicked(context);
+          context.read<ListMultiKeyProvider>().notifyAdd(currentViewAbstract!);
+        }
+        // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);
       },
     );
     return FloatingActionButton.extended(
@@ -266,7 +285,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       child: AddFromListPopupIconWidget(
         viewAbstract: getExtras(),
         onSelected: (selectedList) {
-          getListableInterface().onListableSelectedListAdded(context,selectedList);
+          getListableInterface()
+              .onListableSelectedListAdded(context, selectedList);
           onListableSelectedItem.value = selectedList;
           onEditListableItem.value = null;
         },

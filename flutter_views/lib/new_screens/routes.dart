@@ -87,15 +87,7 @@ class RouteGenerator {
         GoRoute(
             path: '/',
             pageBuilder: (BuildContext context, GoRouterState state) {
-              Status authStatus =
-                  context.read<AuthProvider<AuthUser>>().getStatus;
-              if (authStatus == Status.Authenticated) {
-                // return POSPage();
-                return const MaterialPage(child: BaseHomeMainPage());
-              } else {
-                // return POSPage();
-                return const MaterialPage(child: BaseAuthenticatingScreen());
-              }
+              return const MaterialPage(child: BaseAuthenticatingScreen());
             },
             routes: [
               GoRoute(

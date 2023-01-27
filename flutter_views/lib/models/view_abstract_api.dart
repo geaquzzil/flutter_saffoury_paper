@@ -210,7 +210,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse);
       //throw Exception('Failed to load album');
       return null;
     } else {
@@ -227,6 +227,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response == null) return null;
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));
+    } else if (response.statusCode == 401) {
+      ServerResponseMaster serverResponse =
+          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+      onResponse?.onServerFailureResponse(serverResponse);
+      return null;
     }
     return null;
   }
@@ -264,7 +269,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse);
       return [];
     } else {
       return [];
@@ -297,7 +302,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse);
       return [];
     } else {
       return [];
@@ -329,7 +334,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse);
       return [];
     } else {
       return [];
@@ -381,7 +386,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse);
       return [];
     } else {
       return [];
@@ -431,7 +436,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse);
       return null;
     } else {
       return null;

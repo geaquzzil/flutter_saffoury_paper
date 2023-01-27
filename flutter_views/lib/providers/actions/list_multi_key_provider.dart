@@ -28,6 +28,18 @@ class ListMultiKeyProvider with ChangeNotifier {
     return _listMap[key]?.hasError ?? false;
   }
 
+  void notifyAdd(ViewAbstract viewAbstract) {
+    _listMap.entries.forEach((i) {
+      if (i.key == viewAbstract.getListableKey()) {
+        _listMap.remove(i.key);
+
+        notifyListeners();
+
+        fetchList(i.key, viewAbstract);
+      }
+    });
+  }
+
   Future<void> edit(ViewAbstract obj) async {
     _listMap.entries.forEach((i) async {
       var element = i.value;

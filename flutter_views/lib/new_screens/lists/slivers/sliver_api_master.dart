@@ -265,7 +265,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         ),
 
         // backgroundColor: Colors.red,
-        title: const Text("Welcome back"),
+        title: Text(drawerViewAbstractObsever.getObject
+            .getMainHeaderLabelTextOnly(context)),
         fullyStretchable: true,
         headerWidget: getHeaderWidget(),
         expandedBody: QrCodeReader(

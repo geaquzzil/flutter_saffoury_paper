@@ -1,3 +1,5 @@
+import 'server_response_master.dart';
+
 enum ServerActions {
   print,
   notification,
@@ -46,7 +48,7 @@ class URLS {
 class OnResponseCallback {
   final void Function() onServerNoMoreItems;
   final void Function(dynamic o) onServerFailure;
-  final void Function(dynamic o) onServerFailureResponse;
+  final void Function(ServerResponseMaster o) onServerFailureResponse;
   OnResponseCallback(
       {required this.onServerNoMoreItems,
       required this.onServerFailure,
