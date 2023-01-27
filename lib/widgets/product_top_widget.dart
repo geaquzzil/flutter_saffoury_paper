@@ -57,6 +57,7 @@ class ProductTopWidget extends StatelessWidget {
                 title: AppLocalizations.of(context)!.weightPerSheet,
                 description:
                     product.getSheetWeightStringFormat(context: context)),
+                    if(product.hasPermissionOnField(context, field, actions))
             TitleAndDescription(
                 title: AppLocalizations.of(context)!.pricePerSheet,
                 description:

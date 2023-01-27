@@ -36,6 +36,11 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late PermissionLevelAbstract _permissions;
   Status get getStatus => _status;
   T get getUser => _user;
+  T get getSimpleUser => (_user.getSelfNewInstance() as T)
+    ..iD = _user.iD
+    ..phone = _user.phone
+    ..password = _user.password
+    ..setFieldValue("name", getUserName);
   Dealers? get getDealers => _user.dealers;
   String get getUserName => _user.getFieldValue("name") ?? "_UNKONW";
   String get getUserPermission => _user.userlevels?.userlevelname ?? "";

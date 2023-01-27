@@ -177,12 +177,14 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
           return;
         }
         currentViewAbstract = currentViewAbstract!.copyToUplode();
+        
         currentViewAbstract = await currentViewAbstract!.addCall(
             onResponse: OnResponseCallback(
                 onServerNoMoreItems: () {},
                 onServerFailure: (d) {},
                 onServerFailureResponse: (s) {
                   final snackBar = SnackBar(
+                    
                     content: Text(s.serverResponse.message ?? " ___"),
                     action: SnackBarAction(
                       label: 'Retry',

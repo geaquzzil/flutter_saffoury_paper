@@ -27,12 +27,12 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   ViewAbstract? get getParnet => parent;
   String? get getFieldNameFromParent => fieldNameFromParent;
-  Map<String, String> getPremissionFieldsMap(BuildContext context) {
+  Map<String, String> getPermissionFieldsMap(BuildContext context) {
     return {};
   }
 
   String? _getPermissionField(BuildContext context, String field) {
-    return getPremissionFieldsMap(context)[field];
+    return getPermissionFieldsMap(context)[field];
   }
 
   Future<bool> hasPermissionOnField(
@@ -48,7 +48,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     // debugPrint(
     //     "hasPermissionToPreformActionOn: " + " $permissionField " + field  permissionField " );
     // if (isEmpty(permissionField.table_name())) return false;
-    return hasPermission(context,permissionField, actions);
+    return hasPermission(context, permissionField, actions);
   }
 
   Future<bool> hasPermission(

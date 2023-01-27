@@ -287,6 +287,24 @@ class Product extends ViewAbstract<Product>
     return "products";
   }
 
+  Future<bool> hasPermissionQuantity(BuildContext context) async {
+    return await hasPermission(
+        context, "text_products_quantity", ServerActions.view);
+  }
+
+  Future<bool> hasPermissionPrice(BuildContext context) async {
+    return await hasPermission(
+        context, "text_prices_for_customer", ServerActions.view);
+  }
+
+  @override
+  Map<String, String> getPermissionFieldsMap(BuildContext context) {
+    return {
+      "inStock": "text_products_quantity",
+      "comments": "text_products_notes"
+    };
+  }
+
   @override
   List<String> getMainFields({BuildContext? context}) {
     return [

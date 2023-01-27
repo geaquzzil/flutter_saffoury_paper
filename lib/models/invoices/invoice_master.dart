@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -47,6 +48,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
+  Terms? terms;
   int? TermsID;
 
   String? date;
@@ -74,22 +76,120 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   InvoiceMaster() : super() {
     date = "".toDateTimeNowString();
+    TermsID = -1;
   }
   @override
   void onBeforeGenerateView(BuildContext context) {
     super.onBeforeGenerateView(context);
-    employees = context.read<AuthProvider<AuthUser>>().getUser as Employee;
+    if (isNew()) {
+      employees =
+          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+    }
+    terms = getTermsFromID(TermsID ?? -1);
+  }
+
+  @override
+  Map<String, List> getTextInputIsAutoCompleteCustomListMap(
+          BuildContext context) =>
+      {
+        "TermsID": [
+          AppLocalizations.of(context)!.pay1,
+          AppLocalizations.of(context)!.pay2,
+          AppLocalizations.of(context)!.pay3,
+          AppLocalizations.of(context)!.pay4,
+          AppLocalizations.of(context)!.pay5,
+          AppLocalizations.of(context)!.pay6,
+          AppLocalizations.of(context)!.pay7,
+          AppLocalizations.of(context)!.pay8,
+        ]
+      };
+
+  @override
+  void onDropdownChanged(BuildContext context, String field, value,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    super.onDropdownChanged(context, field, value, formKey: formKey);
+
+    if (field == "terms") {
+      setTermsID(value as Terms);
+    }
+  }
+
+  Terms getTermsFromID(int termID) {
+    if (termID == -1) {
+      return Terms.pay1;
+    } else if (termID == -7) {
+      return Terms.pay2;
+    } else if (termID == 7) {
+      return Terms.pay3;
+    } else if (termID == 10) {
+      return Terms.pay4;
+    } else if (termID == 30) {
+      return Terms.pay5;
+    } else if (termID == -30) {
+      return Terms.pay6;
+    } else if (termID == 1) {
+      return Terms.pay7;
+    } else if (termID == 80) {
+      return Terms.pay8;
+    } else {
+      return Terms.none;
+    }
+  }
+
+  Terms getTermsFromString(BuildContext context, String value) {
+    if (value == AppLocalizations.of(context)!.pay1) {
+      return Terms.pay1;
+    } else if (value == AppLocalizations.of(context)!.pay2) {
+      return Terms.pay2;
+    } else if (value == AppLocalizations.of(context)!.pay3) {
+      return Terms.pay3;
+    } else if (value == AppLocalizations.of(context)!.pay4) {
+      return Terms.pay4;
+    } else if (value == AppLocalizations.of(context)!.pay5) {
+      return Terms.pay5;
+    } else if (value == AppLocalizations.of(context)!.pay6) {
+      return Terms.pay6;
+    } else if (value == AppLocalizations.of(context)!.pay7) {
+      return Terms.pay7;
+    } else if (value == AppLocalizations.of(context)!.pay8) {
+      return Terms.pay8;
+    } else {
+      return Terms.none;
+    }
+  }
+
+  void setTermsID(Terms terms) {
+    if (terms == Terms.pay1) {
+      TermsID = -1;
+    } else if (terms == Terms.pay1) {
+      TermsID = -7;
+    } else if (terms == Terms.pay1) {
+      TermsID = 7;
+    } else if (terms == Terms.pay1) {
+      TermsID = 10;
+    } else if (terms == Terms.pay1) {
+      TermsID = 30;
+    } else if (terms == Terms.pay1) {
+      TermsID = -30;
+    } else if (terms == Terms.pay1) {
+      TermsID = 1;
+    } else if (terms == Terms.pay1) {
+      TermsID = 60;
+    } else {
+      TermsID = -1;
+    }
   }
 
   @override
   bool isFieldEnabled(String field) {
     return super.isFieldEnabled(field);
   }
+
   @override
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "TermsID": 0,
+        "terms": Terms.none,
         "date": "",
         "billNo": "",
         "comments": "",
@@ -106,6 +206,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         "date",
         "billNo",
         "status",
+        "terms",
         "comments"
       ];
   @override
@@ -768,6 +869,65 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       number == null ? 0 : double.tryParse(number.toString());
 
   static String? intFromString(dynamic number) => number?.toString();
+}
+
+enum Terms implements ViewAbstractEnum<Terms> {
+  @JsonValue("0")
+  none,
+  @JsonValue("-1")
+  pay1,
+  @JsonValue("-7")
+  pay2,
+  @JsonValue("7")
+  pay3,
+  @JsonValue("10")
+  pay4,
+  @JsonValue("30")
+  pay5,
+  @JsonValue("-30")
+  pay6,
+  @JsonValue("1")
+  pay7,
+  @JsonValue("80")
+  pay8;
+
+  @override
+  IconData getMainIconData() => Icons.money;
+
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.termsDate;
+  @override
+  String getFieldLabelString(BuildContext context, Terms field) {
+    switch (field) {
+      case Terms.none:
+        return AppLocalizations.of(context)!.none;
+      case Terms.pay1:
+        return AppLocalizations.of(context)!.pay1;
+      case Terms.pay2:
+        return AppLocalizations.of(context)!.pay2;
+      case Terms.pay3:
+        return AppLocalizations.of(context)!.pay3;
+      case Terms.pay4:
+        return AppLocalizations.of(context)!.pay4;
+      case Terms.pay5:
+        return AppLocalizations.of(context)!.pay5;
+      case Terms.pay6:
+        return AppLocalizations.of(context)!.pay6;
+      case Terms.pay7:
+        return AppLocalizations.of(context)!.pay7;
+      case Terms.pay8:
+        return AppLocalizations.of(context)!.pay8;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, Terms field) {
+    return Icons.date_range_outlined;
+  }
+
+  @override
+  List<Terms> getValues() => Terms.values;
 }
 
 enum InvoiceStatus implements ViewAbstractEnum<InvoiceStatus> {
