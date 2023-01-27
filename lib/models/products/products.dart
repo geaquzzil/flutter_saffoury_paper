@@ -287,13 +287,16 @@ class Product extends ViewAbstract<Product>
     return "products";
   }
 
-  Future<bool> hasPermissionQuantity(BuildContext context) async {
-    return await hasPermission(
-        context, "text_products_quantity", ServerActions.view);
+  bool hasPermissionQuantity(BuildContext context) {
+    return hasPermission(context, "text_products_quantity", ServerActions.view);
   }
 
-  Future<bool> hasPermissionPrice(BuildContext context) async {
-    return await hasPermission(
+  bool hasPermissionQuantityOrPrice(BuildContext context) {
+    return hasPermissionQuantity(context) || hasPermissionPrice(context);
+  }
+
+  bool hasPermissionPrice(BuildContext context) {
+    return hasPermission(
         context, "text_prices_for_customer", ServerActions.view);
   }
 
@@ -1101,10 +1104,10 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Future<List<MenuItemBuildGenirc>> getPopupMenuActionsThreeDot(
-      BuildContext c, ServerActions? action) async {
+  List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
+      BuildContext c, ServerActions? action) {
     return [
-      if (await hasPermissionAdd(c, viewAbstract: CutRequest()))
+      if (hasPermissionAdd(c, viewAbstract: CutRequest()))
         MenuItemBuildGenirc<CutRequest>(
             title: CutRequest().getAddToFormat(c),
             icon: Icons.add,

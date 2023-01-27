@@ -208,6 +208,7 @@ class BaseEditWidget extends StatelessWidget {
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
         // initiallyExpanded: !viewAbstract.isNull,
         // isExpanded: false,
+        isDeleteButtonClicked:  viewAbstract.isNullTriggerd,
         hasError: hasError(context),
         canExpand: () => isFieldEnableSubViewAbstract(),
         leading: SizedBox(
@@ -259,9 +260,13 @@ class BaseEditWidget extends StatelessWidget {
                   viewAbstractChangeProvider.toggleNullbale();
                   if (viewAbstract.isNull) {
                     keyExpansionTile.currentState?.collapsedOnlyIfExpanded();
+                  } else {
+                    keyExpansionTile.currentState?.setError(hasError(context));
                   }
                   debugPrint(
                       "onToggleNullbale pressed null ${viewAbstract.isNull}");
+
+            
                 }),
         if (viewAbstract.isEditing())
           viewAbstract.getPopupMenuActionWidget(context, ServerActions.edit)

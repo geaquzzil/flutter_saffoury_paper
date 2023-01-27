@@ -23,6 +23,7 @@ class ExpansionTileCustom extends StatefulWidget {
   List<Widget> children;
   bool padding;
   bool Function()? canExpand;
+  bool isDeleteButtonClicked;
   void Function()? onTap;
   ExpansionTileCustom(
       {Key? key,
@@ -30,6 +31,7 @@ class ExpansionTileCustom extends StatefulWidget {
       this.leading,
       this.subtitle,
       this.trailing,
+      this.isDeleteButtonClicked = false,
       this.useLeadingOutSideCard = true,
       this.padding = true,
       this.wrapWithCardOrOutlineCard = true,
@@ -144,9 +146,15 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   }
 
   void collapsedOnlyIfExpanded() {
-    if (!_isExpanded) return;
+    if (!_isExpanded) {
+      if (!hasError) return;
+      setState(() {
+        hasError = false;
+      });
+    }
     setState(() {
       _isExpanded = false;
+      hasError = false;
       if (_isExpanded) {
         _controller.forward();
       } else {
@@ -188,7 +196,11 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     if (widget.canExpand == null) {
       return true;
     }
-    return widget.canExpand!();
+    if (widget.canExpand!()) {
+      if (widget.isDeleteButtonClicked) return false;
+      return true;
+    }
+    return false;
   }
 
   void _handleTap(BuildContext context) {

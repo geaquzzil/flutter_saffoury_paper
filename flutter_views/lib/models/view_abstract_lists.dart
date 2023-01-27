@@ -231,12 +231,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   List<Widget>? getPopupActionsList(BuildContext context) => null;
 
-  Future<List<MenuItemBuild>> getPopupMenuActionsView(
-      BuildContext context) async {
+  List<MenuItemBuild> getPopupMenuActionsView(BuildContext context) {
     return [
-      if (await hasPermissionPrint(context)) getMenuItemPrint(context),
-      if (await hasPermissionShare(context)) getMenuItemShare(context),
-      if (await hasPermissionEdit(context)) getMenuItemEdit(context),
+      if (hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (hasPermissionShare(context)) getMenuItemShare(context),
+      if (hasPermissionEdit(context)) getMenuItemEdit(context),
     ];
   }
 
@@ -249,78 +248,59 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return [];
   }
 
-  Future<List<MenuItemBuildGenirc>> getPopupMenuActionsThreeDot(
-      BuildContext context, ServerActions? action) async {
+  List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
+      BuildContext context, ServerActions? action) {
     return [];
   }
 
-  Future<List<MenuItemBuild>> getPopupMenuActionsEdit(
-      BuildContext context) async {
+  List<MenuItemBuild> getPopupMenuActionsEdit(BuildContext context) {
     return [
-      if (await hasPermissionPrint(context)) getMenuItemPrint(context),
-      if (await hasPermissionShare(context)) getMenuItemShare(context),
-      if (await hasPermissionEdit(context)) getMenuItemEdit(context),
+      if (hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (hasPermissionShare(context)) getMenuItemShare(context),
+      if (hasPermissionEdit(context)) getMenuItemEdit(context),
     ];
   }
 
-  Future<List<MenuItemBuild>> getPopupMenuActionsList(
-      BuildContext context) async {
+  List<MenuItemBuild> getPopupMenuActionsList(BuildContext context) {
     return [
-      if (await hasPermissionShare(context)) getMenuItemShare(context),
-      if (await hasPermissionPrint(context)) getMenuItemPrint(context),
-      if (await hasPermissionEdit(context)) getMenuItemEdit(context),
-      if (await hasPermissionView(context)) getMenuItemView(context),
+      if (hasPermissionShare(context)) getMenuItemShare(context),
+      if (hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (hasPermissionEdit(context)) getMenuItemEdit(context),
+      if (hasPermissionView(context)) getMenuItemView(context),
     ];
   }
 
+  @Deprecated("Not future anymore")
   Widget onFutureAllPopupMenuLoaded(BuildContext context, ServerActions action,
       {required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded}) {
-    return FutureBuilder<List<MenuItemBuild>>(
-      future: action == ServerActions.edit
-          ? getPopupMenuActionsEdit(context)
-          : getPopupMenuActionsList(context),
-      builder: (context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return onPopupMenuListLoaded(snapshot.data!);
-        }
-        return nil;
-      },
-    );
+    List<MenuItemBuild> list = action == ServerActions.edit
+        ? getPopupMenuActionsEdit(context)
+        : getPopupMenuActionsList(context);
+    return onPopupMenuListLoaded(list);
   }
 
   Widget getPopupMenuActionWidget(BuildContext c, ServerActions action) {
     //TODO for divider use PopupMenuDivider()
-
-    return FutureBuilder(
-      builder:
-          (BuildContext context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
-        return PopupMenuButton<MenuItemBuild>(
-          onSelected: (MenuItemBuild result) {
-            onPopupMenuActionSelected(c, result);
-          },
-          itemBuilder: (BuildContext context) =>
-              snapshot.data?.map((r) => buildMenuItem(c, r)).toList() ?? [],
-        );
+    List<MenuItemBuild> items = action == ServerActions.edit
+        ? getPopupMenuActionsEdit(c)
+        : getPopupMenuActionsList(c);
+    return PopupMenuButton<MenuItemBuild>(
+      onSelected: (MenuItemBuild result) {
+        onPopupMenuActionSelected(c, result);
       },
-      future: action == ServerActions.edit
-          ? getPopupMenuActionsEdit(c)
-          : getPopupMenuActionsList(c),
+      itemBuilder: (BuildContext context) =>
+          items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 
   Widget getPopupMenuActionListWidget(BuildContext c) {
-    return FutureBuilder(
-      builder:
-          (BuildContext context, AsyncSnapshot<List<MenuItemBuild>> snapshot) {
-        return PopupMenuButton<MenuItemBuild>(
-          onSelected: (MenuItemBuild result) {
-            onPopupMenuActionSelected(c, result);
-          },
-          itemBuilder: (BuildContext context) =>
-              snapshot.data?.map((r) => buildMenuItem(c, r)).toList() ?? [],
-        );
+    List<MenuItemBuild> items = getPopupMenuActionsList(c);
+    return PopupMenuButton<MenuItemBuild>(
+      onSelected: (MenuItemBuild result) {
+        onPopupMenuActionSelected(c, result);
       },
-      future: getPopupMenuActionsList(c),
+      itemBuilder: (BuildContext context) =>
+          items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 

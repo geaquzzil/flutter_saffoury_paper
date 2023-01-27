@@ -120,8 +120,8 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  Future<bool> hasPermissionDelete(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionDelete(BuildContext context,
+      {ViewAbstract? viewAbstract})  {
     if (cut_request_results_count.toNonNullable() > 0) return false;
     return super.hasPermissionDelete(context);
   }

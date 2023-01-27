@@ -51,35 +51,37 @@ class ProductTopWidget extends StatelessWidget {
               title: AppLocalizations.of(context)!.grainOn,
               description: product.getGrainOn())
         ]),
-        if (!product.isRoll())
+        if (!product.isRoll() && product.hasPermissionQuantityOrPrice(context))
+          getRow(context, [
+            if (product.hasPermissionQuantity(context))
+              TitleAndDescription(
+                  title: AppLocalizations.of(context)!.weightPerSheet,
+                  description:
+                      product.getSheetWeightStringFormat(context: context)),
+            if (product.hasPermissionPrice(context))
+              TitleAndDescription(
+                  title: AppLocalizations.of(context)!.pricePerSheet,
+                  description:
+                      product.getOneSheetPriceStringFormat(context: context))
+          ]),
+        if (product.hasPermissionPrice(context))
           getRow(context, [
             TitleAndDescription(
-                title: AppLocalizations.of(context)!.weightPerSheet,
+                title:
+                    "${AppLocalizations.of(context)!.unit_price} (${AppLocalizations.of(context)!.per_each} ${product.getProductTypeUnit(context)})",
                 description:
-                    product.getSheetWeightStringFormat(context: context)),
-                    if(product.hasPermissionOnField(context, field, actions))
+                    product.getUnitSellPriceStringFormat(context: context)),
             TitleAndDescription(
-                title: AppLocalizations.of(context)!.pricePerSheet,
-                description:
-                    product.getOneSheetPriceStringFormat(context: context))
+              title: AppLocalizations.of(context)!.total_price,
+              descriptionWidget: Text(
+                product.getTotalSellPriceStringFormat(context: context),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
+            )
           ]),
-        getRow(context, [
-          TitleAndDescription(
-              title:
-                  "${AppLocalizations.of(context)!.unit_price} (${AppLocalizations.of(context)!.per_each} ${product.getProductTypeUnit(context)})",
-              description:
-                  product.getUnitSellPriceStringFormat(context: context)),
-          TitleAndDescription(
-            title: AppLocalizations.of(context)!.total_price,
-            descriptionWidget: Text(
-              product.getTotalSellPriceStringFormat(context: context),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
-            ),
-          )
-        ]),
         Divider(),
         HeaderDescription(
           iconData: Icons.insert_drive_file_outlined,
@@ -181,4 +183,3 @@ class ProductHeaderToggle extends StatelessWidget {
     );
   }
 }
-

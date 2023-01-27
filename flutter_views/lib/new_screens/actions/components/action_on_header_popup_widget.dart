@@ -17,20 +17,16 @@ class ActionsOnHeaderPopupWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     serverActions ??=
         context.watch<ActionViewAbstractProvider>().getServerActions;
-    return viewAbstract.onFutureBuilder<List<MenuItemBuildGenirc>>(
-      context,
-      function:
-          viewAbstract.getPopupMenuActionsThreeDot(context, serverActions),
-      onHasPermissionWidget: (data) {
-        return PopupMenuButton<MenuItemBuildGenirc>(
-          onSelected: (MenuItemBuildGenirc result) {
-            Navigator.pushNamed(context, result.route, arguments: result.value);
-            // viewAbstract.onPopupMenuActionSelected(c, result);
-          },
-          itemBuilder: (BuildContext context) =>
-              data.map(buildPopupMenuItem).toList(),
-        );
+    List<MenuItemBuildGenirc> menuItems =
+        viewAbstract.getPopupMenuActionsThreeDot(context, serverActions);
+
+    return PopupMenuButton<MenuItemBuildGenirc>(
+      onSelected: (MenuItemBuildGenirc result) {
+        Navigator.pushNamed(context, result.route, arguments: result.value);
+        // viewAbstract.onPopupMenuActionSelected(c, result);
       },
+      itemBuilder: (BuildContext context) =>
+          menuItems.map(buildPopupMenuItem).toList(),
     );
   }
 

@@ -40,7 +40,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     debugPrint('onCardLongClicked Offset: ${offset.dx}, ${offset.dy}');
     debugPrint(
         'onCardLongClicked Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
-    var list = await (this as ViewAbstract).getPopupMenuActionsList(context);
+    var list = (this as ViewAbstract).getPopupMenuActionsList(context);
     await showMenu<MenuItemBuild>(
       context: context,
 

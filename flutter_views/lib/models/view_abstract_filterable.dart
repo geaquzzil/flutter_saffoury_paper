@@ -48,9 +48,9 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "<$field>";
   }
 
-  Future<bool> hasPermssionFilterable(
-      BuildContext context, ViewAbstract viewAbstract) async {
-    return await hasPermissionList(context, viewAbstract: viewAbstract);
+  bool hasPermssionFilterable(
+      BuildContext context, ViewAbstract viewAbstract)  {
+    return  hasPermissionList(context, viewAbstract: viewAbstract);
   }
 
   bool hasPermssionFilterableField(BuildContext context, String field) {

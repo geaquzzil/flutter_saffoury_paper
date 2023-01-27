@@ -125,7 +125,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
       // debugPrint("checing permission for $item ");
-      bool hasPermssion = await _user.hasPermissionList(context,
+      bool hasPermssion =  _user.hasPermissionList(context,
           viewAbstract: item as ViewAbstract);
       // debugPrint("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {

@@ -23,6 +23,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(ignore: true)
   bool isNull = false;
 
+  @JsonKey(ignore: true)
+  bool isNullTriggerd = false;
+
   int iD = -1;
 
   ViewAbstract? get getParnet => parent;
@@ -51,8 +54,8 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     return hasPermission(context, permissionField, actions);
   }
 
-  Future<bool> hasPermission(
-      BuildContext context, dynamic toDo, ServerActions? action) async {
+  bool hasPermission(
+      BuildContext context, dynamic toDo, ServerActions? action) {
     return true;
     action ??= ServerActions.view;
 
@@ -69,7 +72,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
       return false;
     }
     PermissionActionAbstract? foundedPermission =
-        await findCurrentPermission(context, toDo);
+        findCurrentPermission(context, toDo);
     if (foundedPermission == null) {
       if (toDo is String) {
         return false;
@@ -112,60 +115,53 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     }
   }
 
-  Future<bool> hasPermissionList(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionList(BuildContext context, {ViewAbstract? viewAbstract}) {
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.list)
-        : await hasPermission(context, viewAbstract, ServerActions.list);
+        ? hasPermission(context, this, ServerActions.list)
+        : hasPermission(context, viewAbstract, ServerActions.list);
   }
 
-  Future<bool> hasPermissionImport(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionImport(BuildContext context, {ViewAbstract? viewAbstract}) {
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.add)
-        : await hasPermission(context, viewAbstract, ServerActions.add);
+        ? hasPermission(context, this, ServerActions.add)
+        : hasPermission(context, viewAbstract, ServerActions.add);
   }
 
-  Future<bool> hasPermissionAdd(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionAdd(BuildContext context, {ViewAbstract? viewAbstract}) {
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.add)
-        : await hasPermission(context, viewAbstract, ServerActions.add);
+        ? hasPermission(context, this, ServerActions.add)
+        : hasPermission(context, viewAbstract, ServerActions.add);
   }
 
-  Future<bool> hasPermissionShare(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionShare(BuildContext context, {ViewAbstract? viewAbstract}) {
     return true;
   }
 
-  Future<bool> hasPermissionView(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionView(BuildContext context, {ViewAbstract? viewAbstract}) {
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.view)
-        : await hasPermission(context, viewAbstract, ServerActions.view);
+        ? hasPermission(context, this, ServerActions.view)
+        : hasPermission(context, viewAbstract, ServerActions.view);
   }
 
-  Future<bool> hasPermissionEdit(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionEdit(BuildContext context, {ViewAbstract? viewAbstract}) {
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.edit)
-        : await hasPermission(context, viewAbstract, ServerActions.edit);
+        ? hasPermission(context, this, ServerActions.edit)
+        : hasPermission(context, viewAbstract, ServerActions.edit);
   }
 
-  Future<bool> hasPermissionPrint(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionPrint(BuildContext context, {ViewAbstract? viewAbstract}) {
     if (this is! PrintableMaster) return false;
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.print)
-        : await hasPermission(context, viewAbstract, ServerActions.print);
+        ? hasPermission(context, this, ServerActions.print)
+        : hasPermission(context, viewAbstract, ServerActions.print);
   }
 
-  Future<PermissionActionAbstract?> findCurrentPermission(
-      BuildContext context, dynamic toDo) async {
+  PermissionActionAbstract? findCurrentPermission(
+      BuildContext context, dynamic toDo) {
     PermissionLevelAbstract permissionLevelAbstract =
         getUserPermissionLevel(context);
 
-    return await permissionLevelAbstract.findPermissionBy(toDo);
+    return permissionLevelAbstract.findPermissionBy(toDo);
   }
 
   List<PermissionActionAbstract> getPermssionActions(BuildContext context) {
@@ -195,32 +191,15 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     );
   }
 
-  FutureBuilder<bool> onHasPermission(BuildContext context,
-      {required Future<bool> function,
-      required Widget Function() onHasPermissionWidget}) {
-    return FutureBuilder<bool>(
-      future: function,
-      builder: (context, snapshot) {
-        if (snapshot.data == false) {
-          return nil;
-        } else {
-          return onHasPermissionWidget();
-        }
-      },
-    );
-  }
-
   //  bool hasPerantViewAbstrct() {
   //     return getParent() != null;
   // }
-  Future<bool> hasPermissionDelete(BuildContext context,
-      {ViewAbstract? viewAbstract}) async {
+  bool hasPermissionDelete(BuildContext context, {ViewAbstract? viewAbstract}) {
     if (isNew()) return false;
     // if (hasPerantViewAbstrct()) return false;
     return viewAbstract == null
-        ? await hasPermission(context, this, ServerActions.delete_action)
-        : await hasPermission(
-            context, viewAbstract, ServerActions.delete_action);
+        ? hasPermission(context, this, ServerActions.delete_action)
+        : hasPermission(context, viewAbstract, ServerActions.delete_action);
   }
 
   bool isAdmin(BuildContext context) =>
@@ -255,6 +234,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   void toggleIsNullable() {
     isNull = !isNull;
+    isNullTriggerd = !isNullTriggerd;
   }
 
   bool isNullableAlreadyFromParentCheck(String field) {

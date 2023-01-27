@@ -35,7 +35,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
     return hashMapOfPermissionTableAction[key];
   }
 
-  Future<PermissionActionAbstract?> findPermissionBy(dynamic toDo) async {
+  PermissionActionAbstract? findPermissionBy(dynamic toDo) {
     PermissionActionAbstract? foundedPermission;
     String? currentTableNameFromObject = findCurrentTableNmeFromObject(toDo);
     if ((currentTableNameFromObject == null)) return null;

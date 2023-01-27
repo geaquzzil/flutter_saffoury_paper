@@ -13,28 +13,22 @@ class ActionsOnHeaderWidget extends StatelessWidget {
   ServerActions? serverActions;
   bool removeSharedWithFabs;
   ActionsOnHeaderWidget(
-      {super.key, required this.viewAbstract, this.serverActions,this.removeSharedWithFabs=true});
+      {super.key,
+      required this.viewAbstract,
+      this.serverActions,
+      this.removeSharedWithFabs = true});
 
   @override
   Widget build(BuildContext context) {
     serverActions ??=
         context.watch<ActionViewAbstractProvider>().getServerActions;
     // final viewAbstract = context.watch<ActionViewAbstractProvider>().getObject;
-
-    return FutureBuilder(
-        future: serverActions == ServerActions.view
-            ? viewAbstract.getPopupMenuActionsView(context)
-            : viewAbstract.getPopupMenuActionsEdit(context),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<MenuItemBuild>> snapshot) {
-          debugPrint("shared header build List ${snapshot.data}");
-          if (snapshot.hasData) {
-            return Row(
-              children: [...?snapshot.data?.map(buildMenuItem).toList()],
-            );
-          }
-          return const Icon(Icons.error);
-        });
+    List<MenuItemBuild> menuItems = serverActions == ServerActions.view
+        ? viewAbstract.getPopupMenuActionsView(context)
+        : viewAbstract.getPopupMenuActionsEdit(context);
+    return Row(
+      children: [...menuItems.map(buildMenuItem).toList()],
+    );
   }
 
   Widget buildMenuItem(MenuItemBuild menuItemBuild) => HeaderIconBuilder(

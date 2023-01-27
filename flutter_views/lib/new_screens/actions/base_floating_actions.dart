@@ -46,20 +46,15 @@ class BaseFloatingActionButtons extends StatelessWidget {
             width: kDefaultPadding,
           ),
         if (serverActions != ServerActions.print)
-          viewAbstract.onHasPermission(
-            context,
-            function: viewAbstract.hasPermissionDelete(context),
-            onHasPermissionWidget: () {
-              return Row(
-                children: [
-                  getDeleteFloatingButton(context),
-                  const SizedBox(
-                    width: kDefaultPadding,
-                  ),
-                ],
-              );
-            },
-          ),
+          if (viewAbstract.hasPermissionDelete(context))
+            Row(
+              children: [
+                getDeleteFloatingButton(context),
+                const SizedBox(
+                  width: kDefaultPadding,
+                ),
+              ],
+            ),
         if (addOnList != null) ...addOnList!
       ],
     );
