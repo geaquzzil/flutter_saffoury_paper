@@ -63,6 +63,7 @@ class BaseEditWidget extends StatelessWidget {
     keyExpansionTile = GlobalKey<EditSubViewAbstractHeaderState>(
         debugLabel: "${viewAbstract.runtimeType}");
     viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
+    viewAbstract.onBeforeGenerateView(context);
 
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;
@@ -274,30 +275,34 @@ class BaseEditWidget extends StatelessWidget {
         autovalidateMode: AutovalidateMode.always,
         key: formKey,
         onChanged: () {
-          if (onValidate != null) {
-            bool? validate = formKey?.currentState!.validate();
-            if (validate ?? false) {
-              formKey?.currentState!.save();
-              ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
-              onValidate!(objcet);
-              debugPrint(
-                  "BaseEdit main form onValidate => ${objcet?.toJsonString()}",wrapWidth: 1024);
-              if (viewAbstract.parent != null) {
-                debugPrint(
-                    "BaseEdit main form onValidate => ${objcet?.getTableNameApi()}  has parent and has error=> false");
-                keyExpansionTile.currentState?.setError(false);
-              }
-            } else {
-              onValidate!(null);
-              if (viewAbstract.parent != null) {
-                debugPrint(
-                    "BaseEdit main form onValidate =>  has parent and has error=> true");
-                keyExpansionTile.currentState?.setError(true);
-              }
-            }
-          }
+          onValidateForm(context);
         },
         child: getFormContent(context));
+  }
+
+  void onValidateForm(BuildContext context) {
+    if (onValidate != null) {
+      bool? validate = formKey?.currentState!.validate();
+      if (validate ?? false) {
+        formKey?.currentState!.save();
+        ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
+        onValidate!(objcet);
+        debugPrint("BaseEdit main form onValidate => ${objcet?.toJsonString()}",
+            wrapWidth: 1024);
+        if (viewAbstract.parent != null) {
+          debugPrint(
+              "BaseEdit main form onValidate => ${objcet?.getTableNameApi()}  has parent and has error=> false");
+          keyExpansionTile.currentState?.setError(false);
+        }
+      } else {
+        onValidate!(null);
+        if (viewAbstract.parent != null) {
+          debugPrint(
+              "BaseEdit main form onValidate =>  has parent and has error=> true");
+          keyExpansionTile.currentState?.setError(true);
+        }
+      }
+    }
   }
 
   Widget getFormContent(BuildContext context) {

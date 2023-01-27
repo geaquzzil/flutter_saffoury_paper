@@ -221,6 +221,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
 
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
+        
           onTap: () => controller.selection = TextSelection(
               baseOffset: 0, extentOffset: controller.value.text.length),
           enabled: enabled,

@@ -36,6 +36,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     }
     return object.iD == iD && object.getTableNameApi() == getTableNameApi();
   }
+  ///here we init fields to get from saved data or other...
+  void onBeforeGenerateView(BuildContext context) {
+  }
 
   T copyWithNewSuggestion(ViewAbstract newValue) {
     newValue.setLastSearchViewAbstractByTextInputList(

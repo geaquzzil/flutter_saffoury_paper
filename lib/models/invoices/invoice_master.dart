@@ -16,11 +16,13 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -28,9 +30,11 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
+import 'package:provider/provider.dart';
 
 import 'invoice_master_details.dart';
 import 'orders.dart';
@@ -71,7 +75,16 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   InvoiceMaster() : super() {
     date = "".toDateTimeNowString();
   }
+  @override
+  void onBeforeGenerateView(BuildContext context) {
+    super.onBeforeGenerateView(context);
+    employees = context.read<AuthProvider<AuthUser>>().getUser as Employee;
+  }
 
+  @override
+  bool isFieldEnabled(String field) {
+    return super.isFieldEnabled(field);
+  }
   @override
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
   @override

@@ -27,19 +27,30 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   ViewAbstract? get getParnet => parent;
   String? get getFieldNameFromParent => fieldNameFromParent;
+  Map<String, String> getPremissionFieldsMap(BuildContext context) {
+    return {};
+  }
 
-// Future<bool> hasPermissionToPreformActionOn(BuildContext context,
-//   String field, ServerActions? actions) async{
-//         print( "hasPermissionToPreformActionOn: " + " field " + field + "  action " + actions.toString());
-//         PermissionField permissionField = getPermission(field);
-//         if (permissionField == null) {
-//             print(  "hasPermissionToPreformActionOn: " + " PermissionField ==null  " + field.getName() + "  action " + actions.toString());
-//             return true;
-//         }
-//      print( "hasPermissionToPreformActionOn: " + " PermissionField " + field.getName() + "  permissionField " + permissionField.table_name());
-//         if (isEmpty(permissionField.table_name())) return false;
-//         return hasPermission(permissionField.table_name, actions);
-//     }
+  String? _getPermissionField(BuildContext context, String field) {
+    return getPremissionFieldsMap(context)[field];
+  }
+
+  Future<bool> hasPermissionOnField(
+      BuildContext context, String field, ServerActions? actions) async {
+    debugPrint(
+        "hasPermissionToPreformActionOn:  field $field  action $actions");
+    String? permissionField = _getPermissionField(context, field);
+    if (permissionField == null) {
+      debugPrint(
+          "hasPermissionToPreformActionOn:  PermissionField ==null  $field  action $actions");
+      return true;
+    }
+    // debugPrint(
+    //     "hasPermissionToPreformActionOn: " + " $permissionField " + field  permissionField " );
+    // if (isEmpty(permissionField.table_name())) return false;
+    return hasPermission(context,permissionField, actions);
+  }
+
   Future<bool> hasPermission(
       BuildContext context, dynamic toDo, ServerActions? action) async {
     return true;
