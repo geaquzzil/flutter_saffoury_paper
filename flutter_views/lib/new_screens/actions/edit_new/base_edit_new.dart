@@ -41,6 +41,7 @@ class BaseEditWidget extends StatelessWidget {
   late Map<GroupItem, List<String>> groupedFields;
 
   Map<String, TextEditingController> controllers = {};
+  Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
   late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
 
@@ -138,7 +139,11 @@ class BaseEditWidget extends StatelessWidget {
     }
     return hasErr;
   }
-
+  FormBuilderState getSubFormState(BuildContext context,String field){
+    if(_subformKeys.containsKey(field)){
+      return _subformKeys![field];
+    }
+  }
   TextEditingController getController(BuildContext context,
       {required String field,
       required dynamic value,
