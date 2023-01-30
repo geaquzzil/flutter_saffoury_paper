@@ -62,6 +62,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
             if (getListableInterface().getListableList().isEmpty) {
               onValidateViewAbstract.value = null;
             } else {
+              //TODO check every list item
+              
               onValidateViewAbstract.value = currentViewAbstract;
             }
           }

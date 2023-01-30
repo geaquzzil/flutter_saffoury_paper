@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -6,11 +7,12 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class BaseEditDialog extends StatelessWidget {
   ViewAbstract viewAbstract;
   ViewAbstract? _updatedViewAbstract;
+  GlobalKey<FormBuilderState>? formKey;
   final GlobalKey<ScaffoldMessengerState> scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
 
   late ValueNotifier<ViewAbstract?> onValidate;
-  BaseEditDialog({super.key, required this.viewAbstract});
+  BaseEditDialog({super.key, required this.viewAbstract, this.formKey});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class BaseEditDialog extends StatelessWidget {
         ]),
         resizeToAvoidBottomInset: false,
         body: BaseEditWidget(
+            formKey: formKey,
             viewAbstract: viewAbstract,
             isTheFirst: true,
             // isRequiredSubViewAbstract: false,

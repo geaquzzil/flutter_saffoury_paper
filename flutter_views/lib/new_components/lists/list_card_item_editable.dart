@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -18,28 +19,40 @@ class ListCardItemEditable<T extends ViewAbstract> extends StatefulWidget {
   void Function(T object) onDelete;
   void Function(T object) onUpdate;
   bool useDialog;
+  GlobalKey<FormBuilderState>? formKey;
   ListCardItemEditable(
       {Key? key,
       required this.index,
       required this.object,
       required this.onDelete,
+      this.formKey,
       required this.onUpdate,
       this.useDialog = true})
       : super(key: key);
 
   @override
-  State<ListCardItemEditable> createState() => _ListCardItemEditable();
+  State<ListCardItemEditable> createState() => ListCardItemEditableState();
 }
 
-class _ListCardItemEditable<T extends ViewAbstract>
+class ListCardItemEditableState<T extends ViewAbstract>
     extends State<ListCardItemEditable<T>> {
+  GlobalKey<FormBuilderState>? formKey;
   bool isExpanded = false;
   late ViewAbstract validated;
+
   @override
   void initState() {
     super.initState();
     validated = widget.object;
+    formKey = widget.formKey ?? GlobalKey<FormBuilderState>();
+
     // checkEnable();
+  }
+
+  bool isValidated() {
+    debugPrint("listCardItemEditableState isValidate");
+    formKey!.currentState?.validate();
+    return true;
   }
 
   @override
@@ -61,7 +74,6 @@ class _ListCardItemEditable<T extends ViewAbstract>
 
   Widget getListTile(BuildContext context) {
     return ListTile(
-      
       title: (validated.getMainHeaderText(context)),
       subtitle: (validated.getMainSubtitleHeaderText(context)),
       leading: validated.getCardLeading(context),
@@ -74,11 +86,10 @@ class _ListCardItemEditable<T extends ViewAbstract>
 
   Future<void> getEditDialog(BuildContext context) async {
     await showFullScreenDialogExt<ViewAbstract?>(
-      
         anchorPoint: const Offset(1000, 1000),
         context: context,
         builder: (p0) {
-           return BaseEditDialog(
+          return BaseEditDialog(
             viewAbstract: validated,
           );
         }).then((value) {

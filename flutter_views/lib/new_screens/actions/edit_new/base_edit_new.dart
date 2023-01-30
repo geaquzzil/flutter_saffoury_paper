@@ -113,6 +113,14 @@ class BaseEditWidget extends StatelessWidget {
     });
   }
 
+  bool isValidated() {
+    if (formKey == null) {
+      ///todo check manually for validation
+    } else {
+      
+    }
+  }
+
   bool hasErrorGroupWidget(BuildContext context, List<String> groupedFields) {
     for (var element in groupedFields) {
       bool? res = formKey?.currentState?.fields[element]?.validate();
