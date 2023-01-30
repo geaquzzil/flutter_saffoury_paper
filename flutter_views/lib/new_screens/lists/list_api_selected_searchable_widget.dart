@@ -154,7 +154,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
         }
         return ListCardItemSelected<T>(
           object: data[index] as T,
-          onSelected: (obj) {
+          onSelected: (obj, isSelect) {
             if (obj.isSelected) {
               T? isFounded;
               try {

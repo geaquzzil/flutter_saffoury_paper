@@ -14,6 +14,9 @@ abstract class ListableInterface<T extends ViewAbstract> {
 
   ViewAbstract getListablePickObject();
 
+  List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
+      BuildContext context);
+
   String? getListableTotalQuantity(BuildContext context);
   double? getListableTotalPrice(BuildContext context);
   double? getListableTotalDiscount(BuildContext context);

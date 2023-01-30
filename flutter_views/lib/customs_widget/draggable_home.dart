@@ -15,7 +15,9 @@ enum ExpandType { CLOSED, HALF_EXPANDED, EXPANDED }
 
 class DraggableHome extends StatefulWidget {
   @override
-  _DraggableHomeState createState() => _DraggableHomeState();
+  DraggableHomeState createState() => DraggableHomeState();
+
+  final bool pinnedToolbar;
 
   /// Leading: A widget to display before the toolbar's title.
   final Widget? leading;
@@ -105,6 +107,7 @@ class DraggableHome extends StatefulWidget {
   const DraggableHome(
       {Key? key,
       this.leading,
+      this.pinnedToolbar = false,
       this.title,
       this.centerTitle = true,
       this.actions,
@@ -143,7 +146,7 @@ class DraggableHome extends StatefulWidget {
         super(key: key);
 }
 
-class _DraggableHomeState extends State<DraggableHome>
+class DraggableHomeState extends State<DraggableHome>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   bool isPlaying = false;
@@ -360,6 +363,35 @@ class _DraggableHomeState extends State<DraggableHome>
     );
   }
 
+  void addAnimatedListItem(Widget widget) {
+    if (animatedWidgets.isNotEmpty) return;
+    animatedWidgets.add(widget);
+    int idx = animatedWidgets.indexOf(widget);
+    debugPrint("DraggableHome addAnimatedListItem  at $idx");
+    _listKey.currentState?.insertItem(idx);
+  }
+
+  void removeAnimatedListItemByWidget(Widget widget) {
+    if (animatedWidgets.isEmpty) return;
+    int idx = animatedWidgets.indexOf(widget);
+    debugPrint("DraggableHome removeAnimatedListItemByWidget  at $idx");
+    if (idx == -1) return;
+    Widget removed = animatedWidgets.removeAt(idx);
+    _listKey.currentState?.removeItem(
+        idx,
+        (context, animation) =>
+            SliverAnimatedCard(animation: animation, child: removed));
+  }
+
+  void removeAnimatedListItem(int idx) {
+    if (animatedWidgets.isEmpty) return;
+    Widget removed = animatedWidgets.removeAt(idx);
+    _listKey.currentState?.removeItem(
+        idx,
+        (context, animation) =>
+            SliverAnimatedCard(animation: animation, child: removed));
+  }
+
   Widget sliver(
     BuildContext context,
     double appBarHeight,
@@ -378,7 +410,9 @@ class _DraggableHomeState extends State<DraggableHome>
           child: CustomScrollView(
             // key: const PageStorageKey<String>('saveState'),
             controller: widget.scrollController,
-            physics: widget.physics ?? const BouncingScrollPhysics(),
+            physics: widget.physics ??
+                const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
             slivers: [
               StreamBuilder<List<bool>>(
                 stream: CombineLatestStream.list<bool>([
@@ -393,16 +427,10 @@ class _DraggableHomeState extends State<DraggableHome>
                   if (toggleWidget != null) {
                     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
                       if (!fullyCollapsed && !fullyExpanded) {
-                        if (animatedWidgets.isEmpty) return;
-                        Widget removed = animatedWidgets.removeAt(0);
-                        _listKey.currentState?.removeItem(
-                            0,
-                            (context, animation) => SliverAnimatedCard(
-                                animation: animation, child: removed));
+                        removeAnimatedListItem(0);
                       } else if (fullyCollapsed && !fullyExpanded) {
-                        animatedWidgets.add(_tabs![value]
+                        addAnimatedListItem(_tabs![value]
                             .draggableSwithHeaderFromAppbarToScroll!);
-                        _listKey.currentState?.insertItem(0);
                       }
                     });
                   }
@@ -425,7 +453,7 @@ class _DraggableHomeState extends State<DraggableHome>
                             ? []
                             : widget.actions,
                     elevation: 0,
-                    pinned: false,
+                    pinned: widget.pinnedToolbar,
                     // floating: true,
                     stretch: true,
                     centerTitle: widget.centerTitle,

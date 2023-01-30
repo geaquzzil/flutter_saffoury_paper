@@ -10,7 +10,16 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   bool? delete;
   @JsonKey(ignore: true)
   bool? selected;
+  @JsonKey(ignore: true)
+  bool? _isScannedFromQrCode;
+
   ViewAbstract() : super();
+
+  bool? get getIsScannedFromQrCode => _isScannedFromQrCode;
+
+  set setIsScannedFromQrCode(bool? isScannedFromQrCode) =>
+      _isScannedFromQrCode = isScannedFromQrCode;
+      
   @Deprecated("could be replaced with getHomeListHeaderWidgetList")
   List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) =>
       null;
@@ -36,9 +45,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     }
     return object.iD == iD && object.getTableNameApi() == getTableNameApi();
   }
+
   ///here we init fields to get from saved data or other...
-  void onBeforeGenerateView(BuildContext context) {
-  }
+  void onBeforeGenerateView(BuildContext context) {}
 
   T copyWithNewSuggestion(ViewAbstract newValue) {
     newValue.setLastSearchViewAbstractByTextInputList(

@@ -3,9 +3,11 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
   final T object;
-  void Function(T obj)? onSelected;
+  bool? isSelected;
+  void Function(T obj, bool selected)? onSelected;
 
-  ListCardItemSelected({Key? key, required this.object, this.onSelected})
+  ListCardItemSelected(
+      {Key? key, required this.object, this.onSelected, this.isSelected})
       : super(key: key);
 
   @override
@@ -19,19 +21,19 @@ class _ListCardItemSelected<T extends ViewAbstract>
   void initState() {
     super.initState();
     // checkEnable();
-    isSelected = widget.object.isSelected;
+    isSelected = widget.isSelected ?? widget.object.isSelected;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    isSelected = widget.object.isSelected;
+    isSelected = widget.isSelected ?? widget.object.isSelected;
   }
 
   @override
   void didUpdateWidget(covariant ListCardItemSelected<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    isSelected = widget.object.isSelected;
+    isSelected = widget.isSelected ?? widget.object.isSelected;
   }
 
   @override
@@ -40,11 +42,13 @@ class _ListCardItemSelected<T extends ViewAbstract>
       controlAffinity: ListTileControlAffinity.leading,
       value: isSelected,
       onChanged: (value) {
+        debugPrint("CheckboxListTile changed  => $value");
         setState(() {
           widget.object.isSelected = value ?? false;
+          isSelected = value ?? false;
         });
         if (widget.onSelected != null) {
-          widget.onSelected!(widget.object);
+          widget.onSelected!(widget.object, value ?? false);
         }
       },
       selected: isSelected,

@@ -125,6 +125,7 @@ class _QrCodeReaderState extends State<QrCodeReader> {
 
           v = await v?.viewCallGetFirstFromList(qrCodeID.iD);
           if (checkCurrentState(QrCodeCurrentState.DONE)) {
+            v?.setIsScannedFromQrCode = true;
             widget.valueNotifierQrState?.value = QrCodeNotifierState(
                 state: QrCodeCurrentState.DONE, viewAbstract: v);
             widget.valueNotifierQrStateFunction?.call(QrCodeNotifierState(

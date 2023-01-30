@@ -858,16 +858,27 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
+      BuildContext context) {
+    return getProductsFromDetailList();
+  }
+
+  //todo check current list for duplications
+  ///list includes initial selected list
+  @override
   void onListableSelectedListAdded(
       BuildContext context, List<ViewAbstract> list) {
     List<Product> products = list.cast();
-    for (var element in products) {
-      debugPrint("onListableSelectedListAdded  added ${element.iD}");
-      getDetailListFromMaster()
-          .add(getDetailMasterNewInstance()..setProduct(context, element));
-    }
-    debugPrint(
-        "onListableSelectedListAdded  getDetailListFromMaster length= >  ${getDetailListFromMaster().length}");
+    List<Product> currentProducts = getProductsFromDetailList();
+    if (isNew()) {
+      for (var element in products) {
+        debugPrint("onListableSelectedListAdded  added ${element.iD}");
+        getDetailListFromMaster()
+            .add(getDetailMasterNewInstance()..setProduct(context, element));
+      }
+      debugPrint(
+          "onListableSelectedListAdded  getDetailListFromMaster length= >  ${getDetailListFromMaster().length}");
+    } else {}
   }
 
   static double? convertToDouble(dynamic number) =>

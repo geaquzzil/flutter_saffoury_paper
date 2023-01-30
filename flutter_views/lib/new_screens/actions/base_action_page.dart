@@ -33,6 +33,7 @@ import 'package:nil/nil.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:skeletons/skeletons.dart';
 import '../../screens/base_shared_actions_header.dart';
 import 'components/action_on_header_popup_widget.dart';
 import 'view/view_view_abstract.dart';
@@ -81,6 +82,13 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   ValueNotifier<ApiCallState> apiCallState =
       ValueNotifier<ApiCallState>(ApiCallState.NONE);
+
+  ValueNotifier<QrCodeNotifierState> valueNotifierQrState =
+      ValueNotifier<QrCodeNotifierState>(
+          QrCodeNotifierState(state: QrCodeCurrentState.NONE));
+
+  GlobalKey<DraggableHomeState> draggableHomeState =
+      GlobalKey<DraggableHomeState>();
   @override
   void dispose() {
     _tabController.dispose();
@@ -422,8 +430,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   EmptyWidget getEmptyWidget(BuildContext context) {
     return EmptyWidget(
         lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-        title: AppLocalizations.of(context)!.cantConnect,
-        subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+        title: AppLocalizations.of(context)!.noItems,
+        subtitle: AppLocalizations.of(context)!.no_content);
   }
 
   @override
@@ -449,31 +457,81 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       slivers: [
         ValueListenableBuilder(
             valueListenable: onListableSelectedItem,
-            builder: (context, value, child) => SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                  debugPrint(
-                      "getListableInterface SliverList index => $index is added");
+            builder: (context, value, child) {
+              if (getListableInterface().getListableList().isEmpty) {
+                return SliverFillRemaining(
+                  child: getEmptyWidget(context),
+                );
+              }
+              return SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                debugPrint(
+                    "getListableInterface SliverList index => $index is added");
 
-                  return ListCardItemEditable<ViewAbstract>(
-                    index: index,
-                    object: getListableInterface().getListableList()[index],
-                    useDialog: true,
-                    onDelete: (object) {
-                      debugPrint(
-                          "getListableInterface index => $index is removed");
-                      (getListableInterface()).onListableDelete(object);
-                      onEditListableItem.value = object;
-                    },
-                    onUpdate: (object) {
-                      (getListableInterface()).onListableUpdate(object);
-                      onEditListableItem.value = object;
-                    },
-                  );
-                },
-                        childCount:
-                            getListableInterface().getListableList().length))),
+                return ListCardItemEditable<ViewAbstract>(
+                  index: index,
+                  object: getListableInterface().getListableList()[index],
+                  useDialog: true,
+                  onDelete: (object) {
+                    debugPrint(
+                        "getListableInterface index => $index is removed");
+                    (getListableInterface()).onListableDelete(object);
+                    onEditListableItem.value = object;
+                  },
+                  onUpdate: (object) {
+                    (getListableInterface()).onListableUpdate(object);
+                    onEditListableItem.value = object;
+                  },
+                );
+              }, childCount: getListableInterface().getListableList().length));
+            }),
       ],
       AppLocalizations.of(context)!.details,
+    );
+  }
+
+  Widget getShimmerLoadingQrCode() {
+    return SliverFillRemaining(
+      child: SkeletonTheme(
+        shimmerGradient: const LinearGradient(
+          colors: [
+            Color(0xFFD8E3E7),
+            Color(0xFFC8D5DA),
+            Color(0xFFD8E3E7),
+          ],
+          stops: [
+            0.1,
+            0.5,
+            0.9,
+          ],
+        ),
+        darkShimmerGradient: const LinearGradient(
+          colors: [
+            Color(0xFF222222),
+            Color(0xFF242424),
+            Color(0xFF2B2B2B),
+            Color(0xFF242424),
+            Color(0xFF222222),
+            // Color(0xFF242424),
+            // Color(0xFF2B2B2B),
+            // Color(0xFF242424),
+            // Color(0xFF222222),
+          ],
+          stops: [
+            0.0,
+            0.2,
+            0.5,
+            0.8,
+            1,
+          ],
+          // begin: Alignment(-2.4, -0.2),
+          // end: Alignment(2.4, 0.2),
+          // tileMode: TileMode.clamp,
+        ),
+        child: SkeletonListView(
+          itemCount: 1,
+        ),
+      ),
     );
   }
 
@@ -497,6 +555,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       tabs.insert(1, getListableTab());
     }
     return DraggableHome(
+        key: draggableHomeState,
         valueNotifierExpandType: expandType,
         // bottomNavigationBarHeight: 80,
         bottomNavigationBar: getExtras() is CartableProductItemInterface
@@ -520,16 +579,44 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                 currentHeight: 20,
                 valueNotifierQrStateFunction: (codeState) {
                   if (codeState == null) return;
-                  if (codeState.state == QrCodeCurrentState.DONE) {
+                  Widget loadingWidget = ListTile(
+                    leading: const SkeletonAvatar(
+                      style: SkeletonAvatarStyle(
+                          shape: BoxShape.circle, width: 50, height: 50),
+                    ),
+                    title: SkeletonParagraph(
+                      style: SkeletonParagraphStyle(
+                          lines: 2,
+                          spacing: 6,
+                          lineStyle: SkeletonLineStyle(
+                            randomLength: true,
+                            height: 10,
+                            borderRadius: BorderRadius.circular(8),
+                            minLength: MediaQuery.of(context).size.width / 6,
+                            maxLength: MediaQuery.of(context).size.width / 3,
+                          )),
+                    ),
+                  );
+
+                  if (codeState.state == QrCodeCurrentState.LOADING) {
+                    debugPrint(
+                        "QrCodeReader codeState is current state loading");
+                    draggableHomeState.currentState
+                        ?.addAnimatedListItem(loadingWidget);
+                    return;
+                  } else if (codeState.state == QrCodeCurrentState.DONE) {
+                    //todo if response qrcode is null then add list tile with retry button
+                    draggableHomeState.currentState?.removeAnimatedListItem(0);
                     ViewAbstract selectedViewAbstract = codeState.viewAbstract!;
                     getListableInterface().onListableSelectedListAdded(
                         context, [selectedViewAbstract]);
                     onListableSelectedItem.value = [selectedViewAbstract];
+                  } else {
+                    draggableHomeState.currentState?.removeAnimatedListItem(0);
                   }
                 },
               )
             : null,
-            
         headerExpandedHeight: .3,
         stretchMaxHeight: .31,
         scrollController: ScrollController(),
@@ -574,8 +661,14 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             buildSearchWidgetAsEditText: true,
             buildFilterableView: false,
             initialSelectedList: getListableInterface()
-                .getListableList(), //todo this is a order details to get product from it
-            onSelectedListChange: (selectedList) {},
+                .getListableInitialSelectedListPassedByPickedObject(
+                    context), //todo this is a order details to get product from it
+            onSelectedListChange: (selectedList) {
+              // getListableInterface()
+              //     .onListableSelectedListAdded(context, selectedList);
+              // onListableSelectedItem.value = selectedList;
+              // onEditListableItem.value = null;
+            },
             // onSelectedListChangeValueNotifier: {},
           );
         }).then((value) {

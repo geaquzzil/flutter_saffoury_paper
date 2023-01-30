@@ -91,9 +91,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   bool _selectMood = false;
   bool get isSelectedMode => _selectMood;
 
-  List<ViewAbstract> _selectedList = [];
-
-  List<ViewAbstract> get getSelectedList => _selectedList;
   ValueNotifier<ExpandType> expandType =
       ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
   ValueNotifier<ExpandType> expandTypeOnlyOnExpand =
@@ -102,29 +99,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   ValueNotifier<QrCodeNotifierState> valueNotifierQrState =
       ValueNotifier<QrCodeNotifierState>(
           QrCodeNotifierState(state: QrCodeCurrentState.NONE));
-  void onSelectedItem(ViewAbstract obj) {
-    if (obj.isSelected) {
-      ViewAbstract? isFounded;
-      try {
-        isFounded = _selectedList.firstWhereOrNull((p0) => p0.isEquals(obj));
-      } catch (e, s) {}
-      if (isFounded == null) {
-        _selectedList.add(obj);
-        
-        // if (widget.onSelected != null) {
-        //   widget.onSelected!(selectedList);
-        //   setState(() {});
-        // }
-      }
-    } else {
-      _selectedList.removeWhere((element) => element.isEquals(obj));
-      // if (widget.onSelected != null) {
-      //   widget.onSelected!(selectedList);
-      //   setState(() {});
-      // }
-    }
-    context.read<ListActionsProvider>().notifySelectedItem();
-  }
+
+  late ValueNotifier<List<ViewAbstract>> onSelectedListChangeValueNotifier;
 
   void toggleSelectMood() {
     if (mounted) {
@@ -135,10 +111,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   void clearSelection() {
-    for (var element in _selectedList) {
-      element.selected = false;
-    }
-    _selectedList.clear();
+    onSelectedListChangeValueNotifier.value.clear();
   }
 
   @override
@@ -153,6 +126,12 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
     _selectMood = widget.onSelectedListChange != null ||
         widget.onSelectedListChangeValueNotifier != null;
+
+    if (_selectMood) {
+      onSelectedListChangeValueNotifier = widget
+              .onSelectedListChangeValueNotifier ??
+          ValueNotifier<List<ViewAbstract>>(widget.initialSelectedList ?? []);
+    }
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
@@ -202,6 +181,19 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   Widget? getHeaderWidget() {
+    if (isSelectedMode) {
+      return ValueListenableBuilder<List<ViewAbstract>>(
+        valueListenable: onSelectedListChangeValueNotifier,
+        builder: (context, value, child) {
+          debugPrint(
+              "ValueListenableBuilder sliverApiMaster appBar changed  ${value.length}");
+          return AppBar(
+            title: Text("Selected items  ${value.length}"),
+            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.delete))],
+          );
+        },
+      );
+    }
     List<Widget>? homeList = viewAbstract.getHomeListHeaderWidgetList(context);
     // if (homeList == null) return null;
     return SizedBox(
@@ -238,6 +230,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getBuildBodyDraggable() {
     return DraggableHome(
+
+        // key: dr,
         valueNotifierExpandType: expandType,
         valueNotifierExpandTypeOnExpandOny: expandTypeOnlyOnExpand,
         // drawer: DrawerLargeScreens(),
@@ -288,14 +282,24 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         // backgroundColor: Colors.red,
         title: Text(drawerViewAbstractObsever.getObject
             .getMainHeaderLabelTextOnly(context)),
-        fullyStretchable: true,
+        fullyStretchable: isSelectedMode ? false : true,
+        // headerBottomBar: getHeaderWidget(),
+        pinnedToolbar: isSelectedMode,
+        centerTitle: false,
+        actions: [
+          if (isSelectedMode)
+            IconButton(onPressed: () {}, icon: Icon(Icons.delete))
+        ],
         headerWidget: getHeaderWidget(),
-        expandedBody: QrCodeReader(
-          getViewAbstract: true,
-          currentHeight: 20,
-          valueNotifierQrState: valueNotifierQrState,
-        ),
+        expandedBody: isSelectedMode
+            ? null
+            : QrCodeReader(
+                getViewAbstract: true,
+                currentHeight: 20,
+                valueNotifierQrState: valueNotifierQrState,
+              ),
         slivers: [
+          // if (isSelectedMode) getHeaderWidget()!,
           if (widget.buildSearchWidget) getSearchWidget(),
           if (widget.buildFilterableView) getFilterableWidget(),
           if (widget.buildToggleView) getToggleView(),
@@ -512,17 +516,43 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         if (isLoading && index == count) {
           return getSharedLoadingItem(context);
         }
-
+        ViewAbstract va = listProvider.getList(findCustomKey())[index];
         return _selectMood
             ? ListCardItemSelected(
-                onSelected: (obj) {
-                  onSelectedItem(obj as ViewAbstract);
+                isSelected: isSelected(va),
+                onSelected: (obj, isSelected) {
+                  debugPrint("ListCardItemSelected $isSelected");
+                  onSelectedItem(obj as ViewAbstract, isSelected);
                 },
-                object: listProvider.getList(findCustomKey())[index])
-            : ListCardItem(
-                object: listProvider.getList(findCustomKey())[index]);
+                object: va)
+            : ListCardItem(object: va);
       }, childCount: count + (isLoading ? 1 : 0))),
     );
+  }
+
+  void onSelectedItem(ViewAbstract obj, bool isSelected) {
+    if (!isSelected) {
+      List<ViewAbstract> list = onSelectedListChangeValueNotifier.value;
+      list.removeWhere((element) => element.isEquals(obj));
+      onSelectedListChangeValueNotifier.value = [...list];
+    } else {
+      ViewAbstract? isFounded = onSelectedListChangeValueNotifier.value
+          .firstWhereOrNull((p0) => p0.isEquals(obj));
+      if (isFounded == null) {
+        onSelectedListChangeValueNotifier.value = [
+          ...onSelectedListChangeValueNotifier.value,
+          obj
+        ];
+      }
+    }
+
+    widget.onSelectedListChange?.call(onSelectedListChangeValueNotifier.value);
+  }
+
+  bool isSelected(ViewAbstract v) {
+    return onSelectedListChangeValueNotifier.value
+            .firstWhereOrNull((p0) => p0.isEquals(v)) !=
+        null;
   }
 
   SliverPersistentHeader getFilterableWidget() {
