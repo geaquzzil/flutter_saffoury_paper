@@ -151,6 +151,8 @@ abstract class ViewAbstractInputAndValidater<T>
       BuildContext context, String field) {
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
+
+    debugPrint("getTextInputValidator for $field , maxValue:  $maxValue");
     return FormBuilderValidators.compose([
       if (isFieldRequired(field)) FormBuilderValidators.required(),
       if (maxValue != null) FormBuilderValidators.max(maxValue),
@@ -168,7 +170,7 @@ abstract class ViewAbstractInputAndValidater<T>
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
     debugPrint(
-        "getTextInputValidatorComposeAutoComplete maxValue:$maxValue minValue:$minValue isRequired: ${isFieldRequired(field)}");
+        "getTextInputValidator maxValue:$maxValue minValue:$minValue isRequired: ${isFieldRequired(field)}");
     return FormBuilderValidators.compose<ViewAbstract>([
       if (isFieldRequired(field)) FormBuilderValidators.required(),
       if (maxValue != null) FormBuilderValidators.max(maxValue),
@@ -189,7 +191,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   String? getTextInputValidatorIsRequired(
       BuildContext context, String field, dynamic value) {
-    debugPrint("getTextInputValidatorIsRequired field=>$field value=>$value");
+    debugPrint("getTextInputValidator field=>$field value=>$value");
     if (isFieldRequired(field)) {
       if (value == null) {
         String fieldLabel = getFieldLabel(context, field);
@@ -204,6 +206,8 @@ abstract class ViewAbstractInputAndValidater<T>
     String fieldLabel = getFieldLabel(context, field);
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
+    debugPrint(
+        "getTextInputValidator maxValue:$maxValue minValue:$minValue isRequired: ${isFieldRequired(field)}");
     if (isFieldRequired(field)) {
       if (value?.isEmpty ?? false) {
         return "$fieldLabel ${AppLocalizations.of(context)!.errFieldIsIncorrect}";

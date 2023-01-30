@@ -267,3 +267,6 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
     );
   }
 }
+enum SliverListMood{
+  NONE,SELECT
+}

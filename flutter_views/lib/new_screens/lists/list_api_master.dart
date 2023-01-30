@@ -186,8 +186,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
       children: <Widget>[
         if (widget.buildSearchWidget)
           SearchWidgetComponent(
-              controller: controller,
-              onSearchTextChanged: _onSearchTextChanged),
+
+      ),
         // FiltersAndSelectionListHeader(),
         Expanded(
             child: ChangeNotifierProvider.value(
@@ -257,8 +257,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
               getConsumer(),
               if (!isSelectedMode && widget.buildSearchWidget)
                 SearchWidgetComponent(
-                    controller: controller,
-                    onSearchTextChanged: _onSearchTextChanged),
+               ),
             ]),
       ),
     );

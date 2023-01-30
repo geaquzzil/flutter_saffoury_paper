@@ -21,11 +21,15 @@ class QrCodeNotifierState {
 
 class QrCodeReader extends StatefulWidget {
   bool getViewAbstract;
+  ViewAbstract? onlyReadThisType;
   double currentHeight;
   ValueNotifier<QrCodeNotifierState?>? valueNotifierQrState;
+  Function(QrCodeNotifierState? codeState)? valueNotifierQrStateFunction;
   QrCodeReader(
       {super.key,
       this.valueNotifierQrState,
+      this.onlyReadThisType,
+      this.valueNotifierQrStateFunction,
       this.getViewAbstract = true,
       this.currentHeight = 0});
 
@@ -90,6 +94,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
       if (checkCurrentState(QrCodeCurrentState.NONE)) {
         widget.valueNotifierQrState?.value =
             QrCodeNotifierState(state: QrCodeCurrentState.NONE);
+        widget.valueNotifierQrStateFunction
+            ?.call(QrCodeNotifierState(state: QrCodeCurrentState.NONE));
       }
       QRCodeID? qrCodeID;
       if (scanData.format == BarcodeFormat.qrcode) {
@@ -99,9 +105,17 @@ class _QrCodeReaderState extends State<QrCodeReader> {
         }
       }
       if (qrCodeID != null) {
+        if (widget.onlyReadThisType != null) {
+          if ((widget.onlyReadThisType?.getTableNameApi() ?? "") !=
+              qrCodeID.action) {
+            return;
+          }
+        }
         if (checkCurrentState(QrCodeCurrentState.LOADING)) {
           widget.valueNotifierQrState?.value =
               QrCodeNotifierState(state: QrCodeCurrentState.LOADING);
+          widget.valueNotifierQrStateFunction
+              ?.call(QrCodeNotifierState(state: QrCodeCurrentState.LOADING));
         }
         // await controller.pauseCamera();
         if (widget.getViewAbstract) {
@@ -113,6 +127,8 @@ class _QrCodeReaderState extends State<QrCodeReader> {
           if (checkCurrentState(QrCodeCurrentState.DONE)) {
             widget.valueNotifierQrState?.value = QrCodeNotifierState(
                 state: QrCodeCurrentState.DONE, viewAbstract: v);
+            widget.valueNotifierQrStateFunction?.call(QrCodeNotifierState(
+                state: QrCodeCurrentState.DONE, viewAbstract: v));
           }
         }
         // await controller.resumeCamera();

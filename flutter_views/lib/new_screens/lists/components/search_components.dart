@@ -11,23 +11,23 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/debouncer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchWidgetComponent extends StatefulWidget {
-  TextEditingController? controller;
-  bool forceSearchBarAsEditText;
   String heroTag;
-  Function(String?) onSearchTextChanged;
+  ViewAbstract? viewAbstract;
+  Function(String)? onSearchTextChanged;
+  ValueNotifier<String>? onSearchTextChangedValueNotifier;
   ValueNotifier<ExpandType>? appBardExpandType;
   SearchWidgetComponent(
       {super.key,
       this.heroTag = "/search",
-      this.controller,
       this.appBardExpandType,
-      required this.onSearchTextChanged,
-      this.forceSearchBarAsEditText = false});
+      this.onSearchTextChangedValueNotifier,
+      this.onSearchTextChanged});
 
   @override
   State<SearchWidgetComponent> createState() => _SearchWidgetComponentState();
@@ -37,13 +37,15 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   bool isPlaying = false;
-
+  bool isEditText = false;
+  final Debouncer _debouncer = Debouncer(milliseconds: 1000);
   @override
   void initState() {
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     _animationController.forward();
-    widget.controller?.addListener(() {});
+    isEditText = widget.onSearchTextChanged != null ||
+        widget.onSearchTextChangedValueNotifier != null;
     super.initState();
   }
 
@@ -57,35 +59,23 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       child: Hero(
         tag: widget.heroTag,
         child: CardCorner(
-          
           // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
             leading: getLeadingWidget(context),
-            onTap: () => context.goNamed(searchRouteName, queryParams: {
-              "query": "q"
-            },
-                // extra: [
-                //   context.read<DrawerMenuControllerProvider>().getObject,
-                //   widget.heroTag
-                // ] ,
-                params: {
-                  "tableName": context
-                      .read<DrawerMenuControllerProvider>()
-                      .getObject
-                      .getTableNameApi()!
-                }),
-            title: Selector<DrawerMenuControllerProvider, ViewAbstract>(
-              builder: (context, value, child) {
-                return Text(
-                  AppLocalizations.of(context)!.searchInFormat(
-                      value.getMainHeaderLabelTextOnly(context)),
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
-                );
-              },
-              selector: (p0, p1) => p1.getObject,
-            ),
+            onTap: isEditText
+                ? null
+                : () => context.goNamed(searchRouteName, queryParams: {
+                      "query": "q"
+                    }, params: {
+                      "tableName": context
+                          .read<DrawerMenuControllerProvider>()
+                          .getObject
+                          .getTableNameApi()!
+                    }),
+            title: isEditText
+                ? getSearchTitleEditable()
+                : getSearchTitleClickable(),
             trailing: CartIconWidget(
               onPressed: () {
                 context
@@ -96,6 +86,50 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           ),
         ),
       ),
+    );
+  }
+
+  Widget getSearchTitleEditable() {
+    return TextField(
+      textInputAction: TextInputAction.search,
+      onSubmitted: (value) async {
+        debugPrint("onSubmitted $value");
+        callDebouncer(value);
+      },
+      decoration: InputDecoration(
+          fillColor: Colors.transparent,
+          hintText: widget.viewAbstract == null
+              ? AppLocalizations.of(context)?.search
+              : getSearchHint(widget.viewAbstract!),
+          border: InputBorder.none),
+    );
+  }
+
+  void callDebouncer(String query) {
+    _debouncer.run(() async {
+      widget.onSearchTextChanged?.call(query);
+      widget.onSearchTextChangedValueNotifier?.value = query;
+    });
+  }
+
+  String getSearchHint(ViewAbstract value) {
+    return AppLocalizations.of(context)!
+        .searchInFormat(value.getMainHeaderLabelTextOnly(context));
+  }
+
+  Selector<DrawerMenuControllerProvider, ViewAbstract<dynamic>>
+      getSearchTitleClickable() {
+    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+      builder: (context, value, child) {
+        return Text(
+          getSearchHint(value),
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        );
+      },
+      selector: (p0, p1) => p1.getObject,
     );
   }
 

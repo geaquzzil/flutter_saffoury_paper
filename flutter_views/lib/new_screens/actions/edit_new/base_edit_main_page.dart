@@ -47,24 +47,28 @@ class BaseEditNewPage extends BaseActionScreenPage {
 
 class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   late bool isExtended;
-  bool isCalledApi = false;
 
   ViewAbstract? currentViewAbstract;
-  ViewAbstract? responseViewAbstract;
+
+  late ValueNotifier<ViewAbstract?> onValidateViewAbstract;
 
   @override
   Widget getBody(BuildContext context) {
-    // return BaseEditWidgetSliver(
-    //   viewAbstract: getExtras(),
-    //   isTheFirst: true,
-    // );
-    // return SliverFillRemaining(
-    //   child: Text("dsad"),
-    //
-    // );
     return BaseEditWidget(
       onValidate: (viewAbstract) {
         currentViewAbstract = viewAbstract;
+        if (isListableInterface()) {
+          if (getListableInterface().isListableRequired(context)) {
+            if (getListableInterface().getListableList().isEmpty) {
+              onValidateViewAbstract.value = null;
+            } else {
+              onValidateViewAbstract.value = currentViewAbstract;
+            }
+          }
+        } else {
+          onValidateViewAbstract.value = currentViewAbstract;
+        }
+
         if (currentViewAbstract != null) {
           debugPrint(
               "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}");
@@ -72,17 +76,11 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       },
       viewAbstract: getExtras(),
       isTheFirst: true,
-      // onSubmit: (obj) {
-      //   if (obj != null) {
-      //     debugPrint("baseEditPage onSubmit $obj");
-      //   }
-      // },
     );
   }
 
   @override
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
-    // return null;
     return [
       if (getExtras() is ListableInterface) getAddToListFloatingButton(context),
       if (getExtras() is ListableInterface)
@@ -97,8 +95,12 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   void initState() {
     super.initState();
     isExtended = true;
+
     if (getExtras().isEditing()) {
       currentViewAbstract = getExtras();
+      onValidateViewAbstract = ValueNotifier<ViewAbstract?>(getExtras());
+    } else {
+      onValidateViewAbstract = ValueNotifier<ViewAbstract?>(null);
     }
   }
 
@@ -108,144 +110,72 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     isExtended = true;
     if (getExtras().isEditing()) {
       currentViewAbstract = getExtras();
+      onValidateViewAbstract = ValueNotifier<ViewAbstract?>(getExtras());
+    } else {
+      onValidateViewAbstract = ValueNotifier<ViewAbstract?>(null);
     }
   }
 
-  // Widget getLoadingWidget() {
-  //   if (currentViewAbstract != null) {
-  //     if (isCalledApi == true) {
-  //       if (responseViewAbstract == null) {
-  //         return Row(
-  //           children: [
-  //             const Padding(
-  //                 padding: EdgeInsets.only(right: 4.0),
-  //                 child: Icon(Icons.cancel)),
-  //             const Text("faild to added")
-  //           ],
-  //         );
-  //       } else {
-  //         return Row(
-  //           children: [
-  //             const Padding(
-  //                 padding: EdgeInsets.only(right: 4.0),
-  //                 child: Icon(Icons.done)),
-  //             const Text("Successfully added")
-  //           ],
-  //         );
-  //       }
-  //     } else {
-  //       return const SizedBox(
-  //         width: 20,
-  //         height: 20,
-  //         child: CircularProgressIndicator(
-  //           strokeWidth: 2,
-  //         ),
-  //       );
-  //     }
-  //   } else {
-  //     return Row(
-  //       children: [
-  //         Padding(
-  //           padding: const EdgeInsets.only(right: 4.0),
-  //           child:
-  //               Icon(getExtras().isEditing() ? Icons.edit : Icons.add),
-  //         ),
-  //         Text(getExtras().getActionText(context))
-  //       ],
-  //     );
-  //   }
-  // }
-
   Widget getAddFloatingButton2(BuildContext context) {
-    return FloatingActionButtonExtended(
-      expandedWidget: Text("Confirm"),
-      onPress: () async {
-        if (currentViewAbstract == null) {
-          final snackBar = SnackBar(
-            content: const Text('Yay! A SnackBar!'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {
-                // Some code to undo the change.
-              },
-            ),
-          );
+    return ValueListenableBuilder(
+      valueListenable: onValidateViewAbstract,
+      builder: (context, masterValue, child) {
+        return ValueListenableBuilder<ApiCallState>(
+          valueListenable: apiCallState,
+          builder: (context, value, child) {
+            if (value == ApiCallState.LOADING) {
+              return FloatingActionButton(
+                heroTag: UniqueKey(),
+                onPressed: null,
+                backgroundColor: Theme.of(context).colorScheme.background,
+                child: const CircularProgressIndicator(),
+              );
+            } else if (value == ApiCallState.ERROR) {
+              return FloatingActionButton.extended(
+                  heroTag: UniqueKey(),
+                  onPressed: () {},
+                  icon: const Icon(Icons.error),
+                  label:
+                      Text(AppLocalizations.of(context)!.errOperationFailed));
+            } else {
+              return FloatingActionButtonExtended(
+                expandedWidget: Text(AppLocalizations.of(context)!.subment),
+                onExpandIcon: getExtras().isEditing() ? Icons.edit : Icons.add,
+                colapsed:
+                    masterValue == null ? Icons.error : Icons.arrow_forward,
+                onPress: masterValue == null
+                    ? null
+                    : () async {
+                        currentViewAbstract =
+                            currentViewAbstract!.copyToUplode();
+                        apiCallState.value = ApiCallState.LOADING;
+                        currentViewAbstract =
+                            await currentViewAbstract!.addCall(
+                                onResponse: OnResponseCallback(
+                                    onServerNoMoreItems: () {},
+                                    onServerFailure: (d) {},
+                                    onServerFailureResponse: (s) {
+                                      debugPrint(
+                                          "onServerFailure ${s.toJson()}");
+                                      apiCallState.value = ApiCallState.ERROR;
+                                    }));
+                        if (currentViewAbstract != null) {
+                          apiCallState.value = ApiCallState.DONE;
+                          extras = currentViewAbstract;
+                          currentViewAbstract!.onCardClicked(context);
+                          context
+                              .read<ListMultiKeyProvider>()
+                              .notifyAdd(currentViewAbstract!);
+                        }
 
-          // Find the ScaffoldMessenger in the widget tree
-          // and use it to show a SnackBar.
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          return;
-        }
-        currentViewAbstract = currentViewAbstract!.copyToUplode();
-        
-        currentViewAbstract = await currentViewAbstract!.addCall(
-            onResponse: OnResponseCallback(
-                onServerNoMoreItems: () {},
-                onServerFailure: (d) {},
-                onServerFailureResponse: (s) {
-                  final snackBar = SnackBar(
-                    
-                    content: Text(s.serverResponse.message ?? " ___"),
-                    action: SnackBarAction(
-                      label: 'Retry',
-                      onPressed: () {
-                        // Some code to undo the change.
+                        // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);
                       },
-                    ),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }));
-        if (currentViewAbstract != null) {
-          extras = currentViewAbstract;
-          currentViewAbstract!.onCardClicked(context);
-          context.read<ListMultiKeyProvider>().notifyAdd(currentViewAbstract!);
-        }
-        // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);
+              );
+            }
+          },
+        );
       },
     );
-    return FloatingActionButton.extended(
-        heroTag: UniqueKey(),
-        onPressed: () async {
-          if (currentViewAbstract == null) {
-            isCalledApi = false;
-            debugPrint(
-                "BaseEditMainPage  ready to upload currentViewAbstract=null");
-            _showToast(context);
-            return;
-          }
-          Dialogs.materialDialog(
-              msgAlign: TextAlign.end,
-              dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-              color: Theme.of(context).colorScheme.background,
-              msg: getExtras().getBaseMessage(context),
-              title: getExtras().getBaseTitle(context),
-              context: context,
-              onClose: (value) {
-                if (value != null) {
-                  currentViewAbstract = currentViewAbstract!.copyToUplode();
-                  if (widget.onFabClickedConfirm != null) {
-                    widget.onFabClickedConfirm!(currentViewAbstract);
-                  } else {}
-                  debugPrint(
-                      "onConfirm currentViewAbstract => $currentViewAbstract");
-                }
-              },
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(AppLocalizations.of(context)!.cancel),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop("confirm");
-                    },
-                    child: Text(AppLocalizations.of(context)!.ok)),
-              ]);
-        },
-        icon: Icon(Icons.arrow_forward),
-        label: Text("Confirm"));
   }
 
   List<ViewAbstract> selectedList = [];
@@ -287,117 +217,21 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   FloatingActionButton getAddToListFloatingButton(BuildContext context) {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
-      onPressed: () {},
-      child: AddFromListPopupIconWidget(
-        viewAbstract: getExtras(),
-        onSelected: (selectedList) {
-          getListableInterface()
-              .onListableSelectedListAdded(context, selectedList);
-          onListableSelectedItem.value = selectedList;
-          onEditListableItem.value = null;
-        },
-      ),
+      onPressed: () async {
+        await getSelectedItemsDialog(context);
+      },
+      child: Icon(Icons.list),
+
+      // child: AddFromListPopupIconWidget(
+      //   viewAbstract: getExtras(),
+      //   onSelected: (selectedList) {
+      //     getListableInterface()
+      //         .onListableSelectedListAdded(context, selectedList);
+      //     onListableSelectedItem.value = selectedList;
+      //     onEditListableItem.value = null;
+      //   },
+      // ),
     );
-  }
-
-  // Widget getBody() {
-  //   bool isListable = getExtras() is ListableInterface;
-  //   if (isListable) {
-  //     return Column(
-  //       children: [
-  //         BaseSharedHeaderViewDetailsActions(
-  //           viewAbstract: getExtras(),
-  //         ),
-  //         Expanded(
-  //           child: TabBarByListWidget(
-  //             tabs: [
-  //               TabControllerHelper(
-  //                 "EDIT",
-  //                 widget: ListView(
-  //                     // controller: ScrollController(),
-  //                     // physics: const AlwaysScrollableScrollPhysics(),
-  //                     padding: const EdgeInsets.symmetric(
-  //                         horizontal: kDefaultPadding),
-  //                     children: [
-  //                       BaseEditWidget(
-  //                         onValidate: (viewAbstract) {
-  //                           currentViewAbstract = viewAbstract;
-  //                         },
-  //                         viewAbstract: getExtras(),
-  //                         isTheFirst: true,
-  //                         // onSubmit: (obj) {
-  //                         //   if (obj != null) {
-  //                         //     debugPrint("baseEditPage onSubmit $obj");
-  //                         //   }
-  //                         // },
-  //                       )
-  //                     ]),
-  //               ),
-  //               TabControllerHelper("LIST", widget: getEditableList())
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   } else {
-  //     return SingleChildScrollView(
-  //         controller: ScrollController(),
-  //         physics: const AlwaysScrollableScrollPhysics(),
-  //         // padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-  //         child: Column(
-  //           children: [
-  //             BaseSharedHeaderViewDetailsActions(
-  //               viewAbstract: getExtras(),
-  //             ),
-  //             BaseEditWidget(
-  //               onValidate: (viewAbstract) {
-  //                 currentViewAbstract = viewAbstract;
-  //               },
-  //               viewAbstract: getExtras(),
-  //               isTheFirst: true,
-  //               // onSubmit: (obj) {
-  //               //   if (obj != null) {
-  //               //     debugPrint("baseEditPage onSubmit $obj");
-  //               //   }
-  //               // },
-  //             ),
-  //           ],
-  //         ));
-  //   }
-  // return Row(
-  //   children: [
-  //     // Expanded(flex: 1, child: Text("TEST")),
-  //     Expanded(
-  //       flex: 2,
-  //       child: BaseEditWidget(
-  //         onValidate: (viewAbstract) {
-  //           currentViewAbstract = viewAbstract;
-  //         },
-  //         viewAbstract: getExtras(),
-  //         isTheFirst: true,
-  //         // onSubmit: (obj) {
-  //         //   if (obj != null) {
-  //         //     debugPrint("baseEditPage onSubmit $obj");
-  //         //   }
-  //         // },
-  //       ),
-  //     ),
-  //     if (getExtras().getTabs(context).isNotEmpty)
-  //       Expanded(
-  //         child: OutlinedCard(
-  //           child: TabBarWidget(
-  //             viewAbstract: getExtras(),
-  //           ),
-  //         ),
-  //       )
-  //   ],
-  // );
-
-  Widget getEditableList() {
-    return ListableStaticEditable(
-        onDelete: (v) => (getExtras() as ListableInterface).onListableDelete(v),
-        onUpdate: (v) => (getExtras() as ListableInterface).onListableUpdate(v),
-        list: (getExtras() as ListableInterface).getListableList());
   }
 
   void _showToast(BuildContext context) {
@@ -427,3 +261,5 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     return false;
   }
 }
+
+enum ApiCallState { NONE, LOADING, DONE, ERROR }

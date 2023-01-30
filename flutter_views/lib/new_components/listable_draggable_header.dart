@@ -12,6 +12,19 @@ class HeaderListableDraggable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (listableInterface.getListableList().isEmpty)
+          MaterialBanner(
+            
+            content: const Text('This is a MaterialBanner'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // scaffold.hideCurrentMaterialBanner();
+                },
+                child: const Text('DISMISS'),
+              ),
+            ],
+          ),
         FadeInLeft(
           duration: const Duration(milliseconds: 500),
           child: getRow(context, [

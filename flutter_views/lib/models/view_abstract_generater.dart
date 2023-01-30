@@ -107,9 +107,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           ServerActions.edit);
       return;
     } else {
-      Navigator.pushNamed(context, "/add",
-          arguments:
-              clickedObject ?? (this as ViewAbstract).getSelfNewInstance());
+      context.goNamed(editRouteName,
+          params: {"tableName": getTableNameApi()!, "id": "$iD"},
+          extra: (this as ViewAbstract).getSelfNewInstance());
     }
   }
 

@@ -9,14 +9,15 @@ abstract class ListableInterface<T extends ViewAbstract> {
 
   /// get future that fired when pos widget is created
   List<T> getListableList();
-  void onListableSelectedListAdded(BuildContext context,List<ViewAbstract> list);
+  void onListableSelectedListAdded(
+      BuildContext context, List<ViewAbstract> list);
 
   ViewAbstract getListablePickObject();
 
   String? getListableTotalQuantity(BuildContext context);
   double? getListableTotalPrice(BuildContext context);
   double? getListableTotalDiscount(BuildContext context);
-
+  bool isListableRequired(BuildContext context);
 
   Widget? getListableCustomHeader(BuildContext context);
 

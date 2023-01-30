@@ -175,7 +175,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     });
   }
 
-  void manualExpand(bool expand) {
+  void manualExpand(bool expand, {bool? removeError}) {
     setState(() {
       _isExpanded = expand;
       if (_isExpanded) {

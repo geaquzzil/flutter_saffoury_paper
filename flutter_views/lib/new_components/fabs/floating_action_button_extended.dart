@@ -1,9 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 class FloatingActionButtonExtended extends StatefulWidget {
   IconData colapsed;
   Widget expandedWidget;
-  void Function() onPress;
+  void Function()? onPress;
   void Function()? onToggle;
   IconData onExpandIcon;
   FloatingActionButtonExtended(
@@ -11,7 +12,7 @@ class FloatingActionButtonExtended extends StatefulWidget {
       this.colapsed = Icons.arrow_forward,
       this.onExpandIcon = Icons.add,
       this.onToggle,
-      required this.onPress,
+      this.onPress,
       required this.expandedWidget});
 
   @override
@@ -37,7 +38,7 @@ class _FloatingActionButtonExtendedState
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
         heroTag: UniqueKey(),
-        onPressed: _onFabPress,
+        onPressed: widget.onPress == null ? null : _onFabPress,
         label: AnimatedSize(
           duration: const Duration(milliseconds: 250),
           // transitionBuilder: (Widget child, Animation<double> animation) =>
@@ -50,7 +51,7 @@ class _FloatingActionButtonExtendedState
           //   ),
           // ),
           child: !_isExtended
-              ? Icon(widget.colapsed)
+              ? FadeIn(key: UniqueKey(), child: Icon(widget.colapsed))
               : Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
@@ -69,7 +70,7 @@ class _FloatingActionButtonExtendedState
       widget.onToggle!();
     }
     if (_isExtended) {
-      widget.onPress();
+      widget.onPress!();
     }
     setState(() {
       _isExtended = !_isExtended;

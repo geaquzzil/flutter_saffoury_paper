@@ -139,16 +139,23 @@ class BaseEditWidget extends StatelessWidget {
     }
     return hasErr;
   }
-  FormBuilderState getSubFormState(BuildContext context,String field){
-    if(_subformKeys.containsKey(field)){
-      return _subformKeys![field];
+
+  GlobalKey<FormBuilderState>? getSubFormState(
+      BuildContext context, String field) {
+    if (_subformKeys.containsKey(field)) {
+      return _subformKeys[field];
     }
+    _subformKeys[field] = GlobalKey<FormBuilderState>(debugLabel: field);
+    return _subformKeys[field];
   }
+
   TextEditingController getController(BuildContext context,
       {required String field,
       required dynamic value,
       bool isAutoCompleteVA = false}) {
     if (controllers.containsKey(field)) {
+      // value = getEditControllerText(value);
+      // controllers[field]!.text = value;
       return controllers[field]!;
     }
     value = getEditControllerText(value);
@@ -213,7 +220,7 @@ class BaseEditWidget extends StatelessWidget {
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
         // initiallyExpanded: !viewAbstract.isNull,
         // isExpanded: false,
-        isDeleteButtonClicked:  viewAbstract.isNullTriggerd,
+        isDeleteButtonClicked: viewAbstract.isNullTriggerd,
         hasError: hasError(context),
         canExpand: () => isFieldEnableSubViewAbstract(),
         leading: SizedBox(
@@ -270,8 +277,6 @@ class BaseEditWidget extends StatelessWidget {
                   }
                   debugPrint(
                       "onToggleNullbale pressed null ${viewAbstract.isNull}");
-
-            
                 }),
         if (viewAbstract.isEditing())
           viewAbstract.getPopupMenuActionWidget(context, ServerActions.edit)
@@ -293,6 +298,13 @@ class BaseEditWidget extends StatelessWidget {
   void onValidateForm(BuildContext context) {
     if (onValidate != null) {
       bool? validate = formKey?.currentState!.validate();
+      _subformKeys.forEach((key, value) {
+        bool? subValidate = value.currentState?.validate() ?? false;
+        debugPrint(
+            "BaseEdit main checking subViewAbstract for => $key and validate value is = > $subValidate");
+        //TODO break if we find first value with false;
+        validate = (validate ?? false) && subValidate;
+      });
       if (validate ?? false) {
         formKey?.currentState!.save();
         ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
@@ -415,8 +427,9 @@ class BaseEditWidget extends StatelessWidget {
             field: field, value: fieldValue, isAutoCompleteVA: true),
         onSelected: (selectedViewAbstract) {
           viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
-          refreshControllers(context, field);
+
           viewAbstract = selectedViewAbstract;
+          refreshControllers(context, field);
           viewAbstractChangeProvider.change(viewAbstract);
           keyExpansionTile.currentState?.manualExpand(false);
           // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
@@ -438,6 +451,7 @@ class BaseEditWidget extends StatelessWidget {
           ViewAbstractControllerInputType.DROP_DOWN_API) {
         return wrapController(
             EditControllerDropdownFromViewAbstract(
+                formKey: formKey,
                 enabled: isFieldEnabled(field),
                 parent: viewAbstract,
                 viewAbstract: fieldValue,
@@ -483,6 +497,7 @@ class BaseEditWidget extends StatelessWidget {
       }
       return BaseEditWidget(
         viewAbstract: fieldValue,
+        formKey: getSubFormState(context, field),
         isTheFirst: false,
         onValidate: ((ob) {
           // String? fieldName = ob?.getFieldNameFromParent()!;

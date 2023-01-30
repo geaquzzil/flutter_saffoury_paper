@@ -50,13 +50,12 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   InvoiceMasterDetails setProduct(BuildContext context, Product products,
       {double? quantity}) {
     this.products = products;
-    this.unitPrice = products.getUnitSellPrice();
-    this.price = products.getTotalSellPrice();
+    unitPrice = products.getUnitSellPrice();
+    price = products.getTotalSellPrice();
     this.quantity = quantity ?? products.getCartableProductQuantity();
-    this.warehouse =
-        (context.read<AuthProvider<AuthUser>>().getUser as Employee)
-            .warehouse_employees?[0]
-            .warehouse;
+    warehouse = (context.read<AuthProvider<AuthUser>>().getUser as Employee)
+        .warehouse_employees?[0]
+        .warehouse;
     discount = 0;
     return this;
   }
@@ -71,6 +70,12 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   void onDropdownChanged(BuildContext context, String field, value,
       {GlobalKey<FormBuilderState>? formKey}) {
     super.onDropdownChanged(context, field, value);
+    if (field == "warehouse") {
+      warehouse = value as Warehouse;
+      debugPrint(
+          "onDropdownChanged invoiceDetail master ${formKey?.currentState?.fields}");
+      // formKey?.currentState?.fields["quantity"]?.validate();
+    }
   }
 
   @override
@@ -188,6 +193,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       price =
           (unitPrice.toNonNullable() * quantity.toNonNullable()).roundDouble();
     }
+    // notifyOtherControllers(context: context);
     // switch (field) {
     //   case "unitPrice":
 

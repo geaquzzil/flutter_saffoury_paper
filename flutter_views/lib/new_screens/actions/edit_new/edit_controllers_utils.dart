@@ -392,7 +392,7 @@ Widget getControllerEditText(BuildContext context,
         keyboardType: viewAbstract.getTextInputType(field),
         inputFormatters: viewAbstract.getTextInputFormatter(field),
         autovalidateMode: AutovalidateMode.always,
-        validator: viewAbstract.getTextInputValidatorCompose(context, field),
+        validator:(va)=> viewAbstract.getTextInputValidatorCompose(context, field).call(va),
         onSaved: (String? value) {
           viewAbstract.setFieldValue(field, value);
           debugPrint(

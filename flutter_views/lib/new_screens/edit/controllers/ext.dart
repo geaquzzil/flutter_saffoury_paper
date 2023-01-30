@@ -66,10 +66,11 @@ InputDecoration getDecorationIconLabel(BuildContext context,
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
-      // filled: true,
-      border: const OutlineInputBorder(),
-      icon: Icon(viewAbstractEnum.getMainIconData()),
-      labelText: viewAbstractEnum.getMainLabelText(context));
+    // filled: true,
+    border: const OutlineInputBorder(),
+    icon: Icon(viewAbstractEnum.getMainIconData()),
+    // labelText: viewAbstractEnum.getMainLabelText(context)
+  );
   // hintText: parent.getTextInputHint(context, field));
 }
 
@@ -99,14 +100,16 @@ InputDecoration getDecorationForAutoComplete(
     labelText: viewAbstract.getMainHeaderLabelTextOnly(context),
   );
 }
-InputDecoration getDecorationWithoutDecoration(BuildContext context,ViewAbstract viewAbstract,String field){
-     return InputDecoration(
-        hintText: viewAbstract.getTextInputHint(context, field: field),
-        labelText: viewAbstract.getTextInputLabel(context, field),
-        prefixText: viewAbstract.getTextInputPrefix(context, field),
-        suffixText: viewAbstract.getTextInputSuffix(context, field));
-  
+
+InputDecoration getDecorationWithoutDecoration(
+    BuildContext context, ViewAbstract viewAbstract, String field) {
+  return InputDecoration(
+      hintText: viewAbstract.getTextInputHint(context, field: field),
+      labelText: viewAbstract.getTextInputLabel(context, field),
+      prefixText: viewAbstract.getTextInputPrefix(context, field),
+      suffixText: viewAbstract.getTextInputSuffix(context, field));
 }
+
 InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
     {String? field}) {
   if (field != null) {

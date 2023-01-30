@@ -348,6 +348,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  bool isListableRequired(BuildContext context) {
+    return true;
+  }
+
+  @override
   String? getListableTotalQuantity(BuildContext context) {
     return getDetailListFromMaster()
         .cast<InvoiceMasterDetails>()

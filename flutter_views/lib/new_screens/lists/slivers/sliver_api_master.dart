@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/new_components/lists/headers/filters_and
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
@@ -44,10 +45,15 @@ import '../../actions/dashboard/base_dashboard_screen_page.dart';
 class SliverApiMaster extends StatefulWidget {
   ViewAbstract? viewAbstract;
   bool buildSearchWidget;
+  bool buildSearchWidgetAsEditText;
   bool buildAppBar;
   bool buildFabIfMobile;
   bool buildToggleView;
   bool buildFilterableView;
+
+  List<ViewAbstract>? initialSelectedList;
+  void Function(List<ViewAbstract> selectedList)? onSelectedListChange;
+  ValueNotifier<List<ViewAbstract>>? onSelectedListChangeValueNotifier;
 
   @Deprecated("message")
   bool fetshListAsSearch;
@@ -55,9 +61,13 @@ class SliverApiMaster extends StatefulWidget {
       {super.key,
       this.viewAbstract,
       this.buildAppBar = true,
+      this.buildSearchWidgetAsEditText = false,
       this.buildSearchWidget = true,
       this.buildFilterableView = true,
       this.buildToggleView = true,
+      this.initialSelectedList,
+      this.onSelectedListChange,
+      this.onSelectedListChangeValueNotifier,
       this.fetshListAsSearch = false,
       this.buildFabIfMobile = true});
 
@@ -75,6 +85,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   GlobalKey<FabsOnListWidgetState> fabsOnListWidgetState =
       GlobalKey<FabsOnListWidgetState>();
   ValueNotifier<bool> valueNotifierGrid = ValueNotifier<bool>(false);
+
+  String searchStringQuery = "";
+
   bool _selectMood = false;
   bool get isSelectedMode => _selectMood;
 
@@ -97,6 +110,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       } catch (e, s) {}
       if (isFounded == null) {
         _selectedList.add(obj);
+        
         // if (widget.onSelected != null) {
         //   widget.onSelected!(selectedList);
         //   setState(() {});
@@ -136,6 +150,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     drawerViewAbstractObsever =
         Provider.of<DrawerMenuControllerProvider>(context, listen: false);
     // drawerViewAbstractObsever.addListener(_onChangedViewAbstract);
+
+    _selectMood = widget.onSelectedListChange != null ||
+        widget.onSelectedListChangeValueNotifier != null;
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
@@ -225,44 +242,48 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         valueNotifierExpandTypeOnExpandOny: expandTypeOnlyOnExpand,
         // drawer: DrawerLargeScreens(),
         scrollController: _scrollController,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ScrollToHideWidget(
-                height: 40,
-                useAnimatedSwitcher: true,
-                showOnlyWhenCloseToTop: false,
-                controller: _scrollController,
-                child: FloatingActionButton.small(
-                    backgroundColor: Theme.of(context)
-                        .colorScheme
-                        .surfaceVariant
-                        .withOpacity(.5),
-                    foregroundColor:
-                        Theme.of(context).colorScheme.onSurfaceVariant,
-                    key: UniqueKey(),
-                    child: const Icon(Icons.arrow_drop_up_rounded),
-                    heroTag: UniqueKey(),
-                    onPressed: () {
-                      _scrollTop();
+        floatingActionButton: !widget.buildFabIfMobile
+            ? null
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ScrollToHideWidget(
+                      height: 40,
+                      useAnimatedSwitcher: true,
+                      showOnlyWhenCloseToTop: false,
+                      controller: _scrollController,
+                      child: FloatingActionButton.small(
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .surfaceVariant
+                              .withOpacity(.5),
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onSurfaceVariant,
+                          key: UniqueKey(),
+                          child: const Icon(Icons.arrow_drop_up_rounded),
+                          heroTag: UniqueKey(),
+                          onPressed: () {
+                            _scrollTop();
 
-                      // context.goNamed(posRouteName);
-                    }),
+                            // context.goNamed(posRouteName);
+                          }),
+                    ),
+                    Spacer(),
+                    FloatingActionButtonExtended(
+                        onPress: () => {
+                              drawerViewAbstractObsever.getObject
+                                  .onDrawerLeadingItemClicked(context)
+                            },
+                        expandedWidget:
+                            Text(viewAbstract.getBaseTitle(context)))
+                  ],
+                ),
               ),
-              Spacer(),
-              FloatingActionButtonExtended(
-                  onPress: () => {
-                        drawerViewAbstractObsever.getObject
-                            .onDrawerLeadingItemClicked(context)
-                      },
-                  expandedWidget: Text(viewAbstract.getBaseTitle(context)))
-            ],
-          ),
-        ),
 
         // backgroundColor: Colors.red,
         title: Text(drawerViewAbstractObsever.getObject
@@ -491,8 +512,15 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         if (isLoading && index == count) {
           return getSharedLoadingItem(context);
         }
-        return ListCardItem(
-            object: listProvider.getList(findCustomKey())[index]);
+
+        return _selectMood
+            ? ListCardItemSelected(
+                onSelected: (obj) {
+                  onSelectedItem(obj as ViewAbstract);
+                },
+                object: listProvider.getList(findCustomKey())[index])
+            : ListCardItem(
+                object: listProvider.getList(findCustomKey())[index]);
       }, childCount: count + (isLoading ? 1 : 0))),
     );
   }
@@ -596,10 +624,15 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                           )
                         : SearchWidgetComponent(
                             appBardExpandType: expandType,
+                            onSearchTextChanged:
+                                !widget.buildSearchWidgetAsEditText
+                                    ? null
+                                    : (serchQuery) {
+                                        searchStringQuery = serchQuery;
+                                        fetshList();
+                                      },
                             key: const ValueKey(2),
                             heroTag: "list/search",
-                            controller: TextEditingController(),
-                            onSearchTextChanged: (p0) {},
                           ),
                   ),
                 ),
@@ -709,8 +742,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   void fetshList() {
-    if (listProvider.getCount(findCustomKey()) == 0) {
-      listProvider.fetchList(findCustomKey(), scanedQr ?? viewAbstract);
+    String customKey = findCustomKey();
+    if (listProvider.getCount(customKey) == 0) {
+      if (searchStringQuery.isEmpty) {
+        listProvider.fetchList(customKey, scanedQr ?? viewAbstract);
+      } else {
+        listProvider.fetchListSearch(
+            findCustomKey(), viewAbstract, searchStringQuery);
+      }
     }
   }
 
@@ -785,8 +824,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   String findCustomKey() {
     if (scanedQr != null) return scanedQr!.getListableKey();
     String key = viewAbstract.getListableKey();
+
     // debugPrint("getCustomKey $key");
-    return key;
+    return key + searchStringQuery;
   }
 
   bool get _isBottom {

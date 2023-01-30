@@ -10,10 +10,12 @@ class EditControllerDropdownFromViewAbstract<T extends ViewAbstract>
   T viewAbstract;
   ViewAbstract parent;
   bool enabled;
+  GlobalKey<FormBuilderState>? formKey;
   String field;
   EditControllerDropdownFromViewAbstract(
       {Key? key,
       required this.parent,
+      this.formKey,
       required this.enabled,
       required this.viewAbstract,
       required this.field})
@@ -84,7 +86,8 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
         if (obj == null) {
           widget.parent.setFieldValue(widget.field, obj);
         }
-        widget.parent.onDropdownChanged(context, widget.field, obj);
+        widget.parent.onDropdownChanged(context, widget.field, obj,
+            formKey: widget.formKey);
       },
       validator: ((value) => widget.parent
           .getTextInputValidatorIsRequired(context, widget.field, value)),

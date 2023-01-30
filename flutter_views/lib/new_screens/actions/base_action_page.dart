@@ -24,9 +24,11 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:nil/nil.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +78,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       ValueNotifier<ViewAbstract?>(null);
   ValueNotifier<List<ViewAbstract>?> onListableSelectedItem =
       ValueNotifier<List<ViewAbstract>?>(null);
+
+  ValueNotifier<ApiCallState> apiCallState =
+      ValueNotifier<ApiCallState>(ApiCallState.NONE);
   @override
   void dispose() {
     _tabController.dispose();
@@ -507,10 +512,28 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                     viewAbstract: getExtras() as CartableProductItemInterface))
             : null,
         // headerBottomBar: Text("sdd"),
+        expandedBody: isListableInterface()
+            ? QrCodeReader(
+                onlyReadThisType:
+                    getListableInterface().getListablePickObject(),
+                getViewAbstract: true,
+                currentHeight: 20,
+                valueNotifierQrStateFunction: (codeState) {
+                  if (codeState == null) return;
+                  if (codeState.state == QrCodeCurrentState.DONE) {
+                    ViewAbstract selectedViewAbstract = codeState.viewAbstract!;
+                    getListableInterface().onListableSelectedListAdded(
+                        context, [selectedViewAbstract]);
+                    onListableSelectedItem.value = [selectedViewAbstract];
+                  }
+                },
+              )
+            : null,
+            
         headerExpandedHeight: .3,
         stretchMaxHeight: .31,
         scrollController: ScrollController(),
-        fullyStretchable: false,
+        fullyStretchable: isListableInterface(),
         headerWidget: widget.viewAbstract.getHeroTag(
             context: context,
             child: getSliverImageBackground(context) ?? getAppBarBackground()),
@@ -531,8 +554,42 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     return super.getExtras() as ViewAbstract;
   }
 
+  bool isListableInterface() {
+    return getExtras() is ListableInterface;
+  }
+
   ListableInterface getListableInterface() {
     return getExtras().getListableInterface();
+  }
+
+  Future<void> getSelectedItemsDialog(BuildContext context) async {
+    await showFullScreenDialogExt<ViewAbstract?>(
+        anchorPoint: const Offset(1000, 1000),
+        context: context,
+        builder: (p0) {
+          return SliverApiMaster(
+            viewAbstract: getListableInterface().getListablePickObject(),
+            buildSearchWidget: true,
+            buildFabIfMobile: false,
+            buildSearchWidgetAsEditText: true,
+            buildFilterableView: false,
+            initialSelectedList: getListableInterface()
+                .getListableList(), //todo this is a order details to get product from it
+            onSelectedListChange: (selectedList) {},
+            // onSelectedListChangeValueNotifier: {},
+          );
+        }).then((value) {
+      {
+        // if (value != null) {
+        //   widget.onUpdate(value as T);
+        //   setState(() {
+        //     validated = value;
+        //   });
+        // }
+        // debugPrint("getEditDialog result $value");
+      }
+      ;
+    });
   }
 
   Scaffold getBuildBody() {
