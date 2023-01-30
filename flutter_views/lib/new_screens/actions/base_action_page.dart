@@ -467,10 +467,12 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                   delegate: SliverChildBuilderDelegate((context, index) {
                 debugPrint(
                     "getListableInterface SliverList index => $index is added");
-
+                ViewAbstract item =
+                    getListableInterface().getListableList()[index];
+                item.parent = getExtras();
                 return ListCardItemEditable<ViewAbstract>(
                   index: index,
-                  object: getListableInterface().getListableList()[index],
+                  object: item,
                   useDialog: true,
                   onDelete: (object) {
                     debugPrint(
@@ -607,10 +609,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                   } else if (codeState.state == QrCodeCurrentState.DONE) {
                     //todo if response qrcode is null then add list tile with retry button
                     draggableHomeState.currentState?.removeAnimatedListItem(0);
-                    ViewAbstract selectedViewAbstract = codeState.viewAbstract!;
-                    getListableInterface().onListableSelectedListAdded(
-                        context, [selectedViewAbstract]);
-                    onListableSelectedItem.value = [selectedViewAbstract];
+                    ViewAbstract? selectedViewAbstract = codeState.viewAbstract;
+                    getListableInterface().onListableListAddedByQrCode(
+                        context, selectedViewAbstract);
+                    onListableSelectedItem.value = [];
                   } else {
                     draggableHomeState.currentState?.removeAnimatedListItem(0);
                   }
@@ -655,19 +657,20 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         context: context,
         builder: (p0) {
           return SliverApiMaster(
+            setParentForChild: getExtras(),
             viewAbstract: getListableInterface().getListablePickObject(),
             buildSearchWidget: true,
             buildFabIfMobile: false,
             buildSearchWidgetAsEditText: true,
             buildFilterableView: false,
-            initialSelectedList: getListableInterface()
-                .getListableInitialSelectedListPassedByPickedObject(
-                    context), //todo this is a order details to get product from it
+            // initialSelectedList: getListableInterface()
+            //     .getListableInitialSelectedListPassedByPickedObject(
+            //         context), //todo this is a order details to get product from it
             onSelectedListChange: (selectedList) {
-              // getListableInterface()
-              //     .onListableSelectedListAdded(context, selectedList);
-              // onListableSelectedItem.value = selectedList;
-              // onEditListableItem.value = null;
+              getListableInterface()
+                  .onListableSelectedListAdded(context, selectedList);
+              onListableSelectedItem.value = selectedList;
+              onEditListableItem.value = null;
             },
             // onSelectedListChangeValueNotifier: {},
           );

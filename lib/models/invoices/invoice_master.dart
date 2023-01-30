@@ -858,9 +858,28 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  bool hasPermissionFromParentSelectItem(
+      BuildContext context, ViewAbstract viewAbstract) {
+    if (viewAbstract is Product) {
+      return viewAbstract.getQuantity() != 0;
+    }
+    return super.hasPermissionFromParentSelectItem(context, viewAbstract);
+  }
+
+  @override
   List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
       BuildContext context) {
     return getProductsFromDetailList();
+  }
+
+  @override
+  void onListableListAddedByQrCode(BuildContext context, ViewAbstract? view) {
+    if (view == null) return;
+    if (view is Product) {
+      if (view.getQuantity() == 0) return;
+      getDetailListFromMaster()
+          .add(getDetailMasterNewInstance()..setProduct(context, view));
+    }
   }
 
   //todo check current list for duplications
@@ -869,9 +888,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   void onListableSelectedListAdded(
       BuildContext context, List<ViewAbstract> list) {
     List<Product> products = list.cast();
-    List<Product> currentProducts = getProductsFromDetailList();
     if (isNew()) {
       for (var element in products) {
+        Product? isFounded = getProductsFromDetailList()
+            .firstWhereOrNull((parent) => parent.isEquals(element));
+        if (isFounded != null) continue;
         debugPrint("onListableSelectedListAdded  added ${element.iD}");
         getDetailListFromMaster()
             .add(getDetailMasterNewInstance()..setProduct(context, element));

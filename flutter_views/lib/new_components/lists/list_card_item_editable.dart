@@ -61,6 +61,7 @@ class _ListCardItemEditable<T extends ViewAbstract>
 
   Widget getListTile(BuildContext context) {
     return ListTile(
+      
       title: (validated.getMainHeaderText(context)),
       subtitle: (validated.getMainSubtitleHeaderText(context)),
       leading: validated.getCardLeading(context),
@@ -77,7 +78,7 @@ class _ListCardItemEditable<T extends ViewAbstract>
         anchorPoint: const Offset(1000, 1000),
         context: context,
         builder: (p0) {
-          return BaseEditDialog(
+           return BaseEditDialog(
             viewAbstract: validated,
           );
         }).then((value) {

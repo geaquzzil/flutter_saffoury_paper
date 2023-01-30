@@ -43,6 +43,10 @@ class _ListCardItemSelected<T extends ViewAbstract>
       value: isSelected,
       onChanged: (value) {
         debugPrint("CheckboxListTile changed  => $value");
+        if ((widget.object.getParnet
+                    ?.hasPermissionFromParentSelectItem(context, widget.object) ??
+                true) ==
+            false ) return;
         setState(() {
           widget.object.isSelected = value ?? false;
           isSelected = value ?? false;

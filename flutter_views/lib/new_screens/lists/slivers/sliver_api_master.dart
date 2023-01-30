@@ -54,11 +54,12 @@ class SliverApiMaster extends StatefulWidget {
   List<ViewAbstract>? initialSelectedList;
   void Function(List<ViewAbstract> selectedList)? onSelectedListChange;
   ValueNotifier<List<ViewAbstract>>? onSelectedListChangeValueNotifier;
-
+  ViewAbstract? setParentForChild;
   @Deprecated("message")
   bool fetshListAsSearch;
   SliverApiMaster(
       {super.key,
+      this.setParentForChild,
       this.viewAbstract,
       this.buildAppBar = true,
       this.buildSearchWidgetAsEditText = false,
@@ -502,9 +503,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             return ListHorizontalItemShimmer();
             // return getSharedLoadingItem(context);
           }
+          ViewAbstract va = listProvider.getList(findCustomKey())[index];
+          va.setParent(widget.setParentForChild);
           return ListCardItemHorizontal<ViewAbstract>(
-              useImageAsBackground: true,
-              object: listProvider.getList(findCustomKey())[index]);
+              useImageAsBackground: true, object: va);
         }, childCount: count + (isLoading ? 5 : 0)));
   }
 
@@ -517,6 +519,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           return getSharedLoadingItem(context);
         }
         ViewAbstract va = listProvider.getList(findCustomKey())[index];
+        va.setParent(widget.setParentForChild);
         return _selectMood
             ? ListCardItemSelected(
                 isSelected: isSelected(va),

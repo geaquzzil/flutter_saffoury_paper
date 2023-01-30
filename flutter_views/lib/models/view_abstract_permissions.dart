@@ -149,6 +149,12 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
         : hasPermission(context, viewAbstract, ServerActions.edit);
   }
 
+  bool hasPermissionFromParentSelectItem(
+      BuildContext context, ViewAbstract viewAbstract) {
+    debugPrint("hasPermissionFromParentSelectItem fromParent=> $parent");
+    return true;
+  }
+
   bool hasPermissionPrint(BuildContext context, {ViewAbstract? viewAbstract}) {
     if (this is! PrintableMaster) return false;
     return viewAbstract == null
