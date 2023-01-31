@@ -78,6 +78,22 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     }
   }
 
+  // @override
+  // T? onManuallyValidate(BuildContext context) {
+  //   if (isPricelessInvoice()) {
+  //     if (quantity.toNonNullable() == 0) {
+  //       return null;
+  //     }
+  //   }
+
+  //   if (price.toNonNullable() == 0 ||
+  //       quantity.toNonNullable() == 0 ||
+  //       unitPrice.toNonNullable() == 0) {
+  //     return null;
+  //   }
+  //   return this as T;
+  // }
+
   @override
   List<ListableDataRow> getListableDetailsColumns(BuildContext context) => [
         ListableDataRow("quantity", AppLocalizations.of(context)!.quantity),

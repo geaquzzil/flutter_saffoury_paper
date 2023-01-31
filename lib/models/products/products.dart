@@ -431,7 +431,7 @@ class Product extends ViewAbstract<Product>
   }
 
   double getTotalSellPrice({Warehouse? warehouse}) {
-    return getUnitSellPrice() * getQuantity(warehouse: warehouse);
+    return (getUnitSellPrice() * getQuantity(warehouse: warehouse)).roundDouble();
   }
 
   String getTotalSellPriceStringFormat(

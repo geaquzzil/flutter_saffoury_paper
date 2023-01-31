@@ -89,6 +89,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   GlobalKey<DraggableHomeState> draggableHomeState =
       GlobalKey<DraggableHomeState>();
+
+  Map<int, GlobalKey<ListCardItemEditableState>> _listCardItemEditableState =
+      {};
   @override
   void dispose() {
     _tabController.dispose();
@@ -105,6 +108,18 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     _tabs.clear();
     _tabs
         .addAll(getExtras().getTabs(context, action: widget.getServerAction()));
+    _listCardItemEditableState.clear();
+  }
+
+  GlobalKey<ListCardItemEditableState> getListCardItemEditableKey(
+      ViewAbstract view) {
+    if (_listCardItemEditableState.containsKey(view.iD)) {
+      return _listCardItemEditableState[view.iD]!;
+    } else {
+      _listCardItemEditableState[view.iD] =
+          GlobalKey<ListCardItemEditableState>();
+      return _listCardItemEditableState[view.iD]!;
+    }
   }
 
   @override
@@ -112,6 +127,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     extras = widget.viewAbstract;
     iD = widget.viewAbstract.iD;
     tableName = widget.viewAbstract.getTableNameApi();
+    _listCardItemEditableState.clear();
     super.initState();
 
     // _updatePaletter();
@@ -557,6 +573,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       tabs.insert(1, getListableTab());
     }
     return DraggableHome(
+        showLeadingAsHamborg: false,
         key: draggableHomeState,
         valueNotifierExpandType: expandType,
         // bottomNavigationBarHeight: 80,

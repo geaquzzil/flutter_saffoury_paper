@@ -62,8 +62,12 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
             if (getListableInterface().getListableList().isEmpty) {
               onValidateViewAbstract.value = null;
             } else {
-              //TODO check every list item
-              
+              for (var item in getListableInterface().getListableList()) {
+                if (item.onManuallyValidate(context) == null) {
+                  onValidateViewAbstract.value = null;
+                  return;
+                }
+              }
               onValidateViewAbstract.value = currentViewAbstract;
             }
           }

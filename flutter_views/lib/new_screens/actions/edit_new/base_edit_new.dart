@@ -49,12 +49,14 @@ class BaseEditWidget extends StatelessWidget {
   bool isRequiredSubViewAbstract;
 
   bool requireOnValidateEvenIfNull;
+  bool disableCheckEnableFromParent;
   BaseEditWidget(
       {Key? key,
       this.isStandAloneField = false,
       required this.viewAbstract,
       required this.isTheFirst,
       this.formKey,
+      this.disableCheckEnableFromParent = false,
       this.requireOnValidateEvenIfNull = false,
       this.isRequiredSubViewAbstract = true,
       this.onValidate})
@@ -97,6 +99,7 @@ class BaseEditWidget extends StatelessWidget {
 
   bool isFieldEnabled(String field) {
     if (!viewAbstract.hasParent()) return viewAbstract.isFieldEnabled(field);
+    if (disableCheckEnableFromParent) return true;
     return viewAbstract.isNew() && viewAbstract.isFieldEnabled(field);
   }
 
@@ -113,11 +116,14 @@ class BaseEditWidget extends StatelessWidget {
     });
   }
 
-  bool isValidated() {
-    if (formKey == null) {
-      ///todo check manually for validation
+  bool isValidated(BuildContext context) {
+    bool? isValidate = formKey?.currentState?.validate();
+    if (isValidate == null) {
+      debugPrint("isValidated is null manually checking");
+      return viewAbstract.onManuallyValidate(context) != null;
     } else {
-      
+      debugPrint("isValidated is not null  automatic checking");
+      return isValidate;
     }
   }
 

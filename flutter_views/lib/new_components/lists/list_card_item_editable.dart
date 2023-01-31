@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -49,11 +50,11 @@ class ListCardItemEditableState<T extends ViewAbstract>
     // checkEnable();
   }
 
-  bool isValidated() {
-    debugPrint("listCardItemEditableState isValidate");
-    formKey!.currentState?.validate();
-    return true;
-  }
+  // bool isValidated() {
+  //   debugPrint("listCardItemEditableState isValidate");
+  //   formKey!.currentState?.validate();
+  //   return true;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +74,24 @@ class ListCardItemEditableState<T extends ViewAbstract>
   }
 
   Widget getListTile(BuildContext context) {
-    return ListTile(
-      title: (validated.getMainHeaderText(context)),
-      subtitle: (validated.getMainSubtitleHeaderText(context)),
-      leading: validated.getCardLeading(context),
-      trailing: validated.getPopupMenuActionListWidget(context),
-      onTap: () {
-        getEditDialog(context);
-      },
-    );
+    return ClippedCard(
+        borderSide: BorderSideColor.START,
+        color: isValidated()
+            ? Colors.transparent
+            : Theme.of(context).colorScheme.error,
+        child: ListTile(
+          title: (validated.getMainHeaderText(context)),
+          subtitle: (validated.getMainSubtitleHeaderText(context)),
+          leading: validated.getCardLeading(context),
+          trailing: validated.getPopupMenuActionListWidget(context),
+          onTap: () {
+            getEditDialog(context);
+          },
+        ));
+  }
+
+  bool isValidated() {
+    return widget.object.onManuallyValidate(context) != null;
   }
 
   Future<void> getEditDialog(BuildContext context) async {
@@ -90,6 +100,7 @@ class ListCardItemEditableState<T extends ViewAbstract>
         context: context,
         builder: (p0) {
           return BaseEditDialog(
+            disableCheckEnableFromParent: true,
             viewAbstract: validated,
           );
         }).then((value) {
@@ -116,6 +127,7 @@ class ListCardItemEditableState<T extends ViewAbstract>
       canExpand: () => true,
       children: [
         BaseEditWidget(
+            disableCheckEnableFromParent: true,
             viewAbstract: validated,
             isTheFirst: true,
             isRequiredSubViewAbstract: false,

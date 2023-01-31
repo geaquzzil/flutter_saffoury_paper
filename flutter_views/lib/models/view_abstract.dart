@@ -19,7 +19,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   set setIsScannedFromQrCode(bool? isScannedFromQrCode) =>
       _isScannedFromQrCode = isScannedFromQrCode;
-      
+
   @Deprecated("could be replaced with getHomeListHeaderWidgetList")
   List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) =>
       null;
@@ -65,6 +65,40 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   }
 
   T? onAfterValidate(BuildContext context) {
+    return this as T;
+  }
+
+  ///this fires when the form key is not founded or the view is not generated yet
+  T? onManuallyValidate(BuildContext context) {
+    for (var element in getMainFields(context: context)) {
+      dynamic value = getFieldValue(element);
+      bool isError;
+      if (isViewAbstract(element)) {
+        if (value == null) {
+          if (isFieldCanBeNullable(context, element)) {
+            continue;
+          } else {
+            return null;
+          }
+        } else {
+          if ((value as ViewAbstract).isEditing()) {
+            debugPrint(
+                "onManuallyValidate called subViewAbstract $T  field=>$element  skipped because subViewAbstract is editing mood");
+            continue;
+          }
+          isError = (value).onManuallyValidate(context) == null;
+          debugPrint(
+              "onManuallyValidate called subViewAbstract $T  field=>$element  value => $value isError= $isError");
+          if (isError) return null;
+        }
+      }
+
+      isError =
+          getTextInputValidatorCompose(context, element).call(value) != null;
+      debugPrint(
+          "onManuallyValidate called for $T  field=>$element  value => $value isError= $isError");
+      if (isError) return null;
+    }
     return this as T;
   }
 

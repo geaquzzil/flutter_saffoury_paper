@@ -36,6 +36,8 @@ class DraggableHome extends StatefulWidget {
   /// Always Show Leading And Action : This make Leading and Action always visible. Default value is false.
   final bool alwaysShowLeadingAndAction;
 
+  final bool showLeadingAsHamborg;
+
   /// Always Show Title : This make Title always visible. Default value is false.
   final bool alwaysShowTitle;
 
@@ -114,6 +116,7 @@ class DraggableHome extends StatefulWidget {
       this.alwaysShowLeadingAndAction = false,
       this.showAppbarOnTopOnly = true,
       this.valueNotifierExpandTypeOnExpandOny,
+      this.showLeadingAsHamborg = true,
       this.alwaysShowTitle = false,
       this.headerExpandedHeight = 0.4,
       this.scrollController,
@@ -564,6 +567,7 @@ class DraggableHomeState extends State<DraggableHome>
   }
 
   Widget? getLeadingAppBar(BuildContext context) {
+    if (!widget.showLeadingAsHamborg) return null;
     Widget icon = IconButton(
       icon: AnimatedIcon(
         icon: AnimatedIcons.arrow_menu,

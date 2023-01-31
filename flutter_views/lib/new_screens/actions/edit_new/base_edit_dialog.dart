@@ -10,9 +10,14 @@ class BaseEditDialog extends StatelessWidget {
   GlobalKey<FormBuilderState>? formKey;
   final GlobalKey<ScaffoldMessengerState> scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
-
+  bool disableCheckEnableFromParent;
   late ValueNotifier<ViewAbstract?> onValidate;
-  BaseEditDialog({super.key, required this.viewAbstract, this.formKey});
+  BaseEditDialog({
+    super.key,
+    required this.viewAbstract,
+    this.formKey,
+    this.disableCheckEnableFromParent = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,7 @@ class BaseEditDialog extends StatelessWidget {
         ]),
         resizeToAvoidBottomInset: false,
         body: BaseEditWidget(
+                 disableCheckEnableFromParent:disableCheckEnableFromParent,
             formKey: formKey,
             viewAbstract: viewAbstract,
             isTheFirst: true,
