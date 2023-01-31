@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/file_reader_popup_icon_widget.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_widget_sliver.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
@@ -87,7 +89,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
+    Widget? widget = getAddToListManualFloatingButton(context);
     return [
+      if (widget != null) widget,
       if (getExtras() is ListableInterface) getAddToListFloatingButton(context),
       if (getExtras() is ListableInterface)
         const SizedBox(
@@ -217,6 +221,47 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
             ]);
       },
       child: const Icon(Icons.delete),
+    );
+  }
+
+  FloatingActionButton? getAddToListManualFloatingButton(BuildContext context) {
+    if (getExtras() is! ListableInterface) return null;
+    ViewAbstract? value =
+        getListableInterface().getListableAddFromManual(context);
+    if (value == null) return null;
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () async {
+        await showFullScreenDialogExt<ViewAbstract?>(
+            anchorPoint: const Offset(1000, 1000),
+            context: context,
+            builder: (p0) {
+              return BaseEditDialog(
+                disableCheckEnableFromParent: true,
+                viewAbstract: value,
+              );
+            }).then((value) {
+          {
+            if (value != null) {
+              getListableInterface().onListableAddFromManual(context, value);
+              onListableSelectedItem.value = [];
+              onEditListableItem.value = null;
+            }
+            debugPrint("getEditDialog result $value");
+          }
+        });
+      },
+      child: Icon(Icons.post_add_rounded),
+
+      // child: AddFromListPopupIconWidget(
+      //   viewAbstract: getExtras(),
+      //   onSelected: (selectedList) {
+      //     getListableInterface()
+      //         .onListableSelectedListAdded(context, selectedList);
+      //     onListableSelectedItem.value = selectedList;
+      //     onEditListableItem.value = null;
+      //   },
+      // ),
     );
   }
 

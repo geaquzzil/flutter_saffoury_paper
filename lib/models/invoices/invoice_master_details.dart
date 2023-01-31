@@ -142,8 +142,13 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
         "comments": TextInputType.text
       };
   @override
-  Map<String, bool> isFieldRequiredMap() =>
-      {"quantity": true, "unitPrice": true, "discount": true, "price": true};
+  Map<String, bool> isFieldRequiredMap() => {
+        "quantity": true,
+        "unitPrice": true,
+        "discount": true,
+        "price": true,
+        "warehouse": true
+      };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>

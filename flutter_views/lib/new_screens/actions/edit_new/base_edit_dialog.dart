@@ -21,7 +21,8 @@ class BaseEditDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onValidate = ValueNotifier<ViewAbstract?>(viewAbstract);
+    onValidate = ValueNotifier<ViewAbstract?>(
+        viewAbstract.isEditing() ? viewAbstract : null);
     return Center(
       child: Scaffold(
         key: scaffoldKey,
@@ -36,13 +37,18 @@ class BaseEditDialog extends StatelessWidget {
         ),
         appBar:
             AppBar(title: Text(viewAbstract.getBaseTitle(context)), actions: [
-          TextButton(
-              onPressed: () => _onPress(context),
-              child: Text(AppLocalizations.of(context)!.save))
+          ValueListenableBuilder<ViewAbstract?>(
+            builder: (context, value, child) {
+              return TextButton(
+                  onPressed: value == null ? null : () => _onPress(context),
+                  child: Text(AppLocalizations.of(context)!.save));
+            },
+            valueListenable: onValidate,
+          )
         ]),
         resizeToAvoidBottomInset: false,
         body: BaseEditWidget(
-                 disableCheckEnableFromParent:disableCheckEnableFromParent,
+            disableCheckEnableFromParent: disableCheckEnableFromParent,
             formKey: formKey,
             viewAbstract: viewAbstract,
             isTheFirst: true,

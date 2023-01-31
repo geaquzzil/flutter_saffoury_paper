@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -274,6 +275,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   ListableInterface getListableInterface() {
     return this as ListableInterface;
+  }
+
+  CartableProductItemInterface getCartableProductItemInterface() {
+    return this as CartableProductItemInterface;
+  }
+
+  bool isCartable() {
+    return this is CartableProductItemInterface;
   }
 
   bool isListable() {

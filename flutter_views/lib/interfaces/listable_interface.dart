@@ -9,11 +9,16 @@ abstract class ListableInterface<T extends ViewAbstract> {
 
   /// get future that fired when pos widget is created
   List<T> getListableList();
+
+  /// if return null then its not supported
+  T? getListableAddFromManual(BuildContext context);
+
   void onListableSelectedListAdded(
       BuildContext context, List<ViewAbstract> list);
 
-
   void onListableListAddedByQrCode(BuildContext context, ViewAbstract? view);
+
+  void onListableAddFromManual(BuildContext context, T addedObject);
 
   ViewAbstract getListablePickObject();
 

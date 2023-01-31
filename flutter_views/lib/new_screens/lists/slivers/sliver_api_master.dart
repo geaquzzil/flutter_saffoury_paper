@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/cartable_draggable_header.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
@@ -55,6 +56,7 @@ class SliverApiMaster extends StatefulWidget {
   void Function(List<ViewAbstract> selectedList)? onSelectedListChange;
   ValueNotifier<List<ViewAbstract>>? onSelectedListChangeValueNotifier;
   ViewAbstract? setParentForChild;
+  final bool showLeadingAsHamborg;
   @Deprecated("message")
   bool fetshListAsSearch;
   SliverApiMaster(
@@ -63,6 +65,7 @@ class SliverApiMaster extends StatefulWidget {
       this.viewAbstract,
       this.buildAppBar = true,
       this.buildSearchWidgetAsEditText = false,
+      this.showLeadingAsHamborg = true,
       this.buildSearchWidget = true,
       this.buildFilterableView = true,
       this.buildToggleView = true,
@@ -181,19 +184,34 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     return getBuildBodyNormal();
   }
 
-  Widget? getHeaderWidget() {
+  Widget getAppbarTitle() {
     if (isSelectedMode) {
       return ValueListenableBuilder<List<ViewAbstract>>(
         valueListenable: onSelectedListChangeValueNotifier,
         builder: (context, value, child) {
           debugPrint(
               "ValueListenableBuilder sliverApiMaster appBar changed  ${value.length}");
-          return AppBar(
-            title: Text("Selected items  ${value.length}"),
-            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.delete))],
-          );
+          return Text(
+              "${value.length} ${AppLocalizations.of(context)!.selectItems}");
         },
       );
+    }
+    return Text(viewAbstract.getMainHeaderLabelTextOnly(context));
+  }
+
+  Widget? getHeaderWidget() {
+    if (isSelectedMode) {
+      if (viewAbstract.isCartable()) {
+        return ValueListenableBuilder<List<ViewAbstract>>(
+          valueListenable: onSelectedListChangeValueNotifier,
+          builder: (context, value, child) {
+            debugPrint(
+                "ValueListenableBuilder sliverApiMaster appBar changed  ${value.length}");
+            return CartableDraggableHeader(listableInterface: value.cast());
+          },
+        );
+      }
+      return null;
     }
     List<Widget>? homeList = viewAbstract.getHomeListHeaderWidgetList(context);
     // if (homeList == null) return null;
@@ -231,6 +249,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getBuildBodyDraggable() {
     return DraggableHome(
+        showLeadingAsHamborg: widget.showLeadingAsHamborg,
 
         // key: dr,
         valueNotifierExpandType: expandType,
@@ -281,8 +300,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               ),
 
         // backgroundColor: Colors.red,
-        title: Text(drawerViewAbstractObsever.getObject
-            .getMainHeaderLabelTextOnly(context)),
+        title: getAppbarTitle(),
+        headerExpandedHeight: isSelectedMode ? 0.25 : 0.4,
+        stretchMaxHeight: isSelectedMode ? .3 : .5,
         fullyStretchable: isSelectedMode ? false : true,
         // headerBottomBar: getHeaderWidget(),
         pinnedToolbar: isSelectedMode,

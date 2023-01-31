@@ -630,6 +630,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                     getListableInterface().onListableListAddedByQrCode(
                         context, selectedViewAbstract);
                     onListableSelectedItem.value = [];
+                    onEditListableItem.value = null;
                   } else {
                     draggableHomeState.currentState?.removeAnimatedListItem(0);
                   }
@@ -674,6 +675,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         context: context,
         builder: (p0) {
           return SliverApiMaster(
+            showLeadingAsHamborg: false,
             setParentForChild: getExtras(),
             viewAbstract: getListableInterface().getListablePickObject(),
             buildSearchWidget: true,

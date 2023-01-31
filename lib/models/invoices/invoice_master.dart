@@ -343,6 +343,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  InvoiceMasterDetails getListableAddFromManual(BuildContext context) {
+    return getDetailMasterNewInstance();
+  }
+
+  @override
   double? getListableTotalPrice(BuildContext context) {
     return getTotalPriceFromList();
   }
@@ -870,6 +875,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
       BuildContext context) {
     return getProductsFromDetailList();
+  }
+
+  @override
+  void onListableAddFromManual(
+      BuildContext context, InvoiceMasterDetails addedObject) {
+        
+    getListableList().add(addedObject);
   }
 
   @override
