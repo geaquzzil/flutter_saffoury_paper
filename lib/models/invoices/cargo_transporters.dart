@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -92,6 +93,13 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
       };
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "governorates") {
+      return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
+    }
+    return super.getInputType(field);
+  }
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {"maxWeight": 500};

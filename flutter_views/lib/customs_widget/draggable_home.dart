@@ -545,13 +545,16 @@ class DraggableHomeState extends State<DraggableHome>
     debugPrint("DraggableHome draggableSwithHeaderFromAppbarToScroll ");
     if (widget.valueNotifierExpandType == null) return null;
     debugPrint("DraggableHome valueNotifierExpandType ");
-    return SliverAnimatedList(
-      initialItemCount: animatedWidgets.length,
-      key: _listKey,
-      itemBuilder: (context, index, animation) {
-        return SliverAnimatedCard(
-            animation: animation, child: animatedWidgets[index]);
-      },
+    return SliverPadding(
+      padding: const EdgeInsets.only(bottom: 100),
+      sliver: SliverAnimatedList(
+        initialItemCount: animatedWidgets.length,
+        key: _listKey,
+        itemBuilder: (context, index, animation) {
+          return SliverAnimatedCard(
+              animation: animation, child: animatedWidgets[index]);
+        },
+      ),
     );
     // SliverAnimatedList(itemBuilder: itemBuilder)
   }

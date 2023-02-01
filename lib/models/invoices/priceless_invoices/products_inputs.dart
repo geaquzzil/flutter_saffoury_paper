@@ -55,10 +55,11 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   @override
   List<String> getMainFields({BuildContext? context}) {
     List<String> list = super.getMainFields(context: context);
-    list.remove("status");
     list.add("warehouse");
     return list;
   }
+
+  
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

@@ -47,7 +47,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   }
 
   ///here we init fields to get from saved data or other...
-  void onBeforeGenerateView(BuildContext context) {}
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {}
 
   T copyWithNewSuggestion(ViewAbstract newValue) {
     newValue.setLastSearchViewAbstractByTextInputList(

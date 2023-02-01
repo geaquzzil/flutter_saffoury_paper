@@ -5,17 +5,20 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/produc
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../prints/print_invoice.dart';
@@ -34,6 +37,11 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   double? price;
 
   String? comments;
+
+  @JsonKey(ignore: true)
+  Warehouse? backupWarehouse;
+  @JsonKey(ignore: true)
+  double? backupQuantity;
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -58,6 +66,15 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
         .warehouse;
     discount = 0;
     return this;
+  }
+
+  @override
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
+    super.onBeforeGenerateView(context);
+    if (action == ServerActions.edit) {
+      backupQuantity = quantity;
+      backupWarehouse = warehouse;
+    }
   }
 
   Stocks getStockFromDetails() {
@@ -294,8 +311,34 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     return 1;
   }
 
+  double getBackupQuantity() {
+    if (isNew()) return 0;
+    if (warehouse?.isEquals(backupWarehouse) ?? false) {
+      return backupQuantity.toNonNullable();
+    }
+    return 0;
+  }
+
+  @override
+  String? getTextInputPrefix(BuildContext context, String field) {
+    // TODO: implement getTextInputPrefix
+    return super.getTextInputPrefix(context, field);
+  }
+
+  @override
+  String? getTextInputSuffix(BuildContext context, String field) {
+    if (field == "quantity") {
+      return products?.getProductTypeUnit(context);
+    }
+    return super.getTextInputSuffix(context, field);
+  }
+
   double getMaxQuantityValue() {
-    return products?.getQuantity(warehouse: warehouse) ?? 0;
+    if (this is PurchasesDetails) {
+      return double.maxFinite;
+    }
+    return (getBackupQuantity()) +
+        (products?.getQuantity(warehouse: warehouse) ?? 0);
   }
 
   @override

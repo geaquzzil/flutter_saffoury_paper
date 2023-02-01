@@ -26,6 +26,10 @@ class BaseFloatingActionButtons extends StatelessWidget {
       required this.viewAbstract,
       required this.serverActions,
       this.addOnList});
+  bool showImportAndExport() {
+    return serverActions != ServerActions.print &&
+        serverActions != ServerActions.edit;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +37,13 @@ class BaseFloatingActionButtons extends StatelessWidget {
       // crossAxisAlignment: WrapCrossAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (serverActions != ServerActions.print)
-          getFileImportFloatingButton(context),
-        if (serverActions != ServerActions.print)
+        if (showImportAndExport()) getFileImportFloatingButton(context),
+        if (showImportAndExport())
           const SizedBox(
             width: kDefaultPadding,
           ),
-        if (serverActions != ServerActions.print)
-          getFileReaderFloatingButton(context),
-        if (serverActions != ServerActions.print)
+        if (showImportAndExport()) getFileReaderFloatingButton(context),
+        if (showImportAndExport())
           const SizedBox(
             width: kDefaultPadding,
           ),

@@ -79,9 +79,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     TermsID = -1;
   }
   @override
-  void onBeforeGenerateView(BuildContext context) {
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
-    if (isNew()) {
+    if (action == ServerActions.edit && isNew()) {
       employees =
           context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
     }
@@ -200,13 +200,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       };
   @override
   List<String> getMainFields({BuildContext? context}) => [
-        "customers",
+        if (!isCustomerLessInvoice()) "customers",
         "cargo_transporters",
         "employees",
         "date",
         "billNo",
-        "status",
-        "terms",
+        if (isHasStatusInvocie()) "status",
+        if (isTermsInvoice()) "terms",
         "comments"
       ];
   @override
@@ -621,6 +621,18 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     }
   }
 
+  bool isHasStatusInvocie() {
+    return this is Order;
+  }
+
+  bool isTermsInvoice() {
+    return this is Order || this is ReservationInvoice;
+  }
+
+  bool isCustomerLessInvoice() {
+    return this is ProductOutput || this is ProductInput || this is Transfers;
+  }
+
   bool isPricelessInvoice() {
     bool result = this is CustomerRequestSize ||
         this is ProductInput ||
@@ -880,7 +892,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   void onListableAddFromManual(
       BuildContext context, InvoiceMasterDetails addedObject) {
-        
     getListableList().add(addedObject);
   }
 

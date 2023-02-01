@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/users/user.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 import 'employees.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
@@ -41,6 +45,16 @@ class Customer extends User<Customer> {
   Employee? employees;
 
   Customer() : super();
+
+  @override
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
+    super.onBeforeGenerateView(context);
+    if (action == ServerActions.edit && isNew()) {
+      employees =
+          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+    }
+  }
+
   @override
   Customer getSelfNewInstance() {
     return Customer();

@@ -21,7 +21,7 @@ class ControllerViewAbstractAsOneField extends StatefulWidget {
     required this.parent,
     this.wrapWithCardOrOutlineCard = true,
     required this.children,
-    this.padding = true,
+    this.padding = false,
   }) : super(key: key);
 
   @override

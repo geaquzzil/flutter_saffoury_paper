@@ -577,7 +577,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         key: draggableHomeState,
         valueNotifierExpandType: expandType,
         // bottomNavigationBarHeight: 80,
-        bottomNavigationBar: getExtras() is CartableProductItemInterface
+        bottomNavigationBar: isCartableInterface()
             ? BottomAppBar(
                 color: Theme.of(context).colorScheme.surface,
                 elevation: 2,
@@ -659,6 +659,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   @override
   ViewAbstract getExtras() {
     return super.getExtras() as ViewAbstract;
+  }
+
+  bool isCartableInterface() {
+    return getExtras() is CartableProductItemInterface &&
+        getExtras().isEditing();
   }
 
   bool isListableInterface() {

@@ -66,7 +66,7 @@ class BaseEditWidget extends StatelessWidget {
     keyExpansionTile = GlobalKey<EditSubViewAbstractHeaderState>(
         debugLabel: "${viewAbstract.runtimeType}");
     viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
-    viewAbstract.onBeforeGenerateView(context);
+    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
 
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;
@@ -140,6 +140,7 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   bool hasError(BuildContext context) {
+    if (viewAbstract.isEditing()) return false;
     bool isFieldCanBeNullable = viewAbstract.parent!
         .isFieldCanBeNullable(context, viewAbstract.getFieldNameFromParent!);
 
@@ -277,7 +278,7 @@ class BaseEditWidget extends StatelessWidget {
                       : Icons.delete_forever_rounded,
                   color: !viewAbstract.isNull
                       ? Theme.of(context).colorScheme.onSurfaceVariant
-                      : Theme.of(context).colorScheme.onError,
+                      : Theme.of(context).colorScheme.error,
                 ),
                 onPressed: () {
                   viewAbstract.toggleIsNullable();
@@ -483,6 +484,9 @@ class BaseEditWidget extends StatelessWidget {
             viewAbstract.setFieldValue(field, ob);
           }),
         );
+      } else if (textFieldTypeVA ==
+          ViewAbstractControllerInputType
+              .DROP_DOWN_TEXT_SEARCH_API_AS_ONE_FIELD_NEW_IF_NOT_FOUND) {
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(

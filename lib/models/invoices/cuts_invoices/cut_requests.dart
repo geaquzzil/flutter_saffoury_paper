@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -28,6 +29,7 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -36,6 +38,7 @@ import 'package:pdf/widgets.dart' as pdf;
 import 'package:pdf/src/widgets/document.dart';
 import 'package:pdf/src/pdf/page_format.dart';
 import 'package:pdf/src/widgets/theme.dart';
+import 'package:provider/provider.dart';
 part 'cut_requests.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -65,6 +68,14 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   CutRequest() : super() {
     date = "".toDateTimeNowString();
+  }
+  @override
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
+    super.onBeforeGenerateView(context);
+    if (action == ServerActions.edit && isNew()) {
+      employees =
+          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+    }
   }
 
   @override
@@ -120,8 +131,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  bool hasPermissionDelete(BuildContext context,
-      {ViewAbstract? viewAbstract})  {
+  bool hasPermissionDelete(BuildContext context, {ViewAbstract? viewAbstract}) {
     if (cut_request_results_count.toNonNullable() > 0) return false;
     return super.hasPermissionDelete(context);
   }

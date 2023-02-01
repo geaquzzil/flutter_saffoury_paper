@@ -3,11 +3,13 @@ import 'package:flutter_saffoury_paper/models/customs/customs_declarations_image
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -18,6 +20,7 @@ import 'package:pdf/widgets.dart';
 import 'package:pdf/src/widgets/document.dart';
 import 'package:pdf/src/pdf/page_format.dart';
 import 'package:printing/printing.dart';
+import 'package:provider/provider.dart';
 
 part 'customs_declarations.g.dart';
 
@@ -42,6 +45,16 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   CustomsDeclaration() : super() {
     date = "".toDateTimeNowString();
   }
+  @override
+  void onBeforeGenerateView(material.BuildContext context,
+      {ServerActions? action}) {
+    super.onBeforeGenerateView(context);
+    if (action == ServerActions.edit && isNew()) {
+      employees =
+          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+    }
+  }
+
   @override
   CustomsDeclaration getSelfNewInstance() {
     return CustomsDeclaration();

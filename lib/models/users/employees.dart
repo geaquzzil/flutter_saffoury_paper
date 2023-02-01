@@ -49,6 +49,16 @@ class Employee extends User<Employee> {
   Employee() : super() {
     warehouse_employees = [];
   }
+
+  // @override
+  // void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
+  //   super.onBeforeGenerateView(context);
+  //   if (action == ServerActions.edit && isNew()) {
+  //     employees =
+  //         context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+  //   }
+  // }
+
   @override
   Employee getSelfNewInstance() {
     return Employee();

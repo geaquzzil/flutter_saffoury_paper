@@ -12,14 +12,18 @@ import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:number_to_character/number_to_character.dart';
+import 'package:provider/provider.dart';
 import '../users/customers.dart';
 
 abstract class MoneyFunds<T> extends ViewAbstract<T>
@@ -46,6 +50,15 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   MoneyFunds() : super() {
     date = "".toDateTimeNowString();
+  }
+  @override
+  void onBeforeGenerateView(BuildContext context,
+      {ServerActions? action}) {
+    super.onBeforeGenerateView(context);
+    if (action == ServerActions.edit && isNew()) {
+      employees =
+          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+    }
   }
 
   @override

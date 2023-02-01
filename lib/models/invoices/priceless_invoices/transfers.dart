@@ -52,7 +52,6 @@ class Transfers extends InvoiceMaster<Transfers> {
     List<String> list = super.getMainFields(context: context);
     list.add("fromWarehouse");
     list.add("toWarehouse");
-    list.remove("status");
     return list;
   }
 

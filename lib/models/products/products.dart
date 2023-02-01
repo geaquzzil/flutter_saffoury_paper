@@ -431,7 +431,8 @@ class Product extends ViewAbstract<Product>
   }
 
   double getTotalSellPrice({Warehouse? warehouse}) {
-    return (getUnitSellPrice() * getQuantity(warehouse: warehouse)).roundDouble();
+    return (getUnitSellPrice() * getQuantity(warehouse: warehouse))
+        .roundDouble();
   }
 
   String getTotalSellPriceStringFormat(
@@ -555,10 +556,9 @@ class Product extends ViewAbstract<Product>
 
   @override
   ViewAbstractControllerInputType getInputType(String field) {
-    // TODO: implement getInputType
-    // if (field == "grades") {
-    //   return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
-    // }
+    if (field == "grades") {
+      return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
+    }
     return super.getInputType(field);
   }
 
@@ -853,6 +853,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   Widget? getTabControllerFirstHeaderWidget(BuildContext context) {
+    if (isNew()) return null;
     return ProductHeaderToggle(
       product: this,
     );

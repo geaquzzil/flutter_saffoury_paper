@@ -221,7 +221,6 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
 
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
-        
           onTap: () => controller.selection = TextSelection(
               baseOffset: 0, extentOffset: controller.value.text.length),
           enabled: enabled,
@@ -295,6 +294,122 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           validator: (value) {
             if (autoCompleteBySearchQuery) {
               if (value?.isNew() ?? true) {
+                return AppLocalizations.of(context)!.errFieldNotSelected(
+                    viewAbstract.getMainHeaderLabelTextOnly(context));
+              }
+            }
+            return value?.getTextInputValidator(context, field,
+                getEditControllerText(value.getFieldValue(field)));
+          },
+          suggestionsCallback: (query) {
+            if (query.isEmpty) return [];
+            if (query.trim().isEmpty) return [];
+            if (autoCompleteBySearchQuery) {
+              return viewAbstract.search(5, 0, query)
+                  as Future<List<ViewAbstract>>;
+              // field: field, searchQuery: query);
+            }
+            return viewAbstract.searchViewAbstractByTextInputViewAbstract(
+                field: field, searchQuery: query);
+          }),
+      requiredSpace: withDecoration
+          ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
+          : false);
+}
+
+Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
+    BuildContext context,
+    {bool autoCompleteBySearchQuery = false,
+    required ViewAbstract viewAbstract,
+    required String field,
+    required TextEditingController controller,
+    AutoCompleteFor? type,
+    bool enabled = true,
+    bool withDecoration = true,
+    required Function(ViewAbstract selectedViewAbstract) onSelected}) {
+  // controller.selection = TextSelection(
+  //   baseOffset: 0,
+  //   extentOffset: controller.text.length,
+  // );
+
+  String oneFieldName = viewAbstract.getMainFields(context: context)[0];
+  return wrapController(
+      FormBuilderTypeAheadCustom<ViewAbstract>(
+          onTap: () => controller.selection = TextSelection(
+              baseOffset: 0, extentOffset: controller.value.text.length),
+          enabled: enabled,
+          controller: controller,
+          debounceDuration: const Duration(milliseconds: 750),
+          onChangeGetObject: (text) => autoCompleteBySearchQuery
+              ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
+              : viewAbstract.getParnet == null
+                  ? viewAbstract.getNewInstance()
+                  : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+                      viewAbstract.fieldNameFromParent!)
+            ..setFieldValue(field, text),
+          selectionToTextTransformer: (suggestion) {
+            
+            debugPrint(
+                "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
+            debugPrint(
+                "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
+            return autoCompleteBySearchQuery
+                ? suggestion.isNew()
+                    ? suggestion.searchByAutoCompleteTextInput ?? ""
+                    : suggestion.getMainHeaderTextOnly(context)
+                : getEditControllerText(suggestion.getFieldValue(field));
+          },
+          name: viewAbstract.getTag(field),
+          initialValue: viewAbstract,
+          decoration: type == AutoCompleteFor.NORMAL
+              ? getDecorationForAutoComplete(context, viewAbstract)
+              : withDecoration
+                  ? autoCompleteBySearchQuery
+                      ? const InputDecoration()
+                      : getDecoration(context, viewAbstract, field: field)
+                  : getDecorationWithoutDecoration(
+                      context, viewAbstract, field),
+          maxLength: viewAbstract.getTextInputMaxLength(field),
+          textCapitalization: viewAbstract.getTextInputCapitalization(field),
+          keyboardType: viewAbstract.getTextInputType(field),
+          autovalidateMode: AutovalidateMode.always,
+          onSuggestionSelected: (value) {
+            if (autoCompleteBySearchQuery) {
+              onSelected(value);
+            }
+            debugPrint(
+                "getControllerEditTextViewAbstractAutoComplete value=>$value");
+            onSelected(viewAbstract.copyWithNewSuggestion(value));
+          },
+          onSaved: (newValue) {
+            if (autoCompleteBySearchQuery) {}
+
+            if (viewAbstract.getParnet != null) {
+              viewAbstract.getParnet!.setFieldValue(
+                  viewAbstract.getFieldNameFromParent!, newValue);
+            } else {
+              viewAbstract.setFieldValue(field, newValue);
+            }
+            debugPrint(
+                'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
+          },
+          hideOnLoading: false,
+          loadingBuilder: (context) => const SizedBox(
+              width: double.infinity,
+              height: 200,
+              child: Center(child: CircularProgressIndicator())),
+          itemBuilder: (context, continent) {
+            return ListTile(
+              leading: continent.getCardLeadingCircleAvatar(context),
+              title: Text(continent.getCardItemDropdownText(context)),
+              subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
+            );
+          },
+          inputFormatters: viewAbstract.getTextInputFormatter(field),
+          validator: (value) {
+
+            if (autoCompleteBySearchQuery) {
+              if (value?.isNew() ?? true){
                 return AppLocalizations.of(context)!.errFieldNotSelected(
                     viewAbstract.getMainHeaderLabelTextOnly(context));
               }
@@ -392,7 +507,8 @@ Widget getControllerEditText(BuildContext context,
         keyboardType: viewAbstract.getTextInputType(field),
         inputFormatters: viewAbstract.getTextInputFormatter(field),
         autovalidateMode: AutovalidateMode.always,
-        validator:(va)=> viewAbstract.getTextInputValidatorCompose(context, field).call(va),
+        validator: (va) =>
+            viewAbstract.getTextInputValidatorCompose(context, field).call(va),
         onSaved: (String? value) {
           viewAbstract.setFieldValue(field, value);
           debugPrint(

@@ -243,7 +243,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
           wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
           borderSide: BorderSideColor.START,
           color: (hasError)
-              ? Theme.of(context).colorScheme.onError
+              ? Theme.of(context).colorScheme.error
               : borderSideColor,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -275,9 +275,8 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       return ClippedCard(
         wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
         borderSide: BorderSideColor.START,
-        color: (hasError)
-            ? Theme.of(context).colorScheme.onError
-            : borderSideColor,
+        color:
+            (hasError) ? Theme.of(context).colorScheme.error : borderSideColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
