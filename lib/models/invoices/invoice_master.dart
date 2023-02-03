@@ -17,12 +17,16 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/apis/changes_records.dart';
+import 'package:flutter_view_controller/models/apis/chart_records.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
@@ -31,7 +35,9 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
@@ -847,6 +853,28 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
+    num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
+        mainAxisType: MainAxisType.ListHorizontal);
+    return [
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: mainAxisCellCount,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            autoRest: ChangesRecords.init(this, "EmployeeID")),
+      ),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: mainAxisCellCount,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            autoRest: ChartRecordAnalysis.init(
+                this, DateObject(), EnteryInteval.monthy)),
+      ),
+    ];
+  }
+
+  @override
   void onListableUpdate(InvoiceMasterDetails item) {
     try {
       // getDetailListFromMaster().((element) => false)
@@ -860,6 +888,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   Product getListablePickObject() {
     return Product();
+  }
+
+  @override
+  ViewAbstract? getListablePickObjectQrCode() {
+    return getListablePickObject();
   }
 
   @override

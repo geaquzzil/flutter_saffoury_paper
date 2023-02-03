@@ -203,7 +203,7 @@ class ChangesRecordGroup {
   factory ChangesRecordGroup.fromJson(Map<String, dynamic> data) =>
       ChangesRecordGroup()
         ..count = data['count'] as int?
-        ..groupBy = ChangesRecordGroup.convertToString(['groupBy']);
+        ..groupBy = ChangesRecordGroup.convertToString(data['groupBy']);
 
   Map<String, dynamic> toJson() => {};
 }

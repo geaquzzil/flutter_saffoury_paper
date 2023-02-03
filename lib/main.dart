@@ -116,11 +116,12 @@ void main() async {
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
           create: (context) =>
-              DrawerMenuControllerProvider(initViewAbstract: Order())),
+              DrawerMenuControllerProvider(initViewAbstract: CutRequest())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
-          create: (context) => AuthProvider<AuthUser>.initialize(Employee(),views)),
+          create: (context) =>
+              AuthProvider<AuthUser>.initialize(Employee(), views)),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),

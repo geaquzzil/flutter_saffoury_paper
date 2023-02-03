@@ -442,11 +442,12 @@ class BaseEditWidget extends StatelessWidget {
             field: field, value: fieldValue, isAutoCompleteVA: true),
         onSelected: (selectedViewAbstract) {
           viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
-
+          viewAbstract.parent?.onDropdownChanged(context, field, selectedViewAbstract);
           viewAbstract = selectedViewAbstract;
           refreshControllers(context, field);
           viewAbstractChangeProvider.change(viewAbstract);
           keyExpansionTile.currentState?.manualExpand(false);
+
           // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
         },
       );

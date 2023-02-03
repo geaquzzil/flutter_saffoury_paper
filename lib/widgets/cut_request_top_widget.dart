@@ -188,8 +188,10 @@ class TitleAndDescription {
   String? description;
   Widget? descriptionWidget;
   IconData? icon;
+  bool isError;
   TitleAndDescription(
       {required this.title,
+      this.isError=false,
       this.description,
       this.descriptionWidget,
       this.icon});

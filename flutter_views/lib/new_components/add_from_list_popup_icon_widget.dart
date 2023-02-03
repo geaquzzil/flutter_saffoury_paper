@@ -44,7 +44,7 @@ class AddFromListPopupIconWidget extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * .85,
                 child: ListApiSelectedSearchableWidget(
                   viewAbstract: (viewAbstract as ListableInterface)
-                      .getListablePickObject(),
+                      .getListablePickObject()!,
                   onSelected: (sList) {
                     _selectedList = sList.cast();
                     // setState(() {

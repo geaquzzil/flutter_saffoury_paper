@@ -296,6 +296,9 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
               if (value?.isNew() ?? true) {
                 return AppLocalizations.of(context)!.errFieldNotSelected(
                     viewAbstract.getMainHeaderLabelTextOnly(context));
+              } else {
+               return viewAbstract.getTextInputValidatorOnAutocompleteSelected(
+                    context, field, value!);
               }
             }
             return value?.getTextInputValidator(context, field,
@@ -348,7 +351,6 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
                       viewAbstract.fieldNameFromParent!)
             ..setFieldValue(field, text),
           selectionToTextTransformer: (suggestion) {
-            
             debugPrint(
                 "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
             debugPrint(
@@ -407,9 +409,8 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
           },
           inputFormatters: viewAbstract.getTextInputFormatter(field),
           validator: (value) {
-
             if (autoCompleteBySearchQuery) {
-              if (value?.isNew() ?? true){
+              if (value?.isNew() ?? true) {
                 return AppLocalizations.of(context)!.errFieldNotSelected(
                     viewAbstract.getMainHeaderLabelTextOnly(context));
               }

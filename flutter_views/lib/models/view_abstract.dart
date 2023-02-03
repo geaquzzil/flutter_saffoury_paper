@@ -207,6 +207,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action}) {}
+
+      
 }
 
 class ListableDataRow {

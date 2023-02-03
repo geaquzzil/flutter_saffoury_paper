@@ -147,6 +147,11 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
+  String?  getTextInputValidatorOnAutocompleteSelected(
+      BuildContext context, String field,ViewAbstract value) {
+    return null;
+  }
+
   String? Function(dynamic d) getTextInputValidatorCompose(
       BuildContext context, String field) {
     double? maxValue = getTextInputValidatorMaxValue(field);
@@ -284,7 +289,7 @@ abstract class ViewAbstractInputAndValidater<T>
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
 
   void onTextChangeListener(BuildContext context, String field, String? value) {
-    debugPrint("onTextChangeListener field=> $field value=> $value");
+    debugPrint("onTextChangeListener for $T field=> $field value=> $value");
     // setFieldValue(field, value)
   }
 

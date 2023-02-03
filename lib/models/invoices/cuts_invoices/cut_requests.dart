@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
@@ -9,14 +10,21 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_saffoury_paper/widgets/cut_request_custom_listable_header.dart';
 import 'package:flutter_saffoury_paper/widgets/cut_request_top_widget.dart';
 import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/apis/changes_records.dart';
+import 'package:flutter_view_controller/models/apis/chart_records.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -28,8 +36,10 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -46,7 +56,8 @@ part 'cut_requests.g.dart';
 class CutRequest extends ViewAbstract<CutRequest>
     implements
         PrintableCustomFromPDFInterface<PrintCutRequest>,
-        ModifiablePrintableInterface<PrintCutRequest> {
+        ModifiablePrintableInterface<PrintCutRequest>,
+        ListableInterface<SizesCutRequest> {
   // int? ProductID;
   // int? CustomerID;
   // int? EmployeeID;
@@ -68,7 +79,55 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   CutRequest() : super() {
     date = "".toDateTimeNowString();
+    sizes_cut_requests = <SizesCutRequest>[];
+    cut_status = CutStatus.PENDING;
   }
+  Widget getPendingCutRequestWidget() {
+    return ListHorizontalApiAutoRestWidget(
+      useCardAsOutLine: true,
+      isSliver: true,
+      titleString: "Pending",
+      useCardAsImageBackgroud: true,
+      // listItembuilder: (v) =>
+      //     ListItemProductTypeCategory(productType: v as ProductType),
+      autoRest: AutoRest<CutRequest>(
+          obj: CutRequest()..setCustomMap({"<cut_status>": "PENDING"}),
+          key: "CutRequest<Pending>"),
+    );
+  }
+
+  @override
+  List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
+    // TODO: implement getHomeListHeaderWidgetList
+    return [getPendingCutRequestWidget()];
+  }
+
+  @override
+  List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
+    num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
+        mainAxisType: MainAxisType.ListHorizontal);
+    return [
+      StaggeredGridTile.count(
+          crossAxisCellCount: 2,
+          mainAxisCellCount: mainAxisCellCountList,
+          child: getPendingCutRequestWidget()),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: mainAxisCellCount,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            autoRest: ChangesRecords.init(getSelfNewInstance(), "cut_status")),
+      ),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: mainAxisCellCount,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+            autoRest: ChartRecordAnalysis.init(
+                CutRequest(), DateObject(), EnteryInteval.monthy)),
+      ),
+    ];
+  }
+
   @override
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
@@ -79,17 +138,62 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
+  bool hasPermissionEdit(BuildContext context, {ViewAbstract? viewAbstract}) {
+    if (cut_request_results_count.toNonNullable() > 0) return false;
+    return super.hasPermissionEdit(context, viewAbstract: viewAbstract);
+  }
+
+  @override
   CutRequest getSelfNewInstance() {
     return CutRequest();
+  }
+
+  @override
+  String? getTextInputValidatorOnAutocompleteSelected(
+      BuildContext context, String field, ViewAbstract value) {
+    if (field == "products") {
+      if (!(value as Product).isRoll()) {
+        return AppLocalizations.of(context)!
+            .errFieldNotSelected(Product().getMainHeaderLabelTextOnly(context));
+      }
+    } else {
+      return null;
+    }
+    return null;
+  }
+
+  @override
+  void onTextChangeListener(BuildContext context, String field, String? value) {
+    super.onTextChangeListener(context, field, value);
+    if (field == "quantity") {
+      setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
+    }
+  }
+
+  @override
+  CutRequest? onAfterValidate(BuildContext context) {
+    debugPrint("onAfterValidate for $runtimeType");
+    if (products == null) return null;
+    if (getTotalRequestSizesWidth() != products!.getWidth()) return null;
+    if (getTotalRemainingQuantity() != quantity) return null;
+    return super.onAfterValidate(context);
+  }
+
+  int findMaxWidth() {
+    return products?.getWidth() ?? 0;
+  }
+
+  int findMinWidth() {
+    return 1;
   }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "date": "",
         "comments": "",
-        "quantity": "",
+        "quantity": 0.toDouble(),
         "cut_status": CutStatus.PENDING,
-        "products": Product(),
+        "products": Product.initOnlyReelsCustomParams(),
         "customers": Customer(),
         "employees": Employee(),
         "cut_request_results": List<CutRequestResult>.empty(),
@@ -137,10 +241,21 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
+  void onAutoComplete(BuildContext context, String field, value,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    super.onAutoComplete(context, field, value);
+    if (field == "products") {
+      if (value != null) {
+        quantity = (value as Product).getQuantity();
+      }
+    }
+  }
+
+  @override
   List<String> getMainFields({BuildContext? context}) => [
-        "products",
         "customers",
-        "employee",
+        "employees",
+        "products",
         "date",
         "quantity",
         "cut_status",
@@ -170,7 +285,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action}) {
-    if (action == ServerActions.view &&
+    if ((action == ServerActions.view || action == ServerActions.edit) &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {
       return [CutRequestTopWidget(object: this)];
@@ -341,6 +456,35 @@ class CutRequest extends ViewAbstract<CutRequest>
     return requestSizes?.join("\n") ?? "-";
   }
 
+  int getTotalRequestSizesWidth() {
+    if (getListableList().isEmpty) return 0;
+
+    int valu = getListableList()
+        .toSet()
+        .map((e) => e.sizes!.width)
+        .reduce(
+            (value, element) => value.toNonNullable() + element.toNonNullable())
+        .toNonNullable();
+    return valu <= 0 ? 0 : valu;
+  }
+
+  double? getTotalRemainingQuantity() {
+    if (products == null) return null;
+    if (getListableList().isEmpty) return null;
+    double valu = getListableList()
+            .map((e) => e.quantity)
+            .reduce((value, element) =>
+                value.toNonNullable() + element.toNonNullable())
+            .toNonNullable() -
+        (products?.getQuantity().toNonNullable() ?? 0);
+    return valu <= 0 ? 0 : valu;
+  }
+
+  int getTotalRemainingRequestSizesWidth() {
+    return (products?.getWidth().toNonNullable() ?? 0) -
+        getTotalRequestSizesWidth();
+  }
+
   double? getTotalWaste() {
     double? total;
     cut_request_results?.forEach((element) {
@@ -440,6 +584,101 @@ class CutRequest extends ViewAbstract<CutRequest>
       {PdfPageFormat? format, PrintCutRequest? setting}) {
     // TODO: implement getPrintableCustomFromPDFPageLIst
     throw UnimplementedError();
+  }
+
+  @override
+  List<SizesCutRequest>? deletedList;
+
+  @override
+  SizesCutRequest? getListableAddFromManual(BuildContext context) {
+    return SizesCutRequest()
+      ..sizes = (ProductSize()..width = getTotalRemainingRequestSizesWidth())
+      ..quantity = getTotalRemainingQuantity();
+  }
+
+  @override
+  Widget? getListableCustomHeader(BuildContext context) {
+    if (products == null) {
+      return const Center(child: Text("Select product to show contents"));
+    }
+    return CutRequestCustomListableHeader(
+      cutRequest: this,
+    );
+  }
+
+  @override
+  List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
+      BuildContext context) {
+    if (sizes_cut_requests == null) return [];
+    return sizes_cut_requests?.map((e) => e.sizes!).toList() ?? [];
+  }
+
+  @override
+  List<SizesCutRequest> getListableList() {
+    sizes_cut_requests ??= [];
+    return sizes_cut_requests!;
+  }
+
+  @override
+  ViewAbstract? getListablePickObject() {
+    return null;
+  }
+
+  @override
+  double? getListableTotalDiscount(BuildContext context) {
+    return null;
+  }
+
+  @override
+  double? getListableTotalPrice(BuildContext context) {
+    return null;
+  }
+
+  @override
+  String? getListableTotalQuantity(BuildContext context) {
+    return null;
+  }
+
+  @override
+  bool isListableRequired(BuildContext context) {
+    return true;
+  }
+
+  @override
+  void onListableAddFromManual(
+      BuildContext context, SizesCutRequest addedObject) {
+    getListableList().add(addedObject);
+  }
+
+  @override
+  void onListableDelete(SizesCutRequest item) {
+    if (item.isEditing()) {
+      deletedList ??= [];
+      item.delete = true;
+      deletedList?.add(item);
+    }
+    getListableList().remove(item);
+  }
+
+  @override
+  void onListableListAddedByQrCode(BuildContext context, ViewAbstract? view) {
+    // TODO: implement onListableListAddedByQrCode
+  }
+
+  @override
+  void onListableSelectedListAdded(
+      BuildContext context, List<ViewAbstract> list) {
+    // TODO: implement onListableSelectedListAdded
+  }
+
+  @override
+  void onListableUpdate(SizesCutRequest item) {
+    // TODO: implement onListableUpdate
+  }
+
+  @override
+  ViewAbstract? getListablePickObjectQrCode() {
+    return null;
   }
 }
 

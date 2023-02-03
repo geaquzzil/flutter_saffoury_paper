@@ -90,14 +90,20 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   @override
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
     Widget? widget = getAddToListManualFloatingButton(context);
+    Widget? listSelect = getAddToListFloatingButton(context);
     return [
       if (widget != null) widget,
-      if (getExtras() is ListableInterface) getAddToListFloatingButton(context),
-      if (getExtras() is ListableInterface)
+      if (widget != null)
         const SizedBox(
           width: kDefaultPadding,
         ),
-      getAddFloatingButton2(context),
+      if (listSelect != null) listSelect,
+      if (listSelect != null)
+        const SizedBox(
+          width: kDefaultPadding,
+        ),
+      if (getExtras().hasPermissionEdit(context))
+        getAddFloatingButton2(context),
     ];
   }
 
@@ -232,20 +238,23 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: () async {
+        value = getListableInterface().getListableAddFromManual(context)
+            as ViewAbstract;
+        value!.setParent(getExtras());
         await showFullScreenDialogExt<ViewAbstract?>(
             anchorPoint: const Offset(1000, 1000),
             context: context,
             builder: (p0) {
               return BaseEditDialog(
                 disableCheckEnableFromParent: true,
-                viewAbstract: value,
+                viewAbstract: value!,
               );
             }).then((value) {
           {
             if (value != null) {
               getListableInterface().onListableAddFromManual(context, value);
               onListableSelectedItem.value = [];
-              onEditListableItem.value = null;
+              onEditListableItem.value = value;
             }
             debugPrint("getEditDialog result $value");
           }
@@ -265,7 +274,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     );
   }
 
-  FloatingActionButton getAddToListFloatingButton(BuildContext context) {
+  Widget? getAddToListFloatingButton(BuildContext context) {
+    if (getExtras() is! ListableInterface) return null;
+    if (getListableInterface().getListablePickObject() == null) return null;
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: () async {

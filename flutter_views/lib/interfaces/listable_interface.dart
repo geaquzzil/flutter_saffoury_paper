@@ -20,7 +20,8 @@ abstract class ListableInterface<T extends ViewAbstract> {
 
   void onListableAddFromManual(BuildContext context, T addedObject);
 
-  ViewAbstract getListablePickObject();
+  ViewAbstract? getListablePickObjectQrCode();
+  ViewAbstract? getListablePickObject();
 
   List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
       BuildContext context);

@@ -43,6 +43,9 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   @JsonKey(ignore: true)
   double? backupQuantity;
 
+  @JsonKey(ignore: true)
+  int? backupProductID;
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "products": Product(),
@@ -74,6 +77,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     if (action == ServerActions.edit) {
       backupQuantity = quantity;
       backupWarehouse = warehouse;
+      backupProductID = products?.iD;
     }
   }
 
@@ -313,6 +317,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
 
   double getBackupQuantity() {
     if (isNew()) return 0;
+    if (backupProductID != products?.iD) return 0;
     if (warehouse?.isEquals(backupWarehouse) ?? false) {
       return backupQuantity.toNonNullable();
     }

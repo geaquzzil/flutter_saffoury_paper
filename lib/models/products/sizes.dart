@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -134,12 +135,27 @@ class ProductSize extends ViewAbstract<ProductSize> {
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() =>
-      {"width": 9999, "length": 9999};
+  Map<String, double> getTextInputMaxValidateMap() {
+    int maxWidth = 9999;
+    if (parent is SizesCutRequest) {
+      maxWidth = (parent as SizesCutRequest).getMaxWidth();
+    }
+
+    return {"width": maxWidth.toDouble(), "length": 9999};
+  }
 
   @override
-  Map<String, double> getTextInputMinValidateMap() =>
-      {"width": 10, "length": 0};
+  Map<String, double> getTextInputMinValidateMap() {
+    double minLength = 0;
+    int minWidth = 10;
+    if (parent != null) {
+      if (parent is SizesCutRequest) {
+        minLength = 100;
+        minWidth = (parent as SizesCutRequest).getMinWidth();
+      }
+    }
+    return {"width": minWidth.toDouble(), "length": minLength};
+  }
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -18,7 +19,9 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   ProductSize? sizes;
   double? quantity;
 
-  SizesCutRequest() : super();
+  SizesCutRequest() : super() {
+    // sizes = ProductSize();
+  }
 
   @override
   SizesCutRequest getSelfNewInstance() {
@@ -26,8 +29,11 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"cut_requests": CutRequest(), "sizes": ProductSize(), "quantity": 0};
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "cut_requests": CutRequest(),
+        "sizes": ProductSize(),
+        "quantity": 0.toDouble()
+      };
   @override
   List<String> getMainFields({BuildContext? context}) => ["sizes", "quantity"];
 
@@ -69,7 +75,38 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   Map<String, int> getTextInputMaxLengthMap() => {"quantity": 10};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() => {};
+  Map<String, double> getTextInputMaxValidateMap() {
+    debugPrint(
+        "getTextInputMaxValidateMap parent is ${parent.runtimeType}  quantity is ${(parent as CutRequest).quantity}");
+
+    return {"quantity": (parent as CutRequest).quantity ?? 0};
+  }
+
+  @override
+  List<Widget>? getCustomTopWidget(BuildContext context,
+      {ServerActions? action}) {
+    if (isNew()) {
+      if (parent is CutRequest) {
+        if ((parent as CutRequest).products == null) {
+          [
+            MaterialBanner(
+                content: Text(AppLocalizations.of(context)!.errFieldNotSelected(
+                    AppLocalizations.of(context)!.product)),
+                actions: [])
+          ];
+        }
+      }
+    }
+    return null;
+  }
+
+  int getMaxWidth() {
+    return (parent as CutRequest).findMaxWidth();
+  }
+
+  int getMinWidth() {
+    return (parent as CutRequest).findMinWidth();
+  }
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {};
@@ -95,4 +132,14 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   @override
   SizesCutRequest fromJsonViewAbstract(Map<String, dynamic> json) =>
       SizesCutRequest.fromJson(json);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SizesCutRequest &&
+          runtimeType == other.runtimeType &&
+          sizes?.width == other.sizes?.width;
+
+  @override
+  int get hashCode => sizes?.width.hashCode ?? super.hashCode;
 }

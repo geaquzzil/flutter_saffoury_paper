@@ -590,53 +590,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                     viewAbstract: getExtras() as CartableProductItemInterface))
             : null,
         // headerBottomBar: Text("sdd"),
-        expandedBody: isListableInterface()
-            ? QrCodeReader(
-                onlyReadThisType:
-                    getListableInterface().getListablePickObject(),
-                getViewAbstract: true,
-                currentHeight: 20,
-                valueNotifierQrStateFunction: (codeState) {
-                  if (codeState == null) return;
-                  Widget loadingWidget = ListTile(
-                    leading: const SkeletonAvatar(
-                      style: SkeletonAvatarStyle(
-                          shape: BoxShape.circle, width: 50, height: 50),
-                    ),
-                    title: SkeletonParagraph(
-                      style: SkeletonParagraphStyle(
-                          lines: 2,
-                          spacing: 6,
-                          lineStyle: SkeletonLineStyle(
-                            randomLength: true,
-                            height: 10,
-                            borderRadius: BorderRadius.circular(8),
-                            minLength: MediaQuery.of(context).size.width / 6,
-                            maxLength: MediaQuery.of(context).size.width / 3,
-                          )),
-                    ),
-                  );
-
-                  if (codeState.state == QrCodeCurrentState.LOADING) {
-                    debugPrint(
-                        "QrCodeReader codeState is current state loading");
-                    draggableHomeState.currentState
-                        ?.addAnimatedListItem(loadingWidget);
-                    return;
-                  } else if (codeState.state == QrCodeCurrentState.DONE) {
-                    //todo if response qrcode is null then add list tile with retry button
-                    draggableHomeState.currentState?.removeAnimatedListItem(0);
-                    ViewAbstract? selectedViewAbstract = codeState.viewAbstract;
-                    getListableInterface().onListableListAddedByQrCode(
-                        context, selectedViewAbstract);
-                    onListableSelectedItem.value = [];
-                    onEditListableItem.value = null;
-                  } else {
-                    draggableHomeState.currentState?.removeAnimatedListItem(0);
-                  }
-                },
-              )
-            : null,
+        expandedBody:
+            isListableInterface() ? getListableInterfaceQrCode() : null,
         headerExpandedHeight: .3,
         stretchMaxHeight: .31,
         scrollController: ScrollController(),
@@ -654,6 +609,54 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           serverActions: widget.getServerAction(),
           addOnList: getFloatingActionWidgetAddOns(context),
         ));
+  }
+
+  Widget? getListableInterfaceQrCode() {
+    if (getListableInterface().getListablePickObjectQrCode() == null) {
+      return null;
+    }
+    return QrCodeReader(
+      onlyReadThisType: getListableInterface().getListablePickObjectQrCode(),
+      getViewAbstract: true,
+      currentHeight: 20,
+      valueNotifierQrStateFunction: (codeState) {
+        if (codeState == null) return;
+        Widget loadingWidget = ListTile(
+          leading: const SkeletonAvatar(
+            style: SkeletonAvatarStyle(
+                shape: BoxShape.circle, width: 50, height: 50),
+          ),
+          title: SkeletonParagraph(
+            style: SkeletonParagraphStyle(
+                lines: 2,
+                spacing: 6,
+                lineStyle: SkeletonLineStyle(
+                  randomLength: true,
+                  height: 10,
+                  borderRadius: BorderRadius.circular(8),
+                  minLength: MediaQuery.of(context).size.width / 6,
+                  maxLength: MediaQuery.of(context).size.width / 3,
+                )),
+          ),
+        );
+
+        if (codeState.state == QrCodeCurrentState.LOADING) {
+          debugPrint("QrCodeReader codeState is current state loading");
+          draggableHomeState.currentState?.addAnimatedListItem(loadingWidget);
+          return;
+        } else if (codeState.state == QrCodeCurrentState.DONE) {
+          //todo if response qrcode is null then add list tile with retry button
+          draggableHomeState.currentState?.removeAnimatedListItem(0);
+          ViewAbstract? selectedViewAbstract = codeState.viewAbstract;
+          getListableInterface()
+              .onListableListAddedByQrCode(context, selectedViewAbstract);
+          onListableSelectedItem.value = [];
+          onEditListableItem.value = null;
+        } else {
+          draggableHomeState.currentState?.removeAnimatedListItem(0);
+        }
+      },
+    );
   }
 
   @override

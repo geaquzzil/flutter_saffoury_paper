@@ -199,6 +199,9 @@ class Product extends ViewAbstract<Product>
     return ProductSizeType.PALLET;
   }
 
+  Product.initOnlyReelsCustomParams() {
+    setCustomMap(getOnlyReelsCustomParams());
+  }
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.product;
@@ -774,6 +777,19 @@ class Product extends ViewAbstract<Product>
     return "ProductID";
   }
 
+  Map<String, String> getOnlyReelsCustomParams() {
+    Map<String, String> hashMap = getCustomMap;
+    // hashMap["<maxWaste>"] = ("[\"100\"]");
+    hashMap["<unit>"] = ("[\"Roll\"]");
+    hashMap["requireInventory"] = "yes";
+    return hashMap;
+  }
+
+  @override
+  String getCardItemDropdownSubtitle(BuildContext context) {
+    return "${getIDFormat(context)} /${getQuantityStringFormat(context: context)}";
+  }
+
   Map<String, String> getSimilarWithSameSizeCustomParams(BuildContext context) {
     Map<String, String> hashMap = getCustomMap;
     hashMap["<maxWaste>"] = ("[\"100\"]");
@@ -1229,7 +1245,10 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Map<String, String> getCustomMapOnSearch() => {"requireInventory": "true"};
+  Map<String, String> getCustomMapOnSearch() => {
+        "requireInventory": "true",
+        if (parent is CutRequest) ...getOnlyReelsCustomParams()
+      };
   @override
   Widget getPosableMainWidget(
       BuildContext context, AsyncSnapshot snapshotResponse) {

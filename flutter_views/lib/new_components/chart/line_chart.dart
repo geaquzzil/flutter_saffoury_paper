@@ -19,6 +19,7 @@ class LineChartItem<T, E> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCartesianChart(
         title: ChartTitle(alignment: ChartAlignment.near, text: title),
+        
         // legend:
         //     Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
         // Initialize category axis
@@ -27,7 +28,7 @@ class LineChartItem<T, E> extends StatelessWidget {
             ? DateTimeAxis()
             : CategoryAxis(rangePadding: ChartRangePadding.round),
         primaryYAxis: NumericAxis(),
-        // tooltipBehavior: TooltipBehavior(),
+        tooltipBehavior: TooltipBehavior(),
         series: <CartesianSeries>[
           // ColumnSeries<T, E>(
           //   // Bind data source
@@ -53,15 +54,14 @@ class LineChartItem<T, E> extends StatelessWidget {
                 dataLabelSettings: const DataLabelSettings(isVisible: true))
           else
             ColumnSeries<T, E>(
-              sortingOrder: SortingOrder.descending,
-              // Sorting based on the specified field
-              // sortFieldValueMapper: (T data, _) => data.runtimeType,
-              dataSource: list,
-              markerSettings: MarkerSettings(isVisible: true),
-              xValueMapper: xValueMapper,
-              yValueMapper: yValueMapper,
-              // dataLabelSettings: const DataLabelSettings(isVisible: true)
-            )
+                sortingOrder: SortingOrder.descending,
+                // Sorting based on the specified field
+                // sortFieldValueMapper: (T data, _) => data.runtimeType,
+                dataSource: list,
+                markerSettings: MarkerSettings(isVisible: true),
+                xValueMapper: xValueMapper,
+                yValueMapper: yValueMapper,
+                dataLabelSettings: const DataLabelSettings(isVisible: true))
         ]);
   }
 }
