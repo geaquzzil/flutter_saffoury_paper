@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -13,6 +14,8 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/screens/web/home.dart';
+import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +24,8 @@ import '../interfaces/dashable_interface.dart';
 import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import '../screens/web/our_products.dart';
+import '../screens/web/terms.dart';
 import 'actions/view/view_view_main_page.dart';
 import 'authentecation/base_authentication_screen.dart';
 import 'actions/edit_new/base_edit_main_page.dart';
@@ -50,6 +55,13 @@ const String addRouteName = 'add';
 const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
 const String posRouteName = "pos";
+const String indexWebRouteName = "index";
+const String indexWebPrivecyPolicy = "privecy-policy";
+const String indexWebTermsAndConditions = "terms";
+const String indexWebOurProducts = "products";
+const String indexWebServices = "services";
+const String indexWebAboutUs = "about-us";
+
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
@@ -64,9 +76,9 @@ class RouteGenerator {
     return GoRouter(
       initialLocation: '/',
       // redirect: (context, state) async {
-      //   Status authStatus = context.read<AuthProvider<AuthUser>>().getStatus;
-      //   if (authStatus == Status.Initialization) {
-      //     return "/home";
+
+      //   if (kIsWeb) {
+      //     return "/index";
       //   }
       //   return "/";
       // },
@@ -79,10 +91,38 @@ class RouteGenerator {
       // },
       routes: <RouteBase>[
         GoRoute(
+            path: "/index",
+            name: indexWebRouteName,
+            pageBuilder: (context, state) =>
+                const MaterialPage(child: HomeWebPage()),
+            routes: [
+              GoRoute(
+                path: "privecy-policy",
+                name: indexWebPrivecyPolicy,
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: PrivecyPolicyWebPage());
+                },
+              ),
+              GoRoute(
+                path: "terms",
+                name: indexWebTermsAndConditions,
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: TermsWebPage());
+                },
+              ),
+              GoRoute(
+                path: "products",
+                name: indexWebOurProducts,
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: ProductWebPage());
+                },
+              )
+            ]),
+        GoRoute(
           name: homeRouteName,
           path: "/home",
           pageBuilder: (context, state) =>
-              MaterialPage(child: BaseHomeMainPage()),
+              const MaterialPage(child: BaseHomeMainPage()),
         ),
         GoRoute(
             path: '/',
@@ -174,7 +214,7 @@ class RouteGenerator {
           name: loginRouteName,
           path: "/login",
           pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child: SignInPage());
+            return MaterialPage(key: state.pageKey, child: const SignInPage());
           },
         ),
         if (addonRoutes != null) ...addonRoutes
@@ -366,8 +406,8 @@ class HeroPageRoute extends PageRouteBuilder {
     required this.tag,
     required this.child,
   }) : super(
-          transitionDuration: Duration(milliseconds: 1000),
-          reverseTransitionDuration: Duration(milliseconds: 1000),
+          transitionDuration: const Duration(milliseconds: 1000),
+          reverseTransitionDuration: const Duration(milliseconds: 1000),
           pageBuilder: (
             BuildContext context,
             Animation<double> animation,
@@ -394,7 +434,7 @@ class CurvedRectArcTween extends MaterialRectArcTween {
   }) : super(begin: begin, end: end);
   @override
   Rect lerp(double t) {
-    Cubic easeInOut = Cubic(0.42, 0.0, 0.58, 1.0);
+    Cubic easeInOut = const Cubic(0.42, 0.0, 0.58, 1.0);
     double curvedT = easeInOut.transform(t);
     return super.lerp(curvedT);
   }

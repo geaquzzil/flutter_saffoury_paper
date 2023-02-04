@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
-
+import 'package:flutter_view_controller/screens/web/ext.dart';
 
 abstract class BaseWebPage extends StatelessWidget {
   Widget? getContentWidget(BuildContext context);
@@ -22,6 +22,7 @@ abstract class BaseWebPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var headerItems = getHeaderItems(context);
     return Scaffold(
       key: Globals.scaffoldKey,
       endDrawer: Drawer(
@@ -43,8 +44,7 @@ abstract class BaseWebPage extends StatelessWidget {
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 28.0),
                           child: TextButton(
-                            onPressed: () =>
-                                headerItems[index].onHeaderItemClick(context),
+                            onPressed: () => headerItems[index].onClick?.call(),
                             child: Text(
                               headerItems[index].title,
                               style: const TextStyle(

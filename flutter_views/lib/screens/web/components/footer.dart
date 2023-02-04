@@ -1,38 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/models/footer_item.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+
 final List<FooterItem> footerItems = [
   FooterItem(
     icon: const Icon(Icons.add_home_work, size: 25),
     title: "ADDRESS",
-    text1: "999 Carter Street",
-    text2: "Sailor Springs, IL 64234",
+    text1: "Damascus - Syria",
+    text2: "Hosh-Sahia",
   ),
   FooterItem(
     icon: const Icon(Icons.phone, size: 25),
     title: "PHONE",
-    text1: "+1 618-689-9604",
-    text2: "+1 781-689-9632",
+    text1: "+963 933-326-882",
+    text2: "+963 933-211-012",
   ),
   FooterItem(
     icon: const Icon(Icons.email, size: 25),
     title: "EMAIL",
-    text1: "hello@example.com",
-    text2: "info@flutterpanda.com",
+    text1: "papr@saffoury.com",
+    text2: "info@saffoury.com",
   ),
   FooterItem(
     icon: const Icon(Icons.whatsapp, size: 25),
     title: "WHATSAPP",
-    text1: "+234 901-134-0095",
-    text2: "+234 901-134-0095",
+    text1: "+963 933-211-012",
+    text2: "+963 933-211-012",
   )
 ];
 
@@ -61,6 +64,7 @@ Widget _buildUi(double width, BuildContext context) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Divider(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50.0),
                 child: Wrap(
@@ -86,7 +90,7 @@ Widget _buildUi(double width, BuildContext context) {
                                   Text(
                                     footerItem.title,
                                     style: GoogleFonts.roboto(
-                                      fontSize: 18.0,
+                                      // fontSize: 18.0,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                     ),
@@ -123,9 +127,6 @@ Widget _buildUi(double width, BuildContext context) {
                       .toList(),
                 ),
               ),
-              const SizedBox(
-                height: 20.0,
-              ),
               Flex(
                 direction: ScreenHelper.isMobile(context)
                     ? Axis.vertical
@@ -147,7 +148,9 @@ Widget _buildUi(double width, BuildContext context) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          context.goNamed(indexWebPrivecyPolicy);
+                        },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(
@@ -168,7 +171,9 @@ Widget _buildUi(double width, BuildContext context) {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          context.goNamed(indexWebTermsAndConditions);
+                        },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(

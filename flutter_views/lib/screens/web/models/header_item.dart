@@ -5,9 +5,11 @@ import 'package:flutter_view_controller/new_screens/sign_in.dart';
 class HeaderItem {
   final String title;
   final bool isButton;
+  final Function()? onClick;
 
   HeaderItem({
     required this.title,
+    this.onClick,
     this.isButton = false,
   });
 
