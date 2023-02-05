@@ -1106,6 +1106,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.1"
   reflectable:
     dependency: "direct main"
     description:
@@ -1120,6 +1127,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  responsive_grid_list:
+    dependency: transitive
+    description:
+      name: responsive_grid_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   rxdart:
     dependency: transitive
     description:

@@ -6,10 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 final List<Stat> stats = [
-  Stat(count: "43", text: "Clients"),
-  Stat(count: "68+", text: "Projects"),
-  Stat(count: "17", text: "Awards"),
-  Stat(count: "10", text: "Years\nExperience"),
+  Stat(count: "100+", text: "Clients"),
+  Stat(count: "68+", text: "Products"),
+  Stat(count: "10+", text: "Awards"),
+  Stat(count: "40", text: "Years\nExperience"),
 ];
 
 class PortfolioStats extends StatelessWidget {
