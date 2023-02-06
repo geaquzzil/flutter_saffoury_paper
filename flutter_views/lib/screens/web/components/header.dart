@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/globals.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,27 +23,35 @@ class HeaderLogo extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: () {},
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "Saffoury",
-                  style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.normal,
-                  ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // CompanyLogo(),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Saffoury".toUpperCase(),
+                      style: GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Paper".toUpperCase(),
+                      style: GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    )
+                  ],
                 ),
-                TextSpan(
-                  text: "Paper",
-                  style: GoogleFonts.roboto(
-                    color: kPrimaryColor,
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -50,7 +60,8 @@ class HeaderLogo extends StatelessWidget {
 }
 
 class HeaderRow extends StatelessWidget {
-  const HeaderRow({Key? key}) : super(key: key);
+  final String selectedHeader;
+  const HeaderRow({Key? key, required this.selectedHeader}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +88,7 @@ class HeaderRow extends StatelessWidget {
                           // onPressed: () {},
                           onPressed: () => item.onClick?.call(),
                           child: Text(
-                            item.title,
+                            item.title.toUpperCase(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 13.0,
@@ -87,16 +98,23 @@ class HeaderRow extends StatelessWidget {
                         ),
                       ),
                     )
-                  : MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 30.0),
-                        child: GestureDetector(
-                          onTap: () => item.onClick?.call(),
+                  : GestureDetector(
+                      onTap: () {
+                        debugPrint("onTap onHoverWidget");
+                        item.onClick?.call();
+                      },
+                      child: OnHoverWidget(
+                        scale: false,
+                        builder: (isHovered) => Container(
+                          margin: const EdgeInsets.only(right: 30.0),
                           child: Text(
-                            item.title,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            item.title.toUpperCase(),
+                            style: TextStyle(
+                              color: selectedHeader.toLowerCase() ==
+                                          item.title.toLowerCase() ||
+                                      isHovered
+                                  ? kPrimaryColor
+                                  : Colors.white,
                               fontSize: 13.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -109,10 +127,31 @@ class HeaderRow extends StatelessWidget {
       ),
     );
   }
+
+  MouseRegion getHeaderItem(HeaderItem item) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Container(
+        margin: const EdgeInsets.only(right: 30.0),
+        child: GestureDetector(
+          onTap: () => item.onClick?.call(),
+          child: Text(
+            item.title.toUpperCase(),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class Header extends StatelessWidget {
-  const Header({Key? key}) : super(key: key);
+  final String selectedHeader;
+  const Header({Key? key, required this.selectedHeader}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +202,9 @@ class Header extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          HeaderLogo(),
-          HeaderRow(),
+        children: [
+          const HeaderLogo(),
+          HeaderRow(selectedHeader: selectedHeader),
         ],
       ),
     );

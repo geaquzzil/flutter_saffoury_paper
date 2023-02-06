@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:go_router/go_router.dart';
@@ -100,21 +101,28 @@ class RouteGenerator {
                 path: "privecy-policy",
                 name: indexWebPrivecyPolicy,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: PrivecyPolicyWebPage());
+                  return const MaterialPage(child: PrivecyPolicyWebPage());
+                },
+              ),
+              GoRoute(
+                path: "about-us",
+                name: indexWebAboutUs,
+                pageBuilder: (context, state) {
+                  return const MaterialPage(child: AboutUsWebPage());
                 },
               ),
               GoRoute(
                 path: "terms",
                 name: indexWebTermsAndConditions,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: TermsWebPage());
+                  return const MaterialPage(child: TermsWebPage());
                 },
               ),
               GoRoute(
                 path: "products",
                 name: indexWebOurProducts,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: ProductWebPage());
+                  return const MaterialPage(child: ProductWebPage());
                 },
               )
             ]),

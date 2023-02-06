@@ -25,10 +25,6 @@ class TermsWebPage extends BaseWebPage {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TermsWhoWeAre(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 28.0),
-            child: PortfolioStats(),
-          ),
           HeaderText(
             text: "TERMS AND\nCONDITIONS",
             description: getHtmlWidget(),
@@ -40,7 +36,7 @@ class TermsWebPage extends BaseWebPage {
             title: "PRIVACY",
             description:
                 "This privacy policy provides the method for collecting your data in the manner used by “Al-Saffoury Application” and we recommend that you read the privacy policy carefully. “You” consent to the collection and use of your data by the “Online Application” and some third party service providers in the manner set forth in this Privacy Policy.",
-            iconData: Icons.privacy_tip,
+            customIconData: Icons.privacy_tip,
           ),
           HeaderText(
             fontSize: 20,
@@ -54,7 +50,7 @@ class TermsWebPage extends BaseWebPage {
             text: "Privacy Guarantee".toUpperCase(),
             description: Html(
                 data:
-                    "Al Saffoury promises not to sell, rent or share your personal information to any third party (except as provided in this Privacy Policy) without your consent."),
+                    "Al-Saffoury promises not to sell, rent or share your personal information to any third party (except as provided in this Privacy Policy) without your consent."),
           ),
           const SizedBox(
             height: 50.0,
@@ -63,7 +59,7 @@ class TermsWebPage extends BaseWebPage {
             title: "Information\nthat may be collected from you".toUpperCase(),
             description:
                 "The “electronic application” collects the information provided through you when registering in the “electronic application” and submitting requests in a record with the information we have known about you through your use of our site, including the collection of information about the operations you perform on the “electronic application”. We may also collect additional information in connection with your participation in any of our offers. We also monitor customer traffic patterns and application usage, which enables us to improve our service.",
-            iconData: Icons.question_answer,
+            customIconData: Icons.question_answer,
           ),
           HeaderText(
             fontSize: 20,
@@ -78,6 +74,13 @@ class TermsWebPage extends BaseWebPage {
             description: Html(
                 data:
                     "We will not use your personal information for any purpose other than to complete a transaction with you. We do not rent, sell or share your personal information, and we will not disclose any personal information to any third party except in the following circumstances:<br><br><ul><li>Have your permission</li><li>To provide the products and services you requested</li><li>To assist in the investigation or prevention of conduct related to illegal and illegal activities, suspected fraud, or posing a threat to the safety or security of any person or in cases of violation of the User Agreement or to defend against legal claims. Special circumstances such as compliance with subpoenas, court orders, request/order from a statutory authority.</li></ul>"),
+          ),
+          HeaderText(
+            fontSize: 20,
+            text: "Our Responsibility".toUpperCase(),
+            description: Html(
+                data:
+                    "Although we will work to maintain the confidentiality of your personal information, transmissions via the Internet cannot be completely secure. By using this Website, you agree that we have no responsibility for disclosing your information due to any party's transmission errors or unauthorized acts of third parties.We reserve the right to change or update our policy at any time, and we will notify you of changes if this occurs. Such changes are effective immediately upon being placed on the Site.<br><br><strong>Copyright</strong><br>The content, organization, graphics, design, compilation, electronic translation, digitization, and other matters relating to the “Site” are the property of “Saffoury” and are all protected by copyright and trade name laws, and other rights including It has intellectual property rights. It is absolutely prohibited to copy, redistribute, use or print any of these materials or any part of them from the “Site” or from any other sites, except to the extent permitted by the laws in force in the Syrian Arab Republic in this regard.<br><br><strong>Brand</strong><br>All words and logos on the “Website or Application” are the property of “Al-Saffoury” whether they are registered trademarks, designs, phrases, logos and/or unregistered words and are protected by intellectual property laws. All other trademarks not owned by “Al-Saffoury” that appear on the Site are the property of their respective owners, who may or may not be affiliated with or associated with “Al-Saffoury”.<br><br>Questions? We are always happy to help with questions you may have! Check our FAQ or contact us sections for any questions."),
           ),
         ],
       ),

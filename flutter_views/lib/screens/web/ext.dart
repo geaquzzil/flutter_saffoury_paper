@@ -24,6 +24,12 @@ List<HeaderItem> getHeaderItems(BuildContext context) => [
         },
       ),
       HeaderItem(
+        title: AppLocalizations.of(context)!.about,
+        onClick: () {
+          context.goNamed(indexWebAboutUs);
+        },
+      ),
+      HeaderItem(
         title: "LOG IN",
         onClick: () {
           context.goNamed(loginRouteName);

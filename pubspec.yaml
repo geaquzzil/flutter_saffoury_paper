@@ -47,7 +47,7 @@ dependencies:
   easy_localization: ^3.0.1
   sliding_up_panel: ^2.0.0+1
   latlng: ^0.2.0
-  flutter_map: ^3.0.0
+  flutter_map: ^3.1.0
   latlong2: ^0.8.1
   search_page: ^2.2.0
   paginated_search_bar: ^1.1.2

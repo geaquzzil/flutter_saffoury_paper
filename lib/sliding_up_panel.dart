@@ -287,10 +287,26 @@ class _HomePageState extends State<HomePage> {
 
   Widget _body() {
     return FlutterMap(
+      // children: [
+
+      //       TileLayerOptions(
+      //       urlTemplate: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"),
+      //   MarkerLayerOptions(markers: [
+      //     Marker(
+      //         point: LatLng(40.441753, -80.011476),
+      //         builder: (ctx) => const Icon(
+      //               Icons.location_on,
+      //               color: Colors.blue,
+      //               size: 48.0,
+      //             ),
+      //         height: 60),
+      //   ]),
+      // ],
       options: MapOptions(
         center: LatLng(40.441589, -80.010948),
         zoom: 13,
         maxZoom: 15,
+        
       ),
       // layers: [
       //   TileLayerOptions(

@@ -9,12 +9,16 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class TitleAndDescriptopnAndImage extends StatelessWidget {
   final String title;
   final String description;
-  final IconData iconData;
+  final String? primaryTitle;
+  final IconData? customIconData;
+  final Widget? customWidget;
   const TitleAndDescriptopnAndImage(
       {super.key,
+      this.primaryTitle,
       required this.title,
       required this.description,
-      required this.iconData});
+      this.customWidget,
+      this.customIconData});
 
   // We can use same idea as ios_app_ad.dart and swap children order, let's copy code
   @override
@@ -47,6 +51,19 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (primaryTitle != null)
+                        Text(
+                          primaryTitle!,
+                          style: GoogleFonts.roboto(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      if (primaryTitle != null)
+                        const SizedBox(
+                          height: 15.0,
+                        ),
                       Text(
                         title,
                         style: GoogleFonts.roboto(
@@ -78,10 +95,12 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
                 ),
                 Expanded(
                     flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                    child: Icon(
-                      iconData,
-                      size: constraints.maxWidth > 720.0 ? 100 : 350.0,
-                    )),
+                    child: customWidget != null
+                        ? customWidget!
+                        : Icon(
+                            customIconData!,
+                            size: constraints.maxWidth > 720.0 ? 100 : 350.0,
+                          )),
               ],
             ),
           );
