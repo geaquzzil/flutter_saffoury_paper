@@ -8,7 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class TitleAndDescriptopnAndImage extends StatelessWidget {
   final String title;
-  final String description;
+  final String? description;
+  final Widget? customDescription;
   final String? primaryTitle;
   final IconData? customIconData;
   final Widget? customWidget;
@@ -16,7 +17,8 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
       {super.key,
       this.primaryTitle,
       required this.title,
-      required this.description,
+      this.customDescription,
+      this.description,
       this.customWidget,
       this.customIconData});
 
@@ -76,14 +78,16 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      Text(
-                        description,
-                        style: const TextStyle(
-                          color: kCaptionColor,
-                          height: 1.5,
-                          fontSize: 15.0,
-                        ),
-                      ),
+                      description != null
+                          ? Text(
+                              description!,
+                              style: const TextStyle(
+                                color: kCaptionColor,
+                                height: 1.5,
+                                fontSize: 15.0,
+                              ),
+                            )
+                          : customDescription!,
                       const SizedBox(
                         height: 25.0,
                       ),

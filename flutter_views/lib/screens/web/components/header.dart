@@ -61,7 +61,30 @@ class HeaderLogo extends StatelessWidget {
 
 class HeaderRow extends StatelessWidget {
   final String selectedHeader;
-  const HeaderRow({Key? key, required this.selectedHeader}) : super(key: key);
+  final GlobalKey menuKey = GlobalKey();
+  HeaderRow({Key? key, required this.selectedHeader}) : super(key: key);
+  showMenus(BuildContext context) async {
+    final render = menuKey.currentContext!.findRenderObject() as RenderBox;
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+          render.localToGlobal(Offset.zero).dx,
+          render.localToGlobal(Offset.zero).dy + 50,
+          double.infinity,
+          double.infinity),
+      items: [
+        PopupMenuItem(
+          child: Text("Create a website"),
+        ),
+        PopupMenuItem(
+          child: Text("Top Ms commericial management"),
+        ),
+        PopupMenuItem(
+          child: Text("Mobile inventory application"),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +99,15 @@ class HeaderRow extends StatelessWidget {
             .map(
               (item) => item.isButton
                   ? MouseRegion(
+                      // onExit: (event) => Navigator.of(context).pop(),
+                      onHover: (event) {
+                        showMenus(context);
+                      },
                       cursor: SystemMouseCursors.click,
                       child: Container(
+                        key: menuKey,
                         decoration: BoxDecoration(
-                          color: kDangerColor,
+                          color: kPrimaryColor,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         padding: const EdgeInsets.symmetric(

@@ -64,69 +64,9 @@ Widget _buildUi(double width, BuildContext context) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50.0),
-                child: Wrap(
-                  spacing: 20.0,
-                  runSpacing: 20.0,
-                  children: footerItems
-                      .map(
-                        (footerItem) => SizedBox(
-                          height: 120.0,
-                          width: ScreenHelper.isMobile(context)
-                              ? constraints.maxWidth / 2.0 - 20.0
-                              : constraints.maxWidth / 4.0 - 20.0,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  footerItem.icon,
-                                  const SizedBox(
-                                    width: 15.0,
-                                  ),
-                                  Text(
-                                    footerItem.title,
-                                    style: GoogleFonts.roboto(
-                                      // fontSize: 18.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 15.0,
-                              ),
-                              RichText(
-                                textAlign: TextAlign.start,
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "${footerItem.text1}\n",
-                                      style: const TextStyle(
-                                        color: kCaptionColor,
-                                        height: 1.8,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "${footerItem.text2}\n",
-                                      style: const TextStyle(
-                                        color: kCaptionColor,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
+              // Divider(),
+              //getContactInfo(context, constraints),
+
               Flex(
                 direction: ScreenHelper.isMobile(context)
                     ? Axis.vertical
@@ -149,7 +89,7 @@ Widget _buildUi(double width, BuildContext context) {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          context.goNamed(indexWebPrivecyPolicy);
+                          context.goNamed(indexWebTermsAndConditions);
                         },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -193,6 +133,71 @@ Widget _buildUi(double width, BuildContext context) {
           );
         },
       ),
+    ),
+  );
+}
+
+Padding getContactInfo(BuildContext context, BoxConstraints constraints) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 10.0),
+    child: Wrap(
+      spacing: 20.0,
+      runSpacing: 20.0,
+      children: footerItems
+          .map(
+            (footerItem) => SizedBox(
+              height: 120.0,
+              width: ScreenHelper.isMobile(context)
+                  ? constraints.maxWidth / 2.0 - 20.0
+                  : constraints.maxWidth / 4.0 - 20.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      footerItem.icon,
+                      const SizedBox(
+                        width: 15.0,
+                      ),
+                      Text(
+                        footerItem.title,
+                        style: GoogleFonts.roboto(
+                          // fontSize: 18.0,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "${footerItem.text1}\n",
+                          style: const TextStyle(
+                            color: kCaptionColor,
+                            height: 1.8,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "${footerItem.text2}\n",
+                          style: const TextStyle(
+                            color: kCaptionColor,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+          .toList(),
     ),
   );
 }
