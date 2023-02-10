@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'components/header_text.dart';
 import 'components/title_and_image.dart';
 import 'dart:html' as html;
@@ -20,20 +21,24 @@ var contactInfo = [
       category: "INNOVATION",
       name: "Qussai Al-Saffoury",
       email: "qussai@saffoury.com",
+      hasWhatsapp: true,
       phone: "+963 989-944-380"),
   const ContactItem(
       category: "GENERAL MANAGER",
       name: "Yazan Al-Saffoury",
+      hasWhatsapp: true,
       email: "yazan@saffoury.com",
       phone: "+963 989-944-377"),
   const ContactItem(
       category: "TECHNICAL CUSTOMER\nSERVICE",
       name: "Noor Al-Dinn Qusini",
+      hasWhatsapp: true,
       phone: "+963 989-944-384"),
   ContactItem(
       category: "OFFICE".toUpperCase(),
       name: "Tokka Al",
       email: "paper@saffoury.com",
+      hasWhatsapp: true,
       phone: "+963 989-944-381")
 ];
 
@@ -68,31 +73,31 @@ class AboutUsWebPage extends BaseWebPage {
                   data:
                       r"<strong>Saffoury Co.</strong> C947+C89, Unnamed Road, Kherbet Al-Ward, Damascus, Syria<br>C.R: 1405 - I.R: 3<br><br><strong>Mobile: </strong>+963 933-211-012</strong><br><strong>Tel: </strong>+963 11 545-5704<strong><br>Tel: </strong>+963 11 545-5705<br><br><strong>E-Mail: </bold>info@saffoury.com",
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            html.window.open(
-                                'https://facebook.com/dima9359', 'new tab');
-                          },
-                          icon: const Icon(Icons.facebook)),
-                      IconButton(
-                          onPressed: () {
-                            html.window.open(
-                                'https://www.google.com/maps/place/%D8%B4%D8%B1%D9%83%D8%A9+%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%B1%D9%8A+%D9%85%D8%AD%D8%A7%D8%B1%D9%85+%D8%AF%D9%8A%D9%85%D8%A9%E2%80%AD/@33.4060428,36.3611587,17z/data=!3m1!4b1!4m5!3m4!1s0x15191d468d48d2ed:0xb54d8bf7839d29a7!8m2!3d33.4060483!4d36.3633467',
-                                'new tab');
-                          },
-                          icon: const Icon(Icons.location_on)),
-                      IconButton(
-                          onPressed: () {
-                            launchMailto();
-                          },
-                          icon: const Icon(Icons.email)),
-                    ],
-                  ),
-                ),
+                getSocialButtons([
+                  IconButton(
+                      onPressed: () {
+                        launch(
+                            "https://wa.me/+963933211012/?text=Hello There,");
+                      },
+                      icon: const Icon(Icons.whatsapp)),
+                  IconButton(
+                      onPressed: () {
+                        html.window
+                            .open('https://facebook.com/dima9359', 'new tab');
+                      },
+                      icon: const Icon(Icons.facebook)),
+                  IconButton(
+                      onPressed: () {
+                        html.window.open(
+                            'https://goo.gl/maps/GTBfhWsNdrghA4Bk9', 'new tab');
+                      },
+                      icon: const Icon(Icons.location_on)),
+                  IconButton(
+                      onPressed: () {
+                        launchMailto();
+                      },
+                      icon: const Icon(Icons.email)),
+                ]),
               ],
             ),
             // description:
@@ -163,6 +168,27 @@ class AboutUsWebPage extends BaseWebPage {
                   data:
                       r"<strong>SaffouryPaper.</strong> F8PC+7GG, Ibn Battuta St, Damascus, Syria",
                 ),
+                getSocialButtons([
+                  IconButton(
+                      onPressed: () {
+                        html.window.open(
+                            'https://facebook.com/SaffouryPaper', 'new tab');
+                      },
+                      icon: const Icon(Icons.facebook)),
+                  IconButton(
+                      onPressed: () {
+                        html.window.open(
+                            'https://goo.gl/maps/iVLB4dSWpzeyASbp8', 'new tab');
+                      },
+                      icon: const Icon(Icons.location_on)),
+                  IconButton(
+                      onPressed: () {
+                        launchMailtoSaffouryPaperCustom(
+                            "paper@saffoury.com", "SaffouryPaper");
+                        // launchMailto();
+                      },
+                      icon: const Icon(Icons.email)),
+                ]),
                 ...contactInfo
                     .map((c) => ContactInfoItemWidget(contactInfo: c))
                     .toList(),
@@ -306,6 +332,15 @@ class AboutUsWebPage extends BaseWebPage {
     );
   }
 
+  Padding getSocialButtons(List<Widget> widgets) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: widgets,
+      ),
+    );
+  }
+
   launchMailto() async {
     final mailtoLink = Mailto(
       to: ['info@saffoury.com'],
@@ -338,10 +373,12 @@ class ContactItem {
   final String name;
   final String? email;
   final String phone;
+  final bool? hasWhatsapp;
   const ContactItem(
       {required this.category,
       required this.name,
       this.email,
+      this.hasWhatsapp,
       required this.phone});
   Widget getLeading() {
     return getWebText(title: category, fontSize: 18, color: kPrimaryColor);
@@ -366,9 +403,16 @@ class ContactItem {
               icon: const Icon(Icons.email)),
         IconButton(
             onPressed: () {
-              launch("tel://$phone");
+              launchUrlString("tel://$phone");
             },
             icon: const Icon(Icons.phone)),
+        if (hasWhatsapp ?? false)
+          IconButton(
+              onPressed: () {
+                launchUrlString(
+                    "https://wa.me/${phone.replaceAll(" ", "").replaceAll("-", "")}/?text=Hello There,");
+              },
+              icon: const Icon(Icons.whatsapp)),
       ],
     );
   }

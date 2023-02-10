@@ -63,7 +63,13 @@ class ProductWebPage extends BaseWebPage {
                 children: [
                   Expanded(
                       flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                      child: Center(child: Text("start"))),
+                      child: Center(
+                          child: Column(
+                        children: [
+                          ExpansionTile(title: Text("TISSUES")),
+                          ExpansionTile(title: Text("Paper And Cardboard")),
+                        ],
+                      ))),
                   Divider(),
 
                   // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
@@ -74,7 +80,6 @@ class ProductWebPage extends BaseWebPage {
                       child: ResponsiveGridList(
                         horizontalGridMargin: 50,
                         verticalGridMargin: 50,
-                        
                         minItemWidth: 200,
                         children: List.generate(
                           100,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/carousel.dart';
 import 'package:flutter_view_controller/screens/web/components/cv_section.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_view_controller/screens/web/components/portfolio_stats.d
 import 'package:flutter_view_controller/screens/web/components/skill_section.dart';
 import 'package:flutter_view_controller/screens/web/components/sponsors.dart';
 import 'package:flutter_view_controller/screens/web/components/testimonial_widget.dart';
+import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
 import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
 
 class HomeWebPage extends BaseWebPage {
@@ -19,7 +21,18 @@ class HomeWebPage extends BaseWebPage {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Carousel(),
+          // Carousel(),
+          const SizedBox(
+            height: 20.0,
+          ),
+          TitleAndDescriptopnAndImage(
+            primaryTitle: "Hello, There",
+            title: "TITLE",
+            customWidget: CompanyLogo(),
+            description: "Description",
+            // backgroundImage:
+            //     "http://www.saffoury.com/SaffouryPaper2/Images/24a802d340815c27a72f798234f26703.jpg",
+          ),
           const SizedBox(
             height: 20.0,
           ),
