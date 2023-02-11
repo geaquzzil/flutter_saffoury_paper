@@ -27,16 +27,21 @@ class HomeWebPage extends BaseWebPage {
           ),
           TitleAndDescriptopnAndImage(
             primaryTitle: "Hello, There",
-            title: "TITLE",
+            title: "SAFFOURY CO.\nfor tissue\nmanufacturing".toUpperCase(),
             customWidget: CompanyLogo(),
-            description: "Description",
+            description:
+                "SaffouryPaper is a professional manufacture of different kinds of paper with more than 30 years manufacturing experience, advanced technology has been gradually brought in from Taiwan, Italy With our strong R&D team.",
             // backgroundImage:
             //     "http://www.saffoury.com/SaffouryPaper2/Images/24a802d340815c27a72f798234f26703.jpg",
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 28.0),
+            child: PortfolioStats(),
           ),
           const SizedBox(
             height: 20.0,
           ),
-          const CvSection(),
+          const ProductQualityWebSection(),
           IosAppAd(),
           const SizedBox(
             height: 70.0,

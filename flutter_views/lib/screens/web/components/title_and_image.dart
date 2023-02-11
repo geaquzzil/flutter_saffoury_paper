@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -100,40 +101,49 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (primaryTitle != null)
-                Text(
-                  primaryTitle!,
-                  style: GoogleFonts.roboto(
-                    color: kPrimaryColor,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16.0,
+                FadeInLeft(
+                  key: UniqueKey(),
+                  child: Text(
+                    primaryTitle!,
+                    style: GoogleFonts.roboto(
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
               if (primaryTitle != null)
                 const SizedBox(
                   height: 15.0,
                 ),
-              Text(
-                title,
-                style: GoogleFonts.roboto(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  height: 1.3,
-                  fontSize: 35.0,
+              FadeInLeft(
+                key: UniqueKey(),
+                child: Text(
+                  title,
+                  style: GoogleFonts.roboto(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    height: 1.3,
+                    fontSize: 35.0,
+                  ),
                 ),
               ),
               const SizedBox(
                 height: 10.0,
               ),
               description != null
-                  ? Text(
-                      description!,
-                      style: const TextStyle(
-                        color: kCaptionColor,
-                        height: 1.5,
-                        fontSize: 15.0,
+                  ? FadeInLeft(
+                      key: UniqueKey(),
+                      child: Text(
+                        description!,
+                        style: const TextStyle(
+                          color: kCaptionColor,
+                          height: 1.5,
+                          fontSize: 15.0,
+                        ),
                       ),
                     )
-                  : customDescription!,
+                  : FadeInLeft(key: UniqueKey(), child: customDescription!),
               const SizedBox(
                 height: 25.0,
               ),
@@ -146,10 +156,13 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
         Expanded(
             flex: constraints.maxWidth > 720.0 ? 1 : 0,
             child: customWidget != null
-                ? customWidget!
-                : Icon(
-                    customIconData!,
-                    size: constraints.maxWidth > 720.0 ? 100 : 350.0,
+                ? FadeInRight(key: UniqueKey(), child: customWidget!)
+                : FadeInRight(
+                    key: UniqueKey(),
+                    child: Icon(
+                      customIconData!,
+                      size: constraints.maxWidth > 720.0 ? 100 : 350.0,
+                    ),
                   )),
       ],
     );

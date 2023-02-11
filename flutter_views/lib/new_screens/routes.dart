@@ -76,13 +76,18 @@ class RouteGenerator {
   static GoRouter _getGoRouter({List<RouteBase>? addonRoutes}) {
     return GoRouter(
       initialLocation: '/',
-      // redirect: (context, state) async {
-
-      //   if (kIsWeb) {
-      //     return "/index";
-      //   }
-      //   return "/";
-      // },
+      redirect: (context, state) async {
+        if (kIsWeb) {
+          if (state.location == "/") {
+            return "/index";
+          } else if (state.location.startsWith("/index")) {
+            return state.location;
+          } else {
+            return "/index";
+          }
+        }
+        return "/";
+      },
       errorPageBuilder: (context, state) => MaterialPage(
         key: state.pageKey,
         child: getErrorPage(),
