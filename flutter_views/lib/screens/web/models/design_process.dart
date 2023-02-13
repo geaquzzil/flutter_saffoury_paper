@@ -1,12 +1,29 @@
+import 'package:flutter/cupertino.dart';
 
 class DesignProcess {
   final String title;
-  final String imagePath;
+  final String? imagePath;
+  final IconData? iconData;
   final String subtitle;
 
   DesignProcess({
     required this.title,
-    required this.imagePath,
+    this.imagePath,
+    this.iconData,
     required this.subtitle,
-  });
+  }) : assert(imagePath != null || iconData != null);
+
+  Widget getImage() {
+    if (imagePath != null) {
+      return Image.asset(
+        imagePath!,
+        width: 40.0,
+      );
+    } else {
+      return Icon(
+        iconData!,
+        size: 40,
+      );
+    }
+  }
 }

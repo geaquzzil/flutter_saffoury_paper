@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
+import 'package:flutter_view_controller/screens/web/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -99,8 +100,7 @@ class RouteGenerator {
         GoRoute(
             path: "/index",
             name: indexWebRouteName,
-            pageBuilder: (context, state) =>
-                const MaterialPage(child: HomeWebPage()),
+            pageBuilder: (context, state) => MaterialPage(child: HomeWebPage()),
             routes: [
               GoRoute(
                 path: "privecy-policy",
@@ -128,6 +128,13 @@ class RouteGenerator {
                 name: indexWebOurProducts,
                 pageBuilder: (context, state) {
                   return const MaterialPage(child: ProductWebPage());
+                },
+              ),
+              GoRoute(
+                path: "services",
+                name: indexWebServices,
+                pageBuilder: (context, state) {
+                  return  MaterialPage(child: ServicesWebPage());
                 },
               )
             ]),

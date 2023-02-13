@@ -1293,6 +1293,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+2"
+  smooth_scroll_web:
+    dependency: transitive
+    description:
+      name: smooth_scroll_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   source_gen:
     dependency: transitive
     description:
@@ -1454,6 +1461,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  transparent_image:
+    dependency: transitive
+    description:
+      name: transparent_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   tuple:
     dependency: "direct main"
     description:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -73,13 +74,13 @@ class HeaderRow extends StatelessWidget {
           double.infinity,
           double.infinity),
       items: [
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Create a website"),
         ),
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Top Ms commericial management"),
         ),
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Mobile inventory application"),
         ),
       ],
@@ -179,10 +180,34 @@ class HeaderRow extends StatelessWidget {
 
 class Header extends StatelessWidget {
   final String selectedHeader;
-  const Header({Key? key, required this.selectedHeader}) : super(key: key);
+  ValueNotifier<double>? valueNotifier;
+  Header({Key? key, required this.selectedHeader, this.valueNotifier})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (valueNotifier != null) {
+      return ValueListenableBuilder<double>(
+        valueListenable: valueNotifier!,
+        builder: (context, value, child) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 750),
+            color: value == 0
+                ? null
+                : Theme.of(context).scaffoldBackgroundColor.darken(),
+            child: ScreenHelper(
+              desktop: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: buildHeader(),
+              ),
+              // We will make this in a bit
+              mobile: buildMobileHeader(),
+              tablet: buildHeader(),
+            ),
+          );
+        },
+      );
+    }
     return Container(
       child: ScreenHelper(
         desktop: Padding(

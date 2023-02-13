@@ -8,25 +8,31 @@ import 'package:responsive_framework/responsive_framework.dart';
 final List<DesignProcess> designProcesses = [
   DesignProcess(
     title: "DESIGN",
-    imagePath: "assets/design.png",
+    iconData: Icons.design_services,
     subtitle:
         "A full stack allround designer thay may or may not include a guide for specific creative",
   ),
   DesignProcess(
     title: "DEVELOP",
-    imagePath: "assets/develop.png",
+    iconData: Icons.developer_board,
     subtitle:
         "A full stack allround developer thay may or may not include a guide for specific creative",
   ),
   DesignProcess(
-    title: "WRITE",
-    imagePath: "assets/write.png",
+    title: "QUALITY",
+    iconData: Icons.high_quality,
     subtitle:
         "A full stack allround writer thay may or may not include a guide for specific creative",
   ),
   DesignProcess(
     title: "PROMOTE",
-    imagePath: "assets/promote.png",
+    iconData: Icons.high_quality,
+    subtitle:
+        "A full stack allround promoter thay may or may not include a guide for specific creative",
+  ),
+  DesignProcess(
+    title: "PROMOTE",
+    iconData: Icons.high_quality,
     subtitle:
         "A full stack allround promoter thay may or may not include a guide for specific creative",
   ),
@@ -87,76 +93,73 @@ class CvSection extends StatelessWidget {
           const SizedBox(
             height: 50.0,
           ),
-          Container(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return ResponsiveGridView.builder(
-                  padding: const EdgeInsets.all(0.0),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  alignment: Alignment.topCenter,
-                  gridDelegate: ResponsiveGridDelegate(
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 20.0,
-                    maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                            ScreenHelper.isMobile(context)
-                        ? constraints.maxWidth / 2.0
-                        : 250.0,
-                    // Hack to adjust child height
-                    childAspectRatio: ScreenHelper.isDesktop(context)
-                        ? 1
-                        : MediaQuery.of(context).size.aspectRatio * 1.5,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                designProcesses[index].imagePath,
-                                width: 40.0,
-                              ),
-                              const SizedBox(
-                                width: 15.0,
-                              ),
-                              Text(
-                                designProcesses[index].title,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 15.0,
-                          ),
-                          Text(
-                            designProcesses[index].subtitle,
-                            style: const TextStyle(
-                              color: kCaptionColor,
-                              height: 1.5,
-                              fontSize: 14.0,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return ResponsiveGridView.builder(
+                padding: const EdgeInsets.all(0.0),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                alignment: Alignment.topCenter,
+                gridDelegate: ResponsiveGridDelegate(
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+                  maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
+                          ScreenHelper.isMobile(context)
+                      ? constraints.maxWidth / 2.0
+                      : 250.0,
+                  // Hack to adjust child height
+                  childAspectRatio: ScreenHelper.isDesktop(context)
+                      ? 1
+                      : MediaQuery.of(context).size.aspectRatio * 1.5,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  var designProcesse = designProcesses[index];
+                  return Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            designProcesse.getImage(),
+                            const SizedBox(
+                              width: 15.0,
                             ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  itemCount: designProcesses.length,
-                );
-              },
-            ),
+                            Text(
+                              designProcesse.title,
+                              style: GoogleFonts.roboto(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Text(
+                          designProcesse.subtitle,
+                          style: const TextStyle(
+                            color: kCaptionColor,
+                            height: 1.5,
+                            fontSize: 14.0,
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+                itemCount: designProcesses.length,
+              );
+            },
           )
         ],
       ),
     );
   }
 }
+
 class ProductQualityWebSection extends StatelessWidget {
   const ProductQualityWebSection({Key? key}) : super(key: key);
 
@@ -212,70 +215,65 @@ class ProductQualityWebSection extends StatelessWidget {
           const SizedBox(
             height: 50.0,
           ),
-          Container(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return ResponsiveGridView.builder(
-                  padding: const EdgeInsets.all(0.0),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  alignment: Alignment.topCenter,
-                  gridDelegate: ResponsiveGridDelegate(
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 20.0,
-                    maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                            ScreenHelper.isMobile(context)
-                        ? constraints.maxWidth / 2.0
-                        : 250.0,
-                    // Hack to adjust child height
-                    childAspectRatio: ScreenHelper.isDesktop(context)
-                        ? 1
-                        : MediaQuery.of(context).size.aspectRatio * 1.5,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return ResponsiveGridView.builder(
+                padding: const EdgeInsets.all(0.0),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                alignment: Alignment.topCenter,
+                gridDelegate: ResponsiveGridDelegate(
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+                  maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
+                          ScreenHelper.isMobile(context)
+                      ? constraints.maxWidth / 2.0
+                      : 250.0,
+                  // Hack to adjust child height
+                  childAspectRatio: ScreenHelper.isDesktop(context)
+                      ? 1
+                      : MediaQuery.of(context).size.aspectRatio * 1.5,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  var designProcesse = designProcesses[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                designProcesses[index].imagePath,
-                                width: 40.0,
-                              ),
-                              const SizedBox(
-                                width: 15.0,
-                              ),
-                              Text(
-                                designProcesses[index].title,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
+                          designProcesse.getImage(),
                           const SizedBox(
-                            height: 15.0,
+                            width: 15.0,
                           ),
                           Text(
-                            designProcesses[index].subtitle,
-                            style: const TextStyle(
-                              color: kCaptionColor,
-                              height: 1.5,
-                              fontSize: 14.0,
+                            designProcesse.title,
+                            style: GoogleFonts.roboto(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
                             ),
                           )
                         ],
                       ),
-                    );
-                  },
-                  itemCount: designProcesses.length,
-                );
-              },
-            ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Text(
+                        designProcesse.subtitle,
+                        style: const TextStyle(
+                          color: kCaptionColor,
+                          height: 1.5,
+                          fontSize: 14.0,
+                        ),
+                      )
+                    ],
+                  );
+                },
+                itemCount: designProcesses.length,
+              );
+            },
           )
         ],
       ),
