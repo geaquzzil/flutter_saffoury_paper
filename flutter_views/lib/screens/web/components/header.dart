@@ -191,10 +191,15 @@ class Header extends StatelessWidget {
         valueListenable: valueNotifier!,
         builder: (context, value, child) {
           return AnimatedContainer(
-            duration: const Duration(milliseconds: 750),
-            color: value == 0
-                ? null
-                : Theme.of(context).scaffoldBackgroundColor.darken(),
+            duration: const Duration(milliseconds: 500),
+            decoration: BoxDecoration(
+                border: value == 0
+                    ? null
+                    : const Border.symmetric(
+                        horizontal: BorderSide(width: 2, color: Colors.orange)),
+                color: value == 0
+                    ? null
+                    : Theme.of(context).scaffoldBackgroundColor.darken()),
             child: ScreenHelper(
               desktop: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

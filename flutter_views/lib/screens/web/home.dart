@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/carousel.dart';
@@ -15,9 +16,11 @@ import 'package:flutter_view_controller/screens/web/components/testimonial_widge
 import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image_left.dart';
 import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
+import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'components/grid_view_api.dart';
 import 'parallex/parallexes.dart';
 
 const kHeroImage =
@@ -219,7 +222,7 @@ class HomeWebPage extends BaseWebPage {
               "This is a random text about the project, I should have used the regular lorem ipsum text, but I am too lazy to search for that. This should be long enough",
           customIconData: Icons.play_arrow,
         ),
-
+        GridViewApi(),
         LocationListItem(
           usePadding: false,
           useResponsiveLayout: false,
@@ -232,7 +235,30 @@ class HomeWebPage extends BaseWebPage {
             description: "Have questions before making a purchase?",
             customWidget: Lottie.network(
                 "https://assets5.lottiefiles.com/packages/lf20_u25cckyh.json",
-                height: 200),
+                height: 300),
+            actions: [
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  height: 48.0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 28.0,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      context.goNamed(indexWebAboutUs);
+                    },
+                    child: Center(
+                        child: Lottie.network(
+                            "https://assets5.lottiefiles.com/packages/lf20_cbdikfm6.json")),
+                  ),
+                ),
+              ),
+            ],
           ),
           imageUrl:
               "https://saffoury.com/wp-content/uploads/2022/05/center_15.jpg",
@@ -242,6 +268,29 @@ class HomeWebPage extends BaseWebPage {
           description: "Have questions before making a purchase?",
           customWidget: Lottie.network(
               "https://assets5.lottiefiles.com/packages/lf20_u25cckyh.json"),
+          actions: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                height: 48.0,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28.0,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    context.goNamed(indexWebAboutUs);
+                  },
+                  child: Center(
+                      child: Lottie.network(
+                          "https://assets5.lottiefiles.com/packages/lf20_cbdikfm6.json")),
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(
           height: 70.0,

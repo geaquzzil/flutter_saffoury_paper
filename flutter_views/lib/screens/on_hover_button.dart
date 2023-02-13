@@ -5,9 +5,11 @@ import 'package:sprung/sprung.dart';
 
 class OnHoverWidget extends StatefulWidget {
   bool scale;
+  ValueNotifier<bool>? onHover;
   Widget Function(bool isHovered) builder;
 
-  OnHoverWidget({Key? key, required this.builder, this.scale = true})
+  OnHoverWidget(
+      {Key? key, required this.builder, this.onHover, this.scale = true})
       : super(key: key);
 
   @override
@@ -17,6 +19,10 @@ class OnHoverWidget extends StatefulWidget {
 class _OnHoverWidgetState extends State<OnHoverWidget> {
   bool isHover = false;
   void onEntered(bool isHover) {
+    if (widget.onHover != null) {
+      widget.onHover!.value = isHover;
+      return;
+    }
     setState(() {
       this.isHover = isHover;
     });

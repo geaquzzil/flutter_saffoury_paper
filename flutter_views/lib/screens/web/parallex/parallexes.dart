@@ -125,10 +125,11 @@ class LocationListItem extends StatelessWidget {
   Widget _buildParallaxBackground(BuildContext context) {
     if (soildColor != null) {
       return Positioned.fill(
-        child: Container(
-          color: soildColor,
-        ),
-      );
+          child: Image.network(
+        imageUrl,
+        key: _backgroundImageKey,
+        fit: BoxFit.cover,
+      ));
     }
     return Flow(
       delegate: ParallaxFlowDelegate(
