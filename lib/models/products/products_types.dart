@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -16,7 +18,8 @@ part 'products_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class ProductType extends ViewAbstract<ProductType> {
+class ProductType extends ViewAbstract<ProductType>
+    implements WebCategoryGridableInterface<ProductType> {
   // int? GradeID;
 
   String? name;
@@ -63,18 +66,18 @@ class ProductType extends ViewAbstract<ProductType> {
     }
   }
 
-  @override
-  Future<List<ProductType>?> listCall(
-      {int? count, int? page, OnResponseCallback? onResponse}) async {
-    try {
-      Iterable l = jsonDecode(jsonEncode(availabilityType));
-      return List<ProductType>.from(
-          l.map((model) => fromJsonViewAbstract(model)));
-    } catch (e) {
-      debugPrint("listCallFake ${e.toString()}");
-    }
-    return null;
-  }
+  // @override
+  // Future<List<ProductType>?> listCall(
+  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
+  //   try {
+  //     Iterable l = jsonDecode(jsonEncode(availabilityType));
+  //     return List<ProductType>.from(
+  //         l.map((model) => fromJsonViewAbstract(model)));
+  //   } catch (e) {
+  //     debugPrint("listCallFake ${e.toString()}");
+  //   }
+  //   return null;
+  // }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -225,6 +228,21 @@ class ProductType extends ViewAbstract<ProductType> {
   String getUnit(BuildContext context) {
     if (unit == null) return "-";
     return unit!.getFieldLabelString(context, unit!);
+  }
+
+  @override
+  String? getWebCategoryGridableDescription(BuildContext context) {
+    return availability?.toCurrencyFormat();
+  }
+
+  @override
+  ProductType getWebCategoryGridableInterface(BuildContext context) {
+    return ProductType.init(true);
+  }
+
+  @override
+  String getWebCategoryGridableTitle(BuildContext context) {
+    return getMainHeaderTextOnly(context);
   }
 }
 

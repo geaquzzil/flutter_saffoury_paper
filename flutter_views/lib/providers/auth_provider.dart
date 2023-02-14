@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -59,6 +60,12 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController name = TextEditingController();
+  List<ViewAbstract> getWebCategories() {
+    return getDrawerItems
+        .whereType<WebCategoryGridableInterface>()
+        .toList()
+        .cast();
+  }
 
   AuthProvider.initialize(T initUser, List<ViewAbstract> drawerItems) {
     _drawerItems = drawerItems;
@@ -125,8 +132,8 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
       // debugPrint("checing permission for $item ");
-      bool hasPermssion =  _user.hasPermissionList(context,
-          viewAbstract: item as ViewAbstract);
+      bool hasPermssion =
+          _user.hasPermissionList(context, viewAbstract: item as ViewAbstract);
       // debugPrint("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {
         _drawerItemsPermissions.add(item);

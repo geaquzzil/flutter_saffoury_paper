@@ -6,10 +6,13 @@ import 'package:sprung/sprung.dart';
 class OnHoverWidget extends StatefulWidget {
   bool scale;
   ValueNotifier<bool>? onHover;
+  MouseCursor  mouseCursor; 
   Widget Function(bool isHovered) builder;
 
   OnHoverWidget(
-      {Key? key, required this.builder, this.onHover, this.scale = true})
+      {Key? key, required this.builder, this.onHover, 
+      this.mouseCursor=SystemMouseCursors.click,
+      this.scale = true})
       : super(key: key);
 
   @override
@@ -37,7 +40,7 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
     GlobalKey key = GlobalKey();
     return MouseRegion(
       key: key,
-      cursor: SystemMouseCursors.click,
+      cursor: widget.mouseCursor,
       onEnter: (event) => onEntered(true),
       onExit: (event) => onEntered(false),
       child: AnimatedContainer(
@@ -45,6 +48,86 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
         duration: const Duration(milliseconds: 200),
         transform: widget.scale ? transform : null,
         child: widget.builder(isHover),
+      ),
+    );
+  }
+}
+
+class HoverImage extends StatefulWidget {
+  final String image;
+  final Widget Function(bool isHovered)? builder;
+  const HoverImage({super.key, required this.image, this.builder});
+
+  @override
+  _HoverImageState createState() => _HoverImageState();
+}
+
+class _HoverImageState extends State<HoverImage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation _animation;
+  late Animation padding;
+  late bool isHovered;
+
+  @override
+  void initState() {
+    super.initState();
+    isHovered = false;
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 275),
+      vsync: this,
+    );
+    _animation = Tween(begin: 1.0, end: 1.2).animate(CurvedAnimation(
+        parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
+    padding = Tween(begin: 0.0, end: -25.0).animate(CurvedAnimation(
+        parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (value) {
+        setState(() {
+          isHovered = true;
+          _controller.forward();
+        });
+      },
+      onExit: (value) {
+        setState(() {
+          isHovered = false;
+          _controller.reverse();
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0.0, 20.0),
+              spreadRadius: -10.0,
+              blurRadius: 20.0,
+            )
+          ],
+        ),
+        child: Container(
+            height: 220.0,
+            width: 170.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            clipBehavior: Clip.hardEdge,
+            transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value,
+                0, 0, 0, 0, 1, 0, padding.value, padding.value, 0, 1),
+            child: widget.builder == null
+                ? Image.network(
+                    widget.image,
+                    fit: BoxFit.contain,
+                  )
+                : widget.builder!(isHovered)),
       ),
     );
   }

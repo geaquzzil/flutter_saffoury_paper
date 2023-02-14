@@ -41,6 +41,7 @@ class LocationListItem extends StatelessWidget {
     this.customCenterWidget,
     this.usePadding = true,
     this.useClipRect = true,
+    this.useAspectRatio = false,
     this.soildColor,
     this.useResponsiveLayout = true,
   });
@@ -51,6 +52,7 @@ class LocationListItem extends StatelessWidget {
   final bool useResponsiveLayout;
   final String imageUrl;
   final Color? soildColor;
+  final bool useAspectRatio;
   final String name;
   final String country;
   final GlobalKey _backgroundImageKey = GlobalKey();
@@ -83,14 +85,22 @@ class LocationListItem extends StatelessWidget {
   }
 
   Padding getBody(BuildContext context) {
+    double carouselContainerHeight = MediaQuery.of(context).size.height *
+        (SizeConfig.isMobile(context) ? .5 : .65);
     return Padding(
       padding: usePadding
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
           : EdgeInsets.zero,
-      child: AspectRatio(
-        aspectRatio: aspectRatio,
-        child: getClipRRect(context),
-      ),
+      child: useAspectRatio
+          ? AspectRatio(
+              aspectRatio: aspectRatio,
+              child: getClipRRect(context),
+            )
+          : SizedBox(
+              height: carouselContainerHeight,
+              width: double.infinity,
+              child: getClipRRect(context),
+            ),
     );
   }
 
@@ -108,10 +118,12 @@ class LocationListItem extends StatelessWidget {
   Stack getStack(BuildContext context) {
     return Stack(
       children: [
+        if (customCenterWidget != null)
+          if (soildColor != null) Positioned.fill(child: getFlow(context)),
         _buildParallaxBackground(context),
         if (customCenterWidget == null) _buildGradient(),
         if (customCenterWidget == null) _buildTitleAndSubtitle(),
-        if (customCenterWidget != null) _buildCenterWidget(context)
+        if (customCenterWidget != null) _buildCenterWidget(context),
       ],
     );
   }
@@ -125,12 +137,15 @@ class LocationListItem extends StatelessWidget {
   Widget _buildParallaxBackground(BuildContext context) {
     if (soildColor != null) {
       return Positioned.fill(
-          child: Image.network(
-        imageUrl,
-        key: _backgroundImageKey,
-        fit: BoxFit.cover,
-      ));
+        child: Container(
+          color: soildColor,
+        ),
+      );
     }
+    return getFlow(context);
+  }
+
+  Flow getFlow(BuildContext context) {
     return Flow(
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context)!,
@@ -143,16 +158,11 @@ class LocationListItem extends StatelessWidget {
         //   image: CachedNetworkImageProvider(imageUrl!),
         //   fit: BoxFit.cover,
         // )
-        if (soildColor != null)
-          Container(
-            color: soildColor,
-          ),
-        if (soildColor == null)
-          Image.network(
-            imageUrl,
-            key: _backgroundImageKey,
-            fit: BoxFit.cover,
-          ),
+        Image.network(
+          imageUrl,
+          key: _backgroundImageKey,
+          fit: BoxFit.cover,
+        ),
 
         // FadeInImage.memoryNetwork(
         //   key: _backgroundImageKey,

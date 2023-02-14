@@ -2,6 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:lottie/lottie.dart';
 
+class LottieColorFilter extends StatelessWidget {
+  final String? lottiUrl;
+  final String? lottieJson;
+  final double? height;
+  final Color? color;
+  final String lottieAssetPath = "assets/lotties/";
+  const LottieColorFilter(
+      {super.key, this.color, this.lottiUrl, this.lottieJson, this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget widget;
+    if (lottiUrl != null) {
+      widget = Lottie.network(
+        lottiUrl!,
+        height: height,
+      );
+    } else {
+      widget = Lottie.asset(
+        lottieAssetPath + lottieJson!,
+      );
+    }
+    return ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          color ?? Theme.of(context).colorScheme.onBackground,
+          BlendMode.modulate,
+        ),
+        child: widget);
+  }
+}
+
 class EmptyWidget extends StatelessWidget {
   final String? lottiUrl;
 
