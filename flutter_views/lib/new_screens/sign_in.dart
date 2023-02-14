@@ -8,7 +8,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import '../constants.dart';
 
 class SignInPage extends BaseWebPage {
-  const SignInPage({Key? key}) : super(key: key);
+   SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget getContentWidget(BuildContext context) {

@@ -10,7 +10,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
 class ProductWebPage extends BaseWebPage {
-  const ProductWebPage({Key? key}) : super(key: key);
+   ProductWebPage({Key? key}) : super(key: key);
 
   @override
   Widget? getContentWidget(BuildContext context) {

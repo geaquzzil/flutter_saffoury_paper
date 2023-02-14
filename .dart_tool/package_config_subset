@@ -810,6 +810,10 @@ test_api
 2.12
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.12/
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.12/lib/
+timelines
+2.12
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/timelines-0.1.0/
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/timelines-0.1.0/lib/
 timing
 2.12
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/timing-1.0.0/
@@ -878,6 +882,10 @@ watcher
 2.14
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/watcher-1.0.1/
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/watcher-1.0.1/lib/
+web_smooth_scroll
+2.16
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_smooth_scroll-1.1.0/
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_smooth_scroll-1.1.0/lib/
 web_socket_channel
 2.12
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/web_socket_channel-2.2.0/

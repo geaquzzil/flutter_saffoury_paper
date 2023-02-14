@@ -16,7 +16,7 @@ import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
 import 'components/terms/terms_who_we_are.dart';
 
 class TermsWebPage extends BaseWebPage {
-  const TermsWebPage({Key? key}) : super(key: key);
+   TermsWebPage({Key? key}) : super(key: key);
 
   @override
   Widget? getContentWidget(BuildContext context) {

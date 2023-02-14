@@ -1454,6 +1454,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.12"
+  timelines:
+    dependency: transitive
+    description:
+      name: timelines
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   timing:
     dependency: transitive
     description:
@@ -1573,6 +1580,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  web_smooth_scroll:
+    dependency: transitive
+    description:
+      name: web_smooth_scroll
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   web_socket_channel:
     dependency: transitive
     description:

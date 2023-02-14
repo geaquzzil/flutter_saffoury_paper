@@ -13,6 +13,7 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
   final String? backgroundImage;
   final IconData? customIconData;
   final bool? isBackgroundImageBlurred;
+  final bool descriptionIsWhite;
   final Widget? customWidget;
   final List<Widget>? actions;
   const TitleAndDescriptopnAndImageLeft(
@@ -21,6 +22,7 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
       required this.title,
       this.customDescription,
       this.description,
+      this.descriptionIsWhite = false,
       this.actions,
       this.isBackgroundImageBlurred = true,
       this.backgroundImage,
@@ -106,8 +108,10 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
                                 key: UniqueKey(),
                                 child: Text(
                                   description!,
-                                  style: const TextStyle(
-                                    color: kCaptionColor,
+                                  style: TextStyle(
+                                    color: descriptionIsWhite
+                                        ? Colors.white70
+                                        : kCaptionColor,
                                     height: 1.5,
                                     fontSize: 15.0,
                                   ),
@@ -134,7 +138,7 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
   Widget getButtons() {
     return Row(
       children: [
-        if(actions!=null)...actions!
+        if (actions != null) ...actions!
         // MouseRegion(
         //   cursor: SystemMouseCursors.click,
         //   child: Container(

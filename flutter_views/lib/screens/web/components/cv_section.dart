@@ -203,7 +203,7 @@ class ProductQualityWebSection extends StatelessWidget {
                   child: Text(
                     "DOWNLOAD CV",
                     style: GoogleFonts.roboto(
-                      color: kPrimaryColor,
+                      color: Colors.white70,
                       fontWeight: FontWeight.w900,
                       fontSize: 16.0,
                     ),

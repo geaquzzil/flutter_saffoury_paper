@@ -21,7 +21,9 @@ import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
 import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:timelines/timelines.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'components/grid_view_api.dart';
 import 'parallex/parallexes.dart';
@@ -168,43 +170,38 @@ class HomeWebPage extends BaseWebPage {
           padding: const EdgeInsets.symmetric(vertical: 28.0),
           child: PortfolioStats(),
         ),
+        FixedTimeline.tileBuilder(
+          theme: TimelineTheme.of(context).copyWith(
+            connectorTheme: ConnectorThemeData(color: kPrimaryColor),
+            color: kPrimaryColor,
+          ),
+          builder: TimelineTileBuilder.connectedFromStyle(
+            contentsAlign: ContentsAlign.alternating,
+            oppositeContentsBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(historyList[index].period),
+            ),
+            contentsBuilder: (context, index) => Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(historyList[index].description),
+              ),
+            ),
+            connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
+            indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
+            itemCount: historyList.length,
+          ),
+        ),
         const SizedBox(
           height: 20.0,
         ),
         const ProductQualityWebSection(),
-        TitleAndDescriptopnAndImageLeft(
-          actions: [
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                height: 48.0,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 28.0,
-                ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: Center(
-                      child: Lottie.network(
-                          "https://assets5.lottiefiles.com/packages/lf20_cbdikfm6.json")),
-                ),
-              ),
-            ),
-          ],
-          primaryTitle: "IOS APP",
-          title: "UNIVERSAL\nSMART HOME APP",
-          description:
-              "This is a random text about the project, I should have used the regular lorem ipsum text, but I am too lazy to search for that. This should be long enough",
-          customIconData: Icons.play_arrow,
-        ),
 
-        const SizedBox(
-          height: 70.0,
-        ),
         LocationListItem(
+          soildColor: Theme.of(context)
+              .scaffoldBackgroundColor
+              .lighten()
+              .withOpacity(.8),
           usePadding: false,
           useResponsiveLayout: false,
           country: "",
@@ -216,6 +213,39 @@ class HomeWebPage extends BaseWebPage {
           imageUrl:
               "https://saffoury.com/wp-content/uploads/2022/05/center_15.jpg",
         ),
+        const SizedBox(
+          height: 70.0,
+        ),
+
+        HistorySection(),
+        // TitleAndDescriptopnAndImageLeft(
+        //   actions: [
+        //     MouseRegion(
+        //       cursor: SystemMouseCursors.click,
+        //       child: Container(
+        //         decoration: BoxDecoration(
+        //           color: kPrimaryColor,
+        //           borderRadius: BorderRadius.circular(8.0),
+        //         ),
+        //         height: 48.0,
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 28.0,
+        //         ),
+        //         child: TextButton(
+        //           onPressed: () {},
+        //           child: Center(
+        //               child: Lottie.network(
+        //                   "https://assets5.lottiefiles.com/packages/lf20_cbdikfm6.json")),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        //   title: "OUR\nMISSION",
+        //   description:
+        //       "From the beginning,our mission has been to orginize the world's ",
+        //   customIconData: Icons.play_arrow,
+        // ),
+
         const SizedBox(
           height: 70.0,
         ),
@@ -236,11 +266,12 @@ class HomeWebPage extends BaseWebPage {
           soildColor: Theme.of(context)
               .scaffoldBackgroundColor
               .lighten()
-              .withOpacity(.5),
+              .withOpacity(.8),
           customCenterWidget: TitleAndDescriptopnAndImageLeft(
             title: "WE\nLAUNCHED\nOUR APP".toUpperCase(),
+            descriptionIsWhite: true,
             description:
-                "Ordering solution perfect for presses owners.\nStart ordering online, along with website, apps, products,\nmenus & much,much more",
+                "Ordering solution perfect for presses owners.\nStart ordering online, along with website, apps, products,\nmenus & much,much more\nDevelopment by Qussai Al-Saffoury",
             customWidget: Container(),
             actions: [
               MouseRegion(
@@ -256,19 +287,21 @@ class HomeWebPage extends BaseWebPage {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      context.goNamed(indexWebAboutUs);
+                      launchUrlString(
+                          "https://play.google.com/store/apps/details?id=com.saffoury.saffourypaper&hl=en&gl=US");
                     },
                     child: LottieColorFilter(
                       // color: Colors.black.withOpacity(.4),
                       lottiUrl:
-                          "https://assets10.lottiefiles.com/packages/lf20_RBUCBDMwqd.json",
+                          "https://assets7.lottiefiles.com/packages/lf20_bsPjV4.json",
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          imageUrl: "https://saffoury.com/wp-content/uploads/lo1-scaled.jpg",
+          imageUrl:
+              "https://saffoury.com/wp-content/uploads/lo1-Recovered-1-scaled.jpg",
         ),
 
         const SizedBox(
@@ -293,6 +326,7 @@ class HomeWebPage extends BaseWebPage {
               .withOpacity(.7),
           customCenterWidget: TitleAndDescriptopnAndImageLeft(
             title: "Contact us".toUpperCase(),
+            descriptionIsWhite: true,
             description:
                 "Have questions before making a purchase?\nWe are very keen on trust and credibility in dealing with our customers, where we must adhere to all the requirements of our customers and provide them with services as fully as possible",
             customWidget: Lottie.network(
@@ -370,7 +404,7 @@ class HomeWebPage extends BaseWebPage {
         // const SizedBox(
         //   height: 50.0,
         // ),
-        // EducationSection(),
+
         // const SizedBox(
         //   height: 50.0,
         // ),

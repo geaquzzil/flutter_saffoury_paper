@@ -45,7 +45,7 @@ var contactInfo = [
 ];
 
 class AboutUsWebPage extends BaseWebPage {
-  const AboutUsWebPage({Key? key}) : super(key: key);
+   AboutUsWebPage({Key? key}) : super(key: key);
 
   @override
   Widget? getContentWidget(BuildContext context) {

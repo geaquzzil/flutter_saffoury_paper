@@ -41,11 +41,13 @@ class LocationListItem extends StatelessWidget {
     this.customCenterWidget,
     this.usePadding = true,
     this.useClipRect = true,
+    this.descriptionIsWhite=false,
     this.useAspectRatio = false,
     this.soildColor,
     this.useResponsiveLayout = true,
   });
   final bool useClipRect;
+  final bool descriptionIsWhite;
   final bool usePadding;
   final Widget? customBottomWidget;
   final Widget? customCenterWidget;

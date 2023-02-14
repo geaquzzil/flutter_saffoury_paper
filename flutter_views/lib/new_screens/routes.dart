@@ -106,28 +106,28 @@ class RouteGenerator {
                 path: "privecy-policy",
                 name: indexWebPrivecyPolicy,
                 pageBuilder: (context, state) {
-                  return const MaterialPage(child: PrivecyPolicyWebPage());
+                  return  MaterialPage(child: PrivecyPolicyWebPage());
                 },
               ),
               GoRoute(
                 path: "about-us",
                 name: indexWebAboutUs,
                 pageBuilder: (context, state) {
-                  return const MaterialPage(child: AboutUsWebPage());
+                  return  MaterialPage(child: AboutUsWebPage());
                 },
               ),
               GoRoute(
                 path: "terms",
                 name: indexWebTermsAndConditions,
                 pageBuilder: (context, state) {
-                  return const MaterialPage(child: TermsWebPage());
+                  return  MaterialPage(child: TermsWebPage());
                 },
               ),
               GoRoute(
                 path: "products",
                 name: indexWebOurProducts,
                 pageBuilder: (context, state) {
-                  return const MaterialPage(child: ProductWebPage());
+                  return  MaterialPage(child: ProductWebPage());
                 },
               ),
               GoRoute(
@@ -234,7 +234,7 @@ class RouteGenerator {
           name: loginRouteName,
           path: "/login",
           pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child: const SignInPage());
+            return MaterialPage(key: state.pageKey, child:  SignInPage());
           },
         ),
         if (addonRoutes != null) ...addonRoutes
@@ -262,7 +262,7 @@ class RouteGenerator {
       case "/search":
         return getSearchPage();
       case '/sign_in':
-        return MaterialPageRoute(builder: (context) => const SignInPage());
+        return MaterialPageRoute(builder: (context) =>  SignInPage());
 
       //  case "/print":
       //     return MaterialPageRoute(builder: (context) => const SignInPage());

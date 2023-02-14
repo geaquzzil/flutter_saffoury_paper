@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/terms.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:smooth_scroll_web/smooth_scroll_web.dart';
+import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
   Widget? getContentWidget(BuildContext context);
@@ -112,8 +113,9 @@ abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
 }
 
 abstract class BaseWebPage extends StatelessWidget {
+  ScrollController _scrollController = ScrollController();
   Widget? getContentWidget(BuildContext context);
-  const BaseWebPage({Key? key}) : super(key: key);
+  BaseWebPage({Key? key}) : super(key: key);
 
   String getSelectedHeader(BuildContext context) {
     if (this is AboutUsWebPage) {
@@ -199,14 +201,23 @@ abstract class BaseWebPage extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            getHeader(context),
-            getContentWidget(context)!,
-            const Footer(),
-          ],
+      body: WebSmoothScroll(
+        controller: _scrollController,
+        scrollOffset: 250, // additional offset to users scroll input
+        animationDuration: 600,
+        //     500, // duration of animation of scroll in milliseconds
+        // curve: Curves.easeIn, // curve of the animation
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _scrollController,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getHeader(context),
+              getContentWidget(context)!,
+              const Footer(),
+            ],
+          ),
         ),
       ),
     );
