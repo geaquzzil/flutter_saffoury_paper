@@ -25,7 +25,7 @@ import 'package:timelines/timelines.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import 'components/grid_view_api.dart';
+import 'components/grid_view_api_category.dart';
 import 'parallex/parallexes.dart';
 
 const kHeroImage =
@@ -170,31 +170,7 @@ class HomeWebPage extends BaseWebPage {
           padding: const EdgeInsets.symmetric(vertical: 28.0),
           child: PortfolioStats(),
         ),
-        FixedTimeline.tileBuilder(
-          theme: TimelineTheme.of(context).copyWith(
-            connectorTheme: ConnectorThemeData(color: kPrimaryColor),
-            color: kPrimaryColor,
-          ),
-          builder: TimelineTileBuilder.connectedFromStyle(
-            contentsAlign: ContentsAlign.alternating,
-            oppositeContentsBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(historyList[index].period),
-            ),
-            contentsBuilder: (context, index) => Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(historyList[index].description),
-              ),
-            ),
-            connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
-            indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
-            itemCount: historyList.length,
-          ),
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
+
         const ProductQualityWebSection(),
 
         LocationListItem(
@@ -346,7 +322,7 @@ class HomeWebPage extends BaseWebPage {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      context.goNamed(indexWebAboutUs);
+                      context.goNamed(indexWebContactUs);
                     },
                     child: LottieColorFilter(
                       // color: Colors.black.withOpacity(.4),

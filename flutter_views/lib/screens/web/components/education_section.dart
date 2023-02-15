@@ -36,13 +36,13 @@ final List<Education> historyList = [
   Education(
     description:
         "`Saffoury` celebrates another factory location in Chtoura - Lebanon ",
-    linkName: "www.flutterpanda.com",
+    // linkName: "www.flutterpanda.com",
     period: "2020 - PRESENT",
   ),
   Education(
     description:
         "`Saffoury` Company established another factory for tissues manufacturer in `Dubai - United Arab Emirates`, which makes the company's expertise match the global expertise in the tissue industry",
-    linkName: "www.flutterpanda.com",
+    // linkName: "www.flutterpanda.com",
     period: "2010 - 2014",
   ),
   Education(
@@ -58,13 +58,13 @@ final List<Education> historyList = [
   Education(
     description:
         "`Saffoury` release over 10+ products to all Syrian governorates, making it the best tissue manufacturer in the entire region",
-    linkName: "www.flutterpanda.com",
+    // linkName: "www.flutterpanda.com",
     period: "1995",
   ),
   Education(
     description:
         "`Saffoury` celebrates its first factory location in Damascus - Syria",
-    linkName: "www.flutterpanda.com",
+    // linkName: "www.flutterpanda.com",
     period: "1990 - PRESENT",
   ),
 ];
@@ -189,6 +189,8 @@ class EducationSection extends StatelessWidget {
 }
 
 class HistorySection extends StatelessWidget {
+  const HistorySection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -277,7 +279,6 @@ class HistorySection extends StatelessWidget {
                                 ),
                                 if (education.linkName != null)
                                   WebButton(
-                                    
                                       primary: false, title: "EXPLORE MORE"),
                                 // MouseRegion(
                                 //   cursor: SystemMouseCursors.click,

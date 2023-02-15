@@ -26,6 +26,7 @@ import '../interfaces/dashable_interface.dart';
 import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import '../screens/web/contact-us.dart';
 import '../screens/web/our_products.dart';
 import '../screens/web/terms.dart';
 import 'actions/view/view_view_main_page.dart';
@@ -63,6 +64,7 @@ const String indexWebTermsAndConditions = "terms";
 const String indexWebOurProducts = "products";
 const String indexWebServices = "services";
 const String indexWebAboutUs = "about-us";
+const String indexWebContactUs = "contact-us";
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -106,35 +108,42 @@ class RouteGenerator {
                 path: "privecy-policy",
                 name: indexWebPrivecyPolicy,
                 pageBuilder: (context, state) {
-                  return  MaterialPage(child: PrivecyPolicyWebPage());
+                  return MaterialPage(child: PrivecyPolicyWebPage());
+                },
+              ),
+              GoRoute(
+                path: indexWebContactUs,
+                name: indexWebContactUs,
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: ContactUsWebPage());
                 },
               ),
               GoRoute(
                 path: "about-us",
                 name: indexWebAboutUs,
                 pageBuilder: (context, state) {
-                  return  MaterialPage(child: AboutUsWebPage());
+                  return MaterialPage(child: AboutUsWebPage());
                 },
               ),
               GoRoute(
                 path: "terms",
                 name: indexWebTermsAndConditions,
                 pageBuilder: (context, state) {
-                  return  MaterialPage(child: TermsWebPage());
+                  return MaterialPage(child: TermsWebPage());
                 },
               ),
               GoRoute(
                 path: "products",
                 name: indexWebOurProducts,
                 pageBuilder: (context, state) {
-                  return  MaterialPage(child: ProductWebPage());
+                  return MaterialPage(child: ProductWebPage());
                 },
               ),
               GoRoute(
                 path: "services",
                 name: indexWebServices,
                 pageBuilder: (context, state) {
-                  return  MaterialPage(child: ServicesWebPage());
+                  return MaterialPage(child: ServicesWebPage());
                 },
               )
             ]),
@@ -234,7 +243,7 @@ class RouteGenerator {
           name: loginRouteName,
           path: "/login",
           pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child:  SignInPage());
+            return MaterialPage(key: state.pageKey, child: SignInPage());
           },
         ),
         if (addonRoutes != null) ...addonRoutes
@@ -262,7 +271,7 @@ class RouteGenerator {
       case "/search":
         return getSearchPage();
       case '/sign_in':
-        return MaterialPageRoute(builder: (context) =>  SignInPage());
+        return MaterialPageRoute(builder: (context) => SignInPage());
 
       //  case "/print":
       //     return MaterialPageRoute(builder: (context) => const SignInPage());

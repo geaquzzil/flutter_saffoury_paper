@@ -54,6 +54,12 @@ List<HeaderItem> getHeaderItems(BuildContext context) => [
         },
       ),
       HeaderItem(
+        title: AppLocalizations.of(context)!.contactUs,
+        onClick: () {
+          context.goNamed(indexWebContactUs);
+        },
+      ),
+      HeaderItem(
         title: AppLocalizations.of(context)!.about,
         onClick: () {
           context.goNamed(indexWebAboutUs);

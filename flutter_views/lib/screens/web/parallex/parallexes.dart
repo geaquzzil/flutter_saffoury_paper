@@ -41,7 +41,7 @@ class LocationListItem extends StatelessWidget {
     this.customCenterWidget,
     this.usePadding = true,
     this.useClipRect = true,
-    this.descriptionIsWhite=false,
+    this.descriptionIsWhite = false,
     this.useAspectRatio = false,
     this.soildColor,
     this.useResponsiveLayout = true,
@@ -163,7 +163,7 @@ class LocationListItem extends StatelessWidget {
         Image.network(
           imageUrl,
           key: _backgroundImageKey,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         ),
 
         // FadeInImage.memoryNetwork(

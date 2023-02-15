@@ -10,25 +10,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class TitleAndDescriptopnAndImage extends StatelessWidget {
-  final String title;
+class TitleAndDescriptopnResponsive extends StatelessWidget {
+  final String? title;
   final String? description;
   final Widget? customDescription;
   final String? primaryTitle;
-  final String? backgroundImage;
-  final IconData? customIconData;
-  final bool? isBackgroundImageBlurred;
-  final Widget? customWidget;
-  const TitleAndDescriptopnAndImage(
-      {super.key,
-      this.primaryTitle,
-      required this.title,
-      this.customDescription,
-      this.description,
-      this.isBackgroundImageBlurred = true,
-      this.backgroundImage,
-      this.customWidget,
-      this.customIconData});
+  final Widget? addonWidget;
+  const TitleAndDescriptopnResponsive({
+    super.key,
+    this.primaryTitle,
+    this.title,
+    this.addonWidget,
+    this.customDescription,
+    this.description,
+  });
 
   // We can use same idea as ios_app_ad.dart and swap children order, let's copy code
   @override
@@ -50,43 +45,11 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
             maxWidth: width,
             minWidth: width,
             defaultScale: false,
-            child: backgroundImage != null
-                ? getUiBodyWithBackgroundImage(constraints, context)
-                : getUiBody(constraints),
+            child: getUiBody(constraints),
           );
         },
       ),
     );
-  }
-
-  Widget getUiBodyWithBackgroundImage(
-      BoxConstraints constraints, BuildContext context) {
-    double carouselContainerHeight = MediaQuery.of(context).size.height *
-        (SizeConfig.isMobile(context) ? .25 : .5);
-    Widget image = CachedNetworkImage(
-      color: Theme.of(context).colorScheme.onBackground,
-      imageUrl: backgroundImage!,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onBackground,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-          child: Container(
-            height: carouselContainerHeight,
-            decoration: BoxDecoration(
-              color: kPrimaryColor.withOpacity(0.9),
-              borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            ),
-            child: getUiBody(constraints),
-          ),
-        ),
-      ),
-      placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
-    );
-    return image;
   }
 
   Flex getUiBody(BoxConstraints constraints) {
@@ -116,21 +79,23 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
                 const SizedBox(
                   height: 15.0,
                 ),
-              FadeInLeft(
-                key: UniqueKey(),
-                child: Text(
-                  title,
-                  style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    height: 1.3,
-                    fontSize: 35.0,
+              if (title != null)
+                FadeInLeft(
+                  key: UniqueKey(),
+                  child: Text(
+                    title!,
+                    style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      height: 1.3,
+                      fontSize: 35.0,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
+              if (title != null)
+                const SizedBox(
+                  height: 10.0,
+                ),
               description != null
                   ? FadeInLeft(
                       key: UniqueKey(),
@@ -147,28 +112,10 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
               const SizedBox(
                 height: 25.0,
               ),
+              if (addonWidget != null) addonWidget!,
             ],
           ),
-        ),
-        const SizedBox(
-          width: 25.0,
-        ),
-        // if (constraints.maxWidth > 720.0)
-        Expanded(
-            flex: constraints.maxWidth > 720.0 ? 1 : 0,
-            child: customWidget != null
-                ? FadeInRight(key: UniqueKey(), child: customWidget!)
-                : FadeInRight(
-                    key: UniqueKey(),
-                    child: Icon(
-                      customIconData!,
-                      size: 100,
-                    ),
-                  )),
-        if (constraints.maxWidth < 720.0)
-          const SizedBox(
-            height: 25.0,
-          ),
+        )
       ],
     );
   }

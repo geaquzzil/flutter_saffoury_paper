@@ -4,6 +4,8 @@ import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
+import '../contact-us.dart';
+
 class ContactInfoItemWidget extends StatelessWidget {
   final ContactItem contactInfo;
   const ContactInfoItemWidget({super.key, required this.contactInfo});
