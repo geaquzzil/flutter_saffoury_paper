@@ -172,7 +172,10 @@ class HomeWebPage extends BaseWebPage {
         ),
 
         const ProductQualityWebSection(),
-
+        GridViewApi(
+            title: "LATEST PRODUCTS".toUpperCase(),
+            description: "browser category by paper and board",
+            viewAbstract: context.read<AuthProvider>().getWebCategories()[0]),
         LocationListItem(
           soildColor: Theme.of(context)
               .scaffoldBackgroundColor
@@ -286,7 +289,7 @@ class HomeWebPage extends BaseWebPage {
         GridViewApi(
             title: "Category".toUpperCase(),
             description: "browser category by paper and board",
-            viewAbstract: context.read<AuthProvider>().getWebCategories()[0]),
+            viewAbstract: context.read<AuthProvider>().getWebCategories()[1]),
         const SizedBox(
           height: 70.0,
         ),

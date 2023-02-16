@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
+import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +66,7 @@ const String indexWebOurProducts = "products";
 const String indexWebServices = "services";
 const String indexWebAboutUs = "about-us";
 const String indexWebContactUs = "contact-us";
+const String indexWebView = "v";
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -123,6 +125,19 @@ class RouteGenerator {
                 name: indexWebAboutUs,
                 pageBuilder: (context, state) {
                   return MaterialPage(child: AboutUsWebPage());
+                },
+              ),
+              GoRoute(
+                name: indexWebView,
+                path: "v/:tableName/:id",
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: WebProductView(
+                        iD: int.parse(state.params['id']!),
+                        tableName: state.params['tableName']!,
+                        extras: state.extra as ViewAbstract?,
+                      ));
                 },
               ),
               GoRoute(

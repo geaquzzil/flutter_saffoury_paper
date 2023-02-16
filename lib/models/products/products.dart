@@ -35,6 +35,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -93,6 +94,7 @@ class Product extends ViewAbstract<Product>
         PrintableCustomInterface<PrintProduct>,
         PrintableSelfListInterface<PrintProductList>,
         PosableInterface,
+        WebCategoryGridableInterface<Product>,
         ExcelableReaderInterace {
   // int? ParentID;
   // int? ProductTypeID;
@@ -1482,6 +1484,21 @@ class Product extends ViewAbstract<Product>
   @override
   String getCartableQuantityUnit(BuildContext context) {
     return getProductTypeUnit(context);
+  }
+
+  @override
+  String? getWebCategoryGridableDescription(BuildContext context) {
+    return getMainHeaderTextOnly(context);
+  }
+
+  @override
+  Product getWebCategoryGridableInterface(BuildContext context) {
+    return Product();
+  }
+
+  @override
+  String getWebCategoryGridableTitle(BuildContext context) {
+    return getMainHeaderTextOnly(context);
   }
 }
 

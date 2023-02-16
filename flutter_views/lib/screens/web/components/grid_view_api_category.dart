@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/models/design_process.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -196,15 +198,25 @@ class WebGridViewItem extends StatelessWidget {
     return HoverImage(
       image: item.getImageUrl(context) ?? "",
       // scale: false,
-      builder: (isHovered) => Stack(
-        children: [
-          _buildBackground(context),
-          // _buildBackground(context),
-          if (isHovered) _buildGradient(),
-          if (isHovered) _buildTitleAndSubtitle(context),
+      builder: (isHovered) => GestureDetector(
+        onTap: () {
+          context.goNamed(indexWebView,
+              params: {
+                "id": item.iD.toString(),
+                "tableName": item.getTableNameApi()!
+              },
+              extra: item);
+        },
+        child: Stack(
+          children: [
+            _buildBackground(context),
+            // _buildBackground(context),
+            if (isHovered) _buildGradient(),
+            if (isHovered) _buildTitleAndSubtitle(context),
 
-          // _buildCenterWidget(context)
-        ],
+            // _buildCenterWidget(context)
+          ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
+import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
@@ -95,8 +96,8 @@ class HeaderRow extends StatelessWidget {
       visibleWhen: const [
         Condition.largerThan(name: MOBILE),
       ],
-      child: Row(
-        children: headerItems
+      child: Row(children: [
+        ...headerItems
             .map(
               (item) => item.isButton
                   ? MouseRegion(
@@ -153,7 +154,10 @@ class HeaderRow extends StatelessWidget {
                     ),
             )
             .toList(),
-      ),
+        CartIconWidget(
+          returnNillIfZero: true,
+        )
+      ]),
     );
   }
 
