@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -8,7 +9,10 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../new_components/lists/horizontal_list_card_item.dart';
@@ -63,23 +67,32 @@ class _ListHorizontalApiWidgetState
   }
 
   Widget listShimmerItems() {
-    return GridView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: 5 + Random().nextInt(10 - 5),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        crossAxisSpacing: kDefaultPadding / 2,
-        mainAxisSpacing: kDefaultPadding / 2,
-        childAspectRatio: 3 / 2,
-
-        maxCrossAxisExtent: 300,
-        // childAspectRatio: 3 / 2,
-      ),
-      itemBuilder: (context, index) {
-        return GridTile(
-            // footer: Text("foot"),
-            child: ListHorizontalItemShimmer(
-          lines: 3,
-        ));
+    return LayoutBuilder(
+      builder: (co, constraints) {
+        debugPrint("layoutBuilder ${constraints.maxWidth}");
+        return ResponsiveGridView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          alignment: Alignment.topCenter,
+          itemCount: 5 + Random().nextInt(10 - 5),
+          gridDelegate: ResponsiveGridDelegate(
+            mainAxisSpacing: 20.0,
+            crossAxisSpacing: 20.0,
+            maxCrossAxisExtent:
+                ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
+                    ? constraints.maxWidth / 2.0
+                    : 250.0,
+            // Hack to adjust child height
+            childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+          ),
+          itemBuilder: (context, index) {
+            return GridTile(
+                // footer: Text("foot"),
+                child: ListHorizontalItemShimmer(
+              lines: 3,
+            ));
+          },
+        );
       },
     );
   }
@@ -87,34 +100,54 @@ class _ListHorizontalApiWidgetState
   Widget _listItems(
       List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
     bool isLoading = listProvider.isLoading(widget.autoRest.key);
-    return GridView.builder(
-      controller: _scrollController,
-      scrollDirection: Axis.horizontal,
-      itemCount: isLoading ? (data.length + 3) : (data.length),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        crossAxisSpacing: kDefaultPadding / 2,
-        mainAxisSpacing: kDefaultPadding / 2,
-        childAspectRatio: 3 / 2,
-        // mainAxisExtent: 100,
-        maxCrossAxisExtent: 250,
-        // childAspectRatio: 3 / 2,
-      ),
-      itemBuilder: (context, index) {
-        if (isLoading && index > data.length - 1) {
-          return GridTile(
-              child: ListHorizontalItemShimmer(
-            lines: 3,
-          ));
-        }
-        return GridTile(
-            // footer: Text("foot"),
-            child: widget.listItembuilder == null
-                ? ListCardItemHorizontal(
-                    useOutlineCard: widget.useCardAsOutLine,
-                    object: data[index],
-                    useImageAsBackground: widget.useCardAsImageBackgroud,
-                  )
-                : widget.listItembuilder!(data[index]));
+    return LayoutBuilder(
+      builder: (co, constraints) {
+        debugPrint("layoutBuilder ${constraints.maxWidth}");
+        return ResponsiveGridView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: isLoading ? (data.length + 3) : (data.length),
+          gridDelegate: ResponsiveGridDelegate(
+            mainAxisSpacing: kIsWeb ? 40 : 20.0,
+            crossAxisSpacing: kIsWeb ? 40 : 20.0,
+            maxCrossAxisExtent:
+                ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
+                    ? constraints.maxWidth / 2.0
+                    : 250.0,
+            // Hack to adjust child height
+            childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+          ),
+          // const SliverGridDelegateWithMaxCrossAxisExtent(
+          //   crossAxisSpacing: kDefaultPadding / 2,
+          //   mainAxisSpacing: kDefaultPadding / 2,
+          //   childAspectRatio: 1 / 1,
+          //   // mainAxisExtent: 100,
+          //   maxCrossAxisExtent: 250,
+          //   // childAspectRatio: 3 / 2,
+          // ),
+          itemBuilder: (context, index) {
+            if (isLoading && index > data.length - 1) {
+              return GridTile(
+                  child: ListHorizontalItemShimmer(
+                lines: 3,
+              ));
+            }
+            return GridTile(
+                // footer: Text("foot"),
+                child: kIsWeb
+                    ? WebGridViewItem(
+                        item: data[index],
+                      )
+                    : widget.listItembuilder == null
+                        ? ListCardItemHorizontal(
+                            useOutlineCard: widget.useCardAsOutLine,
+                            object: data[index],
+                            useImageAsBackground:
+                                widget.useCardAsImageBackgroud,
+                          )
+                        : widget.listItembuilder!(data[index]));
+          },
+        );
       },
     );
 
@@ -220,6 +253,10 @@ class _ListHorizontalApiWidgetState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildHeader(context),
+        if (kIsWeb)
+          const SizedBox(
+            height: kDefaultPadding,
+          ),
         if (widget.customHeight != null)
           SizedBox(height: widget.customHeight, child: child)
         else

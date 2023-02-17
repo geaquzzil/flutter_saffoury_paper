@@ -4,13 +4,16 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
+import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
 class ProductWebPage extends BaseWebPage {
-   ProductWebPage({Key? key}) : super(key: key);
+  ProductWebPage({Key? key}) : super(key: key);
 
   @override
   Widget? getContentWidget(BuildContext context) {
@@ -63,45 +66,31 @@ class ProductWebPage extends BaseWebPage {
                 children: [
                   Expanded(
                       flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                      child: Center(
-                          child: Column(
-                        children: [
-                          ExpansionTile(title: Text("TISSUES")),
-                          ExpansionTile(title: Text("Paper And Cardboard")),
-                        ],
-                      ))),
+                      child: Container(
+                        color: Colors.green,
+                        child: Center(
+                            child: Column(
+                          children: [
+                            ExpansionTile(title: Text("TISSUES")),
+                            ExpansionTile(title: Text("Paper And Cardboard")),
+                          ],
+                        )),
+                      )),
                   Divider(),
 
                   // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
                   Expanded(
-                    flex: constraints.maxWidth > 720.0 ? 6 : 0,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height - 100,
-                      child: ResponsiveGridList(
-                        horizontalGridMargin: 50,
-                        verticalGridMargin: 50,
-                        minItemWidth: 200,
-                        children: List.generate(
-                          100,
-                          (index) => ColoredBox(
-                            color: Colors.lightBlue,
-                            child: Padding(
-                              padding: const EdgeInsets.all(32),
-                              child: Text(
-                                '$index',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    flex: constraints.maxWidth > 720.0 ? 5 : 0,
+                    child: GridViewApi(
+                        customHeight: MediaQuery.of(context).size.height - 100,
+                        viewAbstract:
+                            context.read<AuthProvider>().getWebCategories()[0]),
                   ),
                   Divider(),
                   Expanded(
                       flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                      child: Center(child: Text("END"))),
+                      child:
+                          Container(color: Colors.green, child: Text("END"))),
                 ],
               ),
             ),

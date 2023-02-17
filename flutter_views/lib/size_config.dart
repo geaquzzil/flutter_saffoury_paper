@@ -8,6 +8,9 @@ import 'dart:ui' as ui;
 import 'dart:math' as Math;
 
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
+
+import 'constants.dart';
 
 enum MainAxisType {
   ListHorizontal,
@@ -286,6 +289,30 @@ class Device {
     final padding = ui.window.viewPadding;
     //print(padding);
     return padding.top > 0 || padding.bottom > 0;
+  }
+}
+
+class ResponsiveWebBuilder extends StatelessWidget {
+  final Widget Function(BuildContext context, double width) builder;
+  const ResponsiveWebBuilder({super.key, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenHelper(
+      desktop: _buildUi(context, kDesktopMaxWidth),
+      tablet: _buildUi(context, kTabletMaxWidth),
+      mobile: _buildUi(context, getMobileMaxWidth(context)),
+    );
+  }
+
+  Widget _buildUi(BuildContext context, double width) {
+    return Center(child: LayoutBuilder(builder: (context, constraints) {
+      return ResponsiveWrapper(
+          maxWidth: width,
+          minWidth: width,
+          defaultScale: false,
+          child: builder.call(context, width));
+    }));
   }
 }
 

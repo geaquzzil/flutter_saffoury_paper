@@ -47,8 +47,43 @@ class WebProductView extends BaseWebPageSliversApi {
           tablet: _buildUi(kTabletMaxWidth),
           mobile: _buildUi(getMobileMaxWidth(context)),
         ),
+      ),
+      ...getBottomWidget(context),
+      const SliverToBoxAdapter(
+        child: SizedBox(height: 80),
       )
     ];
+  }
+
+  List<Widget> getTopWidget(BuildContext context) {
+    List<Widget>? topWidget =
+        getExtras()?.getCustomTopWidget(context, action: getServerActions());
+    if (topWidget == null) return [];
+    return topWidget;
+  }
+
+  List<Widget> getBottomWidget(BuildContext context) {
+    List<Widget>? bottomWidget =
+        getExtras()?.getCustomBottomWidget(context, action: getServerActions());
+    if (bottomWidget == null) return [];
+    return bottomWidget.map((e) {
+      return getPadding(
+          context,
+          SliverToBoxAdapter(
+            child: ResponsiveWebBuilder(builder: (context, width) => e),
+          ),
+          bottom: 20);
+      // if (bottomWidget.indexOf(e) == bottomWidget.length) {
+      //   return getPadding(
+      //       context,
+      //       SliverToBoxAdapter(
+      //         child: ResponsiveWebBuilder(builder: (context, width) => e),
+      //       ),
+      //       bottom: 20);
+      // }
+      return SliverToBoxAdapter(
+          child: ResponsiveWebBuilder(builder: (context, width) => e));
+    }).toList();
   }
 
   @override
@@ -87,6 +122,7 @@ class WebProductView extends BaseWebPageSliversApi {
                           const SizedBox(
                             height: 20,
                           ),
+                          ...getTopWidget(context),
                           WebViewDetails(
                             viewAbstract: extras!,
                           ),

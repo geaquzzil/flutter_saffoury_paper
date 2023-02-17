@@ -16,23 +16,29 @@ class GridViewApi extends StatelessWidget {
   final ViewAbstract viewAbstract;
   final String? title;
   final String? description;
+  double? customHeight;
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
   GridViewApi(
-      {Key? key, required this.viewAbstract, this.title, this.description})
+      {Key? key,
+      this.customHeight,
+      required this.viewAbstract,
+      this.title,
+      this.description})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double carouselContainerHeight = MediaQuery.of(context).size.height *
-        (SizeConfig.isMobile(context) ? .6 : .75);
+    customHeight = customHeight ??
+        MediaQuery.of(context).size.height *
+            (SizeConfig.isMobile(context) ? .6 : .75);
     return OnHoverWidget(
       mouseCursor: SystemMouseCursors.basic,
       onHover: valueNotifier,
       builder: (isHover) {
         return SizedBox(
           width: double.infinity,
-          height: carouselContainerHeight,
+          height: customHeight,
           child: Stack(children: [
             Positioned.fill(
               child: Align(
@@ -155,8 +161,8 @@ class GridViewApi extends StatelessWidget {
                         crossAxisSpacing: 40.0,
                         maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
                                 ScreenHelper.isMobile(context)
-                            ? constraints.maxWidth / 2.0
-                            : 250.0,
+                            ? constraints.maxWidth / 2
+                            : 250,
                         // Hack to adjust child height
                         childAspectRatio: ScreenHelper.isDesktop(context)
                             ? 1

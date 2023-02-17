@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -847,7 +848,11 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
-        customHeight: 175,
+        customHeight: kIsWeb
+            ? (ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context))
+                ? 220
+                : 200
+            : 175,
         useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
@@ -857,7 +862,11 @@ class Product extends ViewAbstract<Product>
       ),
       ListHorizontalApiAutoRestWidget(
         useCardAsImageBackgroud: true,
-        customHeight: 175,
+        customHeight: kIsWeb
+            ? (ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context))
+                ? 220
+                : 200
+            : 175,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,

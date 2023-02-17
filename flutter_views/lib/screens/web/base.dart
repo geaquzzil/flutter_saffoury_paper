@@ -402,9 +402,21 @@ abstract class BaseWebPageSliversApi extends StatelessWidget {
       : super(key: key);
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context);
   ServerActions getServerActions();
-  ViewAbstract ? getExtras(){
+  ViewAbstract? getExtras() {
     return extras;
   }
+
+  SliverPadding getPadding(BuildContext context, Widget sliver,
+      {double? bottom}) {
+    return SliverPadding(
+        padding: EdgeInsets.only(
+            top: kDefaultPadding / 2,
+            right: kDefaultPadding / 2,
+            bottom: bottom ?? 0,
+            left: kDefaultPadding / 2),
+        sliver: sliver);
+  }
+
   bool getBodyWithoutApi() {
     if (extras is! ViewAbstract) return false;
 
