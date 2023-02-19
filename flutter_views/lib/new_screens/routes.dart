@@ -151,7 +151,10 @@ class RouteGenerator {
                 path: "products",
                 name: indexWebOurProducts,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: ProductWebPage());
+                  return MaterialPage(
+                      child: ProductWebPage(
+                    searchQuery: state.queryParams["search"],
+                  ));
                 },
               ),
               GoRoute(

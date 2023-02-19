@@ -1,3 +1,4 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -62,6 +63,7 @@ class HeaderLogo extends StatelessWidget {
 }
 
 class HeaderRow extends StatelessWidget {
+  TextEditingController textController = TextEditingController();
   final String selectedHeader;
   final GlobalKey menuKey = GlobalKey();
   HeaderRow({Key? key, required this.selectedHeader}) : super(key: key);
@@ -154,6 +156,16 @@ class HeaderRow extends StatelessWidget {
                     ),
             )
             .toList(),
+        AnimSearchBar(
+          // color: Theme.of(context).scaffoldBackgroundColor,
+
+          width: 400,
+          textController: textController,
+          onSuffixTap: () {},
+          onSubmitted: (s) {
+            context.goNamed(indexWebOurProducts, queryParams: {"search": s});
+          },
+        ),
         CartIconWidget(
           returnNillIfZero: true,
         )

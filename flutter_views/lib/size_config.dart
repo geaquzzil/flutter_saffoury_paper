@@ -292,6 +292,28 @@ class Device {
   }
 }
 
+class ResponsiveWebBuilderSliver extends StatelessWidget {
+  final Widget Function(BuildContext context, double width) builder;
+  const ResponsiveWebBuilderSliver({super.key, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenHelper(
+      desktop: _buildUi(context, kDesktopMaxWidth),
+      tablet: _buildUi(context, kTabletMaxWidth),
+      mobile: _buildUi(context, getMobileMaxWidth(context)),
+    );
+  }
+
+  Widget _buildUi(BuildContext context, double width) {
+    return ResponsiveWrapper(
+        maxWidth: width,
+        minWidth: width,
+        defaultScale: false,
+        child: builder.call(context, width));
+  }
+}
+
 class ResponsiveWebBuilder extends StatelessWidget {
   final Widget Function(BuildContext context, double width) builder;
   const ResponsiveWebBuilder({super.key, required this.builder});
@@ -306,13 +328,54 @@ class ResponsiveWebBuilder extends StatelessWidget {
   }
 
   Widget _buildUi(BuildContext context, double width) {
-    return Center(child: LayoutBuilder(builder: (context, constraints) {
-      return ResponsiveWrapper(
-          maxWidth: width,
-          minWidth: width,
-          defaultScale: false,
-          child: builder.call(context, width));
-    }));
+    return Center(
+      child: LayoutBuilder(builder: (context, constraints) {
+        return ResponsiveWrapper(
+            maxWidth: width,
+            minWidth: width,
+            defaultScale: false,
+            child: builder.call(context, width));
+      }),
+    );
+  }
+}
+
+class ScreenHelperSliver extends StatelessWidget {
+  final Widget Function(double width) mobile;
+  final Widget Function(double width) tablet;
+  final Widget Function(double width) desktop;
+
+  const ScreenHelperSliver(
+      {Key? key,
+      required this.desktop,
+      required this.mobile,
+      required this.tablet})
+      : super(key: key);
+
+  static bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < 800.0;
+
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 800.0 &&
+      MediaQuery.of(context).size.width < 1200.0;
+
+  static bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 1200.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth >= 1200.0) {
+          return desktop.call(kDesktopMaxWidth);
+        } else if (constraints.maxWidth >= 800 &&
+            constraints.maxWidth < 1200.0) {
+          return tablet.call(kTabletMaxWidth);
+        } else {
+          return mobile.call(getMobileMaxWidth(context));
+        }
+      },
+    );
   }
 }
 

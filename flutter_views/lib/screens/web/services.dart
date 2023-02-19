@@ -9,7 +9,8 @@ class ServicesWebPage extends BaseWebPageSlivers {
   ServicesWebPage({Key? key}) : super(key: key);
 
   @override
-  List<Widget> getContentWidget(BuildContext context) {
+  List<Widget> getContentWidget(
+      BuildContext context, BoxConstraints constraints) {
     return [
       SliverToBoxAdapter(
         child: LocationListItem(

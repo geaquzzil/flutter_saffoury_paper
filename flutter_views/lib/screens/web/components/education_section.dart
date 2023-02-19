@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/screens/web/models/education.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:go_router/go_router.dart';
 
 final List<Education> educationList = [
   Education(
@@ -195,14 +197,14 @@ class HistorySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ScreenHelper(
-        desktop: _buildUi(kDesktopMaxWidth),
-        tablet: _buildUi(kTabletMaxWidth),
-        mobile: _buildUi(getMobileMaxWidth(context)),
+        desktop: _buildUi(context, kDesktopMaxWidth),
+        tablet: _buildUi(context, kTabletMaxWidth),
+        mobile: _buildUi(context, getMobileMaxWidth(context)),
       ),
     );
   }
 
-  Widget _buildUi(double width) {
+  Widget _buildUi(BuildContext context, double width) {
     return Container(
       alignment: Alignment.center,
       child: ResponsiveWrapper(
@@ -225,6 +227,7 @@ class HistorySection extends StatelessWidget {
               height: 5.0,
             ),
             Wrap(
+              direction: Axis.vertical,
               children: [
                 Container(
                   constraints: const BoxConstraints(maxWidth: 400.0),
@@ -235,6 +238,14 @@ class HistorySection extends StatelessWidget {
                       height: 1.5,
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                WebButton(
+                  title: "READ MORE",
+                  primary: false,
+                  onPressed: () => context.goNamed(indexWebAboutUs),
                 ),
               ],
             ),

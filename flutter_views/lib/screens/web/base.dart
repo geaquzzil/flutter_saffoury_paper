@@ -231,7 +231,8 @@ abstract class BaseWebPage extends StatelessWidget {
 
 abstract class BaseWebPageSlivers extends StatelessWidget {
   ScrollController _scrollController = ScrollController();
-  List<Widget> getContentWidget(BuildContext context);
+  List<Widget> getContentWidget(
+      BuildContext context, BoxConstraints constraints);
   BaseWebPageSlivers({Key? key}) : super(key: key);
 
   String getSelectedHeader(BuildContext context) {
@@ -322,70 +323,72 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
             ),
           ),
         ),
-        body: WebSmoothScroll(
-          controller: _scrollController,
-          scrollOffset: 250, // additional offset to users scroll input
-          animationDuration: 600,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              debugPrint(
-                  "onNotification  ${notification.metrics.extentBefore}");
-              onScroll.value = notification.metrics.extentBefore;
-              // // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
-              // //   debugPrint(
-              // //       "DraggableHome ${widget.scrollController!.position.pixels}");
-              // //   if (widget.scrollController!.position.pixels >= 200) {
-              // //     if (isFullyExpanded.value) isFullyExpanded.add(false);
-              // //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
-              // //     // expandedHeight = 0;
-              // //     return false;
-              // //   }
-              // // }
+        body: LayoutBuilder(
+          builder: (c, constraints) => WebSmoothScroll(
+            controller: _scrollController,
+            scrollOffset: 250, // additional offset to users scroll input
+            animationDuration: 600,
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                debugPrint(
+                    "onNotification  ${notification.metrics.extentBefore}");
+                onScroll.value = notification.metrics.extentBefore;
+                // // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
+                // //   debugPrint(
+                // //       "DraggableHome ${widget.scrollController!.position.pixels}");
+                // //   if (widget.scrollController!.position.pixels >= 200) {
+                // //     if (isFullyExpanded.value) isFullyExpanded.add(false);
+                // //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
+                // //     // expandedHeight = 0;
+                // //     return false;
+                // //   }
+                // // }
 
-              // if (notification.metrics.axis == Axis.vertical) {
-              //   // isFullyCollapsed
-              //   if ((isFullyExpanded.value) &&
-              //       notification.metrics.extentBefore > 100) {
-              //     isFullyExpanded.add(false);
-              //   }
-              //   // if (widget.hideBottomNavigationBarOnScroll) {
-              //   //   if (notification.metrics.extentBefore > 100) {
-              //   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              //   //       hideWhenScroll.value = true;
-              //   //     });
-              //   //   } else {
-              //   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              //   //       hideWhenScroll.value = false;
-              //   //     });
-              //   //   }
-              //   // }
+                // if (notification.metrics.axis == Axis.vertical) {
+                //   // isFullyCollapsed
+                //   if ((isFullyExpanded.value) &&
+                //       notification.metrics.extentBefore > 100) {
+                //     isFullyExpanded.add(false);
+                //   }
+                //   // if (widget.hideBottomNavigationBarOnScroll) {
+                //   //   if (notification.metrics.extentBefore > 100) {
+                //   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                //   //       hideWhenScroll.value = true;
+                //   //     });
+                //   //   } else {
+                //   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                //   //       hideWhenScroll.value = false;
+                //   //     });
+                //   //   }
+                //   // }
 
-              //   //isFullyCollapsed
-              //   if (notification.metrics.extentBefore >
-              //       expandedHeight - AppBar().preferredSize.height - 40) {
-              //     if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
-              //   } else {
-              //     if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
-              //   }
+                //   //isFullyCollapsed
+                //   if (notification.metrics.extentBefore >
+                //       expandedHeight - AppBar().preferredSize.height - 40) {
+                //     if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
+                //   } else {
+                //     if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
+                //   }
 
-              return false;
-            },
-            child: CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _scrollController,
-                slivers: [
-                  SliverPersistentHeader(
-                      pinned: true,
-                      floating: true,
-                      delegate: SliverAppBarDelegatePreferedSize(
-                          child: PreferredSize(
-                              preferredSize: const Size.fromHeight(70.0),
-                              child: getHeader(context)))),
-                  ...getContentWidget(context),
-                  const SliverToBoxAdapter(
-                    child: Footer(),
-                  )
-                ]),
+                return false;
+              },
+              child: CustomScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  slivers: [
+                    SliverPersistentHeader(
+                        pinned: true,
+                        floating: true,
+                        delegate: SliverAppBarDelegatePreferedSize(
+                            child: PreferredSize(
+                                preferredSize: const Size.fromHeight(70.0),
+                                child: getHeader(context)))),
+                    ...getContentWidget(context, constraints),
+                    const SliverToBoxAdapter(
+                      child: Footer(),
+                    )
+                  ]),
+            ),
           ),
         ));
   }
