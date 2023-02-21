@@ -35,7 +35,8 @@ class ProductWebPage extends BaseWebPageSlivers {
               fontSize: 25,
               text: "Search results: “$searchQuery“",
               description: Html(
-                data: "Showing 1 - 6 of 31 results",
+                data:
+                    "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
               )),
         ),
       // SliverToBoxAdapter(
@@ -78,7 +79,12 @@ class ProductWebPage extends BaseWebPageSlivers {
                 sliverChildBuilderDelegateOptions:
                     SliverChildBuilderDelegateOptions(),
                 minItemWidth: 200,
-                children: list.map((e) => WebGridViewItem(item: e)).toList()),
+                children: list
+                    .map((e) => WebGridViewItem(
+                          item: e,
+                          setDescriptionAtBottom: true,
+                        ))
+                    .toList()),
           );
         },
       ),

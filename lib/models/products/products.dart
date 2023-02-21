@@ -255,7 +255,7 @@ class Product extends ViewAbstract<Product>
     String res = "$productType\n$size X $gsm";
     return Text(
       res,
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.start,
     );
   }
 

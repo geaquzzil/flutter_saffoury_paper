@@ -6,12 +6,14 @@ import 'package:sprung/sprung.dart';
 class OnHoverWidget extends StatefulWidget {
   bool scale;
   ValueNotifier<bool>? onHover;
-  MouseCursor  mouseCursor; 
+  MouseCursor mouseCursor;
   Widget Function(bool isHovered) builder;
 
   OnHoverWidget(
-      {Key? key, required this.builder, this.onHover, 
-      this.mouseCursor=SystemMouseCursors.click,
+      {Key? key,
+      required this.builder,
+      this.onHover,
+      this.mouseCursor = SystemMouseCursors.click,
       this.scale = true})
       : super(key: key);
 
@@ -55,8 +57,10 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
 
 class HoverImage extends StatefulWidget {
   final String image;
+  final Widget? bottomWidget;
   final Widget Function(bool isHovered)? builder;
-  const HoverImage({super.key, required this.image, this.builder});
+  const HoverImage(
+      {super.key, required this.image, this.builder, this.bottomWidget});
 
   @override
   _HoverImageState createState() => _HoverImageState();
@@ -104,31 +108,62 @@ class _HoverImageState extends State<HoverImage>
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0.0, 20.0),
-              spreadRadius: -10.0,
-              blurRadius: 20.0,
-            )
-          ],
-        ),
-        child: Container(
-            height: 220.0,
-            width: 170.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            clipBehavior: Clip.hardEdge,
-            transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value,
-                0, 0, 0, 0, 1, 0, padding.value, padding.value, 0, 1),
-            child: widget.builder == null
-                ? Image.network(
-                    widget.image,
-                    fit: BoxFit.contain,
+          boxShadow: widget.bottomWidget != null
+              ? null
+              : const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0.0, 20.0),
+                    spreadRadius: -10.0,
+                    blurRadius: 20.0,
                   )
-                : widget.builder!(isHovered)),
+                ],
+        ),
+        child: widget.bottomWidget == null
+            ? _getAspectRatio()
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _getAspectRatio(),
+                  AnimatedOpacity(
+                      opacity: isHovered ? 0 : 1,
+                      duration: const Duration(milliseconds: 275),
+                      // height: isHovered ? 0 : 100,
+                      child: widget.bottomWidget)
+                ],
+              ),
       ),
+    );
+  }
+
+  AspectRatio _getAspectRatio() {
+    return AspectRatio(
+      aspectRatio: 1 / 1,
+      child: Container(
+          // height: 220.0,
+          // width: 170.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          clipBehavior: Clip.hardEdge,
+          transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value, 0,
+              0, 0, 0, 1, 0, padding.value, padding.value, 0, 1),
+          child: widget.builder == null
+              ? Image.network(
+                  widget.image,
+                  fit: BoxFit.contain,
+                )
+              : widget.builder!(isHovered)
+          // Column(
+          //     children: [
+          //       widget.builder!(isHovered),
+          //       Text("TEST")
+          //     ],
+          //   )
+
+          ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -143,7 +144,7 @@ class GridViewApi extends StatelessWidget {
                       page: value),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
                     List<ViewAbstract>? list = snapshot.data?.cast();
                     if (list == null) {
@@ -189,9 +190,11 @@ class GridViewApi extends StatelessWidget {
 
 class WebGridViewItem extends StatelessWidget {
   final ViewAbstract item;
+  final bool setDescriptionAtBottom;
   late WebCategoryGridableInterface _categoryGridable;
 
-  WebGridViewItem({super.key, required this.item});
+  WebGridViewItem(
+      {super.key, required this.item, this.setDescriptionAtBottom = false});
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +205,20 @@ class WebGridViewItem extends StatelessWidget {
     //         image: item.getImageUrl(context)!,
     //       );
     return HoverImage(
+      bottomWidget: setDescriptionAtBottom
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  item.getHorizontalCardMainHeader(context),
+                  item.getHorizontalCardSubtitle(context),
+                ],
+              ),
+            )
+          : null,
       image: item.getImageUrl(context) ?? "",
       // scale: false,
       builder: (isHovered) => GestureDetector(
@@ -213,17 +230,35 @@ class WebGridViewItem extends StatelessWidget {
               },
               extra: item);
         },
-        child: Stack(
-          children: [
-            _buildBackground(context),
-            // _buildBackground(context),
-            if (isHovered) _buildGradient(),
-            if (isHovered) _buildTitleAndSubtitle(context),
-
-            // _buildCenterWidget(context)
-          ],
-        ),
+        child: setDescriptionAtBottom
+            ? _getStack(context, isHovered)
+            : _getStack(context, isHovered),
       ),
+    );
+  }
+
+  Stack _getStack(BuildContext context, bool isHovered) {
+    return Stack(
+      children: [
+        _buildBackground(context),
+        // _buildBackground(context),
+        _buildGradient(isHovered),
+        _buildTitleAndSubtitle(context, isHovered),
+        if (item is CartableProductItemInterface)
+          Positioned.fill(
+              child: AnimatedScale(
+            duration: const Duration(milliseconds: 275),
+            scale: isHovered ? 1 : 0,
+            child: Center(
+              child: IconButton(
+                icon: const Icon(Icons.add_shopping_cart),
+                onPressed: () {},
+              ),
+            ),
+          ))
+        // Positioned(bottom: 0.0, left: 0.0, child: Text("das"))
+        // _buildCenterWidget(context)
+      ],
     );
   }
 
@@ -253,48 +288,54 @@ class WebGridViewItem extends StatelessWidget {
     );
   }
 
-  Widget _buildGradient() {
+  Widget _buildGradient(bool isHoverd) {
     return Positioned.fill(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.black.withOpacity(0.7),
-              Colors.black.withOpacity(0.7)
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: const [0.6, 0.95],
-          ),
+        child: AnimatedContainer(
+      duration: const Duration(milliseconds: 275),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: const [0.6, 0.95],
         ),
       ),
-    );
+    )
+
+        //  DecoratedBox(
+        //   decoration: BoxDecoration(
+        //     gradient: LinearGradient(
+        //       colors: [
+        //         Colors.black.withOpacity(0.7),
+        //         Colors.black.withOpacity(0.7)
+        //       ],
+        //       begin: Alignment.topCenter,
+        //       end: Alignment.bottomCenter,
+        //       stops: const [0.6, 0.95],
+        //     ),
+        //   ),
+        // ),
+        );
   }
 
-  Widget _buildTitleAndSubtitle(BuildContext context) {
+  Widget _buildTitleAndSubtitle(BuildContext context, bool isHoverd) {
     return Positioned(
       left: 20,
       bottom: 20,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            item.getMainHeaderTextOnly(context),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            item.getMainHeaderLabelTextOnly(context),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-          ),
-        ],
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 275),
+        opacity: isHoverd ? 1 : 0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            item.getHorizontalCardMainHeader(context),
+            item.getHorizontalCardSubtitle(context),
+          ],
+        ),
       ),
     );
   }
