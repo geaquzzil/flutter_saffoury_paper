@@ -41,6 +41,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class ProductWebPage extends BaseWebPageSlivers {
   final String? searchQuery;
   final String? customFilter;
+  Map<String, FilterableProviderHelper>? customFilterChecker;
   late ViewAbstract viewAbstract;
   ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable =
       ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
@@ -58,7 +59,18 @@ class ProductWebPage extends BaseWebPageSlivers {
   @override
   void init(BuildContext context) {
     super.init(context);
-    
+    if (customFilter != null) {
+      Map<String, dynamic> map = jsonDecode(customFilter!);
+      Map<String, FilterableProviderHelper> jsonMap = {};
+      for (var element in map.entries) {
+        jsonMap[element.key] = FilterableProviderHelper.fromJson(element.value);
+      }
+      customFilterChecker = jsonMap;
+      onFilterable.value = jsonMap;
+      debugPrint("onFilterable ${onFilterable.value}");
+    } else {
+      customFilterChecker = null;
+    }
   }
 
   void fetshList() {
@@ -70,8 +82,11 @@ class ProductWebPage extends BaseWebPageSlivers {
 
   void fetshListNotCheckingZero() {
     String customKey = findCustomKey();
-
-    if (searchQuery == null) {
+    if (customFilterChecker != null) {
+      viewAbstract.setFilterableMap(customFilterChecker!);
+      customKey = findCustomKey();
+      listProvider.fetchList(customKey, viewAbstract);
+    } else if (searchQuery == null) {
       listProvider.fetchList(customKey, viewAbstract);
     } else {
       listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
@@ -158,66 +173,65 @@ class ProductWebPage extends BaseWebPageSlivers {
   @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
-    viewAbstract = context.read<AuthProvider>().getWebCategories()[0];
+    viewAbstract =
+        context.read<AuthProvider>().getWebCategories()[0].getNewInstance();
 
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     fetshListWidgetBinding();
     return [
-      // SliverToBoxAdapter(
-      //   child: LocationListItem(
-      //     // useClipRect: false,
-      //     usePadding: false,
-      //     useResponsiveLayout: false,
-      //     soildColor: Colors.black87.withOpacity(.5),
-      //     imageUrl:
-      //         "https://saffoury.com/wp-content/uploads/Saffoury_1-scaled.jpg",
-      //     // soildColor: kPrimaryColor.withOpacity(.2),
-      //     customCenterWidget: ResponsiveWebBuilder(
-      //       builder: (context, width) => SearchWidgetComponentEditable(
-      //           notiferSearch: ValueNotifier<String>("")),
-      //     ),
-      //     customBottomWidget: HeaderText(
-      //       text: "Shop your favorite products",
-      //       description: Html(data: ""),
-      //     ),
-      //     country: '',
-      //     name: '',
-      //   ),
-      // ),
       if (searchQuery == null)
         SliverToBoxAdapter(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            HeaderText(
-                fontSize: 25,
-                text: "Showing products",
-                description: Html(
-                  data:
-                      "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
-                )),
-            WebButton(
-              title: "TRY FILTER THINGS",
-              onPressed: () async {
-                await showFilterDialog(context).then((value) {
-                  onFilterable.value = value;
-                  if (value == null) return;
-                  // ViewAbstract? v = viewAbstract.getCopyInstance();
-                  context.goNamed(indexWebOurProducts,
-                      queryParams: {'filter': jsonEncode(value)});
-                  // viewAbstract.setFilterableMap(value);
-                  // fetshList();
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HeaderText(
+                    fontSize: 25,
+                    text: "Showing products",
+                    description: Html(
+                      data:
+                          "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
+                    )),
+                ResponsiveWebBuilder(
+                  builder: (context, width) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        WebButton(
+                          title: "TRY FILTER THINGS",
+                          primary: false,
+                          onPressed: () async {
+                            await showFilterDialog(context).then((value) {
+                              onFilterable.value = value;
+                              if (value == null) return;
+                              // ViewAbstract? v = viewAbstract.getCopyInstance();
+                              context.goNamed(indexWebOurProducts,
+                                  queryParams: {'filter': jsonEncode(value)});
+                              // viewAbstract.setFilterableMap(value);
+                              // fetshList();
 
-                  // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
-                });
-              },
-            ),
-            ResponsiveWebBuilder(
-              builder: (context, width) => FiltersAndSelectionListHeader(
-                customKey: findCustomKey(),
-                listProvider: listProvider,
-                viewAbstract: viewAbstract,
-              ),
-            ),
-          ]),
+                              // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
+                            });
+                          },
+                        ),
+                        ValueListenableBuilder(
+                            valueListenable: onFilterable,
+                            builder: (context, value, child) =>
+                                HorizontalFilterableSelectedList(
+                                    onFilterable: onFilterable)),
+                        FiltersAndSelectionListHeader(
+                          customKey: findCustomKey(),
+                          listProvider: listProvider,
+                          viewAbstract: viewAbstract,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ]),
         ),
       if (searchQuery != null)
         SliverToBoxAdapter(

@@ -34,8 +34,7 @@ part 'orders.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Order extends InvoiceMaster<Order>
-    implements
-        CartableInvoiceMasterObjectInterface{
+    implements CartableInvoiceMasterObjectInterface {
   List<OrderDetails>? orders_details;
   int? orders_details_count;
 
@@ -150,7 +149,7 @@ class Order extends InvoiceMaster<Order>
     return [
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-          description: totalPrice?.toStringAsFixed(2) ?? "0"),
+          description: totalPrice?.toCurrencyFormatFromSetting(context) ?? "0"),
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.discount.toUpperCase(),
           description: totalDiscount?.toStringAsFixed(2) ?? "0"),
@@ -160,7 +159,7 @@ class Order extends InvoiceMaster<Order>
               orders_details.getTotalQuantityGroupedFormattedText(context)),
       InvoiceTotalTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-          description: totalNetPrice.toStringAsFixed(2),
+          description: totalNetPrice.toCurrencyFormatFromSetting(context),
           hexColor: getPrintablePrimaryColor(null)),
     ];
   }
@@ -203,9 +202,9 @@ class Order extends InvoiceMaster<Order>
   }
 
   @override
-  CartableInvoiceDetailsInterface getCartableNewInstance(BuildContext context,
-      CartableProductItemInterface product) {
-    return OrderDetails()..setProduct(context,product as Product);
+  CartableInvoiceDetailsInterface getCartableNewInstance(
+      BuildContext context, CartableProductItemInterface product) {
+    return OrderDetails()..setProduct(context, product as Product);
   }
 
   @override
@@ -213,7 +212,7 @@ class Order extends InvoiceMaster<Order>
       BuildContext context, int index, CartableProductItemInterface cii,
       {double? quantiy}) {
     orders_details?.add(OrderDetails()
-      ..setProduct(context,cii as Product,
+      ..setProduct(context, cii as Product,
           quantity: quantiy ?? (cii).getCartableProductQuantity()));
   }
 
@@ -221,8 +220,6 @@ class Order extends InvoiceMaster<Order>
   void onCartClear() {
     orders_details?.clear();
   }
-
-
 }
 
 @JsonSerializable(explicitToJson: true)

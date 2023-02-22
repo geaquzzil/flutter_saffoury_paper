@@ -7,10 +7,12 @@ import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../ext.dart';
@@ -166,6 +168,8 @@ class HeaderRow extends StatelessWidget {
           },
         ),
         CartIconWidget(
+          onPressed:
+              context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu,
           returnNillIfZero: true,
         )
       ]),

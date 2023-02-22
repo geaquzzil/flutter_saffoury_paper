@@ -14,7 +14,7 @@ class CartIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Selector<CartProvider, int>(
       builder: ((_, value, __) {
-        if (value == 0 && returnNillIfZero) return SizedBox();
+        if (value == 0 && returnNillIfZero) return const SizedBox();
         return Badge(
             badgeColor: Theme.of(context).colorScheme.primary,
             badgeContent: Text(

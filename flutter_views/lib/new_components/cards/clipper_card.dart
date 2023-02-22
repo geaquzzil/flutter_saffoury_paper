@@ -30,7 +30,7 @@ class ClippedCard extends StatelessWidget {
       clipper: ShapeBorderClipper(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-      child: Container(
+      child: AnimatedContainer(
         // duration: const Duration(milliseconds: 250),
         decoration: BoxDecoration(
             border: Border(
@@ -47,6 +47,7 @@ class ClippedCard extends StatelessWidget {
               ? BorderSide(color: color, width: 5)
               : BorderSide.none,
         )),
+        duration: Duration(milliseconds: 275),
         child: child,
       ),
     );

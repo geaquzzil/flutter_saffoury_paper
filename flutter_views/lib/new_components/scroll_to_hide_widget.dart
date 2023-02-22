@@ -13,12 +13,14 @@ class ScrollToHideWidget extends StatefulWidget {
   final Duration duration;
   final bool showOnlyWhenCloseToTop;
   final double height;
+  final bool reverse;
   final bool useAnimatedSwitcher;
-  ScrollToHideWidget(
+  const ScrollToHideWidget(
       {super.key,
       required this.child,
       this.showOnlyWhenCloseToTop = true,
       this.controller,
+      this.reverse = false,
       this.useAnimatedSwitcher = false,
       this.duration = const Duration(milliseconds: 200),
       this.height = 80});
@@ -28,12 +30,12 @@ class ScrollToHideWidget extends StatefulWidget {
 }
 
 class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
-  bool isVisible = true;
+  late bool isVisible;
 
   @override
   void initState() {
     super.initState();
-
+    isVisible = widget.reverse ? false : true;
     widget.controller?.addListener(listen);
   }
 
@@ -45,17 +47,33 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
 
   void listen() {
     final direction = widget.controller?.position.userScrollDirection;
-    if (widget.showOnlyWhenCloseToTop) {
-      if ((widget.controller?.position.pixels ?? 0) > 100) {
-        hide();
+    if (widget.reverse) {
+      if (widget.showOnlyWhenCloseToTop) {
+        if ((widget.controller?.position.pixels ?? 0) > 100) {
+          show();
+        } else {
+          hide();
+        }
       } else {
-        show();
+        if (direction == ScrollDirection.forward) {
+          hide();
+        } else if (direction == ScrollDirection.reverse) {
+          show();
+        }
       }
     } else {
-      if (direction == ScrollDirection.forward) {
-        show();
-      } else if (direction == ScrollDirection.reverse) {
-        hide();
+      if (widget.showOnlyWhenCloseToTop) {
+        if ((widget.controller?.position.pixels ?? 0) > 100) {
+          hide();
+        } else {
+          show();
+        }
+      } else {
+        if (direction == ScrollDirection.forward) {
+          show();
+        } else if (direction == ScrollDirection.reverse) {
+          hide();
+        }
       }
     }
   }

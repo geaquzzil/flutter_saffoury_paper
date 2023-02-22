@@ -99,7 +99,7 @@ class CartDescriptionTotals extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: Container(
-            padding: EdgeInsets.all(kDefaultPadding),
+            padding: const EdgeInsets.all(kDefaultPadding),
             child: Column(
               children: context
                   .watch<CartProvider>()

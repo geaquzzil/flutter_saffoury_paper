@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/globals.dart';
+import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
@@ -15,11 +17,14 @@ import 'package:flutter_view_controller/screens/web/models/header_item.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/terms.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_scroll_web/smooth_scroll_web.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 import '../../models/servers/server_helpers.dart';
 import '../../models/view_abstract.dart';
+import '../../new_screens/cart/base_home_cart_screen.dart';
 
 abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
   Widget? getContentWidget(BuildContext context);
@@ -151,6 +156,14 @@ abstract class BaseWebPage extends StatelessWidget {
     }
   }
 
+  void _scrollTop() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var headerItems = getHeaderItems(context);
@@ -158,6 +171,14 @@ abstract class BaseWebPage extends StatelessWidget {
     return Scaffold(
       // appBar: ScrollToHideWidget(),
       // key: Globals.scaffoldKey,
+      floatingActionButton: ScrollToHideWidget(
+        controller: _scrollController,
+        child: FloatingActionButton(
+            onPressed: () {
+              _scrollTop();
+            },
+            child: const Icon(Icons.arrow_upward_sharp)),
+      ),
       endDrawer: Drawer(
         child: SafeArea(
           child: Padding(
@@ -251,6 +272,14 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     }
   }
 
+  void _scrollTop() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   Widget getHeader(BuildContext context) {
     if (kIsWeb) {
       return Header(
@@ -286,9 +315,21 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     init(context);
     var headerItems = getHeaderItems(context);
     return Scaffold(
+        floatingActionButton: ScrollToHideWidget(
+          useAnimatedSwitcher: true,
+          // height: 50,
+          reverse: true,
+          controller: _scrollController,
+          child: FloatingActionButton(
+              onPressed: () {
+                _scrollTop();
+              },
+              child: const Icon(Icons.arrow_upward_sharp)),
+        ),
         // appBar: ScrollToHideWidget(),
-        // key: Globals.scaffoldKey,
-        endDrawer: Drawer(
+        key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
+        endDrawer: SizedBox(width: 500, child: WebShoppingCartDrawer()),
+        drawer: Drawer(
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(

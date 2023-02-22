@@ -19,6 +19,7 @@ class WebButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
           height: 48.0,
+          width: 200,
           padding: const EdgeInsets.symmetric(
             horizontal: 28.0,
           ),
@@ -48,6 +49,7 @@ class WebButton extends StatelessWidget {
           ),
         ),
         height: 48.0,
+        width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 28.0),
         child: TextButton(
           onPressed: onPressed,

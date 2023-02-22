@@ -1,7 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
 import 'package:provider/provider.dart';
 
 import '../../new_components/editables/editable_widget.dart';
@@ -30,8 +34,7 @@ class _POSListCardItem<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Dismissible(
+    return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.horizontal,
       background: dismissBackground(context),
@@ -40,54 +43,24 @@ class _POSListCardItem<T extends ViewAbstract>
           .read<CartProvider>()
           .onCartItemRemoved(
               context, widget.object as CartableInvoiceDetailsInterface),
-      child: Container(
-        decoration: validated != null
-            ? null
-            : BoxDecoration(
-                // borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border(
-                left: BorderSide(
-                  //                   <--- left side
-                  color: Theme.of(context).colorScheme.onError,
-                  width: 5.0,
-                ),
-              )),
-        child: ExpansionTile(
-            initiallyExpanded: isExpanded,
-            onExpansionChanged: ((value) {
-              if (value) {
-                setState(() {
-                  isExpanded = value;
-                });
-              }
-            }),
-            // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-            // onTap: () => widget.object.onCardClicked(context),
-            // onLongPress: () => widget.object.onCardLongClicked(context),
-            title: (widget.object.getMainHeaderText(context)),
-            subtitle: (widget.object.getMainSubtitleHeaderText(context)),
-            // isThreeLine: true,
+      child: ExpansionTileCustom(
+        useLeadingOutSideCard: false,
+        // trailing: kIsWeb
+        //     ? IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
+        //     : null,
+        title: (widget.object.getMainHeaderText(context)),
+        subtitle: (widget.object.getMainSubtitleHeaderText(context)),
 
-            leading: widget.object.getCardLeading(context),
-            trailing: widget.object.getPopupMenuActionListWidget(context),
+        // isThreeLine: true,
 
-            // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-            // onTap: () => widget.object.onCardClicked(context),
-            // onLongPress: () => widget.object.onCardLongClicked(context),
-            children: [
-              EditableWidget(
-                  viewAbstract: widget.object,
-                  onValidated: (viewAbstract) {
-                    setState(() {
-                      validated = viewAbstract;
-                    });
-
-                    context.read<CartProvider>().onCartItemChanged(context, -1,
-                        viewAbstract as CartableInvoiceDetailsInterface);
-                  })
-            ]),
+        leading: widget.object.getCardLeading(context),
+        children: [
+          WebViewDetails(
+            viewAbstract: widget.object,
+          ),
+        ],
       ),
-    ));
+    );
   }
 
   Container dismissBackground(BuildContext context) {

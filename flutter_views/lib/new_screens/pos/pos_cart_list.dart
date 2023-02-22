@@ -8,22 +8,37 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class POSCartList extends StatelessWidget {
-  const POSCartList({Key? key}) : super(key: key);
+  final bool useSliver;
+  const POSCartList({Key? key, this.useSliver = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     CartProvider cart = context.watch<CartProvider>();
     List<CartableInvoiceDetailsInterface> list = cart.getList;
     if (list.isEmpty) {
-      return EmptyWidget(
-          lottiUrl:
-              "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-          title: AppLocalizations.of(context)!.noItems,
-          subtitle: AppLocalizations.of(context)!.startAddingToCartHint);
+      return useSliver
+          ? SliverFillRemaining(
+              child: getEmptyWidget(context),
+            )
+          : getEmptyWidget(context);
+    }
+    if (useSliver) {
+      return SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return POSListCardItem<ViewAbstract>(
+            object: list[index] as ViewAbstract);
+      }, childCount: list.length));
     }
     return ListView.builder(
         itemCount: list.length,
         itemBuilder: (context, index) =>
             POSListCardItem<ViewAbstract>(object: list[index] as ViewAbstract));
+  }
+
+  EmptyWidget getEmptyWidget(BuildContext context) {
+    return EmptyWidget(
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        title: AppLocalizations.of(context)!.noItems,
+        subtitle: AppLocalizations.of(context)!.startAddingToCartHint);
   }
 }
