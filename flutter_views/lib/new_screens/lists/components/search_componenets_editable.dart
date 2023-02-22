@@ -10,13 +10,15 @@ class SearchWidgetComponentEditable extends StatelessWidget {
   TextEditingController controller = TextEditingController();
   bool trailingIsCart;
   final Debouncer _debouncer = Debouncer(milliseconds: 700);
-  ValueNotifier<String> notiferSearch;
+  ValueNotifier<String>? notiferSearch;
+  void Function(String value)? notiferSearchVoid;
 
   SearchWidgetComponentEditable({
     super.key,
     this.trailingIsCart = false,
-    required this.notiferSearch,
-  });
+    this.notiferSearch,
+    this.notiferSearchVoid,
+  }) : assert(notiferSearch != null || notiferSearchVoid != null);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,12 @@ class SearchWidgetComponentEditable extends StatelessWidget {
 
   void callDebouncer(String query) {
     _debouncer.run(() async {
-      notiferSearch.value = query;
+      if (notiferSearch != null) {
+        notiferSearch!.value = query;
+      }
+      if (notiferSearchVoid != null) {
+        notiferSearchVoid!.call(query);
+      }
     });
   }
 

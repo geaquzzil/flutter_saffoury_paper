@@ -131,6 +131,21 @@ class FilterableProvider with ChangeNotifier {
       }
     }
   }
+
+  static Map<String, FilterableProviderHelper> removeStatic(
+      Map<String, FilterableProviderHelper> list, String field,
+      {String? value, String? mainValueName}) {
+    if (value == null) {
+      if (list.containsKey(field)) {
+        list.remove(field);
+      }
+    } else {
+      if (list.containsKey(field)) {
+        list[field]?.remove(value, mainValueName!);
+      }
+    }
+    return list;
+  }
 }
 
 class FilterableProviderHelper {
@@ -164,6 +179,32 @@ class FilterableProviderHelper {
     return this;
   }
 
+  factory FilterableProviderHelper.fromJson(Map<String, dynamic> data) =>
+      FilterableProviderHelper(
+          field: data['field'] as String,
+          fieldNameApi: data['fieldNameApi'] as String,
+          requestTheFirstValueOnly: data['requestTheFirstValueOnly'] as bool?,
+          mainFieldName: data['mainFieldName'] as String,
+          mainValuesName:
+              (data['mainValuesName'] as List<dynamic>).cast<String>(),
+          values: (data['values'] as List<dynamic>).cast<String>());
+  // ..field = data['field'] as String
+  // ..fieldNameApi = data['fieldNameApi'] as String
+  // ..requestTheFirstValueOnly = data['requestTheFirstValueOnly'] as bool?
+  // ..mainFieldName = data['mainFieldName'] as String
+  // ..mainValuesName =
+  //     (data['mainValuesName'] as List<dynamic>).cast<String>()
+  // ..values = (data['values'] as List<dynamic>).cast<String>();
+
+  Map<String, dynamic> toJson() => {
+        'field': field,
+        'fieldNameApi': fieldNameApi,
+        'requestTheFirstValueOnly': requestTheFirstValueOnly,
+        'mainFieldName': mainFieldName,
+        'mainValuesName': mainValuesName,
+        'values': values
+      };
+
   int getCount() {
     return values.length;
   }
@@ -193,6 +234,6 @@ class FilterableProviderHelper {
 
   @override
   String toString() {
-    return "{field:$field,fieldApi:$fieldNameApi,value:$values}";
+    return toJson().toString();
   }
 }

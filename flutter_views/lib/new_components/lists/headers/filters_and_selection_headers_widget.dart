@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -35,24 +36,16 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/drawer/drawer_controler.dart';
 
-class FiltersControllerHeader extends StatelessWidget {
-  ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable;
-
-  FiltersControllerHeader({super.key, required this.onFilterable});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-
 class FiltersAndSelectionListHeader extends StatelessWidget {
   late DrawerMenuControllerProvider drawerViewAbstractObsever;
+  ViewAbstract? viewAbstract;
   String customKey;
   ListMultiKeyProvider listProvider;
   FiltersAndSelectionListHeader(
-      {super.key, required this.listProvider, required this.customKey});
+      {super.key,
+      this.viewAbstract,
+      required this.listProvider,
+      required this.customKey});
 
   String findCustomKey() {
     return customKey;
@@ -62,25 +55,38 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     drawerViewAbstractObsever =
         Provider.of<DrawerMenuControllerProvider>(context, listen: false);
-    Widget? printButton =
-        (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
+
+    Widget? printButton = kIsWeb
+        ? null
+        : (context
+                    .watch<ListMultiKeyProvider>()
+                    .getList(findCustomKey())
+                    .length >
                 2)
             ? getPrintWidget(context)
             : null;
 
-    Widget? filterButton =
-        (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
+    Widget? filterButton = kIsWeb
+        ? null
+        : (context
+                    .watch<ListMultiKeyProvider>()
+                    .getList(findCustomKey())
+                    .length >
                 2)
             ? getFilterWidget(context)
             : null;
 
-    Widget? exportButton =
-        (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
+    Widget? exportButton = kIsWeb
+        ? null
+        : (context
+                    .watch<ListMultiKeyProvider>()
+                    .getList(findCustomKey())
+                    .length >
                 2)
             ? getExportButton(context)
             : null;
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: kIsWeb ? null : Theme.of(context).colorScheme.background,
       child: Column(
         children: [
           Padding(
@@ -95,8 +101,9 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 DropdownStringListControllerListenerByIcon(
                     icon: Icons.sort_by_alpha,
                     hint: AppLocalizations.of(context)!.sortBy,
-                    list: drawerViewAbstractObsever.getObject
-                        .getMainFieldsIconsAndValues(context),
+                    list: viewAbstract?.getMainFieldsIconsAndValues(context) ??
+                        drawerViewAbstractObsever.getObject
+                            .getMainFieldsIconsAndValues(context),
                     onSelected: (obj) {
                       debugPrint("is selected ${obj.runtimeType}");
                       if (obj == null) {
@@ -119,7 +126,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                   },
                 ),
                 const Spacer(),
-                getAddBotton(context),
+                if (!kIsWeb) getAddBotton(context),
                 getRefreshWidget(),
                 if (exportButton != null) exportButton,
                 if (printButton != null) printButton

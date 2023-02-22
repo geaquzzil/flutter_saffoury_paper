@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
+import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -147,7 +149,27 @@ class HomeWebPage extends BaseWebPage {
         // Carousel(),
 
         LocationListItem(
-          useResponsiveLayout: true,
+          usePadding: false,
+          useResponsiveLayout: false,
+          soildColor: Colors.black38,
+          customCenterWidget: TitleAndDescriptopnAndImage(
+            // primaryTitle: "Hello, There",
+            title: "Find the perfect saffoury products\nfor your business"
+                .toUpperCase(),
+            customWidget: SizedBox(),
+            // customIconData: Icons.adobe_outlined,
+            customDescription: Card(
+              child: SearchWidgetComponentEditable(
+                trailingIsCart: false,
+                notiferSearchVoid: (value) => context.goNamed(
+                    indexWebOurProducts,
+                    queryParams: {"search": value}),
+              ),
+            ),
+            // backgroundImage:
+            //     "http://www.saffoury.com/SaffouryPaper2/Images/24a802d340815c27a72f798234f26703.jpg",
+          ),
+          // useResponsiveLayout: true,
           country: "Saffoury",
           name: "SaffouryPaper",
           imageUrl:

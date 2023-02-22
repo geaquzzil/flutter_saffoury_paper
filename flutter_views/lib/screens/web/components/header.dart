@@ -17,45 +17,44 @@ import '../ext.dart';
 import '../models/header_item.dart';
 
 class HeaderLogo extends StatelessWidget {
-  const HeaderLogo({Key? key}) : super(key: key);
+  ValueNotifier<double>? valueNotifier;
+  HeaderLogo({Key? key, this.valueNotifier}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () {},
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // CompanyLogo(),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Saffoury".toUpperCase(),
-                      style: GoogleFonts.roboto(
-                        color: Colors.white,
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.w400,
-                      ),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {},
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // CompanyLogo(),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Saffoury".toUpperCase(),
+                    style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.w400,
                     ),
-                    TextSpan(
-                      text: "Paper".toUpperCase(),
-                      style: GoogleFonts.roboto(
-                        color: Colors.white,
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.w200,
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  TextSpan(
+                    text: "Paper".toUpperCase(),
+                    style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -209,17 +208,23 @@ class Header extends StatelessWidget {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 500),
             decoration: BoxDecoration(
+                // boxShadow: value == 0
+                //     ? null
+                //     : [
+                //         const BoxShadow(
+                //             color: kPrimaryColor,
+                //             offset: Offset(2.0, 4.0),
+                //             blurRadius: 2)
+                //       ],
                 border: value == 0
                     ? null
                     : const Border.symmetric(
-                        horizontal: BorderSide(width: 2, color: Colors.orange)),
-                color: value == 0
-                    ? null
-                    : Theme.of(context).scaffoldBackgroundColor.darken()),
+                        horizontal: BorderSide(width: 1, color: kPrimaryColor)),
+                color: value == 0 ? null : Colors.black87),
             child: ScreenHelper(
               desktop: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: buildHeader(),
+                child: buildHeader(valueNotifier: valueNotifier),
               ),
               // We will make this in a bit
               mobile: buildMobileHeader(),
@@ -250,7 +255,7 @@ class Header extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const HeaderLogo(),
+            HeaderLogo(),
             // Restart server to make icons work
             // Lets make a scaffold key and create a drawer
             GestureDetector(
@@ -271,13 +276,13 @@ class Header extends StatelessWidget {
   }
 
   // Lets plan for mobile and smaller width screens
-  Widget buildHeader() {
+  Widget buildHeader({ValueNotifier<double>? valueNotifier}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const HeaderLogo(),
+          HeaderLogo(valueNotifier: valueNotifier),
           HeaderRow(selectedHeader: selectedHeader),
         ],
       ),

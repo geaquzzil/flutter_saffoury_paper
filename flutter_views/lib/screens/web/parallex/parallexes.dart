@@ -40,6 +40,7 @@ class LocationListItem extends StatelessWidget {
     this.customBottomWidget,
     this.customCenterWidget,
     this.usePadding = true,
+    this.customFlowWidget,
     this.useClipRect = true,
     this.descriptionIsWhite = false,
     this.useAspectRatio = false,
@@ -51,6 +52,7 @@ class LocationListItem extends StatelessWidget {
   final bool usePadding;
   final Widget? customBottomWidget;
   final Widget? customCenterWidget;
+  final Widget? customFlowWidget;
   final bool useResponsiveLayout;
   final String imageUrl;
   final Color? soildColor;
@@ -132,7 +134,7 @@ class LocationListItem extends StatelessWidget {
 
   Widget _buildCenterWidget(BuildContext context) {
     return Positioned.fill(
-      child: Align(alignment: Alignment.center, child: customCenterWidget!),
+      child: Align(alignment: Alignment.centerLeft, child: customCenterWidget!),
     );
   }
 
@@ -149,22 +151,25 @@ class LocationListItem extends StatelessWidget {
 
   Flow getFlow(BuildContext context) {
     return Flow(
+      clipBehavior: Clip.antiAlias,
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context)!,
         listItemContext: context,
         backgroundImageKey: _backgroundImageKey,
       ),
       children: [
+        if (customFlowWidget != null) customFlowWidget!,
         // FadeInImage(
         //   placeholder: MemoryImage(kTransparentImage),
         //   image: CachedNetworkImageProvider(imageUrl!),
         //   fit: BoxFit.cover,
         // )
-        Image.network(
-          imageUrl,
-          key: _backgroundImageKey,
-          fit: BoxFit.contain,
-        ),
+        if (customFlowWidget == null)
+          Image.network(
+            imageUrl,
+            key: _backgroundImageKey,
+            fit: BoxFit.cover,
+          ),
 
         // FadeInImage.memoryNetwork(
         //   key: _backgroundImageKey,

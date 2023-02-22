@@ -276,11 +276,15 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
         sliver: child);
   }
 
+  void init(BuildContext context) {
+    _scrollController.addListener(() => _onScroll(context));
+  }
+
   ValueNotifier<double> onScroll = ValueNotifier<double>(0);
   @override
   Widget build(BuildContext context) {
+    init(context);
     var headerItems = getHeaderItems(context);
-    _scrollController.addListener(() => _onScroll(context));
     return Scaffold(
         // appBar: ScrollToHideWidget(),
         // key: Globals.scaffoldKey,

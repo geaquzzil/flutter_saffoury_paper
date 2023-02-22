@@ -154,6 +154,7 @@ class RouteGenerator {
                   return MaterialPage(
                       child: ProductWebPage(
                     searchQuery: state.queryParams["search"],
+                    customFilter:state.queryParams['filter'],
                   ));
                 },
               ),
