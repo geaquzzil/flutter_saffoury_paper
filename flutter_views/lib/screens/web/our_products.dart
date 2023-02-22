@@ -46,12 +46,16 @@ class ProductWebPage extends BaseWebPageSlivers {
   void fetshList() {
     String customKey = findCustomKey();
     if (listProvider.getCount(customKey) == 0) {
-      if (searchQuery == null) {
-        listProvider.fetchList(customKey, viewAbstract);
-      } else {
-        listProvider.fetchListSearch(
-            findCustomKey(), viewAbstract, searchQuery!);
-      }
+      fetshListNotCheckingZero();
+    }
+  }
+
+  void fetshListNotCheckingZero() {
+    String customKey = findCustomKey();
+    if (searchQuery == null) {
+      listProvider.fetchList(customKey, viewAbstract);
+    } else {
+      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
     }
   }
 
@@ -151,6 +155,8 @@ class ProductWebPage extends BaseWebPageSlivers {
                     data:
                         "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
                   )),
+              FiltersAndSelectionListHeader(
+                  listProvider: listProvider, customKey: findCustomKey()),
               ResponsiveWebBuilder(
                   builder: (context, width) => WebButton(
                         title: "TRY FILTER THINGS",
@@ -184,8 +190,10 @@ class ProductWebPage extends BaseWebPageSlivers {
                               );
                             },
                           ).then((value) {
-                            //                             ViewAbstract? v = context.read<DrawerMenuControllerProvider>().getObject;
-                            // v.setFilterableMap(context.read<FilterableProvider>().getList);
+                            if (value == null) return;
+                            // ViewAbstract? v = viewAbstract.getCopyInstance();
+                            viewAbstract.setFilterableMap(value);
+                            fetshList();
                             // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
                           });
                         },
@@ -229,11 +237,7 @@ class ProductWebPage extends BaseWebPageSlivers {
 
   @override
   void isScrolled(BuildContext context) {
-    if (searchQuery == null) {
-      listProvider.fetchList(findCustomKey(), viewAbstract);
-    } else {
-      listProvider.fetchListSearch(findCustomKey(), viewAbstract, searchQuery!);
-    }
+    fetshListNotCheckingZero();
   }
 
   SliverPadding getGridList(BoxConstraints constraints,

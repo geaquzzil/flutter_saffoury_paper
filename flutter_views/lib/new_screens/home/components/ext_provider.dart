@@ -74,8 +74,10 @@ List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context) {
 }
 
 @Deprecated("will be removed in a future release")
-List<FilterableProviderHelper> getAllSelectedFilters(BuildContext context) {
-  var list = context.watch<FilterableProvider>().getList.values.toList();
+List<FilterableProviderHelper> getAllSelectedFilters(BuildContext context,
+    {Map<String, FilterableProviderHelper>? customFilters}) {
+  var list = customFilters?.values.toList() ??
+      context.watch<FilterableProvider>().getList.values.toList();
   var listSelectd = list
       .map((master) => master.values
           .map((e) => FilterableProviderHelper(

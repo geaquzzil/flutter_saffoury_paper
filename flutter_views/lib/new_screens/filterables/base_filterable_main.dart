@@ -73,7 +73,10 @@ class BaseFilterableMainWidget extends StatelessWidget {
       return Scaffold(
         body: _getBody(context, drawerViewAbstract, list),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context)
+                .pop(context.read<FilterableProvider>().getList);
+          },
           isExtended: true,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           icon: Icon(Icons.arrow_forward),

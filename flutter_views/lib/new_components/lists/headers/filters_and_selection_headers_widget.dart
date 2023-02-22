@@ -35,6 +35,18 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/drawer/drawer_controler.dart';
 
+class FiltersControllerHeader extends StatelessWidget {
+  ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable;
+
+  FiltersControllerHeader({super.key, required this.onFilterable});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
 class FiltersAndSelectionListHeader extends StatelessWidget {
   late DrawerMenuControllerProvider drawerViewAbstractObsever;
   String customKey;

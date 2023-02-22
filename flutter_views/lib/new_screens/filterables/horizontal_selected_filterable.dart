@@ -8,11 +8,13 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../home/components/ext_provider.dart';
 
 class HorizontalFilterableSelectedList extends StatelessWidget {
-  const HorizontalFilterableSelectedList({super.key});
+  ValueNotifier<Map<String, FilterableProviderHelper>?>? onFilterable;
+  HorizontalFilterableSelectedList({super.key, this.onFilterable});
 
   @override
   Widget build(BuildContext context) {
-    List<FilterableProviderHelper> finalList = getAllSelectedFilters(context);
+    List<FilterableProviderHelper> finalList =
+        getAllSelectedFilters(context, customFilters: onFilterable?.value);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -38,11 +40,15 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
         {
           return Chip(
             // selected: true,
-            label: Text(
-                "${item.mainFieldName} :${item.mainValuesName[0]}"),
+            label: Text("${item.mainFieldName} :${item.mainValuesName[0]}"),
 
             // avatar:Text(item.field),
             onDeleted: () {
+              if (onFilterable != null) {
+                //todo
+                ;l
+                return;
+              }
               removeFilterableSelectedStringValue(
                   context, item.field, item.values[0], item.mainValuesName[0]);
               notifyListApi(context);
