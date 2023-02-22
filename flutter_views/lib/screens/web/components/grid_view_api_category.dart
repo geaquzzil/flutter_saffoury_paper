@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/models/design_process.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -245,17 +246,28 @@ class WebGridViewItem extends StatelessWidget {
         _buildGradient(isHovered),
         _buildTitleAndSubtitle(context, isHovered),
         if (item is CartableProductItemInterface)
-          Positioned.fill(
+          if (item
+                  .getCartableProductItemInterface()
+                  .getCartableProductQuantity() !=
+              0)
+            Positioned.fill(
+                child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 275),
+              opacity: isHovered ? 1 : 0,
               child: AnimatedScale(
-            duration: const Duration(milliseconds: 275),
-            scale: isHovered ? 1 : 0,
-            child: Center(
-              child: IconButton(
-                icon: const Icon(Icons.add_shopping_cart),
-                onPressed: () {},
+                duration: const Duration(milliseconds: 275),
+                scale: isHovered ? 1 : 0,
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.add_shopping_cart),
+                    onPressed: () {
+                      showCartDialog(
+                          context, item as CartableProductItemInterface);
+                    },
+                  ),
+                ),
               ),
-            ),
-          ))
+            ))
         // Positioned(bottom: 0.0, left: 0.0, child: Text("das"))
         // _buildCenterWidget(context)
       ],

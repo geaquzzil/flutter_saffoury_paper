@@ -113,66 +113,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                   )
                 : ElevatedButton(
                     onPressed: () {
-                      showDialogExt(
-                          anchorPoint: Offset(1000, 1000),
-                          context: context,
-                          builder: (context) {
-                            final TextEditingController _textEditingController =
-                                TextEditingController();
-                            bool isChecked = false;
-                            final GlobalKey<FormState> _formKey =
-                                GlobalKey<FormState>();
-                            return StatefulBuilder(
-                                builder: (context, setState) {
-                              return AlertDialog(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.surface,
-                                content: Form(
-                                    key: _formKey,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        TextFormField(
-                                          autofocus: true,
-                                          controller: _textEditingController,
-                                          validator: context
-                                              .read<CartProvider>()
-                                              .getCartableInvoice
-                                              .getCartableNewInstance(context,
-                                                  viewAbstract)
-                                              .getCartableEditableValidateItemCell(
-                                                  context, "quantity"),
-                                          decoration: InputDecoration(
-                                              hintText: "Enter Some Text"),
-                                        ),
-                                      ],
-                                    )),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(
-                                        AppLocalizations.of(context)!.subment),
-                                    onPressed: () {
-                                      if (_formKey.currentState?.validate() ??
-                                          false) {
-                                        context
-                                            .read<CartProvider>()
-                                            .onCartItemAdded(
-                                                context,
-                                                -1,
-                                                viewAbstract,
-                                                double.tryParse(
-                                                        _textEditingController
-                                                            .text) ??
-                                                    0);
-                                        // Do something like updating SharedPreferences or User Settings etc.
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                          });
+                      showCartDialog(context, viewAbstract);
                     },
                     child: Text(value
                         ? AppLocalizations.of(context)!

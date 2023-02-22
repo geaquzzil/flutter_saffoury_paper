@@ -83,8 +83,12 @@ class _HoverImageState extends State<HoverImage>
     );
     _animation = Tween(begin: 1.0, end: 1.2).animate(CurvedAnimation(
         parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
-    padding = Tween(begin: 0.0, end: -25.0).animate(CurvedAnimation(
-        parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
+    padding =
+        Tween(begin: 0.0, end: widget.bottomWidget == null ? -25.0 : -25.0)
+            .animate(CurvedAnimation(
+                parent: _controller,
+                curve: Curves.ease,
+                reverseCurve: Curves.easeIn));
     _controller.addListener(() {
       setState(() {});
     });

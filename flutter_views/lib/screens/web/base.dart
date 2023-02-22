@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -230,7 +232,7 @@ abstract class BaseWebPage extends StatelessWidget {
 }
 
 abstract class BaseWebPageSlivers extends StatelessWidget {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints);
   BaseWebPageSlivers({Key? key}) : super(key: key);
@@ -263,11 +265,22 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     }
   }
 
+  Widget getSliverPadding(
+      BuildContext context, BoxConstraints constraints, Widget child) {
+    return SliverPadding(
+        padding: EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: max((constraints.maxWidth - 1200) / 2, 0) > 15
+                ? max((constraints.maxWidth - 1200) / 2, 0)
+                : 15),
+        sliver: child);
+  }
+
   ValueNotifier<double> onScroll = ValueNotifier<double>(0);
   @override
   Widget build(BuildContext context) {
     var headerItems = getHeaderItems(context);
-
+    _scrollController.addListener(() => _onScroll(context));
     return Scaffold(
         // appBar: ScrollToHideWidget(),
         // key: Globals.scaffoldKey,
@@ -391,6 +404,21 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  void isScrolled(BuildContext context) {}
+  void _onScroll(BuildContext context) {
+    if (_isBottom) {
+      debugPrint("Base Web is scrolled");
+      isScrolled(context);
+    }
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -129,7 +130,9 @@ class WebProductView extends BaseWebPageSliversApi {
                           if (extras is CartableProductItemInterface)
                             BottomWidgetOnViewIfCartable(
                                 viewAbstract:
-                                    extras as CartableProductItemInterface)
+                                    extras as CartableProductItemInterface),
+
+                          // if(extras is SharableInterface)
                         ],
                       )),
                 ],

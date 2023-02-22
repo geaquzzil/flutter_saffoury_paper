@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -18,15 +19,30 @@ import 'package:provider/provider.dart';
 class BaseFilterableMainWidget extends StatelessWidget {
   bool useDraggableWidget;
   bool setHeaderTitle;
-  Function()? onDoneCliced;
+  ViewAbstract? viewAbstract;
+  Function()? onDoneClickedPopResults;
   BaseFilterableMainWidget(
       {super.key,
       this.useDraggableWidget = false,
       this.setHeaderTitle = true,
-      this.onDoneCliced});
+      this.viewAbstract,
+      this.onDoneClickedPopResults});
 
   @override
   Widget build(BuildContext context) {
+    if (viewAbstract != null) {
+      return FutureBuilder(
+          future: context
+              .read<FilterableListApiProvider<FilterableData>>()
+              .getServerData(viewAbstract!),
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return getListFilterableControlers(context, viewAbstract!);
+            }
+            return Lottie.network(
+                "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json");
+          }));
+    }
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) {
         return FutureBuilder(
@@ -53,33 +69,38 @@ class BaseFilterableMainWidget extends StatelessWidget {
     if (useDraggableWidget) {
       return getDraggableWidget(context, list, drawerViewAbstract);
     }
+    if (onDoneClickedPopResults != null) {
+      return Scaffold(
+        body: _getBody(context, drawerViewAbstract, list),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {},
+          isExtended: true,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          icon: Icon(Icons.arrow_forward),
+          label: Text(AppLocalizations.of(context)!.subment),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      );
+    }
+    return _getBody(context, drawerViewAbstract, list);
+  }
 
+  CustomScrollView _getBody(
+      BuildContext context,
+      ViewAbstract<dynamic> drawerViewAbstract,
+      Map<ViewAbstract<dynamic>, List<dynamic>> list) {
     return CustomScrollView(
       slivers: [
         if (setHeaderTitle)
           SliverToBoxAdapter(
             child: getHeader(context, drawerViewAbstract),
           ),
-        if (SizeConfig.isMobile(context) && (setHeaderTitle)) Divider(),
+        if (SizeConfig.isMobile(context) && (setHeaderTitle))
+          const SliverToBoxAdapter(child: Divider()),
         ...getControllersSliver(list, drawerViewAbstract, context),
+
         // SliverFillRemaining(child: getButtons(context),)
       ],
-    );
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(kDefaultPadding),
-        child: Column(
-          children: [
-            if (setHeaderTitle) getHeader(context, drawerViewAbstract),
-            if (SizeConfig.isMobile(context) && (setHeaderTitle)) Divider(),
-            Expanded(
-              child: getControllers(list, drawerViewAbstract, context),
-            ),
-            Divider(),
-            getButtons(context)
-          ],
-        ),
-      ),
     );
   }
 
@@ -90,7 +111,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
       {ScrollController? scrollController}) {
     return [
       SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
         sliver: SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
           ViewAbstract viewAbstract = list.keys.elementAt(index);
@@ -102,7 +123,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
         }, childCount: list.length)),
       ),
       SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
         sliver: SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
           return CustomFilterableController(
@@ -159,13 +180,11 @@ class BaseFilterableMainWidget extends StatelessWidget {
         ElevatedButton(
           child: const Text("DONE"),
           onPressed: () {
-            if (onDoneCliced != null) {
-              onDoneCliced!();
+            if (onDoneClickedPopResults != null) {
+              onDoneClickedPopResults!();
+              Navigator.of(context)
+                  .pop(context.read<FilterableProvider>().getList);
               return;
-            }
-            notifyListApi(context);
-            if (SizeConfig.isMobile(context)) {
-              Navigator.pop(context);
             }
             // Navigator.pop(context);
             // debugPrint(context.read<FilterableProvider>().getList.toString());
@@ -189,7 +208,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
         toAnimate: true,
         showBadge: value > 0,
         animationType: BadgeAnimationType.slide,
-        child: Icon(Icons.filter_alt),
+        child: const Icon(Icons.filter_alt),
       ),
       selector: (p0, p1) => p1.getList.length,
     );
@@ -205,7 +224,8 @@ class BaseFilterableMainWidget extends StatelessWidget {
     }
     return Card(
       child: ListTile(
-        leading: getBadge(context),
+        leading: kIsWeb ? const BackButton() : getBadge(context),
+        trailing: kIsWeb ? getBadge(context) : null,
         title: getTitle(context, drawerViewAbstract),
       ),
     );

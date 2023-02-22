@@ -116,6 +116,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key];
     }
     if (multiListProviderHelper!.isLoading) return;
+    if (multiListProviderHelper.isNoMoreItem) return;
     multiListProviderHelper.isLoading = true;
     notifyListeners();
     // await Future.delayed(

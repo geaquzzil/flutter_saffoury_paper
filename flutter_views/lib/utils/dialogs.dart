@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import '../providers/cart/cart_provider.dart';
 
 ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e) {
   return ListTile(
@@ -82,6 +87,7 @@ Future<T?> showFullScreenDialogExt<T>(
   if (SizeConfig.isLargeScreenGeneral(context)) {
     return showGeneralDialog(
       anchorPoint: anchorPoint,
+
       context: context,
       barrierDismissible: false,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
@@ -113,14 +119,80 @@ Future<T?> showFullScreenDialogExt<T>(
   }
 }
 
+Future<dynamic> showCartDialog(
+    BuildContext context, CartableProductItemInterface viewAbstract) {
+  return showDialogExt(
+      barrierDismissible: true,
+      anchorPoint: const Offset(1000, 1000),
+      context: context,
+      builder: (context) {
+        final TextEditingController textEditingController =
+            TextEditingController();
+        textEditingController.text =
+            "${viewAbstract.getCartableProductQuantity()}";
+        final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            content: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      autofocus: true,
+                      controller: textEditingController,
+                      validator: context
+                          .read<CartProvider>()
+                          .getCartableInvoice
+                          .getCartableNewInstance(context, viewAbstract)
+                          .getCartableEditableValidateItemCell(
+                              context, "quantity"),
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.quantity,
+                        icon: const Icon(Icons.shopping_cart_rounded),
+                        // iconColor: context
+                        //         .watch<ErrorFieldsProvider>()
+                        //         .hasErrorField(viewAbstract, field)
+                        //     ? Theme.of(context).colorScheme.error
+                        //     : null,
+                        labelText: AppLocalizations.of(context)!.add_to_cart,
+                        suffixText:
+                            viewAbstract.getCartableQuantityUnit(context),
+                      ),
+                    ),
+                  ],
+                )),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.subment),
+                onPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    context.read<CartProvider>().onCartItemAdded(
+                        context,
+                        -1,
+                        viewAbstract,
+                        double.tryParse(textEditingController.text) ?? 0);
+                    // Do something like updating SharedPreferences or User Settings etc.
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
+          );
+        });
+      });
+}
+
 Future<T?> showDialogExt<T>(
     {required BuildContext context,
     required Widget Function(BuildContext) builder,
-    Offset? anchorPoint}) {
+    Offset? anchorPoint,
+    bool barrierDismissible = false}) {
   return showDialog(
       anchorPoint: anchorPoint,
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: barrierDismissible,
       builder: builder);
 }
 
