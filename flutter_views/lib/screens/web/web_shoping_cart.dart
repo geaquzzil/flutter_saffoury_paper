@@ -3,6 +3,8 @@ import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_description.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -97,7 +99,7 @@ class _WebShoppingCartDrawer extends State<WebShoppingCartDrawer>
           isExtended: true,
           icon: const Icon(Icons.shopping_cart_checkout_outlined),
           onPressed: () {
-            context.read<CartProvider>().checkout(context);
+            context.goNamed(indexWebCheckout);
           },
           label: Text(AppLocalizations.of(context)!.checkout)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

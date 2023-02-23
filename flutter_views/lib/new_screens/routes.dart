@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
+import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
@@ -66,6 +67,7 @@ const String indexWebOurProducts = "products";
 const String indexWebServices = "services";
 const String indexWebAboutUs = "about-us";
 const String indexWebContactUs = "contact-us";
+const String indexWebCheckout = "checkout";
 const String indexWebView = "v";
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -128,6 +130,13 @@ class RouteGenerator {
                 },
               ),
               GoRoute(
+                path: indexWebCheckout,
+                name: indexWebCheckout,
+                pageBuilder: (context, state) {
+                  return MaterialPage(child: CheckoutWeb());
+                },
+              ),
+              GoRoute(
                 name: indexWebView,
                 path: "v/:tableName/:id",
                 pageBuilder: (context, state) {
@@ -154,7 +163,7 @@ class RouteGenerator {
                   return MaterialPage(
                       child: ProductWebPage(
                     searchQuery: state.queryParams["search"],
-                    customFilter:state.queryParams['filter'],
+                    customFilter: state.queryParams['filter'],
                   ));
                 },
               ),

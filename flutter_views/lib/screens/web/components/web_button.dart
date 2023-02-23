@@ -4,9 +4,10 @@ import 'package:flutter_view_controller/constants.dart';
 class WebButton extends StatelessWidget {
   final String title;
   final bool primary;
+  final double width;
   final void Function()? onPressed;
   const WebButton(
-      {super.key, this.primary = true, required this.title, this.onPressed});
+      {super.key, this.primary = true, required this.title, this.onPressed,this.width=200});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class WebButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
           height: 48.0,
-          width: 200,
+          width: width,
           padding: const EdgeInsets.symmetric(
             horizontal: 28.0,
           ),
@@ -49,7 +50,7 @@ class WebButton extends StatelessWidget {
           ),
         ),
         height: 48.0,
-        width: 200,
+        width: width,
         padding: const EdgeInsets.symmetric(horizontal: 28.0),
         child: TextButton(
           onPressed: onPressed,
