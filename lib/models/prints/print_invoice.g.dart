@@ -18,6 +18,7 @@ PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..hideQrCode = json['hideQrCode'] as bool?
   ..primaryColor = json['primaryColor'] as String?
   ..secondaryColor = json['secondaryColor'] as String?
+  ..hasMultiplePageFormats = json['hasMultiplePageFormats'] as bool
   ..hideTermsOfService = json['hideTermsOfService'] as bool?
   ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
   ..hideCustomerAddressInfo = json['hideCustomerAddressInfo'] as bool?
@@ -44,6 +45,7 @@ Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
       'hideQrCode': instance.hideQrCode,
       'primaryColor': instance.primaryColor,
       'secondaryColor': instance.secondaryColor,
+      'hasMultiplePageFormats': instance.hasMultiplePageFormats,
       'hideTermsOfService': instance.hideTermsOfService,
       'hideAdditionalNotes': instance.hideAdditionalNotes,
       'hideCustomerAddressInfo': instance.hideCustomerAddressInfo,

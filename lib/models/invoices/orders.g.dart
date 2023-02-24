@@ -9,6 +9,7 @@ part of 'orders.dart';
 Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..iD = json['iD'] as int
   ..delete = json['delete'] as bool?
+  ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
@@ -38,14 +39,12 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..orders_refunds = (json['orders_refunds'] as List<dynamic>?)
       ?.map((e) => OrderRefund.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..orders_refunds_count = json['orders_refunds_count'] as int?
-  ..deletedList = (json['deletedList'] as List<dynamic>?)
-      ?.map((e) => OrderDetails.fromJson(e as Map<String, dynamic>))
-      .toList();
+  ..orders_refunds_count = json['orders_refunds_count'] as int?;
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
+      'terms': _$TermsEnumMap[instance.terms],
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -66,8 +65,19 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'orders_refunds':
           instance.orders_refunds?.map((e) => e.toJson()).toList(),
       'orders_refunds_count': instance.orders_refunds_count,
-      // 'deletedList': instance.deletedList?.map((e) => e.toJson()).toList(),
     };
+
+const _$TermsEnumMap = {
+  Terms.none: '0',
+  Terms.pay1: '-1',
+  Terms.pay2: '-7',
+  Terms.pay3: '7',
+  Terms.pay4: '10',
+  Terms.pay5: '30',
+  Terms.pay6: '-30',
+  Terms.pay7: '1',
+  Terms.pay8: '80',
+};
 
 const _$InvoiceStatusEnumMap = {
   InvoiceStatus.NONE: 'NONE',

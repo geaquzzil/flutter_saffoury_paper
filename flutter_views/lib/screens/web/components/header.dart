@@ -158,6 +158,7 @@ class HeaderRow extends StatelessWidget {
             )
             .toList(),
         AnimSearchBar(
+          textFieldIconColor: Colors.black,
           // color: Theme.of(context).scaffoldBackgroundColor,
 
           width: 400,

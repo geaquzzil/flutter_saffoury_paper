@@ -10,6 +10,7 @@ CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
     CustomerRequestSize()
       ..iD = json['iD'] as int
       ..delete = json['delete'] as bool?
+      ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
@@ -47,6 +48,7 @@ Map<String, dynamic> _$CustomerRequestSizeToJson(
     <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
+      'terms': _$TermsEnumMap[instance.terms],
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -68,6 +70,18 @@ Map<String, dynamic> _$CustomerRequestSizeToJson(
       'customers_request_sizes_details_count':
           instance.customers_request_sizes_details_count,
     };
+
+const _$TermsEnumMap = {
+  Terms.none: '0',
+  Terms.pay1: '-1',
+  Terms.pay2: '-7',
+  Terms.pay3: '7',
+  Terms.pay4: '10',
+  Terms.pay5: '30',
+  Terms.pay6: '-30',
+  Terms.pay7: '1',
+  Terms.pay8: '80',
+};
 
 const _$InvoiceStatusEnumMap = {
   InvoiceStatus.NONE: 'NONE',

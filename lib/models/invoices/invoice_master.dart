@@ -829,7 +829,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     debugPrint("getModifiablePrintablePdfSetting $o");
     return o;
   }
-
+  @JsonKey(ignore: true)
   @override
   List<InvoiceMasterDetails>? deletedList;
 

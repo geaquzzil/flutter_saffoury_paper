@@ -125,8 +125,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     //     notifyListeners();
     //   },
     // );
-    List? list = await viewAbstract.search(
-        viewAbstract.getPageItemCount, multiListProviderHelper.page, query);
+    List? list = await viewAbstract.search(viewAbstract.getPageItemCountSearch,
+        multiListProviderHelper.page, query);
     multiListProviderHelper.isLoading = false;
     multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
     multiListProviderHelper.page++;

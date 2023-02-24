@@ -9,6 +9,7 @@ part of 'purchases.dart';
 Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
   ..iD = json['iD'] as int
   ..delete = json['delete'] as bool?
+  ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
@@ -43,6 +44,7 @@ Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
 Map<String, dynamic> _$PurchasesToJson(Purchases instance) => <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
+      'terms': _$TermsEnumMap[instance.terms],
       'TermsID': instance.TermsID,
       'date': instance.date,
       'billNo': instance.billNo,
@@ -64,6 +66,18 @@ Map<String, dynamic> _$PurchasesToJson(Purchases instance) => <String, dynamic>{
           instance.purchases_refunds?.map((e) => e.toJson()).toList(),
       'purchases_refunds_count': instance.purchases_refunds_count,
     };
+
+const _$TermsEnumMap = {
+  Terms.none: '0',
+  Terms.pay1: '-1',
+  Terms.pay2: '-7',
+  Terms.pay3: '7',
+  Terms.pay4: '10',
+  Terms.pay5: '30',
+  Terms.pay6: '-30',
+  Terms.pay7: '1',
+  Terms.pay8: '80',
+};
 
 const _$InvoiceStatusEnumMap = {
   InvoiceStatus.NONE: 'NONE',
