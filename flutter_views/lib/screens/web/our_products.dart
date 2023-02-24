@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
@@ -179,6 +180,25 @@ class ProductWebPage extends BaseWebPageSlivers {
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     fetshListWidgetBinding();
     return [
+      SliverPersistentHeader(
+          pinned: true,
+          delegate: SliverAppBarDelegatePreferedSize(
+            shouldRebuildWidget: true,
+            child: PreferredSize(
+              preferredSize: const Size.fromHeight(60),
+              child: ResponsiveWebBuilderSliver(
+                builder: (context, width) => SearchWidgetComponent(
+                  // appBardExpandType: expandType,
+                  onSearchTextChanged: (serchQuery) {
+                    // searchQuery = serchQuery;
+                    fetshList();
+                  },
+                  // key: const ValueKey(2),
+                  heroTag: "list/search",
+                ),
+              ),
+            ),
+          )),
       if (searchQuery == null)
         SliverToBoxAdapter(
           child: Column(

@@ -61,6 +61,7 @@ const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
 const String posRouteName = "pos";
 const String indexWebRouteName = "index";
+const String indexWebSignIn = "sign-in";
 const String indexWebPrivecyPolicy = "privecy-policy";
 const String indexWebTermsAndConditions = "terms";
 const String indexWebOurProducts = "products";
@@ -108,6 +109,13 @@ class RouteGenerator {
             name: indexWebRouteName,
             pageBuilder: (context, state) => MaterialPage(child: HomeWebPage()),
             routes: [
+              GoRoute(
+                name: indexWebSignIn,
+                path: indexWebSignIn,
+                pageBuilder: (context, state) {
+                  return MaterialPage(key: state.pageKey, child: SignInPage());
+                },
+              ),
               GoRoute(
                 path: "privecy-policy",
                 name: indexWebPrivecyPolicy,
