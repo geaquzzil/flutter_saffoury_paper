@@ -22,7 +22,7 @@ class WebCheckoutList extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          getWebText(title: "Your order", fontSize: 27),
+          // getWebText(title: "Your order", fontSize: 20),
           const CartListHeader(),
           CartDataTableMaster(
             action: ServerActions.view,
@@ -44,11 +44,17 @@ class WebCheckoutList extends StatelessWidget {
               width: 200,
             ),
           ),
+          const SizedBox(
+            height: kDefaultPadding,
+          ),
           CheckboxListTile(
             value: false,
             onChanged: (value) {},
             title: Text(
                 "I have read and agree to the SaffouryPaper terms and conditions"),
+          ),
+          const SizedBox(
+            height: kDefaultPadding,
           ),
           WebButton(
             width: double.infinity,
