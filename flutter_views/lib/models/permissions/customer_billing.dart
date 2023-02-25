@@ -28,21 +28,6 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   @override
   IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;
 
-  @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "name": "",
-          "email": "",
-          "token": "",
-          "activated": 0,
-          "date": "",
-          "city": "",
-          "address": "",
-          "profile": "",
-          "comments": "",
-        });
-
   BillingCustomer() : super() {
     date = "".toDateTimeNowString();
   }
@@ -172,7 +157,16 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
-          "cash": 0,
+          "name": "",
+          "email": "",
+          "token": "",
+          "activated": 0,
+          "date": "",
+          "city": "",
+          "address": "",
+          "profile": "",
+          "comments": "",
+          "cash":0
         });
 
   @override

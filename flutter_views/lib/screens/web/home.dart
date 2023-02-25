@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
@@ -197,7 +198,7 @@ class HomeWebPage extends BaseWebPage {
         GridViewApi(
             title: "LATEST PRODUCTS".toUpperCase(),
             description: "browser category by paper and board",
-            viewAbstract: context.read<AuthProvider>().getWebCategories()[0]),
+            viewAbstract: context.read<AuthProvider<AuthUser>>().getWebCategories()[0]),
         LocationListItem(
           soildColor: Theme.of(context)
               .scaffoldBackgroundColor
@@ -311,7 +312,7 @@ class HomeWebPage extends BaseWebPage {
         GridViewApi(
             title: "Category".toUpperCase(),
             description: "browser category by paper and board",
-            viewAbstract: context.read<AuthProvider>().getWebCategories()[1]),
+            viewAbstract: context.read<AuthProvider<AuthUser>>().getWebCategories()[1]),
         const SizedBox(
           height: 70.0,
         ),

@@ -5,6 +5,7 @@ import 'package:flutter/src/rendering/box.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/customer_billing.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/web_checkout_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -30,11 +31,7 @@ class CheckoutWeb extends BaseWebPageSlivers {
             children: [
               Expanded(
                   flex: constraints.maxWidth >= 850 ? 1 : 0,
-                  child: BaseEditWidget(
-                    viewAbstract: BillingCustomer(),
-                    onValidate: (viewAbstract) {},
-                    isTheFirst: true,
-                  )),
+                  child: WebCheckoutLoginCheck()),
               Expanded(
                 flex: constraints.maxWidth >= 850 ? 1 : 0,
                 child: Card(
@@ -51,5 +48,19 @@ class CheckoutWeb extends BaseWebPageSlivers {
         ),
       )
     ];
+  }
+}
+
+class WebCheckoutLoginCheck extends StatelessWidget {
+  const WebCheckoutLoginCheck({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // BaseEditWidget(
+    //                 viewAbstract: BillingCustomer(),
+    //                 onValidate: (viewAbstract) {},
+    //                 isTheFirst: true,
+    //               )
+    return SignInPageWithoutHeaders();
   }
 }

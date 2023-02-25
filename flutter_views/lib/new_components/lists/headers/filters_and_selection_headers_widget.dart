@@ -156,6 +156,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   }
 
   bool hasFilterable(BuildContext context) {
+    if (kIsWeb) return false;
     return context
         .watch<FilterableProvider>()
         .getList

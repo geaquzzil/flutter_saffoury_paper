@@ -13,6 +13,8 @@ class Configurations {
   static Future<bool> hasSavedValue(Object value) async {
     String? objectHistoryList =
         await getValueString(value.runtimeType.toString());
+    debugPrint(
+        "Configurations has saved value key :${value.runtimeType.toString()}  value = > $objectHistoryList");
     return objectHistoryList != null;
   }
 

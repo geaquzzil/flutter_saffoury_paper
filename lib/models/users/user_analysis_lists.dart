@@ -81,7 +81,7 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() =>
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
           "cut_requests": List<CutRequest>.empty(),

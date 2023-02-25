@@ -154,15 +154,6 @@ class Employee extends User<Employee> {
     return super.getInputType(field);
   }
 
-  @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "publish": 0,
-          "employee": Employee(),
-          "warehouse": Warehouse(),
-          "warehouse_employees": List<WarehouseEmployee>.empty()
-        });
 
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context,

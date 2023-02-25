@@ -11,12 +11,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class HeaderText extends StatelessWidget {
   final String text;
   final double fontSize;
-  final Html description;
+  final Html? description;
   const HeaderText(
-      {super.key,
-      this.fontSize = 35,
-      required this.text,
-      required this.description});
+      {super.key, this.fontSize = 35, required this.text, this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +33,8 @@ class HeaderText extends StatelessWidget {
             minWidth: width,
             defaultScale: false,
             child: Flex(
-              direction: constraints.maxWidth > 720
-                  ? Axis.horizontal
-                  : Axis.vertical,
+              direction:
+                  constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
               children: [
                 // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
                 Expanded(
@@ -56,13 +52,11 @@ class HeaderText extends StatelessWidget {
                           fontSize: fontSize,
                         ),
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      description,
-                      const SizedBox(
-                        height: 25.0,
-                      ),
+                      if (description != null)
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                      if (description != null) description!,
                     ],
                   ),
                 ),

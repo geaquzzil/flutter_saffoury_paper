@@ -84,6 +84,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     date = "".toDateTimeNowString();
     TermsID = -1;
   }
+  
   @override
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);

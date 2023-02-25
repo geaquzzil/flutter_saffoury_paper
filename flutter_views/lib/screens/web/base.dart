@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/globals.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -328,55 +329,58 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
         ),
         // appBar: ScrollToHideWidget(),
         key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
-        endDrawer: SizedBox(width: 500, child: WebShoppingCartDrawer()),
-        drawer: Drawer(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 24.0,
-              ),
-              child: ListView.separated(
-                itemBuilder: (BuildContext context, int index) {
-                  return headerItems[index].isButton
-                      ? MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: kDangerColor,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 28.0),
-                            child: TextButton(
-                              onPressed: () =>
-                                  headerItems[index].onClick?.call(),
-                              child: Text(
-                                headerItems[index].title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold,
+        endDrawer: SizedBox(
+            width: 500, child: CardCorner(child: WebShoppingCartDrawer())),
+        drawer: CardCorner(
+          child: Drawer(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 24.0,
+                ),
+                child: ListView.separated(
+                  itemBuilder: (BuildContext context, int index) {
+                    return headerItems[index].isButton
+                        ? MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: kDangerColor,
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 28.0),
+                              child: TextButton(
+                                onPressed: () =>
+                                    headerItems[index].onClick?.call(),
+                                child: Text(
+                                  headerItems[index].title,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      : ListTile(
-                          title: Text(
-                            headerItems[index].title,
-                            style: const TextStyle(
-                              color: Colors.white,
+                          )
+                        : ListTile(
+                            title: Text(
+                              headerItems[index].title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 10.0,
-                  );
-                },
-                itemCount: headerItems.length,
+                          );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(
+                      height: 10.0,
+                    );
+                  },
+                  itemCount: headerItems.length,
+                ),
               ),
             ),
           ),
@@ -388,9 +392,11 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
             animationDuration: 600,
             child: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
-                debugPrint(
-                    "onNotification  ${notification.metrics.extentBefore}");
-                onScroll.value = notification.metrics.extentBefore;
+                if (notification.metrics.axisDirection == Axis.horizontal) {
+                  debugPrint(
+                      "onNotification  ${notification.metrics.extentBefore}");
+                  onScroll.value = notification.metrics.extentBefore;
+                }
                 // // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
                 // //   debugPrint(
                 // //       "DraggableHome ${widget.scrollController!.position.pixels}");
@@ -434,8 +440,16 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _scrollController,
                   slivers: [
+                    SliverToBoxAdapter(
+                      child: MaterialBanner(
+                        content: Text("This is a test"),
+                        actions: [
+                          IconButton(onPressed: () {}, icon: Icon(Icons.close))
+                        ],
+                      ),
+                    ),
                     SliverPersistentHeader(
-                        pinned: true,
+                        pinned: false,
                         floating: true,
                         delegate: SliverAppBarDelegatePreferedSize(
                             child: PreferredSize(

@@ -1,14 +1,184 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 import '../constants.dart';
 
+class SignInPageWithoutHeaders extends StatelessWidget {
+  final ValueNotifier<ViewAbstract?> _loginState =
+      ValueNotifier<ViewAbstract?>(null);
+  AuthUserLogin user = AuthUserLogin();
+  void Function()? onPressRegister;
+  void Function(ViewAbstract? viewAbstract)? onPressLogin;
+  SignInPageWithoutHeaders(
+      {super.key, this.onPressRegister, this.onPressLogin});
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint("SignInPageWithoutHeaders ${double.infinity}");
+    return body(double.infinity, context);
+  }
+
+  Widget header(double width, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.signInWithYourAccount,
+          style: const TextStyle(
+            fontSize: 45,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: CompanyLogo(
+            size: 100,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget body(double width, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50.0),
+              child: Flex(
+                direction: Axis.vertical,
+                children: [
+                  Expanded(
+                    flex: 0,
+                    child: header(width, context),
+                  ),
+                  Expanded(
+                      flex: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          BaseEditWidget(
+                            viewAbstract: user,
+                            isTheFirst: true,
+                            requireOnValidateEvenIfNull: true,
+                            onValidate: (viewAbstract) {
+                              _loginState.value = viewAbstract;
+                            },
+                          ),
+                          Selector<AuthProvider<AuthUser>, Status>(
+                            builder: (context, value, child) {
+                              Widget child;
+                              TextStyle? style = Theme.of(context)
+                                  .textTheme
+                                  .caption
+                                  ?.copyWith(
+                                      color: value == Status.Authenticated
+                                          ? Colors.green
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .error);
+                              if (value == Status.Blocked) {
+                                child = Text(
+                                  AppLocalizations.of(context)!.errLogin,
+                                  style: style,
+                                );
+                              } else if (value == Status.Authenticated) {
+                                child = Text(
+                                  AppLocalizations.of(context)!.log_in,
+                                  style: style,
+                                );
+                              } else if (value == Status.Authenticating) {
+                                child = const LinearProgressIndicator();
+                              } else if (value == Status.Unauthenticated) {
+                                child = Text(
+                                  AppLocalizations.of(context)!
+                                      .error_incorrect_password,
+                                  style: style,
+                                );
+                              } else {
+                                child = const SizedBox();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.all(20),
+                                child: child,
+                              );
+                            },
+                            selector: (p0, p1) => p1.getStatus,
+                          ),
+                          ValueListenableBuilder<ViewAbstract?>(
+                            valueListenable: _loginState,
+                            builder: (context, value, child) => WebButton(
+                              width: double.infinity,
+                              title: "SIGN IN",
+                              onPressed: value != null
+                                  ? () {
+                                      debugPrint(
+                                          "AuthProvider  ds auth user =>phone: ${(value as AuthUserLogin?)?.phone} password: ${(value as AuthUserLogin?)?.password}");
+                                      AuthUser auth = AuthUser();
+                                      auth.password =
+                                          (value as AuthUserLogin).password;
+                                      auth.phone = value.phone;
+                                      onPressLogin?.call(auth);
+                                    }
+                                  : null,
+                            ),
+                          ),
+                          Text(
+                            "If you don't have an account",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "You can",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(width: 15),
+                              TextButton(
+                                onPressed: () {
+                                  onPressRegister?.call();
+                                },
+                                child: Text(
+                                  "Register here!",
+                                  style: Theme.of(context).textTheme.button,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SignInPage extends BaseWebPage {
-   SignInPage({Key? key}) : super(key: key);
+  final ValueNotifier<ViewAbstract?> _loginState =
+      ValueNotifier<ViewAbstract?>(null);
+  AuthUserLogin user = AuthUserLogin();
+  SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget getContentWidget(BuildContext context) {
@@ -58,8 +228,11 @@ class SignInPage extends BaseWebPage {
             ),
           ],
         ),
-        CompanyLogo(
-          size: 300,
+        Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: CompanyLogo(
+            size: 100,
+          ),
         )
       ],
     );
@@ -97,7 +270,119 @@ class SignInPage extends BaseWebPage {
                               ? constraints.maxWidth - 20.0
                               : constraints.maxWidth / 2 - 20.0,
                           height: MediaQuery.of(context).size.height - 100,
-                          child: _formLogin(width, context),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical:
+                                    MediaQuery.of(context).size.height / 6),
+                            child: Column(
+                              children: [
+                                BaseEditWidget(
+                                  viewAbstract: user,
+                                  isTheFirst: true,
+                                  requireOnValidateEvenIfNull: true,
+                                  onValidate: (viewAbstract) {
+                                    _loginState.value = viewAbstract;
+                                  },
+                                ),
+                                Selector<AuthProvider<AuthUser>, Status>(
+                                  builder: (context, value, child) {
+                                    Widget child;
+                                    TextStyle? style = Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        ?.copyWith(
+                                            color: value == Status.Authenticated
+                                                ? Colors.green
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .error);
+                                    if (value == Status.Blocked) {
+                                      child = Text(
+                                        AppLocalizations.of(context)!.errLogin,
+                                        style: style,
+                                      );
+                                    } else if (value == Status.Authenticated) {
+                                      child = Text(
+                                        AppLocalizations.of(context)!.log_in,
+                                        style: style,
+                                      );
+                                    } else if (value == Status.Authenticating) {
+                                      child = const LinearProgressIndicator();
+                                    } else if (value ==
+                                        Status.Unauthenticated) {
+                                      child = Text(
+                                        AppLocalizations.of(context)!
+                                            .error_incorrect_password,
+                                        style: style,
+                                      );
+                                    } else {
+                                      child = const SizedBox();
+                                    }
+                                    return Padding(
+                                      padding: EdgeInsets.all(20),
+                                      child: child,
+                                    );
+                                  },
+                                  selector: (p0, p1) => p1.getStatus,
+                                ),
+                                ValueListenableBuilder<ViewAbstract?>(
+                                  valueListenable: _loginState,
+                                  builder: (context, value, child) => WebButton(
+                                    width: double.infinity,
+                                    title: "SIGN IN",
+                                    onPressed: value != null
+                                        ? () {
+                                            debugPrint(
+                                                "AuthProvider  ds auth user =>phone: ${(value as AuthUserLogin?)?.phone} password: ${(value as AuthUserLogin?)?.password}");
+                                            AuthUser auth = AuthUser();
+                                            auth.password =
+                                                (value as AuthUserLogin)
+                                                    .password;
+                                            auth.phone = value.phone;
+                                            context
+                                                .read<AuthProvider<AuthUser>>()
+                                                .signIn(user: auth);
+                                          }
+                                        : null,
+                                  ),
+                                ),
+                                const SizedBox(height: 40),
+                                Row(children: [
+                                  Expanded(
+                                    child: Divider(
+                                      color: Colors.grey[300],
+                                      height: 50,
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child: Text("Or continue with"),
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: Colors.grey[400],
+                                      height: 50,
+                                    ),
+                                  ),
+                                ]),
+                                const SizedBox(height: 40),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _loginWithButton(context,
+                                        image: Icons.g_mobiledata),
+                                    _loginWithButton(context,
+                                        image: Icons.g_mobiledata_rounded,
+                                        isActive: true),
+                                    _loginWithButton(context,
+                                        image: Icons.facebook),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -161,34 +446,12 @@ class SignInPage extends BaseWebPage {
             ),
           ),
           const SizedBox(height: 40),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).colorScheme.primary,
-                  spreadRadius: 10,
-                  blurRadius: 20,
-                ),
-              ],
-            ),
-            child: ElevatedButton(
-              onPressed: () => debugPrint("it's pressed"),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.shadow,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: Center(
-                      child: Text(
-                          AppLocalizations.of(context)!.action_sign_in_short))),
-            ),
-          ),
+          // WebButton(
+          //   title: "Sign in",
+          //   onPressed: () {
+          //     context.read<AuthProvider<AuthUser>>().signIn();
+          //   },
+          // ),
           const SizedBox(height: 40),
           Row(children: [
             Expanded(
@@ -225,6 +488,7 @@ class SignInPage extends BaseWebPage {
 
   Widget _loginWithButton(BuildContext context,
       {required IconData image, bool isActive = false}) {
+    return IconButton(iconSize: 50, onPressed: () {}, icon: Icon(image));
     return Container(
       width: 90,
       height: 70,

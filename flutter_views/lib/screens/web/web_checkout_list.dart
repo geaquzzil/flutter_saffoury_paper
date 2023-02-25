@@ -7,13 +7,16 @@ import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_description.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_list_header.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/servers/server_helpers.dart';
 
 class WebCheckoutList extends StatelessWidget {
-  const WebCheckoutList({super.key});
+  ValueNotifier<bool> hasAggreeTerms = ValueNotifier<bool>(false);
+  WebCheckoutList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +50,33 @@ class WebCheckoutList extends StatelessWidget {
           const SizedBox(
             height: kDefaultPadding,
           ),
-          CheckboxListTile(
-            value: false,
-            onChanged: (value) {},
-            title: Text(
-                "I have read and agree to the SaffouryPaper terms and conditions"),
+          ValueListenableBuilder<bool>(
+            valueListenable: hasAggreeTerms,
+            builder: (context, value, child) => CheckboxListTile(
+              value: value,
+              onChanged: (value) {
+                hasAggreeTerms.value = value ?? false;
+              },
+              title: const Text(
+                  "I have read and agree to the SaffouryPaper terms and conditions"),
+            ),
           ),
           const SizedBox(
             height: kDefaultPadding,
           ),
-          WebButton(
-            width: double.infinity,
-            title: "PLACE ORDER",
-            onPressed: () {},
-          )
+          ValueListenableBuilder<bool>(
+              valueListenable: hasAggreeTerms,
+              builder: (context, hasAgree, child) =>
+                  Selector<AuthProvider, Status>(
+                    builder: (context, value, child) => WebButton(
+                      width: double.infinity,
+                      title: "PLACE ORDER",
+                      onPressed: hasAgree && value == Status.Authenticated
+                          ? () {}
+                          : null,
+                    ),
+                    selector: (p0, p1) => p1.getStatus,
+                  ))
         ],
       ),
     );

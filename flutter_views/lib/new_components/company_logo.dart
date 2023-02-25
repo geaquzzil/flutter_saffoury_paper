@@ -12,12 +12,23 @@ class CompanyLogo extends StatelessWidget {
     final svg = context.watch<SVGData>();
     // debugPrint("CompanyLogo=> $svg.code");
     return svg.code.isNotEmpty
-        ? Center(
-            child: SvgPicture.string(
-            svg.code,
-            height: size,
-            width: size,
-          ))
+        ? size != null
+            ? SizedBox(
+                width: size,
+                height: size,
+                child: Center(
+                    child: SvgPicture.string(
+                  svg.code,
+                  height: size,
+                  width: size,
+                )),
+              )
+            : Center(
+                child: SvgPicture.string(
+                svg.code,
+                height: size,
+                width: size,
+              ))
         : const Center(child: CircularProgressIndicator.adaptive());
   }
 

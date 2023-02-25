@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
@@ -259,6 +260,20 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
 
     debugPrint("isPricelessInvoice for $runtimeType result =>$result");
     return result;
+  }
+
+  @override
+  getFieldValue(String field, {BuildContext? context}) {
+    // TODO: implement getFieldValue
+    if (kIsWeb && context != null) {
+      if (field == "unitPrice") {
+        return unitPrice.toCurrencyFormatFromSetting(context);
+      }
+      if (field == "price") {
+        return price.toCurrencyFormatFromSetting(context);
+      }
+    }
+    return super.getFieldValue(field, context: context);
   }
 
   @override

@@ -3,13 +3,132 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../dealers/dealer.dart';
+import '../servers/server_helpers.dart';
 
 part 'user_auth.g.dart';
+
+@reflector
+class AuthUserLogin extends AuthUser<AuthUserLogin> {
+  AuthUserLogin() : super(setPassword: false);
+  @override
+  List<String> getMainFields({BuildContext? context}) {
+    return [
+      "phone",
+      "password",
+    ];
+  }
+
+  @override
+  String getFieldToReduceSize() {
+    return "name";
+  }
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "phone": AppLocalizations.of(context)!.user_name,
+        "password": AppLocalizations.of(context)!.password,
+      };
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {};
+
+  @override
+  String? getCustomAction() {
+    return "login_flutter";
+  }
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {
+        "phone": Icons.radio_button_unchecked_sharp,
+        "password": Icons.password,
+      };
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) => "not found";
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() => {};
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() => {};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        "phone": TextInputType.text,
+        "password": TextInputType.visiblePassword,
+      };
+
+  @override
+  Map<String, bool> isFieldRequiredMap() => {
+        "phone": true,
+        "password": true,
+      };
+
+  @override
+  String getSortByFieldName() {
+    return "name";
+  }
+
+  @override
+  SortByType getSortByType() {
+    return SortByType.ASC;
+  }
+
+  @override
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.users;
+
+  @override
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
+    super.onBeforeGenerateView(context);
+  }
+
+  @override
+  AuthUserLogin getSelfNewInstance() {
+    return AuthUserLogin();
+  }
+
+  @override
+  String getForeignKeyName() {
+    return "CustomerID";
+  }
+
+  @override
+  IconData getMainIconData() {
+    return Icons.account_circle;
+  }
+
+  @override
+  String? getTableNameApi() {
+    return "";
+  }
+
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.customer;
+
+  factory AuthUserLogin.fromJson(Map<String, dynamic> data) => AuthUserLogin();
+
+  @override
+  Map<String, dynamic> toJson() => {};
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() => toJson();
+
+  @override
+  AuthUserLogin fromJsonViewAbstract(Map<String, dynamic> json) => this;
+}
 
 @JsonSerializable(explicitToJson: true)
 class AuthUser<T> extends ViewAbstract<AuthUser> {
@@ -24,6 +143,12 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   Dealers? dealers;
 
   AuthUser({bool? setPassword}) : super() {
+    if (setPassword != null) {
+      if (setPassword) {
+        setRandomPassword();
+      }
+      return;
+    }
     // if (setPassword ?? false) {
     //   setRandomPassword();
     // }
@@ -39,16 +164,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
         "login": false,
         "permission": false,
         "response": 0,
-        "phone": "",
-        "password": "",
-        "userlevels": PermissionLevelAbstract(),
-        "setting": Setting()
-      };
-  @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() => {
-        "login": false,
-        "permission": false,
-        "response": 1,
         "phone": "",
         "password": "",
         "userlevels": PermissionLevelAbstract(),

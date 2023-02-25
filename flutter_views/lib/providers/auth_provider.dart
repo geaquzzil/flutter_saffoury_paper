@@ -153,10 +153,50 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )
   }
 
-  Future<bool> signIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<bool> signIn({AuthUser? user}) async {
     try {
+      debugPrint(
+          "AuthProvider auth user =>phone: ${user?.phone} password: ${user?.password}");
+      hasSavedUser = await Configurations.hasSavedValue(_initUser);
+      final Response? responseUser;
+      if (user != null) {
+        _user = user as T;
+        _user.password = user.password ?? "";
+        _user.phone = user.phone ?? "";
+        _user.login = false;
+        _status = Status.Guest;
+        Configurations.save("", _user as AuthUser);
+      } else if (hasSavedUser == false) {
+        _user = _initUser;
+        _user.password = "";
+        _user.phone = "";
+        _user.login = false;
+        _status = Status.Guest;
+      } else {
+        _user = (await Configurations.get<T>(_initUser))!;
+      }
       _status = Status.Authenticating;
+      notifyListeners();
+      responseUser = await _user.getRespones(serverActions: ServerActions.add);
+      if (responseUser == null) {
+        _status = Status.Faild;
+      } else if (responseUser.statusCode == 401) {
+        _status = Status.Faild;
+      } else {
+        _user =
+            _initUser.fromJsonViewAbstract(jsonDecode(responseUser.body)) as T;
+        bool isLogin = _user.login ?? false;
+        bool hasPermission = _user.permission ?? false;
+        _status = isLogin ? Status.Authenticated : Status.Unauthenticated;
+        if (isLogin) {
+          Configurations.save("", _user as AuthUser);
+        }
+        // }
+        _permissions = _user.userlevels ?? PermissionLevelAbstract();
+        debugPrint("Authenticated $_status");
+        // notifyListeners();
+      }
+      // _status = Status.Authenticating;
       notifyListeners();
       // await auth
       //     .signInWithEmailAndPassword(

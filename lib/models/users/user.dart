@@ -20,7 +20,7 @@ class User<T> extends UserLists<T> {
   IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;
 
   @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() =>
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
           "name": "",

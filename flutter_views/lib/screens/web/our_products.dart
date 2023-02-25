@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
+import 'package:flutter_view_controller/encyptions/compressions.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
@@ -39,13 +40,15 @@ import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import '../../models/permissions/user_auth.dart';
+
 class ProductWebPage extends BaseWebPageSlivers {
   final String? searchQuery;
   final String? customFilter;
   Map<String, FilterableProviderHelper>? customFilterChecker;
   late ViewAbstract viewAbstract;
-  ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable =
-      ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
+  // ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable =
+  //     ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
 
   late ListMultiKeyProvider listProvider;
 
@@ -61,14 +64,16 @@ class ProductWebPage extends BaseWebPageSlivers {
   void init(BuildContext context) {
     super.init(context);
     if (customFilter != null) {
-      Map<String, dynamic> map = jsonDecode(customFilter!);
+      Map<String, dynamic> map =
+          Compression.uncompress(customFilter!) as Map<String, dynamic>;
+
       Map<String, FilterableProviderHelper> jsonMap = {};
       for (var element in map.entries) {
         jsonMap[element.key] = FilterableProviderHelper.fromJson(element.value);
       }
       customFilterChecker = jsonMap;
-      onFilterable.value = jsonMap;
-      debugPrint("onFilterable ${onFilterable.value}");
+      // onFilterable.value = jsonMap;
+      // debugPrint("onFilterable ${onFilterable.value}");
     } else {
       customFilterChecker = null;
     }
@@ -175,8 +180,8 @@ class ProductWebPage extends BaseWebPageSlivers {
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     viewAbstract =
-        context.read<AuthProvider>().getWebCategories()[0].getNewInstance();
-
+        context.read<AuthProvider<AuthUser>>().getWebCategories()[0].getNewInstance();
+    
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     fetshListWidgetBinding();
     return [
@@ -187,143 +192,80 @@ class ProductWebPage extends BaseWebPageSlivers {
             child: PreferredSize(
               preferredSize: const Size.fromHeight(60),
               child: ResponsiveWebBuilderSliver(
-                builder: (context, width) => SearchWidgetComponent(
+                builder: (context, width) => SearchWidgetWebComponent(
+                  scrollvalueNofifier: onScroll,
                   // appBardExpandType: expandType,
                   onSearchTextChanged: (serchQuery) {
-                    // searchQuery = serchQuery;
-                    fetshList();
+                    context.goNamed(indexWebOurProducts,
+                        queryParams: {"search": serchQuery});
                   },
                   // key: const ValueKey(2),
-                  heroTag: "list/search",
                 ),
               ),
             ),
           )),
-      if (searchQuery == null)
-        SliverToBoxAdapter(
-          child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                HeaderText(
-                    fontSize: 25,
-                    text: "Showing products",
-                    description: Html(
-                      data:
-                          "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
-                    )),
-                ResponsiveWebBuilder(
-                  builder: (context, width) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        WebButton(
-                          title: "TRY FILTER THINGS",
-                          primary: false,
-                          onPressed: () async {
-                            await showFilterDialog(context).then((value) {
-                              onFilterable.value = value;
-                              if (value == null) return;
-                              // ViewAbstract? v = viewAbstract.getCopyInstance();
-                              context.goNamed(indexWebOurProducts,
-                                  queryParams: {'filter': jsonEncode(value)});
-                              // viewAbstract.setFilterableMap(value);
-                              // fetshList();
-
-                              // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
-                            });
-                          },
-                        ),
-                        ValueListenableBuilder(
-                            valueListenable: onFilterable,
-                            builder: (context, value, child) =>
-                                HorizontalFilterableSelectedList(
-                                    onFilterable: onFilterable)),
-                        FiltersAndSelectionListHeader(
-                          customKey: findCustomKey(),
-                          listProvider: listProvider,
-                          viewAbstract: viewAbstract,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ]),
-        ),
-      if (searchQuery != null)
-        SliverToBoxAdapter(
-          child: ResponsiveWebBuilderSliver(
-            builder: (context, width) => Column(
-              children: [
-                HeaderText(
-                    fontSize: 25,
-                    text: "Search results: “$searchQuery“",
-                    description: Html(
-                      data:
-                          "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
-                    )),
-                ValueListenableBuilder(
-                    valueListenable: onFilterable,
-                    builder: (context, value, child) =>
-                        HorizontalFilterableSelectedList(
-                            onFilterable: onFilterable)),
-                WebButton(
-                  title: "TRY FILTER THINGS",
-                  onPressed: () async {
-                    await showFilterDialog(context).then((value) {
-                      onFilterable.value = value;
-                      if (value == null) return;
-                      // ViewAbstract? v = viewAbstract.getCopyInstance();
-
-                      viewAbstract.setFilterableMap(value);
-                      fetshList();
-                      // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
-                    });
-                  },
-                )
-              ],
-            ),
-          ),
-        ),
-
+      const SliverToBoxAdapter(
+        child: SizedBox(height: kDefaultPadding),
+      ),
+      _getHeaderTitle(context),
+      _getFilterHeader(context),
       getListSelector(context, constraints)
-
-      // SliverToBoxAdapter(
-      //   child: WebProductList(
-      //       searchQuery: searchQuery,
-      //       customHeight: MediaQuery.of(context).size.height,
-      //       viewAbstract: context.read<AuthProvider>().getWebCategories()[0]),
-      // ),
-      // FutureBuilder<List<dynamic>?>(
-      //   future: searchQuery != null
-      //       ? viewAbstract.search(20, 0, searchQuery!)
-      //       : viewAbstract.listCall(
-      //           count: ScreenHelper.isDesktop(context) ? 20 : 4, page: 0),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return const SliverFillRemaining(
-      //           child: Center(child: CircularProgressIndicator()));
-      //     }
-      //     List<ViewAbstract>? list = snapshot.data?.cast();
-      //     if (list == null) {
-      //       return Container();
-      //     }
-
-      //     return getGridList(constraints, list);
-      //   },
-      // ),
-
-      // SliverSearchApi(
-      //     viewAbstract: context.read<AuthProvider>().getWebCategories()[0],
-      //     searchQuery: searchQuery ?? "")
     ];
     // return Expanded(
   }
 
-  Future<dynamic> showFilterDialog(BuildContext context) {
+  Widget _getFilterHeader(BuildContext context) {
+    return SliverToBoxAdapter(
+        child: ResponsiveWebBuilderSliver(
+      builder: (context, width) => Padding(
+        padding: const EdgeInsets.all(kDefaultPadding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FiltersAndSelectionListHeader(
+              customKey: findCustomKey(),
+              listProvider: listProvider,
+              viewAbstract: viewAbstract,
+            ),
+            HorizontalFilterableSelectedList(
+              onFilterable: customFilterChecker,
+              onFilterableChanged: (onFilter) {
+                if (onFilter == null) {
+                  context.goNamed(indexWebOurProducts);
+                } else {
+                  context.goNamed(indexWebOurProducts,
+                      queryParams: {"filter": Compression.compress(onFilter)});
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    ));
+  }
+
+  Widget _getHeaderTitle(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: HeaderText(
+          fontSize: 25,
+          text: searchQuery != null
+              ? "Search results: “$searchQuery“"
+              : customFilterChecker != null
+                  ? "Showing products by filter"
+                  : "Showing products",
+          description: searchQuery != null || customFilterChecker != null
+              ? Html(
+                  data:
+                      "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
+                )
+              : null),
+    );
+  }
+
+  static Future<dynamic> showFilterDialog(
+      BuildContext context, ViewAbstract viewAbstract) {
     return showDialogExt(
       barrierDismissible: true,
       // anchorPoint: const Offset(1000, 1000),
@@ -426,7 +368,7 @@ class ProductWebPage extends BaseWebPageSlivers {
                     child: WebProductList(
                         customHeight: MediaQuery.of(context).size.height - 100,
                         viewAbstract:
-                            context.read<AuthProvider>().getWebCategories()[0]),
+                            context.read<AuthProvider<AuthUser>>().getWebCategories()[0]),
                   ),
                   // Divider(),
                   // Expanded(
