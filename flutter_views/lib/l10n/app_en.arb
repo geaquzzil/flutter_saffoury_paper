@@ -712,5 +712,8 @@
     "suggestionList":"Suggestions",
     
     "addedToCart":"Added to cart",
-    "gramSymbol":"g"
+    "gramSymbol":"g",
+    "month":"Month",
+    "year":"Year",
+    "day":"Day"
 }

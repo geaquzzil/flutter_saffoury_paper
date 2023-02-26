@@ -296,12 +296,12 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   }
 
   Widget getSliverPadding(
-      BuildContext context, BoxConstraints constraints, Widget child) {
+      BuildContext context, BoxConstraints constraints, Widget child,{double padd=2}) {
     return SliverPadding(
         padding: EdgeInsets.symmetric(
             vertical: 15,
-            horizontal: max((constraints.maxWidth - 1200) / 2, 0) > 15
-                ? max((constraints.maxWidth - 1200) / 2, 0)
+            horizontal: max((constraints.maxWidth - 1200) / padd, 0) > 15
+                ? max((constraints.maxWidth - 1200) / padd, 0)
                 : 15),
         sliver: child);
   }

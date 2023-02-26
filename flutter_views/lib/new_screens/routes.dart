@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
+import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:go_router/go_router.dart';
@@ -70,7 +71,7 @@ const String indexWebAboutUs = "about-us";
 const String indexWebContactUs = "contact-us";
 const String indexWebCheckout = "checkout";
 const String indexWebView = "v";
-
+const String IndexWebRegister = "register";
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
@@ -114,6 +115,13 @@ class RouteGenerator {
                 path: indexWebSignIn,
                 pageBuilder: (context, state) {
                   return MaterialPage(key: state.pageKey, child: SignInPage());
+                },
+              ),
+              GoRoute(
+                path: IndexWebRegister,
+                name: IndexWebRegister,
+                pageBuilder: (context, state) {
+                  return MaterialPage(key: state.pageKey, child: RegisterWebPage());
                 },
               ),
               GoRoute(

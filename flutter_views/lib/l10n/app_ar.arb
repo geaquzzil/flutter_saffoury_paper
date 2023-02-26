@@ -708,5 +708,8 @@
     "systemDefault":"النظام الافتراضي",
     "suggestionList":"قائمة الاقتراحات",
         "addedToCart":"تمت الإضافة إلى عربة التسوق",
-    "gramSymbol":"غرام"
+    "gramSymbol":"غرام",
+     "month":"شهر",
+    "year":"سنة",
+    "day":"يوم"
 }

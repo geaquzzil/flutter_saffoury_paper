@@ -5,10 +5,12 @@ import 'package:flutter/src/rendering/box.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/customer_billing.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/web_checkout_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 import 'ext.dart';
@@ -61,6 +63,6 @@ class WebCheckoutLoginCheck extends StatelessWidget {
     //                 onValidate: (viewAbstract) {},
     //                 isTheFirst: true,
     //               )
-    return SignInPageWithoutHeaders();
+    return SignInPageWithoutHeaders(onPressRegister:() => context.goNamed(IndexWebRegister) ,);
   }
 }

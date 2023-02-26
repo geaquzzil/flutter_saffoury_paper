@@ -39,6 +39,7 @@ class BaseEditWidget extends StatelessWidget {
   GlobalKey<FormBuilderState>? formKey;
   late List<String> fields;
   late Map<GroupItem, List<String>> groupedFields;
+  late Map<int, List<String>> groupedHorizontalFields;
 
   Map<String, TextEditingController> controllers = {};
   Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
@@ -78,6 +79,8 @@ class BaseEditWidget extends StatelessWidget {
     } else {
       fields = viewAbstract.getMainFields(context: context);
       groupedFields = viewAbstract.getMainFieldsGroups(context);
+      groupedHorizontalFields =
+          viewAbstract.getMainFieldsHorizontalGroups(context);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -359,22 +362,16 @@ class BaseEditWidget extends StatelessWidget {
               children:
                   e.value.map((e) => getControllerWidget(context, e)).toList()))
           .toList(),
+      ...groupedHorizontalFields.entries
+          .map((e) => Row(
+              children: e.value
+                  .map((e) => Expanded(child: getControllerWidget(context, e)))
+                  .toList()))
+          .toList(),
     ];
     return Column(
       children: child,
     );
-    if (isTheFirst) {
-      return ListView(
-          shrinkWrap: true,
-
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: child);
-    } else {
-      return Column(
-        children: child,
-      );
-    }
   }
 
   bool _canBuildChildern() {
@@ -442,7 +439,8 @@ class BaseEditWidget extends StatelessWidget {
             field: field, value: fieldValue, isAutoCompleteVA: true),
         onSelected: (selectedViewAbstract) {
           viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
-          viewAbstract.parent?.onDropdownChanged(context, field, selectedViewAbstract);
+          viewAbstract.parent
+              ?.onDropdownChanged(context, field, selectedViewAbstract);
           viewAbstract = selectedViewAbstract;
           refreshControllers(context, field);
           viewAbstractChangeProvider.change(viewAbstract);

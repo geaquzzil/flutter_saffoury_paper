@@ -6,11 +6,14 @@ class CardBackgroundWithTitle extends StatelessWidget {
   String title;
   IconData? leading;
   bool useHorizontalPadding;
+  bool centerTitle;
   Widget child;
+
   CardBackgroundWithTitle(
       {super.key,
       required this.title,
       this.leading,
+      this.centerTitle = false,
       this.useHorizontalPadding = true,
       required this.child});
 
@@ -18,12 +21,22 @@ class CardBackgroundWithTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        HeaderDescription(
-          title: title,
-          iconData: leading,
-        ),
+        if (centerTitle)
+          Padding(
+            padding: const EdgeInsets.only(top: kDefaultPadding),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          )
+        else
+          HeaderDescription(
+            title: title,
+            iconData: leading,
+          ),
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: useHorizontalPadding ? kDefaultPadding * 2 : 0,

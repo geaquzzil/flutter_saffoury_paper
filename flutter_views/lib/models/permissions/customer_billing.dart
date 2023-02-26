@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -24,12 +25,26 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   String? address; // text
   String? profile; //text
   String? comments; //text
+  String? birthday;
 
+  @JsonKey(ignore: true)
+  String year = "1900";
+  @JsonKey(ignore: true)
+  String month = "1";
+  @JsonKey(ignore: true)
+  String day = "1";
+
+  @JsonKey(ignore: true)
+  List<String> daysInMonth = [];
   @override
   IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;
 
   BillingCustomer() : super() {
     date = "".toDateTimeNowString();
+    daysInMonth = List.generate(
+      DateTime(int.parse(year), int.parse(month)).daysIn(),
+      (index) => "$index",
+    );
   }
   @override
   List<String> getMainFields({BuildContext? context}) {
@@ -37,7 +52,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
       "name",
       "phone",
       "password",
-      "date",
+      // "birthday",
       "email",
       "city",
       "address",
@@ -46,20 +61,29 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   }
 
   @override
+  Map<int, List<String>> getMainFieldsHorizontalGroups(BuildContext context) =>
+      {
+        0: ["year", "month", "day"]
+      };
+
+  @override
   String getFieldToReduceSize() {
     return "name";
   }
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "name": getMainHeaderLabelTextOnly(context),
+        "name": AppLocalizations.of(context)!.name,
         "phone": AppLocalizations.of(context)!.phone_number,
         "password": AppLocalizations.of(context)!.password,
-        "date": AppLocalizations.of(context)!.date,
+        "birthday": AppLocalizations.of(context)!.date,
         "email": AppLocalizations.of(context)!.email,
         "city": AppLocalizations.of(context)!.city,
         "address": AppLocalizations.of(context)!.address1,
-        "comments": AppLocalizations.of(context)!.comments
+        "comments": AppLocalizations.of(context)!.comments,
+        "day": AppLocalizations.of(context)!.day,
+        "month": AppLocalizations.of(context)!.month,
+        "year": AppLocalizations.of(context)!.year
       };
 
   @override
@@ -83,7 +107,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   Map<String, IconData> getFieldIconDataMap() => {
         "name": getMainIconData(),
         "phone": Icons.phone,
-        "date": Icons.date_range,
+        "birthday": Icons.date_range,
         "password": Icons.password,
         "email": Icons.email,
         "city": Icons.location_city,
@@ -101,12 +125,46 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {};
+  @override
+  Map<String, List> getTextInputIsAutoCompleteCustomListMap(
+      BuildContext context) {
+    List<String> list = List.empty(growable: true);
+    for (int i = 1900; i <= DateTime.now().year; i++) {
+      list.add("$i");
+    }
+    return {
+      "year": list.reversed.toList(),
+      "month": List.generate(11, (index) => "${index + 1}"),
+      "day": daysInMonth
+    };
+  }
+
+  @override
+  void onDropdownChanged(BuildContext context, String field, value,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    super.onDropdownChanged(context, field, value);
+    if (field == "month") {
+      month = value.toString();
+      daysInMonth = List.generate(
+        DateTime(int.parse(year), int.parse(month)).daysIn(),
+        (index) => "$index",
+      );
+      //  generatedFieldsAutoCompleteCustom[field] = fileColumns;
+      notifyOtherControllers(context: context, formKey: formKey);
+    } else {
+      setFieldValue(field, value);
+    }
+    birthday = DateTime(int.tryParse(year) ?? 0, int.tryParse(month) ?? 0,
+            int.tryParse(day) ?? 0)
+        .toDateTimeStringOnlyDate();
+    debugPrint("birthday now is $birthday");
+  }
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "name": TextInputType.name,
         "phone": TextInputType.phone,
-        "date": TextInputType.datetime,
+        "birthday": TextInputType.datetime,
         "password": TextInputType.visiblePassword,
         "email": TextInputType.emailAddress,
         "address": TextInputType.streetAddress,
@@ -121,7 +179,10 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
         "password": true,
         "address": true,
         "city": true,
-        "email": true
+        "email": true,
+        "month": true,
+        "year": true,
+        "day": true,
       };
 
   @override
@@ -160,13 +221,16 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
           "name": "",
           "email": "",
           "token": "",
+          "month": "1",
+          "year": "1900",
+          "day": "1",
           "activated": 0,
-          "date": "",
+          "birthday": "",
           "city": "",
           "address": "",
           "profile": "",
           "comments": "",
-          "cash":0
+          "cash": 0
         });
 
   @override

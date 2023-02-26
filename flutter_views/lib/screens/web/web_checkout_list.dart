@@ -50,16 +50,8 @@ class WebCheckoutList extends StatelessWidget {
           const SizedBox(
             height: kDefaultPadding,
           ),
-          ValueListenableBuilder<bool>(
-            valueListenable: hasAggreeTerms,
-            builder: (context, value, child) => CheckboxListTile(
-              value: value,
-              onChanged: (value) {
-                hasAggreeTerms.value = value ?? false;
-              },
-              title: const Text(
-                  "I have read and agree to the SaffouryPaper terms and conditions"),
-            ),
+          AgreeToTerms(
+            hasAgreeToTerms: hasAggreeTerms,
           ),
           const SizedBox(
             height: kDefaultPadding,
@@ -78,6 +70,28 @@ class WebCheckoutList extends StatelessWidget {
                     selector: (p0, p1) => p1.getStatus,
                   ))
         ],
+      ),
+    );
+  }
+}
+
+class AgreeToTerms extends StatelessWidget {
+  ValueNotifier<bool>? hasAgreeToTerms;
+  AgreeToTerms({super.key, this.hasAgreeToTerms});
+
+  @override
+  Widget build(BuildContext context) {
+    hasAgreeToTerms ??= ValueNotifier<bool>(false);
+    return ValueListenableBuilder<bool>(
+      valueListenable: hasAgreeToTerms!,
+      builder: (context, value, child) => CheckboxListTile(
+        
+        value: value,
+        onChanged: (value) {
+          hasAgreeToTerms!.value = value ?? false;
+        },
+        title: const Text(
+            "I have read and agree to the SaffouryPaper terms and conditions"),
       ),
     );
   }

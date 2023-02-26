@@ -2074,4 +2074,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get gramSymbol => 'غرام';
+
+  @override
+  String get month => 'شهر';
+
+  @override
+  String get year => 'سنة';
+
+  @override
+  String get day => 'يوم';
 }

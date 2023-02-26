@@ -290,7 +290,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) => {};
-
+  Map<int, List<String>> getMainFieldsHorizontalGroups(BuildContext context) =>
+      {};
   List<String> getMainFieldsWithOutGroups(BuildContext context) {
     Map<GroupItem, List<String>> map = getMainFieldsGroups(context);
     if (map.isEmpty) return getMainFields(context: context);

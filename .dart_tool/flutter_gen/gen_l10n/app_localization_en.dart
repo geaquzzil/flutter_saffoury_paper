@@ -2074,4 +2074,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gramSymbol => 'g';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get day => 'Day';
 }

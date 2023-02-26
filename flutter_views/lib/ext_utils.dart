@@ -8,6 +8,9 @@ import 'dart:math';
 
 import 'models/view_abstract.dart';
 
+String dateFormatString = "yyyy-MM-dd HH:mm:ss";
+String dateOnlyFormatString = "yyyy-MM-dd";
+
 extension HexColor on Color {
   Color darken([double amount = .1]) {
     assert(amount >= 0 && amount <= 1);
@@ -58,9 +61,6 @@ extension HexColor on Color {
               '${blue.toRadixString(16).padLeft(2, '0')}'
           .toUpperCase();
 }
-
-String dateFormatString = "yyyy-MM-dd HH:mm:ss";
-String dateOnlyFormatString = "yyyy-MM-dd";
 
 extension StringsUtils2 on String {
   Color? fromHex() {
@@ -135,6 +135,23 @@ extension DatesDateTime on DateTime? {
     if (this == null) return "".toDateTimeNowString();
     DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en');
     return dateFormat.format(this ?? DateTime.now());
+  }
+
+  int daysIn() {
+    if (this == null) return -1;
+    int month = this!.month;
+    int forYear = this!.year;
+    DateTime firstOfNextMonth;
+    if (month == 12) {
+      firstOfNextMonth =
+          DateTime(forYear + 1, 1, 1, 12); //year, month, day, hour
+    } else {
+      firstOfNextMonth = DateTime(forYear, month + 1, 1, 12);
+    }
+    int numberOfDaysInMonth =
+        firstOfNextMonth.subtract(const Duration(days: 1)).day;
+    //.subtract(Duration) returns a DateTime, .day gets the integer for the day of that DateTime
+    return numberOfDaysInMonth;
   }
 }
 
