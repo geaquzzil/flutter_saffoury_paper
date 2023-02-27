@@ -74,7 +74,8 @@ class _DropdownCustomListWithFormListenerState
               p0),
           decoration: getDecorationIconLabel(context,
               label: widget.viewAbstract.getFieldLabel(context, widget.field),
-              icon: widget.viewAbstract.getFieldIconData(widget.field)),
+              icon: widget.viewAbstract
+                  .getFieldIconDataNullAccepted(widget.field)),
           items: list
               .map((item) => DropdownMenuItem<dynamic>(
                     value: item,

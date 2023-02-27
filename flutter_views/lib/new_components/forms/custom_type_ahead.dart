@@ -310,8 +310,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// {@macro flutter.widgets.editableText.keyboardType}
   final TextInputType? keyboardType;
   final SelectionToTextTransformer<T>? selectionToTextTransformer;
-  @override
-  final FormFieldValidator<T>? validator;
 
   /// {@macro flutter.widgets.editableText.textCapitalization}
   final TextCapitalization textCapitalization;
@@ -339,7 +337,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     bool enabled = true,
     FocusNode? focusNode,
     FormFieldSetter<T>? onSaved,
-    required this.validator,
+    required super.validator,
     required this.onChangeGetObject,
     InputDecoration decoration = const InputDecoration(),
     required String name,
@@ -386,10 +384,8 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
           key: key,
           initialValue: initialValue,
           name: name,
-          validator: validator,
           valueTransformer: valueTransformer,
           onChanged: onChanged,
-          
           autovalidateMode: autovalidateMode,
           onSaved: onSaved,
           enabled: enabled,
@@ -401,7 +397,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
             final theme = Theme.of(state.context);
 
             return TypeAheadField<T>(
-            
               textFieldConfiguration: textFieldConfiguration.copyWith(
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,

@@ -297,7 +297,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
                 return AppLocalizations.of(context)!.errFieldNotSelected(
                     viewAbstract.getMainHeaderLabelTextOnly(context));
               } else {
-               return viewAbstract.getTextInputValidatorOnAutocompleteSelected(
+                return viewAbstract.getTextInputValidatorOnAutocompleteSelected(
                     context, field, value!);
               }
             }
@@ -456,7 +456,13 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
           keyboardType: viewAbstract.getTextInputType(field),
           inputFormatters: viewAbstract.getTextInputFormatter(field),
           autovalidateMode: AutovalidateMode.always,
-          validator: viewAbstract.getTextInputValidatorCompose(context, field),
+          validator: (s) {
+            debugPrint(
+                "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
+            return viewAbstract
+                .getTextInputValidatorCompose(context, field)
+                .call(s);
+          },
           itemBuilder: (context, continent) {
             return ListTile(title: Text(continent));
           },
@@ -508,8 +514,9 @@ Widget getControllerEditText(BuildContext context,
         keyboardType: viewAbstract.getTextInputType(field),
         inputFormatters: viewAbstract.getTextInputFormatter(field),
         autovalidateMode: AutovalidateMode.always,
-        validator: (va) =>
-            viewAbstract.getTextInputValidatorCompose(context, field).call(va),
+        validator: (va) => viewAbstract
+            .getTextInputValidatorCompose<String?>(context, field)
+            .call(va),
         onSaved: (String? value) {
           viewAbstract.setFieldValue(field, value);
           debugPrint(

@@ -54,11 +54,11 @@ InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
 }
 
 InputDecoration getDecorationIconLabel(BuildContext context,
-    {required IconData icon, required String label}) {
+    {IconData? icon, required String label}) {
   return InputDecoration(
       // filled: true,
       border: const OutlineInputBorder(),
-      icon: Icon(icon),
+      icon: icon == null ? null : Icon(icon),
       labelText: label);
   // hintText: parent.getTextInputHint(context, field));
 }

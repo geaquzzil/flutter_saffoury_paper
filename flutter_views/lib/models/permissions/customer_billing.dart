@@ -39,7 +39,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   @override
   IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;
 
-  BillingCustomer() : super() {
+  BillingCustomer() : super(setPassword: false) {
     date = "".toDateTimeNowString();
     daysInMonth = List.generate(
       DateTime(int.parse(year), int.parse(month)).daysIn(),
@@ -56,7 +56,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
       "email",
       "city",
       "address",
-      "comments"
+      // "comments"
     ];
   }
 
@@ -86,9 +86,9 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
         "year": AppLocalizations.of(context)!.year
       };
 
+//todo ON VALDATION NOT APPLIED TO FIELD WITH AUTO COMPLETE
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() =>
-      {"city": true, "address": true};
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
   @override
   Map<String, int> getTextInputMaxLengthMap() => {
         "name": 100,

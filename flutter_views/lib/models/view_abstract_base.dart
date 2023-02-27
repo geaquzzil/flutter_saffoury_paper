@@ -54,6 +54,17 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }
   }
 
+  IconData? getFieldIconDataNullAccepted(String field) {
+    dynamic value = getMirrorNewInstance(field);
+    if (value is ViewAbstract) {
+      return value.getMainIconData();
+    } else if (value is ViewAbstractEnum) {
+      return value.getMainIconData();
+    } else {
+      return getFieldIconDataMap()[field];
+    }
+  }
+
   String getFieldLabel(BuildContext context, String field) {
     return getFieldLabelMap(context)[field] ??
         getMirrorViewAbstractLabelText(context, field);

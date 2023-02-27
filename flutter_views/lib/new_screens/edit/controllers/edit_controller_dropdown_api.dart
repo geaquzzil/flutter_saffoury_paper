@@ -90,7 +90,8 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
             formKey: widget.formKey);
       },
       validator: ((value) => widget.parent
-          .getTextInputValidatorIsRequired(context, widget.field, value)),
+          .getTextInputValidatorCompose(context, widget.field)
+          .call(value)),
       name: widget.parent.getTag(widget.field),
       initialValue:
           list.firstWhereOrNull((element) => element.iD == getEqualID()),

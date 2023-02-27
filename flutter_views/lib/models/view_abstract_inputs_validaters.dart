@@ -147,25 +147,42 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
-  String?  getTextInputValidatorOnAutocompleteSelected(
-      BuildContext context, String field,ViewAbstract value) {
+  String? getTextInputValidatorOnAutocompleteSelected(
+      BuildContext context, String field, ViewAbstract value) {
     return null;
   }
 
-  String? Function(dynamic d) getTextInputValidatorCompose(
+  String? Function(E? val) getTextInputValidatorCompose<E>(
       BuildContext context, String field) {
+    String passWordPattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     double? maxValue = getTextInputValidatorMaxValue(field);
     double? minValue = getTextInputValidatorMinValue(field);
-
-    debugPrint("getTextInputValidator for $field , maxValue:  $maxValue");
+    debugPrint(
+        "getTextInputValidatorCompose for $field , maxValue:  $maxValue e=> $E   e is ${E.runtimeType} e is String ${"" is E}");
     return FormBuilderValidators.compose([
       if (isFieldRequired(field)) FormBuilderValidators.required(),
+      if (isFieldRequired(field)) FormBuilderValidators.minLength(1),
       if (maxValue != null) FormBuilderValidators.max(maxValue),
       if (minValue != null) FormBuilderValidators.min(minValue),
       // if (getTextInputType(field) == TextInputType.emailAddress)
       //   FormBuilderValidators.email(),
+      if (getTextInputType(field) == TextInputType.name && "" is E)
+        FormBuilderValidators.match(r'^\w+(\s\w+)+$',
+            errorText: "Enter a valid name") as String? Function(E?),
       if (getTextInputType(field) == TextInputType.phone)
         FormBuilderValidators.equalLength(10),
+      if (getTextInputType(field) == TextInputType.emailAddress && "" is E)
+        FormBuilderValidators.email() as String? Function(E?),
+      if (getTextInputType(field) == TextInputType.visiblePassword && "" is E)
+        FormBuilderValidators.match(
+                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+                errorText:
+                    "Password should contain upper,lower,digit and Special character")
+            as String? Function(E?),
+      if (getTextInputType(field) == TextInputType.visiblePassword)
+        FormBuilderValidators.minLength(6,
+            errorText: "Password Must be more than 5 characters"),
     ]);
   }
 
@@ -199,6 +216,10 @@ abstract class ViewAbstractInputAndValidater<T>
     debugPrint("getTextInputValidator field=>$field value=>$value");
     if (isFieldRequired(field)) {
       if (value == null) {
+        String fieldLabel = getFieldLabel(context, field);
+        return "$fieldLabel ${AppLocalizations.of(context)!.errFieldIsIncorrect}";
+      }
+      if (value is String && value.isEmpty) {
         String fieldLabel = getFieldLabel(context, field);
         return "$fieldLabel ${AppLocalizations.of(context)!.errFieldIsIncorrect}";
       }

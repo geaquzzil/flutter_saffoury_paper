@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/customer_billing.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_descriptopn_header.dart';
@@ -11,6 +13,8 @@ import 'web_checkout_list.dart';
 class RegisterWebPage extends BaseWebPageSlivers {
   BillingCustomer c = BillingCustomer();
   ValueNotifier<bool> hasAggreeTerms = ValueNotifier<bool>(false);
+  ValueNotifier<ViewAbstract?> billingCustomerNotifier =
+      ValueNotifier<ViewAbstract?>(null);
   RegisterWebPage({super.key});
 
   @override
@@ -28,23 +32,36 @@ class RegisterWebPage extends BaseWebPageSlivers {
                 children: [
                   BaseEditWidget(
                     viewAbstract: c,
-                    onValidate: (viewAbstract) {},
+                    onValidate: (viewAbstract) {
+                      billingCustomerNotifier.value = viewAbstract;
+                    },
                     isTheFirst: true,
                   ),
                   AgreeToTerms(hasAgreeToTerms: hasAggreeTerms),
-                  ValueListenableBuilder<bool>(
-                    valueListenable: hasAggreeTerms,
-                    builder: (context, hasAgree, child) => WebButton(
-                      width: double.infinity,
-                      title: "SIGN UP",
-                      onPressed: hasAgree ? () {} : null,
+                  Padding(
+                    padding: const EdgeInsets.all(kDefaultPadding),
+                    child: ValueListenableBuilder<bool>(
+                      valueListenable: hasAggreeTerms,
+                      builder: (context, hasAgree, child) =>
+                          ValueListenableBuilder<ViewAbstract?>(
+                        valueListenable: billingCustomerNotifier,
+                        builder: (context, validated, child) => AnimatedScale(
+                          duration: const Duration(milliseconds: 275),
+                          scale: validated != null && hasAgree ? 1 : 0,
+                          child: WebButton(
+                            width: double.infinity,
+                            title: "SIGN UP",
+                            onPressed: hasAgree ? () {} : null,
+                          ),
+                        ),
+                      ),
                     ),
                   )
                 ],
               ),
             ),
           ),
-          padd: 1.5),
+          padd: 1.2),
     ];
   }
 }

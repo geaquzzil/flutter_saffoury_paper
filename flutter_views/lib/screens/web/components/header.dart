@@ -211,7 +211,7 @@ class Header extends StatelessWidget {
         valueListenable: valueNotifier!,
         builder: (context, value, child) {
           return AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 275),
             decoration: BoxDecoration(
                 // boxShadow: value == 0
                 //     ? null
