@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
@@ -8,6 +9,38 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+
+class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
+  final T object;
+  Key? listState;
+  ListCardItemWeb({
+    Key? key,
+    this.listState,
+    required this.object,
+  }) : super(key: GlobalKey());
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: getListTile(false, context),
+    );
+  }
+
+  Widget getListTile(bool isSelected, BuildContext context) {
+    return ListTile(
+      selected: isSelected,
+      // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+      onTap: () => object.onCardClicked(context),
+      onLongPress: () {
+        object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
+      },
+      title: (object.getWebListTileItemTitle(context)),
+      subtitle: (object.getWebListTileItemSubTitle(context)),
+      leading: object.getWebListTileItemSubLeading(context),
+      // trailing: object.getCardTrailing(context)
+    );
+  }
+}
 
 class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   final T object;

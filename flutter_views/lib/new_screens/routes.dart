@@ -20,6 +20,7 @@ import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -72,6 +73,7 @@ const String indexWebContactUs = "contact-us";
 const String indexWebCheckout = "checkout";
 const String indexWebView = "v";
 const String IndexWebRegister = "register";
+const String indexWebSettingAndAccount = "account";
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
@@ -121,7 +123,16 @@ class RouteGenerator {
                 path: IndexWebRegister,
                 name: IndexWebRegister,
                 pageBuilder: (context, state) {
-                  return MaterialPage(key: state.pageKey, child: RegisterWebPage());
+                  return MaterialPage(
+                      key: state.pageKey, child: RegisterWebPage());
+                },
+              ),
+              GoRoute(
+                path: indexWebSettingAndAccount,
+                name: indexWebSettingAndAccount,
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey, child: SettingAndProfileWeb());
                 },
               ),
               GoRoute(

@@ -139,7 +139,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   ),
                 ),
                 // title: AppLocalizations.of(context)!.appTitle,
-                title: "SSSS",
+                title: "SaffouryPaper",
                 debugShowCheckedModeBanner: false,
                 restorationScopeId: 'root',
 

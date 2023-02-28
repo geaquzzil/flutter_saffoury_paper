@@ -257,7 +257,18 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints);
-  BaseWebPageSlivers({Key? key}) : super(key: key);
+
+  final bool buildHeader;
+  final bool buildFooter;
+  final bool pinToolbar;
+  final bool useSmallFloatingBar;
+  BaseWebPageSlivers(
+      {Key? key,
+      this.buildHeader = true,
+      this.useSmallFloatingBar = false,
+      this.buildFooter = true,
+      this.pinToolbar = true})
+      : super(key: key);
 
   String getSelectedHeader(BuildContext context) {
     if (this is AboutUsWebPage) {
@@ -296,7 +307,8 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   }
 
   Widget getSliverPadding(
-      BuildContext context, BoxConstraints constraints, Widget child,{double padd=2}) {
+      BuildContext context, BoxConstraints constraints, Widget child,
+      {double padd = 2}) {
     return SliverPadding(
         padding: EdgeInsets.symmetric(
             vertical: 15,
@@ -316,19 +328,29 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     init(context);
     var headerItems = getHeaderItems(context);
     return Scaffold(
+        backgroundColor: !buildHeader ? Colors.transparent : null,
         floatingActionButton: ScrollToHideWidget(
-          useAnimatedSwitcher: true,
+          // useAnimatedSwitcher: true,
+          useAnimatedScaling: true,
           // height: 50,
           reverse: true,
           controller: _scrollController,
-          child: FloatingActionButton(
-              onPressed: () {
-                _scrollTop();
-              },
-              child: const Icon(Icons.arrow_upward_sharp)),
+          child: useSmallFloatingBar
+              ? FloatingActionButton.small(
+                  onPressed: () {
+                    _scrollTop();
+                  },
+                  child: const Icon(Icons.arrow_upward_sharp))
+              : FloatingActionButton(
+                  onPressed: () {
+                    _scrollTop();
+                  },
+                  child: const Icon(Icons.arrow_upward_sharp)),
         ),
         // appBar: ScrollToHideWidget(),
-        key: context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
+        key: !buildHeader
+            ? null
+            : context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
         endDrawer: SizedBox(
             width: 500, child: CardCorner(child: WebShoppingCartDrawer())),
         drawer: CardCorner(
@@ -392,11 +414,11 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
             animationDuration: 600,
             child: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
-                if (notification.metrics.axisDirection == Axis.horizontal) {
-                  debugPrint(
-                      "onNotification  ${notification.metrics.extentBefore}");
-                  onScroll.value = notification.metrics.extentBefore;
-                }
+                // if (notification.metrics.axisDirection == Axis.vertical) {
+                debugPrint(
+                    "onNotification  ${notification.metrics.extentBefore}");
+                onScroll.value = notification.metrics.extentBefore;
+                // }
                 // // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
                 // //   debugPrint(
                 // //       "DraggableHome ${widget.scrollController!.position.pixels}");
@@ -440,25 +462,34 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _scrollController,
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: MaterialBanner(
-                        content: Text("This is a test"),
-                        actions: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.close))
-                        ],
-                      ),
-                    ),
-                    SliverPersistentHeader(
-                        pinned: false,
-                        floating: true,
-                        delegate: SliverAppBarDelegatePreferedSize(
-                            child: PreferredSize(
-                                preferredSize: const Size.fromHeight(70.0),
-                                child: getHeader(context)))),
+                    // SliverToBoxAdapter(
+                    //   child: MaterialBanner(
+                    //     content: SizedBox(
+                    //       height: 60,
+                    //       width: MediaQuery.of(context).size.width,
+                    //       child: Image.network(
+                    //           "https://saffoury.com/wp-content/uploads/Saffoury_1-scaled.jpg",
+                    //           // c
+                    //           fit: BoxFit.fitWidth),
+                    //     ),
+                    //     actions: [
+                    //       IconButton(onPressed: () {}, icon: Icon(Icons.close))
+                    //     ],
+                    //   ),
+                    // ),
+                    if (buildHeader)
+                      SliverPersistentHeader(
+                          pinned: pinToolbar,
+                          floating: true,
+                          delegate: SliverAppBarDelegatePreferedSize(
+                              child: PreferredSize(
+                                  preferredSize: const Size.fromHeight(70.0),
+                                  child: getHeader(context)))),
                     ...getContentWidget(context, constraints),
-                    const SliverToBoxAdapter(
-                      child: Footer(),
-                    )
+                    if (buildFooter)
+                      const SliverToBoxAdapter(
+                        child: Footer(),
+                      )
                   ]),
             ),
           ),

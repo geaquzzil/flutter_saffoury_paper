@@ -120,8 +120,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
-          create: (context) =>
-              AuthProvider<AuthUser>.initialize(Employee(), views)),
+          create: (context) => AuthProvider<AuthUser>.initialize(
+              Employee(), views, Purchases())),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),

@@ -1,14 +1,21 @@
+import 'dart:ui';
+
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/popup_widget.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
+import 'package:flutter_view_controller/screens/overlay_page.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -172,7 +179,15 @@ class HeaderRow extends StatelessWidget {
           onPressed:
               context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu,
           returnNillIfZero: true,
-        )
+        ),
+        ProfilePicturePopupMenu(),
+        // CustomPopupMenu(
+        //   menuBuilder: () => ProfileMenuWidget(controller: _controller),
+        //   pressType: PressType.singleClick,
+
+        //   child: RoundedIconButtonNetwork(
+        //       onTap: () {}, imageUrl: authProvider.getUserImageUrl),
+        // ),
       ]),
     );
   }
@@ -221,19 +236,28 @@ class Header extends StatelessWidget {
                 //             offset: Offset(2.0, 4.0),
                 //             blurRadius: 2)
                 //       ],
-                border: value == 0
+                // border: value == 0
+                //     ? null
+                //     : const Border.symmetric(
+                //         horizontal: BorderSide(width: 1, color: kPrimaryColor)),
+                color: value == 0
                     ? null
-                    : const Border.symmetric(
-                        horizontal: BorderSide(width: 1, color: kPrimaryColor)),
-                color: value == 0 ? null : Colors.black87),
-            child: ScreenHelper(
-              desktop: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: buildHeader(valueNotifier: valueNotifier),
+                    : Theme.of(context)
+                        .scaffoldBackgroundColor
+                        .withOpacity(.7)),
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: ScreenHelper(
+                  desktop: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: buildHeader(valueNotifier: valueNotifier),
+                  ),
+                  // We will make this in a bit
+                  mobile: buildMobileHeader(),
+                  tablet: buildHeader(),
+                ),
               ),
-              // We will make this in a bit
-              mobile: buildMobileHeader(),
-              tablet: buildHeader(),
             ),
           );
         },

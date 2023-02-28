@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 
 class ClippedCard extends StatelessWidget {
@@ -27,12 +28,14 @@ class ClippedCard extends StatelessWidget {
 
   ClipPath getCardChild() {
     return ClipPath(
+      
       clipper: ShapeBorderClipper(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       child: AnimatedContainer(
         // duration: const Duration(milliseconds: 250),
         decoration: BoxDecoration(
+            // borderRadius: BorderRadius.all(Radius.circular(5)),
             border: Border(
           top: borderSide == BorderSideColor.TOP
               ? BorderSide(color: color, width: 5)
@@ -47,7 +50,7 @@ class ClippedCard extends StatelessWidget {
               ? BorderSide(color: color, width: 5)
               : BorderSide.none,
         )),
-        duration: Duration(milliseconds: 275),
+        duration: const Duration(milliseconds: 275),
         child: child,
       ),
     );

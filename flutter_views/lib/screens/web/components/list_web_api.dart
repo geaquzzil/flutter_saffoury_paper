@@ -7,9 +7,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/header.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
@@ -40,24 +42,34 @@ import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import '../../models/permissions/user_auth.dart';
-
-class ProductWebPage extends BaseWebPageSlivers {
+class ListWebApi extends BaseWebPageSlivers {
   final String? searchQuery;
   final String? customFilter;
+  final bool buildSearchBar;
   Map<String, FilterableProviderHelper>? customFilterChecker;
-  late ViewAbstract viewAbstract;
+  ViewAbstract viewAbstract;
+  final Widget? customHeader;
   // ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable =
   //     ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
 
   late ListMultiKeyProvider listProvider;
-
-  ProductWebPage({
-    Key? key,
-    this.searchQuery,
-    this.customFilter,
-    super.pinToolbar = false,
-  }) : super(key: key);
+  ValueNotifier<bool> valueNotifierGrid = ValueNotifier<bool>(false);
+  ListWebApi(
+      {Key? key,
+      this.searchQuery,
+      this.customFilter,
+      required this.viewAbstract,
+      this.customHeader,
+      super.pinToolbar = false,
+      this.buildSearchBar = false,
+      bool buildFooter = false,
+      bool useSmallFloatingBar = true,
+      bool buildHeader = false})
+      : super(
+            key: key,
+            buildFooter: buildFooter,
+            buildHeader: buildHeader,
+            useSmallFloatingBar: useSmallFloatingBar);
   void fetshListWidgetBinding() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
@@ -109,20 +121,24 @@ class ProductWebPage extends BaseWebPageSlivers {
     );
   }
 
-  EmptyWidget _getEmptyWidget(BuildContext context, bool isError) {
-    return EmptyWidget(
-        onSubtitleClicked: isError
-            ? () {
-                fetshList();
-              }
-            : null,
-        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-        title: isError
-            ? AppLocalizations.of(context)!.cantConnect
-            : AppLocalizations.of(context)!.noItems,
-        subtitle: isError
-            ? AppLocalizations.of(context)!.cantConnectConnectToRetry
-            : AppLocalizations.of(context)!.no_content);
+  Widget _getEmptyWidget(BuildContext context, bool isError) {
+    return Center(
+      child: EmptyWidget(
+          expand: false,
+          onSubtitleClicked: isError
+              ? () {
+                  fetshList();
+                }
+              : null,
+          lottiUrl:
+              "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+          title: isError
+              ? AppLocalizations.of(context)!.cantConnect
+              : AppLocalizations.of(context)!.noItems,
+          subtitle: isError
+              ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+              : AppLocalizations.of(context)!.no_content),
+    );
   }
 
   Widget getShimmerLoading(BuildContext context, BoxConstraints constraints) {
@@ -160,18 +176,101 @@ class ProductWebPage extends BaseWebPageSlivers {
 
         if (isLoading) {
           if (count == 0) {
-            return getShimmerLoading(context, constraints);
+            if (valueNotifierGrid.value) {
+              return getShimmerLoading(context, constraints);
+            } else {
+              return getShimmerLoadingList();
+            }
           }
         } else {
           if (count == 0 || isError) {
             return getEmptyWidget(context, isError: isError);
           }
         }
+        return ValueListenableBuilder<bool>(
+          valueListenable: valueNotifierGrid,
+          builder: (context, value, child) {
+            if (value) {
+              return getGridList(constraints,
+                  listProvider.getList(findCustomKey()), isLoading);
+            } else {
+              return getSliverList(count, isLoading);
+            }
+          },
+        );
         return getGridList(
             constraints, listProvider.getList(findCustomKey()), isLoading);
       },
       selector: (p0, p1) => Tuple3(p1.isLoading(findCustomKey()),
           p1.getCount(findCustomKey()), p1.isHasError(findCustomKey())),
+    );
+  }
+
+  Widget getShimmerLoadingList() {
+    return SliverFillRemaining(
+      child: SkeletonTheme(
+        shimmerGradient: const LinearGradient(
+          colors: [
+            Color(0xFFD8E3E7),
+            Color(0xFFC8D5DA),
+            Color(0xFFD8E3E7),
+          ],
+          stops: [
+            0.1,
+            0.5,
+            0.9,
+          ],
+        ),
+        darkShimmerGradient: const LinearGradient(
+          colors: [
+            Color(0xFF222222),
+            Color(0xFF242424),
+            Color(0xFF2B2B2B),
+            Color(0xFF242424),
+            Color(0xFF222222),
+            // Color(0xFF242424),
+            // Color(0xFF2B2B2B),
+            // Color(0xFF242424),
+            // Color(0xFF222222),
+          ],
+          stops: [
+            0.0,
+            0.2,
+            0.5,
+            0.8,
+            1,
+          ],
+          // begin: Alignment(-2.4, -0.2),
+          // end: Alignment(2.4, 0.2),
+          // tileMode: TileMode.clamp,
+        ),
+        child: SkeletonListView(
+          itemCount: viewAbstract.getPageItemCount,
+        ),
+      ),
+    );
+  }
+
+  Widget getSharedLoadingItem(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(kDefaultPadding / 2),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget getSliverList(int count, bool isLoading) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
+      sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        if (isLoading && index == count) {
+          return getSharedLoadingItem(context);
+        }
+        ViewAbstract va = listProvider.getList(findCustomKey())[index];
+        return ListCardItemWeb(object: va);
+      }, childCount: count + (isLoading ? 1 : 0))),
     );
   }
 
@@ -183,38 +282,39 @@ class ProductWebPage extends BaseWebPageSlivers {
   @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
-    viewAbstract = context
-        .read<AuthProvider<AuthUser>>()
-        .getWebCategories()[0]
-        .getNewInstance();
-
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     fetshListWidgetBinding();
     return [
-      SliverPersistentHeader(
-          pinned: true,
-          delegate: SliverAppBarDelegatePreferedSize(
-            shouldRebuildWidget: true,
-            child: PreferredSize(
-              preferredSize: const Size.fromHeight(60),
-              child: ResponsiveWebBuilderSliver(
-                builder: (context, width) => SearchWidgetWebComponent(
-                  scrollvalueNofifier: onScroll,
-                  // appBardExpandType: expandType,
-                  onSearchTextChanged: (serchQuery) {
-                    context.goNamed(indexWebOurProducts,
-                        queryParams: {"search": serchQuery});
-                  },
-                  // key: const ValueKey(2),
+      if (customHeader != null)
+        SliverToBoxAdapter(
+          child: customHeader,
+        ),
+      if (buildSearchBar)
+        SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverAppBarDelegatePreferedSize(
+              shouldRebuildWidget: true,
+              child: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: ResponsiveWebBuilderSliver(
+                  builder: (context, width) => SearchWidgetWebComponent(
+                    scrollvalueNofifier: onScroll,
+                    // appBardExpandType: expandType,
+                    onSearchTextChanged: (serchQuery) {
+                      context.goNamed(indexWebOurProducts,
+                          queryParams: {"search": serchQuery});
+                    },
+                    // key: const ValueKey(2),
+                  ),
                 ),
               ),
-            ),
-          )),
-      const SliverToBoxAdapter(
-        child: SizedBox(height: kDefaultPadding),
-      ),
-      _getHeaderTitle(context),
-      _getFilterHeader(context),
+            )),
+      if (buildSearchBar)
+        const SliverToBoxAdapter(
+          child: SizedBox(height: kDefaultPadding),
+        ),
+      if (buildSearchBar) _getHeaderTitle(context),
+      if (buildSearchBar) _getFilterHeader(context),
       getListSelector(context, constraints)
     ];
     // return Expanded(
@@ -337,57 +437,6 @@ class ProductWebPage extends BaseWebPageSlivers {
             if (isLoading)
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),
-    );
-  }
-
-  Widget _buildUi(double width) {
-    return Center(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return ResponsiveWrapper(
-            maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
-            child: Container(
-              child: Flex(
-                direction: constraints.maxWidth > 720
-                    ? Axis.horizontal
-                    : Axis.vertical,
-                children: [
-                  // Expanded(
-                  //     flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                  //     child: Container(
-                  //       color: Colors.green,
-                  //       child: Center(
-                  //           child: Column(
-                  //         children: [
-                  //           ExpansionTile(title: Text("TISSUES")),
-                  //           ExpansionTile(title: Text("Paper And Cardboard")),
-                  //         ],
-                  //       )),
-                  //     )),
-                  // Divider(),
-
-                  // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-                  Expanded(
-                    flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                    child: WebProductList(
-                        customHeight: MediaQuery.of(context).size.height - 100,
-                        viewAbstract: context
-                            .read<AuthProvider<AuthUser>>()
-                            .getWebCategories()[0]),
-                  ),
-                  // Divider(),
-                  // Expanded(
-                  //     flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                  //     child:
-                  //         Container(color: Colors.green, child: Text("END"))),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }

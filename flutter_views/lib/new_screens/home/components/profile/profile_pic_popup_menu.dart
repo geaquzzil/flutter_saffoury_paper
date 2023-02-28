@@ -1,11 +1,14 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+
 class ItemModel {
   String title;
   IconData icon;
@@ -28,19 +31,18 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
-    return AnimatedSwitcher(
-      transitionBuilder: (child, animation) => ScaleTransition(
-        scale: animation,
-        child: child,
-      ),
-      duration: const Duration(milliseconds: 1000),
-      child: CustomPopupMenu(
-        menuBuilder: () => ProfileMenuWidget(controller: _controller),
-        pressType: PressType.singleClick,
-        controller: _controller,
-        child: RoundedIconButtonNetwork(
-            onTap: () {}, imageUrl: authProvider.getUserImageUrl),
-      ),
+    return CustomPopupMenu(
+      barrierColor: kIsWeb ? Colors.black54 : Colors.black26,
+      menuBuilder: () => kIsWeb
+          ? SizedBox(width: 600, height: 600, child: SettingAndProfileWeb())
+          : ProfileMenuWidget(controller: _controller),
+      pressType: PressType.singleClick,
+      arrowColor: kIsWeb
+          ? Theme.of(context).scaffoldBackgroundColor
+          : const Color(0xFF4C4C4C),
+      controller: _controller,
+      child: RoundedIconButtonNetwork(
+          onTap: () {}, imageUrl: authProvider.getUserImageUrl),
     );
   }
 }

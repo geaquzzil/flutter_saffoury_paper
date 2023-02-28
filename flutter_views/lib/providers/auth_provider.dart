@@ -32,6 +32,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   final List<ViewAbstract> _drawerItemsPermissions = [];
   late T _user;
   late T _initUser;
+  late ViewAbstract _orderSimple;
   Status _status = Status.Initialization;
   bool hasSavedUser = false;
   late PermissionLevelAbstract _permissions;
@@ -43,6 +44,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     ..password = _user.password
     ..setFieldValue("name", getUserName);
   Dealers? get getDealers => _user.dealers;
+  ViewAbstract get getOrderSimple => _orderSimple.getSelfNewInstance();
   String get getUserName => _user.getFieldValue("name") ?? "_UNKONW";
   String get getUserPermission => _user.userlevels?.userlevelname ?? "";
   String get getUserImageUrl =>
@@ -67,9 +69,11 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         .cast();
   }
 
-  AuthProvider.initialize(T initUser, List<ViewAbstract> drawerItems) {
+  AuthProvider.initialize(
+      T initUser, List<ViewAbstract> drawerItems, ViewAbstract orderSimple) {
     _drawerItems = drawerItems;
     _initUser = initUser;
+    _orderSimple = orderSimple;
     initFakeData();
   }
   DashableInterface getDashableInterface() {

@@ -56,10 +56,14 @@ class SearchWidgetWebComponent extends StatelessWidget {
     return ValueListenableBuilder<double>(
       valueListenable: scrollvalueNofifier,
       builder: (context, value, child) {
-        return AnimatedOpacity(
+        return AnimatedScale(
           duration: const Duration(milliseconds: 275),
-          opacity: value > 100 ? 1 : 0,
-          child: icon,
+          scale: value > 100 ? 1 : 0,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 275),
+            opacity: value > 100 ? 1 : 0,
+            child: icon,
+          ),
         );
       },
     );

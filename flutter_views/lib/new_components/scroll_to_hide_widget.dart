@@ -13,6 +13,7 @@ class ScrollToHideWidget extends StatefulWidget {
   final Duration duration;
   final bool showOnlyWhenCloseToTop;
   final double height;
+  final bool useAnimatedScaling;
   final bool reverse;
   final bool useAnimatedSwitcher;
   const ScrollToHideWidget(
@@ -21,6 +22,7 @@ class ScrollToHideWidget extends StatefulWidget {
       this.showOnlyWhenCloseToTop = true,
       this.controller,
       this.reverse = false,
+      this.useAnimatedScaling = false,
       this.useAnimatedSwitcher = false,
       this.duration = const Duration(milliseconds: 200),
       this.height = 80});
@@ -96,7 +98,26 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.useAnimatedSwitcher) {
+    if (widget.useAnimatedSwitcher && widget.useAnimatedScaling) {
+      return AnimatedScale(
+        duration: widget.duration,
+        scale: isVisible ? 1 : 0,
+        child: AnimatedSwitcher(
+            // transitionBuilder: (child, animation) =>
+            //     ScaleTransition(scale: animation),
+            duration: widget.duration,
+            child: isVisible
+                ? widget.child
+                : SizedBox(
+                    key: UniqueKey(),
+                  )),
+      );
+    } else if (widget.useAnimatedScaling) {
+      return AnimatedScale(
+          duration: widget.duration,
+          scale: isVisible ? 1 : 0,
+          child: widget.child);
+    } else if (widget.useAnimatedSwitcher) {
       return AnimatedSwitcher(
           // transitionBuilder: (child, animation) =>
           //     ScaleTransition(scale: animation),

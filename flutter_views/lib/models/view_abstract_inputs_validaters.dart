@@ -154,6 +154,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   String? Function(E? val) getTextInputValidatorCompose<E>(
       BuildContext context, String field) {
+    return (d) => null;
     String passWordPattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     double? maxValue = getTextInputValidatorMaxValue(field);
