@@ -36,7 +36,7 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
       },
       title: (object.getWebListTileItemTitle(context)),
       subtitle: (object.getWebListTileItemSubTitle(context)),
-      leading: object.getWebListTileItemSubLeading(context),
+      leading: object.getWebListTileItemLeading(context),
       // trailing: object.getCardTrailing(context)
     );
   }

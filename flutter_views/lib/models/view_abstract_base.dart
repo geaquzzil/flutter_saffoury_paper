@@ -139,6 +139,18 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         );
   }
 
+  Widget? getWebListTileItemTitle(BuildContext context) {
+    return null;
+  }
+
+  Widget? getWebListTileItemSubtitle(BuildContext context) {
+    return null;
+  }
+
+  Widget? getWebListTileItemLeading(BuildContext context) {
+    return null;
+  }
+
   Widget getHorizontalCardTitleSameLine(
     BuildContext context, {
     PaletteGenerator? color,
