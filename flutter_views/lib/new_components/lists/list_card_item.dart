@@ -35,7 +35,7 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
         object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
       },
       title: (object.getWebListTileItemTitle(context)),
-      subtitle: (object.getWebListTileItemSubTitle(context)),
+      subtitle: (object.getWebListTileItemSubtitle(context)),
       leading: object.getWebListTileItemLeading(context),
       // trailing: object.getCardTrailing(context)
     );

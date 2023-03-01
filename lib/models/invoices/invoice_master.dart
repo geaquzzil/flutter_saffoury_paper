@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -84,7 +85,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     date = "".toDateTimeNowString();
     TermsID = -1;
   }
-  
+
   @override
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
@@ -270,7 +271,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   String? getSortByFieldName() => "date";
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByType() => SortByType.ASC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -830,6 +831,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     debugPrint("getModifiablePrintablePdfSetting $o");
     return o;
   }
+
   @JsonKey(ignore: true)
   @override
   List<InvoiceMasterDetails>? deletedList;
@@ -963,6 +965,77 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       number == null ? 0 : double.tryParse(number.toString());
 
   static String? intFromString(dynamic number) => number?.toString();
+
+  @override
+  Widget? getWebListTileItemLeading(BuildContext context) {
+    return super.getWebListTileItemLeading(context);
+  }
+
+  @override
+  Widget? getWebListTileItemSubtitle(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Text(
+            //   getDateTextOnly() ?? "",
+            //   style: Theme.of(context).textTheme.caption,
+            // ),
+            Html(
+                shrinkWrap: true,
+                data:
+                    "${AppLocalizations.of(context)!.itemCount}: <strong>${getDetailListFromMasterItemsCount()}</strong>"),
+            Html(
+                shrinkWrap: true,
+                data:
+                    "${AppLocalizations.of(context)!.total_price}: <strong>${extendedNetPrice.toCurrencyFormatFromSetting(context)}</strong>"),
+          ],
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Text(
+            //   getDateTextOnly() ?? "",
+            //   style: Theme.of(context).textTheme.caption,
+            // ),
+            Html(
+                shrinkWrap: true,
+                data:
+                    "${AppLocalizations.of(context)!.total_quantity}: <strong>${getListableTotalQuantity(context)}</strong>"),
+            if (isHasStatusInvocie())
+              Html(
+                  shrinkWrap: true,
+                  data:
+                      "${AppLocalizations.of(context)!.status}: <strong>${status?.getFieldLabelString(context, status ?? InvoiceStatus.NONE)}</strong>"),
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget? getWebListTileItemTitle(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Text(
+        //   getDateTextOnly() ?? "",
+        //   style: Theme.of(context).textTheme.caption,
+        // ),
+        Html(
+            shrinkWrap: true,
+            data: "<strong>${getPrintableQrCodeID()}</strong>"),
+        Text(
+          getDateTextOnlyFormat(context) ?? "",
+          style: Theme.of(context).textTheme.caption,
+        )
+      ],
+    );
+  }
 }
 
 enum Terms implements ViewAbstractEnum<Terms> {
