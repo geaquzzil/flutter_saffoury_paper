@@ -34,7 +34,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
     return CustomPopupMenu(
       barrierColor: kIsWeb ? Colors.black54 : Colors.black26,
       menuBuilder: () => kIsWeb
-          ? SizedBox(width: 600, height: 600, child: SettingAndProfileWeb())
+          ? SizedBox(width: 700, height: 600, child: SettingAndProfileWeb())
           : ProfileMenuWidget(controller: _controller),
       pressType: PressType.singleClick,
       arrowColor: kIsWeb

@@ -35,8 +35,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String? getDateTextOnly() {
     dynamic value = getFieldValue("date");
-    // if (value == null) return null;
-    return value?.toString() ?? "";
+    return value;
   }
 
   String? getDateTextOnlyFormat(BuildContext context) {

@@ -14,12 +14,17 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
+import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+import '../../customs_widget/sliver_delegates.dart';
+
 class SettingAndProfileWeb extends BaseWebPageSlivers {
   ValueNotifier<ItemModel?> selectedValue = ValueNotifier<ItemModel?>(null);
+  ValueNotifier<ViewAbstract?> selectedCardValue =
+      ValueNotifier<ViewAbstract?>(null);
   SettingAndProfileWeb({
     super.key,
     super.buildFooter = false,
@@ -65,7 +70,7 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                               ),
                             )),
                         Expanded(
-                          flex: 3,
+                          flex: 4,
                           child: Container(
                             color: Theme.of(context).scaffoldBackgroundColor,
                             child: SizedBox(
@@ -90,24 +95,77 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                                         return const ProfileEdit();
                                       } else if (value.icon ==
                                           Icons.shopping_basket_rounded) {
-                                        return ListWebApi(
-                                          customHeader: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const ListTile(
-                                                title: Text("Orders"),
+                                        return ValueListenableBuilder<
+                                            ViewAbstract?>(
+                                          valueListenable: selectedCardValue,
+                                          builder: (context, value, child) {
+                                            if (value != null) {
+                                              return WebProductView(
+                                                buildSmallView: true,
+                                                iD: value.iD,
+                                                tableName:
+                                                    value.getTableNameApi()!,
+                                                extras: value,
+                                                buildFooter: false,
+                                                customSliverHeader:
+                                                    SliverPersistentHeader(
+                                                  pinned: pinToolbar,
+                                                  floating: true,
+                                                  delegate:
+                                                      SliverAppBarDelegatePreferedSize(
+                                                          child: PreferredSize(
+                                                              preferredSize:
+                                                                  const Size
+                                                                          .fromHeight(
+                                                                      70.0),
+                                                              child: Container(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .scaffoldBackgroundColor,
+                                                                child: ListTile(
+                                                                  leading:
+                                                                      IconButton(
+                                                                    icon: const Icon(
+                                                                        Icons
+                                                                            .arrow_back),
+                                                                    onPressed:
+                                                                        () {
+                                                                      debugPrint(
+                                                                          "backbutton pressed");
+                                                                      selectedCardValue
+                                                                              .value =
+                                                                          null;
+                                                                    },
+                                                                  ),
+                                                                  title: value
+                                                                      .getMainHeaderText(
+                                                                          context),
+                                                                ),
+                                                              ))),
+                                                ),
+                                                buildHeader: false,
+                                                useSmallFloatingBar: true,
+                                              );
+                                            }
+                                            return ListWebApi(
+                                              onCardTap: selectedCardValue,
+                                              customHeader: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: const [
+                                                  ListTile(
+                                                    title: Text("Orders"),
+                                                    subtitle: Text(
+                                                        "By logining you out all of your data will be cleared."),
+                                                  ),
+                                                ],
                                               ),
-                                              const ListTile(
-                                                subtitle: Text(
-                                                    "By logining you out all of your data will be cleared."),
-                                              ),
-                                            ],
-                                          ),
-                                          viewAbstract:
-                                              getListOfOrders(context),
+                                              viewAbstract:
+                                                  getListOfOrders(context),
+                                            );
+                                          },
                                         );
                                       }
                                       return const Center(

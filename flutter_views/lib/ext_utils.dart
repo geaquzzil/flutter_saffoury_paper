@@ -89,6 +89,7 @@ extension StringsUtils on String? {
   /// if null return the now date
   DateTime toDateTime() {
     if (this == null) return DateTime.now();
+    if (this!.isEmpty) return DateTime.now();
     DateFormat dateFormat = DateFormat(dateFormatString, 'en-US');
     return dateFormat.parse(this ?? "");
   }
@@ -101,17 +102,17 @@ extension StringsUtils on String? {
 
   String toDateTimeOnlyDateString() {
     DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
-    return dateFormat.format(DateTime.now());
+    return dateFormat.format(toDateTime());
   }
 
   String toDateTimeNowString() {
     DateFormat dateFormat = DateFormat(dateFormatString, 'en-US');
-    return dateFormat.format(DateTime.now());
+    return dateFormat.format(toDateTime());
   }
 
   String toDateString() {
     DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
-    return dateFormat.format(DateTime.now());
+    return dateFormat.format(toDateTime());
   }
 
   String toDateTimeFirstDateYearString() {

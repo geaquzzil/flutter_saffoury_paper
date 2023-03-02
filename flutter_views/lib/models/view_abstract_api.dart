@@ -493,14 +493,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody['start'] =
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
-        if (getCustomMap.isEmpty) {
-          String? hasSortByFieldDefault =
-              (this as ViewAbstractFilterable).getSortByFieldName();
-          if (hasSortByFieldDefault != null) {
+        String? hasSortByFieldDefault =
+            (this as ViewAbstractFilterable).getSortByFieldName();
+        if (hasSortByFieldDefault != null) {
+          bool hasCustomSortByField =
+              getCustomMap.containsKey(SortByType.ASC.name) ||
+                  getCustomMap.containsKey(SortByType.DESC.name);
+          if (!hasCustomSortByField) {
             mainBody[(this as ViewAbstractFilterable).getSortByType().name] =
                 hasSortByFieldDefault;
           }
         }
+
         mainBody.addAll(getCustomMap);
         break;
       case ServerActions.call:

@@ -49,11 +49,13 @@ class ListWebApi extends BaseWebPageSlivers {
   Map<String, FilterableProviderHelper>? customFilterChecker;
   ViewAbstract viewAbstract;
   final Widget? customHeader;
+
   // ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable =
   //     ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
 
   late ListMultiKeyProvider listProvider;
   ValueNotifier<bool> valueNotifierGrid = ValueNotifier<bool>(false);
+  ValueNotifier<ViewAbstract?>? onCardTap;
   ListWebApi(
       {Key? key,
       this.searchQuery,
@@ -62,6 +64,7 @@ class ListWebApi extends BaseWebPageSlivers {
       this.customHeader,
       super.pinToolbar = false,
       this.buildSearchBar = false,
+      this.onCardTap,
       bool buildFooter = false,
       bool useSmallFloatingBar = true,
       bool buildHeader = false})
@@ -269,7 +272,12 @@ class ListWebApi extends BaseWebPageSlivers {
           return getSharedLoadingItem(context);
         }
         ViewAbstract va = listProvider.getList(findCustomKey())[index];
-        return ListCardItemWeb(object: va);
+        return ListCardItemWeb(
+          object: va,
+          onTap: () {
+            onCardTap?.value = va;
+          },
+        );
       }, childCount: count + (isLoading ? 1 : 0))),
     );
   }

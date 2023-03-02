@@ -4,12 +4,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
@@ -22,8 +27,20 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class WebProductView extends BaseWebPageSliversApi {
+  final bool? buildSmallView;
+  final bool usePaddingOnBottomWidgets;
   WebProductView(
-      {super.key, super.extras, required super.iD, required super.tableName});
+      {super.key,
+      super.extras,
+      required super.iD,
+      this.buildSmallView,
+      required super.tableName,
+      super.buildFooter,
+      super.buildHeader,
+      this.usePaddingOnBottomWidgets = false,
+      super.pinToolbar,
+      super.useSmallFloatingBar,
+      super.customSliverHeader});
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
@@ -40,15 +57,21 @@ class WebProductView extends BaseWebPageSliversApi {
   }
 
   @override
-  List<Widget> getContentWidget(BuildContext context) {
+  List<Widget> getContentWidget(
+      BuildContext context, BoxConstraints constraints) {
     return [
-      SliverToBoxAdapter(
-        child: ScreenHelper(
-          desktop: _buildUi(kDesktopMaxWidth),
-          tablet: _buildUi(kTabletMaxWidth),
-          mobile: _buildUi(getMobileMaxWidth(context)),
+      if (buildSmallView ?? false)
+        SliverToBoxAdapter(
+          child: getDetailsView(context),
+        )
+      else
+        SliverToBoxAdapter(
+          child: ScreenHelper(
+            desktop: _buildUi(context, kDesktopMaxWidth, constraints),
+            tablet: _buildUi(context, kTabletMaxWidth, constraints),
+            mobile: _buildUi(context, getMobileMaxWidth(context), constraints),
+          ),
         ),
-      ),
       ...getBottomWidget(context),
       const SliverToBoxAdapter(
         child: SizedBox(height: 80),
@@ -68,22 +91,29 @@ class WebProductView extends BaseWebPageSliversApi {
         getExtras()?.getCustomBottomWidget(context, action: getServerActions());
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
-      return getPadding(
-          context,
-          SliverToBoxAdapter(
-            child: ResponsiveWebBuilder(builder: (context, width) => e),
-          ),
-          bottom: 20);
-      // if (bottomWidget.indexOf(e) == bottomWidget.length) {
-      //   return getPadding(
-      //       context,
-      //       SliverToBoxAdapter(
-      //         child: ResponsiveWebBuilder(builder: (context, width) => e),
-      //       ),
-      //       bottom: 20);
-      // }
-      return SliverToBoxAdapter(
-          child: ResponsiveWebBuilder(builder: (context, width) => e));
+      if (buildSmallView ?? false) {
+        return usePaddingOnBottomWidgets
+            ? getPadding(
+                context,
+                SliverToBoxAdapter(
+                  child: e,
+                ),
+                bottom: 20)
+            : SliverToBoxAdapter(
+                child: e,
+              );
+      } else {
+        return usePaddingOnBottomWidgets
+            ? getPadding(
+                context,
+                SliverToBoxAdapter(
+                  child: ResponsiveWebBuilder(builder: (context, width) => e),
+                ),
+                bottom: 20)
+            : SliverToBoxAdapter(
+                child: ResponsiveWebBuilder(builder: (context, width) => e),
+              );
+      }
     }).toList();
   }
 
@@ -92,55 +122,63 @@ class WebProductView extends BaseWebPageSliversApi {
     return ServerActions.view;
   }
 
-  Widget _buildUi(double width) {
+  Widget _buildUi(
+      BuildContext context, double width, BoxConstraints constraints) {
     return Center(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return ResponsiveWrapper(
-            maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
-            child: Container(
-              child: Flex(
-                direction: constraints.maxWidth > 720
-                    ? Axis.horizontal
-                    : Axis.vertical,
-                children: [
-                  // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-                  Expanded(
-                      flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                      child: WebProductImages(
-                        item: extras!,
-                      )),
-                  Expanded(
-                      flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getWebText(
-                              title: extras!.getMainHeaderTextOnly(context)),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ...getTopWidget(context),
-                          WebViewDetails(
-                            viewAbstract: extras!,
-                          ),
-                          if (extras is CartableProductItemInterface)
-                            BottomWidgetOnViewIfCartable(
-                                viewAbstract:
-                                    extras as CartableProductItemInterface),
-
-                          // if(extras is SharableInterface)
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          );
-        },
+        child: ResponsiveWrapper(
+      maxWidth: width,
+      minWidth: width,
+      defaultScale: false,
+      child: Flex(
+        direction: constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
+        children: [
+          // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
+          Expanded(
+              flex: constraints.maxWidth > 720.0 ? 1 : 0,
+              child: WebProductImages(
+                item: extras!,
+              )),
+          Expanded(
+              flex: constraints.maxWidth > 720.0 ? 1 : 0,
+              child: getDetailsView(context)),
+        ],
       ),
+    ));
+  }
+
+  Column getDetailsView(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (buildSmallView == false)
+          getWebText(title: extras!.getMainHeaderTextOnly(context)),
+        if (buildSmallView == false)
+          const SizedBox(
+            height: 20,
+          ),
+        ...getTopWidget(context),
+        WebViewDetails(
+          viewAbstract: extras!,
+        ),
+        if (extras is ListableInterface)
+          const ListTile(
+            leading: Icon(Icons.list),
+            title: Text("Details"),
+          ),
+        if (extras is ListableInterface)
+          ListStaticWidget<ViewAbstract>(
+              list: extras!.getListableInterface().getListableList(),
+              emptyWidget: const Text("null"),
+              listItembuilder: (item) => ListCardItemWeb(
+                    object: item,
+                  )),
+        if (extras is CartableProductItemInterface)
+          BottomWidgetOnViewIfCartable(
+              viewAbstract: extras as CartableProductItemInterface),
+
+        // if(extras is SharableInterface)
+      ],
     );
   }
 }

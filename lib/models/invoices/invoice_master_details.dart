@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -364,4 +366,52 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.details;
+
+  @override
+  Widget? getWebListTileItemLeading(BuildContext context) {
+    return products?.getCardLeading(context);
+  }
+
+  @override
+  Widget? getWebListTileItemTitle(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Text(
+            //   getDateTextOnly() ?? "",
+            //   style: Theme.of(context).textTheme.caption,
+            // ),
+            Text(getMainHeaderTextOnly(context)),
+            Text(quantity.toCurrencyFormat(
+                symbol: products?.getProductTypeUnit(context) ?? ""))
+          ],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget? getWebListTileItemSubtitle(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Text(
+        //   getDateTextOnly() ?? "",
+        //   style: Theme.of(context).textTheme.caption,
+        // ),
+        Text(unitPrice.toCurrencyFormatFromSetting(context)),
+        Text(
+          price.toCurrencyFormatFromSetting(context),
+          style: Theme.of(context)
+              .textTheme
+              .caption
+              ?.copyWith(color: kPrimaryColor),
+        )
+      ],
+    );
+  }
 }

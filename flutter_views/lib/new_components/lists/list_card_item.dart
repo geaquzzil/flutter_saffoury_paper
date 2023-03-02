@@ -12,11 +12,13 @@ import 'package:provider/provider.dart';
 
 class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
   final T object;
-  Key? listState;
+  void Function()? onTap;
+  void Function()? onLongTap;
   ListCardItemWeb({
     Key? key,
-    this.listState,
     required this.object,
+    this.onTap,
+    this.onLongTap,
   }) : super(key: GlobalKey());
 
   @override
@@ -30,10 +32,8 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
     return ListTile(
       selected: isSelected,
       // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-      onTap: () => object.onCardClicked(context),
-      onLongPress: () {
-        object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
-      },
+      onTap: onTap,
+      onLongPress: onLongTap,
       title: (object.getWebListTileItemTitle(context)),
       subtitle: (object.getWebListTileItemSubtitle(context)),
       leading: object.getWebListTileItemLeading(context),

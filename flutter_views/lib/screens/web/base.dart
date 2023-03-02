@@ -262,11 +262,13 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   final bool buildFooter;
   final bool pinToolbar;
   final bool useSmallFloatingBar;
+  final Widget? customSliverHeader;
   BaseWebPageSlivers(
       {Key? key,
       this.buildHeader = true,
       this.useSmallFloatingBar = false,
       this.buildFooter = true,
+      this.customSliverHeader,
       this.pinToolbar = true})
       : super(key: key);
 
@@ -306,6 +308,17 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     }
   }
 
+  SliverPadding getPadding(BuildContext context, Widget sliver,
+      {double? bottom}) {
+    return SliverPadding(
+        padding: EdgeInsets.only(
+            top: kDefaultPadding / 2,
+            right: kDefaultPadding / 2,
+            bottom: bottom ?? 0,
+            left: kDefaultPadding / 2),
+        sliver: sliver);
+  }
+
   Widget getSliverPadding(
       BuildContext context, BoxConstraints constraints, Widget child,
       {double padd = 2}) {
@@ -326,174 +339,139 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     init(context);
+
+    return getScaffold(context);
+  }
+
+  Scaffold getScaffold(BuildContext context) {
     var headerItems = getHeaderItems(context);
     return Scaffold(
         backgroundColor: !buildHeader ? Colors.transparent : null,
-        floatingActionButton: ScrollToHideWidget(
-          // useAnimatedSwitcher: true,
-          useAnimatedScaling: true,
-          // height: 50,
-          reverse: true,
-          controller: _scrollController,
-          child: useSmallFloatingBar
-              ? FloatingActionButton.small(
-                  onPressed: () {
-                    _scrollTop();
-                  },
-                  child: const Icon(Icons.arrow_upward_sharp))
-              : FloatingActionButton(
-                  onPressed: () {
-                    _scrollTop();
-                  },
-                  child: const Icon(Icons.arrow_upward_sharp)),
-        ),
-        // appBar: ScrollToHideWidget(),
+        floatingActionButton: getFloatingActionButton(),
         key: !buildHeader
             ? null
             : context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
-        endDrawer: SizedBox(
-            width: 500, child: CardCorner(child: WebShoppingCartDrawer())),
-        drawer: CardCorner(
-          child: Drawer(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 24.0,
-                ),
-                child: ListView.separated(
-                  itemBuilder: (BuildContext context, int index) {
-                    return headerItems[index].isButton
-                        ? MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: kDangerColor,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 28.0),
-                              child: TextButton(
-                                onPressed: () =>
-                                    headerItems[index].onClick?.call(),
-                                child: Text(
-                                  headerItems[index].title,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : ListTile(
-                            title: Text(
+        endDrawer: getEndDrawer(),
+        drawer: getDrawer(headerItems),
+        body: getBody(context));
+  }
+
+  LayoutBuilder getBody(BuildContext context) {
+    return LayoutBuilder(
+      builder: (c, constraints) => WebSmoothScroll(
+        controller: _scrollController,
+        scrollOffset: 250, // additional offset to users scroll input
+        animationDuration: 600,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            debugPrint("onNotification  ${notification.metrics.extentBefore}");
+            onScroll.value = notification.metrics.extentBefore;
+
+            return false;
+          },
+          child: CustomScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _scrollController,
+              slivers: [
+                if (buildHeader)
+                  SliverPersistentHeader(
+                      pinned: pinToolbar,
+                      floating: true,
+                      delegate: SliverAppBarDelegatePreferedSize(
+                          child: PreferredSize(
+                              preferredSize: const Size.fromHeight(70.0),
+                              child: getHeader(context)))),
+                if (customSliverHeader != null) customSliverHeader!,
+                ...getContentWidget(context, constraints),
+                if (buildFooter)
+                  const SliverToBoxAdapter(
+                    child: Footer(),
+                  )
+              ]),
+        ),
+      ),
+    );
+  }
+
+  SizedBox getEndDrawer() {
+    return SizedBox(
+        width: 500, child: CardCorner(child: WebShoppingCartDrawer()));
+  }
+
+  CardCorner getDrawer(List<HeaderItem> headerItems) {
+    return CardCorner(
+      child: Drawer(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 24.0,
+            ),
+            child: ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return headerItems[index].isButton
+                    ? MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kDangerColor,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                          child: TextButton(
+                            onPressed: () => headerItems[index].onClick?.call(),
+                            child: Text(
                               headerItems[index].title,
                               style: const TextStyle(
                                 color: Colors.white,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(
-                      height: 10.0,
-                    );
-                  },
-                  itemCount: headerItems.length,
-                ),
-              ),
+                          ),
+                        ),
+                      )
+                    : ListTile(
+                        title: Text(
+                          headerItems[index].title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(
+                  height: 10.0,
+                );
+              },
+              itemCount: headerItems.length,
             ),
           ),
         ),
-        body: LayoutBuilder(
-          builder: (c, constraints) => WebSmoothScroll(
-            controller: _scrollController,
-            scrollOffset: 250, // additional offset to users scroll input
-            animationDuration: 600,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                // if (notification.metrics.axisDirection == Axis.vertical) {
-                debugPrint(
-                    "onNotification  ${notification.metrics.extentBefore}");
-                onScroll.value = notification.metrics.extentBefore;
-                // }
-                // // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
-                // //   debugPrint(
-                // //       "DraggableHome ${widget.scrollController!.position.pixels}");
-                // //   if (widget.scrollController!.position.pixels >= 200) {
-                // //     if (isFullyExpanded.value) isFullyExpanded.add(false);
-                // //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
-                // //     // expandedHeight = 0;
-                // //     return false;
-                // //   }
-                // // }
+      ),
+    );
+  }
 
-                // if (notification.metrics.axis == Axis.vertical) {
-                //   // isFullyCollapsed
-                //   if ((isFullyExpanded.value) &&
-                //       notification.metrics.extentBefore > 100) {
-                //     isFullyExpanded.add(false);
-                //   }
-                //   // if (widget.hideBottomNavigationBarOnScroll) {
-                //   //   if (notification.metrics.extentBefore > 100) {
-                //   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                //   //       hideWhenScroll.value = true;
-                //   //     });
-                //   //   } else {
-                //   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                //   //       hideWhenScroll.value = false;
-                //   //     });
-                //   //   }
-                //   // }
-
-                //   //isFullyCollapsed
-                //   if (notification.metrics.extentBefore >
-                //       expandedHeight - AppBar().preferredSize.height - 40) {
-                //     if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
-                //   } else {
-                //     if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
-                //   }
-
-                return false;
+  ScrollToHideWidget getFloatingActionButton() {
+    return ScrollToHideWidget(
+      // useAnimatedSwitcher: true,
+      useAnimatedScaling: true,
+      // height: 50,
+      reverse: true,
+      controller: _scrollController,
+      child: useSmallFloatingBar
+          ? FloatingActionButton.small(
+              onPressed: () {
+                _scrollTop();
               },
-              child: CustomScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _scrollController,
-                  slivers: [
-                    // SliverToBoxAdapter(
-                    //   child: MaterialBanner(
-                    //     content: SizedBox(
-                    //       height: 60,
-                    //       width: MediaQuery.of(context).size.width,
-                    //       child: Image.network(
-                    //           "https://saffoury.com/wp-content/uploads/Saffoury_1-scaled.jpg",
-                    //           // c
-                    //           fit: BoxFit.fitWidth),
-                    //     ),
-                    //     actions: [
-                    //       IconButton(onPressed: () {}, icon: Icon(Icons.close))
-                    //     ],
-                    //   ),
-                    // ),
-                    if (buildHeader)
-                      SliverPersistentHeader(
-                          pinned: pinToolbar,
-                          floating: true,
-                          delegate: SliverAppBarDelegatePreferedSize(
-                              child: PreferredSize(
-                                  preferredSize: const Size.fromHeight(70.0),
-                                  child: getHeader(context)))),
-                    ...getContentWidget(context, constraints),
-                    if (buildFooter)
-                      const SliverToBoxAdapter(
-                        child: Footer(),
-                      )
-                  ]),
-            ),
-          ),
-        ));
+              child: const Icon(Icons.arrow_upward_sharp))
+          : FloatingActionButton(
+              onPressed: () {
+                _scrollTop();
+              },
+              child: const Icon(Icons.arrow_upward_sharp)),
+    );
   }
 
   bool get _isBottom {
@@ -512,30 +490,25 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   }
 }
 
-abstract class BaseWebPageSliversApi extends StatelessWidget {
-  ScrollController _scrollController = ScrollController();
-  List<Widget> getContentWidget(BuildContext context);
+abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
   int iD;
   String tableName;
   ViewAbstract? extras;
   BaseWebPageSliversApi(
-      {Key? key, required this.iD, required this.tableName, this.extras})
+      {Key? key,
+      required this.iD,
+      required this.tableName,
+      this.extras,
+      super.buildFooter,
+      super.buildHeader,
+      super.pinToolbar,
+      super.customSliverHeader,
+      super.useSmallFloatingBar})
       : super(key: key);
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context);
   ServerActions getServerActions();
   ViewAbstract? getExtras() {
     return extras;
-  }
-
-  SliverPadding getPadding(BuildContext context, Widget sliver,
-      {double? bottom}) {
-    return SliverPadding(
-        padding: EdgeInsets.only(
-            top: kDefaultPadding / 2,
-            right: kDefaultPadding / 2,
-            bottom: bottom ?? 0,
-            left: kDefaultPadding / 2),
-        sliver: sliver);
   }
 
   bool getBodyWithoutApi() {
@@ -554,39 +527,10 @@ abstract class BaseWebPageSliversApi extends StatelessWidget {
     return res;
   }
 
-  String getSelectedHeader(BuildContext context) {
-    if (this is AboutUsWebPage) {
-      return AppLocalizations.of(context)!.about;
-    } else if (this is HomeWebPage) {
-      return AppLocalizations.of(context)!.home;
-    } else if (this is ProductWebPage) {
-      return AppLocalizations.of(context)!.products;
-    } else if (this is TermsWebPage) {
-      return AppLocalizations.of(context)!.termsAndConitions;
-    } else {
-      return "";
-    }
-  }
-
-  Widget getHeader(BuildContext context) {
-    if (kIsWeb) {
-      return Header(
-        valueNotifier: onScroll,
-        selectedHeader: getSelectedHeader(context),
-      );
-    } else {
-      return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
-        child: BackButton(),
-      );
-    }
-  }
-
-  ValueNotifier<double> onScroll = ValueNotifier<double>(0);
   @override
   Widget build(BuildContext context) {
     if (extras != null && getBodyWithoutApi()) {
-      return buildAfterCall(context);
+      return getScaffold(context);
     }
 
     return FutureBuilder<ViewAbstract?>(
@@ -604,14 +548,8 @@ abstract class BaseWebPageSliversApi extends StatelessWidget {
         } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             extras = snapshot.data;
-            if (extras is ViewAbstract) {
-              // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              //   context
-              //       .read<ListMultiKeyProvider>()
-              //       .edit(extras as ViewAbstract);
-              // });
-            }
-            return buildAfterCall(context);
+            if (extras is ViewAbstract) {}
+            return getScaffold(context);
           } else {
             return EmptyWidget(
                 lottiUrl:
@@ -630,93 +568,5 @@ abstract class BaseWebPageSliversApi extends StatelessWidget {
         }
       },
     );
-  }
-
-  Scaffold buildAfterCall(BuildContext context) {
-    var headerItems = getHeaderItems(context);
-    return Scaffold(
-        // appBar: ScrollToHideWidget(),
-        // key: Globals.scaffoldKey,
-        endDrawer: Drawer(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 24.0,
-              ),
-              child: ListView.separated(
-                itemBuilder: (BuildContext context, int index) {
-                  return headerItems[index].isButton
-                      ? MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: kDangerColor,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 28.0),
-                            child: TextButton(
-                              onPressed: () =>
-                                  headerItems[index].onClick?.call(),
-                              child: Text(
-                                headerItems[index].title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : ListTile(
-                          title: Text(
-                            headerItems[index].title,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 10.0,
-                  );
-                },
-                itemCount: headerItems.length,
-              ),
-            ),
-          ),
-        ),
-        body: WebSmoothScroll(
-          controller: _scrollController,
-          scrollOffset: 250, // additional offset to users scroll input
-          animationDuration: 600,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              debugPrint(
-                  "onNotification  ${notification.metrics.extentBefore}");
-              onScroll.value = notification.metrics.extentBefore;
-              return false;
-            },
-            child: CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _scrollController,
-                slivers: [
-                  SliverPersistentHeader(
-                      pinned: true,
-                      floating: true,
-                      delegate: SliverAppBarDelegatePreferedSize(
-                          child: PreferredSize(
-                              preferredSize: const Size.fromHeight(70.0),
-                              child: getHeader(context)))),
-                  ...getContentWidget(context),
-                  const SliverToBoxAdapter(
-                    child: Footer(),
-                  )
-                ]),
-          ),
-        ));
   }
 }

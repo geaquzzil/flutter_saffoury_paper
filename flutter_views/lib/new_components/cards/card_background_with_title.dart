@@ -6,6 +6,7 @@ class CardBackgroundWithTitle extends StatelessWidget {
   String title;
   IconData? leading;
   bool useHorizontalPadding;
+  bool useVerticalPadding;
   bool centerTitle;
   Widget child;
 
@@ -15,6 +16,7 @@ class CardBackgroundWithTitle extends StatelessWidget {
       this.leading,
       this.centerTitle = false,
       this.useHorizontalPadding = true,
+      this.useVerticalPadding = true,
       required this.child});
 
   @override
@@ -40,7 +42,7 @@ class CardBackgroundWithTitle extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: useHorizontalPadding ? kDefaultPadding * 2 : 0,
-            vertical: kDefaultPadding * .3,
+            vertical: useVerticalPadding ? kDefaultPadding * .3 : 0,
           ),
           child: child,
         )

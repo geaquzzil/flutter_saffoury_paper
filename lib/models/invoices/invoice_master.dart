@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -36,6 +37,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -271,7 +273,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   String? getSortByFieldName() => "date";
 
   @override
-  SortByType getSortByType() => SortByType.ASC;
+  SortByType getSortByType() => SortByType.DESC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -389,33 +391,41 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
     double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
-
+    Widget child = Column(
+      children: [
+        getListTile(
+            title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+            description:
+                totalPrice?.toCurrencyFormatFromSetting(context) ?? "0"),
+        getListTile(
+            title: AppLocalizations.of(context)!.discount.toUpperCase(),
+            description:
+                totalDiscount?.toCurrencyFormatFromSetting(context) ?? "0"),
+        getListTile(
+            title: AppLocalizations.of(context)!.quantity.toUpperCase(),
+            description: getDetailListFromMaster()
+                .cast<InvoiceMasterDetails>()
+                .getTotalQuantityGroupedFormattedText(context)),
+        getListTile(
+            title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+            description: totalNetPrice.toCurrencyFormatFromSetting(context)),
+      ],
+    );
     return [
-      ExpansionTile(
-        initiallyExpanded: true,
-        leading: Icon(Icons.summarize),
-        title: Text(AppLocalizations.of(context)!.no_summary),
-        children: [
-          Column(
-            children: [
-              getListTile(
-                  title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-                  description: totalPrice?.toStringAsFixed(2) ?? "0"),
-              getListTile(
-                  title: AppLocalizations.of(context)!.discount.toUpperCase(),
-                  description: totalDiscount?.toStringAsFixed(2) ?? "0"),
-              getListTile(
-                  title: AppLocalizations.of(context)!.quantity.toUpperCase(),
-                  description: getDetailListFromMaster()
-                      .cast<InvoiceMasterDetails>()
-                      .getTotalQuantityGroupedFormattedText(context)),
-              getListTile(
-                  title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-                  description: totalNetPrice.toStringAsFixed(2)),
-            ],
-          )
-        ],
-      )
+      if (kIsWeb)
+        CardBackgroundWithTitle(
+            leading: Icons.summarize,
+            useHorizontalPadding: false,
+            useVerticalPadding: false,
+            title: AppLocalizations.of(context)!.no_summary,
+            child: child)
+      else
+        ExpansionTile(
+          initiallyExpanded: true,
+          leading: Icon(Icons.summarize),
+          title: Text(AppLocalizations.of(context)!.no_summary),
+          children: [child],
+        )
     ];
   }
 
