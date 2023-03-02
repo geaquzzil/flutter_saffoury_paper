@@ -81,12 +81,23 @@ class _CartDataTableState extends State<CartDataTableMaster> {
   }
 
   List<DataColumn> getColumns(BuildContext context) {
-    return list_invoice_details[0]
+    var list = list_invoice_details[0]
         .getCartInvoiceTableHeaderAndContent(context)
         .values
+        .toList();
+    return list
         .map((e) => DataColumn(
               numeric: true,
-              label: Text(e.title),
+              label: Expanded(
+                child: Text(
+                  e.title,
+                  textAlign: list.indexOf(e) == 0
+                      ? TextAlign.left
+                      : list.indexOf(e) == list.length - 1
+                          ? TextAlign.right
+                          : null,
+                ),
+              ),
               onSort: (columnIndex, ascending) =>
                   onSort(context, columnIndex, ascending),
             ))
@@ -181,8 +192,10 @@ class _CartDataTableState extends State<CartDataTableMaster> {
       String indexOfCell,
       MapEntry<String, DataTableContent> ee) {
     DataTableContent e = ee.value;
-    bool canEdit = indexOfRow == lastIndexOfSelected && e.canEdit;
 
+    bool canEdit = indexOfRow == lastIndexOfSelected && e.canEdit;
+// var list = ee.values
+//         .toList();
     return DataCell(Text(e.value.toString()), showEditIcon: false);
 
     if (canEdit) {

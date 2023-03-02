@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 class ClippedCard extends StatelessWidget {
   Widget child;
   Color color;
+  Color? customCardColor;
   double elevation;
   bool wrapWithCardOrOutlineCard;
   BorderSideColor borderSide;
@@ -12,6 +13,7 @@ class ClippedCard extends StatelessWidget {
       {super.key,
       required this.child,
       required this.color,
+      this.customCardColor,
       this.wrapWithCardOrOutlineCard = true,
       this.borderSide = BorderSideColor.START,
       this.elevation = 2});
@@ -20,6 +22,17 @@ class ClippedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return wrapWithCardOrOutlineCard
         ? Card(
+            margin: customCardColor != null
+                ? const EdgeInsets.only(left: kDefaultPadding / 2)
+                : null,
+            shape: customCardColor != null
+                ? const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10)),
+                  )
+                : null,
+            color: customCardColor,
             elevation: elevation,
             child: getCardChild(),
           )
@@ -28,7 +41,6 @@ class ClippedCard extends StatelessWidget {
 
   ClipPath getCardChild() {
     return ClipPath(
-      
       clipper: ShapeBorderClipper(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),

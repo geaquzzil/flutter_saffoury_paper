@@ -68,7 +68,12 @@ class ProfileMenuWidget extends StatelessWidget {
                                       : child;
                                   if (value.title == item.title) {
                                     return ClippedCard(
-                                        color: kPrimaryColor, child: child);
+                                        elevation: 0,
+                                        customCardColor: Theme.of(context)
+                                            .scaffoldBackgroundColor
+                                            .withOpacity(.5),
+                                        color: kPrimaryColor,
+                                        child: child);
                                   } else {
                                     return child;
                                   }
