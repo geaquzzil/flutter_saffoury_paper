@@ -415,7 +415,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       if (kIsWeb)
         CardBackgroundWithTitle(
             leading: Icons.summarize,
-            useHorizontalPadding: false,
+            useHorizontalPadding: true,
             useVerticalPadding: false,
             title: AppLocalizations.of(context)!.no_summary,
             child: child)

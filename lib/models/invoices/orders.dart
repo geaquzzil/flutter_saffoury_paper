@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
@@ -263,10 +264,11 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
             title: AppLocalizations.of(context)!.description,
             value: products?.getMainHeaderTextOnly(context) ?? "",
             canEdit: false),
-        "gsm": DataTableContent(
-            title: AppLocalizations.of(context)!.gsm,
-            value: products?.gsms?.gsm ?? 0,
-            canEdit: false),
+        if (!kIsWeb)
+          "gsm": DataTableContent(
+              title: AppLocalizations.of(context)!.gsm,
+              value: products?.gsms?.gsm ?? 0,
+              canEdit: false),
         "quantity": DataTableContent(
             title: AppLocalizations.of(context)!.quantity,
             value: quantity ?? 0,
@@ -275,10 +277,11 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
             title: AppLocalizations.of(context)!.unit_price,
             value: unitPrice ?? 0,
             canEdit: true),
-        "discount": DataTableContent(
-            title: AppLocalizations.of(context)!.discount,
-            value: discount ?? 0,
-            canEdit: true),
+        if (!kIsWeb)
+          "discount": DataTableContent(
+              title: AppLocalizations.of(context)!.discount,
+              value: discount ?? 0,
+              canEdit: true),
         "price": DataTableContent(
             title: AppLocalizations.of(context)!.total_price,
             value: price ?? 0,
@@ -310,13 +313,7 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
   @override
   String? Function(dynamic) getCartableEditableValidateItemCell(
       BuildContext context, String field) {
-    double? maxValue = getTextInputValidatorMaxValue(field);
-    double? minValue = getTextInputValidatorMinValue(field);
-    return FormBuilderValidators.compose([
-      if (isFieldRequired(field)) FormBuilderValidators.required(),
-      if (maxValue != null) FormBuilderValidators.max(maxValue),
-      if (minValue != null) FormBuilderValidators.min(minValue),
-    ]);
+    return getTextInputValidatorCompose(context, field);
   }
 
   @override

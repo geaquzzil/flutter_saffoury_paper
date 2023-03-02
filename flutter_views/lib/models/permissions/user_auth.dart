@@ -66,7 +66,7 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "phone": TextInputType.text,
-        "password": TextInputType.visiblePassword,
+        "password": TextInputType.none,
       };
 
   @override

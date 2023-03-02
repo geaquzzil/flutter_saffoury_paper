@@ -59,11 +59,7 @@ class SearchWidgetWebComponent extends StatelessWidget {
         return AnimatedScale(
           duration: const Duration(milliseconds: 275),
           scale: value > 100 ? 1 : 0,
-          child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 275),
-            opacity: value > 100 ? 1 : 0,
-            child: icon,
-          ),
+          child: icon,
         );
       },
     );
@@ -87,9 +83,9 @@ class SearchWidgetWebComponent extends StatelessWidget {
               ValueListenableBuilder<double>(
                 valueListenable: scrollvalueNofifier,
                 builder: (context, value, child) {
-                  return AnimatedOpacity(
+                  return AnimatedScale(
                     duration: const Duration(milliseconds: 275),
-                    opacity: value > 100 ? 1 : 0,
+                    scale: value > 100 ? 1 : 0,
                     child: CartIconWidget(
                       onPressed: () {
                         context

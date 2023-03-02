@@ -63,6 +63,8 @@ class WebCheckoutLoginCheck extends StatelessWidget {
     //                 onValidate: (viewAbstract) {},
     //                 isTheFirst: true,
     //               )
-    return SignInPageWithoutHeaders(onPressRegister:() => context.goNamed(IndexWebRegister) ,);
+    return SignInPageWithoutHeaders(
+      onPressRegister: () => context.goNamed(IndexWebRegister),
+    );
   }
 }

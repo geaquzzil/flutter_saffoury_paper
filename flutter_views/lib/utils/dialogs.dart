@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../providers/cart/cart_provider.dart';
@@ -87,7 +88,6 @@ Future<T?> showFullScreenDialogExt<T>(
   if (SizeConfig.isLargeScreenGeneral(context)) {
     return showGeneralDialog(
       anchorPoint: anchorPoint,
-
       context: context,
       barrierDismissible: false,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
@@ -132,37 +132,45 @@ Future<dynamic> showCartDialog(
             "${viewAbstract.getCartableProductQuantity()}";
         final GlobalKey<FormState> formKey = GlobalKey<FormState>();
         return StatefulBuilder(builder: (context, setState) {
+          double minValue = 1;
+          double maxValue = viewAbstract.getCartableProductQuantity();
           return AlertDialog(
             backgroundColor: Theme.of(context).colorScheme.surface,
-            content: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      autofocus: true,
-                      controller: textEditingController,
-                      validator: context
-                          .read<CartProvider>()
-                          .getCartableInvoice
-                          .getCartableNewInstance(context, viewAbstract)
-                          .getCartableEditableValidateItemCell(
-                              context, "quantity"),
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.quantity,
-                        icon: const Icon(Icons.shopping_cart_rounded),
-                        // iconColor: context
-                        //         .watch<ErrorFieldsProvider>()
-                        //         .hasErrorField(viewAbstract, field)
-                        //     ? Theme.of(context).colorScheme.error
-                        //     : null,
-                        labelText: AppLocalizations.of(context)!.add_to_cart,
-                        suffixText:
-                            viewAbstract.getCartableQuantityUnit(context),
+            content: SizedBox(
+              width: 200,
+              // height: 500,
+              child: Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.always,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        autofocus: true,
+                        autovalidateMode: AutovalidateMode.always,
+                        keyboardType: TextInputType.number,
+                        controller: textEditingController,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.max(maxValue),
+                          FormBuilderValidators.min(minValue),
+                        ]),
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.quantity,
+                          icon: const Icon(Icons.shopping_cart_rounded),
+                          // iconColor: context
+                          //         .watch<ErrorFieldsProvider>()
+                          //         .hasErrorField(viewAbstract, field)
+                          //     ? Theme.of(context).colorScheme.error
+                          //     : null,
+                          labelText: AppLocalizations.of(context)!.add_to_cart,
+                          suffixText:
+                              viewAbstract.getCartableQuantityUnit(context),
+                        ),
                       ),
-                    ),
-                  ],
-                )),
+                    ],
+                  )),
+            ),
             actions: <Widget>[
               TextButton(
                 child: Text(AppLocalizations.of(context)!.subment),
@@ -192,7 +200,6 @@ Future<T?> showDialogExt<T>(
   return showDialog(
       anchorPoint: anchorPoint,
       context: context,
-      
       barrierDismissible: barrierDismissible,
       builder: builder);
 }
