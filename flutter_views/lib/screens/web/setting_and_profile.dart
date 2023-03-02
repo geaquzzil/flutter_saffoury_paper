@@ -350,7 +350,8 @@ class Help extends StatelessWidget {
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.orange)),
               onPressed: () {},
-              child: const Text("Development by Qussai Al-Saffoury")),
+              child:
+                  const Text("Development And Designed by Qussai Al-Saffoury")),
         ),
       ],
     );
