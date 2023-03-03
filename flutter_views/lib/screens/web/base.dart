@@ -313,9 +313,9 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     return SliverPadding(
         padding: EdgeInsets.only(
             top: kDefaultPadding / 2,
-            right: kDefaultPadding / 2,
+            right: kDefaultPadding,
             bottom: bottom ?? 0,
-            left: kDefaultPadding / 2),
+            left: kDefaultPadding),
         sliver: sliver);
   }
 
@@ -394,12 +394,11 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   }
 
   SizedBox getEndDrawer() {
-    return SizedBox(
-        width: 500, child: Card(child: WebShoppingCartDrawer()));
+    return SizedBox(width: 500, child: Card(child: WebShoppingCartDrawer()));
   }
 
   Widget getDrawer(List<HeaderItem> headerItems) {
-    return CardCorner(
+    return Card(
       child: Drawer(
         child: SafeArea(
           child: Padding(

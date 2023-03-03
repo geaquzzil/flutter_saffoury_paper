@@ -12,11 +12,19 @@ class HeaderText extends StatelessWidget {
   final String text;
   final double fontSize;
   final Html? description;
+  final bool useRespnosiveLayout;
   const HeaderText(
-      {super.key, this.fontSize = 35, required this.text, this.description});
+      {super.key,
+      this.fontSize = 35,
+      this.useRespnosiveLayout = true,
+      required this.text,
+      this.description});
 
   @override
   Widget build(BuildContext context) {
+    if (!useRespnosiveLayout) {
+      return getBody();
+    }
     return ScreenHelper(
       desktop: _buildUi(kDesktopMaxWidth),
       tablet: _buildUi(kTabletMaxWidth),
@@ -39,32 +47,36 @@ class HeaderText extends StatelessWidget {
                 // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
                 Expanded(
                   flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        text,
-                        style: GoogleFonts.roboto(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          height: 1.3,
-                          fontSize: fontSize,
-                        ),
-                      ),
-                      if (description != null)
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                      if (description != null) description!,
-                    ],
-                  ),
+                  child: getBody(),
                 ),
               ],
             ),
           );
         },
       ),
+    );
+  }
+
+  Column getBody() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text,
+          style: GoogleFonts.roboto(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            height: 1.3,
+            fontSize: fontSize,
+          ),
+        ),
+        if (description != null)
+          const SizedBox(
+            height: 10.0,
+          ),
+        if (description != null) description!,
+      ],
     );
   }
 }

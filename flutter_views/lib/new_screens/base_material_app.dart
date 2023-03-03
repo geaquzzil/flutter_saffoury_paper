@@ -14,10 +14,12 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_m
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
+import 'package:flutter_view_controller/printing_generator/utils.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/util.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -51,6 +53,11 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         setState(() {});
       });
     });
+    init();
+  }
+
+  void init() async {
+    Utils.initVersionNumber();
   }
 
   @override

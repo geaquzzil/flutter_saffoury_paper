@@ -18,8 +18,10 @@ class WebProductImages extends StatelessWidget {
           child: Column(children: [
             AspectRatio(
               aspectRatio: 1 / 1,
-              child:
-                  CachedNetworkImage(imageUrl: item.getImageUrl(context) ?? ""),
+              child: CachedNetworkImage(
+                imageUrl: item.getImageUrl(context) ?? "",
+                fit: BoxFit.contain,
+              ),
             )
           ]),
         ));

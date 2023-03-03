@@ -66,6 +66,7 @@ class WebMasterToList extends BaseWebPageSliversApi {
       buildFooter: true,
       buildHeader: true,
       pinToolbar: true,
+      useSmallFloatingBar: false,
       valueNotifierGrid: ValueNotifier<bool>(true),
       customHeader: Column(
         children: [

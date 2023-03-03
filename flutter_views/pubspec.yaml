@@ -108,6 +108,7 @@ dependencies:
   web_smooth_scroll: ^1.1.0
   timelines: ^0.1.0
   anim_search_bar: ^2.0.3
+  package_info_plus: ^3.0.3
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0
   

@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
+import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
@@ -32,6 +33,7 @@ import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../screens/web/contact-us.dart';
+import '../screens/web/error-page.dart';
 import '../screens/web/our_products.dart';
 import '../screens/web/terms.dart';
 import 'actions/view/view_view_main_page.dart';
@@ -96,7 +98,7 @@ class RouteGenerator {
           } else if (state.location.startsWith("/index")) {
             return state.location;
           } else {
-            return "/index";
+            return "Error";
           }
         }
         return "/";
@@ -321,14 +323,9 @@ class RouteGenerator {
     );
   }
 
-  static Scaffold getErrorPage() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Error'),
-      ),
-      body: const Center(
-        child: Text('ERROR'),
-      ),
+  static Widget getErrorPage() {
+    return ErrorWebPage(
+      errorMessage: "404 not found!",
     );
   }
 

@@ -67,6 +67,11 @@ class ProductWebPage extends BaseWebPageSlivers {
   @override
   void init(BuildContext context) {
     super.init(context);
+    viewAbstract = context
+        .read<AuthProvider<AuthUser>>()
+        .getWebCategories()[0]
+        .getNewInstance();
+
     if (customFilter != null) {
       Map<String, dynamic> map =
           Compression.uncompress(customFilter!) as Map<String, dynamic>;
@@ -183,11 +188,6 @@ class ProductWebPage extends BaseWebPageSlivers {
   @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
-    viewAbstract = context
-        .read<AuthProvider<AuthUser>>()
-        .getWebCategories()[0]
-        .getNewInstance();
-
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     fetshListWidgetBinding();
     return [
@@ -213,7 +213,8 @@ class ProductWebPage extends BaseWebPageSlivers {
       const SliverToBoxAdapter(
         child: SizedBox(height: kDefaultPadding),
       ),
-      _getHeaderTitle(context),
+      if (searchQuery != null || customFilterChecker != null)
+        _getHeaderTitle(context, constraints),
       _getFilterHeader(context),
       getListSelector(context, constraints)
     ];
@@ -252,22 +253,29 @@ class ProductWebPage extends BaseWebPageSlivers {
     ));
   }
 
-  Widget _getHeaderTitle(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: HeaderText(
-          fontSize: 25,
-          text: searchQuery != null
-              ? "Search results: “$searchQuery“"
-              : customFilterChecker != null
-                  ? "Showing products by filter"
-                  : "Showing products",
-          description: searchQuery != null || customFilterChecker != null
-              ? Html(
-                  data:
-                      "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
-                )
-              : null),
-    );
+  Widget _getHeaderTitle(BuildContext context, BoxConstraints constraints) {
+    return getSliverPadding(
+        context,
+        constraints,
+        getPadding(
+            context,
+            SliverToBoxAdapter(
+              child: HeaderText(
+                  fontSize: 25,
+                  useRespnosiveLayout: false,
+                  text: searchQuery != null
+                      ? "Search results: “$searchQuery“"
+                      : customFilterChecker != null
+                          ? "Showing products by filter"
+                          : "Showing products",
+                  description:
+                      searchQuery != null || customFilterChecker != null
+                          ? Html(
+                              data:
+                                  "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
+                            )
+                          : null),
+            )));
   }
 
   static Future<dynamic> showFilterDialog(

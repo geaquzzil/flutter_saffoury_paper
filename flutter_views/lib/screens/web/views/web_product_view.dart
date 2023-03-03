@@ -135,8 +135,11 @@ class WebProductView extends BaseWebPageSliversApi {
           // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
           Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
-              child:   WebProductImages(
-                item: extras!,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(kBorderRadius / 2),
+                child: WebProductImages(
+                  item: extras!,
+                ),
               )),
           Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,

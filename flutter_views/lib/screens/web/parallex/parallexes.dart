@@ -125,7 +125,7 @@ class LocationListItem extends StatelessWidget {
         if (customCenterWidget != null)
           if (soildColor != null) Positioned.fill(child: getFlow(context)),
         _buildParallaxBackground(context),
-        if (customCenterWidget == null) _buildGradient(),
+        if (customCenterWidget == null) _buildGradient(context),
         if (customCenterWidget == null) _buildTitleAndSubtitle(),
         if (customCenterWidget != null) _buildCenterWidget(context),
       ],
@@ -151,7 +151,7 @@ class LocationListItem extends StatelessWidget {
 
   Flow getFlow(BuildContext context) {
     return Flow(
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context)!,
         listItemContext: context,
@@ -183,15 +183,19 @@ class LocationListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildGradient() {
+  Widget _buildGradient(BuildContext context) {
     return Positioned.fill(
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+            colors: [
+              Colors.transparent,
+              //  Colors.black.withOpacity(0.7),
+              Theme.of(context).scaffoldBackgroundColor
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: const [0.6, 0.95],
+            stops: const [0.6, .95],
           ),
         ),
       ),

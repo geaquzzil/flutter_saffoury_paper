@@ -79,7 +79,7 @@ class SearchWidgetWebComponent extends StatelessWidget {
             leading: getLeadingWidget(context),
             title: getSearchTitleEditable(context),
             trailing: Wrap(children: [
-              const Spacer(),
+              // const Spacer(),
               ValueListenableBuilder<double>(
                 valueListenable: scrollvalueNofifier,
                 builder: (context, value, child) {

@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
+import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -55,17 +56,13 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                             child: SizedBox(
                               height: 500,
                               child: ClipRect(
-                                child: BackdropFilter(
-                                  filter:
-                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                  child: Container(
-                                    // height: 200,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor
-                                        .withOpacity(.5),
-                                    child: ProfileMenuWidget(
-                                        selectedValue: selectedValue),
-                                  ),
+                                child: Container(
+                                  // height: 200,
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor
+                                      .withOpacity(.5),
+                                  child: ProfileMenuWidget(
+                                      selectedValue: selectedValue),
                                 ),
                               ),
                             )),
@@ -314,33 +311,41 @@ class Help extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ListTile(
+          //todo translate
           title: Text("Help"),
         ),
-        const ListTile(
+        ListTile(
+          //todo translate
           title: Text("SaffouryPaper LTD. Co."),
-          subtitle: Text("Version 1.0"),
+          subtitle: Text(Utils.version),
         ),
         const Divider(),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
+          //todo translate
           child: TextButton(onPressed: () {}, child: const Text("Help Center")),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
+          //todo translate
           child: TextButton(onPressed: () {}, child: const Text("Contact Us")),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
+          //todo translate
           child: TextButton(onPressed: () {}, child: const Text("Licenses")),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: TextButton(
-              onPressed: () {}, child: const Text("Terms and Privacy Policy")),
+              //todo translate
+              onPressed: () {},
+              child: const Text("Terms and Privacy Policy")),
         ),
         const Divider(),
         const ListTile(
             subtitle:
+                //todo translate
                 Text("Copyright (c) 2023 SaffouryPaper. All rights Reserved")),
         const Spacer(),
         Padding(

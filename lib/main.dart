@@ -52,6 +52,8 @@ import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
+import 'package:flutter_view_controller/utils/util.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'models/funds/credits.dart';
@@ -63,6 +65,7 @@ void main() async {
   initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
+  Utils.initVersionNumber();
   svgCode = await rootBundle.loadString("assets/images/vector/logoOnly.svg");
   //TODO what is this ?
   // await SystemChrome.setPreferredOrientations([

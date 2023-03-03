@@ -164,17 +164,17 @@ class HeaderRow extends StatelessWidget {
                     ),
             )
             .toList(),
-        AnimSearchBar(
-          textFieldIconColor: Colors.black,
-          // color: Theme.of(context).scaffoldBackgroundColor,
+        // AnimSearchBar(
+        //   textFieldIconColor: Colors.black,
+        //   // color: Theme.of(context).scaffoldBackgroundColor,
 
-          width: 400,
-          textController: textController,
-          onSuffixTap: () {},
-          onSubmitted: (s) {
-            context.goNamed(indexWebOurProducts, queryParams: {"search": s});
-          },
-        ),
+        //   width: 400,
+        //   textController: textController,
+        //   onSuffixTap: () {},
+        //   onSubmitted: (s) {
+        //     context.goNamed(indexWebOurProducts, queryParams: {"search": s});
+        //   },
+        // ),
         CartIconWidget(
           onPressed:
               context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu,
@@ -228,6 +228,7 @@ class Header extends StatelessWidget {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 275),
             decoration: BoxDecoration(
+
                 // boxShadow: value == 0
                 //     ? null
                 //     : [
@@ -236,10 +237,14 @@ class Header extends StatelessWidget {
                 //             offset: Offset(2.0, 4.0),
                 //             blurRadius: 2)
                 //       ],
-                // border: value == 0
-                //     ? null
-                //     : const Border.symmetric(
-                //         horizontal: BorderSide(width: 1, color: kPrimaryColor)),
+                border: value == 0
+                    ? null
+                    : Border(
+                        bottom: BorderSide(
+                            width: 1,
+                            color: Theme.of(context)
+                                .scaffoldBackgroundColor
+                                .withOpacity(.7))),
                 color: value == 0
                     ? null
                     : Theme.of(context)
@@ -254,7 +259,7 @@ class Header extends StatelessWidget {
                     child: buildHeader(valueNotifier: valueNotifier),
                   ),
                   // We will make this in a bit
-                  mobile: buildMobileHeader(),
+                  mobile: buildMobileHeader(context),
                   tablet: buildHeader(),
                 ),
               ),
@@ -263,21 +268,19 @@ class Header extends StatelessWidget {
         },
       );
     }
-    return Container(
-      child: ScreenHelper(
-        desktop: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: buildHeader(),
-        ),
-        // We will make this in a bit
-        mobile: buildMobileHeader(),
-        tablet: buildHeader(),
+    return ScreenHelper(
+      desktop: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: buildHeader(),
       ),
+      // We will make this in a bit
+      mobile: buildMobileHeader(context),
+      tablet: buildHeader(),
     );
   }
 
   // mobile header
-  Widget buildMobileHeader() {
+  Widget buildMobileHeader(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -290,7 +293,9 @@ class Header extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 // Lets open drawer using global key
-                Globals.scaffoldKey.currentState?.openEndDrawer();
+                context
+                    .read<DrawerMenuControllerProvider>()
+                    .controlStartDrawerMenu();
               },
               child: const Icon(
                 FlutterIcons.menu_fea,
@@ -314,6 +319,66 @@ class Header extends StatelessWidget {
           HeaderLogo(valueNotifier: valueNotifier),
           HeaderRow(selectedHeader: selectedHeader),
         ],
+      ),
+    );
+  }
+}
+
+class WebMobileDrawer extends StatelessWidget {
+  const WebMobileDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Drawer(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 24.0,
+            ),
+            child: ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return headerItems[index].isButton
+                    ? MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kDangerColor,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                          child: TextButton(
+                            onPressed: () => headerItems[index].onClick?.call(),
+                            child: Text(
+                              headerItems[index].title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : ListTile(
+                        title: Text(
+                          headerItems[index].title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(
+                  height: 10.0,
+                );
+              },
+              itemCount: headerItems.length,
+            ),
+          ),
+        ),
       ),
     );
   }
