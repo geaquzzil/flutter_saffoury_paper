@@ -1496,6 +1496,11 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
+    return null;
+  }
+
+  @override
   String? getWebCategoryGridableDescription(BuildContext context) {
     return getMainHeaderTextOnly(context);
   }

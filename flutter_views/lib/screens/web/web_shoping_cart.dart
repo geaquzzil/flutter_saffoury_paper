@@ -99,6 +99,7 @@ class _WebShoppingCartDrawer extends State<WebShoppingCartDrawer>
           isExtended: true,
           icon: const Icon(Icons.shopping_cart_checkout_outlined),
           onPressed: () {
+            context.pop();
             context.goNamed(indexWebCheckout);
           },
           label: Text(AppLocalizations.of(context)!.checkout)),

@@ -5,4 +5,6 @@ abstract class WebCategoryGridableInterface<T extends ViewAbstract> {
   T getWebCategoryGridableInterface(BuildContext context);
   String getWebCategoryGridableTitle(BuildContext context);
   String? getWebCategoryGridableDescription(BuildContext context);
+
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context);
 }

@@ -343,7 +343,7 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     return getScaffold(context);
   }
 
-  Scaffold getScaffold(BuildContext context) {
+  Widget getScaffold(BuildContext context) {
     var headerItems = getHeaderItems(context);
     return Scaffold(
         backgroundColor: !buildHeader ? Colors.transparent : null,
@@ -395,10 +395,10 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
 
   SizedBox getEndDrawer() {
     return SizedBox(
-        width: 500, child: CardCorner(child: WebShoppingCartDrawer()));
+        width: 500, child: Card(child: WebShoppingCartDrawer()));
   }
 
-  CardCorner getDrawer(List<HeaderItem> headerItems) {
+  Widget getDrawer(List<HeaderItem> headerItems) {
     return CardCorner(
       child: Drawer(
         child: SafeArea(

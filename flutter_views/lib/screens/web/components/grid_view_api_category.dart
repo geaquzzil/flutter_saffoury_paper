@@ -224,12 +224,23 @@ class WebGridViewItem extends StatelessWidget {
       // scale: false,
       builder: (isHovered) => GestureDetector(
         onTap: () {
-          context.goNamed(indexWebView,
-              params: {
-                "id": item.iD.toString(),
-                "tableName": item.getTableNameApi()!
-              },
-              extra: item);
+          ViewAbstract? isMasterToList =
+              _categoryGridable.getWebCategoryGridableIsMasterToList(context);
+          if (isMasterToList != null) {
+            context.goNamed(indexWebMasterToList,
+                params: {"tableName": item.getTableNameApi()!},
+                queryParams: {
+                  "id": item.iD.toString(),
+                },
+                extra: item);
+          } else {
+            context.goNamed(indexWebView,
+                params: {
+                  "id": item.iD.toString(),
+                  "tableName": item.getTableNameApi()!
+                },
+                extra: item);
+          }
         },
         child: setDescriptionAtBottom
             ? _getStack(context, isHovered)
@@ -285,6 +296,8 @@ class WebGridViewItem extends StatelessWidget {
 
   Widget _buildBackground(BuildContext context) {
     return Positioned.fill(
+        child: item.getHeroTag(
+      context: context,
       child: Container(
           // width: 150,
           // height: 100,
@@ -297,7 +310,7 @@ class WebGridViewItem extends StatelessWidget {
                       fit: BoxFit.cover),
               color: null,
               borderRadius: const BorderRadius.all(Radius.circular(18)))),
-    );
+    ));
   }
 
   Widget _buildGradient(bool isHoverd) {

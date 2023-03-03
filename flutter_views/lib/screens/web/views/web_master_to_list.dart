@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -17,7 +18,9 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
+import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
+import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_images.dart';
 import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -26,10 +29,11 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class WebProductView extends BaseWebPageSliversApi {
+class WebMasterToList extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
-  WebProductView(
+
+  WebMasterToList(
       {super.key,
       super.extras,
       required super.iD,
@@ -38,7 +42,7 @@ class WebProductView extends BaseWebPageSliversApi {
       super.buildFooter,
       super.buildHeader,
       this.usePaddingOnBottomWidgets = false,
-      super.pinToolbar,
+      super.pinToolbar = true,
       super.useSmallFloatingBar,
       super.customSliverHeader});
 
@@ -54,6 +58,29 @@ class WebProductView extends BaseWebPageSliversApi {
               .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD)
           as Future<ViewAbstract?>;
     }
+  }
+
+  @override
+  Widget getScaffold(BuildContext context) {
+    return ListWebApi(
+      buildFooter: true,
+      buildHeader: true,
+      pinToolbar: true,
+      valueNotifierGrid: ValueNotifier<bool>(true),
+      customHeader: Column(
+        children: [
+          LocationListItem(
+              usePadding: false,
+              useResponsiveLayout: false,
+              // soildColor: Colors.black38,
+              imageUrl: extras?.getImageUrl(context) ?? "",
+              name: extras!.getMainHeaderTextOnly(context),
+              country: ""),
+        ],
+      ),
+      viewAbstract: (extras as WebCategoryGridableInterface)
+          .getWebCategoryGridableIsMasterToList(context)!,
+    );
   }
 
   @override
@@ -135,7 +162,7 @@ class WebProductView extends BaseWebPageSliversApi {
           // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
           Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
-              child:   WebProductImages(
+              child: WebProductImages(
                 item: extras!,
               )),
           Expanded(

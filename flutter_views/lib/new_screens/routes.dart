@@ -21,6 +21,7 @@ import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
+import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -72,6 +73,7 @@ const String indexWebAboutUs = "about-us";
 const String indexWebContactUs = "contact-us";
 const String indexWebCheckout = "checkout";
 const String indexWebView = "v";
+const String indexWebMasterToList = "list";
 const String IndexWebRegister = "register";
 const String indexWebSettingAndAccount = "account";
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -171,6 +173,19 @@ class RouteGenerator {
                       key: state.pageKey,
                       child: WebProductView(
                         iD: int.parse(state.params['id']!),
+                        tableName: state.params['tableName']!,
+                        extras: state.extra as ViewAbstract?,
+                      ));
+                },
+              ),
+              GoRoute(
+                name: indexWebMasterToList,
+                path: "list/:tableName",
+                pageBuilder: (context, state) {
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: WebMasterToList(
+                        iD: int.parse(state.queryParams['id']!),
                         tableName: state.params['tableName']!,
                         extras: state.extra as ViewAbstract?,
                       ));

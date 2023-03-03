@@ -231,6 +231,11 @@ class ProductType extends ViewAbstract<ProductType>
   }
 
   @override
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
+    return Product()..setCustomMap({"<${getForeignKeyName()}>": getIDString()});
+  }
+
+  @override
   String? getWebCategoryGridableDescription(BuildContext context) {
     return availability?.toCurrencyFormat();
   }

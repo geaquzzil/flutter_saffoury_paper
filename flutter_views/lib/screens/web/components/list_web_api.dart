@@ -54,7 +54,7 @@ class ListWebApi extends BaseWebPageSlivers {
   //     ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
 
   late ListMultiKeyProvider listProvider;
-  ValueNotifier<bool> valueNotifierGrid = ValueNotifier<bool>(false);
+  ValueNotifier<bool>? valueNotifierGrid;
   ValueNotifier<ViewAbstract?>? onCardTap;
   ListWebApi(
       {Key? key,
@@ -67,6 +67,7 @@ class ListWebApi extends BaseWebPageSlivers {
       this.onCardTap,
       bool buildFooter = false,
       bool useSmallFloatingBar = true,
+      this.valueNotifierGrid,
       bool buildHeader = false})
       : super(
             key: key,
@@ -96,6 +97,7 @@ class ListWebApi extends BaseWebPageSlivers {
     } else {
       customFilterChecker = null;
     }
+    valueNotifierGrid ??= ValueNotifier<bool>(false);
   }
 
   void fetshList() {
@@ -179,7 +181,7 @@ class ListWebApi extends BaseWebPageSlivers {
 
         if (isLoading) {
           if (count == 0) {
-            if (valueNotifierGrid.value) {
+            if (valueNotifierGrid!.value) {
               return getShimmerLoading(context, constraints);
             } else {
               return getShimmerLoadingList();
@@ -191,7 +193,7 @@ class ListWebApi extends BaseWebPageSlivers {
           }
         }
         return ValueListenableBuilder<bool>(
-          valueListenable: valueNotifierGrid,
+          valueListenable: valueNotifierGrid!,
           builder: (context, value, child) {
             if (value) {
               return getGridList(constraints,
