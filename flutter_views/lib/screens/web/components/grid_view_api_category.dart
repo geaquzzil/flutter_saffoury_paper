@@ -4,9 +4,11 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
+import 'package:flutter_view_controller/screens/web/components/list_web_api_master.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/models/design_process.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -14,31 +16,38 @@ import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:responsive_grid_list/responsive_grid_list.dart';
 
 class GridViewApi extends StatelessWidget {
   final ViewAbstract viewAbstract;
-  final String? title;
-  final String? description;
   double? customHeight;
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
-  GridViewApi(
-      {Key? key,
-      this.customHeight,
-      required this.viewAbstract,
-      this.title,
-      this.description})
-      : super(key: key);
+  GridViewApi({
+    Key? key,
+    this.customHeight,
+    required this.viewAbstract,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     customHeight = customHeight ??
         MediaQuery.of(context).size.height *
-            (SizeConfig.isMobile(context) ? .6 : .75);
+            (SizeConfig.isMobile(context) ? .5 : .65);
     return OnHoverWidget(
       mouseCursor: SystemMouseCursors.basic,
       onHover: valueNotifier,
       builder: (isHover) {
+        return ResponsiveWebBuilder(
+          builder: (context, width) {
+            return SizedBox(
+              height: customHeight,
+              child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [_buildUi(context, width), getButtons()]),
+            );
+          },
+        );
         return SizedBox(
           width: double.infinity,
           height: customHeight,
@@ -56,60 +65,67 @@ class GridViewApi extends StatelessWidget {
                 ),
               ),
             ),
-            ValueListenableBuilder<bool>(
-              valueListenable: valueNotifier,
-              builder: (context, value, child) {
-                return Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                        width: double.infinity,
-                        child: value == false
-                            ? Container()
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 40),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    RoundedIconButton(
-                                      icon: Icons.arrow_back_ios_new_sharp,
-                                      onTap: () {
-                                        if (valuePageNotifier.value == 0) {
-                                          return;
-                                        }
-                                        valuePageNotifier.value =
-                                            valuePageNotifier.value - 1;
-                                      },
-                                    ),
-                                    // IconButton(
-                                    //     onPressed: () {
-                                    //       if (valuePageNotifier.value == 0) {
-                                    //         return;
-                                    //       }
-                                    //       valuePageNotifier.value =
-                                    //           valuePageNotifier.value - 1;
-                                    //     },
-                                    //     icon: const Icon(
-                                    //         size: 100,
-                                    //         Icons.arrow_back_ios_new_sharp)),
-                                    IconButton(
-                                        onPressed: () {
-                                          valuePageNotifier.value =
-                                              valuePageNotifier.value + 1;
-                                        },
-                                        icon: const Icon(
-                                            size: 100,
-                                            Icons.arrow_forward_ios_sharp)),
-                                  ],
-                                ),
-                              )),
-                  ),
-                );
-              },
-            ),
+            getButtons(),
           ]),
+        );
+      },
+    );
+  }
+
+  ValueListenableBuilder<bool> getButtons() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: valueNotifier,
+      builder: (context, value, child) {
+        return Positioned.fill(
+          child: Align(
+            alignment: Alignment.center,
+            child: AnimatedScale(
+              duration: const Duration(milliseconds: 275),
+              scale: value ? 1 : 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RoundedIconButton(
+                    icon: Icons.arrow_back_ios_new_sharp,
+                    onTap: () {
+                      if (valuePageNotifier.value == 0) {
+                        return;
+                      }
+                      valuePageNotifier.value = valuePageNotifier.value - 1;
+                    },
+                  ),
+                  RoundedIconButton(
+                      onTap: () {
+                        valuePageNotifier.value = valuePageNotifier.value + 1;
+                      },
+                      icon: Icons.arrow_forward_ios_sharp),
+                ],
+              ),
+            ),
+
+            //  value == false
+            //     ? Container()
+            //     : Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           RoundedIconButton(
+            //             icon: Icons.arrow_back_ios_new_sharp,
+            //             onTap: () {
+            //               if (valuePageNotifier.value == 0) {
+            //                 return;
+            //               }
+            //               valuePageNotifier.value = valuePageNotifier.value - 1;
+            //             },
+            //           ),
+            //           RoundedIconButton(
+            //               onTap: () {
+            //                 valuePageNotifier.value =
+            //                     valuePageNotifier.value + 1;
+            //               },
+            //               icon: Icons.arrow_forward_ios_sharp),
+            //         ],
+            //       ),
+          ),
         );
       },
     );
@@ -118,84 +134,124 @@ class GridViewApi extends StatelessWidget {
   Widget _buildUi(BuildContext context, double width) {
     debugPrint("GridViewApi is building");
     // we need the context to get maxWidth before the constraints below
-    return ResponsiveWrapper(
-      maxWidth: width,
-      minWidth: width,
-      defaultScale: false,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          if (title != null)
-            Align(
-              alignment: Alignment.topCenter,
-              child: getWebText(title: title!),
-            ),
-          if (description != null)
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                description!,
-                style: const TextStyle(
-                  color: kCaptionColor,
-                  height: 1.5,
-                  fontSize: 15.0,
-                ),
-              ),
-            ),
-          const SizedBox(
-            height: 50.0,
-          ),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return ValueListenableBuilder<int>(
-                valueListenable: valuePageNotifier,
-                builder: (context, value, child) =>
-                    FutureBuilder<List<dynamic>?>(
-                  future: viewAbstract.listCall(
-                      count: ScreenHelper.isDesktop(context) ? 10 : 4,
-                      page: value),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    List<ViewAbstract>? list = snapshot.data?.cast();
-                    if (list == null) {
-                      return Container();
-                    }
+    return ValueListenableBuilder<int>(
+      valueListenable: valuePageNotifier,
+      builder: (context, value, child) {
+        return Align(
+          alignment: Alignment.center,
+          child: ListWebApiMaster(
+            valueNotifierGrid: ValueNotifier<bool>(true),
+            viewAbstract: viewAbstract,
+            customCount: ScreenHelper.isDesktop(context)
+                ? 8
+                : ScreenHelper.isTablet(context)
+                    ? 4
+                    : 4,
+            customPage: value,
+            onLoad: (context, list, count, isLoading) {
+              // return ResponsiveGridList(
+              //     listViewBuilderOptions: ListViewBuilderOptions(
+              //         physics: const NeverScrollableScrollPhysics(),
+              //         shrinkWrap: true,
+              //         padding: EdgeInsets.zero),
+              //     // shrinkWrap: true,
+              //     horizontalGridSpacing:
+              //         50, // Horizontal space between grid items
+              //     verticalGridSpacing: 50, // Vertical space between grid items
+              //     horizontalGridMargin: 50, // Horizontal space around the grid
+              //     verticalGridMargin: 50, // Vertical space around the grid
+              //     minItemsPerRow:
+              //         2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+              //     maxItemsPerRow:
+              //         4, // The maximum items to show in a single row. Can be useful on large screens
+              //     // sliverChildBuilderDelegateOptions:
+              //     //     SliverChildBuilderDelegateOptions(),
+              //     minItemWidth: 180,
+              //     children: [
+              //       ...list
+              //           .map((e) => WebGridViewItem(
+              //                 item: e,
+              //                 setDescriptionAtBottom: false,
+              //               ))
+              //           .toList(),
+              //       if (isLoading)
+              //         ...List.generate(
+              //             5, (index) => ListHorizontalItemShimmer())
+              //     ]);
+              return ResponsiveGridView.builder(
+                padding: const EdgeInsets.all(0.0),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                alignment: Alignment.topCenter,
 
-                    return ResponsiveGridView.builder(
-                      padding: const EdgeInsets.all(0.0),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      alignment: Alignment.topCenter,
-                      gridDelegate: ResponsiveGridDelegate(
-                        mainAxisSpacing:
-                            ScreenHelper.isDesktop(context) ? 40.0 : 20.0,
-                        crossAxisSpacing: 40.0,
-                        maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                                ScreenHelper.isMobile(context)
-                            ? constraints.maxWidth / 2
-                            : 250,
-                        // Hack to adjust child height
-                        childAspectRatio: ScreenHelper.isDesktop(context)
-                            ? 1
-                            : MediaQuery.of(context).size.aspectRatio * 1.5,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        var designProcesse = list[index];
-                        return WebGridViewItem(
-                          item: designProcesse,
-                        );
-                      },
-                      itemCount: list.length,
-                    );
-                  },
+                // maxRowCount: 4,
+                gridDelegate: ResponsiveGridDelegate(
+                  mainAxisSpacing:
+                      ScreenHelper.isDesktop(context) ? 40.0 : 20.0,
+                  crossAxisSpacing: 40.0,
+
+                  maxCrossAxisExtent: ScreenHelper.isTablet(context)
+                      ? width / 4
+                      : ScreenHelper.isMobile(context)
+                          ? width / 2
+                          : 250,
+                  // Hack to adjust child height
+                  childAspectRatio: ScreenHelper.isDesktop(context)
+                      ? 1
+                      : MediaQuery.of(context).size.aspectRatio * 2,
                 ),
+                itemBuilder: (BuildContext context, int index) {
+                  var designProcesse = list[index];
+                  return WebGridViewItem(
+                    item: designProcesse,
+                  );
+                },
+                itemCount: list.length,
               );
             },
-          )
-        ],
-      ),
+          ),
+        );
+
+        return FutureBuilder<List<dynamic>?>(
+          future: viewAbstract.listCall(
+              count: ScreenHelper.isDesktop(context) ? 10 : 4, page: value),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            List<ViewAbstract>? list = snapshot.data?.cast();
+            if (list == null) {
+              return Container();
+            }
+
+            return ResponsiveGridView.builder(
+              padding: const EdgeInsets.all(0.0),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              alignment: Alignment.topCenter,
+              gridDelegate: ResponsiveGridDelegate(
+                mainAxisSpacing: ScreenHelper.isDesktop(context) ? 40.0 : 20.0,
+                crossAxisSpacing: 40.0,
+                maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
+                        ScreenHelper.isMobile(context)
+                    ? width / 2
+                    : 250,
+                // Hack to adjust child height
+                childAspectRatio: ScreenHelper.isDesktop(context)
+                    ? 1
+                    : MediaQuery.of(context).size.aspectRatio * 1.5,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                var designProcesse = list[index];
+                return WebGridViewItem(
+                  item: designProcesse,
+                );
+              },
+              itemCount: list.length,
+            );
+          },
+        );
+      },
     );
   }
 }

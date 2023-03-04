@@ -25,6 +25,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
       required this.title,
       this.customDescription,
       this.description,
+
       this.isBackgroundImageBlurred = true,
       this.backgroundImage,
       this.customWidget,
@@ -33,6 +34,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
   // We can use same idea as ios_app_ad.dart and swap children order, let's copy code
   @override
   Widget build(BuildContext context) {
+  
     return ScreenHelper(
       desktop: _buildUi(context, kDesktopMaxWidth),
       tablet: _buildUi(context, kTabletMaxWidth),

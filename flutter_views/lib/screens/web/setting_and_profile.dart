@@ -274,7 +274,7 @@ class MasterToListFromProfile extends StatelessWidget {
             ),
           );
         }
-        return ListWebApi(
+        return ListWebApiPage(
           buildHeader: buildHeader,
           buildFooter: buildFooter,
           useSmallFloatingBar: useSmallFloatingBar,

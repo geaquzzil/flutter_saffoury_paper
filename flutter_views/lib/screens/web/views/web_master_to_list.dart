@@ -62,7 +62,7 @@ class WebMasterToList extends BaseWebPageSliversApi {
 
   @override
   Widget getScaffold(BuildContext context) {
-    return ListWebApi(
+    return ListWebApiPage(
       buildFooter: true,
       buildHeader: true,
       pinToolbar: true,

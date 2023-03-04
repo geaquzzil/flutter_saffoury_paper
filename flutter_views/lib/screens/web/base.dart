@@ -294,6 +294,15 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     );
   }
 
+  Widget getSliverSizedBox({double height = 20, double? width}) {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: height,
+        width: width,
+      ),
+    );
+  }
+
   Widget getHeader(BuildContext context) {
     if (kIsWeb) {
       return Header(

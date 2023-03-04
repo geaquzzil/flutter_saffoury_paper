@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
@@ -26,6 +28,7 @@ import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
@@ -42,49 +45,42 @@ import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-class ListWebApiPage extends BaseWebPageSlivers {
+class ListWebApiSliverComponent extends StatelessWidget {
   final String? searchQuery;
   final String? customFilter;
-  final bool buildSearchBar;
   Map<String, FilterableProviderHelper>? customFilterChecker;
   ViewAbstract viewAbstract;
-  final Widget? customHeader;
-
-  // ValueNotifier<Map<String, FilterableProviderHelper>?> onFilterable =
-  //     ValueNotifier<Map<String, FilterableProviderHelper>?>(null);
 
   late ListMultiKeyProvider listProvider;
   ValueNotifier<bool>? valueNotifierGrid;
   ValueNotifier<ViewAbstract?>? onCardTap;
-  ListWebApiPage(
+
+  
+
+  ///web version converts to hover actions and changed to list item from 20 to 10 if desktop or 4 if mobile and adds button on hover to go to next page
+  final bool buildWebVersion;
+  ListWebApiSliverComponent(
       {Key? key,
       this.searchQuery,
       this.customFilter,
       required this.viewAbstract,
-      this.customHeader,
-      super.pinToolbar = false,
-      this.buildSearchBar = false,
       this.onCardTap,
+      this.buildWebVersion = false,
       bool buildFooter = false,
       bool useSmallFloatingBar = true,
       this.valueNotifierGrid,
       Widget? customSliverWidget,
       bool buildHeader = false})
       : super(
-            key: key,
-            buildFooter: buildFooter,
-            buildHeader: buildHeader,
-            customSliverHeader: customSliverWidget,
-            useSmallFloatingBar: useSmallFloatingBar);
-  void fetshListWidgetBinding() {
+          key: key,
+        );
+  void fetshListWidgetBinding(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetshList();
+      fetshList(context);
     });
   }
 
-  @override
   void init(BuildContext context) {
-    super.init(context);
     if (customFilter != null) {
       Map<String, dynamic> map =
           Compression.uncompress(customFilter!) as Map<String, dynamic>;
@@ -100,23 +96,35 @@ class ListWebApiPage extends BaseWebPageSlivers {
       customFilterChecker = null;
     }
     valueNotifierGrid ??= ValueNotifier<bool>(false);
+    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+    fetshListWidgetBinding(context);
   }
 
-  void fetshList() {
+  void fetshList(BuildContext context) {
     String customKey = findCustomKey();
     if (listProvider.getCount(customKey) == 0) {
-      fetshListNotCheckingZero();
+      fetshListNotCheckingZero(context);
     }
   }
 
-  void fetshListNotCheckingZero() {
+  void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract,
+          customCount: buildWebVersion == false
+              ? null
+              : ScreenHelper.isDesktop(context)
+                  ? 8
+                  : 4);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract,
+          customCount: buildWebVersion == false
+              ? null
+              : ScreenHelper.isDesktop(context)
+                  ? 8
+                  : 4);
     } else {
       listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
     }
@@ -134,7 +142,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
           expand: false,
           onSubtitleClicked: isError
               ? () {
-                  fetshList();
+                  fetshList(context);
                 }
               : null,
           lottiUrl:
@@ -148,7 +156,8 @@ class ListWebApiPage extends BaseWebPageSlivers {
     );
   }
 
-  Widget getShimmerLoading(BuildContext context, BoxConstraints constraints) {
+  Widget getShimmerLoading(
+      BuildContext context, SliverConstraints constraints) {
     return getSliverPadding(
       context,
       constraints,
@@ -172,7 +181,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
   }
 
   Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>> getListSelector(
-      BuildContext context, BoxConstraints constraints) {
+      BuildContext context, SliverConstraints constraints) {
     return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
       builder: (context, value, child) {
         // List<Widget> widgets;
@@ -205,8 +214,6 @@ class ListWebApiPage extends BaseWebPageSlivers {
             }
           },
         );
-        return getGridList(
-            constraints, listProvider.getList(findCustomKey()), isLoading);
       },
       selector: (p0, p1) => Tuple3(p1.isLoading(findCustomKey()),
           p1.getCount(findCustomKey()), p1.isHasError(findCustomKey())),
@@ -267,7 +274,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
     );
   }
 
-  Widget getSliverList(BuildContext context, BoxConstraints constraints,
+  Widget getSliverList(BuildContext context, SliverConstraints constraints,
       int count, bool isLoading) {
     return getSliverPadding(
       context,
@@ -291,47 +298,6 @@ class ListWebApiPage extends BaseWebPageSlivers {
   String findCustomKey() {
     String key = viewAbstract.getListableKey();
     return key + (searchQuery == null ? "" : searchQuery!);
-  }
-
-  @override
-  List<Widget> getContentWidget(
-      BuildContext context, BoxConstraints constraints) {
-    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    fetshListWidgetBinding();
-    return [
-      if (customHeader != null)
-        SliverToBoxAdapter(
-          child: customHeader,
-        ),
-      if (buildSearchBar)
-        SliverPersistentHeader(
-            pinned: true,
-            delegate: SliverAppBarDelegatePreferedSize(
-              shouldRebuildWidget: true,
-              child: PreferredSize(
-                preferredSize: const Size.fromHeight(60),
-                child: ResponsiveWebBuilderSliver(
-                  builder: (context, width) => SearchWidgetWebComponent(
-                    scrollvalueNofifier: onScroll,
-                    // appBardExpandType: expandType,
-                    onSearchTextChanged: (serchQuery) {
-                      context.goNamed(indexWebOurProducts,
-                          queryParams: {"search": serchQuery});
-                    },
-                    // key: const ValueKey(2),
-                  ),
-                ),
-              ),
-            )),
-      if (buildSearchBar)
-        const SliverToBoxAdapter(
-          child: SizedBox(height: kDefaultPadding),
-        ),
-      if (buildSearchBar) _getHeaderTitle(context),
-      if (buildSearchBar) _getFilterHeader(context),
-      getListSelector(context, constraints)
-    ];
-    // return Expanded(
   }
 
   Widget _getFilterHeader(BuildContext context) {
@@ -416,18 +382,25 @@ class ListWebApiPage extends BaseWebPageSlivers {
     );
   }
 
-  @override
-  void isScrolled(BuildContext context) {
-    fetshListNotCheckingZero();
+  Widget getSliverPadding(
+      BuildContext context, SliverConstraints constraints, Widget child,
+      {double padd = 2}) {
+    return SliverPadding(
+        padding: EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: max((constraints.crossAxisExtent - 1200) / padd, 0) > 15
+                ? max((constraints.crossAxisExtent - 1200) / padd, 0)
+                : 15),
+        sliver: child);
   }
 
-  SliverPadding getGridList(BoxConstraints constraints,
+  SliverPadding getGridList(SliverConstraints constraints,
       List<ViewAbstract<dynamic>> list, bool isLoading) {
     return SliverPadding(
       padding: EdgeInsets.symmetric(
           vertical: 15,
-          horizontal: max((constraints.maxWidth - 1200) / 2, 0) > 15
-              ? max((constraints.maxWidth - 1200) / 2, 0)
+          horizontal: max((constraints.crossAxisExtent - 1200) / 2, 0) > 15
+              ? max((constraints.crossAxisExtent - 1200) / 2, 0)
               : 15),
       sliver: ResponsiveSliverGridList(
           horizontalGridSpacing: 50, // Horizontal space between grid items
@@ -452,5 +425,12 @@ class ListWebApiPage extends BaseWebPageSlivers {
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    init(context);
+    return SliverLayoutBuilder(
+        builder: (p0, constraints) => getListSelector(context, constraints));
   }
 }
