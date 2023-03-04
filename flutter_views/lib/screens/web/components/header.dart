@@ -8,10 +8,13 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/popup_widget.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/overlay_page.dart';
@@ -180,7 +183,22 @@ class HeaderRow extends StatelessWidget {
               context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu,
           returnNillIfZero: true,
         ),
-        ProfilePicturePopupMenu(),
+        if (context.read<AuthProvider<AuthUser>>().getStatus ==
+            Status.Authenticated)
+          Row(
+            children: [
+              getWebText(
+                  fontSize: 12,
+                  color: Colors.orange,
+                  title: AppLocalizations.of(context)!.hiThere +
+                      "\n" +
+                      context.read<AuthProvider<AuthUser>>().getUserName),
+              const SizedBox(
+                width: kDefaultPadding / 2,
+              ),
+              const ProfilePicturePopupMenu(),
+            ],
+          ),
         // CustomPopupMenu(
         //   menuBuilder: () => ProfileMenuWidget(controller: _controller),
         //   pressType: PressType.singleClick,
@@ -325,10 +343,23 @@ class Header extends StatelessWidget {
 }
 
 class WebMobileDrawer extends StatelessWidget {
-  const WebMobileDrawer({super.key});
+  final String selectedHeader;
+  const WebMobileDrawer({super.key, required this.selectedHeader});
 
   @override
   Widget build(BuildContext context) {
+    var headerItems = getHeaderItems(context);
+    Widget? header =
+        context.read<AuthProvider<AuthUser>>().getStatus == Status.Authenticated
+            ? ProfileHeaderListTileWidget(
+                onTap: () {
+                  context
+                      .read<DrawerMenuControllerProvider>()
+                      .controlStartDrawerMenu();
+                  context.goNamed(indexWebSettingAndAccount);
+                },
+              )
+            : null;
     return Card(
       child: Drawer(
         child: SafeArea(
@@ -339,6 +370,9 @@ class WebMobileDrawer extends StatelessWidget {
             ),
             child: ListView.separated(
               itemBuilder: (BuildContext context, int index) {
+                if (index >= headerItems.length) {
+                  return header!;
+                }
                 return headerItems[index].isButton
                     ? MouseRegion(
                         cursor: SystemMouseCursors.click,
@@ -362,6 +396,13 @@ class WebMobileDrawer extends StatelessWidget {
                         ),
                       )
                     : ListTile(
+                        onTap: () {
+                          context
+                              .read<DrawerMenuControllerProvider>()
+                              .controlStartDrawerMenu();
+                          headerItems[index].onClick?.call();
+                        },
+                        selected: headerItems[index].title == selectedHeader,
                         title: Text(
                           headerItems[index].title,
                           style: const TextStyle(
@@ -375,7 +416,7 @@ class WebMobileDrawer extends StatelessWidget {
                   height: 10.0,
                 );
               },
-              itemCount: headerItems.length,
+              itemCount: headerItems.length + (header != null ? 1 : 0),
             ),
           ),
         ),

@@ -68,11 +68,13 @@ class ListWebApi extends BaseWebPageSlivers {
       bool buildFooter = false,
       bool useSmallFloatingBar = true,
       this.valueNotifierGrid,
+      Widget? customSliverWidget,
       bool buildHeader = false})
       : super(
             key: key,
             buildFooter: buildFooter,
             buildHeader: buildHeader,
+            customSliverHeader: customSliverWidget,
             useSmallFloatingBar: useSmallFloatingBar);
   void fetshListWidgetBinding() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -199,7 +201,7 @@ class ListWebApi extends BaseWebPageSlivers {
               return getGridList(constraints,
                   listProvider.getList(findCustomKey()), isLoading);
             } else {
-              return getSliverList(count, isLoading);
+              return getSliverList(context, constraints, count, isLoading);
             }
           },
         );
@@ -265,10 +267,12 @@ class ListWebApi extends BaseWebPageSlivers {
     );
   }
 
-  Widget getSliverList(int count, bool isLoading) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
-      sliver: SliverList(
+  Widget getSliverList(BuildContext context, BoxConstraints constraints,
+      int count, bool isLoading) {
+    return getSliverPadding(
+      context,
+      constraints,
+      SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
         if (isLoading && index == count) {
           return getSharedLoadingItem(context);

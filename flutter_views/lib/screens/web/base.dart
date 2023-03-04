@@ -352,7 +352,7 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
             ? null
             : context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
         endDrawer: getEndDrawer(),
-        drawer: getDrawer(headerItems),
+        drawer: WebMobileDrawer(selectedHeader: getSelectedHeader(context)),
         body: getBody(context));
   }
 

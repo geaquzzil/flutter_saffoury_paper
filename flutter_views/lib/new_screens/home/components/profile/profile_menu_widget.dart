@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/card_clicked.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
+import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -13,17 +14,34 @@ import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+class ProfileMenuWidgetList extends StatelessWidget {
+  final List<ItemModel> menuItems;
+
+  const ProfileMenuWidgetList({super.key, required this.menuItems});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
 class ProfileMenuWidget extends StatelessWidget {
   CustomPopupMenuController? controller;
   bool showHeader;
   List<ItemModel> menuItems = [];
   ValueNotifier<ItemModel?>? selectedValue;
+  void Function(ItemModel? value)? selectedValueVoid;
   ProfileMenuWidget(
-      {super.key, this.controller, this.showHeader = true, this.selectedValue});
+      {super.key,
+      this.controller,
+      this.selectedValueVoid,
+      this.showHeader = true,
+      this.selectedValue});
 
   @override
   Widget build(BuildContext context) {
-    init(context);
+    menuItems = getListOfProfileSettings(context, controller: controller);
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
@@ -41,6 +59,8 @@ class ProfileMenuWidget extends StatelessWidget {
                       onTap: () {
                         if (selectedValue != null) {
                           selectedValue!.value = item;
+                        } else if (selectedValueVoid != null) {
+                          selectedValueVoid?.call(item);
                         } else {
                           item.onPress?.call();
                         }
@@ -169,32 +189,5 @@ class ProfileMenuWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void init(BuildContext context) {
-    AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
-    if (authProvider.hasSavedUser) {
-      menuItems = [
-        ItemModel(authProvider.getUserName, Icons.chat_bubble),
-        ItemModel(
-            "${AppLocalizations.of(context)!.edit} ${AppLocalizations.of(context)!.profile}",
-            Icons.account_box_outlined),
-        ItemModel(AppLocalizations.of(context)!.orders,
-            Icons.shopping_basket_rounded),
-        ItemModel('Chat', Icons.chat_bubble),
-        ItemModel("Help", Icons.help_outline_rounded),
-        ItemModel(AppLocalizations.of(context)!.logout, Icons.logout),
-      ];
-    } else {
-      menuItems = [
-        ItemModel(
-            AppLocalizations.of(context)!.action_sign_in_short, Icons.login,
-            onPress: () {
-          debugPrint("onPress sing_in");
-          controller?.hideMenu();
-          context.goNamed(loginRouteName);
-        }),
-      ];
-    }
   }
 }

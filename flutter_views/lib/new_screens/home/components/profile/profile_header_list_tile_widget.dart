@@ -6,13 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProfileHeaderListTileWidget extends StatelessWidget {
-  const ProfileHeaderListTileWidget({Key? key}) : super(key: key);
+  final void Function()? onTap;
+  const ProfileHeaderListTileWidget({Key? key, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     AuthProvider auth = context.watch<AuthProvider<AuthUser>>();
 
     return ListTile(
+      onTap: onTap,
       leading: RoundedIconButtonNetwork(
           onTap: () {},
           imageUrl: context.read<AuthProvider<AuthUser>>().getUserImageUrl),

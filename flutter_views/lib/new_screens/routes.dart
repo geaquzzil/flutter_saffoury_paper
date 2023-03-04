@@ -22,6 +22,7 @@ import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile_web_page.dart';
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:go_router/go_router.dart';
@@ -136,7 +137,7 @@ class RouteGenerator {
                 name: indexWebSettingAndAccount,
                 pageBuilder: (context, state) {
                   return MaterialPage(
-                      key: state.pageKey, child: SettingAndProfileWeb());
+                      key: state.pageKey, child: SettingAndProfileWebPage(currentSetting: state.queryParams["action"],));
                 },
               ),
               GoRoute(

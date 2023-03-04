@@ -61,9 +61,12 @@ class WebProductView extends BaseWebPageSliversApi {
       BuildContext context, BoxConstraints constraints) {
     return [
       if (buildSmallView ?? false)
-        SliverToBoxAdapter(
-          child: getDetailsView(context),
-        )
+        getSliverPadding(
+            context,
+            constraints,
+            SliverToBoxAdapter(
+              child: getDetailsView(context),
+            ))
       else
         SliverToBoxAdapter(
           child: ScreenHelper(
@@ -72,7 +75,7 @@ class WebProductView extends BaseWebPageSliversApi {
             mobile: _buildUi(context, getMobileMaxWidth(context), constraints),
           ),
         ),
-      ...getBottomWidget(context),
+      ...getBottomWidget(context, constraints),
       const SliverToBoxAdapter(
         child: SizedBox(height: 80),
       )
@@ -86,7 +89,8 @@ class WebProductView extends BaseWebPageSliversApi {
     return topWidget;
   }
 
-  List<Widget> getBottomWidget(BuildContext context) {
+  List<Widget> getBottomWidget(
+      BuildContext context, BoxConstraints constraint) {
     List<Widget>? bottomWidget =
         getExtras()?.getCustomBottomWidget(context, action: getServerActions());
     if (bottomWidget == null) return [];
@@ -99,9 +103,12 @@ class WebProductView extends BaseWebPageSliversApi {
                   child: e,
                 ),
                 bottom: 20)
-            : SliverToBoxAdapter(
-                child: e,
-              );
+            : getSliverPadding(
+                context,
+                constraint,
+                SliverToBoxAdapter(
+                  child: e,
+                ));
       } else {
         return usePaddingOnBottomWidgets
             ? getPadding(
@@ -110,9 +117,12 @@ class WebProductView extends BaseWebPageSliversApi {
                   child: ResponsiveWebBuilder(builder: (context, width) => e),
                 ),
                 bottom: 20)
-            : SliverToBoxAdapter(
-                child: ResponsiveWebBuilder(builder: (context, width) => e),
-              );
+            : getSliverPadding(
+                context,
+                constraint,
+                SliverToBoxAdapter(
+                  child: e,
+                ));
       }
     }).toList();
   }

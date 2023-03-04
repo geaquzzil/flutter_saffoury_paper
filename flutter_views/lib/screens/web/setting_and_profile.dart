@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
+import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
@@ -24,8 +25,7 @@ import '../../customs_widget/sliver_delegates.dart';
 
 class SettingAndProfileWeb extends BaseWebPageSlivers {
   ValueNotifier<ItemModel?> selectedValue = ValueNotifier<ItemModel?>(null);
-  ValueNotifier<ViewAbstract?> selectedCardValue =
-      ValueNotifier<ViewAbstract?>(null);
+
   SettingAndProfileWeb({
     super.key,
     super.buildFooter = false,
@@ -77,98 +77,8 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                                 child: ValueListenableBuilder<ItemModel?>(
                                     valueListenable: selectedValue,
                                     builder: (context, value, child) {
-                                      if (value == null) {
-                                        return const Center(
-                                          child: Text("Select setting to show"),
-                                        );
-                                      }
-                                      if (value.icon == Icons.logout) {
-                                        return const Logout();
-                                      } else if (value.icon ==
-                                          Icons.help_outline_rounded) {
-                                        return const Help();
-                                      } else if (value.icon ==
-                                          Icons.account_box_outlined) {
-                                        return const ProfileEdit();
-                                      } else if (value.icon ==
-                                          Icons.shopping_basket_rounded) {
-                                        return ValueListenableBuilder<
-                                            ViewAbstract?>(
-                                          valueListenable: selectedCardValue,
-                                          builder: (context, value, child) {
-                                            if (value != null) {
-                                              return WebProductView(
-                                                buildSmallView: true,
-                                                iD: value.iD,
-                                                tableName:
-                                                    value.getTableNameApi()!,
-                                                extras: value,
-                                                buildFooter: false,
-                                                customSliverHeader:
-                                                    SliverPersistentHeader(
-                                                  pinned: pinToolbar,
-                                                  floating: true,
-                                                  delegate:
-                                                      SliverAppBarDelegatePreferedSize(
-                                                          child: PreferredSize(
-                                                              preferredSize:
-                                                                  const Size
-                                                                          .fromHeight(
-                                                                      70.0),
-                                                              child: Container(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .scaffoldBackgroundColor,
-                                                                child: ListTile(
-                                                                  leading:
-                                                                      IconButton(
-                                                                    icon: const Icon(
-                                                                        Icons
-                                                                            .arrow_back),
-                                                                    onPressed:
-                                                                        () {
-                                                                      debugPrint(
-                                                                          "backbutton pressed");
-                                                                      selectedCardValue
-                                                                              .value =
-                                                                          null;
-                                                                    },
-                                                                  ),
-                                                                  title: value
-                                                                      .getMainHeaderText(
-                                                                          context),
-                                                                ),
-                                                              ))),
-                                                ),
-                                                buildHeader: false,
-                                                useSmallFloatingBar: true,
-                                              );
-                                            }
-                                            return ListWebApi(
-                                              onCardTap: selectedCardValue,
-                                              customHeader: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: const [
-                                                  ListTile(
-                                                    title: Text("Orders"),
-                                                    subtitle: Text(
-                                                        "By logining you out all of your data will be cleared."),
-                                                  ),
-                                                ],
-                                              ),
-                                              viewAbstract:
-                                                  getListOfOrders(context),
-                                            );
-                                          },
-                                        );
-                                      }
-                                      return const Center(
-                                        child: Text(
-                                            "not seleting setting to show"),
-                                      );
+                                      return getWidgetFromProfile(
+                                          context, value, pinToolbar);
                                     }),
                               ),
                             ),
@@ -297,6 +207,93 @@ class ProfileEdit extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MasterToListFromProfile extends StatelessWidget {
+  final bool pinToolbar;
+  ValueNotifier<ViewAbstract?> selectedCardValue =
+      ValueNotifier<ViewAbstract?>(null);
+  bool buildFooter;
+  bool buildHeader;
+  bool buildSmallView;
+  bool useSmallFloatingBar;
+  Widget? customSliverHeader;
+  MasterToListFromProfile(
+      {super.key,
+      required this.pinToolbar,
+      this.buildFooter = false,
+      this.buildSmallView = true,
+      this.useSmallFloatingBar = true,
+      this.buildHeader = false});
+
+  ViewAbstract getListOfOrders(BuildContext context) {
+    AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
+    ViewAbstract orderSample = authProvider.getOrderSimple;
+    String key = authProvider.getUser.isGeneralEmployee(context)
+        ? "EmployeeID"
+        : "CustomerID";
+    orderSample.setCustomMap({"<$key>": "${authProvider.getUser.iD}"});
+    return orderSample;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ViewAbstract?>(
+      valueListenable: selectedCardValue,
+      builder: (context, value, child) {
+        if (value != null) {
+          return WebProductView(
+            buildSmallView: buildSmallView,
+            buildHeader: buildHeader,
+            useSmallFloatingBar: useSmallFloatingBar,
+            iD: value.iD,
+            tableName: value.getTableNameApi()!,
+            extras: value,
+            buildFooter: buildFooter,
+            customSliverHeader: SliverPersistentHeader(
+              pinned: pinToolbar,
+              // floating: true,
+              delegate: SliverAppBarDelegatePreferedSize(
+                  child: PreferredSize(
+                      preferredSize: const Size.fromHeight(70.0),
+                      child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: ListTile(
+                          leading: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              debugPrint("backbutton pressed");
+                              selectedCardValue.value = null;
+                            },
+                          ),
+                          title: value.getMainHeaderText(context),
+                        ),
+                      ))),
+            ),
+          );
+        }
+        return ListWebApi(
+          buildHeader: buildHeader,
+          buildFooter: buildFooter,
+          useSmallFloatingBar: useSmallFloatingBar,
+          pinToolbar: pinToolbar,
+          onCardTap: selectedCardValue,
+          customHeader: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              ListTile(
+                title: Text("Orders"),
+                subtitle: Text(
+                    "By logining you out all of your data will be cleared."),
+              ),
+            ],
+          ),
+          viewAbstract: getListOfOrders(context),
+        );
+      },
     );
   }
 }
