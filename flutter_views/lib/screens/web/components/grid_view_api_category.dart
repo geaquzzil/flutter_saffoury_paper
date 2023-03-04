@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
@@ -72,17 +73,27 @@ class GridViewApi extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          if (valuePageNotifier.value == 0) {
-                                            return;
-                                          }
-                                          valuePageNotifier.value =
-                                              valuePageNotifier.value - 1;
-                                        },
-                                        icon: const Icon(
-                                            size: 100,
-                                            Icons.arrow_back_ios_new_sharp)),
+                                    RoundedIconButton(
+                                      icon: Icons.arrow_back_ios_new_sharp,
+                                      onTap: () {
+                                        if (valuePageNotifier.value == 0) {
+                                          return;
+                                        }
+                                        valuePageNotifier.value =
+                                            valuePageNotifier.value - 1;
+                                      },
+                                    ),
+                                    // IconButton(
+                                    //     onPressed: () {
+                                    //       if (valuePageNotifier.value == 0) {
+                                    //         return;
+                                    //       }
+                                    //       valuePageNotifier.value =
+                                    //           valuePageNotifier.value - 1;
+                                    //     },
+                                    //     icon: const Icon(
+                                    //         size: 100,
+                                    //         Icons.arrow_back_ios_new_sharp)),
                                     IconButton(
                                         onPressed: () {
                                           valuePageNotifier.value =
