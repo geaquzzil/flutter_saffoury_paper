@@ -5,30 +5,30 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'grid_view_api_category.dart';
+
 final List<DesignProcess> designProcesses = [
   DesignProcess(
     title: "DESIGN",
+    imageUrl:
+        "https://saffoury.com/wp-content/uploads/cropped-imag03_small.jpg",
     iconData: Icons.design_services,
     subtitle:
         "A full stack allround designer thay may or may not include a guide for specific creative",
   ),
   DesignProcess(
+    imageUrl: "https://saffoury.com/wp-content/uploads/cropped-imag01.jpg",
     title: "DEVELOP",
     iconData: Icons.developer_board,
     subtitle:
         "A full stack allround developer thay may or may not include a guide for specific creative",
   ),
   DesignProcess(
+    imageUrl: "https://saffoury.com/wp-content/uploads/toilet.jpg",
     title: "QUALITY",
     iconData: Icons.high_quality,
     subtitle:
         "A full stack allround writer thay may or may not include a guide for specific creative",
-  ),
-  DesignProcess(
-    title: "PROMOTE",
-    iconData: Icons.high_quality,
-    subtitle:
-        "A full stack allround promoter thay may or may not include a guide for specific creative",
   ),
   DesignProcess(
     title: "PROMOTE",
@@ -201,7 +201,7 @@ class ProductQualityWebSection extends StatelessWidget {
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: Text(
-                    "DOWNLOAD CV",
+                    "",
                     style: GoogleFonts.roboto(
                       color: Colors.white70,
                       fontWeight: FontWeight.w900,
@@ -215,6 +215,10 @@ class ProductQualityWebSection extends StatelessWidget {
           const SizedBox(
             height: 50.0,
           ),
+          // Wrap(
+          //     spacing: 20.0,
+          //     runSpacing: 20.0,
+          //     children: designProcesses.map((e) => getItem(e)).toList()),
           LayoutBuilder(
             builder: (context, constraints) {
               return ResponsiveGridView.builder(
@@ -227,49 +231,33 @@ class ProductQualityWebSection extends StatelessWidget {
                   crossAxisSpacing: 20.0,
                   maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
                           ScreenHelper.isMobile(context)
-                      ? constraints.maxWidth / 2.0
+                      ? constraints.maxWidth / 2
                       : 250.0,
                   // Hack to adjust child height
-                  childAspectRatio: ScreenHelper.isDesktop(context)
-                      ? 1
-                      : MediaQuery.of(context).size.aspectRatio * 1.5,
+                  childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   var designProcesse = designProcesses[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          designProcesse.getImage(),
-                          const SizedBox(
-                            width: 15.0,
-                          ),
-                          Text(
-                            designProcesse.title,
-                            style: GoogleFonts.roboto(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      Text(
+                  return WebGridViewItemCustom(
+                    showChildOnHoverOnly: true,
+                    imageUrl: designProcesse.imageUrl,
+                    title: getItemTitle(designProcesse),
+                    child: Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(kDefaultPadding / 2),
+                      child: Text(
+                        textAlign: TextAlign.center,
                         designProcesse.subtitle,
                         style: const TextStyle(
-                          color: kCaptionColor,
+                          color: Colors.white,
                           height: 1.5,
                           fontSize: 14.0,
                         ),
-                      )
-                    ],
+                      ),
+                    )),
                   );
+
+                  // getItem(designProcesse);
                 },
                 itemCount: designProcesses.length,
               );
@@ -277,6 +265,84 @@ class ProductQualityWebSection extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget getItemForGrid(DesignProcess designProcesse) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        getItemTitle(designProcesse),
+        const SizedBox(
+          height: 15.0,
+        ),
+        Text(
+          designProcesse.subtitle,
+          style: const TextStyle(
+            color: kCaptionColor,
+            height: 1.5,
+            fontSize: 14.0,
+          ),
+        )
+      ],
+    );
+  }
+
+  Row getItemTitle(DesignProcess designProcesse) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        designProcesse.getImage(),
+        const SizedBox(
+          width: 15.0,
+        ),
+        Text(
+          designProcesse.title,
+          style: GoogleFonts.roboto(
+            fontSize: 20.0,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget getItem(DesignProcess designProcesse) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            designProcesse.getImage(),
+            const SizedBox(
+              width: 15.0,
+            ),
+            Text(
+              designProcesse.title,
+              style: GoogleFonts.roboto(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 15.0,
+        ),
+        Text(
+          designProcesse.subtitle,
+          style: const TextStyle(
+            color: kCaptionColor,
+            height: 1.5,
+            fontSize: 14.0,
+          ),
+        )
+      ],
     );
   }
 }

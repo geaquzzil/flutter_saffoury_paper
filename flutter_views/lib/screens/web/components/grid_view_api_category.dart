@@ -79,27 +79,31 @@ class GridViewApi extends StatelessWidget {
         return Positioned.fill(
           child: Align(
             alignment: Alignment.center,
-            child: AnimatedScale(
+            child: AnimatedOpacity(
               duration: const Duration(milliseconds: 275),
-              scale: value ? 1 : 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RoundedIconButton(
-                    icon: Icons.arrow_back_ios_new_sharp,
-                    onTap: () {
-                      if (valuePageNotifier.value == 0) {
-                        return;
-                      }
-                      valuePageNotifier.value = valuePageNotifier.value - 1;
-                    },
-                  ),
-                  RoundedIconButton(
+              opacity: value ? 1 : 0,
+              child: AnimatedScale(
+                duration: const Duration(milliseconds: 275),
+                scale: value ? 1 : 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RoundedIconButton(
+                      icon: Icons.arrow_back_ios_new_sharp,
                       onTap: () {
-                        valuePageNotifier.value = valuePageNotifier.value + 1;
+                        if (valuePageNotifier.value == 0) {
+                          return;
+                        }
+                        valuePageNotifier.value = valuePageNotifier.value - 1;
                       },
-                      icon: Icons.arrow_forward_ios_sharp),
-                ],
+                    ),
+                    RoundedIconButton(
+                        onTap: () {
+                          valuePageNotifier.value = valuePageNotifier.value + 1;
+                        },
+                        icon: Icons.arrow_forward_ios_sharp),
+                  ],
+                ),
               ),
             ),
 
@@ -143,7 +147,7 @@ class GridViewApi extends StatelessWidget {
             valueNotifierGrid: ValueNotifier<bool>(true),
             viewAbstract: viewAbstract,
             customCount: ScreenHelper.isDesktop(context)
-                ? 8
+                ? 10
                 : ScreenHelper.isTablet(context)
                     ? 4
                     : 4,
@@ -179,7 +183,7 @@ class GridViewApi extends StatelessWidget {
               //             5, (index) => ListHorizontalItemShimmer())
               //     ]);
               return ResponsiveGridView.builder(
-                padding: const EdgeInsets.all(0.0),
+                padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 alignment: Alignment.topCenter,
@@ -187,7 +191,7 @@ class GridViewApi extends StatelessWidget {
                 // maxRowCount: 4,
                 gridDelegate: ResponsiveGridDelegate(
                   mainAxisSpacing:
-                      ScreenHelper.isDesktop(context) ? 40.0 : 20.0,
+                      ScreenHelper.isDesktop(context) ? 40.0 : 40.0,
                   crossAxisSpacing: 40.0,
 
                   maxCrossAxisExtent: ScreenHelper.isTablet(context)
@@ -426,6 +430,139 @@ class WebGridViewItem extends StatelessWidget {
           children: [
             item.getHorizontalCardMainHeader(context),
             item.getHorizontalCardSubtitle(context),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WebGridViewItemCustom extends StatelessWidget {
+  final Widget title;
+  final String? subtitle;
+  final bool setDescriptionAtBottom;
+  final String? imageUrl;
+  final Widget? child;
+  final void Function()? onClick;
+  final bool showChildOnHoverOnly;
+
+  const WebGridViewItemCustom(
+      {super.key,
+      required this.title,
+      this.subtitle,
+      this.imageUrl,
+      this.onClick,
+      this.child,
+      this.showChildOnHoverOnly = false,
+      this.setDescriptionAtBottom = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return HoverImage(
+      bottomWidget: setDescriptionAtBottom
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  title,
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: Theme.of(context).textTheme.caption,
+                    )
+                ],
+              ),
+            )
+          : null,
+      image: imageUrl ?? "",
+      // scale: false,
+      builder: (isHovered) => GestureDetector(
+          onTap: () {
+            onClick?.call();
+          },
+          child: _getStack(context, isHovered)),
+    );
+  }
+
+  bool canShowChild(bool isHovered) {
+    if (showChildOnHoverOnly) return isHovered;
+    return true;
+  }
+
+  Stack _getStack(BuildContext context, bool isHovered) {
+    return Stack(
+      children: [
+        if (imageUrl != null) _buildBackground(context),
+        if (!showChildOnHoverOnly)
+          if (child != null && canShowChild(isHovered)) _buildChild(context),
+        _buildGradient(isHovered),
+        _buildTitleAndSubtitle(context, isHovered),
+        if (showChildOnHoverOnly)
+          if (child != null && canShowChild(isHovered)) _buildChild(context),
+      ],
+    );
+  }
+
+  Widget _buildBackground(BuildContext context) {
+    return Positioned.fill(
+        child: Container(
+            // width: 150,
+            // height: 100,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: CachedNetworkImageProvider(imageUrl!),
+                    fit: BoxFit.cover),
+                color: null,
+                borderRadius: const BorderRadius.all(Radius.circular(18)))));
+  }
+
+  Widget _buildChild(BuildContext context) {
+    return Positioned.fill(
+        child: Container(
+            decoration: const BoxDecoration(
+                color: null,
+                borderRadius: BorderRadius.all(Radius.circular(18))),
+            child: child!));
+  }
+
+  Widget _buildGradient(bool isHoverd) {
+    return Positioned.fill(
+        child: AnimatedContainer(
+      duration: const Duration(milliseconds: 275),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: const [0.6, 0.95],
+        ),
+      ),
+    ));
+  }
+
+  Widget _buildTitleAndSubtitle(BuildContext context, bool isHoverd) {
+    return Positioned(
+      left: 20,
+      bottom: 20,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 275),
+        opacity: isHoverd ? 1 : 0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            title,
+            if (subtitle != null)
+              Text(
+                subtitle!,
+                style: Theme.of(context).textTheme.caption,
+              )
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -213,6 +214,10 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   void notifyLogoColor(
       BuildContext context, ColorScheme? lightScheme, ColorScheme? darkScheme) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (kIsWeb) {
+        CompanyLogo.updateLogoColor(context, kPrimaryColor);
+        return;
+      }
       var brightness = SchedulerBinding.instance.window.platformBrightness;
       bool isDarkMode = brightness == Brightness.dark;
       CompanyLogo.updateLogoColor(

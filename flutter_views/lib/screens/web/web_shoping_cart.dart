@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_description.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -55,54 +57,31 @@ class _WebShoppingCartDrawer extends State<WebShoppingCartDrawer>
     _animationController.dispose();
   }
 
+  Widget getEmptyWidget(BuildContext context) {
+    return EmptyWidget(
+        expand: true,
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        title: AppLocalizations.of(context)!.noItems,
+        onSubtitleClicked: () => context.goNamed(indexWebOurProducts),
+        subtitle: "No cart items available, click here to go shopping");
+  }
+
   @override
   Widget build(BuildContext context) {
+    CartProvider cart = context.watch<CartProvider>();
+    List<CartableInvoiceDetailsInterface> list = cart.getList;
     return Scaffold(
-      body: CustomScrollView(slivers: [
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(kDefaultPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.no_summary,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.clear_all))
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        const POSCartList(
-          useSliver: true,
-        ),
-        SliverFillRemaining(
-          child: Column(
-            children: [
-              CartDescriptionTotals(),
-            ],
-          ),
-        )
-      ]),
-      floatingActionButton: FloatingActionButton.extended(
-          isExtended: true,
-          icon: const Icon(Icons.shopping_cart_checkout_outlined),
-          onPressed: () {
-            context.pop();
-            context.goNamed(indexWebCheckout);
-          },
-          label: Text(AppLocalizations.of(context)!.checkout)),
+      body: list.isEmpty ? getEmptyWidget(context) : getListBody(context),
+      floatingActionButton: list.isEmpty
+          ? null
+          : FloatingActionButton.extended(
+              isExtended: true,
+              icon: const Icon(Icons.shopping_cart_checkout_outlined),
+              onPressed: () {
+                context.pop();
+                context.goNamed(indexWebCheckout);
+              },
+              label: Text(AppLocalizations.of(context)!.checkout)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       // bottomNavigationBar: FloatingActionButton(
       //   onPressed: () {},
@@ -174,5 +153,45 @@ class _WebShoppingCartDrawer extends State<WebShoppingCartDrawer>
         ),
       ),
     );
+  }
+
+  CustomScrollView getListBody(BuildContext context) {
+    return CustomScrollView(slivers: [
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.no_summary,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.clear_all))
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      const POSCartList(
+        useSliver: true,
+      ),
+      SliverFillRemaining(
+        child: Column(
+          children: [
+            CartDescriptionTotals(),
+          ],
+        ),
+      )
+    ]);
   }
 }

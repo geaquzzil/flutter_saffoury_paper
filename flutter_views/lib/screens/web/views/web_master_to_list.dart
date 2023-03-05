@@ -73,6 +73,7 @@ class WebMasterToList extends BaseWebPageSliversApi {
           LocationListItem(
               usePadding: false,
               useResponsiveLayout: false,
+              useClipRect: false,
               // soildColor: Colors.black38,
               imageUrl: extras?.getImageUrl(context) ?? "",
               name: extras!.getMainHeaderTextOnly(context),

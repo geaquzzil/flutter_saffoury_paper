@@ -16,7 +16,7 @@ import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
 import 'components/terms/terms_who_we_are.dart';
 
 class TermsWebPage extends BaseWebPage {
-   TermsWebPage({Key? key}) : super(key: key);
+  TermsWebPage({Key? key}) : super(key: key);
 
   @override
   Widget? getContentWidget(BuildContext context) {
@@ -24,7 +24,7 @@ class TermsWebPage extends BaseWebPage {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TermsWhoWeAre(),
+          WelcomMessageTermsWhoWeAre(),
           HeaderText(
             text: "TERMS AND\nCONDITIONS",
             description: getHtmlWidget(),

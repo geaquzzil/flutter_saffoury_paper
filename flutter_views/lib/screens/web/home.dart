@@ -58,6 +58,21 @@ class HomeWebPage extends BaseWebPageSlivers {
     super.init(context);
   }
 
+  Widget getTitle(
+      BuildContext context, BoxConstraints constraints, String title) {
+    return getSliverPadding(
+        context,
+        constraints,
+        SliverToBoxAdapter(
+            child: Align(
+          alignment: Alignment.center,
+          child: HeaderText(
+            useRespnosiveLayout: false,
+            text: title,
+          ),
+        )));
+  }
+
   @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
@@ -67,251 +82,159 @@ class HomeWebPage extends BaseWebPageSlivers {
       getHomeWelcomMessage(),
       getProfiloStates(),
       getProfiloProductProfits(),
-      getSliverPadding(
-          context,
-          constraints,
-          const SliverToBoxAdapter(
-              child: Align(
-            alignment: Alignment.center,
-            child: HeaderText(
-              useRespnosiveLayout: false,
-              text: "LATEST PRODUCTS",
-            ),
-          ))),
-      // ListWebApiSliverComponent(
-      //   viewAbstract: products,
-      //   valueNotifierGrid: ValueNotifier<bool>(true),
-      // )
+      getTitle(context, constraints, "LATEST PRODUCTS"),
       getLastProducts(context),
 
-      SliverToBoxAdapter(
-        child: LocationListItem(
-          soildColor: Theme.of(context)
-              .scaffoldBackgroundColor
-              .lighten()
-              .withOpacity(.8),
-          usePadding: false,
-          useResponsiveLayout: false,
-          country: "",
-          name: "",
-          customCenterWidget: SizedBox(
-              height: 300,
-              width: MediaQuery.of(context).size.width,
-              child: const ProductQualityWebSection()),
-          imageUrl:
-              "https://saffoury.com/wp-content/uploads/2022/05/center_15.jpg",
-        ),
-      ),
+      getProductDescrtionsSections(context),
+      getTitle(context, constraints, "CATEGORY"),
+      getCategory(),
+
+      getGooglePlay(context),
+      // getSliverSizedBox(),
       getSliverSizedBox(),
-      const SliverToBoxAdapter(child: HistorySection()),
+      getHistorySection(),
 
-      // const SizedBox(
-      //   height: 70.0,
+      getContactUs(context),
+      getSliverSizedBox()
+
+      // SliverToBoxAdapter(
+      //   child: TestimonialWidget(),
       // ),
+      // SliverToBoxAdapter(
+      //   child: Sponsors(),
+      // ),
+
+      // SliverToBoxAdapter(
+      //   child: SkillSection(),
+      // ),
+      // SliverToBoxAdapter(
+      //   child: WebsiteAd(),
+      // )
     ];
+  }
 
-    // // TitleAndDescriptopnAndImageLeft(
-    // //   actions: [
-    // //     MouseRegion(
-    // //       cursor: SystemMouseCursors.click,
-    // //       child: Container(
-    // //         decoration: BoxDecoration(
-    // //           color: kPrimaryColor,
-    // //           borderRadius: BorderRadius.circular(8.0),
-    // //         ),
-    // //         height: 48.0,
-    // //         padding: const EdgeInsets.symmetric(
-    // //           horizontal: 28.0,
-    // //         ),
-    // //         child: TextButton(
-    // //           onPressed: () {},
-    // //           child: Center(
-    // //               child: Lottie.network(
-    // //                   "https://assets5.lottiefiles.com/packages/lf20_cbdikfm6.json")),
-    // //         ),
-    // //       ),
-    // //     ),
-    // //   ],
-    // //   title: "OUR\nMISSION",
-    // //   description:
-    // //       "From the beginning,our mission has been to orginize the world's ",
-    // //   customIconData: Icons.play_arrow,
-    // // ),
+  SliverToBoxAdapter getContactUs(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: LocationListItem(
+        usePadding: false,
+        useResponsiveLayout: false,
+        useClipRect: false,
+        country: "",
+        name: "",
+        soildColor:
+            Theme.of(context).scaffoldBackgroundColor.lighten().withOpacity(.7),
+        customCenterWidget: TitleAndDescriptopnAndImageLeft(
+          title: "Contact us".toUpperCase(),
+          descriptionIsWhite: true,
+          description:
+              "Have questions before making a purchase?\nWe are very keen on trust and credibility in dealing with our customers, where we must adhere to all the requirements of our customers and provide them with services as fully as possible",
+          customWidget: Lottie.network(
+              "https://assets2.lottiefiles.com/packages/lf20_abqysclq.json",
+              height: 300),
+          actions: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                height: 48.0,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28.0,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    context.goNamed(indexWebContactUs);
+                  },
+                  child: LottieColorFilter(
+                    // color: Colors.black.withOpacity(.4),
+                    lottiUrl:
+                        "https://assets10.lottiefiles.com/packages/lf20_RBUCBDMwqd.json",
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        imageUrl:
+            "https://www.europharmconsulting.com/wp-content/uploads/2019/05/536-2000x1000.jpg",
+      ),
+    );
+  }
 
-    // const SizedBox(
-    //   height: 70.0,
-    // ),
-    // // const ProductQualityWebSection(),
-    // // TitleAndDescriptopnAndImageLeft(
-    // //   primaryTitle: "IOS APP",
-    // //   title: "UNIVERSAL\nSMART HOME APP",
-    // //   description:
-    // //       "This is a random text about the project, I should have used the regular lorem ipsum text, but I am too lazy to search for that. This should be long enough",
-    // //   customIconData: Icons.play_arrow,
-    // // ),
-    // LocationListItem(
-    //   usePadding: false,
-    //   useResponsiveLayout: false,
-    //   useClipRect: false,
-    //   country: "",
-    //   name: "",
-    //   soildColor: Theme.of(context)
-    //       .scaffoldBackgroundColor
-    //       .lighten()
-    //       .withOpacity(.8),
-    //   customCenterWidget: TitleAndDescriptopnAndImageLeft(
-    //     title: "WE\nLAUNCHED\nOUR APP".toUpperCase(),
-    //     descriptionIsWhite: true,
-    //     description:
-    //         "Ordering solution perfect for presses owners.\nStart ordering online, along with website, apps, products,\nmenus & much,much more\nDevelopment by Qussai Al-Saffoury",
-    //     customWidget: Container(),
-    //     actions: [
-    //       MouseRegion(
-    //         cursor: SystemMouseCursors.click,
-    //         child: Container(
-    //           decoration: BoxDecoration(
-    //             color: kPrimaryColor,
-    //             borderRadius: BorderRadius.circular(8.0),
-    //           ),
-    //           height: 48.0,
-    //           padding: const EdgeInsets.symmetric(
-    //             horizontal: 28.0,
-    //           ),
-    //           child: TextButton(
-    //             onPressed: () {
-    //               launchUrlString(
-    //                   "https://play.google.com/store/apps/details?id=com.saffoury.saffourypaper&hl=en&gl=US");
-    //             },
-    //             child: LottieColorFilter(
-    //               // color: Colors.black.withOpacity(.4),
-    //               lottiUrl:
-    //                   "https://assets7.lottiefiles.com/packages/lf20_bsPjV4.json",
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    //   imageUrl:
-    //       "https://saffoury.com/wp-content/uploads/lo1-Recovered-1-scaled.jpg",
-    // ),
+  SliverToBoxAdapter getProductDescrtionsSections(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: LocationListItem(
+        useClipRect: false,
+        soildColor:
+            Theme.of(context).scaffoldBackgroundColor.lighten().withOpacity(.8),
+        usePadding: false,
+        useResponsiveLayout: false,
+        country: "",
+        name: "",
+        customCenterWidget: Container(),
+        imageUrl:
+            "https://saffoury.com/wp-content/uploads/2022/05/center_15.jpg",
+      ),
+    );
+  }
 
-    // const SizedBox(
-    //   height: 70.0,
-    // ),
-    // GridViewApi(
-    //     title: "Category".toUpperCase(),
-    //     description: "browser category by paper and board",
-    //     viewAbstract:
-    //         context.read<AuthProvider<AuthUser>>().getWebCategories()[1]),
-    // const SizedBox(
-    //   height: 70.0,
-    // ),
-    // LocationListItem(
-    //   usePadding: false,
-    //   useResponsiveLayout: false,
-    //   useClipRect: false,
-    //   country: "",
-    //   name: "",
-    //   soildColor: Theme.of(context)
-    //       .scaffoldBackgroundColor
-    //       .lighten()
-    //       .withOpacity(.7),
-    //   customCenterWidget: TitleAndDescriptopnAndImageLeft(
-    //     title: "Contact us".toUpperCase(),
-    //     descriptionIsWhite: true,
-    //     description:
-    //         "Have questions before making a purchase?\nWe are very keen on trust and credibility in dealing with our customers, where we must adhere to all the requirements of our customers and provide them with services as fully as possible",
-    //     customWidget: Lottie.network(
-    //         "https://assets2.lottiefiles.com/packages/lf20_abqysclq.json",
-    //         height: 300),
-    //     actions: [
-    //       MouseRegion(
-    //         cursor: SystemMouseCursors.click,
-    //         child: Container(
-    //           decoration: BoxDecoration(
-    //             color: kPrimaryColor,
-    //             borderRadius: BorderRadius.circular(8.0),
-    //           ),
-    //           height: 48.0,
-    //           padding: const EdgeInsets.symmetric(
-    //             horizontal: 28.0,
-    //           ),
-    //           child: TextButton(
-    //             onPressed: () {
-    //               context.goNamed(indexWebContactUs);
-    //             },
-    //             child: LottieColorFilter(
-    //               // color: Colors.black.withOpacity(.4),
-    //               lottiUrl:
-    //                   "https://assets10.lottiefiles.com/packages/lf20_RBUCBDMwqd.json",
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    //   imageUrl:
-    //       "https://www.europharmconsulting.com/wp-content/uploads/2019/05/536-2000x1000.jpg",
-    // ),
-    // const SizedBox(
-    //   height: 70.0,
-    // ),
-    // TitleAndDescriptopnAndImageLeft(
-    //   title: "Contact us".toUpperCase(),
-    //   description: "Have questions before making a purchase?",
-    //   customWidget: Lottie.network(
-    //       "https://assets5.lottiefiles.com/packages/lf20_u25cckyh.json"),
-    //   actions: [
-    //     MouseRegion(
-    //       cursor: SystemMouseCursors.click,
-    //       child: Container(
-    //         decoration: BoxDecoration(
-    //           color: kPrimaryColor,
-    //           borderRadius: BorderRadius.circular(8.0),
-    //         ),
-    //         height: 48.0,
-    //         padding: const EdgeInsets.symmetric(
-    //           horizontal: 28.0,
-    //         ),
-    //         child: TextButton(
-    //           onPressed: () {
-    //             context.goNamed(indexWebAboutUs);
-    //           },
-    //           child: Center(
-    //               child: Lottie.network(
-    //                   "https://assets5.lottiefiles.com/packages/lf20_cbdikfm6.json")),
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // ),
-    // const SizedBox(
-    //   height: 70.0,
-    // ),
-    // WebsiteAd(),
-    // Padding(
-    //   padding: const EdgeInsets.symmetric(vertical: 28.0),
-    //   child: PortfolioStats(),
-    // ),
-    // const SizedBox(
-    //   height: 50.0,
-    // ),
+  Widget getGooglePlay(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: LocationListItem(
+        usePadding: false,
+        useResponsiveLayout: false,
+        useClipRect: false,
+        country: "",
+        name: "",
+        soildColor:
+            Theme.of(context).scaffoldBackgroundColor.lighten().withOpacity(.8),
+        customCenterWidget: TitleAndDescriptopnAndImageLeft(
+          title: "WE\nLAUNCHED\nOUR APP".toUpperCase(),
+          descriptionIsWhite: true,
+          description:
+              "Ordering solution perfect for presses owners.\nStart ordering online, along with website, apps, products,\nmenus & much,much more\nDevelopment by Qussai Al-Saffoury",
+          customWidget: Container(),
+          actions: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                height: 48.0,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28.0,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    launchUrlString(
+                        "https://play.google.com/store/apps/details?id=com.saffoury.saffourypaper&hl=en&gl=US");
+                  },
+                  child: LottieColorFilter(
+                    // color: Colors.black.withOpacity(.4),
+                    lottiUrl:
+                        "https://assets7.lottiefiles.com/packages/lf20_bsPjV4.json",
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        imageUrl:
+            "https://saffoury.com/wp-content/uploads/lo1-Recovered-1-scaled.jpg",
+      ),
+    );
+  }
 
-    // const SizedBox(
-    //   height: 50.0,
-    // ),
-    // SkillSection(),
-    // const SizedBox(
-    //   height: 50.0,
-    // ),
-    // Sponsors(),
-    // const SizedBox(
-    //   height: 50.0,
-    // ),
-    // TestimonialWidget()
-    // ],
-    // );
+  SliverToBoxAdapter getHistorySection() =>
+      const SliverToBoxAdapter(child: HistorySection());
+  Widget getCategory() {
+    return SliverToBoxAdapter(
+      child: GridViewApi(viewAbstract: categories),
+    );
   }
 
   Widget getLastProducts(BuildContext context) {
@@ -352,6 +275,7 @@ class HomeWebPage extends BaseWebPageSlivers {
       child: LocationListItem(
         usePadding: false,
         useResponsiveLayout: false,
+        useClipRect: false,
         soildColor: Colors.black38,
         customCenterWidget: TitleAndDescriptopnAndImage(
           // primaryTitle: "Hello, There",

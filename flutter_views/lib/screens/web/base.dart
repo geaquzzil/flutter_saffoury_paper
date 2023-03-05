@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
+import 'package:flutter_view_controller/screens/web/contact-us.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/models/header_item.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/terms.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_scroll_web/smooth_scroll_web.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
@@ -281,6 +283,8 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
       return AppLocalizations.of(context)!.products;
     } else if (this is TermsWebPage) {
       return AppLocalizations.of(context)!.termsAndConitions;
+    } else if (this is ContactUsWebPage) {
+      return AppLocalizations.of(context)!.contactUs;
     } else {
       return "";
     }
@@ -294,7 +298,7 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     );
   }
 
-  Widget getSliverSizedBox({double height = 20, double? width}) {
+  Widget getSliverSizedBox({double height = kDefaultPadding, double? width}) {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: height,
@@ -331,12 +335,21 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   Widget getSliverPadding(
       BuildContext context, BoxConstraints constraints, Widget child,
       {double padd = 2}) {
+    double defualPadding =
+        ScreenHelper.isMobile(context) ? kDefaultPadding * 2 : kDefaultPadding;
+    double horizontalPadding = max(
+        (constraints.maxWidth -
+                (ScreenHelper.isTablet(context)
+                    ? kTabletMaxWidth
+                    : kDesktopMaxWidth)) /
+            padd,
+        0);
     return SliverPadding(
         padding: EdgeInsets.symmetric(
-            vertical: 15,
-            horizontal: max((constraints.maxWidth - 1200) / padd, 0) > 15
-                ? max((constraints.maxWidth - 1200) / padd, 0)
-                : 15),
+            vertical: defualPadding,
+            horizontal: horizontalPadding > defualPadding
+                ? horizontalPadding
+                : defualPadding),
         sliver: child);
   }
 
@@ -353,13 +366,14 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   }
 
   Widget getScaffold(BuildContext context) {
-    var headerItems = getHeaderItems(context);
     return Scaffold(
         backgroundColor: !buildHeader ? Colors.transparent : null,
         floatingActionButton: getFloatingActionButton(),
         key: !buildHeader
             ? null
-            : context.read<DrawerMenuControllerProvider>().getStartDrawableKey,
+            : context
+                .read<DrawerMenuControllerProvider>()
+                .getStartDrawableKeyWeb(runtimeType.toString()),
         endDrawer: getEndDrawer(),
         drawer: WebMobileDrawer(selectedHeader: getSelectedHeader(context)),
         body: getBody(context));

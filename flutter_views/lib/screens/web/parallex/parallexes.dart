@@ -151,7 +151,7 @@ class LocationListItem extends StatelessWidget {
 
   Flow getFlow(BuildContext context) {
     return Flow(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
+      clipBehavior: Clip.antiAlias,
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context)!,
         listItemContext: context,
@@ -168,7 +168,7 @@ class LocationListItem extends StatelessWidget {
           Image.network(
             imageUrl,
             key: _backgroundImageKey,
-            fit: BoxFit.cover,
+            fit: BoxFit.fitHeight,
           ),
 
         // FadeInImage.memoryNetwork(
@@ -195,7 +195,7 @@ class LocationListItem extends StatelessWidget {
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: const [0.6, .95],
+            stops: const [0, .95],
           ),
         ),
       ),

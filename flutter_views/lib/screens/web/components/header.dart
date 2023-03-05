@@ -41,8 +41,13 @@ class HeaderLogo extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // AnimatedScale(
+            //   scale: (valueNotifier?.value ?? 1.0) > 0 ? 1 : 0,
+            //   duration: const Duration(milliseconds: 275),
+            //   child: CompanyLogo(size: 70),
+            // ),
             // CompanyLogo(),
             RichText(
               text: TextSpan(
@@ -50,7 +55,7 @@ class HeaderLogo extends StatelessWidget {
                   TextSpan(
                     text: "Saffoury".toUpperCase(),
                     style: GoogleFonts.roboto(
-                      color: Colors.white,
+                      // color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 32.0,
                       fontWeight: FontWeight.w400,
                     ),
@@ -58,7 +63,7 @@ class HeaderLogo extends StatelessWidget {
                   TextSpan(
                     text: "Paper".toUpperCase(),
                     style: GoogleFonts.roboto(
-                      color: Colors.white,
+                      // color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 32.0,
                       fontWeight: FontWeight.w200,
                     ),

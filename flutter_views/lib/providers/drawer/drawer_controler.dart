@@ -7,6 +7,7 @@ import 'drawer_viewabstract_stand_alone.dart';
 
 class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
+  Map<String, GlobalKey<ScaffoldState>> _startDrawerKeyWeb = {};
   ViewAbstract _object;
   bool sideMenuOpen = false;
   int _idx = 0;
@@ -21,6 +22,15 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   bool get getSideMenuIsClosed => !sideMenuOpen;
   ViewAbstract get getObject => _object;
   GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
+  GlobalKey<ScaffoldState> getStartDrawableKeyWeb(String key) {
+    debugPrint("getStartDrawableKey $key");
+    if (_startDrawerKeyWeb.containsKey(key)) {
+      return _startDrawerKeyWeb[key]!;
+    }
+    _startDrawerKeyWeb[key] = GlobalKey<ScaffoldState>(debugLabel: key);
+    return _startDrawerKeyWeb[key]!;
+  }
+
   int get getNavigationIndex => _navigationIndex;
   bool get getNavigationRailIsOpen => _navigationRailIsOpen;
 
@@ -82,17 +92,39 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   }
 
   void controlStartDrawerMenu() {
-    if (!_startDrawerKey.currentState!.isDrawerOpen) {
-      _startDrawerKey.currentState!.openDrawer();
+    _controlStartDrawerMenu(_startDrawerKey);
+    if (_startDrawerKeyWeb.isNotEmpty) {
+      _startDrawerKeyWeb.forEach((key, value) {
+        _controlStartDrawerMenu(value);
+      });
+    }
+  }
+
+  void _controlStartDrawerMenu(GlobalKey<ScaffoldState> key) {
+    if (key.currentState == null) return;
+    if (!key.currentState!.isDrawerOpen) {
+      key.currentState?.openDrawer();
     } else {
-      _startDrawerKey.currentState!.closeDrawer();
+      key.currentState?.closeDrawer();
     }
   }
 
   void controlEndDrawerMenu() {
-    if (!_startDrawerKey.currentState!.isEndDrawerOpen) {
-      _startDrawerKey.currentState!.openEndDrawer();
+    _controlEndDrawerMenu(_startDrawerKey);
+    if (_startDrawerKeyWeb.isNotEmpty) {
+      _startDrawerKeyWeb.forEach((key, value) {
+        _controlEndDrawerMenu(value);
+      });
     }
-    // notifyListeners();
+  }
+
+  void _controlEndDrawerMenu(GlobalKey<ScaffoldState> key) {
+    if (key.currentState == null) return;
+
+    if (key.currentState!.isEndDrawerOpen) {
+      key.currentState?.closeEndDrawer();
+    } else {
+      key.currentState?.openEndDrawer();
+    }
   }
 }

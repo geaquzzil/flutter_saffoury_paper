@@ -86,6 +86,11 @@ class ListWebApiMaster extends StatelessWidget {
 
   Widget getShimmerLoading(BuildContext context) {
     return ResponsiveGridList(
+        listViewBuilderOptions: ListViewBuilderOptions(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
+        ),
         horizontalGridSpacing: 50, // Horizontal space between grid items
         verticalGridSpacing: 50, // Vertical space between grid items
         horizontalGridMargin: 50, // Horizontal space around the grid

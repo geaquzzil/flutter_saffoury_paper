@@ -6,6 +6,7 @@ const bgColor = Color(0xFF212332);
 
 const defaultPadding = 16.0;
 const kPrimaryColor = Color(0xFF607D8B);
+const kAccentColor = Colors.orange;
 const kWhite = Colors.white;
 const kTextColor = Color(0xFF707070);
 const kTextLightColor = Color(0xFF949098);

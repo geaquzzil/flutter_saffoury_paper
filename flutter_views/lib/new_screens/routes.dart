@@ -18,7 +18,7 @@ import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
-import 'package:flutter_view_controller/screens/web/privecy-policey.dart';
+import 'package:flutter_view_controller/screens/web/return-privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
@@ -68,8 +68,8 @@ const String dashboardRouteName = "dashboard";
 const String posRouteName = "pos";
 const String indexWebRouteName = "index";
 const String indexWebSignIn = "sign-in";
-const String indexWebPrivecyPolicy = "privecy-policy";
-const String indexWebTermsAndConditions = "terms";
+const String indexReturnPrivecyPolicy = "return-policy";
+const String indexWebTermsAndConditions = "terms-and-conditions";
 const String indexWebOurProducts = "products";
 const String indexWebServices = "services";
 const String indexWebAboutUs = "about-us";
@@ -115,7 +115,8 @@ class RouteGenerator {
         GoRoute(
             path: "/index",
             name: indexWebRouteName,
-            pageBuilder: (context, state) => MaterialPage(child: HomeWebPage()),
+            pageBuilder: (context, state) =>
+                MaterialPage(key: state.pageKey, child: HomeWebPage()),
             routes: [
               GoRoute(
                 name: indexWebSignIn,
@@ -137,35 +138,41 @@ class RouteGenerator {
                 name: indexWebSettingAndAccount,
                 pageBuilder: (context, state) {
                   return MaterialPage(
-                      key: state.pageKey, child: SettingAndProfileWebPage(currentSetting: state.queryParams["action"],));
+                      key: state.pageKey,
+                      child: SettingAndProfileWebPage(
+                        currentSetting: state.queryParams["action"],
+                      ));
                 },
               ),
               GoRoute(
-                path: "privecy-policy",
-                name: indexWebPrivecyPolicy,
+                path: indexReturnPrivecyPolicy,
+                name: indexReturnPrivecyPolicy,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: PrivecyPolicyWebPage());
+                  return MaterialPage(
+                      key: state.pageKey, child: ReturnPrivecyPolicyWebPage());
                 },
               ),
               GoRoute(
                 path: indexWebContactUs,
                 name: indexWebContactUs,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: ContactUsWebPage());
+                  return MaterialPage(
+                      key: state.pageKey, child: ContactUsWebPage());
                 },
               ),
               GoRoute(
                 path: "about-us",
                 name: indexWebAboutUs,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: AboutUsWebPage());
+                  return MaterialPage(
+                      key: state.pageKey, child: AboutUsWebPage());
                 },
               ),
               GoRoute(
                 path: indexWebCheckout,
                 name: indexWebCheckout,
                 pageBuilder: (context, state) {
-                  return MaterialPage(child: CheckoutWeb());
+                  return MaterialPage(key: state.pageKey, child: CheckoutWeb());
                 },
               ),
               GoRoute(
@@ -195,7 +202,7 @@ class RouteGenerator {
                 },
               ),
               GoRoute(
-                path: "terms",
+                path: indexWebTermsAndConditions,
                 name: indexWebTermsAndConditions,
                 pageBuilder: (context, state) {
                   return MaterialPage(child: TermsWebPage());

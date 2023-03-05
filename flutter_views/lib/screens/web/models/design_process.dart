@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 class DesignProcess {
   final String title;
   final String? imagePath;
+  final String? imageUrl;
   final IconData? iconData;
   final String subtitle;
 
   DesignProcess({
     required this.title,
     this.imagePath,
+    this.imageUrl,
     this.iconData,
     required this.subtitle,
   }) : assert(imagePath != null || iconData != null);

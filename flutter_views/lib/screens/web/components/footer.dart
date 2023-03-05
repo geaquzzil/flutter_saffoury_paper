@@ -89,13 +89,13 @@ Widget _buildUi(double width, BuildContext context) {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          context.goNamed(indexWebTermsAndConditions);
+                          context.goNamed(indexReturnPrivecyPolicy);
                         },
-                        child: MouseRegion(
+                        child: const MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: Text(
-                            AppLocalizations.of(context)!.privacy,
-                            style: const TextStyle(
+                            "Return Policy",
+                            style: TextStyle(
                               color: kCaptionColor,
                             ),
                           ),
