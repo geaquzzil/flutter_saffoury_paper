@@ -166,7 +166,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     return image;
   }
-
+  Widget getImageIfNoUrl(){
+     return Icon(getMainIconData());
+  }
   Widget getCardLeadingImage(BuildContext context,
       {bool? isSelected, bool addBottomWidget = true}) {
     String? imageUrl = getImageUrl(context);

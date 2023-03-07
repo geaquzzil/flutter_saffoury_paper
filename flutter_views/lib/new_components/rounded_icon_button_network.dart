@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 
 class RoundedIconButtonNetwork extends StatelessWidget {
-  double size;
-  RoundedIconButtonNetwork({
+  final double size;
+
+  final GestureTapCallback onTap;
+  final String? imageUrl;
+  const RoundedIconButtonNetwork({
     Key? key,
     this.size = 18,
     required this.onTap,
-    required this.imageUrl,
+    this.imageUrl,
   }) : super(key: key);
-
-  final GestureTapCallback onTap;
-  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: imageUrl,
+      imageUrl: imageUrl ?? "",
       imageBuilder: (context, image) => Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(size),
@@ -36,7 +36,7 @@ class RoundedIconButtonNetwork extends StatelessWidget {
         ),
       ),
       placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
+      errorWidget: (context, url, error) => const Icon(Icons.account_circle),
     );
   }
 }

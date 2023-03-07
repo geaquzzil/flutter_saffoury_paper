@@ -58,9 +58,16 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
 class HoverImage extends StatefulWidget {
   final String image;
   final Widget? bottomWidget;
+  final bool animatedScale;
+  final bool roundedCorners;
   final Widget Function(bool isHovered)? builder;
   const HoverImage(
-      {super.key, required this.image, this.builder, this.bottomWidget});
+      {super.key,
+      required this.image,
+      this.animatedScale = true,
+      this.roundedCorners = true,
+      this.builder,
+      this.bottomWidget});
 
   @override
   _HoverImageState createState() => _HoverImageState();
@@ -100,18 +107,23 @@ class _HoverImageState extends State<HoverImage>
       onEnter: (value) {
         setState(() {
           isHovered = true;
-          _controller.forward();
+          if (widget.animatedScale) {
+            _controller.forward();
+          }
         });
       },
       onExit: (value) {
         setState(() {
           isHovered = false;
-          _controller.reverse();
+          if (widget.animatedScale) {
+            _controller.reverse();
+          }
         });
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius:
+              widget.roundedCorners ? BorderRadius.circular(20.0) : null,
           boxShadow: widget.bottomWidget != null
               ? null
               : const [
@@ -145,29 +157,34 @@ class _HoverImageState extends State<HoverImage>
   AspectRatio _getAspectRatio() {
     return AspectRatio(
       aspectRatio: 1 / 1,
-      child: Container(
-          // height: 220.0,
-          // width: 170.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          clipBehavior: Clip.hardEdge,
-          transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value, 0,
-              0, 0, 0, 1, 0, padding.value, padding.value, 0, 1),
-          child: widget.builder == null
-              ? Image.network(
-                  widget.image,
-                  fit: BoxFit.contain,
-                )
-              : widget.builder!(isHovered)
-          // Column(
-          //     children: [
-          //       widget.builder!(isHovered),
-          //       Text("TEST")
-          //     ],
-          //   )
-
-          ),
+      child: getBody(),
     );
+  }
+
+  Container getBody() {
+    return Container(
+        // height: 220.0,
+        // width: 170.0,
+        decoration: BoxDecoration(
+          borderRadius:
+              widget.roundedCorners ? BorderRadius.circular(20.0) : null,
+        ),
+        clipBehavior: Clip.hardEdge,
+        transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value, 0, 0,
+            0, 0, 1, 0, padding.value, padding.value, 0, 1),
+        child: widget.builder == null
+            ? Image.network(
+                widget.image,
+                fit: BoxFit.contain,
+              )
+            : widget.builder!(isHovered)
+        // Column(
+        //     children: [
+        //       widget.builder!(isHovered),
+        //       Text("TEST")
+        //     ],
+        //   )
+
+        );
   }
 }

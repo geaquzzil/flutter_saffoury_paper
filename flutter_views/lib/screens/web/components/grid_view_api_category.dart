@@ -293,30 +293,40 @@ class WebGridViewItem extends StatelessWidget {
           : null,
       image: item.getImageUrl(context) ?? "",
       // scale: false,
-      builder: (isHovered) => GestureDetector(
-        onTap: () {
-          ViewAbstract? isMasterToList =
-              _categoryGridable.getWebCategoryGridableIsMasterToList(context);
-          if (isMasterToList != null) {
-            context.goNamed(indexWebMasterToList,
-                params: {"tableName": item.getTableNameApi()!},
-                queryParams: {
-                  "id": item.iD.toString(),
-                },
-                extra: item);
-          } else {
-            context.goNamed(indexWebView,
-                params: {
-                  "id": item.iD.toString(),
-                  "tableName": item.getTableNameApi()!
-                },
-                extra: item);
-          }
-        },
-        child: setDescriptionAtBottom
-            ? _getStack(context, isHovered)
-            : _getStack(context, isHovered),
-      ),
+      builder: (isHovered) {
+        Widget child = GestureDetector(
+          onTap: () {
+            ViewAbstract? isMasterToList =
+                _categoryGridable.getWebCategoryGridableIsMasterToList(context);
+            if (isMasterToList != null) {
+              context.goNamed(indexWebMasterToList,
+                  params: {"tableName": item.getTableNameApi()!},
+                  queryParams: {
+                    "id": item.iD.toString(),
+                  },
+                  extra: item);
+            } else {
+              context.goNamed(indexWebView,
+                  params: {
+                    "id": item.iD.toString(),
+                    "tableName": item.getTableNameApi()!
+                  },
+                  extra: item);
+            }
+          },
+          child: setDescriptionAtBottom
+              ? _getStack(context, isHovered)
+              : _getStack(context, isHovered),
+        );
+        return child;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 275),
+          padding: isHovered
+              ? const EdgeInsets.all(kDefaultPadding)
+              : EdgeInsets.zero,
+          child: child,
+        );
+      },
     );
   }
 
@@ -370,8 +380,6 @@ class WebGridViewItem extends StatelessWidget {
         child: item.getHeroTag(
       context: context,
       child: Container(
-          // width: 150,
-          // height: 100,
           decoration: BoxDecoration(
               image: item.getImageUrl(context) == null
                   ? null
@@ -380,7 +388,10 @@ class WebGridViewItem extends StatelessWidget {
                           item.getImageUrl(context)!),
                       fit: BoxFit.cover),
               color: null,
-              borderRadius: const BorderRadius.all(Radius.circular(18)))),
+              borderRadius: const BorderRadius.all(Radius.circular(18))),
+          child: item.getImageUrl(context) == null
+              ? item.getImageIfNoUrl()
+              : null),
     ));
   }
 

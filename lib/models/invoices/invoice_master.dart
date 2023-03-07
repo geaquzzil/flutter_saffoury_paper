@@ -397,15 +397,18 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
             title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
             description:
                 totalPrice?.toCurrencyFormatFromSetting(context) ?? "0"),
+        const Divider(),
         getListTile(
             title: AppLocalizations.of(context)!.discount.toUpperCase(),
             description:
                 totalDiscount?.toCurrencyFormatFromSetting(context) ?? "0"),
+        const Divider(),
         getListTile(
             title: AppLocalizations.of(context)!.quantity.toUpperCase(),
             description: getDetailListFromMaster()
                 .cast<InvoiceMasterDetails>()
                 .getTotalQuantityGroupedFormattedText(context)),
+        const Divider(),
         getListTile(
             title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
             description: totalNetPrice.toCurrencyFormatFromSetting(context)),
