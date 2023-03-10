@@ -53,21 +53,30 @@ class HeaderLogo extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Saffoury".toUpperCase(),
-                    style: GoogleFonts.roboto(
-                      // color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 32.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
+                      text: "Saffoury".toUpperCase(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w800)
+
+                      // GoogleFonts.roboto(
+                      //   // color: Theme.of(context).colorScheme.onBackground,
+                      //   fontSize: 32.0,
+                      //   fontWeight: FontWeight.w400,
+                      // ),
+                      ),
                   TextSpan(
-                    text: "Paper".toUpperCase(),
-                    style: GoogleFonts.roboto(
-                      // color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 32.0,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  )
+                      text: "Paper".toUpperCase(),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w200,
+                          )
+
+                      // style: GoogleFonts.roboto(
+                      //   // color: Theme.of(context).colorScheme.onBackground,
+                      //   fontSize: 32.0,
+                      //   fontWeight: FontWeight.w200,
+                      // ),
+                      )
                 ],
               ),
             ),
@@ -135,14 +144,14 @@ class HeaderRow extends StatelessWidget {
                         child: TextButton(
                           // onPressed: () {},
                           onPressed: () => item.onClick?.call(),
-                          child: Text(
-                            item.title.toUpperCase(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: Text(item.title.toUpperCase(),
+                              style: Theme.of(context).textTheme.titleSmall
+                              // const TextStyle(
+                              //   // color: Colors.white,
+                              //   fontSize: 13.0,
+                              //   fontWeight: FontWeight.bold,
+                              // ),
+                              ),
                         ),
                       ),
                     )
@@ -155,18 +164,16 @@ class HeaderRow extends StatelessWidget {
                         scale: false,
                         builder: (isHovered) => Container(
                           margin: const EdgeInsets.only(right: 30.0),
-                          child: Text(
-                            item.title.toUpperCase(),
-                            style: TextStyle(
-                              color: selectedHeader.toLowerCase() ==
-                                          item.title.toLowerCase() ||
-                                      isHovered
-                                  ? kPrimaryColor
-                                  : Colors.white,
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: Text(item.title.toUpperCase(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      color: isHovered ||
+                                              selectedHeader.toLowerCase() ==
+                                                  item.title.toLowerCase()
+                                          ? kAccentColor
+                                          : null)),
                         ),
                       ),
                     ),
@@ -215,21 +222,15 @@ class HeaderRow extends StatelessWidget {
     );
   }
 
-  MouseRegion getHeaderItem(HeaderItem item) {
+  MouseRegion getHeaderItem(BuildContext context, HeaderItem item) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Container(
         margin: const EdgeInsets.only(right: 30.0),
         child: GestureDetector(
           onTap: () => item.onClick?.call(),
-          child: Text(
-            item.title.toUpperCase(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text(item.title.toUpperCase(),
+              style: Theme.of(context).textTheme.titleSmall),
         ),
       ),
     );
@@ -251,15 +252,19 @@ class Header extends StatelessWidget {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 275),
             decoration: BoxDecoration(
-
-                // boxShadow: value == 0
-                //     ? null
-                //     : [
-                //         const BoxShadow(
-                //             color: kPrimaryColor,
-                //             offset: Offset(2.0, 4.0),
-                //             blurRadius: 2)
-                //       ],
+                boxShadow: value == 0
+                    ? null
+                    : [
+                        BoxShadow(
+                            spreadRadius: 3,
+                            color: context.isDarkMode
+                                ? Theme.of(context)
+                                    .scaffoldBackgroundColor
+                                    .withOpacity(.5)
+                                : Colors.black54,
+                            offset: const Offset(0, 2.0),
+                            blurRadius: 5)
+                      ],
                 border: value == 0
                     ? null
                     : Border(
@@ -270,22 +275,15 @@ class Header extends StatelessWidget {
                                 .withOpacity(.7))),
                 color: value == 0
                     ? null
-                    : Theme.of(context)
-                        .scaffoldBackgroundColor
-                        .withOpacity(.7)),
+                    : context.isDarkMode
+                        ? Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withOpacity(.7)
+                        : Colors.white),
             child: ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: ScreenHelper(
-                  desktop: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: buildHeader(valueNotifier: valueNotifier),
-                  ),
-                  // We will make this in a bit
-                  mobile: buildMobileHeader(context),
-                  tablet: buildHeader(),
-                ),
-              ),
+              child: context.isDarkMode
+                  ? getBackdropFilter(context)
+                  : getBody(context),
             ),
           );
         },
@@ -295,6 +293,25 @@ class Header extends StatelessWidget {
       desktop: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: buildHeader(),
+      ),
+      // We will make this in a bit
+      mobile: buildMobileHeader(context),
+      tablet: buildHeader(),
+    );
+  }
+
+  BackdropFilter getBackdropFilter(BuildContext context) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: getBody(context),
+    );
+  }
+
+  ScreenHelper getBody(BuildContext context) {
+    return ScreenHelper(
+      desktop: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: buildHeader(valueNotifier: valueNotifier),
       ),
       // We will make this in a bit
       mobile: buildMobileHeader(context),
@@ -322,7 +339,7 @@ class Header extends StatelessWidget {
               },
               child: const Icon(
                 FlutterIcons.menu_fea,
-                color: Colors.white,
+                // color: Colors.white,
                 size: 28.0,
               ),
             )
@@ -365,64 +382,79 @@ class WebMobileDrawer extends StatelessWidget {
                 },
               )
             : null;
-    return Card(
-      child: Drawer(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 24.0,
-            ),
-            child: ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                if (index >= headerItems.length) {
-                  return header!;
-                }
-                return headerItems[index].isButton
-                    ? MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: kDangerColor,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                          child: TextButton(
-                            onPressed: () => headerItems[index].onClick?.call(),
-                            child: Text(
-                              headerItems[index].title,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+    return NavigationDrawer(
+      onDestinationSelected: (value) {
+        debugPrint("onDestinationSelected index $value");
+        headerItems[value].onClick?.call();
+      },
+      selectedIndex: headerItems.indexWhere(
+        (element) => element.title == selectedHeader,
+      ),
+      children: <Widget>[
+        Padding(
+            padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
+            child: HeaderLogo()),
+        ...headerItems.map((HeaderItem destination) {
+          return NavigationDrawerDestination(
+              label: Text(destination.title),
+              icon: destination.getIcon(),
+              selectedIcon: destination.getSelectedIcon());
+        }),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
+          child: Divider(),
+        ),
+        if (header != null) header
+      ],
+    );
+
+    Drawer(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 24.0,
+          ),
+          child: ListView.separated(
+            itemBuilder: (BuildContext context, int index) {
+              if (index >= headerItems.length) {
+                return header!;
+              }
+              return headerItems[index].isButton
+                  ? MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: kDangerColor,
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                      )
-                    : ListTile(
-                        onTap: () {
-                          context
-                              .read<DrawerMenuControllerProvider>()
-                              .controlStartDrawerMenu();
-                          headerItems[index].onClick?.call();
-                        },
-                        selected: headerItems[index].title == selectedHeader,
-                        title: Text(
-                          headerItems[index].title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
+                        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                        child: TextButton(
+                          onPressed: () => headerItems[index].onClick?.call(),
+                          child: Text(headerItems[index].title,
+                              style: Theme.of(context).textTheme.titleSmall),
                         ),
-                      );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  height: 10.0,
-                );
-              },
-              itemCount: headerItems.length + (header != null ? 1 : 0),
-            ),
+                      ),
+                    )
+                  : ListTile(
+                      onTap: () {
+                        context
+                            .read<DrawerMenuControllerProvider>()
+                            .controlStartDrawerMenu();
+                        headerItems[index].onClick?.call();
+                      },
+                      selected: headerItems[index].title == selectedHeader,
+                      title: Text(
+                        headerItems[index].title,
+                      ),
+                    );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(
+                height: 10.0,
+              );
+            },
+            itemCount: headerItems.length + (header != null ? 1 : 0),
           ),
         ),
       ),

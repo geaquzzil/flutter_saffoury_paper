@@ -49,26 +49,26 @@ class _HeaderMainState extends State<HeaderMain> {
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),
-                Badge(
-                  badgeContent:
-                      Text("${context.watch<CartProvider>().getCount}"),
-                  toAnimate: true,
-                  animationType: BadgeAnimationType.scale,
-                  showBadge: context.watch<CartProvider>().getCount > 0,
-                  child: RoundedIconButton(
-                      onTap: () {
-                        // context
-                        //     .read<EndDrawerProvider>()
-                        //     .change();
-                        context
-                            .read<DrawerMenuControllerProvider>()
-                            .controlEndDrawerMenu();
-                      },
-                      // onTap: () => context
-                      //     .read<EndDrawerProvider>()
-                      //     .changeAndOpen(context, BaseHomeCartPage()),
-                      icon: Icons.shopping_cart_rounded),
-                ),
+                // Badge(
+                //   badgeContent:
+                //       Text("${context.watch<CartProvider>().getCount}"),
+                //   toAnimate: true,
+                //   animationType: BadgeAnimationType.scale,
+                //   showBadge: context.watch<CartProvider>().getCount > 0,
+                //   child: RoundedIconButton(
+                //       onTap: () {
+                //         // context
+                //         //     .read<EndDrawerProvider>()
+                //         //     .change();
+                //         context
+                //             .read<DrawerMenuControllerProvider>()
+                //             .controlEndDrawerMenu();
+                //       },
+                //       // onTap: () => context
+                //       //     .read<EndDrawerProvider>()
+                //       //     .changeAndOpen(context, BaseHomeCartPage()),
+                //       icon: Icons.shopping_cart_rounded),
+                // ),
                 const SizedBox(
                   width: kDefaultPadding / 2,
                 ),

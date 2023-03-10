@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/models/stat.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
@@ -13,6 +14,8 @@ final List<Stat> stats = [
 ];
 
 class PortfolioStats extends StatelessWidget {
+  const PortfolioStats({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,24 +48,11 @@ class PortfolioStats extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      stat.count,
-                      style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 32.0,
-                        color: Colors.white,
-                      ),
-                    ),
+                    Text(stat.count, style: getTitleTextStyle(context)),
                     const SizedBox(
                       width: 10.0,
                     ),
-                    Text(
-                      stat.text,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        color: kCaptionColor,
-                      ),
-                    )
+                    Text(stat.text, style: getSubtitleTextStyle(context))
                   ],
                 ),
               );

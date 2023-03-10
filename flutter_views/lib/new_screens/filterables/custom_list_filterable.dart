@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -25,17 +25,25 @@ class CustomFilterableController extends StatelessWidget {
           leading: Selector<FilterableProvider, int>(
             selector: (p0, p1) => p1.getCount(customFilterableField.field),
             builder: (context, value, child) => Badge(
-              badgeColor: Theme.of(context).colorScheme.primary,
-              badgeContent: Text(
+              isLabelVisible: value > 0,
+              label: Text(
                 "$value",
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
                     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
               ),
-              toAnimate: true,
-              showBadge: value > 0,
-              animationType: BadgeAnimationType.slide,
+              // badgeColor: Theme.of(context).colorScheme.primary,
+              // badgeContent: Text(
+              //   "$value",
+              //   style: Theme.of(context)
+              //       .textTheme
+              //       .titleSmall!
+              //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+              // ),
+              // toAnimate: true,
+              // showBadge: value > 0,
+              // animationType: BadgeAnimationType.slide,
               child: Icon(customFilterableField.icon),
             ),
           ),

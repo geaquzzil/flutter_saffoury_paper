@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/material.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 
@@ -13,9 +13,11 @@ class TowIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Badge(
-      badgeColor: Theme.of(context).colorScheme.background,
-      animationDuration: const Duration(milliseconds: 200),
+    return customBadges.Badge(
+      // showBadge: ,
+      // badgeAnimation: ,
+      // badgeColor: Theme.of(context).colorScheme.background,
+      // animationDuration: const Duration(milliseconds: 200),
       badgeContent: DecoratedIcon(
         icon: Icon(
           smallIcon,
@@ -24,11 +26,11 @@ class TowIcons extends StatelessWidget {
         ),
         // decoration: IconDecoration(border: IconBorder()),
       ),
-      position: BadgePosition.bottomEnd(bottom: -12, end: -12),
-      toAnimate: false,
-      animationType: BadgeAnimationType.scale,
-      alignment: Alignment.bottomLeft,
-      elevation: 2,
+      position: customBadges.BadgePosition.bottomEnd(bottom: -12, end: -12),
+      // toAnimate: false,
+      // badgeAnimation: customBadges.BadgeAnimationType.scale,
+      // alignment: Alignment.bottomLeft,
+      // elevation: 2,
       child: largChild,
     );
   }

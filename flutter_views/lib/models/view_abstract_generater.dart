@@ -89,7 +89,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (SizeConfig.hasSecondScreen(context)) {
       context
           .read<ActionViewAbstractProvider>()
-          .change((this as ViewAbstract).getCopyInstance(), ServerActions.edit);
+          .change((this as ViewAbstract).getCopyInstance(), ServerActions.view);
       return;
     }
     context.pushNamed(viewRouteName,

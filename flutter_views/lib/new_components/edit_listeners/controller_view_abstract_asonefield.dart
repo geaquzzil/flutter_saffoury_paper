@@ -62,7 +62,7 @@ class _ControllerViewAbstractAsOneField
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
     initiallyExpanded = widget.viewAbstract.isEditing();
-    _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
+    _isExpanded = PageStorage.of(context).readState(context) as bool? ??
         initiallyExpanded;
     if (_isExpanded) {
       _controller.value = 1.0;
@@ -91,7 +91,7 @@ class _ControllerViewAbstractAsOneField
       ..end = expansionTileTheme.iconColor ?? colorScheme.primary;
 
     initiallyExpanded = widget.viewAbstract.isEditing();
-    _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
+    _isExpanded = PageStorage.of(context).readState(context) as bool? ??
         initiallyExpanded;
 
     if (_isExpanded) {
@@ -218,7 +218,7 @@ class _ControllerViewAbstractAsOneField
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
   }
 
@@ -235,7 +235,7 @@ class _ControllerViewAbstractAsOneField
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
   }
 
@@ -252,7 +252,7 @@ class _ControllerViewAbstractAsOneField
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
 
     // widget.onExpansionChanged?.call(_isExpanded);

@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -200,17 +200,25 @@ class BaseFilterableMainWidget extends StatelessWidget {
   Widget getBadge(BuildContext context) {
     return Selector<FilterableProvider, int>(
       builder: (context, value, child) => Badge(
-        badgeColor: Theme.of(context).colorScheme.primary,
-        badgeContent: Text(
+        isLabelVisible: value > 0,
+        label: Text(
           value.toString(),
           style: Theme.of(context)
               .textTheme
               .titleSmall!
               .copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
-        toAnimate: true,
-        showBadge: value > 0,
-        animationType: BadgeAnimationType.slide,
+        // badgeColor: Theme.of(context).colorScheme.primary,
+        // badgeContent: Text(
+        //   value.toString(),
+        //   style: Theme.of(context)
+        //       .textTheme
+        //       .titleSmall!
+        //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+        // ),
+        // toAnimate: true,
+        // showBadge: value > 0,
+        // animationType: BadgeAnimationType.slide,
         child: const Icon(Icons.filter_alt),
       ),
       selector: (p0, p1) => p1.getList.length,

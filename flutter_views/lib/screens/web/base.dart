@@ -22,7 +22,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:smooth_scroll_web/smooth_scroll_web.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 import '../../models/servers/server_helpers.dart';

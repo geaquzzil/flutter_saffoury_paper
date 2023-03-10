@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
@@ -82,6 +85,44 @@ class HomeWebPage extends BaseWebPageSlivers {
       getHomeWelcomMessage(),
       getProfiloStates(),
       getProfiloProductProfits(),
+      getSliverPadding(
+        context,
+        constraints,
+        SliverToBoxAdapter(
+          child: StaggeredGrid.count(
+            crossAxisCount: 4,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            children: [
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: 2,
+                child:   Text("")
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: 1,
+                child: Container(color: Colors.red, child: Text("1")),
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 1,
+                mainAxisCellCount: 1,
+                child: Container(color: Colors.blue, child: Text("1")),
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 1,
+                mainAxisCellCount: 1,
+                child: Container(color: Colors.deepOrange, child: Text("1")),
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 4,
+                mainAxisCellCount: 2,
+                child: Container(color: Colors.lightGreen, child: Text("1")),
+              ),
+            ],
+          ),
+        ),
+      ),
       getTitle(context, constraints, "LATEST PRODUCTS"),
       getLastProducts(context),
 
@@ -147,7 +188,7 @@ class HomeWebPage extends BaseWebPageSlivers {
                   onPressed: () {
                     context.goNamed(indexWebContactUs);
                   },
-                  child: LottieColorFilter(
+                  child: const LottieColorFilter(
                     // color: Colors.black.withOpacity(.4),
                     lottiUrl:
                         "https://assets10.lottiefiles.com/packages/lf20_RBUCBDMwqd.json",
@@ -213,7 +254,7 @@ class HomeWebPage extends BaseWebPageSlivers {
                     launchUrlString(
                         "https://play.google.com/store/apps/details?id=com.saffoury.saffourypaper&hl=en&gl=US");
                   },
-                  child: LottieColorFilter(
+                  child: const LottieColorFilter(
                     // color: Colors.black.withOpacity(.4),
                     lottiUrl:
                         "https://assets7.lottiefiles.com/packages/lf20_bsPjV4.json",
@@ -244,8 +285,8 @@ class HomeWebPage extends BaseWebPageSlivers {
   }
 
   Widget getProfiloStates() {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(vertical: 28.0),
+    return const SliverPadding(
+      padding: EdgeInsets.symmetric(vertical: 28.0),
       sliver: SliverToBoxAdapter(
         child: PortfolioStats(),
       ),

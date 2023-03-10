@@ -23,6 +23,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -171,9 +172,12 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 // onGenerateRoute: RouteGenerator.generateRoute,
 
                 theme: ThemeData(
-                  scaffoldBackgroundColor: lightDynamic?.background,
-                  shadowColor: lightDynamic?.shadow,
-                  cardColor: lightDynamic?.surfaceVariant,
+                  textTheme: kIsWeb
+                      ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
+                      : null,
+                  // scaffoldBackgroundColor: lightDynamic?.background,
+                  // shadowColor: lightDynamic?.shadow,
+                  // cardColor: lightDynamic?.surfaceVariant,
                   colorScheme: lightDynamic ?? defaultLightColorScheme,
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(
@@ -187,9 +191,16 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   ),
                 ),
                 darkTheme: ThemeData(
-                  scaffoldBackgroundColor: darkDynamic?.background,
-                  shadowColor: darkDynamic?.shadow,
-                  cardColor: darkDynamic?.surfaceVariant,
+                  // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
+                  textTheme: kIsWeb
+                      ? GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme)
+                      : null,
+
+                  // scaffoldBackgroundColor:
+                  //     Theme.of(context).colorScheme.background,
+                  // scaffoldBackgroundColor: darkDynamic?.background,
+                  // shadowColor: darkDynamic?.shadow,
+                  // cardColor: darkDynamic?.surfaceVariant,
                   colorScheme: darkDynamic ?? defaultDarkColorScheme,
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(

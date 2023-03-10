@@ -144,8 +144,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     try {
       return await getHttp().post(
           Uri.parse(serverActions == ServerActions.print
-              ? URLS.BASE_URL_PRINT
-              : URLS.BASE_URL),
+              ? URLS.getBaseUrlPrint()
+              : URLS.getBaseUrl()),
           headers: await getHeaders(),
           body: getBody(serverActions,
               searchQuery: searchQuery,

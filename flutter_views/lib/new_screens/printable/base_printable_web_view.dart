@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/prints/print_commad_abstract.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
@@ -57,7 +58,7 @@ class BasePrintableViewWidget extends StatelessWidget {
     var pdfData = response.bodyBytes;
     await Printing.layoutPdf(
         onLayout: (format) async => Printing.convertHtml(
-            baseUrl: "http://saffoury.com/SaffouryPaper2/print/index.php",
+            baseUrl: URLS.getBaseUrlPrint(),
             html: response.body,
             format: PdfPageFormat.a4));
   }

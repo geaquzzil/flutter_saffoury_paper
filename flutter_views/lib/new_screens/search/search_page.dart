@@ -424,10 +424,10 @@ class _SearchPageState extends State<SearchPage> {
                 {
                   return ActionChip(
                     elevation: 1,
-                    backgroundColor: Theme.of(context).colorScheme.surface,
-                    shadowColor: Theme.of(context).colorScheme.shadow,
-                    surfaceTintColor:
-                        Theme.of(context).colorScheme.onSurfaceVariant,
+                    // backgroundColor: Theme.of(context).colorScheme.surface,
+                    // shadowColor: Theme.of(context).colorScheme.shadow,
+                    // surfaceTintColor:
+                    //     Theme.of(context).colorScheme.onSurfaceVariant,
                     avatar: const Icon(Icons.search),
                     onPressed: () {
                       _controller.text = item;

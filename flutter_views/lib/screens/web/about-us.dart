@@ -17,7 +17,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'components/header_text.dart';
 import 'components/title_and_image.dart';
-import 'dart:html' as html;
 
 import 'parallex/parallexes.dart';
 

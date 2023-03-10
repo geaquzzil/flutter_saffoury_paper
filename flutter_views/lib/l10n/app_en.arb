@@ -593,7 +593,7 @@
 
   "welcome_message": "مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\nرصيدك الحالي:{r}\\n",
   "welcome_message_employees": "مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\n",
-  "dollar_format": "{r} $",
+  "dollar_format": "S$ {r}",
   "syp_format": "{r} SYP",
   "product_size_f": "Size: {r} ✗ {r}",
   "product_size_roll_f": "Width: {r}",

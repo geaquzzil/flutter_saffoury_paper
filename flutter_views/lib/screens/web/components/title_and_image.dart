@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
@@ -25,7 +26,6 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
       required this.title,
       this.customDescription,
       this.description,
-
       this.isBackgroundImageBlurred = true,
       this.backgroundImage,
       this.customWidget,
@@ -34,7 +34,6 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
   // We can use same idea as ios_app_ad.dart and swap children order, let's copy code
   @override
   Widget build(BuildContext context) {
-  
     return ScreenHelper(
       desktop: _buildUi(context, kDesktopMaxWidth),
       tablet: _buildUi(context, kTabletMaxWidth),
@@ -52,7 +51,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
             defaultScale: false,
             child: backgroundImage != null
                 ? getUiBodyWithBackgroundImage(constraints, context)
-                : getUiBody(constraints),
+                : getUiBody(context, constraints),
           );
         },
       ),
@@ -71,17 +70,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
           color: Theme.of(context).colorScheme.onBackground,
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-          child: Container(
-            height: carouselContainerHeight,
-            decoration: BoxDecoration(
-              color: kPrimaryColor.withOpacity(0.9),
-              borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            ),
-            child: getUiBody(constraints),
-          ),
-        ),
+        child: getBackdropFilter(context, carouselContainerHeight, constraints),
       ),
       placeholder: (context, url) => const CircularProgressIndicator(),
       errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -89,7 +78,27 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
     return image;
   }
 
-  Flex getUiBody(BoxConstraints constraints) {
+  BackdropFilter getBackdropFilter(BuildContext context,
+      double carouselContainerHeight, BoxConstraints constraints) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+      child: getBody(context, carouselContainerHeight, constraints),
+    );
+  }
+
+  Container getBody(BuildContext context, double carouselContainerHeight,
+      BoxConstraints constraints) {
+    return Container(
+      height: carouselContainerHeight,
+      decoration: BoxDecoration(
+        color: kPrimaryColor.withOpacity(0.9),
+        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+      ),
+      child: getUiBody(context, constraints),
+    );
+  }
+
+  Flex getUiBody(BuildContext context, BoxConstraints constraints) {
     return Flex(
       direction: constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
       children: [
@@ -103,14 +112,11 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
               if (primaryTitle != null)
                 FadeInLeft(
                   key: UniqueKey(),
-                  child: Text(
-                    primaryTitle!,
-                    style: GoogleFonts.roboto(
-                      color: kPrimaryColor,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16.0,
-                    ),
-                  ),
+                  child: Text(primaryTitle!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: kPrimaryColor)),
                 ),
               if (primaryTitle != null)
                 const SizedBox(
@@ -118,15 +124,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
                 ),
               FadeInLeft(
                 key: UniqueKey(),
-                child: Text(
-                  title,
-                  style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    height: 1.3,
-                    fontSize: 35.0,
-                  ),
-                ),
+                child: Text(title, style: getTitleTextStyle(context)),
               ),
               const SizedBox(
                 height: 10.0,
@@ -134,15 +132,8 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
               description != null
                   ? FadeInLeft(
                       key: UniqueKey(),
-                      child: Text(
-                        description!,
-                        style: const TextStyle(
-                          color: kCaptionColor,
-                          height: 1.5,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                    )
+                      child: Text(description!,
+                          style: getSubtitleTextStyle(context)))
                   : FadeInLeft(key: UniqueKey(), child: customDescription!),
               const SizedBox(
                 height: 25.0,

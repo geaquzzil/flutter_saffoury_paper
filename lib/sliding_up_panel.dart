@@ -162,7 +162,8 @@ class _HomePageState extends State<HomePage> {
                   height: 5,
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
-                      borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0))),
                 ),
               ],
             ),
@@ -265,13 +266,15 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(16.0),
-          decoration:
-              BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.15),
-              blurRadius: 4.0,
-            )
-          ]),
+          decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.15),
+                  blurRadius: 4.0,
+                )
+              ]),
           child: Icon(
             icon,
             color: Colors.white,
@@ -306,7 +309,6 @@ class _HomePageState extends State<HomePage> {
         center: LatLng(40.441589, -80.010948),
         zoom: 13,
         maxZoom: 15,
-        
       ),
       // layers: [
       //   TileLayerOptions(

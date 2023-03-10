@@ -196,7 +196,7 @@ class ProductWebPage extends BaseWebPageSlivers {
           delegate: SliverAppBarDelegatePreferedSize(
             shouldRebuildWidget: true,
             child: PreferredSize(
-              preferredSize: const Size.fromHeight(60),
+              preferredSize: const Size(40, kToolbarHeight),
               child: ResponsiveWebBuilderSliver(
                 builder: (context, width) => SearchWidgetWebComponent(
                   scrollvalueNofifier: onScroll,
@@ -324,17 +324,17 @@ class ProductWebPage extends BaseWebPageSlivers {
               ? max((constraints.maxWidth - 1200) / 2, 0)
               : 15),
       sliver: ResponsiveSliverGridList(
-          horizontalGridSpacing: 50, // Horizontal space between grid items
-          verticalGridSpacing: 50, // Vertical space between grid items
-          horizontalGridMargin: 50, // Horizontal space around the grid
-          verticalGridMargin: 50, // Vertical space around the grid
+          horizontalGridSpacing: 25, // Horizontal space between grid items
+          verticalGridSpacing: 25, // Vertical space between grid items
+          horizontalGridMargin: 25, // Horizontal space around the grid
+          verticalGridMargin: 25, // Vertical space around the grid
           minItemsPerRow:
               2, // The minimum items to show in a single row. Takes precedence over minItemWidth
           maxItemsPerRow:
               4, // The maximum items to show in a single row. Can be useful on large screens
           sliverChildBuilderDelegateOptions:
               SliverChildBuilderDelegateOptions(),
-          minItemWidth: 200,
+          minItemWidth: 250,
           children: [
             ...list
                 .map((e) => WebGridViewItem(

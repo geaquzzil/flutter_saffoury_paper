@@ -454,7 +454,9 @@ class WebGridViewItemCustom extends StatelessWidget {
   final bool setDescriptionAtBottom;
   final String? imageUrl;
   final Widget? child;
+  final bool paddingToInside;
   final void Function()? onClick;
+  final bool roundedCorners;
   final bool showChildOnHoverOnly;
 
   const WebGridViewItemCustom(
@@ -462,40 +464,57 @@ class WebGridViewItemCustom extends StatelessWidget {
       required this.title,
       this.subtitle,
       this.imageUrl,
+      this.roundedCorners = true,
       this.onClick,
       this.child,
+      this.paddingToInside = false,
       this.showChildOnHoverOnly = false,
       this.setDescriptionAtBottom = false});
 
   @override
   Widget build(BuildContext context) {
     return HoverImage(
-      bottomWidget: setDescriptionAtBottom
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  title,
-                  if (subtitle != null)
-                    Text(
-                      subtitle!,
-                      style: Theme.of(context).textTheme.caption,
-                    )
-                ],
-              ),
-            )
-          : null,
-      image: imageUrl ?? "",
-      // scale: false,
-      builder: (isHovered) => GestureDetector(
-          onTap: () {
-            onClick?.call();
-          },
-          child: _getStack(context, isHovered)),
-    );
+        roundedCorners: roundedCorners,
+        animatedScale: !paddingToInside,
+        bottomWidget: setDescriptionAtBottom
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    title,
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: Theme.of(context).textTheme.caption,
+                      )
+                  ],
+                ),
+              )
+            : null,
+        image: imageUrl ?? "",
+        // scale: false,
+        builder: (isHovered) => GestureDetector(
+            onTap: () {
+              onClick?.call();
+            },
+            child: paddingToInside
+                ? AnimatedScale(
+                    scale: isHovered ? 0.95 : 1,
+                    duration: const Duration(milliseconds: 175),
+                    child: _getStack(context, isHovered),
+                  )
+                : _getStack(context, isHovered))
+
+        // isHovered
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: _getStack(context, isHovered),
+        //       )
+        //     : _getStack(context, isHovered)),
+        );
   }
 
   bool canShowChild(bool isHovered) {
@@ -527,15 +546,19 @@ class WebGridViewItemCustom extends StatelessWidget {
                     image: CachedNetworkImageProvider(imageUrl!),
                     fit: BoxFit.cover),
                 color: null,
-                borderRadius: const BorderRadius.all(Radius.circular(18)))));
+                borderRadius: roundedCorners
+                    ? const BorderRadius.all(Radius.circular(18))
+                    : null)));
   }
 
   Widget _buildChild(BuildContext context) {
     return Positioned.fill(
         child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 color: null,
-                borderRadius: BorderRadius.all(Radius.circular(18))),
+                borderRadius: roundedCorners
+                    ? BorderRadius.all(Radius.circular(18))
+                    : null),
             child: child!));
   }
 

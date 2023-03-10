@@ -79,7 +79,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
     hasError = widget.hasError ?? false;
-    _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
+    _isExpanded = PageStorage.of(context).readState(context) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) {
       if (!canExpand(context)) {
@@ -108,7 +108,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
       ..begin =
           expansionTileTheme.collapsedIconColor ?? theme.unselectedWidgetColor
       ..end = expansionTileTheme.iconColor ?? colorScheme.primary;
-    _isExpanded = PageStorage.of(context)?.readState(context) as bool? ??
+    _isExpanded = PageStorage.of(context).readState(context) as bool? ??
         widget.initiallyExpanded;
     hasError = widget.hasError ?? false;
     if (_isExpanded) {
@@ -165,7 +165,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
   }
 
@@ -188,7 +188,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
   }
 
@@ -217,7 +217,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
 
     // widget.onExpansionChanged?.call(_isExpanded);

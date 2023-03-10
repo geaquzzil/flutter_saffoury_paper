@@ -1709,28 +1709,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dateEnteryInterval => 'اختر التاريخهذا العامهذا الشهرمخصص';
 
   @override
-  String get welcome_message => 'مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\nرصيدك الحالي:{r}\\n';
+  String welcome_message(Object r) {
+    return 'مرحبًا $r.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على $r\\nاسم المستخدم:$r\\nكلمة المرور:$r\\nرصيدك الحالي:$r\\n';
+  }
 
   @override
-  String get welcome_message_employees => 'مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\n';
+  String welcome_message_employees(Object r) {
+    return 'مرحبًا $r.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على $r\\nاسم المستخدم:$r\\nكلمة المرور:$r\\n';
+  }
 
   @override
-  String get dollar_format => '\$ {r}';
+  String dollar_format(Object r) {
+    return 'S\$ $r';
+  }
 
   @override
-  String get syp_format => 'ل.س {r}';
+  String syp_format(Object r) {
+    return 'ل.س $r';
+  }
 
   @override
-  String get product_size_f => 'القياس: {r} ✗ {r}';
+  String product_size_f(Object r) {
+    return 'القياس: $r ✗ $r';
+  }
 
   @override
-  String get product_size_roll_f => 'العرض: {r}';
+  String product_size_roll_f(Object r) {
+    return 'العرض: $r';
+  }
 
   @override
-  String get product_size_roll_f_string => 'العرض: {r}';
+  String product_size_roll_f_string(Object r) {
+    return 'العرض: $r';
+  }
 
   @override
-  String get product_notes_format => 'ملاحظات:\\n•{r}';
+  String product_notes_format(Object r) {
+    return 'ملاحظات:\\n•$r';
+  }
 
   @override
   String errFieldNotSelected(String r) {
@@ -1738,67 +1754,105 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get price_dollar => 'السعر: {r} \$';
+  String price_dollar(Object r) {
+    return 'السعر: $r \$';
+  }
 
   @override
-  String get last_payment_format_with_d => 'آخر دفعة: {r} • {r}';
+  String last_payment_format_with_d(Object r) {
+    return 'آخر دفعة: $r • $r';
+  }
 
   @override
-  String get last_spend_format => 'آخر مصاريف: {r} • {r}';
+  String last_spend_format(Object r) {
+    return 'آخر مصاريف: $r • $r';
+  }
 
   @override
-  String get balanceFormat => 'الرصيد: {r}';
+  String balanceFormat(Object r) {
+    return 'الرصيد: $r';
+  }
 
   @override
-  String get level_f => 'المستوى: {r}';
+  String level_f(Object r) {
+    return 'المستوى: $r';
+  }
 
   @override
-  String get last_payment_with_date => '\"{r} في {r} \"';
+  String last_payment_with_date(Object r) {
+    return '\"$r في $r \"';
+  }
 
   @override
-  String get kg_format => '{r} (كغ)';
+  String kg_format(Object r) {
+    return '$r (كغ)';
+  }
 
   @override
-  String get date_format_and_by => 'التاريخ: {r} • {r}';
+  String date_format_and_by(Object r) {
+    return 'التاريخ: $r • $r';
+  }
 
   @override
-  String get order_format => 'مبيعات: {r}';
+  String order_format(Object r) {
+    return 'مبيعات: $r';
+  }
 
   @override
-  String get wastSize_f => 'القياس المهدور: {r} ✗ {r}';
+  String wastSize_f(Object r) {
+    return 'القياس المهدور: $r ✗ $r';
+  }
 
   @override
-  String get wastSizeFlip_f => 'القياس المهدور معكوس: {r} ✗ {r}';
+  String wastSizeFlip_f(Object r) {
+    return 'القياس المهدور معكوس: $r ✗ $r';
+  }
 
   @override
-  String get size_roll_res => 'قص رول على {r} ≈ {r}';
+  String size_roll_res(Object r) {
+    return 'قص رول على $r ≈ $r';
+  }
 
   @override
-  String get size_roll_res_with_width => 'قص الرول على {r} ثم{r}';
+  String size_roll_res_with_width(Object r) {
+    return 'قص الرول على $r ثم$r';
+  }
 
   @override
-  String get wastSize_f2 => 'القياس المهدور: {r} ✗ {r} • {r} ✗ {r}';
+  String wastSize_f2(Object r) {
+    return 'القياس المهدور: $r ✗ $r • $r ✗ $r';
+  }
 
   @override
-  String get wastSizeFlip_f2 => 'القياس المهدور معكوس: {r} ✗ {r} • {r} ✗ {r}';
+  String wastSizeFlip_f2(Object r) {
+    return 'القياس المهدور معكوس: $r ✗ $r • $r ✗ $r';
+  }
 
   @override
-  String get size_res_f => '{r} {r} (كغ) • {r} ';
+  String size_res_f(Object r) {
+    return '$r $r (كغ) • $r ';
+  }
 
   @override
   String get requestedSizeLabel => 'القياسات المطلوبة';
 
   @override
-  String get size_res_f_without_dollar => '{r} {r} (كغ) {r}';
+  String size_res_f_without_dollar(Object r) {
+    return '$r $r (كغ) $r';
+  }
 
   @override
-  String get size_res_flip_f => 'معكوس: {r} {r} (كغ) • {r} ';
+  String size_res_flip_f(Object r) {
+    return 'معكوس: $r $r (كغ) • $r ';
+  }
 
   @override
   String get maxWaste => '\"أقصى هدر ممكن\"';
 
   @override
-  String get tow_strings => '{r} {r}';
+  String tow_strings(Object r) {
+    return '$r $r';
+  }
 
   @override
   String addToFormat(String r) {
@@ -1809,34 +1863,54 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inWords => 'كتابة';
 
   @override
-  String get toFormat => 'إلى {r}';
+  String toFormat(Object r) {
+    return 'إلى $r';
+  }
 
   @override
-  String get addFormat => 'إضافة {r}';
+  String addFormat(Object r) {
+    return 'إضافة $r';
+  }
 
   @override
-  String get sheets_string_f => '{r} ورقة';
+  String sheets_string_f(Object r) {
+    return '$r ورقة';
+  }
 
   @override
-  String get dollar_and_syp_format => '{r} \$ • {r} ل.س';
+  String dollar_and_syp_format(Object r) {
+    return '$r \$ • $r ل.س';
+  }
 
   @override
-  String get dollar_and_kg_format => '{r} \$ • {r} KG';
+  String dollar_and_kg_format(Object r) {
+    return '$r \$ • $r KG';
+  }
 
   @override
-  String get tryToSearchBySizeAnalyzer => 'اضغط هنا للبحث عن (٪1\$s) بواسطة محلل الحجم';
+  String tryToSearchBySizeAnalyzer(Object r) {
+    return 'اضغط هنا للبحث عن (٪1\$s) بواسطة محلل الحجم';
+  }
 
   @override
-  String get not_payed_format => 'لديك {r} عملاء لم يدفعو من زمن طويل, مع {r} مخالافات لشروط الدفع';
+  String not_payed_format(Object r) {
+    return 'لديك $r عملاء لم يدفعو من زمن طويل, مع $r مخالافات لشروط الدفع';
+  }
 
   @override
-  String get sellDollar_format => 'شراء {r} طبق لاصق بسعر {r}';
+  String sellDollar_format(Object r) {
+    return 'شراء $r طبق لاصق بسعر $r';
+  }
 
   @override
-  String get rowCountFormat => '{r} حقل';
+  String rowCountFormat(Object r) {
+    return '$r حقل';
+  }
 
   @override
-  String get errCantEditFormatFromTo => 'لا يمكن تعديل {r} لأنه تم إنشاؤه من {r}';
+  String errCantEditFormatFromTo(Object r) {
+    return 'لا يمكن تعديل $r لأنه تم إنشاؤه من $r';
+  }
 
   @override
   String searchInFormat(String r) {
@@ -1844,31 +1918,49 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get errSomeOperationField => 'فشل بعض العنصار من اتمام عملية {r}, لسبب ما !';
+  String errSomeOperationField(Object r) {
+    return 'فشل بعض العنصار من اتمام عملية $r, لسبب ما !';
+  }
 
   @override
-  String get errCantListBeEmpty => 'خطأ ، {r} فارغة او تحتوي على عنصر واحد أو أكثر خاطئ';
+  String errCantListBeEmpty(Object r) {
+    return 'خطأ ، $r فارغة او تحتوي على عنصر واحد أو أكثر خاطئ';
+  }
 
   @override
-  String get chooseActionYouLike => 'اختر الإجراء الذي ترغب في القيام به من أجل \\n{r}\\n لإكمال العملية';
+  String chooseActionYouLike(Object r) {
+    return 'اختر الإجراء الذي ترغب في القيام به من أجل \\n$r\\n لإكمال العملية';
+  }
 
   @override
-  String get app_fo => '{r} ≈';
+  String app_fo(Object r) {
+    return '$r ≈';
+  }
 
   @override
-  String get clickToFormat => '{r} اضغط لل';
+  String clickToFormat(Object r) {
+    return '$r اضغط لل';
+  }
 
   @override
-  String get noti_message_1_F => 'أتطلع إلى تلقي دفعتك هذا الأسبوع ، مع العلم أن آخر دفعة لك كانت: {r}\\nالرصيد المتبقي هو{r}';
+  String noti_message_1_F(Object r) {
+    return 'أتطلع إلى تلقي دفعتك هذا الأسبوع ، مع العلم أن آخر دفعة لك كانت: $r\\nالرصيد المتبقي هو$r';
+  }
 
   @override
-  String get noti_message_2_F => 'شكرًا لك مقدمًا على الدفع الفوري ، أريد أن أخبرك أن آخر دفعة لك كانت: {r}\\nالرصيد المتبقي هو {r}';
+  String noti_message_2_F(Object r) {
+    return 'شكرًا لك مقدمًا على الدفع الفوري ، أريد أن أخبرك أن آخر دفعة لك كانت: $r\\nالرصيد المتبقي هو $r';
+  }
 
   @override
-  String get noti_message_3_F => 'هذه رسالة تذكير ودية بأن فاتورتك [#] يجب أن تُسدد خلال الأسبوع القادم ، مع العلم أن آخر دفعة لك كانت: {r}\\nالرصيد المتبقي هو {r}';
+  String noti_message_3_F(Object r) {
+    return 'هذه رسالة تذكير ودية بأن فاتورتك [#] يجب أن تُسدد خلال الأسبوع القادم ، مع العلم أن آخر دفعة لك كانت: $r\\nالرصيد المتبقي هو $r';
+  }
 
   @override
-  String get noti_message_4_F => 'الرجاء إخبارنا إذا كانت لديك أي أسئلة حول الفاتورة أو إذا كان هناك أي شيء يمكنني فعله لك ، مع العلم أن آخر دفعة لك كانت: {r}\\n\nالرصيد المتبقي هو {r}';
+  String noti_message_4_F(Object r) {
+    return 'الرجاء إخبارنا إذا كانت لديك أي أسئلة حول الفاتورة أو إذا كان هناك أي شيء يمكنني فعله لك ، مع العلم أن آخر دفعة لك كانت: $r\\n\nالرصيد المتبقي هو $r';
+  }
 
   @override
   String get top => 'الاعلى';

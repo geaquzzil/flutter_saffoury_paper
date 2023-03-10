@@ -20,10 +20,13 @@ class TextFieldTheming {
 }
 
 final defaultLightColorScheme = ColorScheme.fromSwatch(
-    primarySwatch: Colors.blueGrey, accentColor: kAccentColor);
+    backgroundColor: Colors.grey.shade50,
+    primarySwatch: Colors.blueGrey,
+    accentColor: kAccentColor);
 
 final defaultDarkColorScheme = ColorScheme.fromSwatch(
-  
+    // backgroundColor: Colors.grey.shade50,
+    backgroundColor: Colors.grey.shade900,
     primarySwatch: Colors.blueGrey,
     brightness: Brightness.dark,
     accentColor: kAccentColor);

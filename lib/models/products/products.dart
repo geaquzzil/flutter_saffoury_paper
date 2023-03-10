@@ -852,7 +852,7 @@ class Product extends ViewAbstract<Product>
             ? (ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context))
                 ? 220
                 : 200
-            : 175,
+            : 250,
         useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
@@ -866,7 +866,7 @@ class Product extends ViewAbstract<Product>
             ? (ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context))
                 ? 220
                 : 200
-            : 175,
+            : 250,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,

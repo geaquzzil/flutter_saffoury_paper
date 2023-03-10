@@ -1709,28 +1709,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dateEnteryInterval => 'Select dateThis yearThis monthCustom';
 
   @override
-  String get welcome_message => 'مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\nرصيدك الحالي:{r}\\n';
+  String welcome_message(Object r) {
+    return 'مرحبًا $r.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على $r\\nاسم المستخدم:$r\\nكلمة المرور:$r\\nرصيدك الحالي:$r\\n';
+  }
 
   @override
-  String get welcome_message_employees => 'مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\n';
+  String welcome_message_employees(Object r) {
+    return 'مرحبًا $r.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على $r\\nاسم المستخدم:$r\\nكلمة المرور:$r\\n';
+  }
 
   @override
-  String get dollar_format => '{r} \$';
+  String dollar_format(Object r) {
+    return 'S\$ $r';
+  }
 
   @override
-  String get syp_format => '{r} SYP';
+  String syp_format(Object r) {
+    return '$r SYP';
+  }
 
   @override
-  String get product_size_f => 'Size: {r} ✗ {r}';
+  String product_size_f(Object r) {
+    return 'Size: $r ✗ $r';
+  }
 
   @override
-  String get product_size_roll_f => 'Width: {r}';
+  String product_size_roll_f(Object r) {
+    return 'Width: $r';
+  }
 
   @override
-  String get product_size_roll_f_string => 'Width: {r}';
+  String product_size_roll_f_string(Object r) {
+    return 'Width: $r';
+  }
 
   @override
-  String get product_notes_format => 'Notes:\\n•{r}';
+  String product_notes_format(Object r) {
+    return 'Notes:\\n•$r';
+  }
 
   @override
   String errFieldNotSelected(String r) {
@@ -1738,67 +1754,105 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get price_dollar => 'Price: {r} \$';
+  String price_dollar(Object r) {
+    return 'Price: $r \$';
+  }
 
   @override
-  String get last_payment_format_with_d => 'Last Credit: {r} • {r}';
+  String last_payment_format_with_d(Object r) {
+    return 'Last Credit: $r • $r';
+  }
 
   @override
-  String get last_spend_format => 'Last expense: {r} • {r}';
+  String last_spend_format(Object r) {
+    return 'Last expense: $r • $r';
+  }
 
   @override
-  String get balanceFormat => 'Balance: {r}';
+  String balanceFormat(Object r) {
+    return 'Balance: $r';
+  }
 
   @override
-  String get level_f => 'Level: {r}';
+  String level_f(Object r) {
+    return 'Level: $r';
+  }
 
   @override
-  String get last_payment_with_date => '{r} on {r}';
+  String last_payment_with_date(Object r) {
+    return '$r on $r';
+  }
 
   @override
-  String get kg_format => '{r} (KG)';
+  String kg_format(Object r) {
+    return '$r (KG)';
+  }
 
   @override
-  String get date_format_and_by => 'Date: {r} • {r}';
+  String date_format_and_by(Object r) {
+    return 'Date: $r • $r';
+  }
 
   @override
-  String get order_format => 'Orders: {r}';
+  String order_format(Object r) {
+    return 'Orders: $r';
+  }
 
   @override
-  String get wastSize_f => 'Waste size: {r} ✗ {r}';
+  String wastSize_f(Object r) {
+    return 'Waste size: $r ✗ $r';
+  }
 
   @override
-  String get wastSizeFlip_f => 'Waste size: {r} ✗ {r}';
+  String wastSizeFlip_f(Object r) {
+    return 'Waste size: $r ✗ $r';
+  }
 
   @override
-  String get size_roll_res => 'Cut the roller on {r} ≈ {r} (Sheets)';
+  String size_roll_res(Object r) {
+    return 'Cut the roller on $r ≈ $r (Sheets)';
+  }
 
   @override
-  String get size_roll_res_with_width => 'Cut the roller on {r} then {r} ';
+  String size_roll_res_with_width(Object r) {
+    return 'Cut the roller on $r then $r ';
+  }
 
   @override
-  String get wastSize_f2 => 'Waste size: {r} ✗ {r} • {r} ✗ {r}';
+  String wastSize_f2(Object r) {
+    return 'Waste size: $r ✗ $r • $r ✗ $r';
+  }
 
   @override
-  String get wastSizeFlip_f2 => 'Waste size: {r} ✗ {r} • {r} ✗ {r}';
+  String wastSizeFlip_f2(Object r) {
+    return 'Waste size: $r ✗ $r • $r ✗ $r';
+  }
 
   @override
-  String get size_res_f => '{r} {r} (KG) • {r} ';
+  String size_res_f(Object r) {
+    return '$r $r (KG) • $r ';
+  }
 
   @override
   String get requestedSizeLabel => 'Requested sizes';
 
   @override
-  String get size_res_f_without_dollar => '{r} {r} (KG) {r}';
+  String size_res_f_without_dollar(Object r) {
+    return '$r $r (KG) $r';
+  }
 
   @override
-  String get size_res_flip_f => '{r} {r} (KG) • {r} ';
+  String size_res_flip_f(Object r) {
+    return '$r $r (KG) • $r ';
+  }
 
   @override
   String get maxWaste => 'Max possible waste';
 
   @override
-  String get tow_strings => '{r} {r}';
+  String tow_strings(Object r) {
+    return '$r $r';
+  }
 
   @override
   String addToFormat(String r) {
@@ -1809,34 +1863,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inWords => 'In words';
 
   @override
-  String get toFormat => 'to {r}';
+  String toFormat(Object r) {
+    return 'to $r';
+  }
 
   @override
-  String get addFormat => 'Add {r}';
+  String addFormat(Object r) {
+    return 'Add $r';
+  }
 
   @override
-  String get sheets_string_f => '{r} Sheet(s)';
+  String sheets_string_f(Object r) {
+    return '$r Sheet(s)';
+  }
 
   @override
-  String get dollar_and_syp_format => '{r} \$ • {r} SYP';
+  String dollar_and_syp_format(Object r) {
+    return '$r \$ • $r SYP';
+  }
 
   @override
-  String get dollar_and_kg_format => '{r} \$ • {r} KG';
+  String dollar_and_kg_format(Object r) {
+    return '$r \$ • $r KG';
+  }
 
   @override
-  String get tryToSearchBySizeAnalyzer => 'Click here, To search for ({r}) by size analyzer';
+  String tryToSearchBySizeAnalyzer(Object r) {
+    return 'Click here, To search for ($r) by size analyzer';
+  }
 
   @override
-  String get not_payed_format => 'You have {r} customers who have not paid for a long time, with {r} overdue bill(s)';
+  String not_payed_format(Object r) {
+    return 'You have $r customers who have not paid for a long time, with $r overdue bill(s)';
+  }
 
   @override
-  String get sellDollar_format => 'شراء {r} طبق لاصق بسعر {r}';
+  String sellDollar_format(Object r) {
+    return 'شراء $r طبق لاصق بسعر $r';
+  }
 
   @override
-  String get rowCountFormat => '{r} row(s) was';
+  String rowCountFormat(Object r) {
+    return '$r row(s) was';
+  }
 
   @override
-  String get errCantEditFormatFromTo => 'Can not edit {r} because it\\\'s generated from {r}';
+  String errCantEditFormatFromTo(Object r) {
+    return 'Can not edit $r because it\\\'s generated from $r';
+  }
 
   @override
   String searchInFormat(String r) {
@@ -1844,31 +1918,49 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get errSomeOperationField => 'Some items fields to {r}, for some reason !';
+  String errSomeOperationField(Object r) {
+    return 'Some items fields to $r, for some reason !';
+  }
 
   @override
-  String get errCantListBeEmpty => 'Error, {r} list is empty or contains one or more wrong items';
+  String errCantListBeEmpty(Object r) {
+    return 'Error, $r list is empty or contains one or more wrong items';
+  }
 
   @override
-  String get chooseActionYouLike => 'Choose the action you would like to do for \\n{r}\\nTo complete the operation';
+  String chooseActionYouLike(Object r) {
+    return 'Choose the action you would like to do for \\n$r\\nTo complete the operation';
+  }
 
   @override
-  String get app_fo => '≈ {r}';
+  String app_fo(Object r) {
+    return '≈ $r';
+  }
 
   @override
-  String get clickToFormat => 'Click to {r}';
+  String clickToFormat(Object r) {
+    return 'Click to $r';
+  }
 
   @override
-  String get noti_message_1_F => 'I look forward to receiving your payment this week, knowing that your last payment was: {r} The remaining balance is {r}';
+  String noti_message_1_F(Object r) {
+    return 'I look forward to receiving your payment this week, knowing that your last payment was: $r The remaining balance is $r';
+  }
 
   @override
-  String get noti_message_2_F => 'Thank you in advance for your prompt payment, i want to let you know that your last payment was: {r}\\nThe remaining balance is {r}';
+  String noti_message_2_F(Object r) {
+    return 'Thank you in advance for your prompt payment, i want to let you know that your last payment was: $r\\nThe remaining balance is $r';
+  }
 
   @override
-  String get noti_message_3_F => 'This is a friendly reminder that your invoice [#] payment is due to be paid next week, knowing that your last payment was: {r}\\nThe remaining balance is {r}';
+  String noti_message_3_F(Object r) {
+    return 'This is a friendly reminder that your invoice [#] payment is due to be paid next week, knowing that your last payment was: $r\\nThe remaining balance is $r';
+  }
 
   @override
-  String get noti_message_4_F => 'Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: {r}\\n\nThe remaining balance is {r}';
+  String noti_message_4_F(Object r) {
+    return 'Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: $r\\n\nThe remaining balance is $r';
+  }
 
   @override
   String get top => 'Top';

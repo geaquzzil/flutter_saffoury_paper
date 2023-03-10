@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/models/design_process.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -221,6 +222,36 @@ class ProductQualityWebSection extends StatelessWidget {
           //     children: designProcesses.map((e) => getItem(e)).toList()),
           LayoutBuilder(
             builder: (context, constraints) {
+              return StaggeredGrid.count(
+                crossAxisCount: 4,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+                children: [
+                  StaggeredGridTile.count(
+                      crossAxisCellCount: 2,
+                      mainAxisCellCount: 2,
+                      child: getGridViewItemCustom(designProcesses[0])),
+                  StaggeredGridTile.count(
+                      crossAxisCellCount: 2,
+                      mainAxisCellCount: 1,
+                      child: getGridViewItemCustom(designProcesses[1])),
+                  StaggeredGridTile.count(
+                      crossAxisCellCount: 1,
+                      mainAxisCellCount: 1,
+                      child: getGridViewItemCustom(designProcesses[2])),
+                  StaggeredGridTile.count(
+                      crossAxisCellCount: 1,
+                      mainAxisCellCount: 1,
+                      child: getGridViewItemCustom(designProcesses[3])),
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 4,
+                    mainAxisCellCount: 2,
+                    child:
+                        Container(color: Colors.lightGreen, child: Text("1")),
+                  ),
+                ],
+              );
+
               return ResponsiveGridView.builder(
                 padding: const EdgeInsets.all(0.0),
                 shrinkWrap: true,
@@ -238,24 +269,7 @@ class ProductQualityWebSection extends StatelessWidget {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   var designProcesse = designProcesses[index];
-                  return WebGridViewItemCustom(
-                    showChildOnHoverOnly: true,
-                    imageUrl: designProcesse.imageUrl,
-                    title: getItemTitle(designProcesse),
-                    child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(kDefaultPadding / 2),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        designProcesse.subtitle,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          height: 1.5,
-                          fontSize: 14.0,
-                        ),
-                      ),
-                    )),
-                  );
+                  return getGridViewItemCustom(designProcesse);
 
                   // getItem(designProcesse);
                 },
@@ -265,6 +279,29 @@ class ProductQualityWebSection extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  WebGridViewItemCustom getGridViewItemCustom(DesignProcess designProcesse) {
+    return WebGridViewItemCustom(
+      paddingToInside: true,
+      showChildOnHoverOnly: true,
+      roundedCorners: false,
+      imageUrl: designProcesse.imageUrl,
+      title: getItemTitle(designProcesse),
+      child: Center(
+          child: Padding(
+        padding: const EdgeInsets.all(kDefaultPadding / 2),
+        child: Text(
+          textAlign: TextAlign.center,
+          designProcesse.subtitle,
+          style: const TextStyle(
+            color: Colors.white,
+            height: 1.5,
+            fontSize: 14.0,
+          ),
+        ),
+      )),
     );
   }
 

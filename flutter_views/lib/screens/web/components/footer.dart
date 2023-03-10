@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -32,7 +33,7 @@ final List<FooterItem> footerItems = [
     text2: "info@saffoury.com",
   ),
   FooterItem(
-    icon: const Icon(Icons.whatsapp, size: 25),
+    icon:  Icon(FlutterIcons.whatsapp_faw, size: 25),
     title: "WHATSAPP",
     text1: "+963 933-211-012",
     text2: "+963 933-211-012",

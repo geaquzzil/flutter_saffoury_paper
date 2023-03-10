@@ -596,7 +596,7 @@
   "errCantListBeEmpty": "خطأ ، {r} فارغة او تحتوي على عنصر واحد أو أكثر خاطئ",
   "chooseActionYouLike": "اختر الإجراء الذي ترغب في القيام به من أجل \\n{r}\\n لإكمال العملية",
   "price_dollar": "السعر: {r} $",
-  "dollar_format": "$ {r}",
+  "dollar_format": "S$ {r}",
   "syp_format": "ل.س {r}",
   "product_size_roll_f_string": "العرض: {r}",
   "product_size_f": "القياس: {r} ✗ {r}",

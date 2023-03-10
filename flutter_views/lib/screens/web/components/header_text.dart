@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -23,7 +24,7 @@ class HeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!useRespnosiveLayout) {
-      return getBody();
+      return getBody(context);
     }
     return ScreenHelper(
       desktop: _buildUi(kDesktopMaxWidth),
@@ -47,7 +48,7 @@ class HeaderText extends StatelessWidget {
                 // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
                 Expanded(
                   flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                  child: getBody(),
+                  child: getBody(context),
                 ),
               ],
             ),
@@ -57,20 +58,12 @@ class HeaderText extends StatelessWidget {
     );
   }
 
-  Column getBody() {
+  Column getBody(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          text,
-          style: GoogleFonts.roboto(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            height: 1.3,
-            fontSize: fontSize,
-          ),
-        ),
+        Text(text, style: getTitleTextStyle(context, fontSize: fontSize)),
         if (description != null)
           const SizedBox(
             height: 10.0,

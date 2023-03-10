@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
@@ -18,7 +19,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'components/header_text.dart';
 import 'components/title_and_image.dart';
-import 'dart:html' as html;
 
 import 'components/title_and_image_left.dart';
 import 'parallex/parallexes.dart';
@@ -91,17 +91,21 @@ class ContactUsWebPage extends BaseWebPage {
                     onPressed: () {
                       launch("https://wa.me/+963933211012/?text=Hello There,");
                     },
-                    icon: const Icon(Icons.whatsapp)),
+                    icon: const Icon(
+                      FlutterIcons.whatsapp_faw,
+                    )),
                 IconButton(
                     onPressed: () {
-                      html.window
-                          .open('https://facebook.com/dima9359', 'new tab');
+                      //todo not supported on windows
+                      // html.window
+                      //     .open('https://facebook.com/dima9359', 'new tab');
                     },
                     icon: const Icon(Icons.facebook)),
                 IconButton(
                     onPressed: () {
-                      html.window.open(
-                          'https://goo.gl/maps/GTBfhWsNdrghA4Bk9', 'new tab');
+                      //todo not supported on windows
+                      // html.window.open(
+                      //     'https://goo.gl/maps/GTBfhWsNdrghA4Bk9', 'new tab');
                     },
                     icon: const Icon(Icons.location_on)),
                 IconButton(
@@ -182,14 +186,16 @@ class ContactUsWebPage extends BaseWebPage {
               getSocialButtons([
                 IconButton(
                     onPressed: () {
-                      html.window.open(
-                          'https://facebook.com/SaffouryPaper', 'new tab');
+                      //todo not supported on windows
+                      // html.window.open(
+                      //     'https://facebook.com/SaffouryPaper', 'new tab');
                     },
                     icon: const Icon(Icons.facebook)),
                 IconButton(
                     onPressed: () {
-                      html.window.open(
-                          'https://goo.gl/maps/iVLB4dSWpzeyASbp8', 'new tab');
+                      //todo not supported on windows
+                      // html.window.open(
+                      //     'https://goo.gl/maps/iVLB4dSWpzeyASbp8', 'new tab');
                     },
                     icon: const Icon(Icons.location_on)),
                 IconButton(
@@ -420,7 +426,9 @@ class ContactItem {
                 launchUrlString(
                     "https://wa.me/${phone.replaceAll(" ", "").replaceAll("-", "")}/?text=Hello There,");
               },
-              icon: const Icon(Icons.whatsapp)),
+              icon: const Icon(
+                FlutterIcons.whatsapp_faw,
+              )),
       ],
     );
   }

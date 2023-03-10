@@ -39,7 +39,8 @@ launchMailtoSaffouryPaperCustom(String email, String body) async {
   await launch('$mailtoLink');
 }
 
-Widget getWidgetFromProfile(BuildContext context, ItemModel? value,bool pinToolbar) {
+Widget getWidgetFromProfile(
+    BuildContext context, ItemModel? value, bool pinToolbar) {
   if (value == null) {
     return const Center(
       child: Text("Select setting to show"),
@@ -62,30 +63,40 @@ Widget getWidgetFromProfile(BuildContext context, ItemModel? value,bool pinToolb
 List<HeaderItem> getHeaderItems(BuildContext context) => [
       HeaderItem(
         title: AppLocalizations.of(context)!.home.toUpperCase(),
+        iconData: Icons.home_outlined,
+        iconDataSelected: Icons.home,
         onClick: () {
           context.goNamed(indexWebRouteName);
         },
       ),
       HeaderItem(
         title: AppLocalizations.of(context)!.product.toUpperCase(),
+        iconData: Icons.shopping_basket_outlined,
+        iconDataSelected: Icons.shopping_basket_rounded,
         onClick: () {
           context.goNamed(indexWebOurProducts);
         },
       ),
       HeaderItem(
         title: "SERVICES",
+        iconData: Icons.supervised_user_circle_outlined,
+        iconDataSelected: Icons.supervised_user_circle,
         onClick: () {
           context.goNamed(indexWebServices);
         },
       ),
       HeaderItem(
         title: AppLocalizations.of(context)!.contactUs,
+        iconData: Icons.contact_support_outlined,
+        iconDataSelected: Icons.contact_support_rounded,
         onClick: () {
           context.goNamed(indexWebContactUs);
         },
       ),
       HeaderItem(
         title: AppLocalizations.of(context)!.about,
+        iconData: Icons.question_answer_outlined,
+        iconDataSelected: Icons.question_answer,
         onClick: () {
           context.goNamed(indexWebAboutUs);
         },
@@ -94,6 +105,8 @@ List<HeaderItem> getHeaderItems(BuildContext context) => [
           Status.Authenticated)
         HeaderItem(
           title: AppLocalizations.of(context)!.log_in,
+          iconData: Icons.login,
+          iconDataSelected: Icons.login_rounded,
           onClick: () {
             context.goNamed(loginRouteName);
           },

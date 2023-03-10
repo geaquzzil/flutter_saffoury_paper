@@ -3505,49 +3505,49 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\nرصيدك الحالي:{r}\\n'**
-  String get welcome_message;
+  String welcome_message(Object r);
 
   /// No description provided for @welcome_message_employees.
   ///
   /// In en, this message translates to:
   /// **'مرحبًا {r}.\\nأردنا فقط أن نعرف أننا نستمتع حقًا بالعمل معك ، قم بتنزيل SaffouryPaper الآن على {r}\\nاسم المستخدم:{r}\\nكلمة المرور:{r}\\n'**
-  String get welcome_message_employees;
+  String welcome_message_employees(Object r);
 
   /// No description provided for @dollar_format.
   ///
   /// In en, this message translates to:
-  /// **'{r} \$'**
-  String get dollar_format;
+  /// **'S\$ {r}'**
+  String dollar_format(Object r);
 
   /// No description provided for @syp_format.
   ///
   /// In en, this message translates to:
   /// **'{r} SYP'**
-  String get syp_format;
+  String syp_format(Object r);
 
   /// No description provided for @product_size_f.
   ///
   /// In en, this message translates to:
   /// **'Size: {r} ✗ {r}'**
-  String get product_size_f;
+  String product_size_f(Object r);
 
   /// No description provided for @product_size_roll_f.
   ///
   /// In en, this message translates to:
   /// **'Width: {r}'**
-  String get product_size_roll_f;
+  String product_size_roll_f(Object r);
 
   /// No description provided for @product_size_roll_f_string.
   ///
   /// In en, this message translates to:
   /// **'Width: {r}'**
-  String get product_size_roll_f_string;
+  String product_size_roll_f_string(Object r);
 
   /// No description provided for @product_notes_format.
   ///
   /// In en, this message translates to:
   /// **'Notes:\\n•{r}'**
-  String get product_notes_format;
+  String product_notes_format(Object r);
 
   /// Greet the user by their name.
   ///
@@ -3559,97 +3559,97 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Price: {r} \$'**
-  String get price_dollar;
+  String price_dollar(Object r);
 
   /// No description provided for @last_payment_format_with_d.
   ///
   /// In en, this message translates to:
   /// **'Last Credit: {r} • {r}'**
-  String get last_payment_format_with_d;
+  String last_payment_format_with_d(Object r);
 
   /// No description provided for @last_spend_format.
   ///
   /// In en, this message translates to:
   /// **'Last expense: {r} • {r}'**
-  String get last_spend_format;
+  String last_spend_format(Object r);
 
   /// No description provided for @balanceFormat.
   ///
   /// In en, this message translates to:
   /// **'Balance: {r}'**
-  String get balanceFormat;
+  String balanceFormat(Object r);
 
   /// No description provided for @level_f.
   ///
   /// In en, this message translates to:
   /// **'Level: {r}'**
-  String get level_f;
+  String level_f(Object r);
 
   /// No description provided for @last_payment_with_date.
   ///
   /// In en, this message translates to:
   /// **'{r} on {r}'**
-  String get last_payment_with_date;
+  String last_payment_with_date(Object r);
 
   /// No description provided for @kg_format.
   ///
   /// In en, this message translates to:
   /// **'{r} (KG)'**
-  String get kg_format;
+  String kg_format(Object r);
 
   /// No description provided for @date_format_and_by.
   ///
   /// In en, this message translates to:
   /// **'Date: {r} • {r}'**
-  String get date_format_and_by;
+  String date_format_and_by(Object r);
 
   /// No description provided for @order_format.
   ///
   /// In en, this message translates to:
   /// **'Orders: {r}'**
-  String get order_format;
+  String order_format(Object r);
 
   /// No description provided for @wastSize_f.
   ///
   /// In en, this message translates to:
   /// **'Waste size: {r} ✗ {r}'**
-  String get wastSize_f;
+  String wastSize_f(Object r);
 
   /// No description provided for @wastSizeFlip_f.
   ///
   /// In en, this message translates to:
   /// **'Waste size: {r} ✗ {r}'**
-  String get wastSizeFlip_f;
+  String wastSizeFlip_f(Object r);
 
   /// No description provided for @size_roll_res.
   ///
   /// In en, this message translates to:
   /// **'Cut the roller on {r} ≈ {r} (Sheets)'**
-  String get size_roll_res;
+  String size_roll_res(Object r);
 
   /// No description provided for @size_roll_res_with_width.
   ///
   /// In en, this message translates to:
   /// **'Cut the roller on {r} then {r} '**
-  String get size_roll_res_with_width;
+  String size_roll_res_with_width(Object r);
 
   /// No description provided for @wastSize_f2.
   ///
   /// In en, this message translates to:
   /// **'Waste size: {r} ✗ {r} • {r} ✗ {r}'**
-  String get wastSize_f2;
+  String wastSize_f2(Object r);
 
   /// No description provided for @wastSizeFlip_f2.
   ///
   /// In en, this message translates to:
   /// **'Waste size: {r} ✗ {r} • {r} ✗ {r}'**
-  String get wastSizeFlip_f2;
+  String wastSizeFlip_f2(Object r);
 
   /// No description provided for @size_res_f.
   ///
   /// In en, this message translates to:
   /// **'{r} {r} (KG) • {r} '**
-  String get size_res_f;
+  String size_res_f(Object r);
 
   /// No description provided for @requestedSizeLabel.
   ///
@@ -3661,13 +3661,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{r} {r} (KG) {r}'**
-  String get size_res_f_without_dollar;
+  String size_res_f_without_dollar(Object r);
 
   /// No description provided for @size_res_flip_f.
   ///
   /// In en, this message translates to:
   /// **'{r} {r} (KG) • {r} '**
-  String get size_res_flip_f;
+  String size_res_flip_f(Object r);
 
   /// No description provided for @maxWaste.
   ///
@@ -3679,7 +3679,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{r} {r}'**
-  String get tow_strings;
+  String tow_strings(Object r);
 
   /// Greet the user by their name.
   ///
@@ -3697,61 +3697,61 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'to {r}'**
-  String get toFormat;
+  String toFormat(Object r);
 
   /// No description provided for @addFormat.
   ///
   /// In en, this message translates to:
   /// **'Add {r}'**
-  String get addFormat;
+  String addFormat(Object r);
 
   /// No description provided for @sheets_string_f.
   ///
   /// In en, this message translates to:
   /// **'{r} Sheet(s)'**
-  String get sheets_string_f;
+  String sheets_string_f(Object r);
 
   /// No description provided for @dollar_and_syp_format.
   ///
   /// In en, this message translates to:
   /// **'{r} \$ • {r} SYP'**
-  String get dollar_and_syp_format;
+  String dollar_and_syp_format(Object r);
 
   /// No description provided for @dollar_and_kg_format.
   ///
   /// In en, this message translates to:
   /// **'{r} \$ • {r} KG'**
-  String get dollar_and_kg_format;
+  String dollar_and_kg_format(Object r);
 
   /// No description provided for @tryToSearchBySizeAnalyzer.
   ///
   /// In en, this message translates to:
   /// **'Click here, To search for ({r}) by size analyzer'**
-  String get tryToSearchBySizeAnalyzer;
+  String tryToSearchBySizeAnalyzer(Object r);
 
   /// No description provided for @not_payed_format.
   ///
   /// In en, this message translates to:
   /// **'You have {r} customers who have not paid for a long time, with {r} overdue bill(s)'**
-  String get not_payed_format;
+  String not_payed_format(Object r);
 
   /// No description provided for @sellDollar_format.
   ///
   /// In en, this message translates to:
   /// **'شراء {r} طبق لاصق بسعر {r}'**
-  String get sellDollar_format;
+  String sellDollar_format(Object r);
 
   /// No description provided for @rowCountFormat.
   ///
   /// In en, this message translates to:
   /// **'{r} row(s) was'**
-  String get rowCountFormat;
+  String rowCountFormat(Object r);
 
   /// No description provided for @errCantEditFormatFromTo.
   ///
   /// In en, this message translates to:
   /// **'Can not edit {r} because it\\\'s generated from {r}'**
-  String get errCantEditFormatFromTo;
+  String errCantEditFormatFromTo(Object r);
 
   /// Greet the user by their name.
   ///
@@ -3763,55 +3763,55 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Some items fields to {r}, for some reason !'**
-  String get errSomeOperationField;
+  String errSomeOperationField(Object r);
 
   /// No description provided for @errCantListBeEmpty.
   ///
   /// In en, this message translates to:
   /// **'Error, {r} list is empty or contains one or more wrong items'**
-  String get errCantListBeEmpty;
+  String errCantListBeEmpty(Object r);
 
   /// No description provided for @chooseActionYouLike.
   ///
   /// In en, this message translates to:
   /// **'Choose the action you would like to do for \\n{r}\\nTo complete the operation'**
-  String get chooseActionYouLike;
+  String chooseActionYouLike(Object r);
 
   /// No description provided for @app_fo.
   ///
   /// In en, this message translates to:
   /// **'≈ {r}'**
-  String get app_fo;
+  String app_fo(Object r);
 
   /// No description provided for @clickToFormat.
   ///
   /// In en, this message translates to:
   /// **'Click to {r}'**
-  String get clickToFormat;
+  String clickToFormat(Object r);
 
   /// No description provided for @noti_message_1_F.
   ///
   /// In en, this message translates to:
   /// **'I look forward to receiving your payment this week, knowing that your last payment was: {r} The remaining balance is {r}'**
-  String get noti_message_1_F;
+  String noti_message_1_F(Object r);
 
   /// No description provided for @noti_message_2_F.
   ///
   /// In en, this message translates to:
   /// **'Thank you in advance for your prompt payment, i want to let you know that your last payment was: {r}\\nThe remaining balance is {r}'**
-  String get noti_message_2_F;
+  String noti_message_2_F(Object r);
 
   /// No description provided for @noti_message_3_F.
   ///
   /// In en, this message translates to:
   /// **'This is a friendly reminder that your invoice [#] payment is due to be paid next week, knowing that your last payment was: {r}\\nThe remaining balance is {r}'**
-  String get noti_message_3_F;
+  String noti_message_3_F(Object r);
 
   /// No description provided for @noti_message_4_F.
   ///
   /// In en, this message translates to:
   /// **'Please let me know if you have any questions about the invoice or if there’s anything I can do for you, knowing that your last payment was: {r}\\n\nThe remaining balance is {r}'**
-  String get noti_message_4_F;
+  String noti_message_4_F(Object r);
 
   /// No description provided for @top.
   ///

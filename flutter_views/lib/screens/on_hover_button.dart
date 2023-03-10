@@ -103,7 +103,7 @@ class _HoverImageState extends State<HoverImage>
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
+    Widget child = MouseRegion(
       onEnter: (value) {
         setState(() {
           isHovered = true;
@@ -137,21 +137,36 @@ class _HoverImageState extends State<HoverImage>
         ),
         child: widget.bottomWidget == null
             ? _getAspectRatio()
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _getAspectRatio(),
-                  AnimatedOpacity(
-                      opacity: isHovered ? 0 : 1,
-                      duration: const Duration(milliseconds: 275),
-                      // height: isHovered ? 0 : 100,
-                      child: widget.bottomWidget)
-                ],
+            : Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: AspectRatio(aspectRatio: 1, child: getBody())),
+                    AnimatedOpacity(
+                        opacity: isHovered ? 0 : 1,
+                        duration: const Duration(milliseconds: 275),
+                        // height: isHovered ? 0 : 100,
+                        child: widget.bottomWidget)
+                  ],
+                ),
               ),
       ),
     );
+    // return child;
+    // return AspectRatio(
+    //   aspectRatio: 1 / 1,
+    //   child: child,
+    // );
+    if (widget.bottomWidget != null) {
+      return AspectRatio(
+        aspectRatio: 1 / 1,
+        child: child,
+      );
+    }
+    return child;
   }
 
   AspectRatio _getAspectRatio() {
@@ -177,14 +192,6 @@ class _HoverImageState extends State<HoverImage>
                 widget.image,
                 fit: BoxFit.contain,
               )
-            : widget.builder!(isHovered)
-        // Column(
-        //     children: [
-        //       widget.builder!(isHovered),
-        //       Text("TEST")
-        //     ],
-        //   )
-
-        );
+            : widget.builder!(isHovered));
   }
 }

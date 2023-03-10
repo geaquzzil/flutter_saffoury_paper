@@ -188,7 +188,7 @@ class _PopupWidget extends State<PopupWidget> {
     // },
     // );
     if (_overlayEntry != null) {
-      Overlay.of(context)!.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
     }
   }
 

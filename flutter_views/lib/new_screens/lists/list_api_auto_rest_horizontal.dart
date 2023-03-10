@@ -108,8 +108,9 @@ class _ListHorizontalApiWidgetState
           scrollDirection: Axis.horizontal,
           itemCount: isLoading ? (data.length + 3) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
-            mainAxisSpacing: kIsWeb ? 40 : 20.0,
-            crossAxisSpacing: kIsWeb ? 40 : 20.0,
+            mainAxisSpacing: 20,
+
+            crossAxisSpacing: 20,
             maxCrossAxisExtent:
                 ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
                     ? constraints.maxWidth / 2.0
@@ -134,18 +135,23 @@ class _ListHorizontalApiWidgetState
             }
             return GridTile(
                 // footer: Text("foot"),
-                child: kIsWeb
-                    ? WebGridViewItem(
-                        item: data[index],
-                      )
-                    : widget.listItembuilder == null
-                        ? ListCardItemHorizontal(
-                            useOutlineCard: widget.useCardAsOutLine,
-                            object: data[index],
-                            useImageAsBackground:
-                                widget.useCardAsImageBackgroud,
-                          )
-                        : widget.listItembuilder!(data[index]));
+                child: WebGridViewItem(
+              // setDescriptionAtBottom: !kIsWeb,
+              item: data[index],
+            ));
+
+            //  kIsWeb
+            //     ? WebGridViewItem(
+            //         item: data[index],
+            //       )
+            //     : widget.listItembuilder == null
+            //         ? ListCardItemHorizontal(
+            //             useOutlineCard: widget.useCardAsOutLine,
+            //             object: data[index],
+            //             useImageAsBackground:
+            //                 widget.useCardAsImageBackgroud,
+            //           )
+            //         : widget.listItembuilder!(data[index]));
           },
         );
       },

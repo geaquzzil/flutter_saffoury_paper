@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'server_response_master.dart';
 
 enum ServerActions {
@@ -17,10 +19,28 @@ enum ServerActions {
 }
 
 class URLS {
-  static const String BASE_URL =
-      'https://saffoury.com/SaffouryPaper2/index.php';
-  static const String BASE_URL_PRINT =
-      'https://saffoury.com/SaffouryPaper2/print/index.php';
+  static String getBaseUrl() {
+    if (!kIsWeb) {
+      return 'https://saffoury.com/SaffouryPaper2/index.php';
+    }
+    if (kIsWeb && kDebugMode) {
+      return 'https://saffoury.com/SaffouryPaper2/index.php';
+    } else {
+      return 'https://localhost/SaffouryPaper2/index.php';
+    }
+  }
+
+  static String getBaseUrlPrint() {
+    if (!kIsWeb) {
+      return 'https://saffoury.com/SaffouryPaper2/print/index.php';
+    }
+    if (kIsWeb && kDebugMode) {
+      return 'https://saffoury.com/SaffouryPaper2/print/index.php';
+    } else {
+      return 'https://localhost/SaffouryPaper2/print/index.php';
+    }
+  }
+
   static const Map<String, String> requsetHeaders2 = {
     'Accept': 'application/json',
     'Accept-Encoding': 'gzip',
