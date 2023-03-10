@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -62,7 +63,8 @@ class HomeWebPage extends BaseWebPageSlivers {
   }
 
   Widget getTitle(
-      BuildContext context, BoxConstraints constraints, String title) {
+      BuildContext context, BoxConstraints constraints, String title,
+      {String? description}) {
     return getSliverPadding(
         context,
         constraints,
@@ -71,6 +73,11 @@ class HomeWebPage extends BaseWebPageSlivers {
           alignment: Alignment.center,
           child: HeaderText(
             useRespnosiveLayout: false,
+            description: description == null
+                ? null
+                : Html(
+                    data: description,
+                  ),
             text: title,
           ),
         )));
@@ -85,48 +92,16 @@ class HomeWebPage extends BaseWebPageSlivers {
       getHomeWelcomMessage(),
       getProfiloStates(),
       getProfiloProductProfits(),
-      getSliverPadding(
+      getSliverSizedBox(),
+      getTitle(
         context,
         constraints,
-        SliverToBoxAdapter(
-          child: StaggeredGrid.count(
-            crossAxisCount: 4,
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            children: [
-              StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: 2,
-                child:   Text("")
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: 1,
-                child: Container(color: Colors.red, child: Text("1")),
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 1,
-                mainAxisCellCount: 1,
-                child: Container(color: Colors.blue, child: Text("1")),
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 1,
-                mainAxisCellCount: 1,
-                child: Container(color: Colors.deepOrange, child: Text("1")),
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 4,
-                mainAxisCellCount: 2,
-                child: Container(color: Colors.lightGreen, child: Text("1")),
-              ),
-            ],
-          ),
-        ),
+        "LATEST PRODUCTS",
       ),
-      getTitle(context, constraints, "LATEST PRODUCTS"),
       getLastProducts(context),
 
       getProductDescrtionsSections(context),
+      getSliverSizedBox(),
       getTitle(context, constraints, "CATEGORY"),
       getCategory(),
 
@@ -162,8 +137,7 @@ class HomeWebPage extends BaseWebPageSlivers {
         useClipRect: false,
         country: "",
         name: "",
-        soildColor:
-            Theme.of(context).scaffoldBackgroundColor.lighten().withOpacity(.7),
+        soildColor: context.getDarkingColorForFroeground,
         customCenterWidget: TitleAndDescriptopnAndImageLeft(
           title: "Contact us".toUpperCase(),
           descriptionIsWhite: true,
@@ -208,8 +182,7 @@ class HomeWebPage extends BaseWebPageSlivers {
     return SliverToBoxAdapter(
       child: LocationListItem(
         useClipRect: false,
-        soildColor:
-            Theme.of(context).scaffoldBackgroundColor.lighten().withOpacity(.8),
+        soildColor: context.getDarkingColorForFroeground,
         usePadding: false,
         useResponsiveLayout: false,
         country: "",
@@ -229,8 +202,7 @@ class HomeWebPage extends BaseWebPageSlivers {
         useClipRect: false,
         country: "",
         name: "",
-        soildColor:
-            Theme.of(context).scaffoldBackgroundColor.lighten().withOpacity(.8),
+        soildColor: context.getDarkingColorForFroeground,
         customCenterWidget: TitleAndDescriptopnAndImageLeft(
           title: "WE\nLAUNCHED\nOUR APP".toUpperCase(),
           descriptionIsWhite: true,
@@ -317,7 +289,9 @@ class HomeWebPage extends BaseWebPageSlivers {
         usePadding: false,
         useResponsiveLayout: false,
         useClipRect: false,
-        soildColor: Colors.black38,
+        soildColor: context.isDarkMode
+            ? Colors.black38
+            : context.getDarkingColorForFroeground,
         customCenterWidget: TitleAndDescriptopnAndImage(
           // primaryTitle: "Hello, There",
           title: "Find the perfect saffoury products\nfor your business"

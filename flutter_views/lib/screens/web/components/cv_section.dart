@@ -10,32 +10,38 @@ import 'grid_view_api_category.dart';
 
 final List<DesignProcess> designProcesses = [
   DesignProcess(
-    title: "DESIGN",
-    imageUrl:
-        "https://saffoury.com/wp-content/uploads/cropped-imag03_small.jpg",
+    title: "CUSTOMIZE",
+    imageUrl: "https://saffoury.com/wp-content/uploads/imag02.jpg",
     iconData: Icons.design_services,
     subtitle:
-        "A full stack allround designer thay may or may not include a guide for specific creative",
+        "Modify and design the product that suits the nature of your business.If u need to customize , the lead time about 25 work day\nIf customization is not required, the lead time about 7-10days.",
   ),
   DesignProcess(
     imageUrl: "https://saffoury.com/wp-content/uploads/cropped-imag01.jpg",
-    title: "DEVELOP",
-    iconData: Icons.developer_board,
-    subtitle:
-        "A full stack allround developer thay may or may not include a guide for specific creative",
+    title: "Restaurants and hotels".toUpperCase(),
+    iconData: Icons.hotel_class,
+    subtitle: "We have a special section for serving restaurants and hotels",
   ),
   DesignProcess(
     imageUrl: "https://saffoury.com/wp-content/uploads/toilet.jpg",
+    title: "HAND PAPER TOWEL\nKITCHEN ROLL",
+    iconData: Icons.restaurant_menu_rounded,
+    subtitle:
+        "Disposable hand drying paper, strong and tear resistant.\nBamboo fiber kitchen paper towel, makes your kitchen clean and health",
+  ),
+  DesignProcess(
+    imageUrl: "https://saffoury.com/wp-content/uploads/cropped-new_jeeb2_b.gif",
+    title: "Standard Pocket\nTissue".toUpperCase(),
+    iconData: Icons.table_bar_rounded,
+    subtitle: "Pereasy Soft Mini Pocket Tissue",
+  ),
+  DesignProcess(
+    imageUrl:
+        "https://saffoury.com/wp-content/uploads/67527369_2067570993548140_5540770736852959232_n.jpg",
     title: "QUALITY",
     iconData: Icons.high_quality,
     subtitle:
-        "A full stack allround writer thay may or may not include a guide for specific creative",
-  ),
-  DesignProcess(
-    title: "PROMOTE",
-    iconData: Icons.high_quality,
-    subtitle:
-        "A full stack allround promoter thay may or may not include a guide for specific creative",
+        "Saffoury products are the best quality products in the local market",
   ),
 ];
 
@@ -188,15 +194,15 @@ class ProductQualityWebSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "BETTER DESIGN,\nBETTER EXPERIENCES",
-                style: GoogleFonts.roboto(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  height: 1.8,
-                  fontSize: 18.0,
-                ),
-              ),
+              // Text(
+              //   "BETTER DESIGN,\nBETTER EXPERIENCES",
+              //   style: GoogleFonts.roboto(
+              //     color: Colors.white,
+              //     fontWeight: FontWeight.w900,
+              //     height: 1.8,
+              //     fontSize: 18.0,
+              //   ),
+              // ),
               GestureDetector(
                 onTap: () {},
                 child: MouseRegion(
@@ -244,11 +250,9 @@ class ProductQualityWebSection extends StatelessWidget {
                       mainAxisCellCount: 1,
                       child: getGridViewItemCustom(designProcesses[3])),
                   StaggeredGridTile.count(
-                    crossAxisCellCount: 4,
-                    mainAxisCellCount: 2,
-                    child:
-                        Container(color: Colors.lightGreen, child: Text("1")),
-                  ),
+                      crossAxisCellCount: 4,
+                      mainAxisCellCount: 2,
+                      child: getGridViewItemCustom(designProcesses[4])),
                 ],
               );
 

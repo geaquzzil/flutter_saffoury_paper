@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class DesignProcess {
   final String title;
@@ -25,6 +26,7 @@ class DesignProcess {
       return Icon(
         iconData!,
         size: 40,
+        color: Colors.white,
       );
     }
   }

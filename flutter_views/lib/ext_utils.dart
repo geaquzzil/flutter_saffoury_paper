@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -124,11 +125,18 @@ extension StringsUtils on String? {
     return this ?? "";
   }
 }
+
 extension DarkMode on BuildContext {
   /// is dark mode currently enabled?
   bool get isDarkMode {
     final brightness = MediaQuery.of(this).platformBrightness;
     return brightness == Brightness.dark;
+  }
+
+  Color get getDarkingColorForFroeground {
+    return isDarkMode == false
+        ? Colors.transparent
+        : Theme.of(this).scaffoldBackgroundColor.lighten().withOpacity(.8);
   }
 }
 

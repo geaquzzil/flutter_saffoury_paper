@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/screens/web/models/education.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -214,15 +215,7 @@ class HistorySection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              "OUR HISTORY",
-              style: GoogleFonts.roboto(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: 30.0,
-                height: 1.3,
-              ),
-            ),
+            Text("OUR HISTORY", style: getTitleTextStyle(context)),
             const SizedBox(
               height: 5.0,
             ),
@@ -231,13 +224,9 @@ class HistorySection extends StatelessWidget {
               children: [
                 Container(
                   constraints: const BoxConstraints(maxWidth: 400.0),
-                  child: const Text(
-                    "We were founded in 1990, and our first overseas offices opened in 2000, making us the oldest company in Syria",
-                    style: TextStyle(
-                      color: Colors.white,
-                      height: 1.5,
-                    ),
-                  ),
+                  child: Text(
+                      "We were founded in 1990, and our first overseas offices opened in 2000, making us the oldest company in Syria",
+                      style: getSubtitleTextStyle(context)),
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -265,26 +254,17 @@ class HistorySection extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  education.period,
-                                  style: GoogleFonts.roboto(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
+                                Text(education.period,
+                                    style: getTitleTextStyle(context,
+                                        fontSize: 20)),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                Text(
-                                  education.description,
-                                  maxLines: 4,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: kCaptionColor,
-                                    height: 1.5,
-                                  ),
-                                ),
+                                Text(education.description,
+                                    maxLines: 4,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: getSubtitleTextStyle(context,
+                                        color: kCaptionColor)),
                                 const SizedBox(
                                   height: 20.0,
                                 ),

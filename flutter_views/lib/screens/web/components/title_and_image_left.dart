@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
@@ -75,14 +76,11 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
                         if (primaryTitle != null)
                           FadeInRight(
                             key: UniqueKey(),
-                            child: Text(
-                              primaryTitle!,
-                              style: GoogleFonts.roboto(
-                                color: kPrimaryColor,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 16.0,
-                              ),
-                            ),
+                            child: Text(primaryTitle!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(color: kPrimaryColor)),
                           ),
                         if (primaryTitle != null)
                           const SizedBox(
@@ -90,15 +88,7 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
                           ),
                         FadeInRight(
                           key: UniqueKey(),
-                          child: Text(
-                            title,
-                            style: GoogleFonts.roboto(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              height: 1.3,
-                              fontSize: 35.0,
-                            ),
-                          ),
+                          child: Text(title, style: getTitleTextStyle(context)),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -106,16 +96,8 @@ class TitleAndDescriptopnAndImageLeft extends StatelessWidget {
                         description != null
                             ? FadeInRight(
                                 key: UniqueKey(),
-                                child: Text(
-                                  description!,
-                                  style: TextStyle(
-                                    color: descriptionIsWhite
-                                        ? Colors.white70
-                                        : kCaptionColor,
-                                    height: 1.5,
-                                    fontSize: 15.0,
-                                  ),
-                                ),
+                                child: Text(description!,
+                                    style: getSubtitleTextStyle(context)),
                               )
                             : FadeInRight(
                                 key: UniqueKey(), child: customDescription!),

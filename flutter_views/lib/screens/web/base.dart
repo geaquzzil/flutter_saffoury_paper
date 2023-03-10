@@ -275,15 +275,15 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
 
   String getSelectedHeader(BuildContext context) {
     if (this is AboutUsWebPage) {
-      return AppLocalizations.of(context)!.about;
+      return AppLocalizations.of(context)!.about.toUpperCase();
     } else if (this is HomeWebPage) {
-      return AppLocalizations.of(context)!.home;
+      return AppLocalizations.of(context)!.home.toUpperCase();
     } else if (this is ProductWebPage) {
-      return AppLocalizations.of(context)!.products;
+      return "SHOP";
     } else if (this is TermsWebPage) {
       return AppLocalizations.of(context)!.termsAndConitions;
     } else if (this is ContactUsWebPage) {
-      return AppLocalizations.of(context)!.contactUs;
+      return AppLocalizations.of(context)!.contactUs.toUpperCase();
     } else {
       return "";
     }

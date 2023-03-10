@@ -70,23 +70,23 @@ List<HeaderItem> getHeaderItems(BuildContext context) => [
         },
       ),
       HeaderItem(
-        title: AppLocalizations.of(context)!.product.toUpperCase(),
+        title: "SHOP",
         iconData: Icons.shopping_basket_outlined,
         iconDataSelected: Icons.shopping_basket_rounded,
         onClick: () {
           context.goNamed(indexWebOurProducts);
         },
       ),
+      // HeaderItem(
+      //   title: "SERVICES",
+      //   iconData: Icons.supervised_user_circle_outlined,
+      //   iconDataSelected: Icons.supervised_user_circle,
+      //   onClick: () {
+      //     context.goNamed(indexWebServices);
+      //   },
+      // ),
       HeaderItem(
-        title: "SERVICES",
-        iconData: Icons.supervised_user_circle_outlined,
-        iconDataSelected: Icons.supervised_user_circle,
-        onClick: () {
-          context.goNamed(indexWebServices);
-        },
-      ),
-      HeaderItem(
-        title: AppLocalizations.of(context)!.contactUs,
+        title: AppLocalizations.of(context)!.contactUs.toUpperCase(),
         iconData: Icons.contact_support_outlined,
         iconDataSelected: Icons.contact_support_rounded,
         onClick: () {
@@ -94,7 +94,7 @@ List<HeaderItem> getHeaderItems(BuildContext context) => [
         },
       ),
       HeaderItem(
-        title: AppLocalizations.of(context)!.about,
+        title: AppLocalizations.of(context)!.about.toUpperCase(),
         iconData: Icons.question_answer_outlined,
         iconDataSelected: Icons.question_answer,
         onClick: () {

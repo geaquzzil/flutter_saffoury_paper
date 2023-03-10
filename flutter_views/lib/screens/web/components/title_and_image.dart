@@ -116,7 +116,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall
-                          ?.copyWith(color: kPrimaryColor)),
+                          ?.copyWith(color: kAccentColor)),
                 ),
               if (primaryTitle != null)
                 const SizedBox(
