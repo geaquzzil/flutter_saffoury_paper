@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/cartable_draggable_header.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
@@ -17,89 +19,20 @@ class WelcomMessageTermsWhoWeAre extends StatelessWidget {
   // We can use same idea as ios_app_ad.dart and swap children order, let's copy code
   @override
   Widget build(BuildContext context) {
-    return ScreenHelper(
-      desktop: _buildUi(kDesktopMaxWidth),
-      tablet: _buildUi(kTabletMaxWidth),
-      mobile: _buildUi(getMobileMaxWidth(context)),
-    );
-  }
-
-  Widget _buildUi(double width) {
-    return Center(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return ResponsiveWrapper(
-            maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
-            child: Flex(
-              direction:
-                  constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
-              children: [
-                // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-                Expanded(
-                  flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        useForReturnPolicy
-                            ? "Return Policy"
-                            : AppLocalizations.of(context)!.termsAndConitions,
-                        style: GoogleFonts.roboto(
-                          color: kAccentColor,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      Text(
-                        getTitle,
-                        style: GoogleFonts.roboto(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          height: 1.3,
-                          fontSize: 35.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        getDescription,
-                        style: const TextStyle(
-                          color: kCaptionColor,
-                          height: 1.5,
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 25.0,
-                ),
-                Expanded(
-                    flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                    child: useForReturnPolicy
-                        ? Icon(
-                            Icons.shopping_bag_rounded,
-                            size: constraints.maxWidth > 720.0 ? 100 : 350.0,
-                          )
-                        : CompanyLogo(
-                            size: constraints.maxWidth > 720.0 ? 100 : 350.0,
-                          )),
-              ],
+    return TitleAndDescriptopnAndImage(
+      customWidget: useForReturnPolicy
+          ? const Icon(
+              Icons.shopping_bag_rounded,
+              size: 100,
+            )
+          : CompanyLogo(
+              size: 200,
             ),
-          );
-        },
-      ),
+      primaryTitle: useForReturnPolicy
+          ? "Return Policy".toUpperCase()
+          : AppLocalizations.of(context)!.termsAndConitions.toUpperCase(),
+      title: getTitle,
+      description: getDescription,
     );
   }
 

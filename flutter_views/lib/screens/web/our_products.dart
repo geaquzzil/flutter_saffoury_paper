@@ -324,10 +324,10 @@ class ProductWebPage extends BaseWebPageSlivers {
               ? max((constraints.maxWidth - 1200) / 2, 0)
               : 15),
       sliver: ResponsiveSliverGridList(
-          horizontalGridSpacing: 25, // Horizontal space between grid items
-          verticalGridSpacing: 25, // Vertical space between grid items
-          horizontalGridMargin: 25, // Horizontal space around the grid
-          verticalGridMargin: 25, // Vertical space around the grid
+          horizontalGridSpacing: 10, // Horizontal space between grid items
+          verticalGridSpacing: 10, // Vertical space between grid items
+          horizontalGridMargin: 10, // Horizontal space around the grid
+          verticalGridMargin: 10, // Vertical space around the grid
           minItemsPerRow:
               2, // The minimum items to show in a single row. Takes precedence over minItemWidth
           maxItemsPerRow:
