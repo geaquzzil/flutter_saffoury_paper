@@ -135,10 +135,10 @@ class WebProductView extends BaseWebPageSliversApi {
   Widget _buildUi(
       BuildContext context, double width, BoxConstraints constraints) {
     return Center(
-        child: ResponsiveWrapper(
+        child: MaxWidthBox(
       maxWidth: width,
-      minWidth: width,
-      defaultScale: false,
+      // minWidth: width,
+      // defaultScale: false,
       child: Flex(
         direction: constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
         children: [

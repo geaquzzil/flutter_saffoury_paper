@@ -34,7 +34,8 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
@@ -203,7 +204,7 @@ class ProductWebPage extends BaseWebPageSlivers {
                   // appBardExpandType: expandType,
                   onSearchTextChanged: (serchQuery) {
                     context.goNamed(indexWebOurProducts,
-                        queryParams: {"search": serchQuery});
+                        queryParameters: {"search": serchQuery});
                   },
                   // key: const ValueKey(2),
                 ),
@@ -242,8 +243,9 @@ class ProductWebPage extends BaseWebPageSlivers {
                 if (onFilter == null) {
                   context.goNamed(indexWebOurProducts);
                 } else {
-                  context.goNamed(indexWebOurProducts,
-                      queryParams: {"filter": Compression.compress(onFilter)});
+                  context.goNamed(indexWebOurProducts, queryParameters: {
+                    "filter": Compression.compress(onFilter)
+                  });
                 }
               },
             )
@@ -352,10 +354,10 @@ class ProductWebPage extends BaseWebPageSlivers {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return ResponsiveWrapper(
+          return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
+            // minWidth: width,
+            // defaultScale: false,
             child: Container(
               child: Flex(
                 direction: constraints.maxWidth > 720

@@ -133,19 +133,19 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   GlobalWidgetsLocalizations.delegate,
                   FormBuilderLocalizations.delegate,
                 ],
-                builder: (context, widget) => ResponsiveWrapper.builder(
-                  ClampingScrollWrapper.builder(context, widget!),
-                  defaultScale: true,
+                builder: (context, widget) => ResponsiveBreakpoints.builder(
+                  child: ClampingScrollWrapper.builder(context, widget!),
+                  // defaultScale: true,
                   breakpoints: [
-                    const ResponsiveBreakpoint.resize(450, name: MOBILE),
-                    const ResponsiveBreakpoint.resize(800, name: TABLET),
-                    const ResponsiveBreakpoint.resize(1000, name: TABLET),
-                    const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-                    const ResponsiveBreakpoint.resize(2460, name: "4K"),
+                    const Breakpoint(start: 0, end: 450, name: MOBILE),
+                    const Breakpoint(start: 451, end: 800, name: TABLET),
+                    const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+                    const Breakpoint(
+                        start: 1921, end: double.infinity, name: '4K'),
                   ],
-                  background: Container(
-                    color: kBackgroundColor,
-                  ),
+                  //TODO background: Container(
+                  //   color: kBackgroundColor,
+                  // ),
                 ),
                 // title: AppLocalizations.of(context)!.appTitle,
                 title: "SaffouryPaper",

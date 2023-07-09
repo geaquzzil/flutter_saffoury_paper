@@ -3,7 +3,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/models/testimonial.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 final List<Testimonial> testimonials = [
   Testimonial(
@@ -37,10 +37,10 @@ Widget _buildUi(double width) {
   return Center(
     child: LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return ResponsiveWrapper(
+        return MaxWidthBox(
           maxWidth: width,
-          minWidth: width,
-          defaultScale: false,
+          // minWidth: width,
+          // defaultScale: false,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

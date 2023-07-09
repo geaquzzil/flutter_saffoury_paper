@@ -87,10 +87,10 @@ class EducationSection extends StatelessWidget {
   Widget _buildUi(double width) {
     return Container(
       alignment: Alignment.center,
-      child: ResponsiveWrapper(
+      child: MaxWidthBox(
         maxWidth: width,
-        minWidth: width,
-        defaultScale: false,
+        // minWidth: width,
+        // defaultScale: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -208,10 +208,10 @@ class HistorySection extends StatelessWidget {
   Widget _buildUi(BuildContext context, double width) {
     return Container(
       alignment: Alignment.center,
-      child: ResponsiveWrapper(
+      child: MaxWidthBox(
         maxWidth: width,
-        minWidth: width,
-        defaultScale: false,
+        // minWidth: width,
+        // defaultScale: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

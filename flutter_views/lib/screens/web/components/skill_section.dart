@@ -3,7 +3,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/models/skill.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 List<Skill> skills = [
   Skill(
@@ -44,9 +44,9 @@ class SkillSection extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return ResponsiveWrapper(
+          return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
+            // minWidth: width,
             child: Flex(
               direction: ScreenHelper.isMobile(context)
                   ? Axis.vertical
@@ -101,7 +101,8 @@ class SkillSection extends StatelessWidget {
                                     Expanded(
                                       flex: skill.percentage,
                                       child: Container(
-                                        padding: const EdgeInsets.only(left: 10.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
                                         alignment: Alignment.centerLeft,
                                         height: 38.0,
                                         color: Colors.white,

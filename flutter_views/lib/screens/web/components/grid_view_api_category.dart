@@ -300,14 +300,14 @@ class WebGridViewItem extends StatelessWidget {
                 _categoryGridable.getWebCategoryGridableIsMasterToList(context);
             if (isMasterToList != null) {
               context.goNamed(indexWebMasterToList,
-                  params: {"tableName": item.getTableNameApi()!},
-                  queryParams: {
+                  pathParameters: {"tableName": item.getTableNameApi()!},
+                  queryParameters: {
                     "id": item.iD.toString(),
                   },
                   extra: item);
             } else {
               context.goNamed(indexWebView,
-                  params: {
+                  pathParameters: {
                     "id": item.iD.toString(),
                     "tableName": item.getTableNameApi()!
                   },

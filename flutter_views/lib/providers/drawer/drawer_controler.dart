@@ -47,7 +47,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
     if (isOpen == null) {
       _navigationRailIsOpen = !_navigationRailIsOpen;
     } else {
-      _navigationRailIsOpen = isOpen!;
+      _navigationRailIsOpen = isOpen;
     }
     notifyListeners();
   }

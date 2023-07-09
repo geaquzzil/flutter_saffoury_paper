@@ -109,10 +109,10 @@ class WebProductList extends StatelessWidget {
   Widget _buildUi(BuildContext context, double width) {
     debugPrint("GridViewApi is building");
     // we need the context to get maxWidth before the constraints below
-    return ResponsiveWrapper(
+    return MaxWidthBox(
       maxWidth: width,
-      minWidth: width,
-      defaultScale: false,
+      // minWidth: width,
+      // defaultScale: false,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

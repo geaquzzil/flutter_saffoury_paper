@@ -109,7 +109,7 @@ class SearchWidgetWebComponent extends StatelessWidget {
                       String compressed = Compression.compress(value);
                       debugPrint("Compressing $compressed");
                       context.goNamed(indexWebOurProducts,
-                          queryParams: {"filter": Compression.compress(value)});
+                          queryParameters: {"filter": Compression.compress(value)});
                       // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
                     });
                   },
@@ -169,9 +169,9 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
             leading: getLeadingWidget(context),
             onTap: isEditText
                 ? null
-                : () => context.goNamed(searchRouteName, queryParams: {
+                : () => context.goNamed(searchRouteName, queryParameters: {
                       "query": "q"
-                    }, params: {
+                    }, pathParameters: {
                       "tableName": context
                           .read<DrawerMenuControllerProvider>()
                           .getObject

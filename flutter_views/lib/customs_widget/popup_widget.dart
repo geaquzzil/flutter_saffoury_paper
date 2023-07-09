@@ -219,7 +219,7 @@ class _PopupWidget extends State<PopupWidget> {
       if (mounted) {
         _childBox = context.findRenderObject() as RenderBox?;
         _parentBox =
-            Overlay.of(context)?.context.findRenderObject() as RenderBox?;
+            Overlay.of(context).context.findRenderObject() as RenderBox?;
       }
     });
   }

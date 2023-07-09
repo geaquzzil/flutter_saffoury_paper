@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';

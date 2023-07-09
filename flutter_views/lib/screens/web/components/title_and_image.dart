@@ -8,8 +8,9 @@ import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class TitleAndDescriptopnAndImage extends StatelessWidget {
   final String title;
@@ -45,10 +46,10 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return ResponsiveWrapper(
+          return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
+            // minWidth: width,
+            // defaultScale: false,
             child: backgroundImage != null
                 ? getUiBodyWithBackgroundImage(constraints, context)
                 : getUiBody(context, constraints),

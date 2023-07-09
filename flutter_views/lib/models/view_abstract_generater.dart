@@ -93,7 +93,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       return;
     }
     context.pushNamed(viewRouteName,
-        params: {"tableName": getTableNameApi() ?? "", "id": iD.toString()},
+        pathParameters : {"tableName": getTableNameApi() ?? "", "id": iD.toString()},
         extra: this);
   }
 
@@ -108,7 +108,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       return;
     } else {
       context.goNamed(editRouteName,
-          params: {"tableName": getTableNameApi()!, "id": "$iD"},
+          pathParameters : {"tableName": getTableNameApi()!, "id": "$iD"},
           extra: (this as ViewAbstract).getSelfNewInstance());
     }
   }

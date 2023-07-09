@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../contact-us.dart';
 
@@ -30,10 +30,10 @@ class ContactInfoItemWidget extends StatelessWidget {
         if (constraints.maxWidth > 500) {
           return contactInfo.getContactWidget(context);
         }
-        return ResponsiveWrapper(
+        return MaxWidthBox(
           maxWidth: width,
-          minWidth: width,
-          defaultScale: false,
+          // minWidth: width,
+          // defaultScale: false,
           child: Flex(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

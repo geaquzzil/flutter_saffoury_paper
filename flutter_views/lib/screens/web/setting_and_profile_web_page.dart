@@ -68,7 +68,7 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
                         );
                       } else {
                         context.goNamed(indexWebSettingAndAccount,
-                            queryParams: {"action": value.title});
+                            queryParameters: {"action": value.title});
                       }
                     },
                   ),

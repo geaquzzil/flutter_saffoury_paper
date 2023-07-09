@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/globals.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
+import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/screens/web/contact-us.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -20,6 +22,7 @@ import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/terms.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
@@ -272,6 +275,39 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
       this.customSliverHeader,
       this.pinToolbar = true})
       : super(key: key);
+
+  Widget getDescription(
+      BuildContext context, BoxConstraints constraints, String description) {
+    return getSliverPadding(
+        context,
+        constraints,
+        SliverToBoxAdapter(
+            child: Align(
+                alignment: Alignment.center,
+                child:
+                    Text(description, style: getSubtitleTextStyle(context)))));
+  }
+
+  Widget getTitle(
+      BuildContext context, BoxConstraints constraints, String title,
+      {String? description}) {
+    return getSliverPadding(
+        context,
+        constraints,
+        SliverToBoxAdapter(
+            child: Align(
+          alignment: Alignment.center,
+          child: HeaderText(
+            useRespnosiveLayout: false,
+            description: description == null
+                ? null
+                : Html(
+                    data: description,
+                  ),
+            text: title,
+          ),
+        )));
+  }
 
   String getSelectedHeader(BuildContext context) {
     if (this is AboutUsWebPage) {

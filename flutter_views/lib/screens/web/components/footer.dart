@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -33,7 +33,7 @@ final List<FooterItem> footerItems = [
     text2: "info@saffoury.com",
   ),
   FooterItem(
-    icon:  Icon(FlutterIcons.whatsapp_faw, size: 25),
+    icon: Icon(FlutterIcons.whatsapp_faw, size: 25),
     title: "WHATSAPP",
     text1: "+963 933-211-012",
     text2: "+963 933-211-012",
@@ -56,10 +56,10 @@ class Footer extends StatelessWidget {
 Widget _buildUi(double width, BuildContext context) {
   Dealers? dealersInfo = context.read<AuthProvider<AuthUser>>().getDealers;
   return Center(
-    child: ResponsiveWrapper(
+    child: MaxWidthBox(
       maxWidth: width,
-      minWidth: width,
-      defaultScale: false,
+      // minWidth: width,
+      // defaultScale: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Column(

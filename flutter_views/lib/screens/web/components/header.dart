@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/popup_widget.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -120,9 +120,10 @@ class HeaderRow extends StatelessWidget {
     var headerItems = getHeaderItems(context);
     return ResponsiveVisibility(
       visible: false,
-      visibleWhen: const [
-        Condition.largerThan(name: MOBILE),
-      ],
+      visibleConditions: [Condition.largerThan(name: MOBILE, value: 450)],
+      // visibleWhen: const [
+      //   Condition.largerThan(name: MOBILE),
+      // ],
       child: Row(children: [
         ...headerItems
             .map(

@@ -77,8 +77,8 @@ class LocationListItem extends StatelessWidget {
   }
 
   Widget _buildUi(BuildContext context, double width) {
-    return ResponsiveWrapper(
-        minWidth: width,
+    return MaxWidthBox(
+        // minWidth: width,
         maxWidth: width,
         child: Container(
           // height: 400,

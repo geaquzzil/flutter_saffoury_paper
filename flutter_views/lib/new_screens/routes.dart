@@ -140,7 +140,7 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: SettingAndProfileWebPage(
-                        currentSetting: state.queryParams["action"],
+                        currentSetting: state.queryParameters["action"],
                       ));
                 },
               ),
@@ -182,8 +182,8 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: WebProductView(
-                        iD: int.parse(state.params['id']!),
-                        tableName: state.params['tableName']!,
+                        iD: int.parse(state.queryParameters['id']!),
+                        tableName: state.queryParameters['tableName']!,
                         extras: state.extra as ViewAbstract?,
                       ));
                 },
@@ -195,8 +195,8 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: WebMasterToList(
-                        iD: int.parse(state.queryParams['id']!),
-                        tableName: state.params['tableName']!,
+                        iD: int.parse(state.queryParameters['id']!),
+                        tableName: state.pathParameters['tableName']!,
                         extras: state.extra as ViewAbstract?,
                       ));
                 },
@@ -214,8 +214,8 @@ class RouteGenerator {
                 pageBuilder: (context, state) {
                   return MaterialPage(
                       child: ProductWebPage(
-                    searchQuery: state.queryParams["search"],
-                    customFilter: state.queryParams['filter'],
+                    searchQuery: state.queryParameters["search"],
+                    customFilter: state.queryParameters['filter'],
                   ));
                 },
               ),
@@ -280,7 +280,7 @@ class RouteGenerator {
                       key: state.pageKey,
                       child: SearchPage(
                         // heroTag: (state.extra as List)[1],
-                        tableName: state.params["tableName"],
+                        tableName: state.queryParameters["tableName"],
                         viewAbstract: null,
                         // viewAbstract: (state.extra as List)[0],
                       ));
@@ -294,8 +294,8 @@ class RouteGenerator {
             return MaterialPage(
                 key: state.pageKey,
                 child: PdfPage(
-                  iD: int.tryParse(state.params['id'] ?? "-"),
-                  tableName: state.params['tableName'],
+                  iD: int.tryParse(state.queryParameters['id'] ?? "-"),
+                  tableName: state.queryParameters['tableName'],
                   invoiceObj: state.extra as PrintableMaster,
                 ));
           },

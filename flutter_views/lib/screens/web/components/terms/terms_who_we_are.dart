@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class WelcomMessageTermsWhoWeAre extends StatelessWidget {

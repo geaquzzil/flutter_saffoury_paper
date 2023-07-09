@@ -5,10 +5,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class TitleAndDescriptopnResponsive extends StatelessWidget {
   final String? title;
@@ -41,18 +43,18 @@ class TitleAndDescriptopnResponsive extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return ResponsiveWrapper(
+          return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
-            child: getUiBody(constraints),
+            // minWidth: width,
+            // defaultScale: false,
+            child: getUiBody(context, constraints),
           );
         },
       ),
     );
   }
 
-  Flex getUiBody(BoxConstraints constraints) {
+  Flex getUiBody(BuildContext context, BoxConstraints constraints) {
     return Flex(
       direction: constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
       children: [
@@ -81,17 +83,8 @@ class TitleAndDescriptopnResponsive extends StatelessWidget {
                 ),
               if (title != null)
                 FadeInLeft(
-                  key: UniqueKey(),
-                  child: Text(
-                    title!,
-                    style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      height: 1.3,
-                      fontSize: 35.0,
-                    ),
-                  ),
-                ),
+                    key: UniqueKey(),
+                    child: Text(title!, style: getTitleTextStyle(context))),
               if (title != null)
                 const SizedBox(
                   height: 10.0,
@@ -99,14 +92,8 @@ class TitleAndDescriptopnResponsive extends StatelessWidget {
               description != null
                   ? FadeInLeft(
                       key: UniqueKey(),
-                      child: Text(
-                        description!,
-                        style: const TextStyle(
-                          color: kCaptionColor,
-                          height: 1.5,
-                          fontSize: 15.0,
-                        ),
-                      ),
+                      child: Text(description!,
+                          style: getSubtitleTextStyle(context)),
                     )
                   : FadeInLeft(key: UniqueKey(), child: customDescription!),
               const SizedBox(

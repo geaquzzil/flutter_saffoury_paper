@@ -8,7 +8,7 @@ import 'dart:ui' as ui;
 import 'dart:math' as Math;
 
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'constants.dart';
 
@@ -306,10 +306,10 @@ class ResponsiveWebBuilderSliver extends StatelessWidget {
   }
 
   Widget _buildUi(BuildContext context, double width) {
-    return ResponsiveWrapper(
+    return MaxWidthBox(
         maxWidth: width,
-        minWidth: width,
-        defaultScale: false,
+        // minWidth: width,
+        // defaultScale: false,
         child: builder.call(context, width));
   }
 }
@@ -330,10 +330,10 @@ class ResponsiveWebBuilder extends StatelessWidget {
   Widget _buildUi(BuildContext context, double width) {
     return Center(
       child: LayoutBuilder(builder: (context, constraints) {
-        return ResponsiveWrapper(
+        return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
+            // minWidth: width,
+            // defaultScale: false,
             child: builder.call(context, width));
       }),
     );

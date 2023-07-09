@@ -38,7 +38,7 @@ class BaseAppSharedHeader extends StatelessWidget {
 
 class HeaderActions extends StatelessWidget {
   void _insertOverlay(BuildContext context) {
-    return Overlay.of(context)?.insert(
+    return Overlay.of(context).insert(
       OverlayEntry(builder: (context) {
         final size = MediaQuery.of(context).size;
         debugPrint("$size.width");

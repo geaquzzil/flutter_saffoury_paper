@@ -11,8 +11,6 @@ import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/web_checkout_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-
 import 'ext.dart';
 
 class CheckoutWeb extends BaseWebPageSlivers {

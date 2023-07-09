@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
 final List<String> sponsorsLogo = [
   "assets/brand1.png",
   "assets/brand2.png",
@@ -26,10 +27,10 @@ class Sponsors extends StatelessWidget {
 
 Widget _buildUi(double width) {
   return Center(
-    child: ResponsiveWrapper(
-      minWidth: width,
+    child: MaxWidthBox(
       maxWidth: width,
-      defaultScale: false,
+      //     minWidth: width,
+      // defaultScale: false,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Wrap(

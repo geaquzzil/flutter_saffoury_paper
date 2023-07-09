@@ -62,26 +62,6 @@ class HomeWebPage extends BaseWebPageSlivers {
     super.init(context);
   }
 
-  Widget getTitle(
-      BuildContext context, BoxConstraints constraints, String title,
-      {String? description}) {
-    return getSliverPadding(
-        context,
-        constraints,
-        SliverToBoxAdapter(
-            child: Align(
-          alignment: Alignment.center,
-          child: HeaderText(
-            useRespnosiveLayout: false,
-            description: description == null
-                ? null
-                : Html(
-                    data: description,
-                  ),
-            text: title,
-          ),
-        )));
-  }
 
   @override
   List<Widget> getContentWidget(
@@ -302,7 +282,7 @@ class HomeWebPage extends BaseWebPageSlivers {
             child: SearchWidgetComponentEditable(
               trailingIsCart: false,
               notiferSearchVoid: (value) => context
-                  .goNamed(indexWebOurProducts, queryParams: {"search": value}),
+                  .goNamed(indexWebOurProducts, queryParameters: {"search": value}),
             ),
           ),
           // backgroundImage:

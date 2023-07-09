@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/screens/web/models/stat.dart';
 import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 final List<Stat> stats = [
   Stat(count: "100+", text: "Clients"),
@@ -29,10 +29,10 @@ class PortfolioStats extends StatelessWidget {
   }
 
   Widget _buildUi(double width, BuildContext context) {
-    return ResponsiveWrapper(
+    return MaxWidthBox(
       maxWidth: width,
-      minWidth: width,
-      defaultScale: false,
+      // minWidth: width,
+      // defaultScale: false,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraint) {
           return Wrap(

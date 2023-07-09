@@ -36,7 +36,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
@@ -316,7 +316,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
                     // appBardExpandType: expandType,
                     onSearchTextChanged: (serchQuery) {
                       context.goNamed(indexWebOurProducts,
-                          queryParams: {"search": serchQuery});
+                          queryParameters: {"search": serchQuery});
                     },
                     // key: const ValueKey(2),
                   ),
@@ -355,8 +355,9 @@ class ListWebApiPage extends BaseWebPageSlivers {
                 if (onFilter == null) {
                   context.goNamed(indexWebOurProducts);
                 } else {
-                  context.goNamed(indexWebOurProducts,
-                      queryParams: {"filter": Compression.compress(onFilter)});
+                  context.goNamed(indexWebOurProducts, queryParameters: {
+                    "filter": Compression.compress(onFilter)
+                  });
                 }
               },
             )

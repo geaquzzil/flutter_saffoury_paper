@@ -57,7 +57,7 @@ class ChartCardItemCustom extends StatelessWidget {
             if (list!.isEmpty) {
               return;
             }
-            context.pushNamed(dashboardRouteName, params: {
+            context.pushNamed(dashboardRouteName, pathParameters: {
               "tableName": list![0].getMainHeaderLabelTextOnly(context)
             }, extra: [
               this,

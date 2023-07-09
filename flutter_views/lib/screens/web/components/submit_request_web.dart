@@ -31,10 +31,10 @@ class SubmitRequestWeb extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return ResponsiveWrapper(
+          return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
+            // minWidth: width,
+            // defaultScale: false,
             child: Container(
               child: Flex(
                 direction: constraints.maxWidth > 720

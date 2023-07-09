@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../constants.dart';
 
@@ -240,11 +240,11 @@ class SignInPage extends BaseWebPage {
 
   Widget body(double width, BuildContext context) {
     return Center(
-      child: ResponsiveWrapper(
-        shrinkWrap: true,
+      child: MaxWidthBox(
+        // shrinkWrap: true,
         maxWidth: width,
-        minWidth: width,
-        defaultScale: false,
+        // minWidth: width,
+        // defaultScale: false,
         child: LayoutBuilder(
           builder: (context, constraints) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,

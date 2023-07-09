@@ -53,7 +53,7 @@ class _OverlayWidgetState extends State<OverlayWidget> {
   }
 
   void _showOverlay() {
-    final overlay = Overlay.of(context)!;
+    final overlay = Overlay.of(context);
 
     entry = OverlayEntry(
       builder: (context) => buildOverlay(),

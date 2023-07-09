@@ -149,7 +149,7 @@ class _PdfPageState<T extends PrintLocalSetting>
         heroTag: UniqueKey(),
         child: const Icon(Icons.print),
         onPressed: () async => await Printing.layoutPdf(
-            onLayout: (PdfPageFormat format) async => loadedFile!));
+            onLayout: (PdfPageFormat format) async => loadedFile));
   }
 
   FloatingActionButtonExtended getPrintPageOptions() {

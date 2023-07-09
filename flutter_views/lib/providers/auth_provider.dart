@@ -78,7 +78,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
-    initFakeData();
+    init();
   }
   DashableInterface getDashableInterface() {
     return _drawerItems.whereType<DashableInterface>().first;
@@ -111,8 +111,8 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     if (hasSavedUser == false) {
       _user = _initUser;
 
-      _user.password = "0933326880";
-      _user.phone = "0933326882";
+      _user.password = "";
+      _user.phone = "";
       _user.login = true;
       _status = Status.Guest;
     } else {

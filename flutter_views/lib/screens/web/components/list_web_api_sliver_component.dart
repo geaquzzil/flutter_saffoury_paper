@@ -39,7 +39,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
@@ -54,8 +54,6 @@ class ListWebApiSliverComponent extends StatelessWidget {
   late ListMultiKeyProvider listProvider;
   ValueNotifier<bool>? valueNotifierGrid;
   ValueNotifier<ViewAbstract?>? onCardTap;
-
-  
 
   ///web version converts to hover actions and changed to list item from 20 to 10 if desktop or 4 if mobile and adds button on hover to go to next page
   final bool buildWebVersion;
@@ -321,8 +319,9 @@ class ListWebApiSliverComponent extends StatelessWidget {
                 if (onFilter == null) {
                   context.goNamed(indexWebOurProducts);
                 } else {
-                  context.goNamed(indexWebOurProducts,
-                      queryParams: {"filter": Compression.compress(onFilter)});
+                  context.goNamed(indexWebOurProducts, queryParameters: {
+                    "filter": Compression.compress(onFilter)
+                  });
                 }
               },
             )

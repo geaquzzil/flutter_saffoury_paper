@@ -45,12 +45,11 @@ class CutRequestTopWidget extends StatelessWidget {
           HeaderDescriptionAsExpanstion(
             isTitleLarge: false,
             iconData: Icons.done,
-            children: object.cut_request_results![0].products_inputs!
-                .getProductsFromDetailList()!
-                .map((e) => getCutResultWidtget(context, e))
-                .toList(),
             title: AppLocalizations.of(context)!.cutRequestResult,
             description: "Overview of the cut request results sizes",
+            children: object.cut_request_results![0].products_inputs!
+                .getProductsFromDetailList().map((e) => getCutResultWidtget(context, e))
+                .toList(),
           )
       ],
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class IosAppAd extends StatelessWidget {
   @override
@@ -20,10 +20,10 @@ class IosAppAd extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return ResponsiveWrapper(
+          return MaxWidthBox(
             maxWidth: width,
-            minWidth: width,
-            defaultScale: false,
+            // minWidth: width,
+            // defaultScale: false,
             child: Container(
               child: Flex(
                 direction: constraints.maxWidth > 720
