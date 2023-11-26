@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -16,8 +16,8 @@ class WebProductImages extends StatelessWidget {
           child: Column(children: [
             AspectRatio(
               aspectRatio: 1 / 1,
-              child: CachedNetworkImage(
-                imageUrl: item.getImageUrl(context) ?? "",
+              child: FastCachedImage(
+                url: item.getImageUrl(context) ?? "",
                 fit: BoxFit.contain,
               ),
             )

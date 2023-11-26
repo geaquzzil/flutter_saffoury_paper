@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -119,6 +119,51 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
+  Widget getCachedImage(BuildContext context, {String? url}) {
+    //TODO: this is for leading card
+    // CachedNetworkImage(
+    //   color: Theme.of(context).colorScheme.onBackground,
+    //   imageUrl: imageUrl,
+    //   imageBuilder: (context, imageProvider) => Container(
+    //     decoration: BoxDecoration(
+    //       shape: BoxShape.circle,
+    //       color: Theme.of(context).colorScheme.onBackground,
+    //       image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+    //     ),
+    //   ),
+    //   placeholder: (context, url) => const CircularProgressIndicator(),
+    //   errorWidget: (context, url, error) => Icon(getMainIconData()),
+    // );
+    //todo this is the old method for normal 
+    // Widget image = CachedNetworkImage(
+    //   color: Theme.of(context).colorScheme.onBackground,
+    //   imageUrl: imageUrl,
+    //   imageBuilder: (context, imageProvider) => Container(
+    //     decoration: BoxDecoration(
+    //       color: Theme.of(context).colorScheme.onBackground,
+    //       image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+    //     ),
+    //     child: BackdropFilter(
+    //       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+    //       child: Container(
+    //         decoration: BoxDecoration(
+    //             color:
+    //                 Theme.of(context).colorScheme.onPrimary.withOpacity(0.9)),
+    //       ),
+    //     ),
+    //   ),
+    //   placeholder: (context, url) => const CircularProgressIndicator(),
+    //   errorWidget: (context, url, error) => Icon(getMainIconData()),
+    // );
+    return FastCachedImage(
+      url: url ?? "",
+      fit: BoxFit.fitWidth,
+      color: Theme.of(context).colorScheme.onBackground,
+      loadingBuilder: (context, url) => const CircularProgressIndicator(),
+      errorBuilder: (context, url, error) => Icon(getMainIconData()),
+    );
+  }
+
   Widget getDismissibleBackground(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -138,26 +183,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     IconData? iconOnButton =
         addBottomWidget ? getCardLeadingBottomIcon() : null;
-    Widget image = CachedNetworkImage(
-      color: Theme.of(context).colorScheme.onBackground,
-      imageUrl: imageUrl,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onBackground,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-          child: Container(
-            decoration: BoxDecoration(
-                color:
-                    Theme.of(context).colorScheme.onPrimary.withOpacity(0.9)),
-          ),
-        ),
-      ),
-      placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(getMainIconData()),
-    );
+
+    Widget image = getCachedImage(context, url: imageUrl);
+
     if (iconOnButton != null) {
       return TowIcons(
         largChild: image,
@@ -166,9 +194,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     return image;
   }
-  Widget getImageIfNoUrl(){
-     return Icon(getMainIconData());
+
+  Widget getImageIfNoUrl() {
+    return Icon(getMainIconData());
   }
+
   Widget getCardLeadingImage(BuildContext context,
       {bool? isSelected, bool addBottomWidget = true}) {
     String? imageUrl = getImageUrl(context);
@@ -177,19 +207,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     }
     IconData? iconOnButton =
         addBottomWidget ? getCardLeadingBottomIcon() : null;
-    Widget image = CachedNetworkImage(
-      color: Theme.of(context).colorScheme.onBackground,
-      imageUrl: imageUrl,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).colorScheme.onBackground,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-        ),
-      ),
-      placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(getMainIconData()),
-    );
+    Widget image = getCachedImage(context, url: imageUrl);
     if (iconOnButton != null) {
       return TowIcons(
         largChild: image,
@@ -346,16 +364,18 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       //     extra: this,
       //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
       context.goNamed(printRouteName,
-          pathParameters : {"tableName": getTableNameApi()!, "id": "$iD"}, extra: this);
+          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+          extra: this);
       // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       context.goNamed(editRouteName,
-          pathParameters : {"tableName": getTableNameApi()!, "id": "$iD"},
+          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
           extra: (this as ViewAbstract).getCopyInstance());
     } else if (result.icon == Icons.view_agenda) {
       context.goNamed(viewRouteName,
-          pathParameters : {"tableName": getTableNameApi()!, "id": "$iD"}, extra: this);
+          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+          extra: this);
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -384,8 +384,8 @@ class WebGridViewItem extends StatelessWidget {
               image: item.getImageUrl(context) == null
                   ? null
                   : DecorationImage(
-                      image: CachedNetworkImageProvider(
-                          item.getImageUrl(context)!),
+                      image:
+                          FastCachedImageProvider(item.getImageUrl(context)!),
                       fit: BoxFit.cover),
               color: null,
               borderRadius: const BorderRadius.all(Radius.circular(18))),
@@ -543,7 +543,7 @@ class WebGridViewItemCustom extends StatelessWidget {
             // height: 100,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: CachedNetworkImageProvider(imageUrl!),
+                    image: FastCachedImageProvider(imageUrl!),
                     fit: BoxFit.cover),
                 color: null,
                 borderRadius: roundedCorners

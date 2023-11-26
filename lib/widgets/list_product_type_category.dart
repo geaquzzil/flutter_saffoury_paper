@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:animations/animations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/new_screens/actions/master_to_list_page.dart';
@@ -23,7 +23,7 @@ class ListItemProductTypeCategory extends StatelessWidget {
     if (imgUrl != null) {
       return FutureBuilder<PaletteGenerator>(
         future: PaletteGenerator.fromImageProvider(
-          CachedNetworkImageProvider(imgUrl!),
+          FastCachedImageProvider(imgUrl!),
         ),
         builder: (context, snapshot) =>
             openContainer(context, color: snapshot.data),
@@ -40,7 +40,7 @@ class ListItemProductTypeCategory extends StatelessWidget {
         transitionType: ContainerTransitionType.fade,
         closedBuilder: (context, action) => getBody(context, color: color),
         openBuilder: (context, action) => MasterToListPage(
-          master: productType,
+            master: productType,
             detail: Product()
               ..products_types = productType
               ..setProductsByCategoryCustomParams(context, productType),
@@ -55,7 +55,7 @@ class ListItemProductTypeCategory extends StatelessWidget {
             image: imgUrl == null
                 ? null
                 : DecorationImage(
-                    image: CachedNetworkImageProvider(imgUrl!),
+                    image: FastCachedImageProvider(imgUrl!),
                     fit: BoxFit.contain),
             color: imgUrl == null
                 ? Theme.of(context).colorScheme.primary

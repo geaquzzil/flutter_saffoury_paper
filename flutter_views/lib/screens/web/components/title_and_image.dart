@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
@@ -63,19 +62,21 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
       BoxConstraints constraints, BuildContext context) {
     double carouselContainerHeight = MediaQuery.of(context).size.height *
         (SizeConfig.isMobile(context) ? .25 : .5);
-    Widget image = CachedNetworkImage(
-      color: Theme.of(context).colorScheme.onBackground,
-      imageUrl: backgroundImage!,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onBackground,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-        ),
-        child: getBackdropFilter(context, carouselContainerHeight, constraints),
-      ),
-      placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
-    );
+    Widget image = Text("TODO");
+
+    // CachedNetworkImage(
+    //   color: Theme.of(context).colorScheme.onBackground,
+    //   imageUrl: backgroundImage!,
+    //   imageBuilder: (context, imageProvider) => Container(
+    //     decoration: BoxDecoration(
+    //       color: Theme.of(context).colorScheme.onBackground,
+    //       image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+    //     ),
+    //     child: getBackdropFilter(context, carouselContainerHeight, constraints),
+    //   ),
+    //   placeholder: (context, url) => const CircularProgressIndicator(),
+    //   errorWidget: (context, url, error) => const Icon(Icons.error),
+    // );
     return image;
   }
 

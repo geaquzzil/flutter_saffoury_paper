@@ -1,3 +1,4 @@
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
@@ -65,6 +66,7 @@ void main() async {
   initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
+  await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
   Utils.initVersionNumber();
   svgCode = await rootBundle.loadString("assets/images/vector/logoOnly.svg");
   //TODO what is this ?

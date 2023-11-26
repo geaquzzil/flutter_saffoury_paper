@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -56,7 +56,7 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
       if (imgUrl != null) {
         return FutureBuilder<PaletteGenerator>(
           future: PaletteGenerator.fromImageProvider(
-            CachedNetworkImageProvider(imgUrl!),
+            FastCachedImageProvider(imgUrl!),
           ),
           builder: (context, snapshot) {
             color = snapshot.data;
@@ -110,7 +110,7 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
                 image: imgUrl == null
                     ? null
                     : DecorationImage(
-                        image: CachedNetworkImageProvider(imgUrl!),
+                        image: FastCachedImageProvider(imgUrl!),
                         fit: BoxFit.contain),
                 color: imgUrl == null ? null : color?.darkVibrantColor?.color,
                 borderRadius: const BorderRadius.all(Radius.circular(18)))),

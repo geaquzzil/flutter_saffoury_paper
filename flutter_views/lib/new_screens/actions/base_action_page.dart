@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -136,7 +136,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   Future<void> _updatePaletter() async {
     imgUrl = getExtras().getImageUrl(context);
     valueNotifierColor.value = await PaletteGenerator.fromImageProvider(
-      CachedNetworkImageProvider(imgUrl!),
+      FastCachedImageProvider(imgUrl!),
     );
   }
 
@@ -231,7 +231,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             image: imgUrl == null
                 ? null
                 : DecorationImage(
-                    image: CachedNetworkImageProvider(imgUrl),
+                    image: FastCachedImageProvider(imgUrl),
                     fit: BoxFit.contain),
             color: imgUrl == null ? null : color?.darkVibrantColor?.color,
             // borderRadius: const BorderRadius.all(Radius.circular(20))

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -161,7 +160,7 @@ class LocationListItem extends StatelessWidget {
         if (customFlowWidget != null) customFlowWidget!,
         // FadeInImage(
         //   placeholder: MemoryImage(kTransparentImage),
-        //   image: CachedNetworkImageProvider(imageUrl!),
+        //   image: FastCachedImageProvider(imageUrl!),
         //   fit: BoxFit.cover,
         // )
         if (customFlowWidget == null)
