@@ -1,11 +1,9 @@
-import 'dart:convert';
+
+
 import 'dart:io';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
@@ -188,7 +186,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
       {
         var cell =
             sh.cell(CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: i));
-        cell.value = viewAbstract.getFieldLabel(context, fields[i]);
+        cell.value = TextCellValue(viewAbstract.getFieldLabel(context, fields[i]));
         cell.cellStyle = cellStyle;
       }
     }
@@ -209,8 +207,8 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
               'generateExcel Generating  subViewAbstract  => ${subViewAbstract.runtimeType}  columnIndex: $i => value => ${subViewAbstract.getFieldLabel(context, fields[i])}');
           var cell = sh.cell(CellIndex.indexByColumnRow(
               rowIndex: 0, columnIndex: startCount + i));
-          cell.value =
-              "${subViewAbstract.getMainHeaderLabelTextOnly(context)}:${subViewAbstract.getFieldLabel(context, fields[i])}";
+          cell.value = TextCellValue(
+              "${subViewAbstract.getMainHeaderLabelTextOnly(context)}:${subViewAbstract.getFieldLabel(context, fields[i])}");
 
           cell.cellStyle = cellStyle;
         }
@@ -227,7 +225,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
         sh
             .cell(
                 CellIndex.indexByColumnRow(rowIndex: rowIndex, columnIndex: i))
-            .value = viewAbstract.getFieldValueCheckType(context, fields[i]);
+            .value = TextCellValue(viewAbstract.getFieldValueCheckType(context, fields[i]));
       }
     }
     int startCount = fields.length;
@@ -247,7 +245,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
                   .cell(CellIndex.indexByColumnRow(
                       rowIndex: rowIndex, columnIndex: startCount + i))
                   .value =
-              subViewAbstract.getFieldValueCheckType(context, fields[i]);
+           TextCellValue(   subViewAbstract.getFieldValueCheckType(context, fields[i]));
         }
       }
       startCount = startCount + fields.length;

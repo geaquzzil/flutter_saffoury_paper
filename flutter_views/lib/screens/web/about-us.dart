@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/screens/web/components/contact_info_item.dart';
 import 'package:flutter_view_controller/screens/web/components/education_section.dart';
 import 'package:flutter_view_controller/screens/web/components/portfolio_stats.dart';
-import 'package:flutter_view_controller/screens/web/components/title_responsive.dart';
-import 'package:flutter_view_controller/screens/web/ext.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:mailto/mailto.dart';
 import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'components/header_text.dart';
 import 'components/title_and_image.dart';
 
-import 'parallex/parallexes.dart';
 
 class AboutUsWebPage extends BaseWebPageSlivers {
   AboutUsWebPage({Key? key}) : super(key: key);

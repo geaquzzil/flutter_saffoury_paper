@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
@@ -115,19 +115,19 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
                         fontSize: 16.0,
                       ),
                     ),
-                    RatingBar.builder(
-                      initialRating: 2,
-                      allowHalfRating: false,
-                      itemCount: 5,
-                      ignoreGestures:
-                          true, // this disables the change star rating
-                      itemSize: 20,
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: kPrimaryColor,
-                      ),
-                      onRatingUpdate: (rating) {},
-                    ),
+                    // RatingBar.builder(
+                    //   initialRating: 2,
+                    //   allowHalfRating: false,
+                    //   itemCount: 5,
+                    //   ignoreGestures:
+                    //       true, // this disables the change star rating
+                    //   itemSize: 20,
+                    //   itemBuilder: (context, _) => const Icon(
+                    //     Icons.star,
+                    //     color: kPrimaryColor,
+                    //   ),
+                    //   onRatingUpdate: (rating) {},
+                    // ),
                     const SizedBox(
                       height: 15,
                     ),

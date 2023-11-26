@@ -141,7 +141,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     await Future.forEach(_drawerItems, (item) async {
       // debugPrint("checing permission for $item ");
       bool hasPermssion =
-          _user.hasPermissionList(context, viewAbstract: item as ViewAbstract);
+          _user.hasPermissionList(context, viewAbstract: item);
       // debugPrint("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {
         _drawerItemsPermissions.add(item);
@@ -173,7 +173,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         _user.phone = user.phone ?? "";
         _user.login = false;
         _status = Status.Guest;
-        Configurations.save("", _user as AuthUser);
+        Configurations.save("", _user);
       } else if (hasSavedUser == false) {
         _user = _initUser;
         _user.password = "";
@@ -197,7 +197,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         bool hasPermission = _user.permission ?? false;
         _status = isLogin ? Status.Authenticated : Status.Unauthenticated;
         if (isLogin) {
-          Configurations.save("", _user as AuthUser);
+          Configurations.save("", _user);
         }
         // }
         _permissions = _user.userlevels ?? PermissionLevelAbstract();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
@@ -33,18 +33,18 @@ class ProductCardBottom<T extends ViewAbstract> extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          RatingBar.builder(
-            initialRating: 2,
-            allowHalfRating: false,
-            itemCount: 5,
-            ignoreGestures: true, // this disables the change star rating
-            itemSize: 20,
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: kWhite,
-            ),
-            onRatingUpdate: (rating) {},
-          )
+          // RatingBar.builder(
+          //   initialRating: 2,
+          //   allowHalfRating: false,
+          //   itemCount: 5,
+          //   ignoreGestures: true, // this disables the change star rating
+          //   itemSize: 20,
+          //   itemBuilder: (context, _) => const Icon(
+          //     Icons.star,
+          //     color: kWhite,
+          //   ),
+          //   onRatingUpdate: (rating) {},
+          // )
         ],
       ),
     );

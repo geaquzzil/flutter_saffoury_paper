@@ -7,22 +7,12 @@ import 'package:flutter_view_controller/packages/material_dialogs/material_dialo
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/components/contact_info_item.dart';
-import 'package:flutter_view_controller/screens/web/components/cv_section.dart';
-import 'package:flutter_view_controller/screens/web/components/education_section.dart';
-import 'package:flutter_view_controller/screens/web/components/portfolio_stats.dart';
-import 'package:flutter_view_controller/screens/web/components/terms/terms_who_we_are.dart';
-import 'package:flutter_view_controller/screens/web/components/title_responsive.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mailto/mailto.dart';
-import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'components/header_text.dart';
 import 'components/title_and_image.dart';
-
-import 'components/title_and_image_left.dart';
-import 'parallex/parallexes.dart';
 
 var contactInfo = [
   const ContactItem(
@@ -114,13 +104,17 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                 map.MarkerLayer(
                   markers: [
                     map.Marker(
-                      point: LatLng(33.783583, 35.877710),
-                      width: 80,
-                      height: 80,
-                      builder: (context) => Lottie.network(
+                      child: Lottie.network(
                           "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
                           width: 40,
                           height: 40),
+                      point: LatLng(33.783583, 35.877710),
+                      width: 80,
+                      height: 80,
+                      // builder: (context) => Lottie.network(
+                      //     "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
+                      //     width: 40,
+                      //     height: 40),
                     ),
                   ],
                 ),
@@ -207,13 +201,17 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                 map.MarkerLayer(
                   markers: [
                     map.Marker(
-                      point: LatLng(33.485683, 36.3191252),
-                      width: 80,
-                      height: 80,
-                      builder: (context) => Lottie.network(
+                      child: Lottie.network(
                           "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
                           width: 40,
                           height: 40),
+                      point: LatLng(33.485683, 36.3191252),
+                      width: 80,
+                      height: 80,
+                      // builder: (context) => Lottie.network(
+                      //     "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
+                      //     width: 40,
+                      //     height: 40),
                     ),
                   ],
                 ),
@@ -302,13 +300,17 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                 map.MarkerLayer(
                   markers: [
                     map.Marker(
-                      point: LatLng(33.4060428, 36.3611587),
-                      width: 80,
-                      height: 80,
-                      builder: (context) => Lottie.network(
+                      child: Lottie.network(
                           "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
                           width: 40,
                           height: 40),
+                      point: LatLng(33.4060428, 36.3611587),
+                      width: 80,
+                      height: 80,
+                      // builder: (context) => Lottie.network(
+                      //     "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
+                      //     width: 40,
+                      //     height: 40),
                     ),
                   ],
                 ),
