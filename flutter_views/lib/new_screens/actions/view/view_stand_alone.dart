@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
+import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -13,12 +13,7 @@ class MasterViewStandAlone extends StatelessWidget {
   Future<dynamic>? getFuture() {
     debugPrint(
         "getFuture responseType=> ${viewAbstract.getCustomStandAloneResponseType()}");
-    switch (viewAbstract.getCustomStandAloneResponseType()) {
-      case ResponseType.LIST:
-        return viewAbstract.callApi();
-      case ResponseType.SINGLE:
-        return viewAbstract.callApi();
-    }
+    return viewAbstract.callApi();
   }
 
   Widget getFutureBuilder(BuildContext context) {
@@ -83,6 +78,11 @@ class MasterViewStandAlone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return getFutureBuilder(context);
+    if (viewAbstract.getCustomStandAloneResponseType() ==
+        ResponseType.NONE_RESPONSE_TYPE) {
+      return viewAbstract.getCustomStandAloneWidget(context);
+    } else {
+      return getFutureBuilder(context);
+    }
   }
 }

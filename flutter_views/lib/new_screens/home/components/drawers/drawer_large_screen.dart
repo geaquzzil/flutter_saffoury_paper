@@ -34,6 +34,9 @@ class DrawerLargeScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
+    if (SizeConfig.isDesktopOrWeb(context)) {
+      return getBody(true, context);
+    }
     // return getBody(false, context);
     // bool isHovered = context.watch<IsHoveredOnDrawerClosed>().isHovered;
     return Selector<DrawerMenuControllerProvider, bool>(
@@ -369,40 +372,56 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
         context.watch<DrawerMenuControllerProvider>();
 
     if (SizeConfig.isDesktopOrWeb(context)) {
-      return OnHoverWidget(
-          scale: false,
-          builder: (onHover) {
-            return Material(
-              color: Colors.transparent,
-              child: ListTile(
-                leading: InkWell(
-                    onTap: () {
-                      viewAbstract.onDrawerLeadingItemClicked(context);
-                      debugPrint("onLeading ListTile tapped");
-                    },
-                    child: Container(
-                        child: onHover
-                            ? const Icon(Icons.plus_one_sharp)
-                            : viewAbstract.getIcon())),
-                selected: ds.getIndex == viewAbstract.hashCode,
-                title: ds.getSideMenuIsClosed
-                    ? null
-                    : Container(child: viewAbstract.getMainLabelText(context)),
-                onTap: () {
-                  if (SizeConfig.isDesktopOrWeb(context)) {
-                    context
-                        .read<DrawerMenuControllerProvider>()
-                        .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
-                  } else {
-                    context
-                        .read<DrawerMenuControllerProvider>()
-                        .controlStartDrawerMenu();
-                  }
-                  viewAbstract.onDrawerItemClicked(context);
-                },
-              ),
-            );
-          });
+      return ListTile(
+        leading: InkWell(
+            onTap: () {
+              viewAbstract.onDrawerLeadingItemClicked(context);
+              debugPrint("onLeading ListTile tapped");
+            },
+            child: Container(
+                child: false
+                    ? const Icon(Icons.plus_one_sharp)
+                    : viewAbstract.getIcon())),
+        selected: ds.getIndex == viewAbstract.hashCode,
+        // title: ds.getSideMenuIsClosed
+        //     ? null
+        //     : Container(child: viewAbstract.getMainLabelText(context)),
+        title: Container(child: viewAbstract.getMainLabelText(context)),
+        onTap: () {
+          debugPrint('onDrawerItemClicked=> $viewAbstract');
+          context
+              .read<DrawerMenuControllerProvider>()
+              .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+          viewAbstract.onDrawerItemClicked(context);
+        },
+      );
+      //TODO not working any more for desktop return OnHoverWidget(
+      //     scale: false,
+      //     builder: (onHover) {
+      //       return ListTile(
+      //         leading: InkWell(
+      //             onTap: () {
+      //               viewAbstract.onDrawerLeadingItemClicked(context);
+      //               debugPrint("onLeading ListTile tapped");
+      //             },
+      //             child: Container(
+      //                 child: onHover
+      //                     ? const Icon(Icons.plus_one_sharp)
+      //                     : viewAbstract.getIcon())),
+      //         selected: ds.getIndex == viewAbstract.hashCode,
+      //         // title: ds.getSideMenuIsClosed
+      //         //     ? null
+      //         //     : Container(child: viewAbstract.getMainLabelText(context)),
+      //         title: Container(child: viewAbstract.getMainLabelText(context)),
+      //         onTap: () {
+      //           debugPrint('onDrawerItemClicked=> $viewAbstract');
+      //           context
+      //               .read<DrawerMenuControllerProvider>()
+      //               .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+      //           viewAbstract.onDrawerItemClicked(context);
+      //         },
+      //       );
+      //     });
     } else {
       return ListTile(
         leading: viewAbstract.getIcon(),

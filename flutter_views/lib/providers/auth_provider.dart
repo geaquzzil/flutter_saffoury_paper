@@ -78,7 +78,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
-    init();
+    initFakeData();
   }
   DashableInterface getDashableInterface() {
     return _drawerItems.whereType<DashableInterface>().first;

@@ -3,7 +3,7 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
+import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 

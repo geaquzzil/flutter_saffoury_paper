@@ -98,6 +98,8 @@ class ListMultiKeyProvider with ChangeNotifier {
       case ResponseType.SINGLE:
         fetchView(key, t);
         break;
+      case ResponseType.NONE_RESPONSE_TYPE:
+        break;
     }
   }
 

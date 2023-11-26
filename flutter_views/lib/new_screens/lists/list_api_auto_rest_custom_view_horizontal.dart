@@ -64,6 +64,9 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         case ResponseType.SINGLE:
           listProvider.fetchView(key, autoRest as ViewAbstract);
           break;
+
+        case ResponseType.NONE_RESPONSE_TYPE:
+          break;
       }
     }
   }
@@ -131,6 +134,9 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         return getListWidget(listProvider);
 
       case ResponseType.SINGLE:
+        return getSingleWidget(listProvider);
+
+      case ResponseType.NONE_RESPONSE_TYPE:
         return getSingleWidget(listProvider);
     }
   }

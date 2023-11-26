@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 
 abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
@@ -35,7 +36,9 @@ abstract class ViewAbstractStandAloneCustomView<T> extends ViewAbstract<T> {
 
   @override
   void onDrawerItemClicked(BuildContext context) {
-    context.read<DrawerViewAbstractStandAloneProvider>().change(context, this);
+    context
+        .read<DrawerMenuControllerProvider>()
+        .changeToStandAlone(context, this);
   }
 
   @override

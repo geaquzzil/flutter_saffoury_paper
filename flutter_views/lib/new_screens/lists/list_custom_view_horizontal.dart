@@ -51,6 +51,8 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
           case ResponseType.SINGLE:
             listProvider.fetchView(key, widget.autoRest as ViewAbstract);
             break;
+          case ResponseType.NONE_RESPONSE_TYPE:
+            break;
         }
       }
     });
@@ -88,6 +90,8 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
 
       case ResponseType.SINGLE:
         return getSingleWidget(listProvider);
+      case ResponseType.NONE_RESPONSE_TYPE:
+        return getSingleWidget(listProvider);
     }
   }
 
@@ -96,8 +100,7 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
       widget.onResponse!(listProvider.getList(key)[0]);
     }
     return (listProvider.getList(key)[0] as T)
-            .getCustomViewSingleResponseWidget(
-                context) ??
+            .getCustomViewSingleResponseWidget(context) ??
         const Text("Not emplemented getCustomViewSingleResponseWidget");
   }
 

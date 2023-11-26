@@ -11,8 +11,8 @@ class AutoRest<T extends ViewAbstract> {
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
   Widget? getCustomViewSingleResponseWidget(BuildContext context);
-  Widget? getCustomViewTitleWidget(BuildContext context,
-      ValueNotifier valueNotifier);
+  Widget? getCustomViewTitleWidget(
+      BuildContext context, ValueNotifier valueNotifier);
   void onCustomViewCardClicked(BuildContext context, T istem);
   double? getCustomViewHeight();
   ResponseType getCustomViewResponseType();
@@ -22,4 +22,5 @@ abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
 enum ResponseType {
   SINGLE,
   LIST,
+  NONE_RESPONSE_TYPE,
 }

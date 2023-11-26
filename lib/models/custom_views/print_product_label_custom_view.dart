@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -9,42 +11,25 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
-import '../../prints/print_customer_balances.dart';
 
-class CustomerBalanceList
-    extends ViewAbstractStandAloneCustomView<CustomerBalanceList>
-    implements PrintableInvoiceInterface<PrintCustomerBalances> {
+class PrintProductLabelCustomView
+    extends ViewAbstractStandAloneCustomView<PrintProductLabelCustomView>
+    implements PrintableInvoiceInterface<PrintProduct> {
   List<CustomerBalanceSingle>? customers;
   double? totalBalance;
   int? termsBreakCount;
   int? nextPaymentCount;
 
-  CustomerBalanceList();
+  PrintProductLabelCustomView();
 
   @override
-  CustomerBalanceList getSelfNewInstance() {
-    return CustomerBalanceList();
+  PrintProductLabelCustomView getSelfNewInstance() {
+    return PrintProductLabelCustomView();
   }
-
-  @override
-  Future<CustomerBalanceList?> callApi() async {
-    // TODO: implement callApi
-    return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
-  }
-
-  @override
-  CustomerBalanceList fromJsonViewAbstract(Map<String, dynamic> json) =>
-      CustomerBalanceList()
-        ..totalBalance = json['totalBalance'] as double?
-        ..termsBreakCount = json['termsBreakCount'] as int?
-        ..nextPaymentCount = json['nextPaymentCount'] as int?
-        ..customers = (json['customers'] as List<dynamic>?)
-            ?.map((e) =>
-                CustomerBalanceSingle.fromJson(e as Map<String, dynamic>))
-            .toList();
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
@@ -54,14 +39,14 @@ class CustomerBalanceList
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
-      AppLocalizations.of(context)!.users;
+      AppLocalizations.of(context)!.print;
 
   @override
   List<String> getMainFields({BuildContext? context}) => [];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.customerBalances;
+      AppLocalizations.of(context)!.print;
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
@@ -84,7 +69,7 @@ class CustomerBalanceList
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
       getPrintableInvoiceAccountInfoInBottom(
-              BuildContext context, PrintCustomerBalances? pca) =>
+              BuildContext context, PrintProduct? pca) =>
           [];
 
   @override
@@ -95,29 +80,28 @@ class CustomerBalanceList
 
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
-          BuildContext context, PrintCustomerBalances? pca) =>
+          BuildContext context, PrintProduct? pca) =>
       [];
   @override
-  String getPrintableInvoiceTitle(
-          BuildContext context, PrintCustomerBalances? pca) =>
+  String getPrintableInvoiceTitle(BuildContext context, PrintProduct? pca) =>
       getMainHeaderLabelTextOnly(context);
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
-          BuildContext context, PrintCustomerBalances? pca) =>
+          BuildContext context, PrintProduct? pca) =>
       [];
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
-          BuildContext context, PrintCustomerBalances? pca) =>
+          BuildContext context, PrintProduct? pca) =>
       [];
 
   @override
-  String getPrintablePrimaryColor(PrintCustomerBalances? setting) =>
-      Colors.orange.toHex();
+  String getPrintablePrimaryColor(PrintProduct? setting) =>
+      Colors.blueGrey.toHex();
   @override
-  String getPrintableSecondaryColor(PrintCustomerBalances? setting) =>
-      Colors.orange.shade500.toHex();
+  String getPrintableSecondaryColor(PrintProduct? setting) =>
+      Colors.blueGrey.shade500.toHex();
 
   @override
   String getPrintableQrCode() => "TODO";
@@ -126,28 +110,12 @@ class CustomerBalanceList
   String getPrintableQrCodeID() => "TODO";
 
   @override
-  ResponseType getCustomStandAloneResponseType() => ResponseType.SINGLE;
+  ResponseType getCustomStandAloneResponseType() =>
+      ResponseType.NONE_RESPONSE_TYPE;
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
-    return Expanded(
-      // height: 200,
-      child: ListStaticSearchableWidget<CustomerBalanceSingle>(
-        list: customers ?? [],
-        listItembuilder: (item) => ListTile(
-          onTap: () {},
-          leading: item.getCardLeading(context),
-          title: Text(item.name ?? ""),
-          subtitle: Text(item.balance.toCurrencyFormat()),
-        ),
-        onSearchTextChanged: (query) =>
-            customers
-                ?.where((element) =>
-                    element.name?.toLowerCase().contains(query) ?? false)
-                .toList() ??
-            [],
-      ),
-    );
+    return BaseEditNewPage(viewAbstract: Product());
   }
 
   Widget getHeaderWidget(BuildContext context) {
@@ -238,27 +206,10 @@ class CustomerBalanceList
         ],
       )
     ];
+  }
 
-    // return Expanded(
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [
-    //       // HeaderMain(),
-    //       CirculeChartItem<CustomerBalanceSingle, String>(
-    //         title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
-    //         list: customers ?? [],
-    //         xValueMapper: (item, value) => item.name,
-    //         yValueMapper: (item, n) => item.balance,
-    //       ),
-    //       LineChartItem<CustomerBalanceSingle, String>(
-    //         title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
-    //         list: customers ?? [],
-    //         xValueMapper: (item, value) => item.name,
-    //         yValueMapper: (item, n) => item.balance,
-    //       )
-    //     ],
-    //   ),
-    // );
+  @override
+  PrintProductLabelCustomView fromJsonViewAbstract(Map<String, dynamic> json) {
+    return this;
   }
 }

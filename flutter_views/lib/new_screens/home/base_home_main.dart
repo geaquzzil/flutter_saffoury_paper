@@ -4,12 +4,14 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/complex_drawer.dart';
@@ -64,17 +66,33 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    // return SliverApiMaster();
-    return Scaffold(
-      key: drawerMenuControllerProvider.getStartDrawableKey,
-      drawer: DrawerLargeScreens(),
-      // drawerScrimColor: Colors.transparent,
-      // backgroundColor: compexDrawerCanvasColor,
-      endDrawer: const BaseHomeCartPage(),
-      bottomNavigationBar: getBottomNavigationBar(),
-      appBar: getAppBar(),
-      body: getMainBodyIndexedStack(context),
+    return Selector<DrawerMenuControllerProvider,
+        ViewAbstractStandAloneCustomView?>(
+      builder: (context, value, child) {
+        if (value != null) {
+          return Scaffold(
+              key: drawerMenuControllerProvider.getStartDrawableKey,
+              drawer: DrawerLargeScreens(),
+              endDrawer: const BaseHomeCartPage(),
+              appBar: getAppBar(),
+              body: shouldWrapNavigatorChild(
+                  context, MasterViewStandAlone(viewAbstract: value)));
+        } else {
+          return Scaffold(
+              key: drawerMenuControllerProvider.getStartDrawableKey,
+              drawer: DrawerLargeScreens(),
+              // drawerScrimColor: Colors.transparent,
+              // backgroundColor: compexDrawerCanvasColor,
+              endDrawer: const BaseHomeCartPage(),
+              bottomNavigationBar: getBottomNavigationBar(),
+              appBar: getAppBar(),
+              body: getMainBodyIndexedStack(context));
+        }
+      },
+      selector: (p0, p1) => p1.getStandAloneCustomView,
     );
+    // return SliverApiMaster();
+
     // return WillPopScope(
     //   onWillPop: () async {
     //     if (!SizeConfig.isMobile(context)) return Future.value(true);
@@ -213,8 +231,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget getSelectorViewAbstract(BuildContext context,
       {required Widget Function(
         ViewAbstract<dynamic>,
-      )
-          builder}) {
+      ) builder}) {
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) => builder.call(value),
       selector: (p0, p1) => p1.getObject,
@@ -252,6 +269,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   }
 
   Widget getNavigationRail() {
+    bool isDesktopOrWeb = SizeConfig.isDesktopOrWeb(context);
     return Stack(
       children: [
         Selector<DrawerMenuControllerProvider, Tuple2<int, bool>>(
@@ -281,26 +299,27 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           selector: (p0, p1) =>
               Tuple2(p1.getNavigationIndex, p1.getNavigationRailIsOpen),
         ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            // color: Colors.amber,
-            height: 200,
-            child: Column(children: [
-              const DrawerSettingButton(),
-              const SizedBox(
-                height: kDefaultPadding / 3,
-              ),
-              const DrawerLanguageButton(),
-              const SizedBox(
-                height: kDefaultPadding / 3,
-              ),
-              const ProfilePicturePopupMenu()
-            ]),
-          ),
-        )
+        if (!isDesktopOrWeb)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              // color: Colors.amber,
+              height: 200,
+              child: Column(children: [
+                const DrawerSettingButton(),
+                const SizedBox(
+                  height: kDefaultPadding / 3,
+                ),
+                const DrawerLanguageButton(),
+                const SizedBox(
+                  height: kDefaultPadding / 3,
+                ),
+                const ProfilePicturePopupMenu()
+              ]),
+            ),
+          )
       ],
     );
     return Selector<DrawerMenuControllerProvider, Tuple2<int, bool>>(

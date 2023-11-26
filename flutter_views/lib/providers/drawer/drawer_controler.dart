@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'drawer_viewabstract_stand_alone.dart';
 
 class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
   Map<String, GlobalKey<ScaffoldState>> _startDrawerKeyWeb = {};
   ViewAbstract _object;
-  bool sideMenuOpen = false;
+  ViewAbstractStandAloneCustomView? _standAloneCustomView;
+  bool _sideMenuOpen = false;
   int _idx = 0;
 
   int _navigationIndex = 0;
@@ -18,9 +18,11 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   DrawerMenuControllerProvider({required ViewAbstract initViewAbstract})
       : _object = initViewAbstract;
   int get getIndex => _idx;
-  bool get getSideMenuIsOpen => sideMenuOpen;
-  bool get getSideMenuIsClosed => !sideMenuOpen;
+  bool get getSideMenuIsOpen => _sideMenuOpen;
+  bool get getSideMenuIsClosed => !_sideMenuOpen;
   ViewAbstract get getObject => _object;
+  ViewAbstractStandAloneCustomView? get getStandAloneCustomView =>
+      _standAloneCustomView;
   GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
   GlobalKey<ScaffoldState> getStartDrawableKeyWeb(String key) {
     debugPrint("getStartDrawableKey $key");
@@ -55,17 +57,24 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   String getTitle(BuildContext context) =>
       _object.getMainHeaderLabelTextOnly(context).toLowerCase();
 
+  void changeToStandAlone(
+      BuildContext context, ViewAbstractStandAloneCustomView custom) {
+    _standAloneCustomView = custom;
+
+    notifyListeners();
+  }
+
   void change(BuildContext context, ViewAbstract object) {
     _object = object;
+    _standAloneCustomView = null;
     notifyListeners();
     context.read<FilterableProvider>().init(context, object);
-    context.read<DrawerViewAbstractStandAloneProvider>().change(context, null);
   }
 
   void changeWithFilterable(BuildContext context, ViewAbstract object) {
     _object = object;
+    _standAloneCustomView = null;
     notifyListeners();
-    context.read<DrawerViewAbstractStandAloneProvider>().change(context, null);
   }
 
   void changeDrawerIndex(int idx) {
@@ -74,12 +83,13 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   }
 
   void toggleIsOpen() {
-    sideMenuOpen = !sideMenuOpen;
+    _sideMenuOpen = !_sideMenuOpen;
+    debugPrint("Toggling isOpen");
     notifyListeners();
   }
 
   void setSideMenuIsClosed({int? byIdx}) {
-    sideMenuOpen = false;
+    _sideMenuOpen = false;
     if (byIdx != null) {
       _idx = byIdx;
     }
@@ -87,7 +97,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   }
 
   void setSideMenuIsOpen() {
-    sideMenuOpen = true;
+    _sideMenuOpen = true;
     notifyListeners();
   }
 

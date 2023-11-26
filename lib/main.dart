@@ -2,6 +2,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
@@ -37,8 +38,6 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-
-import 'package:flutter_view_controller/providers/drawer/drawer_viewabstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
@@ -84,6 +83,7 @@ void main() async {
     // systemNavigationBarIconBrightness: Brightness.dark,
   ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
+    PrintProductLabelCustomView(),
     Product(),
     ProductSize(),
     Order(),
@@ -137,8 +137,6 @@ void main() async {
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
       ChangeNotifierProvider(create: (_) => LangaugeProvider()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
-      ChangeNotifierProvider(
-          create: (_) => DrawerViewAbstractStandAloneProvider(null)),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),
       ChangeNotifierProvider(

@@ -2,9 +2,9 @@ import 'package:flutter_view_controller/interfaces/printable/printable_custom_in
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/view_abstract_non_list.dart';
 
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:pdf/src/widgets/widget.dart';
 import 'package:pdf/src/pdf/page_format.dart';
 import 'package:flutter/material.dart' as mt;
