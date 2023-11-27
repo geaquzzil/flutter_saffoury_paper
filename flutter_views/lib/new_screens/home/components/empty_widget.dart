@@ -90,12 +90,13 @@ class EmptyWidget extends StatelessWidget {
           TextButton(
             child: Text(subtitle!,
                 textAlign: TextAlign.center,
-                style: themeData.textTheme.caption),
+                style: themeData.textTheme.bodySmall),
             onPressed: () => onSubtitleClicked!.call(),
           )
         else
           Text(subtitle!,
-              textAlign: TextAlign.center, style: themeData.textTheme.caption),
+              textAlign: TextAlign.center,
+              style: themeData.textTheme.bodySmall),
     ];
     return Center(
       child: Column(

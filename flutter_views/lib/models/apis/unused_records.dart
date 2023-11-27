@@ -12,7 +12,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     implements CustomViewHorizontalListResponse<UnusedRecords> {
   List<int> list = [];
   List<T>? listObjects = [];
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   T? viewAbstract;
   bool? requireObjects;
   UnusedRecords() : super();

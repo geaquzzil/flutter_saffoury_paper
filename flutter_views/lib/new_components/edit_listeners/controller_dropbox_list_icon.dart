@@ -22,7 +22,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
       required this.icon,
       required this.onSelected})
       : super(key: key) {
-    list.insert(0, null);
+    // list.insert(0, null);
   }
 
   @override
@@ -34,9 +34,9 @@ class _DropdownStringListControllerListenerByIconState
     extends State<DropdownStringListControllerListenerByIcon> {
   bool firstRun = true;
   DropdownStringListItem? lastSelected;
-  CustomPopupMenuItem<DropdownStringListItem> buildMenuItem(
+  CustomPopupMenuItem<DropdownStringListItem?> buildMenuItem(
           BuildContext context, DropdownStringListItem? e) =>
-      CustomPopupMenuItem<DropdownStringListItem>(
+      CustomPopupMenuItem<DropdownStringListItem?>(
         value: e,
         color: lastSelected?.label == e?.label
             ? Theme.of(context).highlightColor
@@ -74,7 +74,7 @@ class _DropdownStringListControllerListenerByIconState
 
   @override
   Widget build(BuildContext context) {
-    Widget pop = PopupMenuButton<DropdownStringListItem>(
+    Widget pop = PopupMenuButton<DropdownStringListItem?>(
       position: PopupMenuPosition.under,
       tooltip: widget.hint,
       icon: Icon(
@@ -110,7 +110,7 @@ class _DropdownStringListControllerListenerByIconState
               duration: const Duration(milliseconds: 500),
               child: Text(
                 lastSelected!.label,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               )),
           pop
         ],

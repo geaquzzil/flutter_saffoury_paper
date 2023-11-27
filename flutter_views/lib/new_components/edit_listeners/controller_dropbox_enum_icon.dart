@@ -83,7 +83,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
               duration: Duration(milliseconds: 500),
               child: Text(
                 selectedValue!.getFieldLabelString(context, selectedValue),
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               )),
           pop
         ],

@@ -76,7 +76,7 @@ class ViewCardItem extends StatelessWidget {
   }
 
   Text getTextTitle(BuildContext context, String text) {
-    return Text(text, style: Theme.of(context).textTheme.caption);
+    return Text(text, style: Theme.of(context).textTheme.bodySmall);
   }
 
   Text getTextSubTitle(BuildContext context, String text) {

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/actions/action_viewabstract_provider.dart';
 
 class MasterViewStandAlone extends StatelessWidget {
-  ViewAbstractStandAloneCustomView viewAbstract;
+  ViewAbstractStandAloneCustomViewApi viewAbstract;
   MasterViewStandAlone({Key? key, required this.viewAbstract})
       : super(key: key);
   Future<dynamic>? getFuture() {

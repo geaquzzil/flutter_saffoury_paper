@@ -9,7 +9,7 @@ import '../employees.dart';
 
 @reflector
 class TransferAccount
-    extends ViewAbstractStandAloneCustomView<TransferAccount> {
+    extends ViewAbstractStandAloneCustomViewApi<TransferAccount> {
   Employee employee;
   Customer customerFrom;
   Customer customerTo;

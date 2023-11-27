@@ -43,7 +43,7 @@ class Employee extends User<Employee> {
 
   List<WarehouseEmployee>? warehouse_employees;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Warehouse? warehouse;
 
   Employee() : super() {
@@ -153,7 +153,6 @@ class Employee extends User<Employee> {
     }
     return super.getInputType(field);
   }
-
 
   @override
   List<TabControllerHelper> getCustomTabList(BuildContext context,

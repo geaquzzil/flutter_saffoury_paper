@@ -8,10 +8,10 @@ import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? searchByAutoCompleteTextInput;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, FilterableProviderHelper>? _lastFilterableMap;
 
   String? getSortByFieldName();
@@ -48,9 +48,8 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "<$field>";
   }
 
-  bool hasPermssionFilterable(
-      BuildContext context, ViewAbstract viewAbstract)  {
-    return  hasPermissionList(context, viewAbstract: viewAbstract);
+  bool hasPermssionFilterable(BuildContext context, ViewAbstract viewAbstract) {
+    return hasPermissionList(context, viewAbstract: viewAbstract);
   }
 
   bool hasPermssionFilterableField(BuildContext context, String field) {

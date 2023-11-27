@@ -64,14 +64,14 @@ class CutRequestCustomListableHeader extends StatelessWidget {
                 child: ListTile(
                   title: Text(e.title,
                       style: e.isError
-                          ? Theme.of(context).textTheme.caption?.copyWith(
+                          ? Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.error)
-                          : Theme.of(context).textTheme.caption),
+                          : Theme.of(context).textTheme.bodySmall),
                   subtitle: e.descriptionWidget ??
                       Text(
                         e.description ?? "",
                         style: e.isError
-                            ? Theme.of(context).textTheme.caption?.copyWith(
+                            ? Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.error)
                             : Theme.of(context).textTheme.titleLarge?.copyWith(
                                 color: Theme.of(context).colorScheme.primary),

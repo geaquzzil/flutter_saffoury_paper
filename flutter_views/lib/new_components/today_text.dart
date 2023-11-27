@@ -30,7 +30,7 @@ class TodayText extends StatelessWidget {
     }
     return Text(
       title,
-      style: Theme.of(context).textTheme.caption,
+      style: Theme.of(context).textTheme.bodySmall,
     );
   }
 

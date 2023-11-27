@@ -83,7 +83,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Text getMainHeaderLabelWithTextWidgt({required BuildContext context}) {
     return Text(getMainHeaderLabelWithText(context),
-        style: Theme.of(context).textTheme.caption!);
+        style: Theme.of(context).textTheme.bodySmall!);
   }
 
   String getLabelWithText(String label, String text) {
@@ -94,8 +94,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       {BuildContext? context, Color? color}) {
     return Text(getLabelWithText(label, text),
         style: context != null && color != null
-            ? Theme.of(context).textTheme.caption!.copyWith(color: color)
-            : Theme.of(context!).textTheme.caption!);
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(color: color)
+            : Theme.of(context!).textTheme.bodySmall!);
   }
 
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
@@ -163,14 +163,14 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Text(
       "${getMainHeaderLabelTextOnly(context)} ${getIDFormat(context)}",
       style: isImageAsBackground
-          ? Theme.of(context).textTheme.caption?.copyWith(
+          ? Theme.of(context).textTheme.bodySmall?.copyWith(
               fontWeight: FontWeight.bold,
               color: animatedColor != null
                   ? animatedColor.value
                   : color != null
                       ? color.darkMutedColor?.color
                       : Theme.of(context).colorScheme.onPrimaryContainer)
-          : Theme.of(context).textTheme.caption,
+          : Theme.of(context).textTheme.bodySmall,
       // style: const TextStyle(color: kTextLightColor)
     );
   }
@@ -183,22 +183,22 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         Text(
           getMainHeaderLabelTextOnly(context),
           style: isImageAsBackground
-              ? Theme.of(context).textTheme.caption?.copyWith(
+              ? Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: color != null
                       ? color.lightMutedColor?.color
                       : Theme.of(context).colorScheme.onPrimaryContainer)
-              : Theme.of(context).textTheme.caption,
+              : Theme.of(context).textTheme.bodySmall,
           // style: const TextStyle(color: kTextLightColor)
         ),
         Text(
           getIDFormat(context),
           style: isImageAsBackground
-              ? Theme.of(context).textTheme.caption?.copyWith(
+              ? Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: color != null
                       ? color.lightMutedColor?.color
                       : Theme.of(context).colorScheme.onPrimaryContainer)
-              : Theme.of(context).textTheme.caption,
+              : Theme.of(context).textTheme.bodySmall,
         )
       ],
     );
@@ -212,7 +212,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getMainSubtitleHeaderText(context) ??
         Text(
           "",
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         );
   }
 

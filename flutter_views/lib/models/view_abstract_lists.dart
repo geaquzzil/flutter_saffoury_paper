@@ -24,7 +24,7 @@ import '../new_components/views/view_popup_icon_widget.dart';
 import '../providers/actions/action_viewabstract_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool isSelected = false;
 
   Color? getMainColor() {
@@ -67,7 +67,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       {double width = 60, double height = 60, bool addBottomWidget = true}) {
     return CircleAvatar(
         radius: 24,
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
   }
 
@@ -134,7 +134,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     //   placeholder: (context, url) => const CircularProgressIndicator(),
     //   errorWidget: (context, url, error) => Icon(getMainIconData()),
     // );
-    //todo this is the old method for normal 
+    //todo this is the old method for normal
     // Widget image = CachedNetworkImage(
     //   color: Theme.of(context).colorScheme.onBackground,
     //   imageUrl: imageUrl,
@@ -155,12 +155,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     //   placeholder: (context, url) => const CircularProgressIndicator(),
     //   errorWidget: (context, url, error) => Icon(getMainIconData()),
     // );
-    return FastCachedImage(
-      url: url ?? "",
-      fit: BoxFit.fitWidth,
-      color: Theme.of(context).colorScheme.onBackground,
-      loadingBuilder: (context, url) => const CircularProgressIndicator(),
-      errorBuilder: (context, url, error) => Icon(getMainIconData()),
+    return SizedBox(
+      width: 20,
+      height: 20,
+      child: FastCachedImage(
+        url: url ?? "",
+        fit: BoxFit.fitWidth,
+        color: Theme.of(context).colorScheme.onBackground,
+        loadingBuilder: (context, url) => const CircularProgressIndicator(),
+        errorBuilder: (context, url, error) => Icon(getMainIconData()),
+      ),
     );
   }
 

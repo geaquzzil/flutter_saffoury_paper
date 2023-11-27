@@ -17,7 +17,7 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
   PrinterOptions? printerOptions;
   ReportOptions? reportOptions;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   dynamic printObject;
 
   String fieldSortBy = "";

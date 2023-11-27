@@ -15,7 +15,7 @@ import 'package:flutter_view_controller/test_var.dart';
 import '../../prints/print_customer_balances.dart';
 
 class CustomerBalanceList
-    extends ViewAbstractStandAloneCustomView<CustomerBalanceList>
+    extends ViewAbstractStandAloneCustomViewApi<CustomerBalanceList>
     implements PrintableInvoiceInterface<PrintCustomerBalances> {
   List<CustomerBalanceSingle>? customers;
   double? totalBalance;

@@ -81,7 +81,7 @@ class ChartCardItemCustom extends StatelessWidget {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.caption!,
+                    style: Theme.of(context).textTheme.bodySmall!,
                   ),
                   if (icon != null) Icon(icon)
                 ],
@@ -98,10 +98,11 @@ class ChartCardItemCustom extends StatelessWidget {
                 children: [
                   if (footerWidget != null) footerWidget!,
                   if (footer != null)
-                    Text(footer!, style: Theme.of(context).textTheme.caption!),
+                    Text(footer!,
+                        style: Theme.of(context).textTheme.bodySmall!),
                   if (footerRight != null)
                     Text(footerRight!,
-                        style: Theme.of(context).textTheme.caption!),
+                        style: Theme.of(context).textTheme.bodySmall!),
                   if (footerRightWidget != null) footerRightWidget!
                 ],
               ),

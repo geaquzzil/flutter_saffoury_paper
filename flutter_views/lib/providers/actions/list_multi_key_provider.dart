@@ -209,6 +209,7 @@ class ListMultiKeyProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
+      debugPrint("Exception $e");
       multiListProviderHelper.isLoading = false;
       multiListProviderHelper.hasError = true;
       notifyListeners();
@@ -217,14 +218,14 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   Future fetchList(String key, ViewAbstract viewAbstract,
       {AutoRest? autoRest, int? customCount, int? customPage}) async {
-    late MultiListProviderHelper? multiListProviderHelper;
+    MultiListProviderHelper multiListProviderHelper;
     if (_listMap.containsKey(key)) {
-      multiListProviderHelper = _listMap[key];
+      multiListProviderHelper = _listMap[key]!;
     } else {
       _listMap[key] = MultiListProviderHelper();
-      multiListProviderHelper = _listMap[key];
+      multiListProviderHelper = _listMap[key]!;
     }
-    if (multiListProviderHelper!.isLoading) return;
+    if (multiListProviderHelper.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
     multiListProviderHelper.hasError = false;
     multiListProviderHelper.isLoading = true;
@@ -254,6 +255,7 @@ class ListMultiKeyProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
+      debugPrint("Exceptionsos $e");
       multiListProviderHelper.isLoading = false;
       multiListProviderHelper.hasError = true;
       notifyListeners();

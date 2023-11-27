@@ -27,7 +27,7 @@ class CutRequestTopWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint("CutRequestTopWidget ${object.toString()}");
     TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge;
-    TextStyle? descriptionStyle = Theme.of(context).textTheme.caption;
+    TextStyle? descriptionStyle = Theme.of(context).textTheme.bodySmall;
     bool hasCutResult = ((object.cut_request_results_count ?? 0) > 0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,8 @@ class CutRequestTopWidget extends StatelessWidget {
             title: AppLocalizations.of(context)!.cutRequestResult,
             description: "Overview of the cut request results sizes",
             children: object.cut_request_results![0].products_inputs!
-                .getProductsFromDetailList().map((e) => getCutResultWidtget(context, e))
+                .getProductsFromDetailList()
+                .map((e) => getCutResultWidtget(context, e))
                 .toList(),
           )
       ],
@@ -98,8 +99,8 @@ class CutRequestTopWidget extends StatelessWidget {
       children: tile
           .map((e) => Expanded(
                 child: ListTile(
-                  title:
-                      Text(e.title, style: Theme.of(context).textTheme.caption),
+                  title: Text(e.title,
+                      style: Theme.of(context).textTheme.bodySmall),
                   subtitle: e.descriptionWidget ??
                       Text(
                         e.description ?? "",
@@ -190,7 +191,7 @@ class TitleAndDescription {
   bool isError;
   TitleAndDescription(
       {required this.title,
-      this.isError=false,
+      this.isError = false,
       this.description,
       this.descriptionWidget,
       this.icon});

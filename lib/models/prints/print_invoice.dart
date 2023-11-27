@@ -34,7 +34,7 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
   String? sortByField;
   SortByType? sortByType;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   InvoiceMaster? invoice;
 
   PrintInvoice() : super();

@@ -23,7 +23,8 @@ import '../../invoices/orders.dart';
 import '../../invoices/priceless_invoices/transfers.dart';
 
 //TODO ADD DATE
-class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
+class ProductMovments
+    extends ViewAbstractStandAloneCustomViewApi<ProductMovments>
     implements CustomViewHorizontalListResponse<ProductMovments> {
   Product? products;
 
@@ -368,9 +369,7 @@ class ProductMovments extends ViewAbstractStandAloneCustomView<ProductMovments>
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context,
-      ValueNotifier
-          valueNotifier) {
+      BuildContext context, ValueNotifier valueNotifier) {
     return null;
   }
 }

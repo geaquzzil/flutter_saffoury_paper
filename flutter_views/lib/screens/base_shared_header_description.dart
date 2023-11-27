@@ -33,7 +33,8 @@ class BaseSharedHeaderDescription extends StatelessWidget {
                                 TextSpan(
                                     text: viewAbstract
                                         .getMainHeaderLabelTextOnly(context),
-                                    style: Theme.of(context).textTheme.caption),
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
                               ],
                             ),
                           ),
@@ -47,7 +48,7 @@ class BaseSharedHeaderDescription extends StatelessWidget {
                     const SizedBox(width: kDefaultPadding / 2),
                     Text(
                       viewAbstract.getDateTextOnly() ?? "",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),

@@ -27,7 +27,7 @@ class BaseSharedDetailsRating extends StatelessWidget {
         ),
         Text(
           "4.4 (328 reviews)",
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );

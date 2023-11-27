@@ -41,12 +41,12 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
 
   String? comments;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Warehouse? backupWarehouse;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   double? backupQuantity;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   int? backupProductID;
 
   @override
@@ -382,7 +382,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
           children: [
             // Text(
             //   getDateTextOnly() ?? "",
-            //   style: Theme.of(context).textTheme.caption,
+            //   style: Theme.of(context).textTheme.bodySmall,
             // ),
             Text(getMainHeaderTextOnly(context)),
             Text(quantity.toCurrencyFormat(
@@ -401,7 +401,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       children: [
         // Text(
         //   getDateTextOnly() ?? "",
-        //   style: Theme.of(context).textTheme.caption,
+        //   style: Theme.of(context).textTheme.bodySmall,
         // ),
         Text(unitPrice.toCurrencyFormatFromSetting(context)),
         Text(

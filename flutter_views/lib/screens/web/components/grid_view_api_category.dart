@@ -488,7 +488,7 @@ class WebGridViewItemCustom extends StatelessWidget {
                     if (subtitle != null)
                       Text(
                         subtitle!,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       )
                   ],
                 ),
@@ -595,7 +595,7 @@ class WebGridViewItemCustom extends StatelessWidget {
             if (subtitle != null)
               Text(
                 subtitle!,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               )
           ],
         ),

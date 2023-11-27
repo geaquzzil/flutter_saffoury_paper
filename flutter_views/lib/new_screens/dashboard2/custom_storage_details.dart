@@ -69,7 +69,7 @@ class StorageInfoCardCustom extends StatelessWidget {
                   ),
                   Text(
                     description,
-                    style: Theme.of(context).textTheme.caption!,
+                    style: Theme.of(context).textTheme.bodySmall!,
                   ),
                 ],
               ),

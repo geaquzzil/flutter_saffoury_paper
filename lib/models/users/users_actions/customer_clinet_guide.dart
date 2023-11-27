@@ -12,7 +12,7 @@ import '../../prints/print_customer_guid.dart';
 import '../customers.dart';
 
 class CustomerClinetGuide
-    extends ViewAbstractStandAloneCustomView<CustomerClinetGuide>
+    extends ViewAbstractStandAloneCustomViewApi<CustomerClinetGuide>
     implements
         PrintableCustomInterface<PrintCustomerGuid>,
         ModifiablePrintableInterface<PrintCustomerGuid> {

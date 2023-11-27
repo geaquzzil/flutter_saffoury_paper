@@ -25,9 +25,9 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   DateObject? date;
   EnteryInteval? enteryInteval;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   T? viewAbstract;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, dynamic>? customAction;
   ChartRecordAnalysis() : super();
 
@@ -63,8 +63,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       };
 
   @override
-  String? getCustomAction() =>
-      "list_dashboard_single_item";
+  String? getCustomAction() => "list_dashboard_single_item";
   @override
   String? getTableNameApi() => viewAbstract?.getTableNameApi();
 

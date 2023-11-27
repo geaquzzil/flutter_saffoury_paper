@@ -27,14 +27,14 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   String? comments; //text
   String? birthday;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String year = "1900";
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String month = "1";
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String day = "1";
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<String> daysInMonth = [];
   @override
   IconData? getMainDrawerGroupIconData() => Icons.manage_accounts_sharp;

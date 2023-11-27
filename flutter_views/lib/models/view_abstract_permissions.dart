@@ -13,17 +13,17 @@ import 'package:provider/provider.dart';
 import 'permissions/user_auth.dart';
 
 abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? fieldNameFromParent;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   ViewAbstract? parent;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   static const int ADMIN_ID = -1;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool isNull = false;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool isNullTriggerd = false;
 
   int iD = -1;

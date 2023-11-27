@@ -845,7 +845,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     return o;
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   List<InvoiceMasterDetails>? deletedList;
 
@@ -994,7 +994,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           children: [
             // Text(
             //   getDateTextOnly() ?? "",
-            //   style: Theme.of(context).textTheme.caption,
+            //   style: Theme.of(context).textTheme.bodySmall,
             // ),
             Html(
                 shrinkWrap: true,
@@ -1012,7 +1012,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           children: [
             // Text(
             //   getDateTextOnly() ?? "",
-            //   style: Theme.of(context).textTheme.caption,
+            //   style: Theme.of(context).textTheme.bodySmall,
             // ),
             Html(
                 shrinkWrap: true,
@@ -1037,14 +1037,14 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       children: [
         // Text(
         //   getDateTextOnly() ?? "",
-        //   style: Theme.of(context).textTheme.caption,
+        //   style: Theme.of(context).textTheme.bodySmall,
         // ),
         Html(
             shrinkWrap: true,
             data: "<strong>${getPrintableQrCodeID()}</strong>"),
         Text(
           getDateTextOnlyFormat(context) ?? "",
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         )
       ],
     );

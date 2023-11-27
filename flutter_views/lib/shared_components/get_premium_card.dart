@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 
-
 class GetPremiumCard extends StatelessWidget {
   const GetPremiumCard({
     required this.onPressed,
@@ -31,15 +30,18 @@ class GetPremiumCard extends StatelessWidget {
           child: Stack(
             children: const [
               Align(
-                alignment: Alignment.topRight,
-                child:Icon(Icons.dangerous,size: 180,)
-                // child: SvgPicture.asset(
-                //   ImageVectorPath.wavyBus,
-                //   width: 180,
-                //   height: 180,
-                //   fit: BoxFit.contain,
-                // ),
-              ),
+                  alignment: Alignment.topRight,
+                  child: Icon(
+                    Icons.dangerous,
+                    size: 180,
+                  )
+                  // child: SvgPicture.asset(
+                  //   ImageVectorPath.wavyBus,
+                  //   width: 180,
+                  //   height: 180,
+                  //   fit: BoxFit.contain,
+                  // ),
+                  ),
               Padding(
                 padding: EdgeInsets.all(15),
                 child: _Info(),
@@ -69,7 +71,7 @@ class _Info extends StatelessWidget {
         ),
         Text(
           "To add more members",
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );

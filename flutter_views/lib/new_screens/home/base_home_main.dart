@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
@@ -67,14 +68,17 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   @override
   Widget build(BuildContext context) {
     return Selector<DrawerMenuControllerProvider,
-        ViewAbstractStandAloneCustomView?>(
+        ViewAbstractStandAloneCustomViewApi?>(
       builder: (context, value, child) {
+        
         if (value != null) {
+          // List<Widget>? fabs=value.();
           return Scaffold(
               key: drawerMenuControllerProvider.getStartDrawableKey,
               drawer: DrawerLargeScreens(),
               endDrawer: const BaseHomeCartPage(),
               appBar: getAppBar(),
+              // floatingActionButton: ,
               body: shouldWrapNavigatorChild(
                   context, MasterViewStandAlone(viewAbstract: value)));
         } else {

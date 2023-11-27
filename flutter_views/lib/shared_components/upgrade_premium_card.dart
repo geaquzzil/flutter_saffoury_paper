@@ -78,7 +78,7 @@ class _Info extends StatelessWidget {
   Widget _subtitle() {
     return const Text(
       "in order to get full access",
-      // style: Theme.of(Get.context!).textTheme.caption,
+      // style: Theme.of(Get.context!).textTheme.bodySmall,
     );
   }
 

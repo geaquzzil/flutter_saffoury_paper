@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 @reflector
-class Blocking extends ViewAbstractStandAloneCustomView<Blocking> {
+class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   BlockMood blockMood;
   Customer customer;
   bool block;

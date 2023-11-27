@@ -410,7 +410,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                 onTap: onTap,
                 style: state.enabled
                     ? textFieldConfiguration.style
-                    : theme.textTheme.subtitle1!.copyWith(
+                    : theme.textTheme.titleMedium!.copyWith(
                         color: theme.disabledColor,
                       ),
                 onChanged: (val) {

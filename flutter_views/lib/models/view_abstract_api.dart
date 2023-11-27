@@ -17,18 +17,18 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'servers/server_helpers.dart';
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   int _page = 0;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<T>? _lastSearchViewAbstractByTextInputList;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   static Map<String, List<ViewAbstract>>? _lastListReduseSizeViewAbstract;
 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, String>? _customMap;
 
   Map<String, String> getCustomMapOnSearch() => {};

@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     implements CustomViewHorizontalListResponse<ChangesRecords> {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   T? viewAbstract;
   String? fieldToGroupBy;
   int? total;
@@ -171,7 +171,6 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   //     ((ChangesRecords) newObject).viewAbstract = ((ChangesRecords) oldCalledViewAbstract).viewAbstract;
   //     return super.onReadNewObject(context, newObject, oldCalledViewAbstract);
   // }
-
 }
 
 @JsonSerializable()

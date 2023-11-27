@@ -10,7 +10,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, TextEditingController> textFieldController = {};
 
   Map<String, TextInputType?> getTextInputTypeMap();

@@ -49,7 +49,7 @@ class ChartCardItem extends StatelessWidget {
               "TITLdfscsdfdsE",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption!,
+              style: Theme.of(context).textTheme.bodySmall!,
             ),
             Text(
               "Descriptiewwasdsdsasfdsdsfdson",
@@ -60,9 +60,9 @@ class ChartCardItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("32%", style: Theme.of(context).textTheme.caption!),
+                Text("32%", style: Theme.of(context).textTheme.bodySmall!),
                 Text("Since last month",
-                    style: Theme.of(context).textTheme.caption!),
+                    style: Theme.of(context).textTheme.bodySmall!),
               ],
             )
           ],

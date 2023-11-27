@@ -7,10 +7,11 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
+  @JsonKey(includeToJson: true,includeFromJson: false)
   bool? delete;
-  @JsonKey(ignore: true)
+  @JsonKey(includeToJson: false,includeFromJson: false)
   bool? selected;
-  @JsonKey(ignore: true)
+    @JsonKey(includeToJson: false,includeFromJson: false)
   bool? _isScannedFromQrCode;
 
   ViewAbstract() : super();

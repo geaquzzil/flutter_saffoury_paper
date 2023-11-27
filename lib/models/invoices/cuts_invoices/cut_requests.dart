@@ -585,7 +585,8 @@ class CutRequest extends ViewAbstract<CutRequest>
     // TODO: implement getPrintableCustomFromPDFPageLIst
     throw UnimplementedError();
   }
-  @JsonKey(ignore: true)
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   List<SizesCutRequest>? deletedList;
 

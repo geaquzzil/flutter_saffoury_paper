@@ -21,7 +21,7 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
   bool? hideInvoiceDate;
   bool? hideEmployeeName;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   MoneyFunds? moneyFund;
 
   PrintReceipt() : super();

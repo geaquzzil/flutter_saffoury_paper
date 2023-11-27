@@ -322,7 +322,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         slivers: [
           // if (isSelectedMode) getHeaderWidget()!,
           if (widget.buildSearchWidget) getSearchWidget(),
-          if (widget.buildFilterableView) getFilterableWidget(),
+
+          //todo  type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element' if (widget.buildFilterableView) getFilterableWidget(),
           if (widget.buildToggleView) getToggleView(),
           ValueListenableBuilder<ExpandType>(
               valueListenable: expandTypeOnlyOnExpand,
@@ -389,7 +390,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       slivers: [
         if (widget.buildAppBar) getAppBar(context),
         if (widget.buildSearchWidget) getSearchWidget(),
-        if (widget.buildFilterableView) getFilterableWidget(),
+        //todo type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element' if (widget.buildFilterableView) getFilterableWidget(),
         if (widget.buildToggleView) getToggleView(),
         // ValueListenableBuilder<bool>(
         //     valueListenable: valueNotifierCameraMode,
@@ -471,11 +472,12 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
       builder: (context, value, child) {
         // List<Widget> widgets;
-        debugPrint("SliverApiMaster building widget: ${findCustomKey()}");
+
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
-
+        debugPrint(
+            "SliverApiMaster building widget: ${findCustomKey()} isloading: $isLoading iserror: $isError count: $count");
         if (isLoading) {
           if (count == 0) {
             return getShimmerLoading();
@@ -656,7 +658,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     return ValueListenableBuilder<ExpandType>(
         valueListenable: expandType,
         builder: (__, value, ____) {
-          debugPrint("SliverApiMaster expanmd ${value} ");
+          debugPrint("SliverApiMaster expanmd $value ");
           return SliverPersistentHeader(
               pinned: true,
               delegate: SliverAppBarDelegatePreferedSize(

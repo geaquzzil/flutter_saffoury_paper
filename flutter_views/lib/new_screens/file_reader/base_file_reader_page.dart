@@ -138,7 +138,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
                 if (_filePath != null)
                   Text(
                     _filePath!,
-                    style: Theme.of(context).textTheme.caption!.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Theme.of(context).colorScheme.tertiary),
                   )
               ],

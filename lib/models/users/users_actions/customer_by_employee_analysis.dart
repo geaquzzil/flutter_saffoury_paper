@@ -16,7 +16,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dar
 import '../customers.dart';
 
 class CustomerByEmployeeAnanlysis
-    extends ViewAbstractStandAloneCustomView<CustomerByEmployeeAnanlysis>
+    extends ViewAbstractStandAloneCustomViewApi<CustomerByEmployeeAnanlysis>
     implements CustomViewHorizontalListResponse<CustomerByEmployeeAnanlysis> {
   List<Customer>? customers;
 
@@ -278,9 +278,7 @@ class CustomerByEmployeeAnanlysis
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context,
-      ValueNotifier
-          valueNotifier) {
+      BuildContext context, ValueNotifier valueNotifier) {
     return null;
   }
 }

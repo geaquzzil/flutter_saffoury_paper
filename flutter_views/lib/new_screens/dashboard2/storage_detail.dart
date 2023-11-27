@@ -92,7 +92,7 @@ class StorageInfoCard extends StatelessWidget {
                   ),
                   Text(
                     "$numOfFiles Files",
-                    style: Theme.of(context).textTheme.caption!,
+                    style: Theme.of(context).textTheme.bodySmall!,
                   ),
                 ],
               ),

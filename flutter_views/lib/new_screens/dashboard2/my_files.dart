@@ -53,7 +53,7 @@ class MyFiles extends StatelessWidget {
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
-        SizedBox(height: kDefaultPadding )
+        SizedBox(height: kDefaultPadding)
       ],
     );
   }
@@ -118,7 +118,7 @@ class _TestExpandedState extends State<TestExpanded> {
                   "TITLdfscsdfdsE",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.caption!,
+                  style: Theme.of(context).textTheme.bodySmall!,
                 ),
                 Text(
                   "Descriptiewwasdsdsasfdsdsfdson",
@@ -129,9 +129,9 @@ class _TestExpandedState extends State<TestExpanded> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("32%", style: Theme.of(context).textTheme.caption!),
+                    Text("32%", style: Theme.of(context).textTheme.bodySmall!),
                     Text("Since last month",
-                        style: Theme.of(context).textTheme.caption!),
+                        style: Theme.of(context).textTheme.bodySmall!),
                   ],
                 )
               ],

@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+part 'print_product_object.g.dart';
 
 @JsonSerializable(
   explicitToJson: true,
@@ -40,8 +41,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   ProductPrintObject fromJsonViewAbstract(Map<String, dynamic> json) {
-    // TODO: implement fromJsonViewAbstract
-    throw UnimplementedError();
+    return ProductPrintObject.fromJson(json);
   }
 
   @override
@@ -55,109 +55,95 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         'date': AppLocalizations.of(context)!.date,
         "barcode": AppLocalizations.of(context)!.barcode,
-        "fiberLines": AppLocalizations.of(context)!.grain,
+        "customer": AppLocalizations.of(context)!.customer,
+        "quantity": AppLocalizations.of(context)!.quantity,
+        "sheets": AppLocalizations.of(context)!.sheets,
         "comments": AppLocalizations.of(context)!.comments,
       };
 
   @override
-  String? getMainDrawerGroupName(BuildContext context) {
-    // TODO: implement getMainDrawerGroupName
-    throw UnimplementedError();
-  }
+  String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
-    throw UnimplementedError();
+    return AppLocalizations.of(context)!.product;
   }
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
+    return AppLocalizations.of(context)!.product;
   }
 
   @override
   IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
+    return Icons.account_balance_wallet_sharp;
   }
 
   @override
   ProductPrintObject getSelfNewInstance() {
-    // TODO: implement getSelfNewInstance
-    throw UnimplementedError();
+    return ProductPrintObject(ProductSize(), GSM());
   }
 
   @override
-  String? getSortByFieldName() {
-    // TODO: implement getSortByFieldName
-    throw UnimplementedError();
+  String getSortByFieldName() {
+    return "date";
   }
 
   @override
   SortByType getSortByType() {
-    // TODO: implement getSortByType
-    throw UnimplementedError();
+    return SortByType.DESC;
   }
 
   @override
-  String? getTableNameApi() {
-    // TODO: implement getTableNameApi
-    throw UnimplementedError();
-  }
+  String? getTableNameApi() => null;
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
+  Map<String, int> getTextInputMaxLengthMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+        "quantity": TextInputType.number,
+        "date": TextInputType.datetime,
+        "products_types": TextInputType.number,
+        "comments": TextInputType.multiline,
+        "customer": TextInputType.multiline,
+        "sheets": TextInputType.number,
+      };
 
   @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldCanBeNullableMap() => {
+        "gsms": true,
+      };
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
-  }
+  Map<String, bool> isFieldRequiredMap() => {
+        "description": true,
+        "size": true,
+        "comments": false,
+        "customer": true,
+        "gsm": true,
+        "quantity": true,
+        "sheets": true,
+      };
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
-    // TODO: implement toJsonViewAbstract
-    throw UnimplementedError();
+    return toJson();
   }
+
+  factory ProductPrintObject.fromJson(Map<String, dynamic> data) =>
+      _$ProductPrintObjectFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProductPrintObjectToJson(this);
 }

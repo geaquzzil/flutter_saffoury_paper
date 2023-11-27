@@ -8,7 +8,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
   Map<String, GlobalKey<ScaffoldState>> _startDrawerKeyWeb = {};
   ViewAbstract _object;
-  ViewAbstractStandAloneCustomView? _standAloneCustomView;
+  ViewAbstractStandAloneCustomViewApi? _standAloneCustomViewApi;
   bool _sideMenuOpen = false;
   int _idx = 0;
 
@@ -21,8 +21,8 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   bool get getSideMenuIsOpen => _sideMenuOpen;
   bool get getSideMenuIsClosed => !_sideMenuOpen;
   ViewAbstract get getObject => _object;
-  ViewAbstractStandAloneCustomView? get getStandAloneCustomView =>
-      _standAloneCustomView;
+  ViewAbstractStandAloneCustomViewApi? get getStandAloneCustomView =>
+      _standAloneCustomViewApi;
   GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
   GlobalKey<ScaffoldState> getStartDrawableKeyWeb(String key) {
     debugPrint("getStartDrawableKey $key");
@@ -57,23 +57,23 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   String getTitle(BuildContext context) =>
       _object.getMainHeaderLabelTextOnly(context).toLowerCase();
 
-  void changeToStandAlone(
-      BuildContext context, ViewAbstractStandAloneCustomView custom) {
-    _standAloneCustomView = custom;
+  void changeToStandAloneApi(
+      BuildContext context, ViewAbstractStandAloneCustomViewApi custom) {
+    _standAloneCustomViewApi = custom;
 
     notifyListeners();
   }
 
   void change(BuildContext context, ViewAbstract object) {
     _object = object;
-    _standAloneCustomView = null;
+    _standAloneCustomViewApi = null;
     notifyListeners();
     context.read<FilterableProvider>().init(context, object);
   }
 
   void changeWithFilterable(BuildContext context, ViewAbstract object) {
     _object = object;
-    _standAloneCustomView = null;
+    _standAloneCustomViewApi = null;
     notifyListeners();
   }
 

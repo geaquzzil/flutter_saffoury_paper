@@ -14,7 +14,6 @@ class HeaderListableDraggable extends StatelessWidget {
       children: [
         if (listableInterface.getListableList().isEmpty)
           MaterialBanner(
-            
             content: const Text('This is a MaterialBanner'),
             actions: <Widget>[
               TextButton(
@@ -63,8 +62,8 @@ class HeaderListableDraggable extends StatelessWidget {
       children: tile
           .map((e) => Expanded(
                 child: ListTile(
-                  title:
-                      Text(e.title, style: Theme.of(context).textTheme.caption),
+                  title: Text(e.title,
+                      style: Theme.of(context).textTheme.bodySmall),
                   subtitle: e.descriptionWidget ??
                       Text(
                         e.description ?? "",

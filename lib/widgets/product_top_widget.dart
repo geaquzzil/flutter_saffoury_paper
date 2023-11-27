@@ -22,7 +22,7 @@ class ProductTopWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge;
-    TextStyle? descriptionStyle = Theme.of(context).textTheme.caption;
+    TextStyle? descriptionStyle = Theme.of(context).textTheme.bodySmall;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,8 +99,8 @@ class ProductTopWidget extends StatelessWidget {
       children: tile
           .map((e) => Expanded(
                 child: ListTile(
-                  title:
-                      Text(e.title, style: Theme.of(context).textTheme.caption),
+                  title: Text(e.title,
+                      style: Theme.of(context).textTheme.bodySmall),
                   subtitle: e.descriptionWidget ??
                       Text(
                         e.description ?? "",
