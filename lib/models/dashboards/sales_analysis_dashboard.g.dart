@@ -10,7 +10,6 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
         Map<String, dynamic> json) =>
     SalesAnalysisDashboard()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..date = json['date'] == null
           ? null
           : DateObject.fromJson(json['date'] as Map<String, dynamic>)

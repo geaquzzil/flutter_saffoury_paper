@@ -8,7 +8,6 @@ part of 'warehouse.dart';
 
 Warehouse _$WarehouseFromJson(Map<String, dynamic> json) => Warehouse()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..name = BaseWithNameString.intFromString(json['name']);
 
 Map<String, dynamic> _$WarehouseToJson(Warehouse instance) => <String, dynamic>{

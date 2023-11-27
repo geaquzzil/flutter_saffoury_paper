@@ -9,7 +9,6 @@ part of 'products_color.dart';
 ProductsColor _$ProductsColorFromJson(Map<String, dynamic> json) =>
     ProductsColor()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..top = json['top'] as String?
       ..middle = json['middle'] as String?
       ..back = json['back'] as String?;

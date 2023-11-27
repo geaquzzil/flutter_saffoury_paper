@@ -9,7 +9,6 @@ part of 'server_data_api.dart';
 FilterableDataApi _$FilterableDataApiFromJson(Map<String, dynamic> json) =>
     FilterableDataApi()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..products_types = (json['products_types'] as List<dynamic>?)
           ?.map((e) => ProductType.fromJson(e as Map<String, dynamic>))
           .toList()

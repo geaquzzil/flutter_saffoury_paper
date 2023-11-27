@@ -9,7 +9,6 @@ part of 'purchasers_refunds.dart';
 PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
     PurchasesRefund()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -98,7 +97,6 @@ PurchasesRefundDetails _$PurchasesRefundDetailsFromJson(
         Map<String, dynamic> json) =>
     PurchasesRefundDetails()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

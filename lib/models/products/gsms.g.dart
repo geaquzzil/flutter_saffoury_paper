@@ -8,7 +8,6 @@ part of 'gsms.dart';
 
 GSM _$GSMFromJson(Map<String, dynamic> json) => GSM()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..gsm = json['gsm'] as int?
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

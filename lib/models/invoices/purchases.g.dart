@@ -8,7 +8,6 @@ part of 'purchases.dart';
 
 Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
@@ -90,7 +89,6 @@ const _$InvoiceStatusEnumMap = {
 PurchasesDetails _$PurchasesDetailsFromJson(Map<String, dynamic> json) =>
     PurchasesDetails()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

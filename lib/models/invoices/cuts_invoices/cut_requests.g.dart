@@ -8,7 +8,6 @@ part of 'cut_requests.dart';
 
 CutRequest _$CutRequestFromJson(Map<String, dynamic> json) => CutRequest()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..date = json['date'] as String?
   ..comments = json['comments'] as String?
   ..quantity = (json['quantity'] as num?)?.toDouble()

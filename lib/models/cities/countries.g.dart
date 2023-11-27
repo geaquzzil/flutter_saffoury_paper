@@ -8,7 +8,6 @@ part of 'countries.dart';
 
 Country _$CountryFromJson(Map<String, dynamic> json) => Country()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..name = BaseWithNameString.intFromString(json['name']);
 
 Map<String, dynamic> _$CountryToJson(Country instance) => <String, dynamic>{

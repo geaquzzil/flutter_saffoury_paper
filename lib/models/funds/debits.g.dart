@@ -8,7 +8,6 @@ part of 'debits.dart';
 
 Debits _$DebitsFromJson(Map<String, dynamic> json) => Debits()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
   ..date = json['date'] as String?

@@ -8,7 +8,6 @@ part of 'print_invoice.dart';
 
 PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..printerOptions = json['printerOptions'] == null
       ? null
       : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)

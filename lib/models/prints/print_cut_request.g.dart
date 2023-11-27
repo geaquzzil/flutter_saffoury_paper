@@ -9,7 +9,6 @@ part of 'print_cut_request.dart';
 PrintCutRequest _$PrintCutRequestFromJson(Map<String, dynamic> json) =>
     PrintCutRequest()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..printerOptions = json['printerOptions'] == null
           ? null
           : PrinterOptions.fromJson(

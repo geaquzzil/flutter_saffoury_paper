@@ -12,7 +12,6 @@ ProductPrintObject _$ProductPrintObjectFromJson(Map<String, dynamic> json) =>
       GSM.fromJson(json['gsm'] as Map<String, dynamic>),
     )
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..description = json['description'] as String
       ..comments = json['comments'] as String
       ..customer = json['customer'] as String

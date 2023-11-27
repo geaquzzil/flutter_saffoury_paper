@@ -9,7 +9,6 @@ part of 'reservation_invoice.dart';
 ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
     ReservationInvoice()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -92,7 +91,6 @@ ReservationInvoiceDetails _$ReservationInvoiceDetailsFromJson(
         Map<String, dynamic> json) =>
     ReservationInvoiceDetails()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

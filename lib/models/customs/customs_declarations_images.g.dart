@@ -10,7 +10,6 @@ CustomsDeclarationImages _$CustomsDeclarationImagesFromJson(
         Map<String, dynamic> json) =>
     CustomsDeclarationImages()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..image = json['image'] as String?
       ..comments = json['comments'] as String?
       ..customs_declarations = json['customs_declarations'] == null

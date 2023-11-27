@@ -9,7 +9,6 @@ part of 'print_product_list.dart';
 PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
     PrintProductList()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..printerOptions = json['printerOptions'] == null
           ? null
           : PrinterOptions.fromJson(

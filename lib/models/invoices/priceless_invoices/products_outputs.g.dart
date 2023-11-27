@@ -9,7 +9,6 @@ part of 'products_outputs.dart';
 ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -94,7 +93,6 @@ ProductOutputDetails _$ProductOutputDetailsFromJson(
         Map<String, dynamic> json) =>
     ProductOutputDetails()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

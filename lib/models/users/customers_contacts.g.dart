@@ -9,7 +9,6 @@ part of 'customers_contacts.dart';
 CustomerContacts _$CustomerContactsFromJson(Map<String, dynamic> json) =>
     CustomerContacts()
       ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
       ..customers = json['customers'] == null
           ? null
           : Customer.fromJson(json['customers'] as Map<String, dynamic>)

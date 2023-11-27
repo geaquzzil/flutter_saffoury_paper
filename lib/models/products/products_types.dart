@@ -37,6 +37,7 @@ class ProductType extends ViewAbstract<ProductType>
   List<Product>? products;
   int? products_count;
 
+  @JsonKey(includeToJson: true, includeFromJson: false)
   bool requestAvailablity = false;
   ProductType() : super();
   @override

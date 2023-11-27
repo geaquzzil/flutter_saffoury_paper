@@ -8,7 +8,6 @@ part of 'grades.dart';
 
 Grades _$GradesFromJson(Map<String, dynamic> json) => Grades()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..name = BaseWithNameString.intFromString(json['name'])
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

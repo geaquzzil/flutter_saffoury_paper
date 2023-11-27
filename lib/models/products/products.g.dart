@@ -8,7 +8,6 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
   ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
   ..date = json['date'] as String?
   ..sheets = json['sheets'] as int?
