@@ -22,7 +22,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
       required this.icon,
       required this.onSelected})
       : super(key: key) {
-    list.insert(0, null);
+    //todo  list.insert(0, null);
   }
 
   @override

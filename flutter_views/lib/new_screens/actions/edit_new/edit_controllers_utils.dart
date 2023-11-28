@@ -464,7 +464,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
                 .call(s);
           },
           itemBuilder: (context, continent) {
-            return ListTile(title: Text(continent));
+            return ListTile(title: Text(continent??"-"));
           },
           hideOnLoading: false,
           errorBuilder: (context, error) => const CircularProgressIndicator(),

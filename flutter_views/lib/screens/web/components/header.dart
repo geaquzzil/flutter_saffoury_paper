@@ -120,66 +120,64 @@ class HeaderRow extends StatelessWidget {
     var headerItems = getHeaderItems(context);
     return ResponsiveVisibility(
       visible: false,
-      visibleConditions: [Condition.largerThan(name: MOBILE, value: 450)],
+      visibleConditions: [Condition.largerThan(name: MOBILE, value: true)],
       // visibleWhen: const [
       //   Condition.largerThan(name: MOBILE),
       // ],
       child: Row(children: [
-        ...headerItems
-            .map(
-              (item) => item.isButton
-                  ? MouseRegion(
-                      // onExit: (event) => Navigator.of(context).pop(),
-                      onHover: (event) {
-                        showMenus(context);
-                      },
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                        key: menuKey,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 5.0),
-                        child: TextButton(
-                          // onPressed: () {},
-                          onPressed: () => item.onClick?.call(),
-                          child: Text(item.title.toUpperCase(),
-                              style: Theme.of(context).textTheme.titleSmall
-                              // const TextStyle(
-                              //   // color: Colors.white,
-                              //   fontSize: 13.0,
-                              //   fontWeight: FontWeight.bold,
-                              // ),
-                              ),
-                        ),
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        debugPrint("onTap onHoverWidget");
-                        item.onClick?.call();
-                      },
-                      child: OnHoverWidget(
-                        scale: false,
-                        builder: (isHovered) => Container(
-                          margin: const EdgeInsets.only(right: 30.0),
-                          child: Text(item.title.toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                      color: isHovered ||
-                                              selectedHeader.toLowerCase() ==
-                                                  item.title.toLowerCase()
-                                          ? kAccentColor
-                                          : null)),
-                        ),
-                      ),
+        ...headerItems.map(
+          (item) => item.isButton
+              ? MouseRegion(
+                  // onExit: (event) => Navigator.of(context).pop(),
+                  onHover: (event) {
+                    showMenus(context);
+                  },
+                  cursor: SystemMouseCursors.click,
+                  child: Container(
+                    key: menuKey,
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-            )
-            .toList(),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 5.0),
+                    child: TextButton(
+                      // onPressed: () {},
+                      onPressed: () => item.onClick?.call(),
+                      child: Text(item.title.toUpperCase(),
+                          style: Theme.of(context).textTheme.titleSmall
+                          // const TextStyle(
+                          //   // color: Colors.white,
+                          //   fontSize: 13.0,
+                          //   fontWeight: FontWeight.bold,
+                          // ),
+                          ),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    debugPrint("onTap onHoverWidget");
+                    item.onClick?.call();
+                  },
+                  child: OnHoverWidget(
+                    scale: false,
+                    builder: (isHovered) => Container(
+                      margin: const EdgeInsets.only(right: 30.0),
+                      child: Text(item.title.toUpperCase(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                  color: isHovered ||
+                                          selectedHeader.toLowerCase() ==
+                                              item.title.toLowerCase()
+                                      ? kAccentColor
+                                      : null)),
+                    ),
+                  ),
+                ),
+        ),
         // AnimSearchBar(
         //   textFieldIconColor: Colors.black,
         //   // color: Theme.of(context).scaffoldBackgroundColor,
