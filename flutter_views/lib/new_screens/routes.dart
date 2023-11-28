@@ -104,7 +104,7 @@ class RouteGenerator {
             return "Error";
           }
         }
-        return state.fullPath;
+        return null;
       },
       errorPageBuilder: (context, state) => MaterialPage(
         key: state.pageKey,
@@ -270,7 +270,6 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: BaseViewNewPage(
-                        
                         viewAbstract: state.extra as ViewAbstract,
                       ));
                 },
@@ -295,6 +294,7 @@ class RouteGenerator {
           path: "/print/:tableName/:id",
           pageBuilder: (context, state) {
             debugPrint("go route name=> $printRouteName");
+            debugPrint("go route name=> ${state.extra}");
             return MaterialPage(
                 key: state.pageKey,
                 child: PdfPage(
@@ -333,6 +333,10 @@ class RouteGenerator {
         if (addonRoutes != null) ...addonRoutes
       ],
     );
+  }
+
+  static dynamic getFromExtra(Map<String, dynamic> extra) {
+    // return ViewAbstract()..fromJsonViewAbstract(extra);
   }
 
   static Widget getErrorPage() {

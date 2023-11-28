@@ -183,4 +183,16 @@ class CustomerClinetGuide
     // TODO: implement getPrintableCustomPage
     throw UnimplementedError();
   }
+
+  @override
+  String? getPrintableWatermark() {
+    // TODO: implement getPrintableWatermark
+    throw UnimplementedError();
+  }
+
+  @override
+  material.Widget? getCustomFloatingActionWidget(
+      material.BuildContext context) {
+    return null;
+  }
 }

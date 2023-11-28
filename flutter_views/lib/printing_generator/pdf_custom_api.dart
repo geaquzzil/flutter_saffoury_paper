@@ -20,6 +20,7 @@ class PdfCustom<T extends PrintableCustomInterface,
   Future<pw.ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
     final ttf = pw.Font.ttf(pathToFile);
+    // PageTheme(theme: )
     return ThemeData.withFont(
         icons: ttf,
         base: await PdfGoogleFonts.tajawalRegular(),
@@ -43,16 +44,44 @@ class PdfCustom<T extends PrintableCustomInterface,
         pageMode: PdfPageMode.fullscreen,
         theme: myTheme);
     pdf.addPage(await getPage(format));
+
     return pdf.save();
   }
 
   Future<pw.Page> getPage(PdfPageFormat? format) async {
     List<Widget> body =
         await printObj.getPrintableCustomPage(context, format: format);
-    return Page(
-      pageFormat: format,
+    String? watermark = printObj.getPrintableWatermark();
+    dynamic pageTheme = PageTheme(
       margin: EdgeInsets.zero,
-      build: (context) => Column(children: body),
+      pageFormat: format,
+      buildBackground: watermark != null
+          ? (Context context) => FullPage(
+                ignoreMargins: true,
+                child: Watermark.text('SAFFOURY',
+                    fit: BoxFit.scaleDown,
+                    // angle: 0,
+                    style: TextStyle.defaultStyle().copyWith(
+                      fontSize: 80,
+                      color: PdfColors.grey200,
+                      fontWeight: FontWeight.bold,
+                    )),
+              )
+          : null,
+      // buildForeground: (Context context) => Align(
+      //   alignment: Alignment.bottomLeft,
+      //   child: SizedBox(
+      //     width: 100,
+      //     height: 100,
+      //     child: PdfLogo(),
+      //   ),
+      // ),
     );
+
+    return Page(
+        pageTheme: pageTheme,
+        // pageFormat: format,
+        // margin: EdgeInsets.zero,
+        build: (context) => Column(children: body));
   }
 }

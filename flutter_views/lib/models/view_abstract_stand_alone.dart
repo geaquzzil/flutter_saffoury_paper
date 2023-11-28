@@ -15,7 +15,7 @@ abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
 
   Widget getCustomStandAloneWidget(BuildContext context);
   List<Widget>? getCustomeStandAloneSideWidget(BuildContext context);
-
+  Widget? getCustomFloatingActionWidget(BuildContext context);
   @override
   Map<String, IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap

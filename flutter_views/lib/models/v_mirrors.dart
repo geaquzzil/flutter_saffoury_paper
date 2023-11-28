@@ -43,6 +43,9 @@ abstract class VMirrors<T> {
   dynamic getFieldValue(String field, {BuildContext? context}) {
     try {
       dynamic value = getInstanceMirror().invokeGetter(field);
+      // if (value == null) {
+      //   return getMirrorFieldsMapNewInstance()[field];
+      // }
       return value;
     } catch (e) {
       debugPrint("getFieldValue $e");
@@ -221,5 +224,4 @@ abstract class VMirrors<T> {
   //   }
   //   return classMirror?.newInstance("", []) as ViewAbstract?;
   // }
-
 }

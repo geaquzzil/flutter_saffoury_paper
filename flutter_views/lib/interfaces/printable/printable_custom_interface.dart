@@ -12,6 +12,8 @@ abstract class PrintableCustomInterface<T extends PrintLocalSetting>
       {PdfPageFormat? format, T? setting});
   Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
       {PdfPageFormat? format, T? setting});
+
+  String? getPrintableWatermark();
 }
 
 abstract class PrintableCustomFromPDFInterface<T extends PrintLocalSetting>

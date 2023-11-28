@@ -159,7 +159,7 @@ class Product extends ViewAbstract<Product>
   int? transfers_details_count;
 
   @override
-Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
         "date": "",
         "sheets": 0,
@@ -1036,6 +1036,11 @@ Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
   // null;
 
   @override
+  String? getPrintableWatermark() {
+    return "SAFFOURY";
+  }
+
+  @override
   Future<pdfWidget.Widget?>? getPrintableCustomHeader(BuildContext context,
           {pdf.PdfPageFormat? format, PrintProduct? setting}) =>
       null;
@@ -1047,11 +1052,19 @@ Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
     debugPrint("getPrintableCustomPage generating");
     return [
       pdfWidget.Stack(
-          alignment: pdfWidget.Alignment.bottomRight,
-          fit: pdfWidget.StackFit.loose,
-          // alignment: ,
-          children: [header, buildTitle(context, this)]),
-      ProductLabelPDF(context, this).generate()
+        alignment: pdfWidget.Alignment.bottomRight,
+        fit: pdfWidget.StackFit.loose,
+        // alignment: ,
+        children: [
+          header,
+          // pdfWidget.Watermark.text("tessssssssssssssssssssssssst",
+          //     fit: pdfWidget.BoxFit.fill),
+          buildTitle(context, this),
+        ],
+      ),
+      // pdfWidget.Watermark.text("tessssssssssssssssssssssssst"),
+      ProductLabelPDF(context, this).generate(),
+
       //  Row(
       // crossAxisAlignment: CrossAxisAlignment.start,
       // mainAxisAlignment: MainAxisAlignment.start,
@@ -1062,10 +1075,9 @@ Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
     ];
   }
 
-  Future<
-      pdfWidget
-          .Widget> buildHeader() async => pdfWidget.Image(await networkImage(
-      'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor(null)}&darkColor=${getPrintableSecondaryColor(null)}'));
+  Future<pdfWidget.Widget> buildHeader() async =>
+      pdfWidget.Image(await networkImage(
+          'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor(null)}&darkColor=${getPrintableSecondaryColor(null)}'));
 
   @override
   String getPrintableInvoiceTitle(BuildContext context, PrintProduct? pca) {

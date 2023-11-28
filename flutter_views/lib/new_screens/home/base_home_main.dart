@@ -77,8 +77,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               drawer: DrawerLargeScreens(),
               endDrawer: const BaseHomeCartPage(),
               appBar: getAppBar(),
-              
-              // floatingActionButton: ,
+              floatingActionButton:
+                  value.getCustomFloatingActionWidget(context),
               body: shouldWrapNavigatorChild(
                   context, MasterViewStandAlone(viewAbstract: value)));
         } else {

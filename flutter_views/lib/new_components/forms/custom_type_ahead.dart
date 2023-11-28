@@ -331,23 +331,23 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
 
   /// Creates text field that auto-completes user input from a list of items
   FormBuilderTypeAheadCustom({
-    Key? key,
+    super.key,
     //From Super
-    AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
-    bool enabled = true,
-    FocusNode? focusNode,
-    FormFieldSetter<T>? onSaved,
+    AutovalidateMode super.autovalidateMode = AutovalidateMode.disabled,
+    super.enabled,
+    super.focusNode,
+    super.onSaved,
     required super.validator,
     required this.onChangeGetObject,
     InputDecoration decoration = const InputDecoration(),
-    required String name,
+    required super.name,
     required this.itemBuilder,
     required this.suggestionsCallback,
     this.onTap,
-    T? initialValue,
-    ValueChanged<T?>? onChanged,
-    ValueTransformer<T?>? valueTransformer,
-    VoidCallback? onReset,
+    super.initialValue,
+    super.onChanged,
+    super.valueTransformer,
+    super.onReset,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationStart = 0.25,
     this.autoFlipDirection = false,
@@ -381,18 +381,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   })  : assert(T == String || selectionToTextTransformer != null),
         assert(maxLength == null || maxLength > 0),
         super(
-          key: key,
-          initialValue: initialValue,
-          name: name,
-          valueTransformer: valueTransformer,
-          onChanged: onChanged,
-          autovalidateMode: autovalidateMode,
-          onSaved: onSaved,
-          enabled: enabled,
-          onReset: onReset,
-          
-          // decoration: decoration,
-          focusNode: focusNode,
           builder: (FormFieldState<T?> field) {
             final state = field as FormBuilderTypeAheadState<T>;
             final theme = Theme.of(state.context);
@@ -417,8 +405,8 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                   state.didChange(onChangeGetObject(val));
                 },
                 focusNode: state.effectiveFocusNode,
-                
-                // decoration: state.decoration,
+
+                decoration: decoration,
               ),
               // TODO HACK to satisfy strictness
               suggestionsCallback: suggestionsCallback,

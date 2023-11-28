@@ -457,14 +457,14 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
           inputFormatters: viewAbstract.getTextInputFormatter(field),
           autovalidateMode: AutovalidateMode.always,
           validator: (s) {
-            debugPrint(
-                "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
+            // debugPrint(
+            //     "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
             return viewAbstract
-                .getTextInputValidatorCompose(context, field)
+                .getTextInputValidatorCompose<String?>(context, field)
                 .call(s);
           },
           itemBuilder: (context, continent) {
-            return ListTile(title: Text(continent??"-"));
+            return ListTile(title: Text(continent ?? "-"));
           },
           hideOnLoading: false,
           errorBuilder: (context, error) => const CircularProgressIndicator(),

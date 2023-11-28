@@ -261,4 +261,9 @@ class CustomerBalanceList
     //   ),
     // );
   }
+
+  @override
+  Widget? getCustomFloatingActionWidget(BuildContext context) {
+    return null;
+  }
 }

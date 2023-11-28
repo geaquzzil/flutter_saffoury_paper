@@ -175,7 +175,11 @@ abstract class ViewAbstractInputAndValidater<T>
       if (getTextInputType(field) == TextInputType.phone)
         FormBuilderValidators.equalLength(10),
       if (getTextInputType(field) == TextInputType.emailAddress && "" is E)
-        FormBuilderValidators.email() as String? Function(E?),
+        FormBuilderValidators.match(
+                r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$',
+                errorText:
+                    "Email should contain upper,lower,digit and Special character")
+            as String? Function(E?),
       if (getTextInputType(field) == TextInputType.visiblePassword && "" is E)
         FormBuilderValidators.match(
                 r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',

@@ -20,6 +20,7 @@ class ProductLabelPDF {
         //     border: Border.all(color: PdfColors.black, width: 2),
         //     borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Column(children: [
+          // Watermark(child: Text("SDA")),
           build1th(),
           build2th(),
           build3thWithQr(),

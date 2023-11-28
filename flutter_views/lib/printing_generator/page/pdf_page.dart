@@ -42,11 +42,11 @@ class PdfPage<T extends PrintLocalSetting> extends BasePdfPage {
   PrintableMaster<T>? invoiceObj;
 
   PdfPage(
-      {Key? key,
+      {super.key,
       required this.invoiceObj,
       required this.iD,
       required this.tableName})
-      : super(key: key, title: "test");
+      : super(title: "test");
 
   @override
   _PdfPageState<T> createState() => _PdfPageState<T>();

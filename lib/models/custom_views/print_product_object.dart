@@ -32,12 +32,12 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   List<String> getMainFields({BuildContext? context}) {
     return [
       "description",
-      "size",
-      "comments",
       "customer",
+      "size",
       "gsm",
       "quantity",
-      "sheets"
+      "sheets",
+      "comments",
     ];
   }
 
@@ -59,6 +59,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
+        "description": Icons.abc,
         "date": Icons.date_range,
         "sheets": Icons.line_weight_outlined,
         "comments": Icons.notes,
@@ -89,11 +90,12 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "description": AppLocalizations.of(context)!.product_type,
         'date': AppLocalizations.of(context)!.date,
         "barcode": AppLocalizations.of(context)!.barcode,
         "customer": AppLocalizations.of(context)!.customer,
         "quantity": AppLocalizations.of(context)!.quantity,
-        "sheets": AppLocalizations.of(context)!.sheets,
+        "sheets": AppLocalizations.of(context)!.totalSheetNumberByReams,
         "comments": AppLocalizations.of(context)!.comments,
       };
 
@@ -134,6 +136,15 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   SortByType getSortByType() {
     return SortByType.DESC;
   }
+//  return FloatingActionButton(
+//         heroTag: UniqueKey(),
+//         child: const Icon(Icons.print),
+//         onPressed: () async => await Printing.layoutPdf(
+//             onLayout: (PdfPageFormat format) async => loadedFile));
+//   FloatingActionButton.small(
+//         heroTag: UniqueKey(),
+//         child: const Icon(Icons.share),
+//         onPressed: () async => await Printing.sharePdf(bytes: loadedFileBytes));
 
   @override
   String? getTableNameApi() => null;

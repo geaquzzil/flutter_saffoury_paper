@@ -281,4 +281,9 @@ class CustomerByEmployeeAnanlysis
       BuildContext context, ValueNotifier valueNotifier) {
     return null;
   }
+
+  @override
+  Widget? getCustomFloatingActionWidget(BuildContext context) {
+    return null;
+  }
 }

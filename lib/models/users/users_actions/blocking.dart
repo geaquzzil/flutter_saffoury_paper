@@ -101,6 +101,11 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   List<Widget>? getCustomeStandAloneSideWidget(BuildContext context) => null;
+
+  @override
+  Widget? getCustomFloatingActionWidget(BuildContext context) {
+    return null;
+  }
 }
 
 const _$BlockMood = {
