@@ -9,6 +9,7 @@ import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'print_product_object.g.dart';
@@ -55,6 +56,20 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   @override
   ProductPrintObject fromJsonViewAbstract(Map<String, dynamic> json) {
     return ProductPrintObject.fromJson(json);
+  }
+
+  @override
+  bool getIsSubViewAbstractIsExpanded(String fieled) {
+    if (fieled == "size" || fieled == "gsm") return true;
+    return super.getIsSubViewAbstractIsExpanded(fieled);
+  }
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    // if (field == "gsm") {
+    //   return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
+    // }
+    return super.getInputType(field);
   }
 
   @override

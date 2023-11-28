@@ -93,7 +93,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       return;
     }
     context.pushNamed(viewRouteName,
-        pathParameters : {"tableName": getTableNameApi() ?? "", "id": iD.toString()},
+        pathParameters: {
+          "tableName": getTableNameApi() ?? "",
+          "id": iD.toString()
+        },
         extra: this);
   }
 
@@ -108,7 +111,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       return;
     } else {
       context.goNamed(editRouteName,
-          pathParameters : {"tableName": getTableNameApi()!, "id": "$iD"},
+          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
           extra: (this as ViewAbstract).getSelfNewInstance());
     }
   }
@@ -132,6 +135,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       title: getMainLabelText(context),
       onTap: () => onDrawerItemClicked(context),
     );
+  }
+
+  bool getIsSubViewAbstractIsExpanded(String fieled) {
+    return false;
   }
 
   // for adding drawer headers

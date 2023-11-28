@@ -26,7 +26,7 @@ class ExpansionTileCustom extends StatefulWidget {
   bool isDeleteButtonClicked;
   void Function()? onTap;
   ExpansionTileCustom(
-      {Key? key,
+      {super.key,
       this.title,
       this.leading,
       this.subtitle,
@@ -39,8 +39,7 @@ class ExpansionTileCustom extends StatefulWidget {
       this.initiallyExpanded = false,
       this.isEnabled = true,
       this.hasError,
-      this.canExpand})
-      : super(key: key);
+      this.canExpand});
 
   @override
   State<ExpansionTileCustom> createState() => EditSubViewAbstractHeaderState();

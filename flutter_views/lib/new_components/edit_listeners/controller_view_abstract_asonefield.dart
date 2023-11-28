@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
-import 'package:flutter_view_controller/size_config.dart';
 
 class ControllerViewAbstractAsOneField extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -16,13 +10,13 @@ class ControllerViewAbstractAsOneField extends StatefulWidget {
   bool wrapWithCardOrOutlineCard;
   bool padding;
   ControllerViewAbstractAsOneField({
-    Key? key,
+    super.key,
     required this.viewAbstract,
     required this.parent,
     this.wrapWithCardOrOutlineCard = true,
     required this.children,
     this.padding = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ControllerViewAbstractAsOneField> createState() =>

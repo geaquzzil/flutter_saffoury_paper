@@ -52,7 +52,7 @@ class BaseEditWidget extends StatelessWidget {
   bool requireOnValidateEvenIfNull;
   bool disableCheckEnableFromParent;
   BaseEditWidget(
-      {Key? key,
+      {super.key,
       this.isStandAloneField = false,
       required this.viewAbstract,
       required this.isTheFirst,
@@ -60,8 +60,7 @@ class BaseEditWidget extends StatelessWidget {
       this.disableCheckEnableFromParent = false,
       this.requireOnValidateEvenIfNull = false,
       this.isRequiredSubViewAbstract = true,
-      this.onValidate})
-      : super(key: key);
+      this.onValidate});
   void init(BuildContext context) {
     formKey = formKey ?? GlobalKey<FormBuilderState>();
     keyExpansionTile = GlobalKey<EditSubViewAbstractHeaderState>(
@@ -237,7 +236,8 @@ class BaseEditWidget extends StatelessWidget {
         padding: false,
         useLeadingOutSideCard: SizeConfig.isSoLargeScreen(context),
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
-        // initiallyExpanded: !viewAbstract.isNull,
+        initiallyExpanded: viewAbstract.getIsSubViewAbstractIsExpanded(
+            viewAbstract.getFieldNameFromParent ?? ""),
         // isExpanded: false,
         isDeleteButtonClicked: viewAbstract.isNullTriggerd,
         hasError: hasError(context),
@@ -353,22 +353,18 @@ class BaseEditWidget extends StatelessWidget {
     // }, childCount: fields.length));
     var child = <Widget>[
       const SizedBox(height: kDefaultPadding),
-      ...fields.map((e) => getControllerWidget(context, e)).toList(),
-      ...groupedFields.entries
-          .map((e) => ExpansionTileCustom(
-              canExpand: () => true,
-              hasError: hasErrorGroupWidget(context, e.value),
-              title: Text(e.key.label),
-              leading: Icon(e.key.icon),
-              children:
-                  e.value.map((e) => getControllerWidget(context, e)).toList()))
-          .toList(),
-      ...groupedHorizontalFields.entries
-          .map((e) => Row(
-              children: e.value
-                  .map((e) => Expanded(child: getControllerWidget(context, e)))
-                  .toList()))
-          .toList(),
+      ...fields.map((e) => getControllerWidget(context, e)),
+      ...groupedFields.entries.map((e) => ExpansionTileCustom(
+          canExpand: () => true,
+          hasError: hasErrorGroupWidget(context, e.value),
+          title: Text(e.key.label),
+          leading: Icon(e.key.icon),
+          children:
+              e.value.map((e) => getControllerWidget(context, e)).toList())),
+      ...groupedHorizontalFields.entries.map((e) => Row(
+          children: e.value
+              .map((e) => Expanded(child: getControllerWidget(context, e)))
+              .toList())),
     ];
     return Column(
       children: child,
@@ -572,9 +568,7 @@ class BaseEditWidget extends StatelessWidget {
 
 class ViewAbstractChangeProvider with ChangeNotifier {
   late ViewAbstract viewAbstract;
-  ViewAbstractChangeProvider.init(ViewAbstract viewAbstract) {
-    this.viewAbstract = viewAbstract;
-  }
+  ViewAbstractChangeProvider.init(this.viewAbstract);
   void change(ViewAbstract view) {
     viewAbstract = view;
     notifyListeners();
