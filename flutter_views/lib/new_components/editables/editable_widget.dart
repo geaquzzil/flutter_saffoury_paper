@@ -139,8 +139,9 @@ class _EditableWidget extends State<EditableWidget> {
     controllers[field] = TextEditingController();
     controllers[field]!.text = value;
     controllers[field]!.addListener(() {
-      widget.viewAbstract
-          .onTextChangeListener(context, field, controllers[field]!.text);
+      widget.viewAbstract.onTextChangeListener(
+          context, field, controllers[field]!.text,
+          formKey: _formKey);
       // modifieController(field);
     });
     widget.viewAbstract.addTextFieldController(field, controllers[field]!);
@@ -182,7 +183,8 @@ class _EditableWidget extends State<EditableWidget> {
             focusNode: getFocusNode(field: fieldName),
             controller: getController(
                 field: fieldName,
-                value: widget.viewAbstract.getFieldValue(fieldName,context:  context)),
+                value: widget.viewAbstract
+                    .getFieldValue(fieldName, context: context)),
             valueTransformer: (value) {
               return value?.trim();
             },

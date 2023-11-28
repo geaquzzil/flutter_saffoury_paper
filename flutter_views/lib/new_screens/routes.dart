@@ -104,7 +104,7 @@ class RouteGenerator {
             return "Error";
           }
         }
-        return "/";
+        return state.fullPath;
       },
       errorPageBuilder: (context, state) => MaterialPage(
         key: state.pageKey,
@@ -270,6 +270,7 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: BaseViewNewPage(
+                        
                         viewAbstract: state.extra as ViewAbstract,
                       ));
                 },
@@ -293,6 +294,7 @@ class RouteGenerator {
           name: printRouteName,
           path: "/print/:tableName/:id",
           pageBuilder: (context, state) {
+            debugPrint("go route name=> $printRouteName");
             return MaterialPage(
                 key: state.pageKey,
                 child: PdfPage(

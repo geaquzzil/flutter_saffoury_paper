@@ -128,7 +128,8 @@ class BaseEditWidgetSliver extends StatelessWidget {
     controllers[field]!.text = value;
     controllers[field]!.addListener(() {
       viewAbstract.onTextChangeListener(
-          context, field, controllers[field]!.text);
+          context, field, controllers[field]!.text,
+          formKey: _formKey);
       bool? validate =
           _formKey.currentState!.fields[viewAbstract.getTag(field)]?.validate();
       if (validate ?? false) {

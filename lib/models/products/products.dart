@@ -159,7 +159,7 @@ class Product extends ViewAbstract<Product>
   int? transfers_details_count;
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
         "date": "",
         "sheets": 0,

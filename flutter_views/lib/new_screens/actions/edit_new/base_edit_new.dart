@@ -181,7 +181,8 @@ class BaseEditWidget extends StatelessWidget {
     controllers[field]!.text = value;
     controllers[field]!.addListener(() {
       viewAbstract.onTextChangeListener(
-          context, field, controllers[field]!.text);
+          context, field, controllers[field]!.text,
+          formKey: formKey);
       bool? validate =
           formKey?.currentState!.fields[viewAbstract.getTag(field)]?.validate();
       if (validate ?? false) {
@@ -463,7 +464,6 @@ class BaseEditWidget extends StatelessWidget {
             requiredSpace: true);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_API) {
-        
         return wrapController(
             EditControllerDropdownFromViewAbstract(
                 formKey: formKey,

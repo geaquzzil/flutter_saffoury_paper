@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -273,21 +274,46 @@ abstract class ViewAbstractInputAndValidater<T>
     // setFieldValue(field, value);
   }
 
-  void notifyOtherControllers(
-      {required BuildContext context, GlobalKey<FormBuilderState>? formKey}) {
-    formKey?.currentState?.fields.forEach((key, value) {
-      debugPrint("notifyOtherControllers  formKey $key => $key");
-      if (value.widget is FormBuilderDropdown) {
-        if ((value.widget as FormBuilderDropdown).onReset != null) {
-          (value.widget as FormBuilderDropdown).onReset!();
-        } else {
-          debugPrint(
-              "notifyOtherControllers  onReset not implemented $key => $key");
-        }
+  void _notifyController(FormBuilderFieldState? v, String field) {
+    if (v == null) {
+      debugPrint("_notifyController FormBuilderFieldState  is null");
+      return;
+    }
+    if (v.widget is FormBuilderDropdown) {
+      debugPrint("_notifyController =====> FormBuilderDropdown");
+      if ((v.widget as FormBuilderDropdown).onReset != null) {
+        (v.widget as FormBuilderDropdown).onReset!();
       } else {
-        debugPrint("notifyOtherControllers not supported yet");
+        debugPrint(
+            "notifyOtherControllers  onReset not implemented ${v.widget.name}");
       }
-    });
+    } else if (v.widget is FormBuilderTextField) {
+      // v.widget.
+
+      debugPrint("_notifyController =====> FormBuilderTextField");
+      setTextFieldControllerValue(field, getFieldValue(field));
+    } else if (v.widget is FormBuilderTypeAheadCustom) {
+      debugPrint("_notifyController =====> FormBuilderTypeAheadCustom");
+      setTextFieldControllerValue(field, getFieldValue(field));
+    } else {
+      debugPrint("notifyOtherControllers ${v.widget.name} not supported yet");
+    }
+  }
+
+  void notifyOtherControllers(
+      {required BuildContext context,
+      GlobalKey<FormBuilderState>? formKey,
+      String? notifySpecificField}) {
+    if (notifySpecificField != null) {
+      FormBuilderFieldState? f =
+          formKey?.currentState?.fields[notifySpecificField];
+      _notifyController(f, notifySpecificField);
+    } else {
+      formKey?.currentState?.fields.forEach((key, value) {
+        debugPrint("notifyOtherControllers  formKey $key");
+        _notifyController(value, key);
+      });
+    }
   }
 
   List<dynamic> getMultiChipInitalValue(
@@ -310,7 +336,8 @@ abstract class ViewAbstractInputAndValidater<T>
 
   void onCheckBoxChanged(BuildContext context, String field, dynamic value) {}
 
-  void onTextChangeListener(BuildContext context, String field, String? value) {
+  void onTextChangeListener(BuildContext context, String field, String? value,
+      {GlobalKey<FormBuilderState>? formKey}) {
     debugPrint("onTextChangeListener for $T field=> $field value=> $value");
     // setFieldValue(field, value)
   }

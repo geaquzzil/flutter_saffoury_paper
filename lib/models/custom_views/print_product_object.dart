@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -40,6 +42,17 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   }
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "description": "",
+        "size": ProductSize(),
+        "comments": "",
+        "customer": "",
+        "gsm": GSM(),
+        "quantity": 0.0,
+        "sheets": 0.0
+      };
+
+  @override
   ProductPrintObject fromJsonViewAbstract(Map<String, dynamic> json) {
     return ProductPrintObject.fromJson(json);
   }
@@ -47,9 +60,32 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   @override
   Map<String, IconData> getFieldIconDataMap() => {
         "date": Icons.date_range,
-        "sheets": Icons.view_comfortable_outlined,
+        "sheets": Icons.line_weight_outlined,
         "comments": Icons.notes,
+        "customer": Icons.account_circle,
+        "quantity": Icons.scale
       };
+
+  @override
+  void onTextChangeListener(BuildContext context, String field, String? value,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    super.onTextChangeListener(context, field, value);
+
+    if (field == "quantity") {
+      // setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
+
+      Product p = Product()
+        ..sizes = size
+        ..gsms = gsm;
+
+      sheets = p.getSheets(customQuantity: quantity);
+      debugPrint("sheets : $sheets");
+      setFieldValue("sheets", sheets);
+
+      notifyOtherControllers(
+          context: context, formKey: formKey, notifySpecificField: "sheets");
+    }
+  }
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
@@ -60,6 +96,11 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "sheets": AppLocalizations.of(context)!.sheets,
         "comments": AppLocalizations.of(context)!.comments,
       };
+
+  @override
+  bool isFieldEnabled(String field) {
+    return field != "sheets";
+  }
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;

@@ -221,7 +221,8 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  void onTextChangeListener(BuildContext context, String field, String? value) {
+  void onTextChangeListener(BuildContext context, String field, String? value,
+      {GlobalKey<FormBuilderState>? formKey}) {
     super.onTextChangeListener(context, field, value);
 
     setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
@@ -247,7 +248,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     //   case "price":
     //     unitPrice = unitPrice.toNonNullable() * quantity.toNonNullable();
     //     break;
-    //   case "quantity":
+  //   case "quantity":
     //     price = unitPrice.toNonNullable() * quantity.toNonNullable();
     //     break;
     // }

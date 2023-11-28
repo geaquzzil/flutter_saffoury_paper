@@ -70,7 +70,6 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return Selector<DrawerMenuControllerProvider,
         ViewAbstractStandAloneCustomViewApi?>(
       builder: (context, value, child) {
-        
         if (value != null) {
           // List<Widget>? fabs=value.();
           return Scaffold(
@@ -78,6 +77,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               drawer: DrawerLargeScreens(),
               endDrawer: const BaseHomeCartPage(),
               appBar: getAppBar(),
+              
               // floatingActionButton: ,
               body: shouldWrapNavigatorChild(
                   context, MasterViewStandAlone(viewAbstract: value)));

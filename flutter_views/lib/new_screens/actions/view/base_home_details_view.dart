@@ -64,7 +64,7 @@ class BaseSharedDetailsView extends StatelessWidget {
         }
         return AnimatedSwitcher(
           // key: UniqueKey(),
-          duration: Duration(milliseconds: 250),
+          duration: const Duration(milliseconds: 250),
           child: currentWidget,
         );
       },

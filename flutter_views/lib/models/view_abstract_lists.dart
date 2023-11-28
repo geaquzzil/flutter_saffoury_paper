@@ -357,10 +357,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       }
     }
     if (result.icon == Icons.print) {
-      debugPrint("onPopupMenuActionSelected $result");
+      debugPrint("onPopupMenuActionSelected  print $result");
+
       // if (SizeConfig.hasSecondScreen(context)) {
       //   context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
       //         invoiceObj: this as PrintableMaster,
+      //         iD: iD,
+      //         tableName: getTableNameApi(),
       //       ));
       //   return;
       // }
@@ -372,11 +375,13 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           extra: this);
       // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
+      debugPrint("onPopupMenuActionSelected  edit $result");
       // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
       context.goNamed(editRouteName,
           pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
           extra: (this as ViewAbstract).getCopyInstance());
     } else if (result.icon == Icons.view_agenda) {
+      debugPrint("onPopupMenuActionSelected  view_agenda $result");
       context.goNamed(viewRouteName,
           pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
           extra: this);

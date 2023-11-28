@@ -158,7 +158,8 @@ class _EditableTableWidget extends State<EditableTableWidget> {
     controllers[controllerKey]!.text = value;
     controllers[controllerKey]!.addListener(() {
       (widget.viewAbstract as ViewAbstract).onTextChangeListener(
-          context, field, controllers[controllerKey]!.text);
+          context, field, controllers[controllerKey]!.text,
+          formKey: _formKey);
       bool? validate = _formKey.currentState!
           .fields[(widget.viewAbstract as ViewAbstract).getTag(field)]
           ?.validate();
@@ -170,8 +171,8 @@ class _EditableTableWidget extends State<EditableTableWidget> {
       debugPrint("onTextChangeListener field=> $field validate=$validate");
       if (isAutoCompleteVA) {
         if (controllers[controllerKey]!.text ==
-            getEditControllerText(
-                (widget.viewAbstract as ViewAbstract).getFieldValue(field,context:  context))) {
+            getEditControllerText((widget.viewAbstract as ViewAbstract)
+                .getFieldValue(field, context: context))) {
           return;
         }
         //TODO viewAbstract =
@@ -197,7 +198,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
 
   Widget getControllerWidget(
       BuildContext context, ViewAbstract parent, String field, int idx) {
-    dynamic fieldValue = parent.getFieldValue(field,context:  context);
+    dynamic fieldValue = parent.getFieldValue(field, context: context);
     fieldValue ??= parent.getMirrorNewInstance(field);
     TextInputType? textInputType = parent.getTextInputType(field);
     ViewAbstractControllerInputType textFieldTypeVA =
@@ -281,7 +282,8 @@ class _EditableTableWidget extends State<EditableTableWidget> {
             .forEach((field, value) {
           if (key == field) {
             controllers[key]!.text = getEditControllerText(
-                (widget.viewAbstract as ViewAbstract).getFieldValue(field,context:  context));
+                (widget.viewAbstract as ViewAbstract)
+                    .getFieldValue(field, context: context));
           }
         });
       }
