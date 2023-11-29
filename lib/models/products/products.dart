@@ -1036,8 +1036,17 @@ class Product extends ViewAbstract<Product>
   // null;
 
   @override
-  String? getPrintableWatermark() {
-    return "SAFFOURY";
+  pdfWidget.Widget? getPrintableWatermark() {
+    return pdfWidget.FullPage(
+        ignoreMargins: true,
+        child: pdfWidget.Watermark.text('SAFFOURY\n',
+            fit: pdfWidget.BoxFit.scaleDown,
+            // angle: 0,
+            style: pdfWidget.TextStyle.defaultStyle().copyWith(
+              fontSize: 80,
+              color: pdf.PdfColors.grey200,
+              fontWeight: pdfWidget.FontWeight.bold,
+            )));
   }
 
   @override
@@ -1063,7 +1072,7 @@ class Product extends ViewAbstract<Product>
         ],
       ),
       // pdfWidget.Watermark.text("tessssssssssssssssssssssssst"),
-      ProductLabelPDF(context, this,setting: setting).generate(),
+      ProductLabelPDF(context, this, setting: setting).generate(),
 
       //  Row(
       // crossAxisAlignment: CrossAxisAlignment.start,

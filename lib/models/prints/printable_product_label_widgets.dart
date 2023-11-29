@@ -16,13 +16,11 @@ class ProductLabelPDF {
   Widget generate() {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        
+
         // decoration: BoxDecoration(
         //     border: Border.all(color: PdfColors.black, width: 2),
         //     borderRadius: BorderRadius.all(Radius.circular(20))),
-        child: Column(
-         
-          children: [
+        child: Column(children: [
           // Watermark(child: Text("SDA")),
           build1th(),
           build2th(),
@@ -73,16 +71,21 @@ class ProductLabelPDF {
   }
 
   Widget build3thWithQr() {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(flex: 2, child: Column(children: [build3th(), build4th()])),
-          Expanded(
-              flex: 1,
-              child: buildQrCode(context, product,
-                  withPaddingTop: false, size: 90))
-        ]);
+    return Container(
+        decoration: BoxDecoration(border: Border.all()),
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                  flex: 2, child: Column(children: [build3th(), build4th()])),
+              Expanded(
+                  flex: 1,
+                  child: buildQrCode(context, product,
+                      withPaddingTop: false,
+                      size: 90,
+                      printCommandAbstract: setting))
+            ]));
   }
 
   Widget build3th() {
@@ -92,14 +95,14 @@ class ProductLabelPDF {
           child: buildLabelAndText(AppLocalizations.of(context)!.quantity, "",
               isValueWidget: getRichSmall(
                   product.getQuantity().toCurrencyFormat(symbol: ""),
-                  " ${AppLocalizations.of(context)!.kg}"))),
+                  " ${product.getProductTypeUnit(context)}"))),
       Expanded(
           flex: 2,
           child: buildLabelAndText(
               AppLocalizations.of(context)!.weightPerSheet, "",
               isValueWidget: getRichSmall(
                   product.getSheetWeight().toCurrencyFormat(symbol: ""),
-                  " g"))),
+                  " ${AppLocalizations.of(context)!.gramSymbol}"))),
     ]);
   }
 
@@ -107,7 +110,7 @@ class ProductLabelPDF {
     return RichText(
       text: TextSpan(
         text: text,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
         children: <TextSpan>[
           TextSpan(
               text: small,
@@ -123,13 +126,13 @@ class ProductLabelPDF {
       Expanded(
           child: buildLabelAndText(
               AppLocalizations.of(context)!.sheetsInNotPrac,
-              product.getSheets().toStringAsFixed(0))),
+              product.getSheets().toCurrencyFormat())),
       Expanded(
           child: buildLabelAndText(AppLocalizations.of(context)!.sheetsPerReam,
-              product.sheets?.toString() ?? "-")),
+              product.sheets?.toCurrencyFormatChangeToDashIfZero() ?? "-")),
       Expanded(
           child: buildLabelAndText(AppLocalizations.of(context)!.reams,
-              product.getReams().toStringAsFixed(0))),
+              product.getReams().toCurrencyFormatChangeToDashIfZero())),
     ]);
   }
 

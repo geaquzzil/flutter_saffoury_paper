@@ -142,6 +142,7 @@ class PrintProductLabelCustomView
                   viewAbstractPrintObject as PrintableMaster,
                   pdf.PdfPageFormat.a4,
                   hasCustomSetting: PrintProduct()
+                    ..hideQrCode = true
                     ..customerName = customerName));
         });
   }

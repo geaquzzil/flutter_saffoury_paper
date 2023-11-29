@@ -22,6 +22,9 @@ Widget buildTitle<T extends PrintLocalSetting>(
 Widget buildQrCode<T extends PrintLocalSetting>(
     mt.BuildContext context, PrintableMaster printObj,
     {T? printCommandAbstract, bool withPaddingTop = true, double size = 80}) {
+  if ((printCommandAbstract?.hideQrCode ?? false)) {
+    return Column(children: [SizedBox(width: size, height: size)]);
+  }
   return Column(children: [
     SizedBox(
         width: size,

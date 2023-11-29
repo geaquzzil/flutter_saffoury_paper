@@ -315,10 +315,12 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   void onValidateForm(BuildContext context) {
+    // return;
     if (onValidate != null) {
-      bool? validate = formKey?.currentState!.validate();
+      bool? validate = formKey?.currentState!.validate(focusOnInvalid: false);
       _subformKeys.forEach((key, value) {
-        bool? subValidate = value.currentState?.validate() ?? false;
+        bool? subValidate =
+            value.currentState?.validate(focusOnInvalid: false) ?? false;
         debugPrint(
             "BaseEdit main checking subViewAbstract for => $key and validate value is = > $subValidate");
         //TODO break if we find first value with false;
@@ -326,7 +328,7 @@ class BaseEditWidget extends StatelessWidget {
       });
       if (validate ?? false) {
         formKey?.currentState!.save();
-        ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
+      ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
         onValidate!(objcet);
         debugPrint("BaseEdit main form onValidate => ${objcet?.toJsonString()}",
             wrapWidth: 1024);

@@ -185,7 +185,7 @@ class CustomerClinetGuide
   }
 
   @override
-  String? getPrintableWatermark() {
+  Widget? getPrintableWatermark() {
     // TODO: implement getPrintableWatermark
     throw UnimplementedError();
   }

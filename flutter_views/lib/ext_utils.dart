@@ -233,6 +233,11 @@ extension NonNullableInt on int? {
     return this ?? 0;
   }
 
+  String toCurrencyFormatChangeToDashIfZero({String symbol = ""}) {
+    if (this == 0) return "-";
+    return toCurrencyFormat(symbol: symbol);
+  }
+
   String toCurrencyFormat({String symbol = ""}) {
     return NumberFormat.currency(locale: "en_US", symbol: symbol)
         .format(toNonNullable())

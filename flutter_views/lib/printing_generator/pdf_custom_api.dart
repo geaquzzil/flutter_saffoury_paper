@@ -51,23 +51,12 @@ class PdfCustom<T extends PrintableCustomInterface,
   Future<pw.Page> getPage(PdfPageFormat? format) async {
     List<Widget> body = await printObj.getPrintableCustomPage(context,
         format: format, setting: printCommand);
-    String? watermark = printObj.getPrintableWatermark();
+    Widget? watermark = printObj.getPrintableWatermark();
     dynamic pageTheme = PageTheme(
       margin: EdgeInsets.zero,
       pageFormat: format,
-      buildBackground: watermark != null
-          ? (Context context) => FullPage(
-                ignoreMargins: true,
-                child: Watermark.text('SAFFOURY',
-                    fit: BoxFit.scaleDown,
-                    // angle: 0,
-                    style: TextStyle.defaultStyle().copyWith(
-                      fontSize: 80,
-                      color: PdfColors.grey200,
-                      fontWeight: FontWeight.bold,
-                    )),
-              )
-          : null,
+      buildBackground:
+          watermark != null ? (Context context) => watermark : null,
       // buildForeground: (Context context) => Align(
       //   alignment: Alignment.bottomLeft,
       //   child: SizedBox(
