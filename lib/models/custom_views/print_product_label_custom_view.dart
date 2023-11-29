@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_object.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
@@ -8,22 +6,15 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
-import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
-import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_apstract_stand_alone_without_api.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart' as pdf;
 
@@ -36,8 +27,7 @@ class PrintProductLabelCustomView
   String? customerName;
 
   @override
-  String? getMainDrawerGroupName(BuildContext context) =>
-      AppLocalizations.of(context)!.print;
+  String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -48,7 +38,7 @@ class PrintProductLabelCustomView
       getMainHeaderLabelTextOnly(context);
 
   @override
-  IconData getMainIconData() => Icons.balance;
+  IconData getMainIconData() => Icons.print;
 
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>

@@ -73,6 +73,7 @@ dependencies:
   animate_do: ^3.0.2
   package_info_plus: ^5.0.1
   fast_cached_network_image: ^1.2.0
+  pdf: ^3.10.6
   
 dependency_overrides:
     intl: 0.17.0

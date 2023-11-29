@@ -250,13 +250,17 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
               ListTileTheme.merge(
                 iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
                 textColor: _iconColor.value,
-                child: ListTile(
-                    onTap: () => _handleTap(context),
-                    // contentPadding: expansionTileTheme.tilePadding,
-                    // leading: widget.leading,
-                    title: widget.title,
-                    subtitle: widget.subtitle,
-                    trailing: widget.trailing ?? _buildIcon(context)),
+                child: Focus(
+                  descendantsAreFocusable: false,
+                  canRequestFocus: false,
+                  child: ListTile(
+                      onTap: () => _handleTap(context),
+                      // contentPadding: expansionTileTheme.tilePadding,
+                      // leading: widget.leading,
+                      title: widget.title,
+                      subtitle: widget.subtitle,
+                      trailing: widget.trailing ?? _buildIcon(context)),
+                ),
               ),
               if (_isExpanded) Divider(),
               ClipRect(

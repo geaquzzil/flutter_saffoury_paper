@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
-import 'package:flutter_view_controller/customs_widget/expandable_sliver_list.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_custom_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_view_abstract_asonefield.dart';
-import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../interfaces/cartable_interface.dart';
-import '../../../interfaces/listable_interface.dart';
 import '../../../models/view_abstract.dart';
 import '../../../models/view_abstract_inputs_validaters.dart';
-import '../../../new_components/edit_listeners/controller_dropbox_list.dart';
-import '../../../new_components/tables_widgets/editable_table_widget.dart';
-import '../../../new_components/editables/paginated_data_table2.dart';
-import '../../../new_components/tables_widgets/cart_data_table_master.dart';
 
-import '../../edit/controllers/edit_controller_checkbox.dart';
 import '../../edit/controllers/edit_controller_dropdown.dart';
 import '../../edit/controllers/edit_controller_dropdown_api.dart';
 import '../../edit/controllers/edit_controller_file_picker.dart';
@@ -328,7 +317,7 @@ class BaseEditWidget extends StatelessWidget {
       });
       if (validate ?? false) {
         formKey?.currentState!.save();
-      ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
+        ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
         onValidate!(objcet);
         debugPrint("BaseEdit main form onValidate => ${objcet?.toJsonString()}",
             wrapWidth: 1024);
