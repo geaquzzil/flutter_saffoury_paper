@@ -343,13 +343,16 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
           enabled: enabled,
           controller: controller,
           debounceDuration: const Duration(milliseconds: 750),
-          onChangeGetObject: (text) => autoCompleteBySearchQuery
-              ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
-              : viewAbstract.getParnet == null
-                  ? viewAbstract.getNewInstance()
-                  : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
-                      viewAbstract.fieldNameFromParent!)
-            ..setFieldValue(field, text),
+          onChangeGetObject: (text) {
+            return autoCompleteBySearchQuery
+                ? viewAbstract.getNewInstance(
+                    searchByAutoCompleteTextInput: text)
+                : viewAbstract.getParnet == null
+                    ? viewAbstract.getNewInstance()
+                    : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+                        viewAbstract.fieldNameFromParent!)
+              ..setFieldValue(field, text);
+          },
           selectionToTextTransformer: (suggestion) {
             debugPrint(
                 "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");

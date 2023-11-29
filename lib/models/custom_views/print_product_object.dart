@@ -59,9 +59,9 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   }
 
   @override
-  bool getIsSubViewAbstractIsExpanded(String fieled) {
-    if (fieled == "size" || fieled == "gsm") return true;
-    return super.getIsSubViewAbstractIsExpanded(fieled);
+  bool getIsSubViewAbstractIsExpanded(String field) {
+    if (field == "size" || field == "gsm") return true;
+    return super.getIsSubViewAbstractIsExpanded(field);
   }
 
   @override
@@ -83,24 +83,33 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
       };
 
   @override
+  void onTextChangeListenerOnSubViewAbstract(
+      BuildContext context, ViewAbstract subViewAbstract, String field,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    super
+        .onTextChangeListenerOnSubViewAbstract(context, subViewAbstract, field);
+    _setSheets(context, formKey: formKey);
+  }
+
+  void _setSheets(BuildContext context,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    Product p = Product()
+      ..sizes = size
+      ..gsms = gsm;
+
+    sheets = p.getSheets(customQuantity: quantity);
+    debugPrint("sheets : $sheets");
+    setFieldValue("sheets", sheets);
+
+    notifyOtherControllers(
+        context: context, formKey: formKey, notifySpecificField: "sheets");
+  }
+
+  @override
   void onTextChangeListener(BuildContext context, String field, String? value,
       {GlobalKey<FormBuilderState>? formKey}) {
     super.onTextChangeListener(context, field, value);
-
-    if (field == "quantity") {
-      // setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
-
-      Product p = Product()
-        ..sizes = size
-        ..gsms = gsm;
-
-      sheets = p.getSheets(customQuantity: quantity);
-      debugPrint("sheets : $sheets");
-      setFieldValue("sheets", sheets);
-
-      notifyOtherControllers(
-          context: context, formKey: formKey, notifySpecificField: "sheets");
-    }
+    _setSheets(context, formKey: formKey);
   }
 
   @override

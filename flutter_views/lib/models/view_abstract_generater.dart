@@ -137,7 +137,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-  bool getIsSubViewAbstractIsExpanded(String fieled) {
+  bool getIsSubViewAbstractIsExpanded(String field) {
     return false;
   }
 

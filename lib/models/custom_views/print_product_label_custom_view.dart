@@ -97,6 +97,7 @@ class PrintProductLabelCustomView
           ProductPrintObject ppo = v as ProductPrintObject;
           customerName = ppo.customer;
           ProductType productType = ProductType()..name = ppo.description;
+          productType.unit = ProductTypeUnit.KG;
           // viewAbstractPrintObject = Product();
           viewAbstractPrintObject = Product()
             ..comments = ppo.comments

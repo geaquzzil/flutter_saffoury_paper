@@ -171,12 +171,19 @@ class BaseEditWidget extends StatelessWidget {
       viewAbstract.onTextChangeListener(
           context, field, controllers[field]!.text,
           formKey: formKey);
+
       bool? validate =
           formKey?.currentState!.fields[viewAbstract.getTag(field)]?.validate();
       if (validate ?? false) {
         formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
+
+      if (viewAbstract.getParnet != null) {
+        viewAbstract.getParnet!.onTextChangeListenerOnSubViewAbstract(
+            context, viewAbstract, viewAbstract.getFieldNameFromParent!,
+            formKey: formKey);
+      }
       if (isAutoCompleteVA) {
         if (controllers[field]!.text ==
             getEditControllerText(viewAbstract.getFieldValue(field))) {
@@ -220,13 +227,17 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   Widget getExpansionTileCustom(BuildContext context, Widget form) {
+    bool f = viewAbstract.getParnet?.getIsSubViewAbstractIsExpanded(
+            viewAbstract.getFieldNameFromParent ?? "") ??
+        false;
+    debugPrint(
+        "getExpansionTileCustom initiallyExpanded => $f field=>${viewAbstract.getFieldNameFromParent} table= ${viewAbstract.getParnet?.getTableNameApi()}");
     return ExpansionTileCustom(
         key: keyExpansionTile,
         padding: false,
         useLeadingOutSideCard: SizeConfig.isSoLargeScreen(context),
         wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
-        initiallyExpanded: viewAbstract.getIsSubViewAbstractIsExpanded(
-            viewAbstract.getFieldNameFromParent ?? ""),
+        initiallyExpanded: f,
         // isExpanded: false,
         isDeleteButtonClicked: viewAbstract.isNullTriggerd,
         hasError: hasError(context),
@@ -310,6 +321,9 @@ class BaseEditWidget extends StatelessWidget {
       _subformKeys.forEach((key, value) {
         bool? subValidate =
             value.currentState?.validate(focusOnInvalid: false) ?? false;
+        // if (subValidate) {
+        //   _subformKeys[key]?.currentState!.validate(focusOnInvalid: false);4
+        // }
         debugPrint(
             "BaseEdit main checking subViewAbstract for => $key and validate value is = > $subValidate");
         //TODO break if we find first value with false;

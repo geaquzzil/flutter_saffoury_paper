@@ -14,6 +14,9 @@ abstract class ViewAbstractInputAndValidater<T>
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, TextEditingController> textFieldController = {};
 
+
+  
+
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
@@ -343,6 +346,14 @@ abstract class ViewAbstractInputAndValidater<T>
   void onTextChangeListener(BuildContext context, String field, String? value,
       {GlobalKey<FormBuilderState>? formKey}) {
     debugPrint("onTextChangeListener for $T field=> $field value=> $value");
+    // setFieldValue(field, value)
+  }
+
+  void onTextChangeListenerOnSubViewAbstract(
+      BuildContext context, ViewAbstract subViewAbstract, String field,
+      {GlobalKey<FormBuilderState>? formKey}) {
+    debugPrint(
+        "onTextChangeListenerOnSubViewAbstract parent $T for ${subViewAbstract.runtimeType} field=> $field ");
     // setFieldValue(field, value)
   }
 
