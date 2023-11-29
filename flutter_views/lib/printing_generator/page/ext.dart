@@ -18,11 +18,10 @@ import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart'
 import 'package:pdf/pdf.dart';
 
 Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
-    BuildContext context,
-    PrintableMaster<T> invoiceObj,
-    PdfPageFormat format) async {
+    BuildContext context, PrintableMaster<T> invoiceObj, PdfPageFormat format,
+    {T? hasCustomSetting}) async {
   {
-    T? pls = await getSetting(context, invoiceObj);
+    T? pls = hasCustomSetting ?? await getSetting(context, invoiceObj);
     // if (invoiceObj is ModifiablePrintableInterface) {
     //   pls = await Configurations.get<T>(
     //       (invoiceObj as ModifiablePrintableInterface)

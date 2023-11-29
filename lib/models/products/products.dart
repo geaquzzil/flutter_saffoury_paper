@@ -1063,7 +1063,7 @@ class Product extends ViewAbstract<Product>
         ],
       ),
       // pdfWidget.Watermark.text("tessssssssssssssssssssssssst"),
-      ProductLabelPDF(context, this).generate(),
+      ProductLabelPDF(context, this,setting: setting).generate(),
 
       //  Row(
       // crossAxisAlignment: CrossAxisAlignment.start,

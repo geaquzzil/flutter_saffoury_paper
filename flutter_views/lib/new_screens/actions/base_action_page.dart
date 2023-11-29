@@ -155,10 +155,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       ViewAbstract newViewAbstract =
           context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
       return newViewAbstract.viewCallGetFirstFromList(iD!)
-          as Future<ViewAbstract>;
+          as Future<ViewAbstract?>;
     } else {
       return (getExtras()).viewCallGetFirstFromList((getExtras()).iD)
-          as Future<ViewAbstract>;
+          as Future<ViewAbstract?>;
     }
   }
 

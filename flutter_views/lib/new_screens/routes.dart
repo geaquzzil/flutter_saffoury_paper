@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
@@ -297,7 +298,7 @@ class RouteGenerator {
             debugPrint("go route name=> ${state.extra}");
             return MaterialPage(
                 key: state.pageKey,
-                child: PdfPage(
+                child: PdfPage<PrintLocalSetting>(
                   iD: int.tryParse(state.pathParameters['id'] ?? "-"),
                   tableName: state.pathParameters['tableName'],
                   invoiceObj: state.extra as PrintableMaster,

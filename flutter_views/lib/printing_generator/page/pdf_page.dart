@@ -81,11 +81,11 @@ class _PdfPageState<T extends PrintLocalSetting>
       ViewAbstract newViewAbstract =
           context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
       return newViewAbstract.viewCallGetFirstFromList(iD!)
-          as Future<PrintableMaster<T>>;
+          as Future<PrintableMaster<T>?>;
     } else {
       return (getExtras() as ViewAbstract)
               .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD)
-          as Future<PrintableMaster<T>>;
+          as Future<PrintableMaster<T>?>;
     }
   }
 

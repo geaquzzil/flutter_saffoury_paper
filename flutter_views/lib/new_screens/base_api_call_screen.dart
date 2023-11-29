@@ -79,10 +79,10 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
                 subtitle: AppLocalizations.of(context)!.cantConnectRetry);
           }
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-              body: const Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
         } else {
-          return Text("TOTODO");
+          return const Text("TOTODO");
         }
       },
     );

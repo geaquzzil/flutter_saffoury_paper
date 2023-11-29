@@ -441,6 +441,8 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
     bool enabled = true}) {
   return wrapController(
       FormBuilderTypeAheadCustom<String>(
+          onTap: () => controller.selection = TextSelection(
+              baseOffset: 0, extentOffset: controller.value.text.length),
           controller: controller,
           onChangeGetObject: (text) => text,
           valueTransformer: (value) {
@@ -498,6 +500,8 @@ Widget getControllerEditText(BuildContext context,
       "getControllerEditText field $field length ${viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0} ");
   return wrapController(
       FormBuilderTextField(
+        onTap: () => controller.selection = TextSelection(
+            baseOffset: 0, extentOffset: controller.value.text.length),
         onSubmitted: (value) =>
             debugPrint("getControllerEditText field $field value $value"),
         controller: controller,
@@ -513,7 +517,7 @@ Widget getControllerEditText(BuildContext context,
             : getDecoration(context, viewAbstract, field: field),
         keyboardType: viewAbstract.getTextInputType(field),
         inputFormatters: viewAbstract.getTextInputFormatter(field),
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (va) => viewAbstract
             .getTextInputValidatorCompose<String?>(context, field)
             .call(va),

@@ -50,7 +50,8 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
   Widget? getEndPane(BuildContext context) {
     var future = getSettingObject(context);
     if (future == null) return null;
-    return FutureBuilder(
+    // return null;
+    return FutureBuilder<ViewAbstract?>(
       future: future,
       builder: (context, snapshot) {
         return Scaffold(

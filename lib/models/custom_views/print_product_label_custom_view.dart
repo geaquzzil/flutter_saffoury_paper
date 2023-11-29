@@ -33,6 +33,7 @@ class PrintProductLabelCustomView
   PrintProductLabelCustomView();
 
   ViewAbstract? viewAbstractPrintObject;
+  String? customerName;
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -104,6 +105,7 @@ class PrintProductLabelCustomView
         {
           if (v == null) return;
           ProductPrintObject ppo = v as ProductPrintObject;
+          customerName = ppo.customer;
           ProductType productType = ProductType()..name = ppo.description;
           // viewAbstractPrintObject = Product();
           viewAbstractPrintObject = Product()
@@ -138,7 +140,9 @@ class PrintProductLabelCustomView
               onLayout: (pdf.PdfPageFormat format) async => getExcelFileUinit(
                   context,
                   viewAbstractPrintObject as PrintableMaster,
-                  pdf.PdfPageFormat.a4));
+                  pdf.PdfPageFormat.a4,
+                  hasCustomSetting: PrintProduct()
+                    ..customerName = customerName));
         });
   }
 }
