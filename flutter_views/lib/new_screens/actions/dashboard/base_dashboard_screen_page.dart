@@ -20,6 +20,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_static_searchable
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
+import 'package:get/get.dart';
 
 final selectDateChanged = ValueNotifier<DateObject?>(null);
 
@@ -103,51 +104,57 @@ class _BaseDashboardState extends State<BaseDashboard>
           return FutureBuilder(
             future: viewAbstract.callApi(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                widget.dashboard = snapshot.data as DashableInterface;
-                init(context);
-                setTabbar();
-                var size = MediaQuery.of(context).size;
-                List<DashableGridHelper> list =
-                    widget.dashboard.getDashboardSections(context);
-                List<Widget> widgets = List.empty(growable: true);
-                for (var element in list) {
-                  var group = [
-                    DashableItemHeaderBuilder(
-                      dgh: element,
-                    ),
-                    SliverToBoxAdapter(
-                      child: Responsive(
-                        mobile: FileInfoStaggerdGridView(
-                          list: element.widgets,
-                          crossAxisCount: size.width < 750 ? 2 : 4,
-                          childAspectRatio:
-                              size.width < 750 && size.width > 350 ? 1.3 : 1,
-                        ),
-                        tablet: FileInfoStaggerdGridView(
-                          list: element.widgets,
-                        ),
-                        desktop: FileInfoStaggerdGridView(
-                          list: element.widgets,
-                          crossAxisCount: 6,
-                          childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
-                        ),
+              try {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // debugPrint("DashboardPage ${viewAbstract.runtimeType}");
+                  widget.dashboard = snapshot.data as DashableInterface;
+                  init(context);
+                  setTabbar();
+                  var size = MediaQuery.of(context).size;
+                  List<DashableGridHelper> list =
+                      widget.dashboard.getDashboardSections(context);
+                  List<Widget> widgets = List.empty(growable: true);
+                  for (var element in list) {
+                    var group = [
+                      DashableItemHeaderBuilder(
+                        dgh: element,
                       ),
-                    )
-                  ];
-                  widgets.addAll(group);
+                      SliverToBoxAdapter(
+                        child: Responsive(
+                          mobile: FileInfoStaggerdGridView(
+                            list: element.widgets,
+                            crossAxisCount: size.width < 750 ? 2 : 4,
+                            childAspectRatio:
+                                size.width < 750 && size.width > 350 ? 1.3 : 1,
+                          ),
+                          tablet: FileInfoStaggerdGridView(
+                            list: element.widgets,
+                          ),
+                          desktop: FileInfoStaggerdGridView(
+                            list: element.widgets,
+                            crossAxisCount: 6,
+                            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
+                          ),
+                        ),
+                      )
+                    ];
+                    widgets.addAll(group);
+                  }
+                  return CustomScrollView(
+                    slivers: widgets,
+                  );
                 }
-                return CustomScrollView(
-                  slivers: widgets,
+                return Center(
+                  child: EmptyWidget(
+                      lottiUrl:
+                          "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
+                      title: AppLocalizations.of(context)!.loading,
+                      subtitle: AppLocalizations.of(context)!.pleaseWait),
                 );
+              } catch (e) {
+                snapshot.error.printError();
+                return Text(snapshot.error.toString());
               }
-              return Center(
-                child: EmptyWidget(
-                    lottiUrl:
-                        "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
-                    title: AppLocalizations.of(context)!.loading,
-                    subtitle: AppLocalizations.of(context)!.pleaseWait),
-              );
             },
           );
         });

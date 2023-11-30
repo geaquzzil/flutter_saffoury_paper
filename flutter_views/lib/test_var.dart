@@ -10493,6 +10493,7 @@ const productMovement = {
   "cut_requestsAnalysis": []
 };
 const dashboard = {
+  "iD": -1,
   "products_inputs": [],
   "products_outputs": [],
   "transfers": [],

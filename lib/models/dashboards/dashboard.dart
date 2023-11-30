@@ -47,6 +47,7 @@ import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 part 'dashboard.g.dart';
 
+//TODO on publish do not forget that the iD gives error messages because the response of dashboard iD not found
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Dashboard extends UserLists<Dashboard> implements DashableInterface {
@@ -90,6 +91,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
 
   @override
   Future<Dashboard?> callApi() async {
+    // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
     return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
   }
 
