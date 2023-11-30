@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:excel/excel.dart';
@@ -183,7 +181,8 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
       {
         var cell =
             sh.cell(CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: i));
-        cell.value = TextCellValue(viewAbstract.getFieldLabel(context, fields[i]));
+        cell.value =
+            TextCellValue(viewAbstract.getFieldLabel(context, fields[i]));
         cell.cellStyle = cellStyle;
       }
     }
@@ -220,9 +219,11 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
     for (int i = 0; i < fields.length; i++) {
       {
         sh
-            .cell(
-                CellIndex.indexByColumnRow(rowIndex: rowIndex, columnIndex: i))
-            .value = TextCellValue(viewAbstract.getFieldValueCheckType(context, fields[i]));
+                .cell(CellIndex.indexByColumnRow(
+                    rowIndex: rowIndex, columnIndex: i))
+                .value =
+            TextCellValue(
+                viewAbstract.getFieldValueCheckType(context, fields[i]));
       }
     }
     int startCount = fields.length;
@@ -242,7 +243,8 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
                   .cell(CellIndex.indexByColumnRow(
                       rowIndex: rowIndex, columnIndex: startCount + i))
                   .value =
-           TextCellValue(   subViewAbstract.getFieldValueCheckType(context, fields[i]));
+              TextCellValue(
+                  subViewAbstract.getFieldValueCheckType(context, fields[i]));
         }
       }
       startCount = startCount + fields.length;
@@ -288,7 +290,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
     debugPrint('generateExcel Encoding executed in ${stopwatch.elapsed}');
     stopwatch.reset();
     if (fileBytes != null) {
-      File(join("/Users/kawal/Desktop/$fileName.xlsx"))
+      File(join("$fileName.xlsx"))
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }

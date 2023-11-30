@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 
@@ -11,6 +12,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   String hint;
   IconData icon;
   List<DropdownStringListItem?> list;
+  DropdownStringListItem? initialValue;
   bool showSelectedValueBeside;
   void Function(DropdownStringListItem? object) onSelected;
 
@@ -18,6 +20,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
       {Key? key,
       required this.hint,
       required this.list,
+      this.initialValue,
       this.showSelectedValueBeside = true,
       required this.icon,
       required this.onSelected})
@@ -73,6 +76,12 @@ class _DropdownStringListControllerListenerByIconState
       );
 
   @override
+  void initState() {
+    super.initState();
+    lastSelected = widget.initialValue;
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget pop = PopupMenuButton<DropdownStringListItem?>(
       position: PopupMenuPosition.under,
@@ -105,13 +114,21 @@ class _DropdownStringListControllerListenerByIconState
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FadeInLeft(
-              key: UniqueKey(),
-              duration: const Duration(milliseconds: 500),
-              child: Text(
-                lastSelected!.label,
-                style: Theme.of(context).textTheme.bodySmall,
-              )),
+          Globals.isArabic(context)
+              ? FadeInRight(
+                  key: UniqueKey(),
+                  duration: const Duration(milliseconds: 500),
+                  child: Text(
+                    lastSelected!.label,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ))
+              : FadeInLeft(
+                  key: UniqueKey(),
+                  duration: const Duration(milliseconds: 500),
+                  child: Text(
+                    lastSelected!.label,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  )),
           pop
         ],
       );

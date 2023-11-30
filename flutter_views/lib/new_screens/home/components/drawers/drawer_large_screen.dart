@@ -64,8 +64,8 @@ class DrawerLargeScreens extends StatelessWidget {
 
               //   // const Spacer(),
               // ]),
-              if (AuthProvider.isLoggedIn(context))
-                buildDrawerFooter(context, isOpen),
+
+              buildDrawerFooter(context, isOpen),
               // buildProfilePic(context, isOpen),
             ],
           ),
@@ -80,12 +80,14 @@ class DrawerLargeScreens extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // const Divider(),
-        Container(
-            color: isOpen ? Theme.of(context).colorScheme.background : null,
-            child: buildProfilePic(context, isOpen)),
-        Container(
-            color: isOpen ? Theme.of(context).colorScheme.background : null,
-            child: const Divider()),
+        if (AuthProvider.isLoggedIn(context))
+          Container(
+              color: isOpen ? Theme.of(context).colorScheme.background : null,
+              child: buildProfilePic(context, isOpen)),
+        if (AuthProvider.isLoggedIn(context))
+          Container(
+              color: isOpen ? Theme.of(context).colorScheme.background : null,
+              child: const Divider()),
 
         Container(
             color: isOpen ? Theme.of(context).colorScheme.background : null,
@@ -140,9 +142,15 @@ class DrawerLargeScreens extends StatelessWidget {
                   authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
               idx: index,
             );
+    } else if (authProvider.getDrawerItemsGrouped[groupLabel]!.length > 1 &&
+        groupLabel == null) {
+      return DrawerListTileDesktopGroupOpen(
+          groupedDrawerItems:
+              authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
+          idx: index);
     }
     ViewAbstract viewAbstract =
-        authProvider.getDrawerItemsGrouped[groupLabel]!.first;
+        authProvider.getDrawerItemsGrouped[groupLabel]![index];
     return DrawerListTileDesktopOpen(viewAbstract: viewAbstract, idx: index);
   }
 
@@ -175,25 +183,25 @@ class DrawerLargeScreens extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const DrawerSettingButton(),
-
-          CartIconWidget(
-            returnNillIfZero: false,
-            onPressed: () {
-              context
-                  .read<DrawerMenuControllerProvider>()
-                  .controlEndDrawerMenu();
-            },
-          ),
-
-          NotificationPopupWidget(),
-          const DrawerLanguageButton(),
-          if (!SizeConfig.isDesktopOrWeb(context))
-            buildColapsedIcon(
-              context,
-              Icons.arrow_back_ios,
-              () => drawerMenuControllerProvider.toggleIsOpen(),
+          if (AuthProvider.isLoggedIn(context)) const DrawerSettingButton(),
+          if (AuthProvider.isLoggedIn(context))
+            CartIconWidget(
+              returnNillIfZero: false,
+              onPressed: () {
+                context
+                    .read<DrawerMenuControllerProvider>()
+                    .controlEndDrawerMenu();
+              },
             ),
+          if (AuthProvider.isLoggedIn(context)) NotificationPopupWidget(),
+          const DrawerLanguageButton(),
+          if (AuthProvider.isLoggedIn(context))
+            if (!SizeConfig.isDesktopOrWeb(context))
+              buildColapsedIcon(
+                context,
+                Icons.arrow_back_ios,
+                () => drawerMenuControllerProvider.toggleIsOpen(),
+              ),
 
           // oldCollapsedIcon(margin, alignemt, context, icon),
         ],
@@ -242,13 +250,24 @@ class DrawerHeaderLogo extends StatelessWidget {
 class DrawerListTileDesktopGroupOpen extends StatelessWidget {
   List<ViewAbstract> groupedDrawerItems;
   int idx;
+
   DrawerListTileDesktopGroupOpen(
       {Key? key, required this.groupedDrawerItems, required this.idx})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String title = groupedDrawerItems[0].getMainDrawerGroupName(context) ?? "";
+    String? title = groupedDrawerItems[0].getMainDrawerGroupName(context);
+    if (title == null) {
+      return ListView.builder(
+          itemCount: groupedDrawerItems.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            ViewAbstract viewAbstract = groupedDrawerItems[index];
+            return DrawerListTileDesktopOpen(
+                viewAbstract: viewAbstract, idx: index);
+          });
+    }
     return ExpansionTile(
       title: Text(title),
       children: [
@@ -358,8 +377,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
   ViewAbstract viewAbstract;
   int idx;
   DrawerListTileDesktopOpen(
-      {Key? key, required this.viewAbstract, required this.idx})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.idx});
 
   @override
   Widget build(BuildContext context) {

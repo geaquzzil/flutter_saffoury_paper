@@ -2,6 +2,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
@@ -84,9 +85,10 @@ void main() async {
   ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
     PrintProductLabelCustomView(),
-    // Product(),
+    ExcelToProductConverter(),
+    Product(),
     // ProductSize(),
-    // Order(),
+    Order(),
     // Purchases(),
     // ProductInput(),
     // ProductOutput(),
@@ -106,7 +108,7 @@ void main() async {
     // Spendings(),
     // ProductType(),
     // CustomerBalanceList(),
-    // Dashboard(),
+    Dashboard(),
   ]);
   try {
     runApp(MultiProvider(providers: [
@@ -120,8 +122,8 @@ void main() async {
       // ChangeNotifierProvider(
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
-          create: (context) => DrawerMenuControllerProvider(
-              initViewAbstract: PrintProductLabelCustomView())),
+          create: (context) =>
+              DrawerMenuControllerProvider(initViewAbstract: Product())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
@@ -131,8 +133,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(
-          create: (_) =>
-              ViewAbstractChangeProvider.init(PrintProductLabelCustomView())),
+          create: (_) => ViewAbstractChangeProvider.init(Product())),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),

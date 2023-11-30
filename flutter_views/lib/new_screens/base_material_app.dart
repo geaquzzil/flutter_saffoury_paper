@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/l10n/l10n.dart';
@@ -48,7 +49,11 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   void initState() {
     super.initState();
     langaugeProvider = Provider.of<LangaugeProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      String? savedLang = await Configurations.getValueString("ln");
+      if (savedLang != null) {
+        context.read<LangaugeProvider>().change(Locale(savedLang, ''));
+      }
       langaugeProvider.addListener(() {
         debugPrint(
             "langaugeProvider changed  langaugeProvider= ${langaugeProvider.getLocale}");

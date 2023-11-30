@@ -37,7 +37,18 @@ class BaseSharedDetailsView extends StatelessWidget {
         // else
         Widget? currentWidget;
         if (value == null) {
-          currentWidget = Scaffold(body: getEmptyView(context));
+          Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
+          if (customWidget != null) {
+            currentWidget = Scaffold(
+              body: Center(
+                child: customWidget,
+              ),
+            );
+          } else {
+            // Widget? currentWidget;
+
+            currentWidget = Scaffold(body: getEmptyView(context));
+          }
         } else {
           switch (actionViewAbstractProvider.getServerActions) {
             case ServerActions.edit:

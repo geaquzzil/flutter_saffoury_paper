@@ -323,7 +323,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           // if (isSelectedMode) getHeaderWidget()!,
           if (widget.buildSearchWidget) getSearchWidget(),
 
-          //todo  type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element' if (widget.buildFilterableView) getFilterableWidget(),
+          //todo  type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element'
+          if (widget.buildFilterableView) getFilterableWidget(),
           if (widget.buildToggleView) getToggleView(),
           ValueListenableBuilder<ExpandType>(
               valueListenable: expandTypeOnlyOnExpand,

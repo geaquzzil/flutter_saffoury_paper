@@ -1048,7 +1048,7 @@ class Product extends ViewAbstract<Product>
             // angle: 0,
             style: pdfWidget.TextStyle.defaultStyle().copyWith(
               fontSize: 80,
-              color: pdf.PdfColors.grey200,
+              color: pdf.PdfColors.grey300,
               fontWeight: pdfWidget.FontWeight.bold,
             )));
   }
