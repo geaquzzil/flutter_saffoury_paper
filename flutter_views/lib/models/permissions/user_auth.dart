@@ -6,8 +6,10 @@ import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 import '../dealers/dealer.dart';
 import '../servers/server_helpers.dart';
 
@@ -141,6 +143,8 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   PermissionLevelAbstract? userlevels;
   Setting? setting;
   Dealers? dealers;
+
+
 
   AuthUser({bool? setPassword}) : super() {
     if (setPassword != null) {

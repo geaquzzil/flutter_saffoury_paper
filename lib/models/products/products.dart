@@ -479,15 +479,19 @@ class Product extends ViewAbstract<Product>
   double getSheets({ProductSize? customSize, double? customQuantity}) {
     if (customSize != null) {
       if (customSize.isRoll()) return 0;
+      if (customSize.width == 0) return 0;
       if (!hasGSM()) return 0;
+      if ((gsms?.gsm ?? 0) == 0) return 0;
       return ((customQuantity ?? getQuantity()) /
               (getSheetWeight(customSize: customSize) / 1000))
           .toInt()
           .toDouble();
     }
     if (isRoll()) return 0;
+    if (sizes?.width == null || sizes?.length == null) return 0;
+    if (sizes?.width == 0 || sizes?.length == 0) return 0;
     if (!hasGSM()) return 0;
-
+    if ((gsms?.gsm ?? 0) == 0) return 0;
     return ((customQuantity ?? getQuantity()) / (getSheetWeight() / 1000))
         .toInt()
         .toDouble();

@@ -89,7 +89,6 @@ class PrintProductLabelCustomView
       isTheFirst: true,
       viewAbstract: ProductPrintObject(
         ProductSize(),
-        GSM(),
       ),
       onValidate: (v) {
         {
@@ -97,12 +96,13 @@ class PrintProductLabelCustomView
           ProductPrintObject ppo = v as ProductPrintObject;
           customerName = ppo.customer;
           ProductType productType = ProductType()..name = ppo.description;
+          GSM g = GSM()..gsm = ppo.gsm;
           productType.unit = ProductTypeUnit.KG;
           // viewAbstractPrintObject = Product();
           viewAbstractPrintObject = Product()
             ..comments = ppo.comments
             ..sizes = ppo.size
-            ..gsms = ppo.gsm
+            ..gsms = g
             ..products_types = productType
             ..inStock = [Stocks()..quantity = ppo.quantity];
         }
@@ -126,7 +126,17 @@ class PrintProductLabelCustomView
         heroTag: UniqueKey(),
         child: const Icon(Icons.print),
         onPressed: () async {
-          if (viewAbstractPrintObject == null) return;
+          if (viewAbstractPrintObject == null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              // behavior: SnackBarBehavior.floating,
+              // margin: EdgeInsets.only(left: 100.0),
+              backgroundColor: Theme.of(context).colorScheme.errorContainer,
+              content: Text(AppLocalizations.of(context)!.errValidation,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onErrorContainer)),
+            ));
+            return;
+          }
           await Printing.layoutPdf(
               onLayout: (pdf.PdfPageFormat format) async => getExcelFileUinit(
                   context,

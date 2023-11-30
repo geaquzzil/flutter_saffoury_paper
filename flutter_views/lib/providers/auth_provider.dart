@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/src/response.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supercharged/supercharged.dart';
 
@@ -51,6 +52,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     return "";
     //todo for some reason we canot add profile image
     return "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
+  }
+
+  static bool isLoggedIn(BuildContext context) {
+    return context.read<AuthProvider<AuthUser>>().getUser.login == true;
   }
 
   PermissionLevelAbstract get getPermissions => _permissions;
@@ -95,6 +100,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     try {
       _user = _initUser.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)))
           as T;
+      _user.login = false;
       _status = Status.Authenticated;
       _permissions = _user.userlevels ?? PermissionLevelAbstract();
       hasSavedUser = true;
@@ -140,8 +146,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
       // debugPrint("checing permission for $item ");
-      bool hasPermssion =
-          _user.hasPermissionList(context, viewAbstract: item);
+      bool hasPermssion = _user.hasPermissionList(context, viewAbstract: item);
       // debugPrint("checing permission for $item value is $hasPermssion ");
       if (hasPermssion) {
         _drawerItemsPermissions.add(item);

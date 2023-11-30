@@ -31,7 +31,8 @@ class GSM extends ViewAbstract<GSM> {
       gsm = gs;
       return this;
     } else {
-      throw Exception("${getMainHeaderLabelTextOnly(context)}: Cannot convert value of gsm to => $value to a number");
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)}: Cannot convert value of gsm to => $value to a number");
     }
   }
 
@@ -56,7 +57,7 @@ class GSM extends ViewAbstract<GSM> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    return gsm.toString();
+    return gsm == null ? "-" : gsm.toString();
   }
 
   @override

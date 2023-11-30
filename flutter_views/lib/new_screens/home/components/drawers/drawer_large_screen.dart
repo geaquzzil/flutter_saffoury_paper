@@ -1,6 +1,4 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -8,21 +6,16 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
-import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../providers/cart/cart_provider.dart';
 import '../profile/profile_pic_popup_menu.dart';
 import 'components/ext.dart';
 
@@ -71,8 +64,8 @@ class DrawerLargeScreens extends StatelessWidget {
 
               //   // const Spacer(),
               // ]),
-
-              buildDrawerFooter(context, isOpen),
+              if (AuthProvider.isLoggedIn(context))
+                buildDrawerFooter(context, isOpen),
               // buildProfilePic(context, isOpen),
             ],
           ),
@@ -93,6 +86,7 @@ class DrawerLargeScreens extends StatelessWidget {
         Container(
             color: isOpen ? Theme.of(context).colorScheme.background : null,
             child: const Divider()),
+
         Container(
             color: isOpen ? Theme.of(context).colorScheme.background : null,
             child: buildCollapseIcon(context, isOpen)),
@@ -182,6 +176,7 @@ class DrawerLargeScreens extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const DrawerSettingButton(),
+
           CartIconWidget(
             returnNillIfZero: false,
             onPressed: () {
@@ -193,7 +188,7 @@ class DrawerLargeScreens extends StatelessWidget {
 
           NotificationPopupWidget(),
           const DrawerLanguageButton(),
-          if (SizeConfig.isDesktopOrWeb(context))
+          if (!SizeConfig.isDesktopOrWeb(context))
             buildColapsedIcon(
               context,
               Icons.arrow_back_ios,

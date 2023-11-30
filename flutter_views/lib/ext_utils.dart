@@ -195,6 +195,20 @@ extension IterableModifier<E> on Iterable<E?> {
 
 extension ConvertersNumbers on dynamic {}
 
+extension NonNullableNum on num? {
+  String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {
+    if (this == null) return "";
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    return this!.toString().replaceAll(regex, '');
+  }
+
+  String toCurrencyFormatWithoutDecimal() {
+    if (this == null) return "0";
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    return this!.toString().replaceAll(regex, '');
+  }
+}
+
 extension NonNullableDouble on double? {
   double roundDouble() {
     if (this == null) return 0;
@@ -203,6 +217,12 @@ extension NonNullableDouble on double? {
 
   String toCurrencyFormatWithoutDecimal() {
     if (this == null) return "0";
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    return this!.toString().replaceAll(regex, '');
+  }
+
+  String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {
+    if (this == null) return "";
     RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
     return this!.toString().replaceAll(regex, '');
   }

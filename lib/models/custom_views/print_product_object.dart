@@ -20,7 +20,7 @@ part 'print_product_object.g.dart';
 @reflector
 class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   String description = "";
-  GSM gsm;
+  int gsm = 0;
   ProductSize size;
 
   String comments = "";
@@ -28,7 +28,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   double quantity = 0;
   double sheets = 0;
 
-  ProductPrintObject(this.size, this.gsm);
+  ProductPrintObject(this.size);
   @override
   List<String> getMainFields({BuildContext? context}) {
     return [
@@ -48,7 +48,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "size": ProductSize(),
         "comments": "",
         "customer": "",
-        "gsm": GSM(),
+        "gsm": 0,
         "quantity": 0.0,
         "sheets": 0.0
       };
@@ -76,6 +76,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   Map<String, IconData> getFieldIconDataMap() => {
         "description": Icons.abc,
         "date": Icons.date_range,
+        "gsm": Icons.line_weight,
         "sheets": Icons.line_weight_outlined,
         "comments": Icons.notes,
         "customer": Icons.account_circle,
@@ -85,20 +86,22 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   @override
   void onTextChangeListenerOnSubViewAbstract(
       BuildContext context, ViewAbstract subViewAbstract, String field,
-      {GlobalKey<FormBuilderState>? formKey}) {
+      {GlobalKey<FormBuilderState>? parentformKey}) {
     super
         .onTextChangeListenerOnSubViewAbstract(context, subViewAbstract, field);
-    _setSheets(context, formKey: formKey);
+    _setSheets(context, formKey: parentformKey);
   }
 
   void _setSheets(BuildContext context,
       {GlobalKey<FormBuilderState>? formKey}) {
+    GSM g = GSM()..gsm = gsm;
     Product p = Product()
       ..sizes = size
-      ..gsms = gsm;
+      ..gsms = g;
 
     sheets = p.getSheets(customQuantity: quantity);
-    debugPrint("sheets : $sheets");
+    debugPrint(
+        "onTextChangeListener current quantity $quantity ,sheets : $sheets");
     setFieldValue("sheets", sheets);
 
     notifyOtherControllers(
@@ -116,6 +119,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   Map<String, String> getFieldLabelMap(BuildContext context) => {
         "description": AppLocalizations.of(context)!.product_type,
         'date': AppLocalizations.of(context)!.date,
+        "gsm": AppLocalizations.of(context)!.gsm,
         "barcode": AppLocalizations.of(context)!.barcode,
         "customer": AppLocalizations.of(context)!.customer,
         "quantity": AppLocalizations.of(context)!.quantity,
@@ -148,7 +152,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   ProductPrintObject getSelfNewInstance() {
-    return ProductPrintObject(ProductSize(), GSM());
+    return ProductPrintObject(ProductSize());
   }
 
   @override
@@ -179,13 +183,12 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() => {};
-
-  @override
   Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {};
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {"gsm": 4};
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
@@ -195,11 +198,6 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "comments": TextInputType.multiline,
         "customer": TextInputType.multiline,
         "sheets": TextInputType.number,
-      };
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() => {
-        "gsms": true,
       };
 
   @override
@@ -222,4 +220,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
       _$ProductPrintObjectFromJson(data);
 
   Map<String, dynamic> toJson() => _$ProductPrintObjectToJson(this);
+
+  @override
+  Map<String, bool> isFieldCanBeNullableMap() => {};
 }

@@ -8,8 +8,7 @@ part of 'print_product_object.dart';
 
 ProductPrintObject _$ProductPrintObjectFromJson(Map<String, dynamic> json) =>
     ProductPrintObject(
-      ProductSize.fromJson(json['size'] as Map<String, dynamic>),
-      GSM.fromJson(json['gsm'] as Map<String, dynamic>),
+      ProductSize.fromJson(json['size'] as Map<String, dynamic>)
     )
       ..iD = json['iD'] as int
       ..description = json['description'] as String
@@ -23,7 +22,7 @@ Map<String, dynamic> _$ProductPrintObjectToJson(ProductPrintObject instance) =>
       'iD': instance.iD,
       'delete': instance.delete,
       'description': instance.description,
-      'gsm': instance.gsm.toJson(),
+      'gsm': instance.gsm,
       'size': instance.size.toJson(),
       'comments': instance.comments,
       'customer': instance.customer,

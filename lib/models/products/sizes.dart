@@ -76,7 +76,16 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
-    return "$width X $length";
+    if ((width == null && length == null) || (width == 0 && length == 0)) {
+      return "0 X 0";
+    }
+    if (length == 0 || length == null) {
+      return "$width ";
+    } else if (width == 0 || width == null) {
+      return "0 X $length";
+    } else {
+      return "$width X $length";
+    }
   }
 
   @override

@@ -70,8 +70,13 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return Selector<DrawerMenuControllerProvider,
         ViewAbstractStandAloneCustomViewApi?>(
       builder: (context, value, child) {
-        if (value != null) {
+        ViewAbstract? viewAbstract2 =
+            context.read<DrawerMenuControllerProvider>().getObject;
+        bool isInitViewAbstractCustomView =
+            viewAbstract2 is ViewAbstractStandAloneCustomViewApi;
+        if (value != null || isInitViewAbstractCustomView) {
           // List<Widget>? fabs=value.();
+          value ??= viewAbstract2 as ViewAbstractStandAloneCustomViewApi;
           return Scaffold(
               key: drawerMenuControllerProvider.getStartDrawableKey,
               drawer: DrawerLargeScreens(),

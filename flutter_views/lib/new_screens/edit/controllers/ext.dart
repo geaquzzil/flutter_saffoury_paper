@@ -16,11 +16,10 @@ List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
 }
 
 String getEditControllerText(dynamic invokedValue) {
-  var num1 = 10.12345678;
-  // var f = new NurFormat("###.##", "en_US");
-  // print(f.format(num1));
   if (invokedValue is double) {
-    return (invokedValue as double?)?.toCurrencyFormatWithoutDecimal() ?? "0";
+    return (invokedValue).toCurrencyFormatWithoutDecimal();
+  } else if (invokedValue is num) {
+    return (invokedValue).toCurrencyFormatWithoutDecimal();
   }
   return invokedValue?.toString() ?? "";
 }

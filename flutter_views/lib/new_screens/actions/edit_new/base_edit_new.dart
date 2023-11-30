@@ -26,6 +26,9 @@ class BaseEditWidget extends StatelessWidget {
   bool isTheFirst;
   bool isStandAloneField;
   GlobalKey<FormBuilderState>? formKey;
+
+  ///if viewabstract has parent then we get the parent form key
+  GlobalKey<FormBuilderState>? parentFormKey;
   late List<String> fields;
   late Map<GroupItem, List<String>> groupedFields;
   late Map<int, List<String>> groupedHorizontalFields;
@@ -46,6 +49,7 @@ class BaseEditWidget extends StatelessWidget {
       required this.viewAbstract,
       required this.isTheFirst,
       this.formKey,
+      this.parentFormKey,
       this.disableCheckEnableFromParent = false,
       this.requireOnValidateEvenIfNull = false,
       this.isRequiredSubViewAbstract = true,
@@ -168,21 +172,22 @@ class BaseEditWidget extends StatelessWidget {
     controllers[field] = TextEditingController();
     controllers[field]!.text = value;
     controllers[field]!.addListener(() {
-      viewAbstract.onTextChangeListener(
-          context, field, controllers[field]!.text,
-          formKey: formKey);
-
       bool? validate =
           formKey?.currentState!.fields[viewAbstract.getTag(field)]?.validate();
+      // formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       if (validate ?? false) {
         formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
+      viewAbstract.setFieldValue(field, controllers[field]!.text);
+      viewAbstract.onTextChangeListener(
+          context, field, controllers[field]!.text,
+          formKey: formKey);
 
       if (viewAbstract.getParnet != null) {
         viewAbstract.getParnet!.onTextChangeListenerOnSubViewAbstract(
             context, viewAbstract, viewAbstract.getFieldNameFromParent!,
-            formKey: formKey);
+            parentformKey: parentFormKey);
       }
       if (isAutoCompleteVA) {
         if (controllers[field]!.text ==
@@ -193,6 +198,7 @@ class BaseEditWidget extends StatelessWidget {
             viewAbstract.copyWithSetNew(field, controllers[field]!.text);
         viewAbstract.parent?.setFieldValue(field, viewAbstract);
         //  refreshControllers(context);
+      
         viewAbstractChangeProvider.change(viewAbstract);
       }
 
@@ -514,8 +520,10 @@ class BaseEditWidget extends StatelessWidget {
           },
         );
       }
+
       return BaseEditWidget(
         viewAbstract: fieldValue,
+        parentFormKey: formKey,
         formKey: getSubFormState(context, field),
         isTheFirst: false,
         onValidate: ((ob) {

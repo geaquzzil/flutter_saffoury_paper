@@ -14704,7 +14704,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
             {},
             {
               r'': (bool b) => (size, gsm) =>
-                  b ? prefix25.ProductPrintObject(size, gsm) : null,
+                  b ? prefix25.ProductPrintObject(size) : null,
               r'fromJson': (bool b) => (data) =>
                   b ? prefix25.ProductPrintObject.fromJson(data) : null
             },
