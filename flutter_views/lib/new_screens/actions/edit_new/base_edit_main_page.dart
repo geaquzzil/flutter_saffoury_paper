@@ -1,47 +1,28 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
-import 'package:flutter_view_controller/customs_widget/expandable_sliver_list.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/file_reader_popup_icon_widget.dart';
-import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_widget_sliver.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
-import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
-import 'package:flutter_view_controller/screens/action_screens/base_actions_page.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
-import '../../../new_components/add_from_list_popup_icon_widget.dart';
-import '../../../new_components/cards/outline_card.dart';
 import '../../../new_components/fabs/floating_action_button_extended.dart';
-import '../../../providers/actions/action_viewabstract_provider.dart';
 import '../../../providers/actions/list_multi_key_provider.dart';
-
-import '../../home/components/empty_widget.dart';
-import '../../lists/list_api_selected_searchable_widget.dart';
-import '../../lists/list_static_editable.dart';
-import 'package:nil/nil.dart';
 
 class BaseEditNewPage extends BaseActionScreenPage {
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 
   BaseEditNewPage(
-      {Key? key, required super.viewAbstract, this.onFabClickedConfirm})
-      : super(key: key);
+      {super.key, required super.viewAbstract, this.onFabClickedConfirm});
 
   @override
   State<BaseEditNewPage> createState() => _BaseEditNewPageState();
@@ -56,6 +37,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   Widget getBody(BuildContext context) {
+    // return Text("Sdds");
     return BaseEditWidget(
       onValidate: (viewAbstract) {
         currentViewAbstract = viewAbstract;
@@ -162,6 +144,12 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                 onPress: masterValue == null
                     ? null
                     : () async {
+                        if (widget.onFabClickedConfirm != null) {
+                          debugPrint(
+                              "onFabClickedConfirm !=null convert destination");
+                          widget.onFabClickedConfirm!(currentViewAbstract);
+                          return;
+                        }
                         currentViewAbstract =
                             currentViewAbstract!.copyToUplode();
                         apiCallState.value = ApiCallState.LOADING;

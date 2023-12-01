@@ -198,7 +198,7 @@ class BaseEditWidget extends StatelessWidget {
             viewAbstract.copyWithSetNew(field, controllers[field]!.text);
         viewAbstract.parent?.setFieldValue(field, viewAbstract);
         //  refreshControllers(context);
-      
+
         viewAbstractChangeProvider.change(viewAbstract);
       }
 
@@ -378,6 +378,7 @@ class BaseEditWidget extends StatelessWidget {
               .toList())),
     ];
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: child,
     );
   }
@@ -409,6 +410,7 @@ class BaseEditWidget extends StatelessWidget {
           controller: getController(context, field: field, value: fieldValue));
     }
     if (isAutoCompleteByCustomList) {
+      // return wrapController(Text("dsa"));
       return DropdownCustomListWithFormListener(
         viewAbstract: viewAbstract,
         field: field,

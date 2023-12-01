@@ -1,12 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -43,6 +49,27 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
     return PrintProductList();
   }
 
+  // @override
+  // List<TabControllerHelper> getCustomTabList(BuildContext context,
+  //     {ServerActions? action}) {
+  //   return [
+  //     TabControllerHelper(
+  //       AppLocalizations.of(context)!.findSimilar,
+  //       widget: ListApiAutoRestWidget(
+  //         autoRest: AutoRest<Order>(
+  //             obj: Order()..setCustomMap({"<CustomerID>": ""}),
+  //             key: "CustomerByOrder"),
+  //       ),
+  //     ),
+
+  //     //  ChartItem(
+  //     //   autoRest: AutoRest<Order>(
+  //     //     obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+  //     //     key: "CustomerByOrder$iD"),
+  //     // ),
+  //   ];
+  // }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
@@ -62,10 +89,15 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "hideWarehouse",
           "hideQuantity",
           "hideUnitPriceAndTotalPrice",
+          "skipOutOfStock",
           "sortByField",
           "sortByType",
-          "skipOutOfStock",
         ]);
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {
+        "sortByField": Icons.sort,
+      };
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
@@ -105,9 +137,8 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "skipOutOfStock": AppLocalizations.of(context)!.skipOutofStock,
           "hideUnitPriceAndTotalPrice":
               AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
+          "sortByField": AppLocalizations.of(context)!.sortBy
         });
-  @override
-  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) => "";

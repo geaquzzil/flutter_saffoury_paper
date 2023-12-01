@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstr
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../../screens/action_screens/edit_details_page.dart';
 
@@ -17,7 +18,7 @@ class BaseSharedDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<ActionViewAbstractProvider, ViewAbstract?>(
+    return Selector<ActionViewAbstractProvider, Tuple2<ViewAbstract?, Widget?>>(
       builder: (context, value, child) {
         ActionViewAbstractProvider actionViewAbstractProvider =
             context.read<ActionViewAbstractProvider>();
@@ -36,14 +37,11 @@ class BaseSharedDetailsView extends StatelessWidget {
         // }
         // else
         Widget? currentWidget;
-        if (value == null) {
-          Widget? customWidget = actionViewAbstractProvider.getCustomWidget;
+
+        if (value.item1 == null) {
+          Widget? customWidget = value.item2;
           if (customWidget != null) {
-            currentWidget = Scaffold(
-              body: Center(
-                child: customWidget,
-              ),
-            );
+            currentWidget = customWidget;
           } else {
             // Widget? currentWidget;
 
@@ -56,7 +54,7 @@ class BaseSharedDetailsView extends StatelessWidget {
                 key: UniqueKey(),
                 color: Theme.of(context).colorScheme.background,
                 child: BaseEditNewPage(
-                  viewAbstract: value,
+                  viewAbstract: value.item1!,
                 ),
               );
               break;
@@ -65,11 +63,11 @@ class BaseSharedDetailsView extends StatelessWidget {
                   key: UniqueKey(),
                   color: Theme.of(context).colorScheme.background,
                   child: BaseViewNewPage(
-                    viewAbstract: value,
+                    viewAbstract: value.item1!,
                   ));
               break;
             default:
-              currentWidget = MasterHomeHorizontal(viewAbstract: value);
+              currentWidget = MasterHomeHorizontal(viewAbstract: value.item1!);
               break;
           }
         }
@@ -79,7 +77,7 @@ class BaseSharedDetailsView extends StatelessWidget {
           child: currentWidget,
         );
       },
-      selector: (p0, p1) => p1.getObject,
+      selector: (p0, p1) => Tuple2(p1.getObject, p1.getCustomWidget),
     );
   }
 

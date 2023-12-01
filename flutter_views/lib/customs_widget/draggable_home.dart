@@ -564,8 +564,9 @@ class DraggableHomeState extends State<DraggableHome>
     return [
       if (!hasSlivers)
         SliverFillRemaining(
-            fillOverscroll: true, hasScrollBody: false, child: tab.widget),
-      ...?tab.slivers?.map((e) => e).toList()
+          //TODO this gives error 
+            fillOverscroll: true, hasScrollBody: true, child: tab.widget),
+      ...?tab.slivers?.map((e) => e)
     ];
   }
 

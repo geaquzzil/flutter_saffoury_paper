@@ -12,7 +12,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   bool _sideMenuOpen = false;
   int _idx = 0;
 
-  int _navigationIndex = 0;
+  int _navigationIndex = 2;
   bool _navigationRailIsOpen = false;
 
   DrawerMenuControllerProvider({required ViewAbstract initViewAbstract})

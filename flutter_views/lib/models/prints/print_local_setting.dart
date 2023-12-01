@@ -38,13 +38,13 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
       };
   @override
   List<String> getMainFields({BuildContext? context}) => [
-        "printerOptions",
+        // "printerOptions",
         "reportOptions",
-        "hideQrCode",
         "primaryColor",
         "secondaryColor",
-        "hideAdditionalNotes",
-        "hideTermsOfService",
+        "hideQrCode",
+        // "hideAdditionalNotes",
+        // "hideTermsOfService",
       ];
 
   @override

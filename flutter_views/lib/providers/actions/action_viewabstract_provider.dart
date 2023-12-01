@@ -22,7 +22,7 @@ class ActionViewAbstractProvider with ChangeNotifier {
 
   void change(ViewAbstract object, ServerActions? serverActions) {
     _customWidget = null;
-    this._object = object;
+    _object = object;
     this.serverActions = serverActions;
     if (stack.isNotEmpty) {
       stack.removeWhere(

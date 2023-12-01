@@ -10,10 +10,12 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
@@ -313,20 +315,24 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
             changeToPrintPdfSelfList(context);
           } else if (object?.label == printListSetting ||
               object?.label == printSelfListSetting) {
-            context
-                .read<ActionViewAbstractProvider>()
-                .changeCustomWidget(BaseEditNewPage(
-                  onFabClickedConfirm: (obj) {
-                    // context
-                    //     .read<ActionViewAbstractProvider>()
-                    //     .changeCustomWidget(PdfSelfListPage(
-                    //         setting: obj as PrintLocalSetting,
-                    //         list:
-                    //             getList().cast<PrintableSelfListInterface>()));
-                  },
-                  viewAbstract: (drawerViewAbstractObsever.getObject
-                          as PrintableSelfListInterface)
-                      .getModifiablePrintableSelfPdfSetting(context),
+            context.read<ActionViewAbstractProvider>().changeCustomWidget(Card(
+                  child: Container(
+                      key: UniqueKey(),
+                      color: Theme.of(context).colorScheme.background,
+                      child: BaseEditNewPage(
+                        // isTheFirst: true,
+                        onFabClickedConfirm: (obj) {
+                          context
+                              .read<ActionViewAbstractProvider>()
+                              .changeCustomWidget(PdfSelfListPage(
+                                  setting: obj as PrintLocalSetting,
+                                  list: getList()
+                                      .cast<PrintableSelfListInterface>()));
+                        },
+                        viewAbstract: (drawerViewAbstractObsever.getObject
+                                as PrintableSelfListInterface)
+                            .getModifiablePrintableSelfPdfSetting(context),
+                      )),
                 ));
           } else if (object?.label == printSelfListSetting) {
           } else {

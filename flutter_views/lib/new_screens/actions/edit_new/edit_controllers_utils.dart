@@ -60,7 +60,7 @@ Widget getContollerCheckBox(BuildContext context,
     bool enabled = true}) {
   Type? fieldType = viewAbstract.getMirrorFieldType(field);
 
-  return FormBuilderCheckbox(
+  return wrapController(FormBuilderCheckbox(
     autovalidateMode: AutovalidateMode.always,
     name: viewAbstract.getTag(field),
     initialValue: fieldType == int ? (value == true ? 1 : 0) : value ?? false,
@@ -79,7 +79,7 @@ Widget getContollerCheckBox(BuildContext context,
             viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
       }
     },
-  );
+  ));
 }
 
 Widget getContolerColorPicker(BuildContext context,
