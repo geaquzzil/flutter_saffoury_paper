@@ -25,6 +25,7 @@ class PrintProductLabelCustomView
 
   ViewAbstract? viewAbstractPrintObject;
   String? customerName;
+  String? cutRequestNumber;
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;
@@ -81,7 +82,13 @@ class PrintProductLabelCustomView
   String getPrintableQrCode() => "TODO";
 
   @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return true;
+  }
+
+  @override
   String getPrintableQrCodeID() => "TODO";
+ 
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
@@ -95,6 +102,7 @@ class PrintProductLabelCustomView
           if (v == null) return;
           ProductPrintObject ppo = v as ProductPrintObject;
           customerName = ppo.customer;
+          cutRequestNumber = ppo.cutRequestNumber;
           ProductType productType = ProductType()..name = ppo.description;
           GSM g = GSM()..gsm = ppo.gsm;
           productType.unit = ProductTypeUnit.KG;
@@ -144,6 +152,7 @@ class PrintProductLabelCustomView
                   pdf.PdfPageFormat.a4,
                   hasCustomSetting: PrintProduct()
                     ..hideQrCode = true
+                    ..cutRequestID = cutRequestNumber
                     ..customerName = customerName));
         });
   }

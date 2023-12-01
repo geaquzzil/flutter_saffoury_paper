@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -65,6 +67,33 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
   }
 
+  Widget getSliverPadding(
+      BuildContext context, ViewAbstractStandAloneCustomViewApi viewAbstract,
+      {double padd = 2}) {
+    if (!viewAbstract.getCustomStandAloneWidgetIsPadding()) {
+      return MasterViewStandAlone(viewAbstract: viewAbstract);
+    }
+    return LayoutBuilder(builder: (_, constraints) {
+      double defualPadding = ScreenHelper.isMobile(context)
+          ? kDefaultPadding * 2
+          : kDefaultPadding;
+      double horizontalPadding = max(
+          (constraints.maxWidth -
+                  (ScreenHelper.isTablet(context)
+                      ? kTabletMaxWidth
+                      : kDesktopMaxWidth)) /
+              padd,
+          0);
+      return Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: defualPadding,
+              horizontal: horizontalPadding > defualPadding
+                  ? horizontalPadding
+                  : defualPadding),
+          child: MasterViewStandAlone(viewAbstract: viewAbstract));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Selector<DrawerMenuControllerProvider,
@@ -85,7 +114,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               floatingActionButton:
                   value.getCustomFloatingActionWidget(context),
               body: shouldWrapNavigatorChild(
-                  context, MasterViewStandAlone(viewAbstract: value)));
+                  context, getSliverPadding(context, value),
+                  isCustomWidget: true
+                  ));
         } else {
           return Scaffold(
               key: drawerMenuControllerProvider.getStartDrawableKey,
@@ -176,15 +207,16 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             body: getFirstPaneBody(context)));
   }
 
-  Widget shouldWrapNavigatorChild(BuildContext context, Widget child) {
+  Widget shouldWrapNavigatorChild(BuildContext context, Widget child,
+      {bool isCustomWidget = false}) {
     if (SizeConfig.isSoLargeScreen(context)) {
       drawerWidget ??= DrawerLargeScreens();
-      navigationRailWidget ??= getNavigationRail();
+      navigationRailWidget ??= isCustomWidget ? null : getNavigationRail();
       return SafeArea(
           child: Row(
         children: [
           drawerWidget!,
-          navigationRailWidget!,
+          if (!isCustomWidget) navigationRailWidget!,
           Expanded(child: child),
         ],
       ));

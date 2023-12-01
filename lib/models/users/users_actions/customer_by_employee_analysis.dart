@@ -56,6 +56,10 @@ class CustomerByEmployeeAnanlysis
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.dashboard_and_rep;
+  @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return false;
+  }
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>

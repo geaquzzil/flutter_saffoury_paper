@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_view_controller/globals.dart';
 import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -22,11 +23,12 @@ class PdfCustom<T extends PrintableCustomInterface,
     final ttf = pw.Font.ttf(pathToFile);
     // PageTheme(theme: )
     return ThemeData.withFont(
-        icons: ttf,
-        base: await PdfGoogleFonts.tajawalRegular(),
-        bold: await PdfGoogleFonts.tajawalBold(),
-        italic: await PdfGoogleFonts.tajawalMedium(),
-        boldItalic: await PdfGoogleFonts.tajawalBold());
+      icons: ttf,
+      base: Font.ttf(await rootBundle.load("assets/fonts/tr.ttf")),
+      bold: Font.ttf(await rootBundle.load("assets/fonts/tb.ttf")),
+      italic: Font.ttf(await rootBundle.load("assets/fonts/tm.ttf")),
+      boldItalic: Font.ttf(await rootBundle.load("assets/fonts/tb.ttf")),
+    );
   }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
@@ -55,6 +57,9 @@ class PdfCustom<T extends PrintableCustomInterface,
     dynamic pageTheme = PageTheme(
       margin: EdgeInsets.zero,
       pageFormat: format,
+      theme: await getThemeData(),
+      textDirection:
+          Globals.isArabic(context) ? TextDirection.rtl : TextDirection.ltr,
       buildBackground:
           watermark != null ? (Context context) => watermark : null,
       // buildForeground: (Context context) => Align(

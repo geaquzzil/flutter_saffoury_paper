@@ -18,12 +18,13 @@ class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
   Future<pw.ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
     final ttf = pw.Font.ttf(pathToFile);
-    return ThemeData.withFont(
-        icons: ttf,
-        base: await PdfGoogleFonts.tajawalRegular(),
-        bold: await PdfGoogleFonts.tajawalBold(),
-        italic: await PdfGoogleFonts.tajawalMedium(),
-        boldItalic: await PdfGoogleFonts.tajawalBold());
+   return ThemeData.withFont(
+      icons: ttf,
+      base: Font.ttf(await rootBundle.load("assets/fonts/tr.ttf")),
+      bold: Font.ttf(await rootBundle.load("assets/fonts/tb.ttf")),
+      italic: Font.ttf(await rootBundle.load("assets/fonts/tm.ttf")),
+      boldItalic: Font.ttf(await rootBundle.load("assets/fonts/tb.ttf")),
+    );
   }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {

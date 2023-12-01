@@ -50,10 +50,10 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     super.initState();
     langaugeProvider = Provider.of<LangaugeProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      // String? savedLang = await Configurations.getValueString("ln");
-      // if (savedLang != null) {
-      //   context.read<LangaugeProvider>().change(Locale(savedLang, ''));
-      // }
+      String? savedLang = await Configurations.getValueString("ln");
+      if (savedLang != null) {
+        context.read<LangaugeProvider>().change(Locale(savedLang, ''));
+      }
       langaugeProvider.addListener(() {
         debugPrint(
             "langaugeProvider changed  langaugeProvider= ${langaugeProvider.getLocale}");

@@ -51,6 +51,11 @@ class CustomerClinetGuide
   }
 
   @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return false;
+  }
+
+  @override
   List<String> getMainFields({material.BuildContext? context}) {
     // TODO: implement getMainFields
     throw UnimplementedError();

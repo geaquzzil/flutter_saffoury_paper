@@ -51,6 +51,11 @@ class TransferAccount
   }
 
   @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return false;
+  }
+
+  @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     // TODO: implement getMainHeaderLabelTextOnly
     throw UnimplementedError();

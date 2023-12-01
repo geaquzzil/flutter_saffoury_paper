@@ -17,9 +17,9 @@ List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
 
 String getEditControllerText(dynamic invokedValue) {
   if (invokedValue is double) {
-    return (invokedValue).toCurrencyFormatWithoutDecimal();
+    return (invokedValue).toCurrencyFormatWithoutDecimalReturnSpaceIfZero();
   } else if (invokedValue is num) {
-    return (invokedValue).toCurrencyFormatWithoutDecimal();
+    return (invokedValue).toCurrencyFormatWithoutDecimalReturnSpaceIfZero();
   }
   return invokedValue?.toString() ?? "";
 }

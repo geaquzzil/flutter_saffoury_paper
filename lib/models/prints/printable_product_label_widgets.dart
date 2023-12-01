@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/pdf.dart';
@@ -194,7 +195,9 @@ class ProductLabelPDF {
                   child: Text(label,
                       textDirection: TextDirection.rtl,
                       style: const TextStyle(fontSize: 10))),
-              alignment: Alignment.topLeft),
+              alignment: Globals.isArabic(context)
+                  ? Alignment.topRight
+                  : Alignment.topLeft),
           Expanded(
               child: Align(
                   alignment: Alignment.center,

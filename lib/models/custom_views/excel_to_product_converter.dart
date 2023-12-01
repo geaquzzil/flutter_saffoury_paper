@@ -37,6 +37,11 @@ class ExcelToProductConverter
   }
 
   @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return true;
+  }
+
+  @override
   List<String> getExcelableRemovedFields() => [];
 
   @override

@@ -27,6 +27,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   String customer = "";
   double quantity = 0;
   double sheets = 0;
+  String? cutRequestNumber;
 
   ProductPrintObject(this.size);
   @override
@@ -38,6 +39,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
       "gsm",
       "quantity",
       "sheets",
+      "cutRequestNumber",
       "comments",
     ];
   }
@@ -48,6 +50,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "size": ProductSize(),
         "comments": "",
         "customer": "",
+        "cutRequestNumber": "",
         "gsm": 0,
         "quantity": 0.0,
         "sheets": 0.0
@@ -78,6 +81,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "date": Icons.date_range,
         "gsm": Icons.line_weight,
         "sheets": Icons.line_weight_outlined,
+        "cutRequestNumber": Icons.numbers,
         "comments": Icons.notes,
         "customer": Icons.account_circle,
         "quantity": Icons.scale
@@ -120,6 +124,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "description": AppLocalizations.of(context)!.product_type,
         'date': AppLocalizations.of(context)!.date,
         "gsm": AppLocalizations.of(context)!.gsm,
+        "cutRequestNumber": AppLocalizations.of(context)!.cutRequest,
         "barcode": AppLocalizations.of(context)!.barcode,
         "customer": AppLocalizations.of(context)!.customer,
         "quantity": AppLocalizations.of(context)!.quantity,
@@ -183,12 +188,12 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() => {};
+  Map<String, double> getTextInputMaxValidateMap() => {"quantity": 9999};
 
   @override
-  Map<String, double> getTextInputMinValidateMap() => {};
+  Map<String, double> getTextInputMinValidateMap() => {"quantity": 1};
   @override
-  Map<String, int> getTextInputMaxLengthMap() => {"gsm": 4};
+  Map<String, int> getTextInputMaxLengthMap() => {"gsm": 4, "quantity": 4};
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
@@ -208,7 +213,6 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "customer": true,
         "gsm": true,
         "quantity": true,
-        "sheets": true,
       };
 
   @override

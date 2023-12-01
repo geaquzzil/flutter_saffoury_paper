@@ -34,6 +34,10 @@ class CustomerBalanceList
     // TODO: implement callApi
     return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
   }
+  @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return false;
+  }
 
   @override
   CustomerBalanceList fromJsonViewAbstract(Map<String, dynamic> json) =>

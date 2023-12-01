@@ -21,6 +21,11 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   }
 
   @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return false;
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"blockMood": BlockMood.ALL, "customer": Customer(), "block": false};
   @override

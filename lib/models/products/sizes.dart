@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -211,19 +212,35 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   pdf.Widget getSizeTextRichWidget(BuildContext context, {String? fiberLines}) {
-    return pdf.RichText(
-      text: pdf.TextSpan(
-        text: "${getWidth(fibrelines: fiberLines)} X ",
-        style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 32),
-        children: <pdf.TextSpan>[
-          pdf.TextSpan(
-              text: getLength(fibrelines: fiberLines),
-              style:
-                  pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 42)),
-          // TextSpan(text: ' world!'),
-        ],
-      ),
-    );
+    if (Globals.isArabic(context)) {
+      return pdf.RichText(
+        text: pdf.TextSpan(
+          text: getWidth(fibrelines: fiberLines),
+          style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 32),
+          children: <pdf.TextSpan>[
+            pdf.TextSpan(
+                text: "${getLength(fibrelines: fiberLines)} X ",
+                style: pdf.TextStyle(
+                    fontWeight: pdf.FontWeight.bold, fontSize: 42)),
+            // TextSpan(text: ' world!'),
+          ],
+        ),
+      );
+    } else {
+      return pdf.RichText(
+        text: pdf.TextSpan(
+          text: "${getWidth(fibrelines: fiberLines)} X ",
+          style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 32),
+          children: <pdf.TextSpan>[
+            pdf.TextSpan(
+                text: getLength(fibrelines: fiberLines),
+                style: pdf.TextStyle(
+                    fontWeight: pdf.FontWeight.bold, fontSize: 42)),
+            // TextSpan(text: ' world!'),
+          ],
+        ),
+      );
+    }
   }
 
   String getSizeHtmlFormatString(BuildContext context, {String? fiberLines}) {

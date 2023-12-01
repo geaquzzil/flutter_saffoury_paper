@@ -1098,7 +1098,14 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  String getPrintablePrimaryColor(PrintProduct? setting) => Colors.grey.toHex();
+  String getPrintableSecondaryColor(PrintProduct? setting) {
+    return setting?.secondaryColor ?? Colors.grey[700]!.toHex();
+  }
+
+  @override
+  String getPrintablePrimaryColor(PrintProduct? setting) {
+    return setting?.primaryColor ?? Colors.grey[700]!.toHex();
+  }
 
   @override
   String getPrintableQrCode() {
@@ -1116,10 +1123,6 @@ class Product extends ViewAbstract<Product>
     String year = "${dateFormat.parse(date ?? "").year}";
     return "PR-$iD-$year";
   }
-
-  @override
-  String getPrintableSecondaryColor(PrintProduct? setting) =>
-      Colors.grey.toHex();
 
   @override
   PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {

@@ -71,6 +71,10 @@ class ProductMovments
   String? getCustomAction() => "list_products_movements";
   @override
   Map<String, String> get getCustomMap => {"<ProductID>": iD.toString()};
+  @override
+  bool getCustomStandAloneWidgetIsPadding() {
+    return false;
+  }
 
   // @override
   // Future<ProductMovments?> callApi() async {

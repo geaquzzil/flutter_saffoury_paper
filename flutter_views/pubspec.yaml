@@ -140,6 +140,10 @@ flutter:
     - assets/images/vector/
     - assets/images/raster/
     - assets/fonts/materialIcons.ttf
+    - assets/fonts/tb.ttf
+    - assets/fonts/tl.ttf
+    - assets/fonts/tm.ttf
+    - assets/fonts/tr.ttf
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -156,6 +160,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Schyler
+      fonts:
+        - asset: assets/fonts/tr.ttf 
+        - asset: assets/fonts/tm.ttf
+          style: italic
+        - asset: assets/fonts/tm.ttf
+          weight: 700
   # fonts:
   #   - family: Schyler
   #     fonts:
