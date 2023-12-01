@@ -4,25 +4,25 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class ActionViewAbstractProvider with ChangeNotifier {
-  ViewAbstract? object;
+  ViewAbstract? _object;
   ServerActions? serverActions;
   List<StackedActions?> stack = [null];
   ActionViewAbstractProvider();
   Widget? _customWidget;
   Widget? get getCustomWidget => _customWidget;
-  ViewAbstract? get getObject => object;
-  ViewAbstract get getObjectNotNull => object ?? PermissionActionAbstract();
+  ViewAbstract? get getObject => _object;
+  ViewAbstract get getObjectNotNull => _object ?? PermissionActionAbstract();
   ServerActions? get getServerActions => serverActions;
   List<StackedActions?> get getStackedActions => stack;
   void changeCustomWidget(Widget widget) {
     _customWidget = widget;
-    object = null;
+    _object = null;
     notifyListeners();
   }
 
   void change(ViewAbstract object, ServerActions? serverActions) {
     _customWidget = null;
-    this.object = object;
+    this._object = object;
     this.serverActions = serverActions;
     if (stack.isNotEmpty) {
       stack.removeWhere(
@@ -36,7 +36,7 @@ class ActionViewAbstractProvider with ChangeNotifier {
     if (stack.isNotEmpty) {
       StackedActions? s = stack.removeLast();
       if (s != null) {
-        object = s.object;
+        _object = s.object;
         serverActions = s.serverActions;
         notifyListeners();
       }

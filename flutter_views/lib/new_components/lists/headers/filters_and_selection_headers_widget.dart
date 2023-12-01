@@ -297,7 +297,8 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               Icons.print,
               AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever
                   .getObject
-                  .getMainHeaderLabelTextOnly(context))),
+                  .getMainHeaderLabelTextOnly(context)
+                  .toLowerCase())),
           DropdownStringListItem(
               Icons.settings,
               enabled: false,
@@ -310,17 +311,18 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               AppLocalizations.of(context)!
                   .printAllAs(AppLocalizations.of(context)!.list)) {
             changeToPrintPdfSelfList(context);
-          } else if (object?.label == printListSetting) {
+          } else if (object?.label == printListSetting ||
+              object?.label == printSelfListSetting) {
             context
                 .read<ActionViewAbstractProvider>()
                 .changeCustomWidget(BaseEditNewPage(
                   onFabClickedConfirm: (obj) {
-                    context
-                        .read<ActionViewAbstractProvider>()
-                        .changeCustomWidget(PdfSelfListPage(
-                            setting: obj as PrintLocalSetting,
-                            list:
-                                getList().cast<PrintableSelfListInterface>()));
+                    // context
+                    //     .read<ActionViewAbstractProvider>()
+                    //     .changeCustomWidget(PdfSelfListPage(
+                    //         setting: obj as PrintLocalSetting,
+                    //         list:
+                    //             getList().cast<PrintableSelfListInterface>()));
                   },
                   viewAbstract: (drawerViewAbstractObsever.getObject
                           as PrintableSelfListInterface)
