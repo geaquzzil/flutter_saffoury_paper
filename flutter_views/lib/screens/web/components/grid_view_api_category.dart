@@ -307,6 +307,10 @@ class WebGridViewItem extends StatelessWidget {
                   extra: item);
             } else {
               context.goNamed(indexWebView,
+                  // queryParameters: {
+                  //   "id": item.iD.toString(),
+                  //   "tableName": item.getTableNameApi()!
+                  // },
                   pathParameters: {
                     "id": item.iD.toString(),
                     "tableName": item.getTableNameApi()!

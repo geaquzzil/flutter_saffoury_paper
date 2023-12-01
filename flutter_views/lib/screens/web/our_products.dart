@@ -54,11 +54,11 @@ class ProductWebPage extends BaseWebPageSlivers {
   late ListMultiKeyProvider listProvider;
 
   ProductWebPage({
-    Key? key,
+    super.key,
     this.searchQuery,
     this.customFilter,
     super.pinToolbar = false,
-  }) : super(key: key);
+  });
   void fetshListWidgetBinding() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
@@ -197,7 +197,7 @@ class ProductWebPage extends BaseWebPageSlivers {
           delegate: SliverAppBarDelegatePreferedSize(
             shouldRebuildWidget: true,
             child: PreferredSize(
-              preferredSize: const Size(40, kToolbarHeight),
+              preferredSize: const Size(80, 80),
               child: ResponsiveWebBuilderSliver(
                 builder: (context, width) => SearchWidgetWebComponent(
                   scrollvalueNofifier: onScroll,
@@ -240,6 +240,7 @@ class ProductWebPage extends BaseWebPageSlivers {
             HorizontalFilterableSelectedList(
               onFilterable: customFilterChecker,
               onFilterableChanged: (onFilter) {
+                debugPrint("onFiltercHANGE $onFilter");
                 if (onFilter == null) {
                   context.goNamed(indexWebOurProducts);
                 } else {
@@ -343,7 +344,7 @@ class ProductWebPage extends BaseWebPageSlivers {
                       item: e,
                       setDescriptionAtBottom: true,
                     ))
-                .toList(),
+                ,
             if (isLoading)
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),

@@ -93,20 +93,20 @@ class RouteGenerator {
   static GoRouter _getGoRouter({List<RouteBase>? addonRoutes}) {
     return GoRouter(
       initialLocation: '/',
-      redirect: (context, state) async {
-        if (kIsWeb) {
-          if (state.fullPath == null) {
-            return "/index";
-          } else if (state.fullPath == "/") {
-            return "/index";
-          } else if (state.fullPath!.startsWith("/index")) {
-            return state.fullPath;
-          } else {
-            return "Error";
-          }
-        }
-        return null;
-      },
+      // redirect: (context, state) async {
+      //   // if (kIsWeb) {
+      //   //   if (state.fullPath == null) {
+      //   //     return "/index";
+      //   //   } else if (state.fullPath == "/") {
+      //   //     return "/index";
+      //   //   } else if (state.fullPath!.startsWith("/index")) {
+      //   //     return state.fullPath;
+      //   //   } else {
+      //   //     return "Error";
+      //   //   }
+      //   // }
+      //   return null;
+      // },
       errorPageBuilder: (context, state) => MaterialPage(
         key: state.pageKey,
         child: getErrorPage(),
@@ -198,7 +198,7 @@ class RouteGenerator {
                   return MaterialPage(
                       key: state.pageKey,
                       child: WebMasterToList(
-                        iD: int.parse(state.pathParameters['id']!),
+                        iD: int.parse(state.uri.queryParameters['id']!),
                         tableName: state.pathParameters['tableName']!,
                         extras: state.extra as ViewAbstract?,
                       ));
@@ -217,8 +217,8 @@ class RouteGenerator {
                 pageBuilder: (context, state) {
                   return MaterialPage(
                       child: ProductWebPage(
-                    searchQuery: state.pathParameters["search"],
-                    customFilter: state.pathParameters['filter'],
+                    searchQuery: state.uri.queryParameters["search"],
+                    customFilter: state.uri.queryParameters['filter'],
                   ));
                 },
               ),
@@ -301,7 +301,7 @@ class RouteGenerator {
                 child: PdfPage<PrintLocalSetting>(
                   iD: int.tryParse(state.pathParameters['id'] ?? "-"),
                   tableName: state.pathParameters['tableName'],
-                  invoiceObj: state.extra as PrintableMaster,
+                  invoiceObj: state.extra as PrintableMaster?,
                 ));
           },
         ),

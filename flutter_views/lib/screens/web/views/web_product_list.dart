@@ -23,13 +23,12 @@ class WebProductList extends StatelessWidget {
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
   WebProductList(
-      {Key? key,
+      {super.key,
       this.customHeight,
       this.searchQuery,
       required this.viewAbstract,
       this.title,
-      this.description})
-      : super(key: key);
+      this.description});
 
   @override
   Widget build(BuildContext context) {
