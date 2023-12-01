@@ -552,7 +552,7 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
   String tableName;
   ViewAbstract? extras;
   BaseWebPageSliversApi(
-      {Key? key,
+      {super.key,
       required this.iD,
       required this.tableName,
       this.extras,
@@ -560,8 +560,7 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
       super.buildHeader,
       super.pinToolbar,
       super.customSliverHeader,
-      super.useSmallFloatingBar})
-      : super(key: key);
+      super.useSmallFloatingBar});
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context);
   ServerActions getServerActions();
   ViewAbstract? getExtras() {

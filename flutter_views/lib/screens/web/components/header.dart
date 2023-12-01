@@ -406,57 +406,5 @@ class WebMobileDrawer extends StatelessWidget {
         if (header != null) header
       ],
     );
-
-    Drawer(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 24.0,
-          ),
-          child: ListView.separated(
-            itemBuilder: (BuildContext context, int index) {
-              if (index >= headerItems.length) {
-                return header!;
-              }
-              return headerItems[index].isButton
-                  ? MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: kDangerColor,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                        child: TextButton(
-                          onPressed: () => headerItems[index].onClick?.call(),
-                          child: Text(headerItems[index].title,
-                              style: Theme.of(context).textTheme.titleSmall),
-                        ),
-                      ),
-                    )
-                  : ListTile(
-                      onTap: () {
-                        context
-                            .read<DrawerMenuControllerProvider>()
-                            .controlStartDrawerMenu();
-                        headerItems[index].onClick?.call();
-                      },
-                      selected: headerItems[index].title == selectedHeader,
-                      title: Text(
-                        headerItems[index].title,
-                      ),
-                    );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(
-                height: 10.0,
-              );
-            },
-            itemCount: headerItems.length + (header != null ? 1 : 0),
-          ),
-        ),
-      ),
-    );
   }
 }
