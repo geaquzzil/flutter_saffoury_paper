@@ -41,6 +41,8 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
 
   @override
   String? getPrintableSortByName() => sortByField;
+  @override
+  String? getPrintableGroupByName() => null;
 
   @override
   SortByType getPrintableHasSortBy() => sortByType ?? SortByType.ASC;

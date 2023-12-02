@@ -30,6 +30,8 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
   String? getPrintableSortByName() => null;
 
   @override
+  String? getPrintableGroupByName() => null;
+  @override
   SortByType? getPrintableHasSortBy() => SortByType.ASC;
 
   @override

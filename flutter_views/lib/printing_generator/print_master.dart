@@ -130,6 +130,10 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
     return setting?.getPrintableSortByName() != null;
   }
 
+  bool hasGroupBy() {
+    return setting?.getPrintableGroupByName() != null;
+  }
+
   CrossAxisAlignment getCrossAxis() {
     return isArabic() ? CrossAxisAlignment.end : CrossAxisAlignment.start;
   }

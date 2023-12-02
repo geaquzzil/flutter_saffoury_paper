@@ -31,6 +31,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
   bool? hideUnitPriceAndTotalPrice;
 
   String? sortByField;
+  String? groupedByField;
   SortByType? sortByType;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -40,6 +41,9 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
 
   @override
   String? getPrintableSortByName() => sortByField;
+
+  @override
+  String? getPrintableGroupByName() => groupedByField;
 
   @override
   SortByType getPrintableHasSortBy() => sortByType ?? SortByType.ASC;
@@ -90,20 +94,27 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "hideQuantity",
           "hideUnitPriceAndTotalPrice",
           "skipOutOfStock",
+          "groupedByField",
           "sortByField",
           "sortByType",
         ]);
 
   @override
-  Map<String, IconData> getFieldIconDataMap() => {
-        "sortByField": Icons.sort,
-      };
+  Map<String, IconData> getFieldIconDataMap() =>
+      {"sortByField": Icons.sort, "groupedByField": Icons.group_work};
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
           BuildContext context) =>
       {
         "sortByField": product
+                ?.getSelfNewInstance()
+                .getPrintableSelfListTableHeaderAndContent(
+                    context, product, this)
+                .keys
+                .toList() ??
+            [],
+        "groupedByField": product
                 ?.getSelfNewInstance()
                 .getPrintableSelfListTableHeaderAndContent(
                     context, product, this)
@@ -137,7 +148,8 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "skipOutOfStock": AppLocalizations.of(context)!.skipOutofStock,
           "hideUnitPriceAndTotalPrice":
               AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
-          "sortByField": AppLocalizations.of(context)!.sortBy
+          "sortByField": AppLocalizations.of(context)!.sortBy,
+          "groupedByField": "Group by todo"
         });
 
   @override

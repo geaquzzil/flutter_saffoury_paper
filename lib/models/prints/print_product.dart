@@ -39,6 +39,9 @@ class PrintProduct extends PrintLocalSetting<PrintProduct> {
   String? getPrintableSortByName() => null;
 
   @override
+  String? getPrintableGroupByName() => null;
+
+  @override
   SortByType? getPrintableHasSortBy() => null;
 
   @override

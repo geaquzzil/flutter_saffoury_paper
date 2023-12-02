@@ -24,6 +24,8 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
 
   String? getPrintableSortByName();
 
+  String? getPrintableGroupByName();
+
   T onSavedModiablePrintableLoaded(
       BuildContext context, ViewAbstract viewAbstractThatCalledPDF);
 

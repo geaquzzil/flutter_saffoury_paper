@@ -34,7 +34,8 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
 
   @override
   String? getPrintableSortByName() => null;
-
+  @override
+  String? getPrintableGroupByName() => null;
   @override
   SortByType? getPrintableHasSortBy() => null;
 
@@ -122,6 +123,8 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
       BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
     return this;
   }
+
+ 
 }
 
 enum PrintCutRequestType implements ViewAbstractEnum<PrintCutRequestType> {

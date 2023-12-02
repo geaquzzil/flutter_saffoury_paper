@@ -29,6 +29,7 @@ PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
       ..skipOutOfStock = json['skipOutOfStock'] as bool?
       ..hideUnitPriceAndTotalPrice = json['hideUnitPriceAndTotalPrice'] as bool?
       ..sortByField = json['sortByField'] as String?
+      ..groupedByField = json['groupedByField'] as String?
       ..sortByType =
           $enumDecodeNullable(_$SortByTypeEnumMap, json['sortByType']);
 
@@ -50,6 +51,7 @@ Map<String, dynamic> _$PrintProductListToJson(PrintProductList instance) =>
       'skipOutOfStock': instance.skipOutOfStock,
       'hideUnitPriceAndTotalPrice': instance.hideUnitPriceAndTotalPrice,
       'sortByField': instance.sortByField,
+      'groupedByField': instance.groupedByField,
       'sortByType': _$SortByTypeEnumMap[instance.sortByType],
     };
 

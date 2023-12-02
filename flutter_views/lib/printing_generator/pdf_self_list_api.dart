@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:typed_data';
+import 'package:flutter/material.dart' as mt;
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:supercharged/supercharged.dart';
 import '../models/prints/print_local_setting.dart';
 
 class PdfSelfListApi<T extends PrintLocalSetting>
@@ -75,8 +77,65 @@ class PdfSelfListApi<T extends PrintLocalSetting>
   Future<Uint8List> generate(PdfPageFormat? format) async {
     await init();
     var pdf = await getDocument();
-    pdf.addPage(getMultiPage(format, header));
+    if (hasGroupBy()) {
+      int index = list[0]
+          .getPrintableSelfListTableHeaderAndContent(context, list[0], setting)
+          .keys
+          .toList()
+          .indexOf(setting!.getPrintableGroupByName()!);
+
+      final data = list
+          .map((e) => checkListToReverse(e
+              .getPrintableSelfListTableHeaderAndContent(context, e, setting)
+              .values
+              .toList()))
+          .toList();
+      mt.debugPrint(" ssss $data");
+      var d = data.groupBy((element) => element[index]);
+      int idx = 0;
+      d.forEach((key, value) {
+        pdf.addPage(
+            getMultiPageGrouped(format, header, key, value.cast(), idx));
+        idx = idx + 1;
+      });
+      // for (int i = 0; i < data.length - 1; i++) {
+      //   if (i == index) {
+      //     d =
+      //   } else {}
+      // }
+      // totalList =
+      //     await printObj.getPrintableSelfListTotal(context, list, setting);
+      // totalDescriptionList = await printObj.getPrintableSelfListTotalDescripton(
+      //     context, list, setting);
+      // accountInfoList = await printObj.getPrintableSelfListAccountInfoInBottom(
+      //     context, list, setting);
+    } else {
+      pdf.addPage(getMultiPage(format, header));
+    }
+
     return pdf.save();
+  }
+
+  pw.MultiPage getMultiPageGrouped(PdfPageFormat? format, pw.Widget header,
+      String groupName, List<String> data, int idx) {
+    return MultiPage(
+      pageFormat: format,
+      margin: EdgeInsets.zero,
+      build: (context) {
+        contextPDF = context;
+        return [
+          if (idx == 0)
+            Stack(
+                alignment: Alignment.bottomRight,
+                fit: StackFit.loose,
+                children: [header, buildTitle()]),
+          if (hasHeaderInfo()) buildInvoiceMainInfoHeader(),
+          buildSpaceOnInvoice(cm: .5),
+          buildInvoiceMainTable(customData: data),
+          if (hasTotal()) buildMainTotal(),
+        ];
+      },
+    );
   }
 
   pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
@@ -91,7 +150,10 @@ class PdfSelfListApi<T extends PrintLocalSetting>
               fit: StackFit.loose,
               children: [header, buildTitle()]),
           if (hasHeaderInfo()) buildInvoiceMainInfoHeader(),
-          SizedBox(height: .5 * (PdfPageFormat.cm)),
+          buildSpaceOnInvoice(cm: .5),
+          // if (hasGroupBy())
+          //   ...buildInvoiceMainTableGroupBy()
+          // else
           buildInvoiceMainTable(),
           if (hasTotal()) buildMainTotal(),
         ];
@@ -125,12 +187,13 @@ class PdfSelfListApi<T extends PrintLocalSetting>
                 }).toList()))));
   }
 
+  void checkToSortByGroupField() {}
   void checkToSort(PrintableSelfListInterface pid, List<List<String>> data) {
     if (!hasSortBy()) return;
     String field = setting!.getPrintableSortByName()!;
     bool ascending = setting!.getPrintableHasSortBy() == SortByType.ASC;
     int index = pid
-        .getPrintableSelfListTableHeaderAndContent(context, null, setting)
+        .getPrintableSelfListTableHeaderAndContent(context, list[0], setting)
         .keys
         .toList()
         .indexOf(field);
@@ -216,7 +279,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     );
   }
 
-  Widget buildInvoiceMainTable() {
+  List<Widget> buildInvoiceMainTableGroupBy() {
     PrintableSelfListInterface head = list[0];
     var headers = head
         .getPrintableSelfListTableHeaderAndContent(
@@ -234,7 +297,35 @@ class PdfSelfListApi<T extends PrintLocalSetting>
             .toList()))
         .toList();
 
-    // checkToSort(head, data);
+    var headerGroupBy = headers.groupBy((element) =>
+        element.toLowerCase() ==
+        setting?.getPrintableGroupByName()!.toLowerCase());
+    mt.debugPrint(
+        "groupByField ${setting?.getPrintableGroupByName()}  headerGroupBy $headerGroupBy");
+    checkToSort(head, data);
+    return [];
+  }
+
+  Widget buildInvoiceMainTable({dynamic customData}) {
+    PrintableSelfListInterface head = list[0];
+    var headers = head
+        .getPrintableSelfListTableHeaderAndContent(
+            context, (list[0] as ViewAbstract).getSelfNewInstance(), setting)
+        .keys
+        .map((e) => e.toUpperCase())
+        .toList();
+
+    headers = checkListToReverse(headers);
+
+    final data = customData ??
+        list
+            .map((e) => checkListToReverse(e
+                .getPrintableSelfListTableHeaderAndContent(context, e, setting)
+                .values
+                .toList()))
+            .toList();
+
+    checkToSort(head, data);
 
     // data.addAll(getTotalText(headers.length - 1));
     return Padding(
@@ -242,6 +333,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
         child: Directionality(
             textDirection: isArabic() ? TextDirection.rtl : TextDirection.ltr,
             child: Table.fromTextArray(
+
                 // columnWidths: {
                 //   0: FixedColumnWidth(50),
                 //   1: FixedColumnWidth(300)
@@ -400,26 +492,22 @@ class PdfSelfListApi<T extends PrintLocalSetting>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (hasTotal())
-                  ...totalList!
-                      .map(
-                        (e) => buildTotalText(
-                            title: e.title,
-                            value: e.description,
-                            color: e.getColor(),
-                            withDivider:
-                                totalList!.indexOf(e) != totalList!.length - 1),
-                      )
-                      .toList(),
+                  ...totalList!.map(
+                    (e) => buildTotalText(
+                        title: e.title,
+                        value: e.description,
+                        color: e.getColor(),
+                        withDivider:
+                            totalList!.indexOf(e) != totalList!.length - 1),
+                  ),
                 if (hasTotalDescription())
-                  ...totalDescriptionList!
-                      .map((e) => buildTotalText(
-                          size: e.size,
-                          title: e.title,
-                          value: e.description,
-                          color: e.getColor(),
-                          withDivider: totalDescriptionList!.indexOf(e) ==
-                              totalDescriptionList!.length - 1))
-                      .toList()
+                  ...totalDescriptionList!.map((e) => buildTotalText(
+                      size: e.size,
+                      title: e.title,
+                      value: e.description,
+                      color: e.getColor(),
+                      withDivider: totalDescriptionList!.indexOf(e) ==
+                          totalDescriptionList!.length - 1))
               ],
             ),
           )),

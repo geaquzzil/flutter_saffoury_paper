@@ -322,6 +322,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                       child: BaseEditNewPage(
                         // isTheFirst: true,
                         onFabClickedConfirm: (obj) {
+                          debugPrint("onFabClickedConfirm $obj");
                           context
                               .read<ActionViewAbstractProvider>()
                               .changeCustomWidget(PdfSelfListPage(

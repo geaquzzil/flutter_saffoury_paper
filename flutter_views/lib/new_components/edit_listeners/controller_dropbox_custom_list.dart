@@ -45,7 +45,7 @@ class _DropdownCustomListWithFormListenerState
 
   @override
   Widget build(BuildContext context) {
-       list = widget.viewAbstract
+    list = widget.viewAbstract
         .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
     return wrapController(
         FormBuilderDropdown<dynamic>(
@@ -54,7 +54,8 @@ class _DropdownCustomListWithFormListenerState
             // widget.viewAbstract.onDropdownChanged(context, widget.field, obj,
             //     formKey: widget.formKey);
             widget.viewAbstract.setFieldValue(widget.field, obj);
-            debugPrint('getControllerDropdownCustomList onChanged=   $obj');
+            debugPrint(
+                'getControllerDropdownCustomList onChanged= field= ${widget.field} value=   $obj');
             // widget.onSelected(obj);
           },
           onReset: () {
