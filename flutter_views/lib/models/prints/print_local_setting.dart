@@ -18,6 +18,11 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   bool? hideTermsOfService = false;
   bool? hideAdditionalNotes = false;
 
+  String? currentGroupNameFromList;
+  int? currentGroupNameIndex;
+
+  List? currentGroupList;
+
   PrintLocalSetting() : super();
 
   SortByType? getPrintableHasSortBy();

@@ -1172,17 +1172,17 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  @override
-  Future<List<Product>?> listCall(
-      {int? count, int? page, OnResponseCallback? onResponse}) async {
-    try {
-      Iterable l = jsonDecode(jsonEncode(productsJson));
-      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-    } catch (e) {
-      debugPrint("listCallFake ${e.toString()}");
-    }
-    return null;
-  }
+  // @override
+  // Future<List<Product>?> listCall(
+  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
+  //   try {
+  //     Iterable l = jsonDecode(jsonEncode(productsJson));
+  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+  //   } catch (e) {
+  //     debugPrint("listCallFake ${e.toString()}");
+  //   }
+  //   return null;
+  // }
 
   @override
   Future getPosableInitObj(BuildContext context) {
@@ -1350,11 +1350,11 @@ class Product extends ViewAbstract<Product>
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesSecRow(
       BuildContext context, List<Product> list, PrintProductList? pca) {
     return [
-      InvoiceHeaderTitleAndDescriptionInfo(
-        title: AppLocalizations.of(context)!.iD,
-        description: getPrintableQrCodeID(),
-        // icon: Icons.numbers
-      ),
+      // InvoiceHeaderTitleAndDescriptionInfo(
+      //   title: AppLocalizations.of(context)!.iD,
+      //   description: getPrintableQrCodeID(),
+      //   // icon: Icons.numbers
+      // ),
       if ((pca?.hideDate == false))
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.date,
@@ -1366,14 +1366,31 @@ class Product extends ViewAbstract<Product>
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesTherdRow(
       BuildContext context, List<Product> list, PrintProductList? pca) {
+    double? total;
+    if (((pca?.hideQuantity == false))) {
+      pca?.currentGroupList?.forEach((element) {
+        total = (total ?? 0) + (double.tryParse(element[3]) ?? 0);
+      });
+    }
+
     return [
-      // if ((pca?.hideQuantity == false))
-      //   InvoiceHeaderTitleAndDescriptionInfo(
-      //       title: AppLocalizations.of(context)!.total_price,
-      //       description: extendedNetPrice?.toCurrencyFormat() ?? "0",
-      //       hexColor: getPrintablePrimaryColor(pca)
-      //       // icon: Icons.tag
-      //       ),
+      if (pca?.currentGroupNameFromList != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+            title: pca?.groupedByField ?? "-",
+            description: pca?.currentGroupNameFromList ?? "sad",
+            hexColor: getPrintablePrimaryColor(
+                PrintProduct()..primaryColor = pca?.primaryColor)
+            // icon: Icons.tag
+            ),
+      if ((pca?.hideQuantity == false))
+        InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.total,
+            description: total.toCurrencyFormat(),
+            hexColor: getPrintablePrimaryColor(
+                PrintProduct()..primaryColor = pca?.primaryColor)
+            // icon: Icons.tag
+            ),
+
       // if (!isPricelessInvoice())
       //   if ((pca?.hideCustomerBalance == false))
       //     InvoiceHeaderTitleAndDescriptionInfo(
@@ -1412,6 +1429,12 @@ class Product extends ViewAbstract<Product>
         description: results.join("\n\n"),
         // icon: Icons.account_circle_rounded
       ),
+      if (pca?.groupedByField != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.grainOn,
+          description: pca?.groupedByField ?? "",
+          // icon: Icons.account_circle_rounded
+        ),
       // if ((pca?.hideCustomerAddressInfo == false))
       //   if (customers?.address != null)
       //     InvoiceHeaderTitleAndDescriptionInfo(

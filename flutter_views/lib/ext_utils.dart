@@ -64,6 +64,10 @@ extension HexColor on Color {
 }
 
 extension StringsUtils2 on String {
+  bool isNumeric() {
+    return double.tryParse(this) != null;
+  }
+
   Color? fromHex() {
     try {
       final buffer = StringBuffer();
@@ -72,6 +76,14 @@ extension StringsUtils2 on String {
       return Color(int.parse(buffer.toString(), radix: 16));
     } catch (e) {
       return null;
+    }
+  }
+
+  double toDoubleFromString() {
+    if (isNumeric()) {
+      return 0;
+    } else {
+      return double.parse(this);
     }
   }
 }

@@ -93,11 +93,16 @@ class PdfSelfListApi<T extends PrintLocalSetting>
       mt.debugPrint(" ssss $data");
       var d = data.groupBy((element) => element[index]);
       int idx = 0;
-      d.forEach((key, value) {
-        pdf.addPage(
-            getMultiPageGrouped(format, header, key, value.cast(), idx));
-        idx = idx + 1;
-      });
+
+      for (int i = 0; i < d.keys.length - 1; i++) {
+        pdf.addPage(await getMultiPageGrouped(format, header,
+            d.keys.elementAt(i), d.values.elementAt(i).cast(), i));
+      }
+      // d.forEach((key, value) async {
+      //   pdf.addPage(
+      //       await getMultiPageGrouped(format, header, key, value.cast(), idx));
+      //   idx = idx + 1;
+      // });
       // for (int i = 0; i < data.length - 1; i++) {
       //   if (i == index) {
       //     d =
@@ -110,14 +115,30 @@ class PdfSelfListApi<T extends PrintLocalSetting>
       // accountInfoList = await printObj.getPrintableSelfListAccountInfoInBottom(
       //     context, list, setting);
     } else {
-      pdf.addPage(getMultiPage(format, header));
+      pdf.addPage(await getMultiPage(format, header));
     }
 
     return pdf.save();
   }
 
-  pw.MultiPage getMultiPageGrouped(PdfPageFormat? format, pw.Widget header,
-      String groupName, List<String> data, int idx) {
+  Future<pw.MultiPage> getMultiPageGrouped(
+      PdfPageFormat? format,
+      pw.Widget header,
+      String groupName,
+      List<List<String>> data,
+      int idx) async {
+    //      headerInfoList =
+    //     await printObj.getPrintableSelfListHeaderInfo(context, list, setting);
+    // totalList =
+    //     await printObj.getPrintableSelfListTotal(context, list, setting);
+    // totalDescriptionList = await printObj.getPrintableSelfListTotalDescripton(
+    //     context, list, setting);
+    // accountInfoList = await printObj.getPrintableSelfListAccountInfoInBottom(
+    //     context, list, setting);
+    setting?.currentGroupNameFromList = groupName;
+    setting?.currentGroupList = data;
+    setting?.currentGroupNameIndex = idx;
+    Widget w = await buildInvoiceMainInfoHeader();
     return MultiPage(
       pageFormat: format,
       margin: EdgeInsets.zero,
@@ -129,16 +150,18 @@ class PdfSelfListApi<T extends PrintLocalSetting>
                 alignment: Alignment.bottomRight,
                 fit: StackFit.loose,
                 children: [header, buildTitle()]),
-          if (hasHeaderInfo()) buildInvoiceMainInfoHeader(),
+          if (hasHeaderInfo()) w,
           buildSpaceOnInvoice(cm: .5),
           buildInvoiceMainTable(customData: data),
-          if (hasTotal()) buildMainTotal(),
+          // if (hasTotal()) buildMainTotal(),
         ];
       },
     );
   }
 
-  pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
+  Future<pw.MultiPage> getMultiPage(
+      PdfPageFormat? format, pw.Widget header) async {
+    Widget widget = await buildInvoiceMainInfoHeader();
     return MultiPage(
       pageFormat: format,
       margin: EdgeInsets.zero,
@@ -149,7 +172,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
               alignment: Alignment.bottomRight,
               fit: StackFit.loose,
               children: [header, buildTitle()]),
-          if (hasHeaderInfo()) buildInvoiceMainInfoHeader(),
+          if (hasHeaderInfo()) widget,
           buildSpaceOnInvoice(cm: .5),
           // if (hasGroupBy())
           //   ...buildInvoiceMainTableGroupBy()
@@ -161,7 +184,10 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     );
   }
 
-  Widget buildInvoiceMainInfoHeader() {
+  Future<pw.Widget> buildInvoiceMainInfoHeader() async {
+    var currentHeaderInfoList = hasGroupBy()
+        ? await printObj.getPrintableSelfListHeaderInfo(context, list, setting)
+        : headerInfoList;
     return Container(
         width: double.infinity,
         color: PdfColors.grey200,
@@ -170,7 +196,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: checkListToReverse(headerInfoList!.map((e) {
+                children: checkListToReverse(currentHeaderInfoList!.map((e) {
                   return Column(
                       crossAxisAlignment: isArabic()
                           ? CrossAxisAlignment.end
