@@ -71,6 +71,7 @@ class _PdfListPage<T extends PrintLocalSetting> extends State<PdfListPage<T>> {
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,
+        
         // pdfPreviewPageDecoration:
         canDebug: false,
         pageFormats: {

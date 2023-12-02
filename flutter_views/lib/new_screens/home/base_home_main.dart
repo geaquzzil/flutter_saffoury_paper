@@ -35,6 +35,7 @@ import 'package:flutter_view_controller/providers/actions/list_scroll_provider.d
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
@@ -110,13 +111,11 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               key: drawerMenuControllerProvider.getStartDrawableKey,
               drawer: DrawerLargeScreens(),
               endDrawer: const BaseHomeCartPage(),
-              appBar: getAppBar(),
               floatingActionButton:
                   value.getCustomFloatingActionWidget(context),
               body: shouldWrapNavigatorChild(
                   context, getSliverPadding(context, value),
-                  isCustomWidget: true
-                  ));
+                  isCustomWidget: true));
         } else {
           return Scaffold(
               key: drawerMenuControllerProvider.getStartDrawableKey,
@@ -441,8 +440,8 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           IconData icon, IconData activeIcon, String? label) =>
       NavigationRailDestination(icon: Icon(icon), label: Text(label ?? ""));
   PreferredSizeWidget? getAppBar() {
-    return null;
-    if (!SizeConfig.isMobile(context)) return null;
+    // return null;
+    // if (!SizeConfig.isMobile(context)) return null;
 
     GlobalKey<ListApiMasterState> key =
         context.watch<ListActionsProvider>().getListStateKey;

@@ -85,30 +85,30 @@ void main() async {
   ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
     PrintProductLabelCustomView(),
-    // ExcelToProductConverter(),
-    // Product(),
-    // ProductSize(),
-    // Order(),
-    // Purchases(),
-    // ProductInput(),
-    // ProductOutput(),
-    // Transfers(),
-    // CutRequest(),
-    // CustomerRequestSize(),
-    // CargoTransporter(),
-    // OrderRefund(),
-    // PurchasesRefund(),
-    // ReservationInvoice(),
-    // CustomsDeclaration(),
-    // Customer(),
-    // Employee(),
-    // Credits(),
-    // Debits(),
-    // Incomes(),
-    // Spendings(),
-    // ProductType(),
-    // CustomerBalanceList(),
-    // Dashboard(),
+    ExcelToProductConverter(),
+    Product(),
+    ProductSize(),
+    Order(),
+    Purchases(),
+    ProductInput(),
+    ProductOutput(),
+    Transfers(),
+    CutRequest(),
+    CustomerRequestSize(),
+    CargoTransporter(),
+    OrderRefund(),
+    PurchasesRefund(),
+    ReservationInvoice(),
+    CustomsDeclaration(),
+    Customer(),
+    Employee(),
+    Credits(),
+    Debits(),
+    Incomes(),
+    Spendings(),
+    ProductType(),
+    CustomerBalanceList(),
+    Dashboard(),
   ]);
   try {
     runApp(MultiProvider(providers: [
@@ -122,8 +122,8 @@ void main() async {
       // ChangeNotifierProvider(
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
-          create: (context) => DrawerMenuControllerProvider(
-              initViewAbstract: PrintProductLabelCustomView())),
+          create: (context) =>
+              DrawerMenuControllerProvider(initViewAbstract: Product())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
@@ -133,8 +133,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(
-          create: (_) =>
-              ViewAbstractChangeProvider.init(PrintProductLabelCustomView())),
+          create: (_) => ViewAbstractChangeProvider.init(Product())),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),

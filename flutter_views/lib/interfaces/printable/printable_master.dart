@@ -16,6 +16,8 @@ abstract class PrintableMaster<T extends PrintLocalSetting>
   String getPrintableSecondaryColor(T? pca);
 
   String getPrintableInvoiceTitle(BuildContext context, T? pca);
+
+ 
 }
 
 class PrintableMasterEmpty<T extends PrintLocalSetting> {}

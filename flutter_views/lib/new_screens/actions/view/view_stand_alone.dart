@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
+import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -80,7 +81,14 @@ class MasterViewStandAlone extends StatelessWidget {
   Widget build(BuildContext context) {
     if (viewAbstract.getCustomStandAloneResponseType() ==
         ResponseType.NONE_RESPONSE_TYPE) {
-      return viewAbstract.getCustomStandAloneWidget(context);
+      return ListView(
+        children: [
+          BaseSharedHeaderViewDetailsActions(
+            viewAbstract: viewAbstract,
+          ),
+          viewAbstract.getCustomStandAloneWidget(context),
+        ],
+      );
     } else {
       return getFutureBuilder(context);
     }

@@ -102,7 +102,10 @@ flutter:
   - assets/images/raster/
   - assets/lotties/
   - assets/fonts/materialIcons.ttf
-
+  - assets/fonts/tb.ttf
+  - assets/fonts/tl.ttf
+  - assets/fonts/tm.ttf
+  - assets/fonts/tr.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

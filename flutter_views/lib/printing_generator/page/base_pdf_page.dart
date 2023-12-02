@@ -5,7 +5,9 @@ import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -14,8 +16,7 @@ import '../../configrations.dart';
 import '../../new_screens/setting/base_shared_detail_modifidable.dart';
 
 abstract class BasePdfPage extends StatefulWidget {
-  String title;
-  BasePdfPage({super.key, required this.title});
+  BasePdfPage({super.key});
 }
 
 abstract class BasePdfPageState<T extends BasePdfPage, C>
@@ -124,12 +125,14 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
     return CustomScrollView(
       slivers: [
         SliverAppBar(
+          automaticallyImplyLeading: true,
           elevation: 4,
+          leading: BackButton(onPressed: () => context.goNamed(homeRouteName)),
           pinned: true,
           primary: true,
           expandedHeight: 300,
           flexibleSpace: FlexibleSpaceBar(
-            title: Text(widget.title),
+            title: Text(getMainObject().getPritablePageTitle(context)),
           ),
         ),
         SliverFillRemaining(

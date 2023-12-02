@@ -32,6 +32,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Map<String, String> getFieldLabelMap(BuildContext context);
   Map<String, IconData> getFieldIconDataMap();
+  String getPritablePageTitle(BuildContext context) {
+    return "${AppLocalizations.of(context)!.print} ${getMainHeaderLabelTextOnly(context)}";
+  }
 
   String? getDateTextOnly() {
     dynamic value = getFieldValue("date");
