@@ -209,7 +209,9 @@ extension ConvertersNumbers on dynamic {}
 
 extension NonNullableNum on num? {
   String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {
+    debugPrint("toCurrencyFormatWithoutDecimalReturnSpace $this");
     if (this == null) return "";
+    if (this == 0) return "";
     RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
     return this!.toString().replaceAll(regex, '');
   }

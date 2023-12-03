@@ -34,7 +34,8 @@ class DrawerLargeScreens extends StatelessWidget {
     // bool isHovered = context.watch<IsHoveredOnDrawerClosed>().isHovered;
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
-        return getBody(isOpen, __);
+        //todo change true to isOpen
+        return getBody(true, __);
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );

@@ -88,15 +88,13 @@ class PrintProductLabelCustomView
 
   @override
   String getPrintableQrCodeID() => "TODO";
- 
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
+    ProductPrintObject p = ProductPrintObject(ProductSize());
     return BaseEditWidget(
       isTheFirst: true,
-      viewAbstract: ProductPrintObject(
-        ProductSize(),
-      ),
+      viewAbstract: p,
       onValidate: (v) {
         {
           if (v == null) return;

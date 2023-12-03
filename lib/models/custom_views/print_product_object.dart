@@ -34,13 +34,13 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   List<String> getMainFields({BuildContext? context}) {
     return [
       "description",
-      "customer",
-      "size",
-      "gsm",
-      "quantity",
-      "sheets",
-      "cutRequestNumber",
-      "comments",
+      // "customer",
+      // "size",
+      // // "gsm",
+      // // "quantity",
+      // // "sheets",
+      // "cutRequestNumber",
+      // "comments",
     ];
   }
 
@@ -98,6 +98,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   void _setSheets(BuildContext context,
       {GlobalKey<FormBuilderState>? formKey}) {
+    return;
     GSM g = GSM()..gsm = gsm;
     Product p = Product()
       ..sizes = size
@@ -108,8 +109,8 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "onTextChangeListener current quantity $quantity ,sheets : $sheets");
     setFieldValue("sheets", sheets);
 
-    notifyOtherControllers(
-        context: context, formKey: formKey, notifySpecificField: "sheets");
+    // notifyOtherControllers(
+    //     context: context, formKey: formKey, notifySpecificField: "sheets");
   }
 
   @override
