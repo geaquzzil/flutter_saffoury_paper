@@ -61,6 +61,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget? dashboardWidget;
   Widget? homeWidget;
   Widget? shopingWidget;
+  late Widget customWidget;
 
   @override
   void initState() {
@@ -71,8 +72,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget getSliverPadding(
       BuildContext context, ViewAbstractStandAloneCustomViewApi viewAbstract,
       {double padd = 2}) {
+    customWidget = MasterViewStandAlone(viewAbstract: viewAbstract);
     if (!viewAbstract.getCustomStandAloneWidgetIsPadding()) {
-      return MasterViewStandAlone(viewAbstract: viewAbstract);
+      return customWidget;
     }
     return LayoutBuilder(builder: (_, constraints) {
       double defualPadding = ScreenHelper.isMobile(context)
@@ -91,7 +93,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               horizontal: horizontalPadding > defualPadding
                   ? horizontalPadding
                   : defualPadding),
-          child: MasterViewStandAlone(viewAbstract: viewAbstract));
+          child: customWidget);
     });
   }
 

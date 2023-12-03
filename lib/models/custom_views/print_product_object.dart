@@ -34,13 +34,13 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   List<String> getMainFields({BuildContext? context}) {
     return [
       "description",
-      // "customer",
-      // "size",
-      // // "gsm",
-      // // "quantity",
-      // // "sheets",
-      // "cutRequestNumber",
-      // "comments",
+      "customer",
+      "size",
+      "gsm",
+      "quantity",
+      "sheets",
+      "cutRequestNumber",
+      "comments",
     ];
   }
 
