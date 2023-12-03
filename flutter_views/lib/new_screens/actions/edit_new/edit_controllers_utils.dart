@@ -13,11 +13,14 @@ import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import '../../../models/view_abstract_inputs_validaters.dart';
 import '../../edit/controllers/ext.dart';
 
-Widget wrapController(Widget controller, {bool? requiredSpace}) {
+Widget wrapController(Widget controller,
+    {bool? requiredSpace, bool? isExpansionTile}) {
   return Column(
     children: [
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        padding: (isExpansionTile ?? false)
+            ? EdgeInsets.zero
+            : const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         child: controller,
       ),
       if (requiredSpace ?? false) getSpace()

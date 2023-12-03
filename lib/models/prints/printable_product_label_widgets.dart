@@ -192,9 +192,11 @@ class ProductLabelPDF {
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                  child: Text(label,
+                  child: Directionality(
                       textDirection: TextDirection.rtl,
-                      style: const TextStyle(fontSize: 10))),
+                      child: Text(label,
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(fontSize: 10)))),
               alignment: Globals.isArabic(context)
                   ? Alignment.topRight
                   : Alignment.topLeft),
@@ -202,11 +204,13 @@ class ProductLabelPDF {
               child: Align(
                   alignment: Alignment.center,
                   child: isValueWidget ??
-                      Text(value,
+                      Directionality(
                           textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: fontSize)))),
+                          child: Text(value,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize))))),
         ]));
   }
 }

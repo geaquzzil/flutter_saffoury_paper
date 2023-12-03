@@ -75,6 +75,7 @@ dependencies:
   fast_cached_network_image: ^1.2.0
   pdf: ^3.10.6
   bitmap: ^0.1.3
+  desktop_window: ^0.4.0
   
 dependency_overrides:
     intl: 0.17.0

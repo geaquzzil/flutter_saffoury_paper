@@ -96,6 +96,13 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
   }
 
   @override
+  void didUpdateWidget(covariant ExpansionTileCustom oldWidget) {
+    debugPrint("didUpdateWidget ExpanstionTileCustom ");
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void didChangeDependencies() {
     debugPrint("didChangeDependencies ExpanstionTileCustom ");
     final ThemeData theme = Theme.of(context);

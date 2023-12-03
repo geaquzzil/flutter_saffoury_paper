@@ -91,7 +91,8 @@ class BaseEditWidgetSliver extends StatelessWidget {
 
   bool hasErrorGroupWidget(BuildContext context, List<String> groupedFields) {
     for (var element in groupedFields) {
-      bool? res = _formKey.currentState?.fields[element]?.validate();
+      bool? res = _formKey.currentState?.fields[element]
+          ?.validate(focusOnInvalid: false);
       if (res != null) {
         if (res == false) {
           return true;
@@ -105,7 +106,8 @@ class BaseEditWidgetSliver extends StatelessWidget {
     bool isFieldCanBeNullable = viewAbstract.parent!
         .isFieldCanBeNullable(context, viewAbstract.getFieldNameFromParent!);
 
-    bool hasErr = _formKey.currentState?.validate() == false;
+    bool hasErr =
+        _formKey.currentState?.validate(focusOnInvalid: false) == false;
     bool isNull = viewAbstract.isNull;
     if (!isFieldCanBeNullable) {
       return hasErr;
@@ -130,8 +132,8 @@ class BaseEditWidgetSliver extends StatelessWidget {
       viewAbstract.onTextChangeListener(
           context, field, controllers[field]!.text,
           formKey: _formKey);
-      bool? validate =
-          _formKey.currentState!.fields[viewAbstract.getTag(field)]?.validate();
+      bool? validate = _formKey.currentState!.fields[viewAbstract.getTag(field)]
+          ?.validate(focusOnInvalid: false);
       if (validate ?? false) {
         _formKey.currentState!.fields[viewAbstract.getTag(field)]?.save();
       }
@@ -244,7 +246,8 @@ class BaseEditWidgetSliver extends StatelessWidget {
         key: _formKey,
         onChanged: () {
           if (onValidate != null) {
-            bool validate = _formKey.currentState!.validate();
+            bool validate =
+                _formKey.currentState!.validate(focusOnInvalid: false);
             if (validate) {
               _formKey.currentState!.save();
               onValidate!(viewAbstract.onAfterValidate(context));

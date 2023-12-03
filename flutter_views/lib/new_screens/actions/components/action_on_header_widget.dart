@@ -27,7 +27,7 @@ class ActionsOnHeaderWidget extends StatelessWidget {
         ? viewAbstract.getPopupMenuActionsView(context)
         : viewAbstract.getPopupMenuActionsEdit(context);
     return Row(
-      children: [...menuItems.map(buildMenuItem).toList()],
+      children: [...menuItems.map(buildMenuItem)],
     );
   }
 

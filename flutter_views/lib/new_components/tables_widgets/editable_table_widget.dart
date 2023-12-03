@@ -162,7 +162,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
           formKey: _formKey);
       bool? validate = _formKey.currentState!
           .fields[(widget.viewAbstract as ViewAbstract).getTag(field)]
-          ?.validate();
+          ?.validate(focusOnInvalid: false);
       if (validate ?? false) {
         _formKey.currentState!
             .fields[(widget.viewAbstract as ViewAbstract).getTag(field)]

@@ -69,7 +69,8 @@ class _EditableWidget extends State<EditableWidget> {
 
   void validate() {
     // FocusScope.of(context).unfocus();
-    final validationSuccess = _formKey.currentState!.validate();
+    final validationSuccess =
+        _formKey.currentState!.validate(focusOnInvalid: false);
     if (!validationSuccess) {
       _formKey.currentState!.save();
       debugPrint("! validationSuccess ");

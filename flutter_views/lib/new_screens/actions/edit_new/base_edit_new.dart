@@ -112,7 +112,7 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   bool isValidated(BuildContext context) {
-    bool? isValidate = formKey?.currentState?.validate();
+    bool? isValidate = formKey?.currentState?.validate(focusOnInvalid: false);
     if (isValidate == null) {
       debugPrint("isValidated is null manually checking");
       return viewAbstract.onManuallyValidate(context) != null;
@@ -139,7 +139,8 @@ class BaseEditWidget extends StatelessWidget {
     bool isFieldCanBeNullable = viewAbstract.parent!
         .isFieldCanBeNullable(context, viewAbstract.getFieldNameFromParent!);
 
-    bool hasErr = formKey?.currentState?.validate() == false;
+    bool hasErr =
+        formKey?.currentState?.validate(focusOnInvalid: false) == false;
     bool isNull = viewAbstract.isNull;
     if (!isFieldCanBeNullable) {
       return hasErr;
@@ -166,6 +167,9 @@ class BaseEditWidget extends StatelessWidget {
     if (controllers.containsKey(field)) {
       // value = getEditControllerText(value);
       // controllers[field]!.text = value;
+      // FocusScope.of(context).unfocus();
+      // WidgetsBinding.instance
+      //     .addPostFrameCallback((_) => controllers[field]!.clear());
       return controllers[field]!;
     }
     value = getEditControllerText(value);
@@ -173,8 +177,8 @@ class BaseEditWidget extends StatelessWidget {
     controllers[field]!.text = value;
 
     controllers[field]!.addListener(() {
-      bool? validate =
-          formKey?.currentState!.fields[viewAbstract.getTag(field)]?.validate();
+      bool? validate = formKey?.currentState!.fields[viewAbstract.getTag(field)]
+          ?.validate(focusOnInvalid: false);
       // formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       if (validate ?? false) {
         formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
@@ -206,7 +210,9 @@ class BaseEditWidget extends StatelessWidget {
       // }
       // modifieController(field);
     });
-    controllers[field]!.clear();
+    // FocusScope.of(context).unfocus();
+    // WidgetsBinding.instance
+    //     .addPostFrameCallback((_) => controllers[field]!.clear());
 
     viewAbstract.addTextFieldController(field, controllers[field]!);
     return controllers[field]!;
@@ -216,22 +222,30 @@ class BaseEditWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     init(context);
 
-    return ChangeNotifierProvider.value(
-      value: viewAbstractChangeProvider,
-      child: Consumer<ViewAbstractChangeProvider>(
-          builder: (context, provider, listTile) {
-        Widget form = buildForm(context);
-        if (isTheFirst) {
-          return form;
-        } else if (isStandAloneField) {
-          return ControllerViewAbstractAsOneField(
-              viewAbstract: viewAbstract,
-              parent: viewAbstract.parent!,
-              children: form);
-        } else {
-          return getExpansionTileCustom(context, form);
-        }
-      }),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        new TextEditingController().clear();
+      },
+      child: ChangeNotifierProvider.value(
+        value: viewAbstractChangeProvider,
+        child: Consumer<ViewAbstractChangeProvider>(
+            builder: (context, provider, listTile) {
+          Widget form = buildForm(context);
+          if (isTheFirst) {
+            return form;
+          } else if (isStandAloneField) {
+            return ControllerViewAbstractAsOneField(
+                viewAbstract: viewAbstract,
+                parent: viewAbstract.parent!,
+                children: form);
+          } else {
+            return getExpansionTileCustom(context, form);
+            return wrapController(getExpansionTileCustom(context, form),
+                isExpansionTile: true, requiredSpace: true);
+          }
+        }),
+      ),
     );
   }
 
@@ -315,7 +329,7 @@ class BaseEditWidget extends StatelessWidget {
   Widget buildForm(BuildContext context) {
     debugPrint("_BaseEdit buildForm ${viewAbstract.runtimeType}");
     return FormBuilder(
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formKey,
         onChanged: () {
           onValidateForm(context);
@@ -326,10 +340,12 @@ class BaseEditWidget extends StatelessWidget {
   void onValidateForm(BuildContext context) {
     // return;
     if (onValidate != null) {
-      bool? validate = formKey?.currentState!.validate(focusOnInvalid: false);
+      bool? validate = formKey?.currentState!
+          .validate(focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
       _subformKeys.forEach((key, value) {
-        bool? subValidate =
-            value.currentState?.validate(focusOnInvalid: false) ?? false;
+        bool? subValidate = value.currentState?.validate(
+                focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false) ??
+            false;
         // if (subValidate) {
         //   _subformKeys[key]?.currentState!.validate(focusOnInvalid: false);
         // }

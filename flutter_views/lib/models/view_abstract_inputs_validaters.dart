@@ -365,6 +365,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   void setTextFieldControllerValue(String field, dynamic value) {
     textFieldController[getTag(field)]?.text = value.toString();
+    // textFieldController[getTag(field)]!.clear();
   }
 
   void addTextFieldController(String field, TextEditingController controller) {

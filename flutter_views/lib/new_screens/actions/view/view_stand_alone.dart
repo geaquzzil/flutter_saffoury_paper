@@ -81,13 +81,15 @@ class MasterViewStandAlone extends StatelessWidget {
   Widget build(BuildContext context) {
     if (viewAbstract.getCustomStandAloneResponseType() ==
         ResponseType.NONE_RESPONSE_TYPE) {
-      return ListView(
-        children: [
-          BaseSharedHeaderViewDetailsActions(
-            viewAbstract: viewAbstract,
-          ),
-          viewAbstract.getCustomStandAloneWidget(context),
-        ],
+      return Card(
+        child: ListView(
+          children: [
+            BaseSharedHeaderViewDetailsActions(
+              viewAbstract: viewAbstract,
+            ),
+            viewAbstract.getCustomStandAloneWidget(context),
+          ],
+        ),
       );
     } else {
       return getFutureBuilder(context);

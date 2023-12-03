@@ -49,26 +49,26 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                  )
-                else
-                  BackButton(
-                    onPressed: () {
-                      if (context
-                              .read<ActionViewAbstractProvider>()
-                              .getStackedActions
-                              .length >
-                          1) {
-                        context.read<ActionViewAbstractProvider>().pop();
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    },
                   ),
+                // else
+                //   BackButton(
+                //     onPressed: () {
+                //       if (context
+                //               .read<ActionViewAbstractProvider>()
+                //               .getStackedActions
+                //               .length >
+                //           1) {
+                //         context.read<ActionViewAbstractProvider>().pop();
+                //       } else {
+                //         Navigator.of(context).pop();
+                //       }
+                //     },
+                //   ),
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),
-                ActionsOnHeaderWidget(viewAbstract: viewAbstract),
-                ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
+                // ActionsOnHeaderWidget(viewAbstract: viewAbstract),
+                // ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
               ],
             ),
           ),

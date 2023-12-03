@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:desktop_window/desktop_window.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,7 +69,11 @@ void main() async {
   initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
+
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
+  if ((Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    await DesktopWindow.setMinWindowSize(const Size(800, 600));
+  }
   Utils.initVersionNumber();
   svgCode = await rootBundle.loadString("assets/images/vector/logoOnly.svg");
   //TODO what is this ?
@@ -74,7 +81,7 @@ void main() async {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
   // ]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     // statusBarIconBrightness: Brightness.dark,
     // statusBarBrightness:
@@ -85,30 +92,30 @@ void main() async {
   ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
     PrintProductLabelCustomView(),
-    ExcelToProductConverter(),
-    Product(),
-    ProductSize(),
-    Order(),
-    Purchases(),
-    ProductInput(),
-    ProductOutput(),
-    Transfers(),
-    CutRequest(),
-    CustomerRequestSize(),
-    CargoTransporter(),
-    OrderRefund(),
-    PurchasesRefund(),
-    ReservationInvoice(),
-    CustomsDeclaration(),
-    Customer(),
-    Employee(),
-    Credits(),
-    Debits(),
-    Incomes(),
-    Spendings(),
-    ProductType(),
-    CustomerBalanceList(),
-    Dashboard(),
+    // ExcelToProductConverter(),
+    // Product(),
+    // ProductSize(),
+    // Order(),
+    // Purchases(),
+    // ProductInput(),
+    // ProductOutput(),
+    // Transfers(),
+    // CutRequest(),
+    // CustomerRequestSize(),
+    // CargoTransporter(),
+    // OrderRefund(),
+    // PurchasesRefund(),
+    // ReservationInvoice(),
+    // CustomsDeclaration(),
+    // Customer(),
+    // Employee(),
+    // Credits(),
+    // Debits(),
+    // Incomes(),
+    // Spendings(),
+    // ProductType(),
+    // CustomerBalanceList(),
+    // Dashboard(),
   ]);
   try {
     runApp(MultiProvider(providers: [
@@ -122,8 +129,8 @@ void main() async {
       // ChangeNotifierProvider(
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
-          create: (context) =>
-              DrawerMenuControllerProvider(initViewAbstract: Product())),
+          create: (context) => DrawerMenuControllerProvider(
+              initViewAbstract: PrintProductLabelCustomView())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
@@ -133,7 +140,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(
-          create: (_) => ViewAbstractChangeProvider.init(Product())),
+          create: (_) =>
+              ViewAbstractChangeProvider.init(PrintProductLabelCustomView())),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
