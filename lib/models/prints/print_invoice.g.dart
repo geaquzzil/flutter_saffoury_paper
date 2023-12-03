@@ -20,6 +20,9 @@ PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..hasMultiplePageFormats = json['hasMultiplePageFormats'] as bool?
   ..hideTermsOfService = json['hideTermsOfService'] as bool?
   ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
+  ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
+  ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
+  ..currentGroupList = json['currentGroupList'] as List<dynamic>?
   ..hideCustomerAddressInfo = json['hideCustomerAddressInfo'] as bool?
   ..hideCustomerPhone = json['hideCustomerPhone'] as bool?
   ..hideCustomerBalance = json['hideCustomerBalance'] as bool?
@@ -47,6 +50,9 @@ Map<String, dynamic> _$PrintInvoiceToJson(PrintInvoice instance) =>
       'hasMultiplePageFormats': instance.hasMultiplePageFormats,
       'hideTermsOfService': instance.hideTermsOfService,
       'hideAdditionalNotes': instance.hideAdditionalNotes,
+      'currentGroupNameFromList': instance.currentGroupNameFromList,
+      'currentGroupNameIndex': instance.currentGroupNameIndex,
+      'currentGroupList': instance.currentGroupList,
       'hideCustomerAddressInfo': instance.hideCustomerAddressInfo,
       'hideCustomerPhone': instance.hideCustomerPhone,
       'hideCustomerBalance': instance.hideCustomerBalance,

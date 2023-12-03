@@ -1,9 +1,12 @@
 import 'dart:collection';
 import 'dart:convert';
-
+import 'package:bitmap/bitmap.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
@@ -27,6 +30,7 @@ import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.da
 import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
@@ -1061,7 +1065,7 @@ class Product extends ViewAbstract<Product>
   @override
   Future<List<pdfWidget.Widget>> getPrintableCustomPage(BuildContext context,
       {pdf.PdfPageFormat? format, PrintProduct? setting}) async {
-    pdfWidget.Widget header = await buildHeader();
+    pdfWidget.Widget header = await buildHeader(setting: setting);
     debugPrint("getPrintableCustomPage generating");
     return [
       pdfWidget.Stack(
@@ -1088,9 +1092,62 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  Future<pdfWidget.Widget> buildHeader() async =>
-      pdfWidget.Image(await networkImage(
-          'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor(null)}&darkColor=${getPrintableSecondaryColor(null)}'));
+  Future<pdfWidget.Widget> buildHeader({PrintProduct? setting}) async {
+    // String svg =
+    //     await rootBundle.loadString("assets/images/vector/a5Header.svg");
+    // debugPrint(
+    //     "buildHeader #${getPrintablePrimaryColor(null)}  #${getPrintableSecondaryColor(null)}");
+    // // debugPrint("buildHeaderbefore $svg");
+    // svg = svg.replaceAll("{fill:#6ABD45;}", "{fill:#FF0000;}");
+    // svg = svg.replaceAll("{fill:#010101;}", "{fill:#FF0000;}");
+    // svg = svg.replaceAll("{fill:#696A6A;}", "{fill:#FF0000;}");
+    // svg = svg.replaceAll(
+    //     "{fill:#93C83E;}", "{fill:#${getPrintableSecondaryColor(null)};}");
+    // svg = svg.replaceAll(
+    //     "{fill:#7EB642;}", "{fill:#${getPrintablePrimaryColor(null)};}");
+    // debugPrint("buildHeader $svg");
+
+    // DrawableRoot svgDrawableRoot = await svg.fromSvgString(svgString, null);
+
+    // // to have a nice rendering it is important to have the exact original height and width,
+    // // the easier way to retrieve it is directly from the svg string
+    // // but be careful, this is an ugly fix for a flutter_svg problem that works
+    // // with my images
+    // String temp = svgString.substring(svgString.indexOf('height="') + 8);
+    // int originalHeight = int.parse(temp.substring(0, temp.indexOf('p')));
+    // temp = svgString.substring(svgString.indexOf('width="') + 7);
+    // int originalWidth = int.parse(temp.substring(0, temp.indexOf('p')));
+
+    // // toPicture() and toImage() don't seem to be pixel ratio aware, so we calculate the actual sizes here
+    // double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
+    // double width = originalHeight *
+    //     devicePixelRatio; // where 32 is your SVG's original width
+    // double height = originalWidth * devicePixelRatio; // same thing
+
+    // // Convert to ui.Picture
+    // ui.Picture picture = svgDrawableRoot.toPicture(size: Size(width, height));
+
+    // // Convert to ui.Image. toImage() takes width and height as parameters
+    // // you need to find the best size to suit your needs and take into account the screen DPI
+    // ui.Image image = await picture.toImage(width.toInt(), height.toInt());
+    // ByteData bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+
+    // // finally to Bitmap
+    // Bitmap bitmap = await Bitmap.fromHeadless(
+    //     width.toInt(), height.toInt(), bytes.buffer.asUint8List());
+
+    // // if you need to save it:
+    // File file = File('temporary_file_path/unique_name.bmp');
+    // file.writeAsBytesSync(bitmap.content);
+
+    // var d = await Globals.svgStringToPngBytes(svg, 200, 200);
+    // return pdfWidget.Image(pdfWidget.MemoryImage(d));
+    String url =
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrintablePrimaryColor(null)}&darkColor=${getPrintableSecondaryColor(null)}';
+    debugPrint("buildHeader $url");
+    return pdfWidget.Image(await networkImage(url));
+  }
 
   @override
   String getPrintableInvoiceTitle(BuildContext context, PrintProduct? pca) {
@@ -1358,7 +1415,7 @@ class Product extends ViewAbstract<Product>
       if ((pca?.hideDate == false))
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.date,
-          description: "".toDateTimeNowString().toString(),
+          description: "".toDateTimeOnlyDateString().toString(),
           // icon: Icons.date_range
         ),
     ];

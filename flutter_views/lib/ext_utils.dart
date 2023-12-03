@@ -237,6 +237,7 @@ extension NonNullableDouble on double? {
 
   String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {
     if (this == null) return "";
+    if (this == 0) return "";
     RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
     return this!.toString().replaceAll(regex, '');
   }

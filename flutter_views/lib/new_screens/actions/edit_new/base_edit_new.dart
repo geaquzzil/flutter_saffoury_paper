@@ -171,6 +171,7 @@ class BaseEditWidget extends StatelessWidget {
     value = getEditControllerText(value);
     controllers[field] = TextEditingController();
     controllers[field]!.text = value;
+
     controllers[field]!.addListener(() {
       bool? validate =
           formKey?.currentState!.fields[viewAbstract.getTag(field)]?.validate();
@@ -205,6 +206,8 @@ class BaseEditWidget extends StatelessWidget {
       // }
       // modifieController(field);
     });
+    controllers[field]!.clear();
+
     viewAbstract.addTextFieldController(field, controllers[field]!);
     return controllers[field]!;
   }

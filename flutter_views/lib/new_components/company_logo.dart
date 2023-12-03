@@ -17,6 +17,7 @@ class CompanyLogo extends StatelessWidget {
                 width: size,
                 height: size,
                 child: Center(
+                 
                     child: SvgPicture.string(
                   svg.code,
                   height: size,

@@ -26,6 +26,7 @@ class PrintProductLabelCustomView
   ViewAbstract? viewAbstractPrintObject;
   String? customerName;
   String? cutRequestNumber;
+  ProductPrintObject p = ProductPrintObject();
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;
@@ -91,7 +92,6 @@ class PrintProductLabelCustomView
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
-    ProductPrintObject p = ProductPrintObject(ProductSize());
     return BaseEditWidget(
       isTheFirst: true,
       viewAbstract: p,

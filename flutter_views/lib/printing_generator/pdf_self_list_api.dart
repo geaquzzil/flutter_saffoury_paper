@@ -2,6 +2,7 @@
 
 import 'dart:typed_data';
 import 'package:flutter/material.dart' as mt;
+import 'package:flutter/services.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -52,8 +53,12 @@ class PdfSelfListApi<T extends PrintLocalSetting>
 
   @override
   Future<Widget> buildHeader() async {
-    return Image(await networkImage(
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColor()}&darkColor=${getSecondaryColor()}'));
+    String url =
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColorStringHex()}&darkColor=${getSecondaryColorStringHex()}';
+    material.debugPrint("buildHeader $url");
+    // return SvgImage(
+    //     svg: await rootBundle.loadString("assets/images/vector/a4Header.svg"));
+    return Image(await networkImage(url));
   }
 
   bool hasHeaderInfo() {
@@ -91,6 +96,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
               .toList()))
           .toList();
       mt.debugPrint(" ssss $data");
+      checkToSort(list[0], data);
       var d = data.groupBy((element) => element[index]);
       int idx = 0;
 
@@ -414,6 +420,14 @@ class PdfSelfListApi<T extends PrintLocalSetting>
 
   PdfColor getPrimaryColor() {
     return PdfColor.fromHex(printObj.getPrintableSelfListPrimaryColor(setting));
+  }
+
+  String getPrimaryColorStringHex() {
+    return getPrimaryColor().toHex().substring(1, 7);
+  }
+
+  String getSecondaryColorStringHex() {
+    return getSecondaryColor().toHex().substring(1, 7);
   }
 
   @override

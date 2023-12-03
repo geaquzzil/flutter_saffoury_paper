@@ -21,7 +21,7 @@ part 'print_product_object.g.dart';
 class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   String description = "";
   int gsm = 0;
-  ProductSize size;
+  ProductSize? size;
 
   String comments = "";
   String customer = "";
@@ -29,7 +29,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   double sheets = 0;
   String? cutRequestNumber;
 
-  ProductPrintObject(this.size);
+  ProductPrintObject();
   @override
   List<String> getMainFields({BuildContext? context}) {
     return [
@@ -98,7 +98,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   void _setSheets(BuildContext context,
       {GlobalKey<FormBuilderState>? formKey}) {
-    return;
+    // return;
     GSM g = GSM()..gsm = gsm;
     Product p = Product()
       ..sizes = size
@@ -109,8 +109,8 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "onTextChangeListener current quantity $quantity ,sheets : $sheets");
     setFieldValue("sheets", sheets);
 
-    // notifyOtherControllers(
-    //     context: context, formKey: formKey, notifySpecificField: "sheets");
+    notifyOtherControllers(
+        context: context, formKey: formKey, notifySpecificField: "sheets");
   }
 
   @override
@@ -158,7 +158,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   ProductPrintObject getSelfNewInstance() {
-    return ProductPrintObject(ProductSize());
+    return ProductPrintObject();
   }
 
   @override
@@ -201,7 +201,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "quantity": TextInputType.number,
         "date": TextInputType.datetime,
         "products_types": TextInputType.number,
-        "comments": TextInputType.multiline,
+        "comments": TextInputType.text,
         "customer": TextInputType.multiline,
         "sheets": TextInputType.number,
       };

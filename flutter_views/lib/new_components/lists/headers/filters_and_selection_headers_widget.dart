@@ -217,6 +217,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     return DropdownStringListControllerListenerByIcon(
       icon: Icons.file_upload_outlined,
       hint: AppLocalizations.of(context)!.exportAll,
+      showSelectedValueBeside: false,
       list: [
         DropdownStringListItem(
             Icons.picture_as_pdf,
@@ -289,6 +290,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
           "${AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever.getObject.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
       return DropdownStringListControllerListenerByIcon(
         icon: Icons.print,
+        showSelectedValueBeside: false,
         hint: AppLocalizations.of(context)!.printType,
         list: [
           DropdownStringListItem(

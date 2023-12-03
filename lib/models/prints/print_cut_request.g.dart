@@ -23,6 +23,9 @@ PrintCutRequest _$PrintCutRequestFromJson(Map<String, dynamic> json) =>
       ..hasMultiplePageFormats = json['hasMultiplePageFormats'] as bool?
       ..hideTermsOfService = json['hideTermsOfService'] as bool?
       ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
+      ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
+      ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
+      ..currentGroupList = json['currentGroupList'] as List<dynamic>?
       ..hideCustomerName = json['hideCustomerName'] as bool?
       ..hideInvoiceDate = json['hideInvoiceDate'] as bool?
       ..hideEmployeeName = json['hideEmployeeName'] as bool?
@@ -44,6 +47,9 @@ Map<String, dynamic> _$PrintCutRequestToJson(PrintCutRequest instance) =>
       'hasMultiplePageFormats': instance.hasMultiplePageFormats,
       'hideTermsOfService': instance.hideTermsOfService,
       'hideAdditionalNotes': instance.hideAdditionalNotes,
+      'currentGroupNameFromList': instance.currentGroupNameFromList,
+      'currentGroupNameIndex': instance.currentGroupNameIndex,
+      'currentGroupList': instance.currentGroupList,
       'hideCustomerName': instance.hideCustomerName,
       'hideInvoiceDate': instance.hideInvoiceDate,
       'hideEmployeeName': instance.hideEmployeeName,

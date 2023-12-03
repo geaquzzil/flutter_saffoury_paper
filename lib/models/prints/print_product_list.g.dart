@@ -23,6 +23,9 @@ PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
       ..hasMultiplePageFormats = json['hasMultiplePageFormats'] as bool?
       ..hideTermsOfService = json['hideTermsOfService'] as bool?
       ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
+      ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
+      ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
+      ..currentGroupList = json['currentGroupList'] as List<dynamic>?
       ..hideDate = json['hideDate'] as bool?
       ..hideQuantity = json['hideQuantity'] as bool?
       ..hideWarehouse = json['hideWarehouse'] as bool?
@@ -45,6 +48,9 @@ Map<String, dynamic> _$PrintProductListToJson(PrintProductList instance) =>
       'hasMultiplePageFormats': instance.hasMultiplePageFormats,
       'hideTermsOfService': instance.hideTermsOfService,
       'hideAdditionalNotes': instance.hideAdditionalNotes,
+      'currentGroupNameFromList': instance.currentGroupNameFromList,
+      'currentGroupNameIndex': instance.currentGroupNameIndex,
+      'currentGroupList': instance.currentGroupList,
       'hideDate': instance.hideDate,
       'hideQuantity': instance.hideQuantity,
       'hideWarehouse': instance.hideWarehouse,

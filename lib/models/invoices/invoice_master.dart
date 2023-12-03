@@ -667,8 +667,10 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   String getPrintablePrimaryColor(PrintInvoice? setting) {
-    return setting?.primaryColor ??
+    String value = setting?.primaryColor ??
         getMainColor()!.value.toRadixString(16).substring(2, 8);
+    debugPrint("buildHeader ${value}");
+    return value;
   }
 
   @override
