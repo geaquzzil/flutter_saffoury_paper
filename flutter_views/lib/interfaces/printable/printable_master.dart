@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pdf/widgets.dart' as pdf;
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 
 abstract class PrintableMaster<T extends PrintLocalSetting>
@@ -17,7 +18,7 @@ abstract class PrintableMaster<T extends PrintLocalSetting>
 
   String getPrintableInvoiceTitle(BuildContext context, T? pca);
 
- 
+  pdf.Widget? getPrintableWatermark();
 }
 
 class PrintableMasterEmpty<T extends PrintLocalSetting> {}

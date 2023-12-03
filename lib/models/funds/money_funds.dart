@@ -52,8 +52,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     date = "".toDateTimeNowString();
   }
   @override
-  void onBeforeGenerateView(BuildContext context,
-      {ServerActions? action}) {
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
       employees =
@@ -291,4 +290,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   @override
   String getModifibleTitleName(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
+
+  @override
+  pdf.Widget? getPrintableWatermark() => null;
 }

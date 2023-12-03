@@ -92,6 +92,7 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
   String getSecondaryColorStringHex() {
     return getSecondaryColor().toHex().substring(1, 7);
   }
+
 }
 
 class PrintMasterPDFUtils<T extends PrintLocalSetting> {

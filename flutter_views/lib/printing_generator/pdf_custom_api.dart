@@ -54,7 +54,7 @@ class PdfCustom<T extends PrintableCustomInterface,
     List<Widget> body = await printObj.getPrintableCustomPage(context,
         format: format, setting: printCommand);
     Widget? watermark = printObj.getPrintableWatermark();
-    dynamic pageTheme = PageTheme(
+    PageTheme pageTheme = PageTheme(
       margin: EdgeInsets.zero,
       pageFormat: format,
       theme: await getThemeData(),
@@ -62,14 +62,6 @@ class PdfCustom<T extends PrintableCustomInterface,
           Globals.isArabic(context) ? TextDirection.rtl : TextDirection.ltr,
       buildBackground:
           watermark != null ? (Context context) => watermark : null,
-      // buildForeground: (Context context) => Align(
-      //   alignment: Alignment.bottomLeft,
-      //   child: SizedBox(
-      //     width: 100,
-      //     height: 100,
-      //     child: PdfLogo(),
-      //   ),
-      // ),
     );
 
     return Page(

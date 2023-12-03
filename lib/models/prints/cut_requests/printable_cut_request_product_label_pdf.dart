@@ -16,9 +16,13 @@ class CutRequestProductLabelPDF {
   material.BuildContext context;
   CutRequest cutRequest;
   ThemeData themeData;
+  PageTheme pageTheme;
   PrintCutRequest? setting;
   CutRequestProductLabelPDF(this.context,
-      {required this.cutRequest, required this.themeData, this.setting});
+      {required this.cutRequest,
+      required this.pageTheme,
+      required this.themeData,
+      this.setting});
   Future<Widget> buildHeader() async => Image(await networkImage(
       'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${cutRequest.getPrintablePrimaryColor(setting)}&darkColor=${cutRequest.getPrintableSecondaryColor(setting)}'));
   Future<List<Page>> generate() async {
@@ -37,10 +41,11 @@ class CutRequestProductLabelPDF {
                 setting: getPrintProductSetting())
             .generate();
         pages.add(Page(
-            pageFormat: PdfPageFormat.a4,
-            margin: EdgeInsets.zero,
+            pageTheme: pageTheme,
             build: (context) => Column(children: [
-                  Stack(alignment: Alignment.bottomRight, fit: StackFit.loose,
+                  Stack(
+                      alignment: Alignment.bottomRight,
+                      fit: StackFit.loose,
                       // alignment: ,
                       children: [header, buildTitle(this.context, Product())]),
                   page

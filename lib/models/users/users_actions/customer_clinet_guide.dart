@@ -190,10 +190,7 @@ class CustomerClinetGuide
   }
 
   @override
-  Widget? getPrintableWatermark() {
-    // TODO: implement getPrintableWatermark
-    throw UnimplementedError();
-  }
+  Widget? getPrintableWatermark() => null;
 
   @override
   material.Widget? getCustomFloatingActionWidget(

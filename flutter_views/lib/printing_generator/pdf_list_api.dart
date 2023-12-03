@@ -23,7 +23,7 @@ class PDFListApi<T extends PrintLocalSetting> {
   Future<ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
     final ttf = Font.ttf(pathToFile);
-   return ThemeData.withFont(
+    return ThemeData.withFont(
       icons: ttf,
       base: Font.ttf(await rootBundle.load("assets/fonts/tr.ttf")),
       bold: Font.ttf(await rootBundle.load("assets/fonts/tb.ttf")),
@@ -40,7 +40,6 @@ class PDFListApi<T extends PrintLocalSetting> {
         creator: AppLocalizations.of(context)!.appTitle,
         subject: (list[0] as ViewAbstract).getMainHeaderLabelTextOnly(context),
         pageMode: PdfPageMode.fullscreen,
-        
         theme: await getThemeData());
 
     var header;
@@ -70,7 +69,7 @@ class PDFListApi<T extends PrintLocalSetting> {
             context, obj as PrintableReceiptInterface,
             printCommand: setting);
         header ??= await itemPdf.buildHeader();
-        pdf.addPage(itemPdf.getPage(format, header));
+        pdf.addPage(await itemPdf.getPage(format, header));
       }
     });
     // list.forEach((obj) {});

@@ -45,6 +45,7 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/widgets.dart' as pdf;
+import 'package:pdf/pdf.dart' as pdf2;
 import 'package:pdf/src/widgets/document.dart';
 import 'package:pdf/src/pdf/page_format.dart';
 import 'package:pdf/src/widgets/theme.dart';
@@ -571,18 +572,27 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   Future<Document> getPrintableCustomFromPDFPage(BuildContext context,
-      {required pdf.ThemeData theme,
+      {required pdf.PageTheme theme,
+      required pdf.ThemeData themeData,
       PdfPageFormat? format,
       PrintCutRequest? setting}) async {
     CutRequestRecieptPDF productsLabel = CutRequestRecieptPDF(context,
-        cutRequest: this, setting: setting, format: format, themeData: theme);
+        cutRequest: this,
+        setting: setting,
+        format: format,
+        themeData: themeData,
+        pageTheme: theme);
 
     return await productsLabel.generate();
   }
 
   @override
-  Future<List<pdf.Page>> getPrintableCustomFromPDFPageLIst(BuildContext context,
-      {PdfPageFormat? format, PrintCutRequest? setting}) {
+  Future<List<pdf.Page>> getPrintableCustomFromPDFPageLIst(
+    BuildContext context, {
+    PdfPageFormat? format,
+    PrintCutRequest? setting,
+    required pdf.PageTheme themeData,
+  }) {
     // TODO: implement getPrintableCustomFromPDFPageLIst
     throw UnimplementedError();
   }
@@ -681,6 +691,20 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   ViewAbstract? getListablePickObjectQrCode() {
     return null;
+  }
+
+  @override
+  pdf.Widget? getPrintableWatermark() {
+    return pdf.FullPage(
+        ignoreMargins: true,
+        child: pdf.Watermark.text('SAFFOURY\n',
+            fit: pdf.BoxFit.scaleDown,
+            // angle: 0,
+            style: pdf.TextStyle.defaultStyle().copyWith(
+              fontSize: 80,
+              color: pdf2.PdfColors.grey400,
+              fontWeight: pdf.FontWeight.bold,
+            )));
   }
 }
 

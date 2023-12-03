@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_static_searchable
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import '../../prints/print_customer_balances.dart';
+import 'package:pdf/widgets.dart' as pdf;
 
 class CustomerBalanceList
     extends ViewAbstractStandAloneCustomViewApi<CustomerBalanceList>
@@ -34,6 +35,7 @@ class CustomerBalanceList
     // TODO: implement callApi
     return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
   }
+
   @override
   bool getCustomStandAloneWidgetIsPadding() {
     return false;
@@ -270,4 +272,7 @@ class CustomerBalanceList
   Widget? getCustomFloatingActionWidget(BuildContext context) {
     return null;
   }
+
+  @override
+  pdf.Widget? getPrintableWatermark() => null;
 }

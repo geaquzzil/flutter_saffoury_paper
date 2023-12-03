@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_view_controller/globals.dart';
 import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -18,7 +19,7 @@ class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
   Future<pw.ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
     final ttf = pw.Font.ttf(pathToFile);
-   return ThemeData.withFont(
+    return ThemeData.withFont(
       icons: ttf,
       base: Font.ttf(await rootBundle.load("assets/fonts/tr.ttf")),
       bold: Font.ttf(await rootBundle.load("assets/fonts/tb.ttf")),
@@ -29,8 +30,29 @@ class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
+    Widget? watermark = printObj.getPrintableWatermark();
+    PageTheme pageTheme = PageTheme(
+      margin: EdgeInsets.zero,
+      pageFormat: format,
+      theme: myTheme,
+      textDirection:
+          Globals.isArabic(context) ? TextDirection.rtl : TextDirection.ltr,
+      buildBackground:
+          watermark != null ? (Context context) => watermark : null,
+      // buildForeground: (Context context) => Align(
+      //   alignment: Alignment.bottomLeft,
+      //   child: SizedBox(
+      //     width: 100,
+      //     height: 100,
+      //     child: PdfLogo(),
+      //   ),
+      // ),
+    );
     return (await printObj.getPrintableCustomFromPDFPage(context,
-            format: format, setting: printCommand, theme: myTheme))
+            format: format,
+            setting: printCommand,
+            theme: pageTheme,
+            themeData: myTheme))
         .save();
   }
 }

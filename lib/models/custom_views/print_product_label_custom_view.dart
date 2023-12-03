@@ -20,7 +20,7 @@ import 'package:pdf/pdf.dart' as pdf;
 
 class PrintProductLabelCustomView
     extends ViewAbstractStandAloneCustomView<PrintProductLabelCustomView>
-    implements PrintableInvoiceInterface<PrintProduct> {
+ {
   PrintProductLabelCustomView();
 
   ViewAbstract? viewAbstractPrintObject;

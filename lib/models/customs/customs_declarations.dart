@@ -219,7 +219,8 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
 
   @override
   Future<Document> getPrintableCustomFromPDFPage(material.BuildContext context,
-      {required ThemeData theme,
+      {required PageTheme theme,
+      required ThemeData themeData,
       PdfPageFormat? format,
       PrintLocalSetting? setting}) async {
     final pdf = Document(
@@ -228,9 +229,10 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
         creator: AppLocalizations.of(context)!.appTitle,
         subject: getMainHeaderLabelTextOnly(context),
         pageMode: PdfPageMode.fullscreen,
-        theme: theme);
+        theme: themeData);
 
-    await Future.forEach<Page>(await getPrintableCustomFromPDFPageLIst(context),
+    await Future.forEach<Page>(
+        await getPrintableCustomFromPDFPageLIst(context, themeData: theme),
         (element) async {
       pdf.addPage(element);
     });
@@ -267,11 +269,22 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
     throw UnimplementedError();
   }
 
+  // @override
+  // Future<List<Page>> getPrintableCustomFromPDFPageLIst(
+  //     material.BuildContext context,
+  //     {PdfPageFormat? format,
+  //     PrintLocalSetting? setting,
+  //     required PageTheme themeData}) {
+  //   // TODO: implement getPrintableCustomFromPDFPageLIst
+  //   throw UnimplementedError();
+  // }
+
   @override
   Future<List<Page>> getPrintableCustomFromPDFPageLIst(
       material.BuildContext context,
       {PdfPageFormat? format,
-      PrintLocalSetting? setting}) async {
+      PrintLocalSetting? setting,
+      required PageTheme themeData}) async {
     List<Page> pages = [];
     if (customs_declarations_images != null) {
       await Future.forEach<CustomsDeclarationImages?>(
@@ -282,10 +295,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
           cache: true,
         ));
         return pages.add(
-          Page(
-              margin: EdgeInsets.zero,
-              pageFormat: format,
-              build: (context) => widget),
+          Page(pageTheme: themeData, build: (context) => widget),
         );
       });
     }
@@ -295,4 +305,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   @override
   String getMainHeaderTextOnly(material.BuildContext context) =>
       "${getIDFormat(context)} ${getMainHeaderLabelTextOnly(context)}";
+
+  @override
+  Widget? getPrintableWatermark() => null;
 }

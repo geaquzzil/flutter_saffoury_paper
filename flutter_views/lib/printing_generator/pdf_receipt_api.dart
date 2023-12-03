@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_view_controller/globals.dart';
 import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -21,15 +22,25 @@ class PdfReceipt<T extends PrintableReceiptInterface,
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     final pdf = await getDocument();
-    pdf.addPage(getPage(format, header));
+    pdf.addPage(await getPage(format, header));
     return pdf.save();
   }
 
-  Page getPage(PdfPageFormat? format, Widget header) {
+  Future<pw.Page> getPage(PdfPageFormat? format, Widget header) async {
+    Widget? watermark = printObj.getPrintableWatermark();
+    PageTheme pageTheme = PageTheme(
+      margin: EdgeInsets.zero,
+      pageFormat: format,
+      theme: await getThemeData(),
+      textDirection:
+          Globals.isArabic(context) ? TextDirection.rtl : TextDirection.ltr,
+      buildBackground:
+          watermark != null ? (Context context) => watermark : null,
+    );
     return Page(
         // textDirection: getTextDirection("يسش"),
-        pageFormat: format,
-        margin: EdgeInsets.zero,
+
+        pageTheme: pageTheme,
         build: (context) {
           this.contextPDF = context;
           return Column(
@@ -71,7 +82,7 @@ class PdfReceipt<T extends PrintableReceiptInterface,
   @override
   Future<Widget> buildHeader() async {
     return Image(await networkImage(
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${getPrimaryColor()}&darkColor=${getSecondaryColor()}'));
+        'https://saffoury.com/SaffouryPaper2/print/headers/headerA5IMG.php?color=${getPrimaryColorStringHex()}&darkColor=${getSecondaryColorStringHex()}'));
   }
 
   Widget buildInvoiceBottom() {

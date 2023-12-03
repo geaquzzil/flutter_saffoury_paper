@@ -21,10 +21,12 @@ class CutRequestRecieptPDF {
   CutRequest cutRequest;
   PdfPageFormat? format;
   ThemeData themeData;
+  PageTheme pageTheme;
   PrintCutRequest? setting;
   CutRequestRecieptPDF(this.context,
       {required this.cutRequest,
       required this.themeData,
+      required this.pageTheme,
       this.setting,
       this.format});
 
@@ -60,13 +62,16 @@ class CutRequestRecieptPDF {
     final pdfRec = PdfReceipt(
         context, CutRequestRecipt(cutRequest: cutRequest, setting: setting));
     await pdfRec.initHeader();
-    pdf.addPage(pdfRec.getPage(format, pdfRec.header));
+    pdf.addPage(await pdfRec.getPage(format, pdfRec.header));
   }
 
   Future<void> addLabels(Document pdf) async {
     CutRequestProductLabelPDF cutRequestProductLabelPDF =
         CutRequestProductLabelPDF(context,
-            cutRequest: cutRequest, themeData: themeData, setting: setting);
+            cutRequest: cutRequest,
+            themeData: themeData,
+            setting: setting,
+            pageTheme: pageTheme);
 
     for (var element in (await cutRequestProductLabelPDF.generate())) {
       pdf.addPage(element);
@@ -238,4 +243,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
     }
     return null;
   }
+
+  @override
+  Widget? getPrintableWatermark() => null;
 }

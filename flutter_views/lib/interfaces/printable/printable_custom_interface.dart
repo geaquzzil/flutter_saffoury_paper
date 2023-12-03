@@ -13,14 +13,21 @@ abstract class PrintableCustomInterface<T extends PrintLocalSetting>
   Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
       {PdfPageFormat? format, T? setting});
 
-  Widget? getPrintableWatermark();
 }
 
 abstract class PrintableCustomFromPDFInterface<T extends PrintLocalSetting>
     extends PrintableMaster<T> {
   Future<Document> getPrintableCustomFromPDFPage(mt.BuildContext context,
-      {required ThemeData theme, PdfPageFormat? format, T? setting});
+      {required PageTheme theme,
+      required ThemeData themeData,
+      PdfPageFormat? format,
+      T? setting});
 
-  Future<List<Page>> getPrintableCustomFromPDFPageLIst(mt.BuildContext context,
-      {PdfPageFormat? format, T? setting});
+  Future<List<Page>> getPrintableCustomFromPDFPageLIst(
+    mt.BuildContext context, {
+    PdfPageFormat? format,
+    T? setting,
+    required PageTheme themeData,
+  });
+
 }
