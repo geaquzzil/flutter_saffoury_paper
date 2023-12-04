@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/invoices/invoice_master_details.da
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';

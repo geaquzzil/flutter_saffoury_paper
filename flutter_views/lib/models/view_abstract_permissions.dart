@@ -25,11 +25,16 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool isNullTriggerd = false;
-
+  @JsonKey(
+    fromJson: convertToMinusOneIfNotFound,
+  )
   int iD = -1;
 
   ViewAbstract? get getParnet => parent;
   String? get getFieldNameFromParent => fieldNameFromParent;
+
+  static int convertToMinusOneIfNotFound(dynamic number) =>
+      number == null ? -1 : (int.tryParse(number.toString()) ?? -1);
   Map<String, String> getPermissionFieldsMap(BuildContext context) {
     return {};
   }

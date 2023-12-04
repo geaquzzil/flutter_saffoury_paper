@@ -16,11 +16,6 @@ public final class GeneratedPluginRegistrant {
   private static final String TAG = "GeneratedPluginRegistrant";
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
-      flutterEngine.getPlugins().add(new com.example.bitmap.BitmapPlugin());
-    } catch (Exception e) {
-      Log.e(TAG, "Error registering plugin bitmap, com.example.bitmap.BitmapPlugin", e);
-    }
-    try {
       flutterEngine.getPlugins().add(new com.microsoft.flutterdualscreen.DualScreenInfo());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin dual_screen, com.microsoft.flutterdualscreen.DualScreenInfo", e);

@@ -7,7 +7,7 @@ part of 'manufactures.dart';
 // **************************************************************************
 
 Manufacture _$ManufactureFromJson(Map<String, dynamic> json) => Manufacture()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..name = BaseWithNameString.intFromString(json['name']);
 
 Map<String, dynamic> _$ManufactureToJson(Manufacture instance) =>

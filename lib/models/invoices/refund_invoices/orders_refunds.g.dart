@@ -7,7 +7,7 @@ part of 'orders_refunds.dart';
 // **************************************************************************
 
 OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
@@ -90,7 +90,7 @@ const _$InvoiceStatusEnumMap = {
 
 OrderRefundDetails _$OrderRefundDetailsFromJson(Map<String, dynamic> json) =>
     OrderRefundDetails()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

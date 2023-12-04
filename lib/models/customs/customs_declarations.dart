@@ -16,12 +16,13 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/src/widgets/theme.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 
 import 'package:pdf/src/widgets/document.dart';
 import 'package:pdf/src/pdf/page_format.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'customs_declarations.g.dart';
 
 @JsonSerializable(explicitToJson: true)

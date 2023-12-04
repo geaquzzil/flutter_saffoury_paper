@@ -8,7 +8,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'permission_level_abstract.dart';
 import 'setting.dart';
 part 'customer_billing.g.dart';

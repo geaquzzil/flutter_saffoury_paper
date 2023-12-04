@@ -8,7 +8,7 @@ import 'money_funds.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/equalities.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'incomes.g.dart';
 
 @JsonSerializable(explicitToJson: true)

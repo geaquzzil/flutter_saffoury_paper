@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';

@@ -1,7 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'package:bitmap/bitmap.dart';
+// import 'package:bitmap/bitmap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -1229,17 +1230,17 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  // @override
-  // Future<List<Product>?> listCall(
-  //     {int? count, int? page, OnResponseCallback? onResponse}) async {
-  //   try {
-  //     Iterable l = jsonDecode(jsonEncode(productsJson));
-  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-  //   } catch (e) {
-  //     debugPrint("listCallFake ${e.toString()}");
-  //   }
-  //   return null;
-  // }
+  @override
+  Future<List<Product>?> listCall(
+      {int? count, int? page, OnResponseCallback? onResponse}) async {
+    try {
+      Iterable l = jsonDecode(jsonEncode(productsJson));
+      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint("listCallFake ${e.toString()}");
+    }
+    return null;
+  }
 
   @override
   Future getPosableInitObj(BuildContext context) {
@@ -1551,7 +1552,7 @@ class Product extends ViewAbstract<Product>
             item.getQuantity().toCurrencyFormat(),
       if (((pca?.hideUnitPriceAndTotalPrice == false)))
         AppLocalizations.of(context)!.unit_price:
-            item.getUnitSellPrice().toStringAsFixed(2),
+            item.getUnitSellPrice().toCurrencyFormatFromSetting(context),
     };
   }
 

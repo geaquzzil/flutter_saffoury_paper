@@ -7,7 +7,7 @@ part of 'account_names.dart';
 // **************************************************************************
 
 AccountName _$AccountNameFromJson(Map<String, dynamic> json) => AccountName()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..name = BaseWithNameString.intFromString(json['name'])
   ..account_names_types = json['account_names_types'] == null
       ? null
@@ -24,7 +24,7 @@ Map<String, dynamic> _$AccountNameToJson(AccountName instance) =>
 
 AccountNameType _$AccountNameTypeFromJson(Map<String, dynamic> json) =>
     AccountNameType()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..type = json['type'] as String?
       ..typeAr = json['typeAr'] as String?
       ..account_names = (json['account_names'] as List<dynamic>?)

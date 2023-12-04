@@ -27,15 +27,15 @@ class DrawerLargeScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-    if (SizeConfig.isDesktopOrWeb(context)) {
-      return getBody(true, context);
-    }
+    // if (SizeConfig.isDesktopOrWeb(context)) {
+    //   return getBody(true, context);
+    // }
     // return getBody(false, context);
     // bool isHovered = context.watch<IsHoveredOnDrawerClosed>().isHovered;
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
         //todo change true to isOpen
-        return getBody(true, __);
+        return getBody(isOpen, __);
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
@@ -49,24 +49,28 @@ class DrawerLargeScreens extends StatelessWidget {
         height: double.maxFinite,
         width: isOpen ? SizeConfig.getDrawerWidth(context) : 60,
         // color: Colors.blueGrey,
-        child: Card(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            fit: StackFit.loose,
+        child: Drawer(
+          child: Column(
+            // alignment: Alignment.bottomCenter,
+            // fit: StackFit.loose,
             children: [
-              CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(child: buildHeader(context, isOpen)),
-                  // buildList(context, isOpen),
-                  buildListSliver(context, isOpen)
-                ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 50,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(child: buildHeader(context, isOpen)),
+                    // buildList(context, isOpen),
+                    buildListSliver(context, isOpen)
+                  ],
+                ),
               ),
+              Divider(height: 2),
+              buildDrawerFooter(context, isOpen),
               // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
 
               //   // const Spacer(),
               // ]),
 
-              buildDrawerFooter(context, isOpen),
               // buildProfilePic(context, isOpen),
             ],
           ),
@@ -145,10 +149,16 @@ class DrawerLargeScreens extends StatelessWidget {
             );
     } else if (authProvider.getDrawerItemsGrouped[groupLabel]!.length > 1 &&
         groupLabel == null) {
-      return DrawerListTileDesktopGroupOpen(
-          groupedDrawerItems:
-              authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-          idx: index);
+      return isOpen
+          ? DrawerListTileDesktopGroupOpen(
+              groupedDrawerItems:
+                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
+              idx: index)
+          : DrawerListTileDesktopGroupClosed(
+              groupedDrawerItems:
+                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
+              idx: index,
+            );
     }
     ViewAbstract viewAbstract =
         authProvider.getDrawerItemsGrouped[groupLabel]![index];
@@ -196,13 +206,13 @@ class DrawerLargeScreens extends StatelessWidget {
             ),
           if (AuthProvider.isLoggedIn(context)) NotificationPopupWidget(),
           const DrawerLanguageButton(),
-          if (AuthProvider.isLoggedIn(context))
-            if (!SizeConfig.isDesktopOrWeb(context))
-              buildColapsedIcon(
-                context,
-                Icons.arrow_back_ios,
-                () => drawerMenuControllerProvider.toggleIsOpen(),
-              ),
+
+          if (SizeConfig.isDesktopOrWeb(context))
+            buildColapsedIcon(
+              context,
+              Icons.arrow_back_ios,
+              () => drawerMenuControllerProvider.toggleIsOpen(),
+            ),
 
           // oldCollapsedIcon(margin, alignemt, context, icon),
         ],
@@ -214,12 +224,24 @@ class DrawerLargeScreens extends StatelessWidget {
 class DrawerHeaderLogo extends StatelessWidget {
   bool isOpen;
   DrawerHeaderLogo({
-    Key? key,
+    super.key,
     required this.isOpen,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (!isOpen) {
+      return SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+          // .add(safeArea),
+          width: double.infinity,
+          child: CompanyLogo(
+              // size: 24,
+              ),
+        ),
+      );
+    }
     return Card(
       color: Theme.of(context).colorScheme.outline.withOpacity(.1),
       elevation: 0,
@@ -230,7 +252,9 @@ class DrawerHeaderLogo extends StatelessWidget {
             // .add(safeArea),
             width: double.infinity,
             child: !isOpen
-                ? CompanyLogo()
+                ? CompanyLogo(
+                    // size: 24,
+                    )
                 : Row(
                     children: [
                       const SizedBox(
@@ -269,6 +293,19 @@ class DrawerListTileDesktopGroupOpen extends StatelessWidget {
                 viewAbstract: viewAbstract, idx: index);
           });
     }
+    // return Column(
+    //   children: [
+    //     Divider(),
+    //     ListView.builder(
+    //         itemCount: groupedDrawerItems.length,
+    //         shrinkWrap: true,
+    //         itemBuilder: (context, index) {
+    //           ViewAbstract viewAbstract = groupedDrawerItems[index];
+    //           return DrawerListTileDesktopOpen(
+    //               viewAbstract: viewAbstract, idx: index);
+    //         })
+    //   ],
+    // );
     return ExpansionTile(
       title: Text(title),
       children: [
@@ -329,27 +366,29 @@ class DrawerListTileDesktopGroupClosed extends StatefulWidget {
 class _DrawerListTileDesktopGroupClosedState
     extends State<DrawerListTileDesktopGroupClosed> {
   Widget listItems(BuildContext context) {
-    return OutlinedCard(
-      child: ListView.separated(
-          padding: EdgeInsets.zero,
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: kDefaultPadding / 2,
-            );
-          },
-          itemCount: widget.groupedDrawerItems.length,
-          shrinkWrap: true,
-          primary: true,
-          itemBuilder: (context, index) {
-            ViewAbstract viewAbstract = widget.groupedDrawerItems[index];
-            return DrawerListTileDesktopClosed(
-                viewAbstract: viewAbstract, idx: index);
-          }),
-    );
+    return ListView.separated(
+        padding: EdgeInsets.zero,
+        separatorBuilder: (context, index) {
+          if (index == widget.groupedDrawerItems.length - 2) {
+            return Divider();
+          }
+          return const SizedBox(
+            height: kDefaultPadding / 2,
+          );
+        },
+        itemCount: widget.groupedDrawerItems.length,
+        shrinkWrap: true,
+        primary: true,
+        itemBuilder: (context, index) {
+          ViewAbstract viewAbstract = widget.groupedDrawerItems[index];
+          return DrawerListTileDesktopClosed(
+              viewAbstract: viewAbstract, idx: index);
+        });
   }
 
   @override
   Widget build(BuildContext context) {
+    return listItems(context);
     return OnHoverWidget(builder: (isHovered) {
       if (!isHovered) {
         return SizedBox(
@@ -469,6 +508,22 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
   Widget build(BuildContext context) {
     DrawerMenuControllerProvider ds =
         context.watch<DrawerMenuControllerProvider>();
+    return IconButton(
+        tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
+        icon: Icon(
+          viewAbstract.getMainIconData(),
+          color: ds.getIndex == viewAbstract.hashCode
+              ? Theme.of(context).colorScheme.primary
+              : null,
+        ),
+        onPressed: () {
+          context
+              .read<DrawerMenuControllerProvider>()
+              .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+
+          viewAbstract.onDrawerItemClicked(context);
+        });
+
     return OnHoverWidget(
         scale: false,
         builder: (onHover) {

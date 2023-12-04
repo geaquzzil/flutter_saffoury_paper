@@ -24,7 +24,7 @@ import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 import '../users/customers.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'customer_dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)

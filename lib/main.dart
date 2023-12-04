@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:desktop_window/desktop_window.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
@@ -71,8 +72,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
-  if ((Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-    await DesktopWindow.setMinWindowSize(const Size(800, 600));
+  if (!kIsWeb) {
+    if ((Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      // await DesktopWindow.setMinWindowSize(const Size(800, 600));
+    }
   }
   Utils.initVersionNumber();
   svgCode = await rootBundle.loadString("assets/images/vector/logoOnly.svg");
@@ -129,8 +132,8 @@ void main() async {
       // ChangeNotifierProvider(
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
-          create: (context) => DrawerMenuControllerProvider(
-              initViewAbstract: PrintProductLabelCustomView())),
+          create: (context) =>
+              DrawerMenuControllerProvider(initViewAbstract: Product())),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
@@ -140,8 +143,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(
-          create: (_) =>
-              ViewAbstractChangeProvider.init(PrintProductLabelCustomView())),
+          create: (_) => ViewAbstractChangeProvider.init(Product())),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),

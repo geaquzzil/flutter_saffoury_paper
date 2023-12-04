@@ -15,7 +15,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../funds/money_funds.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'print_cut_request.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -123,8 +123,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
       BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
     return this;
   }
-
- 
 }
 
 enum PrintCutRequestType implements ViewAbstractEnum<PrintCutRequestType> {

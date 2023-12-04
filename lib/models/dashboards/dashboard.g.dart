@@ -7,7 +7,7 @@ part of 'dashboard.dart';
 // **************************************************************************
 
 Dashboard _$DashboardFromJson(Map<String, dynamic> json) => Dashboard()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..login = json['login'] as bool?
   ..permission = json['permission'] as bool?
   ..response = json['response'] as int?

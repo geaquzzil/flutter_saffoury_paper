@@ -8,7 +8,7 @@ part of 'customs_declarations.dart';
 
 CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
     CustomsDeclaration()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..number = CustomsDeclaration.intFromString(json['number'])
       ..date = json['date'] as String?
       ..fromCountry = json['fromCountry'] as String?

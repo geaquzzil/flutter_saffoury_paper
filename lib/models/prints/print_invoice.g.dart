@@ -7,7 +7,7 @@ part of 'print_invoice.dart';
 // **************************************************************************
 
 PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..printerOptions = json['printerOptions'] == null
       ? null
       : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)

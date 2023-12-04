@@ -7,7 +7,7 @@ part of 'debits.dart';
 // **************************************************************************
 
 Debits _$DebitsFromJson(Map<String, dynamic> json) => Debits()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
   ..date = json['date'] as String?

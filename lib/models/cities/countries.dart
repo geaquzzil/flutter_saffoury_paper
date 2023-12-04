@@ -3,7 +3,8 @@ import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'countries.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -14,7 +15,6 @@ class Country extends BaseWithNameString<Country> {
   Country getSelfNewInstance() {
     return Country();
   }
-
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

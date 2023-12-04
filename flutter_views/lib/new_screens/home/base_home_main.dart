@@ -60,13 +60,16 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget? navigationRailWidget;
   Widget? dashboardWidget;
   Widget? homeWidget;
+  Widget? drawer;
   Widget? shopingWidget;
   late Widget customWidget;
 
   @override
   void initState() {
     super.initState();
+
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
+    drawer = DrawerLargeScreens();
   }
 
   Widget getSliverPadding(
@@ -111,7 +114,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
           value ??= viewAbstract2 as ViewAbstractStandAloneCustomViewApi;
           return Scaffold(
               key: drawerMenuControllerProvider.getStartDrawableKey,
-              drawer: DrawerLargeScreens(),
+              drawer: drawer,
               endDrawer: const BaseHomeCartPage(),
               floatingActionButton:
                   value.getCustomFloatingActionWidget(context),
@@ -121,7 +124,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         } else {
           return Scaffold(
               key: drawerMenuControllerProvider.getStartDrawableKey,
-              drawer: DrawerLargeScreens(),
+              drawer: drawer,
               // drawerScrimColor: Colors.transparent,
               // backgroundColor: compexDrawerCanvasColor,
               endDrawer: const BaseHomeCartPage(),
@@ -211,7 +214,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   Widget shouldWrapNavigatorChild(BuildContext context, Widget child,
       {bool isCustomWidget = false}) {
     if (SizeConfig.isSoLargeScreen(context)) {
-      drawerWidget ??= DrawerLargeScreens();
+      drawerWidget ??= drawer;
       navigationRailWidget ??= isCustomWidget ? null : getNavigationRail();
       return SafeArea(
           child: Row(
@@ -242,7 +245,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       return SafeArea(
           child: Row(
         children: [
-          DrawerLargeScreens(),
+          drawer!,
           Expanded(child: ListApiSearchableWidget()),
         ],
       ));
@@ -261,7 +264,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ? SafeArea(
             child: Row(
             children: [
-              DrawerLargeScreens(),
+              drawer!,
               Expanded(child: ListApiSearchableWidget()),
             ],
           ))

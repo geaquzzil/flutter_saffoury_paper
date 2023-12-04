@@ -8,7 +8,7 @@ part of 'products_outputs.dart';
 
 ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -92,7 +92,7 @@ const _$InvoiceStatusEnumMap = {
 ProductOutputDetails _$ProductOutputDetailsFromJson(
         Map<String, dynamic> json) =>
     ProductOutputDetails()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

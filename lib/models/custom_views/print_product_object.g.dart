@@ -8,7 +8,7 @@ part of 'print_product_object.dart';
 
 ProductPrintObject _$ProductPrintObjectFromJson(Map<String, dynamic> json) =>
     ProductPrintObject()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..description = json['description'] as String
       ..gsm = json['gsm'] as int
       ..size = json['size'] == null

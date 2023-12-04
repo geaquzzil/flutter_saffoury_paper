@@ -9,7 +9,7 @@ part of 'sales_analysis_dashboard.dart';
 SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
         Map<String, dynamic> json) =>
     SalesAnalysisDashboard()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..date = json['date'] == null
           ? null
           : DateObject.fromJson(json['date'] as Map<String, dynamic>)

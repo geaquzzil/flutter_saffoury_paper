@@ -7,7 +7,7 @@ part of 'incomes.dart';
 // **************************************************************************
 
 Incomes _$IncomesFromJson(Map<String, dynamic> json) => Incomes()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
   ..date = json['date'] as String?

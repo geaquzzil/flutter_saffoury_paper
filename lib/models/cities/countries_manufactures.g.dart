@@ -8,7 +8,7 @@ part of 'countries_manufactures.dart';
 
 CountryManufacture _$CountryManufactureFromJson(Map<String, dynamic> json) =>
     CountryManufacture()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..countries = json['countries'] == null
           ? null
           : Country.fromJson(json['countries'] as Map<String, dynamic>)

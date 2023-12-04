@@ -7,7 +7,7 @@ part of 'orders.dart';
 // **************************************************************************
 
 Order _$OrderFromJson(Map<String, dynamic> json) => Order()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = json['TermsID'] as int?
   ..date = json['date'] as String?
@@ -87,7 +87,7 @@ const _$InvoiceStatusEnumMap = {
 };
 
 OrderDetails _$OrderDetailsFromJson(Map<String, dynamic> json) => OrderDetails()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..products = json['products'] == null
       ? null
       : Product.fromJson(json['products'] as Map<String, dynamic>)

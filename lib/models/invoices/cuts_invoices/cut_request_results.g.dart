@@ -8,7 +8,7 @@ part of 'cut_request_results.dart';
 
 CutRequestResult _$CutRequestResultFromJson(Map<String, dynamic> json) =>
     CutRequestResult()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..cut_requests = json['cut_requests'] == null
           ? null
           : CutRequest.fromJson(json['cut_requests'] as Map<String, dynamic>)

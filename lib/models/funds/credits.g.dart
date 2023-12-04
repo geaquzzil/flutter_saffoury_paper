@@ -7,7 +7,7 @@ part of 'credits.dart';
 // **************************************************************************
 
 Credits _$CreditsFromJson(Map<String, dynamic> json) => Credits()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..fromBox = json['fromBox'] as int?
   ..isDirect = json['isDirect'] as int?
   ..date = json['date'] as String?

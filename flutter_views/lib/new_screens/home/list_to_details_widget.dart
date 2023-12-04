@@ -24,8 +24,7 @@ class ListToDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget getEndPane() =>
-      BaseSharedDetailsView();
+  Widget getEndPane() => BaseSharedDetailsView();
 
   void init(BuildContext context) {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();

@@ -227,8 +227,9 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   ViewAbstract getObjectFromRow(BuildContext context, List<Data?> list) {
-    debugPrint("getObjectFromRow started");
     ViewAbstract view = viewAbstract.getSelfNewInstance();
+    debugPrint(
+        "getDataFromExcelTable getObjectFromRow started with type ${view.runtimeType}");
     Map<String, dynamic> generatedJsonData = {};
 
     selectedFields.forEach((key, value) {
@@ -236,14 +237,15 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       Data? data = list[index];
       dynamic dataValue = data?.value;
       debugPrint(
-          "getObjectFromRow selectedKey=>$key value:$value index:$index  data:$dataValue");
+          "getDataFromExcelTable getObjectFromRow selectedKey=>$key rowName:$value index:$index  data:$dataValue");
 
       // checking if the main viewAbstract has main field
       String? field = view.getMainFields().firstWhereOrNull((p0) => p0 == key);
+      debugPrint("getDataFromExcelTable founded field $field");
 
       if (field == null) {
         debugPrint(
-            "getObjectFromRow field == null searching for main viewAbstract in the subViewAbstract");
+            "getDataFromExcelTable getObjectFromRow field == null searching for main viewAbstract in the subViewAbstract");
         var obj = view
             .getMainFields()
             .where((element) => view.isViewAbstract(element) == true)
@@ -252,13 +254,13 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
         for (var element in obj) {
           debugPrint(
-              "getObjectFromRow field == null searching for main object from => ${element.runtimeType} for field =>  $key");
+              "getDataFromExcelTable getObjectFromRow field == null searching for main object from => ${element.runtimeType} for field =>  $key");
 
           String? field =
               element.getMainFields().firstWhereOrNull((p0) => p0 == key);
           if (field != null) {
             debugPrint(
-                "getObjectFromRow field == null founded main object is => ${element.runtimeType} for field =>  $key");
+                "getDataFromExcelTable getObjectFromRow field == null founded main object is => ${element.runtimeType} for field =>  $key");
 
             var allFieldsThatFromSameObj = element
                 .getMainFields()
@@ -268,7 +270,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
                 .toList();
 
             debugPrint(
-                "getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields that from same object are => $allFieldsThatFromSameObj");
+                "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields that from same object are => $allFieldsThatFromSameObj");
 
             Map<String, dynamic> fieldsValues = {};
             allFieldsThatFromSameObj.forEach((element) {
@@ -283,7 +285,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
             });
 
             debugPrint(
-                "getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues");
+                "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues");
 
             if (fieldsValues.entries.length == 1) {
               generatedJsonData[element.getTableNameApi()!] =
@@ -314,11 +316,11 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
                           value: dataValue) as ViewAbstract)
                   .toJsonViewAbstract());
           debugPrint(
-              "getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, value)}  type: ${view.getMirrorFieldType(field)}");
+              "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}");
         } else {
           debugPrint(
-              "getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, value)}  type: ${view.getMirrorFieldType(field)}");
-          generatedJsonData[field] = view.castFieldValue(field, value);
+              "getDataFromExcelTable getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}");
+          generatedJsonData[field] = view.castFieldValue(field, dataValue);
         }
       }
 
@@ -335,7 +337,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       //   }
       // });
     });
-    debugPrint("getObjectFromRow finished\n");
+    debugPrint(
+        "getDataFromExcelTable getObjectFromRow finished with json $generatedJsonData");
 
     return (view.fromJsonViewAbstract(generatedJsonData) as ViewAbstract)
         .copyWithSetNewFileReader();

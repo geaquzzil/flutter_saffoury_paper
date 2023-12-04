@@ -7,7 +7,7 @@ part of 'print_reciept.dart';
 // **************************************************************************
 
 PrintReceipt _$PrintReceiptFromJson(Map<String, dynamic> json) => PrintReceipt()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..printerOptions = json['printerOptions'] == null
       ? null
       : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)

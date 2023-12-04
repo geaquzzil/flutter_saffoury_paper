@@ -8,7 +8,7 @@ part of 'reservation_invoice.dart';
 
 ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
     ReservationInvoice()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = json['TermsID'] as int?
       ..date = json['date'] as String?
@@ -90,7 +90,7 @@ const _$InvoiceStatusEnumMap = {
 ReservationInvoiceDetails _$ReservationInvoiceDetailsFromJson(
         Map<String, dynamic> json) =>
     ReservationInvoiceDetails()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

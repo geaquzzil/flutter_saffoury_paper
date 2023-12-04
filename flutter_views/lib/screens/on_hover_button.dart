@@ -10,12 +10,11 @@ class OnHoverWidget extends StatefulWidget {
   Widget Function(bool isHovered) builder;
 
   OnHoverWidget(
-      {Key? key,
+      {super.key,
       required this.builder,
       this.onHover,
       this.mouseCursor = SystemMouseCursors.click,
-      this.scale = true})
-      : super(key: key);
+      this.scale = true});
 
   @override
   State<OnHoverWidget> createState() => _OnHoverWidgetState();

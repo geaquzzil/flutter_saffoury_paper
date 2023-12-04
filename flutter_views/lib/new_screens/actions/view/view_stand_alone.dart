@@ -81,8 +81,10 @@ class MasterViewStandAlone extends StatelessWidget {
   Widget build(BuildContext context) {
     if (viewAbstract.getCustomStandAloneResponseType() ==
         ResponseType.NONE_RESPONSE_TYPE) {
+      return viewAbstract.getCustomStandAloneWidget(context);
       return Card(
         child: ListView(
+          shrinkWrap: true,
           children: [
             BaseSharedHeaderViewDetailsActions(
               viewAbstract: viewAbstract,

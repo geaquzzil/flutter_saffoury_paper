@@ -7,7 +7,7 @@ part of 'warehouse.dart';
 // **************************************************************************
 
 Warehouse _$WarehouseFromJson(Map<String, dynamic> json) => Warehouse()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..name = BaseWithNameString.intFromString(json['name']);
 
 Map<String, dynamic> _$WarehouseToJson(Warehouse instance) => <String, dynamic>{

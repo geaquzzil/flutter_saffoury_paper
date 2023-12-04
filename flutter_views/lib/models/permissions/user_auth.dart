@@ -12,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 import '../dealers/dealer.dart';
 import '../servers/server_helpers.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'user_auth.g.dart';
 
 @reflector

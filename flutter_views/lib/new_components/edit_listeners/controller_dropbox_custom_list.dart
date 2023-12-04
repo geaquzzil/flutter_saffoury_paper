@@ -29,19 +29,19 @@ class _DropdownCustomListWithFormListenerState
     extends State<DropdownCustomListWithFormListener> {
   late List<dynamic> list;
 
-  // @override
-  // void initState() {
-  //   list = widget.viewAbstract
-  //       .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
+    super.initState();
+  }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // list = widget.viewAbstract
-  //   //     .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,22 +51,22 @@ class _DropdownCustomListWithFormListenerState
         FormBuilderDropdown<dynamic>(
           autovalidateMode: AutovalidateMode.always,
           onChanged: (obj) {
-            // widget.viewAbstract.onDropdownChanged(context, widget.field, obj,
-            //     formKey: widget.formKey);
+            widget.viewAbstract.onDropdownChanged(context, widget.field, obj,
+                formKey: widget.formKey);
             widget.viewAbstract.setFieldValue(widget.field, obj);
             debugPrint(
                 'getControllerDropdownCustomList onChanged= field= ${widget.field} value=   $obj');
-            // widget.onSelected(obj);
+            widget.onSelected(obj);
           },
           onReset: () {
             debugPrint("getControllerDropdownCustomList onReset");
             debugPrint(
                 "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!}");
-            // setState(() {
-            //   list = widget.viewAbstract
-            //       .getTextInputIsAutoCompleteCustomListMap(
-            //           context)[widget.field]!;
-            // });
+            setState(() {
+              list = widget.viewAbstract
+                  .getTextInputIsAutoCompleteCustomListMap(
+                      context)[widget.field]!;
+            });
           },
           validator: widget.viewAbstract
               .getTextInputValidatorCompose(context, widget.field),

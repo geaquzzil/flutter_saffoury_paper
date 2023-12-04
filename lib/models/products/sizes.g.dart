@@ -7,7 +7,7 @@ part of 'sizes.dart';
 // **************************************************************************
 
 ProductSize _$ProductSizeFromJson(Map<String, dynamic> json) => ProductSize()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..width = json['width'] as int?
   ..length = json['length'] as int?;
 

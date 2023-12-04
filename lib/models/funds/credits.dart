@@ -16,7 +16,7 @@ import 'package:flutter_saffoury_paper/models/funds/currency/equalities.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
-
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'credits.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -55,7 +55,8 @@ class Credits extends MoneyFunds<Credits> {
       Credits.fromJson(json);
 
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context,{ServerActions ? action}) {
+  List<TabControllerHelper> getCustomTabList(BuildContext context,
+      {ServerActions? action}) {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,

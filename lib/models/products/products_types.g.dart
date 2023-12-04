@@ -7,7 +7,7 @@ part of 'products_types.dart';
 // **************************************************************************
 
 ProductType _$ProductTypeFromJson(Map<String, dynamic> json) => ProductType()
-  ..iD = json['iD'] as int
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..name = json['name'] as String?
   ..unit = $enumDecodeNullable(_$ProductTypeUnitEnumMap, json['unit'])
   ..purchasePrice = (json['purchasePrice'] as num?)?.toDouble()

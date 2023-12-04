@@ -60,6 +60,35 @@ class FileReaderValidationWidget extends StatelessWidget {
     }).toList();
   }
 
+  static List<ViewAbstract> getDataFromExcelTable(
+      BuildContext context, FileReaderObject fileReader) {
+    Excel excel = fileReader.excel;
+    var f = excel.tables[fileReader.selectedSheet]?.rows;
+    var columns = fileReader.fileColumns;
+    // debugPrint("getDataFromExcelTable $f  ");
+    // debugPrint("getDataFromExcelTable $columns  ");
+    List<ViewAbstract> generatedViewAbstract = [];
+    List<String> exceptions = [];
+    if (f != null) {
+      var rows = f.sublist(0 + 1, f.length - 1);
+      for (var element in rows) {
+        int rowNumber = rows.indexOf(element) + 1;
+
+        try {
+          //  debugPrint("getDataFromExcelTable exception: " + e.toString());
+          var obj = fileReader.getObjectFromRow(context, element);
+          debugPrint("getDataFromExcelTable  getObjectFromRow $obj");
+          generatedViewAbstract.add(obj);
+        } catch (e) {
+          debugPrint("getDataFromExcelTable exception: " + e.toString());
+          debugPrint(e.toString());
+          exceptions.add("in row number $rowNumber: ${e.toString()}");
+        }
+      }
+    }
+    return generatedViewAbstract;
+  }
+
   Widget getWidget(BuildContext context, AsyncSnapshot<Object?> snapshot) {
     Excel excel = fileReaderObject.excel;
     var f = excel.tables[fileReaderObject.selectedSheet]?.rows;

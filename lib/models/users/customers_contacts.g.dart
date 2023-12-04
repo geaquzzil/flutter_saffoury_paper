@@ -8,7 +8,7 @@ part of 'customers_contacts.dart';
 
 CustomerContacts _$CustomerContactsFromJson(Map<String, dynamic> json) =>
     CustomerContacts()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..customers = json['customers'] == null
           ? null
           : Customer.fromJson(json['customers'] as Map<String, dynamic>)

@@ -9,7 +9,7 @@ part of 'customs_declarations_images.dart';
 CustomsDeclarationImages _$CustomsDeclarationImagesFromJson(
         Map<String, dynamic> json) =>
     CustomsDeclarationImages()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..image = json['image'] as String?
       ..comments = json['comments'] as String?
       ..customs_declarations = json['customs_declarations'] == null

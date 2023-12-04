@@ -8,7 +8,7 @@ part of 'print_product_list.dart';
 
 PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
     PrintProductList()
-      ..iD = json['iD'] as int
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..printerOptions = json['printerOptions'] == null
           ? null
           : PrinterOptions.fromJson(

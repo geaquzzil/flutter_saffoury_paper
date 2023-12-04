@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
@@ -22,9 +23,20 @@ class _FileReaderPageState extends State<FileReaderPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
   String? _filePath;
   late FileReaderObject fileReaderObject;
+  List<PageViewModel> _addOnPageViewModel = [];
   FileReaderObject? validatefileReaderObject;
+  bool isCustom() {
+    return widget.viewAbstract is ExcelableReaderInteraceCustom;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   void _onIntroEnd(context) {
+    Navigator.pop(context);
     // Navigator.of(context).push(
     //   MaterialPageRoute(builder: (_) => HomePage()),
     // );
@@ -77,7 +89,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
     var pageDecoration = PageDecoration(
       titleTextStyle: Theme.of(context).textTheme.titleLarge!,
       bodyTextStyle: Theme.of(context).textTheme.bodyLarge!,
-      bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      bodyPadding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
       // pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
@@ -122,19 +134,25 @@ class _FileReaderPageState extends State<FileReaderPage> {
       // ),
       pages: [
         PageViewModel(
-            title: "Import file",
-            body: "Let\'s go right away! and import the file\n",
-            image: _buildImage(Icons.file_copy),
+            // useRowInLandscape: true,
+            // useScrollView: true,
+            titleWidget: Center(child: Text("Import file")),
+            bodyWidget: Center(
+                child: Text("Let\'s go right away! and import the file\n")),
+            image: Center(child: _buildImage(Icons.file_copy, 200)),
             decoration: pageDecoration,
             footer: Column(
+              // mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                getSpace(),
                 ElevatedButton(
-                  child: Text("Import"),
+                  child: const Text("Import"),
                   onPressed: () async {
                     pickFile();
                   },
                 ),
-                getSpace(),
+                // getSpace(),
                 if (_filePath != null)
                   Text(
                     _filePath!,
@@ -147,21 +165,23 @@ class _FileReaderPageState extends State<FileReaderPage> {
           title: "Select columns",
           bodyWidget: Column(
             children: [
-              Text("SOSO"),
-              if (_filePath != null && fileReaderObject != null)
+              const Text("SOSO"),
+              if (_filePath != null)
                 BaseEditWidget(
                   isTheFirst: true,
                   onValidate: (viewAbstract) {
                     setState(() {
                       validatefileReaderObject =
                           viewAbstract as FileReaderObject?;
+                      if (viewAbstract != null) {
+                        _addOnPageViewModel = widget.viewAbstract
+                                is ExcelableReaderInteraceCustom
+                            ? (widget.viewAbstract
+                                    as ExcelableReaderInteraceCustom)
+                                .getExceableAddOnList(context, fileReaderObject)
+                            : [];
+                      }
                     });
-
-                    // if (validatefileReaderObject != null) {
-                    //   (validatefileReaderObject as FileReaderObject)
-                    //       .viewAbstract = widget.viewAbstract;
-
-                    // }
                   },
                   viewAbstract: fileReaderObject,
                 )
@@ -172,68 +192,75 @@ class _FileReaderPageState extends State<FileReaderPage> {
           // image: _buildImage(Icons.abc_sharp, 50),
           decoration: pageDecoration,
         ),
-        PageViewModel(
-          title: "Validations",
-          bodyWidget: validatefileReaderObject == null
-              ? Text("NULL validatefileReaderObject ")
-              : FileReaderValidationWidget(
-                  fileReaderObject: fileReaderObject as FileReaderObject),
-          // image: _buildImage(Icons.access_time),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "Full Screen Page",
-          body:
-              "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
-          // image: _buildFullscreenImage(),
-          decoration: pageDecoration.copyWith(
-            contentMargin: const EdgeInsets.symmetric(horizontal: 16),
-            fullScreen: true,
-            bodyFlex: 2,
-            imageFlex: 3,
+        if (isCustom()) ..._addOnPageViewModel,
+        if (!isCustom())
+          PageViewModel(
+            title: "Validations",
+            bodyWidget: validatefileReaderObject == null
+                ? const Text("NULL validatefileReaderObject ")
+                : FileReaderValidationWidget(
+                    fileReaderObject: fileReaderObject),
+            // image: _buildImage(Icons.access_time),
+            decoration: pageDecoration,
           ),
-        ),
-        PageViewModel(
-          title: "Another title page",
-          body: "Another beautiful body text for this example onboarding",
-          image: _buildImage(Icons.sos),
-          footer: ElevatedButton(
-            onPressed: () {
-              introKey.currentState?.animateScroll(0);
-            },
-            child: const Text(
-              'FooButton',
-              // style: TextStyle(color: Colors.white),
+        if (!isCustom())
+          PageViewModel(
+            title: "Full Screen Page",
+            body:
+                "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+            // image: _buildFullscreenImage(),
+            decoration: pageDecoration.copyWith(
+              contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+              fullScreen: true,
+              bodyFlex: 2,
+              imageFlex: 3,
             ),
           ),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "Title of last page - reversed",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Click on ", style: bodyStyle),
-              Icon(Icons.edit),
-              Text(" to edit a post", style: bodyStyle),
-            ],
+        if (!isCustom())
+          PageViewModel(
+            title: "Another title page",
+            body: "Another beautiful body text for this example onboarding",
+            image: _buildImage(Icons.sos),
+            footer: ElevatedButton(
+              onPressed: () {
+                introKey.currentState?.animateScroll(0);
+              },
+              child: const Text(
+                'FooButton',
+                // style: TextStyle(color: Colors.white),
+              ),
+            ),
+            decoration: pageDecoration,
           ),
-          decoration: pageDecoration.copyWith(
-            bodyFlex: 2,
-            imageFlex: 4,
-            bodyAlignment: Alignment.bottomCenter,
-            imageAlignment: Alignment.topCenter,
+        if (!isCustom())
+          PageViewModel(
+            title: "Title of last page - reversed",
+            bodyWidget: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Click on ", style: bodyStyle),
+                Icon(Icons.edit),
+                Text(" to edit a post", style: bodyStyle),
+              ],
+            ),
+            decoration: pageDecoration.copyWith(
+              bodyFlex: 2,
+              imageFlex: 4,
+              bodyAlignment: Alignment.bottomCenter,
+              imageAlignment: Alignment.topCenter,
+            ),
+            image: _buildImage(Icons.face),
+            reverse: true,
           ),
-          image: _buildImage(Icons.face),
-          reverse: true,
-        ),
       ],
       onDone: () => _onIntroEnd(context),
       //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: false,
+
       skipOrBackFlex: 0,
       nextFlex: 0,
       showBackButton: true,
+
       //rtl: true, // Display as right-to-left
       back: const Icon(Icons.arrow_back),
       skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
