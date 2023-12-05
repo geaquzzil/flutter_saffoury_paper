@@ -1623,6 +1623,15 @@ class Product extends ViewAbstract<Product>
   String getWebCategoryGridableTitle(BuildContext context) {
     return getMainHeaderTextOnly(context);
   }
+
+  void addInStock(int quantity, {Warehouse? warehouse}) {
+    inStock ??= [
+      ...inStock??[],
+      Stocks()
+        ..quantity = quantity.toDouble()
+        ..warehouse = warehouse
+    ];
+  }
 }
 
 // enum ProductStatus {

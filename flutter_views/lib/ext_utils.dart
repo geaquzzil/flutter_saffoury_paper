@@ -89,6 +89,20 @@ extension StringsUtils2 on String {
 }
 
 extension StringsUtils on String? {
+  bool isNumeric() {
+    return double.tryParse(this ?? "") != null;
+  }
+
+  int toIntFromString() {
+    if (isNumeric()) return int.parse(this!);
+    return -1;
+  }
+
+  double toDoubleFromString() {
+    if (isNumeric()) return double.tryParse(this!) ?? -1;
+    return -1;
+  }
+
   Color? fromHex() {
     if (this == null) return null;
     if (this!.isEmpty) return null;

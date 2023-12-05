@@ -363,7 +363,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Directionality(
-            textDirection: isArabic() ? TextDirection.rtl : TextDirection.ltr,
+            textDirection: TextDirection.rtl,
             child: Table.fromTextArray(
 
                 // columnWidths: {
