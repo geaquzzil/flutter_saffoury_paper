@@ -366,7 +366,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         getPadding(
           context,
           SliverFillRemaining(
-              fillOverscroll: true, hasScrollBody: false, child: e.widget),
+              fillOverscroll: false, hasScrollBody: false, child: e.widget),
         ),
       ...?e.slivers?.map((e) => getPadding(context, e)).toList()
     ];
@@ -579,16 +579,19 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         // bottomNavigationBarHeight: 80,
         bottomNavigationBar: isCartableInterface()
             ? BottomAppBar(
-                color: Theme.of(context).colorScheme.surface,
-                elevation: 2,
+                // color: Theme.of(context).colorScheme.surface,
+                // elevation: 2,
                 shape: const AutomaticNotchedShape(RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25),
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
                       topRight: Radius.circular(25)),
                 )),
                 child: BottomWidgetOnViewIfCartable(
                     viewAbstract: getExtras() as CartableProductItemInterface))
             : null,
+        bottomNavigationBarHeight: 100,
         // headerBottomBar: Text("sdd"),
         expandedBody:
             isListableInterface() ? getListableInterfaceQrCode() : null,

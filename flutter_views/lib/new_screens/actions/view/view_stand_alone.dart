@@ -81,9 +81,13 @@ class MasterViewStandAlone extends StatelessWidget {
   Widget build(BuildContext context) {
     if (viewAbstract.getCustomStandAloneResponseType() ==
         ResponseType.NONE_RESPONSE_TYPE) {
-      return viewAbstract.getCustomStandAloneWidget(context);
+      // return viewAbstract.getCustomStandAloneWidget(context);
+      //todo on CustomStandAloneResponse alone we need to do this       return viewAbstract.getCustomStandAloneWidget(context);
+      //todod if from split scree then
+      // return viewAbstract.getCustomStandAloneWidget(context);
       return Card(
         child: ListView(
+          
           shrinkWrap: true,
           children: [
             BaseSharedHeaderViewDetailsActions(

@@ -31,16 +31,24 @@ class _DropdownCustomListWithFormListenerState
 
   @override
   void initState() {
-    list = widget.viewAbstract
-        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
+    postFram(() => list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!);
+    // list = widget.viewAbstract
+    //     .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    postFram(() => list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!);
     super.didChangeDependencies();
-    list = widget.viewAbstract
-        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
+  }
+
+  void postFram(Function c) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      c.call();
+    });
   }
 
   @override
@@ -62,10 +70,12 @@ class _DropdownCustomListWithFormListenerState
             debugPrint("getControllerDropdownCustomList onReset");
             debugPrint(
                 "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!}");
-            setState(() {
-              list = widget.viewAbstract
-                  .getTextInputIsAutoCompleteCustomListMap(
-                      context)[widget.field]!;
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              setState(() {
+                list = widget.viewAbstract
+                    .getTextInputIsAutoCompleteCustomListMap(
+                        context)[widget.field]!;
+              });
             });
           },
           validator: widget.viewAbstract
