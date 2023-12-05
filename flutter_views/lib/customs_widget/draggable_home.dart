@@ -105,6 +105,8 @@ class DraggableHome extends StatefulWidget {
   // final Widget? tabbar;
   final bool showAppbarOnTopOnly;
 
+  final bool showNormalToolbar;
+
   /// This will create DraggableHome.
   const DraggableHome(
       {Key? key,
@@ -118,6 +120,7 @@ class DraggableHome extends StatefulWidget {
       this.valueNotifierExpandTypeOnExpandOny,
       this.showLeadingAsHamborg = true,
       this.alwaysShowTitle = false,
+      this.showNormalToolbar = false,
       this.headerExpandedHeight = 0.4,
       this.scrollController,
       this.headerWidget,
@@ -234,30 +237,36 @@ class DraggableHomeState extends State<DraggableHome>
     // final availableHeight = MediaQuery.of(context).padding.top;
     return SliverSafeArea(
       sliver: SliverPadding(
-        padding: const EdgeInsets.only(
-            top: kDefaultPadding, left: kDefaultPadding / 2),
+        padding: EdgeInsets.zero,
+
+        //  const EdgeInsets.only(
+        //     top: kDefaultPadding, left: kDefaultPadding / 2),
         sliver: SliverPersistentHeader(
             pinned: true,
             delegate: SliverAppBarDelegatePreferedSize(
                 wrapWithSafeArea: true,
                 child: ColoredTabBar(
-                  useCard: true,
+                  useCard: false,
+                  color:
+                      Theme.of(context).colorScheme.background.withOpacity(.5),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(
+                    dividerColor: Colors.transparent,
+
                     // padding: EdgeInsets.all(kDefaultPadding),
-                    labelStyle: Theme.of(context).textTheme.titleSmall,
-                    indicatorColor:
-                        Theme.of(context).colorScheme.primary.withOpacity(.2),
-                    labelColor: Theme.of(context).colorScheme.primary,
+                    // labelStyle: Theme.of(context).textTheme.titleLarge,
+                    // indicatorColor:
+                    //     Theme.of(context).colorScheme.primary.withOpacity(.2),
+                    // labelColor: Theme.of(context).colorScheme.primary,
                     tabs: _tabs!,
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(80.0),
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary
-                          .withOpacity(.2),
-                    ),
+                    // indicator: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(80.0),
+                    //   color: Theme.of(context)
+                    //       .colorScheme
+                    //       .secondary
+                    //       .withOpacity(.2),
+                    // ),
                     isScrollable: true,
                     controller: _tabController,
                   ),
@@ -294,35 +303,12 @@ class DraggableHomeState extends State<DraggableHome>
       {TabControllerHelper? tab}) {
     return NotificationListener<ScrollNotification>(
         onNotification: (notification) {
-          // debugPrint("DraggableHome  ${notification.metrics.extentBefore}");
-          // if (widget.showAppbarOnTopOnly && widget.scrollController != null) {
-          //   debugPrint(
-          //       "DraggableHome ${widget.scrollController!.position.pixels}");
-          //   if (widget.scrollController!.position.pixels >= 200) {
-          //     if (isFullyExpanded.value) isFullyExpanded.add(false);
-          //     if ((!isFullyCollapsed.value)) isFullyCollapsed.add(true);
-          //     // expandedHeight = 0;
-          //     return false;
-          //   }
-          // }
-
           if (notification.metrics.axis == Axis.vertical) {
             // isFullyCollapsed
             if ((isFullyExpanded.value) &&
                 notification.metrics.extentBefore > 100) {
               isFullyExpanded.add(false);
             }
-            // if (widget.hideBottomNavigationBarOnScroll) {
-            //   if (notification.metrics.extentBefore > 100) {
-            //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            //       hideWhenScroll.value = true;
-            //     });
-            //   } else {
-            //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            //       hideWhenScroll.value = false;
-            //     });
-            //   }
-            // }
 
             //isFullyCollapsed
             if (notification.metrics.extentBefore >
@@ -564,8 +550,10 @@ class DraggableHomeState extends State<DraggableHome>
     return [
       if (!hasSlivers)
         SliverFillRemaining(
-          //TODO this gives error 
-            fillOverscroll: true, hasScrollBody: true, child: tab.widget),
+            //TODO this gives error
+            fillOverscroll: true,
+            hasScrollBody: true,
+            child: tab.widget),
       ...?tab.slivers?.map((e) => e)
     ];
   }

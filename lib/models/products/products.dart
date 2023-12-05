@@ -899,9 +899,10 @@ class Product extends ViewAbstract<Product>
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action}) {
     return [
-      ProductTopWidget(
-        product: this,
-      )
+      if (action != ServerActions.edit)
+        ProductTopWidget(
+          product: this,
+        )
     ];
     return super.getCustomTopWidget(context, action: action);
   }
@@ -1626,7 +1627,7 @@ class Product extends ViewAbstract<Product>
 
   void addInStock(int quantity, {Warehouse? warehouse}) {
     inStock ??= [
-      ...inStock??[],
+      ...inStock ?? [],
       Stocks()
         ..quantity = quantity.toDouble()
         ..warehouse = warehouse

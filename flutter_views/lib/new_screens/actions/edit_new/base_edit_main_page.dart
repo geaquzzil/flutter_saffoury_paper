@@ -37,7 +37,38 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   Widget getBody(BuildContext context) {
-    // return Text("Sdds");
+    return SliverList.builder(
+      itemBuilder: (c, i) => BaseEditWidget(
+        onValidate: (viewAbstract) {
+          currentViewAbstract = viewAbstract;
+          if (isListableInterface()) {
+            if (getListableInterface().isListableRequired(context)) {
+              if (getListableInterface().getListableList().isEmpty) {
+                onValidateViewAbstract.value = null;
+              } else {
+                for (var item in getListableInterface().getListableList()) {
+                  if (item.onManuallyValidate(context) == null) {
+                    onValidateViewAbstract.value = null;
+                    return;
+                  }
+                }
+                onValidateViewAbstract.value = currentViewAbstract;
+              }
+            }
+          } else {
+            onValidateViewAbstract.value = currentViewAbstract;
+          }
+
+          if (currentViewAbstract != null) {
+            debugPrint(
+                "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}");
+          }
+        },
+        viewAbstract: getExtras(),
+        isTheFirst: true,
+      ),
+      itemCount: 1,
+    );
     return BaseEditWidget(
       onValidate: (viewAbstract) {
         currentViewAbstract = viewAbstract;
@@ -308,7 +339,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   @override
   bool getBodyIsSliver() {
-    return false;
+    return true;
   }
 }
 

@@ -394,7 +394,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             SliverToBoxAdapter(
               child: e,
             ),
-            bottom: 80);
+            bottom: 0);
       }
       return SliverToBoxAdapter(child: e);
     }).toList();
@@ -573,6 +573,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       tabs.insert(1, getListableTab());
     }
     return DraggableHome(
+        showNormalToolbar: true,
         showLeadingAsHamborg: false,
         key: draggableHomeState,
         valueNotifierExpandType: expandType,
@@ -668,11 +669,15 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   bool isCartableInterface() {
+    debugPrint("isCartableInterface $T  t is ${(T == BaseEditNewPage)}");
+    // return false;
     return getExtras() is CartableProductItemInterface &&
-        getExtras().isEditing();
+        getExtras().isEditing() &&
+        ((T == BaseEditNewPage) == false);
   }
 
   bool isListableInterface() {
+    // return false;
     return getExtras() is ListableInterface;
   }
 
