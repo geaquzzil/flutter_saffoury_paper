@@ -153,6 +153,10 @@ Widget getSpace({double? height = 26}) {
   return SizedBox(height: height);
 }
 
+Widget getSpaceWidth({double? width = 20}) {
+  return SizedBox(width: width);
+}
+
 bool canSubmitChanges(ViewAbstract viewAbstract) =>
     (viewAbstract.getParnet) != null;
 

@@ -21,8 +21,11 @@ class FilterablePopupIconWidget extends StatelessWidget {
         // arrowColor: Theme.of(context).colorScheme.secondaryContainer,
         menuBuilder: () => getWidget(context),
         enablePassEvent: true,
+
+        // barrierColor: Colors.red,
+        // arrowColor: Colors.red,
         pressType: PressType.singleClick,
-        showArrow: false,
+        showArrow: true,
         verticalMargin: -100,
         controller: _controller,
         child: buildColapsedIcon(context, Icons.filter_alt_rounded, null));
@@ -44,8 +47,18 @@ class FilterablePopupIconWidget extends StatelessWidget {
         ),
       );
 
-  OnHoverWidget buildColapsedIcon(
+  Widget buildColapsedIcon(
       BuildContext context, IconData data, VoidCallback? onPress) {
+    // return Icon(data);
+    return IconButton(
+      color: Theme.of(context).indicatorColor,
+      // padding: EdgeInsets.all(4),
+      onPressed: onPress,
+      icon: Icon(
+        data,
+        color: Theme.of(context).indicatorColor,
+      ),
+    );
     return OnHoverWidget(
         scale: false,
         builder: (onHover) {

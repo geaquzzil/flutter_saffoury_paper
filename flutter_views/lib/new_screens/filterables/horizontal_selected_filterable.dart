@@ -21,7 +21,7 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<FilterableProviderHelper> finalList =
-        getAllSelectedFilters(context, customFilters: onFilterable ?? {});
+        getAllSelectedFiltersRead(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

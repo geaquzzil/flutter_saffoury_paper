@@ -101,8 +101,6 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
             Icon(
               e.getFieldLabelIconData(context, e),
 
-              // color: Colors.black,
-              size: 20,
             ),
             const SizedBox(width: 12),
             Text(e.getFieldLabelString(context, e)),

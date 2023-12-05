@@ -62,8 +62,6 @@ class _DropdownStringListControllerListenerByIconState
                       if (e.icon != null)
                         Icon(
                           e.icon,
-                          // color: Colors.black,
-                          size: 20,
                         ),
                       const SizedBox(width: kDefaultPadding / 3),
                       Text(e.label, overflow: TextOverflow.clip),
@@ -84,14 +82,22 @@ class _DropdownStringListControllerListenerByIconState
   @override
   Widget build(BuildContext context) {
     Widget pop = PopupMenuButton<DropdownStringListItem?>(
+      // iconColor: Theme.of(context).colorScheme.,
       position: PopupMenuPosition.under,
+      // surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+      // child: Icon(
+      //   lastSelected == null || firstRun
+      //       ? widget.icon
+      //       : lastSelected?.icon ?? widget.icon,
+      //   // color: Theme.of(context).highlightColor,
+      // ),
       tooltip: widget.hint,
       icon: Icon(
         lastSelected == null || firstRun
             ? widget.icon
             : lastSelected?.icon ?? widget.icon,
-        color: firstRun || lastSelected == null
-            ? null
+        color: lastSelected == null
+            ? Theme.of(context).indicatorColor
             : Theme.of(context).colorScheme.primary,
       ),
       onSelected: (DropdownStringListItem? result) {

@@ -67,8 +67,8 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),
-                // ActionsOnHeaderWidget(viewAbstract: viewAbstract),
-                // ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
+                ActionsOnHeaderWidget(viewAbstract: viewAbstract),
+                ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
               ],
             ),
           ),

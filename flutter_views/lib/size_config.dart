@@ -44,9 +44,11 @@ class SizeConfig {
   static double getPaneProportion(BuildContext context,
       {Orientation? orientation}) {
     if (MediaQuery.of(context).hinge != null) return 0.5;
-    if (SizeConfig.isDesktopOrWeb(context)) return 0.4;
-    if (SizeConfig.isTablet(context)) return 0.4;
-    return 0.4;
+    if (SizeConfig.isMediumFromScreenSize(context)) {
+      return 0.5;
+    } else {
+      return 0.3;
+    }
   }
 
   static bool isLargeScreenGeneral(BuildContext context) {
@@ -150,6 +152,24 @@ class SizeConfig {
   static bool isTablet(BuildContext context) => Device.get().isTablet;
   static bool hasSecondScreen(BuildContext context) {
     return isDesktopOrWeb(context) || isFoldable(context);
+  }
+
+  static bool isDesktopFromScreenSize(BuildContext context) {
+    return MediaQuery.of(context).size.width > largeTablet;
+  }
+
+  static bool isSmallTabletFromScreenSize(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return width > foldableSmallTablet;
+  }
+
+  static bool isMediumFromScreenSize(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return width > 600 && width < 839;
+  }
+
+  static bool isMobileFromScreenSize(BuildContext context) {
+    return MediaQuery.of(context).size.width > mobileWidth;
   }
 
   static bool isWeb() => kIsWeb;

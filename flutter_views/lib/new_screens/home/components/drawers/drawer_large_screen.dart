@@ -509,6 +509,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
     DrawerMenuControllerProvider ds =
         context.watch<DrawerMenuControllerProvider>();
     return IconButton(
+        // iconSize: 20,
         tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
         icon: Icon(
           viewAbstract.getMainIconData(),

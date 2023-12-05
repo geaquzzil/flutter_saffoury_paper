@@ -105,11 +105,11 @@ class DraggableHome extends StatefulWidget {
   // final Widget? tabbar;
   final bool showAppbarOnTopOnly;
 
-  final bool showNormalToolbar;
+  final PreferredSizeWidget? showNormalToolbar;
 
   /// This will create DraggableHome.
   const DraggableHome(
-      {Key? key,
+      {super.key,
       this.leading,
       this.pinnedToolbar = false,
       this.title,
@@ -120,7 +120,7 @@ class DraggableHome extends StatefulWidget {
       this.valueNotifierExpandTypeOnExpandOny,
       this.showLeadingAsHamborg = true,
       this.alwaysShowTitle = false,
-      this.showNormalToolbar = false,
+      this.showNormalToolbar,
       this.headerExpandedHeight = 0.4,
       this.scrollController,
       this.headerWidget,
@@ -148,8 +148,7 @@ class DraggableHome extends StatefulWidget {
             headerExpandedHeight < stretchMaxHeight),
         assert(
           (stretchMaxHeight > headerExpandedHeight) && (stretchMaxHeight < .95),
-        ),
-        super(key: key);
+        );
 }
 
 class DraggableHomeState extends State<DraggableHome>
@@ -217,14 +216,15 @@ class DraggableHomeState extends State<DraggableHome>
         MediaQuery.of(context).size.height * (widget.stretchMaxHeight);
 
     return Scaffold(
-      backgroundColor:
-          widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: 
+           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
       body: PageStorage(
         bucket: bucket,
         child: getNotificationListener(expandedHeight, context, appBarHeight,
             fullyExpandedHeight, topPadding),
       ),
+      appBar: widget.showNormalToolbar,
       bottomSheet: widget.bottomSheet,
       bottomNavigationBar: getBottomNavigationBar(),
       floatingActionButton: getScaffoldFloatingActionButton(),
@@ -248,7 +248,7 @@ class DraggableHomeState extends State<DraggableHome>
                 child: ColoredTabBar(
                   useCard: false,
                   color:
-                      Theme.of(context).colorScheme.background.withOpacity(.5),
+                      Theme.of(context).colorScheme.background.withOpacity(.9),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(
@@ -403,86 +403,94 @@ class DraggableHomeState extends State<DraggableHome>
                 const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
             slivers: [
-              StreamBuilder<List<bool>>(
-                stream: CombineLatestStream.list<bool>([
-                  isFullyCollapsed.stream,
-                  isFullyExpanded.stream,
-                ]),
-                builder:
-                    (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-                  final List<bool> streams = (snapshot.data ?? [false, false]);
-                  final bool fullyCollapsed = streams[0];
-                  final bool fullyExpanded = streams[1];
-                  if (toggleWidget != null) {
-                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                      if (!fullyCollapsed && !fullyExpanded) {
-                        removeAnimatedListItem(0);
-                      } else if (fullyCollapsed && !fullyExpanded) {
-                        addAnimatedListItem(_tabs![value]
-                            .draggableSwithHeaderFromAppbarToScroll!);
-                      }
-                    });
-                  }
-                  notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
+              if (widget.showNormalToolbar == null)
+                StreamBuilder<List<bool>>(
+                  stream: CombineLatestStream.list<bool>([
+                    isFullyCollapsed.stream,
+                    isFullyExpanded.stream,
+                  ]),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<bool>> snapshot) {
+                    final List<bool> streams =
+                        (snapshot.data ?? [false, false]);
+                    final bool fullyCollapsed = streams[0];
+                    final bool fullyExpanded = streams[1];
+                    if (toggleWidget != null) {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        if (!fullyCollapsed && !fullyExpanded) {
+                          removeAnimatedListItem(0);
+                        } else if (fullyCollapsed && !fullyExpanded) {
+                          addAnimatedListItem(_tabs![value]
+                              .draggableSwithHeaderFromAppbarToScroll!);
+                        }
+                      });
+                    }
+                    notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
 
-                  return SliverAppBar(
-                    automaticallyImplyLeading: true,
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    // surfaceTintColor: Theme.of(context).colorScheme.primary,
-                    // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
-                    leading: getLeadingAppBar(context),
-                    // leading: widget.alwaysShowLeadingAndAction
-                    //     ? widget.leading
-                    //     : !fullyCollapsed
-                    //         ? const SizedBox()
-                    //         : widget.leading,
-                    actions: widget.alwaysShowLeadingAndAction
-                        ? widget.actions
-                        : !fullyCollapsed
-                            ? []
-                            : widget.actions,
-                    elevation: 0,
-                    pinned: widget.pinnedToolbar,
-                    // floating: true,
-                    stretch: true,
-                    centerTitle: widget.centerTitle,
-                    title: widget.title == null
-                        ? null
-                        : widget.alwaysShowTitle
-                            ? widget.title
-                            : AnimatedOpacity(
-                                opacity: fullyCollapsed ? 1 : 0,
-                                duration: const Duration(milliseconds: 100),
-                                child: widget.title,
-                              ),
+                    return SliverAppBar(
+                      automaticallyImplyLeading: true,
 
-                    collapsedHeight: appBarHeight,
-                    expandedHeight:
-                        fullyExpanded ? fullyExpandedHeight : expandedHeight,
-                    flexibleSpace: _tabs != null
-                        ? ValueListenableBuilder<int>(
-                            valueListenable: onTabSelected,
-                            builder: (context, value, child) => getSliverSpace(
-                                fullyExpanded, context, fullyCollapsed,
-                                tabFullyExpanded:
-                                    _tabs![value].draggableExtendedWidget,
-                                tabHeaderWidget: _tabs![value]
-                                        .draggableSwithHeaderFromAppbarToScroll ??
-                                    _tabs![value].draggableHeaderWidget),
-                          )
-                        : widget.headerWidget != null
-                            ? getSliverSpace(
-                                fullyExpanded, context, fullyCollapsed)
-                            : null,
-                    stretchTriggerOffset: widget.stretchTriggerOffset,
-                    onStretchTrigger: widget.fullyStretchable
-                        ? () async {
-                            if (!fullyExpanded) isFullyExpanded.add(true);
-                          }
-                        : null,
-                  );
-                },
-              ),
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      // surfaceTintColor: Theme.of(context).colorScheme.primary,
+                      // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
+                      leading: getLeadingAppBar(context),
+                      // leading: widget.alwaysShowLeadingAndAction
+                      //     ? widget.leading
+                      //     : !fullyCollapsed
+                      //         ? const SizedBox()
+                      //         : widget.leading,
+                      actions: widget.alwaysShowLeadingAndAction
+                          ? widget.actions
+                          : !fullyCollapsed
+                              ? []
+                              : widget.actions,
+                      elevation: 0,
+                      pinned: widget.pinnedToolbar,
+                      // floating: true,
+                      stretch: true,
+                      centerTitle: widget.centerTitle,
+                      title: widget.title == null
+                          ? null
+                          : widget.alwaysShowTitle
+                              ? widget.title
+                              : AnimatedOpacity(
+                                  opacity: fullyCollapsed ? 1 : 0,
+                                  duration: const Duration(milliseconds: 100),
+                                  child: widget.title,
+                                ),
+
+                      collapsedHeight: appBarHeight,
+                      expandedHeight:
+                          fullyExpanded ? fullyExpandedHeight : expandedHeight,
+                      flexibleSpace: _tabs != null
+                          ? ValueListenableBuilder<int>(
+                              valueListenable: onTabSelected,
+                              builder: (context, value, child) => getSliverSpace(
+                                  fullyExpanded, context, fullyCollapsed,
+                                  tabFullyExpanded:
+                                      _tabs![value].draggableExtendedWidget,
+                                  tabHeaderWidget: _tabs![value]
+                                          .draggableSwithHeaderFromAppbarToScroll ??
+                                      _tabs![value].draggableHeaderWidget),
+                            )
+                          : widget.headerWidget != null
+                              ? getSliverSpace(
+                                  fullyExpanded, context, fullyCollapsed)
+                              : null,
+                      stretchTriggerOffset: widget.stretchTriggerOffset,
+                      onStretchTrigger: widget.fullyStretchable
+                          ? () async {
+                              if (!fullyExpanded) isFullyExpanded.add(true);
+                            }
+                          : null,
+                    );
+                  },
+                ),
+              if (widget.showNormalToolbar != null)
+                const SliverPadding(
+                  padding: const EdgeInsets.only(top: 20),
+                  sliver: SliverToBoxAdapter(child: SizedBox()),
+                ),
               if (_tabs != null) getTabbar(context),
 
               if (toggleWidget != null)

@@ -52,18 +52,23 @@ class BaseSharedDetailsView extends StatelessWidget {
             case ServerActions.edit:
               currentWidget = Container(
                 key: UniqueKey(),
-                color: Theme.of(context).colorScheme.background,
-                child: BaseEditNewPage(
-                  viewAbstract: value.item1!,
+                // color: Theme.of(context).colorScheme.background,
+                child: Card(
+                  child: BaseEditNewPage(
+                    viewAbstract: value.item1!,
+                  ),
                 ),
               );
               break;
             case ServerActions.view:
               currentWidget = Container(
+                  // margin: EdgeInsets.all(20),
                   key: UniqueKey(),
-                  color: Theme.of(context).colorScheme.background,
-                  child: BaseViewNewPage(
-                    viewAbstract: value.item1!,
+                  color: Theme.of(context).colorScheme.surface,
+                  child: Card(
+                    child: BaseViewNewPage(
+                      viewAbstract: value.item1!,
+                    ),
                   ));
               break;
             default:

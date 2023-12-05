@@ -101,6 +101,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               children: [
                 if (filterButton != null) filterButton,
                 DropdownStringListControllerListenerByIcon(
+                    showSelectedValueBeside: false,
                     icon: Icons.sort_by_alpha,
                     hint: AppLocalizations.of(context)!.sortBy,
                     list: viewAbstract?.getMainFieldsIconsAndValues(context) ??
@@ -121,6 +122,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                     }),
                 DropdownEnumControllerListenerByIcon<SortByType>(
                   viewAbstractEnum: SortByType.ASC,
+                  showSelectedValueBeside: false,
                   onSelected: (object) {
                     // listProvider.clear(findCustomKey());
                     addFilterableSort(context, object as SortByType);

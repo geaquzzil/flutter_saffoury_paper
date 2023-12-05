@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
@@ -28,7 +29,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   bool useCardAsOutLine;
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
-      {Key? key,
+      {super.key,
       required this.autoRest,
       this.title,
       this.titleString,
@@ -36,8 +37,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
       this.useCardAsImageBackgroud = false,
       this.isSliver = false,
       this.customHeight,
-      this.listItembuilder})
-      : super(key: key);
+      this.listItembuilder});
 
   @override
   State<ListHorizontalApiAutoRestWidget> createState() =>
@@ -48,7 +48,7 @@ class _ListHorizontalApiWidgetState
     extends State<ListHorizontalApiAutoRestWidget> {
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
-
+  double? _currentHeight;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
 
@@ -102,30 +102,19 @@ class _ListHorizontalApiWidgetState
     bool isLoading = listProvider.isLoading(widget.autoRest.key);
     return LayoutBuilder(
       builder: (co, constraints) {
-        debugPrint("layoutBuilder ${constraints.maxWidth}");
+        debugPrint(
+            "layoutBuilder maxWidth  ${constraints.maxWidth} maxHeight ${constraints.maxHeight}");
         return ResponsiveGridView.builder(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
           itemCount: isLoading ? (data.length + 3) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
+            // from width
             mainAxisSpacing: 20,
-
-            crossAxisSpacing: 20,
-            maxCrossAxisExtent:
-                ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
-                    ? constraints.maxWidth / 2.0
-                    : 250.0,
-            // Hack to adjust child height
+            minCrossAxisExtent: constraints.maxHeight - 150,
+            maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
           ),
-          // const SliverGridDelegateWithMaxCrossAxisExtent(
-          //   crossAxisSpacing: kDefaultPadding / 2,
-          //   mainAxisSpacing: kDefaultPadding / 2,
-          //   childAspectRatio: 1 / 1,
-          //   // mainAxisExtent: 100,
-          //   maxCrossAxisExtent: 250,
-          //   // childAspectRatio: 3 / 2,
-          // ),
           itemBuilder: (context, index) {
             if (isLoading && index > data.length - 1) {
               return GridTile(
@@ -133,12 +122,12 @@ class _ListHorizontalApiWidgetState
                 lines: 3,
               ));
             }
-            return GridTile(
-                // footer: Text("foot"),
-                child: WebGridViewItem(
+            Widget currentTile = WebGridViewItem(
               // setDescriptionAtBottom: !kIsWeb,
               item: data[index],
-            ));
+            );
+
+            return GridTile(child: currentTile);
 
             //  kIsWeb
             //     ? WebGridViewItem(
@@ -210,6 +199,8 @@ class _ListHorizontalApiWidgetState
 
   @override
   Widget build(BuildContext context) {
+    _currentHeight =
+        widget.customHeight ?? MediaQuery.of(context).size.height * .25;
     return ChangeNotifierProvider.value(
         value: listProvider,
         child: Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
@@ -263,8 +254,8 @@ class _ListHorizontalApiWidgetState
           const SizedBox(
             height: kDefaultPadding,
           ),
-        if (widget.customHeight != null)
-          SizedBox(height: widget.customHeight, child: child)
+        if (_currentHeight != null)
+          SizedBox(height: _currentHeight, child: child)
         else
           Expanded(child: child)
         // if (widget.isSliver)

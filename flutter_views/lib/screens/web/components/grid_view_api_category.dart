@@ -4,9 +4,11 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api_master.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 
@@ -262,11 +265,17 @@ class GridViewApi extends StatelessWidget {
 
 class WebGridViewItem extends StatelessWidget {
   final ViewAbstract item;
+  final bool hightLightonSelect;
+  final Function()? onPress;
   final bool setDescriptionAtBottom;
   late WebCategoryGridableInterface _categoryGridable;
 
   WebGridViewItem(
-      {super.key, required this.item, this.setDescriptionAtBottom = false});
+      {super.key,
+      required this.item,
+      this.setDescriptionAtBottom = false,
+      this.hightLightonSelect = false,
+      this.onPress});
 
   @override
   Widget build(BuildContext context) {
@@ -295,29 +304,30 @@ class WebGridViewItem extends StatelessWidget {
       // scale: false,
       builder: (isHovered) {
         Widget child = GestureDetector(
-          onTap: () {
-            ViewAbstract? isMasterToList =
-                _categoryGridable.getWebCategoryGridableIsMasterToList(context);
-            if (isMasterToList != null) {
-              context.goNamed(indexWebMasterToList,
-                  pathParameters: {"tableName": item.getTableNameApi()!},
-                  queryParameters: {
-                    "id": item.iD.toString(),
-                  },
-                  extra: item);
-            } else {
-              context.goNamed(indexWebView,
-                  // queryParameters: {
-                  //   "id": item.iD.toString(),
-                  //   "tableName": item.getTableNameApi()!
-                  // },
-                  pathParameters: {
-                    "id": item.iD.toString(),
-                    "tableName": item.getTableNameApi()!
-                  },
-                  extra: item);
-            }
-          },
+          onTap: onPress ??
+              () {
+                ViewAbstract? isMasterToList = _categoryGridable
+                    .getWebCategoryGridableIsMasterToList(context);
+                if (isMasterToList != null) {
+                  context.goNamed(indexWebMasterToList,
+                      pathParameters: {"tableName": item.getTableNameApi()!},
+                      queryParameters: {
+                        "id": item.iD.toString(),
+                      },
+                      extra: item);
+                } else {
+                  context.goNamed(indexWebView,
+                      // queryParameters: {
+                      //   "id": item.iD.toString(),
+                      //   "tableName": item.getTableNameApi()!
+                      // },
+                      pathParameters: {
+                        "id": item.iD.toString(),
+                        "tableName": item.getTableNameApi()!
+                      },
+                      extra: item);
+                }
+              },
           child: setDescriptionAtBottom
               ? _getStack(context, isHovered)
               : _getStack(context, isHovered),
@@ -341,6 +351,7 @@ class WebGridViewItem extends StatelessWidget {
         // _buildBackground(context),
         _buildGradient(isHovered),
         _buildTitleAndSubtitle(context, isHovered),
+
         if (item is CartableProductItemInterface)
           if (item
                   .getCartableProductItemInterface()
@@ -352,7 +363,7 @@ class WebGridViewItem extends StatelessWidget {
               opacity: isHovered ? 1 : 0,
               child: AnimatedScale(
                 duration: const Duration(milliseconds: 275),
-                scale: isHovered ? 1 : 0,
+                scale: isHovered ? .2 : 0,
                 child: Center(
                   child: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),
@@ -363,7 +374,47 @@ class WebGridViewItem extends StatelessWidget {
                   ),
                 ),
               ),
-            ))
+            )),
+        if (hightLightonSelect)
+          Selector<ActionViewAbstractProvider, ViewAbstract?>(
+            builder: (context, value, child) {
+              bool isLargeScreen = SizeConfig.isLargeScreen(context);
+              bool isSelected =
+                  (value?.isEquals(item) ?? false) && isLargeScreen;
+
+              debugPrint("WebGride is selected $isSelected");
+              return !isSelected
+                  ? const Positioned.fill(
+                      child: SizedBox(),
+                    )
+                  : Positioned.fill(
+                      // top: ,
+                      child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 275),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context)
+                                .colorScheme
+                                .surfaceTint
+                                .withOpacity(.2),
+                            // .withOpacity(.9),
+                            Theme.of(context)
+                                .colorScheme
+                                .surfaceTint
+                                .withOpacity(.2)
+                            // .withOpacity(.9),
+                            // Colors.black.withOpacity(0.7),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [0.6, 0.95],
+                        ),
+                      ),
+                    ));
+            },
+            selector: (p0, p1) => p1.getObject,
+          ),
         // Positioned(bottom: 0.0, left: 0.0, child: Text("das"))
         // _buildCenterWidget(context)
       ],
@@ -561,7 +612,7 @@ class WebGridViewItemCustom extends StatelessWidget {
             decoration: BoxDecoration(
                 color: null,
                 borderRadius: roundedCorners
-                    ? BorderRadius.all(Radius.circular(18))
+                    ? const BorderRadius.all(Radius.circular(18))
                     : null),
             child: child!));
   }

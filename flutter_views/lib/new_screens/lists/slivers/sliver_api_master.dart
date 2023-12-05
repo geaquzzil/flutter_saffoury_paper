@@ -33,12 +33,16 @@ import 'package:flutter_view_controller/providers/actions/list_actions_provider.
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:supercharged/supercharged.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../actions/dashboard/base_dashboard_screen_page.dart';
@@ -528,6 +532,15 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           }
           ViewAbstract va = listProvider.getList(findCustomKey())[index];
           va.setParent(widget.setParentForChild);
+          Widget currentTile = WebGridViewItem(
+            hightLightonSelect: true,
+            onPress: () => va.onCardClicked(context),
+            setDescriptionAtBottom: true,
+            // setDescriptionAtBottom: !kIsWeb,
+            item: va,
+          );
+
+          return GridTile(child: currentTile);
           return ListCardItemHorizontal<ViewAbstract>(
               useImageAsBackground: true, object: va);
         }, childCount: count + (isLoading ? 5 : 0)));
@@ -581,17 +594,21 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         null;
   }
 
-  SliverPersistentHeader getFilterableWidget() {
-    return SliverPersistentHeader(
-        pinned: true,
-        delegate: SliverAppBarDelegatePreferedSize(
-            child: PreferredSize(
-          preferredSize: const Size.fromHeight(200.0),
-          child: FiltersAndSelectionListHeader(
-            listProvider: listProvider,
-            customKey: findCustomKey(),
-          ),
-        )));
+  Widget getFilterableWidget() {
+    return Selector<FilterableProvider, Map<String, FilterableProviderHelper>>(
+      builder: (c, v, s) {
+        debugPrint("getFilterableWidget FilterableProvider $v");
+        return SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverAppBarDelegatePreferedSize(
+                child: PreferredSize(
+              preferredSize: Size.fromHeight(v.entries.isNotEmpty ? 200 : 50.0),
+              child: FiltersAndSelectionListHeader(
+                  listProvider: listProvider, customKey: findCustomKey()),
+            )));
+      },
+      selector: (p0, p1) => p1.getList,
+    );
   }
 
   Widget getAddBotton(BuildContext context) => IconButton(
@@ -612,11 +629,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               pinned: false,
               delegate: SliverAppBarDelegatePreferedSize(
                   child: PreferredSize(
-                      preferredSize: const Size.fromHeight(70.0),
+                      preferredSize: const Size.fromHeight(50.0),
                       child: Container(
                         color: Theme.of(context).colorScheme.background,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: kDefaultPadding),
+                        padding: const EdgeInsets.only(
+                            // bottom: kDefaultPadding * .25,
+                            top: kDefaultPadding * .25,
+                            left: kDefaultPadding / 2,
+                            right: kDefaultPadding / 2),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [

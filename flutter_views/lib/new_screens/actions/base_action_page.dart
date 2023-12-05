@@ -573,7 +573,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       tabs.insert(1, getListableTab());
     }
     return DraggableHome(
-        showNormalToolbar: true,
+        // backgroundColor: canShowTabBarAsNormal() ? Colors.transparent : null,
+        showNormalToolbar: getTabBarIfDesktop(),
         showLeadingAsHamborg: false,
         key: draggableHomeState,
         valueNotifierExpandType: expandType,
@@ -723,32 +724,30 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     });
   }
 
-  Scaffold getBuildBody() {
-    return Scaffold(
-        // backgroundColor: widget.color?.darkVibrantColor?.color,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: ChangeNotifierProvider.value(
-            value: baseActionProviders,
-            child: Consumer<BaseActionProviders>(
-                builder: (context, provider, baseActionProviders) {
-              return !provider.getIsLoaded
-                  ? nil
-                  : BaseFloatingActionButtons(
-                      viewAbstract: widget.viewAbstract,
-                      serverActions: widget.getServerAction(),
-                      addOnList: getFloatingActionWidgetAddOns(context),
-                    );
-            })),
+  bool canShowTabBarAsNormal() {
+    return SizeConfig.isSoLargeScreen(context);
+  }
 
-        // provider.getIsLoaded
-        //     ? null
-        //     : BaseFloatingActionButtons(
-        //         viewAbstract: widget.viewAbstract,
-        //         serverActions: widget.getServerAction(),
-        //         addOnList: widget.getFloatingActionWidgetAddOns(context),
-        //       ),
-        body: getBodyDetermineLayout());
+  PreferredSizeWidget? getTabBarIfDesktop() {
+    if (!canShowTabBarAsNormal()) return null;
+    return AppBar(
+      
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: getExtras().getCardLeading(context),
+      ),
+      title: Text(getExtras().getMainHeaderTextOnly(context)),
+      actions: [
+        ActionsOnHeaderPopupWidget(
+          viewAbstract: getExtras(),
+          serverActions: getServerActions(),
+        )
+      ],
+    );
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100),
+      child: BaseSharedHeaderViewDetailsActions(viewAbstract: getExtras()),
+    );
   }
 }
 

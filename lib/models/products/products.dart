@@ -857,11 +857,6 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
-        customHeight: kIsWeb
-            ? (ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context))
-                ? 220
-                : 200
-            : 250,
         useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
@@ -871,11 +866,6 @@ class Product extends ViewAbstract<Product>
       ),
       ListHorizontalApiAutoRestWidget(
         useCardAsImageBackgroud: true,
-        customHeight: kIsWeb
-            ? (ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context))
-                ? 220
-                : 200
-            : 250,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,

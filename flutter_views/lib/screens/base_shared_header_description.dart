@@ -40,16 +40,16 @@ class BaseSharedHeaderDescription extends StatelessWidget {
                           ),
                           Text(
                             viewAbstract.getMainHeaderTextOnly(context),
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.titleMedium,
                           )
                         ],
                       ),
                     ),
                     const SizedBox(width: kDefaultPadding / 2),
-                    Text(
-                      viewAbstract.getDateTextOnly() ?? "",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    // Text(
+                    //   viewAbstract.getDateTextOnly() ?? "",
+                    //   style: Theme.of(context).textTheme.bodySmall,
+                    // ),
                   ],
                 ),
               ]))

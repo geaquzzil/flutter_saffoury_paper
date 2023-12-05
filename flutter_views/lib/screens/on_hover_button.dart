@@ -87,10 +87,10 @@ class _HoverImageState extends State<HoverImage>
       duration: const Duration(milliseconds: 275),
       vsync: this,
     );
-    _animation = Tween(begin: 1.0, end: 1.2).animate(CurvedAnimation(
+    _animation = Tween(begin: 1.0, end: 1.08).animate(CurvedAnimation(
         parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
     padding =
-        Tween(begin: 0.0, end: widget.bottomWidget == null ? -25.0 : -25.0)
+        Tween(begin: 0.0, end: widget.bottomWidget == null ? -10.0 : -10.0)
             .animate(CurvedAnimation(
                 parent: _controller,
                 curve: Curves.ease,
@@ -120,6 +120,7 @@ class _HoverImageState extends State<HoverImage>
         });
       },
       child: Container(
+        margin: EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius:
               widget.roundedCorners ? BorderRadius.circular(20.0) : null,
@@ -128,7 +129,7 @@ class _HoverImageState extends State<HoverImage>
               : const [
                   BoxShadow(
                     color: Colors.black26,
-                    offset: Offset(0.0, 20.0),
+                    offset: Offset(0.0, 0.0),
                     spreadRadius: -10.0,
                     blurRadius: 20.0,
                   )
@@ -154,11 +155,6 @@ class _HoverImageState extends State<HoverImage>
               ),
       ),
     );
-    // return child;
-    // return AspectRatio(
-    //   aspectRatio: 1 / 1,
-    //   child: child,
-    // );
     if (widget.bottomWidget != null) {
       return AspectRatio(
         aspectRatio: 1 / 1,
@@ -184,6 +180,7 @@ class _HoverImageState extends State<HoverImage>
               widget.roundedCorners ? BorderRadius.circular(20.0) : null,
         ),
         clipBehavior: Clip.hardEdge,
+        // transform: Matrix4.identity()..scale(1, 1, 1),
         transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value, 0, 0,
             0, 0, 1, 0, padding.value, padding.value, 0, 1),
         child: widget.builder == null

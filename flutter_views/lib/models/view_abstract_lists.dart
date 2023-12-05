@@ -120,6 +120,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getCachedImage(BuildContext context, {String? url}) {
+    // return Image.network(url);
     //TODO: this is for leading card
     // CachedNetworkImage(
     //   color: Theme.of(context).colorScheme.onBackground,
@@ -155,16 +156,12 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     //   placeholder: (context, url) => const CircularProgressIndicator(),
     //   errorWidget: (context, url, error) => Icon(getMainIconData()),
     // );
-    return SizedBox(
-      width: 20,
-      height: 20,
-      child: FastCachedImage(
-        url: url ?? "",
-        fit: BoxFit.fitWidth,
-        color: Theme.of(context).colorScheme.onBackground,
-        loadingBuilder: (context, url) => const CircularProgressIndicator(),
-        errorBuilder: (context, url, error) => Icon(getMainIconData()),
-      ),
+    return FastCachedImage(
+      url: url ?? "",
+      fit: BoxFit.contain,
+      // color: Theme.of(context).colorScheme.onBackground,
+      loadingBuilder: (context, url) => const CircularProgressIndicator(),
+      errorBuilder: (context, url, error) => Icon(getMainIconData()),
     );
   }
 
@@ -372,7 +369,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
       context.goNamed(printRouteName,
           pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-
           extra: this);
       // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
