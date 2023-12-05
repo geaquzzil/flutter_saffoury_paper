@@ -11,14 +11,16 @@ class DropdownEnumControllerListenerByIcon<T extends ViewAbstractEnum>
     extends StatefulWidget {
   T viewAbstractEnum;
   bool showSelectedValueBeside;
+  T? initialValue;
   void Function(T? object) onSelected;
 
   DropdownEnumControllerListenerByIcon({
-    Key? key,
+    super.key,
     this.showSelectedValueBeside = true,
     required this.viewAbstractEnum,
+    this.initialValue,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<DropdownEnumControllerListenerByIcon<T>> createState() =>
@@ -33,6 +35,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
   @override
   void initState() {
     firstRun = true;
+    selectedValue = widget.initialValue;
     super.initState();
   }
 
@@ -50,13 +53,16 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
   @override
   Widget build(BuildContext context) {
     Widget pop = PopupMenuButton<T>(
-      tooltip: widget.viewAbstractEnum.getMainLabelText(context),
+      tooltip: widget.viewAbstractEnum.getFieldLabelString(
+          context, selectedValue ?? widget.viewAbstractEnum),
       icon: Icon(
-        firstRun
+        selectedValue == null
             ? widget.viewAbstractEnum.getMainIconData()
             : widget.viewAbstractEnum
-                .getFieldLabelIconData(context, widget.viewAbstractEnum),
-        color: firstRun ? null : Theme.of(context).colorScheme.primary,
+                .getFieldLabelIconData(context, selectedValue),
+        color: selectedValue == null
+            ? null
+            : Theme.of(context).colorScheme.primary,
       ),
       onSelected: (T result) {
         widget.onSelected(result);
@@ -92,21 +98,23 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
     return pop;
   }
 
-  CustomPopupMenuItem<T> buildMenuItem(BuildContext context, T e) =>
-      CustomPopupMenuItem<T>(
-        value: e,
-        color: selectedValue == e ? Theme.of(context).highlightColor : null,
-        child: Row(
-          children: [
-            Icon(
-              e.getFieldLabelIconData(context, e),
-
-            ),
-            const SizedBox(width: 12),
-            Text(e.getFieldLabelString(context, e)),
-          ],
-        ),
-      );
+  CustomPopupMenuItem<T> buildMenuItem(BuildContext context, T e) {
+    debugPrint(
+        "buildMenuItem  current $e initailValue viewAbstractEnum ${widget.viewAbstractEnum}");
+    return CustomPopupMenuItem<T>(
+      value: e,
+      color: selectedValue == e ? Theme.of(context).highlightColor : null,
+      child: Row(
+        children: [
+          Icon(
+            e.getFieldLabelIconData(context, e),
+          ),
+          const SizedBox(width: 12),
+          Text(e.getFieldLabelString(context, e)),
+        ],
+      ),
+    );
+  }
 }
 
 class CustomPopupMenuItem<T> extends PopupMenuItem<T> {

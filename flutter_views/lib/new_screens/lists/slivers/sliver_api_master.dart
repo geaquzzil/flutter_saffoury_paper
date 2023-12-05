@@ -204,6 +204,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   Widget? getHeaderWidget() {
+    // return  null;
     if (isSelectedMode) {
       if (viewAbstract.isCartable()) {
         return ValueListenableBuilder<List<ViewAbstract>>(
@@ -217,6 +218,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       }
       return null;
     }
+
+    if (!canShowHeaderWidget()) return null;
     List<Widget>? homeList = viewAbstract.getHomeListHeaderWidgetList(context);
     // if (homeList == null) return null;
     return SizedBox(
@@ -234,13 +237,12 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             ),
           ),
           if (homeList != null)
-            ...homeList
-                .map((e) => SizedBox(
-                      height: MediaQuery.of(context).size.height * .24,
-                      // height: MediaQuery.of(context).size.height * .1,
-                      child: e,
-                    ))
-                .toList()
+            ...homeList.map((e) => SizedBox(
+                  height: MediaQuery.of(context).size.height * .24,
+                  // height: MediaQuery.of(context).size.height * .1,
+                  child: e,
+                ))
+
           // StaggeredGrid.count(
           //     crossAxisCount: 2,
           //     mainAxisSpacing: 1,
@@ -305,7 +307,11 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
         // backgroundColor: Colors.red,
         title: getAppbarTitle(),
-        headerExpandedHeight: isSelectedMode ? 0.25 : 0.4,
+        headerExpandedHeight: !canShowHeaderWidget()
+            ? 0.1
+            : isSelectedMode
+                ? 0.25
+                : 0.4,
         stretchMaxHeight: isSelectedMode ? .3 : .5,
         fullyStretchable: isSelectedMode ? false : true,
         // headerBottomBar: getHeaderWidget(),
@@ -325,6 +331,15 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               ),
         slivers: [
           // if (isSelectedMode) getHeaderWidget()!,
+          if (!canShowHeaderWidget())
+            ...viewAbstract
+                    .getHomeListHeaderWidgetList(context)
+                    ?.map((e) => SliverToBoxAdapter(
+                          child: e,
+                        ))
+                    .toList() ??
+                [],
+
           if (widget.buildSearchWidget) getSearchWidget(),
 
           //todo  type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element'
@@ -341,6 +356,11 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 return getListSelector();
               })
         ]);
+  }
+
+  bool canShowHeaderWidget() {
+    return false;
+    return SizeConfig.isMobileFromScreenSize(context);
   }
 
   WillPopScope getBuildBodyNormal() {

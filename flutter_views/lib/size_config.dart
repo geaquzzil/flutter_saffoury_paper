@@ -51,6 +51,10 @@ class SizeConfig {
     }
   }
 
+  static bool hasPointer(BuildContext context) {
+    return isDesktopOrWeb(context);
+  }
+
   static bool isLargeScreenGeneral(BuildContext context) {
     return isLargeScreen(context) || isSoLargeScreen(context);
   }
@@ -169,7 +173,7 @@ class SizeConfig {
   }
 
   static bool isMobileFromScreenSize(BuildContext context) {
-    return MediaQuery.of(context).size.width > mobileWidth;
+    return MediaQuery.of(context).size.width < mobileWidth;
   }
 
   static bool isWeb() => kIsWeb;

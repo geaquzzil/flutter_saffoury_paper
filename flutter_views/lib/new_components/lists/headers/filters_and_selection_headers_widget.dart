@@ -58,6 +58,8 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     drawerViewAbstractObsever =
         Provider.of<DrawerMenuControllerProvider>(context, listen: false);
 
+    viewAbstract ??= drawerViewAbstractObsever.getObject;
+
     Widget? printButton = kIsWeb
         ? null
         : (context
@@ -95,15 +97,21 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 DropdownStringListControllerListenerByIcon(
                     showSelectedValueBeside: false,
                     icon: Icons.sort_by_alpha,
+                    initialValue: viewAbstract?.getSortByFieldName() == null
+                        ? null
+                        : DropdownStringListItem(
+                            viewAbstract!.getFieldIconData(
+                                viewAbstract!.getSortByFieldName()!),
+                            viewAbstract!.getFieldLabel(
+                                context, viewAbstract!.getSortByFieldName()!),
+                            value: viewAbstract?.getSortByFieldName()),
                     hint: AppLocalizations.of(context)!.sortBy,
                     list: viewAbstract?.getMainFieldsIconsAndValues(context) ??
-                        drawerViewAbstractObsever.getObject
-                            .getMainFieldsIconsAndValues(context),
+                        viewAbstract!.getMainFieldsIconsAndValues(context),
                     onSelected: (obj) {
                       debugPrint("is selected ${obj.runtimeType}");
                       if (obj == null) {
-                        removeFilterableSelected(
-                            context, drawerViewAbstractObsever.getObject);
+                        removeFilterableSelected(context, viewAbstract!);
                       } else {
                         listProvider.clear(findCustomKey());
                         addFilterableSortField(
@@ -114,6 +122,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                     }),
                 DropdownEnumControllerListenerByIcon<SortByType>(
                   viewAbstractEnum: SortByType.ASC,
+                  initialValue: viewAbstract?.getSortByType(),
                   showSelectedValueBeside: false,
                   onSelected: (object) {
                     // listProvider.clear(findCustomKey());
@@ -167,7 +176,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObject);
+    listProvider.refresh(findCustomKey(), viewAbstract!);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -178,7 +187,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
 
   Widget getAddBotton(BuildContext context) => IconButton(
       onPressed: () {
-        drawerViewAbstractObsever.getObject.onDrawerLeadingItemClicked(context);
+        viewAbstract!.onDrawerLeadingItemClicked(context);
       },
       icon: const Icon(Icons.add));
   Widget? getFilterWidget(BuildContext context) {
@@ -269,7 +278,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
           context
               .read<ActionViewAbstractProvider>()
               .changeCustomWidget(FileExporterPage(
-                viewAbstract: drawerViewAbstractObsever.getObject,
+                viewAbstract: viewAbstract!,
                 list: listProvider.getList(findCustomKey()).cast(),
               ));
         } else {
@@ -321,7 +330,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
           "${AppLocalizations.of(context)!.printAllAs(AppLocalizations.of(context)!.list)} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
 
       String? printSelfListSetting =
-          "${AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever.getObject.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
+          "${AppLocalizations.of(context)!.printAllAs(viewAbstract!.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
       return DropdownStringListControllerListenerByIcon(
         icon: Icons.print,
         showSelectedValueBeside: false,
@@ -333,8 +342,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                   .printAllAs(AppLocalizations.of(context)!.list)),
           DropdownStringListItem(
               Icons.print,
-              AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever
-                  .getObject
+              AppLocalizations.of(context)!.printAllAs(viewAbstract!
                   .getMainHeaderLabelTextOnly(context)
                   .toLowerCase())),
           DropdownStringListItem(
@@ -366,9 +374,9 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                                   list: getList()
                                       .cast<PrintableSelfListInterface>()));
                         },
-                        viewAbstract: (drawerViewAbstractObsever.getObject
-                                as PrintableSelfListInterface)
-                            .getModifiablePrintableSelfPdfSetting(context),
+                        viewAbstract:
+                            (viewAbstract! as PrintableSelfListInterface)
+                                .getModifiablePrintableSelfPdfSetting(context),
                       )),
                 ));
           } else if (object?.label == printSelfListSetting) {

@@ -86,10 +86,8 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
   Widget getPendingCutRequestWidget() {
     return ListHorizontalApiAutoRestWidget(
-      useCardAsOutLine: true,
       isSliver: true,
       titleString: "Pending",
-      useCardAsImageBackgroud: true,
       // listItembuilder: (v) =>
       //     ListItemProductTypeCategory(productType: v as ProductType),
       autoRest: AutoRest<CutRequest>(

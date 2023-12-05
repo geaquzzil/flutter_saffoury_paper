@@ -9,24 +9,23 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import '../text_bold.dart';
 
 class DropdownStringListControllerListenerByIcon extends StatefulWidget {
-  String hint;
-  IconData icon;
-  List<DropdownStringListItem?> list;
-  DropdownStringListItem? initialValue;
-  bool showSelectedValueBeside;
+  final String hint;
+  final IconData icon;
+  final List<DropdownStringListItem?> list;
+  final DropdownStringListItem? initialValue;
+  final bool showSelectedValueBeside;
+  final bool showFirstValueAsTitle;
   void Function(DropdownStringListItem? object) onSelected;
 
   DropdownStringListControllerListenerByIcon(
-      {Key? key,
+      {super.key,
       required this.hint,
       required this.list,
       this.initialValue,
+      this.showFirstValueAsTitle = true,
       this.showSelectedValueBeside = true,
       required this.icon,
-      required this.onSelected})
-      : super(key: key) {
-    //todo  list.insert(0, null);
-  }
+      required this.onSelected});
 
   @override
   State<DropdownStringListControllerListenerByIcon> createState() =>
@@ -37,50 +36,62 @@ class _DropdownStringListControllerListenerByIconState
     extends State<DropdownStringListControllerListenerByIcon> {
   bool firstRun = true;
   DropdownStringListItem? lastSelected;
+  final List<DropdownStringListItem?> _list = [null];
   CustomPopupMenuItem<DropdownStringListItem?> buildMenuItem(
-          BuildContext context, DropdownStringListItem? e) =>
-      CustomPopupMenuItem<DropdownStringListItem?>(
-        value: e,
-        color: lastSelected?.label == e?.label
-            ? Theme.of(context).highlightColor
-            : null,
-        enabled: e != null ? (e.enabled ?? true) : false,
-        child: e != null && e.enabled == false
-            ? Column(
-                children: [
-                  const PopupMenuDivider(),
-                  Text(e.label),
-                  const PopupMenuDivider()
-                ],
-              )
-            : e == null
-                ? Column(
-                    children: [Text(widget.hint), const PopupMenuDivider()],
-                  )
-                : Row(
-                    children: [
-                      if (e.icon != null)
-                        Icon(
-                          e.icon,
-                        ),
-                      const SizedBox(width: kDefaultPadding / 3),
-                      Text(e.label, overflow: TextOverflow.clip),
-                      // TextBold(
-                      //   text: "${widget.hint}: ${e.label}",
-                      //   regex: e.label.toString(),
-                      // )
-                    ],
-                  ),
-      );
+      BuildContext context, DropdownStringListItem? e) {
+    return CustomPopupMenuItem<DropdownStringListItem?>(
+      value: e,
+      color: lastSelected == null
+          ? null
+          : lastSelected?.label == e?.label
+              ? Theme.of(context).highlightColor
+              : null,
+      enabled: widget.showFirstValueAsTitle
+          ? e != null
+              ? (e.enabled ?? true)
+              : false
+          : true,
+      child: e != null && e.enabled == false
+          ? Column(
+              children: [
+                const PopupMenuDivider(),
+                Text(e.label),
+                const PopupMenuDivider()
+              ],
+            )
+          : e == null
+              ? Column(
+                  children: [Text(widget.hint), const PopupMenuDivider()],
+                )
+              : Row(
+                  children: [
+                    if (e.icon != null)
+                      Icon(
+                        e.icon,
+                      ),
+                    const SizedBox(width: kDefaultPadding / 3),
+                    Text(e.label, overflow: TextOverflow.clip),
+                    // TextBold(
+                    //   text: "${widget.hint}: ${e.label}",
+                    //   regex: e.label.toString(),
+                    // )
+                  ],
+                ),
+    );
+  }
 
   @override
   void initState() {
-    super.initState();
     lastSelected = widget.initialValue;
+    debugPrint(
+        "buildMenuItem lastSelected $lastSelected initailValue ${widget.initialValue}");
+    _list.addAll(widget.list);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // return Text("dd");
     Widget pop = PopupMenuButton<DropdownStringListItem?>(
       // iconColor: Theme.of(context).colorScheme.,
       position: PopupMenuPosition.under,
@@ -91,11 +102,10 @@ class _DropdownStringListControllerListenerByIconState
       //       : lastSelected?.icon ?? widget.icon,
       //   // color: Theme.of(context).highlightColor,
       // ),
-      tooltip: widget.hint,
+      tooltip: lastSelected == null ? widget.hint : lastSelected!.label,
+      // tooltip: widget.hint,
       icon: Icon(
-        lastSelected == null || firstRun
-            ? widget.icon
-            : lastSelected?.icon ?? widget.icon,
+        lastSelected == null ? widget.icon : lastSelected?.icon ?? widget.icon,
         color: lastSelected == null
             ? Theme.of(context).indicatorColor
             : Theme.of(context).colorScheme.primary,
@@ -110,7 +120,7 @@ class _DropdownStringListControllerListenerByIconState
       },
       // child: Text("Sda"),
       // initialValue: widget.viewAbstractEnum,
-      itemBuilder: (BuildContext context) => widget.list
+      itemBuilder: (BuildContext context) => _list
           .map(
             (e) => buildMenuItem(context, e),
           )

@@ -25,16 +25,12 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   double? customHeight;
   String? titleString;
   bool isSliver;
-  bool useCardAsImageBackgroud;
-  bool useCardAsOutLine;
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
       {super.key,
       required this.autoRest,
       this.title,
       this.titleString,
-      this.useCardAsOutLine = false,
-      this.useCardAsImageBackgroud = false,
       this.isSliver = false,
       this.customHeight,
       this.listItembuilder});
@@ -76,13 +72,18 @@ class _ListHorizontalApiWidgetState
           alignment: Alignment.topCenter,
           itemCount: 5 + Random().nextInt(10 - 5),
           gridDelegate: ResponsiveGridDelegate(
-            mainAxisSpacing: 20.0,
-            crossAxisSpacing: 20.0,
-            maxCrossAxisExtent:
-                ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
-                    ? constraints.maxWidth / 2.0
-                    : 250.0,
-            // Hack to adjust child height
+            // mainAxisSpacing: 20.0,
+            // crossAxisSpacing: 20.0,
+            // maxCrossAxisExtent:
+            //     ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
+            //         ? constraints.maxWidth / 2.0
+            //         : 250.0,
+            // // Hack to adjust child height
+            // childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+
+            mainAxisSpacing: 20,
+            minCrossAxisExtent: constraints.maxHeight - 150,
+            maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
           ),
           itemBuilder: (context, index) {
@@ -123,6 +124,7 @@ class _ListHorizontalApiWidgetState
               ));
             }
             Widget currentTile = WebGridViewItem(
+              setDescriptionAtBottom: !SizeConfig.hasPointer(context),
               // setDescriptionAtBottom: !kIsWeb,
               item: data[index],
             );
@@ -144,31 +146,6 @@ class _ListHorizontalApiWidgetState
           },
         );
       },
-    );
-
-    return ListView.builder(
-      physics: const AlwaysScrollableScrollPhysics(),
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      controller: _scrollController,
-      itemCount: isLoading ? (data.length + 1) : (data.length),
-      itemBuilder: (context, index) {
-        if (isLoading && index == data.length) {
-          return const Center(
-              child: Padding(
-            padding: EdgeInsets.all(kDefaultPadding),
-            child: CircularProgressIndicator(),
-          ));
-        }
-        return widget.listItembuilder == null
-            ? ListCardItemHorizontal(
-                object: data[index],
-                useImageAsBackground: widget.useCardAsImageBackgroud,
-              )
-            : widget.listItembuilder!(data[index]);
-        // return data[index].getCardView(context);
-      },
-      // ),
     );
   }
 

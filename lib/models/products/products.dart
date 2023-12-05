@@ -656,10 +656,9 @@ class Product extends ViewAbstract<Product>
     // TODO: implement getHomeListHeaderWidgetList
     return [
       ListHorizontalApiAutoRestWidget(
-        useCardAsOutLine: true,
         isSliver: true,
-        titleString: "Category",
-        useCardAsImageBackgroud: true,
+        titleString: "Category TODO",
+
         // listItembuilder: (v) =>
         //     ListItemProductTypeCategory(productType: v as ProductType),
         autoRest: AutoRest<ProductType>(
@@ -680,7 +679,7 @@ class Product extends ViewAbstract<Product>
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "Category",
-          useCardAsImageBackgroud: true,
+
           // listItembuilder: (v) =>
           //     ListItemProductTypeCategory(productType: v as ProductType),
           autoRest: AutoRest<ProductType>(
@@ -702,7 +701,7 @@ class Product extends ViewAbstract<Product>
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
           titleString: "Category",
-          useCardAsImageBackgroud: true,
+
           // listItembuilder: (v) =>
           //     ListItemProductTypeCategory(productType: v as ProductType),
           autoRest: AutoRest<ProductType>(
@@ -734,7 +733,7 @@ class Product extends ViewAbstract<Product>
         mainAxisCellCount: mainAxisCellCountList,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
-          useCardAsImageBackgroud: true,
+
           titleString: "Today",
           // listItembuilder: (v) => SizedBox(
           //     width: 100, height: 100, child: POSListCardItem(object: v)),
@@ -750,7 +749,6 @@ class Product extends ViewAbstract<Product>
         mainAxisCellCount: mainAxisCellCountList,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
-          useCardAsImageBackgroud: true,
           titleString: "This week",
           autoRest: AutoRest<Product>(
               obj: Product()
@@ -857,7 +855,6 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
-        useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
             range: 5,
@@ -865,7 +862,6 @@ class Product extends ViewAbstract<Product>
             key: "similarProducts${getSimilarCustomParams(context)}"),
       ),
       ListHorizontalApiAutoRestWidget(
-        useCardAsImageBackgroud: true,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,
