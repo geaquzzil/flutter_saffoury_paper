@@ -23,7 +23,7 @@ class CustomFilterableController extends StatelessWidget {
               const EdgeInsets.only(right: 40, top: 0, left: 40, bottom: 0),
           initiallyExpanded: false,
           leading: Selector<FilterableProvider, int>(
-            selector: (p0, p1) => p1.getCount(customFilterableField.field),
+            selector: (p0, p1) => p1.getCount(field:customFilterableField.field),
             builder: (context, value, child) => Badge(
               isLabelVisible: value > 0,
               label: Text(

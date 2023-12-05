@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 
 class FilterableProvider with ChangeNotifier {
   static const String SORTKEY = "sortByFieldName";
@@ -86,7 +87,7 @@ class FilterableProvider with ChangeNotifier {
             fieldNameApi: sort.name,
             requestTheFirstValueOnly: true,
             values: []);
-    notifyListeners();
+    // notifyListApi(context);
   }
 
   void addSortFieldName(
@@ -103,7 +104,7 @@ class FilterableProvider with ChangeNotifier {
             fieldNameApi: SortByType.ASC.name,
             requestTheFirstValueOnly: true,
             values: [value]);
-    notifyListeners();
+    // notifyListApi(context);
   }
 
   bool isSelected(String field, String value) {
@@ -113,9 +114,18 @@ class FilterableProvider with ChangeNotifier {
     return false;
   }
 
-  int getCount(String field) {
+  int getCount({String? field, bool? requireCountWithSort}) {
     debugPrint("getCount => $field  is ${_list[field]}");
-    return _list[field]?.getCount() ?? 0;
+    if (field != null) {
+      return _list[field]?.getCount() ?? 0;
+    }
+    bool isSortRequired = requireCountWithSort ?? false;
+    if (!isSortRequired) {
+      if (_list.length == 1) {
+        return _list.containsKey(SORTKEY) ? 0 : _list.length;
+      }
+    }
+    return _list.length;
   }
 
   void remove(String field, {String? value, String? mainValueName}) {
@@ -132,6 +142,7 @@ class FilterableProvider with ChangeNotifier {
     }
   }
 
+  static isListContainsSortOny(BuildContext context) {}
   static Map<String, FilterableProviderHelper> removeStatic(
       Map<String, FilterableProviderHelper> list, String field,
       {String? value, String? mainValueName}) {

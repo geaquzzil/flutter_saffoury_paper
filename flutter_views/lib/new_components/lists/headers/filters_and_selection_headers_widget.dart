@@ -68,15 +68,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
             ? getPrintWidget(context)
             : null;
 
-    Widget? filterButton = kIsWeb
-        ? null
-        : (context
-                    .watch<ListMultiKeyProvider>()
-                    .getList(findCustomKey())
-                    .length >
-                2)
-            ? getFilterWidget(context)
-            : null;
+    Widget? filterButton = kIsWeb ? null : getFilterWidget(context);
 
     Widget? exportButton = kIsWeb
         ? null
@@ -137,7 +129,16 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (hasFilterable(context)) HorizontalFilterableSelectedList(),
+          Selector<FilterableProvider, int>(
+            builder: (context, value, child) {
+              debugPrint("FiltersAndSelectionListHeader $value");
+              if (kIsWeb) return SizedBox();
+              if (value == 0) return SizedBox();
+
+              return HorizontalFilterableSelectedList();
+            },
+            selector: (p0, p1) => p1.getCount(),
+          )
         ],
       ),
     );
@@ -157,16 +158,6 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     var first = getFirstObject();
 
     return first is PrintableSelfListInterface || first is PrintableMaster;
-  }
-
-  bool hasFilterable(BuildContext context) {
-    if (kIsWeb) return false;
-    return context
-        .watch<FilterableProvider>()
-        .getList
-        .values
-        .toList()
-        .isNotEmpty;
   }
 
   dynamic getFirstObject() {
@@ -191,6 +182,47 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
       },
       icon: const Icon(Icons.add));
   Widget? getFilterWidget(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.filter_alt_rounded),
+      onPressed: () async {
+        if (SizeConfig.isSmallTabletFromScreenSize(context)) {
+          showBottomSheetExt(
+            context: context,
+            builder: (p0) {
+              return BaseFilterableMainWidget(
+                useDraggableWidget: false,
+              );
+            },
+          );
+        } else {
+          await showFullScreenDialogExt<ViewAbstract?>(
+              anchorPoint: const Offset(1000, 1000),
+              context: context,
+              builder: (p0) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    // color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: IntrinsicWidth(
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width *
+                              (SizeConfig.isTablet(context) ? 0.5 : 0.25),
+                          height: MediaQuery.of(context).size.height * .8,
+                          child: BaseFilterableMainWidget()),
+                    ),
+                  ),
+                );
+              }).then((value) {
+            {
+              if (value != null) {}
+              debugPrint("getEditDialog result $value");
+            }
+          });
+        }
+        // Navigator.pushNamed(context, "/search");
+      },
+    );
+
     if (SizeConfig.isMobile(context)) {
       return IconButton(
         icon: Icon(Icons.filter_alt_rounded),

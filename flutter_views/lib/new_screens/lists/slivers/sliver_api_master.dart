@@ -595,19 +595,19 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   Widget getFilterableWidget() {
-    return Selector<FilterableProvider, Map<String, FilterableProviderHelper>>(
+    return Selector<FilterableProvider, int>(
       builder: (c, v, s) {
-        debugPrint("getFilterableWidget FilterableProvider $v");
+        debugPrint("getFilterableWidget FiltersAndSelectionListHeader $v");
         return SliverPersistentHeader(
             pinned: true,
             delegate: SliverAppBarDelegatePreferedSize(
                 child: PreferredSize(
-              preferredSize: Size.fromHeight(v.entries.isNotEmpty ? 200 : 50.0),
+              preferredSize: Size.fromHeight(v > 0 ? 140 : 60.0),
               child: FiltersAndSelectionListHeader(
                   listProvider: listProvider, customKey: findCustomKey()),
             )));
       },
-      selector: (p0, p1) => p1.getList,
+      selector: (p0, p1) => p1.getCount(),
     );
   }
 

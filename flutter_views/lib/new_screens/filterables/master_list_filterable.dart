@@ -17,7 +17,7 @@ class MasterFilterableController extends StatelessWidget {
     return ExpansionTile(
       title: viewAbstract.getMainLabelText(context),
       leading: Selector<FilterableProvider, int>(
-        selector: (p0, p1) => p1.getCount(viewAbstract.getForeignKeyName()),
+        selector: (p0, p1) => p1.getCount(field:viewAbstract.getForeignKeyName()),
         builder: (context, value, child) => Badge(
           smallSize: 4,
           isLabelVisible: value > 0,
