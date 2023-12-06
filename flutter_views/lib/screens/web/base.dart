@@ -371,12 +371,10 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
       BuildContext context, BoxConstraints constraints, Widget child,
       {double padd = 2}) {
     double defualPadding =
-        ScreenHelper.isMobile(context) ? kDefaultPadding * 2 : kDefaultPadding;
+        isMobile(context) ? kDefaultPadding * 2 : kDefaultPadding;
     double horizontalPadding = max(
         (constraints.maxWidth -
-                (ScreenHelper.isTablet(context)
-                    ? kTabletMaxWidth
-                    : kDesktopMaxWidth)) /
+                (isTablet(context) ? kTabletMaxWidth : kDesktopMaxWidth)) /
             padd,
         0);
     return SliverPadding(

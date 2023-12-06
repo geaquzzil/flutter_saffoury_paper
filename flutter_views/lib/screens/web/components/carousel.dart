@@ -37,12 +37,12 @@ class Carousel extends StatelessWidget {
                       ),
                       child: ScreenHelper(
                         // Responsive views
-                        desktop: _buildDesktop(
+                        largeTablet: _buildDesktop(
                           context,
                           carouselItems[index].text,
                           carouselItems[index].image,
                         ),
-                        tablet: _buildTablet(
+                        smallTablet: _buildTablet(
                           context,
                           carouselItems[index].text,
                           carouselItems[index].image,
@@ -68,7 +68,7 @@ class Carousel extends StatelessWidget {
 // Big screens
 Widget _buildDesktop(BuildContext context, Widget text, Widget image) {
   return Center(
-    child: ResponsiveScaledBox (
+    child: ResponsiveScaledBox(
       width: kDesktopMaxWidth,
 
       // minWidth: kDesktopMaxWidth,
@@ -90,7 +90,7 @@ Widget _buildDesktop(BuildContext context, Widget text, Widget image) {
 // Mid screens
 Widget _buildTablet(BuildContext context, Widget text, Widget image) {
   return Center(
-    child: ResponsiveScaledBox (
+    child: ResponsiveScaledBox(
       width: kTabletMaxWidth,
       // minWidth: kTabletMaxWidth,
       // defaultScale: false,

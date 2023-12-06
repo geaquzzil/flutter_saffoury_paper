@@ -53,17 +53,16 @@ class CvSection extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ScreenHelper(
-        desktop: _buildUi(context, kDesktopMaxWidth),
-        tablet: _buildUi(context, kTabletMaxWidth),
+        largeTablet: _buildUi(context, kDesktopMaxWidth),
+        smallTablet: _buildUi(context, kTabletMaxWidth),
         mobile: _buildUi(context, getMobileMaxWidth(context)),
       ),
     );
   }
 
   Widget _buildUi(BuildContext context, double width) {
-    
     // we need the context to get maxWidth before the constraints below
-    return MaxWidthBox (
+    return MaxWidthBox(
       maxWidth: width,
       // minWidth: width,
       // defaultScale: false,
@@ -111,12 +110,11 @@ class CvSection extends StatelessWidget {
                 gridDelegate: ResponsiveGridDelegate(
                   mainAxisSpacing: 20.0,
                   crossAxisSpacing: 20.0,
-                  maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                          ScreenHelper.isMobile(context)
+                  maxCrossAxisExtent: isTablet(context) || isMobile(context)
                       ? constraints.maxWidth / 2.0
                       : 250.0,
                   // Hack to adjust child height
-                  childAspectRatio: ScreenHelper.isDesktop(context)
+                  childAspectRatio: isDesktop(context)
                       ? 1
                       : MediaQuery.of(context).size.aspectRatio * 1.5,
                 ),
@@ -176,8 +174,8 @@ class ProductQualityWebSection extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ScreenHelper(
-        desktop: _buildUi(context, kDesktopMaxWidth),
-        tablet: _buildUi(context, kTabletMaxWidth),
+        largeTablet: _buildUi(context, kDesktopMaxWidth),
+        smallTablet: _buildUi(context, kTabletMaxWidth),
         mobile: _buildUi(context, getMobileMaxWidth(context)),
       ),
     );
@@ -265,12 +263,11 @@ class ProductQualityWebSection extends StatelessWidget {
                 gridDelegate: ResponsiveGridDelegate(
                   mainAxisSpacing: 20.0,
                   crossAxisSpacing: 20.0,
-                  maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                          ScreenHelper.isMobile(context)
+                  maxCrossAxisExtent: isTablet(context) || isMobile(context)
                       ? constraints.maxWidth / 2
                       : 250.0,
                   // Hack to adjust child height
-                  childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+                  childAspectRatio: isDesktop(context) ? 1 : 1,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   var designProcesse = designProcesses[index];

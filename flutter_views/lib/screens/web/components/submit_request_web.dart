@@ -21,8 +21,8 @@ class SubmitRequestWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenHelper(
-      desktop: _buildUi(kDesktopMaxWidth),
-      tablet: _buildUi(kTabletMaxWidth),
+      largeTablet: _buildUi(kDesktopMaxWidth),
+      smallTablet: _buildUi(kTabletMaxWidth),
       mobile: _buildUi(getMobileMaxWidth(context)),
     );
   }

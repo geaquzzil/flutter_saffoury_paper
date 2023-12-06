@@ -96,8 +96,8 @@ class WebMasterToList extends BaseWebPageSliversApi {
       else
         SliverToBoxAdapter(
           child: ScreenHelper(
-            desktop: _buildUi(context, kDesktopMaxWidth, constraints),
-            tablet: _buildUi(context, kTabletMaxWidth, constraints),
+            largeTablet: _buildUi(context, kDesktopMaxWidth, constraints),
+            smallTablet: _buildUi(context, kTabletMaxWidth, constraints),
             mobile: _buildUi(context, getMobileMaxWidth(context), constraints),
           ),
         ),

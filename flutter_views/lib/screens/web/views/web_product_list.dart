@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
@@ -49,8 +48,8 @@ class WebProductList extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ScreenHelper(
-                    desktop: _buildUi(context, kDesktopMaxWidth),
-                    tablet: _buildUi(context, kTabletMaxWidth),
+                    largeTablet: _buildUi(context, kDesktopMaxWidth),
+                    smallTablet: _buildUi(context, kTabletMaxWidth),
                     mobile: _buildUi(context, getMobileMaxWidth(context)),
                   ),
                 ),
@@ -144,8 +143,7 @@ class WebProductList extends StatelessWidget {
                   future: searchQuery != null
                       ? viewAbstract.search(20, value, searchQuery!)
                       : viewAbstract.listCall(
-                          count: ScreenHelper.isDesktop(context) ? 20 : 4,
-                          page: value),
+                          count: isDesktop(context) ? 20 : 4, page: value),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
@@ -161,15 +159,14 @@ class WebProductList extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       alignment: Alignment.topCenter,
                       gridDelegate: ResponsiveGridDelegate(
-                        mainAxisSpacing:
-                            ScreenHelper.isDesktop(context) ? 40.0 : 20.0,
+                        mainAxisSpacing: isDesktop(context) ? 40.0 : 20.0,
                         crossAxisSpacing: 40.0,
-                        maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                                ScreenHelper.isMobile(context)
-                            ? constraints.maxWidth / 2
-                            : constraints.maxWidth / 5,
+                        maxCrossAxisExtent:
+                            isTablet(context) || isMobile(context)
+                                ? constraints.maxWidth / 2
+                                : constraints.maxWidth / 5,
                         // Hack to adjust child height
-                        childAspectRatio: ScreenHelper.isDesktop(context)
+                        childAspectRatio: isDesktop(context)
                             ? 1
                             : MediaQuery.of(context).size.aspectRatio * 1.5,
                       ),

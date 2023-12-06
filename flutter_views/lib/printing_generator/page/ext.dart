@@ -79,6 +79,8 @@ Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
       }
     }
   }
+  pls?.primaryColor = firstObj.getPrintablePrimaryColor(pls);
+  pls?.secondaryColor = firstObj.getPrintableSecondaryColor(pls);
   return pls;
 }
 

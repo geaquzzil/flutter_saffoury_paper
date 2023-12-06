@@ -9,8 +9,8 @@ class IosAppAd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ScreenHelper(
-        desktop: _buildUi(kDesktopMaxWidth),
-        tablet: _buildUi(kTabletMaxWidth),
+        largeTablet: _buildUi(kDesktopMaxWidth),
+        smallTablet: _buildUi(kTabletMaxWidth),
         mobile: _buildUi(getMobileMaxWidth(context)),
       ),
     );
@@ -120,7 +120,8 @@ class IosAppAd extends StatelessWidget {
                                   ),
                                 ),
                                 height: 48.0,
-                                padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 28.0),
                                 child: TextButton(
                                   onPressed: () {},
                                   child: const Center(

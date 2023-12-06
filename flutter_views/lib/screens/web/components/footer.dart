@@ -46,8 +46,8 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenHelper(
-      desktop: _buildUi(kDesktopMaxWidth, context),
-      tablet: _buildUi(kTabletMaxWidth, context),
+      largeTablet: _buildUi(kDesktopMaxWidth, context),
+      smallTablet: _buildUi(kTabletMaxWidth, context),
       mobile: _buildUi(getMobileMaxWidth(context), context),
     );
   }
@@ -69,10 +69,8 @@ Widget _buildUi(double width, BuildContext context) {
               //getContactInfo(context, constraints),
 
               Flex(
-                direction: ScreenHelper.isMobile(context)
-                    ? Axis.vertical
-                    : Axis.horizontal,
-                mainAxisAlignment: ScreenHelper.isMobile(context)
+                direction: isMobile(context) ? Axis.vertical : Axis.horizontal,
+                mainAxisAlignment: isMobile(context)
                     ? MainAxisAlignment.center
                     : MainAxisAlignment.spaceBetween,
                 children: [
@@ -148,7 +146,7 @@ Padding getContactInfo(BuildContext context, BoxConstraints constraints) {
           .map(
             (footerItem) => SizedBox(
               height: 120.0,
-              width: ScreenHelper.isMobile(context)
+              width: isMobile(context)
                   ? constraints.maxWidth / 2.0 - 20.0
                   : constraints.maxWidth / 4.0 - 20.0,
               child: Column(

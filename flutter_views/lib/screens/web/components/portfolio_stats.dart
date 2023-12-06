@@ -21,8 +21,8 @@ class PortfolioStats extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: ScreenHelper(
-        desktop: _buildUi(kDesktopMaxWidth, context),
-        tablet: _buildUi(kTabletMaxWidth, context),
+        largeTablet: _buildUi(kDesktopMaxWidth, context),
+        smallTablet: _buildUi(kTabletMaxWidth, context),
         mobile: _buildUi(getMobileMaxWidth(context), context),
       ),
     );
@@ -42,7 +42,7 @@ class PortfolioStats extends StatelessWidget {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 15.0),
                 // Just use the helper here really
-                width: ScreenHelper.isMobile(context)
+                width: isMobile(context)
                     ? constraint.maxWidth / 2.0 - 20
                     : (constraint.maxWidth / 4.0 - 20),
                 child: Row(

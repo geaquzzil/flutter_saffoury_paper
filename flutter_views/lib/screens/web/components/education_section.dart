@@ -77,8 +77,8 @@ class EducationSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ScreenHelper(
-        desktop: _buildUi(kDesktopMaxWidth),
-        tablet: _buildUi(kTabletMaxWidth),
+        largeTablet: _buildUi(kDesktopMaxWidth),
+        smallTablet: _buildUi(kTabletMaxWidth),
         mobile: _buildUi(getMobileMaxWidth(context)),
       ),
     );
@@ -198,8 +198,8 @@ class HistorySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ScreenHelper(
-        desktop: _buildUi(context, kDesktopMaxWidth),
-        tablet: _buildUi(context, kTabletMaxWidth),
+        largeTablet: _buildUi(context, kDesktopMaxWidth),
+        smallTablet: _buildUi(context, kTabletMaxWidth),
         mobile: _buildUi(context, getMobileMaxWidth(context)),
       ),
     );

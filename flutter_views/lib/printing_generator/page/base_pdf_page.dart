@@ -54,14 +54,16 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
     // return null;
     return FutureBuilder<ViewAbstract?>(
       future: future,
-      builder: (context, snapshot) {
+      builder: (_, snapshot) {
         return Scaffold(
           body: BaseEditWidget(
             isTheFirst: true,
             viewAbstract: snapshot.data as ViewAbstract,
             onValidate: (viewAbstract) {
-              printSettingListener.setViewAbstract = viewAbstract;
+              debugPrint("BasePdfPageConsumer new viewAbstract $viewAbstract");
+          
               if (viewAbstract != null) {
+                notifyNewViewAbstract(viewAbstract.getCopyInstance());
                 Configurations.save(
                     "_printsetting${getMainObject().runtimeType}",
                     viewAbstract);
@@ -97,7 +99,7 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
     printSettingListener.toggleFloatingActionIsExpanded();
   }
 
-  void notifyNewViewAbstract(BuildContext context, ViewAbstract? viewAbstract) {
+  void notifyNewViewAbstract(ViewAbstract? viewAbstract) {
     printSettingListener.setViewAbstract = viewAbstract;
   }
 

@@ -289,13 +289,13 @@ class Header extends StatelessWidget {
       );
     }
     return ScreenHelper(
-      desktop: Padding(
+      largeTablet: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: buildHeader(),
       ),
       // We will make this in a bit
       mobile: buildMobileHeader(context),
-      tablet: buildHeader(),
+      smallTablet: buildHeader(),
     );
   }
 
@@ -308,13 +308,13 @@ class Header extends StatelessWidget {
 
   ScreenHelper getBody(BuildContext context) {
     return ScreenHelper(
-      desktop: Padding(
+      largeTablet: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: buildHeader(valueNotifier: valueNotifier),
       ),
       // We will make this in a bit
       mobile: buildMobileHeader(context),
-      tablet: buildHeader(),
+      smallTablet: buildHeader(),
     );
   }
 

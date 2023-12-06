@@ -31,8 +31,8 @@ class TitleAndDescriptopnResponsive extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ScreenHelper(
-        desktop: _buildUi(context, kDesktopMaxWidth),
-        tablet: _buildUi(context, kTabletMaxWidth),
+        largeTablet: _buildUi(context, kDesktopMaxWidth),
+        smallTablet: _buildUi(context, kTabletMaxWidth),
         mobile: _buildUi(context, getMobileMaxWidth(context)),
       ),
     );

@@ -232,6 +232,7 @@ class _PdfPageState<T extends PrintLocalSetting>
     return PdfPreview(
         pdfFileName: getExtras()!.getPrintableQrCodeID(),
         shareActionExtraEmails: const ["info@saffoury.com"],
+        maxPageWidth: 200,
         initialPageFormat: selectedFormat,
         canDebug: false,
         scrollViewDecoration:

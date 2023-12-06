@@ -27,8 +27,8 @@ class HeaderText extends StatelessWidget {
       return getBody(context);
     }
     return ScreenHelper(
-      desktop: _buildUi(kDesktopMaxWidth),
-      tablet: _buildUi(kTabletMaxWidth),
+      largeTablet: _buildUi(kDesktopMaxWidth),
+      smallTablet: _buildUi(kTabletMaxWidth),
       mobile: _buildUi(getMobileMaxWidth(context)),
     );
   }

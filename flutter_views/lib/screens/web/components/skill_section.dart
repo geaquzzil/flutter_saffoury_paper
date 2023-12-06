@@ -33,8 +33,8 @@ class SkillSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ScreenHelper(
-        desktop: _buildUi(kDesktopMaxWidth),
-        tablet: _buildUi(kTabletMaxWidth),
+        largeTablet: _buildUi(kDesktopMaxWidth),
+        smallTablet: _buildUi(kTabletMaxWidth),
         mobile: _buildUi(getMobileMaxWidth(context)),
       ),
     );
@@ -48,12 +48,10 @@ class SkillSection extends StatelessWidget {
             maxWidth: width,
             // minWidth: width,
             child: Flex(
-              direction: ScreenHelper.isMobile(context)
-                  ? Axis.vertical
-                  : Axis.horizontal,
+              direction: isMobile(context) ? Axis.vertical : Axis.horizontal,
               children: [
                 Expanded(
-                  flex: ScreenHelper.isMobile(context) ? 0 : 2,
+                  flex: isMobile(context) ? 0 : 2,
                   child: Image.asset(
                     "assets/person_small.png",
                     width: 300.0,

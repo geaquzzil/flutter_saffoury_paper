@@ -15,8 +15,8 @@ class ContactInfoItemWidget extends StatelessWidget {
     return Column(
       children: [
         ScreenHelper(
-          desktop: _buildUi(kDesktopMaxWidth),
-          tablet: _buildUi(kTabletMaxWidth),
+          largeTablet: _buildUi(kDesktopMaxWidth),
+          smallTablet: _buildUi(kTabletMaxWidth),
           mobile: _buildUi(getMobileMaxWidth(context)),
         ),
       ],

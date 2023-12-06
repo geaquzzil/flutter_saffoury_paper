@@ -113,14 +113,14 @@ class ListWebApiSliverComponent extends StatelessWidget {
       listProvider.fetchList(customKey, viewAbstract,
           customCount: buildWebVersion == false
               ? null
-              : ScreenHelper.isDesktop(context)
+              : isDesktop(context)
                   ? 8
                   : 4);
     } else if (searchQuery == null) {
       listProvider.fetchList(customKey, viewAbstract,
           customCount: buildWebVersion == false
               ? null
-              : ScreenHelper.isDesktop(context)
+              : isDesktop(context)
                   ? 8
                   : 4);
     } else {

@@ -69,6 +69,7 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
 
     return PdfPreview(
         shareActionExtraEmails: const ["info@saffoury.com"],
+        
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,

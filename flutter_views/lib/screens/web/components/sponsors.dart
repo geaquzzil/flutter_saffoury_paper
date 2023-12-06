@@ -17,8 +17,8 @@ class Sponsors extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 50.0),
       child: ScreenHelper(
-        desktop: _buildUi(kDesktopMaxWidth),
-        tablet: _buildUi(kTabletMaxWidth),
+        largeTablet: _buildUi(kDesktopMaxWidth),
+        smallTablet: _buildUi(kTabletMaxWidth),
         mobile: _buildUi(getMobileMaxWidth(context)),
       ),
     );

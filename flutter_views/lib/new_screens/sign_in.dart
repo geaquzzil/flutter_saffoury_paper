@@ -183,8 +183,8 @@ class SignInPage extends BaseWebPage {
   @override
   Widget getContentWidget(BuildContext context) {
     return ScreenHelper(
-      desktop: body(kDesktopMaxWidth, context),
-      tablet: body(kTabletMaxWidth, context),
+      largeTablet: body(kDesktopMaxWidth, context),
+      smallTablet: body(kTabletMaxWidth, context),
       mobile: body(getMobileMaxWidth(context), context),
     );
   }
@@ -259,14 +259,14 @@ class SignInPage extends BaseWebPage {
                       runSpacing: 20.0,
                       children: [
                         SizedBox(
-                          width: ScreenHelper.isMobile(context)
+                          width: isMobile(context)
                               ? constraints.maxWidth - 20.0
                               : constraints.maxWidth / 2 - 20.0,
                           height: MediaQuery.of(context).size.height - 100,
                           child: header(width, context),
                         ),
                         SizedBox(
-                          width: ScreenHelper.isMobile(context)
+                          width: isMobile(context)
                               ? constraints.maxWidth - 20.0
                               : constraints.maxWidth / 2 - 20.0,
                           height: MediaQuery.of(context).size.height - 100,

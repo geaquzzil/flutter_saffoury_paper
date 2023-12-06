@@ -80,12 +80,12 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       return customWidget;
     }
     return LayoutBuilder(builder: (_, constraints) {
-      double defualPadding = ScreenHelper.isMobile(context)
+      double defualPadding = isMobile(context)
           ? kDefaultPadding * 2
           : kDefaultPadding;
       double horizontalPadding = max(
           (constraints.maxWidth -
-                  (ScreenHelper.isTablet(context)
+                  (isTablet(context)
                       ? kTabletMaxWidth
                       : kDesktopMaxWidth)) /
               padd,

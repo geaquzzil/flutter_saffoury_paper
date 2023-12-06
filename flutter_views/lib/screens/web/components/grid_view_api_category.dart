@@ -61,8 +61,8 @@ class GridViewApi extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ScreenHelper(
-                    desktop: _buildUi(context, kDesktopMaxWidth),
-                    tablet: _buildUi(context, kTabletMaxWidth),
+                    largeTablet: _buildUi(context, kDesktopMaxWidth),
+                    smallTablet: _buildUi(context, kTabletMaxWidth),
                     mobile: _buildUi(context, getMobileMaxWidth(context)),
                   ),
                 ),
@@ -149,9 +149,9 @@ class GridViewApi extends StatelessWidget {
           child: ListWebApiMaster(
             valueNotifierGrid: ValueNotifier<bool>(true),
             viewAbstract: viewAbstract,
-            customCount: ScreenHelper.isDesktop(context)
+            customCount: isDesktop(context)
                 ? 10
-                : ScreenHelper.isTablet(context)
+                : isTablet(context)
                     ? 4
                     : 4,
             customPage: value,
@@ -193,17 +193,16 @@ class GridViewApi extends StatelessWidget {
 
                 // maxRowCount: 4,
                 gridDelegate: ResponsiveGridDelegate(
-                  mainAxisSpacing:
-                      ScreenHelper.isDesktop(context) ? 40.0 : 40.0,
+                  mainAxisSpacing: isDesktop(context) ? 40.0 : 40.0,
                   crossAxisSpacing: 40.0,
 
-                  maxCrossAxisExtent: ScreenHelper.isTablet(context)
+                  maxCrossAxisExtent: isTablet(context)
                       ? width / 4
-                      : ScreenHelper.isMobile(context)
+                      : isMobile(context)
                           ? width / 2
                           : 250,
                   // Hack to adjust child height
-                  childAspectRatio: ScreenHelper.isDesktop(context)
+                  childAspectRatio: isDesktop(context)
                       ? 1
                       : MediaQuery.of(context).size.aspectRatio * 2,
                 ),
@@ -221,7 +220,7 @@ class GridViewApi extends StatelessWidget {
 
         return FutureBuilder<List<dynamic>?>(
           future: viewAbstract.listCall(
-              count: ScreenHelper.isDesktop(context) ? 10 : 4, page: value),
+              count: isDesktop(context) ? 10 : 4, page: value),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -237,14 +236,12 @@ class GridViewApi extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               alignment: Alignment.topCenter,
               gridDelegate: ResponsiveGridDelegate(
-                mainAxisSpacing: ScreenHelper.isDesktop(context) ? 40.0 : 20.0,
+                mainAxisSpacing: isDesktop(context) ? 40.0 : 20.0,
                 crossAxisSpacing: 40.0,
-                maxCrossAxisExtent: ScreenHelper.isTablet(context) ||
-                        ScreenHelper.isMobile(context)
-                    ? width / 2
-                    : 250,
+                maxCrossAxisExtent:
+                    isTablet(context) || isMobile(context) ? width / 2 : 250,
                 // Hack to adjust child height
-                childAspectRatio: ScreenHelper.isDesktop(context)
+                childAspectRatio: isDesktop(context)
                     ? 1
                     : MediaQuery.of(context).size.aspectRatio * 1.5,
               ),

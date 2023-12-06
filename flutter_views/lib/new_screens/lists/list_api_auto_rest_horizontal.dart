@@ -75,16 +75,16 @@ class _ListHorizontalApiWidgetState
             // mainAxisSpacing: 20.0,
             // crossAxisSpacing: 20.0,
             // maxCrossAxisExtent:
-            //     ScreenHelper.isTablet(context) || ScreenHelper.isMobile(context)
+            //     isTablet(context) || isMobile(context)
             //         ? constraints.maxWidth / 2.0
             //         : 250.0,
             // // Hack to adjust child height
-            // childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+            // childAspectRatio: isDesktop(context) ? 1 : 1,
 
             mainAxisSpacing: 20,
             minCrossAxisExtent: constraints.maxHeight - 150,
             maxCrossAxisExtent: constraints.maxHeight,
-            childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+            childAspectRatio: isDesktop(context) ? 1 : 1,
           ),
           itemBuilder: (context, index) {
             return GridTile(
@@ -114,7 +114,7 @@ class _ListHorizontalApiWidgetState
             mainAxisSpacing: 20,
             minCrossAxisExtent: constraints.maxHeight - 150,
             maxCrossAxisExtent: constraints.maxHeight,
-            childAspectRatio: ScreenHelper.isDesktop(context) ? 1 : 1,
+            childAspectRatio: isDesktop(context) ? 1 : 1,
           ),
           itemBuilder: (context, index) {
             if (isLoading && index > data.length - 1) {
