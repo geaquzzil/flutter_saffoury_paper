@@ -24,6 +24,8 @@ class DrawerLargeScreens extends StatelessWidget {
 
   late DrawerMenuControllerProvider drawerMenuControllerProvider;
 
+  DrawerLargeScreens({super.key});
+
   @override
   Widget build(BuildContext context) {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();

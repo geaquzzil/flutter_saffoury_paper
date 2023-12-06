@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_basedonbase.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
@@ -298,6 +299,8 @@ class RouteGenerator {
           pageBuilder: (context, state) {
             debugPrint("go route name=> $printRouteName");
             debugPrint("go route name=> ${state.extra}");
+            return MaterialPage(key: state.pageKey, child: TestBasePage());
+
             return MaterialPage(
                 key: state.pageKey,
                 child: PdfPage<PrintLocalSetting>(

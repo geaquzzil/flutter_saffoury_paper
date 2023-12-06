@@ -18,9 +18,17 @@ const kFoldableSmallTablet = 839;
 const kLargeTablet = 840;
 const kDesktopWidth = 1200;
 
+bool isMobileFromWidth(double maxWidth) {
+  return maxWidth < kMobileWidth;
+}
+
+bool isTabletFromWidth(double maxWidth) {
+  return maxWidth >= kLargeTablet && maxWidth < kDesktopWidth;
+}
+
 bool isMobile(BuildContext context, {double? maxWidth}) {
   double value = maxWidth ?? MediaQuery.of(context).size.width;
-  return value < kMobileWidth;
+  return isMobileFromWidth(value);
 }
 
 bool isSmallTablet(BuildContext context, {double? maxWidth}) {
@@ -30,12 +38,26 @@ bool isSmallTablet(BuildContext context, {double? maxWidth}) {
 
 bool isTablet(BuildContext context, {double? maxWidth}) {
   double value = maxWidth ?? MediaQuery.of(context).size.width;
-  return value >= kLargeTablet && value < kDesktopWidth;
+  return isTabletFromWidth(value);
 }
 
 bool isDesktop(BuildContext context, {double? maxWidth}) {
   double value = maxWidth ?? MediaQuery.of(context).size.width;
   return value >= kDesktopWidth;
+}
+
+EdgeInsets getSuggestionPadding(double width) {
+  double defualPadding =
+      isMobileFromWidth(width) ? kDefaultPadding * 2 : kDefaultPadding;
+//1920 -900
+  double horizontalPadding = max(
+      (width - (isTabletFromWidth(width) ? kLargeTablet : kDesktopWidth)) / 4,
+      0);
+  return EdgeInsets.symmetric(
+      vertical: defualPadding,
+      horizontal: horizontalPadding > defualPadding
+          ? horizontalPadding
+          : defualPadding);
 }
 
 enum MainAxisType {
