@@ -548,7 +548,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
     DrawerMenuControllerProvider ds =
         context.watch<DrawerMenuControllerProvider>();
 
-    if (SizeConfig.isDesktopOrWeb(context)) {
+    if (SizeConfig.isDesktopOrWebPlatform(context)) {
       debugPrint("DrawerListTileDesktopOpen des");
       Widget c = ListTile(
         leading: InkWell(
@@ -621,7 +621,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
         selected: ds.getIndex == viewAbstract.hashCode,
         title: viewAbstract.getMainLabelText(context),
         onTap: () {
-          if (SizeConfig.isDesktopOrWeb(context)) {
+          if (SizeConfig.isDesktopOrWebPlatform(context)) {
             context
                 .read<DrawerMenuControllerProvider>()
                 .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);

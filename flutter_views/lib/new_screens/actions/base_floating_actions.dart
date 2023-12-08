@@ -68,7 +68,8 @@ class BaseFloatingActionButtons extends StatelessWidget {
       onPressed: () {
         Dialogs.materialDialog(
             msgAlign: TextAlign.end,
-            dialogWidth: SizeConfig.isDesktopOrWeb(context) ? 0.3 : null,
+            dialogWidth:
+                SizeConfig.isDesktopOrWebPlatform(context) ? 0.3 : null,
             color: Theme.of(context).colorScheme.background,
             msg: viewAbstract.getBaseMessage(context),
             title: viewAbstract.getBaseTitle(context),
@@ -100,7 +101,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         onPressed: () {
-          if (SizeConfig.isDesktopOrWeb(context)) {
+          if (SizeConfig.isDesktopOrWebPlatform(context)) {
             context
                 .read<ActionViewAbstractProvider>()
                 .changeCustomWidget(FileExporterPage(
@@ -119,7 +120,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         onPressed: () {
-          if (SizeConfig.isDesktopOrWeb(context)) {
+          if (SizeConfig.isDesktopOrWebPlatform(context)) {
             context
                 .read<ActionViewAbstractProvider>()
                 .changeCustomWidget(FileReaderPage(

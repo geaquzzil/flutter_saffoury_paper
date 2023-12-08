@@ -109,7 +109,7 @@ class SizeConfig {
   }
 
   static bool hasPointer(BuildContext context) {
-    return isDesktopOrWeb(context);
+    return isDesktopOrWebPlatform(context);
   }
 
   static bool isLargeScreenGeneral(BuildContext context) {
@@ -119,8 +119,8 @@ class SizeConfig {
   static bool isSoLargeScreen(BuildContext context) {
     debugSize(context);
     if (MediaQuery.of(context).size.width >= kLargeTablet) return true;
-    bool isSupported =
-        isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
+    bool isSupported = isDesktopOrWebPlatform(context) ||
+        isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
     return MediaQuery.of(context).size.width >= kLargeTablet;
   }
@@ -128,8 +128,8 @@ class SizeConfig {
   static bool isLargeScreen(BuildContext context) {
     debugSize(context);
     if (MediaQuery.of(context).size.width >= 500) return true;
-    bool isSupported =
-        isDesktopOrWeb(context) || isFoldableWithOpenDualScreen(context);
+    bool isSupported = isDesktopOrWebPlatform(context) ||
+        isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
     bool hasSpace = MediaQuery.of(context).size.width >= 500;
     return hasSpace;
@@ -212,7 +212,7 @@ class SizeConfig {
 
   static bool isTablet(BuildContext context) => Device.get().isTablet;
   static bool hasSecondScreen(BuildContext context) {
-    return isDesktopOrWeb(context) || isFoldable(context);
+    return isDesktopOrWebPlatform(context) || isFoldable(context);
   }
 
   static bool isDesktopFromScreenSize(BuildContext context) {
@@ -235,7 +235,7 @@ class SizeConfig {
 
   static bool isWeb() => kIsWeb;
 
-  static bool isDesktopOrWeb(BuildContext context) {
+  static bool isDesktopOrWebPlatform(BuildContext context) {
     if (isWeb()) return true;
     return isDesktop(context);
   }

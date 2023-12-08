@@ -71,8 +71,5 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
       null;
 
   @override
-  bool isPanesIsSliver() {
-    // TODO: implement isPanesIsSliver
-    throw UnimplementedError();
-  }
+  bool isPanesIsSliver(bool firstPane) => true;
 }

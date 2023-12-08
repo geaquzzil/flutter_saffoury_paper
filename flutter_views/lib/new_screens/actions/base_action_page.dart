@@ -274,7 +274,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     _tabController = TabController(length: _tabs.length, vsync: this);
     // return TowPaneExt(startPane: startPane, endPane: endPane)
     return getNastedScrollView();
-    if (SizeConfig.isDesktopOrWeb(context)) {
+    if (SizeConfig.isDesktopOrWebPlatform(context)) {
       return ListView(
         children: [
           BaseSharedHeaderViewDetailsActions(
@@ -731,7 +731,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   PreferredSizeWidget? getTabBarIfDesktop() {
     if (!canShowTabBarAsNormal()) return null;
     return AppBar(
-      
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: getExtras().getCardLeading(context),

@@ -80,14 +80,11 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       return customWidget;
     }
     return LayoutBuilder(builder: (_, constraints) {
-      double defualPadding = isMobile(context)
-          ? kDefaultPadding * 2
-          : kDefaultPadding;
+      double defualPadding =
+          isMobile(context) ? kDefaultPadding * 2 : kDefaultPadding;
       double horizontalPadding = max(
           (constraints.maxWidth -
-                  (isTablet(context)
-                      ? kTabletMaxWidth
-                      : kDesktopMaxWidth)) /
+                  (isTablet(context) ? kTabletMaxWidth : kDesktopMaxWidth)) /
               padd,
           0);
       return Padding(
@@ -314,7 +311,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
   }
 
   Widget getNavigationRail() {
-    bool isDesktopOrWeb = SizeConfig.isDesktopOrWeb(context);
+    bool isDesktopOrWeb = SizeConfig.isDesktopOrWebPlatform(context);
     return Stack(
       children: [
         Selector<DrawerMenuControllerProvider, Tuple2<int, bool>>(

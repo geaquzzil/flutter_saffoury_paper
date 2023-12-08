@@ -33,7 +33,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize);
   Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize);
 
-  bool isPanesIsSliver();
+  bool isPanesIsSliver(bool firstPane);
 
   ///set padding to content view pased on the screen size
   ///if this is [true] then we add divider between panes
@@ -70,11 +70,18 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         ? getFirstPaneAppbar(getCurrentScreenSize())
         : getSecondPaneAppbar(getCurrentScreenSize());
     if (appBarBody == null) return widget;
-    return Scaffold(
-      backgroundColor: ElevationOverlay.overlayColor(context, 0),
-      appBar: generateToolbar(),
-      body: widget,
-    );
+    Widget? body = widget;
+    if (SizeConfig.isDesktopOrWebPlatform(context))
+    {
+
+    }else{
+      
+    }
+      return Scaffold(
+        backgroundColor: ElevationOverlay.overlayColor(context, 0),
+        appBar: isPanesIsSliver(firstPane) ? null : generateToolbar(),
+        body: widget,
+      );
   }
 
   Widget _getBorderDecoration(Widget widget) {
@@ -145,10 +152,15 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   Widget _getTowPanes(double w) {
+    if (isMobile(context, maxWidth: w)) {
+      _firstWidget = getFirstPane(w);
+      return _setSubAppBar(_firstWidget, true)!;
+    }
     Widget? firstPaneFloating;
     Widget? secondPaneFloating;
     Widget? firstPaneAppbar;
     Widget? secondPaneAppbar;
+
     if (isDesktop(context, maxWidth: w)) {
       _firstWidget = getDesktopFirstPane(w);
       _secondWidget = getDesktopSecondPane(w);
@@ -169,6 +181,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     if (getHasDecorationOnFirstPane()) {
       _firstWidget = _getBorderDecoration(_firstWidget!);
     }
+
     return TowPaneExt(startPane: _firstWidget!, endPane: _secondWidget);
   }
 
@@ -184,20 +197,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
   Widget _getBody(double w) {
     Widget currentWidget;
-    if (isMobile(context, maxWidth: w)) {
-      _firstWidget ??= getFirstPane(w);
-      currentWidget = _firstWidget!;
-    } else {
-      currentWidget = _getTowPanes(w);
-    }
+    currentWidget = _getTowPanes(w);
     if (isDesktop(context, maxWidth: w) || isTablet(context, maxWidth: w)) {
       return SafeArea(
           child: Row(
         children: [
           _drawerWidget!,
-          // if (_secondWidget == null) Text("DASDAS"),
-
-          // if (!isCustomWidget) navigationRailWidget!,
           Selector<DrawerMenuControllerProvider, bool>(
             builder: (__, isOpen, ___) {
               Widget toShowWidget;
