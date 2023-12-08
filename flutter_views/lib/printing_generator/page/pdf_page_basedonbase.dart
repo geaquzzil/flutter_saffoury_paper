@@ -13,41 +13,16 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize size) {
     debugPrint("setPaddingWhenTowPane $size");
+    return false;
     return size == CurrentScreenSize.DESKTOP;
   }
 
   @override
-  Widget? getDesktopFirstPane(double width) {
-    return Scaffold(
-        backgroundColor: ElevationOverlay.overlayColor(context, 2),
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            // toolbarHeight: 200,
-            backgroundColor: ElevationOverlay.overlayColor(context, 2),
-            forceMaterialTransparency: true,
-            primary: true,
-            title: const ListTile(
-              title: Text("Dinner Club"),
-              subtitle: Text("3 Messages"),
-            )),
-        body: const Center(child: Text(" this is a body")));
-  }
-
+  Widget? getDesktopFirstPane(double width) =>
+      const Center(child: Text(" this is a  desktop body first pane"));
   @override
-  Widget? getDesktopSecondPane(double width) => Scaffold(
-      backgroundColor: ElevationOverlay.overlayColor(context, 2),
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          // toolbarHeight: 200,
-          backgroundColor: ElevationOverlay.overlayColor(context, 2),
-          forceMaterialTransparency: true,
-          primary: true,
-          title: const ListTile(
-            title: Text("Details Club"),
-            subtitle: Text("3 Messages"),
-          )),
-      body: const Center(child: Text(" this is a body")));
-
+  Widget? getDesktopSecondPane(double width) =>
+      const Center(child: Text(" this is a desktop body second pane"));
   @override
   Widget getFirstPane(double width) => Container(
         color: Colors.blueGrey,
@@ -70,4 +45,34 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
         title: Text("BaseToolbar"),
         subtitle: Text("Subtitle Toolbar"),
       );
+
+  @override
+  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) =>
+      const ListTile(
+        title: Text("first Pane toolbar"),
+        subtitle: Text("Subtitle Toolbar"),
+      );
+
+  @override
+  Widget? getFirstPaneFloatingActionButton(
+          CurrentScreenSize currentScreenSize) =>
+      null;
+
+  @override
+  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize) =>
+      const ListTile(
+        title: Text("secound pane toolbar"),
+        subtitle: Text("Subtitle Toolbar"),
+      );
+
+  @override
+  Widget? getSecondPaneFloatingActionButton(
+          CurrentScreenSize currentScreenSize) =>
+      null;
+
+  @override
+  bool isPanesIsSliver() {
+    // TODO: implement isPanesIsSliver
+    throw UnimplementedError();
+  }
 }

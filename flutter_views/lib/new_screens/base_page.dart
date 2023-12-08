@@ -21,13 +21,19 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
 
-  Widget getFirstPane(double width);
-  Widget? getBaseFloatingActionButton(CurrentScreenSize currentScreenSize);
-  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize);
-
-  Widget? getSecoundPane(double width);
   Widget? getDesktopFirstPane(double width);
   Widget? getDesktopSecondPane(double width);
+  Widget getFirstPane(double width);
+  Widget? getSecoundPane(double width);
+  Widget? getBaseFloatingActionButton(CurrentScreenSize currentScreenSize);
+  Widget? getFirstPaneFloatingActionButton(CurrentScreenSize currentScreenSize);
+  Widget? getSecondPaneFloatingActionButton(
+      CurrentScreenSize currentScreenSize);
+  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize);
+  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize);
+  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize);
+
+  bool isPanesIsSliver();
 
   ///set padding to content view pased on the screen size
   ///if this is [true] then we add divider between panes
@@ -43,13 +49,31 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     return getBaseAppbar(getCurrentScreenSize()) != null;
   }
 
-  generateBaseToolbar() {
+  ///generate all toolbars for the base and first pane and second pane
+  ///if [customAppBar] is null then generates the base toolbar
+  ///else if [customAppBar] is not null then generates the app bar based on the panes
+  generateToolbar({Widget? customAppBar}) {
     return AppBar(
       forceMaterialTransparency: true,
       primary: true,
-      toolbarHeight: 100,
+      backgroundColor: customAppBar != null
+          ? ElevationOverlay.overlayColor(context, 2)
+          : null,
+      toolbarHeight: customAppBar == null ? 100 : null,
       // backgroundColor: ElevationOverlay.overlayColor(context, 2),
-      title: getBaseAppbar(getCurrentScreenSize())!,
+      title: customAppBar ?? getBaseAppbar(getCurrentScreenSize())!,
+    );
+  }
+
+  Widget? _setSubAppBar(Widget? widget, bool firstPane) {
+    Widget? appBarBody = firstPane
+        ? getFirstPaneAppbar(getCurrentScreenSize())
+        : getSecondPaneAppbar(getCurrentScreenSize());
+    if (appBarBody == null) return widget;
+    return Scaffold(
+      backgroundColor: ElevationOverlay.overlayColor(context, 0),
+      appBar: generateToolbar(),
+      body: widget,
     );
   }
 
@@ -121,13 +145,22 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   Widget _getTowPanes(double w) {
+    Widget? firstPaneFloating;
+    Widget? secondPaneFloating;
+    Widget? firstPaneAppbar;
+    Widget? secondPaneAppbar;
     if (isDesktop(context, maxWidth: w)) {
       _firstWidget = getDesktopFirstPane(w);
       _secondWidget = getDesktopSecondPane(w);
+      _firstWidget = _setSubAppBar(_firstWidget, true);
+      _secondWidget = _setSubAppBar(_secondWidget, true);
+
       // if
     } else {
       _firstWidget = getFirstPane(w);
       _secondWidget = getSecoundPane(w);
+      _firstWidget = _setSubAppBar(_firstWidget, true);
+      _secondWidget = _setSubAppBar(_secondWidget, true);
     }
     if (_secondWidget == null) {
       return _firstWidget!;
@@ -173,8 +206,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
                   child: _hasBaseToolbar()
                       ? Scaffold(
                           backgroundColor:
-                              ElevationOverlay.overlayColor(context, 0),
-                          appBar: generateBaseToolbar(),
+                              ElevationOverlay.overlayColor(context, 2),
+                          appBar: generateToolbar(),
                           body: currentWidget,
                         )
                       : currentWidget);
