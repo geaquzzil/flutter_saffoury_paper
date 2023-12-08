@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/popup_widget.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -129,6 +131,11 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         direction: isOpen ? Axis.horizontal : Axis.vertical,
         children: [
           //  Expanded(child: buildProfilePic(context, isOpen)),
+          Expanded(
+              child: PopupWidget(
+                  child: Icon(Icons.settings_accessibility),
+                  menuBuilder: () => SizedBox(
+                      width: 700, height: 600, child: SettingAndProfileWeb()))),
           if (!isOpen) const Expanded(child: DrawerSettingButton()),
           Expanded(
             child: CartIconWidget(

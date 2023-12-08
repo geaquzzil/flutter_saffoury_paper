@@ -7,6 +7,11 @@ import 'package:provider/provider.dart';
 
 import 'home/components/drawers/drawer_large_screen.dart';
 
+///Auto generate view
+///[CurrentScreenSize.MOBILE] if this  is true
+///
+///
+///
 abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? _firstWidget;
   Widget? _secondWidget;
@@ -17,18 +22,55 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? _drawerWidget;
 
   Widget getFirstPane(double width);
-  Widget? getFloatingActionButton();
+  Widget? getBaseFloatingActionButton(CurrentScreenSize currentScreenSize);
+  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize);
+
   Widget? getSecoundPane(double width);
   Widget? getDesktopFirstPane(double width);
   Widget? getDesktopSecondPane(double width);
 
-  bool setPaddingWhenTowPane();
+  ///set padding to content view pased on the screen size
+  ///if this is [true] then we add divider between panes
+  ///if this is [false] then we check for second pane if no second pane then we add padding automatically
+  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize);
+
+  bool getHasDecorationOnFirstPane() {
+    return _secondWidget != null &&
+        setPaddingWhenTowPane(getCurrentScreenSize());
+  }
+
+  bool _hasBaseToolbar() {
+    return getBaseAppbar(getCurrentScreenSize()) != null;
+  }
+
+  generateBaseToolbar() {
+    return AppBar(
+      forceMaterialTransparency: true,
+      primary: true,
+      toolbarHeight: 100,
+      // backgroundColor: ElevationOverlay.overlayColor(context, 2),
+      title: getBaseAppbar(getCurrentScreenSize())!,
+    );
+  }
+
+  Widget _getBorderDecoration(Widget widget) {
+    return Container(
+        decoration: BoxDecoration(
+            border: Border(
+                right: BorderSide(
+                    width: .5, color: Theme.of(context).dividerColor))),
+        child: widget);
+  }
 
   @override
   void initState() {
     _drawerMenuControllerProvider =
         context.read<DrawerMenuControllerProvider>();
     super.initState();
+  }
+
+  CurrentScreenSize getCurrentScreenSize() {
+    return getCurrentScreenSizeStatic(context);
   }
 
   void addFramPost(void Function(Duration) callback) {
@@ -56,7 +98,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    _drawerWidget = DrawerLargeScreens();
+    _drawerWidget ??= const DrawerLargeScreens();
     return ScreenHelperSliver(
         requireAutoPadding: false,
         onChangeLayout: (w, h) {
@@ -91,14 +133,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       return _firstWidget!;
     }
 
-    if (_secondWidget != null) {
-      set border on non foldaable only
-      _firstWidget = Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  right: BorderSide(
-                      width: .5, color: Theme.of(context).dividerColor))),
-          child: _firstWidget);
+    if (getHasDecorationOnFirstPane()) {
+      _firstWidget = _getBorderDecoration(_firstWidget!);
     }
     return TowPaneExt(startPane: _firstWidget!, endPane: _secondWidget);
   }
@@ -107,7 +143,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: getFloatingActionButton(),
+        floatingActionButton:
+            getBaseFloatingActionButton(getCurrentScreenSize()),
         drawer: _drawerWidget,
         body: _getBody(w));
   }
@@ -133,9 +170,17 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               Widget toShowWidget;
               Widget clipRect = ClipRRect(
                   borderRadius: BorderRadius.circular(25),
-                  child: currentWidget);
+                  child: _hasBaseToolbar()
+                      ? Scaffold(
+                          backgroundColor:
+                              ElevationOverlay.overlayColor(context, 0),
+                          appBar: generateBaseToolbar(),
+                          body: currentWidget,
+                        )
+                      : currentWidget);
 
-              if (_secondWidget == null || setPaddingWhenTowPane()) {
+              if (_secondWidget == null ||
+                  setPaddingWhenTowPane(getCurrentScreenSize())) {
                 toShowWidget = Padding(
                   padding: getSuggestionPadding(w),
                   child: clipRect,

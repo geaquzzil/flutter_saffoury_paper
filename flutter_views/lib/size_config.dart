@@ -16,22 +16,24 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'constants.dart';
 
 const kMobileWidth = 599;
-const kFoldableSmallTablet = 839;
+const kFoldableSmallTablet = 600;
 const kLargeTablet = 840;
 const kDesktopWidth = 1200;
 const double kDrawerOpenWidth = 360;
 
 const double kDefaultClosedDrawer = 80;
 
-CurrentScreenSize getCurrentScreenSize(BuildContext context) {
+CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
   return context.read<LayoutChangeListner>().currentScreenSize ??
       CurrentScreenSize.MOBILE;
 }
 
+/// check for width is < [kMobileWidth]=599
 bool isMobileFromWidth(double maxWidth) {
   return maxWidth < kMobileWidth;
 }
 
+///check for width is
 bool isTabletFromWidth(double maxWidth) {
   return maxWidth >= kLargeTablet && maxWidth < kDesktopWidth;
 }
@@ -470,6 +472,7 @@ class ScreenHelperSliver extends StatelessWidget {
         Widget currentWidget;
         double maxWidth = constraints.maxWidth;
         double maxLength = constraints.maxHeight;
+        debugPrint("layoutBuilder width $maxWidth height $maxLength");
 
         onChangeLayout?.call(maxWidth, maxLength);
 
