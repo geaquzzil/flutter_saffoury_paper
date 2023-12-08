@@ -51,7 +51,6 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(" d didBuild");
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
         return getBody(isOpen, __);
@@ -63,18 +62,23 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   Widget getBody(bool isOpen, BuildContext context) {
     return Selector<LayoutChangeListner, Tuple2<double?, double?>>(
       selector: (_, p) => Tuple2(p.getWidth, p.getHeight),
-      builder: (_, v, ___) => AnimatedSize(
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.fastOutSlowIn,
-        child: SizedBox(
-          height: v.item2,
-          // width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
-          child: Drawer(
-            width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
-            child: _getDrawerBody(v, context, isOpen),
+      builder: (_, v, ___) {
+        debugPrint(
+            "getBody DrawerMenuController height ${v.item2} width ${v.item1}");
+        if (v.item1 == null || v.item2 == null) return SizedBox();
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.fastOutSlowIn,
+          child: SizedBox(
+            height: v.item2,
+            // width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
+            child: Drawer(
+              width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
+              child: _getDrawerBody(v, context, isOpen),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -131,11 +135,11 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         direction: isOpen ? Axis.horizontal : Axis.vertical,
         children: [
           //  Expanded(child: buildProfilePic(context, isOpen)),
-          Expanded(
-              child: PopupWidget(
-                  child: Icon(Icons.settings_accessibility),
-                  menuBuilder: () => SizedBox(
-                      width: 700, height: 600, child: SettingAndProfileWeb()))),
+          // PopupWidget(
+          //     position: PreferredPosition.bottom,
+          //     child: Icon(Icons.settings_accessibility),
+          //     menuBuilder: () => SizedBox(
+          //         width: 700, height: 500, child: SettingAndProfileWeb())),
           if (!isOpen) const Expanded(child: DrawerSettingButton()),
           Expanded(
             child: CartIconWidget(

@@ -15,10 +15,10 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import 'constants.dart';
 
-const kMobileWidth = 599;
-const kFoldableSmallTablet = 600;
-const kLargeTablet = 840;
-const kDesktopWidth = 1200;
+const double kMobileWidth = 599;
+const double kFoldableSmallTablet = 600;
+const double kLargeTablet = 840;
+const double kDesktopWidth = 1200;
 const double kDrawerOpenWidth = 360;
 
 const double kDefaultClosedDrawer = 80;
@@ -226,7 +226,7 @@ class SizeConfig {
 
   static bool isMediumFromScreenSize(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return width > 600 && width < 839;
+    return isSmallTablet(context, maxWidth: width);
   }
 
   static bool isMobileFromScreenSize(BuildContext context) {
@@ -472,6 +472,7 @@ class ScreenHelperSliver extends StatelessWidget {
         Widget currentWidget;
         double maxWidth = constraints.maxWidth;
         double maxLength = constraints.maxHeight;
+        // if (maxWidth == null || maxLength == null) return SizedBox();
         debugPrint("layoutBuilder width $maxWidth height $maxLength");
 
         onChangeLayout?.call(maxWidth, maxLength);
@@ -523,6 +524,9 @@ class LayoutChangeListner with ChangeNotifier {
     setHeight = height;
     setWidth = width;
     currentScreenSize = current;
+    debugPrint(
+        "getBody DrawerMenuController layout height $height width $width");
+    if (width == null || height == null) return;
     notifyListeners();
   }
 }

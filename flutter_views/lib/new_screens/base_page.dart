@@ -1,11 +1,24 @@
+import 'dart:math';
+
+import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 import 'home/components/drawers/drawer_large_screen.dart';
+
+/// WebSmothSceroll additional offset to users scroll input WEB WAS 150
+const scrollOffset = 10;
+
+///WebSmothSceroll animation duration WEB WAS 600
+const animationDuration = 250;
+
+const double kDefualtAppBar = 70;
 
 ///Auto generate view
 ///[CurrentScreenSize.MOBILE] if this  is true
@@ -13,18 +26,27 @@ import 'home/components/drawers/drawer_large_screen.dart';
 ///
 ///
 abstract class BasePageState<T extends StatefulWidget> extends State<T> {
-  Widget? _firstWidget;
-  Widget? _secondWidget;
-  double? _width;
-  double? _height;
-
+  dynamic _firstWidget;
+  dynamic _secondWidget;
+  dynamic _width;
+  dynamic _height;
+  final ScrollController _scrollController = ScrollController();
+  bool pinToolbar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
 
-  Widget? getDesktopFirstPane(double width);
-  Widget? getDesktopSecondPane(double width);
-  Widget getFirstPane(double width);
-  Widget? getSecoundPane(double width);
+  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
+  getDesktopFirstPane(double width);
+
+  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
+  getDesktopSecondPane(double width);
+
+  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
+  getFirstPane(double width);
+
+  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
+  getSecoundPane(double width);
+
   Widget? getBaseFloatingActionButton(CurrentScreenSize currentScreenSize);
   Widget? getFirstPaneFloatingActionButton(CurrentScreenSize currentScreenSize);
   Widget? getSecondPaneFloatingActionButton(
@@ -49,6 +71,35 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     return getBaseAppbar(getCurrentScreenSize()) != null;
   }
 
+  double _getCustomPaneProportion() {
+    {
+      if (MediaQuery.of(context).hinge != null) return 0.5;
+      if (SizeConfig.isMediumFromScreenSize(context)) {
+        return 0.5;
+      } else {
+        CurrentScreenSize s = getCurrentScreenSize();
+        double defualtWidth = 0;
+        if (s case CurrentScreenSize.DESKTOP) {
+          defualtWidth = kDesktopWidth;
+          return .3;
+        } else if (s case CurrentScreenSize.LARGE_TABLET) {
+          defualtWidth = kLargeTablet;
+        } else if (s case CurrentScreenSize.MOBILE) {
+          return 1;
+        }
+
+        double sss = max(
+          defualtWidth - _width,
+          _width - defualtWidth,
+        );
+        debugPrint(
+            " current width $_width  defualt width $defualtWidth   VALUE=${sss}  ");
+
+        return sss > 250 ? 0.3 : 0.5;
+      }
+    }
+  }
+
   ///generate all toolbars for the base and first pane and second pane
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
@@ -65,23 +116,75 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     );
   }
 
-  Widget? _setSubAppBar(Widget? widget, bool firstPane) {
+  ///by default this is hidden when scrolling
+  Widget getSliverAppBar(Widget widget,
+      {bool pinned = false,
+      bool floating = true,
+      double height = kDefualtAppBar}) {
+    return SliverPersistentHeader(
+        pinned: pinned,
+        floating: floating,
+        delegate: SliverAppBarDelegatePreferedSize(
+            child: PreferredSize(
+                preferredSize: Size.fromHeight(height), child: widget)));
+  }
+
+  Widget? _getScrollContent(widget, Widget? appBar, bool firstPane) {
+    dynamic body = widget;
+    debugPrint(
+        "BasePage IsPanel isSliver started=> firstPane ${isPanesIsSliver(firstPane)}");
+
+    if (isPanesIsSliver(firstPane)) {
+      List<Widget> list = body;
+      debugPrint(
+          "BasePage IsPanel isSliver ${isPanesIsSliver(firstPane)} body $body");
+      if (SizeConfig.isDesktopOrWebPlatform(context)) {
+        debugPrint(
+            "BasePage IsPanel  isDesktopOrWebPlatform isSliver ${isPanesIsSliver(firstPane)} body $body");
+        body = WebSmoothScroll(
+          controller: _scrollController,
+          animationDuration: animationDuration,
+          scrollOffset: scrollOffset,
+          child: CustomScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _scrollController,
+            slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
+          ),
+        );
+      } else {
+        debugPrint(
+            "BasePage IsPanel  isDesktopOrWebPlatform flassse isSliver ${isPanesIsSliver(firstPane)} body $body");
+        return CustomScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _scrollController,
+          slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
+        );
+      }
+    }
+    debugPrint(
+        "BasePage IsPanel isSliver=> ${isPanesIsSliver(firstPane)} body $body");
+    return body;
+  }
+
+  ///setting appbar but when is sliver then we added to CustomScrollView Sliver
+  Widget? _setSubAppBar(widget, bool firstPane) {
     Widget? appBarBody = firstPane
         ? getFirstPaneAppbar(getCurrentScreenSize())
         : getSecondPaneAppbar(getCurrentScreenSize());
-    if (appBarBody == null) return widget;
-    Widget? body = widget;
-    if (SizeConfig.isDesktopOrWebPlatform(context))
-    {
 
-    }else{
-      
-    }
-      return Scaffold(
-        backgroundColor: ElevationOverlay.overlayColor(context, 0),
-        appBar: isPanesIsSliver(firstPane) ? null : generateToolbar(),
-        body: widget,
-      );
+    Widget? body = _getScrollContent(widget, appBarBody, firstPane);
+    return Scaffold(
+      backgroundColor: ElevationOverlay.overlayColor(context, 0),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: firstPane
+          ? getFirstPaneFloatingActionButton(getCurrentScreenSize())
+          : getSecondPaneFloatingActionButton(getCurrentScreenSize()),
+      appBar: isPanesIsSliver(firstPane)
+          ? null
+          : generateToolbar(customAppBar: appBarBody),
+      body: body,
+    );
   }
 
   Widget _getBorderDecoration(Widget widget) {
@@ -97,6 +200,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   void initState() {
     _drawerMenuControllerProvider =
         context.read<DrawerMenuControllerProvider>();
+
     super.initState();
   }
 
@@ -165,14 +269,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       _firstWidget = getDesktopFirstPane(w);
       _secondWidget = getDesktopSecondPane(w);
       _firstWidget = _setSubAppBar(_firstWidget, true);
-      _secondWidget = _setSubAppBar(_secondWidget, true);
+      _secondWidget = _setSubAppBar(_secondWidget, false);
 
       // if
     } else {
       _firstWidget = getFirstPane(w);
       _secondWidget = getSecoundPane(w);
       _firstWidget = _setSubAppBar(_firstWidget, true);
-      _secondWidget = _setSubAppBar(_secondWidget, true);
+      _secondWidget = _setSubAppBar(_secondWidget, false);
     }
     if (_secondWidget == null) {
       return _firstWidget!;
@@ -182,7 +286,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       _firstWidget = _getBorderDecoration(_firstWidget!);
     }
 
-    return TowPaneExt(startPane: _firstWidget!, endPane: _secondWidget);
+    return TowPaneExt(
+      startPane: _firstWidget!,
+      endPane: _secondWidget,
+      customPaneProportion: _getCustomPaneProportion(),
+    );
   }
 
   Widget _getTabletWidget(double w) {

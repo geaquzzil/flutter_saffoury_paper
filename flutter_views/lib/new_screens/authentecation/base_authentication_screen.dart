@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/new_screens/authentecation/components/ne
 import 'package:flutter_view_controller/new_screens/base_shared.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_basedonbase.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
             case ConnectionState.done:
               // return POSPage();
               // return BaseShared();
+              return TestBasePage();
               return const BaseHomeMainPage();
 
             default:

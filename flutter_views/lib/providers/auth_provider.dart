@@ -159,8 +159,8 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         (item) => item.getMainDrawerGroupName(context),
         valueTransform: (v) => v);
 
-    debugPrint(
-        "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
+    // debugPrint(
+    //     "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
 
     //  List<List<GrowthRate>> g=[];
     //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )

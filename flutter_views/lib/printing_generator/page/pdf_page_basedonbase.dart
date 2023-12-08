@@ -13,20 +13,50 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize size) {
     debugPrint("setPaddingWhenTowPane $size");
-    return false;
+    // return false;
     return size == CurrentScreenSize.DESKTOP;
   }
 
   @override
-  Widget? getDesktopFirstPane(double width) =>
-      const Center(child: Text(" this is a  desktop body first pane"));
+  getDesktopFirstPane(double width) {
+    if (isPanesIsSliver(true)) {
+      return [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  color: index % 2 == 0 ? Colors.green : Colors.greenAccent,
+                  height: 40,
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Item $index",
+                    style: const TextStyle(fontSize: 30),
+                  ),
+                ),
+              );
+            },
+            // 40 list items
+            childCount: 40,
+          ),
+        )
+      ];
+    }
+    return const Center(child: Text(" this is a  desktop body first pane"));
+  }
+
   @override
-  Widget? getDesktopSecondPane(double width) =>
-      const Center(child: Text(" this is a desktop body second pane"));
+  getDesktopSecondPane(double width) {
+    return const Center(child: Text(" this is a desktop body second pane"));
+  }
+
   @override
-  Widget getFirstPane(double width) => Container(
-        color: Colors.blueGrey,
-        child: Text("First Pane $width"),
+  getFirstPane(double width) => getDesktopFirstPane(width);
+  @override
+  getSecoundPane(double width) => Container(
+        color: Colors.grey,
+        child: Text("Second Pane $width"),
       );
 
   @override
@@ -35,21 +65,16 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
           onPressed: () => {}, label: Icon(Icons.add));
 
   @override
-  Widget? getSecoundPane(double width) => Container(
-        color: Colors.grey,
-        child: Text("Second Pane $width"),
-      );
-
-  @override
-  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize) => const ListTile(
-        title: Text("BaseToolbar"),
+  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize) => ListTile(
+        title: Text("BaseToolbar",
+            style: Theme.of(context).textTheme.headlineLarge),
         subtitle: Text("Subtitle Toolbar"),
       );
 
   @override
-  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) =>
-      const ListTile(
-        title: Text("first Pane toolbar"),
+  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) => ListTile(
+        title: Text("first pane tool bar",
+            style: Theme.of(context).textTheme.headlineLarge),
         subtitle: Text("Subtitle Toolbar"),
       );
 
@@ -71,5 +96,10 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
       null;
 
   @override
-  bool isPanesIsSliver(bool firstPane) => true;
+  bool isPanesIsSliver(bool firstPane) {
+    if (firstPane) {
+      return true;
+    }
+    return false;
+  }
 }

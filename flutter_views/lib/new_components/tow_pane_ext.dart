@@ -9,6 +9,7 @@ class TowPaneExt extends StatelessWidget {
   Widget startPane;
   Widget? endPane;
   double? customPaneProportion;
+  
   TowPaneExt(
       {super.key,
       required this.startPane,
