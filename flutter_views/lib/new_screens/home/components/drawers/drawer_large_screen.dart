@@ -3,108 +3,216 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
+import 'package:flutter_view_controller/screens/web/components/header.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 import '../profile/profile_pic_popup_menu.dart';
 import 'components/ext.dart';
 
-class DrawerLargeScreens extends StatelessWidget {
+class DrawerLargeScreens extends StatefulWidget {
+  const DrawerLargeScreens({super.key});
+
+  @override
+  State<DrawerLargeScreens> createState() => _DrawerLargeScreensState();
+}
+
+class _DrawerLargeScreensState extends State<DrawerLargeScreens>
+    with TickerProviderStateMixin {
   final padding = const EdgeInsets.symmetric(horizontal: kDefaultPadding);
 
   late DrawerMenuControllerProvider drawerMenuControllerProvider;
 
-  DrawerLargeScreens({super.key});
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
+    // _animationController.forward();
+    drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-    // if (SizeConfig.isDesktopOrWeb(context)) {
-    //   return getBody(true, context);
-    // }
-    // return getBody(false, context);
-    // bool isHovered = context.watch<IsHoveredOnDrawerClosed>().isHovered;
+    debugPrint(" d didBuild");
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
-        //todo change true to isOpen
         return getBody(isOpen, __);
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
   }
 
-  AnimatedSize getBody(bool isOpen, BuildContext context) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.fastOutSlowIn,
-      child: SizedBox(
-        height: double.maxFinite,
-        width: isOpen ? SizeConfig.getDrawerWidth(context) : 60,
-        // color: Colors.blueGrey,
-        child: Drawer(
-          child: Column(
-            // alignment: Alignment.bottomCenter,
-            // fit: StackFit.loose,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height - 50,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(child: buildHeader(context, isOpen)),
-                    // buildList(context, isOpen),
-                    buildListSliver(context, isOpen)
-                  ],
-                ),
-              ),
-              Divider(height: 2),
-              buildDrawerFooter(context, isOpen),
-              // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-
-              //   // const Spacer(),
-              // ]),
-
-              // buildProfilePic(context, isOpen),
-            ],
+  Widget getBody(bool isOpen, BuildContext context) {
+    return Selector<LayoutChangeListner, Tuple2<double?, double?>>(
+      selector: (_, p) => Tuple2(p.getWidth, p.getHeight),
+      builder: (_, v, ___) => AnimatedSize(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.fastOutSlowIn,
+        child: SizedBox(
+          height: v.item2,
+          // width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
+          child: Drawer(
+            width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
+            child: _getDrawerBody(v, context, isOpen),
           ),
         ),
       ),
     );
   }
 
-  Widget buildDrawerFooter(BuildContext context, bool isOpen) {
+  Widget _getDrawerBody(
+      Tuple2<double?, double?> v, BuildContext context, bool isOpen) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // const Divider(),
-        if (AuthProvider.isLoggedIn(context))
-          Container(
-              color: isOpen ? Theme.of(context).colorScheme.background : null,
-              child: buildProfilePic(context, isOpen)),
-        if (AuthProvider.isLoggedIn(context))
-          Container(
-              color: isOpen ? Theme.of(context).colorScheme.background : null,
-              child: const Divider()),
+        // DrawerHeaderLogo(
+        //   isOpen: isOpen,
+        // ),
+        SizedBox(
+          height: (v.item2 ?? 1000) * .25,
+          child: buildHeader(context, isOpen),
+        ),
+        // FloatingActionButton(
+        //     onPressed: () => {}, child: Icon(Icons.edit)),
+        SizedBox(
+          height: !isOpen
+              ? (v.item2 ?? 1000) * .5
+              : v.item2.toNonNullable() - (100 + (v.item2 ?? 1000) * .25),
+          child: CustomScrollView(
+            slivers: [
+              // SliverToBoxAdapter(child: buildHeader(context, isOpen)),
+              // buildList(context, isOpen),
+              buildListSliver(context, isOpen)
+            ],
+          ),
+        ),
 
-        Container(
-            color: isOpen ? Theme.of(context).colorScheme.background : null,
-            child: buildCollapseIcon(context, isOpen)),
+        // const Divider(height: 2),
+        SizedBox(
+            height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
+            child: buildDrawerFooter(context, isOpen)),
+        // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+
+        //   // const Spacer(),
+        // ]),
+
+        // buildProfilePic(context, isOpen),
       ],
     );
   }
 
+  Widget buildDrawerFooter(BuildContext context, bool isOpen) {
+    return Padding(
+      padding: const EdgeInsets.all(kDefaultPadding),
+      child: Flex(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.end,
+
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        // mainAxisAlignment:
+        //     !isOpen ? MainAxisAlignment.center : MainAxisAlignment.end,
+        direction: isOpen ? Axis.horizontal : Axis.vertical,
+        children: [
+          //  Expanded(child: buildProfilePic(context, isOpen)),
+          if (!isOpen) const Expanded(child: DrawerSettingButton()),
+          Expanded(
+            child: CartIconWidget(
+              returnNillIfZero: false,
+              onPressed: () {
+                context
+                    .read<DrawerMenuControllerProvider>()
+                    .controlEndDrawerMenu();
+              },
+            ),
+          ),
+          // if (AuthProvider.isLoggedIn(context))
+          Expanded(child: NotificationPopupWidget()),
+          if (isOpen) const Expanded(child: DrawerLanguageButton()),
+        ],
+      ),
+    );
+    Widget c = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment:
+          !isOpen ? MainAxisAlignment.center : MainAxisAlignment.end,
+      children: [
+        // const Divider(),
+        // if (AuthProvider.isLoggedIn(context))
+        Container(
+            color: isOpen ? Theme.of(context).colorScheme.background : null,
+            child: buildProfilePic(context, isOpen)),
+
+        if (!isOpen) const DrawerSettingButton(),
+        if (isOpen)
+          // if (AuthProvider.isLoggedIn(context))
+          Container(
+              color: isOpen ? Theme.of(context).colorScheme.background : null,
+              child: const Divider()),
+        if (isOpen)
+          Container(
+              color: isOpen ? Theme.of(context).colorScheme.background : null,
+              child: buildCollapseIcon(context, isOpen)),
+      ],
+    );
+
+    // if (isOpen) {
+    //   return Center(
+    //     child: c,
+    //   );
+    // }
+    return c;
+  }
+
   Widget buildHeader(BuildContext context, bool isOpen) {
+    // return Icon(Icons.dangerous);
     // AnimatedSize(,)
+    return IconButton(
+      onPressed: () {
+        drawerMenuControllerProvider.toggleIsOpen();
+        if (drawerMenuControllerProvider.getSideMenuIsOpen) {
+          _animationController.reverse();
+        } else {
+          _animationController.forward();
+        }
+      },
+      icon: AnimatedIcon(
+          icon: AnimatedIcons.arrow_menu, progress: _animationController),
+    );
+    return Column(
+      children: [
+        ListTile(
+          // title: DrawerHeaderLogo(isOpen: isOpen),
+          title: const Icon(Icons.dangerous),
+          leading: IconButton(
+            onPressed: () {
+              drawerMenuControllerProvider.toggleIsOpen();
+              if (drawerMenuControllerProvider.getSideMenuIsOpen) {
+                _animationController.reverse();
+              } else {
+                _animationController.forward();
+              }
+            },
+            icon: AnimatedIcon(
+                icon: AnimatedIcons.arrow_menu, progress: _animationController),
+          ),
+        ),
+      ],
+    );
     return DrawerHeaderLogo(
       isOpen: isOpen,
     );
@@ -168,11 +276,6 @@ class DrawerLargeScreens extends StatelessWidget {
   }
 
   Widget buildProfilePic(BuildContext context, bool isOpen) {
-    const double size = 52;
-    IconData icon = !isOpen ? Icons.arrow_forward_ios : Icons.arrow_back_ios;
-    final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
-    final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
-    final width = isOpen ? size : double.infinity;
     return isOpen
         ? ProfileOnOpenDrawerWidget()
         : const ProfilePicturePopupMenu();
@@ -196,25 +299,20 @@ class DrawerLargeScreens extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          if (AuthProvider.isLoggedIn(context)) const DrawerSettingButton(),
-          if (AuthProvider.isLoggedIn(context))
-            CartIconWidget(
-              returnNillIfZero: false,
-              onPressed: () {
-                context
-                    .read<DrawerMenuControllerProvider>()
-                    .controlEndDrawerMenu();
-              },
-            ),
-          if (AuthProvider.isLoggedIn(context)) NotificationPopupWidget(),
+          // if (AuthProvider.isLoggedIn(context))
+          const DrawerSettingButton(),
+          // if (AuthProvider.isLoggedIn(context))
+          CartIconWidget(
+            returnNillIfZero: false,
+            onPressed: () {
+              context
+                  .read<DrawerMenuControllerProvider>()
+                  .controlEndDrawerMenu();
+            },
+          ),
+          // if (AuthProvider.isLoggedIn(context))
+          NotificationPopupWidget(),
           const DrawerLanguageButton(),
-
-          if (SizeConfig.isDesktopOrWeb(context))
-            buildColapsedIcon(
-              context,
-              Icons.arrow_back_ios,
-              () => drawerMenuControllerProvider.toggleIsOpen(),
-            ),
 
           // oldCollapsedIcon(margin, alignemt, context, icon),
         ],
@@ -235,13 +333,10 @@ class DrawerHeaderLogo extends StatelessWidget {
     if (!isOpen) {
       return SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-          // .add(safeArea),
-          width: double.infinity,
-          child: CompanyLogo(
-              // size: 24,
-              ),
-        ),
+            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+            // .add(safeArea),
+            width: double.infinity,
+            child: CompanyLogo()),
       );
     }
     return Card(
@@ -249,26 +344,16 @@ class DrawerHeaderLogo extends StatelessWidget {
       elevation: 0,
       child: SafeArea(
         child: Container(
-            // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
-            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-            // .add(safeArea),
-            width: double.infinity,
-            child: !isOpen
-                ? CompanyLogo(
-                    // size: 24,
-                    )
-                : Row(
-                    children: [
-                      const SizedBox(
-                        width: 24,
-                      ),
-                      CompanyLogo(),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      const Text("SaffouryPaper")
-                    ],
-                  )),
+          // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+          // .add(safeArea),
+          width: double.infinity,
+          child: !isOpen
+              ? CompanyLogo(
+                  // size: 24,
+                  )
+              : HeaderLogo(),
+        ),
       ),
     );
   }
@@ -308,6 +393,26 @@ class DrawerListTileDesktopGroupOpen extends StatelessWidget {
     //         })
     //   ],
     // );
+
+    return ListView.builder(
+      itemCount: groupedDrawerItems.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        ViewAbstract viewAbstract = groupedDrawerItems[index];
+        Widget currentWidget =
+            DrawerListTileDesktopOpen(viewAbstract: viewAbstract, idx: index);
+        if (index == groupedDrawerItems.length - 1) {
+          return Column(
+            children: [
+              currentWidget,
+              const Divider(),
+            ],
+          );
+        } else {
+          return currentWidget;
+        }
+      },
+    );
     return ExpansionTile(
       title: Text(title),
       children: [
@@ -371,9 +476,6 @@ class _DrawerListTileDesktopGroupClosedState
     return ListView.separated(
         padding: EdgeInsets.zero,
         separatorBuilder: (context, index) {
-          if (index == widget.groupedDrawerItems.length - 2) {
-            return Divider();
-          }
           return const SizedBox(
             height: kDefaultPadding / 2,
           );
@@ -383,8 +485,21 @@ class _DrawerListTileDesktopGroupClosedState
         primary: true,
         itemBuilder: (context, index) {
           ViewAbstract viewAbstract = widget.groupedDrawerItems[index];
-          return DrawerListTileDesktopClosed(
+
+          Widget currentWidget = DrawerListTileDesktopClosed(
               viewAbstract: viewAbstract, idx: index);
+          if (index == widget.groupedDrawerItems.length - 1) {
+            return Column(
+              children: [
+                currentWidget,
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  child: Divider(),
+                )
+              ],
+            );
+          }
+          return currentWidget;
         });
   }
 
@@ -427,7 +542,8 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
         context.watch<DrawerMenuControllerProvider>();
 
     if (SizeConfig.isDesktopOrWeb(context)) {
-      return ListTile(
+      debugPrint("DrawerListTileDesktopOpen des");
+      Widget c = ListTile(
         leading: InkWell(
             onTap: () {
               viewAbstract.onDrawerLeadingItemClicked(context);
@@ -437,7 +553,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
                 child: false
                     ? const Icon(Icons.plus_one_sharp)
                     : viewAbstract.getIcon())),
-        selected: ds.getIndex == viewAbstract.hashCode,
+        // selected: ds.getIndex == viewAbstract.hashCode,
         // title: ds.getSideMenuIsClosed
         //     ? null
         //     : Container(child: viewAbstract.getMainLabelText(context)),
@@ -450,6 +566,20 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
           viewAbstract.onDrawerItemClicked(context);
         },
       );
+      if (ds.getIndex == viewAbstract.hashCode) {
+        debugPrint("DrawerListTileDesktopOpen des CardCorner");
+        return CardCorner(
+          key: UniqueKey(),
+          color: Theme.of(context).highlightColor,
+          // color: Theme.of(context).highlightColor,
+          // borderSide: BorderSideColor.END,
+          // elevation: 0,
+          // color: Theme.of(context).colorScheme.primary,
+          child: c,
+        );
+      }
+      return c;
+
       //TODO not working any more for desktop return OnHoverWidget(
       //     scale: false,
       //     builder: (onHover) {
@@ -478,6 +608,7 @@ class DrawerListTileDesktopOpen extends StatelessWidget {
       //       );
       //     });
     } else {
+      debugPrint("DrawerListTileDesktopOpen s");
       return ListTile(
         leading: viewAbstract.getIcon(),
         selected: ds.getIndex == viewAbstract.hashCode,
@@ -510,22 +641,34 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
   Widget build(BuildContext context) {
     DrawerMenuControllerProvider ds =
         context.watch<DrawerMenuControllerProvider>();
-    return IconButton(
-        // iconSize: 20,
-        tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
-        icon: Icon(
-          viewAbstract.getMainIconData(),
-          color: ds.getIndex == viewAbstract.hashCode
-              ? Theme.of(context).colorScheme.primary
-              : null,
-        ),
-        onPressed: () {
-          context
-              .read<DrawerMenuControllerProvider>()
-              .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+    return Column(children: [
+      IconButton(
+          isSelected: ds.getIndex == viewAbstract.hashCode,
+          // iconSize: 20,
+          // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
+          icon: Icon(
+            viewAbstract.getMainIconData(),
+            color: ds.getIndex == viewAbstract.hashCode
+                ? Theme.of(context).colorScheme.primary
+                : null,
+          ),
+          onPressed: () {
+            context
+                .read<DrawerMenuControllerProvider>()
+                .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
 
-          viewAbstract.onDrawerItemClicked(context);
-        });
+            viewAbstract.onDrawerItemClicked(context);
+          }),
+      // if (ds.getIndex == viewAbstract.hashCode)
+      AnimatedScale(
+        duration: const Duration(milliseconds: 100),
+        scale: ds.getIndex == viewAbstract.hashCode ? 1 : 0,
+        child: Text(
+          viewAbstract.getMainHeaderLabelTextOnly(context),
+          overflow: TextOverflow.ellipsis,
+        ),
+      )
+    ]);
 
     return OnHoverWidget(
         scale: false,

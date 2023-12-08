@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -9,6 +10,8 @@ import 'home/components/drawers/drawer_large_screen.dart';
 abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? _firstWidget;
   Widget? _secondWidget;
+  double? _width;
+  double? _height;
 
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
@@ -19,12 +22,13 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? getDesktopFirstPane(double width);
   Widget? getDesktopSecondPane(double width);
 
+  bool setPaddingWhenTowPane();
+
   @override
   void initState() {
-    super.initState();
     _drawerMenuControllerProvider =
         context.read<DrawerMenuControllerProvider>();
-    _drawerWidget = DrawerLargeScreens();
+    super.initState();
   }
 
   void addFramPost(void Function(Duration) callback) {
@@ -43,24 +47,33 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     });
   }
 
+  void reset() {
+    _secondWidget = null;
+    _firstWidget = null;
+    _width = 0;
+    _height = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
+    _drawerWidget = DrawerLargeScreens();
     return ScreenHelperSliver(
         requireAutoPadding: false,
+        onChangeLayout: (w, h) {
+          reset();
+          _width = w;
+          _height = h;
+        },
         mobile: (w, h) {
-          setSideMenuOpen();
           return _getTabletWidget(w);
         },
         smallTablet: (w, h) {
-          setSideMenuClosed();
           return _getTabletWidget(w);
         },
         largeTablet: (w, h) {
-          setSideMenuClosed();
           return _getTabletWidget(w);
         },
         desktop: (w, h) {
-          setSideMenuOpen();
           return _getTabletWidget(w);
         });
   }
@@ -68,38 +81,35 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget _getTowPanes(double w) {
     if (isDesktop(context, maxWidth: w)) {
       _firstWidget = getDesktopFirstPane(w);
-
       _secondWidget = getDesktopSecondPane(w);
-      if (_secondWidget == null) {
-        _firstWidget = Padding(
-          padding: getSuggestionPadding(w),
-          child: _firstWidget,
-        );
-      }
+      // if
     } else {
       _firstWidget = getFirstPane(w);
       _secondWidget = getSecoundPane(w);
-      if (_secondWidget == null) {
-        _firstWidget = Padding(
-          padding: getSuggestionPadding(w),
-          child: _firstWidget,
-        );
-      }
     }
     if (_secondWidget == null) {
       return _firstWidget!;
+    }
+
+    if (_secondWidget != null) {
+      set border on non foldaable only
+      _firstWidget = Container(
+          decoration: BoxDecoration(
+              border: Border(
+                  right: BorderSide(
+                      width: .5, color: Theme.of(context).dividerColor))),
+          child: _firstWidget);
     }
     return TowPaneExt(startPane: _firstWidget!, endPane: _secondWidget);
   }
 
   Widget _getTabletWidget(double w) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      floatingActionButton: getFloatingActionButton(),
-      drawer: _drawerWidget,
-      body: Card(child: _getBody(w)),
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+        floatingActionButton: getFloatingActionButton(),
+        drawer: _drawerWidget,
+        body: _getBody(w));
   }
 
   Widget _getBody(double w) {
@@ -118,7 +128,34 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           // if (_secondWidget == null) Text("DASDAS"),
 
           // if (!isCustomWidget) navigationRailWidget!,
-          Expanded(child: currentWidget),
+          Selector<DrawerMenuControllerProvider, bool>(
+            builder: (__, isOpen, ___) {
+              Widget toShowWidget;
+              Widget clipRect = ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: currentWidget);
+
+              if (_secondWidget == null || setPaddingWhenTowPane()) {
+                toShowWidget = Padding(
+                  padding: getSuggestionPadding(w),
+                  child: clipRect,
+                );
+              } else {
+                toShowWidget = clipRect;
+              }
+
+              return AnimatedContainer(
+                  key: UniqueKey(),
+                  height: _height,
+                  width: (_width! -
+                          (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
+                              .toNonNullable()) -
+                      0,
+                  duration: const Duration(milliseconds: 100),
+                  child: toShowWidget);
+            },
+            selector: (p0, p1) => p1.getSideMenuIsOpen,
+          )
         ],
       ));
     } else {

@@ -29,6 +29,7 @@ class TowPaneExt extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         return TwoPane(
+          
             allowedOverrides: const {
               TwoPaneAllowedOverrides.paneProportion,
               // TwoPaneAllowedOverrides.direction,

@@ -57,6 +57,7 @@ import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -148,6 +149,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
       ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
       ChangeNotifierProvider(create: (_) => LangaugeProvider()),
+      ChangeNotifierProvider(create: (_) => LayoutChangeListner()),
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),

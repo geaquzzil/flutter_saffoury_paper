@@ -49,7 +49,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   String get getUserName => _user.getFieldValue("name") ?? "_UNKONW";
   String get getUserPermission => _user.userlevels?.userlevelname ?? "";
   String get getUserImageUrl {
-    return "";
+    // return "";
     //todo for some reason we canot add profile image
     return "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
   }

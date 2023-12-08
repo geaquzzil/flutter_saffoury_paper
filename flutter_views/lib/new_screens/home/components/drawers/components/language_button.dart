@@ -24,6 +24,7 @@ class DrawerLanguageButton extends StatelessWidget {
     ];
     bool? isEng = isEnglish(context);
     return DropdownStringListControllerListenerByIcon(
+      showSelectedValueBeside: false,
       icon: Icons.language,
       hint: AppLocalizations.of(context)!.language,
       list: l,

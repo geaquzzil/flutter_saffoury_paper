@@ -57,7 +57,7 @@ class HeaderLogo extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
-                          ?.copyWith(fontWeight: FontWeight.w800)
+                          ?.copyWith(fontWeight: FontWeight.w500)
 
                       // GoogleFonts.roboto(
                       //   // color: Theme.of(context).colorScheme.onBackground,

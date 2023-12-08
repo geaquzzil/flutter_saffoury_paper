@@ -235,6 +235,11 @@ extension NonNullableNum on num? {
     RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
     return this!.toString().replaceAll(regex, '');
   }
+
+  double toNonNullable() {
+    if (this == null) return 0;
+    return this!.toDouble();
+  }
 }
 
 extension NonNullableDouble on double? {

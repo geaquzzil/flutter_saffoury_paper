@@ -9,6 +9,8 @@ import 'dart:ui' as ui;
 import 'dart:math' as Math;
 
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'constants.dart';
@@ -17,6 +19,14 @@ const kMobileWidth = 599;
 const kFoldableSmallTablet = 839;
 const kLargeTablet = 840;
 const kDesktopWidth = 1200;
+const double kDrawerOpenWidth = 360;
+
+const double kDefaultClosedDrawer = 80;
+
+CurrentScreenSize getCurrentScreenSize(BuildContext context) {
+  return context.read<LayoutChangeListner>().currentScreenSize ??
+      CurrentScreenSize.MOBILE;
+}
 
 bool isMobileFromWidth(double maxWidth) {
   return maxWidth < kMobileWidth;
@@ -415,6 +425,8 @@ class ScreenHelperSliver extends StatelessWidget {
   final Widget Function(double width, double height) largeTablet;
   final Widget Function(double width, double height) desktop;
 
+  final Function(double width, double height)? onChangeLayout;
+
   final bool? requireAutoPadding;
 
   const ScreenHelperSliver(
@@ -423,7 +435,8 @@ class ScreenHelperSliver extends StatelessWidget {
       required this.largeTablet,
       required this.mobile,
       required this.smallTablet,
-      required this.desktop});
+      required this.desktop,
+      this.onChangeLayout});
 
   Widget getPadding(BuildContext context, double width, Widget widget) {
     double defualPadding = isMobile(context, maxWidth: width)
@@ -446,6 +459,10 @@ class ScreenHelperSliver extends StatelessWidget {
         child: widget);
   }
 
+  void addFramPost(void Function(Duration) callback) {
+    WidgetsBinding.instance.addPostFrameCallback(callback);
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -453,13 +470,28 @@ class ScreenHelperSliver extends StatelessWidget {
         Widget currentWidget;
         double maxWidth = constraints.maxWidth;
         double maxLength = constraints.maxHeight;
+
+        onChangeLayout?.call(maxWidth, maxLength);
+
         if (isMobile(context, maxWidth: maxWidth)) {
+          addFramPost((p) => context
+              .read<LayoutChangeListner>()
+              .setSize(maxWidth, maxLength, current: CurrentScreenSize.MOBILE));
           currentWidget = mobile.call(maxWidth, maxLength);
         } else if (isSmallTablet(context, maxWidth: maxWidth)) {
+          addFramPost((p) => context.read<LayoutChangeListner>().setSize(
+              maxWidth, maxLength,
+              current: CurrentScreenSize.SMALL_TABLET));
           currentWidget = smallTablet.call(maxWidth, maxLength);
         } else if (isTablet(context, maxWidth: maxWidth)) {
+          addFramPost((p) => context.read<LayoutChangeListner>().setSize(
+              maxWidth, maxLength,
+              current: CurrentScreenSize.LARGE_TABLET));
           currentWidget = largeTablet.call(maxWidth, maxLength);
         } else {
+          addFramPost((p) => context.read<LayoutChangeListner>().setSize(
+              maxWidth, maxLength,
+              current: CurrentScreenSize.DESKTOP));
           currentWidget = desktop.call(maxWidth, maxLength);
         }
         bool padding = requireAutoPadding ?? false;
@@ -472,6 +504,27 @@ class ScreenHelperSliver extends StatelessWidget {
     );
   }
 }
+
+class LayoutChangeListner with ChangeNotifier {
+  double? _width;
+  double? _height;
+  CurrentScreenSize? currentScreenSize = CurrentScreenSize.MOBILE;
+
+  set setHeight(double? value) => _height = value;
+  set setWidth(double? value) => _width = value;
+
+  double? get getHeight => _height;
+  double? get getWidth => _width;
+
+  void setSize(double? width, double? height, {CurrentScreenSize? current}) {
+    setHeight = height;
+    setWidth = width;
+    currentScreenSize = current;
+    notifyListeners();
+  }
+}
+
+enum CurrentScreenSize { MOBILE, SMALL_TABLET, LARGE_TABLET, DESKTOP }
 
 class ScreenHelper extends StatelessWidget {
   final Widget mobile;

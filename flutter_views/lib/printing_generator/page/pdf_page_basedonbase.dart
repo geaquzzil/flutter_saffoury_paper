@@ -10,18 +10,41 @@ class TestBasePage extends StatefulWidget {
 
 class _TestBasePageState extends BasePageState<TestBasePage> {
   @override
-  Widget? getDesktopFirstPane(double width) => Container(
-        color: Colors.brown,
-        child: Text("Desktop first Pane $width"),
-      );
+  bool setPaddingWhenTowPane() {
+    return true;
+  }
 
   @override
-  Widget? getDesktopSecondPane(double width) => null;
+  Widget? getDesktopFirstPane(double width) {
+    return Scaffold(
+        backgroundColor: ElevationOverlay.overlayColor(context, 2),
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            // toolbarHeight: 200,
+            backgroundColor: ElevationOverlay.overlayColor(context, 2),
+            forceMaterialTransparency: true,
+            primary: true,
+            title: ListTile(
+              title: Text("Dinner Club"),
+              subtitle: Text("3 Messages"),
+            )),
+        body: Center(child: Text(" this is a body")));
+  }
 
-  // Container(
-  //       color: Colors.greenAccent,
-  //       child: Text("Desktop secound Pane $width"),
-  //     );
+  @override
+  Widget? getDesktopSecondPane(double width) => Scaffold(
+      backgroundColor: ElevationOverlay.overlayColor(context, 2),
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          // toolbarHeight: 200,
+          backgroundColor: ElevationOverlay.overlayColor(context, 2),
+          forceMaterialTransparency: true,
+          primary: true,
+          title: ListTile(
+            title: Text("Details Club"),
+            subtitle: Text("3 Messages"),
+          )),
+      body: Center(child: Text(" this is a body")));
 
   @override
   Widget getFirstPane(double width) => Container(
