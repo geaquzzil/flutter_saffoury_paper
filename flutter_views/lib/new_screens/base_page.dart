@@ -57,6 +57,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
   bool isPanesIsSliver(bool firstPane);
 
+  late CurrentScreenSize _currentScreenSize;
+
   ///set padding to content view pased on the screen size
   ///if this is [true] then we add divider between panes
   ///if this is [false] then we check for second pane if no second pane then we add padding automatically
@@ -85,7 +87,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         } else if (s case CurrentScreenSize.LARGE_TABLET) {
           defualtWidth = kLargeTablet;
         } else if (s case CurrentScreenSize.MOBILE) {
-          return 1;
+          return .5;
         }
 
         double sss = max(
@@ -172,7 +174,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         ? getFirstPaneAppbar(getCurrentScreenSize())
         : getSecondPaneAppbar(getCurrentScreenSize());
 
-    Widget? body = _getScrollContent(widget, appBarBody, firstPane);
+    Widget? body = widget;
+    //_getScrollContent(widget, appBarBody, firstPane);
     return Scaffold(
       backgroundColor: ElevationOverlay.overlayColor(context, 0),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -205,7 +208,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   CurrentScreenSize getCurrentScreenSize() {
-    return getCurrentScreenSizeStatic(context);
+    return _currentScreenSize;
   }
 
   void addFramPost(void Function(Duration) callback) {
@@ -236,10 +239,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     _drawerWidget ??= const DrawerLargeScreens();
     return ScreenHelperSliver(
         requireAutoPadding: false,
-        onChangeLayout: (w, h) {
+        onChangeLayout: (w, h, c) {
           reset();
           _width = w;
           _height = h;
+          _currentScreenSize = c;
         },
         mobile: (w, h) {
           return _getTabletWidget(w);

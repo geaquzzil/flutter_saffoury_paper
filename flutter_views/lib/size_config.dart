@@ -28,6 +28,20 @@ CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
       CurrentScreenSize.MOBILE;
 }
 
+CurrentScreenSize findCurrentScreenSize(BuildContext context, {double? width}) {
+  width ??= MediaQuery.of(context).size.width;
+
+  if (isDesktop(context, maxWidth: width)) {
+    return CurrentScreenSize.DESKTOP;
+  } else if (isMobile(context, maxWidth: width)) {
+    return CurrentScreenSize.MOBILE;
+  } else if (isSmallTablet(context, maxWidth: width)) {
+    return CurrentScreenSize.SMALL_TABLET;
+  } else {
+    return CurrentScreenSize.LARGE_TABLET;
+  }
+}
+
 /// check for width is < [kMobileWidth]=599
 bool isMobileFromWidth(double maxWidth) {
   return maxWidth < kMobileWidth;
@@ -427,7 +441,8 @@ class ScreenHelperSliver extends StatelessWidget {
   final Widget Function(double width, double height) largeTablet;
   final Widget Function(double width, double height) desktop;
 
-  final Function(double width, double height)? onChangeLayout;
+  final Function(double width, double height, CurrentScreenSize c)?
+      onChangeLayout;
 
   final bool? requireAutoPadding;
 
@@ -475,7 +490,8 @@ class ScreenHelperSliver extends StatelessWidget {
         // if (maxWidth == null || maxLength == null) return SizedBox();
         debugPrint("layoutBuilder width $maxWidth height $maxLength");
 
-        onChangeLayout?.call(maxWidth, maxLength);
+        onChangeLayout?.call(maxWidth, maxLength,
+            findCurrentScreenSize(context, width: maxWidth));
 
         if (isMobile(context, maxWidth: maxWidth)) {
           addFramPost((p) => context

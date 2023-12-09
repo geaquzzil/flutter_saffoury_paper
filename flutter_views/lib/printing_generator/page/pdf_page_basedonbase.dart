@@ -65,11 +65,13 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
           onPressed: () => {}, label: Icon(Icons.add));
 
   @override
-  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize) => ListTile(
-        title: Text("BaseToolbar",
-            style: Theme.of(context).textTheme.headlineLarge),
-        subtitle: Text("Subtitle Toolbar"),
-      );
+  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize) => null;
+
+  //  ListTile(
+  //       title: Text("BaseToolbar",
+  //           style: Theme.of(context).textTheme.headlineLarge),
+  //       subtitle: Text("Subtitle Toolbar"),
+  //     );
 
   @override
   Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) => ListTile(
@@ -97,9 +99,9 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
 
   @override
   bool isPanesIsSliver(bool firstPane) {
-    if (firstPane) {
-      return true;
-    }
+    // if (firstPane) {
+    //   return true;
+    // }
     return false;
   }
 }
