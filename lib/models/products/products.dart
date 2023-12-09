@@ -976,8 +976,7 @@ class Product extends ViewAbstract<Product>
 //     return null;
 //   }
 
-  @override
-  PrintProduct? getPrintCommand(BuildContext context) => PrintProduct();
+  
 
   static String? intFromString(dynamic number) => number?.toString();
 

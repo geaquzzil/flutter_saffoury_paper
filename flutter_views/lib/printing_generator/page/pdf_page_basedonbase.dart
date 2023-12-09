@@ -11,11 +11,7 @@ class TestBasePage extends StatefulWidget {
 
 class _TestBasePageState extends BasePageState<TestBasePage> {
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize size) {
-    debugPrint("setPaddingWhenTowPane $size");
-    // return false;
-    return size == CurrentScreenSize.DESKTOP;
-  }
+  bool setPaddingWhenTowPane(CurrentScreenSize size) => false;
 
   @override
   getDesktopFirstPane(double width) {
@@ -86,11 +82,7 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
       null;
 
   @override
-  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize) =>
-      const ListTile(
-        title: Text("secound pane toolbar"),
-        subtitle: Text("Subtitle Toolbar"),
-      );
+  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize) => null;
 
   @override
   Widget? getSecondPaneFloatingActionButton(

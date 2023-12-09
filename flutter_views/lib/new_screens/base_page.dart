@@ -73,7 +73,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     return getBaseAppbar(getCurrentScreenSize()) != null;
   }
 
-  double _getCustomPaneProportion() {
+  double getCustomPaneProportion() {
     {
       if (MediaQuery.of(context).hinge != null) return 0.5;
       if (SizeConfig.isMediumFromScreenSize(context)) {
@@ -174,8 +174,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         ? getFirstPaneAppbar(getCurrentScreenSize())
         : getSecondPaneAppbar(getCurrentScreenSize());
 
-    Widget? body = widget;
-    //_getScrollContent(widget, appBarBody, firstPane);
+    Widget? body = _getScrollContent(widget, appBarBody, firstPane);
     return Scaffold(
       backgroundColor: ElevationOverlay.overlayColor(context, 0),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -183,7 +182,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       floatingActionButton: firstPane
           ? getFirstPaneFloatingActionButton(getCurrentScreenSize())
           : getSecondPaneFloatingActionButton(getCurrentScreenSize()),
-      appBar: isPanesIsSliver(firstPane)
+      appBar: isPanesIsSliver(firstPane) || appBarBody == null
           ? null
           : generateToolbar(customAppBar: appBarBody),
       body: body,
@@ -264,10 +263,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       _firstWidget = getFirstPane(w);
       return _setSubAppBar(_firstWidget, true)!;
     }
-    Widget? firstPaneFloating;
-    Widget? secondPaneFloating;
-    Widget? firstPaneAppbar;
-    Widget? secondPaneAppbar;
 
     if (isDesktop(context, maxWidth: w)) {
       _firstWidget = getDesktopFirstPane(w);
@@ -293,7 +288,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     return TowPaneExt(
       startPane: _firstWidget!,
       endPane: _secondWidget,
-      customPaneProportion: _getCustomPaneProportion(),
+      customPaneProportion: getCustomPaneProportion(),
     );
   }
 
@@ -317,6 +312,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           _drawerWidget!,
           Selector<DrawerMenuControllerProvider, bool>(
             builder: (__, isOpen, ___) {
+              debugPrint("drawer selector $isOpen");
               Widget toShowWidget;
               Widget clipRect = ClipRRect(
                   borderRadius: BorderRadius.circular(25),

@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -113,39 +114,55 @@ InputDecoration getDecorationWithoutDecoration(
       suffixText: viewAbstract.getTextInputSuffix(context, field));
 }
 
-InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
-    {String? field}) {
-  if (field != null) {
-    return InputDecoration(
-        // border: const UnderlineInputBorder(),
-        filled: true,
-        // fillColor: Theme.of(context).colorScheme.onBackground,
-        // errorText: "err",
-        icon: viewAbstract.getTextInputIcon(field),
-        // iconColor: context
-        //         .watch<ErrorFieldsProvider>()
-        //         .hasErrorField(viewAbstract, field)
-        //     ? Theme.of(context).colorScheme.error
-        //     : null,
-        hintText: viewAbstract.getTextInputHint(context, field: field),
-        labelText: viewAbstract.getTextInputLabel(context, field),
-        prefixText: viewAbstract.getTextInputPrefix(context, field),
-        suffixText: viewAbstract.getTextInputSuffix(context, field));
-  } else {
-    return InputDecoration(
-      border: const UnderlineInputBorder(),
-      filled: true,
+bool isDecorationFilled(CurrentScreenSize? c) {
+  if (c == null) return true;
+  if (c == CurrentScreenSize.MOBILE) return true;
+  return false;
+}
 
-      // errorText: "err",
-      icon: viewAbstract.getIcon(),
+InputDecoration getDecorationIconHintPrefix(
+    {String? prefix,
+    String? suffix,
+    String? hint,
+    String? label,
+    IconData? icon,
+    CurrentScreenSize? currentScreenSize}) {
+  return InputDecoration(
+      filled: isDecorationFilled(currentScreenSize),
+      border: !isDecorationFilled(currentScreenSize)
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+            )
+          : null,
+      contentPadding: !isDecorationFilled(currentScreenSize)
+          ? (const EdgeInsets.all(16))
+          : null,
       // iconColor: context
       //         .watch<ErrorFieldsProvider>()
       //         .hasErrorField(viewAbstract, field)
       //     ? Theme.of(context).colorScheme.error
       //     : null,
-      hintText: viewAbstract.getTextInputHint(context),
-      // labelText: viewAbstract.getMainHeaderLabelTextOnly(context),
-    );
+      icon: icon == null ? null : Icon(icon),
+      hintText: hint,
+      labelText: label,
+      prefixText: prefix,
+      suffixText: suffix);
+}
+
+InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
+    {String? field, CurrentScreenSize? currentScreenSize}) {
+  debugPrint("getDecoration currentScreenSize: $currentScreenSize");
+  if (field != null) {
+    return getDecorationIconHintPrefix(
+        prefix: viewAbstract.getTextInputPrefix(context, field),
+        suffix: viewAbstract.getTextInputSuffix(context, field),
+        hint: viewAbstract.getTextInputHint(context, field: field),
+        label: viewAbstract.getTextInputLabel(context, field),
+        icon: viewAbstract.getTextInputIconData(field));
+  } else {
+    return getDecorationIconHintPrefix(
+        icon: viewAbstract.getMainIconData(),
+        hint: viewAbstract.getTextInputHint(context));
   }
 }
 

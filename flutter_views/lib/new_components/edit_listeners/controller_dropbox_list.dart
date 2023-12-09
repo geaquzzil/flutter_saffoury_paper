@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/size_config.dart';
 
 import '../text_bold.dart';
 
@@ -7,6 +9,9 @@ class DropdownStringListControllerListener extends StatelessWidget {
   String tag;
   String hint;
   List<DropdownStringListItem?> list;
+
+  IconData? icon;
+  CurrentScreenSize? currentScreenSize;
   void Function(DropdownStringListItem? object) onSelected;
 
   DropdownStringListControllerListener(
@@ -14,6 +19,8 @@ class DropdownStringListControllerListener extends StatelessWidget {
       required this.tag,
       required this.hint,
       required this.list,
+      this.icon,
+      this.currentScreenSize,
       required this.onSelected})
       : super(key: key) {
     list.insert(0, null);
@@ -23,6 +30,8 @@ class DropdownStringListControllerListener extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
       name: tag,
+      decoration: getDecorationIconHintPrefix(
+          hint: hint, icon: icon, currentScreenSize: currentScreenSize),
       // decoration: getDecorationDropdownNewWithLabelAndValue(context),
       items: list
           .map((item) => DropdownMenuItem(

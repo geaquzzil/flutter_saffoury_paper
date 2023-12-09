@@ -9,21 +9,32 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import '../../../models/view_abstract_inputs_validaters.dart';
 import '../../edit/controllers/ext.dart';
 
 Widget wrapController(Widget controller,
-    {bool? requiredSpace, bool? isExpansionTile}) {
+    {bool? requiredSpace,
+    bool? isExpansionTile,
+    CurrentScreenSize? currentScreenSize}) {
   return Column(
     children: [
       Padding(
         padding: (isExpansionTile ?? false)
             ? EdgeInsets.zero
-            : const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            : EdgeInsets.symmetric(
+                // vertical: 0,
+                vertical: currentScreenSize == CurrentScreenSize.DESKTOP
+                    ? kDefaultPadding / 4
+                    : kDefaultPadding / 2,
+                horizontal: currentScreenSize == CurrentScreenSize.DESKTOP
+                    ? kDefaultPadding / 2
+                    : kDefaultPadding),
         child: controller,
       ),
-      if (requiredSpace ?? false) getSpace()
+      // if (currentScreenSize != CurrentScreenSize.DESKTOP)
+      // if (requiredSpace ?? false) getSpace()
     ],
   );
 }
@@ -60,36 +71,48 @@ Widget getContollerCheckBox(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
     required dynamic value,
-    bool enabled = true}) {
+    bool enabled = true,
+    CurrentScreenSize? currentScreenSize}) {
   Type? fieldType = viewAbstract.getMirrorFieldType(field);
 
-  return wrapController(FormBuilderCheckbox(
-    autovalidateMode: AutovalidateMode.always,
-    name: viewAbstract.getTag(field),
-    initialValue: fieldType == int ? (value == true ? 1 : 0) : value ?? false,
-    title: Text(viewAbstract.getTextCheckBoxTitle(context, field)),
-    subtitle: Text(viewAbstract.getTextCheckBoxDescription(context, field)),
-    onChanged: (value) {
-      viewAbstract.onCheckBoxChanged(context, field, value);
-    },
-    onSaved: (value) {
-      dynamic valueToSave =
-          fieldType == int ? (value == true ? 1 : 0) : value ?? false;
-      viewAbstract.setFieldValue(field, valueToSave);
+  return wrapController(
+      FormBuilderCheckbox(
+        autovalidateMode: AutovalidateMode.always,
+        name: viewAbstract.getTag(field),
+        // contentPadding: !isDecorationFilled(currentScreenSize)
+        //     ? (const EdgeInsets.all(16))
+        //     : EdgeInsets.zero,
 
-      if (viewAbstract.getFieldNameFromParent != null) {
-        viewAbstract.getParnet?.setFieldValue(
-            viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
-      }
-    },
-  ));
+        shape: currentScreenSize == CurrentScreenSize.DESKTOP
+            ? CircleBorder()
+            : null,
+        initialValue:
+            fieldType == int ? (value == true ? 1 : 0) : value ?? false,
+        title: Text(viewAbstract.getTextCheckBoxTitle(context, field)),
+        subtitle: Text(viewAbstract.getTextCheckBoxDescription(context, field)),
+        onChanged: (value) {
+          viewAbstract.onCheckBoxChanged(context, field, value);
+        },
+        onSaved: (value) {
+          dynamic valueToSave =
+              fieldType == int ? (value == true ? 1 : 0) : value ?? false;
+          viewAbstract.setFieldValue(field, valueToSave);
+
+          if (viewAbstract.getFieldNameFromParent != null) {
+            viewAbstract.getParnet?.setFieldValue(
+                viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+          }
+        },
+      ),
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getContolerColorPicker(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
     required dynamic value,
-    bool enabled = true}) {
+    bool enabled = true,
+    CurrentScreenSize? currentScreenSize}) {
   debugPrint("getContolerColorPicker field : $field value:$value");
 
   return wrapController(
@@ -98,7 +121,8 @@ Widget getContolerColorPicker(BuildContext context,
         initialValue: (value is String) ? value.fromHex() : value?.fromHex(),
         name: viewAbstract.getTag(field),
         // initialDate: (value as String?).toDateTime(),
-        decoration: getDecoration(context, viewAbstract, field: field),
+        decoration: getDecoration(context, viewAbstract,
+            field: field, currentScreenSize: currentScreenSize),
         onSaved: (newValue) {
           viewAbstract.setFieldValue(field, newValue?.toHex2());
           debugPrint('getContolerColorPicker onSave= ${field}:$newValue');
@@ -108,14 +132,16 @@ Widget getContolerColorPicker(BuildContext context,
           }
         },
       ),
-      requiredSpace: true);
+      requiredSpace: true,
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getControllerDateTime(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
     required dynamic value,
-    bool enabled = true}) {
+    bool enabled = true,
+    CurrentScreenSize? currentScreenSize}) {
   debugPrint("getControllerDateTime field : $field value:$value");
   return wrapController(
       FormBuilderDateTimePicker(
@@ -125,7 +151,8 @@ Widget getControllerDateTime(BuildContext context,
         firstDate: DateTime(2020),
         lastDate: DateTime(2025),
         // initialDate: (value as String?).toDateTime(),
-        decoration: getDecoration(context, viewAbstract, field: field),
+        decoration: getDecoration(context, viewAbstract,
+            field: field, currentScreenSize: currentScreenSize),
         onSaved: (newValue) {
           viewAbstract.setFieldValue(
               field, viewAbstract.getFieldDateTimeParseFromDateTime(newValue));
@@ -136,7 +163,8 @@ Widget getControllerDateTime(BuildContext context,
           }
         },
       ),
-      requiredSpace: true);
+      requiredSpace: true,
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getControllerDropdownCustomList(BuildContext context,
@@ -144,7 +172,8 @@ Widget getControllerDropdownCustomList(BuildContext context,
     required String field,
     required List<dynamic> list,
     GlobalKey<FormBuilderState>? formKey,
-    required Function(dynamic selectedObj) onSelected}) {
+    required Function(dynamic selectedObj) onSelected,
+    CurrentScreenSize? currentScreenSize}) {
   debugPrint("getControllerDropdownCustomList field = $field  list=> $list");
   return wrapController(
       FormBuilderDropdown<dynamic>(
@@ -174,36 +203,40 @@ Widget getControllerDropdownCustomList(BuildContext context,
                 ))
             .toList(),
       ),
-      requiredSpace: true);
+      requiredSpace: true,
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getControllerDropdownViewAbstractEnum(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
     required ViewAbstractEnum viewAbstractEnum,
-    required Function(ViewAbstractEnum? selectedEnum) onSelected}) {
-  return wrapController(FormBuilderDropdown<ViewAbstractEnum?>(
-    autovalidateMode: AutovalidateMode.always,
-    onChanged: (obj) {
-      viewAbstract.onDropdownChanged(context, field, obj);
-      viewAbstract.setFieldValue(field, obj);
-      debugPrint('getControllerDropdownViewAbstractEnum onChanged=   $obj');
-      onSelected(obj);
-    },
-    validator: viewAbstract.getTextInputValidatorCompose(context, field),
-    name: viewAbstract.getTag(field),
-    initialValue: viewAbstract.getFieldValue(field, context: context),
-    decoration:
-        getDecorationDropdown(context, viewAbstract, viewAbstractEnum, field),
-    items: dropdownGetValues(viewAbstractEnum)
-        .map((item) => DropdownMenuItem<ViewAbstractEnum>(
-              value: item,
-              child: Text(item == null
-                  ? dropdownGetEnterText(context, viewAbstractEnum)
-                  : viewAbstractEnum.getFieldLabelString(context, item)),
-            ))
-        .toList(),
-  ));
+    required Function(ViewAbstractEnum? selectedEnum) onSelected,
+    CurrentScreenSize? currentScreenSize}) {
+  return wrapController(
+      FormBuilderDropdown<ViewAbstractEnum?>(
+        autovalidateMode: AutovalidateMode.always,
+        onChanged: (obj) {
+          viewAbstract.onDropdownChanged(context, field, obj);
+          viewAbstract.setFieldValue(field, obj);
+          debugPrint('getControllerDropdownViewAbstractEnum onChanged=   $obj');
+          onSelected(obj);
+        },
+        validator: viewAbstract.getTextInputValidatorCompose(context, field),
+        name: viewAbstract.getTag(field),
+        initialValue: viewAbstract.getFieldValue(field, context: context),
+        decoration: getDecorationDropdown(
+            context, viewAbstract, viewAbstractEnum, field),
+        items: dropdownGetValues(viewAbstractEnum)
+            .map((item) => DropdownMenuItem<ViewAbstractEnum>(
+                  value: item,
+                  child: Text(item == null
+                      ? dropdownGetEnterText(context, viewAbstractEnum)
+                      : viewAbstractEnum.getFieldLabelString(context, item)),
+                ))
+            .toList(),
+      ),
+      currentScreenSize: currentScreenSize);
 }
 
 enum AutoCompleteFor { TABLE, NORMAL }
@@ -216,7 +249,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
     AutoCompleteFor? type,
     bool enabled = true,
     bool withDecoration = true,
-    required Function(ViewAbstract selectedViewAbstract) onSelected}) {
+    required Function(ViewAbstract selectedViewAbstract) onSelected,
+    CurrentScreenSize? currentScreenSize}) {
   // controller.selection = TextSelection(
   //   baseOffset: 0,
   //   extentOffset: controller.text.length,
@@ -254,7 +288,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
               : withDecoration
                   ? autoCompleteBySearchQuery
                       ? const InputDecoration()
-                      : getDecoration(context, viewAbstract, field: field)
+                      : getDecoration(context, viewAbstract,
+                          field: field, currentScreenSize: currentScreenSize)
                   : getDecorationWithoutDecoration(
                       context, viewAbstract, field),
           maxLength: viewAbstract.getTextInputMaxLength(field),
@@ -320,7 +355,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
-          : false);
+          : false,
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
@@ -332,7 +368,8 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
     AutoCompleteFor? type,
     bool enabled = true,
     bool withDecoration = true,
-    required Function(ViewAbstract selectedViewAbstract) onSelected}) {
+    required Function(ViewAbstract selectedViewAbstract) onSelected,
+    CurrentScreenSize? currentScreenSize}) {
   // controller.selection = TextSelection(
   //   baseOffset: 0,
   //   extentOffset: controller.text.length,
@@ -437,14 +474,16 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
-          : false);
+          : false,
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getControllerEditTextAutoComplete(BuildContext context,
     {required ViewAbstract viewAbstract,
     required String field,
     required TextEditingController controller,
-    bool enabled = true}) {
+    bool enabled = true,
+    CurrentScreenSize? currentScreenSize}) {
   return wrapController(
       FormBuilderTypeAheadCustom<String>(
           onTap: () => controller.selection = TextSelection(
@@ -493,7 +532,8 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
                 field: field, searchQuery: query);
           }),
       requiredSpace:
-          viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0);
+          viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0,
+      currentScreenSize: currentScreenSize);
 }
 
 Widget getControllerEditText(BuildContext context,
@@ -501,9 +541,10 @@ Widget getControllerEditText(BuildContext context,
     required String field,
     required TextEditingController controller,
     bool withDecoration = true,
-    bool enabled = true}) {
+    bool enabled = true,
+    CurrentScreenSize? currentScreenSize}) {
   debugPrint(
-      "getControllerEditText field $field length ${viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0} ");
+      "getControllerEditText field $field length ${viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0}  currentScreenSize $currentScreenSize");
   return wrapController(
       FormBuilderTextField(
         onTap: () => controller.selection = TextSelection(
@@ -520,7 +561,8 @@ Widget getControllerEditText(BuildContext context,
         textCapitalization: viewAbstract.getTextInputCapitalization(field),
         decoration: !withDecoration
             ? const InputDecoration()
-            : getDecoration(context, viewAbstract, field: field),
+            : getDecoration(context, viewAbstract,
+                field: field, currentScreenSize: currentScreenSize),
         keyboardType: viewAbstract.getTextInputType(field),
         inputFormatters: viewAbstract.getTextInputFormatter(field),
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -537,6 +579,7 @@ Widget getControllerEditText(BuildContext context,
           }
         },
       ),
+      currentScreenSize: currentScreenSize,
       requiredSpace:
           viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0);
 }

@@ -44,7 +44,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   void initState() {
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
-    // _animationController.forward();
+    _animationController.forward();
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
     super.initState();
   }
@@ -112,6 +112,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         SizedBox(
             height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
             child: buildDrawerFooter(context, isOpen)),
+        // NotificationPopupWidget()
         // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
 
         //   // const Spacer(),
@@ -135,11 +136,11 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         direction: isOpen ? Axis.horizontal : Axis.vertical,
         children: [
           //  Expanded(child: buildProfilePic(context, isOpen)),
-          // PopupWidget(
-          //     position: PreferredPosition.bottom,
-          //     child: Icon(Icons.settings_accessibility),
-          //     menuBuilder: () => SizedBox(
-          //         width: 700, height: 500, child: SettingAndProfileWeb())),
+          PopupWidget(
+              // position: PreferredPosition.bottom,
+              child: Icon(Icons.settings_accessibility),
+              menuBuilder: () => SizedBox(
+                  width: 700, height: 500, child: SettingAndProfileWeb())),
           if (!isOpen) const Expanded(child: DrawerSettingButton()),
           Expanded(
             child: CartIconWidget(
@@ -152,7 +153,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
             ),
           ),
           // if (AuthProvider.isLoggedIn(context))
-          Expanded(child: NotificationPopupWidget()),
+          NotificationPopupWidget(),
           if (isOpen) const Expanded(child: DrawerLanguageButton()),
         ],
       ),

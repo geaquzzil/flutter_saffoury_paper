@@ -488,7 +488,8 @@ class ScreenHelperSliver extends StatelessWidget {
         double maxWidth = constraints.maxWidth;
         double maxLength = constraints.maxHeight;
         // if (maxWidth == null || maxLength == null) return SizedBox();
-        debugPrint("layoutBuilder width $maxWidth height $maxLength");
+        debugPrint(
+            "layoutBuilder width $maxWidth height $maxLength currentScreenSize ${findCurrentScreenSize(context, width: maxWidth)}");
 
         onChangeLayout?.call(maxWidth, maxLength,
             findCurrentScreenSize(context, width: maxWidth));

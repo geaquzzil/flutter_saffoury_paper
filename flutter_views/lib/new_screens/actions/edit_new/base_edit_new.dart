@@ -43,12 +43,15 @@ class BaseEditWidget extends StatelessWidget {
 
   bool requireOnValidateEvenIfNull;
   bool disableCheckEnableFromParent;
+
+  CurrentScreenSize? currentScreenSize;
   BaseEditWidget(
       {super.key,
       this.isStandAloneField = false,
       required this.viewAbstract,
       required this.isTheFirst,
       this.formKey,
+      this.currentScreenSize,
       this.parentFormKey,
       this.disableCheckEnableFromParent = false,
       this.requireOnValidateEvenIfNull = false,
@@ -60,7 +63,7 @@ class BaseEditWidget extends StatelessWidget {
         debugLabel: "${viewAbstract.runtimeType}");
     viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
     viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
-
+    debugPrint("BaseEditNew currentScreenSize $currentScreenSize");
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;
     if (!isRequiredSubViewAbstract) {
@@ -426,7 +429,8 @@ class BaseEditWidget extends StatelessWidget {
           enabled: isFieldEnabled(field),
           viewAbstract: viewAbstract,
           field: field,
-          controller: getController(context, field: field, value: fieldValue));
+          controller: getController(context, field: field, value: fieldValue),
+          currentScreenSize: currentScreenSize);
     }
     if (isAutoCompleteByCustomList) {
       // return wrapController(Text("dsa"));
@@ -456,7 +460,8 @@ class BaseEditWidget extends StatelessWidget {
             viewAbstract: viewAbstract,
             field: field,
             controller: getController(context, field: field, value: fieldValue),
-            enabled: isFieldEnabled(field));
+            enabled: isFieldEnabled(field),
+            currentScreenSize: currentScreenSize);
       }
       return getControllerEditTextViewAbstractAutoComplete(
         context,
@@ -489,7 +494,8 @@ class BaseEditWidget extends StatelessWidget {
                 parent: viewAbstract,
                 viewAbstract: fieldValue,
                 field: field),
-            requiredSpace: true);
+            requiredSpace: true,
+            currentScreenSize: currentScreenSize);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_API) {
         return wrapController(
@@ -499,12 +505,14 @@ class BaseEditWidget extends StatelessWidget {
                 parent: viewAbstract,
                 viewAbstract: fieldValue,
                 field: field),
-            requiredSpace: true);
+            requiredSpace: true,
+            currentScreenSize: currentScreenSize);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD) {
         return BaseEditWidget(
           viewAbstract: fieldValue,
           isStandAloneField: true,
+          currentScreenSize: currentScreenSize,
           isTheFirst: false,
           onValidate: ((ob) {
             // String? fieldName = ob?.getFieldNameFromParent()!;
@@ -518,33 +526,32 @@ class BaseEditWidget extends StatelessWidget {
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(
-          autoCompleteBySearchQuery: true,
-          context,
-          enabled: isFieldEnabled(field),
-          viewAbstract: fieldValue,
-          // enabled: isFieldEnabled(field),
-          field: field,
-          type: AutoCompleteFor.NORMAL,
-          controller: TextEditingController(
-              text: fieldValue.isEditing()
-                  ? fieldValue.getMainHeaderTextOnly(context)
-                  : ''),
-          onSelected: (selectedViewAbstract) {
-            // viewAbstract = selectedViewAbstract;
-            fieldValue.parent?.setFieldValue(field, selectedViewAbstract);
-            fieldValue.parent
-                ?.onAutoComplete(context, field, selectedViewAbstract);
+            autoCompleteBySearchQuery: true,
+            context,
+            enabled: isFieldEnabled(field),
+            viewAbstract: fieldValue,
+            // enabled: isFieldEnabled(field),
+            field: field,
+            type: AutoCompleteFor.NORMAL,
+            controller: TextEditingController(
+                text: fieldValue.isEditing()
+                    ? fieldValue.getMainHeaderTextOnly(context)
+                    : ''), onSelected: (selectedViewAbstract) {
+          // viewAbstract = selectedViewAbstract;
+          fieldValue.parent?.setFieldValue(field, selectedViewAbstract);
+          fieldValue.parent
+              ?.onAutoComplete(context, field, selectedViewAbstract);
 
-            refreshControllers(context, field);
-            // //TODO viewAbstractChangeProvider.change(viewAbstract);
-            // // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
-          },
-        );
+          refreshControllers(context, field);
+          // //TODO viewAbstractChangeProvider.change(viewAbstract);
+          // // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
+        }, currentScreenSize: currentScreenSize);
       }
 
       return BaseEditWidget(
         viewAbstract: fieldValue,
         parentFormKey: formKey,
+        currentScreenSize: currentScreenSize,
         formKey: getSubFormState(context, field),
         isTheFirst: false,
         onValidate: ((ob) {
@@ -567,14 +574,16 @@ class BaseEditWidget extends StatelessWidget {
             viewAbstract: viewAbstract,
             field: field,
             value: fieldValue,
-            enabled: isFieldEnabled(field));
+            enabled: isFieldEnabled(field),
+            currentScreenSize: currentScreenSize);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.COLOR_PICKER) {
         return getContolerColorPicker(context,
             viewAbstract: viewAbstract,
             field: field,
             value: fieldValue,
-            enabled: isFieldEnabled(field));
+            enabled: isFieldEnabled(field),
+            currentScreenSize: currentScreenSize);
       } else if (textFieldTypeVA == ViewAbstractControllerInputType.IMAGE) {
         return EditControllerFilePicker(
           viewAbstract: viewAbstract,
@@ -586,14 +595,16 @@ class BaseEditWidget extends StatelessWidget {
               viewAbstract: viewAbstract,
               field: field,
               value: fieldValue,
-              enabled: isFieldEnabled(field));
+              enabled: isFieldEnabled(field),
+              currentScreenSize: currentScreenSize);
         } else {
           return getControllerEditText(context,
               viewAbstract: viewAbstract,
               field: field,
               controller:
                   getController(context, field: field, value: fieldValue),
-              enabled: isFieldEnabled(field));
+              enabled: isFieldEnabled(field),
+              currentScreenSize: currentScreenSize);
         }
       }
     }
