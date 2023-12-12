@@ -36,7 +36,7 @@ class _DropdownStringListControllerListenerByIconState
     extends State<DropdownStringListControllerListenerByIcon> {
   bool firstRun = true;
   DropdownStringListItem? lastSelected;
-  final List<DropdownStringListItem?> _list = [null];
+  List<DropdownStringListItem?> _list = [null];
   CustomPopupMenuItem<DropdownStringListItem?> buildMenuItem(
       BuildContext context, DropdownStringListItem? e) {
     return CustomPopupMenuItem<DropdownStringListItem?>(
@@ -83,10 +83,28 @@ class _DropdownStringListControllerListenerByIconState
   @override
   void initState() {
     lastSelected = widget.initialValue;
-    debugPrint(
-        "buildMenuItem lastSelected $lastSelected initailValue ${widget.initialValue}");
+
     _list.addAll(widget.list);
+    debugPrint(
+        "DropdownStringListControllerListenerByIcon buildMenuItem lastSelected $lastSelected initailValue ${widget.initialValue} list $_list");
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    debugPrint(
+        "DropdownStringListControllerListenerByIcon didChangeDependencies");
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(
+      covariant DropdownStringListControllerListenerByIcon oldWidget) {
+    debugPrint("DropdownStringListControllerListenerByIcon didUpdateWidget");
+    // lastSelected = widget.initialValue;
+    _list = [null];
+    _list.addAll(widget.list);
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

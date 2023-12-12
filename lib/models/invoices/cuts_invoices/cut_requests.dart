@@ -21,6 +21,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_custom_in
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -59,7 +60,8 @@ class CutRequest extends ViewAbstract<CutRequest>
     implements
         PrintableCustomFromPDFInterface<PrintCutRequest>,
         ModifiablePrintableInterface<PrintCutRequest>,
-        ListableInterface<SizesCutRequest> {
+        ListableInterface<SizesCutRequest>,
+        WebCategoryGridableInterface<CutRequest> {
   // int? ProductID;
   // int? CustomerID;
   // int? EmployeeID;
@@ -704,6 +706,28 @@ class CutRequest extends ViewAbstract<CutRequest>
               color: pdf2.PdfColors.grey400,
               fontWeight: pdf.FontWeight.bold,
             )));
+  }
+
+  @override
+  String? getWebCategoryGridableDescription(BuildContext context) {
+    if (cut_status == null) return null;
+    return cut_status!.getFieldLabelString(context, cut_status!);
+    // return getCutStatusColor()
+  }
+
+  @override
+  CutRequest getWebCategoryGridableInterface(BuildContext context) {
+    return CutRequest();
+  }
+
+  @override
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
+    return null;
+  }
+
+  @override
+  String getWebCategoryGridableTitle(BuildContext context) {
+    return getMainHeaderTextOnly(context);
   }
 }
 

@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -578,6 +579,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         showLeadingAsHamborg: false,
         key: draggableHomeState,
         valueNotifierExpandType: expandType,
+
         // bottomNavigationBarHeight: 80,
         bottomNavigationBar: isCartableInterface()
             ? BottomAppBar(
@@ -733,8 +735,34 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     return AppBar(
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: getExtras().getCardLeading(context),
+        child: Row(
+          children: [
+            Selector<ActionViewAbstractProvider, List<StackedActions?>>(
+              builder: (_, v, __) {
+                debugPrint("SelectorActionViewAbstractProvider ${v.length}");
+                if (v.isEmpty) {
+                  return SizedBox();
+                }
+                // if (v.length == 1) {
+                //   if (v[0]?.isMain ?? false) {
+                //     return SizedBox();
+                //   }
+                // }
+                int i = v.length - 1;
+                return BackButton(onPressed: () {
+                  context.read<ActionViewAbstractProvider>().pop();
+                  // context
+                  //     .read<ActionViewAbstractProvider>()
+                  //     .change(v[i]!.object!, v[i]!.serverActions!,removeLast: true);
+                });
+              },
+              selector: (p, p0) => p0.getStackedActions,
+            ),
+            getExtras().getCardLeading(context),
+          ],
+        ),
       ),
+      leadingWidth: 120,
       title: Text(getExtras().getMainHeaderTextOnly(context)),
       actions: [
         ActionsOnHeaderPopupWidget(

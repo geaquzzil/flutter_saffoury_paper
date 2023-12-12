@@ -6,38 +6,49 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 class ActionViewAbstractProvider with ChangeNotifier {
   ViewAbstract? _object;
   ServerActions? serverActions;
-  List<StackedActions?> stack = [null];
+  List<StackedActions?> _stack = [];
   ActionViewAbstractProvider();
   Widget? _customWidget;
   Widget? get getCustomWidget => _customWidget;
   ViewAbstract? get getObject => _object;
   ViewAbstract get getObjectNotNull => _object ?? PermissionActionAbstract();
   ServerActions? get getServerActions => serverActions;
-  List<StackedActions?> get getStackedActions => stack;
+  List<StackedActions?> get getStackedActions => _stack;
   void changeCustomWidget(Widget widget) {
     _customWidget = widget;
     _object = null;
     notifyListeners();
   }
 
-  void change(ViewAbstract object, ServerActions? serverActions) {
+  void change(ViewAbstract object, ServerActions? serverActions,
+      {bool removeLast = false}) {
     _customWidget = null;
     _object = object;
     this.serverActions = serverActions;
-    if (stack.isNotEmpty) {
-      stack.removeWhere(
-          (element) => element?.object?.isEqualsAsType(object) ?? false);
-    }
-    stack.add(StackedActions(object, serverActions, stack.isEmpty));
+    // if (_stack.isNotEmpty) {
+    //   if (removeLast) {
+    //     _stack.removeLast();
+    //     // (element) => element?.object?.isEqualsAsType(object) ?? false);
+    //   }
+    // }
+    _stack.add(StackedActions(object, serverActions, _stack.isEmpty));
+    debugPrint("popS change ${_stack.length}");
     notifyListeners();
   }
 
   void pop() {
-    if (stack.isNotEmpty) {
-      StackedActions? s = stack.removeLast();
+    if (_stack.isNotEmpty) {
+      StackedActions? s = _stack.removeLast();
+      s = _stack.removeLast();
+      // s = _stack.removeLast();
+      debugPrint("popS lastItem $s");
+
       if (s != null) {
         _object = s.object;
         serverActions = s.serverActions;
+        debugPrint(
+            "popS ${_object?.getTableNameApi()} serverActions $serverActions  list $_stack");
+        // _stack.removeAt(_stack.length - 2);
         notifyListeners();
       }
     }
@@ -50,6 +61,11 @@ class StackedActions {
   ViewAbstract? object;
   ServerActions? serverActions;
   StackedActions(this.object, this.serverActions, this.isMain);
+
+  @override
+  String toString() {
+    return "${object?.getTableNameApi()} serverActions $serverActions";
+  }
 }
 
 class StackList<E> {

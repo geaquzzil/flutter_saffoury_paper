@@ -105,4 +105,7 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
 
   @override
   Widget? getSecondPaneBottomSheet() => null;
+
+  @override
+  bool setBodyPadding(bool firstPane) => false;
 }

@@ -899,6 +899,7 @@ class Product extends ViewAbstract<Product>
     if (action == ServerActions.list) return [];
     return [
       TabControllerHelper(AppLocalizations.of(context)!.movments,
+      
           draggableHeaderWidget: Text(
             "Movments",
             style: Theme.of(context)

@@ -14,7 +14,9 @@ import 'package:tuple/tuple.dart';
 import '../../../screens/action_screens/edit_details_page.dart';
 
 class BaseSharedDetailsView extends StatelessWidget {
-  BaseSharedDetailsView({Key? key}) : super(key: key);
+  ViewAbstract? viewAbstract;
+  ServerActions? action;
+  BaseSharedDetailsView({super.key, this.viewAbstract, this.action});
 
   @override
   Widget build(BuildContext context) {

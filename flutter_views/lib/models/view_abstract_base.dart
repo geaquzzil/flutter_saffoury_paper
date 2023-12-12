@@ -294,8 +294,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return [
       TabControllerHelper(
         getMainHeaderTextOnly(context),
-        draggableSwithHeaderFromAppbarToScroll:
-            getTabControllerFirstHeaderWidget(context),
+        // draggableSwithHeaderFromAppbarToScroll:
+        //     getTabControllerFirstHeaderWidget(context),
         // getMainIconData(),
       ),
       ...getCustomTabList(context)

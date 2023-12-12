@@ -72,7 +72,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   }
 
   void changeWithFilterable(BuildContext context, ViewAbstract object) {
-    _object = object;
+    _object = object.getCopyInstance();
     _standAloneCustomViewApi = null;
     notifyListeners();
   }

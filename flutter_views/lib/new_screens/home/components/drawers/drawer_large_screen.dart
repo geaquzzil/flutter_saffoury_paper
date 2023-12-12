@@ -107,10 +107,10 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
               padding: const EdgeInsets.all(kDefaultPadding),
               child: buildHeader(context, isOpen),
             )),
-        SizedBox(
-          height: !isOpen
-              ? (v.item2 ?? 1000) * .5
-              : v.item2.toNonNullable() - (100 + (v.item2 ?? 1000) * .25),
+        Expanded(
+          // height: !isOpen
+          //     ? (v.item2 ?? 1000) * .5
+          //     : v.item2.toNonNullable() - (100 + (v.item2 ?? 1000) * .25),
           child: CustomScrollView(
             slivers: [
               // SliverToBoxAdapter(child: buildHeader(context, isOpen)),
@@ -119,14 +119,14 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
             ],
           ),
         ),
-
+        buildDrawerFooter(context, isOpen)
         // const Divider(height: 2),
-        AnimatedSize(
-          duration: Duration(milliseconds: 100),
-          child: SizedBox(
-              height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
-              child: buildDrawerFooter(context, isOpen)),
-        )
+        // AnimatedSize(
+        //   duration: Duration(milliseconds: 100),
+        //   child: SizedBox(
+        //       height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
+        //       child: buildDrawerFooter(context, isOpen)),
+        // )
         // NotificationPopupWidget()
         // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
 
@@ -142,7 +142,8 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     return Padding(
       padding: const EdgeInsets.all(kDefaultPadding),
       child: Flex(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
+
         crossAxisAlignment: CrossAxisAlignment.end,
 
         mainAxisAlignment: MainAxisAlignment.center,
@@ -152,24 +153,24 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         direction: isOpen ? Axis.horizontal : Axis.vertical,
         children: [
           //  Expanded(child: buildProfilePic(context, isOpen)),
-          Expanded(
-            child: PopupWidget(
-                // position: PreferredPosition.bottom,
-                child: Icon(Icons.settings_accessibility),
-                menuBuilder: () => SizedBox(
-                    width: 700, height: 500, child: SettingAndProfileWeb())),
-          ),
-          if (!isOpen) const Expanded(child: DrawerSettingButton()),
-          Expanded(
-            child: CartIconWidget(
-              returnNillIfZero: false,
-              onPressed: () {
-                context
-                    .read<DrawerMenuControllerProvider>()
-                    .controlEndDrawerMenu();
-              },
-            ),
-          ),
+          // Expanded(
+          //   child: PopupWidget(
+          //       // position: PreferredPosition.bottom,
+          //       child: Icon(Icons.settings_accessibility),
+          //       menuBuilder: () => SizedBox(
+          //           width: 700, height: 500, child: SettingAndProfileWeb())),
+          // ),
+          // if (!isOpen) const Expanded(child: DrawerSettingButton()),
+          // Expanded(
+          //   child: CartIconWidget(
+          //     returnNillIfZero: false,
+          //     onPressed: () {
+          //       context
+          //           .read<DrawerMenuControllerProvider>()
+          //           .controlEndDrawerMenu();
+          //     },
+          //   ),
+          // ),
           // if (AuthProvider.isLoggedIn(context))
           NotificationPopupWidget(),
           if (isOpen) const Expanded(child: DrawerLanguageButton()),

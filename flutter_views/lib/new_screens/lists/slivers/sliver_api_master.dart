@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
@@ -32,6 +33,7 @@ import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -56,6 +58,9 @@ class SliverApiMaster extends StatefulWidget {
   bool buildToggleView;
   bool buildFilterableView;
 
+  CurrentScreenSize? currentScreenSize;
+  String? tableName;
+
   List<ViewAbstract>? initialSelectedList;
   void Function(List<ViewAbstract> selectedList)? onSelectedListChange;
   ValueNotifier<List<ViewAbstract>>? onSelectedListChangeValueNotifier;
@@ -67,6 +72,7 @@ class SliverApiMaster extends StatefulWidget {
       {super.key,
       this.setParentForChild,
       this.viewAbstract,
+      this.tableName,
       this.buildAppBar = true,
       this.buildSearchWidgetAsEditText = false,
       this.showLeadingAsHamborg = true,
@@ -75,6 +81,7 @@ class SliverApiMaster extends StatefulWidget {
       this.buildToggleView = true,
       this.initialSelectedList,
       this.onSelectedListChange,
+      this.currentScreenSize,
       this.onSelectedListChangeValueNotifier,
       this.fetshListAsSearch = false,
       this.buildFabIfMobile = true});
@@ -142,6 +149,11 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     }
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
+    } else if (widget.tableName != null) {
+      //todo check for table name if exits first
+      viewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(widget.tableName!)!;
     } else {
       viewAbstract = drawerViewAbstractObsever.getObject;
     }
@@ -173,19 +185,32 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) {
         debugPrint(
-            "SliverList ViewAbstract has changed from DrawerMenuController");
-        if (widget.viewAbstract == null) {
-          viewAbstract = value;
-          fetshListWidgetBinding();
-          debugPrint(
-              "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
-        }
+            "drawerViewAbstractObsever SliverList ViewAbstract has changed from DrawerMenuController ${value.getTableNameApi()} customMap ${value.getCustomMap}");
+        // if (viewAbstract== null) {
+        //   viewAbstract = value;
+        //   fetshListWidgetBinding();
+        //   debugPrint(
+        //       "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
+        // }
+        // view
+        // if (!value.isEqualsAsType(viewAbstract)) {
+        //   viewAbstract = value;
+        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+        //     _scrollTop();
+        //     fetshList();
+        //   });
+        //   // fetshListWidgetBinding();
+        // }
+        viewAbstract = value;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollTop();
+          fetshList();
+        });
+
         return getBuildBodyDraggable();
       },
       selector: (p0, p1) => p1.getObject,
     );
-    return getBuildBodyDraggable();
-    return getBuildBodyNormal();
   }
 
   Widget getAppbarTitle() {
@@ -341,9 +366,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 [],
 
           if (widget.buildSearchWidget) getSearchWidget(),
-
-          //todo  type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element'
           if (widget.buildFilterableView) getFilterableWidget(),
+
+          // SliverToBoxAdapter(
+          //   child: FiltersAndSelectionListHeader(
+          //       viewAbstract: viewAbstract,
+          //       listProvider: listProvider,
+          //       customKey: findCustomKey()),
+          // ),
           if (widget.buildToggleView) getToggleView(),
           ValueListenableBuilder<ExpandType>(
               valueListenable: expandTypeOnlyOnExpand,
@@ -361,74 +391,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   bool canShowHeaderWidget() {
     return false;
     return SizeConfig.isMobileFromScreenSize(context);
-  }
-
-  WillPopScope getBuildBodyNormal() {
-    return WillPopScope(
-      onWillPop: () async {
-        if (isDialOpen.value) {
-          isDialOpen.value = false;
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        floatingActionButton: SpeedDial(
-          openCloseDial: isDialOpen,
-          animatedIcon: AnimatedIcons.menu_close,
-          overlayColor: Colors.black,
-          overlayOpacity: .4,
-          spacing: 12,
-          spaceBetweenChildren: 12,
-          // backgroundColor: Colors.black,
-          children: [
-            SpeedDialChild(
-              child: const Icon(Icons.add),
-            ),
-          ],
-        ),
-        body: getBuildBody(),
-      ),
-    );
-  }
-
-  Selector<DrawerMenuControllerProvider, ViewAbstract<dynamic>> getBuildBody() {
-    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
-      builder: (context, value, child) {
-        debugPrint(
-            "SliverList ViewAbstract has changed from DrawerMenuController");
-        if (widget.viewAbstract == null) {
-          viewAbstract = value;
-          fetshListWidgetBinding();
-          debugPrint(
-              "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
-        }
-        return getBody(context);
-      },
-      selector: (p0, p1) => p1.getObject,
-    );
-  }
-
-  CustomScrollView getBody(BuildContext context) {
-    return CustomScrollView(
-      controller: _scrollController,
-      slivers: [
-        if (widget.buildAppBar) getAppBar(context),
-        if (widget.buildSearchWidget) getSearchWidget(),
-        //todo type 'Null' is not a subtype of type 'DropdownStringListItem' of 'element' if (widget.buildFilterableView) getFilterableWidget(),
-        if (widget.buildToggleView) getToggleView(),
-        // ValueListenableBuilder<bool>(
-        //     valueListenable: valueNotifierCameraMode,
-        //     builder: (context, value, child) {
-        //       if (!value) {
-        //         scanedQr = null;
-        //         return getListSelector();
-        //       }
-        //       _scrollTop();
-        //       return getQrCodeSelector();
-        //     })
-      ],
-    );
   }
 
   void _scrollTop() {
@@ -539,8 +501,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getSliverGrid(int count, bool isLoading) {
     return SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              isLargeScreenFromScreenSize(widget.currentScreenSize) ? 3 : 2,
           crossAxisSpacing: kDefaultPadding / 2,
           mainAxisSpacing: kDefaultPadding / 2,
           childAspectRatio: 1,
@@ -621,11 +584,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         return SliverPersistentHeader(
             pinned: true,
             delegate: SliverAppBarDelegatePreferedSize(
+                shouldRebuildWidget: true,
                 child: PreferredSize(
-              preferredSize: Size.fromHeight(v > 0 ? 140 : 60.0),
-              child: FiltersAndSelectionListHeader(
-                  listProvider: listProvider, customKey: findCustomKey()),
-            )));
+                  preferredSize: Size.fromHeight(v > 0 ? 140 : 60.0),
+                  child: FiltersAndSelectionListHeader(
+                      viewAbstract: viewAbstract,
+                      listProvider: listProvider,
+                      customKey: findCustomKey()),
+                )));
       },
       selector: (p0, p1) => p1.getCount(),
     );

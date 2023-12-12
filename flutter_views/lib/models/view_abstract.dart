@@ -7,11 +7,11 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
-  @JsonKey(includeToJson: true,includeFromJson: false)
+  @JsonKey(includeToJson: true, includeFromJson: false)
   bool? delete;
-  @JsonKey(includeToJson: false,includeFromJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   bool? selected;
-    @JsonKey(includeToJson: false,includeFromJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   bool? _isScannedFromQrCode;
 
   ViewAbstract() : super();
@@ -167,6 +167,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
         getLastSearchViewByTextInputList);
     (newObject).textFieldController = textFieldController;
 
+    //todo i added this for notify filter and sort by sliver api master
+    (newObject).setCustomMap(getCustomMap);
+
     return newObject;
   }
 
@@ -208,8 +211,6 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action}) {}
-
-      
 }
 
 class ListableDataRow {

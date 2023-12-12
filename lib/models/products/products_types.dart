@@ -12,9 +12,11 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 part 'products_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -115,7 +117,7 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   IconData getMainIconData() {
-    return Icons.type_specimen_outlined;
+    return Icons.stacked_line_chart_outlined;
   }
 
   @override
@@ -125,6 +127,16 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
+    // ViewAbstract v = context.read<DrawerMenuControllerProvider>().getObject;
+    // var d = v.getCustomMap;
+    // if (d.containsKey("ASC")) {
+    //   String k = d["ASC"]!;
+    //   return "${getFieldLabel(context, k)}: ${getFieldValueCheckType(context, k)}";
+    // }
+    // if (d.containsKey("DESC")) {
+    //   String k = d["DESC"]!;
+    //   return "${getFieldLabel(context, k)}: ${getFieldValueCheckType(context, k)}";
+    // }
     return AppLocalizations.of(context)!.products_type;
   }
 

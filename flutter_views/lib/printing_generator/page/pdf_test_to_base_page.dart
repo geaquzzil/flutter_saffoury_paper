@@ -8,9 +8,12 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:pdf/pdf.dart' as pdf;
@@ -47,6 +50,7 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
 
   @override
   getDesktopFirstPane(double width) {
+    return getFirstPane(width);
     ViewAbstract v = context.read<DrawerMenuControllerProvider>().getObject;
     debugPrint("gettingDesktopFirstPane ");
     // return const Center(child: Text(" this is a desktop body second pane"));
@@ -112,10 +116,21 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
 
   @override
   getDesktopSecondPane(double width) {
+    return BaseSharedDetailsView();
+    return null;
     ViewAbstract v = context.read<DrawerMenuControllerProvider>().getObject;
     double pane = getCustomPaneProportion();
     return Column(
       children: [
+        // MaterialBanner(
+        //   content: Text('This is a MaterialBanner'),
+        //   actions: <Widget>[
+        //     TextButton(
+        //       onPressed: null,
+        //       child: Text('DISMISS'),
+        //     ),
+        //   ],
+        // ),
         Expanded(
           child: PdfPreview(
               pdfFileName: (v as PrintableMaster).getPrintableQrCodeID(),
@@ -193,17 +208,24 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
   }
 
   @override
-  getFirstPane(double width) => getDesktopFirstPane(width);
+  getFirstPane(double width) => SliverApiMaster(
+        tableName: "products_inputs",
+        currentScreenSize: getCurrentScreenSize(),
+        buildFabIfMobile: getCurrentScreenSize() != CurrentScreenSize.DESKTOP,
+      );
 
   @override
   getSecoundPane(double width) => getDesktopSecondPane(width);
 
   @override
-  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) => ListTile(
-        title: Text("first pane tool bar",
-            style: Theme.of(context).textTheme.headlineLarge),
-        subtitle: Text("Subtitle Toolbar"),
-      );
+  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) {
+    return null;
+    return ListTile(
+      title: Text("first pane tool bar",
+          style: Theme.of(context).textTheme.headlineLarge),
+      subtitle: Text("Subtitle Toolbar"),
+    );
+  }
 
   @override
   Widget? getFirstPaneFloatingActionButton(
@@ -211,21 +233,43 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
       null;
 
   @override
-  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize) => null;
+  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize) {
+    return null;
+    return Selector<ActionViewAbstractProvider, List<StackedActions?>>(
+      builder: (_, v, __) {
+        debugPrint("SelectorActionViewAbstractProvider ${v.length}");
+        if (v.isEmpty || v.length == 1) {
+          return SizedBox();
+        }
+        int i = v.length - 1;
+        return ListTile(
+          leading: BackButton(onPressed: () {
+            context.read<ActionViewAbstractProvider>().pop();
+            // context
+            //     .read<ActionViewAbstractProvider>()
+            //     .change(v[i]!.object!, v[i]!.serverActions!,removeLast: true);
+          }),
+        );
+      },
+      selector: (p, p0) => p0.getStackedActions,
+    );
+  }
 
   @override
   Widget? getSecondPaneFloatingActionButton(
-          CurrentScreenSize currentScreenSize) =>
-      FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.print),
-      );
+      CurrentScreenSize currentScreenSize) {
+    return null;
+    return FloatingActionButton(
+      onPressed: () {},
+      child: Icon(Icons.print),
+    );
+  }
 
   @override
   bool isPanesIsSliver(bool firstPane) => false;
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) => true;
+  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) => false;
 
   @override
   Widget? getBaseBottomSheet() => null;
@@ -255,8 +299,9 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
   @override
   Widget? getSecondPaneBottomSheet() {
     return null;
+    // BottomNavigationBar(items: items)
     return BottomAppBar(
-      color: Colors.transparent,
+      // color: Colors.transparent,
       // color: Theme.of(context).colorScheme.surface,
       // elevation: 2,
       shape: const AutomaticNotchedShape(RoundedRectangleBorder(
@@ -266,27 +311,32 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
             bottomRight: Radius.circular(25),
             topRight: Radius.circular(25)),
       )),
-      child: Row(
-        // mainAxisSize: ,
-        children: [
-          IconButton(
-            // iconSize: 40,
-            // padding: EdgeInsets.all(20),
-            // hoverColor: Colors.red,
-            icon: Icon(Icons.arrow_left),
-            onPressed: () {},
-          ),
-          SizedBox(width: 20, child: TextFormField()),
-          Text("of 1"),
-          IconButton(
-            // iconSize: 40,
-            // padding: EdgeInsets.all(20),
-            // hoverColor: Colors.red,
-            icon: Icon(Icons.arrow_right),
-            onPressed: () {},
-          ),
-        ],
+      child: Expanded(
+        child: Row(
+          // mainAxisSize: ,
+          children: [
+            IconButton(
+              // iconSize: 40,
+              // padding: EdgeInsets.all(20),
+              // hoverColor: Colors.red,
+              icon: Icon(Icons.arrow_left),
+              onPressed: () {},
+            ),
+            SizedBox(width: 20, child: TextFormField()),
+            Text("of 1"),
+            IconButton(
+              // iconSize: 40,
+              // padding: EdgeInsets.all(20),
+              // hoverColor: Colors.red,
+              icon: Icon(Icons.arrow_right),
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
     );
   }
+
+  @override
+  bool setBodyPadding(bool firstPane) => false;
 }

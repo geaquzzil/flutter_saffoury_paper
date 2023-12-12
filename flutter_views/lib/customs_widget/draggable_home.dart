@@ -216,8 +216,8 @@ class DraggableHomeState extends State<DraggableHome>
         MediaQuery.of(context).size.height * (widget.stretchMaxHeight);
 
     return Scaffold(
-      backgroundColor: 
-           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor:
+          widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
       body: PageStorage(
         bucket: bucket,

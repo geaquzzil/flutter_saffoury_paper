@@ -2,12 +2,15 @@ import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/converters.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonIntToString()
-abstract class BaseWithNameString<T> extends ViewAbstract<T> {
+abstract class BaseWithNameString<T> extends ViewAbstract<T>
+    implements WebCategoryGridableInterface<ViewAbstract> {
   @JsonKey(
     fromJson: intFromString,
   )
@@ -87,4 +90,21 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T> {
   Map<String, String> getFieldLabelMap(BuildContext context) =>
       {"name": getMainHeaderLabelTextOnly(context)};
   static String? intFromString(dynamic number) => number?.toString();
+
+  @override
+  String getWebCategoryGridableTitle(BuildContext context) {
+    return getMainHeaderTextOnly(context);
+  }
+
+  @override
+  String? getWebCategoryGridableDescription(BuildContext context) => null;
+
+  @override
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) =>
+      Product()..setCustomMap({"<${getForeignKeyName()}>": getIDString()});
+
+  @override
+  BaseWithNameString getWebCategoryGridableInterface(BuildContext context) {
+    return this;
+  }
 }

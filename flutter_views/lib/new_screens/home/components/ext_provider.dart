@@ -46,6 +46,8 @@ List<ItemModel> getListOfProfileSettings(BuildContext context,
 void notifyListApi(BuildContext context) {
   ViewAbstract? v = context.read<DrawerMenuControllerProvider>().getObject;
   v.setFilterableMap(context.read<FilterableProvider>().getList);
+  debugPrint(
+      "notifyListApi viewAbstract ${v.getTableNameApi()} customMap ${v.getCustomMap}");
   context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
 }
 

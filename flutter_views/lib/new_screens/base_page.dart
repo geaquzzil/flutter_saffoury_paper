@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
@@ -35,6 +37,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
 
+  // The listener
+  final _connectionListener = ConnectionListener();
+
   final firstPaneScaffold = GlobalKey<ScaffoldMessengerState>();
   final secondPaneScaffold = GlobalKey<ScaffoldMessengerState>();
 
@@ -64,6 +69,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? getSecondPaneBottomSheet();
 
   bool isPanesIsSliver(bool firstPane);
+  bool setBodyPadding(bool firstPane);
 
   late CurrentScreenSize _currentScreenSize;
 
@@ -115,13 +121,15 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   ///else if [customAppBar] is not null then generates the app bar based on the panes
   generateToolbar({Widget? customAppBar}) {
     return AppBar(
-      forceMaterialTransparency: true,
-      primary: true,
+      // forceMaterialTransparency: true,
+      // primary: true,
+
       backgroundColor: customAppBar != null
           ? ElevationOverlay.overlayColor(context, 2)
           : null,
       toolbarHeight: customAppBar == null ? 100 : null,
       // backgroundColor: ElevationOverlay.overlayColor(context, 2),
+      // leading: ,
       title: customAppBar ?? getBaseAppbar(getCurrentScreenSize())!,
     );
   }
@@ -135,6 +143,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         pinned: pinned,
         floating: floating,
         delegate: SliverAppBarDelegatePreferedSize(
+            shouldRebuildWidget: true,
             child: PreferredSize(
                 preferredSize: Size.fromHeight(height), child: widget)));
   }
@@ -184,8 +193,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
     Widget? body = _getScrollContent(widget, appBarBody, firstPane);
     return Scaffold(
-      
-      key: firstPane ? firstPaneScaffold : secondPaneScaffold,
+      // key: firstPane ? firstPaneScaffold : secondPaneScaffold,
       backgroundColor: ElevationOverlay.overlayColor(context, 0),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
@@ -197,7 +205,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
           : generateToolbar(customAppBar: appBarBody),
       bottomSheet:
           firstPane ? getFirstPaneBottomSheet() : getSecondPaneBottomSheet(),
-      body: body,
+      body: Padding(
+        padding: setBodyPadding(firstPane)
+            ? const EdgeInsets.all(kDefaultPadding)
+            : EdgeInsets.zero,
+        child: body,
+      ),
     );
   }
 
@@ -214,8 +227,18 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   void initState() {
     _drawerMenuControllerProvider =
         context.read<DrawerMenuControllerProvider>();
-
+    _connectionListener.init(
+      onConnected: () => debugPrint("BasePage CONNECTED"),
+      onReconnected: () => debugPrint("BasePage RECONNECTED"),
+      onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _connectionListener.dispose();
+    super.dispose();
   }
 
   CurrentScreenSize getCurrentScreenSize() {

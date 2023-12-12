@@ -449,7 +449,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return HttpWithMiddleware.build(
         requestTimeout: Duration(seconds: 60),
         middlewares: [
-          //TODO uncomment for body html HttpLogger(logLevel: LogLevel.BODY),
+           HttpLogger(logLevel: LogLevel.BODY),
         ]);
   }
 

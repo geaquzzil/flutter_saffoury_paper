@@ -57,9 +57,8 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     drawerViewAbstractObsever =
         Provider.of<DrawerMenuControllerProvider>(context, listen: false);
-
     viewAbstract ??= drawerViewAbstractObsever.getObject;
-
+    debugPrint("drawerViewAbstractObsever ${viewAbstract?.getTableNameApi()}");
     Widget? printButton = kIsWeb
         ? null
         : (context
@@ -134,6 +133,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 if (!kIsWeb) getAddBotton(context),
                 getRefreshWidget(),
                 if (exportButton != null) exportButton,
+                
                 if (printButton != null) printButton
               ],
             ),

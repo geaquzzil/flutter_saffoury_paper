@@ -15,6 +15,7 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
   int? iD;
   String? tableName;
   C? extras;
+  
   BaseApiCallPageState({this.iD, this.tableName, this.extras});
   Future<C?> getCallApiFunctionIfNull(BuildContext context);
   Widget buildAfterCall(BuildContext context, C newObject);
