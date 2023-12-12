@@ -103,6 +103,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
 
   void controlStartDrawerMenu() {
     _controlStartDrawerMenu(_startDrawerKey);
+    
     if (_startDrawerKeyWeb.isNotEmpty) {
       _startDrawerKeyWeb.forEach((key, value) {
         _controlStartDrawerMenu(value);

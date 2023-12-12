@@ -19,7 +19,22 @@ class TextBold extends StatelessWidget {
   Widget build(BuildContext context) {
     final parts = splitJoin();
     debugPrint("TextBold $regex parts => $parts");
-    return Html(data: text.replaceAll(regex, "<b>$regex</b>"));
+
+    // return Html(data: text.replaceAll(regex, "<b>$regex</b>"));
+
+    return RichText(
+      text: TextSpan(
+        text: text.replaceAll(regex, ""),
+        style: Theme.of(context).textTheme.bodyMedium,
+        // style: TextStyle(color: Colors.black),
+        children: <TextSpan>[
+          TextSpan(text: regex, style: Theme.of(context).textTheme.bodyLarge
+              // recognizer: _longPressRecognizer,
+              ),
+          // TextSpan(text: 'secret?'),
+        ],
+      ),
+    );
     return Text.rich(TextSpan(
         children: parts
             .map((e) => TextSpan(

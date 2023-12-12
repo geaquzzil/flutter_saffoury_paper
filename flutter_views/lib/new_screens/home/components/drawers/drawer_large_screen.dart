@@ -71,7 +71,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
           curve: Curves.fastOutSlowIn,
           child: SizedBox(
             height: v.item2,
-            // width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
+            width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
             child: Drawer(
               width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
               child: _getDrawerBody(v, context, isOpen),
@@ -85,16 +85,28 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   Widget _getDrawerBody(
       Tuple2<double?, double?> v, BuildContext context, bool isOpen) {
     return Column(
+      // mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // DrawerHeaderLogo(
         //   isOpen: isOpen,
         // ),
-        SizedBox(
-          height: (v.item2 ?? 1000) * .25,
-          child: buildHeader(context, isOpen),
-        ),
+        // SizedBox(
+        //   height: (v.item2 ?? 1000) * .25,
+        //   child: buildHeader(context, isOpen),
+        // ), // ),
+        // SizedBox(
+        //   height: (v.item2 ?? 1000) * .25,
+        //   child: buildHeader(context, isOpen),
+        // ),
         // FloatingActionButton(
         //     onPressed: () => {}, child: Icon(Icons.edit)),
+        Align(
+            alignment: isOpen ? Alignment.center : Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(kDefaultPadding),
+              child: buildHeader(context, isOpen),
+            )),
         SizedBox(
           height: !isOpen
               ? (v.item2 ?? 1000) * .5
@@ -109,9 +121,12 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         ),
 
         // const Divider(height: 2),
-        SizedBox(
-            height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
-            child: buildDrawerFooter(context, isOpen)),
+        AnimatedSize(
+          duration: Duration(milliseconds: 100),
+          child: SizedBox(
+              height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
+              child: buildDrawerFooter(context, isOpen)),
+        )
         // NotificationPopupWidget()
         // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
 
@@ -130,17 +145,20 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.end,
 
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
+
         // mainAxisAlignment:
         //     !isOpen ? MainAxisAlignment.center : MainAxisAlignment.end,
         direction: isOpen ? Axis.horizontal : Axis.vertical,
         children: [
           //  Expanded(child: buildProfilePic(context, isOpen)),
-          PopupWidget(
-              // position: PreferredPosition.bottom,
-              child: Icon(Icons.settings_accessibility),
-              menuBuilder: () => SizedBox(
-                  width: 700, height: 500, child: SettingAndProfileWeb())),
+          Expanded(
+            child: PopupWidget(
+                // position: PreferredPosition.bottom,
+                child: Icon(Icons.settings_accessibility),
+                menuBuilder: () => SizedBox(
+                    width: 700, height: 500, child: SettingAndProfileWeb())),
+          ),
           if (!isOpen) const Expanded(child: DrawerSettingButton()),
           Expanded(
             child: CartIconWidget(
@@ -194,6 +212,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     // return Icon(Icons.dangerous);
     // AnimatedSize(,)
     return IconButton(
+      // padding: EdgeInsets.all(kDefaultPadding),
       onPressed: () {
         drawerMenuControllerProvider.toggleIsOpen();
         if (drawerMenuControllerProvider.getSideMenuIsOpen) {
@@ -506,7 +525,7 @@ class _DrawerListTileDesktopGroupClosedState
                 currentWidget,
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  child: Divider(),
+                  child: Divider(indent: 2),
                 )
               ],
             );
@@ -648,29 +667,29 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
   DrawerListTileDesktopClosed(
       {Key? key, required this.viewAbstract, required this.idx})
       : super(key: key);
+  Widget getSelectedWidget(BuildContext context, Widget c) {
+    return Card(
+        color: Theme.of(context).colorScheme.surface,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Theme.of(context).colorScheme.background),
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(25), topLeft: Radius.circular(25)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: c,
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     DrawerMenuControllerProvider ds =
         context.watch<DrawerMenuControllerProvider>();
-    return Column(children: [
-      IconButton(
-          isSelected: ds.getIndex == viewAbstract.hashCode,
-          // iconSize: 20,
-          // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
-          icon: Icon(
-            viewAbstract.getMainIconData(),
-            color: ds.getIndex == viewAbstract.hashCode
-                ? Theme.of(context).colorScheme.primary
-                : null,
-          ),
-          onPressed: () {
-            context
-                .read<DrawerMenuControllerProvider>()
-                .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
 
-            viewAbstract.onDrawerItemClicked(context);
-          }),
+    Widget c = Column(children: [
+      getIcon(ds, context),
       // if (ds.getIndex == viewAbstract.hashCode)
       AnimatedScale(
         duration: const Duration(milliseconds: 100),
@@ -681,6 +700,11 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
         ),
       )
     ]);
+
+    if (ds.getIndex == viewAbstract.hashCode) {
+      return getSelectedWidget(context, c);
+    }
+    return c;
 
     return OnHoverWidget(
         scale: false,
@@ -704,6 +728,26 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
 
                 viewAbstract.onDrawerItemClicked(context);
               });
+        });
+  }
+
+  IconButton getIcon(DrawerMenuControllerProvider ds, BuildContext context) {
+    return IconButton(
+        isSelected: ds.getIndex == viewAbstract.hashCode,
+        // iconSize: 20,
+        // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
+        icon: Icon(
+          viewAbstract.getMainIconData(),
+          color: ds.getIndex == viewAbstract.hashCode
+              ? Theme.of(context).colorScheme.primary
+              : null,
+        ),
+        onPressed: () {
+          context
+              .read<DrawerMenuControllerProvider>()
+              .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
+
+          viewAbstract.onDrawerItemClicked(context);
         });
   }
 }

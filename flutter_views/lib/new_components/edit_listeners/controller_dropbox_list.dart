@@ -29,6 +29,7 @@ class DropdownStringListControllerListener extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
+      // itemHeight: 50,
       name: tag,
       decoration: getDecorationIconHintPrefix(
           hint: hint, icon: icon, currentScreenSize: currentScreenSize),
@@ -41,7 +42,7 @@ class DropdownStringListControllerListener extends StatelessWidget {
                         text: "$hint: ${item.label}",
                         regex: item.label.toString(),
                       )
-                    : Text(hint),
+                    : Text(hint, style: Theme.of(context).textTheme.bodyLarge),
               ))
           .toList(),
       onChanged: (obj) {

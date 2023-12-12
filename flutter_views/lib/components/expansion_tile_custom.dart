@@ -244,6 +244,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
         : Colors.transparent;
     if (widget.useLeadingOutSideCard) {
       return ListTile(
+        contentPadding: EdgeInsets.zero,
         leading: widget.leading,
         title: ClippedCard(
           wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,

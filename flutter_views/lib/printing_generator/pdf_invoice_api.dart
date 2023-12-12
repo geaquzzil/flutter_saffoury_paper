@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/printing_generator/print_master.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
@@ -16,11 +17,16 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
   PdfInvoiceApi(material.BuildContext context, T printObj, {E? printCommand})
       : super(context: context, printObj: printObj, setting: printCommand);
 
-  Future<Uint8List> generate(PdfPageFormat? format) async {
-    this.format = format;
+  Future<pw.Document> getDocumentP(PdfPageFormat? format) async {
     var pdf = await getDocument();
     pdf.addPage(getMultiPage(format, header));
-    return pdf.save();
+    
+    return pdf;
+  }
+
+  Future<Uint8List> generate(PdfPageFormat? format) async {
+    this.format = format;
+    return (await getDocumentP(format)).save();
   }
 
   pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {

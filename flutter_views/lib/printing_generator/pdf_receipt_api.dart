@@ -20,10 +20,14 @@ class PdfReceipt<T extends PrintableReceiptInterface,
   PdfReceipt(material.BuildContext context, T printObj, {E? printCommand})
       : super(context: context, printObj: printObj, setting: printCommand);
 
-  Future<Uint8List> generate(PdfPageFormat? format) async {
+  Future<Document> getDocumentP(PdfPageFormat? format) async {
     final pdf = await getDocument();
     pdf.addPage(await getPage(format, header));
-    return pdf.save();
+    return pdf;
+  }
+
+  Future<Uint8List> generate(PdfPageFormat? format) async {
+    return (await getDocumentP(format)).save();
   }
 
   Future<pw.Page> getPage(PdfPageFormat? format, Widget header) async {

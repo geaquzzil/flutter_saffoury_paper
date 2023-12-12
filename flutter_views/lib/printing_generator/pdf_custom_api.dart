@@ -31,7 +31,7 @@ class PdfCustom<T extends PrintableCustomInterface,
     );
   }
 
-  Future<Uint8List> generate(PdfPageFormat? format) async {
+  Future<Document> getDocumentP(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
     Widget? footer =
         await printObj.getPrintableCustomFooter(context, format: format);
@@ -47,7 +47,11 @@ class PdfCustom<T extends PrintableCustomInterface,
         theme: myTheme);
     pdf.addPage(await getPage(format));
 
-    return pdf.save();
+    return pdf;
+  }
+
+  Future<Uint8List> generate(PdfPageFormat? format) async {
+    return (await getDocumentP(format)).save();
   }
 
   Future<pw.Page> getPage(PdfPageFormat? format) async {

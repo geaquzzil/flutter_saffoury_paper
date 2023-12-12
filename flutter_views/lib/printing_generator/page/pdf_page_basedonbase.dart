@@ -96,4 +96,13 @@ class _TestBasePageState extends BasePageState<TestBasePage> {
     // }
     return false;
   }
+
+  @override
+  Widget? getBaseBottomSheet() => null;
+
+  @override
+  Widget? getFirstPaneBottomSheet() => null;
+
+  @override
+  Widget? getSecondPaneBottomSheet() => null;
 }

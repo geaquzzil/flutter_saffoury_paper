@@ -35,6 +35,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
 
+  final firstPaneScaffold = GlobalKey<ScaffoldMessengerState>();
+  final secondPaneScaffold = GlobalKey<ScaffoldMessengerState>();
+
   ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
   getDesktopFirstPane(double width);
 
@@ -54,6 +57,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? getBaseAppbar(CurrentScreenSize currentScreenSize);
   Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize);
   Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize);
+
+  Widget? getBaseBottomSheet();
+
+  Widget? getFirstPaneBottomSheet();
+  Widget? getSecondPaneBottomSheet();
 
   bool isPanesIsSliver(bool firstPane);
 
@@ -176,6 +184,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
     Widget? body = _getScrollContent(widget, appBarBody, firstPane);
     return Scaffold(
+      
+      key: firstPane ? firstPaneScaffold : secondPaneScaffold,
       backgroundColor: ElevationOverlay.overlayColor(context, 0),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
@@ -185,6 +195,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       appBar: isPanesIsSliver(firstPane) || appBarBody == null
           ? null
           : generateToolbar(customAppBar: appBarBody),
+      bottomSheet:
+          firstPane ? getFirstPaneBottomSheet() : getSecondPaneBottomSheet(),
       body: body,
     );
   }

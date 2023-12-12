@@ -26,11 +26,9 @@ Widget wrapController(Widget controller,
             : EdgeInsets.symmetric(
                 // vertical: 0,
                 vertical: currentScreenSize == CurrentScreenSize.DESKTOP
-                    ? kDefaultPadding / 4
-                    : kDefaultPadding / 2,
-                horizontal: currentScreenSize == CurrentScreenSize.DESKTOP
-                    ? kDefaultPadding / 2
-                    : kDefaultPadding),
+                    ? kDefaultPadding * .25
+                    : kDefaultPadding * .5,
+              ),
         child: controller,
       ),
       // if (currentScreenSize != CurrentScreenSize.DESKTOP)

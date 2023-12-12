@@ -29,6 +29,10 @@ class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
   }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
+    return (await getDocumentP(format)).save();
+  }
+
+  Future<pw.Document> getDocumentP(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
     Widget? watermark = printObj.getPrintableWatermark();
     PageTheme pageTheme = PageTheme(
@@ -49,10 +53,9 @@ class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
       // ),
     );
     return (await printObj.getPrintableCustomFromPDFPage(context,
-            format: format,
-            setting: printCommand,
-            theme: pageTheme,
-            themeData: myTheme))
-        .save();
+        format: format,
+        setting: printCommand,
+        theme: pageTheme,
+        themeData: myTheme));
   }
 }

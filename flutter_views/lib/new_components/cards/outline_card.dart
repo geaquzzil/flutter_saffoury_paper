@@ -20,6 +20,7 @@ class OutlinedCard extends StatelessWidget {
     if (onPress == null) return getCard(context);
     return Card(
         color: fillColor ? null : Theme.of(context).colorScheme.surface,
+        // margin: EdgeInsets.zero,
         elevation: 0,
         shape: RoundedRectangleBorder(
           side: BorderSide(

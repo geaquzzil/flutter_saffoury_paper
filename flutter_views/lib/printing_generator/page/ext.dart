@@ -15,10 +15,42 @@ import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_from_pdf_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
-import 'package:pdf/pdf.dart';
+import 'package:pdf/pdf.dart' as pdf;
+import 'package:pdf/widgets.dart' as pw;
+
+Future<pw.Document> getDocumentFile<T extends PrintLocalSetting>(
+    BuildContext context,
+    PrintableMaster<T> invoiceObj,
+    pdf.PdfPageFormat format,
+    {T? hasCustomSetting}) async {
+  T? pls = hasCustomSetting ?? await getSetting(context, invoiceObj);
+  if (invoiceObj is PrintableInvoiceInterface) {
+    final pdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
+        context, invoiceObj as PrintableInvoiceInterface,
+        printCommand: pls);
+    return pdf.getDocumentP(format);
+  } else if (invoiceObj is PrintableCustomInterface) {
+    final pdf = PdfCustom<PrintableCustomInterface, T>(
+        context, invoiceObj as PrintableCustomInterface,
+        printCommand: pls);
+    return pdf.getDocumentP(format);
+  } else if (invoiceObj is PrintableCustomFromPDFInterface) {
+    final pdf = PdfCustomFromPDF<PrintableCustomFromPDFInterface, T>(
+        context, invoiceObj as PrintableCustomFromPDFInterface,
+        printCommand: pls);
+    return pdf.getDocumentP(format);
+  } else {
+    final pdf = PdfReceipt<PrintableReceiptInterface, T>(
+        context, invoiceObj as PrintableReceiptInterface,
+        printCommand: pls);
+    return pdf.getDocumentP(format);
+  }
+}
 
 Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
-    BuildContext context, PrintableMaster<T> invoiceObj, PdfPageFormat format,
+    BuildContext context,
+    PrintableMaster<T> invoiceObj,
+    pdf.PdfPageFormat format,
     {T? hasCustomSetting}) async {
   {
     T? pls = hasCustomSetting ?? await getSetting(context, invoiceObj);
