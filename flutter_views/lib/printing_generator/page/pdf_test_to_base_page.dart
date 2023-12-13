@@ -278,6 +278,7 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
 
   @override
   Widget? getFirstPaneBottomSheet() {
+    return null;
     return BottomAppBar(
       // color: Theme.of(context).colorScheme.surface,
       // elevation: 2,
