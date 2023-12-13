@@ -77,19 +77,19 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardClickedView(BuildContext context) {
-    onCardClicked(context);
+    onCardClicked(context, isMain: false);
   }
 
   void onCardClickedFromSearchResult(BuildContext context) {
     onCardClicked(context);
   }
 
-  void onCardClicked(BuildContext context) {
+  void onCardClicked(BuildContext context, {bool isMain = true}) {
     debugPrint("Card Clicked");
     if (SizeConfig.hasSecondScreen(context)) {
-      context
-          .read<ActionViewAbstractProvider>()
-          .change((this as ViewAbstract).getCopyInstance(), ServerActions.view);
+      context.read<ActionViewAbstractProvider>().change(
+          (this as ViewAbstract).getCopyInstance(), ServerActions.view,
+          isMain: isMain);
       return;
     }
     context.pushNamed(viewRouteName,

@@ -740,7 +740,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             Selector<ActionViewAbstractProvider, List<StackedActions?>>(
               builder: (_, v, __) {
                 debugPrint("SelectorActionViewAbstractProvider ${v.length}");
-                if (v.isEmpty) {
+                if (v.isEmpty || v.length == 1) {
                   return SizedBox();
                 }
                 // if (v.length == 1) {

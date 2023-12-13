@@ -21,10 +21,13 @@ class ActionViewAbstractProvider with ChangeNotifier {
   }
 
   void change(ViewAbstract object, ServerActions? serverActions,
-      {bool removeLast = false}) {
+      {bool isMain = false}) {
     _customWidget = null;
     _object = object;
     this.serverActions = serverActions;
+    if (isMain) {
+      _stack.clear();
+    }
     // if (_stack.isNotEmpty) {
     //   if (removeLast) {
     //     _stack.removeLast();
@@ -36,12 +39,27 @@ class ActionViewAbstractProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ///LIST [products, products type , grade]
+  ///pop => product type
+  ///
   void pop() {
     if (_stack.isNotEmpty) {
-      StackedActions? s = _stack.removeLast();
-      s = _stack.removeLast();
+      StackedActions? s;
+      for (int i = _stack.length - 1; i >= 0; i--) {
+        bool selectingTheShowingObject =
+            _stack[i]?.object?.isEqualsAsType(_object) ?? false;
+        if (selectingTheShowingObject) {
+          _stack.removeAt(i);
+          debugPrint(
+              "popS selecting the previous objcet index ${i - 1}  ${_stack[i - 1]?.object?.getTableNameApi()}");
+          s = _stack[i - 1];
+          break;
+        }
+      }
+
       // s = _stack.removeLast();
-      debugPrint("popS lastItem $s");
+      // s = _stack.removeLast();
+      debugPrint("popS lastItem ${s?.object?.getTableNameApi()}");
 
       if (s != null) {
         _object = s.object;

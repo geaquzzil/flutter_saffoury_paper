@@ -101,7 +101,8 @@ class _DropdownStringListControllerListenerByIconState
   void didUpdateWidget(
       covariant DropdownStringListControllerListenerByIcon oldWidget) {
     debugPrint("DropdownStringListControllerListenerByIcon didUpdateWidget");
-    // lastSelected = widget.initialValue;
+
+    lastSelected = widget.initialValue;
     _list = [null];
     _list.addAll(widget.list);
     super.didUpdateWidget(oldWidget);

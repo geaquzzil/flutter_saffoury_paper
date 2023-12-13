@@ -25,7 +25,9 @@ class BaseAuthenticatingScreen extends StatelessWidget {
         return const LoadingAuth();
       case Status.Authenticated:
       case Status.Guest:
-        return getFutureDrawerItemsBuilder(context, authProvider);
+        return authProvider.hasFinished()
+            ? getDoneWidget()
+            : getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
         return const NetworkFaildAuth();
       default:
@@ -45,11 +47,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-              // return POSPage();
-              // return BaseShared();
-              return PdfTestToBasePage();
-              // return TestBasePage();
-              return const BaseHomeMainPage();
+              return getDoneWidget();
 
             default:
               if (snapshot.hasError) {
@@ -59,5 +57,13 @@ class BaseAuthenticatingScreen extends StatelessWidget {
               }
           }
         });
+  }
+
+  Widget getDoneWidget() {
+    // return POSPage();
+    // return BaseShared();
+    return PdfTestToBasePage();
+    // return TestBasePage();
+    return const BaseHomeMainPage();
   }
 }

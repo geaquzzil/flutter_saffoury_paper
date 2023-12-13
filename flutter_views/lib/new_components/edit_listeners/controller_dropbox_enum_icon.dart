@@ -31,11 +31,13 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
     extends State<DropdownEnumControllerListenerByIcon<T>> {
   late bool firstRun;
   T? selectedValue;
+  late T _viewAbstractEnum;
 
   @override
   void initState() {
     firstRun = true;
     selectedValue = widget.initialValue;
+    _viewAbstractEnum = widget.viewAbstractEnum;
     super.initState();
   }
 
@@ -46,35 +48,41 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
         firstRun = false;
       }
     }
-
+    selectedValue = widget.initialValue;
+    _viewAbstractEnum = widget.viewAbstractEnum;
     super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(
+      covariant DropdownEnumControllerListenerByIcon<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget pop = PopupMenuButton<T>(
-      tooltip: widget.viewAbstractEnum.getFieldLabelString(
-          context, selectedValue ?? widget.viewAbstractEnum),
+      tooltip: _viewAbstractEnum.getFieldLabelString(
+          context, selectedValue ?? _viewAbstractEnum),
       icon: Icon(
         selectedValue == null
-            ? widget.viewAbstractEnum.getMainIconData()
-            : widget.viewAbstractEnum
-                .getFieldLabelIconData(context, selectedValue),
+            ? _viewAbstractEnum.getMainIconData()
+            : _viewAbstractEnum.getFieldLabelIconData(context, selectedValue),
         color: selectedValue == null
             ? null
             : Theme.of(context).colorScheme.primary,
       ),
       onSelected: (T result) {
         widget.onSelected(result);
-        widget.viewAbstractEnum = result;
+        _viewAbstractEnum = result;
         setState(() {
           selectedValue = result;
           firstRun = false;
         });
       },
       // child: Text("Sda"),
-      initialValue: selectedValue ?? widget.viewAbstractEnum,
-      itemBuilder: (BuildContext context) => widget.viewAbstractEnum
+      initialValue: selectedValue ?? _viewAbstractEnum,
+      itemBuilder: (BuildContext context) => _viewAbstractEnum
           .getValues()
           .map(
             (e) => buildMenuItem(context, e),
@@ -100,7 +108,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
 
   CustomPopupMenuItem<T> buildMenuItem(BuildContext context, T e) {
     debugPrint(
-        "buildMenuItem  current $e initailValue viewAbstractEnum ${widget.viewAbstractEnum}");
+        "buildMenuItem  current $e initailValue viewAbstractEnum ${_viewAbstractEnum}");
     return CustomPopupMenuItem<T>(
       value: e,
       color: selectedValue == e ? Theme.of(context).highlightColor : null,

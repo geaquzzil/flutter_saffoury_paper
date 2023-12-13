@@ -133,7 +133,6 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 if (!kIsWeb) getAddBotton(context),
                 getRefreshWidget(),
                 if (exportButton != null) exportButton,
-                
                 if (printButton != null) printButton
               ],
             ),

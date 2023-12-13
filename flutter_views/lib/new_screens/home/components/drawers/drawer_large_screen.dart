@@ -254,6 +254,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
     return SliverList(
         delegate: SliverChildBuilderDelegate(
+            // addRepaintBoundaries: true,
             (context, index) =>
                 buildSubList(context, index, isOpen, authProvider),
             childCount: authProvider.getDrawerItemsGrouped.length));

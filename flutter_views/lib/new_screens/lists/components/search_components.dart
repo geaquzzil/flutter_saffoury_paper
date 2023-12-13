@@ -108,8 +108,9 @@ class SearchWidgetWebComponent extends StatelessWidget {
                       if (value == null) return;
                       String compressed = Compression.compress(value);
                       debugPrint("Compressing $compressed");
-                      context.goNamed(indexWebOurProducts,
-                          queryParameters: {"filter": Compression.compress(value)});
+                      context.goNamed(indexWebOurProducts, queryParameters: {
+                        "filter": Compression.compress(value)
+                      });
                       // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
                     });
                   },
@@ -126,10 +127,12 @@ class SearchWidgetComponent extends StatefulWidget {
   Function(String)? onSearchTextChanged;
   ValueNotifier<String>? onSearchTextChangedValueNotifier;
   ValueNotifier<ExpandType>? appBardExpandType;
+  CurrentScreenSize? currentScreenSize;
   SearchWidgetComponent(
       {super.key,
       this.heroTag = "/search",
       this.appBardExpandType,
+      this.currentScreenSize,
       this.onSearchTextChangedValueNotifier,
       this.onSearchTextChanged});
 
@@ -166,7 +169,11 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
           // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
-            leading: getLeadingWidget(context),
+            leading: isLargeScreenFromScreenSize(widget.currentScreenSize)
+                ? SizedBox(
+                    width: 25,
+                  )
+                : getLeadingWidget(context),
             onTap: isEditText
                 ? null
                 : () => context.goNamed(searchRouteName, queryParameters: {

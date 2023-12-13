@@ -280,7 +280,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getBuildBodyDraggable() {
     return DraggableHome(
-        showLeadingAsHamborg: widget.showLeadingAsHamborg,
+        showLeadingAsHamborg:
+            isLargeScreenFromScreenSize(widget.currentScreenSize)
+                ? false
+                : widget.showLeadingAsHamborg,
 
         // key: dr,
         valueNotifierExpandType: expandType,
@@ -638,30 +641,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   Widget getSearchWidget() {
-    // return SliverPersistentHeader(
-    //   delegate: SliverAppBarDelegatePreferedSize(
-    //       child: PreferredSize(
-    //           preferredSize: const Size.fromHeight(70.0),
-    //           child: ValueListenableBuilder<ExpandType>(
-    //               valueListenable: expandType,
-    //               builder: (__, value, ____) {
-    //                 debugPrint("SliverApiMaster expandType $expandType ");
-    //                 return AnimatedSwitcher(
-    //                   duration: Duration(milliseconds: 750),
-    //                   transitionBuilder: (child, animation) => ScaleTransition(
-    //                     scale: animation,
-    //                     child: child,
-    //                   ),
-    //                   child: value == ExpandType.EXPANDED
-    //                       ? Text("Qr CODE")
-    //                       : SearchWidgetComponent(
-    //                           heroTag: "list/search",
-    //                           controller: TextEditingController(),
-    //                           onSearchTextChanged: (p0) {},
-    //                         ),
-    //                 );
-    //               }))),
-    // );
     return ValueListenableBuilder<ExpandType>(
         valueListenable: expandType,
         builder: (__, value, ____) {
@@ -685,6 +664,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                             style: Theme.of(context).textTheme.titleLarge,
                           )
                         : SearchWidgetComponent(
+                            currentScreenSize: widget.currentScreenSize,
                             appBardExpandType: expandType,
                             onSearchTextChanged:
                                 !widget.buildSearchWidgetAsEditText

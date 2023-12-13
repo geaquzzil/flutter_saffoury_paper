@@ -377,8 +377,9 @@ class CutRequest extends ViewAbstract<CutRequest>
     if (action == ServerActions.view) {
       return [
         ListHorizontalApiAutoRestWidget(
-          customHeight: 250,
-          title: getMainHeaderText(context),
+          // customHeight: 250,
+          titleString: (AppLocalizations.of(context)!
+              .moreFromFormat(customers?.name ?? "")),
           autoRest: AutoRest<CutRequest>(
               obj: CutRequest()
                 ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),

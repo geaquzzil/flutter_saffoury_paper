@@ -35,6 +35,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late T _initUser;
   late ViewAbstract _orderSimple;
   Status _status = Status.Initialization;
+  bool _hasFinishedUpSettingUp = false;
   bool hasSavedUser = false;
   late PermissionLevelAbstract _permissions;
   Status get getStatus => _status;
@@ -52,6 +53,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     // return "";
     //todo for some reason we canot add profile image
     return "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
+  }
+
+  bool hasFinished() {
+    return _hasFinishedUpSettingUp;
   }
 
   static bool isLoggedIn(BuildContext context) {
@@ -158,7 +163,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     __drawerItemsGrouped = _drawerItemsPermissions.groupBy(
         (item) => item.getMainDrawerGroupName(context),
         valueTransform: (v) => v);
-
+    _hasFinishedUpSettingUp = true;
     // debugPrint(
     //     "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
 
