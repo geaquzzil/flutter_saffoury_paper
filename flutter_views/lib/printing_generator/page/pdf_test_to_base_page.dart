@@ -209,6 +209,8 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
 
   @override
   getFirstPane(double width) => SliverApiMaster(
+        buildSearchWidgetAsEditText:
+            isLargeScreenFromScreenSize(getCurrentScreenSize()),
         tableName: "products_inputs",
         currentScreenSize: getCurrentScreenSize(),
         buildFabIfMobile: getCurrentScreenSize() != CurrentScreenSize.DESKTOP,
@@ -269,7 +271,7 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
   bool isPanesIsSliver(bool firstPane) => false;
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) => false;
+  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) => true;
 
   @override
   Widget? getBaseBottomSheet() => null;

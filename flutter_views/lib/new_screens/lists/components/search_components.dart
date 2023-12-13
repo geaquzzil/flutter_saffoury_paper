@@ -133,6 +133,7 @@ class SearchWidgetComponent extends StatefulWidget {
       this.heroTag = "/search",
       this.appBardExpandType,
       this.currentScreenSize,
+      this.viewAbstract,
       this.onSearchTextChangedValueNotifier,
       this.onSearchTextChanged});
 
@@ -159,20 +160,17 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          top: kDefaultPadding / 2,
-          left: kDefaultPadding / 2,
-          right: kDefaultPadding / 2),
+      //todo it was padding default /2  all exept the bottom
+      padding: EdgeInsets.zero,
       child: Hero(
         tag: widget.heroTag,
         child: CardCorner(
+          margin: 2,
           // elevation: 3,
           // color: Theme.of(context).colorScheme.primary,
           child: ListTile(
-            leading: isLargeScreenFromScreenSize(widget.currentScreenSize)
-                ? SizedBox(
-                    width: 25,
-                  )
+            leading: isEditText
+                ? const Icon(Icons.search)
                 : getLeadingWidget(context),
             onTap: isEditText
                 ? null
@@ -209,6 +207,12 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       },
       decoration: InputDecoration(
           fillColor: Colors.transparent,
+          contentPadding: EdgeInsets.zero,
+          alignLabelWithHint: true,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
           hintText: widget.viewAbstract == null
               ? AppLocalizations.of(context)?.search
               : getSearchHint(widget.viewAbstract!),

@@ -203,7 +203,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         // }
         viewAbstract = value;
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          _scrollTop();
+          // _scrollTop();
           fetshList();
         });
 
@@ -370,13 +370,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
           if (widget.buildSearchWidget) getSearchWidget(),
           if (widget.buildFilterableView) getFilterableWidget(),
-
-          // SliverToBoxAdapter(
-          //   child: FiltersAndSelectionListHeader(
-          //       viewAbstract: viewAbstract,
-          //       listProvider: listProvider,
-          //       customKey: findCustomKey()),
-          // ),
           if (widget.buildToggleView) getToggleView(),
           ValueListenableBuilder<ExpandType>(
               valueListenable: expandTypeOnlyOnExpand,
@@ -785,12 +778,13 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   void fetshList() {
     String customKey = findCustomKey();
+    debugPrint("findCustomKey fetshList $customKey");
     if (listProvider.getCount(customKey) == 0) {
       if (searchStringQuery.isEmpty) {
         listProvider.fetchList(customKey, scanedQr ?? viewAbstract);
       } else {
         listProvider.fetchListSearch(
-            findCustomKey(), viewAbstract, searchStringQuery);
+            customKey, viewAbstract, searchStringQuery);
       }
     }
   }
@@ -866,9 +860,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   String findCustomKey() {
     if (scanedQr != null) return scanedQr!.getListableKey();
     String key = viewAbstract.getListableKey();
-
-    // debugPrint("getCustomKey $key");
-    return key + searchStringQuery;
+    key = key + searchStringQuery;
+    debugPrint("findCustomKey getCustomKey $key");
+    return key;
   }
 
   bool get _isBottom {
