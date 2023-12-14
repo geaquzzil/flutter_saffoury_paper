@@ -63,11 +63,11 @@ class GrowthRate {
 
   static getGrowTheme(BuildContext context) => Theme.of(context)
       .textTheme
-      .caption!
+      .bodySmall!
       .copyWith(color: Theme.of(context).colorScheme.primary);
   static getReduceTheme(BuildContext context) => Theme.of(context)
       .textTheme
-      .caption!
+      .bodySmall!
       .copyWith(color: Theme.of(context).colorScheme.error);
 }
 

@@ -32,6 +32,10 @@ class PdfTestToBasePage extends StatefulWidget {
 class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
   late Future<Uint8List> loadedFile;
   late Uint8List loadedFileBytes;
+  @override
+  bool isPaneScaffoldOverlayColord(bool firstPane) {
+    return firstPane;
+  }
 
   @override
   Widget? getBaseAppbar(CurrentScreenSize currentScreenSize) {
@@ -342,4 +346,7 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
 
   @override
   bool setBodyPadding(bool firstPane) => false;
+  
+  @override
+  bool setPaneClipRect(bool firstPane)  => false;
 }

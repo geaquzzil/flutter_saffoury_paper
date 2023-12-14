@@ -109,6 +109,7 @@ dependencies:
   fast_cached_network_image: ^1.2.0
   flutter_side_menu: ^0.4.0
   connectivity_listener: ^0.0.1+1
+  sliver_tools: ^0.2.12
   # bitmap: ^0.1.3
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0

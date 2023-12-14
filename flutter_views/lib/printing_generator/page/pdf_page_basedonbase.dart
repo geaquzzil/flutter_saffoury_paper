@@ -11,8 +11,14 @@ class TestBasePage extends StatefulWidget {
 
 class _TestBasePageState extends BasePageState<TestBasePage> {
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize size) => false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) {
+    return true;
+  }
 
+  @override
+  bool setPaddingWhenTowPane(CurrentScreenSize size) => false;
+  @override
+  bool setPaneClipRect(bool firstPane) => false;
   @override
   getDesktopFirstPane(double width) {
     if (isPanesIsSliver(true)) {

@@ -1,14 +1,15 @@
 {
   "ar": [
+    "ad_app_id",
+    "app_name_spanned",
     "approx",
-    "title_activity_test_to_remove",
+    "content",
+    "empty",
+    "sellDollar_format",
     "tab_text_1",
     "tab_text_2",
-    "app_name_spanned",
-    "empty",
-    "ad_app_id",
+    "title_activity_test_to_remove",
     "welcome_message",
-    "welcome_message_employees",
-    "sellDollar_format"
+    "welcome_message_employees"
   ]
 }

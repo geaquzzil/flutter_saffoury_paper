@@ -6,12 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'home/components/drawers/drawer_large_screen.dart';
 
 /// WebSmothSceroll additional offset to users scroll input WEB WAS 150
@@ -21,6 +26,8 @@ const scrollOffset = 10;
 const animationDuration = 250;
 
 const double kDefualtAppBar = 70;
+
+const double kDefualtClipRect = 25;
 
 ///Auto generate view
 ///[CurrentScreenSize.MOBILE] if this  is true
@@ -32,7 +39,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   dynamic _secondWidget;
   dynamic _width;
   dynamic _height;
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollFirstPaneController = ScrollController();
+  final ScrollController _scrollSecoundPaneController = ScrollController();
   bool pinToolbar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
@@ -69,7 +77,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   Widget? getSecondPaneBottomSheet();
 
   bool isPanesIsSliver(bool firstPane);
+  bool isPaneScaffoldOverlayColord(bool firstPane);
   bool setBodyPadding(bool firstPane);
+
+  bool setPaneClipRect(bool firstPane);
 
   late CurrentScreenSize _currentScreenSize;
 
@@ -121,7 +132,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   ///else if [customAppBar] is not null then generates the app bar based on the panes
   generateToolbar({Widget? customAppBar}) {
     return AppBar(
-      // forceMaterialTransparency: true,
+      surfaceTintColor: Colors.transparent,
+      forceMaterialTransparency: false,
       // primary: true,
 
       backgroundColor: customAppBar != null
@@ -148,6 +160,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
                 preferredSize: Size.fromHeight(height), child: widget)));
   }
 
+  ScrollController getScrollController(bool firstPane) {
+    return firstPane
+        ? _scrollFirstPaneController
+        : _scrollSecoundPaneController;
+  }
+
   Widget? _getScrollContent(widget, Widget? appBar, bool firstPane) {
     dynamic body = widget;
     debugPrint(
@@ -161,12 +179,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         debugPrint(
             "BasePage IsPanel  isDesktopOrWebPlatform isSliver ${isPanesIsSliver(firstPane)} body $body");
         body = WebSmoothScroll(
-          controller: _scrollController,
+          controller: getScrollController(firstPane),
           animationDuration: animationDuration,
           scrollOffset: scrollOffset,
           child: CustomScrollView(
             physics: const NeverScrollableScrollPhysics(),
-            controller: _scrollController,
+            controller: getScrollController(firstPane),
             slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
           ),
         );
@@ -175,7 +193,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
             "BasePage IsPanel  isDesktopOrWebPlatform flassse isSliver ${isPanesIsSliver(firstPane)} body $body");
         return CustomScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          controller: _scrollController,
+          controller: getScrollController(firstPane),
           slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
         );
       }
@@ -192,9 +210,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         : getSecondPaneAppbar(getCurrentScreenSize());
 
     Widget? body = _getScrollContent(widget, appBarBody, firstPane);
-    return Scaffold(
+    Widget scaffold = Scaffold(
       // key: firstPane ? firstPaneScaffold : secondPaneScaffold,
-      backgroundColor: ElevationOverlay.overlayColor(context, 0),
+      backgroundColor: isPaneScaffoldOverlayColord(firstPane)
+          ? ElevationOverlay.overlayColor(context, 0)
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: firstPane
@@ -212,6 +232,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         child: body,
       ),
     );
+
+    if (setPaneClipRect(firstPane)) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(kDefualtClipRect),
+        child: scaffold,
+      );
+    }
+    return scaffold;
   }
 
   Widget _getBorderDecoration(Widget widget) {
@@ -329,6 +357,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
   Widget _getTabletWidget(double w) {
     return Scaffold(
+        // extendBodyBehindAppBar: true,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton:
@@ -350,7 +380,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
               debugPrint("drawer selector $isOpen");
               Widget toShowWidget;
               Widget clipRect = ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(kDefualtClipRect),
                   child: _hasBaseToolbar()
                       ? Scaffold(
                           backgroundColor:
@@ -415,5 +445,87 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
     } else {
       return SafeArea(child: child);
     }
+  }
+}
+
+abstract class BasePageWithApi<T extends StatefulWidget>
+    extends BasePageState<T> {
+  int? iD;
+  String? tableName;
+  dynamic extras;
+
+  BasePageWithApi({this.iD, this.tableName, this.extras});
+  Future<dynamic> getCallApiFunctionIfNull(BuildContext context);
+  ServerActions getServerActions();
+
+  dynamic getExtras() {
+    return extras;
+  }
+
+  bool getBodyWithoutApi() {
+    if (extras is! ViewAbstract) return false;
+    if (extras is DashableInterface) {
+      return (extras as ViewAbstract).isRequiredObjectsListChecker();
+    }
+    bool canGetBody =
+        (extras as ViewAbstract).isRequiredObjectsList()?[getServerActions()] ==
+            null;
+    if (canGetBody) {
+      debugPrint("BasePageWithApi getBodyWithoutApi skiped");
+      return true;
+    }
+    bool res = (extras as ViewAbstract).isNew() ||
+        (extras as ViewAbstract).isRequiredObjectsListChecker();
+    debugPrint("BasePageWithApi getBodyWithoutApi result => $res");
+    return res;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (extras != null && getBodyWithoutApi()) {
+      return super.build(context);
+    }
+
+    return FutureBuilder<dynamic>(
+      future: getCallApiFunctionIfNull(context),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return EmptyWidget(
+              lottiUrl:
+                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+              onSubtitleClicked: () {
+                setState(() {});
+              },
+              title: AppLocalizations.of(context)!.cantConnect,
+              subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data != null) {
+            extras = snapshot.data;
+            if (extras is ViewAbstract) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                context
+                    .read<ListMultiKeyProvider>()
+                    .edit(extras as ViewAbstract);
+              });
+            }
+            return super.build(context);
+          } else {
+            return EmptyWidget(
+                lottiUrl:
+                    "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+                onSubtitleClicked: () {
+                  setState(() {});
+                },
+                title: AppLocalizations.of(context)!.cantConnect,
+                subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+          }
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
+        } else {
+          return const Text("TOTODO");
+        }
+      },
+    );
   }
 }

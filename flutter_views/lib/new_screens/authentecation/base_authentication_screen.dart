@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
 import 'package:flutter_view_controller/new_screens/base_shared.dart';
@@ -26,7 +28,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
       case Status.Authenticated:
       case Status.Guest:
         return authProvider.hasFinished()
-            ? getDoneWidget()
+            ? getDoneWidget(context)
             : getFutureDrawerItemsBuilder(context, authProvider);
       case Status.Faild:
         return const NetworkFaildAuth();
@@ -47,7 +49,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
             case ConnectionState.waiting:
               return getLoadingWidget();
             case ConnectionState.done:
-              return getDoneWidget();
+              return getDoneWidget(context);
 
             default:
               if (snapshot.hasError) {
@@ -59,8 +61,12 @@ class BaseAuthenticatingScreen extends StatelessWidget {
         });
   }
 
-  Widget getDoneWidget() {
+  Widget getDoneWidget(BuildContext context) {
     // return POSPage();
+    return BaseDashboardMainPage(
+        title: "TEST",
+        dashboard:
+            context.read<AuthProvider<AuthUser>>().getDashableInterface());
     // return BaseShared();
     return PdfTestToBasePage();
     // return TestBasePage();

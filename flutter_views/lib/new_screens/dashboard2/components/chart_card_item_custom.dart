@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../constants.dart';
 
@@ -19,7 +21,7 @@ class ChartCardItemCustom extends StatelessWidget {
   Animation<double>? animation;
   void Function()? onTap;
   ChartCardItemCustom(
-      {Key? key,
+      {super.key,
       this.color,
       required this.title,
       required this.description,
@@ -31,8 +33,7 @@ class ChartCardItemCustom extends StatelessWidget {
       this.footerRight,
       this.footerWidget,
       this.onTap,
-      this.footerRightWidget})
-      : super(key: key);
+      this.footerRightWidget});
 
   // final CloudStorageInfo info;
   Widget _animationWidget({required Widget child}) {
@@ -66,7 +67,7 @@ class ChartCardItemCustom extends StatelessWidget {
             //navigate to list page
           },
       child: Card(
-        color: color?.withOpacity(0.1),
+        // color: color?.withOpacity(0.1),
         child: Container(
           padding: const EdgeInsets.all(defaultPadding),
           child: Column(
@@ -90,7 +91,7 @@ class ChartCardItemCustom extends StatelessWidget {
               Text(
                 description,
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                // overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleLarge!,
               ),
               Row(

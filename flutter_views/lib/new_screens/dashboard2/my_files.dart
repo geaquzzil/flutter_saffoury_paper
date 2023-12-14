@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:responsive_framework/responsive_grid.dart';
 
 import '../../interfaces/dashable_interface.dart';
 import 'components/chart_card_item.dart';
@@ -40,15 +41,15 @@ class MyFiles extends StatelessWidget {
         const SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoStaggerdGridView(
-            list: dgh.widgets,
+            list: dgh.widgets.map((e) => e.widget).toList(),
             crossAxisCount: size.width < 750 ? 2 : 6,
             childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
           ),
           tablet: FileInfoStaggerdGridView(
-            list: dgh.widgets,
+            list: dgh.widgets.map((e) => e.widget).toList(),
           ),
           desktop: FileInfoStaggerdGridView(
-            list: dgh.widgets,
+            list: dgh.widgets.map((e) => e.widget).toList(),
             crossAxisCount: 6,
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
@@ -157,8 +158,8 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return StaggeredGrid.count(
         crossAxisCount: crossAxisCount,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
+        mainAxisSpacing: 2,
+        crossAxisSpacing: 2,
         children: list);
   }
 }

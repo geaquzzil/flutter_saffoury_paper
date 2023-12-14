@@ -53,7 +53,7 @@ class DashboardPage extends StatelessWidget {
                   child: Column(
                     children: [
                       ...dashboard
-                          .getDashboardSections(context)
+                          .getDashboardSectionsFirstPane(context, 0)
                           .map((e) => MyFiles(
                                 dgh: e,
                               ))
