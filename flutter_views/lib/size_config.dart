@@ -35,6 +35,7 @@ bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.LARGE_TABLET;
 }
 
+
 CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
   return context.read<LayoutChangeListner>().currentScreenSize ??
       CurrentScreenSize.MOBILE;

@@ -3,32 +3,56 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class LineChartItem<T, E> extends StatelessWidget {
   List<T> list;
-  String title;
+  String? title;
+  bool smallView;
 
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
+  String? Function(T item, int idx)? dataLabelMapper;
+
   LineChartItem(
-      {Key? key,
-      required this.title,
+      {super.key,
+      this.title,
       required this.list,
       required this.xValueMapper,
-      required this.yValueMapper})
-      : super(key: key);
+      required this.yValueMapper,
+      this.smallView = false,
+      this.dataLabelMapper});
 
   @override
   Widget build(BuildContext context) {
-    return SfCartesianChart(
-        title: ChartTitle(alignment: ChartAlignment.near, text: title),
-        
-        // legend:
-        //     Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-        // Initialize category axis
-        // primaryXAxis: CategoryAxis(),
+    Widget t = SfCartesianChart(
+        plotAreaBorderWidth: smallView ? 0 : 0.5,
+        title: ChartTitle(alignment: ChartAlignment.near, text: title ?? ''),
         primaryXAxis: E.runtimeType == DateTime.now().runtimeType
-            ? DateTimeAxis()
-            : CategoryAxis(rangePadding: ChartRangePadding.round),
-        primaryYAxis: NumericAxis(),
-        tooltipBehavior: TooltipBehavior(),
+            ? DateTimeAxis(isVisible: !smallView)
+            : CategoryAxis(
+                borderWidth: 0,
+                rangePadding: ChartRangePadding.auto,
+                isVisible: !smallView,
+                axisBorderType: AxisBorderType.withoutTopAndBottom),
+        primaryYAxis: NumericAxis(
+            borderWidth: 0,
+            axisBorderType: AxisBorderType.withoutTopAndBottom,
+            zoomPosition: .2,
+            rangePadding:
+                smallView ? ChartRangePadding.none : ChartRangePadding.auto,
+            isVisible: !smallView,
+            anchorRangeToVisiblePoints: false),
+        // plotAreaBackgroundColor: Colors.red,
+        // backgroundColor: Colors.redAccent,
+        zoomPanBehavior: ZoomPanBehavior(
+            zoomMode: ZoomMode.x,
+            maximumZoomLevel: 0.3,
+            enablePanning: true,
+            enablePinching: true),
+
+        // s
+
+        // trackballBehavior: TrackballBehavior(enable: true),
+        tooltipBehavior: smallView ? null : TooltipBehavior(),
+
+        // enableSideBySideSeriesPlacement: true,
         series: <CartesianSeries>[
           // ColumnSeries<T, E>(
           //   // Bind data source
@@ -40,18 +64,21 @@ class LineChartItem<T, E> extends StatelessWidget {
           //   // legendItemText: ,
           //   // dataLabelSettings: const DataLabelSettings(isVisible: true)
           // ),
-          if (E.runtimeType == DateTime.now().runtimeType)
+          if (E.runtimeType == DateTime.now().runtimeType || smallView)
             LineSeries<T, E>(
                 // Bind data source
-                markerSettings: MarkerSettings(isVisible: true),
-                enableTooltip: true,
+                markerSettings: MarkerSettings(
+                  isVisible: !smallView,
+                ),
+                enableTooltip: !smallView,
                 dataSource: list,
                 xValueMapper: xValueMapper,
-                xAxisName: "dsad",
-                yAxisName: "y axis",
                 yValueMapper: yValueMapper,
+                dataLabelMapper: dataLabelMapper,
+
                 // legendItemText: ,
-                dataLabelSettings: const DataLabelSettings(isVisible: true))
+
+                dataLabelSettings: DataLabelSettings(isVisible: !smallView))
           else
             ColumnSeries<T, E>(
                 sortingOrder: SortingOrder.descending,
@@ -61,7 +88,16 @@ class LineChartItem<T, E> extends StatelessWidget {
                 markerSettings: MarkerSettings(isVisible: true),
                 xValueMapper: xValueMapper,
                 yValueMapper: yValueMapper,
+                dataLabelMapper: dataLabelMapper,
                 dataLabelSettings: const DataLabelSettings(isVisible: true))
         ]);
+
+    if (smallView) {
+      return SizedBox(
+        height: 60,
+        child: t,
+      );
+    }
+    return t;
   }
 }

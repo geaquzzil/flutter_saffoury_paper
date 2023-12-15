@@ -68,7 +68,6 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
                     // Bind data source
                     legendItemText: widget.titles[widget.list.indexOf(e)],
                     enableTooltip: true,
-                    
                     dataSource: e,
                     dataLabelMapper: widget.dataLabelMapper,
                     xValueMapper: (datum, index) => widget.xValueMapper(

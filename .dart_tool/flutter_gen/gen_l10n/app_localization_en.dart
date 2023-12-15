@@ -309,6 +309,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changeQuantity => 'Change quantity';
 
   @override
+  String get chart => 'Charting';
+
+  @override
   String get checkout => 'Check out';
 
   @override

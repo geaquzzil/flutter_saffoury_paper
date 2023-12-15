@@ -49,13 +49,13 @@ class _BaseDashboardState extends State<BaseDashboard>
     return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
               getAppBar(context, innerBoxIsScrolled),
-              SliverPersistentHeader(
-                  pinned: true,
-                  delegate: SliverAppBarDelegate(
-                      child:  DashboardHeader(
-                          current_screen_size: CurrentScreenSize.DESKTOP),
-                      minHeight: 70,
-                      maxHeight: 80)),
+              // SliverPersistentHeader(
+              //     pinned: true,
+              //     delegate: SliverAppBarDelegate(
+              //         child:  DashboardHeader(
+              //             current_screen_size: CurrentScreenSize.DESKTOP),
+              //         minHeight: 70,
+              //         maxHeight: 80)),
               SliverPersistentHeader(
                   pinned: true,
                   delegate: SliverAppBarDelegatePreferedSize(
@@ -172,13 +172,14 @@ class _BaseDashboardState extends State<BaseDashboard>
     // widgets.add(
     //   getAppBar(context),
     // );
-    widgets.add(SliverPersistentHeader(
-        pinned: true,
-        delegate: SliverAppBarDelegate(
-            child:  DashboardHeader(
-                current_screen_size: CurrentScreenSize.DESKTOP),
-            minHeight: 70,
-            maxHeight: 80)));
+    // widgets.add(
+    //   SliverPersistentHeader(
+    //     pinned: true,
+    //     delegate: SliverAppBarDelegate(
+    //         child:  DashboardHeader(
+    //             current_screen_size: CurrentScreenSize.DESKTOP),
+    //         minHeight: 70,
+    //         maxHeight: 80)));
     widgets.add(SliverPersistentHeader(
         pinned: true,
         delegate: SliverAppBarDelegatePreferedSize(
@@ -365,32 +366,33 @@ class SectionItemHeader extends MultiSliver {
                           dgh.title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        ElevatedButton.icon(
-                          key: buttonKey,
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: kDefaultPadding * 1.5,
-                              vertical: kDefaultPadding / 2,
+                        if (dgh.headerListToAdd != null)
+                          ElevatedButton.icon(
+                            key: buttonKey,
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: kDefaultPadding * 1.5,
+                                vertical: kDefaultPadding / 2,
+                              ),
                             ),
+                            onPressed: () async {
+                              if (dgh.headerListToAdd == null) return;
+                              await showPopupMenu(context, buttonKey,
+                                      list: dgh.headerListToAdd!
+                                          .map((e) => buildMenuItem(
+                                              context,
+                                              MenuItemBuild(
+                                                  e.getMainHeaderLabelTextOnly(
+                                                      context),
+                                                  Icons.add,
+                                                  "")))
+                                          .toList())
+                                  .then((value) =>
+                                      debugPrint("showPopupMenu $value"));
+                            },
+                            icon: const Icon(Icons.add),
+                            label: Text(AppLocalizations.of(context)!.add_new),
                           ),
-                          onPressed: () async {
-                            if (dgh.headerListToAdd == null) return;
-                            await showPopupMenu(context, buttonKey,
-                                    list: dgh.headerListToAdd!
-                                        .map((e) => buildMenuItem(
-                                            context,
-                                            MenuItemBuild(
-                                                e.getMainHeaderLabelTextOnly(
-                                                    context),
-                                                Icons.add,
-                                                "")))
-                                        .toList())
-                                .then((value) =>
-                                    debugPrint("showPopupMenu $value"));
-                          },
-                          icon: const Icon(Icons.add),
-                          label: Text(AppLocalizations.of(context)!.add_new),
-                        ),
                       ],
                     ),
                   ],

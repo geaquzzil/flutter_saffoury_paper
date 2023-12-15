@@ -17,11 +17,15 @@ import 'date_selector.dart';
 
 class DashboardHeader extends StatelessWidget {
   final CurrentScreenSize current_screen_size;
-  DateTime? focuseDate;
-  DashboardHeader({
-    Key? key,
-    required this.current_screen_size,
-  }) : super(key: key);
+  // DateTime? focuseDate;
+  DateObject date;
+  Function(DateObject? date_object) onSelectedDate;
+  DashboardHeader(
+      {Key? key,
+      required this.current_screen_size,
+      required this.date,
+      required this.onSelectedDate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +39,9 @@ class DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              ValueListenableBuilder<DateObject?>(
-                  valueListenable: selectDateChanged,
-                  builder: ((context, value, child) => TodayText(
-                        dateObject: value,
-                      ))),
+              TodayText(
+                dateObject: date,
+              ),
               const Spacer(),
               if (isLargeScreenFromScreenSize(current_screen_size))
                 CustomPopupMenu(
@@ -48,71 +50,62 @@ class DashboardHeader extends StatelessWidget {
                           width: popUpSize.width,
                           height: popUpSize.height,
                           child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(kDefualtClipRect),
-                            child: Scaffold(
-                                body: ValueListenableBuilder<DateObject?>(
-                              valueListenable: selectDateChanged,
-                              builder: (context, value, child) => TableCalendar(
-                                // calendarStyle:CalendarStyle().. ,
-                                // eventLoader: (day) {
-                                //   if (day.weekday == DateTime.monday) {
-                                //     return [Event('Cyclic event')];
-                                //   }
+                              borderRadius:
+                                  BorderRadius.circular(kDefualtClipRect),
+                              child: Scaffold(
+                                body: TableCalendar(
+                                  // calendarStyle:CalendarStyle().. ,
+                                  // eventLoader: (day) {
+                                  //   if (day.weekday == DateTime.monday) {
+                                  //     return [Event('Cyclic event')];
+                                  //   }
 
-                                //   return [];
-                                // },
-                                calendarBuilders: CalendarBuilders(
-                                  dowBuilder: (context, day) {
-                                    if (day.weekday == DateTime.saturday) {
-                                      final text = DateFormat.E().format(day);
+                                  //   return [];
+                                  // },
+                                  calendarBuilders: CalendarBuilders(
+                                    dowBuilder: (context, day) {
+                                      if (day.weekday == DateTime.saturday) {
+                                        final text = DateFormat.E().format(day);
 
-                                      return Center(
-                                        child: Text(
-                                          text,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                      );
-                                    }
+                                        return Center(
+                                          child: Text(
+                                            text,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  rangeStartDay: date.from.toDateTimeOnlyDate(),
+                                  rangeEndDay: date.to.toDateTimeOnlyDate(),
+                                  rangeSelectionMode:
+                                      RangeSelectionMode.toggledOn,
+                                  selectedDayPredicate: (day) {
+                                    return isSameDay(
+                                        date.from.toDateTimeOnlyDate(), day);
+                                  },
+                                  onRangeSelected: (start, end, focuseDate) {
+                                    date = DateObject.initFromDateTime(
+                                        start ?? DateTime.now(),
+                                        toDate: end);
+                                    onSelectedDate.call(date);
+                                    debugPrint("selectDateChanged ${date}");
+                                  },
+                                  locale: 'en-US',
+                                  firstDay: DateTime.utc(2023, 10, 16),
+                                  lastDay: DateTime.utc(2030, 3, 14),
+                                  focusedDay: date.from.toDateTimeOnlyDate(),
+                                  onDaySelected: (d, d1) {
+                                    date = DateObject.initFromDateTime(d);
+                                    // onSelectedDate.call(date);
+                                    // debugPrint(
+                                    //     "selectDateChanged ${selectDateChanged.value}");
                                   },
                                 ),
-                                rangeStartDay: value?.from.toDateTimeOnlyDate(),
-                                rangeEndDay: value?.to.toDateTimeOnlyDate(),
-                                rangeSelectionMode:
-                                    RangeSelectionMode.toggledOn,
-                                selectedDayPredicate: (day) {
-                                  return isSameDay(
-                                      value?.from.toDateTimeOnlyDate() ??
-                                          "".toDateTimeOnlyDate(),
-                                      day);
-                                },
-                                onRangeSelected: (start, end, focuseDate) {
-                                  selectDateChanged.value =
-                                      DateObject.initFromDateTime(
-                                          start ?? DateTime.now(),
-                                          toDate: end);
-
-                                  debugPrint(
-                                      "selectDateChanged ${selectDateChanged.value}");
-                                },
-                                locale: 'en-US',
-                                firstDay: DateTime.utc(2023, 10, 16),
-                                lastDay: DateTime.utc(2030, 3, 14),
-                                focusedDay: value?.from.toDateTimeOnlyDate() ??
-                                    "".toDateTimeOnlyDate(),
-                                onDaySelected: (d, d1) {
-                                  focuseDate = d1;
-                                  selectDateChanged.value =
-                                      DateObject.initFromDateTime(d);
-                                  debugPrint(
-                                      "selectDateChanged ${selectDateChanged.value}");
-                                },
-                              ),
-                            )),
-                          ),
+                              )),
                         ),
                     pressType: PressType.singleClick,
                     arrowColor: kIsWeb

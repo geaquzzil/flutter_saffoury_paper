@@ -31,6 +31,7 @@ import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_li
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -119,7 +120,7 @@ void main() async {
     Spendings(),
     ProductType(),
     CustomerBalanceList(),
-    Dashboard(),
+    Dashboard.init(-1, dateObject: DateObject()),
   ]);
   try {
     runApp(MultiProvider(providers: [

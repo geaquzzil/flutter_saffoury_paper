@@ -681,6 +681,12 @@ abstract class AppLocalizations {
   /// **'Change quantity'**
   String get changeQuantity;
 
+  /// No description provided for @chart.
+  ///
+  /// In en, this message translates to:
+  /// **'Charting'**
+  String get chart;
+
   /// No description provided for @checkout.
   ///
   /// In en, this message translates to:

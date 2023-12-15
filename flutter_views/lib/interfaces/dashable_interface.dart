@@ -22,6 +22,7 @@ enum WidgetDashboardType {
 class WidgetGridHelper {
   StaggeredGridTile widget;
   WidgetDashboardType widgetDashboardType;
+
   WidgetGridHelper({
     required this.widget,
     required this.widgetDashboardType,
@@ -34,10 +35,12 @@ class DashableGridHelper {
   List<WidgetGridHelper> widgets;
   List<List<ViewAbstract>>? sectionsListToTabbar;
   List<ViewAbstract>? headerListToAdd;
+  bool wrapWithCard;
   DashableGridHelper(
       {required this.title,
       required this.widgets,
       this.onTitleButton,
       this.headerListToAdd,
+      this.wrapWithCard = false,
       this.sectionsListToTabbar});
 }

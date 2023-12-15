@@ -139,6 +139,7 @@
   "changeInvoiceProductNameDes": "تغيير اسم المنتج (اتركه فارغا إذا كنت تريد الاحتفاظ بالاسم الأصلي)",
   "changeOnlyCutRoll": "تغيير فقط اسم منتج (قص الرول)",
   "changeQuantity": "تغيير الكمية",
+  "chart": "الرسم البياني",
   "checkout": "المتابعة",
   "chooseAction": "اختر الإجراء",
   "chooseActionYouLike": "اختر الإجراء الذي ترغب في القيام به من أجل \\n{r}\\n لإكمال العملية",

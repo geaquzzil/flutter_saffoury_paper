@@ -450,6 +450,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
 abstract class BasePageWithApi<T extends StatefulWidget>
     extends BasePageState<T> {
+  final refreshListener = ValueNotifier<bool>(true);
   int? iD;
   String? tableName;
   dynamic extras;
@@ -460,6 +461,14 @@ abstract class BasePageWithApi<T extends StatefulWidget>
 
   dynamic getExtras() {
     return extras;
+  }
+
+  void refresh({int? iD, String? tableName, dynamic extras}) {
+    this.iD = iD;
+    this.tableName = tableName;
+    this.extras = extras;
+    // refreshListener.value = !refreshListener.value;
+    setState(() {});
   }
 
   bool getBodyWithoutApi() {
@@ -482,11 +491,12 @@ abstract class BasePageWithApi<T extends StatefulWidget>
 
   @override
   Widget build(BuildContext context) {
+    Widget widget;
     if (extras != null && getBodyWithoutApi()) {
-      return super.build(context);
+      widget = super.build(context);
     }
 
-    return FutureBuilder<dynamic>(
+    widget = FutureBuilder<dynamic>(
       future: getCallApiFunctionIfNull(context),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -527,5 +537,17 @@ abstract class BasePageWithApi<T extends StatefulWidget>
         }
       },
     );
+
+    return widget;
+    // ValueListenableBuilder<DateObject?>(
+    //     valueListenable: selectDateChanged,
+    //     builder: ((context, value, child) {
+    //       // widget.dashboard.setDate(value);
+    //       extras = widget.dashboard;
+    //       extras.setDate(value);
+    //       debugPrint("BasePageApi refreshing refreshListener");
+    //       setState(() {});
+    //       return Text("s");
+    //     }));
   }
 }

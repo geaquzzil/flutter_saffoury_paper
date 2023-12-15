@@ -309,6 +309,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get changeQuantity => 'تغيير الكمية';
 
   @override
+  String get chart => 'الرسم البياني';
+
+  @override
   String get checkout => 'المتابعة';
 
   @override

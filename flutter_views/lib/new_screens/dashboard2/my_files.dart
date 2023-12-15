@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:responsive_framework/responsive_grid.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../interfaces/dashable_interface.dart';
 import 'components/chart_card_item.dart';
 import 'dashboard.dart';
@@ -34,7 +35,7 @@ class MyFiles extends StatelessWidget {
               ),
               onPressed: () {},
               icon: const Icon(Icons.add),
-              label: const Text("Add New"),
+              label: Text(AppLocalizations.of(context)!.add_new),
             ),
           ],
         ),
@@ -144,10 +145,12 @@ class _TestExpandedState extends State<TestExpanded> {
 
 class FileInfoStaggerdGridView extends StatelessWidget {
   List<StaggeredGridTile> list;
+  bool wrapWithCard;
   FileInfoStaggerdGridView(
       {Key? key,
       this.crossAxisCount = 4,
       this.childAspectRatio = 1,
+      this.wrapWithCard = false,
       required this.list})
       : super(key: key);
 
@@ -156,11 +159,18 @@ class FileInfoStaggerdGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("FileInfoStaggerdGridView wrapWithCard $wrapWithCard");
     return StaggeredGrid.count(
         crossAxisCount: crossAxisCount,
         mainAxisSpacing: 2,
         crossAxisSpacing: 2,
-        children: list);
+        children: wrapWithCard
+            ? list
+                .map((e) => Card(
+                      child: e,
+                    ))
+                .toList()
+            : list);
   }
 }
 

@@ -20,7 +20,8 @@ import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
 class ListHorizontalApiAutoRestWidget extends StatefulWidget {
-  AutoRest autoRest;
+  AutoRest? autoRest;
+  List<ViewAbstract>? list;
   Widget? title;
   double? customHeight;
   String? titleString;
@@ -28,12 +29,14 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   Widget Function(ViewAbstract v)? listItembuilder;
   ListHorizontalApiAutoRestWidget(
       {super.key,
-      required this.autoRest,
+      this.autoRest,
       this.title,
+      this.list,
       this.titleString,
       this.isSliver = false,
       this.customHeight,
-      this.listItembuilder});
+      this.listItembuilder})
+      : assert(list != null || autoRest != null);
 
   @override
   State<ListHorizontalApiAutoRestWidget> createState() =>
@@ -52,14 +55,16 @@ class _ListHorizontalApiWidgetState
   void initState() {
     super.initState();
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    _scrollController.addListener(() => _onScroll());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (listProvider.getCount(widget.autoRest.key) == 0) {
-        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj,
-            autoRest: widget.autoRest);
-      }
-    });
+    if (widget.autoRest != null) {
+      _scrollController.addListener(() => _onScroll());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (listProvider.getCount(widget.autoRest!.key) == 0) {
+          listProvider.fetchList(widget.autoRest!.key, widget.autoRest!.obj,
+              autoRest: widget.autoRest);
+        }
+      });
+    }
   }
 
   Widget listShimmerItems() {
@@ -98,9 +103,11 @@ class _ListHorizontalApiWidgetState
     );
   }
 
-  Widget _listItems(
-      List<ViewAbstract> data, ListMultiKeyProvider listProvider) {
-    bool isLoading = listProvider.isLoading(widget.autoRest.key);
+  Widget _listItems(List<ViewAbstract> data,
+      {ListMultiKeyProvider? listProvider}) {
+    bool isLoading = widget.autoRest == null
+        ? false
+        : listProvider!.isLoading(widget.autoRest!.key);
     return LayoutBuilder(
       builder: (co, constraints) {
         debugPrint(
@@ -160,7 +167,7 @@ class _ListHorizontalApiWidgetState
             onSubtitleClicked: isError
                 ? () {
                     listProvider.fetchList(
-                        widget.autoRest.key, widget.autoRest.obj,
+                        widget.autoRest!.key, widget.autoRest!.obj,
                         autoRest: widget.autoRest);
                   }
                 : null,
@@ -178,12 +185,15 @@ class _ListHorizontalApiWidgetState
   Widget build(BuildContext context) {
     _currentHeight =
         widget.customHeight ?? MediaQuery.of(context).size.height * .25;
+    if (widget.list != null) {
+      return wrapHeader(context, _listItems(widget.list!));
+    }
     return ChangeNotifierProvider.value(
         value: listProvider,
         child: Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
           builder: (context, value, child) {
             debugPrint(
-                "ListHorizontalApiAutoRestWidget building widget: ${widget.autoRest.key}");
+                "ListHorizontalApiAutoRestWidget building widget: ${widget.autoRest?.key}");
             bool isLoading = value.item1;
             int count = value.item2;
             bool isError = value.item3;
@@ -193,8 +203,8 @@ class _ListHorizontalApiWidgetState
               } else {
                 return wrapHeader(
                     context,
-                    _listItems(listProvider.getList(widget.autoRest.key),
-                        listProvider));
+                    _listItems(listProvider.getList(widget.autoRest!.key),
+                        listProvider: listProvider));
               }
             } else if (isLoading) {
               if (count == 0) {
@@ -202,8 +212,8 @@ class _ListHorizontalApiWidgetState
               } else {
                 return wrapHeader(
                     context,
-                    _listItems(listProvider.getList(widget.autoRest.key),
-                        listProvider));
+                    _listItems(listProvider.getList(widget.autoRest!.key),
+                        listProvider: listProvider));
               }
             } else {
               if (count == 0) {
@@ -211,22 +221,26 @@ class _ListHorizontalApiWidgetState
               }
               return wrapHeader(
                   context,
-                  _listItems(
-                      listProvider.getList(widget.autoRest.key), listProvider));
+                  _listItems(listProvider.getList(widget.autoRest!.key),
+                      listProvider: listProvider));
             }
           },
           selector: (p0, p1) => Tuple3(
-              p1.isLoading(widget.autoRest.key),
-              p1.getCount(widget.autoRest.key),
-              p1.isHasError(widget.autoRest.key)),
+              p1.isLoading(widget.autoRest!.key),
+              p1.getCount(widget.autoRest!.key),
+              p1.isHasError(widget.autoRest!.key)),
         ));
+  }
+
+  bool hasTitle() {
+    return widget.title != null || widget.titleString != null;
   }
 
   Widget wrapHeader(BuildContext context, Widget child) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildHeader(context),
+        if (hasTitle()) buildHeader(context),
         if (kIsWeb)
           const SizedBox(
             height: kDefaultPadding,
@@ -286,7 +300,7 @@ class _ListHorizontalApiWidgetState
   void _onScroll() {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj,
+      listProvider.fetchList(widget.autoRest!.key, widget.autoRest!.obj,
           autoRest: widget.autoRest);
     }
   }

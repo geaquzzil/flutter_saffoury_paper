@@ -142,6 +142,7 @@
   "changeInvoiceProductNameDes": "Change product name (Leave blank if you want to keep the original name)",
   "changeOnlyCutRoll": "Change only cutted product(s)",
   "changeQuantity": "Change quantity",
+  "chart": "Charting",
   "checkout": "Check out",
   "chooseAction": "Choose action",
   "chooseActionYouLike": "Choose the action you would like to do for \\n{r}\\nTo complete the operation",

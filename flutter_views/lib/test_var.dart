@@ -18095,7 +18095,7 @@ const dashboard = {
       "sizes_cut_requests_count": 1
     }
   ],
-  "date": {"from": "2022-08-02", "to": "2022-08-02"}
+  "date": {"from": "2023-12-15", "to": "2023-12-15"}
 };
 const availabilityType = [
   {

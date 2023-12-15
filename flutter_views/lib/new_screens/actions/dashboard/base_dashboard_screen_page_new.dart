@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/date_selector.dart';
@@ -75,7 +76,7 @@ class _BaseDashboardMainPageState
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: kDefaultPadding ,
+                vertical: kDefaultPadding,
               ),
               child: SearchWidgetComponent(onSearchTextChanged: (text) {
                 debugPrint("search for $text");
@@ -135,9 +136,13 @@ class _BaseDashboardMainPageState
     }
   }
 
-  Widget getWidget(double width, DashableGridHelper element) {
+  Widget getWidget(
+    double width,
+    DashableGridHelper element,
+  ) {
     return FileInfoStaggerdGridView(
         list: element.widgets.map((e) => e.widget).toList(),
+        wrapWithCard: element.wrapWithCard,
         crossAxisCount: getCrossAxisCount(width),
         childAspectRatio: 1
 
@@ -145,11 +150,25 @@ class _BaseDashboardMainPageState
         );
   }
 
+  Widget getSecondPaneWidget(
+    double width,
+    DashableGridHelper element,
+  ) {
+    return FileInfoStaggerdGridView(
+        list: element.widgets.map((e) => e.widget).toList(),
+        wrapWithCard: element.wrapWithCard,
+        crossAxisCount: 1,
+        childAspectRatio: 1.4
+
+        // width < 1400 ? 1.1 : 1.4,
+        );
+  }
+
   @override
   getDesktopFirstPane(double width) {
+    List<Widget> widgets = List.empty(growable: true);
     List<DashableGridHelper> list = getExtras()
         .getDashboardSectionsFirstPane(context, getCrossAxisCount(width));
-    List<Widget> widgets = List.empty(growable: true);
 
     for (var element in list) {
       GlobalKey buttonKey = GlobalKey();
@@ -172,19 +191,17 @@ class _BaseDashboardMainPageState
     List<DashableGridHelper> list = getExtras()
         .getDashboardSectionsSecoundPane(context, getCrossAxisCount(width));
     List<Widget> widgets = List.empty(growable: true);
-    for (var element in list) {
-      var group = [
-        DashableItemHeaderBuilder(
-          dgh: element,
-        ),
-        SliverToBoxAdapter(
-            child: FileInfoStaggerdGridView(
-                list: element.widgets.map((e) => e.widget).toList(),
-                crossAxisCount: 1,
-                childAspectRatio: 1
 
-                // width < 1400 ? 1.1 : 1.4,
-                ))
+    for (var element in list) {
+      GlobalKey buttonKey = GlobalKey();
+      var group = [
+        SectionItemHeader(
+          context: context,
+          dgh: element,
+          buttonKey: buttonKey,
+          child: getSecondPaneWidget(width, element),
+        ),
+        // SliverToBoxAdapter(child: getWidget(width, element))
       ];
       widgets.addAll(group);
     }
@@ -199,7 +216,15 @@ class _BaseDashboardMainPageState
 
   @override
   Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) {
-    return DashboardHeader(current_screen_size: currentScreenSize,);
+    return DashboardHeader(
+      date: extras?.date ?? DateObject(),
+      current_screen_size: currentScreenSize,
+      onSelectedDate: (d) {
+        if (d == null) return;
+        extras.setDate(d);
+        refresh(extras: extras);
+      },
+    );
   }
 
   @override
@@ -265,12 +290,13 @@ class _BaseDashboardMainPageState
 
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane) {
-    // return false;
+    return false;
     return !firstPane;
   }
 
   @override
   bool setPaneClipRect(bool firstPane) {
+    return false;
     return !firstPane;
   }
 }
