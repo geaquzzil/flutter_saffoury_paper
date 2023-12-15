@@ -25,6 +25,7 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final popUpSize = findPopupSizeSquare(context);
     return Container(
       color: Theme.of(context).colorScheme.background,
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -44,8 +45,8 @@ class DashboardHeader extends StatelessWidget {
                 CustomPopupMenu(
                     barrierColor: kIsWeb ? Colors.black54 : Colors.black26,
                     menuBuilder: () => SizedBox(
-                          width: 400,
-                          height: 400,
+                          width: popUpSize.width,
+                          height: popUpSize.height,
                           child: ClipRRect(
                             borderRadius:
                                 BorderRadius.circular(kDefualtClipRect),

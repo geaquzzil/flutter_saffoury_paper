@@ -23,6 +23,13 @@ const double kDrawerOpenWidth = 360;
 
 const double kDefaultClosedDrawer = 80;
 
+Size findPopupSizeSquare(BuildContext context,
+    {CurrentScreenSize? screenSize}) {
+  screenSize ??= getCurrentScreenSizeStatic(context);
+  Size s = MediaQuery.of(context).size;
+  return Size(400, 400);
+}
+
 bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
   return screenSize == CurrentScreenSize.DESKTOP ||
       screenSize == CurrentScreenSize.LARGE_TABLET;
