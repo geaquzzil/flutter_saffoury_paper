@@ -123,6 +123,7 @@ extension StringsUtils on String? {
 
   DateTime toDateTimeOnlyDate() {
     if (this == null) return DateTime.now();
+    if (this!.isEmpty) return DateTime.now();
     DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
     return dateFormat.parse(this ?? "");
   }

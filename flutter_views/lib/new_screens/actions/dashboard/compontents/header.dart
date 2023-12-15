@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/shared_components/search_field.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../models/apis/date_object.dart';
@@ -16,7 +17,11 @@ import 'date_selector.dart';
 
 class DashboardHeader extends StatelessWidget {
   final CurrentScreenSize current_screen_size;
-  const DashboardHeader({super.key, required this.current_screen_size});
+  DateTime? focuseDate;
+  DashboardHeader({
+    Key? key,
+    required this.current_screen_size,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +53,61 @@ class DashboardHeader extends StatelessWidget {
                                 body: ValueListenableBuilder<DateObject?>(
                               valueListenable: selectDateChanged,
                               builder: (context, value, child) => TableCalendar(
+                                // calendarStyle:CalendarStyle().. ,
+                                // eventLoader: (day) {
+                                //   if (day.weekday == DateTime.monday) {
+                                //     return [Event('Cyclic event')];
+                                //   }
+
+                                //   return [];
+                                // },
+                                calendarBuilders: CalendarBuilders(
+                                  dowBuilder: (context, day) {
+                                    if (day.weekday == DateTime.saturday) {
+                                      final text = DateFormat.E().format(day);
+
+                                      return Center(
+                                        child: Text(
+                                          text,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                rangeStartDay: value?.from.toDateTimeOnlyDate(),
+                                rangeEndDay: value?.to.toDateTimeOnlyDate(),
+                                rangeSelectionMode:
+                                    RangeSelectionMode.toggledOn,
+                                selectedDayPredicate: (day) {
+                                  return isSameDay(
+                                      value?.from.toDateTimeOnlyDate() ??
+                                          "".toDateTimeOnlyDate(),
+                                      day);
+                                },
+                                onRangeSelected: (start, end, focuseDate) {
+                                  selectDateChanged.value =
+                                      DateObject.initFromDateTime(
+                                          start ?? DateTime.now(),
+                                          toDate: end);
+
+                                  debugPrint(
+                                      "selectDateChanged ${selectDateChanged.value}");
+                                },
+                                locale: 'en-US',
                                 firstDay: DateTime.utc(2023, 10, 16),
                                 lastDay: DateTime.utc(2030, 3, 14),
-                                focusedDay:
-                                    value?.from.toDateTime() ?? "".toDateTime(),
+                                focusedDay: value?.from.toDateTimeOnlyDate() ??
+                                    "".toDateTimeOnlyDate(),
                                 onDaySelected: (d, d1) {
+                                  focuseDate = d1;
                                   selectDateChanged.value =
                                       DateObject.initFromDateTime(d);
+                                  debugPrint(
+                                      "selectDateChanged ${selectDateChanged.value}");
                                 },
                               ),
                             )),

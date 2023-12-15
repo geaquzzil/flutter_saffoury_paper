@@ -7,7 +7,7 @@ import '../models/apis/date_object.dart';
 
 class TodayText extends StatelessWidget {
   DateObject? dateObject;
-  TodayText({Key? key, this.dateObject}) : super(key: key);
+  TodayText({super.key, this.dateObject});
 
   @override
   Widget build(BuildContext context) {
