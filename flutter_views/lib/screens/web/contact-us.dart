@@ -49,10 +49,9 @@ class ContactUsWebPage extends BaseWebPageSlivers {
     return [
       SliverToBoxAdapter(
           child: TitleAndDescriptopnAndImage(
-        primaryTitle: "CONTACT US",
-        title: "Submit a\nRequest?".toUpperCase(),
-        description:
-            "Have questions before making a purchase? See the contacts below for more information..",
+        primaryTitle: AppLocalizations.of(context)!.contactUs,
+        title: AppLocalizations.of(context)!.submitARequest.toUpperCase(),
+        description: AppLocalizations.of(context)!.submitRequestDes,
         customIconData: Icons.contact_support_rounded,
       )),
 

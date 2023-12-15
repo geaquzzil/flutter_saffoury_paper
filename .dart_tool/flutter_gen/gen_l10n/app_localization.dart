@@ -213,6 +213,12 @@ abstract class AppLocalizations {
   /// **'Add another new record after successfully added'**
   String get addNewAfterAdd;
 
+  /// No description provided for @addNewFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new {r}'**
+  String addNewFormat(Object r);
+
   /// No description provided for @addNewSubObject.
   ///
   /// In en, this message translates to:
@@ -1040,6 +1046,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Description'**
   String get description;
+
+  /// No description provided for @descriptionWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Saffoury Co covers an area of 60000 square meters now, employing about 400 people,with the monthly output of 2000 ton,about 2.5million per month.Saffoury Co is dedicated to customer and social service, constantly in producing high grade products, cooperation and innovation to promote the development of the company,has passed the CE&ISO approved.\n\nOur tissue made from bamboo pulp. It is eco friendly,bacteriostatic, non-toxic compared to wood pulp and cleaner than recycle pulp.\n\nBased on health, environmental protection and sustainable development, Saffoury Co develops unbleached BAMBOO PULP PAPER, which enable to reduce the deforestation and protect Ecological environment.\n\nBamboo paper replacement can help reduce deforestation about 660000 cubic meters(450000 trees), and absorb extra 105000 tons carbon dioxide per year, Our company adopt advanced technology which reduces the industrial water and COD, reached GWPB.\n\nSaffoury Co won FDA and FSC, ISO, Certifications.got BSCI audited, We have cooperated with more than 20 countries around the world and enjou good reputation both home and abroad Main products: toilet paper, facial tissue in box and soft pack, toilet paper, napkins, paper towel in roll and multi- fold,kitchen paper towel in roll and multi-fold,mini jumbo roll, toilet seat cover,wet wipes, etc.\n\nSincerely welcome you to have a visit and contribute valuable suggestion to us.'**
+  String get descriptionWeb;
+
+  /// No description provided for @descriptionWeb2.
+  ///
+  /// In en, this message translates to:
+  /// **'Saffoury Co. stablished in 1990, as a producer of jumbo tissue paper rolls, All high quality tissue grades are produced from the highest virgin pulp grade sourced from all over the world. Since its inception located in Hosh Sahia, Damascus, Syria\n\nSaffoury is a professional manufacture of different kinds of paper with more than 30 years manufacturing experience, advanced technology has been gradually brought in from Taiwan, Italy with our strong R&D team, OEM service and design service are available.'**
+  String get descriptionWeb2;
 
   /// No description provided for @desposited.
   ///
@@ -2481,6 +2499,12 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get other;
 
+  /// No description provided for @ourHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'OUR HISTORY'**
+  String get ourHistory;
+
   /// No description provided for @outOfStock.
   ///
   /// In en, this message translates to:
@@ -3183,6 +3207,12 @@ abstract class AppLocalizations {
   /// **'See more'**
   String get seeMore;
 
+  /// No description provided for @selectFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Select {r}'**
+  String selectFormat(Object r);
+
   /// No description provided for @selectItems.
   ///
   /// In en, this message translates to:
@@ -3602,6 +3632,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit'**
   String get subment;
+
+  /// No description provided for @submitARequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit a\nRequest?'**
+  String get submitARequest;
+
+  /// No description provided for @submitRequestDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Have questions before making a purchase? See the contacts below for more information..'**
+  String get submitRequestDes;
 
   /// No description provided for @successAdded.
   ///

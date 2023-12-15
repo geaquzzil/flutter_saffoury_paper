@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/date_selector.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
@@ -71,9 +73,14 @@ class _BaseDashboardMainPageState
       title: Row(
         children: [
           Expanded(
-            child: SearchWidgetComponent(onSearchTextChanged: (text) {
-              debugPrint("search for $text");
-            }),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: kDefaultPadding ,
+              ),
+              child: SearchWidgetComponent(onSearchTextChanged: (text) {
+                debugPrint("search for $text");
+              }),
+            ),
           ),
           IconButton(onPressed: () {}, icon: Icon(Icons.tab)),
           IconButton(onPressed: () {}, icon: Icon(Icons.safety_check)),
@@ -82,7 +89,13 @@ class _BaseDashboardMainPageState
           ProfilePicturePopupMenu()
         ],
       ),
-      subtitle: DashboardHeader(),
+      // subtitle: Row(
+      //   children: [
+      //     Expanded(child: DashboardHeader()),
+      //     DateSelector(),
+      //     Spacer()
+      //   ],
+      // ),
     );
   }
 
@@ -186,8 +199,7 @@ class _BaseDashboardMainPageState
 
   @override
   Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) {
-    // TODO: implement getFirstPaneAppbar
-    return null;
+    return DashboardHeader(current_screen_size: currentScreenSize,);
   }
 
   @override

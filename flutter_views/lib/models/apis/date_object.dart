@@ -23,8 +23,16 @@ class DateObject {
     from = findFirstDateOfTheMonth(DateTime.now()).toDateTimeStringOnlyDate();
     to = findLastDateOfTheMonth(DateTime.now()).toDateTimeStringOnlyDate();
   }
+  DateObject.initFromDateTime(DateTime date, {this.from = "", this.to = ""}) {
+    from = date.toDateTimeStringOnlyDate();
+    to = date.toDateTimeStringOnlyDate();
+  }
   static DateTime findLastDateOfTheMonth(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month + 1, 0);
+  }
+
+  static DateTime fromDateObject(DateObject dateObject) {
+    return dateObject.from.toDateTime();
   }
 
   static DateTime findFirstDateOfTheMonth(DateTime dateTime) {

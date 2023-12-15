@@ -52,7 +52,8 @@ class _BaseDashboardState extends State<BaseDashboard>
               SliverPersistentHeader(
                   pinned: true,
                   delegate: SliverAppBarDelegate(
-                      child: const DashboardHeader(),
+                      child: const DashboardHeader(
+                          current_screen_size: CurrentScreenSize.DESKTOP),
                       minHeight: 70,
                       maxHeight: 80)),
               SliverPersistentHeader(
@@ -174,7 +175,10 @@ class _BaseDashboardState extends State<BaseDashboard>
     widgets.add(SliverPersistentHeader(
         pinned: true,
         delegate: SliverAppBarDelegate(
-            child: const DashboardHeader(), minHeight: 70, maxHeight: 80)));
+            child: const DashboardHeader(
+                current_screen_size: CurrentScreenSize.DESKTOP),
+            minHeight: 70,
+            maxHeight: 80)));
     widgets.add(SliverPersistentHeader(
         pinned: true,
         delegate: SliverAppBarDelegatePreferedSize(

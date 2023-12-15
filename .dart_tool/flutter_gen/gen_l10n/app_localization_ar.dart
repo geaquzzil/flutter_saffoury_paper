@@ -67,6 +67,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addNewAfterAdd => 'Add another new record after successfully added';
 
   @override
+  String addNewFormat(Object r) {
+    return 'اضافة $r';
+  }
+
+  @override
   String get addNewSubObject => 'إضافة كائن فرعي جديد';
 
   @override
@@ -491,6 +496,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get description => 'الوصف';
+
+  @override
+  String get descriptionWeb => 'تغطي شركة صفوري مساحة 60000 متر مربع الآن، وتوظف حوالي 400 شخص، ويبلغ إنتاجها الشهري 2000 طن، حوالي 2.5 مليون شهريًا. شركة صفوري مكرسة لخدمة العملاء والخدمة الاجتماعية، وتعمل باستمرار على إنتاج منتجات عالية الجودة والتعاون والابتكار. لتعزيز تطوير الشركة، حصلت على شهادة CE&ISO المعتمدة.\n\nأنسجتنا مصنوعة من لب الخيزران. وهو صديق للبيئة، ومثبط للجراثيم، وغير سام بالمقارنة مع لب الخشب وأنظف من اللب المعاد تدويره.\n\nاستناداً إلى الصحة وحماية البيئة والتنمية المستدامة، تقوم شركة صفوري بتطوير ورق لب الخيزران غير المبيض، مما يتيح تقليل إزالة الغابات وحماية البيئة. البيئة.\n\nيمكن أن يساعد استبدال ورق الخيزران في تقليل إزالة الغابات بحوالي 660000 متر مكعب (450000 شجرة)، وامتصاص 105000 طن إضافي من ثاني أكسيد الكربون سنويًا، وتعتمد شركتنا تقنية متقدمة تقلل من المياه الصناعية وCOD، وقد وصلت إلى GWPB.\n\\ فازت شركة nSaffoury بشهادة FDA وFSC وISO وحصلت على شهادات BSCI، وقد تعاونا مع أكثر من 20 دولة حول العالم ونتمتع بسمعة طيبة في الداخل والخارج. المنتجات الرئيسية: ورق التواليت، مناديل الوجه المعبأة في علب وعبوات ناعمة، ورق التواليت. ، والمناديل الورقية، والمناشف الورقية بشكل لفات ومتعددة الطيات، ومنشفة المطبخ الورقية بشكل لفات ومتعددة الطيات، وبكرة كبيرة الحجم صغيرة، وغطاء مقعد المرحاض، ومناديل مبللة، وما إلى ذلك.\n\nنرحب بكم بشدة لزيارة والمساهمة باقتراحات قيمة نحن.';
+
+  @override
+  String get descriptionWeb2 => 'تأسست شركة صفوري في عام 1990، كمنتج لفات المناديل الورقية الضخمة، ويتم إنتاج جميع درجات المناديل الورقية عالية الجودة من أعلى درجات اللب البكر التي يتم الحصول عليها من جميع أنحاء العالم. منذ إنشائها في حوش ساهية، دمشق، سوريا\n\nSafoury هي شركة متخصصة في تصنيع أنواع مختلفة من الورق مع أكثر من 30 عامًا من الخبرة في التصنيع، وقد تم جلب التكنولوجيا المتقدمة تدريجيًا من تايوان بإيطاليا من خلال فريق البحث والتطوير القوي لدينا، وتصنيع المعدات الأصلية. تتوفر خدمة الخدمة والتصميم.';
 
   @override
   String get desposited => 'أودعت';
@@ -1253,6 +1264,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get other => 'اخرى';
 
   @override
+  String get ourHistory => 'تاريخنا';
+
+  @override
   String get outOfStock => 'إنتهى من المخزن';
 
   @override
@@ -1620,6 +1634,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeMore => 'شاهد المزيد';
 
   @override
+  String selectFormat(Object r) {
+    return 'اختيار $r';
+  }
+
+  @override
   String get selectItems => 'اختيار العناصر';
 
   @override
@@ -1842,6 +1861,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get subment => 'تم';
+
+  @override
+  String get submitARequest => 'إرسال\nالطلب؟';
+
+  @override
+  String get submitRequestDes => 'هل لديك أسئلة قبل إجراء عملية الشراء؟ انظر جهات الاتصال أدناه لمزيد من المعلومات.';
 
   @override
   String get successAdded => 'أضيف بنجاح!';

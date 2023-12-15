@@ -123,7 +123,9 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                             valueListenable: _loginState,
                             builder: (context, value, child) => WebButton(
                               width: double.infinity,
-                              title: "SIGN IN",
+                              title: AppLocalizations.of(context)!
+                                  .log_in
+                                  .toUpperCase(),
                               onPressed: value != null
                                   ? () {
                                       debugPrint(
@@ -138,6 +140,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                             ),
                           ),
                           Text(
+                            //todo translate
                             "If you don't have an account",
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
@@ -147,6 +150,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                           Row(
                             children: [
                               Text(
+                                //todo translate
                                 "You can",
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
@@ -156,6 +160,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                                   onPressRegister?.call();
                                 },
                                 child: Text(
+                                  //todo translate
                                   "Register here!",
                                   style: Theme.of(context).textTheme.button,
                                 ),
@@ -204,6 +209,7 @@ class SignInPage extends BaseWebPage {
           height: 30,
         ),
         Text(
+          //todo translate
           "If you don't have an account",
           style: Theme.of(context).textTheme.bodyLarge,
         ),
@@ -213,6 +219,7 @@ class SignInPage extends BaseWebPage {
         Row(
           children: [
             Text(
+              //todo translate
               "You can",
               style: Theme.of(context).textTheme.bodyLarge,
             ),
@@ -222,6 +229,7 @@ class SignInPage extends BaseWebPage {
                 debugPrint("${MediaQuery.of(context).size.width}");
               },
               child: Text(
+                //todo translate
                 "Register here!",
                 style: Theme.of(context).textTheme.button,
               ),

@@ -26,7 +26,7 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
             )),
         ElevatedButton.icon(
           style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: kDefaultPadding * 1.5,
               vertical: kDefaultPadding / 2,
             ),
@@ -35,7 +35,9 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
             _restorableDateRangePickerRouteFuture.present();
           },
           icon: const Icon(Icons.date_range),
-          label: const Text("SELECT DATE"),
+          label: Text(AppLocalizations.of(context)!
+              .selectFormat(AppLocalizations.of(context)!.date)
+              .toUpperCase()),
         ),
         IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios)),
       ],
@@ -86,6 +88,7 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
   ) {
     return DialogRoute<DateTimeRange?>(
       context: context,
+      
       builder: (BuildContext context) {
         return DateRangePickerDialog(
           helpText: "This is the date range",

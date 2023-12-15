@@ -275,7 +275,7 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
   bool isPanesIsSliver(bool firstPane) => false;
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) => true;
+  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) => false;
 
   @override
   Widget? getBaseBottomSheet() => null;
@@ -346,7 +346,7 @@ class _PdfTestToBasePageState extends BasePageState<PdfTestToBasePage> {
 
   @override
   bool setBodyPadding(bool firstPane) => false;
-  
+
   @override
-  bool setPaneClipRect(bool firstPane)  => false;
+  bool setPaneClipRect(bool firstPane) => false;
 }
