@@ -40,6 +40,7 @@ class _ViewableTableViewAbstractWidget
   int? sortColumnIndex;
   bool isAscending = false;
   late GlobalKey<FormBuilderState> _formKey;
+
   int lastIndexOfSelected = -1;
   @override
   void didUpdateWidget(covariant ViewableTableViewAbstractWidget oldWidget) {

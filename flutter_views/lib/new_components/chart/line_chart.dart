@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class LineChartItem<T, E> extends StatelessWidget {
@@ -27,11 +28,13 @@ class LineChartItem<T, E> extends StatelessWidget {
         primaryXAxis: E.runtimeType == DateTime.now().runtimeType
             ? DateTimeAxis(isVisible: !smallView)
             : CategoryAxis(
+              
                 borderWidth: 0,
                 rangePadding: ChartRangePadding.auto,
                 isVisible: !smallView,
                 axisBorderType: AxisBorderType.withoutTopAndBottom),
         primaryYAxis: NumericAxis(
+            numberFormat: NumberFormat.compact(),
             borderWidth: 0,
             axisBorderType: AxisBorderType.withoutTopAndBottom,
             zoomPosition: .2,

@@ -124,7 +124,8 @@ class ChartCardItemCustom extends StatelessWidget {
                   if (footerWidget != null) footerWidget!,
                   if (footer != null)
                     Text(footer!,
-                        style: Theme.of(context).textTheme.bodySmall!),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary)),
                   if (footerRight != null)
                     Text(footerRight!,
                         style: Theme.of(context).textTheme.bodySmall!),

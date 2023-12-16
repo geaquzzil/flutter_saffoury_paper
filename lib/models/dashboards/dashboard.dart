@@ -18,10 +18,12 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
@@ -95,11 +97,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return Dashboard();
   }
 
-  @override
-  Future<Dashboard?> callApi() async {
-    // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
-    return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
-  }
+  // @override
+  // Future<Dashboard?> callApi() async {
+  //   // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
+  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  // }
 
   @override
   String? getCustomAction() => "list_dashboard";
@@ -114,6 +116,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   Map<String, String> get getCustomMap => {
         "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
+        "interval":"daily"
       };
 
   @override
@@ -264,15 +267,23 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return map;
   }
 
-  List<WidgetGridHelper> getInvoicesWidgets(BuildContext context) {
+  List<WidgetGridHelper> getInvoicesWidgets(
+      BuildContext context, int crossAxisCount) {
+    bool isMezouj = crossAxisCount % 2 == 0;
+    debugPrint(
+        "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
+    int crossCountFund = crossAxisCount ~/ 4;
+    int crossAxisCountMod = crossAxisCount % 4;
+    int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
     return [
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
+          crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             color: Order().getMainColor(),
             // color: Colors.green.withOpacity(0.2),
             icon: Order().getMainIconData(),
+            listGrowthRate: ordersAnalysis,
             title: AppLocalizations.of(context)!.orders,
             description:
                 "${orders?.getTotalQuantityGroupedFormattedText(context)}",
@@ -280,10 +291,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             footerRightWidget: ordersAnalysis.getGrowthRateText(context),
           ))),
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
+          crossAxisCellCount: crossCountFundCalc,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             color: Purchases().getMainColor(),
+            listGrowthRate: purchasesAnalysis,
             icon: Purchases().getMainIconData(),
             title: AppLocalizations.of(context)!.purchases,
             description:
@@ -292,23 +304,47 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             footerRightWidget: purchasesAnalysis.getGrowthRateText(context),
           ))),
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: 3,
-          child: TabBarByListWidget<TabControllerHelper>(
-            tabs: [
-              TabControllerHelper(
-                "orders",
-                widget:
-                    ListStaticWidget(list: orders!, emptyWidget: Text("Empty")),
-              ),
-              // TabControllerHelper(
-              //   "deb",
-              //   null,
-              //   widget:
-              //       ListStaticWidget(list: debits!, emptyWidget: Text("Empty")),
-              // )
-            ],
+          crossAxisCellCount: crossCountFundCalc,
+          mainAxisCellCount: 1,
+          child: ChartCardItemCustom(
+            icon: CutRequest().getMainIconData(),
+            listGrowthRate: cut_requestsAnalysis,
+            title: CutRequest().getMainHeaderLabelTextOnly(context),
+            description: "TEST",
+            footer: cut_requests?.length.toString(),
+            footerRightWidget: cut_requestsAnalysis.getGrowthRateText(context),
           ))),
+
+      getWidget(StaggeredGridTile.count(
+          crossAxisCellCount: crossCountFundCalc,
+          mainAxisCellCount: 1,
+          child: ChartCardItemCustom(
+            icon: Transfers().getMainIconData(),
+            title: Transfers().getMainHeaderLabelTextOnly(context),
+            listGrowthRate: transfersAnalysis,
+            description:
+                transfers.getTotalQuantityGroupedFormattedText(context),
+            footer: transfers?.length.toString(),
+            footerRightWidget: transfersAnalysis.getGrowthRateText(context),
+          ))),
+      // getWidget(StaggeredGridTile.count(
+      //     crossAxisCellCount: 2,
+      //     mainAxisCellCount: 3,
+      //     child: TabBarByListWidget<TabControllerHelper>(
+      //       tabs: [
+      //         TabControllerHelper(
+      //           "orders",
+      //           widget:
+      //               ListStaticWidget(list: orders!, emptyWidget: Text("Empty")),
+      //         ),
+      //         // TabControllerHelper(
+      //         //   "deb",
+      //         //   null,
+      //         //   widget:
+      //         //       ListStaticWidget(list: debits!, emptyWidget: Text("Empty")),
+      //         // )
+      //       ],
+      //     ))),
       getWidget(StaggeredGridTile.count(
           crossAxisCellCount: 1,
           mainAxisCellCount: 1,
@@ -316,7 +352,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             icon: ProductInput().getMainIconData(),
             title: ProductInput().getMainHeaderLabelTextOnly(context),
             description:
-                "${products_inputs.getTotalQuantityGroupedFormattedText(context)}",
+                products_inputs.getTotalQuantityGroupedFormattedText(context),
             footer: products_inputs?.length.toString(),
             footerRightWidget:
                 products_inputsAnalysis.getGrowthRateText(context),
@@ -328,7 +364,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             icon: ProductOutput().getMainIconData(),
             title: ProductOutput().getMainHeaderLabelTextOnly(context),
             description:
-                "${products_outputs.getTotalQuantityGroupedFormattedText(context)}",
+                products_outputs.getTotalQuantityGroupedFormattedText(context),
             footer: products_outputs?.length.toString(),
             footerRightWidget:
                 products_outputsAnalysis.getGrowthRateText(context),
@@ -339,62 +375,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           child: ChartCardItemCustom(
             icon: ReservationInvoice().getMainIconData(),
             title: ReservationInvoice().getMainHeaderLabelTextOnly(context),
-            description:
-                "${reservation_invoice.getTotalQuantityGroupedFormattedText(context)}",
+            description: reservation_invoice
+                .getTotalQuantityGroupedFormattedText(context),
             footer: reservation_invoice?.length.toString(),
             footerRightWidget:
                 reservation_invoiceAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
-          child: ChartCardItemCustom(
-            icon: Transfers().getMainIconData(),
-            title: Transfers().getMainHeaderLabelTextOnly(context),
-            description:
-                "${transfers.getTotalQuantityGroupedFormattedText(context)}",
-            footer: transfers?.length.toString(),
-            footerRightWidget: transfersAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: 1,
-          child: ChartCardItemCustom(
-            icon: CutRequest().getMainIconData(),
-            title: CutRequest().getMainHeaderLabelTextOnly(context),
-            description: "TEST",
-            footer: cut_requests?.length.toString(),
-            footerRightWidget: cut_requestsAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
-          child: ChartCardItemCustom(
-            icon: Icons.arrow_back_sharp,
-            title: AppLocalizations.of(context)!.incomes,
-            description: incomes?.getTotalValue().toCurrencyFormat() ?? "",
-            footer: incomes?.length.toString(),
-            footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1,
-          child: ChartCardItemCustom(
-            icon: Icons.today,
-            title: AppLocalizations.of(context)!.this_day,
-            description: getTotalTodayBalance(),
-            // footer: incomes?.length.toString(),
-            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 3,
-          mainAxisCellCount: 1,
-          child: ChartCardItemCustom(
-            icon: Icons.balance,
-            title: AppLocalizations.of(context)!.balance_due,
-            description: getTotalDueBalance(cashBoxID: 1),
-            // footer: incomes?.length.toString(),
-            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
           ))),
     ];
   }
@@ -412,6 +397,9 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     int crossCountFund = crossAxisCount ~/ 4;
     int crossAxisCountMod = crossAxisCount % 4;
     int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
+
+    debugPrint(
+        "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc $crossCountFundCalc");
     return [
       getWidget(StaggeredGridTile.count(
           crossAxisCellCount: crossCountFundCalc,
@@ -483,25 +471,46 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             footer: incomes?.length.toString(),
             footerRightWidget: incomesAnalysis.getGrowthRateText(context),
           ))),
+      if (checkList(credits))
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: crossAxisCount,
+            mainAxisCellCount: 2,
+            child: Card(
+              child: ViewableTableViewAbstractWidget(
+                  usePag: true,
+                  viewAbstract: [...credits ?? [], ...debits ?? []]),
+            ))),
+
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 2,
+          crossAxisCellCount: 1,
+          mainAxisCellCount: .75,
+          child: ChartCardItemCustom(
+            icon: Icons.balance,
+            color: Colors.orange,
+            title: AppLocalizations.of(context)!.previousBalance,
+            description: getTotalPreviousBalance(),
+            // footer: incomes?.length.toString(),
+            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+          ))),
+
+      getWidget(StaggeredGridTile.count(
+          crossAxisCellCount: crossAxisCount - 2,
+          mainAxisCellCount: 1.5,
+          child: ChartCardItemCustom(
+            icon: Icons.balance,
+            title: AppLocalizations.of(context)!.balance_due,
+            description: getTotalDueBalance(),
+            // footer: incomes?.length.toString(),
+            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+          ))),
+      getWidget(StaggeredGridTile.count(
+          crossAxisCellCount: 1,
           mainAxisCellCount: .75,
           child: ChartCardItemCustom(
             color: Colors.blue,
             icon: Icons.today,
             title: AppLocalizations.of(context)!.this_day,
             description: getTotalTodayBalance(),
-            // footer: incomes?.length.toString(),
-            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: .75,
-          child: ChartCardItemCustom(
-            icon: Icons.balance,
-            color: Colors.orange,
-            title: AppLocalizations.of(context)!.balance_due,
-            description: getTotalDueBalance(),
             // footer: incomes?.length.toString(),
             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
           ))),
@@ -528,8 +537,18 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             ]),
         DashableGridHelper(
             title: AppLocalizations.of(context)!.invoice,
-            headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
-            widgets: [...getInvoicesWidgets(context)]),
+            headerListToAdd: [
+              Order(),
+              Purchases(),
+              CutRequest(),
+              Transfers(),
+              ProductInput(),
+              ProductOutput(),
+              ReservationInvoice()
+            ],
+            widgets: [
+              ...getInvoicesWidgets(context, crossAxisCount)
+            ]),
         if (checkList(pending_cut_requests))
           DashableGridHelper(
               title: AppLocalizations.of(context)!.pendingCutRequest,

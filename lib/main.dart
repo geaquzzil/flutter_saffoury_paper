@@ -120,7 +120,7 @@ void main() async {
     Spendings(),
     ProductType(),
     CustomerBalanceList(),
-    Dashboard.init(-1, dateObject: DateObject()),
+    Dashboard.init(-1, dateObject: DateObject(from: "2022-10-01", to: "2022-10-05")),
   ]);
   try {
     runApp(MultiProvider(providers: [

@@ -30,7 +30,7 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
 
   @override
   void initState() {
-    _zoomPanBehavior = ZoomPanBehavior(enableSelectionZooming: true);
+    _zoomPanBehavior = ZoomPanBehavior(enableSelectionZooming: true,enableDoubleTapZooming: true,enableMouseWheelZooming: true);
     super.initState();
   }
 

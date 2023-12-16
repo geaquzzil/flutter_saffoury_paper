@@ -454,6 +454,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   int? iD;
   String? tableName;
   dynamic extras;
+  bool _isLoading = false;
 
   BasePageWithApi({this.iD, this.tableName, this.extras});
   Future<dynamic> getCallApiFunctionIfNull(BuildContext context);
@@ -490,8 +491,25 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   @override
+  generateToolbar({Widget? customAppBar}) {
+    if (_isLoading) {
+      return null;
+    }
+    return super.generateToolbar(customAppBar: customAppBar);
+  }
+
+  @override
+  Widget _getTowPanes(double w) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return super._getTowPanes(w);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget widget;
+    _isLoading = !getBodyWithoutApi();
     if (extras != null && getBodyWithoutApi()) {
       widget = super.build(context);
     }
@@ -500,6 +518,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
       future: getCallApiFunctionIfNull(context),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          _isLoading = false;
           return EmptyWidget(
               lottiUrl:
                   "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
@@ -509,6 +528,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
               title: AppLocalizations.of(context)!.cantConnect,
               subtitle: AppLocalizations.of(context)!.cantConnectRetry);
         } else if (snapshot.connectionState == ConnectionState.done) {
+          _isLoading = false;
           if (snapshot.data != null) {
             extras = snapshot.data;
             if (extras is ViewAbstract) {
@@ -520,6 +540,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
             }
             return super.build(context);
           } else {
+            _isLoading = false;
             return EmptyWidget(
                 lottiUrl:
                     "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
@@ -530,8 +551,9 @@ abstract class BasePageWithApi<T extends StatefulWidget>
                 subtitle: AppLocalizations.of(context)!.cantConnectRetry);
           }
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+          _isLoading = true;
+          return super.build(context);
+          ;
         } else {
           return const Text("TOTODO");
         }
