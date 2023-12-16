@@ -409,9 +409,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     bool isMezouj = crossAxisCount % 2 == 0;
     debugPrint(
         "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
+    int crossCountFund = crossAxisCount ~/ 4;
+    int crossAxisCountMod = crossAxisCount % 4;
+    int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
     return [
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
+          crossAxisCellCount: crossCountFundCalc,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             list: credits,
@@ -425,7 +428,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             footerRightWidget: creditsAnalysis.getGrowthRateText(context),
           ))),
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
+          crossAxisCellCount: crossCountFundCalc,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             color: Debits().getMainColor(),
@@ -457,7 +460,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       //           svgSrc: Icons.balance)
       //     ], chart: Text("")))),
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
+          crossAxisCellCount: crossCountFundCalc,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             color: Spendings().getMainColor(),
@@ -469,7 +472,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             footerRightWidget: spendingsAnalysis.getGrowthRateText(context),
           ))),
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
+          crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             icon: Icons.arrow_back_sharp,
