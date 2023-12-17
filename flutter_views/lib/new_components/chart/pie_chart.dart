@@ -7,7 +7,7 @@ class CirculeChartItem<T, E> extends StatelessWidget {
 
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
-  
+
   CirculeChartItem(
       {Key? key,
       required this.title,
@@ -21,11 +21,17 @@ class CirculeChartItem<T, E> extends StatelessWidget {
     return SfCircularChart(
         margin: EdgeInsets.zero,
         title: ChartTitle(
-            alignment: ChartAlignment.center,
+            // alignment: ChartAlignment.center,
             text: title,
             textStyle: Theme.of(context).textTheme.titleSmall),
         legend: Legend(
-            isVisible: true, overflowMode: LegendItemOverflowMode.scroll),
+            isResponsive: false,
+            legendItemBuilder: (s, d, d2, i) =>
+                Text("s $s dynamic $d dynamic2  $d2  index $i"),
+            isVisible: true,
+            
+            overflowMode: LegendItemOverflowMode.wrap,
+           ),
         // Initialize category axis
         // primaryXAxis: CategoryAxis(),
         tooltipBehavior: TooltipBehavior(),

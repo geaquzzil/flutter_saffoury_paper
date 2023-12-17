@@ -613,11 +613,10 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                 crossAxisCellCount: 1,
                 mainAxisCellCount: 1.5,
                 child: SizedBox(
-                  height: 300,
+                  height: 800,
                   child: ListHorizontalCustomViewApiAutoRestWidget(
-                    
-                      autoRest: ChangesRecords.init(
-                          Spendings(), "NameID")),
+                      autoRest: ChangesRecords.init(Spendings(), "NameID",
+                          fieldToSumBy: "value")),
                 ),
               ),
               type: WidgetDashboardType.CHART,

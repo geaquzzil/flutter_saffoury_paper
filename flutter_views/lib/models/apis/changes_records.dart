@@ -16,6 +16,9 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   @JsonKey(includeFromJson: false, includeToJson: false)
   T? viewAbstract;
   String? fieldToGroupBy;
+  String? fieldToSumBy;
+  @Deprecated(
+      "this field is already can calculate from totalGrouped.total and its do sql query twice")
   int? total;
   List<ChangesRecordGroup>? totalGrouped = [];
   ChangesRecords() : super();
@@ -33,10 +36,8 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     return totalGrouped ?? [];
   }
 
-  ChangesRecords.init(T viewAbstract, String fieldToGroupBy) {
-    this.viewAbstract = viewAbstract;
-    this.fieldToGroupBy = fieldToGroupBy;
-  }
+  ChangesRecords.init(T this.viewAbstract, String this.fieldToGroupBy,
+      {this.fieldToSumBy});
 
   // @Override
   // public Object getObjectOnRecyclerServerResponse(Context context, Object object) {
@@ -83,8 +84,10 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   @override
   String? getCustomAction() => "list_changes_records_table";
   @override
-  Map<String, String> get getCustomMap =>
-      {"fieldToGroupBy": fieldToGroupBy ?? ""};
+  Map<String, String> get getCustomMap => {
+        "fieldToGroupBy": fieldToGroupBy ?? "",
+        if (fieldToSumBy != null) "fieldToSumBy": fieldToSumBy!
+      };
 
   @override
   ChangesRecords fromJsonViewAbstract(Map<String, dynamic> json) =>
@@ -97,6 +100,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     // ..viewAbstract = this.viewAbstract
     ..total = data["total"] as int?
     ..fieldToGroupBy = data["fieldToGroupBy"] as String?
+    ..fieldToSumBy = data["fieldToSumBy"] as String?
     ..totalGrouped = (data['totalGrouped'] as List<dynamic>?)
         ?.map((e) => ChangesRecordGroup.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -122,18 +126,18 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     debugPrint("getCustomViewSingleResponseWidget ${totalGrouped}");
 
-    return LineChartItem<ChangesRecordGroup, String>(
-      title: "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
-      list: totalGrouped ?? [],
-      xValueMapper: (item, value) => "${item.groupBy}",
-      yValueMapper: (item, n) => item.count,
-    );
+    // return LineChartItem<ChangesRecordGroup, String>(
+    //   title: "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
+    //   list: totalGrouped ?? [],
+    //   xValueMapper: (item, value) => "${item.groupBy}",
+    //   yValueMapper: (item, n) => fieldToSumBy == null ? item.count : item.total,
+    // );
     return CirculeChartItem<ChangesRecordGroup, String>(
       title:
           "${AppLocalizations.of(context)!.total}: ${total.toCurrencyFormat()} ",
       list: totalGrouped ?? [],
       xValueMapper: (item, value) => item.groupBy,
-      yValueMapper: (item, n) => item.count,
+      yValueMapper: (item, n) => fieldToSumBy == null ? item.count : item.total,
     );
   }
 
@@ -158,8 +162,11 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
             if (obj == null) return;
 
             debugPrint("obj selected is ${obj.value}");
-            valueNotifier.value =
-                ChangesRecords.init(viewAbstract!, viewAbstract!.getFieldValueFromDropDownString(obj.value.toString()));
+            valueNotifier.value = ChangesRecords.init(
+                viewAbstract!,
+                viewAbstract!
+                    .getFieldValueFromDropDownString(obj.value.toString()),
+                fieldToSumBy: fieldToSumBy);
           });
     }
 
@@ -180,8 +187,8 @@ class ChangesRecordGroup {
   int? count;
   @JsonKey(fromJson: convertToString)
   String? groupBy;
-
-  
+  @JsonKey(fromJson: convertToDouble)
+  double? total;
 
   ChangesRecordGroup();
 
@@ -200,13 +207,20 @@ class ChangesRecordGroup {
   void setGroupBy(String groupBy) {
     this.groupBy = groupBy;
   }
+  @override
+  String toString() {
+    return "count: $count, groupBy: $groupBy, total: $total";
+  }
 
   static String? convertToString(dynamic number) =>
       number == null ? "-" : number.toString();
   factory ChangesRecordGroup.fromJson(Map<String, dynamic> data) =>
       ChangesRecordGroup()
         ..count = data['count'] as int?
+        ..total = ChangesRecordGroup.convertToDouble(data['total'])
         ..groupBy = ChangesRecordGroup.convertToString(data['groupBy']);
 
   Map<String, dynamic> toJson() => {};
+  static double? convertToDouble(dynamic number) =>
+      number == null ? 0 : double.tryParse(number.toString());
 }
