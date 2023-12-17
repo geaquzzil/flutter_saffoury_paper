@@ -4,17 +4,20 @@ import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'home/components/drawers/drawer_large_screen.dart';
@@ -143,6 +146,40 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
       // backgroundColor: ElevationOverlay.overlayColor(context, 2),
       // leading: ,
       title: customAppBar ?? getBaseAppbar(getCurrentScreenSize())!,
+      bottom: customAppBar == null
+          ? TabBar(
+              dividerColor: Colors.transparent,
+              // labelStyle: Theme.of(context).textTheme.titleSmall,
+              indicatorSize: TabBarIndicatorSize.tab,
+              // indicatorColor:
+              //     Theme.of(context).colorScheme.primary.withOpacity(.2),
+              // labelColor: Theme.of(context).colorScheme.primary,
+
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(80.0),
+                color:
+                    Theme.of(context).colorScheme.onSecondary,
+              ),
+              isScrollable: true,
+              tabs: [
+                  Tab(
+                    // text: "FirstTab",
+                    icon: Icon(Icons.dashboard),
+                  ),
+                  Tab(
+                    text: "FirstTab",
+                    // icon: Icon(Icons.dashboard),
+                  ),
+                  Tab(
+                    text: "FirstTab",
+                    // icon: Icon(Icons.dashboard),
+                  ),
+                  Tab(
+                    text: "FirstTab",
+                    // icon: Icon(Icons.dashboard),
+                  )
+                ])
+          : null,
     );
   }
 
@@ -356,7 +393,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   Widget _getTabletWidget(double w) {
-    return Scaffold(
+    Widget body = _getBody(w);
+    Widget t = Scaffold(
         // extendBodyBehindAppBar: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -364,7 +402,13 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         floatingActionButton:
             getBaseFloatingActionButton(getCurrentScreenSize()),
         drawer: _drawerWidget,
-        body: _getBody(w));
+        body: true ? TabBarView(children: [body, body, body, body]) : body);
+
+    if (true) {
+      return DefaultTabController(length: 4, child: t);
+    } else {
+      return t;
+    }
   }
 
   Widget _getBody(double w) {

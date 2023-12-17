@@ -97,11 +97,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return Dashboard();
   }
 
-  // @override
-  // Future<Dashboard?> callApi() async {
-  //   // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
-  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
-  // }
+  @override
+  Future<Dashboard?> callApi() async {
+    // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
+    return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  }
 
   @override
   String? getCustomAction() => "list_dashboard";
@@ -116,7 +116,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   Map<String, String> get getCustomMap => {
         "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
-        "interval":"daily"
+        if (setInterval()) "interval": "daily"
       };
 
   @override
@@ -646,5 +646,15 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   void setDate(DateObject? date) {
     this.date = date;
     debitsDue = null;
+  }
+
+  bool setInterval() {
+    if (date != null) {
+      DateTime from = date!.from.toDateTimeOnlyDate();
+      DateTime to = date!.to.toDateTimeOnlyDate();
+      int days = from.difference(to).inDays;
+      return days <= 30;
+    }
+    return false;
   }
 }
