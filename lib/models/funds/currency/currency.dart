@@ -18,6 +18,11 @@ class Currency extends BaseWithNameString<Currency> {
   }
 
   @override
+  String getForeignKeyName() {
+    return "CurrencyID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()..addAll({"nameAr": ""});
 

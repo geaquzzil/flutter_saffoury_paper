@@ -35,6 +35,10 @@ class Purchases extends InvoiceMaster<Purchases> {
 
   @override
   String? getTableNameApi() => "purchases";
+  @override
+  String getForeignKeyName() {
+    return "PurchaseID";
+  }
 
   @override
   Map<ServerActions, List<String>>? isRequiredObjectsList() => {
@@ -101,6 +105,11 @@ class PurchasesDetails extends InvoiceMasterDetails<PurchasesDetails> {
 
   Purchases? purchases;
   PurchasesDetails() : super();
+
+  @override
+  String getForeignKeyName() {
+    return "PurchaseRefundID";
+  }
 
   @override
   PurchasesDetails getSelfNewInstance() {

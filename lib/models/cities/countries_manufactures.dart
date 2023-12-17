@@ -25,6 +25,10 @@ class CountryManufacture extends ViewAbstract<CountryManufacture> {
       };
 
   CountryManufacture() : super();
+  @override
+  String getForeignKeyName() {
+    return "Country_Manufacture_CompanyID";
+  }
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {};

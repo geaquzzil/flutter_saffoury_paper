@@ -62,6 +62,11 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   }
 
   @override
+  String getForeignKeyName() {
+    return "CustomsDeclarationID";
+  }
+
+  @override
   CustomsDeclaration getSelfNewInstanceFileImporter(
       {required material.BuildContext context, String? field, value}) {
     int? parsedValue = int.tryParse(value);

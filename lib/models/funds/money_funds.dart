@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/funds/accounts/account_names.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/equalities.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
@@ -72,7 +73,8 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
         "customers": Customer(),
         "employees": Employee(),
         "equalities": Equalities(),
-        "warehouse": Warehouse()
+        "warehouse": Warehouse(),
+        "account_names": AccountName(),
       };
 
   @override

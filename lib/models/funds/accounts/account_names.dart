@@ -20,6 +20,11 @@ class AccountName extends BaseWithNameString<AccountName> {
   }
 
   @override
+  String getForeignKeyName() {
+    return "NameID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({

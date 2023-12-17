@@ -22,6 +22,10 @@ class Equalities extends ViewAbstract<Equalities> {
   Equalities() : super() {
     date = "".toDateTimeNowString();
   }
+  @override
+  String getForeignKeyName() {
+    return "EqualitiesID";
+  }
 
   @override
   Equalities getSelfNewInstance() {

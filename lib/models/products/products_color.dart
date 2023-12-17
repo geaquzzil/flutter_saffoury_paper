@@ -40,8 +40,14 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
         return this;
       }
     } else {
-      throw Exception("${getMainHeaderLabelTextOnly(context)}: ProductsColor.getSelfNewInstance is not a Map");
+      throw Exception(
+          "${getMainHeaderLabelTextOnly(context)}: ProductsColor.getSelfNewInstance is not a Map");
     }
+  }
+
+  @override
+  String getForeignKeyName() {
+    return "ProductColorID";
   }
 
   @override

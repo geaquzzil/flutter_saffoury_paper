@@ -36,6 +36,11 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   ProductInput getSelfNewInstance() {
     return ProductInput();
   }
+  
+  @override
+  String getForeignKeyName() {
+    return "ProductInputID";
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
@@ -59,8 +64,6 @@ class ProductInput extends InvoiceMaster<ProductInput> {
     list.add("warehouse");
     return list;
   }
-
-  
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

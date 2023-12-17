@@ -34,6 +34,10 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   ProductOutput getSelfNewInstance() {
     return ProductOutput();
   }
+    @override
+  String getForeignKeyName() {
+    return "ProductOutputID";
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

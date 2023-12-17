@@ -17,6 +17,13 @@ class Warehouse extends BaseWithNameString<Warehouse> {
   }
 
   @override
+  String getForeignKeyName() {
+    //todo if from money found then CashBoxID
+    //else WarehouseID
+    return "WarehouseID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance();
   @override
@@ -48,8 +55,5 @@ class Warehouse extends BaseWithNameString<Warehouse> {
   Warehouse fromJsonViewAbstract(Map<String, dynamic> json) =>
       Warehouse.fromJson(json);
 
-  @override
-  String getForeignKeyName() {
-    return "WarehouseID";
-  }
+
 }

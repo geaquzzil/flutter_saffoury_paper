@@ -367,6 +367,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         .toList();
   }
 
+  String getFieldValueFromDropDownString(String selectedValue) {
+    dynamic d = getMirrorFieldsMapNewInstance()[selectedValue];
+    if (d is ViewAbstract) {
+      return d.getForeignKeyName();
+    } else {
+      return selectedValue;
+    }
+  }
+
   String getBaseActionText(BuildContext context,
       {ServerActions? serverAction}) {
     if (serverAction != null) {

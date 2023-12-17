@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_view_controller/new_components/tables_widgets/view_table
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
@@ -606,6 +608,37 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           title: AppLocalizations.of(context)!.chart,
           wrapWithCard: true,
           widgets: [
+            getWidget(
+              StaggeredGridTile.count(
+                crossAxisCellCount: 1,
+                mainAxisCellCount: 1.5,
+                child: SizedBox(
+                  height: 300,
+                  child: ListHorizontalCustomViewApiAutoRestWidget(
+                    
+                      autoRest: ChangesRecords.init(
+                          Spendings(), "NameID")),
+                ),
+              ),
+              type: WidgetDashboardType.CHART,
+            ),
+
+            // getWidget(
+            //   StaggeredGridTile.count(
+            //       crossAxisCellCount: 1,
+            //       mainAxisCellCount: 1.5,
+            //       child: CirculeChartItem<GrowthRate, DateTime>(
+            //         title: "T",
+            //         list: getAnalysisChartFunds(),
+            //         // titles: getAnalysisChartFundsTitle(context),
+            //         // dataLabelMapper: (item, idx) =>
+            //         //     item.total.toCurrencyFormat(),
+            //         xValueMapper: (item, value, indexInsideList) => DateTime(
+            //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+            //         yValueMapper: (item, n, indexInsideList) => n.total,
+            //       )),
+            //   type: WidgetDashboardType.CHART,
+            // ),
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 1,

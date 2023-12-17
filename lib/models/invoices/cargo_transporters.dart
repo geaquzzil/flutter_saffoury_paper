@@ -30,6 +30,11 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   }
 
   @override
+  String getForeignKeyName() {
+    return "CargoTransID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "name": "",
         "phone": "",

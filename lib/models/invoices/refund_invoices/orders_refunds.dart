@@ -33,6 +33,11 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   }
 
   @override
+  String getForeignKeyName() {
+    return "OrderRefundID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({

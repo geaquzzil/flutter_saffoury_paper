@@ -7,6 +7,7 @@ class CirculeChartItem<T, E> extends StatelessWidget {
 
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
+  
   CirculeChartItem(
       {Key? key,
       required this.title,

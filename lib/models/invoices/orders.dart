@@ -52,6 +52,11 @@ class Order extends InvoiceMaster<Order>
   }
 
   @override
+  String getForeignKeyName() {
+    return "OrderID";
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
@@ -234,6 +239,11 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
   @override
   OrderDetails getSelfNewInstance() {
     return OrderDetails();
+  }
+
+  @override
+  String getForeignKeyName() {
+    return "OrderDetailsID";
   }
 
   @override

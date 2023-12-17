@@ -156,8 +156,10 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
           list: viewAbstract!.getMainFieldsIconsAndValues(context),
           onSelected: (obj) {
             if (obj == null) return;
+
+            debugPrint("obj selected is ${obj.value}");
             valueNotifier.value =
-                ChangesRecords.init(viewAbstract!, obj.value.toString());
+                ChangesRecords.init(viewAbstract!, viewAbstract!.getFieldValueFromDropDownString(obj.value.toString()));
           });
     }
 
@@ -178,6 +180,8 @@ class ChangesRecordGroup {
   int? count;
   @JsonKey(fromJson: convertToString)
   String? groupBy;
+
+  
 
   ChangesRecordGroup();
 
