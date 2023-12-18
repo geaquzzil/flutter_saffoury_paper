@@ -89,21 +89,26 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   late CurrentScreenSize _currentScreenSize;
   late TabController _tabController;
   int currentTabIndex = 0;
-
+  List<TabControllerHelper>? _tabList;
   get getWidth => this._width;
 
   get getHeight => this._height;
 
-  List<TabControllerHelper>? getTabBarList() {
+  List<TabControllerHelper>? _getTabBarList() {
+    return _tabList;
+  }
+
+  List<TabControllerHelper>? initTabBarList() {
     return null;
   }
 
   bool _hasTabBarList() {
-    return getTabBarList() != null;
+    return _getTabBarList() != null;
   }
 
   PreferredSizeWidget getTabBarWidget() {
     return TabBar(
+        controller: _tabController,
         dividerColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: BoxDecoration(
@@ -111,12 +116,13 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           color: Theme.of(context).colorScheme.onSecondary,
         ),
         isScrollable: true,
-        tabs: getTabBarList()!);
+        tabs: _getTabBarList()!);
   }
 
   ///set padding to content view pased on the screen size
   ///if this is [true] then we add divider between panes
   ///if this is [false] then we check for second pane if no second pane then we add padding automatically
+  ///todo tab not working here it will execute globaley
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
       {TabControllerHelper? tab});
 
@@ -297,9 +303,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       onReconnected: () => debugPrint("BasePage RECONNECTED"),
       onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
     );
+    _tabList = initTabBarList();
     if (_hasTabBarList()) {
-      _tabController =
-          TabController(vsync: this, length: getTabBarList()!.length);
+      _tabController = TabController(vsync: this, length: _tabList!.length);
       _tabController.addListener(_tabControllerChangeListener);
     }
     super.initState();
@@ -367,24 +373,40 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         });
   }
 
+  beforeGetDesktopFirstPaneWidget({TabControllerHelper? tab}) {
+    return getDesktopFirstPane(tab: tab);
+  }
+
+  beforeGetDesktopSecoundPaneWidget({TabControllerHelper? tab}) {
+    return getDesktopSecondPane(tab: tab);
+  }
+
+  beforeGetFirstPaneWidget({TabControllerHelper? tab}) {
+    return getFirstPane(tab: tab);
+  }
+
+  beforeGetSecondPaneWidget({TabControllerHelper? tab}) {
+    return getSecoundPane(tab: tab);
+  }
+
   Widget _getTowPanes({TabControllerHelper? tab}) {
     if (isMobile(context, maxWidth: getWidth)) {
-      _firstWidget = getFirstPane(tab: tab);
+      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
       return _setSubAppBar(_firstWidget, true)!;
     }
 
     if (isDesktop(context, maxWidth: getWidth)) {
-      _firstWidget = getDesktopFirstPane(tab: tab);
-      _secondWidget = getDesktopSecondPane(tab: tab);
-      _firstWidget = _setSubAppBar(_firstWidget, true);
-      _secondWidget = _setSubAppBar(_secondWidget, false);
+      _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
+      _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
+      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
+      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
 
       // if
     } else {
-      _firstWidget = getFirstPane(tab: tab);
-      _secondWidget = getSecoundPane(tab: tab);
-      _firstWidget = _setSubAppBar(_firstWidget, true);
-      _secondWidget = _setSubAppBar(_secondWidget, false);
+      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+      _secondWidget = beforeGetSecondPaneWidget(tab: tab);
+      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
+      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
     }
     if (_secondWidget == null) {
       return _firstWidget!;
@@ -401,37 +423,106 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     );
   }
 
-  Widget getBody() {
-    return _hasTabBarList()
-        ? TabBarView(
-            controller: _tabController,
-            children: getTabBarList()!.map((e) => _getBody(tab: e)).toList())
-        : _getBody();
-  }
+  // Widget getBody() {
+  //   return _hasTabBarList()
+  //       ? TabBarView(
+  //           controller: _tabController,
+  //           children: _getTabBarList()!.map((e) => _getBody(tab: e)).toList())
+  //       : _getBody();
+  // }
 
   Widget _getTabletWidget() {
-    Widget t = Scaffold(
+    return Scaffold(
         // extendBodyBehindAppBar: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getBaseFloatingActionButton(),
         drawer: _drawerWidget,
-        body: getBody());
+        body: _getBody());
 
-    if (_hasTabBarList()) {
-      List<TabControllerHelper> list = getTabBarList()!;
-      return DefaultTabController(length: list.length, child: t);
-    } else {
-      return t;
-    }
+    // return t;
+
+    // if (_hasTabBarList()) {
+    //   List<TabControllerHelper> list = _getTabBarList()!;
+    //   return DefaultTabController(
+    //       initialIndex: currentTabIndex, length: list.length, child: t);
+    // } else {
+    //   return t;
+    // }
   }
 
-  Widget _getBody({TabControllerHelper? tab}) {
+  Widget _getBody() {
     Widget currentWidget;
-    currentWidget = _getTowPanes(tab: tab);
-    if (isDesktop(context, maxWidth: getWidth) ||
-        isTablet(context, maxWidth: getWidth)) {
+    bool isLarge = isDesktop(context, maxWidth: getWidth) ||
+        isTablet(context, maxWidth: getWidth);
+
+    if (_hasTabBarList()) {
+      if (isLarge) {
+        return SafeArea(
+            child: Row(
+          children: [
+            _drawerWidget!,
+            TabBarView(
+                controller: _tabController,
+                children: _getTabBarList()!.map((tab) {
+                  currentWidget = _getTowPanes(tab: tab);
+                  return Selector<DrawerMenuControllerProvider, bool>(
+                    builder: (__, isOpen, ___) {
+                      debugPrint("drawer selector $isOpen");
+
+                      Widget toShowWidget;
+                      Widget clipRect = ClipRRect(
+                          borderRadius: BorderRadius.circular(kDefualtClipRect),
+                          child: _hasBaseToolbar()
+                              ? Scaffold(
+                                  backgroundColor:
+                                      ElevationOverlay.overlayColor(context, 2),
+                                  appBar: generateToolbar(),
+                                  body: currentWidget,
+                                )
+                              : currentWidget);
+
+                      if (_secondWidget == null ||
+                          setPaddingWhenTowPane(getCurrentScreenSize(),
+                              tab: tab)) {
+                        toShowWidget = Padding(
+                          padding: getSuggestionPadding(getWidth),
+                          child: clipRect,
+                        );
+                      } else {
+                        toShowWidget = clipRect;
+                      }
+
+                      return AnimatedContainer(
+                          key: UniqueKey(),
+                          height: _height,
+                          width: (_width! -
+                                  (isOpen
+                                          ? kDrawerOpenWidth
+                                          : kDefaultClosedDrawer)
+                                      .toNonNullable()) -
+                              0,
+                          duration: const Duration(milliseconds: 100),
+                          child: toShowWidget);
+                    },
+                    selector: (p0, p1) => p1.getSideMenuIsOpen,
+                  );
+                }).toList())
+          ],
+        ));
+      } else {
+        return SafeArea(
+          child: TabBarView(
+              controller: _tabController,
+              children:
+                  _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList()),
+        );
+      }
+    } else {
+      currentWidget = _getTowPanes();
+    }
+    if (isLarge) {
       return SafeArea(
           child: Row(
         children: [
@@ -452,7 +543,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                       : currentWidget);
 
               if (_secondWidget == null ||
-                  setPaddingWhenTowPane(getCurrentScreenSize(), tab: tab)) {
+                  setPaddingWhenTowPane(
+                    getCurrentScreenSize(),
+                  )) {
                 toShowWidget = Padding(
                   padding: getSuggestionPadding(getWidth),
                   child: clipRect,
@@ -510,6 +603,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   void _tabControllerChangeListener() {
     currentTabIndex = _tabController.index;
+    debugPrint("_tabController $currentTabIndex");
   }
 }
 
@@ -522,21 +616,39 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   bool _isLoading = false;
 
   BasePageWithApi({this.iD, this.tableName, this.extras});
-  Future<dynamic> getCallApiFunctionIfNull(BuildContext context);
+  Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
+      {TabControllerHelper? tab});
   ServerActions getServerActions();
 
-  dynamic getExtras() {
+  dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
-      return getTabBarList()![currentTabIndex].extras;
+      if (tab != null) {
+        dynamic result = _getTabBarList()!.firstWhere(
+            (element) => element.extras.runtimeType == tab.extras.runtimeType);
+        if (result == null) {
+          throw Exception("Could not find tab");
+        }
+        return result.extras;
+      }
+      return _getTabBarList()![currentTabIndex].extras;
     }
     return extras;
   }
 
-  void setExtras({int? iD, String? tableName, dynamic ex}) {
+  void setExtras(
+      {int? iD, String? tableName, dynamic ex, TabControllerHelper? tabH}) {
+    _isLoading = false;
     if (_hasTabBarList()) {
-      getTabBarList()![currentTabIndex].extras = ex;
-      getTabBarList()![currentTabIndex].iD = iD;
-      getTabBarList()![currentTabIndex].tableName = tableName;
+      TabControllerHelper tab = tabH ?? _getTabBarList()![currentTabIndex];
+      tab.extras = ex;
+      tab.iD = iD;
+      tab.tableName = tableName;
+      if (tabH != null) {
+        // _getTabBarList()!.firstWhere(
+        //     (element) => element.extras.runtimeType == tabH.extras.runtimeType);
+      } else {
+        _getTabBarList()![currentTabIndex] = tab;
+      }
     } else {
       this.extras = ex;
       this.iD = iD;
@@ -549,8 +661,8 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     setState(() {});
   }
 
-  bool getBodyWithoutApi() {
-    dynamic ex = getExtras();
+  bool getBodyWithoutApi({TabControllerHelper? tab}) {
+    dynamic ex = getExtras(tab: tab);
     if (ex is! ViewAbstract) return false;
     if (ex is DashableInterface) {
       return (ex).isRequiredObjectsListChecker();
@@ -574,7 +686,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   // }
   getLoadingWidget(bool firstPane, {TabControllerHelper? tab}) {
     Widget loading = const Center(child: CircularProgressIndicator());
-    if (isPanesIsSliver(firstPane)) {
+    if (isPanesIsSliver(firstPane, tab: tab)) {
       return [
         SliverFillRemaining(
           child: loading,
@@ -585,46 +697,124 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   @override
-  Widget _getTowPanes({TabControllerHelper? tab}) {
-    dynamic loadingWidgetFirst =
-        _isLoading ? getLoadingWidget(true, tab: tab) : null;
-    dynamic loadingWidgetSecound =
-        _isLoading ? getLoadingWidget(false, tab: tab) : null;
-    if (isMobile(context, maxWidth: getWidth)) {
-      _firstWidget = loadingWidgetFirst ?? getFirstPane(tab: tab);
-      return _setSubAppBar(_firstWidget, true)!;
-    }
-
-    if (isDesktop(context, maxWidth: getWidth)) {
-      _firstWidget = loadingWidgetFirst ?? getDesktopFirstPane(tab: tab);
-      _secondWidget = loadingWidgetSecound ?? getDesktopSecondPane(tab: tab);
-      _firstWidget = _setSubAppBar(_firstWidget, true);
-      _secondWidget = _setSubAppBar(_secondWidget, false);
-
-      // if
-    } else {
-      _firstWidget = loadingWidgetFirst ?? getFirstPane(tab: tab);
-      _secondWidget = loadingWidgetSecound ?? getSecoundPane(tab: tab);
-      _firstWidget = _setSubAppBar(_firstWidget, true);
-      _secondWidget = _setSubAppBar(_secondWidget, false);
-    }
-    if (_secondWidget == null) {
-      return _firstWidget!;
-    }
-
-    if (getHasDecorationOnFirstPane(tab: tab)) {
-      _firstWidget = _getBorderDecoration(_firstWidget!);
-    }
-
-    return TowPaneExt(
-      startPane: _firstWidget!,
-      endPane: _secondWidget,
-      customPaneProportion: getCustomPaneProportion(),
-    );
+  beforeGetFirstPaneWidget({TabControllerHelper? tab}) {
+    if (_isLoading) return getLoadingWidget(true, tab: tab);
+    return super.beforeGetFirstPaneWidget(tab: tab);
   }
 
   @override
+  beforeGetDesktopFirstPaneWidget({TabControllerHelper? tab}) {
+    if (_isLoading) return getLoadingWidget(true, tab: tab);
+    return super.beforeGetDesktopFirstPaneWidget(tab: tab);
+  }
+
+  @override
+  beforeGetDesktopSecoundPaneWidget({TabControllerHelper? tab}) {
+    if (_isLoading) return getLoadingWidget(false, tab: tab);
+    return super.beforeGetDesktopSecoundPaneWidget(tab: tab);
+  }
+
+  @override
+  beforeGetSecondPaneWidget({TabControllerHelper? tab}) {
+    if (_isLoading) return getLoadingWidget(false, tab: tab);
+    return super.beforeGetSecondPaneWidget(tab: tab);
+  }
+
+  @override
+  Widget _getTowPanes({TabControllerHelper? tab}) {
+    debugPrint("getBody _getTowPanes TabController ${tab?.extras.runtimeType}");
+    dynamic ex = getExtras(tab: tab);
+    _isLoading = !getBodyWithoutApi(tab: tab);
+    if (ex != null && !_isLoading) {
+      return super._getTowPanes(tab: tab);
+    }
+    return FutureBuilder<dynamic>(
+      future: getCallApiFunctionIfNull(context, tab: tab),
+      builder: (context, snapshot) {
+        debugPrint("BasePageApi FutureBuilder started");
+        if (snapshot.hasError) {
+          debugPrint("BasePageApi FutureBuilder hasError");
+          return getErrorWidget();
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          debugPrint("BasePageApi FutureBuilder done");
+          _isLoading = false;
+          if (snapshot.data != null) {
+            setExtras(ex: snapshot.data, tabH: tab);
+            if (ex is ViewAbstract) {
+              // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              //   context.read<ListMultiKeyProvider>().edit(ex);
+              // });
+            }
+            return super._getTowPanes(tab: tab);
+          } else {
+            debugPrint("BasePageApi FutureBuilder !done");
+            return getErrorWidget();
+          }
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          debugPrint("BasePageApi FutureBuilder waiting");
+          _isLoading = true;
+          return super._getTowPanes(tab: tab);
+        } else {
+          debugPrint("BasePageApi FutureBuilder !TOTODO");
+          return const Text("TOTODO");
+        }
+      },
+    );
+  }
+
+  Widget getErrorWidget() {
+    _isLoading = false;
+    return EmptyWidget(
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        onSubtitleClicked: () {
+          setState(() {});
+        },
+        title: AppLocalizations.of(context)!.cantConnect,
+        subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+  }
+
+  // @override
+  // Widget _getBody({TabControllerHelper? tab}) {
+  //   debugPrint(
+  //       "getBody getDesktopFirstPane TabController ${tab?.extras.runtimeType}");
+  //   dynamic ex = getExtras(tab: tab);
+  //   _isLoading = !getBodyWithoutApi(tab: tab);
+  //   if (ex != null && !_isLoading) {
+  //     return super._getBody(tab: tab);
+  //   }
+
+  //   return FutureBuilder<dynamic>(
+  //     future: getCallApiFunctionIfNull(context, tab: tab),
+  //     builder: (context, snapshot) {
+  //       // debugPrint("BasePageApi snapshot: $snapshot");
+  //       if (snapshot.hasError) {
+  //         return getErrorWidget();
+  //       } else if (snapshot.connectionState == ConnectionState.done) {
+  //         _isLoading = false;
+  //         if (snapshot.data != null) {
+  //           setExtras(ex: snapshot.data, tabH: tab);
+  //           if (ex is ViewAbstract) {
+  //             // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //             //   context.read<ListMultiKeyProvider>().edit(ex);
+  //             // });
+  //           }
+  //           return super._getBody(tab: tab);
+  //         } else {
+  //           return getErrorWidget();
+  //         }
+  //       } else if (snapshot.connectionState == ConnectionState.waiting) {
+  //         _isLoading = true;
+  //         return super._getBody(tab: tab);
+  //       } else {
+  //         return const Text("TOTODO");
+  //       }
+  //     },
+  //   );
+  // }
+
+  @override
   Widget build(BuildContext context) {
+    return super.build(context);
     _isLoading = !getBodyWithoutApi();
     if (getExtras() != null && !_isLoading) {
       return super.build(context);

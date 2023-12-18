@@ -42,7 +42,7 @@ part 'sales_analysis_dashboard.g.dart';
 @reflector
 class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
     implements DashableInterface {
-  DateObject? date;
+  DateObject? dateObject;
 
   List<Product>? bestSellingSize;
 
@@ -79,9 +79,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   String? getTableNameApi() => "list_sales";
 
-  SalesAnalysisDashboard.init({DateObject? dateObject}) {
-    date = dateObject;
-  }
+  SalesAnalysisDashboard.init({this.dateObject});
   @override
   SalesAnalysisDashboard getSelfNewInstance() {
     return SalesAnalysisDashboard();
@@ -101,7 +99,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
       AppLocalizations.of(context)!.dashboard_and_rep;
   @override
   Map<String, String> get getCustomMap => {
-        "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
+        "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
       };
 
   // @override
@@ -144,7 +142,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   void setDate(DateObject? date) {
-    this.date = date;
+    dateObject = date;
     profits = null;
   }
 }

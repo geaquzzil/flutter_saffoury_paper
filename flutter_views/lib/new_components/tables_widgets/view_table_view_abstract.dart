@@ -253,7 +253,7 @@ class MyData extends DataTableSource {
   DataRow getRow(int index) {
     ViewAbstract e = data[index];
 
-    debugPrint("getRow => $e");
+    // debugPrint("getRow => $e");
     return DataRow2.byIndex(
         selected: e.selected ?? false,
         onSelectChanged: (value) {

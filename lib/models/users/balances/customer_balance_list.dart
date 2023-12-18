@@ -36,7 +36,6 @@ class CustomerBalanceList
 
   @override
   Future<CustomerBalanceList?> callApi() async {
-    // TODO: implement callApi
     return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
   }
 
@@ -80,8 +79,8 @@ class CustomerBalanceList
   @override
   IconData getMainIconData() => Icons.balance;
 
-  @override
-  String? getTableNameApi() => null;
+  // @override
+  // String? getTableNameApi() => "list_customers_balances";
 
   @override
   String? getCustomAction() => "list_customers_balances";
@@ -293,7 +292,18 @@ class CustomerBalanceList
   }
 
   @override
+  bool isRequiredObjectsListChecker() {
+    return customers != null;
+  }
+
+  @override
   void setDate(DateObject? date) {
-    // TODO: implement setDate
+    //TODO this.date = date;TODO
+    customers = null;
+  }
+
+  @override
+  String? getTableNameApi() {
+    return "list_customers_balances";
   }
 }

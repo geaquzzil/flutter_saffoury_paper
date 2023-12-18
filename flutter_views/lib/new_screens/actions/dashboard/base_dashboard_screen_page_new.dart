@@ -35,15 +35,15 @@ class _BaseDashboardMainPageState
   //  late DashableInterface dashboard;
 
   @override
-  List<TabControllerHelper>? getTabBarList() {
+  List<TabControllerHelper>? initTabBarList() {
     return context
         .read<AuthProvider<AuthUser>>()
         .getListableOfDashablesInterface()
         .map((e) {
-      debugPrint("getTabBarList ${(e as ViewAbstract).getTableNameApi()}");
+      debugPrint("getTabBarList ${(e as ViewAbstract).getCustomAction()}");
       ViewAbstract v = e as ViewAbstract;
       return TabControllerHelper(
-        v.getTableNameApi() ?? "sda",
+        v.getCustomAction() ?? "sda",
         extras: v,
         icon: Icon(v.getMainIconData()),
       );
@@ -176,9 +176,9 @@ class _BaseDashboardMainPageState
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint("getDesktopFirstPane tab is ${tab?.extras.runtimeType}");
-    debugPrint("getDesktopFirstPane tab getExtras ${getExtras().runtimeType}");
+    // debugPrint("getDesktopFirstPane tab getExtras ${getExtras().debitsDue}");
     List<Widget> widgets = List.empty(growable: true);
-    List<DashableGridHelper> list = getExtras()
+    List<DashableGridHelper> list = getExtras(tab: tab)
         .getDashboardSectionsFirstPane(context, getCrossAxisCount(getWidth));
 
     for (var element in list) {
@@ -199,7 +199,7 @@ class _BaseDashboardMainPageState
 
   @override
   getDesktopSecondPane({TabControllerHelper? tab}) {
-    List<DashableGridHelper> list = getExtras()
+    List<DashableGridHelper> list = getExtras(tab: tab)
         .getDashboardSectionsSecoundPane(context, getCrossAxisCount(getWidth));
     List<Widget> widgets = List.empty(growable: true);
 
@@ -233,8 +233,8 @@ class _BaseDashboardMainPageState
       onSelectedDate: (d) {
         if (d == null) return;
 
-        getExtras().setDate(d);
-        refresh(extras: extras);
+        // getExtras().setDate(d);
+        // refresh(extras: extras);
       },
     );
   }
@@ -291,8 +291,9 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Future getCallApiFunctionIfNull(BuildContext context) =>
-      getExtras().callApi();
+  Future getCallApiFunctionIfNull(BuildContext context,
+          {TabControllerHelper? tab}) =>
+      getExtras(tab: tab).callApi();
 
   @override
   ServerActions getServerActions() {

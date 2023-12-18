@@ -586,7 +586,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                               .toCurrencyFormat(
                                   symbol: AppLocalizations.of(context)!.kg),
                           xValueMapper: (item, value) {
-                            debugPrint("ChartItem $item");
+                            // debugPrint("ChartItem $item");
                             return DateFormat.MMM().format(DateTime(
                                 item.year!, item.month!, item.day ?? 1));
                           },

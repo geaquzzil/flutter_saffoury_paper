@@ -111,7 +111,7 @@ class ChartCardItemCustom extends StatelessWidget {
                     dataLabelMapper: (item, idx) =>
                         item.total?.toCurrencyFormat(),
                     xValueMapper: (item, value) {
-                      debugPrint("ChartItem $item");
+                      // debugPrint("ChartItem $item");
                       return DateFormat.MMM().format(
                           DateTime(item.year!, item.month!, item.day ?? 1));
                     },

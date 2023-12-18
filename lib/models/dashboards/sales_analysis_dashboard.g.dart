@@ -135,9 +135,9 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
       ..cargo_transporters_count = json['cargo_transporters_count'] as int?
-      ..date = json['date'] == null
+      ..dateObject = json['dateObject'] == null
           ? null
-          : DateObject.fromJson(json['date'] as Map<String, dynamic>)
+          : DateObject.fromJson(json['dateObject'] as Map<String, dynamic>)
       ..bestSellingSize = (json['bestSellingSize'] as List<dynamic>?)
           ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -279,7 +279,7 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
       'cargo_transportersAnalysis':
           instance.cargo_transportersAnalysis?.map((e) => e.toJson()).toList(),
       'cargo_transporters_count': instance.cargo_transporters_count,
-      'date': instance.date?.toJson(),
+      'date': instance.dateObject?.toJson(),
       'bestSellingSize':
           instance.bestSellingSize?.map((e) => e.toJson()).toList(),
       'bestSellingGSM':
