@@ -10,6 +10,7 @@ import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_conv
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/sales_analysis_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
 import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
 import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
@@ -96,6 +97,10 @@ void main() async {
     // systemNavigationBarIconBrightness: Brightness.dark,
   ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
+    Dashboard.init(-1,
+        dateObject: DateObject(from: "2022-10-01", to: "2022-10-05")),
+    // CustomerBalanceList(),
+    // SalesAnalysisDashboard(),
     PrintProductLabelCustomView(),
     ExcelToProductConverter(),
     Product(),
@@ -119,8 +124,6 @@ void main() async {
     Incomes(),
     Spendings(),
     ProductType(),
-    CustomerBalanceList(),
-    Dashboard.init(-1, dateObject: DateObject(from: "2022-10-01", to: "2022-10-05")),
   ]);
   try {
     runApp(MultiProvider(providers: [

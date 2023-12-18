@@ -7,8 +7,7 @@ part of 'setting.dart';
 // **************************************************************************
 
 Setting _$SettingFromJson(Map<String, dynamic> json) => Setting()
-  ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..ENABLE_APP = json['ENABLE_APP'] as int?
   ..DISABLE_NOTIFICATIONS = json['DISABLE_NOTIFICATIONS'] as int?
   ..ENABLE_MULTI_EDIT = json['ENABLE_MULTI_EDIT'] as int?

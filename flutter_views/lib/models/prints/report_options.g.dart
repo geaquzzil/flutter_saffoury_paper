@@ -8,8 +8,7 @@ part of 'report_options.dart';
 
 ReportOptions _$ReportOptionsFromJson(Map<String, dynamic> json) =>
     ReportOptions()
-      ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..reportHeader = json['reportHeader'] as String?
       ..reportFooter = json['reportFooter'] as String?;
 

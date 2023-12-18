@@ -94,7 +94,13 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   Future<Dashboard?> callApi() async {
     // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
+    await Future.delayed(const Duration(seconds: 2));
     return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  }
+
+  @override
+  IconData getMainIconData() {
+    return Icons.dashboard_sharp;
   }
 
   @override
@@ -595,6 +601,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
+    return [];
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.chart,
@@ -619,28 +626,28 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                                 child: ListTile(
                               title: Text(AppLocalizations.of(context)!.total),
                               subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: Icon(Icons.monitor_weight),
+                              leading: const Icon(Icons.monitor_weight),
                               trailing: const Text("SYP"),
                             )),
                             OutlinedCard(
                                 child: ListTile(
                               title: Text(AppLocalizations.of(context)!.total),
                               subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: Icon(Icons.monitor_weight),
+                              leading: const Icon(Icons.monitor_weight),
                               trailing: const Text("SYP"),
                             )),
                             OutlinedCard(
                                 child: ListTile(
                               title: Text(AppLocalizations.of(context)!.total),
                               subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: Icon(Icons.monitor_weight),
+                              leading: const Icon(Icons.monitor_weight),
                               trailing: const Text("SYP"),
                             )),
                             OutlinedCard(
                                 child: ListTile(
                               title: Text(AppLocalizations.of(context)!.total),
                               subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: Icon(Icons.monitor_weight),
+                              leading: const Icon(Icons.monitor_weight),
                               trailing: const Text("SYP"),
                             )),
                             StorageInfoCardCustom(

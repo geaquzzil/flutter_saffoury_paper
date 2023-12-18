@@ -7,8 +7,7 @@ part of 'user_auth.dart';
 // **************************************************************************
 
 AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) => AuthUser<T>()
-  ..iD = json['iD'] as int
-  ..delete = json['delete'] as bool?
+  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..login = json['login'] as bool?
   ..permission = json['permission'] as bool?
   ..response = json['response'] as int?

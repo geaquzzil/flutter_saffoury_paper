@@ -283,15 +283,13 @@ class CustomerBalanceList
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
-    // TODO: implement getDashboardSectionsFirstPane
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
-    // TODO: implement getDashboardSectionsSecoundPane
-    throw UnimplementedError();
+    return [];
   }
 
   @override

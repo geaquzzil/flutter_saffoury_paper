@@ -15,8 +15,7 @@ PrinterOptions _$PrinterOptionsFromJson(Map<String, dynamic> json) =>
               _$PrintPaperSizeEnumMap, json['printPaperSize']) ??
           PrintPaperSize.Default,
     )
-      ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..startEndPage = json['startEndPage'] as String?
       ..printerName = json['printerName'] as String?
       ..printerNameLabel = json['printerNameLabel'] as String?;

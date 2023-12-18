@@ -9,8 +9,7 @@ part of 'permission_action_abstract.dart';
 PermissionActionAbstract _$PermissionActionAbstractFromJson(
         Map<String, dynamic> json) =>
     PermissionActionAbstract()
-      ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..table_name = json['table_name'] as String?
       ..print = json['print'] as int?
       ..notification = json['notification'] as int?

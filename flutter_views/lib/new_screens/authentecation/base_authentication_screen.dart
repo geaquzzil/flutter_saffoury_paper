@@ -63,12 +63,9 @@ class BaseAuthenticatingScreen extends StatelessWidget {
 
   Widget getDoneWidget(BuildContext context) {
     // return POSPage();
-    return BaseDashboardMainPage(
-        title: "TEST",
-        dashboard:
-            context.read<AuthProvider<AuthUser>>().getDashableInterface());
+    return BaseDashboardMainPage(title: "TEST");
     // return BaseShared();
-    return PdfTestToBasePage();
+    // return PdfTestToBasePage();
     // return TestBasePage();
     return const BaseHomeMainPage();
   }

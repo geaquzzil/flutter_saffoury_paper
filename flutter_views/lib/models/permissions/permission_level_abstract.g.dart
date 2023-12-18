@@ -9,8 +9,7 @@ part of 'permission_level_abstract.dart';
 PermissionLevelAbstract _$PermissionLevelAbstractFromJson(
         Map<String, dynamic> json) =>
     PermissionLevelAbstract()
-      ..iD = json['iD'] as int
-      ..delete = json['delete'] as bool?
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..userlevelname = json['userlevelname'] as String?
       ..permissions_levels = (json['permissions_levels'] as List<dynamic>?)
           ?.map((e) =>

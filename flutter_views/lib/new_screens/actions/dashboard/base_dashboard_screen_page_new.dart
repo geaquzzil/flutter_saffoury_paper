@@ -1,29 +1,30 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/date_selector.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
-import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:provider/provider.dart';
 
 const mediumPane = 0.65;
 const largePane = 0.75;
 
 class BaseDashboardMainPage extends StatefulWidget {
-  final DashableInterface dashboard;
   final String title;
-  const BaseDashboardMainPage(
-      {super.key, required this.title, required this.dashboard});
+  const BaseDashboardMainPage({
+    super.key,
+    required this.title,
+  });
 
   @override
   State<BaseDashboardMainPage> createState() => _BaseDashboardMainPageState();
@@ -34,9 +35,19 @@ class _BaseDashboardMainPageState
   //  late DashableInterface dashboard;
 
   @override
-  void initState() {
-    extras = widget.dashboard;
-    super.initState();
+  List<TabControllerHelper>? getTabBarList() {
+    return context
+        .read<AuthProvider<AuthUser>>()
+        .getListableOfDashablesInterface()
+        .map((e) {
+      debugPrint("getTabBarList ${(e as ViewAbstract).getTableNameApi()}");
+      ViewAbstract v = e as ViewAbstract;
+      return TabControllerHelper(
+        v.getTableNameApi() ?? "sda",
+        extras: v,
+        icon: Icon(v.getMainIconData()),
+      );
+    }).toList();
   }
 
   @override
@@ -69,7 +80,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getBaseAppbar(CurrentScreenSize currentScreenSize) {
+  Widget? getBaseAppbar({TabControllerHelper? tab}) {
     return ListTile(
       title: Row(
         children: [
@@ -104,7 +115,7 @@ class _BaseDashboardMainPageState
   Widget? getBaseBottomSheet() => null;
 
   @override
-  Widget? getBaseFloatingActionButton(CurrentScreenSize currentScreenSize) {
+  Widget? getBaseFloatingActionButton({TabControllerHelper? tab}) {
     // TODO: implement getBaseFloatingActionButton
     return null;
   }
@@ -137,13 +148,12 @@ class _BaseDashboardMainPageState
   }
 
   Widget getWidget(
-    double width,
     DashableGridHelper element,
   ) {
     return FileInfoStaggerdGridView(
         list: element.widgets.map((e) => e.widget).toList(),
         wrapWithCard: element.wrapWithCard,
-        crossAxisCount: getCrossAxisCount(width),
+        crossAxisCount: getCrossAxisCount(getWidth),
         childAspectRatio: 1
 
         // width < 1400 ? 1.1 : 1.4,
@@ -151,7 +161,6 @@ class _BaseDashboardMainPageState
   }
 
   Widget getSecondPaneWidget(
-    double width,
     DashableGridHelper element,
   ) {
     return FileInfoStaggerdGridView(
@@ -165,10 +174,12 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getDesktopFirstPane(double width) {
+  getDesktopFirstPane({TabControllerHelper? tab}) {
+    debugPrint("getDesktopFirstPane tab is ${tab?.extras.runtimeType}");
+    debugPrint("getDesktopFirstPane tab getExtras ${getExtras().runtimeType}");
     List<Widget> widgets = List.empty(growable: true);
     List<DashableGridHelper> list = getExtras()
-        .getDashboardSectionsFirstPane(context, getCrossAxisCount(width));
+        .getDashboardSectionsFirstPane(context, getCrossAxisCount(getWidth));
 
     for (var element in list) {
       GlobalKey buttonKey = GlobalKey();
@@ -177,7 +188,7 @@ class _BaseDashboardMainPageState
           context: context,
           dgh: element,
           buttonKey: buttonKey,
-          child: getWidget(width, element),
+          child: getWidget(element),
         ),
         // SliverToBoxAdapter(child: getWidget(width, element))
       ];
@@ -187,9 +198,9 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getDesktopSecondPane(double width) {
+  getDesktopSecondPane({TabControllerHelper? tab}) {
     List<DashableGridHelper> list = getExtras()
-        .getDashboardSectionsSecoundPane(context, getCrossAxisCount(width));
+        .getDashboardSectionsSecoundPane(context, getCrossAxisCount(getWidth));
     List<Widget> widgets = List.empty(growable: true);
 
     for (var element in list) {
@@ -199,7 +210,7 @@ class _BaseDashboardMainPageState
           context: context,
           dgh: element,
           buttonKey: buttonKey,
-          child: getSecondPaneWidget(width, element),
+          child: getSecondPaneWidget(element),
         ),
         // SliverToBoxAdapter(child: getWidget(width, element))
       ];
@@ -209,72 +220,72 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getFirstPane(double width) {
+  getFirstPane({TabControllerHelper? tab}) {
     // TODO: implement getFirstPane
-    return getDesktopFirstPane(width);
+    return getDesktopFirstPane(tab: tab);
   }
 
   @override
-  Widget? getFirstPaneAppbar(CurrentScreenSize currentScreenSize) {
+  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) {
     return DashboardHeader(
       date: extras?.date ?? DateObject(),
-      current_screen_size: currentScreenSize,
+      current_screen_size: getCurrentScreenSize(),
       onSelectedDate: (d) {
         if (d == null) return;
-        extras.setDate(d);
+
+        getExtras().setDate(d);
         refresh(extras: extras);
       },
     );
   }
 
   @override
-  Widget? getFirstPaneBottomSheet() {
+  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab}) {
     // TODO: implement getFirstPaneBottomSheet
     return null;
   }
 
   @override
-  Widget? getFirstPaneFloatingActionButton(
-      CurrentScreenSize currentScreenSize) {
+  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
     // TODO: implement getFirstPaneFloatingActionButton
     return null;
   }
 
   @override
-  Widget? getSecondPaneAppbar(CurrentScreenSize currentScreenSize) {
+  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
     // TODO: implement getSecondPaneAppbar
     return null;
   }
 
   @override
-  Widget? getSecondPaneBottomSheet() {
+  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab}) {
     // TODO: implement getSecondPaneBottomSheet
     return null;
   }
 
   @override
-  Widget? getSecondPaneFloatingActionButton(
-      CurrentScreenSize currentScreenSize) {
+  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) {
     // TODO: implement getSecondPaneFloatingActionButton
     return null;
   }
 
   @override
-  getSecoundPane(double width) {
+  getSecoundPane({TabControllerHelper? tab}) {
     // TODO: implement getSecoundPane
-    return getDesktopSecondPane(width);
+    return getDesktopSecondPane(tab: tab);
   }
 
   @override
-  bool isPanesIsSliver(bool firstPane) => true;
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => true;
 
   @override
-  bool setBodyPadding(bool firstPane) {
+  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) {
     return true;
   }
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize) {
+  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
+      {TabControllerHelper? tab}) {
     // TODO: implement setPaddingWhenTowPane
     return false;
   }
@@ -289,13 +300,13 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane) {
+  bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab}) {
     return false;
     return !firstPane;
   }
 
   @override
-  bool setPaneClipRect(bool firstPane) {
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) {
     return false;
     return !firstPane;
   }

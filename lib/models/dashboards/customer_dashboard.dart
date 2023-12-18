@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
@@ -21,8 +22,10 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../funds/credits.dart';
 import '../funds/debits.dart';
+
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 import '../users/customers.dart';
@@ -44,9 +47,8 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   DateObject? dateObject;
 
   CustomerDashboard() : super();
-  CustomerDashboard.init(int iD, {DateObject? dateObject}) {
+  CustomerDashboard.init(int iD, {this.dateObject}) {
     this.iD = iD;
-    this.dateObject = dateObject;
   }
   @override
   CustomerDashboard getSelfNewInstance() {
@@ -54,13 +56,25 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
+  IconData getMainIconData() {
+    return Icons.balance;
+  }
+
+  @override
   String? getCustomAction() => "view_customer_statment_by_employee";
+
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.customer;
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.customer;
 
   @override
   Map<String, String> get getCustomMap => {
         "<iD>": iD.toString(),
-        "date": jsonEncode(
-            DateObject(from: "2022-11-02", to: "2022-11-02").toJson()),
+        "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
       };
 
   factory CustomerDashboard.fromJson(Map<String, dynamic> data) =>
@@ -78,19 +92,23 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
-    // TODO: implement getDashboardSectionsFirstPane
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
-    // TODO: implement getDashboardSectionsSecoundPane
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   void setDate(DateObject? date) {
-    // TODO: implement setDate
+    this.dateObject = date;
+    balance = null;
+  }
+
+  @override
+  bool isRequiredObjectsListChecker() {
+    return balance != null;
   }
 }

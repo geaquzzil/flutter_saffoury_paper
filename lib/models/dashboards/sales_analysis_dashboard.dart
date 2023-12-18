@@ -1,15 +1,38 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter_saffoury_paper/models/funds/credits.dart';
+import 'package:flutter_saffoury_paper/models/funds/debits.dart';
+import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
+import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
+import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
+import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../invoices/invoice_master.dart';
 
@@ -17,7 +40,7 @@ part 'sales_analysis_dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard>
+class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
     implements DashableInterface {
   DateObject? date;
 
@@ -54,117 +77,39 @@ class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard>
   SalesAnalysisDashboard();
 
   @override
+  String? getTableNameApi() => "list_sales";
+
+  SalesAnalysisDashboard.init({DateObject? dateObject}) {
+    date = dateObject;
+  }
+  @override
   SalesAnalysisDashboard getSelfNewInstance() {
     return SalesAnalysisDashboard();
   }
 
   @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
-  String? getMainDrawerGroupName(BuildContext context) {
-    // TODO: implement getMainDrawerGroupName
-    throw UnimplementedError();
-  }
-
-  @override
-  List<String> getMainFields({BuildContext? context}) {
-    // TODO: implement getMainFields
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
   IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
+    return Icons.ssid_chart_sharp;
   }
 
   @override
-  String? getSortByFieldName() {
-    // TODO: implement getSortByFieldName
-    throw UnimplementedError();
-  }
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.dashboard_and_rep;
 
   @override
-  SortByType getSortByType() {
-    // TODO: implement getSortByType
-    throw UnimplementedError();
-  }
-
+  String getMainHeaderTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.dashboard_and_rep;
   @override
-  String? getTableNameApi() {
-    // TODO: implement getTableNameApi
-    throw UnimplementedError();
-  }
+  Map<String, String> get getCustomMap => {
+        "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
+      };
 
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, int> getTextInputMaxLengthMap() {
-    // TODO: implement getTextInputMaxLengthMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, double> getTextInputMaxValidateMap() {
-    // TODO: implement getTextInputMaxValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, double> getTextInputMinValidateMap() {
-    // TODO: implement getTextInputMinValidateMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, TextInputType?> getTextInputTypeMap() {
-    // TODO: implement getTextInputTypeMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldCanBeNullableMap() {
-    // TODO: implement isFieldCanBeNullableMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> isFieldRequiredMap() {
-    // TODO: implement isFieldRequiredMap
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<SalesAnalysisDashboard?> callApi() async {
+  //   // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
+  //   await Future.delayed(Duration(seconds: 2));
+  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  // }
 
   factory SalesAnalysisDashboard.fromJson(Map<String, dynamic> data) =>
       _$SalesAnalysisDashboardFromJson(data);
@@ -183,19 +128,24 @@ class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard>
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
     // TODO: implement getDashboardSectionsFirstPane
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
-    // TODO: implement getDashboardSectionsSecoundPane
-    throw UnimplementedError();
+    return [];
+  }
+
+  @override
+  bool isRequiredObjectsListChecker() {
+    return profits != null;
   }
 
   @override
   void setDate(DateObject? date) {
-    // TODO: implement setDate
+    this.date = date;
+    profits = null;
   }
 }
 

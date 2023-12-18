@@ -94,6 +94,15 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     return _drawerItems.whereType<DashableInterface>().first;
   }
 
+  List<DashableInterface> getListableOfDashablesInterface() {
+    final s = _drawerItems.whereType<DashableInterface>().toList();
+    debugPrint("getListableOfDashablesInterface ${s.length}");
+    s.forEach((element) {
+      debugPrint("getListableOfDashablesInterface ${element.runtimeType}");
+    });
+    return s;
+  }
+
   ViewAbstract? getNewInstance(String tableName) {
     return _drawerItems.firstWhereOrNull(
       (p0) => p0.getTableNameApi() == tableName,

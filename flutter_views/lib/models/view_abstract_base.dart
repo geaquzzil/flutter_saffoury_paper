@@ -440,6 +440,9 @@ class GroupItem {
 class TabControllerHelper extends Tab {
   ///Auto get the field list from the parent
   ///
+  ///
+  ///
+
   String? fieldThatHasList;
 
   ///Auto get the field list from the api object;
@@ -452,17 +455,27 @@ class TabControllerHelper extends Tab {
   Widget? draggableSwithHeaderFromAppbarToScroll;
   AlignmentDirectional? draggableSwithHeaderFromAppbarToScrollAlignment;
   Widget? draggableExtendedWidget;
+
+  int? iD;
+  String? tableName;
+
+  //should be viewAbstract or dashboard or etc...
+  dynamic extras;
+
   TabControllerHelper(String title,
       {super.key,
-      Widget? icon,
+      super.icon,
       this.fieldThatHasList,
       this.autoRest,
       this.slivers,
+      this.iD,
+      this.tableName,
+      this.extras,
       this.draggableHeaderWidget,
       this.draggableExtendedWidget,
       this.draggableSwithHeaderFromAppbarToScrollAlignment =
           AlignmentDirectional.topCenter,
       this.draggableSwithHeaderFromAppbarToScroll,
       this.widget})
-      : super(icon: icon, text: title);
+      : super(text: title);
 }
