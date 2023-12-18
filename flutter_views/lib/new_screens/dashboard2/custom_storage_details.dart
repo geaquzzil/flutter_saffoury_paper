@@ -29,6 +29,7 @@ class StorageDetailsCustom extends StatelessWidget {
   }
 }
 
+@Deprecated("use OutLinedCard instead with ListTile")
 class StorageInfoCardCustom extends StatelessWidget {
   StorageInfoCardCustom({
     Key? key,

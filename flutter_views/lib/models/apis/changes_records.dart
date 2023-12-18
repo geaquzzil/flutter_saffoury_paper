@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -17,6 +18,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   T? viewAbstract;
   String? fieldToGroupBy;
   String? fieldToSumBy;
+  bool? pieChartEnabled = false;
   @Deprecated(
       "this field is already can calculate from totalGrouped.total and its do sql query twice")
   int? total;
@@ -37,7 +39,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   }
 
   ChangesRecords.init(T this.viewAbstract, String this.fieldToGroupBy,
-      {this.fieldToSumBy});
+      {this.fieldToSumBy, this.pieChartEnabled = false});
 
   // @Override
   // public Object getObjectOnRecyclerServerResponse(Context context, Object object) {
@@ -101,6 +103,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     ..total = data["total"] as int?
     ..fieldToGroupBy = data["fieldToGroupBy"] as String?
     ..fieldToSumBy = data["fieldToSumBy"] as String?
+    ..pieChartEnabled = data["pieChartEnabled"] as bool?
     ..totalGrouped = (data['totalGrouped'] as List<dynamic>?)
         ?.map((e) => ChangesRecordGroup.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -125,18 +128,24 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   @override
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     debugPrint("getCustomViewSingleResponseWidget ${totalGrouped}");
+    if (pieChartEnabled == false) {
+      return LineChartItem<ChangesRecordGroup, String>(
+        title:
+            "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
+        list: totalGrouped ?? [],
+        xValueMapper: (item, value) => "${item.groupBy}",
+        yValueMapper: (item, n) =>
+            fieldToSumBy == null ? item.count : item.total,
+      );
+    }
 
-    // return LineChartItem<ChangesRecordGroup, String>(
-    //   title: "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
-    //   list: totalGrouped ?? [],
-    //   xValueMapper: (item, value) => "${item.groupBy}",
-    //   yValueMapper: (item, n) => fieldToSumBy == null ? item.count : item.total,
-    // );
     return CirculeChartItem<ChangesRecordGroup, String>(
       title:
           "${AppLocalizations.of(context)!.total}: ${total.toCurrencyFormat()} ",
       list: totalGrouped ?? [],
       xValueMapper: (item, value) => item.groupBy,
+      dataLabelMapper: (item, value) =>
+          NumberFormat.compact().format(item.total),
       yValueMapper: (item, n) => fieldToSumBy == null ? item.count : item.total,
     );
   }
@@ -171,7 +180,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     }
 
     return HeaderDescription(
-      title: "Changes records",
+      title: AppLocalizations.of(context)!.profit_analysis,
       trailing: dropDownTile,
     );
   }
@@ -207,6 +216,7 @@ class ChangesRecordGroup {
   void setGroupBy(String groupBy) {
     this.groupBy = groupBy;
   }
+
   @override
   String toString() {
     return "count: $count, groupBy: $groupBy, total: $total";

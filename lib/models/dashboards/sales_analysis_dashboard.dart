@@ -2,6 +2,7 @@ import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -16,7 +17,8 @@ part 'sales_analysis_dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard> {
+class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard>
+    implements DashableInterface {
   DateObject? date;
 
   List<Product>? bestSellingSize;
@@ -176,6 +178,25 @@ class SalesAnalysisDashboard extends ViewAbstract<SalesAnalysisDashboard> {
   @override
   SalesAnalysisDashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       SalesAnalysisDashboard.fromJson(json);
+
+  @override
+  List<DashableGridHelper> getDashboardSectionsFirstPane(
+      BuildContext context, int crossAxisCount) {
+    // TODO: implement getDashboardSectionsFirstPane
+    throw UnimplementedError();
+  }
+
+  @override
+  List<DashableGridHelper> getDashboardSectionsSecoundPane(
+      BuildContext context, int crossAxisCount) {
+    // TODO: implement getDashboardSectionsSecoundPane
+    throw UnimplementedError();
+  }
+
+  @override
+  void setDate(DateObject? date) {
+    // TODO: implement setDate
+  }
 }
 
 class AccountNamesBalance {

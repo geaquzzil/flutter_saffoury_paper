@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
-import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -18,25 +16,19 @@ import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
-import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
-import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/priceless_invoices/reservation_invoice.dart';
-import '../products/products_types.dart';
 import '../users/balances/customer_terms.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
@@ -611,12 +603,61 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             getWidget(
               StaggeredGridTile.count(
                 crossAxisCellCount: 1,
-                mainAxisCellCount: 1.5,
+                mainAxisCellCount: 2,
                 child: SizedBox(
-                  height: 800,
+                  height: MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).size.height * .2,
                   child: ListHorizontalCustomViewApiAutoRestWidget(
+                      onResponseAddWidget: ((response) {
+                        ChangesRecords i = response as ChangesRecords;
+                        return Column(
+                          children: [
+                            // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+                            //     titleString: "TEST1 ",
+                            //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+                            OutlinedCard(
+                                child: ListTile(
+                              title: Text(AppLocalizations.of(context)!.total),
+                              subtitle: Text(i.total.toCurrencyFormat()),
+                              leading: Icon(Icons.monitor_weight),
+                              trailing: const Text("SYP"),
+                            )),
+                            OutlinedCard(
+                                child: ListTile(
+                              title: Text(AppLocalizations.of(context)!.total),
+                              subtitle: Text(i.total.toCurrencyFormat()),
+                              leading: Icon(Icons.monitor_weight),
+                              trailing: const Text("SYP"),
+                            )),
+                            OutlinedCard(
+                                child: ListTile(
+                              title: Text(AppLocalizations.of(context)!.total),
+                              subtitle: Text(i.total.toCurrencyFormat()),
+                              leading: Icon(Icons.monitor_weight),
+                              trailing: const Text("SYP"),
+                            )),
+                            OutlinedCard(
+                                child: ListTile(
+                              title: Text(AppLocalizations.of(context)!.total),
+                              subtitle: Text(i.total.toCurrencyFormat()),
+                              leading: Icon(Icons.monitor_weight),
+                              trailing: const Text("SYP"),
+                            )),
+                            StorageInfoCardCustom(
+                                title: AppLocalizations.of(context)!.total,
+                                description: i.total.toCurrencyFormat(),
+                                trailing: const Text("SYP"),
+                                svgSrc: Icons.monitor_weight),
+                            StorageInfoCardCustom(
+                                title: AppLocalizations.of(context)!.balance,
+                                description: "0",
+                                trailing: const Text("trailing"),
+                                svgSrc: Icons.balance),
+                          ],
+                        );
+                      }),
                       autoRest: ChangesRecords.init(Spendings(), "NameID",
-                          fieldToSumBy: "value")),
+                          fieldToSumBy: "value", pieChartEnabled: true)),
                 ),
               ),
               type: WidgetDashboardType.CHART,

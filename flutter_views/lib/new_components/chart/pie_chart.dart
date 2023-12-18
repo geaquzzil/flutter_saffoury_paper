@@ -7,12 +7,13 @@ class CirculeChartItem<T, E> extends StatelessWidget {
 
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
-
+  String? Function(T item, int idx)? dataLabelMapper;
   CirculeChartItem(
       {Key? key,
       required this.title,
       required this.list,
       required this.xValueMapper,
+      this.dataLabelMapper,
       required this.yValueMapper})
       : super(key: key);
 
@@ -21,28 +22,32 @@ class CirculeChartItem<T, E> extends StatelessWidget {
     return SfCircularChart(
         margin: EdgeInsets.zero,
         title: ChartTitle(
+
             // alignment: ChartAlignment.center,
             text: title,
             textStyle: Theme.of(context).textTheme.titleSmall),
         legend: Legend(
-            isResponsive: false,
-            legendItemBuilder: (s, d, d2, i) =>
-                Text("s $s dynamic $d dynamic2  $d2  index $i"),
-            isVisible: true,
-            
-            overflowMode: LegendItemOverflowMode.wrap,
-           ),
+          isResponsive: true,
+          // legendItemBuilder: (s, d, d2, i) =>
+          //     Text("s $s dynamic $d dynamic2  $d2  index $i"),
+          isVisible: false,
+          overflowMode: LegendItemOverflowMode.none,
+        ),
         // Initialize category axis
         // primaryXAxis: CategoryAxis(),
         tooltipBehavior: TooltipBehavior(),
         series: <CircularSeries>[
           DoughnutSeries<T, E>(
               // Bind data source
+
               enableTooltip: true,
               dataSource: list,
               xValueMapper: xValueMapper,
               yValueMapper: yValueMapper,
-              dataLabelSettings: const DataLabelSettings(isVisible: true)),
+              dataLabelMapper: dataLabelMapper,
+              dataLabelSettings: const DataLabelSettings(
+                isVisible: true,
+              )),
         ]);
   }
 }

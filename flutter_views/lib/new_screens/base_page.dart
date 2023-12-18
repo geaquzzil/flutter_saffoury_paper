@@ -87,6 +87,26 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
 
   late CurrentScreenSize _currentScreenSize;
 
+  List<TabControllerHelper>? getTabBarList() {
+    return null;
+  }
+
+  bool _hasTabBarList() {
+    return getTabBarList() != null;
+  }
+
+  PreferredSizeWidget getTabBarWidget() {
+    return TabBar(
+        dividerColor: Colors.transparent,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(80.0),
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+        isScrollable: true,
+        tabs: getTabBarList()!);
+  }
+
   ///set padding to content view pased on the screen size
   ///if this is [true] then we add divider between panes
   ///if this is [false] then we check for second pane if no second pane then we add padding automatically
@@ -135,52 +155,22 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
   ///else if [customAppBar] is not null then generates the app bar based on the panes
   generateToolbar({Widget? customAppBar}) {
     return AppBar(
-      surfaceTintColor: Colors.transparent,
-      forceMaterialTransparency: false,
-      // primary: true,
+        surfaceTintColor: Colors.transparent,
+        forceMaterialTransparency: false,
+        // primary: true,
 
-      backgroundColor: customAppBar != null
-          ? ElevationOverlay.overlayColor(context, 2)
-          : null,
-      toolbarHeight: customAppBar == null ? 100 : null,
-      // backgroundColor: ElevationOverlay.overlayColor(context, 2),
-      // leading: ,
-      title: customAppBar ?? getBaseAppbar(getCurrentScreenSize())!,
-      bottom: customAppBar == null
-          ? TabBar(
-              dividerColor: Colors.transparent,
-              // labelStyle: Theme.of(context).textTheme.titleSmall,
-              indicatorSize: TabBarIndicatorSize.tab,
-              // indicatorColor:
-              //     Theme.of(context).colorScheme.primary.withOpacity(.2),
-              // labelColor: Theme.of(context).colorScheme.primary,
-
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(80.0),
-                color:
-                    Theme.of(context).colorScheme.onSecondary,
-              ),
-              isScrollable: true,
-              tabs: [
-                  Tab(
-                    // text: "FirstTab",
-                    icon: Icon(Icons.dashboard),
-                  ),
-                  Tab(
-                    text: "FirstTab",
-                    // icon: Icon(Icons.dashboard),
-                  ),
-                  Tab(
-                    text: "FirstTab",
-                    // icon: Icon(Icons.dashboard),
-                  ),
-                  Tab(
-                    text: "FirstTab",
-                    // icon: Icon(Icons.dashboard),
-                  )
-                ])
-          : null,
-    );
+        backgroundColor: customAppBar != null
+            ? ElevationOverlay.overlayColor(context, 2)
+            : null,
+        toolbarHeight: customAppBar == null ? 100 : null,
+        // backgroundColor: ElevationOverlay.overlayColor(context, 2),
+        // leading: ,
+        title: customAppBar ?? getBaseAppbar(getCurrentScreenSize())!,
+        bottom: customAppBar == null
+            ? _hasTabBarList()
+                ? getTabBarWidget()
+                : null
+            : null);
   }
 
   ///by default this is hidden when scrolling
@@ -402,10 +392,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T> {
         floatingActionButton:
             getBaseFloatingActionButton(getCurrentScreenSize()),
         drawer: _drawerWidget,
-        body: true ? TabBarView(children: [body, body, body, body]) : body);
+        body: _hasTabBarList()
+            ? TabBarView(
+                children: getTabBarList()!.map((e) => e.widget!).toList())
+            : body);
 
-    if (true) {
-      return DefaultTabController(length: 4, child: t);
+    if (_hasTabBarList()) {
+      List<TabControllerHelper> list = getTabBarList()!;
+      return DefaultTabController(length: list.length, child: t);
     } else {
       return t;
     }

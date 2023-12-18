@@ -162,7 +162,9 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
   Widget wrapHeader(
       BuildContext context, Widget child, ListMultiKeyProvider listProvider) {
     Widget? custom;
-
+    if (child is CircularProgressIndicator) {
+      return Center(child: child);
+    }
     if (widget.onResponseAddWidget != null) {
       if (listProvider.getList(key).isNotEmpty) {
         dynamic obj = autoRest.getCustomViewResponseType() == ResponseType.LIST

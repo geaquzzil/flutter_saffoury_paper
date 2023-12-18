@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -29,7 +31,8 @@ part 'customer_dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class CustomerDashboard extends UserLists<CustomerDashboard> {
+class CustomerDashboard extends UserLists<CustomerDashboard>
+    implements DashableInterface {
   Customer? customers;
   double? previousBalance;
   //balance from to date
@@ -71,4 +74,23 @@ class CustomerDashboard extends UserLists<CustomerDashboard> {
   @override
   CustomerDashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomerDashboard.fromJson(json);
+
+  @override
+  List<DashableGridHelper> getDashboardSectionsFirstPane(
+      BuildContext context, int crossAxisCount) {
+    // TODO: implement getDashboardSectionsFirstPane
+    throw UnimplementedError();
+  }
+
+  @override
+  List<DashableGridHelper> getDashboardSectionsSecoundPane(
+      BuildContext context, int crossAxisCount) {
+    // TODO: implement getDashboardSectionsSecoundPane
+    throw UnimplementedError();
+  }
+
+  @override
+  void setDate(DateObject? date) {
+    // TODO: implement setDate
+  }
 }

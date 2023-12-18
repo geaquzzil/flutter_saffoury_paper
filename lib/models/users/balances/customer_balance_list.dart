@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -17,7 +19,9 @@ import 'package:pdf/widgets.dart' as pdf;
 
 class CustomerBalanceList
     extends ViewAbstractStandAloneCustomViewApi<CustomerBalanceList>
-    implements PrintableInvoiceInterface<PrintCustomerBalances> {
+    implements
+        PrintableInvoiceInterface<PrintCustomerBalances>,
+        DashableInterface {
   List<CustomerBalanceSingle>? customers;
   double? totalBalance;
   int? termsBreakCount;
@@ -275,4 +279,23 @@ class CustomerBalanceList
 
   @override
   pdf.Widget? getPrintableWatermark() => null;
+
+  @override
+  List<DashableGridHelper> getDashboardSectionsFirstPane(
+      BuildContext context, int crossAxisCount) {
+    // TODO: implement getDashboardSectionsFirstPane
+    throw UnimplementedError();
+  }
+
+  @override
+  List<DashableGridHelper> getDashboardSectionsSecoundPane(
+      BuildContext context, int crossAxisCount) {
+    // TODO: implement getDashboardSectionsSecoundPane
+    throw UnimplementedError();
+  }
+
+  @override
+  void setDate(DateObject? date) {
+    // TODO: implement setDate
+  }
 }
