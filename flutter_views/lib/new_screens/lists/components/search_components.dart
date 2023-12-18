@@ -158,6 +158,13 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       //todo it was padding default /2  all exept the bottom

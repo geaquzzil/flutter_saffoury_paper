@@ -270,11 +270,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   List<WidgetGridHelper> getInvoicesWidgets(
       BuildContext context, int crossAxisCount) {
     bool isMezouj = crossAxisCount % 2 == 0;
-    debugPrint(
-        "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
+
     int crossCountFund = crossAxisCount ~/ 4;
     int crossAxisCountMod = crossAxisCount % 4;
     int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
+    debugPrint(
+        "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}");
     return [
       getWidget(StaggeredGridTile.count(
           crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
@@ -399,7 +400,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
 
     debugPrint(
-        "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc $crossCountFundCalc");
+        "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}");
     return [
       getWidget(StaggeredGridTile.count(
           crossAxisCellCount: crossCountFundCalc,
@@ -494,7 +495,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           ))),
 
       getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: crossAxisCount - 2,
+          crossAxisCellCount: 1,
           mainAxisCellCount: 1.5,
           child: ChartCardItemCustom(
             icon: Icons.balance,
@@ -554,7 +555,9 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               title: AppLocalizations.of(context)!.pendingCutRequest,
               widgets: [
                 getWidget(StaggeredGridTile.count(
-                    crossAxisCellCount: crossAxisCount - 2,
+                    crossAxisCellCount: crossAxisCount <= 2
+                        ? crossAxisCount
+                        : crossAxisCount - 2,
                     mainAxisCellCount: 1.5,
                     child: ListHorizontalApiAutoRestWidget(
                       isSliver: true,

@@ -458,66 +458,62 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         isTablet(context, maxWidth: getWidth);
 
     if (_hasTabBarList()) {
+      currentWidget = TabBarView(
+          controller: _tabController,
+          children:
+              _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
       if (isLarge) {
         return SafeArea(
-            child: Row(
-          children: [
-            _drawerWidget!,
-            TabBarView(
-                controller: _tabController,
-                children: _getTabBarList()!.map((tab) {
-                  currentWidget = _getTowPanes(tab: tab);
-                  return Selector<DrawerMenuControllerProvider, bool>(
-                    builder: (__, isOpen, ___) {
-                      debugPrint("drawer selector $isOpen");
+            child: Row(children: [
+          _drawerWidget!,
+          Selector<DrawerMenuControllerProvider, bool>(
+            builder: (__, isOpen, ___) {
+              debugPrint("drawer selector $isOpen");
 
-                      Widget toShowWidget;
-                      Widget clipRect = ClipRRect(
-                          borderRadius: BorderRadius.circular(kDefualtClipRect),
-                          child: _hasBaseToolbar()
-                              ? Scaffold(
-                                  backgroundColor:
-                                      ElevationOverlay.overlayColor(context, 2),
-                                  appBar: generateToolbar(),
-                                  body: currentWidget,
-                                )
-                              : currentWidget);
+              Widget toShowWidget;
+              Widget clipRect = ClipRRect(
+                  borderRadius: BorderRadius.circular(kDefualtClipRect),
+                  child: _hasBaseToolbar()
+                      ? Scaffold(
+                          backgroundColor:
+                              ElevationOverlay.overlayColor(context, 2),
+                          appBar: generateToolbar(),
+                          body: currentWidget,
+                        )
+                      : currentWidget);
 
-                      if (_secondWidget == null ||
-                          setPaddingWhenTowPane(getCurrentScreenSize(),
-                              tab: tab)) {
-                        toShowWidget = Padding(
-                          padding: getSuggestionPadding(getWidth),
-                          child: clipRect,
-                        );
-                      } else {
-                        toShowWidget = clipRect;
-                      }
+              if (_secondWidget == null ||
+                  setPaddingWhenTowPane(
+                    getCurrentScreenSize(),
+                  )) {
+                toShowWidget = Padding(
+                  padding: getSuggestionPadding(getWidth),
+                  child: clipRect,
+                );
+              } else {
+                toShowWidget = clipRect;
+              }
 
-                      return AnimatedContainer(
-                          key: UniqueKey(),
-                          height: _height,
-                          width: (_width! -
-                                  (isOpen
-                                          ? kDrawerOpenWidth
-                                          : kDefaultClosedDrawer)
-                                      .toNonNullable()) -
-                              0,
-                          duration: const Duration(milliseconds: 100),
-                          child: toShowWidget);
-                    },
-                    selector: (p0, p1) => p1.getSideMenuIsOpen,
-                  );
-                }).toList())
-          ],
-        ));
+              return AnimatedContainer(
+                  key: UniqueKey(),
+                  height: _height,
+                  width: (_width! -
+                          (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
+                              .toNonNullable()) -
+                      0,
+                  duration: const Duration(milliseconds: 100),
+                  child: toShowWidget);
+            },
+            selector: (p0, p1) => p1.getSideMenuIsOpen,
+          )
+        ]));
       } else {
         return SafeArea(
-          child: TabBarView(
-              controller: _tabController,
-              children:
-                  _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList()),
-        );
+            child: Scaffold(
+          backgroundColor: ElevationOverlay.overlayColor(context, 2),
+          appBar: generateToolbar(),
+          body: currentWidget,
+        ));
       }
     } else {
       currentWidget = _getTowPanes();
@@ -569,7 +565,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         ],
       ));
     } else {
-      return SafeArea(child: currentWidget);
+      return SafeArea(
+          child: Scaffold(
+        backgroundColor: ElevationOverlay.overlayColor(context, 2),
+        appBar: generateToolbar(),
+        body: currentWidget,
+      ));
     }
   }
 

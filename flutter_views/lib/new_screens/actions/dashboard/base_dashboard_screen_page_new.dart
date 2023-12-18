@@ -45,7 +45,7 @@ class _BaseDashboardMainPageState
       return TabControllerHelper(
         v.getCustomAction() ?? "sda",
         extras: v,
-        icon: Icon(v.getMainIconData()),
+        // icon: Icon(v.getMainIconData()),
       );
     }).toList();
   }
