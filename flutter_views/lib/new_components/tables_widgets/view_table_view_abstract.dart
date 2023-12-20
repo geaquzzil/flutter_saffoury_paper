@@ -79,46 +79,48 @@ class _ViewableTableViewAbstractWidget
         width: double.infinity,
         height: MediaQuery.of(context).size.height * .75,
         child: PaginatedDataTable2(
-            showCheckboxColumn: true,
+            showCheckboxColumn: false,
+            // rowsPerPage: 5,
             onSelectAll: myData.selectAll,
-            actions: [
-              // if (myData.selectedRowCount > 0)
-              IconButton(
-                  onPressed: () {
-                    if (myData.selectedRowCount > 0) {
-                      debugPrint("remove selected row");
-                      setState(() {
-                        list_invoice_details.removeWhere(
-                            (element) => element.selected ?? false);
-                      });
-                    }
-                  },
-                  icon: Icon(Icons.delete))
-            ],
+            showFirstLastButtons: true,
+            // actions: [
+            //   // if (myData.selectedRowCount > 0)
+            //   IconButton(
+            //       onPressed: () {
+            //         if (myData.selectedRowCount > 0) {
+            //           debugPrint("remove selected row");
+            //           setState(() {
+            //             list_invoice_details.removeWhere(
+            //                 (element) => element.selected ?? false);
+            //           });
+            //         }
+            //       },
+            //       icon: Icon(Icons.delete))
+            // ],
             autoRowsToHeight: true,
-            header: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(list_invoice_details[0]
-                      .getMainHeaderLabelTextOnly(context)),
-                  Row(children: [
-                    OutlinedButton(
-                        onPressed: () => _controller!.goToPageWithRow(25),
-                        child: const Text('Go to row 25')),
-                    OutlinedButton(
-                        onPressed: () => _controller!.goToRow(5),
-                        child: const Text('Go to row 5'))
-                  ]),
-                ]),
+            // header: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text(list_invoice_details[0]
+            //           .getMainHeaderLabelTextOnly(context)),
+            //       Row(children: [
+            //         OutlinedButton(
+            //             onPressed: () => _controller!.goToPageWithRow(25),
+            //             child: const Text('Go to row 25')),
+            //         OutlinedButton(
+            //             onPressed: () => _controller!.goToRow(5),
+            //             child: const Text('Go to row 5'))
+            //       ]),
+            //     ]),
             // columnSpacing: 200,
             sortColumnIndex: sortColumnIndex,
             sortAscending: isAscending,
             // onSelectAll: _dessertsDataSource.selectAll,
             horizontalMargin: 20,
-            wrapInCard: false,
-            minWidth: 800,
+            wrapInCard: true,
+            // minWidth: 800,
             controller: _controller,
-            fit: FlexFit.loose,
+            fit: FlexFit.tight,
             columns: getColumns(context),
             source: myData),
       );

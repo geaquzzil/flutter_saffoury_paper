@@ -57,10 +57,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   List<BalanceDue>? creditsDue;
   List<BalanceDue>? incomesDue;
   List<BalanceDue>? spendingsDue;
+
   List<BalanceDue>? debitsBalanceToday;
   List<BalanceDue>? creditsBalanceToday;
   List<BalanceDue>? incomesBalanceToday;
   List<BalanceDue>? spendingsBalanceToday;
+
   List<BalanceDue>? previousdebitsDue;
   List<BalanceDue>? previouscreditsDue;
   List<BalanceDue>? previousincomesDue;
@@ -207,12 +209,16 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     var spendings = getMapPlus(previousdebitsDue, previousspendingsDue,
         cashBoxID: cashBoxID);
 
+    debugPrint("getTotalPreviousBalance getTotoC $incomes $spendings");
+
     return getTotalGroupedFormattedText(getMapMinus(incomes, spendings));
   }
 
   String getTotalDueBalance({int? cashBoxID}) {
     var incomes = getMapPlus(creditsDue, incomesDue, cashBoxID: cashBoxID);
     var spendings = getMapPlus(debitsDue, spendingsDue, cashBoxID: cashBoxID);
+
+    debugPrint("getTotalPreviousBalance getTotoC b $incomes $spendings");
 
     return getTotalGroupedFormattedText(getMapMinus(incomes, spendings));
   }
@@ -229,10 +235,17 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   Map<String, double> getMapMinus(
       Map<String, double> first, Map<String, double> second) {
     Map<String, double> map = {};
-    Map<String, double> mapPlus = {}
-      ..addAll(first)
-      ..addAll(second);
-    mapPlus.forEach((key, value) {
+    Map<String, double> mapPlus1 = {}..addAll(first);
+    Map<String, double> mapPlus2 = {}..addAll(second);
+
+    mapPlus1.forEach((key, value) {
+      if (map.containsKey(key)) {
+        map[key] = map[key]! - value;
+      } else {
+        map[key] = value;
+      }
+    });
+    mapPlus2.forEach((key, value) {
       if (map.containsKey(key)) {
         map[key] = map[key]! - value;
       } else {
@@ -246,11 +259,19 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       List<BalanceDue>? first, List<BalanceDue>? second,
       {int? cashBoxID}) {
     Map<String, double> map = {};
-    Map<String, double> mapPlus = {}
-      ..addAll(first.getTotalGrouped(CashboxID: cashBoxID))
+    Map<String, double> mapPlus1 = {}
+      ..addAll(first.getTotalGrouped(CashboxID: cashBoxID));
+    Map<String, double> mapPlus2 = {}
       ..addAll(second.getTotalGrouped(CashboxID: cashBoxID));
 
-    mapPlus.forEach((key, value) {
+    mapPlus1.forEach((key, value) {
+      if (map.containsKey(key)) {
+        map[key] = map[key]! + value;
+      } else {
+        map[key] = value;
+      }
+    });
+    mapPlus2.forEach((key, value) {
       if (map.containsKey(key)) {
         map[key] = map[key]! + value;
       } else {
@@ -373,6 +394,16 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             footerRightWidget:
                 reservation_invoiceAnalysis.getGrowthRateText(context),
           ))),
+      if (checkList(orders))
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: crossAxisCount,
+            mainAxisCellCount: 2,
+            child: Card(
+              child:
+                  ViewableTableViewAbstractWidget(usePag: true, viewAbstract: [
+                ...orders ?? [],
+              ]),
+            ))),
     ];
   }
 
@@ -465,7 +496,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             child: Card(
               child: ViewableTableViewAbstractWidget(
                   usePag: true,
-                  viewAbstract: [...credits ?? [], ...debits ?? []]),
+                  viewAbstract: [
+                    ...credits ?? [],
+                    ...debits ?? [],
+                    ...spendings ?? [],
+                    ...incomes ?? []
+                  ]),
             ))),
     ];
   }
@@ -668,17 +704,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                   // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
                 ))),
 
-            getWidget(StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: .5,
-              child: OutlinedCard(
-                  child: ListTile(
-                title: Text(AppLocalizations.of(context)!.previousBalance),
-                subtitle: Text(getTotalPreviousBalance()),
-                leading: const Icon(Icons.balance),
-                trailing: const Text("SYP"),
-              )),
-            )),
             // getWidget(
             //   StaggeredGridTile.count(
             //     crossAxisCellCount: 2,
@@ -800,7 +825,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                   mainAxisCellCount: 2,
                   child: Card(
                     child: ViewableTableViewAbstractWidget(
-                        usePag: false,
+                        usePag: true,
                         viewAbstract: [
                           ...customerToPayNext ?? [],
                           ...debits ?? []
@@ -816,7 +841,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                   mainAxisCellCount: 2,
                   child: Card(
                     child: ViewableTableViewAbstractWidget(
-                        usePag: false, viewAbstract: [...notPayedCustomers!]),
+                        usePag: true, viewAbstract: [...notPayedCustomers!]),
                   )))
             ]),
     ];

@@ -98,7 +98,7 @@ void main() async {
   ));
   List<ViewAbstract> views = List<ViewAbstract>.from([
     Dashboard.init(-1,
-        dateObject: DateObject(from: "2022-10-01", to: "2022-10-02")),
+        dateObject: DateObject(from: "2022-10-02", to: "2022-10-03")),
     // CustomerBalanceList(),
     SalesAnalysisDashboard(),
     PrintProductLabelCustomView(),

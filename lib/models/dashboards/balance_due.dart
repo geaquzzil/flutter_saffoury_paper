@@ -1,4 +1,3 @@
-
 class BalanceDue {
   String? currency;
   double? sum;
@@ -8,6 +7,11 @@ class BalanceDue {
   BalanceDue();
   bool isDollar() {
     return currency == (r"S.Y.P");
+  }
+
+  @override
+  String toString() {
+    return "currency $currency sum $sum";
   }
 
   static double? convertToDouble(dynamic number) =>

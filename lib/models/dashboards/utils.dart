@@ -252,7 +252,7 @@ extension BalanceDueTotals<T extends BalanceDue> on List<T?>? {
               value.toNonNullable() + element.toNonNullable())
           .toNonNullable();
     });
-
+    debugPrint("getTotalPreviousBalance getToto getTotalGrouped $total");
     return total;
   }
 

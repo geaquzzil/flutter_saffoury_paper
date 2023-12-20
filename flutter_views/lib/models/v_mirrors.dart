@@ -133,8 +133,8 @@ abstract class VMirrors<T> {
       BuildContext context, String field) {
     // 0.toCurrencyFormat();
     TextInputType? type = (this as ViewAbstract).getTextInputType(field);
-    debugPrint(
-        "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  ${type}");
+    // debugPrint(
+    // "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  ${type}");
     if (type == null) return getFieldValueCheckType(context, field);
     if (type == TextInputType.number) {
       return (getFieldValue(field, context: context) as double)
