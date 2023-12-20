@@ -30,6 +30,7 @@ class LineChartItem<T, E> extends StatelessWidget {
         primaryXAxis: E.runtimeType == DateTime.now().runtimeType
             ? DateTimeAxis(isVisible: !smallView)
             : CategoryAxis(
+                edgeLabelPlacement: EdgeLabelPlacement.shift,
                 borderWidth: 0,
                 rangePadding: ChartRangePadding.auto,
                 isVisible: !smallView,

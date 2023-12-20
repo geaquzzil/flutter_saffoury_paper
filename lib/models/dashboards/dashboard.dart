@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -91,12 +93,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return Dashboard();
   }
 
-  @override
-  Future<Dashboard?> callApi() async {
-    // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
-    await Future.delayed(const Duration(seconds: 2));
-    return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
-  }
+  // @override
+  // Future<Dashboard?> callApi() async {
+  //   // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  // }
 
   @override
   IconData getMainIconData() {
@@ -494,6 +496,37 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             widgets: [
               ...getInvoicesWidgets(context, crossAxisCount)
             ]),
+        DashableGridHelper(
+            title: AppLocalizations.of(context)!.pendingFormat(
+                AppLocalizations.of(context)!.orders.toLowerCase()),
+            headerListToAdd: [
+              Order(),
+            ],
+            widgets: [
+              getWidget(
+                StaggeredGridTile.count(
+                  crossAxisCellCount: crossAxisCount,
+                  mainAxisCellCount: 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).size.height * .2,
+                    child: ListHorizontalApiAutoRestWidget(
+                      isSliver: true,
+
+                      // titleString: "Today",
+                      // listItembuilder: (v) => SizedBox(
+                      //     width: 100, height: 100, child: POSListCardItem(object: v)),
+                      autoRest: AutoRest<Order>(
+                          obj: Order()
+                            ..setCustomMap({
+                              "<status>": "[\"PENDING\"]",
+                            }),
+                          key: "Order<status>PENDING"),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
         if (checkList(pending_cut_requests))
           DashableGridHelper(
               title: AppLocalizations.of(context)!.pendingCutRequest,
@@ -541,7 +574,24 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               ]),
         if (checkList(pending_reservation_invoice))
           DashableGridHelper(
-              title: AppLocalizations.of(context)!.pendingCutRequest,
+              title: AppLocalizations.of(context)!.pendingReservationInvoices,
+              widgets: [
+                getWidget(StaggeredGridTile.count(
+                    crossAxisCellCount: crossAxisCount,
+                    mainAxisCellCount: 1.5,
+                    child: ListHorizontalApiAutoRestWidget(
+                      isSliver: true,
+                      list: pending_reservation_invoice,
+                    ))),
+              ])
+        // ...getInvoicesWidgets(context)
+        ,
+        if (checkList(overdue_reservation_invoice))
+          DashableGridHelper(
+              title: AppLocalizations.of(context)!.overDueFormat(
+                  AppLocalizations.of(context)!
+                      .reservationInvoice
+                      .toLowerCase()),
               widgets: [
                 getWidget(StaggeredGridTile.count(
                     crossAxisCellCount: crossAxisCount,
@@ -549,7 +599,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                     child: ListHorizontalApiAutoRestWidget(
                       isSliver: true,
                       // titleString: "Pending",
-                      list: pending_reservation_invoice,
+                      list: overdue_reservation_invoice,
                       // listItembuilder: (v) =>
                       //     ListItemProductTypeCategory(productType: v as ProductType),
                       // autoRest: AutoRest<CutRequest>(
@@ -558,8 +608,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                       //     key: "CutRequest<Pending>"),
                     ))),
               ])
-        // ...getInvoicesWidgets(context)
-        ,
       ];
 
   @override
@@ -588,6 +636,17 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               type: WidgetDashboardType.CHART,
             ),
             getWidget(StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: .75,
+                child: ChartCardItemCustom(
+                  color: Colors.blue,
+                  icon: Icons.today,
+                  title: AppLocalizations.of(context)!.this_day,
+                  description: getTotalTodayBalance(),
+                  // footer: incomes?.length.toString(),
+                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+            getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: 1,
                 mainAxisCellCount: .75,
                 child: ChartCardItemCustom(
@@ -605,17 +664,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                   icon: Icons.account_balance,
                   title: AppLocalizations.of(context)!.balance_due,
                   description: getTotalDueBalance(),
-                  // footer: incomes?.length.toString(),
-                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: .75,
-                child: ChartCardItemCustom(
-                  color: Colors.blue,
-                  icon: Icons.today,
-                  title: AppLocalizations.of(context)!.this_day,
-                  description: getTotalTodayBalance(),
                   // footer: incomes?.length.toString(),
                   // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
                 ))),

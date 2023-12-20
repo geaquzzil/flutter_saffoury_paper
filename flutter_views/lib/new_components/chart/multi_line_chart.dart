@@ -57,12 +57,30 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
             overflowMode: LegendItemOverflowMode.scroll),
         onZoomStart: (ZoomPanArgs args) => zoom(args),
         zoomPanBehavior: _zoomPanBehavior,
-        primaryXAxis: DateTimeAxis(),
+        primaryXAxis: DateTimeAxis(
+          // autoScrollingDelta: 7,
+          autoScrollingDeltaType: DateTimeIntervalType.months,
+          // plotOffset: 20,
+          maximumLabels: 3,
+          rangePadding: ChartRangePadding.additional,
+          autoScrollingMode: AutoScrollingMode.start,
+          // labelIntersectAction: AxisLabelIntersectAction.multipleRows,
+          // initialVisibleMinimum: 2,
+          // isInversed: true,
+          edgeLabelPlacement: EdgeLabelPlacement.shift,
+          // labelPosition: ChartDataLabelPosition.inside,
+          // tickPosition: TickPosition.inside
+        ),
         primaryYAxis: NumericAxis(
           // zoomPosition: 0.9,
           // rangePadding:ChartRangePadding.auto,
-          rangePadding: ChartRangePadding.additional,
-          anchorRangeToVisiblePoints: true,
+          autoScrollingMode: AutoScrollingMode.start,
+          // labelPosition: ChartDataLabelPosition.inside,
+          // tickPosition: TickPosition.inside,
+          rangePadding: ChartRangePadding.auto,
+          enableAutoIntervalOnZooming: true,
+          anchorRangeToVisiblePoints: false,
+
           numberFormat: NumberFormat.compact(),
         ),
         tooltipBehavior: TooltipBehavior(

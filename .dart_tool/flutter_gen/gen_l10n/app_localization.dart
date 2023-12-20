@@ -2541,6 +2541,12 @@ abstract class AppLocalizations {
   /// **'Overdue'**
   String get overDue;
 
+  /// No description provided for @overDueFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue {r}'**
+  String overDueFormat(Object r);
+
   /// No description provided for @overView_best_selling.
   ///
   /// In en, this message translates to:
@@ -2666,6 +2672,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending first'**
   String get pendingFirst;
+
+  /// No description provided for @pendingFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending {r}'**
+  String pendingFormat(Object r);
 
   /// No description provided for @pendingReservationInvoices.
   ///

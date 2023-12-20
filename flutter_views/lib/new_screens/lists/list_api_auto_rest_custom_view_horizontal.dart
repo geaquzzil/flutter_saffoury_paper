@@ -16,11 +16,10 @@ class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
   Function(dynamic response)? onResponse;
   Widget? Function(dynamic response)? onResponseAddWidget;
   ListHorizontalCustomViewApiAutoRestWidget(
-      {Key? key,
+      {super.key,
       required this.autoRest,
       this.onResponse,
-      this.onResponseAddWidget})
-      : super(key: key);
+      this.onResponseAddWidget});
 
   @override
   State<ListHorizontalCustomViewApiAutoRestWidget> createState() =>
@@ -198,17 +197,6 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         if (custom != null) custom
       ],
     );
-    // return SizedBox(
-    //     child: Expanded(
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       buildHeader(context),
-    //       Expanded(child: child),
-    //       if (custom != null) custom
-    //     ],
-    //   ),
-    // ));
   }
 
   @override

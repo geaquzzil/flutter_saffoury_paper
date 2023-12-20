@@ -26,6 +26,7 @@ import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -54,7 +55,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     implements
         PrintableInvoiceInterface<PrintInvoice>,
         ModifiablePrintableInterface<PrintInvoice>,
-        ListableInterface<InvoiceMasterDetails> {
+        ListableInterface<InvoiceMasterDetails>,
+        WebCategoryGridableInterface<InvoiceMaster> {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -1056,6 +1058,26 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   pdf.Widget? getPrintableWatermark() => null;
+
+  @override
+  String? getWebCategoryGridableDescription(BuildContext context) {
+    return extendedNetPrice.toCurrencyFormatFromSetting(context);
+  }
+
+  @override
+  InvoiceMaster getWebCategoryGridableInterface(BuildContext context) {
+    return getNewInstance() as InvoiceMaster;
+  }
+
+  @override
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
+    return null;
+  }
+
+  @override
+  String getWebCategoryGridableTitle(BuildContext context) {
+    return getMainHeaderTextOnly(context);
+  }
 }
 
 enum Terms implements ViewAbstractEnum<Terms> {

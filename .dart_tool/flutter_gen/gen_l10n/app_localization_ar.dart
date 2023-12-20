@@ -1287,6 +1287,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get overDue => 'متأخرات في الدفع';
 
   @override
+  String overDueFormat(Object r) {
+    return 'متأخرة $r';
+  }
+
+  @override
   String get overView_best_selling => 'رؤية عامة للمبيعات';
 
   @override
@@ -1348,6 +1353,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pendingFirst => 'المعلق أولا';
+
+  @override
+  String pendingFormat(Object r) {
+    return 'في انتظار $r';
+  }
 
   @override
   String get pendingReservationInvoices => 'فواتير حجز المعلقة';
