@@ -83,7 +83,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   double? extendedDiscount;
   @JsonKey(fromJson: convertToDouble)
   double? extendedNetPrice;
-
+  @JsonKey(fromJson: convertToDouble)
+  double? extendedNetQuantity;
   InvoiceMaster() : super() {
     date = "".toDateTimeNowString();
     TermsID = -1;

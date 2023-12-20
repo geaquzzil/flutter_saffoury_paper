@@ -6,6 +6,7 @@ class LineChartItem<T, E> extends StatelessWidget {
   List<T> list;
   String? title;
   bool smallView;
+  Color? color;
 
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
@@ -14,6 +15,7 @@ class LineChartItem<T, E> extends StatelessWidget {
   LineChartItem(
       {super.key,
       this.title,
+      this.color,
       required this.list,
       required this.xValueMapper,
       required this.yValueMapper,
@@ -24,11 +26,10 @@ class LineChartItem<T, E> extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget t = SfCartesianChart(
         plotAreaBorderWidth: smallView ? 0 : 0.5,
-        title: ChartTitle(alignment: ChartAlignment.near, text: title ?? ''),
+        title: ChartTitle(alignment: ChartAlignment.near, text: ''),
         primaryXAxis: E.runtimeType == DateTime.now().runtimeType
             ? DateTimeAxis(isVisible: !smallView)
             : CategoryAxis(
-              
                 borderWidth: 0,
                 rangePadding: ChartRangePadding.auto,
                 isVisible: !smallView,
@@ -38,8 +39,9 @@ class LineChartItem<T, E> extends StatelessWidget {
             borderWidth: 0,
             axisBorderType: AxisBorderType.withoutTopAndBottom,
             zoomPosition: .2,
-            rangePadding:
-                smallView ? ChartRangePadding.none : ChartRangePadding.auto,
+            rangePadding: smallView
+                ? ChartRangePadding.additional
+                : ChartRangePadding.additional,
             isVisible: !smallView,
             anchorRangeToVisiblePoints: false),
         // plotAreaBackgroundColor: Colors.red,
@@ -53,7 +55,11 @@ class LineChartItem<T, E> extends StatelessWidget {
         // s
 
         // trackballBehavior: TrackballBehavior(enable: true),
-        tooltipBehavior: smallView ? null : TooltipBehavior(),
+        tooltipBehavior: TooltipBehavior(
+          elevation: 2,
+          enable: true,
+          duration: 200,
+        ),
 
         // enableSideBySideSeriesPlacement: true,
         series: <CartesianSeries>[
@@ -68,12 +74,17 @@ class LineChartItem<T, E> extends StatelessWidget {
           //   // dataLabelSettings: const DataLabelSettings(isVisible: true)
           // ),
           if (E.runtimeType == DateTime.now().runtimeType || smallView)
-            LineSeries<T, E>(
+            SplineSeries<T, E>(
+                name: title,
+                color: color ?? Theme.of(context).colorScheme.primary,
+                legendIconType: LegendIconType.triangle,
                 // Bind data source
                 markerSettings: MarkerSettings(
                   isVisible: !smallView,
                 ),
-                enableTooltip: !smallView,
+                enableTooltip: true,
+                splineType: SplineType.cardinal,
+                // cardinalSplineTension: 0.5,
                 dataSource: list,
                 xValueMapper: xValueMapper,
                 yValueMapper: yValueMapper,
@@ -81,18 +92,29 @@ class LineChartItem<T, E> extends StatelessWidget {
 
                 // legendItemText: ,
 
-                dataLabelSettings: DataLabelSettings(isVisible: !smallView))
+                dataLabelSettings: DataLabelSettings(
+                    showZeroValue: false,
+
+                    // showCumulativeValues: ,
+                    labelAlignment: ChartDataLabelAlignment.top,
+                    isVisible: !smallView,
+                    overflowMode: OverflowMode.trim))
           else
             ColumnSeries<T, E>(
+                name: title,
+                color: color ?? Theme.of(context).colorScheme.primary,
                 sortingOrder: SortingOrder.descending,
                 // Sorting based on the specified field
                 // sortFieldValueMapper: (T data, _) => data.runtimeType,
                 dataSource: list,
-                markerSettings: MarkerSettings(isVisible: true),
+                markerSettings: MarkerSettings(isVisible: false),
                 xValueMapper: xValueMapper,
                 yValueMapper: yValueMapper,
                 dataLabelMapper: dataLabelMapper,
-                dataLabelSettings: const DataLabelSettings(isVisible: true))
+                dataLabelSettings: const DataLabelSettings(
+                  isVisible: true,
+                  showZeroValue: false,
+                ))
         ]);
 
     if (smallView) {

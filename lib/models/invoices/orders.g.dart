@@ -31,6 +31,8 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
       InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
   ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
   ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+  ..extendedNetQuantity =
+      InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
   ..orders_details = (json['orders_details'] as List<dynamic>?)
       ?.map((e) => OrderDetails.fromJson(e as Map<String, dynamic>))
       .toList()
@@ -58,6 +60,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'extendedRefundPrice': instance.extendedRefundPrice,
       'extendedDiscount': instance.extendedDiscount,
       'extendedNetPrice': instance.extendedNetPrice,
+      'extendedNetQuantity': instance.extendedNetQuantity,
       'orders_details':
           instance.orders_details?.map((e) => e.toJson()).toList(),
       'orders_details_count': instance.orders_details_count,

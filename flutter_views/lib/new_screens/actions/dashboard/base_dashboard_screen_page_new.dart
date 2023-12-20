@@ -166,7 +166,7 @@ class _BaseDashboardMainPageState
     return FileInfoStaggerdGridView(
         list: element.widgets.map((e) => e.widget).toList(),
         wrapWithCard: element.wrapWithCard,
-        crossAxisCount: 1,
+        crossAxisCount: 2,
         childAspectRatio: 1.4
 
         // width < 1400 ? 1.1 : 1.4,

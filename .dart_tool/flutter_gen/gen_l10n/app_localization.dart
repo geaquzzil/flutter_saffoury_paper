@@ -2007,6 +2007,12 @@ abstract class AppLocalizations {
   /// **'Item count'**
   String get itemCount;
 
+  /// No description provided for @itemsFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'{r} items'**
+  String itemsFormat(Object r);
+
   /// No description provided for @journalAccount.
   ///
   /// In en, this message translates to:
@@ -2421,6 +2427,12 @@ abstract class AppLocalizations {
   /// **'Num of overdues'**
   String get numOfOverdues;
 
+  /// No description provided for @offlineOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline orders'**
+  String get offlineOrder;
+
   /// No description provided for @ok.
   ///
   /// In en, this message translates to:
@@ -2450,6 +2462,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1–1 Debit'**
   String get oneDashOneDebits;
+
+  /// No description provided for @onlineOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Online orders'**
+  String get onlineOrder;
 
   /// No description provided for @open.
   ///
@@ -3872,6 +3890,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get total;
+
+  /// No description provided for @totalFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Total {r}'**
+  String totalFormat(Object r);
 
   /// No description provided for @totalIncomesAndExpences.
   ///

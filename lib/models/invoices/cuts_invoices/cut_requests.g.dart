@@ -54,3 +54,22 @@ const _$CutStatusEnumMap = {
   CutStatus.PROCESSING: 'PROCESSING',
   CutStatus.COMPLETED: 'COMPLETED',
 };
+
+ProfitByCutRequest _$ProfitByCutRequestFromJson(Map<String, dynamic> json) =>
+    ProfitByCutRequest()
+      ..cutRequestQuantity = convertToDouble(json['cutRequestQuantity'])
+      ..inputQuantity = convertToDouble(json['inputQuantity'])
+      ..resultQuantity = convertToDouble(json['resultQuantity'])
+      ..totalPrice = convertToDouble(json['totalPrice'])
+      ..CutRequestID = json['CutRequestID'] as int?
+      ..date = json['date'] as String?;
+
+Map<String, dynamic> _$ProfitByCutRequestToJson(ProfitByCutRequest instance) =>
+    <String, dynamic>{
+      'cutRequestQuantity': instance.cutRequestQuantity,
+      'inputQuantity': instance.inputQuantity,
+      'resultQuantity': instance.resultQuantity,
+      'totalPrice': instance.totalPrice,
+      'CutRequestID': instance.CutRequestID,
+      'date': instance.date,
+    };

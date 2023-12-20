@@ -107,26 +107,18 @@ class ProductMovments
     );
   }
 
-  List<String> getAnalysisChartTitle(BuildContext context) {
+  List<ViewAbstract> getAnalysisChartTitle(BuildContext context) {
     return [
-      if (ordersAnalysis?.isNotEmpty ?? false)
-        Order().getMainHeaderLabelTextOnly(context),
-      if (purchasesAnalysis?.isNotEmpty ?? false)
-        Purchases().getMainHeaderLabelTextOnly(context),
-      if (purchases_refundsAnalysis?.isNotEmpty ?? false)
-        PurchasesRefund().getMainHeaderLabelTextOnly(context),
-      if (orders_refundsAnalysis?.isNotEmpty ?? false)
-        OrderRefund().getMainHeaderLabelTextOnly(context),
-      if (products_inputsAnalysis?.isNotEmpty ?? false)
-        ProductInput().getMainHeaderLabelTextOnly(context),
-      if (products_outputsAnalysis?.isNotEmpty ?? false)
-        ProductOutput().getMainHeaderLabelTextOnly(context),
-      if (transfersAnalysis?.isNotEmpty ?? false)
-        Transfers().getMainHeaderLabelTextOnly(context),
+      if (ordersAnalysis?.isNotEmpty ?? false) Order(),
+      if (purchasesAnalysis?.isNotEmpty ?? false) Purchases(),
+      if (purchases_refundsAnalysis?.isNotEmpty ?? false) PurchasesRefund(),
+      if (orders_refundsAnalysis?.isNotEmpty ?? false) OrderRefund(),
+      if (products_inputsAnalysis?.isNotEmpty ?? false) ProductInput(),
+      if (products_outputsAnalysis?.isNotEmpty ?? false) ProductOutput(),
+      if (transfersAnalysis?.isNotEmpty ?? false) Transfers(),
       if (reservation_invoiceAnalysis?.isNotEmpty ?? false)
-        ReservationInvoice().getMainHeaderLabelTextOnly(context),
-      if (cut_requestsAnalysis?.isNotEmpty ?? false)
-        CutRequest().getMainHeaderLabelTextOnly(context),
+        ReservationInvoice(),
+      if (cut_requestsAnalysis?.isNotEmpty ?? false) CutRequest(),
       // if (spendingsAnalysis?.isNotEmpty ??false) spendingsAnalysis ?? [],
       // if (incomesAnalysis?.isNotEmpty ??false) incomesAnalysis ?? []
     ];

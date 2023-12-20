@@ -73,7 +73,12 @@ class ChartCardItemCustom extends StatelessWidget {
             //navigate to list page
           },
       child: Card(
-        // color: color?.withOpacity(0.1),
+        color: color == null
+            ? null
+            : ElevationOverlay.colorWithOverlay(
+                Theme.of(context).colorScheme.surface, color!, 3),
+
+        // color?.withOpacity(0.2),
         child: Container(
           padding: const EdgeInsets.all(defaultPadding),
           child: Column(
@@ -105,7 +110,9 @@ class ChartCardItemCustom extends StatelessWidget {
                   // transform: Matrix4.translationValues(-20.0, 0, -20.0),
                   child: LineChartItem<GrowthRate, String>(
                     smallView: true,
+                    color: color,
                     list: listGrowthRate!,
+                    title: title,
                     // title:
                     //     CutRequest().getMainHeaderLabelTextOnly(context),
                     dataLabelMapper: (item, idx) =>

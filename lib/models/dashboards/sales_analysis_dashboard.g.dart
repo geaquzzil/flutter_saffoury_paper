@@ -138,51 +138,44 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
       ..dateObject = json['dateObject'] == null
           ? null
           : DateObject.fromJson(json['dateObject'] as Map<String, dynamic>)
-      ..bestSellingSize = (json['bestSellingSize'] as List<dynamic>?)
-          ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
+      ..orders_offline_count = (json['orders_offline_count'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..bestSellingGSM = (json['bestSellingGSM'] as List<dynamic>?)
-          ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
+      ..orders_online_count = (json['orders_online_count'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..bestSellingTYPE = (json['bestSellingTYPE'] as List<dynamic>?)
-          ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
+      ..customers_count = (json['customers_count'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..bestProfitableType = (json['bestProfitableType'] as List<dynamic>?)
-          ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
+      ..products = (json['products'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
       ..totalSalesQuantity = (json['totalSalesQuantity'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..totalSalesQuantityAnalysis =
-          (json['totalSalesQuantityAnalysis'] as List<dynamic>?)
-              ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-              .toList()
       ..totalReturnsQuantity = (json['totalReturnsQuantity'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..totalReturnsQuantityAnalysis =
-          (json['totalReturnsQuantityAnalysis'] as List<dynamic>?)
-              ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-              .toList()
       ..totalNetSalesQuantity =
           (json['totalNetSalesQuantity'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..totalNetSalesQuantityAnalysis =
-          (json['totalNetSalesQuantityAnalysis'] as List<dynamic>?)
-              ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-              .toList()
-      ..wastesQuantity = (json['wastesQuantity'] as List<dynamic>?)
+      ..totalSalesPrice = (json['totalSalesPrice'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..wastesQuantityAnalysis =
-          (json['wastesQuantityAnalysis'] as List<dynamic>?)
-              ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-              .toList()
-      ..profits = (json['profits'] as List<dynamic>?)
+      ..totalReturnsPrice = (json['totalReturnsPrice'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..profitsAnalysis = (json['profitsAnalysis'] as List<dynamic>?)
+      ..totalNetSalesPrice = (json['totalNetSalesPrice'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..profitsByOrder = (json['profitsByOrder'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..profitsByCutRequests = (json['profitsByCutRequests'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..wastesByCutRequests = (json['wastesByCutRequests'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
       ..incomesDue = (json['incomesDue'] as List<dynamic>?)
@@ -190,15 +183,6 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           .toList()
       ..spendingsDue = (json['spendingsDue'] as List<dynamic>?)
           ?.map((e) => AccountNamesBalance.fromJson(e as Map<String, dynamic>))
-          .toList()
-      ..wastes = (json['wastes'] as List<dynamic>?)
-          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-          .toList()
-      ..wastesAnalysis = (json['wastesAnalysis'] as List<dynamic>?)
-          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-          .toList()
-      ..netProfit = (json['netProfit'] as List<dynamic>?)
-          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList();
 
 Map<String, dynamic> _$SalesAnalysisDashboardToJson(
@@ -279,40 +263,32 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
       'cargo_transportersAnalysis':
           instance.cargo_transportersAnalysis?.map((e) => e.toJson()).toList(),
       'cargo_transporters_count': instance.cargo_transporters_count,
-      'date': instance.dateObject?.toJson(),
-      'bestSellingSize':
-          instance.bestSellingSize?.map((e) => e.toJson()).toList(),
-      'bestSellingGSM':
-          instance.bestSellingGSM?.map((e) => e.toJson()).toList(),
-      'bestSellingTYPE':
-          instance.bestSellingTYPE?.map((e) => e.toJson()).toList(),
-      'bestProfitableType':
-          instance.bestProfitableType?.map((e) => e.toJson()).toList(),
+      'dateObject': instance.dateObject?.toJson(),
+      'orders_offline_count':
+          instance.orders_offline_count?.map((e) => e.toJson()).toList(),
+      'orders_online_count':
+          instance.orders_online_count?.map((e) => e.toJson()).toList(),
+      'customers_count':
+          instance.customers_count?.map((e) => e.toJson()).toList(),
+      'products': instance.products?.map((e) => e.toJson()).toList(),
       'totalSalesQuantity':
           instance.totalSalesQuantity?.map((e) => e.toJson()).toList(),
-      'totalSalesQuantityAnalysis':
-          instance.totalSalesQuantityAnalysis?.map((e) => e.toJson()).toList(),
       'totalReturnsQuantity':
           instance.totalReturnsQuantity?.map((e) => e.toJson()).toList(),
-      'totalReturnsQuantityAnalysis': instance.totalReturnsQuantityAnalysis
-          ?.map((e) => e.toJson())
-          .toList(),
       'totalNetSalesQuantity':
           instance.totalNetSalesQuantity?.map((e) => e.toJson()).toList(),
-      'totalNetSalesQuantityAnalysis': instance.totalNetSalesQuantityAnalysis
-          ?.map((e) => e.toJson())
-          .toList(),
-      'wastesQuantity':
-          instance.wastesQuantity?.map((e) => e.toJson()).toList(),
-      'wastesQuantityAnalysis':
-          instance.wastesQuantityAnalysis?.map((e) => e.toJson()).toList(),
-      'profits': instance.profits?.map((e) => e.toJson()).toList(),
-      'profitsAnalysis':
-          instance.profitsAnalysis?.map((e) => e.toJson()).toList(),
+      'totalSalesPrice':
+          instance.totalSalesPrice?.map((e) => e.toJson()).toList(),
+      'totalReturnsPrice':
+          instance.totalReturnsPrice?.map((e) => e.toJson()).toList(),
+      'totalNetSalesPrice':
+          instance.totalNetSalesPrice?.map((e) => e.toJson()).toList(),
+      'profitsByOrder':
+          instance.profitsByOrder?.map((e) => e.toJson()).toList(),
+      'profitsByCutRequests':
+          instance.profitsByCutRequests?.map((e) => e.toJson()).toList(),
+      'wastesByCutRequests':
+          instance.wastesByCutRequests?.map((e) => e.toJson()).toList(),
       'incomesDue': instance.incomesDue?.map((e) => e.toJson()).toList(),
       'spendingsDue': instance.spendingsDue?.map((e) => e.toJson()).toList(),
-      'wastes': instance.wastes?.map((e) => e.toJson()).toList(),
-      'wastesAnalysis':
-          instance.wastesAnalysis?.map((e) => e.toJson()).toList(),
-      'netProfit': instance.netProfit?.map((e) => e.toJson()).toList(),
     };

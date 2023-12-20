@@ -34,6 +34,8 @@ CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
           InvoiceMaster.convertToDouble(json['extendedDiscount'])
       ..extendedNetPrice =
           InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+      ..extendedNetQuantity =
+          InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
       ..customers_request_sizes_details =
           (json['customers_request_sizes_details'] as List<dynamic>?)
               ?.map((e) => CustomerRequestSizeDetails.fromJson(
@@ -62,6 +64,7 @@ Map<String, dynamic> _$CustomerRequestSizeToJson(
       'extendedRefundPrice': instance.extendedRefundPrice,
       'extendedDiscount': instance.extendedDiscount,
       'extendedNetPrice': instance.extendedNetPrice,
+      'extendedNetQuantity': instance.extendedNetQuantity,
       'customers_request_sizes_details': instance
           .customers_request_sizes_details
           ?.map((e) => e.toJson())

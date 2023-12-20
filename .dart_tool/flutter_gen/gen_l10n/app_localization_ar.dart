@@ -994,6 +994,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemCount => 'عدد الأصناف';
 
   @override
+  String itemsFormat(Object r) {
+    return '$r عنصر';
+  }
+
+  @override
   String get journalAccount => 'حساب قيد';
 
   @override
@@ -1223,6 +1228,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get numOfOverdues => 'عدد مرات التأخير';
 
   @override
+  String get offlineOrder => 'الفواتير';
+
+  @override
   String get ok => 'حسنا';
 
   @override
@@ -1236,6 +1244,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get oneDashOneDebits => 'رصيد اول مدة';
+
+  @override
+  String get onlineOrder => 'الطلبات عبر الإنترنت';
 
   @override
   String get open => 'فتح';
@@ -1985,6 +1996,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get total => 'المجموع';
+
+  @override
+  String totalFormat(Object r) {
+    return 'مجموع $r';
+  }
 
   @override
   String get totalIncomesAndExpences => 'اجمالي الوارد والصادر';

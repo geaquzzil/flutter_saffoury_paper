@@ -34,6 +34,8 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
           InvoiceMaster.convertToDouble(json['extendedDiscount'])
       ..extendedNetPrice =
           InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+      ..extendedNetQuantity =
+          InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
       ..reservation_invoice_details =
           (json['reservation_invoice_details'] as List<dynamic>?)
               ?.map((e) =>
@@ -61,6 +63,7 @@ Map<String, dynamic> _$ReservationInvoiceToJson(ReservationInvoice instance) =>
       'extendedRefundPrice': instance.extendedRefundPrice,
       'extendedDiscount': instance.extendedDiscount,
       'extendedNetPrice': instance.extendedNetPrice,
+      'extendedNetQuantity': instance.extendedNetQuantity,
       'reservation_invoice_details':
           instance.reservation_invoice_details?.map((e) => e.toJson()).toList(),
       'reservation_invoice_details_count':

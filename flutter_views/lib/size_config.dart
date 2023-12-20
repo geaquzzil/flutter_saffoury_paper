@@ -23,6 +23,8 @@ const double kDrawerOpenWidth = 360;
 
 const double kDefaultClosedDrawer = 80;
 
+double? convertToDouble(dynamic number) =>
+    number == null ? 0 : double.tryParse(number.toString());
 Size findPopupSizeSquare(BuildContext context,
     {CurrentScreenSize? screenSize}) {
   screenSize ??= getCurrentScreenSizeStatic(context);
@@ -34,7 +36,6 @@ bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
   return screenSize == CurrentScreenSize.DESKTOP ||
       screenSize == CurrentScreenSize.LARGE_TABLET;
 }
-
 
 CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
   return context.read<LayoutChangeListner>().currentScreenSize ??

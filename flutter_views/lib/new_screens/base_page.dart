@@ -645,8 +645,8 @@ abstract class BasePageWithApi<T extends StatefulWidget>
       tab.iD = iD;
       tab.tableName = tableName;
       if (tabH != null) {
-        // _getTabBarList()!.firstWhere(
-        //     (element) => element.extras.runtimeType == tabH.extras.runtimeType);
+        _getTabBarList()![_getTabBarList()!.indexWhere((element) =>
+            element.extras.runtimeType == tabH.extras.runtimeType)] = tab;
       } else {
         _getTabBarList()![currentTabIndex] = tab;
       }
@@ -737,7 +737,8 @@ abstract class BasePageWithApi<T extends StatefulWidget>
           debugPrint("BasePageApi FutureBuilder hasError");
           return getErrorWidget();
         } else if (snapshot.connectionState == ConnectionState.done) {
-          debugPrint("BasePageApi FutureBuilder done");
+          debugPrint(
+              "BasePageApi FutureBuilder done snape data ${snapshot.data.runtimeType}");
           _isLoading = false;
           if (snapshot.data != null) {
             setExtras(ex: snapshot.data, tabH: tab);

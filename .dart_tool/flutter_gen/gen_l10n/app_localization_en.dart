@@ -994,6 +994,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get itemCount => 'Item count';
 
   @override
+  String itemsFormat(Object r) {
+    return '$r items';
+  }
+
+  @override
   String get journalAccount => 'Journal account';
 
   @override
@@ -1223,6 +1228,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get numOfOverdues => 'Num of overdues';
 
   @override
+  String get offlineOrder => 'Offline orders';
+
+  @override
   String get ok => 'Ok';
 
   @override
@@ -1236,6 +1244,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get oneDashOneDebits => '1–1 Debit';
+
+  @override
+  String get onlineOrder => 'Online orders';
 
   @override
   String get open => 'Open';
@@ -1985,6 +1996,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get total => 'Total';
+
+  @override
+  String totalFormat(Object r) {
+    return 'Total $r';
+  }
 
   @override
   String get totalIncomesAndExpences => 'Total incoming and outgoing';

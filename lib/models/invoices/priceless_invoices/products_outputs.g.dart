@@ -34,6 +34,8 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
           InvoiceMaster.convertToDouble(json['extendedDiscount'])
       ..extendedNetPrice =
           InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+      ..extendedNetQuantity =
+          InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
       ..products_outputs_details = (json['products_outputs_details']
               as List<dynamic>?)
           ?.map((e) => ProductOutputDetails.fromJson(e as Map<String, dynamic>))
@@ -63,6 +65,7 @@ Map<String, dynamic> _$ProductOutputToJson(ProductOutput instance) =>
       'extendedRefundPrice': instance.extendedRefundPrice,
       'extendedDiscount': instance.extendedDiscount,
       'extendedNetPrice': instance.extendedNetPrice,
+      'extendedNetQuantity': instance.extendedNetQuantity,
       'products_outputs_details':
           instance.products_outputs_details?.map((e) => e.toJson()).toList(),
       'products_outputs_details_count': instance.products_outputs_details_count,

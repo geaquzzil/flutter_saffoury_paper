@@ -740,6 +740,27 @@ class CutRequest extends ViewAbstract<CutRequest>
 //   @JsonValue("COMPLETED")
 //   COMPLETED
 // }
+@JsonSerializable(explicitToJson: true)
+class ProfitByCutRequest {
+  @JsonKey(fromJson: convertToDouble)
+  double? cutRequestQuantity;
+  @JsonKey(fromJson: convertToDouble)
+  double? inputQuantity;
+
+  @JsonKey(fromJson: convertToDouble)
+  double? resultQuantity;
+  @JsonKey(fromJson: convertToDouble)
+  double? totalPrice;
+  int? CutRequestID;
+  String? date;
+
+  ProfitByCutRequest();
+
+  factory ProfitByCutRequest.fromJson(Map<String, dynamic> data) =>
+      _$ProfitByCutRequestFromJson(data);
+
+  Map<String, dynamic> toJson() => _$ProfitByCutRequestToJson(this);
+}
 
 enum CutStatus implements ViewAbstractEnum<CutStatus> {
   PENDING,

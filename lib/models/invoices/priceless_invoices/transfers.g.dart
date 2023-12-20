@@ -31,6 +31,8 @@ Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
       InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
   ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
   ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
+  ..extendedNetQuantity =
+      InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
   ..fromWarehouse = json['fromWarehouse'] == null
       ? null
       : Warehouse.fromJson(json['fromWarehouse'] as Map<String, dynamic>)
@@ -60,6 +62,7 @@ Map<String, dynamic> _$TransfersToJson(Transfers instance) => <String, dynamic>{
       'extendedRefundPrice': instance.extendedRefundPrice,
       'extendedDiscount': instance.extendedDiscount,
       'extendedNetPrice': instance.extendedNetPrice,
+      'extendedNetQuantity': instance.extendedNetQuantity,
       'fromWarehouse': instance.fromWarehouse?.toJson(),
       'toWarehouse': instance.toWarehouse?.toJson(),
       'transfers_details':

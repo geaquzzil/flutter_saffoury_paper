@@ -10,6 +10,8 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 
@@ -78,6 +80,21 @@ class UserLists<T> extends AuthUser<T> {
   @override
   UserLists getSelfNewInstance() {
     return UserLists();
+  }
+
+  bool checkList(List? list) {
+    if (list == null) return false;
+    if (list.isEmpty) return false;
+    return true;
+  }
+
+  WidgetGridHelper getWidget(StaggeredGridTile gride,
+      {WidgetDashboardType type = WidgetDashboardType.NORMAL}) {
+    return WidgetGridHelper(widget: gride, widgetDashboardType: type);
+  }
+
+  String combineStrings(List<List<GrowthRate?>?> list) {
+    return "";
   }
 
   @override

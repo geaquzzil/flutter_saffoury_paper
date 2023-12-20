@@ -355,49 +355,84 @@ class SectionItemHeader extends MultiSliver {
               padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
               sliver: SliverPinnedHeader(
                   child: Container(
-                padding: EdgeInsets.all(kDefaultPadding),
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          dgh.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        if (dgh.headerListToAdd != null)
-                          ElevatedButton.icon(
-                            key: buttonKey,
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: kDefaultPadding * 1.5,
-                                vertical: kDefaultPadding / 2,
-                              ),
-                            ),
-                            onPressed: () async {
-                              if (dgh.headerListToAdd == null) return;
-                              await showPopupMenu(context, buttonKey,
-                                      list: dgh.headerListToAdd!
-                                          .map((e) => buildMenuItem(
-                                              context,
-                                              MenuItemBuild(
-                                                  e.getMainHeaderLabelTextOnly(
-                                                      context),
-                                                  Icons.add,
-                                                  "")))
-                                          .toList())
-                                  .then((value) =>
-                                      debugPrint("showPopupMenu $value"));
-                            },
-                            icon: const Icon(Icons.add),
-                            label: Text(AppLocalizations.of(context)!.add_new),
+                      padding: EdgeInsets.all(kDefaultPadding),
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: ListTile(
+                          title: Text(
+                            dgh.title,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
-                      ],
-                    ),
-                  ],
-                ),
-              )),
+                          trailing: dgh.headerListToAdd == null
+                              ? null
+                              : ElevatedButton.icon(
+                                  key: buttonKey,
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: kDefaultPadding * 1.5,
+                                      vertical: kDefaultPadding / 2,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    if (dgh.headerListToAdd == null) return;
+                                    await showPopupMenu(context, buttonKey,
+                                            list: dgh.headerListToAdd!
+                                                .map((e) => buildMenuItem(
+                                                    context,
+                                                    MenuItemBuild(
+                                                        e.getMainHeaderLabelTextOnly(
+                                                            context),
+                                                        Icons.add,
+                                                        "")))
+                                                .toList())
+                                        .then((value) =>
+                                            debugPrint("showPopupMenu $value"));
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: Text(
+                                      AppLocalizations.of(context)!.add_new),
+                                ))
+
+                      //  Column(
+                      //   children: [
+                      //     Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         Text(
+                      //           dgh.title,
+                      //           style: Theme.of(context).textTheme.titleLarge,
+                      //         ),
+                      //         if (dgh.headerListToAdd != null)
+                      //           ElevatedButton.icon(
+                      //             key: buttonKey,
+                      //             style: TextButton.styleFrom(
+                      //               padding: const EdgeInsets.symmetric(
+                      //                 horizontal: kDefaultPadding * 1.5,
+                      //                 vertical: kDefaultPadding / 2,
+                      //               ),
+                      //             ),
+                      //             onPressed: () async {
+                      //               if (dgh.headerListToAdd == null) return;
+                      //               await showPopupMenu(context, buttonKey,
+                      //                       list: dgh.headerListToAdd!
+                      //                           .map((e) => buildMenuItem(
+                      //                               context,
+                      //                               MenuItemBuild(
+                      //                                   e.getMainHeaderLabelTextOnly(
+                      //                                       context),
+                      //                                   Icons.add,
+                      //                                   "")))
+                      //                           .toList())
+                      //                   .then((value) =>
+                      //                       debugPrint("showPopupMenu $value"));
+                      //             },
+                      //             icon: const Icon(Icons.add),
+                      //             label: Text(AppLocalizations.of(context)!.add_new),
+                      //           ),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
+                      )),
             ),
             SliverToBoxAdapter(
               child: child,

@@ -141,15 +141,12 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return debitsDue != null;
   }
 
-  List<String> getAnalysisChartFundsTitle(BuildContext context) {
+  List<ViewAbstract> getAnalysisChartFundsTitle(BuildContext context) {
     return [
-      if (creditsAnalysis != null)
-        Credits().getMainHeaderLabelTextOnly(context),
-      if (debitsAnalysis != null) Debits().getMainHeaderLabelTextOnly(context),
-      if (spendingsAnalysis != null)
-        Spendings().getMainHeaderLabelTextOnly(context),
-      if (incomesAnalysis != null)
-        Incomes().getMainHeaderLabelTextOnly(context),
+      if (creditsAnalysis != null) Credits(),
+      if (debitsAnalysis != null) Debits(),
+      if (spendingsAnalysis != null) Spendings(),
+      if (incomesAnalysis != null) Incomes(),
     ];
   }
 
@@ -187,22 +184,16 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     ];
   }
 
-  List<String> getAnalysisChartTitle(BuildContext context) {
+  List<ViewAbstract> getAnalysisChartTitle(BuildContext context) {
     return [
-      if (ordersAnalysis != null) Order().getMainHeaderLabelTextOnly(context),
-      if (purchasesAnalysis != null)
-        Purchases().getMainHeaderLabelTextOnly(context),
+      if (ordersAnalysis != null) Order(),
+      if (purchasesAnalysis != null) Purchases(),
 
-      if (products_inputsAnalysis != null)
-        ProductInput().getMainHeaderLabelTextOnly(context),
-      if (products_outputsAnalysis != null)
-        ProductOutput().getMainHeaderLabelTextOnly(context),
-      if (transfersAnalysis != null)
-        Transfers().getMainHeaderLabelTextOnly(context),
-      if (reservation_invoiceAnalysis != null)
-        ReservationInvoice().getMainHeaderLabelTextOnly(context),
-      if (cut_requestsAnalysis != null)
-        CutRequest().getMainHeaderLabelTextOnly(context),
+      if (products_inputsAnalysis != null) ProductInput(),
+      if (products_outputsAnalysis != null) ProductOutput(),
+      if (transfersAnalysis != null) Transfers(),
+      if (reservation_invoiceAnalysis != null) ReservationInvoice(),
+      if (cut_requestsAnalysis != null) CutRequest(),
       // if (spendingsAnalysis != null) spendingsAnalysis ?? [],
       // if (incomesAnalysis != null) incomesAnalysis ?? []
     ];
@@ -281,7 +272,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
-            color: Order().getMainColor(),
             // color: Colors.green.withOpacity(0.2),
             icon: Order().getMainIconData(),
             listGrowthRate: ordersAnalysis,
@@ -295,7 +285,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           crossAxisCellCount: crossCountFundCalc,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
-            color: Purchases().getMainColor(),
             listGrowthRate: purchasesAnalysis,
             icon: Purchases().getMainIconData(),
             title: AppLocalizations.of(context)!.purchases,
@@ -385,11 +374,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     ];
   }
 
-  WidgetGridHelper getWidget(StaggeredGridTile gride,
-      {WidgetDashboardType type = WidgetDashboardType.NORMAL}) {
-    return WidgetGridHelper(widget: gride, widgetDashboardType: type);
-  }
-
   List<WidgetGridHelper> getFundWidgets(
       BuildContext context, int crossAxisCount) {
     bool isMezouj = crossAxisCount % 2 == 0;
@@ -408,7 +392,6 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
           child: ChartCardItemCustom(
             list: credits,
             listGrowthRate: creditsAnalysis,
-            color: Credits().getMainColor(),
             icon: Icons.arrow_back_sharp,
             title: AppLocalizations.of(context)!.credits,
             description:
@@ -426,7 +409,8 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             listGrowthRate: debitsAnalysis,
             description: debits?.getTotalValue().toCurrencyFormat() ?? "",
             footer: debits?.length.toString(),
-            footerRightWidget: debitsAnalysis.getGrowthRateText(context),
+            footerRightWidget:
+                debitsAnalysis.getGrowthRateText(context, reverseTheme: true),
           ))),
       // getWidget(StaggeredGridTile.count(
       //     crossAxisCellCount: 2,
@@ -458,14 +442,14 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             description: spendings?.getTotalValue().toCurrencyFormat() ?? "",
             listGrowthRate: spendingsAnalysis,
             footer: spendings?.length.toString(),
-            footerRightWidget: spendingsAnalysis.getGrowthRateText(context),
+            footerRightWidget: spendingsAnalysis.getGrowthRateText(context,
+                reverseTheme: true),
           ))),
       getWidget(StaggeredGridTile.count(
           crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
           mainAxisCellCount: 1,
           child: ChartCardItemCustom(
             icon: Icons.arrow_back_sharp,
-            color: Incomes().getMainColor(),
             listGrowthRate: incomesAnalysis,
             title: AppLocalizations.of(context)!.incomes,
             description: incomes?.getTotalValue().toCurrencyFormat() ?? "",
@@ -481,47 +465,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                   usePag: true,
                   viewAbstract: [...credits ?? [], ...debits ?? []]),
             ))),
-
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: .75,
-          child: ChartCardItemCustom(
-            icon: Icons.balance,
-            color: Colors.orange,
-            title: AppLocalizations.of(context)!.previousBalance,
-            description: getTotalPreviousBalance(),
-            // footer: incomes?.length.toString(),
-            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-          ))),
-
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: 1.5,
-          child: ChartCardItemCustom(
-            icon: Icons.balance,
-            title: AppLocalizations.of(context)!.balance_due,
-            description: getTotalDueBalance(),
-            // footer: incomes?.length.toString(),
-            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-          ))),
-      getWidget(StaggeredGridTile.count(
-          crossAxisCellCount: 1,
-          mainAxisCellCount: .75,
-          child: ChartCardItemCustom(
-            color: Colors.blue,
-            icon: Icons.today,
-            title: AppLocalizations.of(context)!.this_day,
-            description: getTotalTodayBalance(),
-            // footer: incomes?.length.toString(),
-            // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-          ))),
     ];
-  }
-
-  bool checkList(List? list) {
-    if (list == null) return false;
-    if (list.isEmpty) return false;
-    return true;
   }
 
   @override
@@ -555,9 +499,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               title: AppLocalizations.of(context)!.pendingCutRequest,
               widgets: [
                 getWidget(StaggeredGridTile.count(
-                    crossAxisCellCount: crossAxisCount <= 2
-                        ? crossAxisCount
-                        : crossAxisCount - 2,
+                    crossAxisCellCount: crossAxisCount,
                     mainAxisCellCount: 1.5,
                     child: ListHorizontalApiAutoRestWidget(
                       isSliver: true,
@@ -577,25 +519,44 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                 //   xValueMapper: (item, value) => "${item.groupBy}",
                 //   yValueMapper: (item, n) => item.count,
                 // );
-                getWidget(
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 1.5,
-                        child: LineChartItem<GrowthRate, String>(
-                          list: cut_requestsAnalysis ?? [],
-                          // title:
-                          //     CutRequest().getMainHeaderLabelTextOnly(context),
-                          dataLabelMapper: (item, idx) => item.total
-                              .toCurrencyFormat(
-                                  symbol: AppLocalizations.of(context)!.kg),
-                          xValueMapper: (item, value) {
-                            // debugPrint("ChartItem $item");
-                            return DateFormat.MMM().format(DateTime(
-                                item.year!, item.month!, item.day ?? 1));
-                          },
-                          yValueMapper: (item, n) => item.total,
-                        )),
-                    type: WidgetDashboardType.CHART),
+                // getWidget(
+                //     StaggeredGridTile.count(
+                //         crossAxisCellCount: 2,
+                //         mainAxisCellCount: 1.5,
+                //         child: LineChartItem<GrowthRate, String>(
+                //           list: cut_requestsAnalysis ?? [],
+                //           // title:
+                //           //     CutRequest().getMainHeaderLabelTextOnly(context),
+                //           dataLabelMapper: (item, idx) => item.total
+                //               .toCurrencyFormat(
+                //                   symbol: AppLocalizations.of(context)!.kg),
+                //           xValueMapper: (item, value) {
+                //             // debugPrint("ChartItem $item");
+                //             return DateFormat.MMM().format(DateTime(
+                //                 item.year!, item.month!, item.day ?? 1));
+                //           },
+                //           yValueMapper: (item, n) => item.total,
+                //         )),
+                //     type: WidgetDashboardType.CHART),
+              ]),
+        if (checkList(pending_reservation_invoice))
+          DashableGridHelper(
+              title: AppLocalizations.of(context)!.pendingCutRequest,
+              widgets: [
+                getWidget(StaggeredGridTile.count(
+                    crossAxisCellCount: crossAxisCount,
+                    mainAxisCellCount: 1.5,
+                    child: ListHorizontalApiAutoRestWidget(
+                      isSliver: true,
+                      // titleString: "Pending",
+                      list: pending_reservation_invoice,
+                      // listItembuilder: (v) =>
+                      //     ListItemProductTypeCategory(productType: v as ProductType),
+                      // autoRest: AutoRest<CutRequest>(
+                      //     obj: CutRequest()
+                      //       ..setCustomMap({"<cut_status>": "PENDING"}),
+                      //     key: "CutRequest<Pending>"),
+                    ))),
               ])
         // ...getInvoicesWidgets(context)
         ,
@@ -604,15 +565,75 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
-    return [];
+    // return [];
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.chart,
-          wrapWithCard: true,
+          wrapWithCard: false,
           widgets: [
             getWidget(
               StaggeredGridTile.count(
+                  crossAxisCellCount: 2,
+                  mainAxisCellCount: 1.5,
+                  child: MultiLineChartItem<GrowthRate, DateTime>(
+                    title: "T",
+                    list: getAnalysisChartFunds(),
+                    titles: getAnalysisChartFundsTitle(context),
+                    dataLabelMapper: (item, idx) =>
+                        item.total.toCurrencyFormat(),
+                    xValueMapper: (item, value, indexInsideList) => DateTime(
+                        value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+                    yValueMapper: (item, n, indexInsideList) => n.total,
+                  )),
+              type: WidgetDashboardType.CHART,
+            ),
+            getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: 1,
+                mainAxisCellCount: .75,
+                child: ChartCardItemCustom(
+                  icon: Icons.balance,
+                  color: Colors.orange,
+                  title: AppLocalizations.of(context)!.previousBalance,
+                  description: getTotalPreviousBalance(),
+                  // footer: incomes?.length.toString(),
+                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+            getWidget(StaggeredGridTile.count(
+                crossAxisCellCount: 1,
+                mainAxisCellCount: .75,
+                child: ChartCardItemCustom(
+                  icon: Icons.account_balance,
+                  title: AppLocalizations.of(context)!.balance_due,
+                  description: getTotalDueBalance(),
+                  // footer: incomes?.length.toString(),
+                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+            getWidget(StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: .75,
+                child: ChartCardItemCustom(
+                  color: Colors.blue,
+                  icon: Icons.today,
+                  title: AppLocalizations.of(context)!.this_day,
+                  description: getTotalTodayBalance(),
+                  // footer: incomes?.length.toString(),
+                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+
+            getWidget(StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: .5,
+              child: OutlinedCard(
+                  child: ListTile(
+                title: Text(AppLocalizations.of(context)!.previousBalance),
+                subtitle: Text(getTotalPreviousBalance()),
+                leading: const Icon(Icons.balance),
+                trailing: const Text("SYP"),
+              )),
+            )),
+            getWidget(
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
                 mainAxisCellCount: 2,
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height -
@@ -691,7 +712,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             // ),
             getWidget(
               StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
+                  crossAxisCellCount: 2,
                   mainAxisCellCount: 1.5,
                   child: MultiLineChartItem<GrowthRate, DateTime>(
                     title: "T",
@@ -707,7 +728,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             ),
             getWidget(
               StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
+                  crossAxisCellCount: 2,
                   mainAxisCellCount: 1.5,
                   child: MultiLineChartItem<GrowthRate, DateTime>(
                     title: "T",

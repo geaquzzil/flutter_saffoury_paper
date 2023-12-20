@@ -82,13 +82,54 @@ extension GrowthRateUtils<T extends GrowthRate> on List<T?>? {
     return (period2 - period1) / period1 * 100;
   }
 
-  Widget getGrowthRateText(BuildContext context) {
+  Widget getGrowthRateText(BuildContext context, {bool reverseTheme = false}) {
     double getGrowthRate = this.getGrowthRate();
+    getGrowthRate = reverseTheme ? getGrowthRate * -1 : getGrowthRate;
     return Text(
       getGrowthRate.toCurrencyFormat(symbol: "%"),
       style: getGrowthRate > 0
           ? GrowthRate.getGrowTheme(context)
           : GrowthRate.getReduceTheme(context),
     );
+  }
+
+  Widget getLastRecordGrowthRateText(BuildContext context,
+      {bool reverseTheme = false}) {
+    if (this == null) return const Text("-");
+    if (this!.isEmpty) return const Text("-");
+    double getGrowthRate = this![this!.length - 1]!.total.toNonNullable();
+    return Text(
+      "Last month:" + getGrowthRate.toCurrencyFormat(symbol: "%"),
+      style: getGrowthRate > 0 && !reverseTheme
+          ? GrowthRate.getGrowTheme(context)
+          : GrowthRate.getReduceTheme(context),
+    );
+  }
+
+  String getLastRecordText({String symple = ""}) {
+    if (this == null) return "-";
+    if (this!.isEmpty) return "-";
+    double getGrowthRate = this![this!.length - 1]!.total.toNonNullable();
+    return "Last month:" + getGrowthRate.toCurrencyFormat(symbol: symple);
+  }
+
+  String getLastRecordTextFromSetting(BuildContext context) {
+    if (this == null) return "-";
+    if (this!.isEmpty) return "-";
+    double getGrowthRate = this![this!.length - 1]!.total.toNonNullable();
+    return "Last month:" + getGrowthRate.toCurrencyFormatFromSetting(context);
+  }
+
+  double getTotal() {
+    if (this == null) return 0;
+    return GrowthRate.getTotal(this!.cast());
+  }
+
+  String getTotalText({String symple = ""}) {
+    return getTotal().toCurrencyFormat(symbol: symple);
+  }
+
+  String getTotalTextFromSetting(BuildContext context) {
+    return getTotal().toCurrencyFormatFromSetting(context);
   }
 }
