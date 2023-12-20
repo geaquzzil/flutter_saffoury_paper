@@ -506,7 +506,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               getWidget(
                 StaggeredGridTile.count(
                   crossAxisCellCount: crossAxisCount,
-                  mainAxisCellCount: 1,
+                  mainAxisCellCount: 1.2,
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height -
                         MediaQuery.of(context).size.height * .2,
@@ -533,7 +533,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               widgets: [
                 getWidget(StaggeredGridTile.count(
                     crossAxisCellCount: crossAxisCount,
-                    mainAxisCellCount: 1.5,
+                    mainAxisCellCount: 1.2,
                     child: ListHorizontalApiAutoRestWidget(
                       isSliver: true,
                       // titleString: "Pending",
@@ -578,7 +578,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               widgets: [
                 getWidget(StaggeredGridTile.count(
                     crossAxisCellCount: crossAxisCount,
-                    mainAxisCellCount: 1.5,
+                    mainAxisCellCount: 1.2,
                     child: ListHorizontalApiAutoRestWidget(
                       isSliver: true,
                       list: pending_reservation_invoice,
@@ -595,7 +595,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               widgets: [
                 getWidget(StaggeredGridTile.count(
                     crossAxisCellCount: crossAxisCount,
-                    mainAxisCellCount: 1.5,
+                    mainAxisCellCount: 1.2,
                     child: ListHorizontalApiAutoRestWidget(
                       isSliver: true,
                       // titleString: "Pending",
@@ -679,68 +679,68 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                 trailing: const Text("SYP"),
               )),
             )),
-            getWidget(
-              StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: 2,
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).size.height * .2,
-                  child: ListHorizontalCustomViewApiAutoRestWidget(
-                      onResponseAddWidget: ((response) {
-                        ChangesRecords i = response as ChangesRecords;
-                        return Column(
-                          children: [
-                            // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-                            //     titleString: "TEST1 ",
-                            //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-                            OutlinedCard(
-                                child: ListTile(
-                              title: Text(AppLocalizations.of(context)!.total),
-                              subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: const Icon(Icons.monitor_weight),
-                              trailing: const Text("SYP"),
-                            )),
-                            OutlinedCard(
-                                child: ListTile(
-                              title: Text(AppLocalizations.of(context)!.total),
-                              subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: const Icon(Icons.monitor_weight),
-                              trailing: const Text("SYP"),
-                            )),
-                            OutlinedCard(
-                                child: ListTile(
-                              title: Text(AppLocalizations.of(context)!.total),
-                              subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: const Icon(Icons.monitor_weight),
-                              trailing: const Text("SYP"),
-                            )),
-                            OutlinedCard(
-                                child: ListTile(
-                              title: Text(AppLocalizations.of(context)!.total),
-                              subtitle: Text(i.total.toCurrencyFormat()),
-                              leading: const Icon(Icons.monitor_weight),
-                              trailing: const Text("SYP"),
-                            )),
-                            StorageInfoCardCustom(
-                                title: AppLocalizations.of(context)!.total,
-                                description: i.total.toCurrencyFormat(),
-                                trailing: const Text("SYP"),
-                                svgSrc: Icons.monitor_weight),
-                            StorageInfoCardCustom(
-                                title: AppLocalizations.of(context)!.balance,
-                                description: "0",
-                                trailing: const Text("trailing"),
-                                svgSrc: Icons.balance),
-                          ],
-                        );
-                      }),
-                      autoRest: ChangesRecords.init(Spendings(), "NameID",
-                          fieldToSumBy: "value", pieChartEnabled: true)),
-                ),
-              ),
-              type: WidgetDashboardType.CHART,
-            ),
+            // getWidget(
+            //   StaggeredGridTile.count(
+            //     crossAxisCellCount: 2,
+            //     mainAxisCellCount: 2,
+            //     child: SizedBox(
+            //       height: MediaQuery.of(context).size.height -
+            //           MediaQuery.of(context).size.height * .2,
+            //       child: ListHorizontalCustomViewApiAutoRestWidget(
+            //           onResponseAddWidget: ((response) {
+            //             ChangesRecords i = response as ChangesRecords;
+            //             return Column(
+            //               children: [
+            //                 // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+            //                 //     titleString: "TEST1 ",
+            //                 //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+            //                 OutlinedCard(
+            //                     child: ListTile(
+            //                   title: Text(AppLocalizations.of(context)!.total),
+            //                   subtitle: Text(i.total.toCurrencyFormat()),
+            //                   leading: const Icon(Icons.monitor_weight),
+            //                   trailing: const Text("SYP"),
+            //                 )),
+            //                 OutlinedCard(
+            //                     child: ListTile(
+            //                   title: Text(AppLocalizations.of(context)!.total),
+            //                   subtitle: Text(i.total.toCurrencyFormat()),
+            //                   leading: const Icon(Icons.monitor_weight),
+            //                   trailing: const Text("SYP"),
+            //                 )),
+            //                 OutlinedCard(
+            //                     child: ListTile(
+            //                   title: Text(AppLocalizations.of(context)!.total),
+            //                   subtitle: Text(i.total.toCurrencyFormat()),
+            //                   leading: const Icon(Icons.monitor_weight),
+            //                   trailing: const Text("SYP"),
+            //                 )),
+            //                 OutlinedCard(
+            //                     child: ListTile(
+            //                   title: Text(AppLocalizations.of(context)!.total),
+            //                   subtitle: Text(i.total.toCurrencyFormat()),
+            //                   leading: const Icon(Icons.monitor_weight),
+            //                   trailing: const Text("SYP"),
+            //                 )),
+            //                 StorageInfoCardCustom(
+            //                     title: AppLocalizations.of(context)!.total,
+            //                     description: i.total.toCurrencyFormat(),
+            //                     trailing: const Text("SYP"),
+            //                     svgSrc: Icons.monitor_weight),
+            //                 StorageInfoCardCustom(
+            //                     title: AppLocalizations.of(context)!.balance,
+            //                     description: "0",
+            //                     trailing: const Text("trailing"),
+            //                     svgSrc: Icons.balance),
+            //               ],
+            //             );
+            //           }),
+            //           autoRest: ChangesRecords.init(Spendings(), "NameID",
+            //               fieldToSumBy: "value", pieChartEnabled: true)),
+            //     ),
+            //   ),
+            //   type: WidgetDashboardType.CHART,
+            // ),
 
             // getWidget(
             //   StaggeredGridTile.count(
@@ -758,39 +758,67 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             //       )),
             //   type: WidgetDashboardType.CHART,
             // ),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 2,
-                  mainAxisCellCount: 1.5,
-                  child: MultiLineChartItem<GrowthRate, DateTime>(
-                    title: "T",
-                    list: getAnalysisChartFunds(),
-                    titles: getAnalysisChartFundsTitle(context),
-                    dataLabelMapper: (item, idx) =>
-                        item.total.toCurrencyFormat(),
-                    xValueMapper: (item, value, indexInsideList) => DateTime(
-                        value.year ?? 2022, value.month ?? 1, value.day ?? 1),
-                    yValueMapper: (item, n, indexInsideList) => n.total,
-                  )),
-              type: WidgetDashboardType.CHART,
-            ),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 2,
-                  mainAxisCellCount: 1.5,
-                  child: MultiLineChartItem<GrowthRate, DateTime>(
-                    title: "T",
-                    list: getAnalysisChart(),
-                    titles: getAnalysisChartTitle(context),
-                    dataLabelMapper: (item, idx) =>
-                        item.total.toCurrencyFormat(),
-                    xValueMapper: (item, value, indexInsideList) => DateTime(
-                        value.year ?? 2022, value.month ?? 1, value.day ?? 1),
-                    yValueMapper: (item, n, indexInsideList) => n.total,
-                  )),
-            ),
+            // getWidget(
+            //   StaggeredGridTile.count(
+            //       crossAxisCellCount: 2,
+            //       mainAxisCellCount: 1.5,
+            //       child: MultiLineChartItem<GrowthRate, DateTime>(
+            //         title: "T",
+            //         list: getAnalysisChartFunds(),
+            //         titles: getAnalysisChartFundsTitle(context),
+            //         dataLabelMapper: (item, idx) =>
+            //             item.total.toCurrencyFormat(),
+            //         xValueMapper: (item, value, indexInsideList) => DateTime(
+            //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+            //         yValueMapper: (item, n, indexInsideList) => n.total,
+            //       )),
+            //   type: WidgetDashboardType.CHART,
+            // ),
+            // getWidget(
+            //   StaggeredGridTile.count(
+            //       crossAxisCellCount: 2,
+            //       mainAxisCellCount: 1.5,
+            //       child: MultiLineChartItem<GrowthRate, DateTime>(
+            //         title: "T",
+            //         list: getAnalysisChart(),
+            //         titles: getAnalysisChartTitle(context),
+            //         dataLabelMapper: (item, idx) =>
+            //             item.total.toCurrencyFormat(),
+            //         xValueMapper: (item, value, indexInsideList) => DateTime(
+            //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+            //         yValueMapper: (item, n, indexInsideList) => n.total,
+            //       )),
+            // ),
             // ...getInvoicesWidgets(context)
           ]),
+      if (checkList(customerToPayNext))
+        DashableGridHelper(
+            title: AppLocalizations.of(context)!.customer,
+            widgets: [
+              getWidget(StaggeredGridTile.count(
+                  crossAxisCellCount: crossAxisCount,
+                  mainAxisCellCount: 2,
+                  child: Card(
+                    child: ViewableTableViewAbstractWidget(
+                        usePag: false,
+                        viewAbstract: [
+                          ...customerToPayNext ?? [],
+                          ...debits ?? []
+                        ]),
+                  )))
+            ]),
+      if (checkList(notPayedCustomers))
+        DashableGridHelper(
+            title: AppLocalizations.of(context)!.customer,
+            widgets: [
+              getWidget(StaggeredGridTile.count(
+                  crossAxisCellCount: crossAxisCount,
+                  mainAxisCellCount: 2,
+                  child: Card(
+                    child: ViewableTableViewAbstractWidget(
+                        usePag: false, viewAbstract: [...notPayedCustomers!]),
+                  )))
+            ]),
     ];
   }
 

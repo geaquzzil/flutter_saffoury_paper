@@ -40,7 +40,7 @@ extension HexColor on Color {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
-  String colorToHexString() => '#${this.value.toRadixString(16).substring(2)}';
+  String colorToHexString() => '#${value.toRadixString(16).substring(2)}';
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
@@ -221,6 +221,43 @@ extension IterableModifier<E> on Iterable<E?> {
 }
 
 extension ConvertersNumbers on dynamic {}
+
+extension NonNullableDouble1 on double {
+  double roundDouble() {
+    return double.tryParse(toStringAsFixed(2)) ?? 0;
+  }
+
+  String toCurrencyFormatWithoutDecimal() {
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    return toString().replaceAll(regex, '');
+  }
+
+  String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {
+    if (this == 0) return "";
+    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+    return toString().replaceAll(regex, '');
+  }
+
+  String format(double n) {
+    return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 2);
+  }
+
+  double toNonNullable() {
+    return this;
+  }
+
+  String toCurrencyFormat({String symbol = ""}) {
+    return NumberFormat.currency(locale: "en", symbol: " $symbol ")
+        .format(toNonNullable())
+        .replaceFirst(RegExp(r'\.?0*$'), '');
+  }
+
+  String toCurrencyFormatFromSetting(BuildContext context) {
+    return context
+        .read<AuthProvider<AuthUser>>()
+        .getPriceFromSetting(context, toNonNullable());
+  }
+}
 
 extension NonNullableNum on num? {
   String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {

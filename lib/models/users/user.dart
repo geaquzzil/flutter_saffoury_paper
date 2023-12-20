@@ -64,7 +64,13 @@ class User<T> extends UserLists<T> {
         "email": AppLocalizations.of(context)!.email,
         "city": AppLocalizations.of(context)!.city,
         "address": AppLocalizations.of(context)!.address1,
-        "comments": AppLocalizations.of(context)!.comments
+        "comments": AppLocalizations.of(context)!.comments,
+        "balance": AppLocalizations.of(context)!.balance,
+        "totalCredits": AppLocalizations.of(context)!.credits,
+        "totalDebits": AppLocalizations.of(context)!.debits,
+        "totalOrders": AppLocalizations.of(context)!.orders,
+        "totalPurchases": AppLocalizations.of(context)!.purchases,
+        "termsDate": AppLocalizations.of(context)!.termsDate,
       };
 
   @override
@@ -118,7 +124,13 @@ class User<T> extends UserLists<T> {
         "email": TextInputType.emailAddress,
         "address": TextInputType.streetAddress,
         "city": TextInputType.text,
-        "comments": TextInputType.text
+        "comments": TextInputType.text,
+        "balance": TextInputType.number,
+        "totalCredits": TextInputType.number,
+        "totalDebits": TextInputType.number,
+        "totalOrders": TextInputType.number,
+        "totalPurchases": TextInputType.number,
+        "termsDate": TextInputType.datetime,
       };
 
   @override

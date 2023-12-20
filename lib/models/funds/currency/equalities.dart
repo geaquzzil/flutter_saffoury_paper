@@ -66,7 +66,7 @@ class Equalities extends ViewAbstract<Equalities> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
-      "1 USD = ${1 / (value ?? 1)}";
+      "1 USD = ${(1 / (value ?? 1)).toCurrencyFormat()}";
 
   @override
   IconData getMainIconData() => Icons.currency_exchange;

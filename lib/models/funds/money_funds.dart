@@ -121,7 +121,8 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "value": TextInputType.numberWithOptions(decimal: true, signed: false),
+        "value":
+            const TextInputType.numberWithOptions(decimal: true, signed: false),
         "date": TextInputType.datetime,
         "comments": TextInputType.text
       };

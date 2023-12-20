@@ -46,7 +46,7 @@ class _ViewableTableViewAbstractWidget
   void didUpdateWidget(covariant ViewableTableViewAbstractWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     list_invoice_details = widget.viewAbstract;
-    fields = (widget.viewAbstract[0]).getMainFields(context: context);
+    fields = (widget.viewAbstract[0]).getMainFieldsForTable(context: context);
   }
 
   @override
@@ -60,7 +60,7 @@ class _ViewableTableViewAbstractWidget
   void initState() {
     super.initState();
     list_invoice_details = widget.viewAbstract;
-    fields = (widget.viewAbstract[0]).getMainFields(context: context);
+    fields = (widget.viewAbstract[0]).getMainFieldsForTable(context: context);
     _formKey = GlobalKey<FormBuilderState>();
   }
 
@@ -148,7 +148,7 @@ class _ViewableTableViewAbstractWidget
   List<DataColumn> getColumns(BuildContext context) {
     ViewAbstract first = list_invoice_details[0];
     return first
-        .getMainFields(context: context)
+        .getMainFieldsForTable(context: context)
         .map((e) => DataColumn(
               // numeric: true,
               label: Text(first.getFieldLabel(context, e)),
@@ -171,10 +171,10 @@ class _ViewableTableViewAbstractWidget
             });
           },
           cells: e
-              .getMainFields(context: context)
+              .getMainFieldsForTable(context: context)
               .map((ee) => DataCell(
                   Text(
-                    e.getFieldValueCheckType(context, ee),
+                    e.getFieldValueCheckTypeChangeToCurrencyFormat(context, ee),
                     overflow: TextOverflow.visible,
                     softWrap: true,
                   ),
@@ -188,10 +188,10 @@ class _ViewableTableViewAbstractWidget
         "onSort: columnIndex $columnIndex  listsize=> ${list_invoice_details.length} ");
     list_invoice_details.sort((obj1, obj2) => compareDynamic(
         ascending,
-        obj1.getFieldValueCheckType(
-            context, obj1.getMainFields(context: context)[columnIndex]),
-        obj2.getFieldValueCheckType(
-            context, obj2.getMainFields(context: context)[columnIndex])));
+        obj1.getFieldValueCheckTypeChangeToCurrencyFormat(
+            context, obj1.getMainFieldsForTable(context: context)[columnIndex]),
+        obj2.getFieldValueCheckTypeChangeToCurrencyFormat(context,
+            obj2.getMainFieldsForTable(context: context)[columnIndex])));
 
     setState(() {
       sortColumnIndex = columnIndex;
@@ -270,10 +270,10 @@ class MyData extends DataTableSource {
             : null,
         // selected: e.selected,
         cells: e
-            .getMainFields(context: context)
+            .getMainFieldsForTable(context: context)
             .map((ee) => DataCell(
                 Text(
-                  e.getFieldValueCheckType(context, ee),
+                  e.getFieldValueCheckTypeChangeToCurrencyFormat(context, ee),
                   // overflow: TextOverflow.visible,
                   // softWrap: true,
                 ),

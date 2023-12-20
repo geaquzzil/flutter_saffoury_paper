@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:http/http.dart';
@@ -126,6 +127,36 @@ abstract class VMirrors<T> {
       if (getFieldValue(field, context: context) == null) return "";
       return getFieldValue(field, context: context).toString();
     }
+  }
+
+  String getFieldValueCheckTypeChangeToCurrencyFormat(
+      BuildContext context, String field) {
+    // 0.toCurrencyFormat();
+    TextInputType? type = (this as ViewAbstract).getTextInputType(field);
+    debugPrint(
+        "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  ${type}");
+    if (type == null) return getFieldValueCheckType(context, field);
+    if (type == TextInputType.number) {
+      return (getFieldValue(field, context: context) as double)
+          .toCurrencyFormat();
+    } else if (type ==
+        const TextInputType.numberWithOptions(signed: false, decimal: true)) {
+      return (getFieldValue(field, context: context) as double)
+          .toCurrencyFormat();
+    } else if (type ==
+        const TextInputType.numberWithOptions(signed: true, decimal: false)) {
+      return (getFieldValue(field, context: context) as double)
+          .toCurrencyFormat();
+    } else if (type ==
+        const TextInputType.numberWithOptions(signed: true, decimal: true)) {
+      return (getFieldValue(field, context: context) as double)
+          .toCurrencyFormat();
+    } else if (type ==
+        const TextInputType.numberWithOptions(signed: false, decimal: false)) {
+      return (getFieldValue(field, context: context) as double)
+          .toCurrencyFormat();
+    }
+    return getFieldValueCheckType(context, field);
   }
 
   String getMirrorViewAbstractLabelText(BuildContext context, String field) {

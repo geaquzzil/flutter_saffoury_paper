@@ -45,6 +45,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getDateTextOnly().toDateTimeOnlyDateString();
   }
 
+  List<String> getMainFieldsForTable({BuildContext? context}) {
+    return getMainFields(context: context);
+  }
+
   List<TabControllerHelper> getCustomTabList(BuildContext context,
           {ServerActions? action}) =>
       List<TabControllerHelper>.empty();

@@ -32,6 +32,12 @@ class CustomerTerms extends Customer
   }
 
   @override
+  List<String> getMainFieldsForTable({BuildContext? context}) {
+    // TODO: check other fields if you want to add to view
+    return ["name", "phone", "balance"];
+  }
+
+  @override
   String? getCustomAction() => "list_customers_terms";
   @override
   Map<String, String> get getCustomMap => {"iD": iD.toString()};
@@ -102,9 +108,7 @@ class CustomerTerms extends Customer
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context,
-      ValueNotifier
-          valueNotifier) {
+      BuildContext context, ValueNotifier valueNotifier) {
     return null;
   }
 }

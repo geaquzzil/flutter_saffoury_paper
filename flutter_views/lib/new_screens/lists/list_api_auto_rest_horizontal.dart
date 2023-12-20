@@ -135,21 +135,7 @@ class _ListHorizontalApiWidgetState
               // setDescriptionAtBottom: !kIsWeb,
               item: data[index],
             );
-
             return GridTile(child: currentTile);
-
-            //  kIsWeb
-            //     ? WebGridViewItem(
-            //         item: data[index],
-            //       )
-            //     : widget.listItembuilder == null
-            //         ? ListCardItemHorizontal(
-            //             useOutlineCard: widget.useCardAsOutLine,
-            //             object: data[index],
-            //             useImageAsBackground:
-            //                 widget.useCardAsImageBackgroud,
-            //           )
-            //         : widget.listItembuilder!(data[index]));
           },
         );
       },
