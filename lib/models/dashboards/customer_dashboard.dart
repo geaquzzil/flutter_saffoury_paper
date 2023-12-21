@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
@@ -61,7 +63,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
-  String? getCustomAction() => "view_customer_statment_by_employee";
+  String? getCustomAction() => "view_customer_statement";
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -92,6 +94,23 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
+    if (iD == -1) {
+      return [
+        DashableGridHelper(
+            title: AppLocalizations.of(context)!.overview,
+            widgets: [
+              getWidget(StaggeredGridTile.count(
+                  crossAxisCellCount: crossAxisCount,
+                  mainAxisCellCount: 2,
+                  child: EmptyWidget(
+                      lottiUrl:
+                          "https://lottie.host/901033cb-134b-423b-a08a-42be30e6a1e4/BT8QbFb23s.json",
+                      title: AppLocalizations.of(context)!.pleaseSelect,
+                      subtitle: AppLocalizations.of(context)!.no_content))),
+              // ...getInvoicesWidgets(context)
+            ]),
+      ];
+    }
     return [];
   }
 
@@ -110,5 +129,23 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   bool isRequiredObjectsListChecker() {
     return balance != null;
+  }
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {};
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) => {};
+  @override
+  String? getMainDrawerGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.users;
+
+  @override
+  List<String> getMainFields({BuildContext? context}) => [];
+
+  @override
+  bool getDashboardShouldWaitBeforerRequest() {
+    debugPrint("getDashboardShouldWaitBefore $iD");
+    return iD != -1;
   }
 }

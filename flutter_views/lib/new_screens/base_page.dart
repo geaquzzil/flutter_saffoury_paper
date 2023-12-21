@@ -636,6 +636,10 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     return extras;
   }
 
+  ViewAbstract getExtrasCast({TabControllerHelper? tab}) {
+    return getExtras(tab: tab) as ViewAbstract;
+  }
+
   void setExtras(
       {int? iD, String? tableName, dynamic ex, TabControllerHelper? tabH}) {
     _isLoading = false;
@@ -666,7 +670,8 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     dynamic ex = getExtras(tab: tab);
     if (ex is! ViewAbstract) return false;
     if (ex is DashableInterface) {
-      return (ex).isRequiredObjectsListChecker();
+      return (ex).isRequiredObjectsListChecker() &&
+          !(ex as DashableInterface).getDashboardShouldWaitBeforerRequest();
     }
     bool canGetBody = (ex).isRequiredObjectsList()?[getServerActions()] == null;
     if (canGetBody) {

@@ -341,6 +341,23 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     onPopupMenuActionSelected(context, e);
   }
 
+  void printPage(BuildContext context) {
+    // if (SizeConfig.hasSecondScreen(context)) {
+    //   context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
+    //         invoiceObj: this as PrintableMaster,
+    //         iD: iD,
+    //         tableName: getTableNameApi(),
+    //       ));
+    //   return;
+    // }
+    // context.goNamed(printRouteName,
+    //     extra: this,
+    //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
+    context.goNamed(printRouteName,
+        pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+        extra: this);
+  }
+
   void onPopupMenuActionSelected(
       BuildContext context, MenuItemBuild result) async {
     debugPrint("onPopupMenuActionSelected $result");
@@ -356,20 +373,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     if (result.icon == Icons.print) {
       debugPrint("onPopupMenuActionSelected  print $result");
 
-      // if (SizeConfig.hasSecondScreen(context)) {
-      //   context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
-      //         invoiceObj: this as PrintableMaster,
-      //         iD: iD,
-      //         tableName: getTableNameApi(),
-      //       ));
-      //   return;
-      // }
-      // context.goNamed(printRouteName,
-      //     extra: this,
-      //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
-      context.goNamed(printRouteName,
-          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-          extra: this);
+      printPage(context);
       // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
       debugPrint("onPopupMenuActionSelected  edit $result");

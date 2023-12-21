@@ -160,8 +160,12 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     return true;
   }
 
+  bool isPrintableMaster() {
+    return this is PrintableMaster;
+  }
+
   bool hasPermissionPrint(BuildContext context, {ViewAbstract? viewAbstract}) {
-    if (this is! PrintableMaster) return false;
+    if (isPrintableMaster()) return false;
     return viewAbstract == null
         ? hasPermission(context, this, ServerActions.print)
         : hasPermission(context, viewAbstract, ServerActions.print);

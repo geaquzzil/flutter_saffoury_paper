@@ -46,6 +46,9 @@ import '../invoices/invoice_master.dart';
 
 part 'sales_analysis_dashboard.g.dart';
 
+const heightSmall = 0.9;
+const heightLarge = 1.8;
+
 //TODO on publish change $FROM Date "2022-01-01"
 @JsonSerializable(explicitToJson: true)
 @reflector
@@ -131,6 +134,8 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
+  bool getDashboardShouldWaitBeforerRequest() => false;
+  @override
   SalesAnalysisDashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       SalesAnalysisDashboard.fromJson(json);
 
@@ -143,7 +148,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
           widgets: [
             getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: 2,
-                mainAxisCellCount: 1,
+                mainAxisCellCount: heightSmall,
                 child: ChartCardItemCustom(
                   // list: incomesDue,
                   listGrowthRate: totalSalesPrice,
@@ -157,7 +162,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
                 ))),
             getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: 1,
-                mainAxisCellCount: 2,
+                mainAxisCellCount: heightLarge,
                 child: ChartCardItemCustom(
                   // list: incomesDue,
                   listGrowthRate: incomesAnalysis,
@@ -170,7 +175,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
                 ))),
             getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: 1,
-                mainAxisCellCount: 2,
+                mainAxisCellCount: heightLarge,
                 child: ChartCardItemCustom(
                   // list: spendingsDue,
                   icon: Icons.arrow_forward,
@@ -203,7 +208,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
                 ))),
             getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: 2,
-                mainAxisCellCount: 1,
+                mainAxisCellCount: heightSmall,
                 child: ChartCardItemCustom(
                   // list: spendingsDue,
                   listGrowthRate: profitsByOrder,
@@ -218,7 +223,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 2,
-                  mainAxisCellCount: 1.5,
+                  mainAxisCellCount: heightLarge,
                   child: ChartCardItemCustom(
                     // list: spendingsDue,
                     listGrowthRate: profitsByCutRequests,
@@ -236,7 +241,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 2,
-                  mainAxisCellCount: 1.5,
+                  mainAxisCellCount: heightLarge,
                   child: ChartCardItemCustom(
                     // list: spendingsDue,
                     color: Theme.of(context).colorScheme.error,
@@ -268,7 +273,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
                 StaggeredGridTile.count(
                     crossAxisCellCount: 2,
-                    mainAxisCellCount: 1.5,
+                    mainAxisCellCount: heightLarge,
                     child: LineChartItem<GrowthRate, String>(
                       list: wastesByCutRequests ?? [],
                       // title:
@@ -287,7 +292,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
+                  mainAxisCellCount: heightSmall,
                   child: ChartCardItemCustom(
                     // list: spendingsDue,
                     listGrowthRate: orders_offline_count,
@@ -306,7 +311,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
+                  mainAxisCellCount: heightSmall,
                   child: ChartCardItemCustom(
                     // list: spendingsDue,
                     listGrowthRate: orders_online_count,
@@ -325,7 +330,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
+                  mainAxisCellCount: heightSmall,
                   child: ChartCardItemCustom(
                     // list: spendingsDue,
                     listGrowthRate: customers_count,
@@ -345,7 +350,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             getWidget(
               StaggeredGridTile.count(
                   crossAxisCellCount: 1,
-                  mainAxisCellCount: 1,
+                  mainAxisCellCount: heightSmall,
                   child: ChartCardItemCustom(
                     // list: spendingsDue,
                     listGrowthRate: products,

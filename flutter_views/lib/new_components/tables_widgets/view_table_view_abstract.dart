@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:dynamic_table/dynamic_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -19,12 +20,15 @@ import '../../models/view_abstract.dart';
 class ViewableTableViewAbstractWidget extends StatefulWidget {
   List<ViewAbstract> viewAbstract;
   bool usePag;
+  bool buildActions;
 
   ///if the obj is set then we get the obj data
   ///else the cartProvider data
   ViewableTableViewAbstractWidget(
-      {Key? key, required this.viewAbstract, this.usePag = false})
-      : super(key: key);
+      {super.key,
+      required this.viewAbstract,
+      this.buildActions = false,
+      this.usePag = false});
 
   @override
   State<ViewableTableViewAbstractWidget> createState() =>
@@ -40,6 +44,7 @@ class _ViewableTableViewAbstractWidget
   int? sortColumnIndex;
   bool isAscending = false;
   late GlobalKey<FormBuilderState> _formKey;
+  final tableKey = GlobalKey<DynamicTableState>();
 
   int lastIndexOfSelected = -1;
   @override
@@ -73,58 +78,135 @@ class _ViewableTableViewAbstractWidget
           title: AppLocalizations.of(context)!.noItems,
           subtitle: AppLocalizations.of(context)!.error_empty);
     }
-    if (widget.usePag) {
-      var myData = MyData(context, list_invoice_details);
-      return SizedBox(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * .75,
-        child: PaginatedDataTable2(
-            showCheckboxColumn: false,
-            // rowsPerPage: 5,
-            onSelectAll: myData.selectAll,
-            showFirstLastButtons: true,
-            // actions: [
-            //   // if (myData.selectedRowCount > 0)
-            //   IconButton(
-            //       onPressed: () {
-            //         if (myData.selectedRowCount > 0) {
-            //           debugPrint("remove selected row");
-            //           setState(() {
-            //             list_invoice_details.removeWhere(
-            //                 (element) => element.selected ?? false);
-            //           });
-            //         }
-            //       },
-            //       icon: Icon(Icons.delete))
-            // ],
-            autoRowsToHeight: true,
-            // header: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Text(list_invoice_details[0]
-            //           .getMainHeaderLabelTextOnly(context)),
-            //       Row(children: [
-            //         OutlinedButton(
-            //             onPressed: () => _controller!.goToPageWithRow(25),
-            //             child: const Text('Go to row 25')),
-            //         OutlinedButton(
-            //             onPressed: () => _controller!.goToRow(5),
-            //             child: const Text('Go to row 5'))
-            //       ]),
-            //     ]),
-            // columnSpacing: 200,
-            sortColumnIndex: sortColumnIndex,
-            sortAscending: isAscending,
-            // onSelectAll: _dessertsDataSource.selectAll,
-            horizontalMargin: 20,
-            wrapInCard: true,
-            // minWidth: 800,
-            controller: _controller,
-            fit: FlexFit.tight,
-            columns: getColumns(context),
-            source: myData),
-      );
+    if (widget.buildActions && !widget.usePag) {
+      return DynamicTable(
+          key: tableKey,
+          header: const Text("Person Table"),
+          showCheckboxColumn: false,
+          showFirstLastButtons: true,
+          rowsPerPage: 4,
+
+          // rowsPerPage: 5,
+          // onSelectAll: myData.selectAll,
+
+          // actions: [
+          //   // if (myData.selectedRowCount > 0)
+          //   IconButton(
+          //       onPressed: () {
+          //         if (myData.selectedRowCount > 0) {
+          //           debugPrint("remove selected row");
+          //           setState(() {
+          //             list_invoice_details.removeWhere(
+          //                 (element) => element.selected ?? false);
+          //           });
+          //         }
+          //       },
+          //       icon: Icon(Icons.delete))
+          // ],
+          // autoRowsToHeight: true,
+          // header: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(list_invoice_details[0]
+          //           .getMainHeaderLabelTextOnly(context)),
+          //       Row(children: [
+          //         OutlinedButton(
+          //             onPressed: () => _controller!.goToPageWithRow(25),
+          //             child: const Text('Go to row 25')),
+          //         OutlinedButton(
+          //             onPressed: () => _controller!.goToRow(5),
+          //             child: const Text('Go to row 5'))
+          //       ]),
+          //     ]),
+          // columnSpacing: 200,
+          onRowEdit: (index, List<dynamic> onRowEdit) {
+            //permisision for edit
+
+            return true;
+          },
+          onRowDelete: (index, List<dynamic> onRowEdit) {
+            //permisision for delete
+
+            return true;
+          },
+          onRowSave:
+              (int index, List<dynamic> oldValue, List<dynamic> newValue) {
+            return newValue;
+          },
+          sortColumnIndex: sortColumnIndex,
+          sortAscending: isAscending,
+          columnSpacing: 2,
+          // onSelectAll: _dessertsDataSource.selectAll,
+          horizontalMargin: 20,
+
+          // wrapInCard: true,
+          // minWidth: 800,
+          // controller: _controller,
+          showActions: true,
+          actions: [],
+          showAddRowButton: true,
+          showDeleteAction: true,
+
+          // fit: FlexFit.tight,
+          columns: getColumnsDynamicTableDataColumn(context),
+          rows: getRowsDynamicTableDataRow(context));
     }
+    if (widget.usePag) {
+      var myData = MyData(context, list_invoice_details,
+          buildActions: widget.buildActions);
+      return PaginatedDataTable2(
+          header: const Text("Person Table"),
+          showCheckboxColumn: false,
+          showFirstLastButtons: true,
+          rowsPerPage: 4,
+
+          // onSelectAll: myData.selectAll,
+
+          // actions: [
+          //   // if (myData.selectedRowCount > 0)
+          //   IconButton(
+          //       onPressed: () {
+          //         if (myData.selectedRowCount > 0) {
+          //           debugPrint("remove selected row");
+          //           setState(() {
+          //             list_invoice_details.removeWhere(
+          //                 (element) => element.selected ?? false);
+          //           });
+          //         }
+          //       },
+          //       icon: Icon(Icons.delete))
+          // ],
+          // autoRowsToHeight: true,
+          // header: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(list_invoice_details[0]
+          //           .getMainHeaderLabelTextOnly(context)),
+          //       Row(children: [
+          //         OutlinedButton(
+          //             onPressed: () => _controller!.goToPageWithRow(25),
+          //             child: const Text('Go to row 25')),
+          //         OutlinedButton(
+          //             onPressed: () => _controller!.goToRow(5),
+          //             child: const Text('Go to row 5'))
+          //       ]),
+          //     ]),
+          // columnSpacing: 200,
+
+          sortColumnIndex: sortColumnIndex,
+          sortAscending: isAscending,
+          // onSelectAll: _dessertsDataSource.selectAll,
+          horizontalMargin: 20,
+          actions: [Icon(Icons.print)],
+          // wrapInCard: true,
+          // minWidth: 800,
+          controller: _controller,
+
+          // fit: FlexFit.tight,
+          columns: getColumns(context),
+          source: myData);
+    }
+
     return ScrollableWidget(child: buildForm());
   }
 
@@ -147,9 +229,33 @@ class _ViewableTableViewAbstractWidget
     );
   }
 
+  List<DynamicTableDataColumn> getColumnsDynamicTableDataColumn(
+      BuildContext context) {
+    ViewAbstract first = list_invoice_details[0];
+    var list = first
+        .getMainFieldsForTable(context: context)
+        .map((e) => DynamicTableDataColumn(
+              isEditable: true,
+              dynamicTableInputType: DynamicTableInputType.text(
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(20),
+                      border: OutlineInputBorder())),
+
+              // numeric: true,
+              label: Text(first.getFieldLabel(context, e)),
+              onSort: (columnIndex, ascending) =>
+                  onSort(context, columnIndex, ascending),
+            ))
+        .toList();
+    // if (widget.buildActions) {
+    //   list.add(DynamicTableDataColumn(label: SizedBox()));
+    // }
+    return list;
+  }
+
   List<DataColumn> getColumns(BuildContext context) {
     ViewAbstract first = list_invoice_details[0];
-    return first
+    var list = first
         .getMainFieldsForTable(context: context)
         .map((e) => DataColumn(
               // numeric: true,
@@ -158,6 +264,13 @@ class _ViewableTableViewAbstractWidget
                   onSort(context, columnIndex, ascending),
             ))
         .toList();
+    if (widget.buildActions) {
+      list.add(DataColumn(
+          label: SizedBox(
+        width: 100,
+      )));
+    }
+    return list;
   }
 
   List<DataRow> getRows(BuildContext context) {
@@ -181,6 +294,31 @@ class _ViewableTableViewAbstractWidget
                     softWrap: true,
                   ),
                   showEditIcon: false))
+              .toList());
+    }).toList();
+  }
+
+  List<DynamicTableDataRow> getRowsDynamicTableDataRow(BuildContext context) {
+    return list_invoice_details.map((e) {
+      int index = list_invoice_details.indexOf(e);
+      return DynamicTableDataRow(
+          selected: false,
+          index: index,
+          // selected: lastIndexOfSelected == index,
+          isEditing: false,
+          // onSelectChanged: (s) {
+          //   debugPrint(
+          //       "dataRow selectChange $s index=> ${list_invoice_details.indexOf(e)}");
+          //   setState(() {
+          //     lastIndexOfSelected = index;
+          //   });
+          // },
+          cells: e
+              .getMainFieldsForTable(context: context)
+              .map((ee) => DynamicTableDataCell(
+                  // showEditIcon: true,
+                  value: e.getFieldValueCheckTypeChangeToCurrencyFormat(
+                      context, ee)))
               .toList());
     }).toList();
   }
@@ -232,7 +370,8 @@ class MyData extends DataTableSource {
   List<ViewAbstract> data;
   int _selectedCount = 0;
   BuildContext context;
-  MyData(this.context, this.data);
+  bool buildActions;
+  MyData(this.context, this.data, {required this.buildActions});
   // Generate some made-up data
 
   @override
@@ -254,32 +393,58 @@ class MyData extends DataTableSource {
   @override
   DataRow getRow(int index) {
     ViewAbstract e = data[index];
+    var list = (e).getPopupMenuActionsList(context);
+    var cells = e
+        .getMainFieldsForTable(context: context)
+        .map((ee) => DataCell(
+            onTap: () => {
+                  e.onCardLongClicked(
+                    context,
+                  )
+                },
+            Text(
+              e.getFieldValueCheckTypeChangeToCurrencyFormat(context, ee),
+              // overflow: TextOverflow.visible,
+              // softWrap: true,
+            ),
+            showEditIcon: false))
+        .toList();
+    if (buildActions) {
+      cells.add(DataCell(
+        SizedBox(
+            height: 100,
+            width: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: list
+                  .map((i) => Expanded(child: e.buildMenuItem(context, i)))
+                  .toList(),
+            )),
+      ));
+    }
 
     // debugPrint("getRow => $e");
     return DataRow2.byIndex(
+        specificRowHeight: (e.selected ?? false) ? 100 : null,
         selected: e.selected ?? false,
-        onSelectChanged: (value) {
-          if (e.selected != value) {
-            _selectedCount += value! ? 1 : -1;
-            assert(_selectedCount >= 0);
-            e.selected = value;
-            notifyListeners();
-          }
+        onTap: () {
+          debugPrint("dataRow onTap");
+          e.onCardLongClicked(context);
         },
+        // onSelectChanged: (value) {
+        //   if (e.selected != value) {
+        //     _selectedCount += value! ? 1 : -1;
+        //     assert(_selectedCount >= 0);
+        //     e.selected = value;
+        //     notifyListeners();
+        //   }
+        // },
+
         index: index,
         color: e.selected == true
             ? MaterialStateProperty.all(Theme.of(context).highlightColor)
             : null,
         // selected: e.selected,
-        cells: e
-            .getMainFieldsForTable(context: context)
-            .map((ee) => DataCell(
-                Text(
-                  e.getFieldValueCheckTypeChangeToCurrencyFormat(context, ee),
-                  // overflow: TextOverflow.visible,
-                  // softWrap: true,
-                ),
-                showEditIcon: false))
-            .toList());
+        cells: cells);
   }
 }

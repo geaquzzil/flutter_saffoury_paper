@@ -21,6 +21,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
+import 'package:flutter_view_controller/new_components/tables_widgets/expandable_table.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
@@ -95,12 +96,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     return Dashboard();
   }
 
-  // @override
-  // Future<Dashboard?> callApi() async {
-  //   // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
-  //   await Future.delayed(const Duration(seconds: 2));
-  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
-  // }
+  @override
+  Future<Dashboard?> callApi() async {
+    // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
+    return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
+  }
 
   @override
   IconData getMainIconData() {
@@ -399,10 +399,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 2,
             child: Card(
-              child:
-                  ViewableTableViewAbstractWidget(usePag: true, viewAbstract: [
-                ...orders ?? [],
-              ]),
+              child: ViewableTableViewAbstractWidget(
+                viewAbstract: orders!,
+                usePag: true,
+                buildActions: true,
+              ),
             ))),
     ];
   }
@@ -495,7 +496,8 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             mainAxisCellCount: 2,
             child: Card(
               child: ViewableTableViewAbstractWidget(
-                  usePag: true,
+                  usePag: false,
+                  buildActions: true,
                   viewAbstract: [
                     ...credits ?? [],
                     ...debits ?? [],
@@ -826,6 +828,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
                   child: Card(
                     child: ViewableTableViewAbstractWidget(
                         usePag: true,
+                        buildActions: false,
                         viewAbstract: [
                           ...customerToPayNext ?? [],
                           ...debits ?? []
@@ -862,4 +865,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
     }
     return false;
   }
+
+  @override
+  bool getDashboardShouldWaitBeforerRequest() => false;
 }

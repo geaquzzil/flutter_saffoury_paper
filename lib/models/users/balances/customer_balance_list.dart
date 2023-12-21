@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
@@ -68,6 +70,8 @@ class CustomerBalanceList
   @override
   List<String> getMainFields({BuildContext? context}) => [];
 
+  @override
+  bool getDashboardShouldWaitBeforerRequest() => false;
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customerBalances;
@@ -278,17 +282,80 @@ class CustomerBalanceList
 
   @override
   pdf.Widget? getPrintableWatermark() => null;
+  bool checkList(List? list) {
+    if (list == null) return false;
+    if (list.isEmpty) return false;
+    return true;
+  }
+
+  WidgetGridHelper getWidget(StaggeredGridTile gride,
+      {WidgetDashboardType type = WidgetDashboardType.NORMAL}) {
+    return WidgetGridHelper(widget: gride, widgetDashboardType: type);
+  }
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
-    return [];
+    return [
+      DashableGridHelper(
+          title: AppLocalizations.of(context)!.overview,
+          widgets: [
+            getWidget(StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 4,
+              child: ListStaticSearchableWidget<CustomerBalanceSingle>(
+                list: customers ?? [],
+                listItembuilder: (item) => ListTile(
+                  onTap: () {},
+                  leading: item.getCardLeading(context),
+                  title: Text(item.name ?? ""),
+                  subtitle: Text(item.balance.toCurrencyFormat()),
+                ),
+                onSearchTextChanged: (query) =>
+                    customers
+                        ?.where((element) =>
+                            element.name?.toLowerCase().contains(query) ??
+                            false)
+                        .toList() ??
+                    [],
+              ),
+            )),
+            // ...getInvoicesWidgets(context)
+          ]),
+    ];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
-    return [];
+    return [
+      DashableGridHelper(
+          title: AppLocalizations.of(context)!.overview,
+          widgets: [
+            getWidget(StaggeredGridTile.count(
+                crossAxisCellCount: crossAxisCount,
+                mainAxisCellCount: 2,
+                child: getHeaderWidget(context))),
+            // ...getInvoicesWidgets(context)
+          ]),
+      DashableGridHelper(
+          title: AppLocalizations.of(context)!.overview,
+          widgets: [
+            getWidget(StaggeredGridTile.count(
+                crossAxisCellCount: crossAxisCount,
+                mainAxisCellCount: 4,
+                child: ListStaticWidget<CustomerBalanceSingle>(
+                  list: customers?.sublist(0, 10) ?? [],
+                  emptyWidget: const Text("null"),
+                  listItembuilder: (item) => ListTile(
+                    leading: item.getCardLeading(context),
+                    title: Text(item.name ?? ""),
+                    subtitle: Text(item.balance.toCurrencyFormat()),
+                  ),
+                ))),
+            // ...getInvoicesWidgets(context)
+          ]),
+    ];
   }
 
   @override

@@ -12,6 +12,9 @@ abstract class DashableInterface<T extends ViewAbstract> {
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount);
   void setDate(DateObject? date);
+
+  ///this should wait for user input before request api
+  bool getDashboardShouldWaitBeforerRequest();
 }
 
 enum WidgetDashboardType {

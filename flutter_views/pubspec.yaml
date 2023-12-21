@@ -111,6 +111,8 @@ dependencies:
   connectivity_listener: ^0.0.1+1
   sliver_tools: ^0.2.12
   table_calendar: ^3.0.9
+  flutter_expandable_table: ^2.0.1
+  dynamic_table: ^0.0.1-beta.2
   # bitmap: ^0.1.3
   # intl_converter: ^1.0.0
   # flutter_gen: ^5.0.0

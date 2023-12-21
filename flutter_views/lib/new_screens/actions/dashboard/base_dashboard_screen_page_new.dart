@@ -79,6 +79,10 @@ class _BaseDashboardMainPageState
     }
   }
 
+  bool isPrintable({TabControllerHelper? tab}) {
+    return (getExtrasCast(tab: tab)).isPrintableMaster();
+  }
+
   @override
   Widget? getBaseAppbar({TabControllerHelper? tab}) {
     return ListTile(
@@ -94,11 +98,18 @@ class _BaseDashboardMainPageState
               }),
             ),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.tab)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.safety_check)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.baby_changing_station)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notification_add)),
-          ProfilePicturePopupMenu()
+          if (isPrintable(tab: tab))
+            IconButton(
+                onPressed: () {
+                  getExtrasCast(tab: tab).printPage(context);
+                },
+                icon: const Icon(Icons.print)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
+          IconButton(
+              onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
+          IconButton(
+              onPressed: () {}, icon: const Icon(Icons.notification_add)),
+          const ProfilePicturePopupMenu()
         ],
       ),
       // subtitle: Row(
