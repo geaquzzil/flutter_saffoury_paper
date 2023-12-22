@@ -217,7 +217,10 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   Future fetchList(String key, ViewAbstract viewAbstract,
-      {AutoRest? autoRest, int? customCount, int? customPage}) async {
+      {AutoRest? autoRest,
+      AutoRestCustom? customAutoRest,
+      int? customCount,
+      int? customPage}) async {
     MultiListProviderHelper multiListProviderHelper;
     if (_listMap.containsKey(key)) {
       multiListProviderHelper = _listMap[key]!;
@@ -262,7 +265,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
   }
 
-  Future fetchView(String key, ViewAbstract viewAbstract) async {
+  Future fetchView(String key, ViewAbstract viewAbstract,
+      {AutoRestCustom? autoRestCustom}) async {
     late MultiListProviderHelper? multiListProviderHelper;
     if (_listMap.containsKey(key)) {
       multiListProviderHelper = _listMap[key];

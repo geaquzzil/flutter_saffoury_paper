@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
@@ -181,11 +182,16 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: .75,
-            child: ListHorizontalCustomViewApiAutoRestWidget(
-                onResponse: (g) {
-                  return Text("SOS");
-                },
-                autoRest: ChangesRecords.init(CutRequest(), "cut_status")))),
+            child: ChartCardItemCustom(
+                color: Colors.red,
+                icon: Icons.arrow_back,
+                title: AppLocalizations.of(context)!.totalFormat(
+                    AppLocalizations.of(context)!.debits.toLowerCase()),
+                description: debitsAnalysis.getTotalTextFromSetting(context)
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: 2,
             mainAxisCellCount: .75,
@@ -197,6 +203,15 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                 // footer: incomes?.length.toString(),
                 // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
                 ))),
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 2,
+            child: ListHorizontalCustomViewApiAutoRestWidget(
+                onResponse: (g) {
+                  return Text("SOS");
+                },
+                autoRest: AutoRest<List<GrowthRate>>(
+                    key: "GrowthRate", obj: GrowthRate)))),
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 3,
