@@ -21,10 +21,11 @@ class MyFiles extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              dgh.title,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
+            if (dgh.title != null)
+              Text(
+                dgh.title!,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ElevatedButton.icon(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(

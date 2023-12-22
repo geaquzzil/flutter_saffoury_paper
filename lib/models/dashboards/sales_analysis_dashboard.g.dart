@@ -183,6 +183,9 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           .toList()
       ..spendingsDue = (json['spendingsDue'] as List<dynamic>?)
           ?.map((e) => AccountNamesBalance.fromJson(e as Map<String, dynamic>))
+          .toList()
+      ..calculatedNetProfit = (json['calculatedNetProfit'] as List<dynamic>?)
+          ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList();
 
 Map<String, dynamic> _$SalesAnalysisDashboardToJson(
@@ -291,4 +294,6 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
           instance.wastesByCutRequests?.map((e) => e.toJson()).toList(),
       'incomesDue': instance.incomesDue?.map((e) => e.toJson()).toList(),
       'spendingsDue': instance.spendingsDue?.map((e) => e.toJson()).toList(),
+      'calculatedNetProfit':
+          instance.calculatedNetProfit?.map((e) => e.toJson()).toList(),
     };

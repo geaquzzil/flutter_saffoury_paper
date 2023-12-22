@@ -33,9 +33,11 @@ import 'package:flutter_view_controller/models/permissions/permission_level_abst
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:intl/intl.dart';
@@ -134,7 +136,13 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  bool getDashboardShouldWaitBeforerRequest() => false;
+  getDashboardShouldWaitBeforeRequest(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
+
   @override
   SalesAnalysisDashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       SalesAnalysisDashboard.fromJson(json);
@@ -391,6 +399,14 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   List<String> getMainFields({BuildContext? context}) => [];
+
+  @override
+  Widget? getDashboardAppbar(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
 }
 
 class AccountNamesBalance {

@@ -120,9 +120,9 @@ class _BaseDashboardState extends State<BaseDashboard>
                   List<Widget> widgets = List.empty(growable: true);
                   for (var element in list) {
                     var group = [
-                      DashableItemHeaderBuilder(
-                        dgh: element,
-                      ),
+                      // DashableItemHeaderBuilder(
+                      //   dgh: element,
+                      // ),
                       SliverToBoxAdapter(
                         child: Responsive(
                           mobile: FileInfoStaggerdGridView(
@@ -194,9 +194,9 @@ class _BaseDashboardState extends State<BaseDashboard>
         )));
     for (var element in list) {
       var group = [
-        DashableItemHeaderBuilder(
-          dgh: element,
-        ),
+        // DashableItemHeaderBuilder(
+        //   dgh: element,
+        // ),
         SliverToBoxAdapter(
           child: Responsive(
             mobile: FileInfoStaggerdGridView(
@@ -351,89 +351,90 @@ class SectionItemHeader extends MultiSliver {
       : super(
           pushPinnedChildren: true,
           children: [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
-              sliver: SliverPinnedHeader(
-                  child: Container(
-                      padding: EdgeInsets.all(kDefaultPadding),
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      child: ListTile(
-                          title: Text(
-                            dgh.title,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          trailing: dgh.headerListToAdd == null
-                              ? null
-                              : ElevatedButton.icon(
-                                  key: buttonKey,
-                                  style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: kDefaultPadding * 1.5,
-                                      vertical: kDefaultPadding / 2,
+            if (dgh.title != null)
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+                sliver: SliverPinnedHeader(
+                    child: Container(
+                        padding: EdgeInsets.all(kDefaultPadding),
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: ListTile(
+                            title: Text(
+                              dgh.title!,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            trailing: dgh.headerListToAdd == null
+                                ? null
+                                : ElevatedButton.icon(
+                                    key: buttonKey,
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: kDefaultPadding * 1.5,
+                                        vertical: kDefaultPadding / 2,
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () async {
-                                    if (dgh.headerListToAdd == null) return;
-                                    await showPopupMenu(context, buttonKey,
-                                            list: dgh.headerListToAdd!
-                                                .map((e) => buildMenuItem(
-                                                    context,
-                                                    MenuItemBuild(
-                                                        e.getMainHeaderLabelTextOnly(
-                                                            context),
-                                                        Icons.add,
-                                                        "")))
-                                                .toList())
-                                        .then((value) =>
-                                            debugPrint("showPopupMenu $value"));
-                                  },
-                                  icon: const Icon(Icons.add),
-                                  label: Text(
-                                      AppLocalizations.of(context)!.add_new),
-                                ))
+                                    onPressed: () async {
+                                      if (dgh.headerListToAdd == null) return;
+                                      await showPopupMenu(context, buttonKey,
+                                              list: dgh.headerListToAdd!
+                                                  .map((e) => buildMenuItem(
+                                                      context,
+                                                      MenuItemBuild(
+                                                          e.getMainHeaderLabelTextOnly(
+                                                              context),
+                                                          Icons.add,
+                                                          "")))
+                                                  .toList())
+                                          .then((value) => debugPrint(
+                                              "showPopupMenu $value"));
+                                    },
+                                    icon: const Icon(Icons.add),
+                                    label: Text(
+                                        AppLocalizations.of(context)!.add_new),
+                                  ))
 
-                      //  Column(
-                      //   children: [
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //       children: [
-                      //         Text(
-                      //           dgh.title,
-                      //           style: Theme.of(context).textTheme.titleLarge,
-                      //         ),
-                      //         if (dgh.headerListToAdd != null)
-                      //           ElevatedButton.icon(
-                      //             key: buttonKey,
-                      //             style: TextButton.styleFrom(
-                      //               padding: const EdgeInsets.symmetric(
-                      //                 horizontal: kDefaultPadding * 1.5,
-                      //                 vertical: kDefaultPadding / 2,
-                      //               ),
-                      //             ),
-                      //             onPressed: () async {
-                      //               if (dgh.headerListToAdd == null) return;
-                      //               await showPopupMenu(context, buttonKey,
-                      //                       list: dgh.headerListToAdd!
-                      //                           .map((e) => buildMenuItem(
-                      //                               context,
-                      //                               MenuItemBuild(
-                      //                                   e.getMainHeaderLabelTextOnly(
-                      //                                       context),
-                      //                                   Icons.add,
-                      //                                   "")))
-                      //                           .toList())
-                      //                   .then((value) =>
-                      //                       debugPrint("showPopupMenu $value"));
-                      //             },
-                      //             icon: const Icon(Icons.add),
-                      //             label: Text(AppLocalizations.of(context)!.add_new),
-                      //           ),
-                      //       ],
-                      //     ),
-                      //   ],
-                      // ),
-                      )),
-            ),
+                        //  Column(
+                        //   children: [
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text(
+                        //           dgh.title,
+                        //           style: Theme.of(context).textTheme.titleLarge,
+                        //         ),
+                        //         if (dgh.headerListToAdd != null)
+                        //           ElevatedButton.icon(
+                        //             key: buttonKey,
+                        //             style: TextButton.styleFrom(
+                        //               padding: const EdgeInsets.symmetric(
+                        //                 horizontal: kDefaultPadding * 1.5,
+                        //                 vertical: kDefaultPadding / 2,
+                        //               ),
+                        //             ),
+                        //             onPressed: () async {
+                        //               if (dgh.headerListToAdd == null) return;
+                        //               await showPopupMenu(context, buttonKey,
+                        //                       list: dgh.headerListToAdd!
+                        //                           .map((e) => buildMenuItem(
+                        //                               context,
+                        //                               MenuItemBuild(
+                        //                                   e.getMainHeaderLabelTextOnly(
+                        //                                       context),
+                        //                                   Icons.add,
+                        //                                   "")))
+                        //                           .toList())
+                        //                   .then((value) =>
+                        //                       debugPrint("showPopupMenu $value"));
+                        //             },
+                        //             icon: const Icon(Icons.add),
+                        //             label: Text(AppLocalizations.of(context)!.add_new),
+                        //           ),
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
+                        )),
+              ),
             SliverToBoxAdapter(
               child: child,
             )
@@ -441,77 +442,77 @@ class SectionItemHeader extends MultiSliver {
         );
 }
 
-@deprecated
-class DashableItemHeaderBuilder extends StatelessWidget {
-  DashableGridHelper dgh;
-  DashableItemHeaderBuilder({Key? key, required this.dgh}) : super(key: key);
+// @deprecated
+// class DashableItemHeaderBuilder extends StatelessWidget {
+//   DashableGridHelper dgh;
+//   DashableItemHeaderBuilder({Key? key, required this.dgh}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    GlobalKey buttonKey = GlobalKey();
-    return SliverPinnedHeader(
-      child: Text(dgh.title),
-    );
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: kDefaultPadding, vertical: kDefaultPadding),
-      sliver: SliverPersistentHeader(
-        floating: true,
-        pinned: true,
+//   @override
+//   Widget build(BuildContext context) {
+//     GlobalKey buttonKey = GlobalKey();
+//     return SliverPinnedHeader(
+//       child: Text(dgh.title),
+//     );
+//     return SliverPadding(
+//       padding: const EdgeInsets.symmetric(
+//           horizontal: kDefaultPadding, vertical: kDefaultPadding),
+//       sliver: SliverPersistentHeader(
+//         floating: true,
+//         pinned: true,
 
-        // floating: true,
-        delegate: SliverAppBarDelegate(
+//         // floating: true,
+//         delegate: SliverAppBarDelegate(
 
-            // 2
-            minHeight: 50,
-            maxHeight: 50,
-            // 3
-            child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        dgh.title,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      ElevatedButton.icon(
-                        key: buttonKey,
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: kDefaultPadding * 1.5,
-                            vertical: kDefaultPadding / 2,
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (dgh.headerListToAdd == null) return;
-                          await showPopupMenu(context, buttonKey,
-                                  list: dgh.headerListToAdd!
-                                      .map((e) => buildMenuItem(
-                                          context,
-                                          MenuItemBuild(
-                                              e.getMainHeaderLabelTextOnly(
-                                                  context),
-                                              Icons.add,
-                                              "")))
-                                      .toList())
-                              .then((value) =>
-                                  debugPrint("showPopupMenu $value"));
-                        },
-                        icon: const Icon(Icons.add),
-                        label: Text(AppLocalizations.of(context)!.add_new),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )),
-      ),
-    );
-  }
-}
+//             // 2
+//             minHeight: 50,
+//             maxHeight: 50,
+//             // 3
+//             child: Container(
+//               color: Theme.of(context).scaffoldBackgroundColor,
+//               child: Column(
+//                 children: [
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       Text(
+//                         dgh.title,
+//                         style: Theme.of(context).textTheme.titleLarge,
+//                       ),
+//                       ElevatedButton.icon(
+//                         key: buttonKey,
+//                         style: TextButton.styleFrom(
+//                           padding: const EdgeInsets.symmetric(
+//                             horizontal: kDefaultPadding * 1.5,
+//                             vertical: kDefaultPadding / 2,
+//                           ),
+//                         ),
+//                         onPressed: () async {
+//                           if (dgh.headerListToAdd == null) return;
+//                           await showPopupMenu(context, buttonKey,
+//                                   list: dgh.headerListToAdd!
+//                                       .map((e) => buildMenuItem(
+//                                           context,
+//                                           MenuItemBuild(
+//                                               e.getMainHeaderLabelTextOnly(
+//                                                   context),
+//                                               Icons.add,
+//                                               "")))
+//                                       .toList())
+//                               .then((value) =>
+//                                   debugPrint("showPopupMenu $value"));
+//                         },
+//                         icon: const Icon(Icons.add),
+//                         label: Text(AppLocalizations.of(context)!.add_new),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             )),
+//       ),
+//     );
+//   }
+// }
 
 // class TicPackage extends StatelessWidget {
 //   TicPackage(

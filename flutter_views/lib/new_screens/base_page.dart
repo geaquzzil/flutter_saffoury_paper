@@ -615,6 +615,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   String? tableName;
   dynamic extras;
   bool _isLoading = false;
+  GlobalKey<BasePageWithApi> globalKey = GlobalKey<BasePageWithApi>();
 
   BasePageWithApi({this.iD, this.tableName, this.extras});
   Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
@@ -634,6 +635,10 @@ abstract class BasePageWithApi<T extends StatefulWidget>
       return _getTabBarList()![currentTabIndex].extras;
     }
     return extras;
+  }
+
+  DashableInterface getExtrasCastDashboard({TabControllerHelper? tab}) {
+    return getExtras(tab: tab) as DashableInterface;
   }
 
   ViewAbstract getExtrasCast({TabControllerHelper? tab}) {
@@ -670,8 +675,12 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     dynamic ex = getExtras(tab: tab);
     if (ex is! ViewAbstract) return false;
     if (ex is DashableInterface) {
-      return (ex).isRequiredObjectsListChecker() &&
-          !(ex as DashableInterface).getDashboardShouldWaitBeforerRequest();
+      if ((ex as DashableInterface)
+              .getDashboardShouldWaitBeforeRequest(context, tab: tab) !=
+          null) {
+        return true;
+      }
+      return (ex).isRequiredObjectsListChecker();
     }
     bool canGetBody = (ex).isRequiredObjectsList()?[getServerActions()] == null;
     if (canGetBody) {
@@ -705,25 +714,38 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   @override
   beforeGetFirstPaneWidget({TabControllerHelper? tab}) {
     if (_isLoading) return getLoadingWidget(true, tab: tab);
-    return super.beforeGetFirstPaneWidget(tab: tab);
+    var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
+        .getDashboardShouldWaitBeforeRequest(context,
+            firstPane: true, tab: tab);
+    return shouldWaitWidget ?? super.beforeGetFirstPaneWidget(tab: tab);
   }
 
   @override
   beforeGetDesktopFirstPaneWidget({TabControllerHelper? tab}) {
     if (_isLoading) return getLoadingWidget(true, tab: tab);
-    return super.beforeGetDesktopFirstPaneWidget(tab: tab);
+    var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
+        .getDashboardShouldWaitBeforeRequest(context,
+            firstPane: true, tab: tab);
+    return shouldWaitWidget ?? super.beforeGetDesktopFirstPaneWidget(tab: tab);
   }
 
   @override
   beforeGetDesktopSecoundPaneWidget({TabControllerHelper? tab}) {
     if (_isLoading) return getLoadingWidget(false, tab: tab);
-    return super.beforeGetDesktopSecoundPaneWidget(tab: tab);
+    var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
+        .getDashboardShouldWaitBeforeRequest(context,
+            firstPane: false, tab: tab);
+    return shouldWaitWidget ??
+        super.beforeGetDesktopSecoundPaneWidget(tab: tab);
   }
 
   @override
   beforeGetSecondPaneWidget({TabControllerHelper? tab}) {
     if (_isLoading) return getLoadingWidget(false, tab: tab);
-    return super.beforeGetSecondPaneWidget(tab: tab);
+    var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
+        .getDashboardShouldWaitBeforeRequest(context,
+            firstPane: false, tab: tab);
+    return shouldWaitWidget ?? super.beforeGetSecondPaneWidget(tab: tab);
   }
 
   @override

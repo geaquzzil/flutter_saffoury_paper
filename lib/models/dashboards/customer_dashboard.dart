@@ -10,6 +10,10 @@ import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -94,23 +98,6 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
-    if (iD == -1) {
-      return [
-        DashableGridHelper(
-            title: AppLocalizations.of(context)!.overview,
-            widgets: [
-              getWidget(StaggeredGridTile.count(
-                  crossAxisCellCount: crossAxisCount,
-                  mainAxisCellCount: 2,
-                  child: EmptyWidget(
-                      lottiUrl:
-                          "https://lottie.host/901033cb-134b-423b-a08a-42be30e6a1e4/BT8QbFb23s.json",
-                      title: AppLocalizations.of(context)!.pleaseSelect,
-                      subtitle: AppLocalizations.of(context)!.no_content))),
-              // ...getInvoicesWidgets(context)
-            ]),
-      ];
-    }
     return [];
   }
 
@@ -144,8 +131,133 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   List<String> getMainFields({BuildContext? context}) => [];
 
   @override
-  bool getDashboardShouldWaitBeforerRequest() {
+  getDashboardShouldWaitBeforeRequest(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab}) {
     debugPrint("getDashboardShouldWaitBefore $iD");
-    return iD != -1;
+    firstPane = firstPane ?? false;
+    if (iD == -1) {
+      return [
+        if (firstPane)
+          SliverFillRemaining(
+            child: Center(child: Text("SOSOSOSO")),
+          )
+        else
+          SliverFillRemaining(
+            child: Center(
+              child: EmptyWidget(
+                  lottiUrl:
+                      "https://lottie.host/901033cb-134b-423b-a08a-42be30e6a1e4/BT8QbFb23s.json",
+                  title: AppLocalizations.of(context)!.pleaseSelect,
+                  subtitle: AppLocalizations.of(context)!.no_content),
+            ),
+          )
+      ];
+    } else {
+      return null;
+    }
   }
+
+  @override
+  Widget? getDashboardAppbar(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
+}
+
+@JsonSerializable(explicitToJson: true)
+@reflector
+class CustomerDashboardSelector
+    extends ViewAbstract<CustomerDashboardSelector> {
+  Customer? customer;
+  String? date;
+  CustomerDashboardSelector() : super();
+
+  @override
+  CustomerDashboardSelector fromJsonViewAbstract(Map<String, dynamic> json) {
+    return CustomerDashboardSelector.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJsonViewAbstract() {
+    return toJson();
+  }
+
+  factory CustomerDashboardSelector.fromJson(Map<String, dynamic> data) =>
+      _$CustomerDashboardSelectorFromJson(data);
+
+  @override
+  Map<String, dynamic> toJson() => _$CustomerDashboardSelectorToJson(this);
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() => {
+        "date": Icons.date_range,
+      };
+
+  @override
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+        "date": AppLocalizations.of(context)!.date,
+      };
+
+  @override
+  String? getMainDrawerGroupName(BuildContext context) => null;
+
+  @override
+  List<String> getMainFields({BuildContext? context}) => ["date"];
+
+  @override
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.customer;
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) {
+    return customer?.name ?? "-";
+  }
+
+  @override
+  IconData getMainIconData() {
+    return Icons.account_circle_sharp;
+  }
+
+  @override
+  CustomerDashboardSelector getSelfNewInstance() => CustomerDashboardSelector();
+
+  @override
+  String? getSortByFieldName() => null;
+
+  @override
+  SortByType getSortByType() => SortByType.DESC;
+
+  @override
+  String? getTableNameApi() => null;
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
+      {"customer": true};
+
+  @override
+  Map<String, int> getTextInputMaxLengthMap() => {};
+
+  @override
+  Map<String, double> getTextInputMaxValidateMap() => {};
+
+  @override
+  Map<String, double> getTextInputMinValidateMap() => {};
+
+  @override
+  Map<String, TextInputType?> getTextInputTypeMap() =>
+      {"date": TextInputType.datetime};
+
+  @override
+  Map<String, bool> isFieldCanBeNullableMap() =>
+      {"date": false, "customer": false};
+
+  @override
+  Map<String, bool> isFieldRequiredMap() => {"date": true, "customer": true};
 }

@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/lists/components/search_comp
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 const mediumPane = 0.65;
 const largePane = 0.75;
@@ -33,7 +34,6 @@ class BaseDashboardMainPage extends StatefulWidget {
 class _BaseDashboardMainPageState
     extends BasePageWithApi<BaseDashboardMainPage> {
   //  late DashableInterface dashboard;
-
   @override
   List<TabControllerHelper>? initTabBarList() {
     return context
@@ -90,13 +90,16 @@ class _BaseDashboardMainPageState
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: kDefaultPadding,
-              ),
-              child: SearchWidgetComponent(onSearchTextChanged: (text) {
-                debugPrint("search for $text");
-              }),
-            ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: kDefaultPadding,
+                ),
+                child: Text(AppLocalizations.of(context)!.dashboard_and_rep,
+                    style: Theme.of(context).textTheme.headlineMedium)
+
+                // SearchWidgetComponent(onSearchTextChanged: (text) {
+                //   debugPrint("search for $text");
+                // }),
+                ),
           ),
           if (isPrintable(tab: tab))
             IconButton(
@@ -238,16 +241,8 @@ class _BaseDashboardMainPageState
 
   @override
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) {
-    return DashboardHeader(
-      date: extras?.date ?? DateObject(),
-      current_screen_size: getCurrentScreenSize(),
-      onSelectedDate: (d) {
-        if (d == null) return;
-
-        // getExtras().setDate(d);
-        // refresh(extras: extras);
-      },
-    );
+    return getExtrasCastDashboard(tab: tab)
+        .getDashboardAppbar(context, firstPane: true, tab: tab);
   }
 
   @override
@@ -264,8 +259,8 @@ class _BaseDashboardMainPageState
 
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
-    // TODO: implement getSecondPaneAppbar
-    return null;
+    return getExtrasCastDashboard(tab: tab)
+        .getDashboardAppbar(context, firstPane: false, tab: tab);
   }
 
   @override

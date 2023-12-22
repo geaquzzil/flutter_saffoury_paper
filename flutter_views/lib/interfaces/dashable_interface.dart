@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 
 abstract class DashableItemInterface {}
 
@@ -11,10 +13,19 @@ abstract class DashableInterface<T extends ViewAbstract> {
       BuildContext context, int crossAxisCount);
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount);
+
   void setDate(DateObject? date);
 
   ///this should wait for user input before request api
-  bool getDashboardShouldWaitBeforerRequest();
+  getDashboardShouldWaitBeforeRequest(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab});
+
+  Widget? getDashboardAppbar(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab});
 }
 
 enum WidgetDashboardType {
@@ -33,14 +44,14 @@ class WidgetGridHelper {
 }
 
 class DashableGridHelper {
-  String title;
+  String? title;
   Widget? onTitleButton;
   List<WidgetGridHelper> widgets;
   List<List<ViewAbstract>>? sectionsListToTabbar;
   List<ViewAbstract>? headerListToAdd;
   bool wrapWithCard;
   DashableGridHelper(
-      {required this.title,
+      {this.title,
       required this.widgets,
       this.onTitleButton,
       this.headerListToAdd,

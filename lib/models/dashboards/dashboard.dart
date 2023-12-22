@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/expandable_table.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
@@ -867,5 +869,18 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
   }
 
   @override
-  bool getDashboardShouldWaitBeforerRequest() => false;
+  Widget? getDashboardAppbar(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  getDashboardShouldWaitBeforeRequest(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
 }

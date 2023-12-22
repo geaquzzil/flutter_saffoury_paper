@@ -11,7 +11,9 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
@@ -71,7 +73,21 @@ class CustomerBalanceList
   List<String> getMainFields({BuildContext? context}) => [];
 
   @override
-  bool getDashboardShouldWaitBeforerRequest() => false;
+  Widget? getDashboardAppbar(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  getDashboardShouldWaitBeforeRequest(BuildContext context,
+      {bool? firstPane,
+      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      TabControllerHelper? tab}) {
+    return null;
+  }
+
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customerBalances;
