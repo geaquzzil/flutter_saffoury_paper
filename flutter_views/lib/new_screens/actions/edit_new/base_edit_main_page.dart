@@ -12,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
@@ -22,7 +23,10 @@ class BaseEditNewPage extends BaseActionScreenPage {
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 
   BaseEditNewPage(
-      {super.key, required super.viewAbstract, this.onFabClickedConfirm});
+      {super.key,
+      required super.viewAbstract,
+      this.onFabClickedConfirm,
+      super.currentScreenSize});
 
   @override
   State<BaseEditNewPage> createState() => _BaseEditNewPageState();
@@ -39,6 +43,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
   Widget getBody(BuildContext context) {
     return SliverList.builder(
       itemBuilder: (c, i) => BaseEditWidget(
+        currentScreenSize: widget.currentScreenSize,
         onValidate: (viewAbstract) {
           currentViewAbstract = viewAbstract;
           if (isListableInterface()) {

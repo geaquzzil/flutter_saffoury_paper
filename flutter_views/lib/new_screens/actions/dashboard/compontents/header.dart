@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +17,29 @@ import '../../../../models/apis/date_object.dart';
 import '../base_dashboard_screen_page.dart';
 import 'date_selector.dart';
 
-class DashboardHeader extends StatelessWidget {
+class DashboardHeader extends StatefulWidget {
   final CurrentScreenSize current_screen_size;
   // DateTime? focuseDate;
   DateObject date;
   Function(DateObject? date_object) onSelectedDate;
   DashboardHeader(
-      {Key? key,
+      {super.key,
       required this.current_screen_size,
       required this.date,
-      required this.onSelectedDate})
-      : super(key: key);
+      required this.onSelectedDate});
+
+  @override
+  State<DashboardHeader> createState() => _DashboardHeaderState();
+}
+
+class _DashboardHeaderState extends State<DashboardHeader> {
+  late DateObject date;
+
+  @override
+  void initState() {
+    date = widget.date;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +54,10 @@ class DashboardHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               TodayText(
-                dateObject: date,
+                dateObject: widget.date,
               ),
               const Spacer(),
-              if (isLargeScreenFromScreenSize(current_screen_size))
+              if (isLargeScreenFromScreenSize(widget.current_screen_size))
                 CustomPopupMenu(
                     barrierColor: kIsWeb ? Colors.black54 : Colors.black26,
                     menuBuilder: () => SizedBox(
@@ -79,27 +93,36 @@ class DashboardHeader extends StatelessWidget {
                                       }
                                     },
                                   ),
-                                  rangeStartDay: date.from.toDateTimeOnlyDate(),
-                                  rangeEndDay: date.to.toDateTimeOnlyDate(),
+                                  rangeStartDay:
+                                      widget.date.from.toDateTimeOnlyDate(),
+                                  rangeEndDay:
+                                      widget.date.to.toDateTimeOnlyDate(),
                                   rangeSelectionMode:
                                       RangeSelectionMode.toggledOn,
                                   selectedDayPredicate: (day) {
                                     return isSameDay(
-                                        date.from.toDateTimeOnlyDate(), day);
+                                        widget.date.from.toDateTimeOnlyDate(),
+                                        day);
                                   },
                                   onRangeSelected: (start, end, focuseDate) {
-                                    date = DateObject.initFromDateTime(
-                                        start ?? DateTime.now(),
-                                        toDate: end);
-                                    onSelectedDate.call(date);
-                                    debugPrint("selectDateChanged ${date}");
+                                    widget.onSelectedDate.call(widget.date);
+                                    setState(() {
+                                      date = DateObject.initFromDateTime(
+                                          start ?? DateTime.now(),
+                                          toDate: end);
+                                    });
+                                    debugPrint(
+                                        "selectDateChanged ${widget.date}");
                                   },
                                   locale: 'en-US',
-                                  firstDay: DateTime.utc(2023, 10, 16),
-                                  lastDay: DateTime.utc(2030, 3, 14),
-                                  focusedDay: date.from.toDateTimeOnlyDate(),
+                                  firstDay: DateTime.utc(2020, 01, 01),
+                                  lastDay: DateTime.utc(2030, 01, 01),
+                                  focusedDay:
+                                      widget.date.from.toDateTimeOnlyDate(),
                                   onDaySelected: (d, d1) {
-                                    date = DateObject.initFromDateTime(d);
+                                    setState(() {
+                                      date = DateObject.initFromDateTime(d);
+                                    });
                                     // onSelectedDate.call(date);
                                     // debugPrint(
                                     //     "selectDateChanged ${selectDateChanged.value}");

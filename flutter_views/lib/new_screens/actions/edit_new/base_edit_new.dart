@@ -455,6 +455,11 @@ class BaseEditWidget extends StatelessWidget {
       );
     }
     if (isAutoCompleteViewAbstract) {
+      if (textFieldTypeVA ==
+          ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
+        throw Exception(
+            "Do not select isAutoCompleteViewAbstract and DROP_DOWN_TEXT_SEARCH_API");
+      }
       if (viewAbstract.getParnet == null) {
         return getControllerEditText(context,
             viewAbstract: viewAbstract,

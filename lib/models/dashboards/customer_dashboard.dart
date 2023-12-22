@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
@@ -13,8 +14,17 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
+import 'package:flutter_view_controller/screens/web/components/header_text.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
@@ -98,18 +108,51 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount) {
-    return [];
+    return [
+      DashableGridHelper(
+          sectionsListToTabbar: getListOfTabbarFunds(),
+          headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
+          title: AppLocalizations.of(context)!.overview,
+          widgets: [
+            ...getFundWidgets(context, crossAxisCount, checkForEmpty: false),
+            // ...getInvoicesWidgets(context)
+          ]),
+      DashableGridHelper(
+          title: AppLocalizations.of(context)!.invoice,
+          headerListToAdd: [
+            Order(),
+            Purchases(),
+            CutRequest(),
+            Transfers(),
+            ProductInput(),
+            ProductOutput(),
+            ReservationInvoice()
+          ],
+          widgets: [
+            ...getInvoicesWidgets(context, crossAxisCount)
+          ]),
+    ];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount) {
-    return [];
+    return [
+      DashableGridHelper(
+          title: AppLocalizations.of(context)!.overview,
+          widgets: [
+            getWidget(StaggeredGridTile.count(
+                crossAxisCellCount: crossAxisCount,
+                mainAxisCellCount: 3,
+                child: BaseViewNewPage(viewAbstract: customers!)))
+            // ...getInvoicesWidgets(context)
+          ]),
+    ];
   }
 
   @override
   void setDate(DateObject? date) {
-    this.dateObject = date;
+    dateObject = date;
     balance = null;
   }
 
@@ -141,7 +184,21 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
       return [
         if (firstPane)
           SliverFillRemaining(
-            child: Center(child: Text("SOSOSOSO")),
+            child: BaseEditWidget(
+              currentScreenSize: getCurrentScreenSizeStatic(context),
+              viewAbstract: CustomerDashboardSelector(), isTheFirst: true,
+              onValidate: (v) {
+                if (v == null) return;
+
+                CustomerDashboardSelector cds = v as CustomerDashboardSelector;
+                debugPrint(
+                    "refresh customerr ${cds.customer?.iD} date ${cds.date} ");
+                iD = cds.customer!.iD;
+                dateObject = DateObject(from: cds.date!, to: cds.date!);
+                globalKey?.currentState?.refresh(extras: this, tab: tab);
+              },
+              // onFabClickedConfirm: (v) {},
+            ),
           )
         else
           SliverFillRemaining(
@@ -164,6 +221,28 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
       {bool? firstPane,
       GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
       TabControllerHelper? tab}) {
+    if (iD == -1 || firstPane == false) {
+      return null;
+    }
+    return DashboardHeader(
+      date: dateObject ?? DateObject(),
+      current_screen_size: getCurrentScreenSizeStatic(context),
+      onSelectedDate: (d) {
+        if (d == null) return;
+
+        // getExtras().setDate(d);
+        // refresh(extras: extras);
+      },
+    );
+    return HeaderText(
+        fontSize: 15,
+        useRespnosiveLayout: false,
+        text: "Search results: “${customers?.name}",
+        description: Html(
+          data:
+              "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
+        ));
+
     return null;
   }
 }
@@ -174,7 +253,14 @@ class CustomerDashboardSelector
     extends ViewAbstract<CustomerDashboardSelector> {
   Customer? customer;
   String? date;
+
   CustomerDashboardSelector() : super();
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "date": "",
+        "customer": Customer(),
+      };
 
   @override
   CustomerDashboardSelector fromJsonViewAbstract(Map<String, dynamic> json) {
@@ -188,6 +274,14 @@ class CustomerDashboardSelector
 
   factory CustomerDashboardSelector.fromJson(Map<String, dynamic> data) =>
       _$CustomerDashboardSelectorFromJson(data);
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    if (field == "customer") {
+      return ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API;
+    }
+    return super.getInputType(field);
+  }
 
   @override
   Map<String, dynamic> toJson() => _$CustomerDashboardSelectorToJson(this);
@@ -206,7 +300,7 @@ class CustomerDashboardSelector
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  List<String> getMainFields({BuildContext? context}) => ["date"];
+  List<String> getMainFields({BuildContext? context}) => ["customer", "date"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -238,9 +332,7 @@ class CustomerDashboardSelector
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
-      {"customer": true};
-
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
   @override
   Map<String, int> getTextInputMaxLengthMap() => {};
 

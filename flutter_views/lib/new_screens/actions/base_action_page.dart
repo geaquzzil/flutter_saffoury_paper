@@ -42,7 +42,12 @@ import 'view/view_view_abstract.dart';
 abstract class BaseActionScreenPage extends StatefulWidget {
   ViewAbstract viewAbstract;
   PaletteGenerator? color;
-  BaseActionScreenPage({super.key, required this.viewAbstract, this.color});
+  CurrentScreenSize? currentScreenSize;
+  BaseActionScreenPage(
+      {super.key,
+      required this.viewAbstract,
+      this.color,
+      this.currentScreenSize});
 
   ServerActions getServerAction() {
     if (this is BaseEditNewPage) {

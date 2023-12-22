@@ -284,10 +284,13 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           decoration: type == AutoCompleteFor.NORMAL
               ? getDecorationForAutoComplete(context, viewAbstract)
               : withDecoration
-                  ? autoCompleteBySearchQuery
-                      ? const InputDecoration()
-                      : getDecoration(context, viewAbstract,
-                          field: field, currentScreenSize: currentScreenSize)
+                  ?
+                  //  autoCompleteBySearchQuery
+                  //     ? const InputDecoration()
+                  //     : getDecoration(context, viewAbstract,
+                  //         field: field, currentScreenSize: currentScreenSize)
+                  getDecoration(context, viewAbstract,
+                      field: field, currentScreenSize: currentScreenSize)
                   : getDecorationWithoutDecoration(
                       context, viewAbstract, field),
           maxLength: viewAbstract.getTextInputMaxLength(field),

@@ -22,7 +22,7 @@ const largePane = 0.75;
 
 class BaseDashboardMainPage extends StatefulWidget {
   final String title;
-  const BaseDashboardMainPage({
+  BaseDashboardMainPage({
     super.key,
     required this.title,
   });
@@ -241,8 +241,12 @@ class _BaseDashboardMainPageState
 
   @override
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) {
-    return getExtrasCastDashboard(tab: tab)
-        .getDashboardAppbar(context, firstPane: true, tab: tab);
+    return getExtrasCastDashboard(tab: tab).getDashboardAppbar(
+      context,
+      firstPane: true,
+      tab: tab,
+      globalKey: globalKeyBasePageWithApi,
+    );
   }
 
   @override
@@ -259,8 +263,12 @@ class _BaseDashboardMainPageState
 
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
-    return getExtrasCastDashboard(tab: tab)
-        .getDashboardAppbar(context, firstPane: false, tab: tab);
+    return getExtrasCastDashboard(tab: tab).getDashboardAppbar(
+      context,
+      firstPane: false,
+      tab: tab,
+      globalKey: globalKeyBasePageWithApi,
+    );
   }
 
   @override

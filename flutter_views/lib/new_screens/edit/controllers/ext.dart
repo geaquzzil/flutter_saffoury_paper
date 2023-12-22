@@ -154,6 +154,7 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
   debugPrint("getDecoration currentScreenSize: $currentScreenSize");
   if (field != null) {
     return getDecorationIconHintPrefix(
+        currentScreenSize: currentScreenSize,
         prefix: viewAbstract.getTextInputPrefix(context, field),
         suffix: viewAbstract.getTextInputSuffix(context, field),
         hint: viewAbstract.getTextInputHint(context, field: field),
@@ -161,6 +162,7 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
         icon: viewAbstract.getTextInputIconData(field));
   } else {
     return getDecorationIconHintPrefix(
+        currentScreenSize: currentScreenSize,
         icon: viewAbstract.getMainIconData(),
         hint: viewAbstract.getTextInputHint(context));
   }

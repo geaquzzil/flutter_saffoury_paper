@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashb
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/base_shared.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
@@ -63,7 +64,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
 
   Widget getDoneWidget(BuildContext context) {
     // return POSPage();
-    return BaseDashboardMainPage(title: "TEST");
+    return BaseDashboardMainPage(key: globalKeyBasePageWithApi, title: "TEST");
     // return BaseShared();
     // return PdfTestToBasePage();
     // return TestBasePage();

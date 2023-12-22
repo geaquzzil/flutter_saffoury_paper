@@ -31,6 +31,8 @@ const animationDuration = 250;
 const double kDefualtAppBar = 70;
 
 const double kDefualtClipRect = 25;
+GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
+    GlobalKey<BasePageWithApi>();
 
 ///Auto generate view
 ///[CurrentScreenSize.MOBILE] if this  is true
@@ -615,7 +617,6 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   String? tableName;
   dynamic extras;
   bool _isLoading = false;
-  GlobalKey<BasePageWithApi> globalKey = GlobalKey<BasePageWithApi>();
 
   BasePageWithApi({this.iD, this.tableName, this.extras});
   Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
@@ -666,8 +667,10 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     }
   }
 
-  void refresh({int? iD, String? tableName, dynamic extras}) {
-    setExtras(iD: iD, tableName: tableName, ex: extras);
+  void refresh(
+      {int? iD, String? tableName, dynamic extras, TabControllerHelper? tab}) {
+    debugPrint("refresh basePage");
+    setExtras(iD: iD, tableName: tableName, ex: extras, tabH: tab);
     setState(() {});
   }
 
@@ -716,7 +719,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     if (_isLoading) return getLoadingWidget(true, tab: tab);
     var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
         .getDashboardShouldWaitBeforeRequest(context,
-            firstPane: true, tab: tab);
+            globalKey: globalKeyBasePageWithApi, firstPane: true, tab: tab);
     return shouldWaitWidget ?? super.beforeGetFirstPaneWidget(tab: tab);
   }
 
@@ -725,7 +728,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     if (_isLoading) return getLoadingWidget(true, tab: tab);
     var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
         .getDashboardShouldWaitBeforeRequest(context,
-            firstPane: true, tab: tab);
+            globalKey: globalKeyBasePageWithApi, firstPane: true, tab: tab);
     return shouldWaitWidget ?? super.beforeGetDesktopFirstPaneWidget(tab: tab);
   }
 
@@ -734,7 +737,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     if (_isLoading) return getLoadingWidget(false, tab: tab);
     var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
         .getDashboardShouldWaitBeforeRequest(context,
-            firstPane: false, tab: tab);
+            globalKey: globalKeyBasePageWithApi, firstPane: false, tab: tab);
     return shouldWaitWidget ??
         super.beforeGetDesktopSecoundPaneWidget(tab: tab);
   }
@@ -744,7 +747,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     if (_isLoading) return getLoadingWidget(false, tab: tab);
     var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
         .getDashboardShouldWaitBeforeRequest(context,
-            firstPane: false, tab: tab);
+            globalKey: globalKeyBasePageWithApi, firstPane: false, tab: tab);
     return shouldWaitWidget ?? super.beforeGetSecondPaneWidget(tab: tab);
   }
 

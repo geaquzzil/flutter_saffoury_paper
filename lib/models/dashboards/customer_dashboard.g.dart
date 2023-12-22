@@ -233,3 +233,21 @@ Map<String, dynamic> _$CustomerDashboardToJson(CustomerDashboard instance) =>
       'totalPurchases': instance.totalPurchases,
       'dateObject': instance.dateObject?.toJson(),
     };
+
+CustomerDashboardSelector _$CustomerDashboardSelectorFromJson(
+        Map<String, dynamic> json) =>
+    CustomerDashboardSelector()
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..customer = json['customer'] == null
+          ? null
+          : Customer.fromJson(json['customer'] as Map<String, dynamic>)
+      ..date = json['date'] as String?;
+
+Map<String, dynamic> _$CustomerDashboardSelectorToJson(
+        CustomerDashboardSelector instance) =>
+    <String, dynamic>{
+      'iD': instance.iD,
+      'delete': instance.delete,
+      'customer': instance.customer?.toJson(),
+      'date': instance.date,
+    };

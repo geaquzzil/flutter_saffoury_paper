@@ -180,6 +180,9 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   textTheme: kIsWeb
                       ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
                       : null,
+                  visualDensity: SizeConfig.isDesktopOrWebPlatform(context)
+                      ? VisualDensity.comfortable
+                      : VisualDensity.compact,
                   // scaffoldBackgroundColor: lightDynamic?.background,
                   // shadowColor: lightDynamic?.shadow,
                   // cardColor: lightDynamic?.surfaceVariant,
