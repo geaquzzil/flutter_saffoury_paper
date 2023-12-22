@@ -13,7 +13,7 @@ import '../../new_components/loading_shimmer.dart';
 class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
     T extends CustomViewHorizontalListResponse<E>> extends StatefulWidget {
   T autoRest;
-  Function(dynamic response)? onResponse;
+  Widget Function(dynamic response)? onResponse;
   Widget? Function(dynamic response)? onResponseAddWidget;
   ListHorizontalCustomViewApiAutoRestWidget(
       {super.key,
@@ -142,7 +142,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
   Widget getSingleWidget(ListMultiKeyProvider listProvider) {
     if (widget.onResponse != null) {
-      widget.onResponse!(listProvider.getList(key)[0]);
+      return widget.onResponse!(listProvider.getList(key)[0]);
     }
     return (listProvider.getList(key)[0] as CustomViewHorizontalListResponse<E>)
             .getCustomViewSingleResponseWidget(context) ??
@@ -151,7 +151,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
   Widget getListWidget(ListMultiKeyProvider listProvider) {
     if (widget.onResponse != null) {
-      widget.onResponse!(listProvider.getList(key) as List<T>);
+      return widget.onResponse!(listProvider.getList(key) as List<T>);
     }
     return autoRest.getCustomViewListResponseWidget(
             context, listProvider.getList(key).cast()) ??

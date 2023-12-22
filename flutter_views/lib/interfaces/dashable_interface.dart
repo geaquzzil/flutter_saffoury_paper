@@ -9,10 +9,10 @@ import 'package:flutter_view_controller/new_screens/base_page.dart';
 abstract class DashableItemInterface {}
 
 abstract class DashableInterface<T extends ViewAbstract> {
-  List<DashableGridHelper> getDashboardSectionsFirstPane(
-      BuildContext context, int crossAxisCount);
-  List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount);
+  getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
+  getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
 
   void setDate(DateObject? date);
 

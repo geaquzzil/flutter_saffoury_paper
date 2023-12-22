@@ -24,11 +24,13 @@ import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/expandable_table.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -178,7 +180,8 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-          BuildContext context, int crossAxisCount) =>
+          BuildContext context, int crossAxisCount,
+          {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) =>
       [
         DashableGridHelper(
             sectionsListToTabbar: getListOfTabbarFunds(),
@@ -318,7 +321,8 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount) {
+      BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     // return [];
     return [
       DashableGridHelper(
@@ -539,7 +543,19 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       {bool? firstPane,
       GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
       TabControllerHelper? tab}) {
-    return null;
+    if (firstPane == false) return null;
+    return DashboardHeader(
+      date: date ?? DateObject(),
+      current_screen_size: getCurrentScreenSizeStatic(context),
+      onSelectedDate: (d) {
+        if (d == null) return;
+        date = d;
+        debitsDue = null;
+        globalKey?.currentState?.refresh(extras: this, tab: tab);
+        // getExtras().setDate(d);
+        // refresh(extras: extras);
+      },
+    );
   }
 
   @override

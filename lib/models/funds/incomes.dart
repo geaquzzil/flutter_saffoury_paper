@@ -31,8 +31,14 @@ class Incomes extends MoneyFunds<Incomes> {
   }
 
   @override
-  List<String> getMainFields({BuildContext? context}) =>
-      ["account_names", "employee", "date", "value", "equalities", "warehouse"];
+  List<String> getMainFields({BuildContext? context}) => [
+        "account_names",
+        "employees",
+        "date",
+        "value",
+        "equalities",
+        "warehouse"
+      ];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

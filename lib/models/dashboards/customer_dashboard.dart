@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -15,13 +18,16 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -91,6 +97,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   Map<String, String> get getCustomMap => {
         "<iD>": iD.toString(),
         "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
+        "withAnalysis": "true"
       };
 
   factory CustomerDashboard.fromJson(Map<String, dynamic> data) =>
@@ -107,7 +114,8 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-      BuildContext context, int crossAxisCount) {
+      BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
       DashableGridHelper(
           sectionsListToTabbar: getListOfTabbarFunds(),
@@ -136,17 +144,65 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount) {
+      BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
-      DashableGridHelper(
-          title: AppLocalizations.of(context)!.overview,
-          widgets: [
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: crossAxisCount,
-                mainAxisCellCount: 3,
-                child: BaseViewNewPage(viewAbstract: customers!)))
-            // ...getInvoicesWidgets(context)
-          ]),
+      DashableGridHelper(title: AppLocalizations.of(context)!.total, widgets: [
+        getWidget(
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1.5,
+              child: MultiLineChartItem<GrowthRate, DateTime>(
+                title: "T",
+                list: [...getAnalysisChartFunds(), ...getAnalysisChart()],
+                titles: [
+                  ...getAnalysisChartFundsTitle(context),
+                  ...getAnalysisChartTitle(context)
+                ],
+                dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
+                xValueMapper: (item, value, indexInsideList) => DateTime(
+                    value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+                yValueMapper: (item, n, indexInsideList) => n.total,
+              )),
+          type: WidgetDashboardType.CHART,
+        ),
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: 1,
+            mainAxisCellCount: .75,
+            child: ChartCardItemCustom(
+                color: Colors.blue,
+                icon: Icons.credit_card,
+                title: AppLocalizations.of(context)!.totalFormat(
+                    AppLocalizations.of(context)!.credits.toLowerCase()),
+                description: creditsAnalysis.getTotalTextFromSetting(context)
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: 1,
+            mainAxisCellCount: .75,
+            child: ListHorizontalCustomViewApiAutoRestWidget(
+                onResponse: (g) {
+                  return Text("SOS");
+                },
+                autoRest: ChangesRecords.init(CutRequest(), "cut_status")))),
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: .75,
+            child: ChartCardItemCustom(
+                color: Colors.orange,
+                icon: Icons.arrow_back,
+                title: AppLocalizations.of(context)!.balance_due,
+                description: balance.toCurrencyFormatFromSetting(context)
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+                ))),
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: crossAxisCount,
+            mainAxisCellCount: 3,
+            child: BaseViewNewPage(viewAbstract: customers!)))
+        // ...getInvoicesWidgets(context)
+      ]),
     ];
   }
 
@@ -229,7 +285,9 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
       current_screen_size: getCurrentScreenSizeStatic(context),
       onSelectedDate: (d) {
         if (d == null) return;
-
+        dateObject = d;
+        balance = null;
+        globalKey?.currentState?.refresh(extras: this, tab: tab);
         // getExtras().setDate(d);
         // refresh(extras: extras);
       },

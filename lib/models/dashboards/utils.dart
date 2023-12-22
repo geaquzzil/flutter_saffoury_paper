@@ -5,6 +5,7 @@ import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master_details.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:supercharged/supercharged.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../funds/money_funds.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -108,6 +109,7 @@ extension InvoiceMasterUtils<T extends InvoiceMaster> on List<T?>? {
   String getTotalQuantityGroupedFormattedText(BuildContext context) {
     List<String> list = [];
     Map<ProductTypeUnit, double> total = getTotalQuantityGrouped();
+    debugPrint("getTotalQuantityGroupedFormattedText $total");
     total.forEach((key, value) {
       list.add(value.toCurrencyFormat(
           symbol: key.getFieldLabelString(context, key)));
@@ -118,12 +120,14 @@ extension InvoiceMasterUtils<T extends InvoiceMaster> on List<T?>? {
   Map<ProductTypeUnit, double> getTotalQuantityGrouped() {
     if (this == null) return {};
     Map<ProductTypeUnit, double> map = {};
-
     for (var element in this!) {
       // if(map.containsKey(key))
       Map<ProductTypeUnit, double> detailMap = element!
           .getDetailListFromMaster()
           .getTotalQuantityGroupedByProductType();
+
+      debugPrint(
+          "getTotalQuantityGroupedFormattedText getTotalQuantityGrouped $detailMap");
 
       detailMap.forEach((key, value) {
         if (map.containsKey(key)) {
@@ -187,6 +191,28 @@ extension InvoiceMasterDetailsUtils<T extends InvoiceMasterDetails>
 }
 
 extension MoneyFundTotals<T extends MoneyFunds> on List<T?>? {
+  ///getting only currnecyID 1 and 2 and compine together
+  ///todo this function is static
+  String getTotalValueString(BuildContext context) {
+    if (this == null) return AppLocalizations.of(context)!.noItems;
+    List<String> l = List.empty(growable: true);
+    double first = getTotalValue(currencyID: 1);
+    double secound = getTotalValue(currencyID: 2);
+    if (first == 0 && secound == 0) {
+      return AppLocalizations.of(context)!.no_content;
+    }
+    if (first != 0) {
+      l.add(first.toCurrencyFormat(
+          symbol: AppLocalizations.of(context)!.sypDots));
+    }
+    if (secound != 0) {
+      l.add(
+          secound.toCurrencyFormat(symbol: AppLocalizations.of(context)!.syp));
+    }
+
+    return l.join("\n");
+  }
+
   double getTotalValue({int? currencyID}) {
     if (this == null) return 0;
     try {

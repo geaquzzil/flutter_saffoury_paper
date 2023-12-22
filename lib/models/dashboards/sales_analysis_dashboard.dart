@@ -37,9 +37,11 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -149,7 +151,8 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-      BuildContext context, int crossAxisCount) {
+      BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.profit_analysis,
@@ -271,7 +274,8 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount) {
+      BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     debugPrint("getDashboardSectionsSecoundPane $this");
     return [
       // if (checkList(profits))
@@ -405,7 +409,19 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
       {bool? firstPane,
       GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
       TabControllerHelper? tab}) {
-    return null;
+    if (firstPane == false) return null;
+    return DashboardHeader(
+      date: dateObject ?? DateObject(),
+      current_screen_size: getCurrentScreenSizeStatic(context),
+      onSelectedDate: (d) {
+        if (d == null) return;
+        dateObject = d;
+        wastesByCutRequests = null;
+        globalKey?.currentState?.refresh(extras: this, tab: tab);
+        // getExtras().setDate(d);
+        // refresh(extras: extras);
+      },
+    );
   }
 }
 

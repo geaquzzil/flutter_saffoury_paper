@@ -466,6 +466,9 @@ class TabControllerHelper extends Tab {
   //should be viewAbstract or dashboard or etc...
   dynamic extras;
 
+  final ScrollController scrollFirstPaneController = ScrollController();
+  final ScrollController scrollSecoundPaneController = ScrollController();
+
   TabControllerHelper(String title,
       {super.key,
       super.icon,

@@ -34,7 +34,12 @@ class DashboardHeader extends StatefulWidget {
 
 class _DashboardHeaderState extends State<DashboardHeader> {
   late DateObject date;
+  DateTime _focusedDay = DateTime.now();
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
+      .toggledOn; // Can be toggled on/off by longpressing a date
 
+  final CustomPopupMenuController _controller = CustomPopupMenuController();
   @override
   void initState() {
     date = widget.date;
@@ -54,11 +59,17 @@ class _DashboardHeaderState extends State<DashboardHeader> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               TodayText(
-                dateObject: widget.date,
+                dateObject: date,
               ),
               const Spacer(),
               if (isLargeScreenFromScreenSize(widget.current_screen_size))
                 CustomPopupMenu(
+                    menuOnChange: (b) {
+                      if (!b) {
+                        debugPrint("Please select Soso ");
+                        widget.onSelectedDate(date);
+                      }
+                    },
                     barrierColor: kIsWeb ? Colors.black54 : Colors.black26,
                     menuBuilder: () => SizedBox(
                           width: popUpSize.width,
@@ -67,66 +78,77 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                               borderRadius:
                                   BorderRadius.circular(kDefualtClipRect),
                               child: Scaffold(
-                                body: TableCalendar(
-                                  // calendarStyle:CalendarStyle().. ,
-                                  // eventLoader: (day) {
-                                  //   if (day.weekday == DateTime.monday) {
-                                  //     return [Event('Cyclic event')];
-                                  //   }
+                                body: StatefulBuilder(
+                                  builder: (c, setState) => TableCalendar(
+                                    // headerVisible: false,
+                                    // holidayPredicate: (day) {
+                                    //   // Every 20th day of the month will be treated as a holiday
+                                    //   return day.day % 8 == 0;
+                                    // },
 
-                                  //   return [];
-                                  // },
-                                  calendarBuilders: CalendarBuilders(
-                                    dowBuilder: (context, day) {
-                                      if (day.weekday == DateTime.saturday) {
-                                        final text = DateFormat.E().format(day);
-
-                                        return Center(
-                                          child: Text(
-                                            text,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
-                                          ),
-                                        );
+                                    rangeSelectionMode: _rangeSelectionMode,
+                                    onPageChanged: (f) => _focusedDay = f,
+                                    onFormatChanged: (format) {
+                                      if (_calendarFormat != format) {
+                                        setState(() {
+                                          _calendarFormat = format;
+                                        });
                                       }
                                     },
+                                    calendarBuilders: CalendarBuilders(
+                                      dowBuilder: (context, day) {
+                                        if (day.weekday == DateTime.saturday) {
+                                          final text =
+                                              DateFormat.E().format(day);
+
+                                          return Center(
+                                            child: Text(
+                                              text,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary),
+                                            ),
+                                          );
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    rangeStartDay:
+                                        date.from.toDateTimeOnlyDate(),
+                                    rangeEndDay: date.to.toDateTimeOnlyDate(),
+                                    selectedDayPredicate: (day) {
+                                      return isSameDay(
+                                          date.from.toDateTimeOnlyDate(), day);
+                                    },
+                                    onRangeSelected: (start, end, focuseDate) {
+                                      // widget.onSelectedDate.call(date);
+                                      setState(() {
+                                        date = DateObject.initFromDateTime(
+                                            start ?? DateTime.now(),
+                                            toDate: end);
+                                        _focusedDay = focuseDate;
+                                        _rangeSelectionMode =
+                                            RangeSelectionMode.toggledOn;
+                                      });
+                                      debugPrint("selectDateChanged ${date}");
+                                    },
+                                    locale: 'en-US',
+                                    firstDay: DateTime.utc(2020, 01, 01),
+                                    lastDay: DateTime.utc(2030, 01, 01),
+                                    focusedDay: _focusedDay,
+                                    onDaySelected: (d, d1) {
+                                      setState(() {
+                                        date = DateObject.initFromDateTime(d);
+                                        _focusedDay = d1;
+                                        _rangeSelectionMode =
+                                            RangeSelectionMode.toggledOff;
+                                      });
+                                      // onSelectedDate.call(date);
+                                      // debugPrint(
+                                      //     "selectDateChanged ${selectDateChanged.value}");
+                                    },
                                   ),
-                                  rangeStartDay:
-                                      widget.date.from.toDateTimeOnlyDate(),
-                                  rangeEndDay:
-                                      widget.date.to.toDateTimeOnlyDate(),
-                                  rangeSelectionMode:
-                                      RangeSelectionMode.toggledOn,
-                                  selectedDayPredicate: (day) {
-                                    return isSameDay(
-                                        widget.date.from.toDateTimeOnlyDate(),
-                                        day);
-                                  },
-                                  onRangeSelected: (start, end, focuseDate) {
-                                    widget.onSelectedDate.call(widget.date);
-                                    setState(() {
-                                      date = DateObject.initFromDateTime(
-                                          start ?? DateTime.now(),
-                                          toDate: end);
-                                    });
-                                    debugPrint(
-                                        "selectDateChanged ${widget.date}");
-                                  },
-                                  locale: 'en-US',
-                                  firstDay: DateTime.utc(2020, 01, 01),
-                                  lastDay: DateTime.utc(2030, 01, 01),
-                                  focusedDay:
-                                      widget.date.from.toDateTimeOnlyDate(),
-                                  onDaySelected: (d, d1) {
-                                    setState(() {
-                                      date = DateObject.initFromDateTime(d);
-                                    });
-                                    // onSelectedDate.call(date);
-                                    // debugPrint(
-                                    //     "selectDateChanged ${selectDateChanged.value}");
-                                  },
                                 ),
                               )),
                         ),

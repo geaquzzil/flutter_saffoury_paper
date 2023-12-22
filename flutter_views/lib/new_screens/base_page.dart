@@ -203,7 +203,13 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                 preferredSize: Size.fromHeight(height), child: widget)));
   }
 
-  ScrollController getScrollController(bool firstPane) {
+  ScrollController getScrollController(bool firstPane,
+      {TabControllerHelper? tab}) {
+    if (tab != null) {
+      return firstPane
+          ? tab.scrollFirstPaneController
+          : tab.scrollSecoundPaneController;
+    }
     return firstPane
         ? _scrollFirstPaneController
         : _scrollSecoundPaneController;
@@ -223,12 +229,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         debugPrint(
             "BasePage IsPanel  isDesktopOrWebPlatform isSliver ${isPanesIsSliver(firstPane, tab: tab)} body $body");
         body = WebSmoothScroll(
-          controller: getScrollController(firstPane),
+          controller: getScrollController(firstPane, tab: tab),
           animationDuration: animationDuration,
           scrollOffset: scrollOffset,
           child: CustomScrollView(
             physics: const NeverScrollableScrollPhysics(),
-            controller: getScrollController(firstPane),
+            controller: getScrollController(firstPane, tab: tab),
             slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
           ),
         );
@@ -237,7 +243,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
             "BasePage IsPanel  isDesktopOrWebPlatform flassse isSliver ${isPanesIsSliver(firstPane)} body $body");
         return CustomScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          controller: getScrollController(firstPane),
+          controller: getScrollController(firstPane, tab: tab),
           slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
         );
       }
@@ -608,6 +614,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     currentTabIndex = _tabController.index;
     debugPrint("_tabController $currentTabIndex");
   }
+
+  void changeTabIndex(int index) {
+    debugPrint("_tabController $index");
+    if (!_hasTabBarList()) return;
+    debugPrint("_tabController $index");
+    currentTabIndex = index;
+    _tabController.index = index;
+  }
 }
 
 abstract class BasePageWithApi<T extends StatefulWidget>
@@ -636,6 +650,28 @@ abstract class BasePageWithApi<T extends StatefulWidget>
       return _getTabBarList()![currentTabIndex].extras;
     }
     return extras;
+  }
+
+  //todo check return type if not tab bar then return extras ??
+  TabControllerHelper? findExtrasViaType(Type extra) {
+    if (_hasTabBarList()) {
+      return _getTabBarList()!.firstWhereOrNull((element) {
+        debugPrint(
+            "_tabController element runtype ${element.extras.runtimeType}");
+        return extra == element.extras.runtimeType;
+      });
+    } else {
+      return extras;
+    }
+  }
+
+  int findExtrasIndexFromTab(Type extra) {
+    if (_hasTabBarList()) {
+      return _getTabBarList()!
+          .indexWhere((element) => element.extras.runtimeType == extra);
+    } else {
+      return -1;
+    }
   }
 
   DashableInterface getExtrasCastDashboard({TabControllerHelper? tab}) {

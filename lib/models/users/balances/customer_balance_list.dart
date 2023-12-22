@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/title_text.dart';
@@ -310,40 +311,54 @@ class CustomerBalanceList
   }
 
   @override
-  List<DashableGridHelper> getDashboardSectionsFirstPane(
-      BuildContext context, int crossAxisCount) {
+  getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
-      DashableGridHelper(
-          title: AppLocalizations.of(context)!.overview,
-          widgets: [
-            getWidget(StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
-              mainAxisCellCount: 4,
-              child: ListStaticSearchableWidget<CustomerBalanceSingle>(
-                list: customers ?? [],
-                listItembuilder: (item) => ListTile(
-                  onTap: () {},
-                  leading: item.getCardLeading(context),
-                  title: Text(item.name ?? ""),
-                  subtitle: Text(item.balance.toCurrencyFormat()),
-                ),
-                onSearchTextChanged: (query) =>
-                    customers
-                        ?.where((element) =>
-                            element.name?.toLowerCase().contains(query) ??
-                            false)
-                        .toList() ??
-                    [],
-              ),
-            )),
-            // ...getInvoicesWidgets(context)
-          ]),
+      SliverFillRemaining(
+        child: ListStaticSearchableWidget<CustomerBalanceSingle>(
+          list: customers ?? [],
+          listItembuilder: (item) => ListTile(
+            onTap: () {
+              debugPrint("_tabController clicked");
+              if (globalKey == null) return;
+              debugPrint("_tabController clicked2");
+              TabControllerHelper? value = globalKey.currentState
+                  ?.findExtrasViaType(CustomerDashboard().runtimeType);
+              debugPrint("_tabController value $value");
+              if (value == null) return;
+              int index = globalKey.currentState!
+                  .findExtrasIndexFromTab(CustomerDashboard().runtimeType);
+              if (index == -1) return;
+              CustomerDashboard newCustomerDashboard = CustomerDashboard();
+              newCustomerDashboard.iD = item.iD;
+              //todo change date
+              newCustomerDashboard.dateObject =
+                  DateObject(from: "2020-01-01", to: "2023-01-01");
+              value.extras = newCustomerDashboard;
+              globalKey.currentState
+                  ?.refresh(extras: newCustomerDashboard, tab: value);
+
+              globalKey.currentState?.changeTabIndex(index);
+            },
+            leading: item.getCardLeading(context),
+            title: Text(item.name ?? ""),
+            subtitle: Text(item.balance.toCurrencyFormat()),
+          ),
+          onSearchTextChanged: (query) =>
+              customers
+                  ?.where((element) =>
+                      element.name?.toLowerCase().contains(query) ?? false)
+                  .toList() ??
+              [],
+        ),
+      ),
     ];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount) {
+      BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.overview,
@@ -359,7 +374,7 @@ class CustomerBalanceList
           widgets: [
             getWidget(StaggeredGridTile.count(
                 crossAxisCellCount: crossAxisCount,
-                mainAxisCellCount: 4,
+                mainAxisCellCount: 1,
                 child: ListStaticWidget<CustomerBalanceSingle>(
                   list: customers?.sublist(0, 10) ?? [],
                   emptyWidget: const Text("null"),

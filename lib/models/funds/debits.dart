@@ -23,7 +23,7 @@ class Debits extends MoneyFunds<Debits> {
 
   @override
   List<String> getMainFields({BuildContext? context}) =>
-      ["customer", "employee", "date", "value", "equalities", "warehouse"];
+      ["customers", "employees", "date", "value", "equalities", "warehouse"];
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.debits;

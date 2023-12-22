@@ -192,43 +192,55 @@ class _BaseDashboardMainPageState
     debugPrint("getDesktopFirstPane tab is ${tab?.extras.runtimeType}");
     // debugPrint("getDesktopFirstPane tab getExtras ${getExtras().debitsDue}");
     List<Widget> widgets = List.empty(growable: true);
-    List<DashableGridHelper> list = getExtras(tab: tab)
-        .getDashboardSectionsFirstPane(context, getCrossAxisCount(getWidth));
-
-    for (var element in list) {
-      GlobalKey buttonKey = GlobalKey();
-      var group = [
-        SectionItemHeader(
-          context: context,
-          dgh: element,
-          buttonKey: buttonKey,
-          child: getWidget(element),
-        ),
-        // SliverToBoxAdapter(child: getWidget(width, element))
-      ];
-      widgets.addAll(group);
+    var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsFirstPane(
+        context, getCrossAxisCount(getWidth),
+        tab: tab, globalKey: globalKeyBasePageWithApi);
+    if (list is List<DashableGridHelper>) {
+      for (var element in list) {
+        GlobalKey buttonKey = GlobalKey();
+        var group = [
+          SectionItemHeader(
+            context: context,
+            dgh: element,
+            buttonKey: buttonKey,
+            child: getWidget(element),
+          ),
+          // SliverToBoxAdapter(child: getWidget(width, element))
+        ];
+        widgets.addAll(group);
+      }
+    } else if (list is List<Widget>) {
+      widgets.addAll(list);
+    } else {
+      widgets.add(list);
     }
     return widgets;
   }
 
   @override
   getDesktopSecondPane({TabControllerHelper? tab}) {
-    List<DashableGridHelper> list = getExtras(tab: tab)
-        .getDashboardSectionsSecoundPane(context, getCrossAxisCount(getWidth));
+    var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
+        context, getCrossAxisCount(getWidth),
+        tab: tab, globalKey: globalKeyBasePageWithApi);
     List<Widget> widgets = List.empty(growable: true);
-
-    for (var element in list) {
-      GlobalKey buttonKey = GlobalKey();
-      var group = [
-        SectionItemHeader(
-          context: context,
-          dgh: element,
-          buttonKey: buttonKey,
-          child: getSecondPaneWidget(element),
-        ),
-        // SliverToBoxAdapter(child: getWidget(width, element))
-      ];
-      widgets.addAll(group);
+    if (list is List<DashableGridHelper>) {
+      for (var element in list) {
+        GlobalKey buttonKey = GlobalKey();
+        var group = [
+          SectionItemHeader(
+            context: context,
+            dgh: element,
+            buttonKey: buttonKey,
+            child: getSecondPaneWidget(element),
+          ),
+          // SliverToBoxAdapter(child: getWidget(width, element))
+        ];
+        widgets.addAll(group);
+      }
+    } else if (list is List<Widget>) {
+      widgets.addAll(list);
+    } else {
+      widgets.add(list);
     }
     return widgets;
   }

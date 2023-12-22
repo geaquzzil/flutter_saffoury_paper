@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/balance_due.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
@@ -276,8 +278,7 @@ class UserLists<T> extends AuthUser<T> {
               listGrowthRate: creditsAnalysis,
               icon: Icons.arrow_back_sharp,
               title: AppLocalizations.of(context)!.credits,
-              description:
-                  "${credits?.getTotalValue(currencyID: 2).toCurrencyFormat()}\n${credits?.getTotalValue(currencyID: 1).toCurrencyFormat()}",
+              description: credits.getTotalValueString(context),
               footer: credits?.length.toString(),
               footerRightWidget: creditsAnalysis.getGrowthRateText(context),
             ))),
@@ -290,7 +291,7 @@ class UserLists<T> extends AuthUser<T> {
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.debits,
               listGrowthRate: debitsAnalysis,
-              description: debits?.getTotalValue().toCurrencyFormat() ?? "",
+              description: debits.getTotalValueString(context),
               footer: debits?.length.toString(),
               footerRightWidget:
                   debitsAnalysis.getGrowthRateText(context, reverseTheme: true),
@@ -303,7 +304,7 @@ class UserLists<T> extends AuthUser<T> {
               color: Spendings().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.spendings,
-              description: spendings?.getTotalValue().toCurrencyFormat() ?? "",
+              description: spendings.getTotalValueString(context),
               listGrowthRate: spendingsAnalysis,
               footer: spendings?.length.toString(),
               footerRightWidget: spendingsAnalysis.getGrowthRateText(context,
@@ -317,7 +318,7 @@ class UserLists<T> extends AuthUser<T> {
               icon: Icons.arrow_back_sharp,
               listGrowthRate: incomesAnalysis,
               title: AppLocalizations.of(context)!.incomes,
-              description: incomes?.getTotalValue().toCurrencyFormat() ?? "",
+              description: incomes.getTotalValueString(context),
               footer: incomes?.length.toString(),
               footerRightWidget: incomesAnalysis.getGrowthRateText(context),
             ))),
@@ -360,8 +361,8 @@ class UserLists<T> extends AuthUser<T> {
               icon: Order().getMainIconData(),
               listGrowthRate: ordersAnalysis,
               title: AppLocalizations.of(context)!.orders,
-              description:
-                  "${orders?.getTotalQuantityGroupedFormattedText(context)}",
+              description: ordersAnalysis.getTotalText(
+                  symple: AppLocalizations.of(context)!.quantity),
               footer: orders?.length.toString(),
               footerRightWidget: ordersAnalysis.getGrowthRateText(context),
             ))),
@@ -373,8 +374,8 @@ class UserLists<T> extends AuthUser<T> {
               listGrowthRate: purchasesAnalysis,
               icon: Purchases().getMainIconData(),
               title: AppLocalizations.of(context)!.purchases,
-              description:
-                  "${purchases?.getTotalQuantityGroupedFormattedText(context)}",
+              description: purchasesAnalysis.getTotalText(
+                  symple: AppLocalizations.of(context)!.quantity),
               footer: purchases?.length.toString(),
               footerRightWidget: purchasesAnalysis.getGrowthRateText(context),
             ))),
@@ -399,29 +400,11 @@ class UserLists<T> extends AuthUser<T> {
               icon: Transfers().getMainIconData(),
               title: Transfers().getMainHeaderLabelTextOnly(context),
               listGrowthRate: transfersAnalysis,
-              description:
-                  transfers.getTotalQuantityGroupedFormattedText(context),
+              description: transfersAnalysis.getTotalText(
+                  symple: AppLocalizations.of(context)!.quantity),
               footer: transfers?.length.toString(),
               footerRightWidget: transfersAnalysis.getGrowthRateText(context),
             ))),
-      // getWidget(StaggeredGridTile.count(
-      //     crossAxisCellCount: 2,
-      //     mainAxisCellCount: 3,
-      //     child: TabBarByListWidget<TabControllerHelper>(
-      //       tabs: [
-      //         TabControllerHelper(
-      //           "orders",
-      //           widget:
-      //               ListStaticWidget(list: orders!, emptyWidget: Text("Empty")),
-      //         ),
-      //         // TabControllerHelper(
-      //         //   "deb",
-      //         //   null,
-      //         //   widget:
-      //         //       ListStaticWidget(list: debits!, emptyWidget: Text("Empty")),
-      //         // )
-      //       ],
-      //     ))),
       if (checkForEmptyList(products_inputs, checkForEmpty) &&
           !isCustomerDashboard())
         getWidget(StaggeredGridTile.count(
@@ -430,8 +413,8 @@ class UserLists<T> extends AuthUser<T> {
             child: ChartCardItemCustom(
               icon: ProductInput().getMainIconData(),
               title: ProductInput().getMainHeaderLabelTextOnly(context),
-              description:
-                  products_inputs.getTotalQuantityGroupedFormattedText(context),
+              description: products_inputsAnalysis.getTotalText(
+                  symple: AppLocalizations.of(context)!.quantity),
               footer: products_inputs?.length.toString(),
               footerRightWidget:
                   products_inputsAnalysis.getGrowthRateText(context),
