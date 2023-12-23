@@ -13,7 +13,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 //   },
 @reflector
 class CustomerTerms extends Customer
-    implements CustomViewHorizontalListResponse<CustomerTerms> {
+    implements
+        CustomViewHorizontalListResponse<CustomerTerms>,
+        JsonHelper<CustomerTerms> {
   //FIX ME ITS ALSOW declares on Customer
 //    @com.saffoury.viewgenerator.Annotations.View(Type = Enums.ViewType.VIEW_TEXT, Priority = 0, MasterOnList = true)
 //     int termsBreakCount;
@@ -110,5 +112,10 @@ class CustomerTerms extends Customer
   Widget? getCustomViewTitleWidget(
       BuildContext context, ValueNotifier valueNotifier) {
     return null;
+  }
+
+  @override
+  CustomerTerms fromJson(Map<String, dynamic> data) {
+    return CustomerTerms.fromJson(data);
   }
 }

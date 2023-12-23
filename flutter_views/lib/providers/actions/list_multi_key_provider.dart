@@ -13,6 +13,10 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   List<ViewAbstract> getList(String key) {
+    return _listMap[key]?.getObjects.cast() ?? [].cast();
+  }
+
+  List getListNotViewAbstract(String key) {
     return _listMap[key]?.getObjects ?? [];
   }
 
@@ -41,8 +45,8 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future<void> edit(ViewAbstract obj) async {
     _listMap.entries.forEach((i) async {
       var element = i.value;
-      ViewAbstract? o =
-          element.objects.firstWhereOrNull((element) => element.isEquals(obj));
+      ViewAbstract? o = (element.objects as List<ViewAbstract>)
+          .firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
         int idx =
             element.objects.indexWhere((element) => element.isEquals(obj));
@@ -258,7 +262,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper.isLoading = false;
       multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
       if (list != null) {
-        multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+        multiListProviderHelper.objects.addAll(list);
         multiListProviderHelper.page =
             customPage ?? multiListProviderHelper.page + 1;
         notifyListeners();
@@ -316,10 +320,10 @@ class MultiListProviderHelper {
   bool isNoMoreItem = false;
   bool hasError = false;
   // All movies (that will be displayed on the Home screen)
-  final List<ViewAbstract> objects = [];
+  final List objects = [];
   int page = 0;
   // Retrieve all movies
-  List<ViewAbstract> get getObjects => objects;
+  List get getObjects => objects;
 
   int get getCount => objects.length;
   MultiListProviderHelper();

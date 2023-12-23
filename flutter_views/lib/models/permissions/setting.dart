@@ -29,6 +29,7 @@ class Setting extends ViewAbstract<Setting> {
   }
 
   double getPriceFromSetting(double value) {
+    return value;
     switch (currency) {
       case CurrencySetting.DOLLAR:
         return value;
@@ -44,10 +45,13 @@ class Setting extends ViewAbstract<Setting> {
   String getPriceCurrencyFromSetting(BuildContext context) {
     switch (currency) {
       case CurrencySetting.DOLLAR:
+        return r"$";
         return AppLocalizations.of(context)!.dollarSymbol;
       case CurrencySetting.SYP:
+        return "SYP";
         return AppLocalizations.of(context)!.syp;
       case CurrencySetting.DOLLAR_THREE_ZERO:
+        return r"$";
         return AppLocalizations.of(context)!.sypDots;
       default:
         return AppLocalizations.of(context)!.sypDots;

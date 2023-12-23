@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+import 'package:flutter_saffoury_paper/models/users/balances/customer_terms.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -206,10 +207,21 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                 ))),
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            mainAxisCellCount: 1,
             child: ListHorizontalCustomViewCustomApiAutoRestWidget(
                 onResponse: (g) {
-                  return Text("$g");
+                  List<GrowthRate> growthList = List.castFrom(g);
+                  return ChartCardItemCustom(
+                    // color: Colors.orange,
+                    icon: Icons.donut_small_sharp,
+                    title: AppLocalizations.of(context)!.profit_analysis,
+                    listGrowthRate: growthList,
+
+                    description: growthList.getTotalTextFromSetting(context),
+                    // footer: incomes?.length.toString(),
+                    footerRightWidget:
+                        incomesAnalysis.getGrowthRateText(context),
+                  );
                 },
                 autoRest: AutoRestCustom<GrowthRate>(
                     responseType: ResponseType.LIST,
@@ -219,8 +231,29 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                           dateObject?.toJson() ?? DateObject().toJson()),
                     },
                     action: "list_customers_profit",
-                    key: "GrowthRate",
+                    key: "list_customers_profit${customers!.iD}",
                     responseObjcect: GrowthRate())))),
+        getWidget(StaggeredGridTile.count(
+            crossAxisCellCount: 1,
+            mainAxisCellCount: 1,
+            child: ListHorizontalCustomViewCustomApiAutoRestWidget(
+                onResponse: (g) {
+                  List<CustomerTerms> growthList = List.castFrom(g);
+                  return ChartCardItemCustom(
+                    icon: Icons.broken_image,
+                    title: AppLocalizations.of(context)!.termsAndConitions,
+                    description: AppLocalizations.of(context)!
+                        .totalFormat(growthList.length),
+                  );
+                },
+                autoRest: AutoRestCustom<CustomerTerms>(
+                    responseType: ResponseType.LIST,
+                    customMap: {
+                      "iD": "${customers!.iD}",
+                    },
+                    action: "list_customers_terms",
+                    key: "list_customers_terms${customers!.iD}",
+                    responseObjcect: CustomerTerms())))),
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 3,

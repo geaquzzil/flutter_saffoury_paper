@@ -13,12 +13,11 @@ import '../../new_components/loading_shimmer.dart';
 class ListHorizontalCustomViewCustomApiAutoRestWidget extends StatefulWidget {
   AutoRestCustom autoRest;
   Widget Function(dynamic response) onResponse;
-  Widget? Function(dynamic response)? onResponseAddWidget;
-  ListHorizontalCustomViewCustomApiAutoRestWidget(
-      {super.key,
-      required this.autoRest,
-      required this.onResponse,
-      this.onResponseAddWidget});
+  ListHorizontalCustomViewCustomApiAutoRestWidget({
+    super.key,
+    required this.autoRest,
+    required this.onResponse,
+  });
 
   @override
   State<ListHorizontalCustomViewCustomApiAutoRestWidget> createState() =>
@@ -141,11 +140,11 @@ class _ListHorizontalCustomApiWidgetState
 
   Widget getSingleWidget(ListMultiKeyProvider listProvider) {
     // if (widget.onResponse != null) {
-    return widget.onResponse(listProvider.getList(key)[0]);
+    return widget.onResponse(listProvider.getListNotViewAbstract(key)[0]);
   }
 
   Widget getListWidget(ListMultiKeyProvider listProvider) {
-    return widget.onResponse(listProvider.getList(key));
+    return widget.onResponse(listProvider.getListNotViewAbstract(key));
   }
 
   Widget wrapHeader(
@@ -154,39 +153,7 @@ class _ListHorizontalCustomApiWidgetState
     if (child is CircularProgressIndicator) {
       return Center(child: child);
     }
-    if (widget.onResponseAddWidget != null) {
-      if (listProvider.getList(key).isNotEmpty) {
-        dynamic obj = autoRest.getCustomViewResponseType() == ResponseType.LIST
-            ? listProvider.getList(key)
-            : listProvider.getList(key)[0];
-        custom = widget.onResponseAddWidget!(obj);
-      }
-    }
-    header ??= null;
-    if (header == null) {
-      return Column(
-        children: [
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
-            child: child,
-          )),
-          if (custom != null) custom
-        ],
-      );
-    }
-    return Column(
-      children: [
-        header!,
-        Expanded(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-          child: child,
-        )),
-        if (custom != null) custom
-      ],
-    );
+    return child;
   }
 
   @override

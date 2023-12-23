@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +25,8 @@ class ChartCardItemCustom extends StatelessWidget {
   Color? color;
   bool isSmall;
   Animation<double>? animation;
+  final OverlayPortalController _tooltipController = OverlayPortalController();
+
   void Function()? onTap;
   ChartCardItemCustom(
       {super.key,
@@ -55,123 +58,216 @@ class ChartCardItemCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget card = GestureDetector(
-      onTap: onTap ??
-          () {
-            if (list == null) {
-              return;
-            }
-            if (list!.isEmpty) {
-              return;
-            }
-            context.pushNamed(dashboardRouteName, pathParameters: {
-              "tableName": list![0].getMainHeaderLabelTextOnly(context)
-            }, extra: [
-              this,
-              list
-            ]);
-            //navigate to list page
-          },
-      child: Card(
-        color: color == null
-            ? null
-            : ElevationOverlay.colorWithOverlay(
-                Theme.of(context).colorScheme.surface, color!, 3),
+    // Widget card = GestureDetector(
+    //   onTap: onTap ??
+    //       () {
+    //         if (list == null) {
+    //           return;
+    //         }
+    //         if (list!.isEmpty) {
+    //           return;
+    //         }
 
-        // color?.withOpacity(0.2),
-        child: Container(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall!,
-                  ),
-                  if (icon != null) Icon(icon)
-                ],
-              ),
+    //         context.pushNamed(dashboardRouteName, pathParameters: {
+    //           "tableName": list![0].getMainHeaderLabelTextOnly(context)
+    //         }, extra: [
+    //           this,
+    //           list
+    //         ]);
+    //         //navigate to list page
+    //       },
+    //   child: getBody(context),
+    // );
+    Widget card = getBody(context);
 
-              Text(
-                description,
-                maxLines: 2,
-                // overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyLarge!,
+    return InkWell(
+      onTap: _tooltipController.toggle,
+      child: OverlayPortal(
+        controller: _tooltipController,
+        overlayChildBuilder: (cxc) {
+          Widget c;
+          if (list == null) {
+            c = Text("dasda");
+          }
+          if (list!.isEmpty) {
+            c = Text("dsadassa");
+          }
+          c = Text("sdadas");
+          return Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              width: 400,
+              height: 400,
+              color: Colors.white,
+              child: c,
+            ),
+          );
+          return Positioned(
+            right: 50,
+            bottom: 50,
+            child: SizedBox(
+              height: 400,
+              width: 400,
+              child: DashboardListDetails(
+                list: list!,
+                header: this,
+                wrapWithScaffold: true,
               ),
-              if (listGrowthRate != null)
-                Container(
-                  // transform: Matrix4.translationValues(-20.0, 0, -20.0),
-                  child: LineChartItem<GrowthRate, String>(
-                    smallView: true,
-                    color: color,
-                    list: listGrowthRate!,
-                    title: title,
-                    // title:
-                    //     CutRequest().getMainHeaderLabelTextOnly(context),
-                    dataLabelMapper: (item, idx) =>
-                        item.total?.toCurrencyFormat(),
-                    xValueMapper: (item, value) {
-                      // debugPrint("ChartItem $item");
-                      return DateFormat.yMMM().format(
-                          DateTime(item.year!, item.month!, item.day ?? 1));
-                    },
-                    yValueMapper: (item, n) => item.total,
-                  ),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (footerWidget != null) footerWidget!,
-                  if (footer != null)
-                    Text(footer!,
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Theme.of(context).colorScheme.secondary)),
-                  if (footerRight != null)
-                    Text(footerRight!,
-                        style: Theme.of(context).textTheme.bodySmall!),
-                  if (footerRightWidget != null) footerRightWidget!
-                ],
-              ),
-              // if (!isSmall)
-              //   Text("this is not a small widget",
-              //       style: Theme.of(context).textTheme.titleLarge)
-            ],
-          ),
-        ),
+            ),
+          );
+        },
+        child: card,
       ),
     );
 
-    return Hero(
-        tag: getHeroTag(),
-        flightShuttleBuilder: (
-          BuildContext flightContext,
-          Animation<double> animation,
-          HeroFlightDirection flightDirection,
-          BuildContext fromHeroContext,
-          BuildContext toHeroContext,
-        ) {
-          return ChartCardItemCustom(
-            title: title,
-            description: description,
-            list: list,
-            color: color,
-            footer: footer,
-            footerRight: footerRight,
-            footerWidget: footerWidget,
-            footerRightWidget: footerRightWidget,
-            icon: icon,
-            isSmall: false,
-            animation: ReverseAnimation(animation),
+    return InkWell(
+      // focusColor: color,
+
+      hoverColor: color == null
+          ? null
+          : ElevationOverlay.colorWithOverlay(
+              Theme.of(context).colorScheme.surface, color!, 3),
+      // onTap: ,
+      onTap: _tooltipController.toggle,
+      child: OverlayPortal(
+        controller: _tooltipController,
+        overlayChildBuilder: (c) {
+          Widget c;
+          if (list == null) {
+            c = Text("dasda");
+          }
+          if (list!.isEmpty) {
+            c = Text("dsadassa");
+          }
+          c = Text("sdadas");
+          return Positioned(
+            right: 50,
+            bottom: 50,
+            child: Container(
+              width: 400,
+              height: 400,
+              color: Colors.white,
+              child: c,
+            ),
+          );
+          return Positioned(
+            right: 50,
+            bottom: 50,
+            child: SizedBox(
+              height: 400,
+              width: 400,
+              child: DashboardListDetails(
+                list: list!,
+                header: this,
+                wrapWithScaffold: true,
+              ),
+            ),
           );
         },
-        child: card);
+        child: Hero(
+            tag: getHeroTag(),
+            flightShuttleBuilder: (
+              BuildContext flightContext,
+              Animation<double> animation,
+              HeroFlightDirection flightDirection,
+              BuildContext fromHeroContext,
+              BuildContext toHeroContext,
+            ) {
+              return ChartCardItemCustom(
+                title: title,
+                description: description,
+                list: list,
+                color: color,
+                footer: footer,
+                footerRight: footerRight,
+                footerWidget: footerWidget,
+                footerRightWidget: footerRightWidget,
+                icon: icon,
+                isSmall: false,
+                animation: ReverseAnimation(animation),
+              );
+            },
+            child: card),
+      ),
+    );
+  }
+
+  Card getBody(BuildContext context) {
+    return Card(
+      color: color == null
+          ? null
+          : ElevationOverlay.colorWithOverlay(
+              Theme.of(context).colorScheme.surface, color!, 3),
+
+      // color?.withOpacity(0.2),
+      child: Container(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall!,
+                ),
+                if (icon != null) Icon(icon)
+              ],
+            ),
+
+            Text(
+              description,
+              maxLines: 2,
+              // overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyLarge!,
+            ),
+            if (listGrowthRate != null)
+              Container(
+                // transform: Matrix4.translationValues(-20.0, 0, -20.0),
+                child: LineChartItem<GrowthRate, String>(
+                  smallView: true,
+                  color: color,
+                  list: listGrowthRate!,
+                  title: title,
+                  // title:
+                  //     CutRequest().getMainHeaderLabelTextOnly(context),
+                  dataLabelMapper: (item, idx) =>
+                      item.total?.toCurrencyFormat(),
+                  xValueMapper: (item, value) {
+                    // debugPrint("ChartItem $item");
+                    return DateFormat.yMMM().format(
+                        DateTime(item.year!, item.month!, item.day ?? 1));
+                  },
+                  yValueMapper: (item, n) => item.total,
+                ),
+              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (footerWidget != null) footerWidget!,
+                if (footer != null)
+                  Text(footer!,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary)),
+                if (footerRight != null)
+                  Text(footerRight!,
+                      style: Theme.of(context).textTheme.bodySmall!),
+                if (footerRightWidget != null) footerRightWidget!
+              ],
+            ),
+            // if (!isSmall)
+            //   Text("this is not a small widget",
+            //       style: Theme.of(context).textTheme.titleLarge)
+          ],
+        ),
+      ),
+    );
   }
 
   String getHeroTag() {
