@@ -104,7 +104,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   }
 
   @override
-  String? getTableNameApi() => null;
+  String? getTableNameApi() => action;
 }
 
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {

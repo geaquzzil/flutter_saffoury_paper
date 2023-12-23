@@ -213,7 +213,11 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                 },
                 autoRest: AutoRestCustom<GrowthRate>(
                     responseType: ResponseType.LIST,
-                    customMap: {"iD": "${customers!.iD}"},
+                    customMap: {
+                      "iD": "${customers!.iD}",
+                      "date": jsonEncode(
+                          dateObject?.toJson() ?? DateObject().toJson()),
+                    },
                     action: "list_customers_profit",
                     key: "GrowthRate",
                     responseObjcect: GrowthRate())))),

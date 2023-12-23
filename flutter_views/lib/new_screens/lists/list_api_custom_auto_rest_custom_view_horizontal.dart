@@ -54,7 +54,7 @@ class _ListHorizontalCustomApiWidgetState
 
   void fetshList() {
     if (listProvider.getCount(key) == 0) {
-      switch (widget.autoRest.getCustomViewResponseType()) {
+      switch (autoRest.getCustomViewResponseType()) {
         case ResponseType.LIST:
           listProvider.fetchList(key, customAutoRest: autoRest);
           break;
@@ -85,6 +85,7 @@ class _ListHorizontalCustomApiWidgetState
     return EmptyWidget(
         onSubtitleClicked: isError
             ? () {
+                debugPrint("errr");
                 fetshList();
               }
             : null,

@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/test_var.dart';
+
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
@@ -156,8 +157,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } on Exception catch (e) {
       // Display an alert, no internet
       onResponse?.onServerFailure(e);
+      debugPrint(e.toString());
       return null;
     } catch (err) {
+      debugPrint(err.toString());
       return null;
     }
   }
@@ -493,13 +496,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody['start'] =
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
-        String? hasSortByFieldDefault =
-            (this as ViewAbstractFilterable).getSortByFieldName();
+        String? hasSortByFieldDefault = this is ViewAbstractFilterable
+            ? (this as ViewAbstractFilterable).getSortByFieldName()
+            : null;
         if (hasSortByFieldDefault != null) {
           bool hasCustomSortByField =
               getCustomMap.containsKey(SortByType.ASC.name) ||
                   getCustomMap.containsKey(SortByType.DESC.name);
-          if (!hasCustomSortByField) {
+          if (!hasCustomSortByField && this is ViewAbstractFilterable) {
             mainBody[(this as ViewAbstractFilterable).getSortByType().name] =
                 hasSortByFieldDefault;
           }
