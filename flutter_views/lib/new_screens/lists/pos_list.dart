@@ -39,7 +39,8 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
     _scrollController.addListener(() => _onScroll());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {
-        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+        listProvider.fetchList(widget.autoRest.key,
+            viewAbstract: widget.autoRest.obj);
       }
     });
   }
@@ -187,7 +188,8 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
     debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+      listProvider.fetchList(widget.autoRest.key,
+          viewAbstract: widget.autoRest.obj);
     }
   }
 

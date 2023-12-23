@@ -29,6 +29,7 @@ import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_custom_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -206,12 +207,16 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: 2,
             mainAxisCellCount: 2,
-            child: ListHorizontalCustomViewApiAutoRestWidget(
+            child: ListHorizontalCustomViewCustomApiAutoRestWidget(
                 onResponse: (g) {
-                  return Text("SOS");
+                  return Text("$g");
                 },
-                autoRest: AutoRest<List<GrowthRate>>(
-                    key: "GrowthRate", obj: GrowthRate)))),
+                autoRest: AutoRestCustom<GrowthRate>(
+                    responseType: ResponseType.LIST,
+                    customMap: {"iD": "${customers!.iD}"},
+                    action: "list_customers_profit",
+                    key: "GrowthRate",
+                    responseObjcect: GrowthRate())))),
         getWidget(StaggeredGridTile.count(
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 3,

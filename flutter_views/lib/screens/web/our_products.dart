@@ -101,9 +101,9 @@ class ProductWebPage extends BaseWebPageSlivers {
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
     } else {
       listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
     }
@@ -339,12 +339,10 @@ class ProductWebPage extends BaseWebPageSlivers {
               SliverChildBuilderDelegateOptions(),
           minItemWidth: 250,
           children: [
-            ...list
-                .map((e) => WebGridViewItem(
-                      item: e,
-                      setDescriptionAtBottom: true,
-                    ))
-                ,
+            ...list.map((e) => WebGridViewItem(
+                  item: e,
+                  setDescriptionAtBottom: true,
+                )),
             if (isLoading)
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),

@@ -73,12 +73,13 @@ class _ListApiMasterHorizontalState<T>
       var checkType = widget.object;
       if (checkType is AutoRest) {
         if (listProvider.getCount(findCustomKey()) == 0) {
-          listProvider.fetchList(checkType.key, checkType.obj,
-              autoRest: checkType);
+          listProvider.fetchList(checkType.key,
+              viewAbstract: checkType.obj, autoRest: checkType);
         }
       } else if (checkType is ViewAbstract) {
         if (listProvider.getCount(findCustomKey()) == 0) {
-          listProvider.fetchList(checkType.getListableKey(), checkType);
+          listProvider.fetchList(checkType.getListableKey(),
+              viewAbstract: checkType);
         }
       }
     }
@@ -92,10 +93,11 @@ class _ListApiMasterHorizontalState<T>
     } else {
       var checkType = widget.object;
       if (checkType is AutoRest) {
-        listProvider.fetchList(checkType.key, checkType.obj,
-            autoRest: checkType);
+        listProvider.fetchList(checkType.key,
+            viewAbstract: checkType.obj, autoRest: checkType);
       } else if (checkType is ViewAbstract) {
-        listProvider.fetchList(checkType.getListableKey(), checkType);
+        listProvider.fetchList(checkType.getListableKey(),
+            viewAbstract: checkType);
       }
     }
   }

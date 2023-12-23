@@ -33,7 +33,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       if (i.key == viewAbstract.getListableKey()) {
         _listMap.remove(i.key);
         notifyListeners();
-        fetchList(i.key, viewAbstract);
+        fetchList(i.key, viewAbstract: viewAbstract);
       }
     });
   }
@@ -93,10 +93,10 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
     switch (type) {
       case ResponseType.LIST:
-        fetchList(key, t);
+        fetchList(key, viewAbstract: t);
         break;
       case ResponseType.SINGLE:
-        fetchView(key, t);
+        fetchView(key, viewAbstract: t);
         break;
       case ResponseType.NONE_RESPONSE_TYPE:
         break;
@@ -105,7 +105,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   void refresh(String key, ViewAbstract viewAbstract) {
     clear(key);
-    fetchList(key, viewAbstract);
+    fetchList(key, viewAbstract: viewAbstract);
   }
 
   Future fetchListSearch(
@@ -216,8 +216,9 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
   }
 
-  Future fetchList(String key, ViewAbstract viewAbstract,
+  Future fetchList(String key,
       {AutoRest? autoRest,
+      ViewAbstract? viewAbstract,
       AutoRestCustom? customAutoRest,
       int? customCount,
       int? customPage}) async {
@@ -241,10 +242,18 @@ class ListMultiKeyProvider with ChangeNotifier {
     // );
 
     try {
-      List? list = await viewAbstract.listCall(
-          count:
-              customCount ?? autoRest?.range ?? viewAbstract.getPageItemCount,
-          page: customPage ?? multiListProviderHelper.page);
+      List? list;
+      if (customAutoRest != null) {
+        list = await customAutoRest.listCall(
+            count: customCount ?? customAutoRest.getPageItemCount,
+            page: customPage ?? multiListProviderHelper.page);
+      } else {
+        list = await viewAbstract!.listCall(
+            count:
+                customCount ?? autoRest?.range ?? viewAbstract.getPageItemCount,
+            page: customPage ?? multiListProviderHelper.page);
+      }
+
       multiListProviderHelper.isLoading = false;
       multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
       if (list != null) {
@@ -265,8 +274,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
   }
 
-  Future fetchView(String key, ViewAbstract viewAbstract,
-      {AutoRestCustom? autoRestCustom}) async {
+  Future fetchView(String key,
+      {ViewAbstract? viewAbstract, AutoRestCustom? customAutoRest}) async {
     late MultiListProviderHelper? multiListProviderHelper;
     if (_listMap.containsKey(key)) {
       multiListProviderHelper = _listMap[key];
@@ -284,7 +293,13 @@ class ListMultiKeyProvider with ChangeNotifier {
     //     notifyListeners();
     //   },
     // );
-    dynamic list = await viewAbstract.callApi();
+    dynamic list;
+    if (customAutoRest != null) {
+      list = await customAutoRest.callApi();
+    } else {
+      list = await viewAbstract!.callApi();
+    }
+
     multiListProviderHelper.isLoading = false;
     if (list != null) {
       multiListProviderHelper.objects.add(list);

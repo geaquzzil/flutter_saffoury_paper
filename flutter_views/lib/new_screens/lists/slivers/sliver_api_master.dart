@@ -781,7 +781,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     debugPrint("findCustomKey fetshList $customKey");
     if (listProvider.getCount(customKey) == 0) {
       if (searchStringQuery.isEmpty) {
-        listProvider.fetchList(customKey, scanedQr ?? viewAbstract);
+        listProvider.fetchList(customKey,
+            viewAbstract: scanedQr ?? viewAbstract);
       } else {
         listProvider.fetchListSearch(
             customKey, viewAbstract, searchStringQuery);
@@ -853,7 +854,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     if (widget.viewAbstract != null) return;
 
     viewAbstract = drawerViewAbstractObsever.getObject;
-    listProvider.fetchList(findCustomKey(), viewAbstract);
+    listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
     debugPrint("ViewAbstractProvider CHANGED");
   }
 
@@ -880,7 +881,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       context.read<ListScrollProvider>().setScrollDirection = direction;
     }
     if (_isBottom) {
-      listProvider.fetchList(findCustomKey(), viewAbstract);
+      listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
     }
   }
 }

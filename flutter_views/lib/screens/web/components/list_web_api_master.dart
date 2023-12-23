@@ -74,11 +74,15 @@ class ListWebApiMaster extends StatelessWidget {
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      _listProvider.fetchList(customKey, viewAbstract,
-          customPage: customPage, customCount: customCount);
+      _listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract,
+          customPage: customPage,
+          customCount: customCount);
     } else if (searchQuery == null) {
-      _listProvider.fetchList(customKey, viewAbstract,
-          customPage: customPage, customCount: customCount);
+      _listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract,
+          customPage: customPage,
+          customCount: customCount);
     } else {
       _listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
     }

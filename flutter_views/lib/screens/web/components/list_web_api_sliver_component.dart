@@ -110,14 +110,16 @@ class ListWebApiSliverComponent extends StatelessWidget {
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract,
+      listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract,
           customCount: buildWebVersion == false
               ? null
               : isDesktop(context)
                   ? 8
                   : 4);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract,
+      listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract,
           customCount: buildWebVersion == false
               ? null
               : isDesktop(context)

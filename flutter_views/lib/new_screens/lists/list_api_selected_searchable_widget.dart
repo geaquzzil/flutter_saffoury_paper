@@ -40,7 +40,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     _scrollController.addListener(() => _onScroll());
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      listProvider.fetchList(getCustomKey(), widget.viewAbstract);
+      listProvider.fetchList(getCustomKey(), viewAbstract: widget.viewAbstract);
     });
   }
 
@@ -244,7 +244,8 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
-        listProvider.fetchList(getCustomKey(), widget.viewAbstract);
+        listProvider.fetchList(getCustomKey(),
+            viewAbstract: widget.viewAbstract);
       } else {
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),

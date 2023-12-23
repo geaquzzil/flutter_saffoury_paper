@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -148,7 +147,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getPage(getCustomKey()) == 0) {
-        listProvider.fetchList(getCustomKey(), viewAbstract);
+        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract);
       }
     });
   }
@@ -184,10 +183,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   Widget getLargeScreenWidget() {
     return Column(
       children: <Widget>[
-        if (widget.buildSearchWidget)
-          SearchWidgetComponent(
-
-      ),
+        if (widget.buildSearchWidget) SearchWidgetComponent(),
         // FiltersAndSelectionListHeader(),
         Expanded(
             child: ChangeNotifierProvider.value(
@@ -256,8 +252,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
             children: [
               getConsumer(),
               if (!isSelectedMode && widget.buildSearchWidget)
-                SearchWidgetComponent(
-               ),
+                SearchWidgetComponent(),
             ]),
       ),
     );
@@ -348,7 +343,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
 
   void fetshList() {
     if (listProvider.getCount(getCustomKey()) == 0) {
-      listProvider.fetchList(getCustomKey(), viewAbstract);
+      listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract);
     }
   }
 
@@ -398,7 +393,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (widget.viewAbstract != null) return;
 
     viewAbstract = drawerViewAbstractObsever.getObject;
-    listProvider.fetchList(findCustomKey(), viewAbstract);
+    listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
     debugPrint("ViewAbstractProvider CHANGED");
   }
 
@@ -431,7 +426,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (_isBottom) {
       // debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
-        listProvider.fetchList(getCustomKey(), viewAbstract);
+        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract);
       } else {
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),

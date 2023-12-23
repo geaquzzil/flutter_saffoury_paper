@@ -10,32 +10,29 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
-class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
-    T extends CustomViewHorizontalListResponse<E>> extends StatefulWidget {
-  T autoRest;
-  Widget Function(dynamic response)? onResponse;
+class ListHorizontalCustomViewCustomApiAutoRestWidget extends StatefulWidget {
+  AutoRestCustom autoRest;
+  Widget Function(dynamic response) onResponse;
   Widget? Function(dynamic response)? onResponseAddWidget;
-
-  ListHorizontalCustomViewApiAutoRestWidget(
+  ListHorizontalCustomViewCustomApiAutoRestWidget(
       {super.key,
       required this.autoRest,
-      this.onResponse,
+      required this.onResponse,
       this.onResponseAddWidget});
 
   @override
-  State<ListHorizontalCustomViewApiAutoRestWidget> createState() =>
-      _ListHorizontalApiWidgetState<E, T>();
+  State<ListHorizontalCustomViewCustomApiAutoRestWidget> createState() =>
+      _ListHorizontalCustomApiWidgetState();
 }
 
-class _ListHorizontalApiWidgetState<E extends ViewAbstract,
-        T extends CustomViewHorizontalListResponse<E>>
-    extends State<ListHorizontalCustomViewApiAutoRestWidget<E, T>> {
+class _ListHorizontalCustomApiWidgetState
+    extends State<ListHorizontalCustomViewCustomApiAutoRestWidget> {
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
   Widget? header;
   late ValueNotifier valueNotifier;
   late String key;
-  late T autoRest;
+  late AutoRestCustom autoRest;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
 
@@ -43,7 +40,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
   void initState() {
     super.initState();
     autoRest = widget.autoRest;
-    key = autoRest.getCustomViewKey();
+    key = autoRest.key;
     debugPrint("_ListHorizontalApiWidgetState $key");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     _scrollController.addListener(() => _onScroll());
@@ -59,11 +56,10 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     if (listProvider.getCount(key) == 0) {
       switch (widget.autoRest.getCustomViewResponseType()) {
         case ResponseType.LIST:
-          listProvider.fetchList(key,
-              viewAbstract: widget.autoRest as ViewAbstract);
+          listProvider.fetchList(key, customAutoRest: autoRest);
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(key, viewAbstract: autoRest as ViewAbstract);
+          listProvider.fetchView(key, customAutoRest: autoRest);
           break;
 
         case ResponseType.NONE_RESPONSE_TYPE:
@@ -74,7 +70,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
   @override
   void didUpdateWidget(
-      covariant ListHorizontalCustomViewApiAutoRestWidget<E, T> oldWidget) {
+      covariant ListHorizontalCustomViewCustomApiAutoRestWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("ListHorizontalCustomViewApiAutoRestWidget didUpdateWidget");
     if (key != autoRest.getCustomViewKey()) {
@@ -143,21 +139,12 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
   }
 
   Widget getSingleWidget(ListMultiKeyProvider listProvider) {
-    if (widget.onResponse != null) {
-      return widget.onResponse!(listProvider.getList(key)[0]);
-    }
-    return (listProvider.getList(key)[0] as CustomViewHorizontalListResponse<E>)
-            .getCustomViewSingleResponseWidget(context) ??
-        const Text("Not emplemented getCustomViewSingleResponseWidget");
+    // if (widget.onResponse != null) {
+    return widget.onResponse(listProvider.getList(key)[0]);
   }
 
   Widget getListWidget(ListMultiKeyProvider listProvider) {
-    if (widget.onResponse != null) {
-      return widget.onResponse!(listProvider.getList(key) as List<T>);
-    }
-    return autoRest.getCustomViewListResponseWidget(
-            context, listProvider.getList(key).cast()) ??
-        const Text("Not emplemented getCustomViewListToSingle");
+    return widget.onResponse(listProvider.getList(key));
   }
 
   Widget wrapHeader(
@@ -174,7 +161,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         custom = widget.onResponseAddWidget!(obj);
       }
     }
-    header ??= autoRest.getCustomViewTitleWidget(context, valueNotifier);
+    header ??= null;
     if (header == null) {
       return Column(
         children: [

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
-class GrowthRate {
+class GrowthRate extends JsonHelper<GrowthRate> {
   int? year;
   int? month;
   int? day;
@@ -17,6 +18,10 @@ class GrowthRate {
 
   static double? convertToDouble(dynamic number) =>
       number == null ? 0 : double.tryParse(number.toString());
+  @override
+  GrowthRate fromJson(Map<String, dynamic> data) {
+    return GrowthRate.fromJson(data);
+  }
 
   factory GrowthRate.fromJson(Map<String, dynamic> data) => GrowthRate()
     ..total = GrowthRate.convertToDouble(data["total"])

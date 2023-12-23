@@ -32,7 +32,8 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     _scrollController.addListener(() => _onScroll());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {
-        listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+        listProvider.fetchList(widget.autoRest.key,
+            viewAbstract: widget.autoRest.obj);
       }
     });
   }
@@ -123,7 +124,8 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      listProvider.fetchList(widget.autoRest.key, widget.autoRest.obj);
+      listProvider.fetchList(widget.autoRest.key,
+          viewAbstract: widget.autoRest.obj);
     }
   }
 

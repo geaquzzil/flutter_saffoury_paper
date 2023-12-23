@@ -114,9 +114,9 @@ class ListWebApiPage extends BaseWebPageSlivers {
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
     } else {
       listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
     }
