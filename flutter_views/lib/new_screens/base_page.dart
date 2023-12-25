@@ -40,7 +40,7 @@ GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
 ///
 ///
 abstract class BasePageState<T extends StatefulWidget> extends State<T>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   dynamic _firstWidget;
   dynamic _secondWidget;
   dynamic _width;
@@ -62,13 +62,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   getDesktopFirstPane({TabControllerHelper? tab});
 
   ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getDesktopSecondPane({TabControllerHelper? tab});
+  getDesktopSecondPane(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab});
 
   ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
   getFirstPane({TabControllerHelper? tab});
 
   ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getSecoundPane({TabControllerHelper? tab});
+  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab});
 
   Widget? getBaseFloatingActionButton();
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab});
@@ -90,8 +91,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   late CurrentScreenSize _currentScreenSize;
   late TabController _tabController;
+  late TabController _tabControllerSecondPane;
   int currentTabIndex = 0;
+  int currentPaneIndexSecondPane = 0;
   List<TabControllerHelper>? _tabList;
+  List<TabControllerHelper>? _tabListSecondPane;
+  ValueNotifier<int> onTabSelectedSecondPane = ValueNotifier<int>(0);
   get getWidth => this._width;
 
   get getHeight => this._height;
@@ -100,12 +105,25 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return _tabList;
   }
 
+  List<TabControllerHelper>? _getTabBarListSecondPane() {
+    return _tabListSecondPane;
+  }
+
   List<TabControllerHelper>? initTabBarList() {
+    return null;
+  }
+
+  List<TabControllerHelper>? initTabBarListSecondPane(
+      {TabControllerHelper? tab}) {
     return null;
   }
 
   bool _hasTabBarList() {
     return _getTabBarList() != null;
+  }
+
+  bool _hasTabBarListSecondPane() {
+    return _getTabBarListSecondPane() != null;
   }
 
   PreferredSizeWidget getTabBarWidget() {
@@ -119,6 +137,19 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         ),
         isScrollable: true,
         tabs: _getTabBarList()!);
+  }
+
+  PreferredSizeWidget getTabBarWidgetSecondPane() {
+    return TabBar(
+        controller: _tabControllerSecondPane,
+        dividerColor: Colors.transparent,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(80.0),
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+        isScrollable: true,
+        tabs: _getTabBarListSecondPane()!);
   }
 
   ///set padding to content view pased on the screen size
@@ -169,7 +200,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ///generate all toolbars for the base and first pane and second pane
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
-  generateToolbar({Widget? customAppBar}) {
+  generateToolbar({Widget? customAppBar, bool? firstPane}) {
     return AppBar(
         surfaceTintColor: Colors.transparent,
         forceMaterialTransparency: false,
@@ -201,6 +232,31 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
             shouldRebuildWidget: true,
             child: PreferredSize(
                 preferredSize: Size.fromHeight(height), child: widget)));
+  }
+
+  Widget getTabbarSecoundPaneSliver() {
+    return SliverSafeArea(
+      sliver: SliverPadding(
+        padding: EdgeInsets.zero,
+        sliver: SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverAppBarDelegatePreferedSize(
+                wrapWithSafeArea: true,
+                child: ColoredTabBar(
+                  useCard: false,
+                  color:
+                      Theme.of(context).colorScheme.background.withOpacity(.9),
+                  cornersIfCard: 80.0,
+                  // color: Theme.of(context).colorScheme.surfaceVariant,
+                  child: TabBar(
+                    dividerColor: Colors.transparent,
+                    tabs: _tabListSecondPane!,
+                    isScrollable: true,
+                    controller: _tabControllerSecondPane,
+                  ),
+                ))),
+      ),
+    );
   }
 
   ScrollController getScrollController(bool firstPane,
@@ -235,7 +291,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           child: CustomScrollView(
             physics: const NeverScrollableScrollPhysics(),
             controller: getScrollController(firstPane, tab: tab),
-            slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
+            slivers: [
+              if (appBar != null) getSliverAppBar(appBar),
+              if (!firstPane && _hasTabBarListSecondPane())
+                getTabbarSecoundPaneSliver(),
+              ...list
+            ],
           ),
         );
       } else {
@@ -244,7 +305,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         return CustomScrollView(
           physics: const NeverScrollableScrollPhysics(),
           controller: getScrollController(firstPane, tab: tab),
-          slivers: [if (appBar != null) getSliverAppBar(appBar), ...list],
+          slivers: [
+            if (appBar != null) getSliverAppBar(appBar),
+            if (!firstPane && _hasTabBarListSecondPane())
+              getTabbarSecoundPaneSliver(),
+            ...list
+          ],
         );
       }
     }
@@ -272,7 +338,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           : getSecondPaneFloatingActionButton(tab: tab),
       appBar: isPanesIsSliver(firstPane, tab: tab) || appBarBody == null
           ? null
-          : generateToolbar(customAppBar: appBarBody),
+          : generateToolbar(firstPane: firstPane, customAppBar: appBarBody),
       bottomSheet: firstPane
           ? getFirstPaneBottomSheet(tab: tab)
           : getSecondPaneBottomSheet(tab: tab),
@@ -316,6 +382,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       _tabController = TabController(vsync: this, length: _tabList!.length);
       _tabController.addListener(_tabControllerChangeListener);
     }
+
     super.initState();
   }
 
@@ -325,6 +392,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     if (_hasTabBarList()) {
       _tabController.removeListener(_tabControllerChangeListener);
       _tabController.dispose();
+    }
+    if (_hasTabBarListSecondPane()) {
+      _tabControllerSecondPane
+          .removeListener(_tabControllerChangeListenerSecondPane);
+      _tabControllerSecondPane.dispose();
     }
     super.dispose();
   }
@@ -385,16 +457,29 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return getDesktopFirstPane(tab: tab);
   }
 
-  beforeGetDesktopSecoundPaneWidget({TabControllerHelper? tab}) {
-    return getDesktopSecondPane(tab: tab);
+  beforeGetDesktopSecoundPaneWidget(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
   }
 
   beforeGetFirstPaneWidget({TabControllerHelper? tab}) {
     return getFirstPane(tab: tab);
   }
 
-  beforeGetSecondPaneWidget({TabControllerHelper? tab}) {
-    return getSecoundPane(tab: tab);
+  beforeGetSecondPaneWidget(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getSecoundPane(tab: tab, secoundTab: secoundTab);
+  }
+
+  void _setupSecondPaneTabBar({TabControllerHelper? tab}) {
+    _tabListSecondPane = initTabBarListSecondPane(tab: tab);
+    if (_hasTabBarListSecondPane()) {
+      _tabControllerSecondPane =
+          TabController(vsync: this, length: _tabListSecondPane!.length);
+
+      _tabControllerSecondPane
+          .addListener(_tabControllerChangeListenerSecondPane);
+    }
   }
 
   Widget _getTowPanes({TabControllerHelper? tab}) {
@@ -404,13 +489,40 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
 
     if (isDesktop(context, maxWidth: getWidth)) {
+      _setupSecondPaneTabBar(tab: tab);
       _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
-      _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
-      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+
+      if (_hasTabBarListSecondPane()) {
+        _secondWidget = TabBarView(
+            controller: _tabControllerSecondPane,
+            children: _getTabBarListSecondPane()!.map((e) {
+              return _setSubAppBar(
+                  beforeGetDesktopSecoundPaneWidget(tab: tab, secoundTab: e),
+                  false,
+                  tab: tab)!;
+            }).toList());
+
+        // _secondWidget = _secondWidget = ValueListenableBuilder(
+        //     valueListenable: onTabSelectedSecondPane,
+        //     builder: (c, v, cc) {
+        //       _secondWidget = beforeGetDesktopSecoundPaneWidget(
+        //           tab: tab, secoundTab: _getTabBarListSecondPane()![v]);
+        //       return TabBarView(
+        //           controller: _tabControllerSecondPane,
+        //           children: _getTabBarListSecondPane()!
+        //               .map((e) => _getTowPanes(tab: e))
+        //               .toList());
+        //     });
+      } else {
+        _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
+
+        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+      }
 
       // if
     } else {
+      _setupSecondPaneTabBar(tab: tab);
       _firstWidget = beforeGetFirstPaneWidget(tab: tab);
       _secondWidget = beforeGetSecondPaneWidget(tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
@@ -615,12 +727,25 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     debugPrint("_tabController $currentTabIndex");
   }
 
+  void _tabControllerChangeListenerSecondPane() {
+    currentPaneIndexSecondPane = _tabControllerSecondPane.index;
+    debugPrint("_tabControllerChangeListenerSecondPane $currentTabIndex");
+  }
+
   void changeTabIndex(int index) {
     debugPrint("_tabController $index");
     if (!_hasTabBarList()) return;
     debugPrint("_tabController $index");
     currentTabIndex = index;
     _tabController.index = index;
+  }
+
+  void changeTabIndexSecondPane(int index) {
+    debugPrint("_tabControllerChangeListenerSecondPane $index");
+    if (!_hasTabBarListSecondPane()) return;
+    debugPrint("_tabControllerChangeListenerSecondPane $index");
+    currentPaneIndexSecondPane = index;
+    _tabControllerSecondPane.index = index;
   }
 }
 
@@ -769,22 +894,26 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   @override
-  beforeGetDesktopSecoundPaneWidget({TabControllerHelper? tab}) {
+  beforeGetDesktopSecoundPaneWidget(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     if (_isLoading) return getLoadingWidget(false, tab: tab);
     var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
         .getDashboardShouldWaitBeforeRequest(context,
             globalKey: globalKeyBasePageWithApi, firstPane: false, tab: tab);
     return shouldWaitWidget ??
-        super.beforeGetDesktopSecoundPaneWidget(tab: tab);
+        super.beforeGetDesktopSecoundPaneWidget(
+            tab: tab, secoundTab: secoundTab);
   }
 
   @override
-  beforeGetSecondPaneWidget({TabControllerHelper? tab}) {
+  beforeGetSecondPaneWidget(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     if (_isLoading) return getLoadingWidget(false, tab: tab);
     var shouldWaitWidget = getExtrasCastDashboard(tab: tab)
         .getDashboardShouldWaitBeforeRequest(context,
             globalKey: globalKeyBasePageWithApi, firstPane: false, tab: tab);
-    return shouldWaitWidget ?? super.beforeGetSecondPaneWidget(tab: tab);
+    return shouldWaitWidget ??
+        super.beforeGetSecondPaneWidget(tab: tab, secoundTab: secoundTab);
   }
 
   @override

@@ -568,7 +568,7 @@ class DraggableHomeState extends State<DraggableHome>
 
   Widget? getLeadingAppBar(BuildContext context) {
     if (!widget.showLeadingAsHamborg) return null;
-    
+
     Widget icon = IconButton(
       icon: AnimatedIcon(
         icon: AnimatedIcons.arrow_menu,

@@ -51,6 +51,15 @@ class _BaseDashboardMainPageState
   }
 
   @override
+  List<TabControllerHelper>? initTabBarListSecondPane(
+      {TabControllerHelper? tab}) {
+    return [
+      TabControllerHelper("SOSO"),
+      TabControllerHelper("FOFO"),
+    ];
+  }
+
+  @override
   double getCustomPaneProportion() {
     {
       if (SizeConfig.isMediumFromScreenSize(context)) {
@@ -218,7 +227,8 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getDesktopSecondPane({TabControllerHelper? tab}) {
+  getDesktopSecondPane(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
         context, getCrossAxisCount(getWidth),
         tab: tab, globalKey: globalKeyBasePageWithApi);
@@ -296,9 +306,9 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getSecoundPane({TabControllerHelper? tab}) {
+  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     // TODO: implement getSecoundPane
-    return getDesktopSecondPane(tab: tab);
+    return getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
   }
 
   @override

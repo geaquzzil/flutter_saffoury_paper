@@ -14,6 +14,9 @@ abstract class DashableInterface<T extends ViewAbstract> {
   getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
       {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
 
+  getDashboardTabbarSectionSecoundPane(BuildContext context,
+      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
+
   void setDate(DateObject? date);
 
   ///this should wait for user input before request api
