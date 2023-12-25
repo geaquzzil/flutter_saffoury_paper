@@ -1,8 +1,10 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -29,8 +31,7 @@ class ChartCardItemCustom extends StatelessWidget {
 
   void Function()? onTap;
   ChartCardItemCustom(
-      {super.key,
-      this.color,
+      {this.color,
       required this.title,
       required this.description,
       this.icon,
@@ -42,7 +43,8 @@ class ChartCardItemCustom extends StatelessWidget {
       this.footerRight,
       this.footerWidget,
       this.onTap,
-      this.footerRightWidget});
+      this.footerRightWidget})
+      : super(key: ValueKey(title + description));
 
   // final CloudStorageInfo info;
   Widget _animationWidget({required Widget child}) {
@@ -78,119 +80,137 @@ class ChartCardItemCustom extends StatelessWidget {
     //       },
     //   child: getBody(context),
     // );
+    // Widget c;
+    // if (list == null) {
+    //   c = Text("dasda");
+    // }
+    // if (list!.isEmpty) {
+    //   c = Text("dsadassa");
+    // }
+
+    // c = Text("sdadas");
+
     Widget card = getBody(context);
-
-    return InkWell(
-      onTap: _tooltipController.toggle,
-      child: OverlayPortal(
-        controller: _tooltipController,
-        overlayChildBuilder: (cxc) {
-          Widget c;
-          if (list == null) {
-            c = Text("dasda");
-          }
-          if (list!.isEmpty) {
-            c = Text("dsadassa");
-          }
-          c = Text("sdadas");
-          return Positioned(
-            right: 0,
-            bottom: 0,
-            child: Container(
-              width: 400,
-              height: 400,
-              color: Colors.white,
-              child: c,
-            ),
-          );
-          return Positioned(
-            right: 50,
-            bottom: 50,
-            child: SizedBox(
-              height: 400,
-              width: 400,
-              child: DashboardListDetails(
-                list: list!,
-                header: this,
-                wrapWithScaffold: true,
-              ),
-            ),
-          );
-        },
-        child: card,
+    if (list == null || (list?.isEmpty ?? true)) {
+      return card;
+    }
+    return CustomPopupMenu(
+      pressType: PressType.singleClick,
+      position: PreferredPosition.bottom,
+      menuBuilder: () => SizedBox(
+        height: MediaQuery.of(context).size.height * .7,
+        width: MediaQuery.of(context).size.height * .5,
+        child: DashboardListDetails(
+          header: this,
+          list: list!,
+          wrapWithScaffold: true,
+        ),
       ),
+      child: card,
     );
+    // return InkWell(
+    //   onTap: _tooltipController.toggle,
+    //   child: OverlayPortal(
+    //     controller: _tooltipController,
+    //     overlayChildBuilder: (cxc) {
+    //       return Positioned(
+    //         right: 0,
+    //         bottom: 0,
+    //         child: Container(
+    //           width: 400,
+    //           height: 400,
+    //           color: Colors.white,
+    //           child: c,
+    //         ),
+    //       );
+    //       return Positioned(
+    //         right: 50,
+    //         bottom: 50,
+    //         child: SizedBox(
+    //           height: 400,
+    //           width: 400,
+    //           child: DashboardListDetails(
+    //             list: list!,
+    //             header: this,
+    //             wrapWithScaffold: true,
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //     child: card,
+    //   ),
+    // );
 
-    return InkWell(
-      // focusColor: color,
+    // return InkWell(
+    //   // focusColor: color,
 
-      hoverColor: color == null
-          ? null
-          : ElevationOverlay.colorWithOverlay(
-              Theme.of(context).colorScheme.surface, color!, 3),
-      // onTap: ,
-      onTap: _tooltipController.toggle,
-      child: OverlayPortal(
-        controller: _tooltipController,
-        overlayChildBuilder: (c) {
-          Widget c;
-          if (list == null) {
-            c = Text("dasda");
-          }
-          if (list!.isEmpty) {
-            c = Text("dsadassa");
-          }
-          c = Text("sdadas");
-          return Positioned(
-            right: 50,
-            bottom: 50,
-            child: Container(
-              width: 400,
-              height: 400,
-              color: Colors.white,
-              child: c,
-            ),
-          );
-          return Positioned(
-            right: 50,
-            bottom: 50,
-            child: SizedBox(
-              height: 400,
-              width: 400,
-              child: DashboardListDetails(
-                list: list!,
-                header: this,
-                wrapWithScaffold: true,
-              ),
-            ),
-          );
-        },
-        child: Hero(
-            tag: getHeroTag(),
-            flightShuttleBuilder: (
-              BuildContext flightContext,
-              Animation<double> animation,
-              HeroFlightDirection flightDirection,
-              BuildContext fromHeroContext,
-              BuildContext toHeroContext,
-            ) {
-              return ChartCardItemCustom(
-                title: title,
-                description: description,
-                list: list,
-                color: color,
-                footer: footer,
-                footerRight: footerRight,
-                footerWidget: footerWidget,
-                footerRightWidget: footerRightWidget,
-                icon: icon,
-                isSmall: false,
-                animation: ReverseAnimation(animation),
-              );
-            },
-            child: card),
-      ),
-    );
+    //   hoverColor: color == null
+    //       ? null
+    //       : ElevationOverlay.colorWithOverlay(
+    //           Theme.of(context).colorScheme.surface, color!, 3),
+    //   // onTap: ,
+    //   onTap: _tooltipController.toggle,
+    //   child: OverlayPortal(
+    //     controller: _tooltipController,
+    //     overlayChildBuilder: (c) {
+    //       Widget c;
+    //       if (list == null) {
+    //         c = Text("dasda");
+    //       }
+    //       if (list!.isEmpty) {
+    //         c = Text("dsadassa");
+    //       }
+    //       c = Text("sdadas");
+    //       return Positioned(
+    //         right: 50,
+    //         bottom: 50,
+    //         child: Container(
+    //           width: 400,
+    //           height: 400,
+    //           color: Colors.white,
+    //           child: c,
+    //         ),
+    //       );
+    //       return Positioned(
+    //         right: 50,
+    //         bottom: 50,
+    //         child: SizedBox(
+    //           height: 400,
+    //           width: 400,
+    //           child: DashboardListDetails(
+    //             list: list!,
+    //             header: this,
+    //             wrapWithScaffold: true,
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //     child: Hero(
+    //         tag: getHeroTag(),
+    //         flightShuttleBuilder: (
+    //           BuildContext flightContext,
+    //           Animation<double> animation,
+    //           HeroFlightDirection flightDirection,
+    //           BuildContext fromHeroContext,
+    //           BuildContext toHeroContext,
+    //         ) {
+    //           return ChartCardItemCustom(
+    //             title: title,
+    //             description: description,
+    //             list: list,
+    //             color: color,
+    //             footer: footer,
+    //             footerRight: footerRight,
+    //             footerWidget: footerWidget,
+    //             footerRightWidget: footerRightWidget,
+    //             icon: icon,
+    //             isSmall: false,
+    //             animation: ReverseAnimation(animation),
+    //           );
+    //         },
+    //         child: card),
+    //   ),
+    // );
   }
 
   Card getBody(BuildContext context) {
@@ -274,3 +294,207 @@ class ChartCardItemCustom extends StatelessWidget {
     return title + description;
   }
 }
+
+// enum OVERLAY_POSITION { TOP, BOTTOM }
+
+// class ScriptureDisplay extends StatefulWidget {
+//   @override
+//   _ScriptureDisplayState createState() => _ScriptureDisplayState();
+// }
+
+// class _ScriptureDisplayState extends State<ScriptureDisplay> {
+//   TapDownDetails _tapDownDetails;
+//   OverlayEntry _overlayEntry;
+//   OVERLAY_POSITION _overlayPosition;
+
+//   double _statusBarHeight;
+//   double _toolBarHeight;
+
+//   OverlayEntry _createOverlayEntry() {
+//     RenderBox renderBox = context.findRenderObject();
+
+//     var size = renderBox.size;
+
+//     var offset = renderBox.localToGlobal(Offset.zero);
+//     var globalOffset = renderBox.localToGlobal(_tapDownDetails.globalPosition);
+
+//     _statusBarHeight = MediaQuery.of(context).padding.top;
+
+//     // TODO: Calculate ToolBar Height Using MediaQuery
+//     _toolBarHeight = 50;
+//     var screenHeight = MediaQuery.of(context).size.height;
+
+//     var remainingScreenHeight =
+//         screenHeight - _statusBarHeight - _toolBarHeight;
+
+//     if (globalOffset.dy > remainingScreenHeight / 2) {
+//       _overlayPosition = OVERLAY_POSITION.TOP;
+//     } else {
+//       _overlayPosition = OVERLAY_POSITION.BOTTOM;
+//     }
+//     return OverlayEntry(builder: (context) {
+//       return Stack(
+//         children: <Widget>[
+//           GestureDetector(
+//             onTap: () {
+//               _overlayEntry.remove();
+//             },
+//             child: Container(
+//               width: MediaQuery.of(context).size.width,
+//               height: MediaQuery.of(context).size.height,
+//               color: Colors.blueGrey.withOpacity(0.1),
+//             ),
+//           ),
+//           Positioned(
+//             left: 10,
+//             top: _overlayPosition == OVERLAY_POSITION.TOP
+//                 ? _statusBarHeight + _toolBarHeight
+//                 : offset.dy + size.height - 5.0,
+//             width: MediaQuery.of(context).size.width - 20,
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: <Widget>[
+//                 // ignore: sdk_version_ui_as_code
+//                 if (_overlayPosition == OVERLAY_POSITION.BOTTOM) nip(),
+//                 body(context, offset.dy),
+//                 // ignore: sdk_version_ui_as_code
+//                 if (_overlayPosition == OVERLAY_POSITION.TOP) nip(),
+//               ],
+//             ),
+//           )
+//         ],
+//       );
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.only(top: 400, left: 10, right: 100),
+//       child: GestureDetector(
+//         child: Text("C"),
+//         onTapDown: (TapDownDetails tapDown) {
+//           setState(() {
+//             _tapDownDetails = tapDown;
+//           });
+//           this._overlayEntry = this._createOverlayEntry();
+//           Overlay.of(context).insert(this._overlayEntry);
+//         },
+//       ),
+//     );
+//   }
+
+//   Widget body(BuildContext context, double offset) {
+//     return Material(
+//       borderRadius: BorderRadius.all(
+//         Radius.circular(8.0),
+//       ),
+//       elevation: 4.0,
+//       child: Container(
+//         width: MediaQuery.of(context).size.width,
+//         height: _overlayPosition == OVERLAY_POSITION.BOTTOM
+//             ? MediaQuery.of(context).size.height -
+//                 _tapDownDetails.globalPosition.dy -
+//                 20
+//             : _tapDownDetails.globalPosition.dy -
+//                 _toolBarHeight -
+//                 _statusBarHeight -
+//                 15,
+//         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//         child: ListView(
+//           padding: EdgeInsets.zero,
+//           shrinkWrap: true,
+//           children: [
+//             "First",
+//             "Second",
+//             "Third",
+//             "First",
+//             "Second",
+//             "Third",
+//             "First",
+//             "Second",
+//             "Third"
+//           ]
+//               .map((String s) => ListTile(
+//                     subtitle: Text(s),
+//                   ))
+//               .toList(growable: false),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget nip() {
+//     return Container(
+//       height: 10.0,
+//       width: 10.0,
+//       margin: EdgeInsets.only(left: _tapDownDetails.globalPosition.dx),
+//       child: CustomPaint(
+//         painter: OpenPainter(_overlayPosition),
+//       ),
+//     );
+//   }
+// }
+
+// class OpenPainter extends CustomPainter {
+//   final OVERLAY_POSITION overlayPosition;
+
+//   OpenPainter(this.overlayPosition);
+
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     switch (overlayPosition) {
+//       case OVERLAY_POSITION.TOP:
+//         var paint = Paint()
+//           ..style = PaintingStyle.fill
+//           ..color = Colors.white
+//           ..isAntiAlias = true;
+
+//         _drawThreeShape(canvas,
+//             first: Offset(0, 0),
+//             second: Offset(20, 0),
+//             third: Offset(10, 15),
+//             size: size,
+//             paint: paint);
+
+//         break;
+//       case OVERLAY_POSITION.BOTTOM:
+//         var paint = Paint()
+//           ..style = PaintingStyle.fill
+//           ..color = Colors.white
+//           ..isAntiAlias = true;
+
+//         _drawThreeShape(canvas,
+//             first: Offset(15, 0),
+//             second: Offset(0, 20),
+//             third: Offset(30, 20),
+//             size: size,
+//             paint: paint);
+
+//         break;
+//     }
+
+//     canvas.save();
+//     canvas.restore();
+//   }
+
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) => false;
+
+//   void _drawThreeShape(Canvas canvas,
+//       {Offset first, Offset second, Offset third, Size size, paint}) {
+//     var path1 = Path()
+//       ..moveTo(first.dx, first.dy)
+//       ..lineTo(second.dx, second.dy)
+//       ..lineTo(third.dx, third.dy);
+//     canvas.drawPath(path1, paint);
+//   }
+
+//   void _drawTwoShape(Canvas canvas,
+//       {Offset first, Offset second, Size size, paint}) {
+//     var path1 = Path()
+//       ..moveTo(first.dx, first.dy)
+//       ..lineTo(second.dx, second.dy);
+//     canvas.drawPath(path1, paint);
+//   }
+// }

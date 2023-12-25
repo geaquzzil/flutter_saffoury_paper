@@ -9,6 +9,25 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
+RelativeRect getRealativPosition(GlobalKey clickedWidget) {
+  RenderBox renderBox =
+      clickedWidget.currentContext?.findRenderObject() as RenderBox;
+
+  final Size size = renderBox.size; // or _widgetKey.currentContext?.size
+  debugPrint('getRealativPosition Size: ${size.width}, ${size.height}');
+
+  final Offset offset = renderBox.localToGlobal(Offset.zero);
+  debugPrint('getRealativPosition Offset: ${offset.dx}, ${offset.dy}');
+  debugPrint(
+      'getRealativPosition Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
+  return RelativeRect.fromLTRB(
+    offset.dx,
+    offset.dy + size.height,
+    offset.dx,
+    offset.dy,
+  );
+}
+
 List<dynamic> dropdownGetValues(ViewAbstractEnum enumViewAbstract) {
   List<dynamic> v = [];
   v.add(null);
