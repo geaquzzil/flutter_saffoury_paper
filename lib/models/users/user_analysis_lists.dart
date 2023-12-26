@@ -22,7 +22,10 @@ import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../funds/debits.dart';
@@ -151,6 +154,82 @@ class UserLists<T> extends AuthUser<T> {
           "cargo_transporters_count": 0
         });
 
+  List<TabControllerHelper>? getTabBarSecondPane(BuildContext context) {
+    List<TabControllerHelper> l = [
+      TabControllerHelper(
+        AppLocalizations.of(context)!.overview,
+      ),
+      if (credits?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.credits,
+          extras: credits,
+        ),
+      if (debits?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.debits,
+          extras: debits,
+        ),
+      if (spendings?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.spendings,
+          extras: spendings,
+        ),
+      if (incomes?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.incomes,
+          extras: incomes,
+        ),
+      if (orders?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.orders,
+          extras: orders,
+        ),
+      if (purchases?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.purchases,
+          extras: purchases,
+        ),
+      if (products_inputs?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.productsInput,
+          extras: products_inputs,
+        ),
+      if (products_outputs?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.productsOutput,
+          extras: products_outputs,
+        ),
+      if (transfers?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.transfers,
+          extras: transfers,
+        ),
+      if (reservation_invoice?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.reservationInvoice,
+          extras: reservation_invoice,
+        ),
+      if (cut_requests?.isNotEmpty ?? false)
+        TabControllerHelper(
+          AppLocalizations.of(context)!.cutRequest,
+          extras: cut_requests,
+        ),
+    ];
+    if (l.isEmpty) return null;
+    return l;
+  }
+
+  SliverList getSliverListFromExtrasTabbar(TabControllerHelper tabSecondPane) {
+    return SliverList.builder(
+        itemCount: (tabSecondPane.extras as List).length,
+        itemBuilder: (c, index) {
+          return ListCardItemWeb<ViewAbstract>(
+            onTap: () {},
+            object: tabSecondPane.extras[index],
+          );
+        });
+  }
+
   List<ViewAbstract> getAnalysisChartFundsTitle(BuildContext context) {
     return [
       if (creditsAnalysis != null) Credits(),
@@ -258,7 +337,7 @@ class UserLists<T> extends AuthUser<T> {
 
   List<WidgetGridHelper> getFundWidgets(
       BuildContext context, int crossAxisCount,
-      {bool checkForEmpty = false}) {
+      {bool checkForEmpty = false, GlobalKey<BasePageWithApi>? globalKey}) {
     bool isMezouj = crossAxisCount % 2 == 0;
     debugPrint(
         "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
@@ -343,7 +422,7 @@ class UserLists<T> extends AuthUser<T> {
 
   List<WidgetGridHelper> getInvoicesWidgets(
       BuildContext context, int crossAxisCount,
-      {bool checkForEmpty = false}) {
+      {bool checkForEmpty = false, GlobalKey<BasePageWithApi>? globalKey}) {
     bool isMezouj = crossAxisCount % 2 == 0;
 
     int crossCountFund = crossAxisCount ~/ 4;

@@ -22,6 +22,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/expandable_table.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
@@ -320,10 +321,17 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       ];
 
   @override
-  List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+  getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab,
+      TabControllerHelper? tabSecondPane}) {
     // return [];
+    if (tabSecondPane != null && tabSecondPane.extras != null) {
+      return [
+        // LineChartItem(list: , xValueMapper: xValueMapper, yValueMapper: yValueMapper)
+        getSliverListFromExtrasTabbar(tabSecondPane)
+      ];
+    }
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.chart,
@@ -521,6 +529,11 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             ]),
     ];
   }
+
+  @override
+  List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
+          BuildContext context) =>
+      getTabBarSecondPane(context);
 
   @override
   void setDate(DateObject? date) {

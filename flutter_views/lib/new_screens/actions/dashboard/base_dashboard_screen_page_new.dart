@@ -53,10 +53,8 @@ class _BaseDashboardMainPageState
   @override
   List<TabControllerHelper>? initTabBarListSecondPane(
       {TabControllerHelper? tab}) {
-    return [
-      TabControllerHelper("SOSO"),
-      TabControllerHelper("FOFO"),
-    ];
+    return getExtrasCastDashboard(tab: tab)
+        .getDashboardTabbarSectionSecoundPaneList(context);
   }
 
   @override
@@ -231,7 +229,12 @@ class _BaseDashboardMainPageState
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
         context, getCrossAxisCount(getWidth),
-        tab: tab, globalKey: globalKeyBasePageWithApi);
+        tab: tab,
+        globalKey: globalKeyBasePageWithApi,
+        tabSecondPane: secoundTab);
+    // if (secoundTab != null) {
+    //   return list;
+    // }
     List<Widget> widgets = List.empty(growable: true);
     if (list is List<DashableGridHelper>) {
       for (var element in list) {

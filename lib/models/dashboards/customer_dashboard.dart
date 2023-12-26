@@ -146,9 +146,17 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
-  List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+  getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
+      {GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab,
+      TabControllerHelper? tabSecondPane}) {
+    if (tabSecondPane != null && tabSecondPane.extras != null) {
+      return [
+        // LineChartItem(list: , xValueMapper: xValueMapper, yValueMapper: yValueMapper)
+        getSliverListFromExtrasTabbar(tabSecondPane)
+      ];
+    }
+
     return [
       DashableGridHelper(title: AppLocalizations.of(context)!.total, widgets: [
         getWidget(
@@ -360,6 +368,11 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
     return null;
   }
+
+  @override
+  List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
+          BuildContext context) =>
+      getTabBarSecondPane(context);
 }
 
 @JsonSerializable(explicitToJson: true)

@@ -275,7 +275,9 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+      {GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab,
+      TabControllerHelper? tabSecondPane}) {
     debugPrint("getDashboardSectionsSecoundPane $this");
     return [
       // if (checkList(profits))
@@ -381,6 +383,10 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
     ];
   }
 
+  @override
+  List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
+          BuildContext context) =>
+      null;
   @override
   bool isRequiredObjectsListChecker() {
     return wastesByCutRequests != null;

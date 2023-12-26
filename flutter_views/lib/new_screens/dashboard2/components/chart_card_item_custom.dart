@@ -94,6 +94,9 @@ class ChartCardItemCustom extends StatelessWidget {
     if (list == null || (list?.isEmpty ?? true)) {
       return card;
     }
+    if (onTap != null) {
+      return InkWell(onTap: onTap, child: card);
+    }
     return CustomPopupMenu(
       pressType: PressType.singleClick,
       position: PreferredPosition.bottom,
@@ -213,7 +216,7 @@ class ChartCardItemCustom extends StatelessWidget {
     // );
   }
 
-  Card getBody(BuildContext context) {
+  Widget getBody(BuildContext context) {
     return Card(
       color: color == null
           ? null

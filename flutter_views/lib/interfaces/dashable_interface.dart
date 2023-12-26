@@ -12,10 +12,12 @@ abstract class DashableInterface<T extends ViewAbstract> {
   getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
       {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
   getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
+      {GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab,
+      TabControllerHelper? tabSecondPane});
 
-  getDashboardTabbarSectionSecoundPane(BuildContext context,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
+  List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
+      BuildContext context);
 
   void setDate(DateObject? date);
 

@@ -358,7 +358,9 @@ class CustomerBalanceList
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+      {GlobalKey<BasePageWithApi>? globalKey,
+      TabControllerHelper? tab,
+      TabControllerHelper? tabSecondPane}) {
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.overview,
@@ -388,6 +390,11 @@ class CustomerBalanceList
           ]),
     ];
   }
+
+  @override
+  List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
+          BuildContext context) =>
+      null;
 
   @override
   bool isRequiredObjectsListChecker() {

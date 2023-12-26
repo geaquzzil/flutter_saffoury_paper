@@ -777,14 +777,29 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     return extras;
   }
 
+  TabControllerHelper? findExtrasViaTypeList(List<TabControllerHelper>? list,
+      bool Function(TabControllerHelper) test) {
+    if (list != null) {
+      return list.firstWhereOrNull(test);
+    } else {
+      return extras;
+    }
+  }
+
+  int findExtrasIndexFromTabList(List<TabControllerHelper>? list,
+      bool Function(TabControllerHelper) test) {
+    if (list != null) {
+      return list.indexWhere(test);
+    } else {
+      return -1;
+    }
+  }
+
   //todo check return type if not tab bar then return extras ??
   TabControllerHelper? findExtrasViaType(Type extra) {
     if (_hasTabBarList()) {
-      return _getTabBarList()!.firstWhereOrNull((element) {
-        debugPrint(
-            "_tabController element runtype ${element.extras.runtimeType}");
-        return extra == element.extras.runtimeType;
-      });
+      return findExtrasViaTypeList(
+          _getTabBarList(), (e) => e.extras.runtimeType == extra);
     } else {
       return extras;
     }
@@ -792,8 +807,17 @@ abstract class BasePageWithApi<T extends StatefulWidget>
 
   int findExtrasIndexFromTab(Type extra) {
     if (_hasTabBarList()) {
-      return _getTabBarList()!
-          .indexWhere((element) => element.extras.runtimeType == extra);
+      return findExtrasIndexFromTabList(
+          _getTabBarList(), (element) => element.extras.runtimeType == extra);
+    } else {
+      return -1;
+    }
+  }
+
+  int findExtrasIndexFromTabSecoundPane(Type extra) {
+    if (_hasTabBarList()) {
+      return findExtrasIndexFromTabList(
+          _getTabBarList(), (element) => element.extras.runtimeType == extra);
     } else {
       return -1;
     }

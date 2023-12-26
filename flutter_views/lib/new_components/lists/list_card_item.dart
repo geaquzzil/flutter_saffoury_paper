@@ -14,6 +14,7 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   void Function()? onTap;
   void Function()? onLongTap;
+
   ListCardItemWeb({
     Key? key,
     required this.object,

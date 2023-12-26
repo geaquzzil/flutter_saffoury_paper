@@ -150,15 +150,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget? getWebListTileItemTitle(BuildContext context) {
-    return null;
+    return getMainHeaderText(context);
   }
 
   Widget? getWebListTileItemSubtitle(BuildContext context) {
-    return null;
+    return getMainSubtitleHeaderText(context);
   }
 
   Widget? getWebListTileItemLeading(BuildContext context) {
-    return null;
+    return getCardTrailing(context);
   }
 
   Widget getHorizontalCardTitleSameLine(
