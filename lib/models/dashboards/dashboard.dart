@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_view_controller/models/apis/changes_records.dart';
-import 'package:flutter_view_controller/models/apis/chart_records.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
@@ -17,24 +17,18 @@ import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
-import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/expandable_table.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pdf/src/widgets/widget.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/priceless_invoices/reservation_invoice.dart';
 import '../users/balances/customer_terms.dart';
@@ -53,12 +47,14 @@ import '../funds/credits.dart';
 import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
+import 'package:pdf/widgets.dart' as pdf;
 part 'dashboard.g.dart';
 
 //TODO on publish do not forget that the iD gives error messages because the response of dashboard iD not found
 @JsonSerializable(explicitToJson: true)
 @reflector
-class Dashboard extends UserLists<Dashboard> implements DashableInterface {
+class Dashboard extends UserLists<Dashboard>
+    implements DashableInterface, PrintableDashboardInterface< {
   List<BalanceDue>? debitsDue;
   List<BalanceDue>? creditsDue;
   List<BalanceDue>? incomesDue;
@@ -189,7 +185,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
             headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
             title: AppLocalizations.of(context)!.overview,
             widgets: [
-              ...getFundWidgets(context, crossAxisCount),
+              ...getFundWidgets(context, crossAxisCount, globalKey: globalKey),
               // ...getInvoicesWidgets(context)
             ]),
         DashableGridHelper(
@@ -204,7 +200,8 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
               ReservationInvoice()
             ],
             widgets: [
-              ...getInvoicesWidgets(context, crossAxisCount)
+              ...getInvoicesWidgets(context, crossAxisCount,
+                  globalKey: globalKey)
             ]),
         DashableGridHelper(
             title: AppLocalizations.of(context)!.pendingFormat(
@@ -558,6 +555,7 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       TabControllerHelper? tab}) {
     if (firstPane == false) return null;
     return DashboardHeader(
+      object: this,
       date: date ?? DateObject(),
       current_screen_size: getCurrentScreenSizeStatic(context),
       onSelectedDate: (d) {
@@ -577,5 +575,110 @@ class Dashboard extends UserLists<Dashboard> implements DashableInterface {
       GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
       TabControllerHelper? tab}) {
     return null;
+  }
+
+  @override
+  List<InvoiceHeaderTitleAndDescriptionInfo>
+      getPrintableDashboardAccountInfoInBottom(
+          BuildContext context, PrintLocalSetting? pca) {
+    // TODO: implement getPrintableDashboardAccountInfoInBottom
+    throw UnimplementedError();
+  }
+
+  @override
+  pdf.Widget? getPrintableDashboardCustomWidgetBottom(
+      BuildContext context,
+      PrintLocalSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    // TODO: implement getPrintableDashboardCustomWidgetBottom
+    throw UnimplementedError();
+  }
+
+  @override
+  pdf.Widget? getPrintableDashboardCustomWidgetTop(
+      BuildContext context,
+      PrintLocalSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    // TODO: implement getPrintableDashboardCustomWidgetTop
+    throw UnimplementedError();
+  }
+
+  @override
+  List<InvoiceTotalTitleAndDescriptionInfo> getPrintableDashboardFooterTotal(
+      BuildContext context, PrintLocalSetting? pca) {
+    // TODO: implement getPrintableDashboardFooterTotal
+    throw UnimplementedError();
+  }
+
+  @override
+  List<List<InvoiceHeaderTitleAndDescriptionInfo>>
+      getPrintableDashboardHeaderInfo(
+          BuildContext context, PrintLocalSetting? pca) {
+    // TODO: implement getPrintableDashboardHeaderInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  List<InvoiceTotalTitleAndDescriptionInfo>
+      getPrintableDashboardTotalDescripton(
+          BuildContext context, PrintLocalSetting? pca) {
+    // TODO: implement getPrintableDashboardTotalDescripton
+    throw UnimplementedError();
+  }
+
+  @override
+  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    // TODO: implement getPrintableInvoiceTableHeaderAndContentWhenDashboard
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableInvoiceTitle(
+      BuildContext context, PrintLocalSetting? pca) {
+    // TODO: implement getPrintableInvoiceTitle
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintablePrimaryColor(PrintLocalSetting? pca) {
+    // TODO: implement getPrintablePrimaryColor
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableQrCode() {
+    // TODO: implement getPrintableQrCode
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableQrCodeID() {
+    // TODO: implement getPrintableQrCodeID
+    throw UnimplementedError();
+  }
+
+  @override
+  List<PrintableMaster<PrintLocalSetting>>
+      getPrintableRecieptMasterDashboardLists(
+          BuildContext context, PrintLocalSetting? pca) {
+    // TODO: implement getPrintableRecieptMasterDashboardLists
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableSecondaryColor(PrintLocalSetting? pca) {
+    // TODO: implement getPrintableSecondaryColor
+    throw UnimplementedError();
+  }
+
+  @override
+  pdf.Widget? getPrintableWatermark() {
+    // TODO: implement getPrintableWatermark
+    throw UnimplementedError();
   }
 }

@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_bill_inte
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -234,6 +235,14 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     return q.getQrCode();
   }
 
+  bool isSpendings() {
+    return runtimeType == Debits || runtimeType == Spendings;
+  }
+
+  bool isIncomes() {
+    return runtimeType == Incomes || runtimeType == Credits;
+  }
+
   @override
   Color? getMainColor() {
     if (runtimeType == Credits) {
@@ -296,6 +305,28 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
   String getModifibleTitleName(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
 
+  bool isDollar() {
+    return equalities?.isDollar() ?? false;
+  }
+
   @override
   pdf.Widget? getPrintableWatermark() => null;
+  String getIdWithLabelWithIsDollar(BuildContext context) {
+    bool isD = isDollar();
+    String addOn = "";
+    if (!isD) {
+      addOn = " -${equalities?.getMainHeaderTextOnly(context)}";
+    }
+    return "${getMainHeaderLabelTextOnly(context)} ${getIDFormat(context)}$addOn";
+  }
+
+  @override
+  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+          BuildContext context, PrintLocalSetting? pca) =>
+      [
+        date ?? "-",
+        getIdWithLabelWithIsDollar(context),
+        isIncomes() ? getValue : 0,
+        isSpendings() ? getValue() : 0,
+      ];
 }

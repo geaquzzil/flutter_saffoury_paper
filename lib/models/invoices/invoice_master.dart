@@ -31,6 +31,7 @@ import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -658,6 +659,22 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     return this is ProductOutput || this is ProductInput || this is Transfers;
   }
 
+  bool isDebitsInvoice() {
+    return this is Order || this is PurchasesRefund;
+  }
+
+  bool isCreditInvoice() {
+    return this is Purchases || this is OrderRefund;
+  }
+
+  bool isRefundCreditInvoice() {
+    return this is OrderRefund;
+  }
+
+  bool isRefundDebitInvoice() {
+    return this is PurchasesRefund;
+  }
+
   bool isPricelessInvoice() {
     bool result = this is CustomerRequestSize ||
         this is ProductInput ||
@@ -1077,6 +1094,29 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   String getWebCategoryGridableTitle(BuildContext context) {
     return getMainHeaderTextOnly(context);
+  }
+
+  @override
+  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    return [
+      date!,
+      getMainHeaderTextOnly(context),
+      isPricelessInvoice()
+          ? 0
+          : isCreditInvoice()
+              ? isRefundCreditInvoice()
+                  ? extendedRefundPrice
+                  : extendedPrice
+              : 0,
+      isPricelessInvoice()
+          ? 0
+          : isDebitsInvoice()
+              ? isRefundDebitInvoice()
+                  ? extendedRefundPrice
+                  : extendedPrice
+              : 0,
+    ];
   }
 }
 

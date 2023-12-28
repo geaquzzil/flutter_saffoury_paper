@@ -19,6 +19,9 @@ abstract class PrintableMaster<T extends PrintLocalSetting>
   String getPrintableInvoiceTitle(BuildContext context, T? pca);
 
   pdf.Widget? getPrintableWatermark();
+
+  List<dynamic>? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting);
 }
 
 class PrintableMasterEmpty<T extends PrintLocalSetting> {}

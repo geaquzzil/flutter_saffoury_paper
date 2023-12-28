@@ -13,11 +13,12 @@ import '../../new_components/loading_shimmer.dart';
 class ListHorizontalCustomViewCustomApiAutoRestWidget extends StatefulWidget {
   AutoRestCustom autoRest;
   Widget Function(dynamic response) onResponse;
-  ListHorizontalCustomViewCustomApiAutoRestWidget({
-    super.key,
-    required this.autoRest,
-    required this.onResponse,
-  });
+  Widget Function(dynamic response)? onResponseError;
+  ListHorizontalCustomViewCustomApiAutoRestWidget(
+      {super.key,
+      required this.autoRest,
+      required this.onResponse,
+      this.onResponseError});
 
   @override
   State<ListHorizontalCustomViewCustomApiAutoRestWidget> createState() =>

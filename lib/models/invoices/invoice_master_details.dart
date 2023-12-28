@@ -2,18 +2,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -248,10 +252,26 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     //   case "price":
     //     unitPrice = unitPrice.toNonNullable() * quantity.toNonNullable();
     //     break;
-  //   case "quantity":
+    //   case "quantity":
     //     price = unitPrice.toNonNullable() * quantity.toNonNullable();
     //     break;
     // }
+  }
+
+  bool isDebitsInvoice() {
+    return this is OrderDetails || this is PurchasesRefundDetails;
+  }
+
+  bool isCreditInvoice() {
+    return this is PurchasesDetails || this is OrderRefundDetails;
+  }
+
+  bool isRefundCreditInvoice() {
+    return this is OrderRefundDetails;
+  }
+
+  bool isRefundDebitInvoice() {
+    return this is PurchasesRefundDetails;
   }
 
   bool isPricelessInvoice() {
@@ -414,5 +434,24 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
         )
       ],
     );
+  }
+
+  @override
+  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    return [
+      "",
+      getMainHeaderTextOnly(context),
+      isPricelessInvoice()
+          ? 0
+          : isCreditInvoice()
+              ? price
+              : 0,
+      isPricelessInvoice()
+          ? 0
+          : isDebitsInvoice()
+              ? price
+              : 0,
+    ];
   }
 }

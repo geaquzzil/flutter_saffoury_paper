@@ -12,7 +12,6 @@ abstract class PrintableCustomInterface<T extends PrintLocalSetting>
       {PdfPageFormat? format, T? setting});
   Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
       {PdfPageFormat? format, T? setting});
-
 }
 
 abstract class PrintableCustomFromPDFInterface<T extends PrintLocalSetting>
@@ -29,5 +28,4 @@ abstract class PrintableCustomFromPDFInterface<T extends PrintLocalSetting>
     T? setting,
     required PageTheme themeData,
   });
-
 }

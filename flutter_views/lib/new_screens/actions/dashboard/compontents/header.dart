@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -19,6 +20,7 @@ import 'date_selector.dart';
 
 class DashboardHeader extends StatefulWidget {
   final CurrentScreenSize current_screen_size;
+  ViewAbstract? object;
   // DateTime? focuseDate;
   DateObject date;
   Function(DateObject? date_object) onSelectedDate;
@@ -26,6 +28,7 @@ class DashboardHeader extends StatefulWidget {
       {super.key,
       required this.current_screen_size,
       required this.date,
+      this.object,
       required this.onSelectedDate});
 
   @override
@@ -62,6 +65,12 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                 dateObject: date,
               ),
               const Spacer(),
+              if (widget.object?.isPrintableMaster() == true)
+                IconButton(
+                    onPressed: () {
+                      widget.object?.printPage(context);
+                    },
+                    icon: Icon(Icons.print)),
               if (isLargeScreenFromScreenSize(widget.current_screen_size))
                 CustomPopupMenu(
                     menuOnChange: (b) {

@@ -32,6 +32,10 @@ class Equalities extends ViewAbstract<Equalities> {
     return Equalities();
   }
 
+  bool isDollar() {
+    return currency?.iD == 1;
+  }
+
   @override
   ViewAbstractControllerInputType getInputType(String field) {
     if (field == "currency")

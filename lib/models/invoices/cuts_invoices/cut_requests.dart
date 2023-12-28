@@ -730,6 +730,11 @@ class CutRequest extends ViewAbstract<CutRequest>
   String getWebCategoryGridableTitle(BuildContext context) {
     return getMainHeaderTextOnly(context);
   }
+
+  @override
+  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+          BuildContext context, PrintLocalSetting? dashboardSetting) =>
+      null;
 }
 
 // enum CutStatus {

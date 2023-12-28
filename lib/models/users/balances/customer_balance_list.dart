@@ -411,4 +411,10 @@ class CustomerBalanceList
   String? getTableNameApi() {
     return "list_customers_balances";
   }
+
+  @override
+  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    return null;
+  }
 }

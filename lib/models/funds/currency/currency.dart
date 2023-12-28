@@ -28,6 +28,9 @@ class Currency extends BaseWithNameString<Currency> {
 
   @override
   List<String> getMainFields({BuildContext? context}) => ["name", "nameAr"];
+  bool isDollar() {
+    return iD == 1;
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {

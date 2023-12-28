@@ -220,7 +220,20 @@ extension IterableModifier<E> on Iterable<E?> {
   }
 }
 
-extension ConvertersNumbers on dynamic {}
+extension ConvertersNumbers on dynamic {
+  bool isNumeric() {
+    if (this == null) return false;
+    return double.tryParse(this) != null;
+  }
+
+  double toDouble() {
+    if (isNumeric()) {
+      return double.parse(this);
+    } else {
+      return 0;
+    }
+  }
+}
 
 extension NonNullableDouble1 on double {
   double roundDouble() {

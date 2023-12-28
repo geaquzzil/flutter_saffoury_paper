@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import '../../prints/print_customer_balances.dart';
 import 'customer_terms.dart';
 import '../customers.dart';
@@ -98,6 +99,12 @@ class CustomerBalanceSingle extends Customer
 
   @override
   Map<String, dynamic> toJson() => {};
+
+  @override
+  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    return null;
+  }
 }
 
 class EqualityValue {

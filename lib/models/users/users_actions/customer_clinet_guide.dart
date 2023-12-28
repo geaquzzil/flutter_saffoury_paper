@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/models/auto_rest.dart';
 
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:pdf/src/widgets/widget.dart';
 import 'package:pdf/src/pdf/page_format.dart';
@@ -197,4 +198,9 @@ class CustomerClinetGuide
       material.BuildContext context) {
     return null;
   }
+
+  @override
+  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+          material.BuildContext context, PrintLocalSetting? dashboardSetting) =>
+      null;
 }

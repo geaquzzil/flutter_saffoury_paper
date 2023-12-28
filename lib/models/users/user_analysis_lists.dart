@@ -154,6 +154,12 @@ class UserLists<T> extends AuthUser<T> {
           "cargo_transporters_count": 0
         });
 
+  int getTabBarIndex(BuildContext context, List list) {
+    if (getTabBarSecondPane(context) == null) return -1;
+    return getTabBarSecondPane(context)!.indexWhere(
+        (element) => element.extras.runtimeType == list.runtimeType);
+  }
+
   List<TabControllerHelper>? getTabBarSecondPane(BuildContext context) {
     List<TabControllerHelper> l = [
       TabControllerHelper(
@@ -353,6 +359,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, credits ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               list: credits,
               listGrowthRate: creditsAnalysis,
               icon: Icons.arrow_back_sharp,
@@ -366,6 +377,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, debits ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               color: Debits().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.debits,
@@ -380,6 +396,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, spendings ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               color: Spendings().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.spendings,
@@ -394,6 +415,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, incomes ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               icon: Icons.arrow_back_sharp,
               listGrowthRate: incomesAnalysis,
               title: AppLocalizations.of(context)!.incomes,
@@ -436,6 +462,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, orders ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               // color: Colors.green.withOpacity(0.2),
               icon: Order().getMainIconData(),
               listGrowthRate: ordersAnalysis,
@@ -450,6 +481,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, purchases ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               listGrowthRate: purchasesAnalysis,
               icon: Purchases().getMainIconData(),
               title: AppLocalizations.of(context)!.purchases,
@@ -463,6 +499,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, cut_requests ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               icon: CutRequest().getMainIconData(),
               listGrowthRate: cut_requestsAnalysis,
               title: CutRequest().getMainHeaderLabelTextOnly(context),
@@ -476,6 +517,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, transfers ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               icon: Transfers().getMainIconData(),
               title: Transfers().getMainHeaderLabelTextOnly(context),
               listGrowthRate: transfersAnalysis,
@@ -490,6 +536,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, products_inputs ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               icon: ProductInput().getMainIconData(),
               title: ProductInput().getMainHeaderLabelTextOnly(context),
               description: products_inputsAnalysis.getTotalText(
@@ -504,6 +555,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, products_outputs ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               icon: ProductOutput().getMainIconData(),
               title: ProductOutput().getMainHeaderLabelTextOnly(context),
               description: products_outputs
@@ -517,6 +573,11 @@ class UserLists<T> extends AuthUser<T> {
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
+              onTap: () {
+                int idx = getTabBarIndex(context, reservation_invoice ?? []);
+                if (idx == -1) return;
+                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              },
               icon: ReservationInvoice().getMainIconData(),
               title: ReservationInvoice().getMainHeaderLabelTextOnly(context),
               description: reservation_invoice

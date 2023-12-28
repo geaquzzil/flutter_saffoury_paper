@@ -18,7 +18,8 @@ abstract class PrintableReceiptInterface<T extends PrintLocalSetting>
       getPrintableRecieptFooterTitleAndDescription(
           BuildContext context, T? pca);
 
-  pdf.Widget? getPrintableRecieptCustomWidget(BuildContext context, T? pca,PdfReceipt generator);
+  pdf.Widget? getPrintableRecieptCustomWidget(
+      BuildContext context, T? pca, PdfReceipt generator);
 }
 
 class RecieptHeaderTitleAndDescriptionInfo {

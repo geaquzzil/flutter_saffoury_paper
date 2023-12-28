@@ -314,4 +314,14 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
 
   @override
   Widget? getPrintableWatermark() => null;
+
+  @override
+  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+          material.BuildContext context, PrintLocalSetting? pca) =>
+      [
+        date ?? "-",
+        getMainHeaderTextOnly(context) ?? "",
+        null,
+        null,
+      ];
 }

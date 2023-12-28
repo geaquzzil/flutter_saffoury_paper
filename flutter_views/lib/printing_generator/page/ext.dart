@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_from_pdf_api.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:pdf/pdf.dart' as pdf;
@@ -37,6 +38,11 @@ Future<pw.Document> getDocumentFile<T extends PrintLocalSetting>(
   } else if (invoiceObj is PrintableCustomFromPDFInterface) {
     final pdf = PdfCustomFromPDF<PrintableCustomFromPDFInterface, T>(
         context, invoiceObj as PrintableCustomFromPDFInterface,
+        printCommand: pls);
+    return pdf.getDocumentP(format);
+  } else if (invoiceObj is PrintableDashboardInterface) {
+    final pdf = PdfDashnoardApi<PrintableDashboardInterface, T>(
+        context, invoiceObj as PrintableDashboardInterface,
         printCommand: pls);
     return pdf.getDocumentP(format);
   } else {
@@ -77,6 +83,11 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
     } else if (invoiceObj is PrintableCustomFromPDFInterface) {
       final pdf = PdfCustomFromPDF<PrintableCustomFromPDFInterface, T>(
           context, invoiceObj as PrintableCustomFromPDFInterface,
+          printCommand: pls);
+      return pdf.generate(format);
+    } else if (invoiceObj is PrintableDashboardInterface) {
+      final pdf = PdfDashnoardApi<PrintableDashboardInterface, T>(
+          context, invoiceObj as PrintableDashboardInterface,
           printCommand: pls);
       return pdf.generate(format);
     } else {

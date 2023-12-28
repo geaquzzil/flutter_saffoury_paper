@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 // import 'package:bitmap/bitmap.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -1615,6 +1616,13 @@ class Product extends ViewAbstract<Product>
         ..quantity = quantity.toDouble()
         ..warehouse = warehouse
     ];
+  }
+
+  @override
+  List getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    // TODO: implement getPrintableInvoiceTableHeaderAndContentWhenDashboard
+    throw UnimplementedError();
   }
 }
 
