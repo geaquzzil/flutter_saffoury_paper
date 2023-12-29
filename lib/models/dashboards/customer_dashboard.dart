@@ -153,7 +153,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
     if (tabSecondPane != null && tabSecondPane.extras != null) {
       return [
         // LineChartItem(list: , xValueMapper: xValueMapper, yValueMapper: yValueMapper)
-        getSliverListFromExtrasTabbar(tabSecondPane)
+        getSliverListFromExtrasTabbar(context, tabSecondPane)
       ];
     }
 

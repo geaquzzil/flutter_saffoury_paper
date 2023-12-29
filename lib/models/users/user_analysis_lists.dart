@@ -225,12 +225,15 @@ class UserLists<T> extends AuthUser<T> {
     return l;
   }
 
-  SliverList getSliverListFromExtrasTabbar(TabControllerHelper tabSecondPane) {
+  SliverList getSliverListFromExtrasTabbar(
+      BuildContext context, TabControllerHelper tabSecondPane) {
     return SliverList.builder(
         itemCount: (tabSecondPane.extras as List).length,
         itemBuilder: (c, index) {
           return ListCardItemWeb<ViewAbstract>(
-            onTap: () {},
+            onTap: () {
+              tabSecondPane.extras[index].viewPage(context);
+            },
             object: tabSecondPane.extras[index],
           );
         });

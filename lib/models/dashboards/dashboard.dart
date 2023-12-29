@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
@@ -28,7 +29,6 @@ import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dar
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pdf/src/widgets/widget.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/priceless_invoices/reservation_invoice.dart';
 import '../users/balances/customer_terms.dart';
@@ -54,7 +54,9 @@ part 'dashboard.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Dashboard extends UserLists<Dashboard>
-    implements DashableInterface, PrintableDashboardInterface< {
+    implements
+        DashableInterface,
+        PrintableDashboardInterface<PrintDashboardSetting> {
   List<BalanceDue>? debitsDue;
   List<BalanceDue>? creditsDue;
   List<BalanceDue>? incomesDue;
@@ -326,7 +328,7 @@ class Dashboard extends UserLists<Dashboard>
     if (tabSecondPane != null && tabSecondPane.extras != null) {
       return [
         // LineChartItem(list: , xValueMapper: xValueMapper, yValueMapper: yValueMapper)
-        getSliverListFromExtrasTabbar(tabSecondPane)
+        getSliverListFromExtrasTabbar(context, tabSecondPane)
       ];
     }
     return [
@@ -580,7 +582,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
       getPrintableDashboardAccountInfoInBottom(
-          BuildContext context, PrintLocalSetting? pca) {
+          BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableDashboardAccountInfoInBottom
     throw UnimplementedError();
   }
@@ -588,7 +590,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetBottom(
       BuildContext context,
-      PrintLocalSetting? pca,
+      PrintDashboardSetting? pca,
       PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
               PrintLocalSetting>
           generator) {
@@ -599,7 +601,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetTop(
       BuildContext context,
-      PrintLocalSetting? pca,
+      PrintDashboardSetting? pca,
       PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
               PrintLocalSetting>
           generator) {
@@ -609,7 +611,7 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableDashboardFooterTotal(
-      BuildContext context, PrintLocalSetting? pca) {
+      BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableDashboardFooterTotal
     throw UnimplementedError();
   }
@@ -617,7 +619,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>>
       getPrintableDashboardHeaderInfo(
-          BuildContext context, PrintLocalSetting? pca) {
+          BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableDashboardHeaderInfo
     throw UnimplementedError();
   }
@@ -625,7 +627,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   List<InvoiceTotalTitleAndDescriptionInfo>
       getPrintableDashboardTotalDescripton(
-          BuildContext context, PrintLocalSetting? pca) {
+          BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableDashboardTotalDescripton
     throw UnimplementedError();
   }
@@ -639,13 +641,13 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   String getPrintableInvoiceTitle(
-      BuildContext context, PrintLocalSetting? pca) {
+      BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableInvoiceTitle
     throw UnimplementedError();
   }
 
   @override
-  String getPrintablePrimaryColor(PrintLocalSetting? pca) {
+  String getPrintablePrimaryColor(PrintDashboardSetting? pca) {
     // TODO: implement getPrintablePrimaryColor
     throw UnimplementedError();
   }
@@ -665,13 +667,13 @@ class Dashboard extends UserLists<Dashboard>
   @override
   List<PrintableMaster<PrintLocalSetting>>
       getPrintableRecieptMasterDashboardLists(
-          BuildContext context, PrintLocalSetting? pca) {
+          BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableRecieptMasterDashboardLists
     throw UnimplementedError();
   }
 
   @override
-  String getPrintableSecondaryColor(PrintLocalSetting? pca) {
+  String getPrintableSecondaryColor(PrintDashboardSetting? pca) {
     // TODO: implement getPrintableSecondaryColor
     throw UnimplementedError();
   }
@@ -680,5 +682,21 @@ class Dashboard extends UserLists<Dashboard>
   pdf.Widget? getPrintableWatermark() {
     // TODO: implement getPrintableWatermark
     throw UnimplementedError();
+  }
+
+  @override
+  List<String> getPrintableDashboardTableHeaders(
+      BuildContext context,
+      PrintDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    return [
+      AppLocalizations.of(context)!.date,
+      AppLocalizations.of(context)!.description,
+      AppLocalizations.of(context)!.credits,
+      AppLocalizations.of(context)!.debits,
+      AppLocalizations.of(context)!.balance,
+    ].map((e) => e.toUpperCase()).toList();
   }
 }

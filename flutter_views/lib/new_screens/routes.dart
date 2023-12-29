@@ -95,8 +95,13 @@ class RouteGenerator {
     return GoRouter(
       initialLocation: '/',
       redirect: !kIsWeb
-          ? null
+          ? (context, state) async {
+              debugPrint(
+                  "routes !kIsWeb path ${state.fullPath} ${state.name} ${state.uri}");
+              return null;
+            }
           : (context, state) async {
+              debugPrint("routes kIsWeb path  ${state.fullPath}");
               if (kIsWeb) {
                 if (state.fullPath == null) {
                   return "/index";
@@ -110,10 +115,13 @@ class RouteGenerator {
               }
               return null;
             },
-      errorPageBuilder: (context, state) => MaterialPage(
-        key: state.pageKey,
-        child: getErrorPage(),
-      ),
+      errorPageBuilder: (context, state) {
+        debugPrint("routes errorPageBuilder ${state.fullPath}");
+        return MaterialPage(
+          key: state.pageKey,
+          child: getErrorPage(),
+        );
+      },
       // redirect: (context, state) {
 
       // },
@@ -234,12 +242,7 @@ class RouteGenerator {
               )
             ]),
         GoRoute(
-          name: homeRouteName,
-          path: "/home",
-          pageBuilder: (context, state) =>
-              const MaterialPage(child: BaseHomeMainPage()),
-        ),
-        GoRoute(
+            name: homeRouteName,
             path: '/',
             pageBuilder: (BuildContext context, GoRouterState state) {
               return const MaterialPage(child: BaseAuthenticatingScreen());
@@ -278,6 +281,40 @@ class RouteGenerator {
                       ));
                 },
               ),
+              // GoRoute(
+              //   name: printRouteName,
+              //   path: "print/:tableName/:id",
+              //   pageBuilder: (context, state) {
+              //     debugPrint("go route name=> $printRouteName");
+              //     debugPrint("go route name=> ${state.extra}");
+              //     // return MaterialPage(key: state.pageKey, child: TestBasePage());
+
+              //     return MaterialPage(
+              //         key: state.pageKey,
+              //         child: PdfPage<PrintLocalSetting>(
+              //           iD: int.tryParse(state.pathParameters['id'] ?? "-"),
+              //           tableName: state.pathParameters['tableName'],
+              //           invoiceObj: state.extra as PrintableMaster?,
+              //         ));
+              //   },
+              // ),
+              GoRoute(
+                name: printRouteName,
+                path: "print/:tableName/:id",
+                pageBuilder: (context, state) {
+                  debugPrint("go route name=> $printRouteName");
+                  debugPrint("go route name=> ${state.extra}");
+                  // return MaterialPage(key: state.pageKey, child: TestBasePage());
+
+                  return MaterialPage(
+                      key: state.pageKey,
+                      child: PdfPage<PrintLocalSetting>(
+                        iD: int.tryParse(state.pathParameters['id'] ?? "-"),
+                        tableName: state.pathParameters['tableName'],
+                        invoiceObj: state.extra as PrintableMaster?,
+                      ));
+                },
+              ),
               GoRoute(
                 name: searchRouteName,
                 path: "search/:tableName",
@@ -293,23 +330,6 @@ class RouteGenerator {
                 },
               ),
             ]),
-        GoRoute(
-          name: printRouteName,
-          path: "/print/:tableName/:id",
-          pageBuilder: (context, state) {
-            debugPrint("go route name=> $printRouteName");
-            debugPrint("go route name=> ${state.extra}");
-            // return MaterialPage(key: state.pageKey, child: TestBasePage());
-
-            return MaterialPage(
-                key: state.pageKey,
-                child: PdfPage<PrintLocalSetting>(
-                  iD: int.tryParse(state.pathParameters['id'] ?? "-"),
-                  tableName: state.pathParameters['tableName'],
-                  invoiceObj: state.extra as PrintableMaster?,
-                ));
-          },
-        ),
         GoRoute(
           name: dashboardRouteName,
           path: "/dashboard/list/:tableName",

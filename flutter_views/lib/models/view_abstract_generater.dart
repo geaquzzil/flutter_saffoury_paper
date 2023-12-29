@@ -92,10 +92,29 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           isMain: isMain);
       return;
     }
+    viewPage(context);
+  }
+
+  void viewPage(BuildContext context) {
     context.pushNamed(viewRouteName,
         pathParameters: {
           "tableName": getTableNameApi() ?? "",
           "id": iD.toString()
+        },
+        extra: this);
+  }
+
+  void editPage(BuildContext context) {
+    context.goNamed(editRouteName,
+        pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+        extra: (this as ViewAbstract).getCopyInstance());
+  }
+
+  void printPage(BuildContext context) {
+    context.goNamed(printRouteName,
+        pathParameters: {
+          "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+          "id": "$iD"
         },
         extra: this);
   }

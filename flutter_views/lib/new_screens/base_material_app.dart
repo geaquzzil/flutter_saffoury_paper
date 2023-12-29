@@ -7,17 +7,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
-import 'package:flutter_view_controller/l10n/l10n.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
-import 'package:flutter_view_controller/new_screens/authentecation/base_authentication_screen.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/new_screens/sign_in.dart';
-import 'package:flutter_view_controller/printing_generator/utils.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
@@ -25,15 +16,12 @@ import 'package:flutter_view_controller/utils/util.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:skeletons/skeletons.dart';
 
 import '../theming/text_field_theming.dart';
-import 'home/base_home_main.dart';
 
 class BaseMaterialAppPage extends StatefulWidget {
   List<RouteBase>? addOnRoutes;

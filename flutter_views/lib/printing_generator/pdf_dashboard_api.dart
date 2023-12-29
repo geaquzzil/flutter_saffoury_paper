@@ -190,13 +190,9 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
   Widget buildInvoiceMainTable() {
     List<PrintableMaster> details =
         printObj.getPrintableRecieptMasterDashboardLists(context, setting);
-    var headers = [
-      AppLocalizations.of(context)!.date,
-      AppLocalizations.of(context)!.description,
-      AppLocalizations.of(context)!.credits,
-      AppLocalizations.of(context)!.debits,
-      AppLocalizations.of(context)!.balance,
-    ].map((e) => e.toUpperCase()).toList();
+    var headers =
+        printObj.getPrintableDashboardTableHeaders(context, setting, this);
+
     headers = checkListToReverse(headers);
     for (int i = 0; i < details.length; i++) {
       dynamic element = details[i];

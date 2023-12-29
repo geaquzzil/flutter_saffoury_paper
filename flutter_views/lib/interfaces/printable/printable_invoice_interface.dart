@@ -3,7 +3,8 @@ import 'package:flutter_view_controller/interfaces/printable/printable_bill_inte
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
-import 'package:pdf/pdf.dart';
+import 'package:pdf/pdf.dart' as pdf;
+import 'package:pdf/widgets.dart' as pdfW;
 
 ///بدنا راسسية وذيل مخصص
 /// خود الليستات كلها رتبها
@@ -25,13 +26,17 @@ abstract class PrintableDashboardInterface<T extends PrintLocalSetting>
   List<InvoiceHeaderTitleAndDescriptionInfo>
       getPrintableDashboardAccountInfoInBottom(BuildContext context, T? pca);
 
-  Widget? getPrintableDashboardCustomWidgetTop(
+  pdfW.Widget? getPrintableDashboardCustomWidgetTop(
       BuildContext context, T? pca, PdfDashnoardApi generator);
-  Widget? getPrintableDashboardCustomWidgetBottom(
+
+  pdfW.Widget? getPrintableDashboardCustomWidgetBottom(
       BuildContext context, T? pca, PdfDashnoardApi generator);
 
   List<PrintableMaster> getPrintableRecieptMasterDashboardLists(
       BuildContext context, T? pca);
+
+  List<String> getPrintableDashboardTableHeaders(
+      BuildContext context, T? pca, PdfDashnoardApi generator);
 }
 
 abstract class PrintableInvoiceInterfaceDetails<T extends PrintLocalSetting> {
@@ -73,9 +78,9 @@ class InvoiceHeaderTitleAndDescriptionInfo {
     return icon?.codePoint;
   }
 
-  PdfColor getColor() {
-    if (hexColor == null) return PdfColors.black;
-    return PdfColor.fromHex(hexColor ?? "");
+  pdf.PdfColor getColor() {
+    if (hexColor == null) return pdf.PdfColors.black;
+    return pdf.PdfColor.fromHex(hexColor ?? "");
   }
 }
 
@@ -87,8 +92,8 @@ class InvoiceTotalTitleAndDescriptionInfo {
   InvoiceTotalTitleAndDescriptionInfo(
       {required this.title, this.description, this.hexColor, this.size});
 
-  PdfColor getColor() {
-    if (hexColor == null) return PdfColors.black;
-    return PdfColor.fromHex(hexColor ?? "");
+  pdf.PdfColor getColor() {
+    if (hexColor == null) return pdf.PdfColors.black;
+    return pdf.PdfColor.fromHex(hexColor ?? "");
   }
 }

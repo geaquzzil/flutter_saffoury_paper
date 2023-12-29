@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:ui';
 
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -341,22 +343,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     onPopupMenuActionSelected(context, e);
   }
 
-  void printPage(BuildContext context) {
-    // if (SizeConfig.hasSecondScreen(context)) {
-    //   context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfPage(
-    //         invoiceObj: this as PrintableMaster,
-    //         iD: iD,
-    //         tableName: getTableNameApi(),
-    //       ));
-    //   return;
-    // }
-    // context.goNamed(printRouteName,
-    //     extra: this,
-    //     params: {"tableName": getTableNameApi()!, "id": iD.toString()});
-    context.goNamed(printRouteName,
-        pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-        extra: this);
-  }
+
 
   void onPopupMenuActionSelected(
       BuildContext context, MenuItemBuild result) async {
@@ -371,21 +358,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       }
     }
     if (result.icon == Icons.print) {
-      debugPrint("onPopupMenuActionSelected  print $result");
-
       printPage(context);
-      // Navigator.pushNamed(context, "/print", arguments: this);
     } else if (result.icon == Icons.edit) {
-      debugPrint("onPopupMenuActionSelected  edit $result");
-      // context.read<ActionViewAbstractProvider>().change(this as ViewAbstract);
-      context.goNamed(editRouteName,
-          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-          extra: (this as ViewAbstract).getCopyInstance());
+      editPage(context);
     } else if (result.icon == Icons.view_agenda) {
-      debugPrint("onPopupMenuActionSelected  view_agenda $result");
-      context.goNamed(viewRouteName,
-          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-          extra: this);
+      viewPage(context);
     }
   }
 }
