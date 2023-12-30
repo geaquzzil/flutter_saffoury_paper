@@ -88,6 +88,13 @@ extension StringsUtils2 on String {
   }
 }
 
+extension BoolUtils on bool? {
+  bool getBool() {
+    if (this == null) return false;
+    return this!;
+  }
+}
+
 extension StringsUtils on String? {
   bool isNumeric() {
     return double.tryParse(this ?? "") != null;

@@ -27,16 +27,12 @@ PrintDashboardSetting _$PrintDashboardSettingFromJson(
       ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
       ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
       ..currentGroupList = json['currentGroupList'] as List<dynamic>?
-      ..hideCustomerBalance = json['hideCustomerBalance'] as bool?
-      ..hideInvoiceDate = json['hideInvoiceDate'] as bool?
-      ..hideEmployeeName = json['hideEmployeeName'] as bool?
-      ..hideCountry = json['hideCountry'] as bool?
-      ..hideManufacture = json['hideManufacture'] as bool?
-      ..customerName = json['customerName'] as String?
-      ..cutRequestID = json['cutRequestID'] as String?
-      ..country = json['country'] as String?
-      ..manufacture = json['manufacture'] as String?
-      ..description = json['description'] as String?;
+      ..hideInfoHeader = json['hideInfoHeader'] as bool?
+      ..hideTotalFooter = json['hideTotalFooter'] as bool?
+      ..hideCurrency = json['hideCurrency'] as bool?
+      ..currency = json['currency'] == null
+          ? null
+          : Currency.fromJson(json['currency'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$PrintDashboardSettingToJson(
         PrintDashboardSetting instance) =>
@@ -54,14 +50,8 @@ Map<String, dynamic> _$PrintDashboardSettingToJson(
       'currentGroupNameFromList': instance.currentGroupNameFromList,
       'currentGroupNameIndex': instance.currentGroupNameIndex,
       'currentGroupList': instance.currentGroupList,
-      'hideCustomerBalance': instance.hideCustomerBalance,
-      'hideInvoiceDate': instance.hideInvoiceDate,
-      'hideEmployeeName': instance.hideEmployeeName,
-      'hideCountry': instance.hideCountry,
-      'hideManufacture': instance.hideManufacture,
-      'customerName': instance.customerName,
-      'cutRequestID': instance.cutRequestID,
-      'country': instance.country,
-      'manufacture': instance.manufacture,
-      'description': instance.description,
+      'hideInfoHeader': instance.hideInfoHeader,
+      'hideTotalFooter': instance.hideTotalFooter,
+      'hideCurrency': instance.hideCurrency,
+      'currency': instance.currency?.toJson(),
     };

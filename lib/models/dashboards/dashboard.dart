@@ -625,7 +625,7 @@ class Dashboard extends UserLists<Dashboard>
               BuildContext context, PrintDashboardSetting? pca) =>
           [];
   @override
-  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 
@@ -656,6 +656,8 @@ class Dashboard extends UserLists<Dashboard>
             ...incomes?.cast() ?? [],
             ...orders?.cast() ?? [],
             ...purchases?.cast() ?? [],
+            ...orders_refunds?.cast() ?? [],
+            ...purchases_refunds?.cast() ?? [],
             ...cut_requests?.cast() ?? []
 
             // if (debits?.isNotEmpty ?? false) debits!,
@@ -679,10 +681,29 @@ class Dashboard extends UserLists<Dashboard>
     return [
       AppLocalizations.of(context)!.date,
       AppLocalizations.of(context)!.description,
+      if (pca?.hideCurrency == false) AppLocalizations.of(context)!.currency,
       AppLocalizations.of(context)!.credits,
       AppLocalizations.of(context)!.debits,
       AppLocalizations.of(context)!.balance,
     ].map((e) => e.toUpperCase()).toList();
+  }
+
+  int getPrintableDashboardCreditIndex(PrintDashboardSetting? pca, r) {
+    if (pca?.hideCurrency == false) {
+      return 3;
+    } else {
+      return 2;
+    }
+  }
+
+  int getPrintableDashboardDebitIndex(
+    PrintDashboardSetting? pca,
+  ) {
+    if (pca?.hideCurrency == false) {
+      return 4;
+    } else {
+      return 3;
+    }
   }
 
   @override
@@ -703,4 +724,27 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   String getModifibleTitleName(BuildContext context) => "sdad";
+
+  @override
+  List<String> getPrintableDashboardRowContentConverter(
+      BuildContext context,
+      PrintDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator,
+      List dynamicList) {
+    double debitsDouble =
+        dynamicList[getPrintableDashboardCreditIndex(pca)].toDouble();
+    double creditsDouble =
+        dynamicList[getPrintableDashboardDebitIndex(pca)].toDouble();
+    generator.lastBalance =
+        generator.lastBalance + (creditsDouble - debitsDouble);
+    return [
+      dynamicList[0].toString(),
+      dynamicList[1].toString(),
+      creditsDouble.toCurrencyFormat(),
+      debitsDouble.toCurrencyFormat(),
+      generator.lastBalance.toCurrencyFormat()
+    ];
+  }
 }

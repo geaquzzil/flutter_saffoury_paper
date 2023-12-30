@@ -3,6 +3,7 @@ import 'package:flutter_saffoury_paper/models/customs/customs_declarations_image
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -316,12 +317,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   Widget? getPrintableWatermark() => null;
 
   @override
-  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           material.BuildContext context, PrintLocalSetting? pca) =>
-      [
-        date ?? "-",
-        getMainHeaderTextOnly(context) ?? "",
-        null,
-        null,
-      ];
+      null;
 }

@@ -1097,7 +1097,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+    DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
     return [
       date!,

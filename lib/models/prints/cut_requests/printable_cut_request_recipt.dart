@@ -8,6 +8,7 @@ import 'package:flutter_saffoury_paper/models/prints/printable_product_label_wid
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
@@ -249,7 +250,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
   Widget? getPrintableWatermark() => null;
 
   @override
-  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+    DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           material.BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 }

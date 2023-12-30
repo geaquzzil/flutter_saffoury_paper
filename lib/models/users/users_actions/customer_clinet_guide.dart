@@ -200,7 +200,7 @@ class CustomerClinetGuide
   }
 
   @override
-  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           material.BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 }

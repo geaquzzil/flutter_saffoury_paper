@@ -19,8 +19,7 @@ import '../models/prints/print_local_setting.dart';
 class PdfDashnoardApi<T extends PrintableDashboardInterface,
     E extends PrintLocalSetting> extends PrintMasterPDF<T, E> {
   late List<List<String>> list;
-  final int creditsIndex = 2;
-  final int debitsIndex = 3;
+
   double lastBalance = 0;
   Map<int, PdfColor> colorTypes = <int, PdfColor>{};
 
@@ -176,16 +175,8 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
   }
 
   void addToList(List<dynamic> data) {
-    double debitsDouble = data[debitsIndex].toDouble();
-    double creditsDouble = data[creditsIndex].toDouble();
-    lastBalance = lastBalance + (creditsDouble - debitsDouble);
-    list.add([
-      data[0].toString(),
-      data[1].toString(),
-      creditsDouble.toCurrencyFormat(),
-      debitsDouble.toCurrencyFormat(),
-      lastBalance.toCurrencyFormat()
-    ]);
+    list.add(printObj.getPrintableDashboardRowContentConverter(
+        context, setting, this, data));
   }
 
   Widget buildInvoiceMainTable() {

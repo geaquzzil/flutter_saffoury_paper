@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/funds/accounts/account_names.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
+import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/equalities.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
 import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
 import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_reciept.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
@@ -311,6 +313,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
 
   @override
   pdf.Widget? getPrintableWatermark() => null;
+
   String getIdWithLabelWithIsDollar(BuildContext context) {
     bool isD = isDollar();
     String addOn = "";
@@ -320,13 +323,37 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     return "${getMainHeaderLabelTextOnly(context)} ${getIDFormat(context)}$addOn";
   }
 
+  String getIdWithLabelWithIsDollarForDashboard(
+      BuildContext context, PrintLocalSetting? pca) {
+    bool isD = isDollar();
+    String addOn = "";
+    if (!isD) {
+      addOn = " -${equalities?.getMainHeaderTextOnly(context)}";
+    }
+    return "${getMainHeaderLabelTextOnly(context)} ${getIDFormat(context)}$addOn";
+  }
+
+  double getValueForDashboard(BuildContext context, PrintLocalSetting? pca) {
+    PrintDashboardSetting? setting;
+    if (pca != null) {
+      setting = pca as PrintDashboardSetting;
+    }
+    Currency? c = setting?.currency;
+    5
+
+    return value.toNonNullable() * (equalities?.value.toNonNullable() ?? 0);
+  }
+
   @override
-  List<dynamic> getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-          BuildContext context, PrintLocalSetting? pca) =>
-      [
-        date ?? "-",
-        getIdWithLabelWithIsDollar(context),
-        isIncomes() ? getValue() : 0,
-        isSpendings() ? getValue() : 0,
-      ];
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? pca) {
+    return DashboardContentItem()
+      ..credit = isIncomes() ? getValueForDashboard(context, pca) : 0
+      ..debit = isSpendings() ? getValueForDashboard(context, pca) : 0
+      ..date = date
+      ..currency = equalities?.currency?.name
+      ..currencyId = equalities?.currency?.iD
+      ..description = getIdWithLabelWithIsDollarForDashboard(context, pca)
+      ..iD = iD;
+  }
 }

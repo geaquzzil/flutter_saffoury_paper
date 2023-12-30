@@ -1619,10 +1619,9 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  List getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
-    // TODO: implement getPrintableInvoiceTableHeaderAndContentWhenDashboard
-    throw UnimplementedError();
+    return null;
   }
 }
 

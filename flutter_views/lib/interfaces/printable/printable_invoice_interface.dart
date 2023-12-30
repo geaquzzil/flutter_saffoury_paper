@@ -37,12 +37,16 @@ abstract class PrintableDashboardInterface<T extends PrintLocalSetting>
 
   List<String> getPrintableDashboardTableHeaders(
       BuildContext context, T? pca, PdfDashnoardApi generator);
+
+
+  List<String> getPrintableDashboardRowContentConverter(BuildContext context,
+      T? pca, PdfDashnoardApi generator, List dynamicList);
 }
 
 abstract class PrintableInvoiceInterfaceDetails<T extends PrintLocalSetting> {
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
       BuildContext context, T? pca);
-  List<dynamic>? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting);
 }
 
