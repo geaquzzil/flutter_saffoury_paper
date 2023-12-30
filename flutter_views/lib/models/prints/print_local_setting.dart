@@ -27,7 +27,7 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
 
   SortByType? getPrintableHasSortBy();
 
-  String? getPrintableSortByName();
+  String? getPrintableSortByName(BuildContext context);
 
   String? getPrintableGroupByName();
 

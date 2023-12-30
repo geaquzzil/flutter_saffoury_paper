@@ -222,7 +222,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
   void checkToSortByGroupField() {}
   void checkToSort(PrintableSelfListInterface pid, List<List<String>> data) {
     if (!hasSortBy()) return;
-    String field = setting!.getPrintableSortByName()!;
+    String field = setting!.getPrintableSortByName(context)!;
     bool ascending = setting!.getPrintableHasSortBy() == SortByType.ASC;
     int index = pid
         .getPrintableSelfListTableHeaderAndContent(context, list[0], setting)

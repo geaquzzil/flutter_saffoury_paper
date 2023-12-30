@@ -141,7 +141,7 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
   }
 
   bool hasSortBy() {
-    return setting?.getPrintableSortByName() != null;
+    return setting?.getPrintableSortByName(context) != null;
   }
 
   bool hasGroupBy() {

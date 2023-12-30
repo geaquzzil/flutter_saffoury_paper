@@ -42,6 +42,7 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
   }
 
   pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
+    material.debugPrint("getMultiPage started");
     return MultiPage(
       pageFormat: format,
       margin: EdgeInsets.zero,
@@ -89,7 +90,7 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
 
   void checkToSort(List<String> headers, List<List<String>> data) {
     if (!hasSortBy()) return;
-    String field = setting!.getPrintableSortByName()!;
+    String field = setting!.getPrintableSortByName(context)!;
     bool ascending = setting!.getPrintableHasSortBy() == SortByType.ASC;
     int index = headers.indexOf(field);
     if (index != -1) {
@@ -251,7 +252,11 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
                     border: Border(
                         bottom:
                             BorderSide(width: 2, color: getPrimaryColor()))),
-                cellStyle: Theme.of(contextPDF).tableCell,
+                cellStyle: Theme.of(contextPDF).tableCell.copyWith(
+                    // color: colorTypes.containsKey(rowNum)
+                    //         ? colorTypes[rowNum]!
+                    //         : null
+                    ),
                 headerStyle: Theme.of(contextPDF).tableHeader.copyWith(
                     color: getPrimaryColor(),
                     background: const BoxDecoration(color: PdfColors.white)),

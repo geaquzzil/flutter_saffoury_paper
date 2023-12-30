@@ -20,7 +20,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
   Future<pw.Document> getDocumentP(PdfPageFormat? format) async {
     var pdf = await getDocument();
     pdf.addPage(getMultiPage(format, header));
-    
+
     return pdf;
   }
 
@@ -78,7 +78,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
   void checkToSort(
       PrintableInvoiceInterfaceDetails pid, List<List<String>> data) {
     if (!hasSortBy()) return;
-    String field = setting!.getPrintableSortByName()!;
+    String field = setting!.getPrintableSortByName(context)!;
     bool ascending = setting!.getPrintableHasSortBy() == SortByType.ASC;
     int index = pid
         .getPrintableInvoiceTableHeaderAndContent(context, setting)

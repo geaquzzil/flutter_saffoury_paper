@@ -95,11 +95,13 @@ class RouteGenerator {
     return GoRouter(
       initialLocation: '/',
       redirect: !kIsWeb
-          ? (context, state) async {
-              debugPrint(
-                  "routes !kIsWeb path ${state.fullPath} ${state.name} ${state.uri}");
-              return null;
-            }
+          ? null
+
+          // (context, state) async {
+          //     debugPrint(
+          //         "routes !kIsWeb path ${state.fullPath} ${state.name} ${state.uri}");
+          //     return null;
+          //   }
           : (context, state) async {
               debugPrint("routes kIsWeb path  ${state.fullPath}");
               if (kIsWeb) {
@@ -303,7 +305,7 @@ class RouteGenerator {
                 path: "print/:tableName/:id",
                 pageBuilder: (context, state) {
                   debugPrint("go route name=> $printRouteName");
-                  debugPrint("go route name=> ${state.extra}");
+                  // debugPrint("go route name=> ${state.extra}");
                   // return MaterialPage(key: state.pageKey, child: TestBasePage());
 
                   return MaterialPage(

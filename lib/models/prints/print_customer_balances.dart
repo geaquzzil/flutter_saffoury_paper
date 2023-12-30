@@ -57,7 +57,7 @@ class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
   }
 
   @override
-  String? getPrintableSortByName() => null;
+  String? getPrintableSortByName(BuildContext context) => null;
 
   @override
   String? getPrintableGroupByName() => null;

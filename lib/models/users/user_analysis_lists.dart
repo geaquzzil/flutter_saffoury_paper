@@ -95,6 +95,11 @@ class UserLists<T> extends AuthUser<T> {
     return UserLists();
   }
 
+  @override
+  String? getTableNameApi() {
+    return null;
+  }
+
   bool checkList(List? list) {
     if (list == null) return false;
     if (list.isEmpty) return false;

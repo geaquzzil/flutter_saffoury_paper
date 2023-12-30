@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -56,7 +57,8 @@ part 'dashboard.g.dart';
 class Dashboard extends UserLists<Dashboard>
     implements
         DashableInterface,
-        PrintableDashboardInterface<PrintDashboardSetting> {
+        PrintableDashboardInterface<PrintDashboardSetting>,
+        ModifiablePrintableInterface<PrintDashboardSetting> {
   List<BalanceDue>? debitsDue;
   List<BalanceDue>? creditsDue;
   List<BalanceDue>? incomesDue;
@@ -584,105 +586,88 @@ class Dashboard extends UserLists<Dashboard>
       getPrintableDashboardAccountInfoInBottom(
           BuildContext context, PrintDashboardSetting? pca) {
     // TODO: implement getPrintableDashboardAccountInfoInBottom
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetBottom(
-      BuildContext context,
-      PrintDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator) {
-    // TODO: implement getPrintableDashboardCustomWidgetBottom
-    throw UnimplementedError();
-  }
+          BuildContext context,
+          PrintDashboardSetting? pca,
+          PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+                  PrintLocalSetting>
+              generator) =>
+      null;
 
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetTop(
-      BuildContext context,
-      PrintDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator) {
-    // TODO: implement getPrintableDashboardCustomWidgetTop
-    throw UnimplementedError();
-  }
+          BuildContext context,
+          PrintDashboardSetting? pca,
+          PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+                  PrintLocalSetting>
+              generator) =>
+      null;
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableDashboardFooterTotal(
-      BuildContext context, PrintDashboardSetting? pca) {
-    // TODO: implement getPrintableDashboardFooterTotal
-    throw UnimplementedError();
-  }
+          BuildContext context, PrintDashboardSetting? pca) =>
+      [];
 
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>>
       getPrintableDashboardHeaderInfo(
           BuildContext context, PrintDashboardSetting? pca) {
-    // TODO: implement getPrintableDashboardHeaderInfo
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo>
       getPrintableDashboardTotalDescripton(
-          BuildContext context, PrintDashboardSetting? pca) {
-    // TODO: implement getPrintableDashboardTotalDescripton
-    throw UnimplementedError();
-  }
-
+              BuildContext context, PrintDashboardSetting? pca) =>
+          [];
   @override
   List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
-    // TODO: implement getPrintableInvoiceTableHeaderAndContentWhenDashboard
-    throw UnimplementedError();
-  }
+          BuildContext context, PrintLocalSetting? dashboardSetting) =>
+      null;
 
   @override
   String getPrintableInvoiceTitle(
       BuildContext context, PrintDashboardSetting? pca) {
-    // TODO: implement getPrintableInvoiceTitle
-    throw UnimplementedError();
+    return getMainHeaderTextOnly(context);
   }
 
   @override
-  String getPrintablePrimaryColor(PrintDashboardSetting? pca) {
-    // TODO: implement getPrintablePrimaryColor
-    throw UnimplementedError();
-  }
+  String getPrintablePrimaryColor(PrintDashboardSetting? pca) =>
+      Colors.orange.toHex();
 
   @override
-  String getPrintableQrCode() {
-    // TODO: implement getPrintableQrCode
-    throw UnimplementedError();
-  }
+  String getPrintableQrCode() => "";
 
   @override
-  String getPrintableQrCodeID() {
-    // TODO: implement getPrintableQrCodeID
-    throw UnimplementedError();
-  }
+  String getPrintableQrCodeID() => "";
 
   @override
   List<PrintableMaster<PrintLocalSetting>>
       getPrintableRecieptMasterDashboardLists(
-          BuildContext context, PrintDashboardSetting? pca) {
-    // TODO: implement getPrintableRecieptMasterDashboardLists
-    throw UnimplementedError();
-  }
+              BuildContext context, PrintDashboardSetting? pca) =>
+          [
+            ...credits?.cast() ?? [],
+            ...debits?.cast() ?? [],
+            ...spendings?.cast() ?? [],
+            ...incomes?.cast() ?? [],
+            ...orders?.cast() ?? [],
+            ...purchases?.cast() ?? [],
+            ...cut_requests?.cast() ?? []
+
+            // if (debits?.isNotEmpty ?? false) debits!,
+            // if (spendings?.isNotEmpty ?? false) spendings!,
+            // if (incomes?.isNotEmpty ?? false) incomes!,
+          ];
+  @override
+  String getPrintableSecondaryColor(PrintDashboardSetting? pca) =>
+      Colors.orange[700]!.toHex();
 
   @override
-  String getPrintableSecondaryColor(PrintDashboardSetting? pca) {
-    // TODO: implement getPrintableSecondaryColor
-    throw UnimplementedError();
-  }
-
-  @override
-  pdf.Widget? getPrintableWatermark() {
-    // TODO: implement getPrintableWatermark
-    throw UnimplementedError();
-  }
+  pdf.Widget? getPrintableWatermark() => null;
 
   @override
   List<String> getPrintableDashboardTableHeaders(
@@ -699,4 +684,23 @@ class Dashboard extends UserLists<Dashboard>
       AppLocalizations.of(context)!.balance,
     ].map((e) => e.toUpperCase()).toList();
   }
+
+  @override
+  String getModifiableMainGroupName(BuildContext context) => "";
+
+  @override
+  PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
+          BuildContext context) =>
+      this;
+
+  @override
+  IconData getModifibleIconData() => getMainIconData();
+
+  @override
+  PrintDashboardSetting getModifibleSettingObject(BuildContext context) {
+    return PrintDashboardSetting();
+  }
+
+  @override
+  String getModifibleTitleName(BuildContext context) => "sdad";
 }

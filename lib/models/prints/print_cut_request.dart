@@ -33,7 +33,7 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
   PrintCutRequest() : super();
 
   @override
-  String? getPrintableSortByName() => null;
+  String? getPrintableSortByName(BuildContext context) => null;
   @override
   String? getPrintableGroupByName() => null;
   @override

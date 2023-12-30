@@ -41,7 +41,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
   PrintProductList() : super();
 
   @override
-  String? getPrintableSortByName() => sortByField;
+  String? getPrintableSortByName(BuildContext context) => sortByField;
 
   @override
   String? getPrintableGroupByName() => groupedByField;

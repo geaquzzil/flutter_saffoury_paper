@@ -28,7 +28,7 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
   PrintReceipt() : super();
 
   @override
-  String? getPrintableSortByName() => null;
+  String? getPrintableSortByName(BuildContext context) => null;
 
   @override
   String? getPrintableGroupByName() => null;

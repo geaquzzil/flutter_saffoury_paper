@@ -326,7 +326,7 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
       [
         date ?? "-",
         getIdWithLabelWithIsDollar(context),
-        isIncomes() ? getValue : 0,
+        isIncomes() ? getValue() : 0,
         isSpendings() ? getValue() : 0,
       ];
 }

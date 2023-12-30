@@ -37,7 +37,7 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
   }
 
   @override
-  String? getPrintableSortByName() => null;
+  String? getPrintableSortByName(BuildContext context) => AppLocalizations.of(context)!.date;
 
   @override
   String? getPrintableGroupByName() => null;

@@ -49,7 +49,7 @@ class PrintCustomerGuid extends PrintLocalSetting<PrintCustomerGuid> {
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
   @override
-  String? getPrintableSortByName() => null;
+  String? getPrintableSortByName(BuildContext context) => null;
   @override
   String? getPrintableGroupByName() => null;
 
