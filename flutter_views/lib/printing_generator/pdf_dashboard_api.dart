@@ -20,7 +20,6 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
     E extends PrintLocalSetting> extends PrintMasterPDF<T, E> {
   late List<List<String>> list;
 
-  double lastBalance = 0;
   Map<int, PdfColor> colorTypes = <int, PdfColor>{};
 
   PdfDashnoardApi(material.BuildContext context, T printObj, {E? printCommand})
@@ -36,7 +35,6 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
   Future<Uint8List> generate(PdfPageFormat? format) async {
     this.format = format;
     list = List.empty(growable: true);
-    lastBalance = 0;
     return (await getDocumentP(format)).save();
   }
 
@@ -174,12 +172,17 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
     );
   }
 
-  void addToList(List<dynamic> data) {
+  void addToList(DashboardContentItem data) {
     list.add(printObj.getPrintableDashboardRowContentConverter(
         context, setting, this, data));
   }
 
   Widget buildInvoiceMainTable() {
+    DashboardContentItem? data = printObj
+        .getPrintableDashboardFirstRowContentItem(context, setting, this);
+    if (data != null) {
+      addToList(data);
+    }
     List<PrintableMaster> details =
         printObj.getPrintableRecieptMasterDashboardLists(context, setting);
     var headers =
@@ -190,15 +193,17 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
       dynamic element = details[i];
 
       if (element is PrintableReceiptInterface) {
-        List? l = element.getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-            context, setting);
+        DashboardContentItem? l =
+            element.getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+                context, setting);
         if (l == null) continue;
         addToList(l);
         colorTypes.addAll(
             {i: PdfColor.fromHex(element.getPrintablePrimaryColor(null))});
       } else if (element is PrintableInvoiceInterface) {
-        List? l = element.getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-            context, setting);
+        DashboardContentItem? l =
+            element.getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+                context, setting);
         if (l == null) continue;
         addToList(l);
         colorTypes.addAll(
@@ -207,8 +212,9 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
         List<PrintableInvoiceInterfaceDetails> details =
             element.getPrintableInvoiceDetailsList();
         for (var w in details) {
-          List? l = w.getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-              context, setting);
+          DashboardContentItem? l =
+              w.getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+                  context, setting);
           if (l != null) {
             addToList(l);
           }

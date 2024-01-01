@@ -17,6 +17,7 @@ import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -429,7 +430,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
           price.toCurrencyFormatFromSetting(context),
           style: Theme.of(context)
               .textTheme
-              .caption
+              .bodySmall
               ?.copyWith(color: kPrimaryColor),
         )
       ],
@@ -437,21 +438,20 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-    DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
-    return [
-      "",
-      getMainHeaderTextOnly(context),
-      isPricelessInvoice()
-          ? 0
-          : isCreditInvoice()
-              ? price
-              : 0,
-      isPricelessInvoice()
-          ? 0
-          : isDebitsInvoice()
-              ? price
-              : 0,
-    ];
+    return DashboardContentItem(
+        shouldAddToBalance: false,
+        description: getMainHeaderTextOnly(context),
+        credit: isPricelessInvoice()
+            ? 0
+            : isCreditInvoice()
+                ? price
+                : 0,
+        debit: isPricelessInvoice()
+            ? 0
+            : isDebitsInvoice()
+                ? price
+                : 0);
   }
 }

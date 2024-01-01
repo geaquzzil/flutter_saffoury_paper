@@ -339,9 +339,13 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
       setting = pca as PrintDashboardSetting;
     }
     Currency? c = setting?.currency;
-    5
-
-    return value.toNonNullable() * (equalities?.value.toNonNullable() ?? 0);
+    if (c == null) {
+      return value.toNonNullable();
+    } else if (c.iD == 1) {
+      return value.toNonNullable() * (equalities?.value.toNonNullable() ?? 0);
+    } else {
+      return value.toCurrencyFormatFromSettingDoubleFindSYPEquality(context);
+    }
   }
 
   @override

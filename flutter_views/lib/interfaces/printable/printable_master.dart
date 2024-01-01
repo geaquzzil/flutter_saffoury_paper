@@ -35,15 +35,16 @@ class DashboardContentItem {
   int? currencyId;
   double? credit;
   double? debit;
-  DashboardContentItem({
-    this.iD,
-    this.date,
-    this.description,
-    this.currency,
-    this.currencyId,
-    this.credit,
-    this.debit,
-  });
+  bool shouldAddToBalance;
+  DashboardContentItem(
+      {this.iD,
+      this.date,
+      this.description,
+      this.currency,
+      this.currencyId,
+      this.credit,
+      this.debit,
+      this.shouldAddToBalance = true});
 }
 
 class CurrencyBalanceItem {}

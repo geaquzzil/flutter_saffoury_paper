@@ -90,11 +90,13 @@ class Dashboard extends UserLists<Dashboard>
 
   Dashboard() : super() {
     date = DateObject();
+    balances = {};
   }
 
   Dashboard.init(int iD, {DateObject? dateObject}) {
     this.iD = iD;
     date = dateObject;
+    balances = {};
   }
   @override
   Dashboard getSelfNewInstance() {
@@ -625,7 +627,7 @@ class Dashboard extends UserLists<Dashboard>
               BuildContext context, PrintDashboardSetting? pca) =>
           [];
   @override
-   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 
@@ -724,6 +726,21 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   String getModifibleTitleName(BuildContext context) => "sdad";
+  @override
+  DashboardContentItem? getPrintableDashboardFirstRowContentItem(
+    BuildContext context,
+    PrintDashboardSetting? pca,
+    PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+            PrintLocalSetting>
+        generator,
+  ) {
+    if (pca?.includePreviousBalance == true) {
+      return DashboardContentItem(
+          date: date?.from.toDateString(),
+          description: AppLocalizations.of(context)!.previousBalance,);
+    }
+    return null;
+  }
 
   @override
   List<String> getPrintableDashboardRowContentConverter(
@@ -732,7 +749,7 @@ class Dashboard extends UserLists<Dashboard>
       PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
               PrintLocalSetting>
           generator,
-      List dynamicList) {
+      DashboardContentItem? dynamicList) {
     double debitsDouble =
         dynamicList[getPrintableDashboardCreditIndex(pca)].toDouble();
     double creditsDouble =

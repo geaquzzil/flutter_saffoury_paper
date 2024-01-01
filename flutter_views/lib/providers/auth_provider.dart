@@ -288,6 +288,17 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     return _user.setting!.getPriceAndCurrency(context, value);
   }
 
+  double getPriceFromSettingDouble(BuildContext context, double value) {
+    if (_user.setting == null) return value.roundDouble();
+    return _user.setting!.getPriceFromSetting(value);
+  }
+
+  double getPriceFromSettingDoubleFindSYPEquality(
+      BuildContext context, double value) {
+    if (_user.setting == null) return -1;
+    return _user.setting!.getPriceSYPEquality(value);
+  }
+
   String? validateEmail(String value) {
     value = value.trim();
 

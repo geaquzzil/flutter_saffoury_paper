@@ -732,7 +732,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  List? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 }

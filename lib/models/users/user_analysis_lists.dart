@@ -28,6 +28,7 @@ import 'package:flutter_view_controller/new_components/tables_widgets/view_table
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:json_annotation/json_annotation.dart';
 import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
@@ -88,6 +89,33 @@ class UserLists<T> extends AuthUser<T> {
   List<CargoTransporter>? cargo_transporters; //employee only
   List<GrowthRate>? cargo_transportersAnalysis;
   int? cargo_transporters_count;
+
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  Map<String, double> balances = {};
+
+  void addBalance(double value, String currnecyName) {
+    if (balances.containsKey(currnecyName)) {
+      balances[currnecyName] = balances[currnecyName].toNonNullable() + value;
+    } else {
+      balances[currnecyName] = value;
+    }
+  }
+
+  void minusBalance(double value, String currnecyName) {
+    if (balances.containsKey(currnecyName)) {
+      balances[currnecyName] = balances[currnecyName].toNonNullable() - value;
+    } else {
+      balances[currnecyName] = value;
+    }
+  }
+
+  String getBalance() {
+    List<String> result = List.empty(growable: true);
+    balances.forEach((key, value) {
+      result.add(balances[key].toCurrencyFormat(symbol: key));
+    });
+    return result.join("\n");
+  }
 
   UserLists() : super();
   @override

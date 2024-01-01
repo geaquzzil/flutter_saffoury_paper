@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/services/text_input.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
@@ -23,7 +25,10 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
   bool? hideInfoHeader;
   bool? hideTotalFooter;
   bool? hideCurrency;
+  bool? showAsDetails;
+  bool? includePreviousBalance;
   Currency? currency;
+  PrintDashboardType? dashboardPrintType;
 
   PrintDashboardSetting() : super() {
     hasMultiplePageFormats = false;
@@ -59,13 +64,24 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
           "hideInfoHeader": false,
           "hideTotalFooter": false,
           "hideCurrency": false,
+          "showAsDetails": true,
+          "includePreviousBalance": true,
+          "dashboardPrintType": PrintDashboardType.ALL,
           "currency": Currency(),
         });
 
   @override
-  List<String> getMainFields({BuildContext? context}) => super
-      .getMainFields(context: context)
-    ..addAll(["hideInfoHeader", "hideTotalFooter", "hideCurrency", "currency"]);
+  List<String> getMainFields({BuildContext? context}) =>
+      super.getMainFields(context: context)
+        ..addAll([
+          "hideInfoHeader",
+          "hideTotalFooter",
+          "hideCurrency",
+          "currency",
+          "dashboardPrintType",
+          "includePreviousBalance",
+          "showAsDetails"
+        ]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
     if (field == "hideInfoHeader") {
@@ -74,6 +90,10 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
       return "hide Total Footer description TODO";
     } else if (field == "hideCurrency") {
       return AppLocalizations.of(context)!.hideCurrencyDes;
+    } else if (field == "showAsDetails") {
+      return "Show As Details description TODO";
+    } else if (field == "includePreviousBalance") {
+      return "${AppLocalizations.of(context)!.previousBalance} TYODO includePreviousBalance";
     }
     return super.getTextCheckBoxDescription(context, field);
   }
@@ -85,6 +105,9 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
           "hideInfoHeader": "hide Info Header label todo",
           "hideTotalFooter": "hide Total Footer label todo",
           "hideCurrency": AppLocalizations.of(context)!.hideCurrency,
+          "showAsDetails": "Show as Details label todo",
+          "includePreviousBalance":
+              AppLocalizations.of(context)!.previousBalance
         });
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
@@ -128,4 +151,45 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
         "onSavedModiablePrintableLoaded ${viewAbstractThatCalledPDF.runtimeType}");
     return this;
   }
+}
+
+enum PrintDashboardType implements ViewAbstractEnum<PrintDashboardType> {
+  ALL,
+  DAILY_INVOICE_ONLY,
+  MONEY_FUND_ONLY;
+
+  @override
+  String getFieldLabelString(BuildContext context, PrintDashboardType field) {
+    switch (field) {
+      case PrintDashboardType.ALL:
+        return AppLocalizations.of(context)!.all;
+      case PrintDashboardType.DAILY_INVOICE_ONLY:
+        return AppLocalizations.of(context)!.invoice;
+      case PrintDashboardType.MONEY_FUND_ONLY:
+        return AppLocalizations.of(context)!.money_fund;
+    }
+  }
+
+  @override
+  IconData getFieldLabelIconData(
+      BuildContext context, PrintDashboardType field) {
+    switch (field) {
+      case PrintDashboardType.ALL:
+        return Icons.all_inbox;
+      case PrintDashboardType.DAILY_INVOICE_ONLY:
+        return Icons.document_scanner;
+      case PrintDashboardType.MONEY_FUND_ONLY:
+        return Icons.money;
+    }
+  }
+
+  @override
+  IconData getMainIconData() => Icons.print;
+
+  @override
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.printOptionsEnum;
+
+  @override
+  List<PrintDashboardType> getValues() => PrintDashboardType.values;
 }

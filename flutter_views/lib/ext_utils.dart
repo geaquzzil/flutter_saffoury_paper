@@ -333,6 +333,19 @@ extension NonNullableDouble on double? {
         .replaceFirst(RegExp(r'\.?0*$'), '');
   }
 
+  double toCurrencyFormatFromSettingDoubleFindSYPEquality(
+      BuildContext context) {
+    return context
+        .read<AuthProvider<AuthUser>>()
+        .getPriceFromSettingDoubleFindSYPEquality(context, toNonNullable());
+  }
+
+  double toCurrencyFormatFromSettingDobule(BuildContext context) {
+    return context
+        .read<AuthProvider<AuthUser>>()
+        .getPriceFromSettingDouble(context, toNonNullable());
+  }
+
   String toCurrencyFormatFromSetting(BuildContext context) {
     return context
         .read<AuthProvider<AuthUser>>()

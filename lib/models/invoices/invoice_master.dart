@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
@@ -1097,26 +1098,25 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-    DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
-    return [
-      date!,
-      getMainHeaderTextOnly(context),
-      isPricelessInvoice()
-          ? 0
-          : isCreditInvoice()
-              ? isRefundCreditInvoice()
-                  ? extendedRefundPrice
-                  : extendedPrice
-              : 0,
-      isPricelessInvoice()
-          ? 0
-          : isDebitsInvoice()
-              ? isRefundDebitInvoice()
-                  ? extendedRefundPrice
-                  : extendedPrice
-              : 0,
-    ];
+    return DashboardContentItem(
+        credit: isPricelessInvoice()
+            ? 0
+            : isCreditInvoice()
+                ? isRefundCreditInvoice()
+                    ? extendedRefundPrice
+                    : extendedPrice
+                : 0,
+        debit: isPricelessInvoice()
+            ? 0
+            : isDebitsInvoice()
+                ? isRefundDebitInvoice()
+                    ? extendedRefundPrice
+                    : extendedPrice
+                : 0,
+        date: date,
+        description: getMainHeaderTextOnly(context));
   }
 }
 

@@ -28,8 +28,11 @@ class Setting extends ViewAbstract<Setting> {
         .toCurrencyFormat(symbol: " ${getPriceCurrencyFromSetting(context)} ");
   }
 
+  double getPriceSYPEquality(double value) {
+    return value * EXCHANGE_RATE.toNonNullable();
+  }
+
   double getPriceFromSetting(double value) {
-    return value;
     switch (currency) {
       case CurrencySetting.DOLLAR:
         return value;
