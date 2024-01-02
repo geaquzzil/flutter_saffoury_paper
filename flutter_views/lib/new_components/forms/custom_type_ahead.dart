@@ -408,7 +408,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
 
                 decoration: decoration,
               ),
-              // TODO HACK to satisfy strictness
               suggestionsCallback: suggestionsCallback,
               itemBuilder: itemBuilder,
               transitionBuilder: (context, suggestionsBox, controller) =>

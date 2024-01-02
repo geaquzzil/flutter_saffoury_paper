@@ -12,6 +12,12 @@ class Currency extends BaseWithNameString<Currency> {
   String? nameAr;
 
   Currency() : super();
+
+  Currency.init(BuildContext context) {
+    nameAr = AppLocalizations.of(context)!.sypDots;
+    name = AppLocalizations.of(context)!.sypDots;
+    iD = 1;
+  }
   @override
   Currency getSelfNewInstance() {
     return Currency();

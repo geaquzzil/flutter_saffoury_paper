@@ -352,6 +352,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get communicate => 'Communicate';
 
   @override
+  String get companyLogo => 'Company logo';
+
+  @override
   String get completed => 'Completed';
 
   @override
@@ -508,6 +511,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get desposited => 'Deposited';
+
+  @override
+  String get detailedInoive => 'Detailed invoice';
 
   @override
   String get details => 'Details';
@@ -899,6 +905,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hideEmployeeDes => 'Employee name which server the invoice will not appear on the invoice';
+
+  @override
+  String hideFormat(Object r) {
+    return 'Hide $r';
+  }
 
   @override
   String get hideInvoiceUnitAndTotalPrice => 'Hide invoice unit and total price';
@@ -1396,6 +1407,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previousBalance => 'Previous balance';
 
   @override
+  String get previousBalanceForwarded => 'Previous balance (Forwarded)';
+
+  @override
   String get priceInfo => 'Price info';
 
   @override
@@ -1779,6 +1793,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showBarcodesDes => 'Show all product barcodes details';
+
+  @override
+  String showFormat(Object r) {
+    return 'Show $r';
+  }
 
   @override
   String get showInvoiceRefund => 'Show invoice refund(s)';

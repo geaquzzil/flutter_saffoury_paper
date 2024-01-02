@@ -759,6 +759,12 @@ abstract class AppLocalizations {
   /// **'Communicate'**
   String get communicate;
 
+  /// No description provided for @companyLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Company logo'**
+  String get companyLogo;
+
   /// No description provided for @completed.
   ///
   /// In en, this message translates to:
@@ -1070,6 +1076,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deposited'**
   String get desposited;
+
+  /// No description provided for @detailedInoive.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed invoice'**
+  String get detailedInoive;
 
   /// No description provided for @details.
   ///
@@ -1820,6 +1832,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Employee name which server the invoice will not appear on the invoice'**
   String get hideEmployeeDes;
+
+  /// No description provided for @hideFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide {r}'**
+  String hideFormat(Object r);
 
   /// No description provided for @hideInvoiceUnitAndTotalPrice.
   ///
@@ -2751,6 +2769,12 @@ abstract class AppLocalizations {
   /// **'Previous balance'**
   String get previousBalance;
 
+  /// No description provided for @previousBalanceForwarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous balance (Forwarded)'**
+  String get previousBalanceForwarded;
+
   /// No description provided for @priceInfo.
   ///
   /// In en, this message translates to:
@@ -3476,6 +3500,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show all product barcodes details'**
   String get showBarcodesDes;
+
+  /// No description provided for @showFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Show {r}'**
+  String showFormat(Object r);
 
   /// No description provided for @showInvoiceRefund.
   ///

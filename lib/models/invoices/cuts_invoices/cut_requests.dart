@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
@@ -733,8 +734,19 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-          BuildContext context, PrintLocalSetting? dashboardSetting) =>
-      null;
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    Currency c = Currency.init(context);
+    return DashboardContentItem(
+        shouldAddToBalance: false,
+        showDebitAndCredit: false,
+        currency: c.name,
+        currencyId: c.iD,
+        quantity: quantity.toCurrencyFormat(),
+        credit: 0,
+        debit: 0,
+        date: date,
+        description: getMainHeaderTextOnly(context));
+  }
 }
 
 // enum CutStatus {

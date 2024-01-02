@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'print_dashboard_setting.dart';
+part of 'print_customer_dashboard_setting.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PrintDashboardSetting _$PrintDashboardSettingFromJson(
+PrintCustomerDashboardSetting _$PrintCustomerDashboardSettingFromJson(
         Map<String, dynamic> json) =>
-    PrintDashboardSetting()
+    PrintCustomerDashboardSetting()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..printerOptions = json['printerOptions'] == null
           ? null
@@ -36,11 +36,10 @@ PrintDashboardSetting _$PrintDashboardSettingFromJson(
       ..currency = json['currency'] == null
           ? null
           : Currency.fromJson(json['currency'] as Map<String, dynamic>)
-      ..dashboardPrintType = $enumDecodeNullable(
-          _$PrintDashboardTypeEnumMap, json['dashboardPrintType']);
+      ..hideCustomerTerms = json['hideCustomerTerms'] as bool?;
 
-Map<String, dynamic> _$PrintDashboardSettingToJson(
-        PrintDashboardSetting instance) =>
+Map<String, dynamic> _$PrintCustomerDashboardSettingToJson(
+        PrintCustomerDashboardSetting instance) =>
     <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
@@ -62,12 +61,5 @@ Map<String, dynamic> _$PrintDashboardSettingToJson(
       'showAsDetails': instance.showAsDetails,
       'includePreviousBalance': instance.includePreviousBalance,
       'currency': instance.currency?.toJson(),
-      'dashboardPrintType':
-          _$PrintDashboardTypeEnumMap[instance.dashboardPrintType],
+      'hideCustomerTerms': instance.hideCustomerTerms,
     };
-
-const _$PrintDashboardTypeEnumMap = {
-  PrintDashboardType.ALL: 'ALL',
-  PrintDashboardType.DAILY_INVOICE_ONLY: 'DAILY_INVOICE_ONLY',
-  PrintDashboardType.MONEY_FUND_ONLY: 'MONEY_FUND_ONLY',
-};

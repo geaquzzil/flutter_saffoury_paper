@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
@@ -1100,7 +1101,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
+    Currency c = Currency.init(context);
     return DashboardContentItem(
+        currency: c.name,
+        currencyId: c.iD,
+        quantity: quantity.toCurrencyFormat(),
         credit: isPricelessInvoice()
             ? 0
             : isCreditInvoice()

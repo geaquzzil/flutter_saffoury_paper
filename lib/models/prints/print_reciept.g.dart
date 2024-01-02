@@ -20,6 +20,7 @@ PrintReceipt _$PrintReceiptFromJson(Map<String, dynamic> json) => PrintReceipt()
   ..hasMultiplePageFormats = json['hasMultiplePageFormats'] as bool?
   ..hideTermsOfService = json['hideTermsOfService'] as bool?
   ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
+  ..hideHeaderLogo = json['hideHeaderLogo'] as bool?
   ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
   ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
   ..currentGroupList = json['currentGroupList'] as List<dynamic>?
@@ -39,6 +40,7 @@ Map<String, dynamic> _$PrintReceiptToJson(PrintReceipt instance) =>
       'hasMultiplePageFormats': instance.hasMultiplePageFormats,
       'hideTermsOfService': instance.hideTermsOfService,
       'hideAdditionalNotes': instance.hideAdditionalNotes,
+      'hideHeaderLogo': instance.hideHeaderLogo,
       'currentGroupNameFromList': instance.currentGroupNameFromList,
       'currentGroupNameIndex': instance.currentGroupNameIndex,
       'currentGroupList': instance.currentGroupList,

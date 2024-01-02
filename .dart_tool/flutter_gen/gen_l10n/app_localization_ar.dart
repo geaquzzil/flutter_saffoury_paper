@@ -352,6 +352,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get communicate => 'التواصل';
 
   @override
+  String get companyLogo => 'شعار الشركة';
+
+  @override
   String get completed => 'مكتمل';
 
   @override
@@ -508,6 +511,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get desposited => 'أودعت';
+
+  @override
+  String get detailedInoive => 'فاتورة مفصلة';
 
   @override
   String get details => 'التفاصيل';
@@ -899,6 +905,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hideEmployeeDes => 'اسم الموظف الذي لن تظهر الفاتورة في الفاتورة';
+
+  @override
+  String hideFormat(Object r) {
+    return 'اخفاء $r';
+  }
 
   @override
   String get hideInvoiceUnitAndTotalPrice => 'إخفاء وحدة الفاتورة والسعر الإجمالي';
@@ -1396,6 +1407,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get previousBalance => 'الرصيد السابق';
 
   @override
+  String get previousBalanceForwarded => 'الرصيد السابق (المحول)';
+
+  @override
   String get priceInfo => 'معلومات السعر';
 
   @override
@@ -1779,6 +1793,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get showBarcodesDes => 'اظهار جميع  باركودات المنتج';
+
+  @override
+  String showFormat(Object r) {
+    return 'اظهار $r';
+  }
 
   @override
   String get showInvoiceRefund => 'أظهار مرتجعات الفاتورة';

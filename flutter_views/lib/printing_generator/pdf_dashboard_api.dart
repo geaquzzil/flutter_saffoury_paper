@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_bill_inte
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -26,9 +27,9 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
       : super(context: context, printObj: printObj, setting: printCommand);
 
   Future<pw.Document> getDocumentP(PdfPageFormat? format) async {
+    (printObj as ViewAbstract).onBeforeGenerateView(context);
     var pdf = await getDocument();
     pdf.addPage(getMultiPage(format, header));
-
     return pdf;
   }
 
@@ -68,7 +69,7 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
         padding: const EdgeInsets.all(20),
         child: getDirections(
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: checkListToReverse(inf.map((e) {
                   return Column(
@@ -108,16 +109,6 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
     }
   }
 
-  double getSizeForHeaderInfo(int length, int idx) {
-    if (idx == length - 1) {
-      return 200;
-    } else if (idx == 0) {
-      return 200;
-    } else {
-      return 100;
-    }
-  }
-
   CrossAxisAlignment getCrossAxisAlignmentForHeaderInfo(int length, int idx) {
     if (idx == length - 1) {
       return isArabic() ? CrossAxisAlignment.start : CrossAxisAlignment.end;
@@ -128,6 +119,16 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
     }
   }
 
+  double getSizeForHeaderInfo(int length, int idx) {
+    if (idx == length - 1) {
+      return 200;
+    } else if (idx == 0) {
+      return 200;
+    } else {
+      return 100;
+    }
+  }
+
   pw.Padding buildInvoiceInfoItem(
       InvoiceHeaderTitleAndDescriptionInfo item, int length, int idx) {
     return Padding(
@@ -135,7 +136,7 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
         child: Container(
             width: getSizeForHeaderInfo(length, idx),
             child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment:
                     getCrossAxisAlignmentForHeaderInfo(length, idx),
                 mainAxisAlignment: getMainAxisSizeForHeaderInfo(length, idx),

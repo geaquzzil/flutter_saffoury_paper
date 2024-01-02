@@ -4,17 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_customer_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_terms.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -31,6 +36,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_custom_auto_rest_custom_view_horizontal.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -48,6 +54,7 @@ import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_re
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:pdf/src/widgets/widget.dart' as pdf;
 import '../funds/credits.dart';
 import '../funds/debits.dart';
 
@@ -60,7 +67,10 @@ part 'customer_dashboard.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CustomerDashboard extends UserLists<CustomerDashboard>
-    implements DashableInterface {
+    implements
+        DashableInterface,
+        PrintableDashboardInterface<PrintCustomerDashboardSetting>,
+        ModifiablePrintableInterface<PrintCustomerDashboardSetting> {
   Customer? customers;
   double? previousBalance;
   //balance from to date
@@ -373,6 +383,177 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
           BuildContext context) =>
       getTabBarSecondPane(context);
+
+  @override
+  String getModifiableMainGroupName(BuildContext context) {
+    // TODO: implement getModifiableMainGroupName
+    throw UnimplementedError();
+  }
+
+  @override
+  PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
+      BuildContext context) {
+    // TODO: implement getModifiablePrintablePdfSetting
+    throw UnimplementedError();
+  }
+
+  @override
+  IconData getModifibleIconData() {
+    // TODO: implement getModifibleIconData
+    throw UnimplementedError();
+  }
+
+  @override
+  PrintCustomerDashboardSetting getModifibleSettingObject(
+      BuildContext context) {
+    // TODO: implement getModifibleSettingObject
+    throw UnimplementedError();
+  }
+
+  @override
+  String getModifibleTitleName(BuildContext context) {
+    // TODO: implement getModifibleTitleName
+    throw UnimplementedError();
+  }
+
+  @override
+  List<InvoiceHeaderTitleAndDescriptionInfo>
+      getPrintableDashboardAccountInfoInBottom(
+          BuildContext context, PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableDashboardAccountInfoInBottom
+    throw UnimplementedError();
+  }
+
+  @override
+  pdf.Widget? getPrintableDashboardCustomWidgetBottom(
+      BuildContext context,
+      PrintCustomerDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    // TODO: implement getPrintableDashboardCustomWidgetBottom
+    throw UnimplementedError();
+  }
+
+  @override
+  pdf.Widget? getPrintableDashboardCustomWidgetTop(
+      BuildContext context,
+      PrintCustomerDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    // TODO: implement getPrintableDashboardCustomWidgetTop
+    throw UnimplementedError();
+  }
+
+  @override
+  DashboardContentItem? getPrintableDashboardFirstRowContentItem(
+      BuildContext context,
+      PrintCustomerDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    // TODO: implement getPrintableDashboardFirstRowContentItem
+    throw UnimplementedError();
+  }
+
+  @override
+  List<InvoiceTotalTitleAndDescriptionInfo> getPrintableDashboardFooterTotal(
+      BuildContext context, PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableDashboardFooterTotal
+    throw UnimplementedError();
+  }
+
+  @override
+  List<List<InvoiceHeaderTitleAndDescriptionInfo>>
+      getPrintableDashboardHeaderInfo(
+          BuildContext context, PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableDashboardHeaderInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String> getPrintableDashboardRowContentConverter(
+      BuildContext context,
+      PrintCustomerDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator,
+      DashboardContentItem dynamicList) {
+    // TODO: implement getPrintableDashboardRowContentConverter
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String> getPrintableDashboardTableHeaders(
+      BuildContext context,
+      PrintCustomerDashboardSetting? pca,
+      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
+              PrintLocalSetting>
+          generator) {
+    // TODO: implement getPrintableDashboardTableHeaders
+    throw UnimplementedError();
+  }
+
+  @override
+  List<InvoiceTotalTitleAndDescriptionInfo>
+      getPrintableDashboardTotalDescripton(
+          BuildContext context, PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableDashboardTotalDescripton
+    throw UnimplementedError();
+  }
+
+  @override
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    // TODO: implement getPrintableInvoiceTableHeaderAndContentWhenDashboard
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableInvoiceTitle(
+      BuildContext context, PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableInvoiceTitle
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintablePrimaryColor(PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintablePrimaryColor
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableQrCode() {
+    // TODO: implement getPrintableQrCode
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableQrCodeID() {
+    // TODO: implement getPrintableQrCodeID
+    throw UnimplementedError();
+  }
+
+  @override
+  List<PrintableMaster<PrintLocalSetting>>
+      getPrintableRecieptMasterDashboardLists(
+          BuildContext context, PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableRecieptMasterDashboardLists
+    throw UnimplementedError();
+  }
+
+  @override
+  String getPrintableSecondaryColor(PrintCustomerDashboardSetting? pca) {
+    // TODO: implement getPrintableSecondaryColor
+    throw UnimplementedError();
+  }
+
+  @override
+  pdf.Widget? getPrintableWatermark() {
+    // TODO: implement getPrintableWatermark
+    throw UnimplementedError();
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

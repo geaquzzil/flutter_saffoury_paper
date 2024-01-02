@@ -18,6 +18,8 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   bool? hideTermsOfService = false;
   bool? hideAdditionalNotes = false;
 
+  bool? hideHeaderLogo = false;
+
   String? currentGroupNameFromList;
   int? currentGroupNameIndex;
 
@@ -42,6 +44,7 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "sortByType": SortByType.DESC,
         "hideTermsOfService": false,
         "hideAdditionalNotes": false,
+        "hideHeaderLogo": false,
       };
   @override
   List<String> getMainFields({BuildContext? context}) => [
@@ -61,6 +64,8 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "secondaryColor": AppLocalizations.of(context)!.secondaryColor,
         "hideTermsOfService": AppLocalizations.of(context)!.hideCompanyTerms,
         "hideAdditionalNotes": AppLocalizations.of(context)!.hideCompanyNotes,
+        "hideHeaderLogo": AppLocalizations.of(context)!
+            .hideFormat(AppLocalizations.of(context)!.companyLogo.toLowerCase())
       };
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/balance_due.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -16,11 +17,15 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -91,9 +96,15 @@ class UserLists<T> extends AuthUser<T> {
   int? cargo_transporters_count;
 
   @JsonKey(includeToJson: false, includeFromJson: false)
-  Map<String, double> balances = {};
+  Map<String?, double> balances = {};
 
-  void addBalance(double value, String currnecyName) {
+  @override
+  void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
+    super.onBeforeGenerateView(context, action: action);
+    balances.clear();
+  }
+
+  void addBalance(double value, String? currnecyName) {
     if (balances.containsKey(currnecyName)) {
       balances[currnecyName] = balances[currnecyName].toNonNullable() + value;
     } else {
@@ -112,7 +123,7 @@ class UserLists<T> extends AuthUser<T> {
   String getBalance() {
     List<String> result = List.empty(growable: true);
     balances.forEach((key, value) {
-      result.add(balances[key].toCurrencyFormat(symbol: key));
+      result.add(balances[key].toCurrencyFormat(symbol: key ?? ""));
     });
     return result.join("\n");
   }
@@ -128,6 +139,34 @@ class UserLists<T> extends AuthUser<T> {
     return null;
   }
 
+  String? getAbstractColor(PrintDashboardSetting? pca) {
+    if (this is Dashboard) {
+      return (this as Dashboard).getPrintablePrimaryColor(pca);
+    } else if (this is CustomerDashboard) {
+      return (this as CustomerDashboard).getMainColor()?.toHex();
+    }
+    return null;
+  }
+
+  String getAPreviousBalance(BuildContext context, PrintDashboardSetting? pca) {
+    if (this is Dashboard) {
+      return (this as Dashboard)
+          .getTotalPreviousBalance(cashBoxID: pca?.currency?.iD);
+    } else {
+      //todo previous balance on customer
+      return (this as CustomerDashboard).previousBalance.toCurrencyFormat();
+    }
+  }
+
+  DateObject? getDate() {
+    if (this is CustomerDashboard) {
+      return (this as CustomerDashboard).dateObject;
+    } else if (this is Dashboard) {
+      return (this as Dashboard).date;
+    }
+    return null;
+  }
+
   bool checkList(List? list) {
     if (list == null) return false;
     if (list.isEmpty) return false;
@@ -137,6 +176,83 @@ class UserLists<T> extends AuthUser<T> {
   bool checkForEmptyList(List? list, bool checkForEmpty) {
     if (!checkForEmpty) return true;
     return checkList(list);
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoiceDesSecRow(
+      BuildContext context, PrintDashboardSetting? pca) {
+    DateObject? date = getDate();
+    if (date == null) return null;
+    return [
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: AppLocalizations.of(context)!.from,
+        description: date.from,
+        // icon: Icons.date_range
+      ),
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: AppLocalizations.of(context)!.to,
+        description: date.to,
+        // icon: Icons.date_range
+      ),
+    ];
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoiceDesTherdRow(
+      BuildContext context, PrintDashboardSetting? pca) {
+    return [
+      if (pca?.hideCurrency == false)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.currency,
+          description: pca?.currency?.name ?? AppLocalizations.of(context)!.all,
+          // hexColor: getAbstractColor(pca)
+          // icon: Icons.tag
+        ),
+      if (pca?.includePreviousBalance == true)
+        InvoiceHeaderTitleAndDescriptionInfo(
+            title: AppLocalizations.of(context)!.previousBalance,
+            description: getAPreviousBalance(context, pca),
+            hexColor: getAbstractColor(pca)
+            // icon: Icons.tag
+            ),
+
+      // InvoiceHeaderTitleAndDescriptionInfo(
+      //     title: AppLocalizations.of(context)!.balance,
+      //     description: customers?.balance?.toCurrencyFormat() ?? "",
+      //     hexColor: getPrintablePrimaryColor(pca)
+      //     // icon: Icons.balance
+      //     ),
+      // if (!isPricelessInvoice())
+      //   if ((pca?.hideInvoicePaymentMethod == false))
+      //     InvoiceHeaderTitleAndDescriptionInfo(
+      //         title: AppLocalizations.of(context)!.paymentMethod,
+      //         description: "payment on advanced",
+      //         hexColor: getPrintablePrimaryColor(pca)
+      //         // icon: Icons.credit_card
+      //         ),
+    ];
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoicDesFirstRow(
+      BuildContext context, PrintDashboardSetting? pca) {
+    if (this is! CustomerDashboard) return null;
+    return [
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: AppLocalizations.of(context)!.mr,
+        description: (this as CustomerDashboard).customers?.name ?? "TODO",
+        // icon: Icons.account_circle_rounded
+      ),
+      if ((this as CustomerDashboard).customers?.address != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.addressInfo,
+          description: (this as CustomerDashboard).customers?.name ?? "",
+          // icon: Icons.map
+        ),
+      if ((this as CustomerDashboard).customers?.phone != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.phone_number,
+          description: (this as CustomerDashboard).customers?.phone ?? "",
+          // icon: Icons.phone
+        ),
+    ];
   }
 
   WidgetGridHelper getWidget(StaggeredGridTile gride,

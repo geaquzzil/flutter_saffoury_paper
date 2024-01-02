@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -618,7 +619,18 @@ class Dashboard extends UserLists<Dashboard>
   List<List<InvoiceHeaderTitleAndDescriptionInfo>>
       getPrintableDashboardHeaderInfo(
           BuildContext context, PrintDashboardSetting? pca) {
-    return [];
+    List<InvoiceHeaderTitleAndDescriptionInfo>? first =
+        getInvoicDesFirstRow(context, pca);
+    List<InvoiceHeaderTitleAndDescriptionInfo>? sec =
+        getInvoiceDesSecRow(context, pca);
+    List<InvoiceHeaderTitleAndDescriptionInfo>? therd =
+        getInvoiceDesTherdRow(context, pca);
+
+    return [
+      if (first != null) first,
+      if (sec != null) sec,
+      if (therd != null) therd
+    ];
   }
 
   @override
@@ -634,41 +646,81 @@ class Dashboard extends UserLists<Dashboard>
   @override
   String getPrintableInvoiceTitle(
       BuildContext context, PrintDashboardSetting? pca) {
-    return getMainHeaderTextOnly(context);
+    if (pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY) {
+      return AppLocalizations.of(context)!.money_fund;
+    } else if (pca?.dashboardPrintType ==
+        PrintDashboardType.DAILY_INVOICE_ONLY) {
+      return "Daily invoice";
+    } else {
+      return getMainHeaderTextOnly(context);
+    }
+  }
+
+  Color getColorB(PrintDashboardSetting? pca) {
+    if (pca?.dashboardPrintType == PrintDashboardType.ALL) {
+      return Colors.orange;
+    } else if (pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY) {
+      return Colors.green;
+    } else {
+      return Colors.orangeAccent;
+    }
   }
 
   @override
-  String getPrintablePrimaryColor(PrintDashboardSetting? pca) =>
-      Colors.orange.toHex();
+  String getPrintablePrimaryColor(PrintDashboardSetting? pca) {
+    return getColorB(pca).toHex();
+  }
 
+  @override
+  String getPrintableSecondaryColor(PrintDashboardSetting? pca) =>
+      getColorB(pca).toHex();
   @override
   String getPrintableQrCode() => "";
 
   @override
   String getPrintableQrCodeID() => "";
 
+  bool shouldViewInvoice(PrintDashboardSetting? pca) {
+    return pca?.dashboardPrintType == PrintDashboardType.DAILY_INVOICE_ONLY ||
+        pca?.dashboardPrintType == PrintDashboardType.ALL;
+  }
+
+  bool shouldViewMoney(PrintDashboardSetting? pca) {
+    return pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY ||
+        pca?.dashboardPrintType == PrintDashboardType.ALL;
+  }
+
+  List<PrintableMaster> getList(List? list, PrintDashboardSetting? pca) {
+    if (list == null) return [];
+    if (pca?.currency != null && list is List<MoneyFunds>) {
+      debugPrint("List is MoneyFunds");
+      return (list)
+          .where((p) => p.equalities?.currency?.iD == pca!.currency!.iD)
+          .toList();
+    }
+    return list.cast();
+  }
+
   @override
   List<PrintableMaster<PrintLocalSetting>>
       getPrintableRecieptMasterDashboardLists(
               BuildContext context, PrintDashboardSetting? pca) =>
           [
-            ...credits?.cast() ?? [],
-            ...debits?.cast() ?? [],
-            ...spendings?.cast() ?? [],
-            ...incomes?.cast() ?? [],
-            ...orders?.cast() ?? [],
-            ...purchases?.cast() ?? [],
-            ...orders_refunds?.cast() ?? [],
-            ...purchases_refunds?.cast() ?? [],
-            ...cut_requests?.cast() ?? []
+            if (shouldViewMoney(pca)) ...getList(credits, pca),
+            if (shouldViewMoney(pca)) ...getList(debits, pca),
+            if (shouldViewMoney(pca)) ...getList(incomes, pca),
+            if (shouldViewMoney(pca)) ...getList(spendings, pca),
+
+            if (shouldViewInvoice(pca)) ...orders?.cast() ?? [],
+            if (shouldViewInvoice(pca)) ...purchases?.cast() ?? [],
+            if (shouldViewInvoice(pca)) ...orders_refunds?.cast() ?? [],
+            if (shouldViewInvoice(pca)) ...purchases_refunds?.cast() ?? [],
+            if (shouldViewInvoice(pca)) ...cut_requests?.cast() ?? []
 
             // if (debits?.isNotEmpty ?? false) debits!,
             // if (spendings?.isNotEmpty ?? false) spendings!,
             // if (incomes?.isNotEmpty ?? false) incomes!,
           ];
-  @override
-  String getPrintableSecondaryColor(PrintDashboardSetting? pca) =>
-      Colors.orange[700]!.toHex();
 
   @override
   pdf.Widget? getPrintableWatermark() => null;
@@ -680,12 +732,24 @@ class Dashboard extends UserLists<Dashboard>
       PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
               PrintLocalSetting>
           generator) {
+    if (pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY) {
+      return [
+        AppLocalizations.of(context)!.date,
+        AppLocalizations.of(context)!.description,
+        if (pca?.hideCurrency == false) AppLocalizations.of(context)!.currency,
+        AppLocalizations.of(context)!.credits,
+        AppLocalizations.of(context)!.debits,
+        AppLocalizations.of(context)!.balance,
+      ].map((e) => e.toUpperCase()).toList();
+    }
     return [
       AppLocalizations.of(context)!.date,
       AppLocalizations.of(context)!.description,
-      if (pca?.hideCurrency == false) AppLocalizations.of(context)!.currency,
-      AppLocalizations.of(context)!.credits,
+      AppLocalizations.of(context)!.quantityShortCut,
+      AppLocalizations.of(context)!.unit,
       AppLocalizations.of(context)!.debits,
+      AppLocalizations.of(context)!.credits,
+      AppLocalizations.of(context)!.equality,
       AppLocalizations.of(context)!.balance,
     ].map((e) => e.toUpperCase()).toList();
   }
@@ -736,8 +800,11 @@ class Dashboard extends UserLists<Dashboard>
   ) {
     if (pca?.includePreviousBalance == true) {
       return DashboardContentItem(
-          date: date?.from.toDateString(),
-          description: AppLocalizations.of(context)!.previousBalance,);
+        shouldAddToBalance: true,
+        showDebitAndCredit: false,
+        date: date?.from,
+        description: AppLocalizations.of(context)!.previousBalance,
+      );
     }
     return null;
   }
@@ -749,19 +816,40 @@ class Dashboard extends UserLists<Dashboard>
       PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
               PrintLocalSetting>
           generator,
-      DashboardContentItem? dynamicList) {
-    double debitsDouble =
-        dynamicList[getPrintableDashboardCreditIndex(pca)].toDouble();
-    double creditsDouble =
-        dynamicList[getPrintableDashboardDebitIndex(pca)].toDouble();
-    generator.lastBalance =
-        generator.lastBalance + (creditsDouble - debitsDouble);
+      DashboardContentItem dynamicList) {
+    double? debitsDouble;
+    double? creditsDouble;
+    debitsDouble = dynamicList.debit;
+    creditsDouble = dynamicList.credit;
+    double? balancesGe =
+        (creditsDouble.toNonNullable() - debitsDouble.toNonNullable());
+    if (!dynamicList.showDebitAndCredit) {
+      addBalance(balancesGe, "s");
+      creditsDouble = null;
+      debitsDouble = null;
+    }
+    if (dynamicList.shouldAddToBalance) {
+      addBalance(balancesGe, dynamicList.currency);
+    }
+    if (pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY) {
+      return [
+        dynamicList.date ?? "-",
+        dynamicList.description ?? "-",
+        if (pca?.hideCurrency == false) dynamicList.currency ?? "-",
+        creditsDouble == null ? " " : creditsDouble.toCurrencyFormat(),
+        debitsDouble == null ? " " : debitsDouble.toCurrencyFormat(),
+        getBalance(),
+      ];
+    }
     return [
-      dynamicList[0].toString(),
-      dynamicList[1].toString(),
-      creditsDouble.toCurrencyFormat(),
-      debitsDouble.toCurrencyFormat(),
-      generator.lastBalance.toCurrencyFormat()
-    ];
+      dynamicList.date ?? "-",
+      dynamicList.description ?? "-",
+      dynamicList.quantity ?? " ",
+      dynamicList.unit ?? " ",
+      debitsDouble == null ? " " : debitsDouble.toCurrencyFormat(),
+      creditsDouble == null ? " " : creditsDouble.toCurrencyFormat(),
+      " EQ",
+      getBalance(),
+    ].map((e) => e.toUpperCase()).toList();
   }
 }

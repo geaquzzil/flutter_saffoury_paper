@@ -17,20 +17,23 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../funds/money_funds.dart';
 
-part 'print_dashboard_setting.g.dart';
+part 'print_customer_dashboard_setting.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
-class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
+class PrintCustomerDashboardSetting
+    extends PrintLocalSetting<PrintCustomerDashboardSetting> {
   bool? hideInfoHeader;
   bool? hideTotalFooter;
   bool? hideCurrency;
   bool? showAsDetails;
   bool? includePreviousBalance;
   Currency? currency;
-  PrintDashboardType? dashboardPrintType;
 
-  PrintDashboardSetting() : super() {
+  bool? hideCustomerTerms = true;
+  // bool? hide
+
+  PrintCustomerDashboardSetting() : super() {
     hasMultiplePageFormats = false;
   }
 
@@ -53,8 +56,8 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
   SortByType? getPrintableHasSortBy() => null;
 
   @override
-  PrintDashboardSetting getSelfNewInstance() {
-    return PrintDashboardSetting();
+  PrintCustomerDashboardSetting getSelfNewInstance() {
+    return PrintCustomerDashboardSetting();
   }
 
   @override
@@ -137,16 +140,17 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
   @override
   Map<String, dynamic> toJsonViewAbstract() => toJson();
   @override
-  PrintDashboardSetting fromJsonViewAbstract(Map<String, dynamic> json) =>
-      PrintDashboardSetting.fromJson(json);
+  PrintCustomerDashboardSetting fromJsonViewAbstract(
+          Map<String, dynamic> json) =>
+      PrintCustomerDashboardSetting.fromJson(json);
 
-  factory PrintDashboardSetting.fromJson(Map<String, dynamic> data) =>
-      _$PrintDashboardSettingFromJson(data);
+  factory PrintCustomerDashboardSetting.fromJson(Map<String, dynamic> data) =>
+      _$PrintCustomerDashboardSettingFromJson(data);
 
-  Map<String, dynamic> toJson() => _$PrintDashboardSettingToJson(this);
+  Map<String, dynamic> toJson() => _$PrintCustomerDashboardSettingToJson(this);
 
   @override
-  PrintDashboardSetting onSavedModiablePrintableLoaded(
+  PrintCustomerDashboardSetting onSavedModiablePrintableLoaded(
       BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
     debugPrint(
         "onSavedModiablePrintableLoaded ${viewAbstractThatCalledPDF.runtimeType}");

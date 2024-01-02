@@ -39,7 +39,7 @@ abstract class PrintableDashboardInterface<T extends PrintLocalSetting>
       BuildContext context, T? pca, PdfDashnoardApi generator);
 
   List<String> getPrintableDashboardRowContentConverter(BuildContext context,
-      T? pca, PdfDashnoardApi generator, DashboardContentItem? dynamicList);
+      T? pca, PdfDashnoardApi generator, DashboardContentItem dynamicList);
 
   DashboardContentItem? getPrintableDashboardFirstRowContentItem(
       BuildContext context, T? pca, PdfDashnoardApi generator);

@@ -35,7 +35,15 @@ class DashboardContentItem {
   int? currencyId;
   double? credit;
   double? debit;
+  String? quantity;
+  String? unit;
+  String? eq;
+  //this for adding invoice details we don't want to duplicate balance
   bool shouldAddToBalance;
+
+  ///this for adding previously balance
+  bool showDebitAndCredit;
+
   DashboardContentItem(
       {this.iD,
       this.date,
@@ -44,6 +52,10 @@ class DashboardContentItem {
       this.currencyId,
       this.credit,
       this.debit,
+      this.eq,
+      this.unit,
+      this.quantity,
+      this.showDebitAndCredit = true,
       this.shouldAddToBalance = true});
 }
 

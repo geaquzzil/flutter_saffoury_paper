@@ -563,9 +563,8 @@ class Product extends ViewAbstract<Product>
   }
 
   String getCountryNameString() {
-    //TODO if cutrequest return syria;
     if (isRollCut()) {
-      return "Syria";
+      return "Syria".toUpperCase();
     }
     return countries_manufactures?.countries?.name ?? "";
   }
