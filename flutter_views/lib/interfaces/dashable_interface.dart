@@ -31,6 +31,9 @@ abstract class DashableInterface<T extends ViewAbstract> {
       {bool? firstPane,
       GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab});
+
+
+      
 }
 
 enum WidgetDashboardType {

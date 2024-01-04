@@ -17,6 +17,7 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_customer_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -179,7 +181,7 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoiceDesSecRow(
-      BuildContext context, PrintDashboardSetting? pca) {
+      BuildContext context, PrintLocalSetting? pca) {
     DateObject? date = getDate();
     if (date == null) return null;
     return [
@@ -196,13 +198,44 @@ class UserLists<T> extends AuthUser<T> {
     ];
   }
 
+  bool includePreviousBalance(PrintLocalSetting? pca) {
+    if (pca == null) return true;
+    if (pca is PrintDashboardSetting) {
+      return pca.includePreviousBalance ?? true;
+    } else if (pca is PrintCustomerDashboardSetting) {
+      return pca.includePreviousBalance ?? true;
+    }
+    return true;
+  }
+
+  /// this hide by default
+  bool hideCurrencySetting(PrintLocalSetting? pca) {
+    if (pca == null) return true;
+    if (pca is PrintDashboardSetting) {
+      return pca.hideCurrency ?? true;
+    } else if (pca is PrintCustomerDashboardSetting) {
+      return pca.hideCurrency ?? true;
+    }
+    return true;
+  }
+
+  String getCurrencySettingName(BuildContext context, PrintLocalSetting? pca) {
+    if (pca == null) return AppLocalizations.of(context)!.all;
+    if (pca is PrintDashboardSetting) {
+      return pca.currency?.name ?? AppLocalizations.of(context)!.all;
+    } else if (pca is PrintCustomerDashboardSetting) {
+      return pca.currency?.name ?? AppLocalizations.of(context)!.all;
+    }
+    return AppLocalizations.of(context)!.all;
+  }
+
   List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoiceDesTherdRow(
       BuildContext context, PrintDashboardSetting? pca) {
     return [
-      if (pca?.hideCurrency == false)
+      if (hideCurrencySetting(pca))
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.currency,
-          description: pca?.currency?.name ?? AppLocalizations.of(context)!.all,
+          description: getCurrencySettingName(context, pca),
           // hexColor: getAbstractColor(pca)
           // icon: Icons.tag
         ),
@@ -232,7 +265,7 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoicDesFirstRow(
-      BuildContext context, PrintDashboardSetting? pca) {
+      BuildContext context, PrintLocalSetting? pca) {
     if (this is! CustomerDashboard) return null;
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
@@ -242,8 +275,9 @@ class UserLists<T> extends AuthUser<T> {
       ),
       if ((this as CustomerDashboard).customers?.address != null)
         InvoiceHeaderTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.addressInfo,
-          description: (this as CustomerDashboard).customers?.name ?? "",
+          title: AppLocalizations.of(context)!.iD,
+          description:
+              (this as CustomerDashboard).customers?.getIDFormat(context) ?? "",
           // icon: Icons.map
         ),
       if ((this as CustomerDashboard).customers?.phone != null)

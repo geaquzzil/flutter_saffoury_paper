@@ -21,8 +21,9 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
 
   @override
   Future<Widget> buildHeader() async {
-    String url =
-        'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColorStringHex()}&darkColor=${getSecondaryColorStringHex()}';
+    String url = setting?.hideHeaderLogo == true
+        ? ""
+        : 'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColorStringHex()}&darkColor=${getSecondaryColorStringHex()}';
     material.debugPrint("buildHeader $url");
     // return SvgImage(
     //     svg: await rootBundle.loadString("assets/images/vector/a4Header.svg"));
@@ -92,7 +93,6 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
   String getSecondaryColorStringHex() {
     return getSecondaryColor().toHex().substring(1, 7);
   }
-
 }
 
 class PrintMasterPDFUtils<T extends PrintLocalSetting> {

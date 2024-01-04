@@ -44,7 +44,7 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
         "sortByType": SortByType.DESC,
         "hideTermsOfService": false,
         "hideAdditionalNotes": false,
-        "hideHeaderLogo": false,
+        "hideHeaderLogo": true,
       };
   @override
   List<String> getMainFields({BuildContext? context}) => [

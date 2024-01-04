@@ -291,7 +291,6 @@ class _PdfPageState<T extends PrintLocalSetting>
   ViewAbstract getMainObject() {
     return getExtras() as ViewAbstract;
   }
-
   @override
   ServerActions getServerActions() {
     return ServerActions.view;

@@ -6,12 +6,15 @@ import 'package:flutter/material.dart';
 class QRCodeID {
   late int iD;
   late String action;
+
   int? quantity;
-  QRCodeID({required this.iD, required this.action, this.quantity});
+  String? extra;
+  QRCodeID({required this.iD, required this.action, this.quantity, this.extra});
   String getQrCode() {
     Map<String, dynamic> map = {
       "iD": iD,
       "action": action,
+      if (extra != null) "extra": extra,
       if (quantity != null) "quantity": quantity
     };
     final enCodedJson = utf8.encode(jsonEncode(map));
@@ -27,11 +30,12 @@ class QRCodeID {
     iD = map["iD"];
     action = map["action"];
     quantity = map["quantity"];
+    extra = map["extra"];
   }
 
   @override
   String toString() {
-    return "{iD:$iD,action:$action,quantity:$quantity}";
+    return "{iD:$iD,action:$action,quantity:$quantity,extra:$extra}";
   }
 }
 

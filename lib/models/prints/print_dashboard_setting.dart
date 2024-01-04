@@ -32,6 +32,7 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
 
   PrintDashboardSetting() : super() {
     hasMultiplePageFormats = false;
+    hideHeaderLogo=true;
   }
 
   @override
@@ -68,6 +69,7 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
           "includePreviousBalance": true,
           "dashboardPrintType": PrintDashboardType.ALL,
           "currency": Currency(),
+          
         });
 
   @override
