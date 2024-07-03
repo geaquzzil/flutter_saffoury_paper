@@ -15,14 +15,13 @@ class DropdownStringListControllerListener extends StatelessWidget {
   void Function(DropdownStringListItem? object) onSelected;
 
   DropdownStringListControllerListener(
-      {Key? key,
+      {super.key,
       required this.tag,
       required this.hint,
       required this.list,
       this.icon,
       this.currentScreenSize,
-      required this.onSelected})
-      : super(key: key) {
+      required this.onSelected}) {
     list.insert(0, null);
   }
 

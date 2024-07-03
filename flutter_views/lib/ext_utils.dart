@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
 
 import 'models/view_abstract.dart';
 
@@ -367,7 +365,6 @@ extension NonNullableInt on int? {
     return NumberFormat.currency(locale: "en_US", symbol: symbol)
         .format(toNonNullable())
         .replaceFirst(RegExp(r'\.?0*$'), '');
-    ;
   }
 }
 

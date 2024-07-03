@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProfileHeaderListTileWidget extends StatelessWidget {
   final void Function()? onTap;
-  const ProfileHeaderListTileWidget({Key? key, this.onTap}) : super(key: key);
+  const ProfileHeaderListTileWidget({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {

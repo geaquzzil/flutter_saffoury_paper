@@ -1,12 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 
-import '../text_bold.dart';
 
 class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   final String hint;

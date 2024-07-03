@@ -3,10 +3,8 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../cards/card_clicked.dart';
@@ -18,12 +16,12 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatefulWidget {
   bool useImageAsBackground;
 
   ListCardItemHorizontal({
-    Key? key,
+    super.key,
     required this.object,
     this.onPress,
     this.useImageAsBackground = false,
     this.useOutlineCard = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ListCardItemHorizontal<T>> createState() =>
@@ -186,11 +184,11 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
           child: Padding(
             padding: const EdgeInsets.all(1),
             child: DecoratedBox(
-              child: widget.object
-                  .getCardLeading(context, addCustomHeroTag: "horizontal"),
               decoration: const ShapeDecoration(
                 shape: CircleBorder(),
               ),
+              child: widget.object
+                  .getCardLeading(context, addCustomHeroTag: "horizontal"),
             ),
           ),
         ),

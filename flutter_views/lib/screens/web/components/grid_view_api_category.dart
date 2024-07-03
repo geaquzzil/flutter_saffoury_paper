@@ -4,22 +4,16 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
-import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api_master.dart';
-import 'package:flutter_view_controller/screens/web/ext.dart';
-import 'package:flutter_view_controller/screens/web/models/design_process.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:responsive_grid_list/responsive_grid_list.dart';
 
 class GridViewApi extends StatelessWidget {
   final ViewAbstract viewAbstract;
@@ -27,10 +21,10 @@ class GridViewApi extends StatelessWidget {
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
   GridViewApi({
-    Key? key,
+    super.key,
     this.customHeight,
     required this.viewAbstract,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

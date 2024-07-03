@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 

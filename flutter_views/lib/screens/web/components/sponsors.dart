@@ -12,6 +12,8 @@ final List<String> sponsorsLogo = [
 ];
 
 class Sponsors extends StatelessWidget {
+  const Sponsors({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

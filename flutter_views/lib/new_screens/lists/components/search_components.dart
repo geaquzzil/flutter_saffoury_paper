@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
@@ -11,7 +9,6 @@ import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/screens/on_hover_button.dart';

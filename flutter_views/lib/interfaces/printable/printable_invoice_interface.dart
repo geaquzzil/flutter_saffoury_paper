@@ -1,5 +1,6 @@
+// ignore_for_file: library_prefixes
+
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';

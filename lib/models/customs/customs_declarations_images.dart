@@ -6,7 +6,6 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'customs_declarations_images.g.dart';
 
 @JsonSerializable(explicitToJson: true)

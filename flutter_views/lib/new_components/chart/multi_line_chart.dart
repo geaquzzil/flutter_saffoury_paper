@@ -1,8 +1,5 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -17,15 +14,14 @@ class MultiLineChartItem<T, E> extends StatefulWidget {
   num? Function(int idx, T item, num num) yValueMapper;
   String? Function(T item, int idx)? dataLabelMapper;
   MultiLineChartItem(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.list,
       required this.titles,
       required this.xValueMapper,
       required this.yValueMapper,
       this.legendVisibility = false,
-      this.dataLabelMapper})
-      : super(key: key);
+      this.dataLabelMapper});
 
   @override
   State<MultiLineChartItem<T, E>> createState() =>
@@ -57,7 +53,7 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
             overflowMode: LegendItemOverflowMode.scroll),
         onZoomStart: (ZoomPanArgs args) => zoom(args),
         zoomPanBehavior: _zoomPanBehavior,
-        primaryXAxis: DateTimeAxis(
+        primaryXAxis: const DateTimeAxis(
           // autoScrollingDelta: 7,
           autoScrollingDeltaType: DateTimeIntervalType.months,
           // plotOffset: 20,
@@ -110,7 +106,7 @@ class _MultiLineChartItemState<T, E> extends State<MultiLineChartItem<T, E>> {
         //             color: Colors.black,
         //             child: Text("$label\n$date - $value"));
         //       }),
-        series: <ChartSeries>[
+        series: <CartesianSeries>[
           ...widget.list.map(
             (e) => LineSeries<T, E>(
                 name: widget.titles[widget.list.indexOf(e)]

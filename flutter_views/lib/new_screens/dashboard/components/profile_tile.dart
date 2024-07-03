@@ -6,8 +6,7 @@ import '../main_dashboard2.dart';
 
 class ProfilTile extends StatelessWidget {
   const ProfilTile(
-      {required this.data, required this.onPressedNotification, Key? key})
-      : super(key: key);
+      {required this.data, required this.onPressedNotification, super.key});
 
   final Profile data;
   final Function() onPressedNotification;

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -12,7 +14,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/src/response.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supercharged/supercharged.dart';
 
 import '../models/dealers/dealer.dart';
@@ -97,9 +98,9 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   List<DashableInterface> getListableOfDashablesInterface() {
     final s = _drawerItems.whereType<DashableInterface>().toList();
     debugPrint("getListableOfDashablesInterface ${s.length}");
-    s.forEach((element) {
+    for (var element in s) {
       debugPrint("getListableOfDashablesInterface ${element.runtimeType}");
-    });
+    }
     return s;
   }
 

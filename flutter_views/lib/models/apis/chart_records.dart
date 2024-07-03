@@ -8,9 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_date.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -29,16 +27,15 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   T? viewAbstract;
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, dynamic>? customAction;
+
   ChartRecordAnalysis() : super();
 
-  ChartRecordAnalysis.init(
-      T viewAbstract, DateObject date, EnteryInteval enteryInteval,
+  ChartRecordAnalysis.init(T this.viewAbstract, DateObject this.date,
+      EnteryInteval this.enteryInteval,
       {this.customAction}) {
-    this.viewAbstract = viewAbstract;
-    this.date = date;
-    this.enteryInteval = enteryInteval;
     customAction = customAction;
   }
+
   @override
   ChartRecordAnalysis getSelfNewInstance() {
     return ChartRecordAnalysis();
@@ -64,6 +61,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   String? getCustomAction() => "list_dashboard_single_item";
+
   @override
   String? getTableNameApi() => viewAbstract?.getTableNameApi();
 

@@ -1,11 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 
-import '../text_bold.dart';
 
 class DropdownEnumControllerListenerByIcon<T extends ViewAbstractEnum>
     extends StatefulWidget {
@@ -94,7 +90,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
         children: [
           FadeInLeft(
               key: UniqueKey(),
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               child: Text(
                 selectedValue!.getFieldLabelString(context, selectedValue),
                 style: Theme.of(context).textTheme.bodySmall,
@@ -108,7 +104,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
 
   CustomPopupMenuItem<T> buildMenuItem(BuildContext context, T e) {
     debugPrint(
-        "buildMenuItem  current $e initailValue viewAbstractEnum ${_viewAbstractEnum}");
+        "buildMenuItem  current $e initailValue viewAbstractEnum $_viewAbstractEnum");
     return CustomPopupMenuItem<T>(
       value: e,
       color: selectedValue == e ? Theme.of(context).highlightColor : null,
@@ -129,12 +125,12 @@ class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
   final Color? color;
 
   const CustomPopupMenuItem({
-    Key? key,
-    T? value,
-    bool enabled = true,
-    Widget? child,
+    super.key,
+    super.value,
+    super.enabled,
+    super.child,
     this.color,
-  }) : super(key: key, value: value, enabled: enabled, child: child);
+  });
 
   @override
   _CustomPopupMenuItemState<T> createState() => _CustomPopupMenuItemState<T>();

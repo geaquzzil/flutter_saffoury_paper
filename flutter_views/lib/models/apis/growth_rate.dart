@@ -104,7 +104,7 @@ extension GrowthRateUtils<T extends GrowthRate> on List<T?>? {
     if (this!.isEmpty) return const Text("-");
     double getGrowthRate = this![this!.length - 1]!.total.toNonNullable();
     return Text(
-      "Last month:" + getGrowthRate.toCurrencyFormat(symbol: "%"),
+      "Last month:${getGrowthRate.toCurrencyFormat(symbol: "%")}",
       style: getGrowthRate > 0 && !reverseTheme
           ? GrowthRate.getGrowTheme(context)
           : GrowthRate.getReduceTheme(context),
@@ -115,14 +115,14 @@ extension GrowthRateUtils<T extends GrowthRate> on List<T?>? {
     if (this == null) return "-";
     if (this!.isEmpty) return "-";
     double getGrowthRate = this![this!.length - 1]!.total.toNonNullable();
-    return "Last month:" + getGrowthRate.toCurrencyFormat(symbol: symple);
+    return "Last month:${getGrowthRate.toCurrencyFormat(symbol: symple)}";
   }
 
   String getLastRecordTextFromSetting(BuildContext context) {
     if (this == null) return "-";
     if (this!.isEmpty) return "-";
     double getGrowthRate = this![this!.length - 1]!.total.toNonNullable();
-    return "Last month:" + getGrowthRate.toCurrencyFormatFromSetting(context);
+    return "Last month:${getGrowthRate.toCurrencyFormatFromSetting(context)}";
   }
 
   double getTotal() {

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
@@ -7,7 +9,6 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
 import 'permissions/user_auth.dart';

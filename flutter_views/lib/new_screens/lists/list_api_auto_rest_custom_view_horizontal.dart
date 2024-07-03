@@ -7,7 +7,6 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
 class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
@@ -105,14 +104,14 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
   Widget build(BuildContext context) {
     return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
       builder: (context, value, child) {
-        debugPrint("ListApiMasterState building widget: ${key}");
+        debugPrint("ListApiMasterState building widget: $key");
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
         if (isLoading) {
           if (count == 0) {
             return wrapHeader(
-                context, CircularProgressIndicator(), listProvider);
+                context, const CircularProgressIndicator(), listProvider);
           }
         } else {
           if (count == 0 && isError) {

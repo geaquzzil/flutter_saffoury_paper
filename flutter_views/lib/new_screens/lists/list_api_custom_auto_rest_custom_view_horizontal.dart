@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
 class ListHorizontalCustomViewCustomApiAutoRestWidget extends StatefulWidget {
@@ -102,14 +99,14 @@ class _ListHorizontalCustomApiWidgetState
   Widget build(BuildContext context) {
     return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
       builder: (context, value, child) {
-        debugPrint("ListApiMasterState building widget: ${key}");
+        debugPrint("ListApiMasterState building widget: $key");
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
         if (isLoading) {
           if (count == 0) {
             return wrapHeader(
-                context, CircularProgressIndicator(), listProvider);
+                context, const CircularProgressIndicator(), listProvider);
           }
         } else {
           if (count == 0 && isError) {

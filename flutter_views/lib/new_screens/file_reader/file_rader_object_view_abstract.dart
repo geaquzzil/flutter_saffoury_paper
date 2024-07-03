@@ -1,19 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../models/v_mirrors.dart';
 import '../../models/view_abstract_base.dart';
@@ -273,7 +267,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
                 "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields that from same object are => $allFieldsThatFromSameObj");
 
             Map<String, dynamic> fieldsValues = {};
-            allFieldsThatFromSameObj.forEach((element) {
+            for (var element in allFieldsThatFromSameObj) {
               var s = selectedFields.entries
                   .firstWhereOrNull((p0) => p0.key == element);
               if (s != null) {
@@ -282,7 +276,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
                 dynamic dataValue = data?.value;
                 fieldsValues[element] = dataValue;
               }
-            });
+            }
 
             debugPrint(
                 "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues");

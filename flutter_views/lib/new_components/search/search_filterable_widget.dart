@@ -11,8 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchFilterableWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
-  SearchFilterableWidget({Key? key, required this.viewAbstract})
-      : super(key: key);
+  SearchFilterableWidget({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {

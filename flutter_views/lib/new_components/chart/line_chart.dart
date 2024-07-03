@@ -26,7 +26,7 @@ class LineChartItem<T, E> extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget t = SfCartesianChart(
         plotAreaBorderWidth: smallView ? 0 : 0.5,
-        title: ChartTitle(alignment: ChartAlignment.near, text: ''),
+        title: const ChartTitle(alignment: ChartAlignment.near, text: ''),
         primaryXAxis: E.runtimeType == DateTime.now().runtimeType
             ? DateTimeAxis(isVisible: !smallView)
             : CategoryAxis(
@@ -39,7 +39,7 @@ class LineChartItem<T, E> extends StatelessWidget {
             numberFormat: NumberFormat.compact(),
             borderWidth: 0,
             axisBorderType: AxisBorderType.withoutTopAndBottom,
-            zoomPosition: .2,
+            initialZoomPosition: .2,
             rangePadding: smallView
                 ? ChartRangePadding.additional
                 : ChartRangePadding.additional,
@@ -108,7 +108,7 @@ class LineChartItem<T, E> extends StatelessWidget {
                 // Sorting based on the specified field
                 // sortFieldValueMapper: (T data, _) => data.runtimeType,
                 dataSource: list,
-                markerSettings: MarkerSettings(isVisible: false),
+                markerSettings: const MarkerSettings(isVisible: false),
                 xValueMapper: xValueMapper,
                 yValueMapper: yValueMapper,
                 dataLabelMapper: dataLabelMapper,

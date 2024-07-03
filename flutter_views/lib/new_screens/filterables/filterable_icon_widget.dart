@@ -1,11 +1,7 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:nil/nil.dart';
 
 import '../../screens/on_hover_button.dart';
 import 'base_filterable_main.dart';

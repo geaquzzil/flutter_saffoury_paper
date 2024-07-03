@@ -1,16 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/actions/action_viewabstract_provider.dart';
-import '../lists/components/search_components.dart';
 
 abstract class BaseHomeSharedWithWidgets extends StatelessWidget {
   Widget? firstPane;
@@ -71,13 +61,13 @@ abstract class BaseHomeSharedWithWidgets extends StatelessWidget {
         if (getSilverAppBarTitle(context) != null)
           SliverAppBar.large(
             elevation: 4,
-            surfaceTintColor: Theme.of(context).colorScheme.background,
+            surfaceTintColor: Theme.of(context).colorScheme.surface,
             automaticallyImplyLeading: false,
             actions: getSliverAppBarActions(context),
-            leading: SizedBox(),
+            leading: const SizedBox(),
             flexibleSpace: getSilverAppBarBackground(context),
           ),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: Divider(),
         ),
         if (getSliverHeader(context) != null)
@@ -85,7 +75,7 @@ abstract class BaseHomeSharedWithWidgets extends StatelessWidget {
               context, SliverToBoxAdapter(child: getSliverHeader(context))),
         ...getSliverList(context)
             .map((e) => wrapWithPadding(context, e))
-            .toList()
+
       ],
     );
   }

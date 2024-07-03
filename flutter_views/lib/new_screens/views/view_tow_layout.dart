@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ViewTowLayout extends StatelessWidget {
-  const ViewTowLayout({Key? key}) : super(key: key);
+  const ViewTowLayout({super.key});
 
   @override
   Widget build(BuildContext context) {

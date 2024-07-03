@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, library_prefixes
+
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -5,11 +7,9 @@ import 'dart:ui';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'dart:ui' as ui;
 import 'dart:math' as Math;
-
-import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -25,11 +25,12 @@ const double kDefaultClosedDrawer = 80;
 
 double? convertToDouble(dynamic number) =>
     number == null ? 0 : double.tryParse(number.toString());
+
 Size findPopupSizeSquare(BuildContext context,
     {CurrentScreenSize? screenSize}) {
   screenSize ??= getCurrentScreenSizeStatic(context);
   Size s = MediaQuery.of(context).size;
-  return Size(400, 400);
+  return const Size(400, 400);
 }
 
 bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
@@ -239,6 +240,7 @@ class SizeConfig {
   }
 
   static bool isTablet(BuildContext context) => Device.get().isTablet;
+
   static bool hasSecondScreen(BuildContext context) {
     return isDesktopOrWebPlatform(context) || isFoldable(context);
   }
@@ -279,7 +281,7 @@ class Device {
   static double height = size.height;
   static double screenWidth = width / devicePixelRatio;
   static double screenHeight = height / devicePixelRatio;
-  static ui.Size screenSize = new ui.Size(screenWidth, screenHeight);
+  static ui.Size screenSize = ui.Size(screenWidth, screenHeight);
   final bool isTablet, isPhone, isIos, isAndroid, isIphoneX, hasNotch;
   static Device? _device;
   static Function? onMetricsChange;
@@ -305,7 +307,7 @@ class Device {
         height = size.height;
         screenWidth = width / devicePixelRatio;
         screenHeight = height / devicePixelRatio;
-        screenSize = new ui.Size(screenWidth, screenHeight);
+        screenSize = ui.Size(screenWidth, screenHeight);
 
         onMetricsChange!();
       };
@@ -364,7 +366,7 @@ class Device {
 
     if (_hasTopOrBottomPadding()) hasNotch = true;
 
-    return _device = new Device(
+    return _device = Device(
         isTablet: isTablet,
         isPhone: isPhone,
         isAndroid: isAndroid,
@@ -403,6 +405,7 @@ class Device {
 
 class ResponsiveWebBuilderSliver extends StatelessWidget {
   final Widget Function(BuildContext context, double width) builder;
+
   const ResponsiveWebBuilderSliver({super.key, required this.builder});
 
   @override
@@ -425,6 +428,7 @@ class ResponsiveWebBuilderSliver extends StatelessWidget {
 
 class ResponsiveWebBuilder extends StatelessWidget {
   final Widget Function(BuildContext context, double width) builder;
+
   const ResponsiveWebBuilder({super.key, required this.builder});
 
   @override
@@ -546,9 +550,11 @@ class LayoutChangeListner with ChangeNotifier {
   CurrentScreenSize? currentScreenSize = CurrentScreenSize.MOBILE;
 
   set setHeight(double? value) => _height = value;
+
   set setWidth(double? value) => _width = value;
 
   double? get getHeight => _height;
+
   double? get getWidth => _width;
 
   void setSize(double? width, double? height, {CurrentScreenSize? current}) {

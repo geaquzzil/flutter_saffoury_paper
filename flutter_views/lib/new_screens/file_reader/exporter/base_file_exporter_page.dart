@@ -1,11 +1,8 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/file_rader_object_exporter_view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -81,7 +78,7 @@ class _FileExporterPage extends State<FileExporterPage> {
     var pageDecoration = PageDecoration(
       titleTextStyle: Theme.of(context).textTheme.titleLarge!,
       bodyTextStyle: Theme.of(context).textTheme.bodyLarge!,
-      bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      bodyPadding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
       // pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
@@ -128,7 +125,7 @@ class _FileExporterPage extends State<FileExporterPage> {
           title: "Select columns",
           bodyWidget: Column(
             children: [
-              Text("SOSO"),
+              const Text("SOSO"),
               BaseEditWidget(
                 isTheFirst: true,
                 onValidate: (viewAbstract) {
@@ -165,7 +162,7 @@ class _FileExporterPage extends State<FileExporterPage> {
                     onPressed: () {},
                     child: Text(AppLocalizations.of(context)!.ok));
               }
-              return Text("ERRRo");
+              return const Text("ERRRo");
             },
           ),
           decoration: pageDecoration.copyWith(
@@ -194,7 +191,7 @@ class _FileExporterPage extends State<FileExporterPage> {
           : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       dotsDecorator: DotsDecorator(
         size: const Size(10.0, 10.0),
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
         activeColor: Theme.of(context).colorScheme.primary,
         activeSize: const Size(22.0, 10.0),
         activeShape: const RoundedRectangleBorder(

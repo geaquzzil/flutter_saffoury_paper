@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IconsOutlineButton extends StatelessWidget {
-  IconsOutlineButton({
+  const IconsOutlineButton({super.key,
     required this.onPressed,
     required this.text,
     this.shape,
@@ -55,7 +55,7 @@ class IconsOutlineButton extends StatelessWidget {
           ),
           Visibility(
             visible: iconData != null,
-            child: SizedBox(
+            child: const SizedBox(
               width: 4,
             ),
           ),

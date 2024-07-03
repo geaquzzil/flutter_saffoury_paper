@@ -1,27 +1,19 @@
 import 'dart:ui';
 
-import 'package:anim_search_bar/anim_search_bar.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/customs_widget/popup_widget.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
-import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
-import 'package:flutter_view_controller/screens/overlay_page.dart';
-import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -30,7 +22,7 @@ import '../models/header_item.dart';
 
 class HeaderLogo extends StatelessWidget {
   ValueNotifier<double>? valueNotifier;
-  HeaderLogo({Key? key, this.valueNotifier}) : super(key: key);
+  HeaderLogo({super.key, this.valueNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +83,7 @@ class HeaderRow extends StatelessWidget {
   TextEditingController textController = TextEditingController();
   final String selectedHeader;
   final GlobalKey menuKey = GlobalKey();
-  HeaderRow({Key? key, required this.selectedHeader}) : super(key: key);
+  HeaderRow({super.key, required this.selectedHeader});
   showMenus(BuildContext context) async {
     final render = menuKey.currentContext!.findRenderObject() as RenderBox;
     await showMenu(
@@ -120,7 +112,7 @@ class HeaderRow extends StatelessWidget {
     var headerItems = getHeaderItems(context);
     return ResponsiveVisibility(
       visible: false,
-      visibleConditions: [Condition.largerThan(name: MOBILE, value: true)],
+      visibleConditions: const [Condition.largerThan(name: MOBILE, value: true)],
       // visibleWhen: const [
       //   Condition.largerThan(name: MOBILE),
       // ],
@@ -201,9 +193,7 @@ class HeaderRow extends StatelessWidget {
               getWebText(
                   fontSize: 12,
                   color: Colors.orange,
-                  title: AppLocalizations.of(context)!.hiThere +
-                      "\n" +
-                      context.read<AuthProvider<AuthUser>>().getUserName),
+                  title: "${AppLocalizations.of(context)!.hiThere}\n${context.read<AuthProvider<AuthUser>>().getUserName}"),
               const SizedBox(
                 width: kDefaultPadding / 2,
               ),
@@ -239,8 +229,7 @@ class HeaderRow extends StatelessWidget {
 class Header extends StatelessWidget {
   final String selectedHeader;
   ValueNotifier<double>? valueNotifier;
-  Header({Key? key, required this.selectedHeader, this.valueNotifier})
-      : super(key: key);
+  Header({super.key, required this.selectedHeader, this.valueNotifier});
 
   @override
   Widget build(BuildContext context) {

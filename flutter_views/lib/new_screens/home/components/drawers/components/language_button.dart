@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 
 class DrawerLanguageButton extends StatelessWidget {
   const DrawerLanguageButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   bool? isEnglish(BuildContext context) {
     return context.read<LangaugeProvider>().getLocale?.languageCode == 'en';
   }

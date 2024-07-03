@@ -9,7 +9,6 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -50,6 +49,7 @@ import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 import 'package:pdf/widgets.dart' as pdf;
+
 part 'dashboard.g.dart';
 
 //TODO on publish do not forget that the iD gives error messages because the response of dashboard iD not found
@@ -99,6 +99,7 @@ class Dashboard extends UserLists<Dashboard>
     date = dateObject;
     balances = {};
   }
+
   @override
   Dashboard getSelfNewInstance() {
     return Dashboard();
@@ -125,6 +126,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.dashboard_and_rep;
+
   @override
   Map<String, String> get getCustomMap => {
         "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
@@ -638,6 +640,7 @@ class Dashboard extends UserLists<Dashboard>
       getPrintableDashboardTotalDescripton(
               BuildContext context, PrintDashboardSetting? pca) =>
           [];
+
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           BuildContext context, PrintLocalSetting? dashboardSetting) =>
@@ -674,6 +677,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   String getPrintableSecondaryColor(PrintDashboardSetting? pca) =>
       getColorB(pca).toHex();
+
   @override
   String getPrintableQrCode() => "";
 
@@ -790,6 +794,7 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   String getModifibleTitleName(BuildContext context) => "sdad";
+
   @override
   DashboardContentItem? getPrintableDashboardFirstRowContentItem(
     BuildContext context,

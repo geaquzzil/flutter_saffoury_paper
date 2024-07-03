@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/product_from_excel_printer.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product_list.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
@@ -12,11 +10,9 @@ import 'package:flutter_view_controller/interfaces/excelable_reader_interface.da
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_apstract_stand_alone_without_api.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_reader_validation.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:introduction_screen/src/model/page_view_model.dart';
 import 'package:json_annotation/json_annotation.dart';

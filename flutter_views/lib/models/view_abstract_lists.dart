@@ -1,28 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:ui';
 
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
-import 'package:flutter_view_controller/screens/action_screens/edit_details_page.dart';
-import 'package:flutter_view_controller/size_config.dart';
-import 'package:go_router/go_router.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:share_plus/share_plus.dart';
-import '../new_components/views/view_popup_icon_widget.dart';
 import '../providers/actions/action_viewabstract_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
@@ -69,7 +59,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       {double width = 60, double height = 60, bool addBottomWidget = true}) {
     return CircleAvatar(
         radius: 24,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
   }
 

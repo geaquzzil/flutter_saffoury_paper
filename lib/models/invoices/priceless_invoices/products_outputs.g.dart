@@ -10,7 +10,7 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-      ..TermsID = json['TermsID'] as int?
+      ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
       ..comments = json['comments'] as String?
@@ -41,7 +41,7 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
           ?.map((e) => ProductOutputDetails.fromJson(e as Map<String, dynamic>))
           .toList()
       ..products_outputs_details_count =
-          json['products_outputs_details_count'] as int?
+          (json['products_outputs_details_count'] as num?)?.toInt()
       ..warehouse = json['warehouse'] == null
           ? null
           : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>);

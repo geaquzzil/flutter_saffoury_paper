@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 class BaseHomeCartPage extends StatefulWidget {
-  const BaseHomeCartPage({Key? key}) : super(key: key);
+  const BaseHomeCartPage({super.key});
 
   @override
   State<BaseHomeCartPage> createState() => _BaseHomeCartPageState();
@@ -22,8 +22,8 @@ class _BaseHomeCartPageState extends State<BaseHomeCartPage> {
         width: MediaQuery.of(context).size.width * 90,
         child: TowPaneExt(
           customPaneProportion: SizeConfig.getPaneProportion(context),
-          startPane: CartList(),
-          endPane: SubRowCartDescription(),
+          startPane: const CartList(),
+          endPane: const SubRowCartDescription(),
         )
 
         // Expanded(

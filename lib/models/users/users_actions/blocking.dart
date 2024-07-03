@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';

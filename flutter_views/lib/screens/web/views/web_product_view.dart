@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
-import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/view_table_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
@@ -21,10 +14,8 @@ import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_images.dart';
 import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;

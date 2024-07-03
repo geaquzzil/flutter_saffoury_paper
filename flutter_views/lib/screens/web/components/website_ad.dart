@@ -7,6 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class WebsiteAd extends StatelessWidget {
+  const WebsiteAd({super.key});
+
   // We can use same idea as ios_app_ad.dart and swap children order, let's copy code
   @override
   Widget build(BuildContext context) {

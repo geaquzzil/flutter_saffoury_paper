@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class MasterView extends StatelessWidget {
   ViewAbstract viewAbstract;
-  MasterView({Key? key, required this.viewAbstract}) : super(key: key);
+  MasterView({super.key, required this.viewAbstract});
   Widget buildItem(BuildContext context, String field) {
     debugPrint("MasterView buildItem $field");
     dynamic fieldValue = viewAbstract.getFieldValue(field);
@@ -56,8 +56,7 @@ class MasterView extends StatelessWidget {
 class BottomWidgetOnViewIfCartable extends StatelessWidget {
   CartableProductItemInterface viewAbstract;
   TextEditingController controller = TextEditingController();
-  BottomWidgetOnViewIfCartable({Key? key, required this.viewAbstract})
-      : super(key: key);
+  BottomWidgetOnViewIfCartable({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {
@@ -148,8 +147,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
 
 class BottomWidgetOnViewIfViewAbstract extends StatelessWidget {
   ViewAbstract viewAbstract;
-  BottomWidgetOnViewIfViewAbstract({Key? key, required this.viewAbstract})
-      : super(key: key);
+  BottomWidgetOnViewIfViewAbstract({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {

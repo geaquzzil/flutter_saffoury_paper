@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:desktop_window/desktop_window.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,6 @@ import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
-import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
@@ -62,7 +60,6 @@ import 'package:flutter_view_controller/providers/notifications/notification_pro
 import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'models/funds/credits.dart';

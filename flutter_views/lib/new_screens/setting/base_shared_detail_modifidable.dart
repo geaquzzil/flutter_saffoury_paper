@@ -2,15 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
-import 'package:flutter_view_controller/new_components/tab_bar/tab_bar.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
-import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +15,7 @@ import '../actions/edit_new/base_edit_new.dart';
 class BaseSettingDetailsView extends StatelessWidget {
   ModifiableInterface? viewAbstract;
   Function(ViewAbstract? viewAbstract)? onValidate;
-  BaseSettingDetailsView({Key? key, this.viewAbstract, this.onValidate})
-      : super(key: key);
+  BaseSettingDetailsView({super.key, this.viewAbstract, this.onValidate});
   Future<ViewAbstract?> getSetting(
       BuildContext context, ModifiableInterface settingObject) async {
     ViewAbstract? saved = await Configurations.get<ViewAbstract>(
@@ -72,7 +66,7 @@ class BaseSettingDetailsView extends StatelessWidget {
             ),
           );
         } else {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
       },
     );

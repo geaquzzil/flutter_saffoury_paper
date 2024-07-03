@@ -7,7 +7,6 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
@@ -16,7 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../new_components/lists/horizontal_list_card_item.dart';
 import '../../new_components/loading_shimmer.dart';
 
 class ListHorizontalApiAutoRestWidget extends StatefulWidget {
@@ -263,8 +261,8 @@ class _ListHorizontalApiWidgetState
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 10,
           itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
+            return const Column(
+              children: [
                 ShimmerLoadingList(),
                 SizedBox(
                   height: 10,

@@ -3,9 +3,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
 import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
@@ -21,7 +18,6 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
-import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -32,15 +28,12 @@ import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -99,6 +92,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   String? getCustomAction() => "list_sales";
 
   SalesAnalysisDashboard.init({this.dateObject});
+
   @override
   SalesAnalysisDashboard getSelfNewInstance() {
     return SalesAnalysisDashboard();
@@ -116,6 +110,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.dashboard_and_rep;
+
   @override
   Map<String, String> get getCustomMap => {
         "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
@@ -387,6 +382,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
           BuildContext context) =>
       null;
+
   @override
   bool isRequiredObjectsListChecker() {
     return wastesByCutRequests != null;
@@ -403,6 +399,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {};
+
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;

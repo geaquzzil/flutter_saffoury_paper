@@ -1,37 +1,24 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/header.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_search_api.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
-import 'package:flutter_view_controller/screens/web/components/web_button.dart';
-import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
-import 'package:flutter_view_controller/screens/web/views/web_product_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
@@ -57,7 +44,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
   ValueNotifier<bool>? valueNotifierGrid;
   ValueNotifier<ViewAbstract?>? onCardTap;
   ListWebApiPage(
-      {Key? key,
+      {super.key,
       this.searchQuery,
       this.customFilter,
       required this.viewAbstract,
@@ -65,17 +52,13 @@ class ListWebApiPage extends BaseWebPageSlivers {
       super.pinToolbar = false,
       this.buildSearchBar = false,
       this.onCardTap,
-      bool buildFooter = false,
-      bool useSmallFloatingBar = true,
+      super.buildFooter = false,
+      super.useSmallFloatingBar = true,
       this.valueNotifierGrid,
       Widget? customSliverWidget,
-      bool buildHeader = false})
+      super.buildHeader = false})
       : super(
-            key: key,
-            buildFooter: buildFooter,
-            buildHeader: buildHeader,
-            customSliverHeader: customSliverWidget,
-            useSmallFloatingBar: useSmallFloatingBar);
+            customSliverHeader: customSliverWidget);
   void fetshListWidgetBinding() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
@@ -448,7 +431,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
                       item: e,
                       setDescriptionAtBottom: true,
                     ))
-                .toList(),
+                ,
             if (isLoading)
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),

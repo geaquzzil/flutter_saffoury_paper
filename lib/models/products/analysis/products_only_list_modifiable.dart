@@ -1,7 +1,6 @@
 import 'package:flutter_saffoury_paper/models/prints/print_product_list.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 

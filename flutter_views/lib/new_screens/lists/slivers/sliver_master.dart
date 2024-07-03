@@ -1,11 +1,10 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
-import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
@@ -23,6 +22,7 @@ class SliverMaster extends StatefulWidget {
   String title;
   bool buildHeaderAsQrCodeReader;
   bool buildFilterableView;
+
   SliverMaster(
       {super.key,
       required this.title,
@@ -57,15 +57,15 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
         // drawer: DrawerLargeScreens(),
         scrollController: _scrollController,
         floatingActionButton: FloatingActionButton.small(
-            child: const Icon(Icons.arrow_drop_up_rounded),
             heroTag: UniqueKey(),
             onPressed: () {
               scrollTop();
               // context.goNamed(posRouteName);
-            }),
+            },
+            child: const Icon(Icons.arrow_drop_up_rounded)),
 
         // backgroundColor: Colors.red,
-        
+
         title: Text(widget.title),
         fullyStretchable: widget.buildHeaderAsQrCodeReader ? true : false,
         headerWidget: null,
@@ -129,6 +129,7 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
   }
 
   void onScrollOnBottom() {}
+
   Widget? onBuildHeaderExtendedBoy() {
     return widget.buildHeaderAsQrCodeReader
         ? QrCodeReader(
@@ -194,15 +195,15 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
   }
 
   Widget onBuildSliverList() {
-    return SliverToBoxAdapter(child: SizedBox());
+    return const SliverToBoxAdapter(child: SizedBox());
   }
 
   Widget onBuildFilterableWidget() {
-    return SliverToBoxAdapter(child: SizedBox());
+    return const SliverToBoxAdapter(child: SizedBox());
   }
 
   Widget onBuildSearchWidget() {
-    return SliverToBoxAdapter(child: SizedBox());
+    return const SliverToBoxAdapter(child: SizedBox());
   }
 
   Widget getEmptyWidget({bool isError = false}) {
@@ -267,6 +268,5 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
     );
   }
 }
-enum SliverListMood{
-  NONE,SELECT
-}
+
+enum SliverListMood { NONE, SELECT }

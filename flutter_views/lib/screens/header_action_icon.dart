@@ -6,8 +6,7 @@ class HeaderIconBuilder extends StatelessWidget {
   MenuItemBuild menuItemBuild;
   ViewAbstract viewAbstract;
   HeaderIconBuilder(
-      {Key? key, required this.viewAbstract, required this.menuItemBuild})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.menuItemBuild});
 
   @override
   Widget build(BuildContext context) {

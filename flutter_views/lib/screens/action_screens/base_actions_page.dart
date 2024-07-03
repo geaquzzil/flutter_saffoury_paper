@@ -12,7 +12,7 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
 
   List<Widget>? getAppBarActionsView(BuildContext context);
   T object;
-  BaseActionPage({Key? key, required this.object}) : super(key: key);
+  BaseActionPage({super.key, required this.object});
   List<String> getFields(BuildContext context) {
     return object.getMainFields(context: context);
   }

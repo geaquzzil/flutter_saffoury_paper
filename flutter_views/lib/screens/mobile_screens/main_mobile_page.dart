@@ -9,7 +9,7 @@ import 'package:flutter_view_controller/light_color.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_widget.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -21,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(13)),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: AppTheme.shadow),
       child: Icon(
         icon,
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // _search(),
             _categoryWidget(),
             // Expanded(child: ListProviderWidget()),
-             ListApiWidget()
+            const ListApiWidget()
             // PostsPage(
             //     viewAbstract:
             //         context.watch<DrawerViewAbstractProvider>().getObject),

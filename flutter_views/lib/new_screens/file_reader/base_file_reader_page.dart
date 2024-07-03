@@ -8,7 +8,6 @@ import 'package:flutter_view_controller/new_screens/file_reader/file_rader_objec
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../models/view_abstract.dart';
-import 'excel_dropbox_generator.dart';
 import 'file_reader_validation.dart';
 
 class FileReaderPage extends StatefulWidget {
@@ -136,9 +135,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
         PageViewModel(
             // useRowInLandscape: true,
             // useScrollView: true,
-            titleWidget: Center(child: Text("Import file")),
-            bodyWidget: Center(
-                child: Text("Let\'s go right away! and import the file\n")),
+            titleWidget: const Center(child: Text("Import file")),
+            bodyWidget: const Center(
+                child: Text("Let's go right away! and import the file\n")),
             image: Center(child: _buildImage(Icons.file_copy, 200)),
             decoration: pageDecoration,
             footer: Column(
@@ -273,7 +272,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
           : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       dotsDecorator: DotsDecorator(
         size: const Size(10.0, 10.0),
-        color: Theme.of(context).colorScheme.onBackground,
+        color: Theme.of(context).colorScheme.onSurface,
         activeColor: Theme.of(context).colorScheme.primary,
         activeSize: const Size(22.0, 10.0),
         activeShape: const RoundedRectangleBorder(

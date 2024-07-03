@@ -9,7 +9,7 @@ class CustomTabView extends StatefulWidget {
   final ValueChanged<double?>? onScroll;
   final int? initPosition;
 
-  CustomTabView({
+  CustomTabView({super.key,
     required this.itemCount,
     required this.pageBuilder,
     required this.tabBuilder,

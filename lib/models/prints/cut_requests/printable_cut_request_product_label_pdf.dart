@@ -3,11 +3,8 @@ import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:pdf/widgets.dart';
-import 'package:pdf/pdf.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:printing/printing.dart';
 import '../../products/products.dart';

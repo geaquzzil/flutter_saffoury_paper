@@ -3,9 +3,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/customer_billing.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
-import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_descriptopn_header.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 
 import 'components/web_button.dart';

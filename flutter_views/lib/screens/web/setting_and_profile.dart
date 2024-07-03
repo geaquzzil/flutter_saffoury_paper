@@ -1,10 +1,5 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
-import 'package:flutter_view_controller/models/permissions/customer_billing.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
@@ -16,10 +11,8 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
-import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../customs_widget/sliver_delegates.dart';
 
@@ -106,6 +99,7 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
 
 class OrdersWeb extends StatelessWidget {
   const OrdersWeb({super.key});
+
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
@@ -220,6 +214,7 @@ class MasterToListFromProfile extends StatelessWidget {
   bool buildSmallView;
   bool useSmallFloatingBar;
   Widget? customSliverHeader;
+
   MasterToListFromProfile(
       {super.key,
       required this.pinToolbar,
@@ -280,10 +275,10 @@ class MasterToListFromProfile extends StatelessWidget {
           useSmallFloatingBar: useSmallFloatingBar,
           pinToolbar: pinToolbar,
           onCardTap: selectedCardValue,
-          customHeader: Column(
+          customHeader: const Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               ListTile(
                 title: Text("Orders"),
                 subtitle: Text(
@@ -313,7 +308,7 @@ class Help extends StatelessWidget {
         ),
         ListTile(
           //todo translate
-          title: Text("SaffouryPaper LTD. Co."),
+          title: const Text("SaffouryPaper LTD. Co."),
           subtitle: Text(Utils.version),
         ),
         const Divider(),
@@ -350,7 +345,7 @@ class Help extends StatelessWidget {
           child: TextButton(
               style: ButtonStyle(
                   foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange)),
+                      WidgetStateProperty.all<Color>(Colors.orange)),
               onPressed: () {},
               child:
                   const Text("Development And Designed by Qussai Al-Saffoury")),

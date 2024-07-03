@@ -9,7 +9,7 @@ part of 'orders.dart';
 Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = json['TermsID'] as int?
+  ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
   ..comments = json['comments'] as String?
@@ -36,11 +36,11 @@ Order _$OrderFromJson(Map<String, dynamic> json) => Order()
   ..orders_details = (json['orders_details'] as List<dynamic>?)
       ?.map((e) => OrderDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..orders_details_count = json['orders_details_count'] as int?
+  ..orders_details_count = (json['orders_details_count'] as num?)?.toInt()
   ..orders_refunds = (json['orders_refunds'] as List<dynamic>?)
       ?.map((e) => OrderRefund.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..orders_refunds_count = json['orders_refunds_count'] as int?;
+  ..orders_refunds_count = (json['orders_refunds_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'iD': instance.iD,

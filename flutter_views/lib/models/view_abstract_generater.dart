@@ -6,7 +6,6 @@ import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewa
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/screens/action_screens/view_details_page.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

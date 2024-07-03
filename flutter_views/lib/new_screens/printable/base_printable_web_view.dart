@@ -11,8 +11,7 @@ class BasePrintableViewWidget extends StatelessWidget {
   ViewAbstract printObject;
   PrintCommandAbstract printCommand;
   BasePrintableViewWidget(
-      {Key? key, required this.printCommand, required this.printObject})
-      : super(key: key);
+      {super.key, required this.printCommand, required this.printObject});
 
   @override
   Widget build(BuildContext context) {

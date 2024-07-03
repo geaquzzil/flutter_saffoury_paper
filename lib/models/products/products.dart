@@ -1,19 +1,13 @@
-import 'dart:collection';
-import 'dart:convert';
 // import 'package:bitmap/bitmap.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names, use_build_context_synchronously, library_prefixes
+
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
@@ -21,7 +15,6 @@ import 'package:flutter_saffoury_paper/models/prints/printable_product_label_wid
 import 'package:flutter_saffoury_paper/models/products/analysis/products_movments.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
-import 'package:flutter_saffoury_paper/models/products/pos_on_add_dialog.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
@@ -32,7 +25,6 @@ import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.da
 import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
@@ -58,19 +50,15 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as pdf;
@@ -79,7 +67,6 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:supercharged/supercharged.dart';
-import '../../widgets/list_product_type_category.dart';
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/orders.dart';
 import '../invoices/priceless_invoices/products_inputs.dart';
@@ -1234,7 +1221,7 @@ class Product extends ViewAbstract<Product>
   @override
   Widget getPosableOnAddWidget(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       scrollable: true,
       title: getMainHeaderText(context),
@@ -1243,14 +1230,14 @@ class Product extends ViewAbstract<Product>
         var height = MediaQuery.of(context).size.height;
         var width = MediaQuery.of(context).size.width;
 
-        return Container(
+        return SizedBox(
           height: height - 400,
           width: width - 400,
         );
       }),
       actions: <Widget>[
         ElevatedButton(
-          child: Text('CANCEL'),
+          child: const Text('CANCEL'),
           onPressed: () {
             // setState(() {
             //   Navigator.pop(context);
@@ -1258,7 +1245,7 @@ class Product extends ViewAbstract<Product>
           },
         ),
         ElevatedButton(
-          child: Text('OK'),
+          child: const Text('OK'),
           onPressed: () {
             // if (validated == null) return;
             // // debugPrint("textEdit ${_textFieldController.text}");
@@ -1337,7 +1324,7 @@ class Product extends ViewAbstract<Product>
     data.insert(0, ProductType()..availability = 2);
     return Column(
       children: [
-        PosHeader(),
+        const PosHeader(),
         Expanded(
           child: Container(
               // color: Theme.of(context).colorScheme.background,

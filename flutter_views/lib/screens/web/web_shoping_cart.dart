@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_description.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
-import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,7 @@ import '../../providers/cart/cart_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class WebShoppingCartDrawer extends StatefulWidget {
-  WebShoppingCartDrawer({Key? key}) : super(key: key);
+  const WebShoppingCartDrawer({super.key});
 
   @override
   State<WebShoppingCartDrawer> createState() => _WebShoppingCartDrawer();
@@ -185,7 +184,7 @@ class _WebShoppingCartDrawer extends State<WebShoppingCartDrawer>
       const POSCartList(
         useSliver: true,
       ),
-      SliverFillRemaining(
+      const SliverFillRemaining(
         child: Column(
           children: [
             CartDescriptionTotals(),

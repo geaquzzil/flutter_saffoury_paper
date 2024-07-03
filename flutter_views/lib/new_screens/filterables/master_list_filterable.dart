@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -9,8 +8,7 @@ class MasterFilterableController extends StatelessWidget {
   List<dynamic> list;
   ViewAbstract viewAbstract;
   MasterFilterableController(
-      {Key? key, required this.viewAbstract, required this.list})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.list});
 
   @override
   Widget build(BuildContext context) {

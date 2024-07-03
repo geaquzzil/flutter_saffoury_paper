@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/widgets/cut_request_top_widget.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
@@ -35,13 +34,13 @@ class ProductTopWidget extends StatelessWidget {
           description:
               product.comments ?? AppLocalizations.of(context)!.no_content,
         ),
-        Divider(),
+        const Divider(),
         // SizedBox(height: kDefaultPadding),
 
         HeaderDescription(
           iconData: Icons.info_outline,
           title: AppLocalizations.of(context)!.overview,
-          trailing: IconButton(icon: Icon(Icons.calculate), onPressed: () {}),
+          trailing: IconButton(icon: const Icon(Icons.calculate), onPressed: () {}),
         ),
         getRow(context, [
           TitleAndDescription(
@@ -82,7 +81,7 @@ class ProductTopWidget extends StatelessWidget {
               ),
             )
           ]),
-        Divider(),
+        const Divider(),
         HeaderDescription(
           iconData: Icons.insert_drive_file_outlined,
           title: AppLocalizations.of(context)!.hideCargoInfo,
@@ -116,9 +115,9 @@ class ProductTopWidget extends StatelessWidget {
 
 class ProductHeaderToggle extends StatelessWidget {
   const ProductHeaderToggle({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   final Product product;
 
@@ -143,7 +142,7 @@ class ProductHeaderToggle extends StatelessWidget {
                     children: [
                       // FadeInLeftBig(child: child)
                       animate.FadeInLeft(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         child: ListTile(
                           title: Text(
                             product.products_types!.name ?? "",

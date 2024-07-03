@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 
 class FilterSide extends StatelessWidget {
-  const FilterSide({Key? key}) : super(key: key);
+  const FilterSide({super.key});
 
   final _navItems = const [
     NavItemModel(name: 'Item 1', icon: Icons.home),
@@ -46,8 +46,8 @@ class FilterSide extends StatelessWidget {
                 return SideMenuData(
                   header: Column(
                     children: [
-                      ListTile(
-                        title: const Text('View Option',
+                      const ListTile(
+                        title: Text('View Option',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
@@ -60,26 +60,26 @@ class FilterSide extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: ListTile(
-                          title: const Text('Default View'),
+                        child: const ListTile(
+                          title: Text('Default View'),
                         ),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.filter_alt_outlined),
-                        title: const Text('Filter'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                      const ListTile(
+                        leading: Icon(Icons.filter_alt_outlined),
+                        title: Text('Filter'),
+                        trailing: Icon(Icons.arrow_forward_ios),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.sort),
-                        title: const Text('Sort'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                      const ListTile(
+                        leading: Icon(Icons.sort),
+                        title: Text('Sort'),
+                        trailing: Icon(Icons.arrow_forward_ios),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.access_alarm),
-                        title: const Text('Alarm'),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                      const ListTile(
+                        leading: Icon(Icons.access_alarm),
+                        title: Text('Alarm'),
+                        trailing: Icon(Icons.arrow_forward_ios),
                       ),
-                      Divider()
+                      const Divider()
                     ],
                   ),
                   items: [
@@ -95,7 +95,7 @@ class FilterSide extends StatelessWidget {
                             ),
                           ),
                         )
-                        .toList(),
+                        ,
                     const SideMenuItemDataDivider(divider: Divider()),
                     const SideMenuItemDataTitle(title: 'Account'),
                     ..._accountItems
@@ -108,7 +108,7 @@ class FilterSide extends StatelessWidget {
                               e.icon,
                               color: const Color(0xff8e8e8e),
                             ),
-                            badgeContent: const Text(
+                            badgeBuilder: (w) => const Text(
                               '23',
                               style: TextStyle(
                                 fontSize: 8,
@@ -117,7 +117,7 @@ class FilterSide extends StatelessWidget {
                             ).showOrNull(data.isOpen),
                           ),
                         )
-                        .toList(),
+                        ,
                   ],
                   footer: ListTile(
                     title: const Text('Foo Bar').showOrNull(data.isOpen),

@@ -4,13 +4,13 @@ import 'package:flutter_view_controller/constants.dart';
 
 class CardBody extends StatelessWidget {
   const CardBody({
-    Key? key,
+    super.key,
     required this.child,
     required this.onTap,
     required this.index,
     required this.width,
     required this.height,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final GestureTapCallback onTap;

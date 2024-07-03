@@ -3,8 +3,8 @@ import 'package:flutter_view_controller/constants.dart';
 
 class CategorySection extends StatefulWidget {
   const CategorySection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _CategorySectionState createState() => _CategorySectionState();
@@ -43,11 +43,11 @@ class _CategorySectionState extends State<CategorySection> {
 
 class CategoryPhill extends StatelessWidget {
   const CategoryPhill({
-    Key? key,
+    super.key,
     required this.onTap,
     // required this.category,
     this.isActive = false, // by default active state is false
-  }) : super(key: key);
+  });
 
   final GestureTapCallback onTap;
   // final CategoryModel category;

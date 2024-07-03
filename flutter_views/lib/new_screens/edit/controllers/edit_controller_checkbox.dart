@@ -8,8 +8,7 @@ class EditControllerCheckBox extends StatelessWidget {
   ViewAbstract viewAbstract;
   String field;
   EditControllerCheckBox(
-      {Key? key, required this.viewAbstract, required this.field})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.field});
 
   @override
   Widget build(BuildContext context) {

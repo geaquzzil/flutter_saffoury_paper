@@ -10,11 +10,10 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
   ViewAbstract parent;
   String field;
   EditControllerDropdown(
-      {Key? key,
+      {super.key,
       required this.parent,
       required this.enumViewAbstract,
-      required this.field})
-      : super(key: key);
+      required this.field});
 
   @override
   Widget build(BuildContext context) {

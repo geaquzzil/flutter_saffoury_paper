@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/base_shared.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page_basedonbase.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_test_to_base_page.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class BaseAuthenticatingScreen extends StatelessWidget {
-  const BaseAuthenticatingScreen({Key? key}) : super(key: key);
+  const BaseAuthenticatingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

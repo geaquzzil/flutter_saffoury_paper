@@ -5,8 +5,8 @@ import '../../constants.dart';
 
 class RecentFiles extends StatelessWidget {
   const RecentFiles({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class RecentFiles extends StatelessWidget {
         children: [
           Text(
             "Recent Files",
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           SizedBox(
             width: double.infinity,

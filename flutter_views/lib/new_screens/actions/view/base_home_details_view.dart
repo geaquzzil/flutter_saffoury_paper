@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../../screens/action_screens/edit_details_page.dart';
 
 class BaseSharedDetailsView extends StatelessWidget {
   ViewAbstract? viewAbstract;
@@ -100,8 +96,7 @@ class BaseSharedDetailsView extends StatelessWidget {
 
 class MasterHomeHorizontal extends StatelessWidget {
   ViewAbstract viewAbstract;
-  MasterHomeHorizontal({Key? key, required this.viewAbstract})
-      : super(key: key);
+  MasterHomeHorizontal({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {

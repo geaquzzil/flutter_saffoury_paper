@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -11,9 +13,11 @@ void main() => runApp(MultiProvider(providers: [
       ChangeNotifierProvider(
           create: (_) =>
               DrawerMenuControllerProvider(initViewAbstract: Product()))
-    ], child: MyApp()));
+    ], child: const MyApp()));
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,12 +26,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +49,7 @@ class MyHomePage extends StatelessWidget {
               search: const _Search(),
             ),
           ),
-          SliverFillRemaining(hasScrollBody: true, child: ListApiWidget())
+          const SliverFillRemaining(hasScrollBody: true, child: ListApiWidget())
         ],
       ),
     );
@@ -51,7 +57,7 @@ class MyHomePage extends StatelessWidget {
 }
 
 class _Search extends StatefulWidget {
-  const _Search({Key? key}) : super(key: key);
+  const _Search({super.key});
 
   @override
   __SearchState createState() => __SearchState();
@@ -149,7 +155,7 @@ class SearchHeader extends SliverPersistentHeaderDelegate {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline4),
+            Text(title, style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(
               width: 20,
             ),

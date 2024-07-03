@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 
 class MainBody extends StatelessWidget {
   const MainBody(
-      {Key? key,
+      {super.key,
       required this.child,
       this.padding = const EdgeInsets.only(top: 40.0) // Default padding
-      })
-      : super(key: key);
+      });
 
   final Widget? child;
   final EdgeInsets padding;

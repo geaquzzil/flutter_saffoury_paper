@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, constant_identifier_names, non_constant_identifier_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
@@ -9,10 +11,8 @@ import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart';
@@ -161,7 +161,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
               return FloatingActionButton(
                 heroTag: UniqueKey(),
                 onPressed: null,
-                backgroundColor: Theme.of(context).colorScheme.background,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 child: const CircularProgressIndicator(),
               );
             } else if (value == ApiCallState.ERROR) {
@@ -227,7 +227,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
             customViewPosition: CustomViewPosition.BEFORE_TITLE,
             msgAlign: TextAlign.end,
             dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             msg: getExtras().getBaseMessage(context),
             title: getExtras().getBaseTitle(context),
             context: context,
@@ -284,7 +284,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
           }
         });
       },
-      child: Icon(Icons.post_add_rounded),
+      child: const Icon(Icons.post_add_rounded),
 
       // child: AddFromListPopupIconWidget(
       //   viewAbstract: getExtras(),
@@ -306,7 +306,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       onPressed: () async {
         await getSelectedItemsDialog(context);
       },
-      child: Icon(Icons.list),
+      child: const Icon(Icons.list),
 
       // child: AddFromListPopupIconWidget(
       //   viewAbstract: getExtras(),

@@ -7,12 +7,11 @@ import 'package:flutter_view_controller/new_screens/dashboard2/storage_detail.da
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import '../actions/dashboard/compontents/header.dart';
 import 'my_files.dart';
 
 class DashboardPage extends StatelessWidget {
   DashableInterface dashboard;
-  DashboardPage({Key? key, required this.dashboard}) : super(key: key);
+  DashboardPage({super.key, required this.dashboard});
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +93,11 @@ class Responsive extends StatelessWidget {
   final Widget desktop;
 
   const Responsive({
-    Key? key,
+    super.key,
     required this.mobile,
     this.tablet,
     required this.desktop,
-  }) : super(key: key);
+  });
 
 // This size work fine on my design, maybe you need some customization depends on your design
 

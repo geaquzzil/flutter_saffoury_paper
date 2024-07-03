@@ -9,7 +9,7 @@ part of 'purchases.dart';
 Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = json['TermsID'] as int?
+  ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
   ..comments = json['comments'] as String?
@@ -36,11 +36,12 @@ Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
   ..purchases_details = (json['purchases_details'] as List<dynamic>?)
       ?.map((e) => PurchasesDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..purchases_details_count = json['purchases_details_count'] as int?
+  ..purchases_details_count = (json['purchases_details_count'] as num?)?.toInt()
   ..purchases_refunds = (json['purchases_refunds'] as List<dynamic>?)
       ?.map((e) => PurchasesRefund.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..purchases_refunds_count = json['purchases_refunds_count'] as int?;
+  ..purchases_refunds_count =
+      (json['purchases_refunds_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$PurchasesToJson(Purchases instance) => <String, dynamic>{
       'iD': instance.iD,

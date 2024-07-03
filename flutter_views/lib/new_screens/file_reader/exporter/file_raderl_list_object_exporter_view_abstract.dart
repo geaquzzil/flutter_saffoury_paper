@@ -11,12 +11,11 @@ import 'package:path/path.dart';
 class FileExporterListObject extends FileExporterObject {
   late List<ViewAbstract> list;
   FileExporterListObject(
-      {required ViewAbstract viewAbstract, required this.list})
-      : super(viewAbstract: viewAbstract);
+      {required super.viewAbstract, required this.list});
 
   @override
   Future<void> generateExcel(BuildContext context) async {
-    Stopwatch stopwatch = new Stopwatch()..start();
+    Stopwatch stopwatch = Stopwatch()..start();
     excel = Excel.createExcel();
 
     Sheet sh = excel[excel.getDefaultSheet()!];

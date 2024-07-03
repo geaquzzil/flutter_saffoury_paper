@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 class ListStickySettingWidget extends StatelessWidget {
-  const ListStickySettingWidget({Key? key}) : super(key: key);
+  const ListStickySettingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

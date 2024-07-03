@@ -30,8 +30,8 @@ class TaskCard extends StatelessWidget {
     required this.onPressedTask,
     required this.onPressedContributors,
     required this.onPressedComments,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final TaskCardData data;
 
@@ -121,8 +121,7 @@ class _Tile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onPressedMore,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Color dotColor;
   final String title;
@@ -198,8 +197,7 @@ class _IconButton extends StatelessWidget {
     required this.iconData,
     required this.totalContributors,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final int totalContributors;

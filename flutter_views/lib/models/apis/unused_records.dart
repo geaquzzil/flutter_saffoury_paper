@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/buttons/api_button.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     implements CustomViewHorizontalListResponse<UnusedRecords> {
@@ -92,7 +91,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     return ListTile(
       trailing: ApiButton(
         onResult: notifier,
-        futureBuilder: Future.delayed(Duration(milliseconds: 2000)),
+        futureBuilder: Future.delayed(const Duration(milliseconds: 2000)),
         title: AppLocalizations.of(context)!.delete,
         icon: Icons.delete,
         onResultFunction: (onResult) {},

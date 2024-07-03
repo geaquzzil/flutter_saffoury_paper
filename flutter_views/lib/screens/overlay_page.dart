@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class OverlayWidget extends StatefulWidget {
   Widget overlay;
   Widget child;
-  OverlayWidget({Key? key, required this.child, required this.overlay})
-      : super(key: key);
+  OverlayWidget({super.key, required this.child, required this.overlay});
 
   @override
   State<OverlayWidget> createState() => _OverlayWidgetState();

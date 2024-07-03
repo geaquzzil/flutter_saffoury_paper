@@ -8,11 +8,11 @@ part of 'gsms.dart';
 
 GSM _$GSMFromJson(Map<String, dynamic> json) => GSM()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..gsm = json['gsm'] as int?
+  ..gsm = (json['gsm'] as num?)?.toInt()
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..products_count = json['products_count'] as int?;
+  ..products_count = (json['products_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$GSMToJson(GSM instance) => <String, dynamic>{
       'iD': instance.iD,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_sliver_gride.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class MyWidget extends StatefulWidget {
@@ -43,7 +41,7 @@ class _MasterToListPageState extends State<MasterToListPage> {
           actions: [
             IconButton(
               onPressed: () {},
-              icon: CircleAvatar(
+              icon: const CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(Icons.heart_broken)),
             )
@@ -80,13 +78,13 @@ class _MasterToListPageState extends State<MasterToListPage> {
                     Expanded(
                       child: Text(
                         widget.master.getMainHeaderLabelTextOnly(context),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     const SizedBox(width: defaultPadding),
                     Text(
-                      "\$" + widget.master.getMainHeaderLabelTextOnly(context),
-                      style: Theme.of(context).textTheme.headline6,
+                      "\$${widget.master.getMainHeaderLabelTextOnly(context)}",
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
@@ -98,7 +96,7 @@ class _MasterToListPageState extends State<MasterToListPage> {
                 ),
                 Text(
                   "Colors",
-                  style: Theme.of(context).textTheme.subtitle2,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(height: defaultPadding / 2),
                 // Row(
@@ -125,7 +123,8 @@ class _MasterToListPageState extends State<MasterToListPage> {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                          primary: primaryColor, shape: const StadiumBorder()),
+                          backgroundColor: primaryColor,
+                          shape: const StadiumBorder()),
                       child: const Text("Add to Cart"),
                     ),
                   ),

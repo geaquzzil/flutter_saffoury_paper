@@ -17,7 +17,7 @@ class FilledCard extends StatelessWidget {
   Card getCard(BuildContext context) {
     return Card(
       elevation: 0,
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: child,
     );
   }

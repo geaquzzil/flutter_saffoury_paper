@@ -6,7 +6,6 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 
 class ItemModel {
@@ -18,7 +17,7 @@ class ItemModel {
 }
 
 class ProfilePicturePopupMenu extends StatefulWidget {
-  const ProfilePicturePopupMenu({Key? key}) : super(key: key);
+  const ProfilePicturePopupMenu({super.key});
 
   @override
   State<ProfilePicturePopupMenu> createState() =>

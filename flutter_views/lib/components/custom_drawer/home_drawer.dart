@@ -1,26 +1,26 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/app_theme.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer(
-      {Key? key,
+      {super.key,
       this.screenIndex,
       this.iconAnimationController,
-      this.callBackIndex})
-      : super(key: key);
+      this.callBackIndex});
 
   final AnimationController? iconAnimationController;
   final DrawerIndex? screenIndex;
   final Function(DrawerIndex)? callBackIndex;
 
-
-  
   @override
   _HomeDrawerState createState() => _HomeDrawerState();
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList>? drawerList;
+
   @override
   void initState() {
     setDrawerListArray();
@@ -107,8 +107,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               ],
                             ),
                             child: const ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(60.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(60.0)),
                                 child: Icon(Icons.abc)),
                           ),
                         ),

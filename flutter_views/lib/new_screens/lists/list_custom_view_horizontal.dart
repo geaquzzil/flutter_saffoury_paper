@@ -14,12 +14,11 @@ class ListHorizontalCustomViewWidget<T extends CustomViewHorizontalListResponse>
   String? titleString;
   Function(dynamic response)? onResponse;
   ListHorizontalCustomViewWidget(
-      {Key? key,
+      {super.key,
       required this.autoRest,
       this.title,
       this.titleString,
-      this.onResponse})
-      : super(key: key);
+      this.onResponse});
 
   @override
   State<ListHorizontalCustomViewWidget> createState() =>
@@ -147,8 +146,8 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 10,
           itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
+            return const Column(
+              children: [
                 ShimmerLoadingList(),
                 SizedBox(
                   height: 10,

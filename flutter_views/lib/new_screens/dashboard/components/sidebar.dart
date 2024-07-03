@@ -9,8 +9,8 @@ import '../../../constants.dart';
 class Sidebar extends StatelessWidget {
   const Sidebar({
     required this.data,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ProjectCardData data;
 

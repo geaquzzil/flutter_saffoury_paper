@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPopupWidget extends StatelessWidget {
-  NotificationPopupWidget({Key? key}) : super(key: key);
+  NotificationPopupWidget({super.key});
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
   @override
@@ -41,8 +41,8 @@ class NotificationPopupWidget extends StatelessWidget {
 
 class NotificationWidget extends StatelessWidget {
   NotificationWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String title = "No New Notifications";
   String subtitle =

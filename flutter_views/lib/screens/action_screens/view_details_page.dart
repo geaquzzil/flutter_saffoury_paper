@@ -12,9 +12,9 @@ import 'package:flutter_view_controller/constants.dart';
 
 class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
   ViewDetailsPage({
-    Key? key,
-    required T object,
-  }) : super(key: key, object: object);
+    super.key,
+    required T super.object,
+  });
 
   // Widget getBody(BuildContext context) {
   //   List<String> fields = getFields();
@@ -160,7 +160,7 @@ class ViewDetailsPage<T extends ViewAbstract> extends BaseActionPage {
         onTap: () {},
         child: Container(
             padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: RoundedIconButton(onTap: () => null, icon: Icons.print)),
+            child: RoundedIconButton(onTap: () {}, icon: Icons.print)),
       ),
     ];
   }

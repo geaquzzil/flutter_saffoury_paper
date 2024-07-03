@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/text_input.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
@@ -13,7 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+
 part 'print_product_object.g.dart';
 
 @JsonSerializable(
@@ -32,6 +29,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   String? cutRequestNumber;
 
   ProductPrintObject();
+
   @override
   List<String> getMainFields({BuildContext? context}) {
     return [
@@ -172,6 +170,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   SortByType getSortByType() {
     return SortByType.DESC;
   }
+
 //  return FloatingActionButton(
 //         heroTag: UniqueKey(),
 //         child: const Icon(Icons.print),
@@ -187,6 +186,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
@@ -195,6 +195,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {"quantity": 1};
+
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"gsm": 4, "quantity": 4};
 

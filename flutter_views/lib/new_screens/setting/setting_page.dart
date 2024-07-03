@@ -3,6 +3,8 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/setting/base_shared_detail_modifidable.dart';
 import 'package:flutter_view_controller/new_screens/setting/list_sticky_setting_page.dart';
+
+// ignore: unused_import
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -16,9 +18,9 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(title: Text("Setting page")),
+      appBar: AppBar(title: const Text("Setting page")),
       body: TowPaneExt(
-        startPane: ListStickySettingWidget(),
+        startPane: const ListStickySettingWidget(),
         customPaneProportion: 0.3,
         endPane: BaseSettingDetailsView(),
       ),
@@ -26,17 +28,17 @@ class SettingPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Expanded(
       child: Row(children: [
-        Expanded(
+        const Expanded(
             // It takes 5/6 part of the screen
             flex: 3,
             child: SingleChildScrollView(
               child: Column(
-                children: const [
+                children: [
                   ListStickySettingWidget(),
                 ],
               ),
             )),
-        VerticalDivider(),
+        const VerticalDivider(),
         if (SizeConfig.isDesktop(context))
           Expanded(
               flex: size.width > 1340 ? 8 : 10, child: desideLyout(context))

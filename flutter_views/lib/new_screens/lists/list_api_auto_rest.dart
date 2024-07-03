@@ -10,7 +10,7 @@ import '../../new_components/loading_shimmer.dart';
 
 class ListApiAutoRestWidget extends StatefulWidget {
   AutoRest autoRest;
-  ListApiAutoRestWidget({Key? key, required this.autoRest}) : super(key: key);
+  ListApiAutoRestWidget({super.key, required this.autoRest});
 
   @override
   State<ListApiAutoRestWidget> createState() => _ListApiWidgetState();
@@ -100,8 +100,8 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 10,
           itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
+            return const Column(
+              children: [
                 ShimmerLoadingList(),
                 SizedBox(
                   height: 10,

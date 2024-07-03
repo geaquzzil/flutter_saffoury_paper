@@ -18,8 +18,7 @@ class CartDataTableMaster extends StatefulWidget {
 
   ///if the obj is set then we get the obj data
   ///else the cartProvider data
-  CartDataTableMaster({Key? key, required this.action, this.obj})
-      : super(key: key);
+  CartDataTableMaster({super.key, required this.action, this.obj});
 
   @override
   State<CartDataTableMaster> createState() => _CartDataTableState();

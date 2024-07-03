@@ -5,8 +5,8 @@ class ActiveProjectCard extends StatelessWidget {
   const ActiveProjectCard({
     required this.child,
     required this.onPressedSeeAll,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final Function() onPressedSeeAll;

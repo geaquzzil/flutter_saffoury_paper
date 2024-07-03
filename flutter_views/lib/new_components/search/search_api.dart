@@ -10,7 +10,7 @@ import '../../providers/drawer/drawer_controler.dart';
 class SearchWidgetApi extends StatelessWidget {
   String? _searchQuery;
 
-  SearchWidgetApi({Key? key}) : super(key: key);
+  SearchWidgetApi({super.key});
 
   @override
   Widget build(BuildContext context) {

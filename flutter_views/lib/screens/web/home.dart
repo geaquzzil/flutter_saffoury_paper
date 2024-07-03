@@ -1,40 +1,21 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/home/components/header/header_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
-import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
-import 'package:flutter_view_controller/screens/web/components/carousel.dart';
 import 'package:flutter_view_controller/screens/web/components/cv_section.dart';
 import 'package:flutter_view_controller/screens/web/components/education_section.dart';
-import 'package:flutter_view_controller/screens/web/components/header_text.dart';
-import 'package:flutter_view_controller/screens/web/components/ios_app_ad.dart';
-import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
-import 'package:flutter_view_controller/screens/web/components/list_web_api_sliver_component.dart';
 import 'package:flutter_view_controller/screens/web/components/portfolio_stats.dart';
-import 'package:flutter_view_controller/screens/web/components/skill_section.dart';
-import 'package:flutter_view_controller/screens/web/components/sponsors.dart';
-import 'package:flutter_view_controller/screens/web/components/testimonial_widget.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image_left.dart';
-import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
 import 'package:go_router/go_router.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:timelines/timelines.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'components/grid_view_api_category.dart';
@@ -47,7 +28,7 @@ class HomeWebPage extends BaseWebPageSlivers {
   double offset = 0;
   late ViewAbstract products;
   late ViewAbstract categories;
-  HomeWebPage({Key? key}) : super(key: key);
+  HomeWebPage({super.key});
 
   get kPrimaryColor => null;
   bool updateOffsetAccordingToScroll(ScrollNotification scrollNotification) {

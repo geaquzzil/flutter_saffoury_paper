@@ -6,8 +6,7 @@ class AutoCompleteCardItem extends StatelessWidget {
   ViewAbstract viewAbstract;
   String searchQuery;
   AutoCompleteCardItem(
-      {Key? key, required this.viewAbstract, required this.searchQuery})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.searchQuery});
 
   @override
   Widget build(BuildContext context) {

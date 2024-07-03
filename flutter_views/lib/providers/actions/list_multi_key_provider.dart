@@ -33,13 +33,13 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   void notifyAdd(ViewAbstract viewAbstract) {
-    _listMap.entries.forEach((i) {
+    for (var i in _listMap.entries) {
       if (i.key == viewAbstract.getListableKey()) {
         _listMap.remove(i.key);
         notifyListeners();
         fetchList(i.key, viewAbstract: viewAbstract);
       }
-    });
+    }
   }
 
   Future<void> edit(ViewAbstract obj) async {
@@ -71,7 +71,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   Future<void> delete(ViewAbstract obj) async {
     await Future.forEach(_listMap.values, (element) {
-      (element as MultiListProviderHelper)
+      (element)
           .objects
           .removeWhere((element) => element.isEquals(obj));
     });

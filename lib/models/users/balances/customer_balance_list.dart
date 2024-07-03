@@ -16,7 +16,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';

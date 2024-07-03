@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -12,11 +14,10 @@ class DropdownDateControllerListener extends StatelessWidget {
   final void Function(DateObject? dateObject)? onSelectedDateObject;
 
   const DropdownDateControllerListener(
-      {Key? key,
+      {super.key,
       required this.viewAbstractEnum,
       required this.onSelected,
-      this.onSelectedDateObject})
-      : super(key: key);
+      this.onSelectedDateObject});
 
   @override
   Widget build(BuildContext context) {

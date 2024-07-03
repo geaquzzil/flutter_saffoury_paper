@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/cartable_draggable_header.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
@@ -22,32 +16,20 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
-import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
-import 'package:flutter_view_controller/new_screens/base_material_app.dart';
-import 'package:flutter_view_controller/new_screens/camera_preview.dart';
-import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:skeletons/skeletons.dart';
-import 'package:supercharged/supercharged.dart';
 import 'package:tuple/tuple.dart';
-
-import '../../actions/dashboard/base_dashboard_screen_page.dart';
 
 class SliverApiMaster extends StatefulWidget {
   ViewAbstract? viewAbstract;
@@ -68,6 +50,7 @@ class SliverApiMaster extends StatefulWidget {
   final bool showLeadingAsHamborg;
   @Deprecated("message")
   bool fetshListAsSearch;
+
   SliverApiMaster(
       {super.key,
       this.setParentForChild,
@@ -104,6 +87,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   String searchStringQuery = "";
 
   bool _selectMood = false;
+
   bool get isSelectedMode => _selectMood;
 
   ValueNotifier<ExpandType> expandType =
@@ -308,20 +292,20 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                       child: FloatingActionButton.small(
                           backgroundColor: Theme.of(context)
                               .colorScheme
-                              .surfaceVariant
+                              .surfaceContainerHighest
                               .withOpacity(.5),
                           foregroundColor:
                               Theme.of(context).colorScheme.onSurfaceVariant,
                           key: UniqueKey(),
-                          child: const Icon(Icons.arrow_drop_up_rounded),
                           heroTag: UniqueKey(),
                           onPressed: () {
                             _scrollTop();
 
                             // context.goNamed(posRouteName);
-                          }),
+                          },
+                          child: const Icon(Icons.arrow_drop_up_rounded)),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     FloatingActionButtonExtended(
                         onPress: () => {
                               drawerViewAbstractObsever.getObject
@@ -347,7 +331,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         centerTitle: false,
         actions: [
           if (isSelectedMode)
-            IconButton(onPressed: () {}, icon: Icon(Icons.delete))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
         ],
         headerWidget: getHeaderWidget(),
         expandedBody: isSelectedMode
@@ -540,7 +524,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 isSelected: isSelected(va),
                 onSelected: (obj, isSelected) {
                   debugPrint("ListCardItemSelected $isSelected");
-                  onSelectedItem(obj as ViewAbstract, isSelected);
+                  onSelectedItem(obj, isSelected);
                 },
                 object: va)
             : ListCardItem(object: va);
@@ -613,7 +597,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                   child: PreferredSize(
                       preferredSize: const Size.fromHeight(50.0),
                       child: Container(
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                         padding: const EdgeInsets.only(
                             // bottom: kDefaultPadding * .25,
                             top: kDefaultPadding * .25,
@@ -706,7 +690,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       stretch: true,
       primary: true,
       stretchTriggerOffset: 150,
-      surfaceTintColor: Theme.of(context).colorScheme.background,
+      surfaceTintColor: Theme.of(context).colorScheme.surface,
       automaticallyImplyLeading: true,
       actions: const [],
       leading: const SizedBox(),

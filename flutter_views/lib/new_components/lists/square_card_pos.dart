@@ -10,10 +10,10 @@ class SquareCardPOS<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   final Function? press;
   const SquareCardPOS({
-    Key? key,
+    super.key,
     required this.object,
     this.press,
-  }) : super(key: key);
+  });
 
   @override
   State<SquareCardPOS<T>> createState() => _SquareCardPOSState<T>();
@@ -21,7 +21,7 @@ class SquareCardPOS<T extends ViewAbstract> extends StatefulWidget {
 
 class _SquareCardPOSState<T extends ViewAbstract>
     extends State<SquareCardPOS<T>> {
-  TextEditingController _textFieldController = TextEditingController();
+  final TextEditingController _textFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _SquareCardPOSState<T extends ViewAbstract>
                       context.read<CartProvider>().onCartItemAdded(context, -1,
                           widget.object as CartableProductItemInterface, null);
                     },
-                    icon: Icon(Icons.add_shopping_cart))
+                    icon: const Icon(Icons.add_shopping_cart))
               ],
             ),
             // object.getCardLeading(context),

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:collection/collection.dart';

@@ -1,5 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'dealer.g.dart';
 
 @JsonSerializable(explicitToJson: true)

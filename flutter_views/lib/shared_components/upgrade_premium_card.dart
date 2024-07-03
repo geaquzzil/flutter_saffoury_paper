@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -6,8 +8,8 @@ class UpgradePremiumCard extends StatelessWidget {
   const UpgradePremiumCard({
     required this.onPressed,
     this.backgroundColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Color? backgroundColor;
   final Function() onPressed;
@@ -28,8 +30,8 @@ class UpgradePremiumCard extends StatelessWidget {
             maxHeight: 250,
           ),
           padding: const EdgeInsets.all(10),
-          child: Stack(
-            children: const [
+          child: const Stack(
+            children: [
               Padding(
                   padding: EdgeInsets.only(
                     top: 80,
@@ -53,7 +55,7 @@ class UpgradePremiumCard extends StatelessWidget {
 }
 
 class _Info extends StatelessWidget {
-  const _Info({Key? key}) : super(key: key);
+  const _Info({super.key});
 
   @override
   Widget build(BuildContext context) {

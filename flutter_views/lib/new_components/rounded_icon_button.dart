@@ -6,11 +6,11 @@ class RoundedIconButton extends StatelessWidget {
   final IconData icon;
   final double size;
   const RoundedIconButton({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.icon,
     this.size = 40,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

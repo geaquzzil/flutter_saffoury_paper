@@ -5,8 +5,8 @@ import '../../constants.dart';
 
 class Header extends StatelessWidget {
   const Header({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class Header extends StatelessWidget {
         if (!SizeConfig.isMobile(context))
           Text(
             "Dashboard",
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         if (!SizeConfig.isMobile(context))
           Spacer(flex: SizeConfig.isDesktop(context) ? 2 : 1),
@@ -34,8 +34,8 @@ class Header extends StatelessWidget {
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +58,7 @@ class ProfileCard extends StatelessWidget {
           ),
           if (!SizeConfig.isMobile(context))
             const Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
               child: Text("Angelina Jolie"),
             ),
           const Icon(Icons.keyboard_arrow_down),
@@ -71,8 +70,8 @@ class ProfileCard extends StatelessWidget {
 
 class SearchField extends StatelessWidget {
   const SearchField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

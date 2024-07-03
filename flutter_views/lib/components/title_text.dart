@@ -7,12 +7,11 @@ class TitleText extends StatelessWidget {
   // final Color color;
   final FontWeight fontWeight;
   const TitleText(
-      {Key? key,
+      {super.key,
       required this.text,
       this.fontSize = 18,
       // this.color = LightColor.titleTextColor,
-      this.fontWeight = FontWeight.w800})
-      : super(key: key);
+      this.fontWeight = FontWeight.w800});
   @override
   Widget build(BuildContext context) {
     return Text(text,

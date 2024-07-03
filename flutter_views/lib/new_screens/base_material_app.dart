@@ -1,4 +1,5 @@
-import 'dart:ui';
+// ignore_for_file: use_build_context_synchronously
+
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +26,7 @@ import '../theming/text_field_theming.dart';
 
 class BaseMaterialAppPage extends StatefulWidget {
   List<RouteBase>? addOnRoutes;
-  BaseMaterialAppPage({Key? key, this.addOnRoutes}) : super(key: key);
+  BaseMaterialAppPage({super.key, this.addOnRoutes});
 
   @override
   State<BaseMaterialAppPage> createState() => _BaseMaterialAppPageState();

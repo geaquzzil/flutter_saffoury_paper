@@ -1,10 +1,11 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 
 class FilterableProvider with ChangeNotifier {
   static const String SORTKEY = "sortByFieldName";

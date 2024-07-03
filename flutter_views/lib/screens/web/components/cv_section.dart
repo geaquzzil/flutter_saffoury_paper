@@ -46,7 +46,7 @@ final List<DesignProcess> designProcesses = [
 ];
 
 class CvSection extends StatelessWidget {
-  const CvSection({Key? key}) : super(key: key);
+  const CvSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -120,40 +120,38 @@ class CvSection extends StatelessWidget {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   var designProcesse = designProcesses[index];
-                  return Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            designProcesse.getImage(),
-                            const SizedBox(
-                              width: 15.0,
-                            ),
-                            Text(
-                              designProcesse.title,
-                              style: GoogleFonts.roboto(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Text(
-                          designProcesse.subtitle,
-                          style: const TextStyle(
-                            color: kCaptionColor,
-                            height: 1.5,
-                            fontSize: 14.0,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          designProcesse.getImage(),
+                          const SizedBox(
+                            width: 15.0,
                           ),
-                        )
-                      ],
-                    ),
+                          Text(
+                            designProcesse.title,
+                            style: GoogleFonts.roboto(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Text(
+                        designProcesse.subtitle,
+                        style: const TextStyle(
+                          color: kCaptionColor,
+                          height: 1.5,
+                          fontSize: 14.0,
+                        ),
+                      )
+                    ],
                   );
                 },
                 itemCount: designProcesses.length,
@@ -167,7 +165,7 @@ class CvSection extends StatelessWidget {
 }
 
 class ProductQualityWebSection extends StatelessWidget {
-  const ProductQualityWebSection({Key? key}) : super(key: key);
+  const ProductQualityWebSection({super.key});
 
   @override
   Widget build(BuildContext context) {

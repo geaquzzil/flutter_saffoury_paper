@@ -6,16 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/shared_components/search_field.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../models/apis/date_object.dart';
-import '../base_dashboard_screen_page.dart';
 import 'date_selector.dart';
 
 class DashboardHeader extends StatefulWidget {
@@ -53,7 +50,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
   Widget build(BuildContext context) {
     final popUpSize = findPopupSizeSquare(context);
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
       child: Column(
         children: [
@@ -70,7 +67,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                     onPressed: () {
                       widget.object?.printPage(context);
                     },
-                    icon: Icon(Icons.print)),
+                    icon: const Icon(Icons.print)),
               if (isLargeScreenFromScreenSize(widget.current_screen_size))
                 CustomPopupMenu(
                     menuOnChange: (b) {
@@ -140,7 +137,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                                         _rangeSelectionMode =
                                             RangeSelectionMode.toggledOn;
                                       });
-                                      debugPrint("selectDateChanged ${date}");
+                                      debugPrint("selectDateChanged $date");
                                     },
                                     locale: 'en-US',
                                     firstDay: DateTime.utc(2020, 01, 01),
@@ -166,9 +163,9 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                         ? Theme.of(context).scaffoldBackgroundColor
                         : const Color(0xFF4C4C4C),
                     // controller: _controller,
-                    child: Icon(Icons.date_range_outlined))
+                    child: const Icon(Icons.date_range_outlined))
               else
-                DateSelector(),
+                const DateSelector(),
             ],
           ),
         ],

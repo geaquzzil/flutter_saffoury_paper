@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/models/menu_item.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_popup_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
-import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
-import 'package:flutter_view_controller/screens/header_action_icon.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
-import 'base_shared_drawer_navigation.dart';
-
 class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
   ViewAbstract viewAbstract;
-  BaseSharedHeaderViewDetailsActions({Key? key, required this.viewAbstract})
-      : super(key: key);
+
+  BaseSharedHeaderViewDetailsActions({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {

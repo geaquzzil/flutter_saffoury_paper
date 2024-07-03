@@ -1,8 +1,5 @@
-import 'package:data_table_2/data_table_2.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
@@ -80,7 +77,7 @@ class FileReaderValidationWidget extends StatelessWidget {
           debugPrint("getDataFromExcelTable  getObjectFromRow $obj");
           generatedViewAbstract.add(obj);
         } catch (e) {
-          debugPrint("getDataFromExcelTable exception: " + e.toString());
+          debugPrint("getDataFromExcelTable exception: $e");
           debugPrint(e.toString());
           exceptions.add("in row number $rowNumber: ${e.toString()}");
         }

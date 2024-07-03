@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/menu_item.dart';
-import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:sprung/sprung.dart';
 
 class OnHoverWidget extends StatefulWidget {
@@ -120,7 +118,7 @@ class _HoverImageState extends State<HoverImage>
         });
       },
       child: Container(
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius:
               widget.roundedCorners ? BorderRadius.circular(20.0) : null,

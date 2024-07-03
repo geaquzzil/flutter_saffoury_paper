@@ -33,7 +33,7 @@ final List<FooterItem> footerItems = [
     text2: "info@saffoury.com",
   ),
   FooterItem(
-    icon: Icon(FlutterIcons.whatsapp_faw, size: 25),
+    icon: const Icon(FlutterIcons.whatsapp_faw, size: 25),
     title: "WHATSAPP",
     text1: "+963 933-211-012",
     text2: "+963 933-211-012",
@@ -41,7 +41,7 @@ final List<FooterItem> footerItems = [
 ];
 
 class Footer extends StatelessWidget {
-  const Footer({Key? key}) : super(key: key);
+  const Footer({super.key});
 
   @override
   Widget build(BuildContext context) {

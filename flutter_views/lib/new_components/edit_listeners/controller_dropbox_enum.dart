@@ -11,8 +11,7 @@ class DropdownEnumControllerListener<T extends ViewAbstractEnum>
   void Function(T? object) onSelected;
 
   DropdownEnumControllerListener(
-      {Key? key, required this.viewAbstractEnum, required this.onSelected})
-      : super(key: key);
+      {super.key, required this.viewAbstractEnum, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {

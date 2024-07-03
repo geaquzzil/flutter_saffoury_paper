@@ -5,8 +5,7 @@ import '../../constants.dart';
 class StorageDetailsCustom extends StatelessWidget {
   List<StorageInfoCardCustom>? list;
   Widget chart;
-  StorageDetailsCustom({Key? key, this.list, required this.chart})
-      : super(key: key);
+  StorageDetailsCustom({super.key, this.list, required this.chart});
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +31,12 @@ class StorageDetailsCustom extends StatelessWidget {
 @Deprecated("use OutLinedCard instead with ListTile")
 class StorageInfoCardCustom extends StatelessWidget {
   StorageInfoCardCustom({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.trailing,
     required this.svgSrc,
-  }) : super(key: key);
+  });
 
   final String title, description;
   Widget trailing;

@@ -1,7 +1,5 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
@@ -12,8 +10,6 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/listable_draggable_header.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_editable.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
@@ -22,15 +18,12 @@ import 'package:flutter_view_controller/new_screens/actions/components/action_on
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
-import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
-import 'package:nil/nil.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -43,6 +36,7 @@ abstract class BaseActionScreenPage extends StatefulWidget {
   ViewAbstract viewAbstract;
   PaletteGenerator? color;
   CurrentScreenSize? currentScreenSize;
+
   BaseActionScreenPage(
       {super.key,
       required this.viewAbstract,
@@ -66,9 +60,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   ValueNotifier<PaletteGenerator?> valueNotifierColor =
       ValueNotifier<PaletteGenerator?>(null);
   String? imgUrl;
+
   Widget getBody(BuildContext context);
 
   bool getBodyIsSliver();
+
   List<Widget>? getFloatingActionWidgetAddOns(BuildContext context);
 
   /// if null then we get the main viewabstract getBlurringImage
@@ -98,6 +94,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   Map<int, GlobalKey<ListCardItemEditableState>> _listCardItemEditableState =
       {};
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -374,7 +371,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           SliverFillRemaining(
               fillOverscroll: false, hasScrollBody: false, child: e.widget),
         ),
-      ...?e.slivers?.map((e) => getPadding(context, e)).toList()
+      ...?e.slivers?.map((e) => getPadding(context, e))
     ];
   }
 
@@ -611,7 +608,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         headerWidget: widget.viewAbstract.getHeroTag(
             context: context,
             child: getSliverImageBackground(context) ?? getAppBarBackground()),
-        slivers: [],
+        slivers: const [],
         tabs: tabs,
         alwaysShowLeadingAndAction: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -727,7 +724,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         // }
         // debugPrint("getEditDialog result $value");
       }
-      ;
     });
   }
 
@@ -746,7 +742,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
               builder: (_, v, __) {
                 debugPrint("SelectorActionViewAbstractProvider ${v.length}");
                 if (v.isEmpty || v.length == 1) {
-                  return SizedBox();
+                  return const SizedBox();
                 }
                 // if (v.length == 1) {
                 //   if (v[0]?.isMain ?? false) {

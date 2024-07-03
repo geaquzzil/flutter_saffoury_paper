@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:skeletons/skeletons.dart';
 
 import '../../new_components/lists/list_card_item_selected.dart';
-import '../../new_components/loading_shimmer.dart';
 
 class ListApiSelectedSearchableWidget<T extends ViewAbstract>
     extends StatefulWidget {
@@ -16,8 +15,7 @@ class ListApiSelectedSearchableWidget<T extends ViewAbstract>
   void Function(List<T> selectedList)? onSelected;
 
   ListApiSelectedSearchableWidget(
-      {Key? key, required this.viewAbstract, this.onSelected})
-      : super(key: key);
+      {super.key, required this.viewAbstract, this.onSelected});
 
   @override
   State<ListApiSelectedSearchableWidget> createState() =>
@@ -134,13 +132,13 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
           : (data.length),
       itemBuilder: (context, index) {
         if (listProvider.isLoading(findCustomKey()) && index == data.length) {
-          return Center(
+          return const Center(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text("Loading..."),
                 SizedBox(
                     height: 24,
@@ -227,7 +225,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     return Skeleton(
       isLoading: true,
       skeleton: SkeletonListView(itemCount: 10),
-      child: Container(child: Center(child: Text("Content"))),
+      child: Container(child: const Center(child: Text("Content"))),
     );
   }
 

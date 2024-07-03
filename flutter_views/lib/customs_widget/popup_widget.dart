@@ -1,5 +1,6 @@
+// ignore_for_file: unused_element
+
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
@@ -119,14 +120,14 @@ class _PopupWidget extends State<PopupWidget> {
             // but the passed event would trigger [showMenu] again.
             // So, we use time threshold to solve this bug.
             _canResponse = false;
-            Future.delayed(Duration(milliseconds: 300))
+            Future.delayed(const Duration(milliseconds: 300))
                 .then((_) => _canResponse = true);
           },
           child: Container(
             color: Colors.black38,
             child: Align(
                 alignment: Alignment.topLeft,
-                child: Padding(padding: EdgeInsets.all(60), child: menu)),
+                child: Padding(padding: const EdgeInsets.all(60), child: menu)),
           ));
     });
 
@@ -256,10 +257,10 @@ class _PopupWidget extends State<PopupWidget> {
     if (Platform.isIOS) {
       return child;
     } else {
-      return WillPopScope(
-        onWillPop: () {
+      return PopScope(
+        canPop: (true),
+        onPopInvoked : (s) {
           _hideMenu();
-          return Future.value(true);
         },
         child: child,
       );
@@ -290,6 +291,7 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
     required this.screenSize,
     this.position,
   });
+
   final Size screenSize;
   final Size anchorSize;
   final Offset anchorOffset;
@@ -300,8 +302,8 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     Size contentSize = Size.zero;
     Size arrowSize = Size.zero;
-    Offset contentOffset = Offset(0, 0);
-    Offset arrowOffset = Offset(0, 0);
+    Offset contentOffset = const Offset(0, 0);
+    Offset arrowOffset = const Offset(0, 0);
 
     double anchorCenterX = anchorOffset.dx + anchorSize.width / 2;
     double anchorTopY = anchorOffset.dy;
@@ -362,8 +364,8 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
         );
         break;
       case _MenuPosition.topLeft:
-        arrowOffset = Offset(0, 0);
-        contentOffset = Offset(
+        arrowOffset = const Offset(0, 0);
+        contentOffset = const Offset(
           200,
           200,
         );

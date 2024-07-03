@@ -1,6 +1,4 @@
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 
 class RoundedIconButtonNetwork extends StatelessWidget {
   final double size;
@@ -8,15 +6,15 @@ class RoundedIconButtonNetwork extends StatelessWidget {
   final GestureTapCallback onTap;
   final String? imageUrl;
   const RoundedIconButtonNetwork({
-    Key? key,
+    super.key,
     this.size = 18,
     required this.onTap,
     this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Text("TODO");
+    return const Text("TODO");
     // return CachedNetworkImage(
     //   imageUrl: imageUrl ?? "",
     //   imageBuilder: (context, image) => Container(

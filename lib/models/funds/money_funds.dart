@@ -28,8 +28,6 @@ import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:number_to_character/number_to_character.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import '../users/customers.dart';
 
 abstract class MoneyFunds<T> extends ViewAbstract<T>

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/components/title_text.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import '../customers.dart';
 
 class CustomerByEmployeeAnanlysis
@@ -28,9 +26,8 @@ class CustomerByEmployeeAnanlysis
   DateObject? dateObject;
 
   CustomerByEmployeeAnanlysis();
-  CustomerByEmployeeAnanlysis.init(int iD, {DateObject? dateObject}) {
+  CustomerByEmployeeAnanlysis.init(int iD, {this.dateObject}) {
     this.iD = iD;
-    this.dateObject = dateObject;
   }
 
   @override

@@ -4,8 +4,7 @@ import 'package:flutter_view_controller/light_color.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onIconPresedCallback;
-  const CustomBottomNavigationBar({Key? key, required this.onIconPresedCallback})
-      : super(key: key);
+  const CustomBottomNavigationBar({super.key, required this.onIconPresedCallback});
 
   @override
   _CustomBottomNavigationBarState createState() =>
@@ -106,7 +105,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             begin: Curves.easeInExpo.transform(_yController.value),
             end: inCurve.transform(_yController.value),
           ).transform(_yController.velocity.sign * 0.5 + 0.5),
-          Theme.of(context).backgroundColor),
+          Theme.of(context).scaffoldBackgroundColor),
     );
   }
 

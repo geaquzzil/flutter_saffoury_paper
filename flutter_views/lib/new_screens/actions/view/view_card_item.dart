@@ -7,12 +7,11 @@ class ViewCardItem extends StatelessWidget {
   IconData icon;
   ViewAbstract? object;
   ViewCardItem(
-      {Key? key,
+      {super.key,
       this.object,
       required this.title,
       required this.description,
-      required this.icon})
-      : super(key: key);
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {

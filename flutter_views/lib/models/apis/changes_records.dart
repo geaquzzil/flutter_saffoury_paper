@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -127,7 +126,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
-    debugPrint("getCustomViewSingleResponseWidget ${totalGrouped}");
+    debugPrint("getCustomViewSingleResponseWidget $totalGrouped");
     if (pieChartEnabled == false) {
       return LineChartItem<ChangesRecordGroup, String>(
         title:

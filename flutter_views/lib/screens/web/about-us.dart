@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
@@ -10,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'components/title_and_image.dart';
 
 class AboutUsWebPage extends BaseWebPageSlivers {
-  AboutUsWebPage({Key? key}) : super(key: key);
+  AboutUsWebPage({super.key});
 
   @override
   List<Widget> getContentWidget(

@@ -1,15 +1,13 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 
 class CollapsedIcons extends StatelessWidget {
-  const CollapsedIcons({Key? key}) : super(key: key);
+  const CollapsedIcons({super.key});
 
   @override
   Widget build(BuildContext context) {

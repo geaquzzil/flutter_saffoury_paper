@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 // import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,8 +7,7 @@ class TextBold extends StatelessWidget {
   String regex;
   static const _separator = " ";
 
-  TextBold({Key? key, required this.text, required this.regex})
-      : super(key: key) {
+  TextBold({super.key, required this.text, required this.regex}) {
     regex = regex;
     text = text;
     // regex = "($regex)"; // + regex + r"+$";

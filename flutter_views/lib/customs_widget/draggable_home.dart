@@ -1,10 +1,10 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
-import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -102,6 +102,7 @@ class DraggableHome extends StatefulWidget {
 
   final ValueNotifier<ExpandType>? valueNotifierExpandType;
   final ValueNotifier<ExpandType>? valueNotifierExpandTypeOnExpandOny;
+
   // final Widget? tabbar;
   final bool showAppbarOnTopOnly;
 
@@ -197,7 +198,6 @@ class DraggableHomeState extends State<DraggableHome>
           //   curve: Curves.ease,
           // );
         });
-      ;
     }
     super.initState();
   }
@@ -248,7 +248,7 @@ class DraggableHomeState extends State<DraggableHome>
                 child: ColoredTabBar(
                   useCard: false,
                   color:
-                      Theme.of(context).colorScheme.background.withOpacity(.9),
+                      Theme.of(context).colorScheme.surface.withOpacity(.9),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(
@@ -430,7 +430,7 @@ class DraggableHomeState extends State<DraggableHome>
                     return SliverAppBar(
                       automaticallyImplyLeading: true,
 
-                      backgroundColor: Theme.of(context).colorScheme.background,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       // surfaceTintColor: Theme.of(context).colorScheme.primary,
                       // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
                       leading: getLeadingAppBar(context),
@@ -488,7 +488,7 @@ class DraggableHomeState extends State<DraggableHome>
                 ),
               if (widget.showNormalToolbar != null)
                 const SliverPadding(
-                  padding: const EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 20),
                   sliver: SliverToBoxAdapter(child: SizedBox()),
                 ),
               if (_tabs != null) getTabbar(context),

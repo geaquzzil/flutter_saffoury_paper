@@ -1,6 +1,4 @@
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
@@ -32,6 +30,7 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
 
   @override
   String? getPrintableGroupByName() => null;
+
   @override
   SortByType? getPrintableHasSortBy() => SortByType.ASC;
 
@@ -57,6 +56,7 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
           "hideEmployeeName",
           "hideInvoiceDate",
         ]);
+
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
     if (field == "hideCustomerBalance") {
@@ -78,6 +78,7 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
         });
+
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
 
@@ -104,6 +105,7 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => toJson();
+
   @override
   PrintReceipt fromJsonViewAbstract(Map<String, dynamic> json) =>
       PrintReceipt.fromJson(json);

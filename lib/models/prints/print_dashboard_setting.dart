@@ -1,7 +1,6 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import '../funds/money_funds.dart';
 
 part 'print_dashboard_setting.g.dart';
 

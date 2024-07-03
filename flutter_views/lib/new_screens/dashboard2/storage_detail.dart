@@ -4,8 +4,8 @@ import '../../constants.dart';
 
 class StarageDetails extends StatelessWidget {
   const StarageDetails({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +54,12 @@ class StarageDetails extends StatelessWidget {
 
 class StorageInfoCard extends StatelessWidget {
   const StorageInfoCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.svgSrc,
     required this.amountOfFiles,
     required this.numOfFiles,
-  }) : super(key: key);
+  });
 
   final String title, amountOfFiles;
   final IconData svgSrc;
@@ -107,8 +107,8 @@ class StorageInfoCard extends StatelessWidget {
 
 class Chart extends StatelessWidget {
   const Chart({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +125,7 @@ class Chart extends StatelessWidget {
                 const SizedBox(height: defaultPadding),
                 Text(
                   "29.1",
-                  style: Theme.of(context).textTheme.headline4!.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         height: 0.5,

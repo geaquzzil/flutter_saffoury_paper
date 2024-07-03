@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class POSCartList extends StatelessWidget {
   final bool useSliver;
-  const POSCartList({Key? key, this.useSliver = false}) : super(key: key);
+  const POSCartList({super.key, this.useSliver = false});
 
   @override
   Widget build(BuildContext context) {

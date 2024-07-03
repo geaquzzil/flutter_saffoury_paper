@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -15,13 +17,11 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_invoice.dart';
-import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
@@ -257,7 +257,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       // mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text("Customer : ${customers?.name}"),
-        Text("Total:" + extendedNetPrice.toCurrencyFormat()),
+        Text("Total:${extendedNetPrice.toCurrencyFormat()}"),
         // Align(
         //     alignment: AlignmentDirectional.centerEnd,
         //     child: Text("Date: $date")),
@@ -432,7 +432,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       else
         ExpansionTile(
           initiallyExpanded: true,
-          leading: Icon(Icons.summarize),
+          leading: const Icon(Icons.summarize),
           title: Text(AppLocalizations.of(context)!.no_summary),
           children: [child],
         )
@@ -692,7 +692,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   String getPrintablePrimaryColor(PrintInvoice? setting) {
     String value = setting?.primaryColor ??
         getMainColor()!.value.toRadixString(16).substring(2, 8);
-    debugPrint("buildHeader ${value}");
+    debugPrint("buildHeader $value");
     return value;
   }
 
@@ -943,7 +943,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       "items: ${getDetailListFromMasterItemsCount()}",
       style: Theme.of(context)
           .textTheme
-          .caption!
+          .bodySmall!
           .copyWith(color: Theme.of(context).colorScheme.primary),
     );
   }

@@ -4,13 +4,8 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../constants.dart';
 
@@ -251,24 +246,21 @@ class ChartCardItemCustom extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge!,
             ),
             if (listGrowthRate != null)
-              Container(
-                // transform: Matrix4.translationValues(-20.0, 0, -20.0),
-                child: LineChartItem<GrowthRate, String>(
-                  smallView: true,
-                  color: color,
-                  list: listGrowthRate!,
-                  title: title,
-                  // title:
-                  //     CutRequest().getMainHeaderLabelTextOnly(context),
-                  dataLabelMapper: (item, idx) =>
-                      item.total?.toCurrencyFormat(),
-                  xValueMapper: (item, value) {
-                    // debugPrint("ChartItem $item");
-                    return DateFormat.yMMM().format(
-                        DateTime(item.year!, item.month!, item.day ?? 1));
-                  },
-                  yValueMapper: (item, n) => item.total,
-                ),
+              LineChartItem<GrowthRate, String>(
+                smallView: true,
+                color: color,
+                list: listGrowthRate!,
+                title: title,
+                // title:
+                //     CutRequest().getMainHeaderLabelTextOnly(context),
+                dataLabelMapper: (item, idx) =>
+                    item.total?.toCurrencyFormat(),
+                xValueMapper: (item, value) {
+                  // debugPrint("ChartItem $item");
+                  return DateFormat.yMMM().format(
+                      DateTime(item.year!, item.month!, item.day ?? 1));
+                },
+                yValueMapper: (item, n) => item.total,
               ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

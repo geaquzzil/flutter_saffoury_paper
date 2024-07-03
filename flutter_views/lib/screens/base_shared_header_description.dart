@@ -4,8 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class BaseSharedHeaderDescription extends StatelessWidget {
   ViewAbstract viewAbstract;
-  BaseSharedHeaderDescription({Key? key, required this.viewAbstract})
-      : super(key: key);
+  BaseSharedHeaderDescription({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class BaseSharedHeaderDescription extends StatelessWidget {
                           Text.rich(
                             TextSpan(
                               // text: viewAbstract.getMainHeaderTextOnly(context),
-                              style: Theme.of(context).textTheme.button,
+                              style: Theme.of(context).textTheme.labelLarge,
                               children: [
                                 TextSpan(
                                     text: viewAbstract

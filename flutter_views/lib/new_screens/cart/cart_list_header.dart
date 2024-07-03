@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class CartListHeader extends StatelessWidget {
-  const CartListHeader({Key? key}) : super(key: key);
+  const CartListHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

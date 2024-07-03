@@ -4,10 +4,8 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/produc
 import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_product_label_pdf.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
-import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
@@ -16,7 +14,6 @@ import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import '../../products/products.dart';
 
 class CutRequestRecieptPDF {
   material.BuildContext context;
@@ -237,11 +234,11 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
               ...e.products_inputs!.products_inputs_details!
                   .map((e) =>
                       getProductDetailsWidget(context, e, pca, generator))
-                  .toList()
+
           ]));
 
       return Column(
-          children: [if (d != null) ...d.whereType<Column>().toList()]);
+          children: [if (d != null) ...d.whereType<Column>()]);
     }
     return null;
   }
@@ -250,7 +247,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
   Widget? getPrintableWatermark() => null;
 
   @override
-    DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           material.BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 }

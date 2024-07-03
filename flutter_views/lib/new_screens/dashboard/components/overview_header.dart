@@ -8,8 +8,8 @@ class OverviewHeader extends StatelessWidget {
   const OverviewHeader({
     required this.onSelected,
     this.axis = Axis.horizontal,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Function(TaskType? task) onSelected;
   final Axis axis;

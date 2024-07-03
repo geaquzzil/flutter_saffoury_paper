@@ -1,4 +1,5 @@
-import 'package:flutter/services.dart' show rootBundle;
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter_view_controller/globals.dart';
 import 'dart:typed_data';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
@@ -9,9 +10,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
-import 'package:flutter/material.dart' as mt;
-import 'package:intl/intl.dart' as intl;
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'ext.dart' as ext;
 
@@ -46,7 +44,7 @@ class PdfReceipt<T extends PrintableReceiptInterface,
 
         pageTheme: pageTheme,
         build: (context) {
-          this.contextPDF = context;
+          contextPDF = context;
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +76,7 @@ class PdfReceipt<T extends PrintableReceiptInterface,
       Expanded(flex: 4, child: buildInvoiceMainTable2()),
       Expanded(
           flex: 1,
-          child: ext.buildQrCode<E>(this.context, printObj,
+          child: ext.buildQrCode<E>(context, printObj,
               printCommandAbstract: setting))
     ];
   }

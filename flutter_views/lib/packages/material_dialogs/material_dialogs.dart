@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/widgets/dialogs/dialog_widget.dart';
@@ -9,18 +11,18 @@ export 'package:lottie/lottie.dart';
 class Dialogs {
   ///[titleStyle] can be used to change the dialog title style
   static const TextStyle titleStyle =
-      const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+      TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
 
   ///[bcgColor] background default value
-  static const Color bcgColor = const Color(0xfffefefe);
+  static const Color bcgColor = Color(0xfffefefe);
 
   ///[holder] holder for the custom view
-  static const Widget holder = const SizedBox(
+  static const Widget holder = SizedBox(
     height: 0,
   );
 
   /// [dialogShape] dialog outer shape
-  static const ShapeBorder dialogShape = const RoundedRectangleBorder(
+  static const ShapeBorder dialogShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(16)));
 
   /// [BottomSheetShape] bottom dialog outer shape

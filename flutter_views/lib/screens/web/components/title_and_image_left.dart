@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class TitleAndDescriptopnAndImageLeft extends StatelessWidget {

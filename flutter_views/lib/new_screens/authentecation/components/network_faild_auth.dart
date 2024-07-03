@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class NetworkFaildAuth extends StatelessWidget {
-  const NetworkFaildAuth({Key? key}) : super(key: key);
+  const NetworkFaildAuth({super.key});
 
   @override
   Widget build(BuildContext context) {

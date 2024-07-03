@@ -7,8 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class ChartDateChooser<T extends ViewAbstractEnum> extends StatefulWidget {
   T obj;
   Widget Function(T? obj) onSelected;
-  ChartDateChooser({Key? key, required this.obj, required this.onSelected})
-      : super(key: key);
+
+  ChartDateChooser({super.key, required this.obj, required this.onSelected});
 
   @override
   State<ChartDateChooser> createState() => _ChartDateChooserState<T>();
@@ -17,6 +17,7 @@ class ChartDateChooser<T extends ViewAbstractEnum> extends StatefulWidget {
 class _ChartDateChooserState<T extends ViewAbstractEnum>
     extends State<ChartDateChooser<T>> {
   Widget? selectedObj;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

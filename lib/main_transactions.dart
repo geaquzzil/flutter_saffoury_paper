@@ -8,7 +8,7 @@ import 'package:flutter/scheduler.dart';
 /// The demo page for [FadeScaleTransition].
 class FadeScaleTransitionDemo extends StatefulWidget {
   /// Creates the demo page for [FadeScaleTransition].
-  const FadeScaleTransitionDemo({Key? key}) : super(key: key);
+  const FadeScaleTransitionDemo({super.key});
 
   @override
   State<FadeScaleTransitionDemo> createState() =>
@@ -141,7 +141,7 @@ class _ExampleAlertDialog extends StatelessWidget {
 /// The demo page for [SharedAxisPageTransitionsBuilder].
 class SharedAxisTransitionDemo extends StatefulWidget {
   /// Creates the demo page for [SharedAxisPageTransitionsBuilder].
-  const SharedAxisTransitionDemo({Key? key}) : super(key: key);
+  const SharedAxisTransitionDemo({super.key});
 
   @override
   State<SharedAxisTransitionDemo> createState() {
@@ -384,7 +384,7 @@ class _SignInPage extends StatelessWidget {
 /// The demo page for [FadeThroughTransition].
 class FadeThroughTransitionDemo extends StatefulWidget {
   /// Creates the demo page for [FadeThroughTransition].
-  const FadeThroughTransitionDemo({Key? key}) : super(key: key);
+  const FadeThroughTransitionDemo({super.key});
 
   @override
   State<FadeThroughTransitionDemo> createState() =>
@@ -598,7 +598,7 @@ const double _fabDimension = 56.0;
 /// The demo page for [OpenContainerTransform].
 class OpenContainerTransformDemo extends StatefulWidget {
   /// Creates the demo page for [OpenContainerTransform].
-  const OpenContainerTransformDemo({Key? key}) : super(key: key);
+  const OpenContainerTransformDemo({super.key});
 
   @override
   State<OpenContainerTransformDemo> createState() {

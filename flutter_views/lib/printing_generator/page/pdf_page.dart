@@ -2,23 +2,13 @@
 
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
-import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -29,8 +19,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../../interfaces/printable/printable_master.dart';
 import '../../models/servers/server_helpers.dart';
-import '../pdf_custom_from_pdf_api.dart';
-import '../pdf_receipt_api.dart';
 import 'base_pdf_page.dart';
 import 'ext.dart';
 import 'dart:math' as math;
@@ -130,7 +118,7 @@ class _PdfPageState<T extends PrintLocalSetting>
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return Text("TOTODO");
+          return const Text("TOTODO");
         }
       },
     );
@@ -236,7 +224,7 @@ class _PdfPageState<T extends PrintLocalSetting>
         initialPageFormat: selectedFormat,
         canDebug: false,
         scrollViewDecoration:
-            BoxDecoration(color: Theme.of(context).colorScheme.background),
+            BoxDecoration(color: Theme.of(context).colorScheme.surface),
         dynamicLayout: true,
         loadingWidget: const CircularProgressIndicator(),
         useActions: false,
@@ -302,10 +290,10 @@ class TitleWidget extends StatelessWidget {
   final String text;
 
   const TitleWidget({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => Column(
@@ -330,10 +318,10 @@ class ButtonWidget extends StatelessWidget {
   final VoidCallback onClicked;
 
   const ButtonWidget({
-    Key? key,
+    super.key,
     required this.text,
     required this.onClicked,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => ElevatedButton(

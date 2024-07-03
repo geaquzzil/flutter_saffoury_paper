@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 
 class WebViewDetails extends StatelessWidget {
   ViewAbstract viewAbstract;
-  WebViewDetails({Key? key, required this.viewAbstract}) : super(key: key);
+  WebViewDetails({super.key, required this.viewAbstract});
   Widget buildItem(BuildContext context, String field) {
     debugPrint("MasterView buildItem $field");
     dynamic fieldValue = viewAbstract.getFieldValue(field);
@@ -48,12 +48,11 @@ class ViewCardItem extends StatelessWidget {
   IconData icon;
   ViewAbstract? object;
   ViewCardItem(
-      {Key? key,
+      {super.key,
       this.object,
       required this.title,
       required this.description,
-      required this.icon})
-      : super(key: key);
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {

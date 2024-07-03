@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -13,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../configrations.dart';
-import '../../new_screens/setting/base_shared_detail_modifidable.dart';
 
 abstract class BasePdfPage extends StatefulWidget {
   BasePdfPage({super.key});

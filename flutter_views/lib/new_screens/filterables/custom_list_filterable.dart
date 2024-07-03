@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -11,8 +10,7 @@ import '../edit/controllers/ext.dart';
 class CustomFilterableController extends StatelessWidget {
   CustomFilterableField customFilterableField;
 
-  CustomFilterableController({Key? key, required this.customFilterableField})
-      : super(key: key);
+  CustomFilterableController({super.key, required this.customFilterableField});
 
   @override
   Widget build(BuildContext context) {

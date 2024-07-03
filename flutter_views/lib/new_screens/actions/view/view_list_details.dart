@@ -5,8 +5,7 @@ import 'view_card_item.dart';
 
 class ViewDetailsListWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
-  ViewDetailsListWidget({Key? key, required this.viewAbstract})
-      : super(key: key);
+  ViewDetailsListWidget({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {

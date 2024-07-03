@@ -1,14 +1,16 @@
 // import 'package:file_picker/file_picker.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class RoundedIconButtonTowChilds2 extends StatelessWidget {
   Widget largChild;
   IconData smallIcon;
   RoundedIconButtonTowChilds2({
-    Key? key,
+    super.key,
     required this.largChild,
     required this.smallIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

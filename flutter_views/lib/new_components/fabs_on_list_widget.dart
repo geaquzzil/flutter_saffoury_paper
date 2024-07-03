@@ -1,8 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
@@ -10,19 +9,14 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
-import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
-import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -89,7 +83,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
       childPadding: const EdgeInsets.all(5),
       spaceBetweenChildren: 4,
 
-      buttonSize: Size(
+      buttonSize: const Size(
           56.0, 56.0), // it's the SpeedDial size which defaults to 56 itself
       // iconTheme: IconThemeData(size: 22),
       label:
@@ -233,7 +227,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
   Widget? getFilterWidget(BuildContext context) {
     if (SizeConfig.isMobile(context)) {
       return IconButton(
-        icon: Icon(Icons.filter_alt_rounded),
+        icon: const Icon(Icons.filter_alt_rounded),
         onPressed: () async {
           showBottomSheetExt(
             context: context,

@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_tow_childs%20copy.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
-import 'package:flutter_view_controller/size_config.dart';
+
 
 import '../new_components/cards/clipper_card.dart';
 
@@ -269,7 +263,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
                       trailing: widget.trailing ?? _buildIcon(context)),
                 ),
               ),
-              if (_isExpanded) Divider(),
+              if (_isExpanded) const Divider(),
               ClipRect(
                 child: Align(
                   alignment: Alignment.center,
@@ -301,7 +295,7 @@ class EditSubViewAbstractHeaderState extends State<ExpansionTileCustom>
                   subtitle: widget.subtitle,
                   trailing: widget.trailing ?? _buildIcon(context)),
             ),
-            if (_isExpanded) Divider(),
+            if (_isExpanded) const Divider(),
             ClipRect(
               child: Align(
                 alignment: Alignment.center,

@@ -1,22 +1,17 @@
-import 'dart:convert';
+// ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:provider/provider.dart';
 part 'products_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -48,9 +43,7 @@ class ProductType extends ViewAbstract<ProductType>
     return ProductType();
   }
 
-  ProductType.init(bool requestAvailablity) {
-    this.requestAvailablity = requestAvailablity;
-  }
+  ProductType.init(this.requestAvailablity);
 
   @override
   ProductType getSelfNewInstanceFileImporter(

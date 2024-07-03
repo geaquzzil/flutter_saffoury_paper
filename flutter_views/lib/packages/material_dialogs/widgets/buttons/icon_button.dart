@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 ///[btnShape] buttons shape
-const RoundedRectangleBorder btnShape = const RoundedRectangleBorder(
+const RoundedRectangleBorder btnShape = RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(4)));
 
 class IconsButton extends StatelessWidget {
-  IconsButton({
+  const IconsButton({super.key,
     required this.onPressed,
     required this.text,
     this.shape = btnShape,
@@ -60,7 +60,7 @@ class IconsButton extends StatelessWidget {
           ),
           Visibility(
             visible: iconData != null,
-            child: SizedBox(
+            child: const SizedBox(
               width: 4,
             ),
           ),

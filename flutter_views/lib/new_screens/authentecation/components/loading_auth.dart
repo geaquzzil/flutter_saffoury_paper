@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class LoadingAuth extends StatelessWidget {
-  const LoadingAuth({Key? key}) : super(key: key);
+  const LoadingAuth({super.key});
 
   @override
   Widget build(BuildContext context) {

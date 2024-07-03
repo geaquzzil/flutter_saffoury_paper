@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
@@ -10,16 +8,10 @@ import 'package:flutter_view_controller/encyptions/compressions.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/header.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_search_api.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -27,8 +19,6 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
-import 'package:flutter_view_controller/screens/web/components/web_button.dart';
-import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
@@ -37,7 +27,6 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 

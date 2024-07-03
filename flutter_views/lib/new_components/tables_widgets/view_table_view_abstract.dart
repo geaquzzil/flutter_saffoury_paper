@@ -1,17 +1,9 @@
-import 'dart:math';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:dynamic_table/dynamic_table.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
-import 'package:flutter_view_controller/interfaces/listable_interface.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../models/view_abstract.dart';
@@ -47,6 +39,7 @@ class _ViewableTableViewAbstractWidget
   final tableKey = GlobalKey<DynamicTableState>();
 
   int lastIndexOfSelected = -1;
+
   @override
   void didUpdateWidget(covariant ViewableTableViewAbstractWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -143,7 +136,7 @@ class _ViewableTableViewAbstractWidget
           // minWidth: 800,
           // controller: _controller,
           showActions: true,
-          actions: [],
+          actions: const [],
           showAddRowButton: true,
           showDeleteAction: true,
 
@@ -197,7 +190,7 @@ class _ViewableTableViewAbstractWidget
           sortAscending: isAscending,
           // onSelectAll: _dessertsDataSource.selectAll,
           horizontalMargin: 20,
-          actions: [Icon(Icons.print)],
+          actions: const [Icon(Icons.print)],
           // wrapInCard: true,
           // minWidth: 800,
           controller: _controller,
@@ -237,7 +230,7 @@ class _ViewableTableViewAbstractWidget
         .map((e) => DynamicTableDataColumn(
               isEditable: true,
               dynamicTableInputType: DynamicTableInputType.text(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(20),
                       border: OutlineInputBorder())),
 
@@ -265,7 +258,7 @@ class _ViewableTableViewAbstractWidget
             ))
         .toList();
     if (widget.buildActions) {
-      list.add(DataColumn(
+      list.add(const DataColumn(
           label: SizedBox(
         width: 100,
       )));
@@ -371,11 +364,14 @@ class MyData extends DataTableSource {
   int _selectedCount = 0;
   BuildContext context;
   bool buildActions;
+
   MyData(this.context, this.data, {required this.buildActions});
+
   // Generate some made-up data
 
   @override
   bool get isRowCountApproximate => false;
+
   @override
   int get rowCount => data.length;
 
@@ -442,7 +438,7 @@ class MyData extends DataTableSource {
 
         index: index,
         color: e.selected == true
-            ? MaterialStateProperty.all(Theme.of(context).highlightColor)
+            ? WidgetStateProperty.all(Theme.of(context).highlightColor)
             : null,
         // selected: e.selected,
         cells: cells);

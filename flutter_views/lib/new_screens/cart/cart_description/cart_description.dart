@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'cart_descriptopn_header.dart';
 
 class SubRowCartDescription extends StatefulWidget {
-  const SubRowCartDescription({Key? key}) : super(key: key);
+  const SubRowCartDescription({super.key});
 
   @override
   State<SubRowCartDescription> createState() => _SubRowCartDescriptionState();
@@ -68,8 +68,8 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
                 icon: const Icon(Icons.clear_all)),
           ),
           const CartDescriptionHeader(),
-          Spacer(),
-          CartDescriptionTotals(),
+          const Spacer(),
+          const CartDescriptionTotals(),
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: kDefaultPadding, vertical: kDefaultPadding),
@@ -93,7 +93,7 @@ class _SubRowCartDescriptionState extends State<SubRowCartDescription>
 }
 
 class CartDescriptionTotals extends StatelessWidget {
-  const CartDescriptionTotals({Key? key}) : super(key: key);
+  const CartDescriptionTotals({super.key});
 
   @override
   Widget build(BuildContext context) {

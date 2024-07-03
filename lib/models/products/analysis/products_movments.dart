@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
@@ -18,7 +16,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import '../../invoices/orders.dart';
 import '../../invoices/priceless_invoices/transfers.dart';
 

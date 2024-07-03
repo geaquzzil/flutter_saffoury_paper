@@ -6,10 +6,10 @@ class TowIcons extends StatelessWidget {
   Widget largChild;
   IconData smallIcon;
   TowIcons({
-    Key? key,
+    super.key,
     required this.largChild,
     required this.smallIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class TowIcons extends StatelessWidget {
         icon: Icon(
           smallIcon,
           size: 20,
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         // decoration: IconDecoration(border: IconBorder()),
       ),

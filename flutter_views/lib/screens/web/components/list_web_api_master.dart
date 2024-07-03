@@ -7,7 +7,6 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';

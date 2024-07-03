@@ -7,6 +7,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 class Carousel extends StatelessWidget {
   final CarouselController carouselController = CarouselController();
+
+  Carousel({super.key});
   @override
   Widget build(BuildContext context) {
     double carouselContainerHeight = MediaQuery.of(context).size.height *

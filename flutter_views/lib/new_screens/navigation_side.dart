@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 
 class NavigationSide extends StatelessWidget {
-  const NavigationSide({Key? key}) : super(key: key);
+  const NavigationSide({super.key});
 
   final _navItems = const [
     NavItemModel(name: 'Item 1', icon: Icons.home),
@@ -65,7 +65,7 @@ class NavigationSide extends StatelessWidget {
                               ),
                             ),
                           )
-                          .toList(),
+                          ,
                       const SideMenuItemDataDivider(divider: Divider()),
                       const SideMenuItemDataTitle(title: 'Account'),
                       ..._accountItems
@@ -78,7 +78,7 @@ class NavigationSide extends StatelessWidget {
                                 e.icon,
                                 color: const Color(0xff8e8e8e),
                               ),
-                              badgeContent: const Text(
+                              badgeBuilder: (w) => const Text(
                                 '23',
                                 style: TextStyle(
                                   fontSize: 8,
@@ -87,7 +87,7 @@ class NavigationSide extends StatelessWidget {
                               ).showOrNull(data.isOpen),
                             ),
                           )
-                          .toList(),
+                          ,
                     ],
                     footer: ListTile(
                       title: const Text('Foo Bar').showOrNull(data.isOpen),

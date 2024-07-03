@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AnimatedListSample extends StatefulWidget {
-  const AnimatedListSample({Key? key}) : super(key: key);
+  const AnimatedListSample({super.key});
 
   @override
   State<AnimatedListSample> createState() => _AnimatedListSampleState();
@@ -165,13 +165,12 @@ class ListModel<E> {
 /// varies from 0 to 128 as the animation varies from 0.0 to 1.0.
 class CardItem extends StatelessWidget {
   const CardItem({
-    Key? key,
+    super.key,
     this.onTap,
     this.selected = false,
     required this.animation,
     required this.item,
-  })  : assert(item >= 0),
-        super(key: key);
+  })  : assert(item >= 0);
 
   final Animation<double> animation;
   final VoidCallback? onTap;
@@ -180,7 +179,7 @@ class CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = Theme.of(context).textTheme.headline4!;
+    TextStyle textStyle = Theme.of(context).textTheme.headlineMedium!;
     if (selected) {
       textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
     }

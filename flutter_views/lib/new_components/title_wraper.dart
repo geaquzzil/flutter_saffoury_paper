@@ -4,8 +4,7 @@ import 'package:flutter_view_controller/components/title_text.dart';
 class TitleWraper extends StatelessWidget {
   Widget child;
   String title;
-  TitleWraper({Key? key, required this.title, required this.child})
-      : super(key: key);
+  TitleWraper({super.key, required this.title, required this.child});
 
   @override
   Widget build(BuildContext context) {

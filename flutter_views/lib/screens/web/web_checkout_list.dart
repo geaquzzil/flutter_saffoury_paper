@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_table_master.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_description/cart_description.dart';
 import 'package:flutter_view_controller/new_screens/cart/cart_list_header.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
-import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/servers/server_helpers.dart';

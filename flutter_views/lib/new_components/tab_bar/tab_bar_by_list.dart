@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
@@ -8,7 +7,7 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 ///So we initialize tab controller on the build
 class TabBarByListWidget<T extends TabControllerHelper> extends StatefulWidget {
   List<T> tabs;
-  TabBarByListWidget({Key? key, required this.tabs}) : super(key: key);
+  TabBarByListWidget({super.key, required this.tabs});
 
   @override
   State<TabBarByListWidget> createState() => _TabBarWidgetState();

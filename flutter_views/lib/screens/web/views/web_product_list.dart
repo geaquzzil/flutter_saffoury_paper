@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
-import 'package:flutter_view_controller/screens/web/models/design_process.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../components/grid_view_api_category.dart';
@@ -146,7 +141,7 @@ class WebProductList extends StatelessWidget {
                           count: isDesktop(context) ? 20 : 4, page: value),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
                     List<ViewAbstract>? list = snapshot.data?.cast();
                     if (list == null) {

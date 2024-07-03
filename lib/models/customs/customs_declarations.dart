@@ -11,19 +11,15 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:pdf/src/widgets/theme.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 
-import 'package:pdf/src/widgets/document.dart';
-import 'package:pdf/src/pdf/page_format.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+
 part 'customs_declarations.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -47,6 +43,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   CustomsDeclaration() : super() {
     date = "".toDateTimeNowString();
   }
+
   @override
   void onBeforeGenerateView(material.BuildContext context,
       {ServerActions? action}) {
@@ -91,6 +88,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
         "customs_declarations_images_count": 0,
         "employees": Employee(),
       };
+
   @override
   List<String> getMainFields({material.BuildContext? context}) =>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
@@ -137,7 +135,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
         //   "items: ${getDetailListFromMasterItemsCount()}",
         //   style: Theme.of(context)
         //       .textTheme
-        //       .caption!
+        //       .bodySmall!
         //       .copyWith(color: Theme.of(context).colorScheme.primary),
         // )
       ],
@@ -222,6 +220,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   @override
   CustomsDeclaration fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomsDeclaration.fromJson(json);
+
   static String? intFromString(dynamic number) => number?.toString();
 
   @override

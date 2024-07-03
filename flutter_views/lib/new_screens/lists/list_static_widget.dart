@@ -7,11 +7,10 @@ class ListStaticWidget<T> extends StatelessWidget {
   Widget Function(T item)? listItembuilder;
   Widget emptyWidget;
   ListStaticWidget(
-      {Key? key,
+      {super.key,
       required this.list,
       required this.emptyWidget,
-      this.listItembuilder})
-      : super(key: key);
+      this.listItembuilder});
 
   @override
   Widget build(BuildContext context) {

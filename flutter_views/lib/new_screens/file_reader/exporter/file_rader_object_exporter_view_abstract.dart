@@ -262,7 +262,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
       );
 
   Future<void> generateExcel(BuildContext context) async {
-    Stopwatch stopwatch = new Stopwatch()..start();
+    Stopwatch stopwatch = Stopwatch()..start();
     excel = Excel.createExcel();
 
     Sheet sh = excel[excel.getDefaultSheet()!];

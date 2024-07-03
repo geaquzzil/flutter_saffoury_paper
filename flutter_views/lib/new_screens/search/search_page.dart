@@ -1,40 +1,28 @@
 import 'dart:math';
 
-import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
-import 'package:flutter_view_controller/new_components/cards/filled_card.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
-import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master_horizontal.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_multible_views.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_search_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/debouncer.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
-import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import '../lists/list_api_master.dart';
 
 class SearchPage extends StatefulWidget {
   String? tableName;
@@ -322,7 +310,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget getEmptyWidget() {
-    return Center(
+    return const Center(
       child: EmptyWidget(
           lottiUrl:
               "https://assets1.lottiefiles.com/private_files/lf30_jo7huq2d.json"),

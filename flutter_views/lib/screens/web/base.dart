@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
-import 'package:flutter_view_controller/globals.dart';
-import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -20,7 +19,6 @@ import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/models/header_item.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/terms.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -29,7 +27,6 @@ import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 import '../../models/servers/server_helpers.dart';
 import '../../models/view_abstract.dart';
-import '../../new_screens/cart/base_home_cart_screen.dart';
 
 abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
   Widget? getContentWidget(BuildContext context);
@@ -130,9 +127,9 @@ abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
 }
 
 abstract class BaseWebPage extends StatelessWidget {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   Widget? getContentWidget(BuildContext context);
-  BaseWebPage({Key? key}) : super(key: key);
+  BaseWebPage({super.key});
 
   String getSelectedHeader(BuildContext context) {
     if (this is AboutUsWebPage) {
@@ -268,13 +265,12 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   final bool useSmallFloatingBar;
   final Widget? customSliverHeader;
   BaseWebPageSlivers(
-      {Key? key,
+      {super.key,
       this.buildHeader = true,
       this.useSmallFloatingBar = false,
       this.buildFooter = true,
       this.customSliverHeader,
-      this.pinToolbar = true})
-      : super(key: key);
+      this.pinToolbar = true});
 
   Widget getDescription(
       BuildContext context, BoxConstraints constraints, String description) {
@@ -450,7 +446,7 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   }
 
   SizedBox getEndDrawer() {
-    return SizedBox(width: 500, child: Card(child: WebShoppingCartDrawer()));
+    return const SizedBox(width: 500, child: Card(child: WebShoppingCartDrawer()));
   }
 
   Widget getDrawer(List<HeaderItem> headerItems) {

@@ -12,7 +12,7 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..login = json['login'] as bool?
       ..permission = json['permission'] as bool?
-      ..response = json['response'] as int?
+      ..response = (json['response'] as num?)?.toInt()
       ..phone = json['phone'] as String?
       ..password = json['password'] as String?
       ..userlevels = json['userlevels'] == null
@@ -55,21 +55,21 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
       ..cut_requestsAnalysis = (json['cut_requestsAnalysis'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..cut_requests_count = json['cut_requests_count'] as int?
+      ..cut_requests_count = (json['cut_requests_count'] as num?)?.toInt()
       ..orders = (json['orders'] as List<dynamic>?)
           ?.map((e) => Order.fromJson(e as Map<String, dynamic>))
           .toList()
       ..ordersAnalysis = (json['ordersAnalysis'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..orders_count = json['orders_count'] as int?
+      ..orders_count = (json['orders_count'] as num?)?.toInt()
       ..purchases = (json['purchases'] as List<dynamic>?)
           ?.map((e) => Purchases.fromJson(e as Map<String, dynamic>))
           .toList()
       ..purchasesAnalysis = (json['purchasesAnalysis'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..purchases_count = json['purchases_count'] as int?
+      ..purchases_count = (json['purchases_count'] as num?)?.toInt()
       ..orders_refunds = (json['orders_refunds'] as List<dynamic>?)
           ?.map((e) => OrderRefund.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -77,7 +77,7 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           (json['orders_refundsAnalysis'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..orders_refunds_count = json['orders_refunds_count'] as int?
+      ..orders_refunds_count = (json['orders_refunds_count'] as num?)?.toInt()
       ..purchases_refunds = (json['purchases_refunds'] as List<dynamic>?)
           ?.map((e) => PurchasesRefund.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -85,7 +85,8 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           (json['purchases_refundsAnalysis'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..purchases_refunds_count = json['purchases_refunds_count'] as int?
+      ..purchases_refunds_count =
+          (json['purchases_refunds_count'] as num?)?.toInt()
       ..customers_request_sizes = (json['customers_request_sizes']
               as List<dynamic>?)
           ?.map((e) => CustomerRequestSize.fromJson(e as Map<String, dynamic>))
@@ -95,7 +96,7 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
       ..customers_request_sizes_count =
-          json['customers_request_sizes_count'] as int?
+          (json['customers_request_sizes_count'] as num?)?.toInt()
       ..reservation_invoice = (json['reservation_invoice'] as List<dynamic>?)
           ?.map((e) => ReservationInvoice.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -103,7 +104,8 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           (json['reservation_invoiceAnalysis'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..reservation_invoice_count = json['reservation_invoice_count'] as int?
+      ..reservation_invoice_count =
+          (json['reservation_invoice_count'] as num?)?.toInt()
       ..products_inputs = (json['products_inputs'] as List<dynamic>?)
           ?.map((e) => ProductInput.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -111,7 +113,7 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           (json['products_inputsAnalysis'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..products_inputs_count = json['products_inputs_count'] as int?
+      ..products_inputs_count = (json['products_inputs_count'] as num?)?.toInt()
       ..products_outputs = (json['products_outputs'] as List<dynamic>?)
           ?.map((e) => ProductOutput.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -119,14 +121,15 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           (json['products_outputsAnalysis'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..products_outputs_count = json['products_outputs_count'] as int?
+      ..products_outputs_count =
+          (json['products_outputs_count'] as num?)?.toInt()
       ..transfers = (json['transfers'] as List<dynamic>?)
           ?.map((e) => Transfers.fromJson(e as Map<String, dynamic>))
           .toList()
       ..transfersAnalysis = (json['transfersAnalysis'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..transfers_count = json['transfers_count'] as int?
+      ..transfers_count = (json['transfers_count'] as num?)?.toInt()
       ..cargo_transporters = (json['cargo_transporters'] as List<dynamic>?)
           ?.map((e) => CargoTransporter.fromJson(e as Map<String, dynamic>))
           .toList()
@@ -134,7 +137,8 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
           (json['cargo_transportersAnalysis'] as List<dynamic>?)
               ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..cargo_transporters_count = json['cargo_transporters_count'] as int?
+      ..cargo_transporters_count =
+          (json['cargo_transporters_count'] as num?)?.toInt()
       ..dateObject = json['dateObject'] == null
           ? null
           : DateObject.fromJson(json['dateObject'] as Map<String, dynamic>)

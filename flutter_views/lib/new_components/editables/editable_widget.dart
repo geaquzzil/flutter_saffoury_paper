@@ -10,11 +10,10 @@ class EditableWidget extends StatefulWidget {
   void Function(ViewAbstract? viewAbstract)? onValidated;
   void Function(FocusNode? lastNode)? onFocusChange;
   EditableWidget(
-      {Key? key,
+      {super.key,
       required this.viewAbstract,
       this.onValidated,
-      this.onFocusChange})
-      : super(key: key);
+      this.onFocusChange});
 
   @override
   State<EditableWidget> createState() => _EditableWidget();
@@ -209,7 +208,7 @@ class _EditableWidget extends State<EditableWidget> {
             },
             onSaved: (String? value) {
               widget.viewAbstract.setFieldValue(fieldName, value);
-              debugPrint('EditControllerEditText onSave= ${fieldName}:$value');
+              debugPrint('EditControllerEditText onSave= $fieldName:$value');
               if (widget.viewAbstract.getFieldNameFromParent != null) {
                 widget.viewAbstract.getParnet?.setFieldValue(
                     widget.viewAbstract.getFieldNameFromParent ?? "",

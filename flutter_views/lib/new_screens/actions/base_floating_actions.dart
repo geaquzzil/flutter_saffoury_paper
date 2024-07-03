@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
@@ -70,7 +67,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
             msgAlign: TextAlign.end,
             dialogWidth:
                 SizeConfig.isDesktopOrWebPlatform(context) ? 0.3 : null,
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             msg: viewAbstract.getBaseMessage(context),
             title: viewAbstract.getBaseTitle(context),
             context: context,

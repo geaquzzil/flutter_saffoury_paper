@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
-import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
-import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +19,8 @@ const largePane = 0.75;
 
 class BaseDashboardMainPage extends StatefulWidget {
   final String title;
-  BaseDashboardMainPage({
+
+  const BaseDashboardMainPage({
     super.key,
     required this.title,
   });

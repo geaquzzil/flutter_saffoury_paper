@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'cards/outline_card.dart';
-
 // class NewsCardSkelton extends StatelessWidget {
 //   const NewsCardSkelton({
 //     Key? key,
@@ -44,13 +42,13 @@ import 'cards/outline_card.dart';
 //   }
 // }
 class ShimmerLoadingList extends StatelessWidget {
-  const ShimmerLoadingList({Key? key}) : super(key: key);
+  const ShimmerLoadingList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: Theme.of(context).colorScheme.outline,
-      highlightColor: Theme.of(context).colorScheme.onBackground,
+      highlightColor: Theme.of(context).colorScheme.onSurface,
       period: const Duration(seconds: 1),
       child: Container(
         decoration: BoxDecoration(
@@ -99,20 +97,20 @@ class ShimmerLoadingList extends StatelessWidget {
 }
 
 class ShimmerLoadingListGrid extends StatelessWidget {
-  const ShimmerLoadingListGrid({Key? key}) : super(key: key);
+  const ShimmerLoadingListGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: Theme.of(context).colorScheme.outline,
-      highlightColor: Theme.of(context).colorScheme.onBackground,
+      highlightColor: Theme.of(context).colorScheme.onSurface,
       period: const Duration(seconds: 1),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             border: Border.all(color: Theme.of(context).colorScheme.outline)),
         child: Padding(
-          padding: EdgeInsets.all(kDefaultPadding),
+          padding: const EdgeInsets.all(kDefaultPadding),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

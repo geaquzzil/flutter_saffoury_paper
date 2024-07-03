@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_master.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
@@ -11,9 +8,8 @@ import '../../components/expansion_tile_custom.dart';
 
 class ListStickyWidget extends ListStaticMaster<ListStickyItem> {
   bool sort;
-  ListStickyWidget(
-      {Key? key, required List<ListStickyItem> list, this.sort = true})
-      : super(key: key, list: list);
+
+  ListStickyWidget({super.key, required super.list, this.sort = true});
 
   Widget _getGroupSeparator(BuildContext ctx, ListStickyItem element) {
     return Text(
@@ -28,7 +24,8 @@ class ListStickyWidget extends ListStaticMaster<ListStickyItem> {
     return StickyGroupedListView<ListStickyItem, String>(
       // physics: ,
       //  physics: const AlwaysScrollableScrollPhysics(),
-      physics: ClampingScrollPhysics(parent: NeverScrollableScrollPhysics()),
+      physics:
+          const ClampingScrollPhysics(parent: NeverScrollableScrollPhysics()),
       shrinkWrap: true,
       elements: list,
       stickyHeaderBackgroundColor: Colors.transparent,
@@ -40,11 +37,11 @@ class ListStickyWidget extends ListStaticMaster<ListStickyItem> {
       itemComparator: (ListStickyItem element1, ListStickyItem element2) =>
           element1.groupItem.groupName.compareTo(element2.groupItem.groupName),
       floatingHeader: false,
-      separator: Text("s"),
-      padding: EdgeInsets.all(kDefaultPadding / 2),
+      separator: const Text("s"),
+      padding: const EdgeInsets.all(kDefaultPadding / 2),
       groupSeparatorBuilder: (element) =>
           element.buildGroupNameInsideItemBuilder
-              ? SizedBox(height: kDefaultPadding / 2)
+              ? const SizedBox(height: kDefaultPadding / 2)
               : _getGroupSeparator(context, element),
       itemBuilder: (context, element) {
         if (element.buildGroupNameInsideItemBuilder) {
@@ -76,6 +73,7 @@ class ListStickyItem {
   bool buildGroupNameInsideItemBuilder;
   bool useExpansionTile;
   Widget Function(BuildContext context) itemBuilder;
+
   ListStickyItem(
       {required this.groupItem,
       required this.itemBuilder,
@@ -86,5 +84,6 @@ class ListStickyItem {
 class ListStickyGroupItem {
   String groupName;
   IconData? icon;
+
   ListStickyGroupItem({required this.groupName, this.icon});
 }

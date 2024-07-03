@@ -4,18 +4,18 @@ import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/shared_components/search_field.dart';
 
 class PosHeader extends StatelessWidget {
-  const PosHeader({Key? key}) : super(key: key);
+  const PosHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(child: SearchField(onSearch: (value) {})),
-         TodayText(),
+        TodayText(),
         const SizedBox(width: kSpacing),
-        IconButton(onPressed: () {}, icon: Icon(Icons.info)),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.info)),
         const SizedBox(width: kSpacing),
-        IconButton(onPressed: () {}, icon: Icon(Icons.camera_alt))
+        IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt))
       ],
     );
   }

@@ -12,7 +12,7 @@ Grades _$GradesFromJson(Map<String, dynamic> json) => Grades()
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..products_count = json['products_count'] as int?;
+  ..products_count = (json['products_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$GradesToJson(Grades instance) => <String, dynamic>{
       'iD': instance.iD,

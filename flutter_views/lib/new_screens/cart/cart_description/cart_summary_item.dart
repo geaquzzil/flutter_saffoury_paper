@@ -5,8 +5,7 @@ class CartSummaryItem extends StatelessWidget {
   String title;
   String? description;
   CartSummaryItem(
-      {Key? key, required this.title, this.description, this.fontSize = 16})
-      : super(key: key);
+      {super.key, required this.title, this.description, this.fontSize = 16});
 
   @override
   Widget build(BuildContext context) {

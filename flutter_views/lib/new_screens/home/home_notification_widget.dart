@@ -1,23 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_shared_with_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/actions/action_viewabstract_provider.dart';
-import '../lists/components/search_components.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-import 'components/notifications/notification_popup.dart';
-
 class HomeNotificationPage extends BaseHomeSharedWithWidgets {
+  HomeNotificationPage({super.key});
+
   @override
   Widget? getEndPane(BuildContext context) {
     return null;
@@ -52,6 +41,7 @@ class HomeNotificationPage extends BaseHomeSharedWithWidgets {
       "Check this section for updates exclusively offer and general notifications";
   String notifiactionLottie =
       "https://assets6.lottiefiles.com/packages/lf20_heejrebm.json";
+
   @override
   List<Widget> getSliverList(BuildContext context) {
     return [
@@ -67,7 +57,7 @@ class HomeNotificationPage extends BaseHomeSharedWithWidgets {
   @override
   EdgeInsets? hasBodyPadding(BuildContext context) {
     // return null;
-    return EdgeInsets.symmetric(horizontal: 100);
+    return const EdgeInsets.symmetric(horizontal: 100);
   }
 
   @override

@@ -3,22 +3,13 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
-import 'package:flutter_view_controller/screens/web/components/carousel.dart';
-import 'package:flutter_view_controller/screens/web/components/cv_section.dart';
-import 'package:flutter_view_controller/screens/web/components/education_section.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
-import 'package:flutter_view_controller/screens/web/components/ios_app_ad.dart';
-import 'package:flutter_view_controller/screens/web/components/portfolio_stats.dart';
-import 'package:flutter_view_controller/screens/web/components/skill_section.dart';
-import 'package:flutter_view_controller/screens/web/components/sponsors.dart';
-import 'package:flutter_view_controller/screens/web/components/testimonial_widget.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
-import 'package:flutter_view_controller/screens/web/components/website_ad.dart';
 
 import 'components/terms/terms_who_we_are.dart';
 
 class TermsWebPage extends BaseWebPageSlivers {
-  TermsWebPage({Key? key}) : super(key: key);
+  TermsWebPage({super.key});
 
   @override
   List<Widget> getContentWidget(

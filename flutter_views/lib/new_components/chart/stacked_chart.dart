@@ -8,24 +8,23 @@ class StackedChartItem<T, E> extends StatelessWidget {
   E? Function(T item, int value) xValueMapper;
   num? Function(T item, num num) yValueMapper;
   StackedChartItem(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.list,
       required this.xValueMapper,
-      required this.yValueMapper})
-      : super(key: key);
+      required this.yValueMapper});
 
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
         title: ChartTitle(alignment: ChartAlignment.near, text: title),
         legend:
-            Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+            const Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
         // Initialize category axis
         // primaryXAxis: CategoryAxis(),
-        primaryXAxis: T is DateTime ? DateTimeAxis() : CategoryAxis(),
+        primaryXAxis: T is DateTime ? const DateTimeAxis() : const CategoryAxis(),
         tooltipBehavior: TooltipBehavior(),
-        series: <ChartSeries>[
+        series: <CartesianSeries>[
           LineSeries<T, E>(
               // Bind data source
 

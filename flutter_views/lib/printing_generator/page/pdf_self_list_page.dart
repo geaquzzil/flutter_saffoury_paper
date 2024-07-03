@@ -2,28 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_self_list_api.dart';
-import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:provider/provider.dart';
 
-import '../../interfaces/printable/printable_master.dart';
-import '../../models/servers/server_helpers.dart';
-import '../pdf_custom_from_pdf_api.dart';
-import '../pdf_receipt_api.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
 class PdfSelfListPage<T extends PrintLocalSetting> extends StatefulWidget {
@@ -84,7 +71,7 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
             BoxDecoration(color: Theme.of(context).colorScheme.outline),
         shareActionExtraBody: "shareActionExtraBody",
         dynamicLayout: true,
-        loadingWidget: CircularProgressIndicator(),
+        loadingWidget: const CircularProgressIndicator(),
         // actions: [Icon(Icons.search), Icon(Icons.ac_unit_sharp)],
         // pdfPreviewPageDecoration: BoxDecoration(color: Colors.green),
         useActions: true,
@@ -108,7 +95,7 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
       pls = await Configurations.get<T>(
           (firstObj as ModifiablePrintableInterface)
               .getModifibleSettingObject(context),
-          customKey: "_printsetting" + firstObj.runtimeType.toString()) as T?;
+          customKey: "_printsetting${firstObj.runtimeType}");
       if (pls != null) {
         pls = pls.onSavedModiablePrintableLoaded(
             context, firstObj as ViewAbstract);

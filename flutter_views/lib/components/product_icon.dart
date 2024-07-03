@@ -10,8 +10,7 @@ class ProductIcon extends StatelessWidget {
   // final String text;
   final ValueChanged<Category> onSelected;
   final Category model;
-  const ProductIcon({Key? key, required this.model, required this.onSelected})
-      : super(key: key);
+  const ProductIcon({super.key, required this.model, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {

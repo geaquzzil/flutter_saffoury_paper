@@ -4,10 +4,10 @@ import '../constants.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.text,
-  }) : super(key: key);
+  });
 
   final GestureTapCallback onTap;
   final String text;

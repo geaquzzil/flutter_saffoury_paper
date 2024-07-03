@@ -114,7 +114,7 @@ class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo>
     return ListView(children: [
       PaginatedDataTable(
         actions: [
-          ElevatedButton(onPressed: () {}, child: Text("OK")),
+          ElevatedButton(onPressed: () {}, child: const Text("OK")),
         ],
         header: const Text('PaginatedDataTable'),
         rowsPerPage: _rowsPerPage.value,

@@ -7,8 +7,7 @@ class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
   void Function(T obj, bool selected)? onSelected;
 
   ListCardItemSelected(
-      {Key? key, required this.object, this.onSelected, this.isSelected})
-      : super(key: key);
+      {super.key, required this.object, this.onSelected, this.isSelected});
 
   @override
   State<ListCardItemSelected> createState() => _ListCardItemSelected();

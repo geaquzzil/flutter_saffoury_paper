@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class DateSelector extends StatefulWidget {
@@ -39,7 +38,7 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
               .selectFormat(AppLocalizations.of(context)!.date)
               .toUpperCase()),
         ),
-        IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward_ios)),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
       ],
     );
   }

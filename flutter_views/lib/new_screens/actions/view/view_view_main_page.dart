@@ -1,10 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseViewNewPage extends BaseActionScreenPage {

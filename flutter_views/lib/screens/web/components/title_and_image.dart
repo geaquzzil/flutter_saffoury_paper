@@ -3,12 +3,9 @@ import 'dart:ui';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class TitleAndDescriptopnAndImage extends StatelessWidget {
@@ -62,7 +59,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
       BoxConstraints constraints, BuildContext context) {
     double carouselContainerHeight = MediaQuery.of(context).size.height *
         (SizeConfig.isMobile(context) ? .25 : .5);
-    Widget image = Text("TODO");
+    Widget image = const Text("TODO");
 
     // CachedNetworkImage(
     //   color: Theme.of(context).colorScheme.onBackground,
@@ -94,7 +91,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
       height: carouselContainerHeight,
       decoration: BoxDecoration(
         color: kPrimaryColor.withOpacity(0.9),
-        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(25.0)),
       ),
       child: getUiBody(context, constraints),
     );

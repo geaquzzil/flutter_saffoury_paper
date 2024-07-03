@@ -93,7 +93,7 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
             MaterialBanner(
                 content: Text(AppLocalizations.of(context)!.errFieldNotSelected(
                     AppLocalizations.of(context)!.product)),
-                actions: [])
+                actions: const [])
           ];
         }
       }

@@ -3,7 +3,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -14,12 +13,11 @@ class EditControllerChipsFromViewAbstract<T extends ViewAbstract>
   String field;
   bool enabled;
   EditControllerChipsFromViewAbstract(
-      {Key? key,
+      {super.key,
       required this.parent,
       required this.enabled,
       required this.viewAbstract,
-      required this.field})
-      : super(key: key);
+      required this.field});
 
   @override
   State<EditControllerChipsFromViewAbstract<T>> createState() =>

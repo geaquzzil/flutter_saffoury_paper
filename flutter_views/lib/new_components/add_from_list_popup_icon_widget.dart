@@ -1,12 +1,8 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 
-import '../../screens/on_hover_button.dart';
 import '../interfaces/listable_interface.dart';
 import '../new_screens/lists/list_api_selected_searchable_widget.dart';
 

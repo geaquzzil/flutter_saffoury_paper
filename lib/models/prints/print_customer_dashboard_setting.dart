@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 import 'print_dashboard_setting.dart';
 
 part 'print_customer_dashboard_setting.g.dart';
@@ -17,7 +15,7 @@ part 'print_customer_dashboard_setting.g.dart';
 class PrintCustomerDashboardSetting extends PrintDashboardSetting {
   bool? hideCustomerTerms = true;
   bool? hideCustomersNotCreditsInvoices = true;
-  
+
   // bool? hide
 
   PrintCustomerDashboardSetting() : super();
@@ -25,21 +23,17 @@ class PrintCustomerDashboardSetting extends PrintDashboardSetting {
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
         ..addAll({
-          "hideCustomersNotCreditsInvoices":true
+          "hideCustomersNotCreditsInvoices": true
           //todo add self properties
         });
 
   @override
   List<String> getMainFields({BuildContext? context}) =>
       super.getMainFields(context: context)
-        ..addAll([
-            "hideCustomersNotCreditsInvoices"
-        ]);
+        ..addAll(["hideCustomersNotCreditsInvoices"]);
   @override
   String getTextCheckBoxDescription(BuildContext context, String field) {
-    if(field=="hideCustomersNotCreditsInvoices"){
-
-    }
+    if (field == "hideCustomersNotCreditsInvoices") {}
 
     return super.getTextCheckBoxDescription(context, field);
   }
@@ -49,6 +43,7 @@ class PrintCustomerDashboardSetting extends PrintDashboardSetting {
       super.getFieldLabelMap(context)
         ..addAll({
           "hideCustomersNotCreditsInvoices":
+              "TODO hideCustomersNotCreditsInvoices"
         });
 
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'dart:async';
 
-
 /// Builder for creating items in the list
 typedef ExpandableItemBuilder<T> = Widget Function(
     BuildContext context, T item, int index);
@@ -40,16 +39,16 @@ class ExpandableSliverList<T> extends StatefulWidget {
 
   /// items, build, and controller must be provided
   ExpandableSliverList({
-    Key? key,
+    super.key,
     required Iterable<T> initialItems,
     required this.builder,
     required this.controller,
-    @Deprecated("Use 'initialState' argument in the constructor of ExpandableSliverListController instead. This argument will be removed on Jan 3, 2022. If using the non-deprecated form, make sure to remove this argument as well, as this will overwrite the value set in the controller")
-        bool? startCollapsed,
+    @Deprecated(
+        "Use 'initialState' argument in the constructor of ExpandableSliverListController instead. This argument will be removed on Jan 3, 2022. If using the non-deprecated form, make sure to remove this argument as well, as this will overwrite the value set in the controller")
+    bool? startCollapsed,
     this.duration = kDefaultDuration,
     this.expandOnInitialInsertion = false,
-  })  : initialItems = List<T>.from(initialItems),
-        super(key: key) {
+  }) : initialItems = List<T>.from(initialItems) {
     if (startCollapsed != null) {
       this.startCollapsed = startCollapsed;
       usedDeprecatedArg = true;
@@ -120,6 +119,7 @@ class _ExpandableSliverListState<T> extends State<ExpandableSliverList<T>> {
     );
   }
 }
+
 enum ExpandableSliverListStatus {
   /// The list is expanded. Items are visible.
   expanded,
@@ -228,7 +228,8 @@ class ExpandableSliverListController<T>
           for (int i = 0; i < numItemsToAdd; i++) {
             // index doesn't matter, as we just want the state's internal list
             // count to change
-            listKey.currentState?.insertItem(0, duration: const Duration(seconds: 0));
+            listKey.currentState
+                ?.insertItem(0, duration: const Duration(seconds: 0));
           }
         }
 

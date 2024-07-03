@@ -26,7 +26,7 @@ class LottieColorFilter extends StatelessWidget {
     }
     return ColorFiltered(
         colorFilter: ColorFilter.mode(
-          color ?? Theme.of(context).colorScheme.onBackground,
+          color ?? Theme.of(context).colorScheme.surface,
           BlendMode.modulate,
         ),
         child: widget);
@@ -47,15 +47,14 @@ class EmptyWidget extends StatelessWidget {
 
   final Function()? onSubtitleClicked;
   const EmptyWidget(
-      {Key? key,
+      {super.key,
       this.onSubtitleClicked,
       this.lottiUrl,
       this.title,
       this.expand = true,
       this.subtitle,
       this.lottieJson})
-      : assert(lottiUrl != null || lottieJson != null),
-        super(key: key);
+      : assert(lottiUrl != null || lottieJson != null);
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +136,7 @@ class EmptyWidget extends StatelessWidget {
     }
     return ColorFiltered(
         colorFilter: ColorFilter.mode(
-          Theme.of(context).colorScheme.onBackground,
+          Theme.of(context).colorScheme.surface,
           BlendMode.modulate,
         ),
         child: widget);

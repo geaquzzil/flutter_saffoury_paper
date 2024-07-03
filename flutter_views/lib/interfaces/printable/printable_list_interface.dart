@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 
-import '../../models/view_abstract.dart';
 
 abstract class PrintableSelfListInterface<T extends PrintLocalSetting> {
   Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?

@@ -1,14 +1,16 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/light_color.dart';
 
 class AppTheme {
   AppTheme._();
 
-static const primaryColor = Color(0xFF2697FF);
-static const secondaryColor = Color(0xFF2A2D3E);
-static const bgColor = Color(0xFF212332);
+  static const primaryColor = Color(0xFF2697FF);
+  static const secondaryColor = Color(0xFF2A2D3E);
+  static const bgColor = Color(0xFF212332);
 
-static const defaultPadding = 16.0;
+  static const defaultPadding = 16.0;
   static const Color notWhite = Color(0xFFEDF0F2);
   static const Color nearlyWhite = Color(0xFFFEFEFE);
   static const Color white = Color(0xFFFFFFFF);
@@ -24,16 +26,6 @@ static const defaultPadding = 16.0;
   static const Color chipBackground = Color(0xFFEEF1F3);
   static const Color spacer = Color(0xFFF2F2F2);
   static const String fontName = 'WorkSans';
-
-  static const TextTheme textTheme = TextTheme(
-    headline4: display1,
-    headline5: headline,
-    headline6: title,
-    subtitle2: subtitle,
-    bodyText2: body2,
-    bodyText1: body1,
-    caption: caption,
-  );
 
   static const TextStyle display1 = TextStyle(
     // h4 -> display1
@@ -64,7 +56,7 @@ static const defaultPadding = 16.0;
   );
 
   static const TextStyle subtitle = TextStyle(
-    // subtitle2 -> subtitle
+    // titleSmall -> subtitle
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -98,16 +90,6 @@ static const defaultPadding = 16.0;
     letterSpacing: 0.2,
     color: lightText, // was lightText
   );
-  static ThemeData lightTheme = ThemeData(
-      backgroundColor: LightColor.background,
-      primaryColor: LightColor.background,
-      cardTheme: const CardTheme(color: LightColor.background),
-      textTheme: const TextTheme(bodyText1: TextStyle(color: LightColor.black)),
-      iconTheme: const IconThemeData(color: LightColor.iconColor),
-      bottomAppBarColor: LightColor.background,
-      dividerColor: LightColor.lightGrey,
-      primaryTextTheme:
-          const TextTheme(bodyText1: TextStyle(color: LightColor.titleTextColor)));
 
   static TextStyle titleStyle =
       const TextStyle(color: LightColor.titleTextColor, fontSize: 16);

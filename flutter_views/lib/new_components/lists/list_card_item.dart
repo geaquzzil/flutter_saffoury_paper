@@ -1,12 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
-import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 

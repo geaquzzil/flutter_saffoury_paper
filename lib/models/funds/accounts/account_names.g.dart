@@ -30,7 +30,7 @@ AccountNameType _$AccountNameTypeFromJson(Map<String, dynamic> json) =>
       ..account_names = (json['account_names'] as List<dynamic>?)
           ?.map((e) => AccountName.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..account_names_count = json['account_names_count'] as int?;
+      ..account_names_count = (json['account_names_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$AccountNameTypeToJson(AccountNameType instance) =>
     <String, dynamic>{

@@ -29,14 +29,14 @@ List<Skill> skills = [
 ];
 
 class SkillSection extends StatelessWidget {
+  const SkillSection({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ScreenHelper(
-        largeTablet: _buildUi(kDesktopMaxWidth),
-        smallTablet: _buildUi(kTabletMaxWidth),
-        mobile: _buildUi(getMobileMaxWidth(context)),
-      ),
+    return ScreenHelper(
+      largeTablet: _buildUi(kDesktopMaxWidth),
+      smallTablet: _buildUi(kTabletMaxWidth),
+      mobile: _buildUi(getMobileMaxWidth(context)),
     );
   }
 

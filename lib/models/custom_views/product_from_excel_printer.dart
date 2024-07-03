@@ -6,9 +6,6 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'package:supercharged/supercharged.dart';
 
 class ProductFromExcel extends Product {
   @override

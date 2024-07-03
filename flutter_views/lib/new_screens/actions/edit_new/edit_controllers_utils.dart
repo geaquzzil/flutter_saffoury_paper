@@ -1,4 +1,5 @@
-import 'dart:io';
+
+// ignore_for_file: constant_identifier_names
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
-import '../../../models/view_abstract_inputs_validaters.dart';
 import '../../edit/controllers/ext.dart';
 
 Widget wrapController(Widget controller,
@@ -82,7 +82,7 @@ Widget getContollerCheckBox(BuildContext context,
         //     : EdgeInsets.zero,
 
         shape: currentScreenSize == CurrentScreenSize.DESKTOP
-            ? CircleBorder()
+            ? const CircleBorder()
             : null,
         initialValue:
             fieldType == int ? (value == true ? 1 : 0) : value ?? false,
@@ -123,7 +123,7 @@ Widget getContolerColorPicker(BuildContext context,
             field: field, currentScreenSize: currentScreenSize),
         onSaved: (newValue) {
           viewAbstract.setFieldValue(field, newValue?.toHex2());
-          debugPrint('getContolerColorPicker onSave= ${field}:$newValue');
+          debugPrint('getContolerColorPicker onSave= $field:$newValue');
           if (viewAbstract.getFieldNameFromParent != null) {
             viewAbstract.getParnet?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
@@ -154,7 +154,7 @@ Widget getControllerDateTime(BuildContext context,
         onSaved: (newValue) {
           viewAbstract.setFieldValue(
               field, viewAbstract.getFieldDateTimeParseFromDateTime(newValue));
-          debugPrint('EditControllerEditText onSave= ${field}:$newValue');
+          debugPrint('EditControllerEditText onSave= $field:$newValue');
           if (viewAbstract.getFieldNameFromParent != null) {
             viewAbstract.getParnet?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
@@ -519,7 +519,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
           onSaved: (newValue) {
             viewAbstract.setFieldValue(field, newValue);
             debugPrint(
-                'getControllerEditTextAutoComplete onSave= ${field}:$newValue');
+                'getControllerEditTextAutoComplete onSave= $field:$newValue');
             if (viewAbstract.getFieldNameFromParent != null) {
               viewAbstract.getParnet?.setFieldValue(
                   viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
@@ -573,7 +573,7 @@ Widget getControllerEditText(BuildContext context,
         onSaved: (String? value) {
           viewAbstract.setFieldValue(field, value);
           debugPrint(
-              'getControllerEditText onSave= ${field}:$value textController:${controller.text}');
+              'getControllerEditText onSave= $field:$value textController:${controller.text}');
           if (viewAbstract.getFieldNameFromParent != null) {
             viewAbstract.getParnet?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);

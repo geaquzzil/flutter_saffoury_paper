@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
-import 'package:provider/provider.dart';
 
 class EditControllerColorPicker extends StatefulWidget {
   ViewAbstract viewAbstract;
   String field;
   EditControllerColorPicker(
-      {Key? key, required this.viewAbstract, required this.field})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.field});
 
   @override
   State<EditControllerColorPicker> createState() =>

@@ -1,14 +1,14 @@
+// ignore_for_file: library_prefixes
+
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
-
-import 'package:flutter/material.dart' as material;
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
-import 'package:pdf/src/widgets/widget.dart';
-import 'package:pdf/src/pdf/page_format.dart';
 import 'package:flutter/material.dart' as mt;
+import 'package:pdf/pdf.dart' as pdf;
+import 'package:pdf/widgets.dart' as pdW;
 import '../../prints/print_customer_guid.dart';
 import '../customers.dart';
 
@@ -57,7 +57,7 @@ class CustomerClinetGuide
   }
 
   @override
-  List<String> getMainFields({material.BuildContext? context}) {
+  List<String> getMainFields({mt.BuildContext? context}) {
     // TODO: implement getMainFields
     throw UnimplementedError();
   }
@@ -170,37 +170,36 @@ class CustomerClinetGuide
       null;
 
   @override
-  Future<Widget?>? getPrintableCustomFooter(mt.BuildContext context,
-      {PdfPageFormat? format, PrintCustomerGuid? setting}) {
+  Future<pdW.Widget?>? getPrintableCustomFooter(mt.BuildContext context,
+      {pdf.PdfPageFormat? format, PrintCustomerGuid? setting}) {
     // TODO: implement getPrintableCustomFooter
     throw UnimplementedError();
   }
 
   @override
-  Future<Widget?>? getPrintableCustomHeader(mt.BuildContext context,
-      {PdfPageFormat? format, PrintCustomerGuid? setting}) {
+  Future<pdW.Widget?>? getPrintableCustomHeader(mt.BuildContext context,
+      {pdf.PdfPageFormat? format, PrintCustomerGuid? setting}) {
     // TODO: implement getPrintableCustomHeader
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Widget>> getPrintableCustomPage(mt.BuildContext context,
-      {PdfPageFormat? format, PrintCustomerGuid? setting}) {
+  Future<List<pdW.Widget>> getPrintableCustomPage(mt.BuildContext context,
+      {pdf.PdfPageFormat? format, PrintCustomerGuid? setting}) {
     // TODO: implement getPrintableCustomPage
     throw UnimplementedError();
   }
 
   @override
-  Widget? getPrintableWatermark() => null;
+  pdW.Widget? getPrintableWatermark() => null;
 
   @override
-  material.Widget? getCustomFloatingActionWidget(
-      material.BuildContext context) {
+  mt.Widget? getCustomFloatingActionWidget(mt.BuildContext context) {
     return null;
   }
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-          material.BuildContext context, PrintLocalSetting? dashboardSetting) =>
+          mt.BuildContext context, PrintLocalSetting? dashboardSetting) =>
       null;
 }

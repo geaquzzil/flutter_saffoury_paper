@@ -6,8 +6,7 @@ import 'package:lottie/lottie.dart';
 /// Displays Material dialog above the current contents of the app
 
 class DialogWidget extends StatelessWidget {
-  DialogWidget({
-    Key? key,
+  const DialogWidget({super.key,
     this.title,
     this.msg,
     this.actions,
@@ -59,7 +58,7 @@ class DialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: dialogWidth == null
           ? null
           : MediaQuery.of(context).size.width * dialogWidth!,
@@ -72,7 +71,7 @@ class DialogWidget extends StatelessWidget {
               : const SizedBox(),
           if (animationBuilder != null)
             Container(
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               height: 200,
               width: double.infinity,
               child: animationBuilder,
@@ -90,7 +89,7 @@ class DialogWidget extends StatelessWidget {
                     textAlign: titleAlign,
                   ),
                 )
-              : SizedBox(
+              : const SizedBox(
                   height: 4,
                 ),
           customViewPosition == CustomViewPosition.BEFORE_MESSAGE
@@ -106,7 +105,7 @@ class DialogWidget extends StatelessWidget {
                     textAlign: msgAlign,
                   ),
                 )
-              : SizedBox(
+              : const SizedBox(
                   height: 20,
                 ),
           customViewPosition == CustomViewPosition.BEFORE_ACTION
@@ -114,7 +113,7 @@ class DialogWidget extends StatelessWidget {
               : const SizedBox(),
           actions?.isNotEmpty == true
               ? buttons(context)
-              : SizedBox(
+              : const SizedBox(
                   height: 20,
                 ),
           customViewPosition == CustomViewPosition.AFTER_ACTION

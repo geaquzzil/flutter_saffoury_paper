@@ -17,7 +17,6 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'home/components/drawers/drawer_large_screen.dart';
@@ -190,7 +189,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           _width - defualtWidth,
         );
         debugPrint(
-            " current width $_width  defualt width $defualtWidth   VALUE=${sss}  ");
+            " current width $_width  defualt width $defualtWidth   VALUE=$sss  ");
 
         return sss > 250 ? 0.3 : 0.5;
       }
@@ -245,7 +244,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                 child: ColoredTabBar(
                   useCard: false,
                   color:
-                      Theme.of(context).colorScheme.background.withOpacity(.9),
+                      Theme.of(context).colorScheme.surface.withOpacity(.9),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(

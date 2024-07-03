@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_side_menu/flutter_side_menu.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
 import 'package:flutter_view_controller/new_screens/filter_side.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
-import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +36,7 @@ class _BaseSharedState extends State<BaseShared> {
     // _controller.
     return Scaffold(
         key: drawerMenuControllerProvider.getStartDrawableKey,
-        drawer: DrawerLargeScreens(),
+        drawer: const DrawerLargeScreens(),
         // drawerScrimColor: Colors.transparent,
         // backgroundColor: compexDrawerCanvasColor,
         endDrawer: const BaseHomeCartPage(),
@@ -53,7 +51,6 @@ class _BaseSharedState extends State<BaseShared> {
                 mode: SideMenuMode.open,
                 builder: (data) {
                   return SideMenuData(
-
                     header: const Text('Header'),
                     items: [
                       const SideMenuItemDataTitle(title: 'Section Header'),
@@ -65,7 +62,7 @@ class _BaseSharedState extends State<BaseShared> {
                         titleStyle: const TextStyle(color: Colors.white),
                         icon: const Icon(Icons.home_outlined),
                         selectedIcon: const Icon(Icons.home),
-                        badgeContent: const Text(
+                        badgeBuilder: (w) => const Text(
                           '23',
                           style: TextStyle(
                             fontSize: 8,
@@ -106,24 +103,21 @@ class _BaseSharedState extends State<BaseShared> {
                 },
               ),
               Expanded(
-                child: Container(
-                  // color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'body',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _controller.toggle();
-                        },
-                        child: const Text('change side menu state'),
-                      )
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'body',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _controller.toggle();
+                      },
+                      child: const Text('change side menu state'),
+                    )
+                  ],
                 ),
               ),
               SideMenu(

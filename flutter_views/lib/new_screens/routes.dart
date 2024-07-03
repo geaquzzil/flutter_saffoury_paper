@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -15,15 +16,12 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page_basedonbase.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
-import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/return-privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
-import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_web_page.dart';
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
@@ -348,7 +346,7 @@ class RouteGenerator {
           name: posRouteName,
           path: "/pos",
           pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child: POSPage());
+            return MaterialPage(key: state.pageKey, child: const POSPage());
           },
         ),
         GoRoute(
@@ -559,8 +557,8 @@ class HeroPageRoute extends PageRouteBuilder {
                 return CurvedRectArcTween(begin: begin, end: end);
               },
               child: PageRouteTransition(
-                child: child,
                 animation: animation,
+                child: child,
               ),
             );
           },
@@ -569,9 +567,9 @@ class HeroPageRoute extends PageRouteBuilder {
 
 class CurvedRectArcTween extends MaterialRectArcTween {
   CurvedRectArcTween({
-    Rect? begin,
-    Rect? end,
-  }) : super(begin: begin, end: end);
+    super.begin,
+    super.end,
+  });
   @override
   Rect lerp(double t) {
     Cubic easeInOut = const Cubic(0.42, 0.0, 0.58, 1.0);
@@ -582,10 +580,10 @@ class CurvedRectArcTween extends MaterialRectArcTween {
 
 class PageRouteTransition extends AnimatedWidget {
   const PageRouteTransition({
-    Key? key,
+    super.key,
     required this.child,
     required this.animation,
-  }) : super(key: key, listenable: animation);
+  }) : super(listenable: animation);
   final Widget child;
   final Animation<double> animation;
   static final opacityTween = Tween<double>(begin: 0.0, end: 1.0);

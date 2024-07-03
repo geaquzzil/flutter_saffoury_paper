@@ -20,7 +20,7 @@ CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
                   CustomsDeclarationImages.fromJson(e as Map<String, dynamic>))
               .toList()
       ..customs_declarations_images_count =
-          json['customs_declarations_images_count'] as int?
+          (json['customs_declarations_images_count'] as num?)?.toInt()
       ..employees = json['employees'] == null
           ? null
           : Employee.fromJson(json['employees'] as Map<String, dynamic>);

@@ -9,7 +9,7 @@ part of 'orders_refunds.dart';
 OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = json['TermsID'] as int?
+  ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
   ..comments = json['comments'] as String?
@@ -41,7 +41,7 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) => OrderRefund()
           ?.map((e) => OrderRefundDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..orders_refunds_order_details_count =
-      json['orders_refunds_order_details_count'] as int?;
+      (json['orders_refunds_order_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$OrderRefundToJson(OrderRefund instance) =>
     <String, dynamic>{

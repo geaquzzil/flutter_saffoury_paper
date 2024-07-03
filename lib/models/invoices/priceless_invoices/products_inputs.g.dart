@@ -9,7 +9,7 @@ part of 'products_inputs.dart';
 ProductInput _$ProductInputFromJson(Map<String, dynamic> json) => ProductInput()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = json['TermsID'] as int?
+  ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
   ..comments = json['comments'] as String?
@@ -38,7 +38,7 @@ ProductInput _$ProductInputFromJson(Map<String, dynamic> json) => ProductInput()
           ?.map((e) => ProductInputDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..products_inputs_details_count =
-      json['products_inputs_details_count'] as int?
+      (json['products_inputs_details_count'] as num?)?.toInt()
   ..warehouse = json['warehouse'] == null
       ? null
       : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>);

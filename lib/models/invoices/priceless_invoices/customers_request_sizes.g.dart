@@ -10,7 +10,7 @@ CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
     CustomerRequestSize()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-      ..TermsID = json['TermsID'] as int?
+      ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
       ..comments = json['comments'] as String?
@@ -42,7 +42,7 @@ CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
                   e as Map<String, dynamic>))
               .toList()
       ..customers_request_sizes_details_count =
-          json['customers_request_sizes_details_count'] as int?;
+          (json['customers_request_sizes_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$CustomerRequestSizeToJson(
         CustomerRequestSize instance) =>

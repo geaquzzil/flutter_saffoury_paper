@@ -30,8 +30,8 @@ class BaseEditDialog extends StatelessWidget {
           builder: (context, value, child) {
             return FloatingActionButton.small(
                 heroTag: null,
-                child: Icon(Icons.save),
-                onPressed: value == null ? null : () => _onPress(context));
+                onPressed: value == null ? null : () => _onPress(context),
+                child: const Icon(Icons.save));
           },
           valueListenable: onValidate,
         ),

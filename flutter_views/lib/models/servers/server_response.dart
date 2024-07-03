@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 part 'server_response.g.dart';
 
 @JsonSerializable(explicitToJson:true)

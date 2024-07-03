@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:pdf/pdf.dart';
@@ -14,10 +16,9 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
   T printObj;
 
   PrintMasterPDF(
-      {required material.BuildContext context,
+      {required super.context,
       required this.printObj,
-      E? setting})
-      : super(context: context, setting: setting);
+      super.setting});
 
   @override
   Future<Widget> buildHeader() async {

@@ -101,10 +101,13 @@ class DessertDataSource extends DataTableSource {
 
   final BuildContext context;
   late List<Dessert> desserts;
+
   // Add row tap handlers and show snackbar
   bool hasRowTaps = false;
+
   // Override height values for certain rows
   bool hasRowHeightOverrides = false;
+
   // Color each Row by index's parity
   bool hasZebraStripes = false;
 
@@ -146,9 +149,9 @@ class DessertDataSource extends DataTableSource {
       index: index,
       selected: dessert.selected,
       color: color != null
-          ? MaterialStateProperty.all(color)
+          ? WidgetStateProperty.all(color)
           : (hasZebraStripes && index.isEven
-              ? MaterialStateProperty.all(Theme.of(context).highlightColor)
+              ? WidgetStateProperty.all(Theme.of(context).highlightColor)
               : null),
       onSelectChanged: (value) {
         if (dessert.selected != value) {
@@ -214,17 +217,17 @@ class DessertDataSource extends DataTableSource {
 /// saync data fetching scenarious by paginated table (such as using Web API)
 class DessertDataSourceAsync extends AsyncDataTableSource {
   DessertDataSourceAsync() {
-    print('DessertDataSourceAsync created');
+    debugPrint('DessertDataSourceAsync created');
   }
 
   DessertDataSourceAsync.empty() {
     _empty = true;
-    print('DessertDataSourceAsync.empty created');
+    debugPrint('DessertDataSourceAsync.empty created');
   }
 
   DessertDataSourceAsync.error() {
     _errorCounter = 0;
-    print('DessertDataSourceAsync.error created');
+    debugPrint('DessertDataSourceAsync.error created');
   }
 
   bool _empty = false;
@@ -233,6 +236,7 @@ class DessertDataSourceAsync extends AsyncDataTableSource {
   RangeValues? _caloriesFilter;
 
   RangeValues? get caloriesFilter => _caloriesFilter;
+
   set caloriesFilter(RangeValues? calories) {
     _caloriesFilter = calories;
     refreshDatasource();
@@ -256,7 +260,7 @@ class DessertDataSourceAsync extends AsyncDataTableSource {
 
   @override
   Future<AsyncRowsResponse> getRows(int start, int end) async {
-    print('getRows($start, $end)');
+    debugPrint('getRows($start, $end)');
     if (_errorCounter != null) {
       _errorCounter = _errorCounter! + 1;
 

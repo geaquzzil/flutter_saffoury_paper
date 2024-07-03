@@ -12,7 +12,7 @@ class DashboardWidget extends StatefulWidget {
   ViewAbstract viewAbstract;
 
   ///
-   DashboardWidget({Key? key,required this.viewAbstract}) : super(key: key);
+   DashboardWidget({super.key,required this.viewAbstract});
 
   ///
   @override

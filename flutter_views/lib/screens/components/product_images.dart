@@ -3,9 +3,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class ProductImages<T extends ViewAbstract> extends StatelessWidget {
   const ProductImages({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   final T product;
 

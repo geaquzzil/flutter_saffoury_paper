@@ -8,8 +8,8 @@ part of 'spendings.dart';
 
 Spendings _$SpendingsFromJson(Map<String, dynamic> json) => Spendings()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..fromBox = json['fromBox'] as int?
-  ..isDirect = json['isDirect'] as int?
+  ..fromBox = (json['fromBox'] as num?)?.toInt()
+  ..isDirect = (json['isDirect'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..value = (json['value'] as num?)?.toDouble()
   ..comments = json['comments'] as String?

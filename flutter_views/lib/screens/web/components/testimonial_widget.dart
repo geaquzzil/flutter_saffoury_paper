@@ -23,6 +23,8 @@ final List<Testimonial> testimonials = [
 ];
 
 class TestimonialWidget extends StatelessWidget {
+  const TestimonialWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenHelper(

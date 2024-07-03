@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:intl/intl.dart';
 
 import '../models/apis/date_object.dart';

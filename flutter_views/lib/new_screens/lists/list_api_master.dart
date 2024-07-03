@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
-import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
@@ -54,8 +50,8 @@ abstract class ListApiMaster extends StatefulWidget {
       required ListMultiKeyProvider listProvider});
 
   Widget getSharedLoadingItem(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(kDefaultPadding),
+    return const Padding(
+      padding: EdgeInsets.all(kDefaultPadding),
       child: Center(
         child: CircularProgressIndicator(),
       ),
@@ -207,7 +203,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
                   customKey: findCustomKey(),
                   listProvider: listProvider,
                 ),
-                Divider(),
+                const Divider(),
                 widget.getListViewWidget(
                     context: context,
                     listProvider: listProvider,
@@ -297,7 +293,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
           //   scale: animation,
           //   child: child,
           // ),
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           child: RefreshIndicator(
             onRefresh: () async {
               _refresh();
@@ -366,7 +362,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
         skeleton: SkeletonListView(
           itemCount: viewAbstract.getPageItemCount,
         ),
-        child: Container(child: Center(child: Text("Content"))),
+        child: Container(child: const Center(child: Text("Content"))),
       ),
     );
   }

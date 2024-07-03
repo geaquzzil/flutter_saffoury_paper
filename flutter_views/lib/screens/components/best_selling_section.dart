@@ -5,8 +5,8 @@ import 'package:flutter_view_controller/size_config.dart';
 
 class BestSellingSection extends StatelessWidget {
   const BestSellingSection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,53 +1,34 @@
 import 'dart:math';
 
-import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
-import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
-import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
-import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawers/complex_drawer.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
-import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
-import 'package:flutter_view_controller/new_screens/home/home_camera_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/home_home_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
-import 'package:flutter_view_controller/screens/base_shared_actions_header.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:tuple/tuple.dart';
-import '../actions/view/base_home_details_view.dart';
 import 'components/drawers/drawer_large_screen.dart';
 import 'components/profile/profile_pic_popup_menu.dart';
 import 'home_notification_widget.dart';
 
 class BaseHomeMainPage extends StatefulWidget {
-  const BaseHomeMainPage({Key? key}) : super(key: key);
+  const BaseHomeMainPage({super.key});
 
   @override
   State<BaseHomeMainPage> createState() => _BaseHomeMainPageState();
@@ -69,7 +50,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     super.initState();
 
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-    drawer = DrawerLargeScreens();
+    drawer = const DrawerLargeScreens();
   }
 
   Widget getSliverPadding(
@@ -342,23 +323,23 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               Tuple2(p1.getNavigationIndex, p1.getNavigationRailIsOpen),
         ),
         if (!isDesktopOrWeb)
-          Positioned(
+          const Positioned(
             bottom: 0,
             left: 0,
             right: 0,
-            child: Container(
+            child: SizedBox(
               // color: Colors.amber,
               height: 200,
               child: Column(children: [
-                const DrawerSettingButton(),
-                const SizedBox(
+                DrawerSettingButton(),
+                SizedBox(
                   height: kDefaultPadding / 3,
                 ),
-                const DrawerLanguageButton(),
-                const SizedBox(
+                DrawerLanguageButton(),
+                SizedBox(
                   height: kDefaultPadding / 3,
                 ),
-                const ProfilePicturePopupMenu()
+                ProfilePicturePopupMenu()
               ]),
             ),
           )

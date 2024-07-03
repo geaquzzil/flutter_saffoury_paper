@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +33,7 @@ Rect getRect(GlobalKey key) {
 PopupMenuItem<MenuItemBuild> buildMenuItem(
         BuildContext context, MenuItemBuild e) =>
     PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));
+
 Future<MenuItemBuild?> showPopupMenu(
     BuildContext context, GlobalKey clickedWidget,
     {required List<PopupMenuEntry<MenuItemBuild>> list, Alignment? alignment}) {
@@ -208,12 +208,12 @@ class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
   final Color? color;
 
   const CustomPopupMenuItem({
-    Key? key,
-    T? value,
-    bool enabled = true,
-    Widget? child,
+    super.key,
+    super.value,
+    super.enabled,
+    super.child,
     this.color,
-  }) : super(key: key, value: value, enabled: enabled, child: child);
+  });
 
   @override
   _CustomPopupMenuItemState<T> createState() => _CustomPopupMenuItemState<T>();
@@ -224,8 +224,8 @@ class _CustomPopupMenuItemState<T>
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: super.build(context),
       color: widget.color ?? Theme.of(context).cardColor,
+      child: super.build(context),
     );
   }
 }

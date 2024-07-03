@@ -1,27 +1,15 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../models/view_abstract.dart';
-import '../../models/view_abstract_enum.dart';
-import '../../models/view_abstract_inputs_validaters.dart';
-import '../../new_screens/edit/controllers/edit_controller_checkbox.dart';
-import '../../new_screens/edit/controllers/edit_controller_dropdown.dart';
-import '../../new_screens/edit/controllers/edit_controller_dropdown_api.dart';
-import '../../new_screens/edit/controllers/edit_controller_file_picker.dart';
-import '../../new_screens/edit/controllers/ext.dart';
-import '../../new_screens/actions/edit_new/edit_controllers_utils.dart';
 
 @immutable
 class ViewableTableWidget extends StatefulWidget {
@@ -29,7 +17,7 @@ class ViewableTableWidget extends StatefulWidget {
 
   ///if the obj is set then we get the obj data
   ///else the cartProvider data
-  ViewableTableWidget({Key? key, required this.viewAbstract}) : super(key: key);
+  ViewableTableWidget({super.key, required this.viewAbstract});
 
   @override
   State<ViewableTableWidget> createState() => _ViewableTableWidget();

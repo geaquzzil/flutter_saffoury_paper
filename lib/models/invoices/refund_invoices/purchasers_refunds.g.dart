@@ -10,7 +10,7 @@ PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
     PurchasesRefund()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-      ..TermsID = json['TermsID'] as int?
+      ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
       ..comments = json['comments'] as String?
@@ -45,7 +45,7 @@ PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
                   PurchasesRefundDetails.fromJson(e as Map<String, dynamic>))
               .toList()
       ..purchases_refunds_purchases_details_count =
-          json['purchases_refunds_purchases_details_count'] as int?;
+          (json['purchases_refunds_purchases_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$PurchasesRefundToJson(PurchasesRefund instance) =>
     <String, dynamic>{

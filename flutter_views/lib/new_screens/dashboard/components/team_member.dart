@@ -9,8 +9,8 @@ class TeamMember extends StatelessWidget {
   const TeamMember({
     required this.totalMember,
     required this.onPressedAdd,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int totalMember;
   final Function() onPressedAdd;

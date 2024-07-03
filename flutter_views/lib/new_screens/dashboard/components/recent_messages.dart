@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class RecentMessages extends StatelessWidget {
   const RecentMessages({
     required this.onPressedMore,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Function() onPressedMore;
 

@@ -10,7 +10,7 @@ ProductPrintObject _$ProductPrintObjectFromJson(Map<String, dynamic> json) =>
     ProductPrintObject()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..description = json['description'] as String
-      ..gsm = json['gsm'] as int
+      ..gsm = (json['gsm'] as num).toInt()
       ..size = json['size'] == null
           ? null
           : ProductSize.fromJson(json['size'] as Map<String, dynamic>)

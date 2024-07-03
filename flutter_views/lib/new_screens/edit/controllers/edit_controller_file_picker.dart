@@ -12,8 +12,7 @@ class EditControllerFilePicker extends StatefulWidget {
   ViewAbstract viewAbstract;
   String field;
   EditControllerFilePicker(
-      {Key? key, required this.viewAbstract, required this.field})
-      : super(key: key);
+      {super.key, required this.viewAbstract, required this.field});
 
   @override
   State<EditControllerFilePicker> createState() =>
@@ -73,7 +72,7 @@ class _EditControllerFilePickerState extends State<EditControllerFilePicker> {
         children: [
           getImageWidget(),
           ElevatedButton.icon(
-              icon: Icon(Icons.image),
+              icon: const Icon(Icons.image),
               onPressed: () async {
                 FilePickerResult? result =
                     await FilePicker.platform.pickFiles();

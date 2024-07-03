@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 
-import '../constants.dart';
-
 class BaseSharedDetailsRating extends StatelessWidget {
   ViewAbstract viewAbstract;
-  BaseSharedDetailsRating({Key? key, required this.viewAbstract})
-      : super(key: key);
+  BaseSharedDetailsRating({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,7 @@
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
-import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -30,11 +28,13 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   ProductOutput() : super() {
     products_outputs_details = <ProductOutputDetails>[];
   }
+
   @override
   ProductOutput getSelfNewInstance() {
     return ProductOutput();
   }
-    @override
+
+  @override
   String getForeignKeyName() {
     return "ProductOutputID";
   }
@@ -78,7 +78,6 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   @override
   ProductOutput fromJsonViewAbstract(Map<String, dynamic> json) =>
       ProductOutput.fromJson(json);
-
 }
 
 @JsonSerializable(explicitToJson: true)

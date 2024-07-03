@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../providers/actions/action_viewabstract_provider.dart';
 
 class BaseSharedActionDrawerNavigation extends StatelessWidget {
-  const BaseSharedActionDrawerNavigation({Key? key}) : super(key: key);
+  const BaseSharedActionDrawerNavigation({super.key});
 
   @override
   Widget build(BuildContext context) {

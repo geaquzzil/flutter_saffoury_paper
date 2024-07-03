@@ -26,7 +26,7 @@ PrintCustomerDashboardSetting _$PrintCustomerDashboardSettingFromJson(
       ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
       ..hideHeaderLogo = json['hideHeaderLogo'] as bool?
       ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
-      ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
+      ..currentGroupNameIndex = (json['currentGroupNameIndex'] as num?)?.toInt()
       ..currentGroupList = json['currentGroupList'] as List<dynamic>?
       ..hideInfoHeader = json['hideInfoHeader'] as bool?
       ..hideTotalFooter = json['hideTotalFooter'] as bool?
@@ -36,7 +36,11 @@ PrintCustomerDashboardSetting _$PrintCustomerDashboardSettingFromJson(
       ..currency = json['currency'] == null
           ? null
           : Currency.fromJson(json['currency'] as Map<String, dynamic>)
-      ..hideCustomerTerms = json['hideCustomerTerms'] as bool?;
+      ..dashboardPrintType = $enumDecodeNullable(
+          _$PrintDashboardTypeEnumMap, json['dashboardPrintType'])
+      ..hideCustomerTerms = json['hideCustomerTerms'] as bool?
+      ..hideCustomersNotCreditsInvoices =
+          json['hideCustomersNotCreditsInvoices'] as bool?;
 
 Map<String, dynamic> _$PrintCustomerDashboardSettingToJson(
         PrintCustomerDashboardSetting instance) =>
@@ -61,5 +65,15 @@ Map<String, dynamic> _$PrintCustomerDashboardSettingToJson(
       'showAsDetails': instance.showAsDetails,
       'includePreviousBalance': instance.includePreviousBalance,
       'currency': instance.currency?.toJson(),
+      'dashboardPrintType':
+          _$PrintDashboardTypeEnumMap[instance.dashboardPrintType],
       'hideCustomerTerms': instance.hideCustomerTerms,
+      'hideCustomersNotCreditsInvoices':
+          instance.hideCustomersNotCreditsInvoices,
     };
+
+const _$PrintDashboardTypeEnumMap = {
+  PrintDashboardType.ALL: 'ALL',
+  PrintDashboardType.DAILY_INVOICE_ONLY: 'DAILY_INVOICE_ONLY',
+  PrintDashboardType.MONEY_FUND_ONLY: 'MONEY_FUND_ONLY',
+};

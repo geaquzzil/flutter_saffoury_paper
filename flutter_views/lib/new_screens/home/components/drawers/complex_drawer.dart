@@ -28,7 +28,7 @@ class Txt extends StatefulWidget {
   final bool strikeThrough;
 
   const Txt({
-    Key? key,
+    super.key,
     this.style,
     this.fontWeight,
     this.maxLines,
@@ -47,7 +47,7 @@ class Txt extends StatefulWidget {
     this.toRupees = false,
     this.toTimeAgo = false,
     this.strikeThrough = false,
-  }) : super(key: key);
+  });
 
   @override
   _TxtState createState() => _TxtState();
@@ -91,7 +91,7 @@ String timeAgo(
   } else if (difference.inSeconds >= 3) {
     ago = '${difference.inSeconds} seconds ${isPast ? 'ago' : ''}';
   } else {
-    ago = '${isPast ? 'Just now' : 'now'}';
+    ago = isPast ? 'Just now' : 'now';
   }
   return prefix == null ? ago : '$prefix $ago';
 }
@@ -109,7 +109,7 @@ class _TxtState extends State<Txt> {
 //Numbers
     if ((widget.text is double || widget.text is int)) {
       if (widget.toRupees)
-        finalText = "${NumberFormat.simpleCurrency().format(widget.text)}"
+        finalText = NumberFormat.simpleCurrency().format(widget.text)
             .replaceAll('\$', '₹')
             .replaceAll(".00", "");
       if (widget.toTimeAgo)
@@ -162,7 +162,7 @@ class CDM {
 }
 
 class ComplexDrawerPage extends StatefulWidget {
-  const ComplexDrawerPage({Key? key}) : super(key: key);
+  const ComplexDrawerPage({super.key});
 
   @override
   _ComplexDrawerPageState createState() => _ComplexDrawerPageState();
@@ -175,7 +175,7 @@ class _ComplexDrawerPageState extends State<ComplexDrawerPage> {
     return Scaffold(
       appBar: appBar(),
       body: body(),
-      drawer: ComplexDrawer(),
+      drawer: const ComplexDrawer(),
       drawerScrimColor: Colors.transparent,
       backgroundColor: compexDrawerCanvasColor,
     );
@@ -186,7 +186,7 @@ class _ComplexDrawerPageState extends State<ComplexDrawerPage> {
       iconTheme: IconTheme.of(context).copyWith(
         color: complexDrawerBlack,
       ),
-      title: Txt(
+      title: const Txt(
         text: "Complex Drawer",
         color: complexDrawerBlack,
       ),
@@ -197,11 +197,11 @@ class _ComplexDrawerPageState extends State<ComplexDrawerPage> {
   Widget body() {
     return Center(
       child: Container(
-        foregroundDecoration: BoxDecoration(
+        foregroundDecoration: const BoxDecoration(
           color: complexDrawerBlack,
           backgroundBlendMode: BlendMode.saturation,
         ),
-        child: FlutterLogo(
+        child: const FlutterLogo(
           size: 150,
         ),
       ),
@@ -210,7 +210,7 @@ class _ComplexDrawerPageState extends State<ComplexDrawerPage> {
 }
 
 class ComplexDrawer extends StatefulWidget {
-  const ComplexDrawer({Key? key}) : super(key: key);
+  const ComplexDrawer({super.key});
 
   @override
   _ComplexDrawerState createState() => _ComplexDrawerState();
@@ -226,8 +226,8 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
     double width = MediaQuery.of(context).size.width;
     return Container(
       width: width,
-      child: row(),
       color: Colors.transparent,
+      child: row(),
     );
   }
 
@@ -286,10 +286,10 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
 
   Widget controlTile() {
     return Padding(
-      padding: EdgeInsets.only(top: 20, bottom: 30),
+      padding: const EdgeInsets.only(top: 20, bottom: 30),
       child: ListTile(
-        leading: FlutterLogo(),
-        title: Txt(
+        leading: const FlutterLogo(),
+        title: const Txt(
           text: "FlutterShip",
           fontSize: 18,
           color: Colors.white,
@@ -302,7 +302,7 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
 
   Widget blackIconMenu() {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       width: 100,
       color: complexDrawerBlack,
       child: Column(
@@ -319,12 +319,12 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
                       showPopupMenu(context, key,
                           alignment: Alignment.centerRight,
                           list: [
-                            PopupMenuItem<MenuItemBuild>(
+                            const PopupMenuItem<MenuItemBuild>(
                                 child: ListTile(
                               title: Text("test"),
                               leading: Icon(Icons.add),
                             )),
-                            PopupMenuItem<MenuItemBuild>(
+                            const PopupMenuItem<MenuItemBuild>(
                                 child: ListTile(
                               title: Text("t"),
                               leading: Icon(Icons.edit),
@@ -352,7 +352,7 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
   Widget invisibleSubMenus() {
     // List<CDM> _cmds = cdms..removeAt(0);
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       width: isExpanded ? 0 : 125,
       color: Colors.transparent,
       child: Column(
@@ -379,13 +379,13 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
 
   Widget controlButton() {
     return Padding(
-      padding: EdgeInsets.only(top: 20, bottom: 30),
+      padding: const EdgeInsets.only(top: 20, bottom: 30),
       child: InkWell(
         onTap: expandOrShrinkDrawer,
         child: Container(
           height: 45,
           alignment: Alignment.center,
-          child: FlutterLogo(
+          child: const FlutterLogo(
             size: 40,
           ),
         ),
@@ -395,17 +395,17 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
 
   Widget subMenuWidget(List<String> submenus, bool isValidSubMenu) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 200),
       height: isValidSubMenu ? submenus.length.toDouble() * 37.5 : 45,
       alignment: Alignment.center,
       decoration: BoxDecoration(
           color: isValidSubMenu ? complexDrawerBlueGrey : Colors.transparent,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topRight: Radius.circular(8),
             bottomRight: Radius.circular(8),
           )),
       child: ListView.builder(
-          padding: EdgeInsets.all(6),
+          padding: const EdgeInsets.all(6),
           itemCount: isValidSubMenu ? submenus.length : 0,
           itemBuilder: (context, index) {
             String subMenu = submenus[index];
@@ -436,7 +436,7 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
     return Padding(
       padding: EdgeInsets.all(usePadding ? 8 : 0),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         height: 45,
         width: 45,
         decoration: BoxDecoration(
@@ -456,11 +456,11 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
       color: complexDrawerBlueGrey,
       child: ListTile(
         leading: accountButton(usePadding: false),
-        title: Txt(
+        title: const Txt(
           text: "Prem Shanhi",
           color: Colors.white,
         ),
-        subtitle: Txt(
+        subtitle: const Txt(
           text: "Web Designer",
           color: Colors.white70,
         ),

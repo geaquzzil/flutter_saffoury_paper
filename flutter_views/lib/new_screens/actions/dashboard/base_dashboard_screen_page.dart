@@ -1,7 +1,5 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
@@ -11,13 +9,10 @@ import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:get/get.dart';
@@ -60,7 +55,7 @@ class _BaseDashboardState extends State<BaseDashboard>
                   pinned: true,
                   delegate: SliverAppBarDelegatePreferedSize(
                     child: ColoredTabBar(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       child: TabBar(
                         // labelColor: Colors.black,
                         tabs: _tabs,
@@ -184,7 +179,7 @@ class _BaseDashboardState extends State<BaseDashboard>
         pinned: true,
         delegate: SliverAppBarDelegatePreferedSize(
           child: ColoredTabBar(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             child: TabBar(
               // labelColor: Colors.black,
               tabs: _tabs,
@@ -268,7 +263,7 @@ class _BaseDashboardState extends State<BaseDashboard>
           pinned: false,
           floating: true,
           elevation: 4,
-          surfaceTintColor: Theme.of(context).colorScheme.background,
+          surfaceTintColor: Theme.of(context).colorScheme.surface,
           // automaticallyImplyLeading: false,
           actions: [Container()],
           // leading: SizedBox(),
@@ -356,7 +351,7 @@ class SectionItemHeader extends MultiSliver {
                 padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
                 sliver: SliverPinnedHeader(
                     child: Container(
-                        padding: EdgeInsets.all(kDefaultPadding),
+                        padding: const EdgeInsets.all(kDefaultPadding),
                         color: Theme.of(context).scaffoldBackgroundColor,
                         child: ListTile(
                             title: Text(

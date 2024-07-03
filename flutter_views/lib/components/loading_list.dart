@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LoadingListPage extends StatefulWidget {
-  const LoadingListPage({Key? key}) : super(key: key);
+  const LoadingListPage({super.key});
 
   @override
   State<LoadingListPage> createState() => _LoadingListPageState();
@@ -87,7 +87,7 @@ class _LoadingListPageState extends State<LoadingListPage> {
                   },
                   child: Text(
                     _enabled ? 'Stop' : 'Play',
-                    style: Theme.of(context).textTheme.button?.copyWith(
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         fontSize: 18.0,
                         color: _enabled ? Colors.redAccent : Colors.green),
                   )),

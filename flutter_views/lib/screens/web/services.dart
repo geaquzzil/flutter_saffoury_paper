@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
 import 'components/title_and_image_left.dart';
 
 class ServicesWebPage extends BaseWebPageSlivers {
-  ServicesWebPage({Key? key}) : super(key: key);
+  ServicesWebPage({super.key});
 
   @override
   List<Widget> getContentWidget(
@@ -28,10 +28,10 @@ class ServicesWebPage extends BaseWebPageSlivers {
               "https://saffoury.com/wp-content/uploads/2022/05/center_15.jpg",
         ),
       ),
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: SizedBox(height: 70),
       ),
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: TitleAndDescriptopnAndImageLeft(
           primaryTitle: "IOS APP",
           title: "UNIVERSAL\nSMART HOME APP",
@@ -40,10 +40,10 @@ class ServicesWebPage extends BaseWebPageSlivers {
           customIconData: Icons.play_arrow,
         ),
       ),
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: SizedBox(height: 70),
       ),
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: TitleAndDescriptopnAndImageLeft(
           primaryTitle: "IOS APP",
           title: "UNIVERSAL\nSMART HOME APP",
@@ -52,10 +52,10 @@ class ServicesWebPage extends BaseWebPageSlivers {
           customIconData: Icons.play_arrow,
         ),
       ),
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: SizedBox(height: 70),
       ),
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: TitleAndDescriptopnAndImageLeft(
           primaryTitle: "IOS APP",
           title: "UNIVERSAL\nSMART HOME APP",

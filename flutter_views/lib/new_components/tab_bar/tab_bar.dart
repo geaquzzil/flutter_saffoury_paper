@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 ///So we initialize tab controller on the build
 class TabBarWidget extends StatefulWidget {
   ViewAbstract viewAbstract;
-  TabBarWidget({Key? key, required this.viewAbstract}) : super(key: key);
+  TabBarWidget({super.key, required this.viewAbstract});
 
   @override
   State<TabBarWidget> createState() => _TabBarWidgetState();

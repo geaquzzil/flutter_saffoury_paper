@@ -10,7 +10,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
   ..date = json['date'] as String?
-  ..sheets = json['sheets'] as int?
+  ..sheets = (json['sheets'] as num?)?.toInt()
   ..barcode = Product.intFromString(json['barcode'])
   ..fiberLines = json['fiberLines'] as String?
   ..comments = json['comments'] as String?
@@ -53,51 +53,52 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..cut_requests = (json['cut_requests'] as List<dynamic>?)
       ?.map((e) => CutRequest.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..cut_requests_count = json['cut_requests_count'] as int?
+  ..cut_requests_count = (json['cut_requests_count'] as num?)?.toInt()
   ..order_refunds_order_details =
       (json['order_refunds_order_details'] as List<dynamic>?)
           ?.map((e) => OrderRefundDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..order_refunds_order_details_count =
-      json['order_refunds_order_details_count'] as int?
+      (json['order_refunds_order_details_count'] as num?)?.toInt()
   ..orders_details = (json['orders_details'] as List<dynamic>?)
       ?.map((e) => OrderDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..orders_details_count = json['orders_details_count'] as int?
+  ..orders_details_count = (json['orders_details_count'] as num?)?.toInt()
   ..products_inputs_details =
       (json['products_inputs_details'] as List<dynamic>?)
           ?.map((e) => ProductInputDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..products_inputs_details_count =
-      json['products_inputs_details_count'] as int?
+      (json['products_inputs_details_count'] as num?)?.toInt()
   ..products_outputs_details =
       (json['products_outputs_details'] as List<dynamic>?)
           ?.map((e) => ProductOutputDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..products_outputs_details_count =
-      json['products_outputs_details_count'] as int?
+      (json['products_outputs_details_count'] as num?)?.toInt()
   ..purchases_details = (json['purchases_details'] as List<dynamic>?)
       ?.map((e) => PurchasesDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..purchases_details_count = json['purchases_details_count'] as int?
+  ..purchases_details_count = (json['purchases_details_count'] as num?)?.toInt()
   ..purchases_refunds_purchases_details =
       (json['purchases_refunds_purchases_details'] as List<dynamic>?)
           ?.map(
               (e) => PurchasesRefundDetails.fromJson(e as Map<String, dynamic>))
           .toList()
   ..purchases_refunds_purchases_details_count =
-      json['purchases_refunds_purchases_details_count'] as int?
+      (json['purchases_refunds_purchases_details_count'] as num?)?.toInt()
   ..reservation_invoice_details = (json['reservation_invoice_details']
           as List<dynamic>?)
       ?.map(
           (e) => ReservationInvoiceDetails.fromJson(e as Map<String, dynamic>))
       .toList()
   ..reservation_invoice_details_count =
-      json['reservation_invoice_details_count'] as int?
+      (json['reservation_invoice_details_count'] as num?)?.toInt()
   ..transfers_details = (json['transfers_details'] as List<dynamic>?)
       ?.map((e) => TransfersDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..transfers_details_count = json['transfers_details_count'] as int?;
+  ..transfers_details_count =
+      (json['transfers_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,

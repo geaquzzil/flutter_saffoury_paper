@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/new_components/tables_widgets/cart_data_
 import 'package:flutter_view_controller/new_screens/cart/cart_list_header.dart';
 
 class CartList extends StatelessWidget {
-  const CartList({Key? key}) : super(key: key);
+  const CartList({super.key});
 
   @override
   Widget build(BuildContext context) {

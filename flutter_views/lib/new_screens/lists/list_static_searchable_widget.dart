@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../filterables/horizontal_selected_filterable.dart';
 
 class ListStaticSearchableWidget<T> extends StatefulWidget {
   List<T> list;
   Widget Function(T item) listItembuilder;
   List<T> Function(String query) onSearchTextChanged;
   ListStaticSearchableWidget(
-      {Key? key,
+      {super.key,
       required this.list,
       required this.listItembuilder,
-      required this.onSearchTextChanged})
-      : super(key: key);
+      required this.onSearchTextChanged});
 
   @override
   State<ListStaticSearchableWidget> createState() =>
@@ -45,7 +43,7 @@ class _ListStaticSearchableWidgetState<T>
 
   Widget _buildSearchResult() {
     if (_searchResult.isEmpty) {
-      return Text("EMPTY");
+      return const Text("EMPTY");
     }
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ShadowWidget extends StatelessWidget {
   Widget child;
 
-  ShadowWidget({Key? key, required this.child}) : super(key: key);
+  ShadowWidget({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

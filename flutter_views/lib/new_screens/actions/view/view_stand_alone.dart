@@ -9,8 +9,7 @@ import '../../../providers/actions/action_viewabstract_provider.dart';
 
 class MasterViewStandAlone extends StatelessWidget {
   ViewAbstractStandAloneCustomViewApi viewAbstract;
-  MasterViewStandAlone({Key? key, required this.viewAbstract})
-      : super(key: key);
+  MasterViewStandAlone({super.key, required this.viewAbstract});
   Future<dynamic>? getFuture() {
     debugPrint(
         "getFuture responseType=> ${viewAbstract.getCustomStandAloneResponseType()}");

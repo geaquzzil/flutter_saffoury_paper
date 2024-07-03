@@ -1,22 +1,18 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
-import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/web/views/web_view_details.dart';
 import 'package:provider/provider.dart';
 
-import '../../new_components/editables/editable_widget.dart';
 import '../../providers/cart/cart_provider.dart';
 
 class POSListCardItem<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   const POSListCardItem({
-    Key? key,
+    super.key,
     required this.object,
-  }) : super(key: key);
+  });
 
   @override
   State<POSListCardItem> createState() => _POSListCardItem();

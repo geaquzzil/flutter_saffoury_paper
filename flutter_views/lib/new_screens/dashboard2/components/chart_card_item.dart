@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
 class ChartCardItem extends StatelessWidget {
-  const ChartCardItem({Key? key}) : super(key: key);
+  const ChartCardItem({super.key});
 
   // final CloudStorageInfo info;
 
@@ -74,9 +74,9 @@ class ChartCardItem extends StatelessWidget {
 
 class ProgressLine extends StatelessWidget {
   const ProgressLine({
-    Key? key,
+    super.key,
     required this.percentage,
-  }) : super(key: key);
+  });
   final int? percentage;
 
   @override

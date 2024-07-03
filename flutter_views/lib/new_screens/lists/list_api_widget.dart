@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../../new_components/loading_shimmer.dart';
 
 class ListApiWidget extends StatefulWidget {
+  const ListApiWidget({super.key});
+
   @override
   State<ListApiWidget> createState() => _ListApiWidgetState();
 }
@@ -56,13 +58,13 @@ class _ListApiWidgetState extends State<ListApiWidget> {
         itemCount: listProvider.isLoading ? (data.length + 1) : (data.length),
         itemBuilder: (context, index) {
           if (listProvider.isLoading && index == data.length) {
-            return Center(
+            return const Center(
                 child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text("Loading..."),
                   SizedBox(
                       height: 24,
@@ -108,8 +110,8 @@ class _ListApiWidgetState extends State<ListApiWidget> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 10,
           itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
+            return const Column(
+              children: [
                 ShimmerLoadingList(),
                 SizedBox(
                   height: 10,

@@ -24,11 +24,13 @@ CutRequest _$CutRequestFromJson(Map<String, dynamic> json) => CutRequest()
   ..cut_request_results = (json['cut_request_results'] as List<dynamic>?)
       ?.map((e) => CutRequestResult.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..cut_request_results_count = json['cut_request_results_count'] as int?
+  ..cut_request_results_count =
+      (json['cut_request_results_count'] as num?)?.toInt()
   ..sizes_cut_requests = (json['sizes_cut_requests'] as List<dynamic>?)
       ?.map((e) => SizesCutRequest.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..sizes_cut_requests_count = json['sizes_cut_requests_count'] as int?;
+  ..sizes_cut_requests_count =
+      (json['sizes_cut_requests_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$CutRequestToJson(CutRequest instance) =>
     <String, dynamic>{
@@ -61,7 +63,7 @@ ProfitByCutRequest _$ProfitByCutRequestFromJson(Map<String, dynamic> json) =>
       ..inputQuantity = convertToDouble(json['inputQuantity'])
       ..resultQuantity = convertToDouble(json['resultQuantity'])
       ..totalPrice = convertToDouble(json['totalPrice'])
-      ..CutRequestID = json['CutRequestID'] as int?
+      ..CutRequestID = (json['CutRequestID'] as num?)?.toInt()
       ..date = json['date'] as String?;
 
 Map<String, dynamic> _$ProfitByCutRequestToJson(ProfitByCutRequest instance) =>

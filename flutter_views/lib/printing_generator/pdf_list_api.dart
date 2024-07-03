@@ -1,11 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
-import 'package:flutter_view_controller/printing_generator/pdf_custom_from_pdf_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:printing/printing.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../interfaces/printable/printable_bill_interface.dart';
 import '../interfaces/printable/printable_custom_interface.dart';

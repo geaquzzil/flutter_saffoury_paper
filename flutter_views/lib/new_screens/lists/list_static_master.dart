@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../filterables/horizontal_selected_filterable.dart';
 
 abstract class ListStaticMaster<T> extends StatefulWidget {
   List<T> list;
   bool isSearchable;
   ListStaticMaster({
-    Key? key,
+    super.key,
     required this.list,
     this.isSearchable = false,
-  }) : super(key: key);
+  });
 
   Widget getListViewWidget(
       {required BuildContext context, required List<T> list});
@@ -40,7 +39,7 @@ class ListStaticMasterState<T> extends State<ListStaticMaster<T>> {
       shrinkWrap: true,
       itemCount: _userDetails.length,
       itemBuilder: (context, index) {
-        return Text("");
+        return const Text("");
         // return widget.listItembuilder(_userDetails[index], false);
         // return data[index].getCardView(context);
       },
@@ -49,7 +48,7 @@ class ListStaticMasterState<T> extends State<ListStaticMaster<T>> {
 
   Widget _buildSearchResult() {
     if (_searchResult.isEmpty) {
-      return Text("EMPTY");
+      return const Text("EMPTY");
     }
     return ListView.builder(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -57,7 +56,7 @@ class ListStaticMasterState<T> extends State<ListStaticMaster<T>> {
       shrinkWrap: true,
       itemCount: _searchResult.length,
       itemBuilder: (context, index) {
-        return Text("");
+        return const Text("");
         // return widget.listItembuilder(_searchResult[index]);
         // return data[index].getCardView(context);
       },

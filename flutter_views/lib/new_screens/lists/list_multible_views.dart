@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
@@ -7,8 +6,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dar
 import '../../components/expansion_tile_custom.dart';
 
 class ListMultibleViews extends ListStaticMaster<ListStickyItem> {
-  ListMultibleViews({Key? key, required List<ListStickyItem> list})
-      : super(key: key, list: list);
+  ListMultibleViews({super.key, required super.list});
 
   Widget _getGroupSeparator(BuildContext ctx, ListStickyItem element) {
     return Text(
@@ -22,7 +20,7 @@ class ListMultibleViews extends ListStaticMaster<ListStickyItem> {
       {required BuildContext context, required List<ListStickyItem> list}) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: ClampingScrollPhysics(parent: NeverScrollableScrollPhysics()),
+      physics: const ClampingScrollPhysics(parent: NeverScrollableScrollPhysics()),
       itemCount: list.length,
       itemBuilder: (context, index) {
         var element = list[index];

@@ -11,7 +11,7 @@ class BottomSheetDialogWidget extends StatelessWidget {
     return Wrap(
       children: [
         getListTile(context),
-        Divider(),
+        const Divider(),
         viewAbstract.onFutureAllPopupMenuLoaded(
           context,
           ServerActions.list,

@@ -5,9 +5,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 
 class ProductCardBottom<T extends ViewAbstract> extends StatelessWidget {
   const ProductCardBottom({
-    Key? key,
+    super.key,
     required this.object,
-  }) : super(key: key);
+  });
 
   final T object;
 
@@ -22,10 +22,10 @@ class ProductCardBottom<T extends ViewAbstract> extends StatelessWidget {
           bottomRight: Radius.circular(25.0),
         ),
       ),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          Text(
             'product.price',
             style: TextStyle(
               color: kWhite,

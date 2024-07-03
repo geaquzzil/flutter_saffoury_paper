@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class HeaderTitleMain extends StatefulWidget {
-  const HeaderTitleMain({Key? key}) : super(key: key);
+  const HeaderTitleMain({super.key});
 
   @override
   State<HeaderTitleMain> createState() => _HeaderTitleMainState();

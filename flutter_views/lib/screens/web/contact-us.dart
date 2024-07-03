@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
@@ -41,7 +43,7 @@ var contactInfo = [
 ];
 
 class ContactUsWebPage extends BaseWebPageSlivers {
-  ContactUsWebPage({Key? key}) : super(key: key);
+  ContactUsWebPage({super.key});
 
   @override
   List<Widget> getContentWidget(
@@ -88,10 +90,10 @@ class ContactUsWebPage extends BaseWebPageSlivers {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: map.FlutterMap(
-              options: map.MapOptions(
-                center: LatLng(33.783583, 35.877710),
-                enableScrollWheel: false,
-                zoom: 15,
+              options: const map.MapOptions(
+                initialCenter: LatLng(33.783583, 35.877710),
+                // enableScrollWheel: false,
+                initialZoom: 15,
               ),
               // nonRotatedChildren: [
               //   AttributionWidget.defaultWidget(
@@ -107,7 +109,7 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                           "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
                           width: 40,
                           height: 40),
-                      point: LatLng(33.783583, 35.877710),
+                      point: const LatLng(33.783583, 35.877710),
                       width: 80,
                       height: 80,
                       // builder: (context) => Lottie.network(
@@ -175,7 +177,7 @@ class ContactUsWebPage extends BaseWebPageSlivers {
           ]),
           ...contactInfo
               .map((c) => ContactInfoItemWidget(contactInfo: c))
-              .toList(),
+              ,
         ],
       ),
       // description:
@@ -185,10 +187,11 @@ class ContactUsWebPage extends BaseWebPageSlivers {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: map.FlutterMap(
-              options: map.MapOptions(
-                center: LatLng(33.485683, 36.3191252),
-                enableScrollWheel: false,
-                zoom: 12,
+              options: const map.MapOptions(
+                initialCenter: LatLng(33.485683, 36.3191252),
+
+                // enableScrollWheel: false,
+                initialZoom: 12,
               ),
               // nonRotatedChildren: [
               //   AttributionWidget.defaultWidget(
@@ -204,7 +207,7 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                           "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
                           width: 40,
                           height: 40),
-                      point: LatLng(33.485683, 36.3191252),
+                      point: const LatLng(33.485683, 36.3191252),
                       width: 80,
                       height: 80,
                       // builder: (context) => Lottie.network(
@@ -284,10 +287,10 @@ class ContactUsWebPage extends BaseWebPageSlivers {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: map.FlutterMap(
-              options: map.MapOptions(
-                center: LatLng(33.4060428, 36.3611587),
-                enableScrollWheel: false,
-                zoom: 15,
+              options: const map.MapOptions(
+                initialCenter: LatLng(33.4060428, 36.3611587),
+                // enableScrollWheel: false,
+                initialZoom: 15,
               ),
               // nonRotatedChildren: [
               //   AttributionWidget.defaultWidget(
@@ -303,7 +306,7 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                           "https://assets2.lottiefiles.com/packages/lf20_hfc3kiim.json",
                           width: 40,
                           height: 40),
-                      point: LatLng(33.4060428, 36.3611587),
+                      point: const LatLng(33.4060428, 36.3611587),
                       width: 80,
                       height: 80,
                       // builder: (context) => Lottie.network(
@@ -380,12 +383,14 @@ class ContactItem {
   final String? email;
   final String phone;
   final bool? hasWhatsapp;
+
   const ContactItem(
       {required this.category,
       required this.name,
       this.email,
       this.hasWhatsapp,
       required this.phone});
+
   Widget getLeading() {
     return getWebText(title: category, fontSize: 18, color: kPrimaryColor);
   }

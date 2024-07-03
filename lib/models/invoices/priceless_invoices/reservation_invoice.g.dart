@@ -10,7 +10,7 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
     ReservationInvoice()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-      ..TermsID = json['TermsID'] as int?
+      ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
       ..comments = json['comments'] as String?
@@ -42,7 +42,7 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
                   ReservationInvoiceDetails.fromJson(e as Map<String, dynamic>))
               .toList()
       ..reservation_invoice_details_count =
-          json['reservation_invoice_details_count'] as int?;
+          (json['reservation_invoice_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$ReservationInvoiceToJson(ReservationInvoice instance) =>
     <String, dynamic>{

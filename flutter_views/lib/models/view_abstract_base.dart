@@ -8,17 +8,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/listable_draggable_header.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_editable.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_static.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:path/path.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:supercharged/supercharged.dart';
-
-import '../new_components/lists/list_card_item_editable.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();

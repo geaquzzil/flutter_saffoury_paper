@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/rendering/box.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
 import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
@@ -29,7 +28,7 @@ class ErrorWebPage extends BaseWebPageSlivers {
               // primaryTitle: "Hello, There",
               title: "ERROR\n$errorMessage".toUpperCase(),
               description: "",
-              customWidget: SizedBox(),
+              customWidget: const SizedBox(),
               customIconData: Icons.error,
 
               // backgroundImage:

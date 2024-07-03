@@ -9,7 +9,7 @@ part of 'transfers.dart';
 Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = json['TermsID'] as int?
+  ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..billNo = InvoiceMaster.intFromString(json['billNo'])
   ..comments = json['comments'] as String?
@@ -42,7 +42,7 @@ Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
   ..transfers_details = (json['transfers_details'] as List<dynamic>?)
       ?.map((e) => TransfersDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..trasfers_details_count = json['trasfers_details_count'] as int?;
+  ..trasfers_details_count = (json['trasfers_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$TransfersToJson(Transfers instance) => <String, dynamic>{
       'iD': instance.iD,

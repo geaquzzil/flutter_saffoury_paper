@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
-import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../providers/cart/cart_provider.dart';
 import '../cart/cart_description/cart_description.dart';
-import '../cart/cart_description/cart_descriptopn_header.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class POSDescription extends StatefulWidget {
-  POSDescription({Key? key}) : super(key: key);
+  const POSDescription({super.key});
 
   @override
   State<POSDescription> createState() => _POSDescriptionState();
@@ -80,8 +78,8 @@ class _POSDescriptionState extends State<POSDescription>
                 ],
               ),
             ),
-            Expanded(child: POSCartList()),
-            CartDescriptionTotals(),
+            const Expanded(child: POSCartList()),
+            const CartDescriptionTotals(),
             Container(
               padding: const EdgeInsets.symmetric(
                   horizontal: kDefaultPadding, vertical: kDefaultPadding),

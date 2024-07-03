@@ -1,16 +1,13 @@
 import 'package:animate_do/animate_do.dart' as animate;
 import 'package:flutter/material.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
-import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/header_description_as_expanstion.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -40,7 +37,7 @@ class CutRequestTopWidget extends StatelessWidget {
         ),
         ...object.sizes_cut_requests!
             .map((e) => getSizeWidget(context, e))
-            .toList(),
+            ,
         if (hasCutResult)
           HeaderDescriptionAsExpanstion(
             isTitleLarge: false,
@@ -116,9 +113,9 @@ class CutRequestTopWidget extends StatelessWidget {
 
 class ProductHeaderToggle extends StatelessWidget {
   const ProductHeaderToggle({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+  });
 
   final Product product;
 

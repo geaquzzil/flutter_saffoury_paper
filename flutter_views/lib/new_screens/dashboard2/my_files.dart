@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:responsive_framework/responsive_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../interfaces/dashable_interface.dart';
 import 'components/chart_card_item.dart';
@@ -11,7 +9,7 @@ import 'dashboard.dart';
 
 class MyFiles extends StatelessWidget {
   DashableGridHelper dgh;
-  MyFiles({Key? key, required this.dgh}) : super(key: key);
+  MyFiles({super.key, required this.dgh});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class MyFiles extends StatelessWidget {
             if (dgh.title != null)
               Text(
                 dgh.title!,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ElevatedButton.icon(
               style: TextButton.styleFrom(
@@ -56,14 +54,14 @@ class MyFiles extends StatelessWidget {
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
-        SizedBox(height: kDefaultPadding)
+        const SizedBox(height: kDefaultPadding)
       ],
     );
   }
 }
 
 class TestExpanded extends StatefulWidget {
-  const TestExpanded({Key? key}) : super(key: key);
+  const TestExpanded({super.key});
 
   @override
   State<TestExpanded> createState() => _TestExpandedState();
@@ -148,12 +146,11 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   List<StaggeredGridTile> list;
   bool wrapWithCard;
   FileInfoStaggerdGridView(
-      {Key? key,
+      {super.key,
       this.crossAxisCount = 4,
       this.childAspectRatio = 1,
       this.wrapWithCard = false,
-      required this.list})
-      : super(key: key);
+      required this.list});
 
   final int crossAxisCount;
   final double childAspectRatio;
@@ -177,10 +174,10 @@ class FileInfoStaggerdGridView extends StatelessWidget {
 
 class FileInfoCardGridView extends StatelessWidget {
   const FileInfoCardGridView({
-    Key? key,
+    super.key,
     this.crossAxisCount = 4,
     this.childAspectRatio = 1,
-  }) : super(key: key);
+  });
 
   final int crossAxisCount;
   final double childAspectRatio;

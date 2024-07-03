@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter/src/widgets/scroll_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../new_components/lists/list_card_item.dart';
 import 'list_api_master.dart';
 
 class ListSliverGrid extends ListApiMaster {
@@ -70,7 +66,7 @@ class _ListSliverGridState extends ListApiMasterState {
         return SliverGrid(
           
             gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return ListCardItemHorizontal(object: data[index]);

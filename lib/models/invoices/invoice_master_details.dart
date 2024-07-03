@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
@@ -186,7 +185,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
 
   @override
   Text getMainLabelText(BuildContext context) {
-    return products?.getMainLabelText(context) ?? Text("ds");
+    return products?.getMainLabelText(context) ?? const Text("ds");
   }
 
   @override

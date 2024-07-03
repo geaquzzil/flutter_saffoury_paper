@@ -4,11 +4,12 @@ import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/helper_model/product.dart';
 import 'package:flutter_view_controller/light_color.dart';
 
-
 class ProductCard extends StatelessWidget {
   final Product product;
   final ValueChanged<Product> onSelected;
-  const ProductCard({Key ?key,required this.product,required this.onSelected}) : super(key: key);
+
+  const ProductCard(
+      {super.key, required this.product, required this.onSelected});
 
 //   @override
 //   _ProductCardState createState() => _ProductCardState();

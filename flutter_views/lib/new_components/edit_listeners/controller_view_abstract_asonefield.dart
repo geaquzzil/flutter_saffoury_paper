@@ -141,7 +141,7 @@ class _ControllerViewAbstractAsOneField
                         ? null
                         : IconButton(
                             onPressed: () => _handleTap(context),
-                            icon: Icon(Icons.minimize),
+                            icon: const Icon(Icons.minimize),
                             color: Theme.of(context).colorScheme.error,
                           ),
                   )),

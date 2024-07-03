@@ -26,7 +26,7 @@ PrintDashboardSetting _$PrintDashboardSettingFromJson(
       ..hideAdditionalNotes = json['hideAdditionalNotes'] as bool?
       ..hideHeaderLogo = json['hideHeaderLogo'] as bool?
       ..currentGroupNameFromList = json['currentGroupNameFromList'] as String?
-      ..currentGroupNameIndex = json['currentGroupNameIndex'] as int?
+      ..currentGroupNameIndex = (json['currentGroupNameIndex'] as num?)?.toInt()
       ..currentGroupList = json['currentGroupList'] as List<dynamic>?
       ..hideInfoHeader = json['hideInfoHeader'] as bool?
       ..hideTotalFooter = json['hideTotalFooter'] as bool?

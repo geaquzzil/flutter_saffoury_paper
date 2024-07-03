@@ -4,10 +4,10 @@ class RoundedIconButtonTowChilds extends StatelessWidget {
   Widget largChild;
   IconData smallIcon;
   RoundedIconButtonTowChilds({
-    Key? key,
+    super.key,
     required this.largChild,
     required this.smallIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

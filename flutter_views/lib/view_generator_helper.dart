@@ -3,7 +3,7 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'models/view_abstract.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+
 class ViewHelper {
   static SafeArea getDrawerSafeArea(
       BuildContext context, List<ViewAbstract> list) {

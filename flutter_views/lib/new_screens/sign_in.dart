@@ -84,7 +84,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                               Widget child;
                               TextStyle? style = Theme.of(context)
                                   .textTheme
-                                  .caption
+                                  .bodySmall
                                   ?.copyWith(
                                       color: value == Status.Authenticated
                                           ? Colors.green
@@ -113,7 +113,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                                 child = const SizedBox();
                               }
                               return Padding(
-                                padding: EdgeInsets.all(20),
+                                padding: const EdgeInsets.all(20),
                                 child: child,
                               );
                             },
@@ -162,7 +162,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                                 child: Text(
                                   //todo translate
                                   "Register here!",
-                                  style: Theme.of(context).textTheme.button,
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
                             ],
@@ -183,7 +183,7 @@ class SignInPage extends BaseWebPage {
   final ValueNotifier<ViewAbstract?> _loginState =
       ValueNotifier<ViewAbstract?>(null);
   AuthUserLogin user = AuthUserLogin();
-  SignInPage({Key? key}) : super(key: key);
+  SignInPage({super.key});
 
   @override
   Widget getContentWidget(BuildContext context) {
@@ -231,7 +231,7 @@ class SignInPage extends BaseWebPage {
               child: Text(
                 //todo translate
                 "Register here!",
-                style: Theme.of(context).textTheme.button,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
           ],
@@ -297,7 +297,7 @@ class SignInPage extends BaseWebPage {
                                     Widget child;
                                     TextStyle? style = Theme.of(context)
                                         .textTheme
-                                        .caption
+                                        .bodySmall
                                         ?.copyWith(
                                             color: value == Status.Authenticated
                                                 ? Colors.green
@@ -327,7 +327,7 @@ class SignInPage extends BaseWebPage {
                                       child = const SizedBox();
                                     }
                                     return Padding(
-                                      padding: EdgeInsets.all(20),
+                                      padding: const EdgeInsets.all(20),
                                       child: child,
                                     );
                                   },

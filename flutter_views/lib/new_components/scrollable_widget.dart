@@ -4,9 +4,9 @@ class ScrollableWidget extends StatelessWidget {
   final Widget child;
 
   const ScrollableWidget({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(

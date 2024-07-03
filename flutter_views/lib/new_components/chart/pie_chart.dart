@@ -9,13 +9,12 @@ class CirculeChartItem<T, E> extends StatelessWidget {
   num? Function(T item, num num) yValueMapper;
   String? Function(T item, int idx)? dataLabelMapper;
   CirculeChartItem(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.list,
       required this.xValueMapper,
       this.dataLabelMapper,
-      required this.yValueMapper})
-      : super(key: key);
+      required this.yValueMapper});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class CirculeChartItem<T, E> extends StatelessWidget {
             // alignment: ChartAlignment.center,
             text: title,
             textStyle: Theme.of(context).textTheme.titleSmall),
-        legend: Legend(
+        legend: const Legend(
           isResponsive: true,
           // legendItemBuilder: (s, d, d2, i) =>
           //     Text("s $s dynamic $d dynamic2  $d2  index $i"),

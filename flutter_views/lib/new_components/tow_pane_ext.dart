@@ -1,8 +1,5 @@
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
 class TowPaneExt extends StatelessWidget {
@@ -45,7 +42,7 @@ class TowPaneExt extends StatelessWidget {
             paneProportion: customPaneProportion ??
                 SizeConfig.getPaneProportion(context, orientation: orientation),
             startPane: startPane,
-            endPane: endPane ?? Text("its not going to be visible"));
+            endPane: endPane ?? const Text("its not going to be visible"));
       },
     );
   }

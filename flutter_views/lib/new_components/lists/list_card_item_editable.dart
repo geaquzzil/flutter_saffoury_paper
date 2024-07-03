@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
-import 'package:provider/provider.dart';
-
-import '../../new_components/editables/editable_widget.dart';
-import '../../providers/cart/cart_provider.dart';
 
 class ListCardItemEditable<T extends ViewAbstract> extends StatefulWidget {
   final T object;
@@ -22,14 +15,13 @@ class ListCardItemEditable<T extends ViewAbstract> extends StatefulWidget {
   bool useDialog;
   GlobalKey<FormBuilderState>? formKey;
   ListCardItemEditable(
-      {Key? key,
+      {super.key,
       required this.index,
       required this.object,
       required this.onDelete,
       this.formKey,
       required this.onUpdate,
-      this.useDialog = true})
-      : super(key: key);
+      this.useDialog = true});
 
   @override
   State<ListCardItemEditable> createState() => ListCardItemEditableState();
@@ -113,7 +105,6 @@ class ListCardItemEditableState<T extends ViewAbstract>
         }
         debugPrint("getEditDialog result $value");
       }
-      ;
     });
   }
 

@@ -8,8 +8,8 @@ import '../../../constants.dart';
 
 class BaseAppSharedHeader extends StatelessWidget {
   const BaseAppSharedHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class BaseAppSharedHeader extends StatelessWidget {
         if (!SizeConfig.isMobile(context))
           Text(
             "Dashboard",
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         if (!SizeConfig.isMobile(context))
           Spacer(flex: SizeConfig.isDesktop(context) ? 2 : 1),
@@ -67,17 +67,17 @@ class HeaderActions extends StatelessWidget {
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Rewind and remember'),
+        return const AlertDialog(
+          title: Text('Rewind and remember'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
+              children: <Widget>[
                 Text('You will never be satisfied.'),
                 Text('You’re like me. I’m never satisfied.'),
               ],
             ),
           ),
-          actions: const <Widget>[
+          actions: <Widget>[
             // FlatButton(
             //   child: const Text('Regret'),
             //   onPressed: () {
@@ -105,7 +105,8 @@ class HeaderActions extends StatelessWidget {
     IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)),
     IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
   ];
-  HeaderActions({Key? key}) : super(key: key);
+
+  HeaderActions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +126,8 @@ class HeaderActions extends StatelessWidget {
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +159,8 @@ class ProfileCard extends StatelessWidget {
 
 class SearchField extends StatelessWidget {
   const SearchField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -196,12 +197,11 @@ class MenuTendina extends StatefulWidget {
   Widget notifiche;
 
   MenuTendina(
-      {Key? key,
+      {super.key,
       required this.child,
       required this.notifiche,
       required this.opacita,
-      required this.altezza})
-      : super(key: key);
+      required this.altezza});
 
   @override
   _MenuTendinaState createState() => _MenuTendinaState();

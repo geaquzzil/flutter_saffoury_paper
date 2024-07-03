@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
-import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -79,7 +77,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
           },
           isExtended: true,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          icon: Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_forward),
           label: Text(AppLocalizations.of(context)!.subment),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

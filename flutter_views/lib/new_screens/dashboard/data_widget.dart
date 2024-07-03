@@ -11,7 +11,7 @@ const Color yellow = Color(0xFFFBBC05);
 const Color green = Color(0xFF34A853);
 
 class DataWidget extends StatelessWidget {
-  DataWidget({Key? key, required this.item}) : super(key: key);
+  DataWidget({super.key, required this.item});
 
   final ColoredDashboardItem item;
 
@@ -38,7 +38,7 @@ class DataWidget extends StatelessWidget {
 }
 
 class Pub extends StatelessWidget {
-  const Pub({Key? key}) : super(key: key);
+  const Pub({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class Pub extends StatelessWidget {
 }
 
 class LinkedIn extends StatelessWidget {
-  const LinkedIn({Key? key}) : super(key: key);
+  const LinkedIn({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +70,8 @@ class LinkedIn extends StatelessWidget {
       },
       child: Container(
         color: const Color(0xFF0A66C2),
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             Expanded(
                 child: Padding(
               padding: EdgeInsets.all(8.0),
@@ -93,7 +93,7 @@ class LinkedIn extends StatelessWidget {
 }
 
 class Twitter extends StatelessWidget {
-  const Twitter({Key? key}) : super(key: key);
+  const Twitter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +103,8 @@ class Twitter extends StatelessWidget {
       },
       child: Container(
         color: const Color(0xFF1DA0F1),
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             Expanded(
                 child: Padding(
               padding: EdgeInsets.all(8.0),
@@ -126,7 +126,7 @@ class Twitter extends StatelessWidget {
 }
 
 class Github extends StatelessWidget {
-  const Github({Key? key}) : super(key: key);
+  const Github({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -136,8 +136,8 @@ class Github extends StatelessWidget {
       },
       child: Container(
         color: Colors.white,
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             Expanded(
                 child: Padding(
               padding: EdgeInsets.all(8.0),
@@ -163,7 +163,7 @@ class Github extends StatelessWidget {
 }
 
 class BuyMee extends StatelessWidget {
-  const BuyMee({Key? key}) : super(key: key);
+  const BuyMee({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +181,7 @@ class BuyMee extends StatelessWidget {
 }
 
 class InfoAdvice extends StatelessWidget {
-  const InfoAdvice({Key? key, required this.layout}) : super(key: key);
+  const InfoAdvice({super.key, required this.layout});
 
   final ItemLayout layout;
 
@@ -199,7 +199,8 @@ class InfoAdvice extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 child: DataTable(
-                    dataRowHeight: 25,
+                    dataRowMinHeight: 25,
+                    dataRowMaxHeight: 50,
                     headingRowHeight: 25,
                     border: const TableBorder(
                         horizontalInside: BorderSide(color: Colors.white)),
@@ -227,7 +228,7 @@ class InfoAdvice extends StatelessWidget {
 }
 
 class DefaultAdvice extends StatelessWidget {
-  const DefaultAdvice({Key? key}) : super(key: key);
+  const DefaultAdvice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -235,10 +236,10 @@ class DefaultAdvice extends StatelessWidget {
         color: yellow,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.refresh,
               size: 30,
@@ -258,7 +259,7 @@ class DefaultAdvice extends StatelessWidget {
 }
 
 class ClearAdvice extends StatelessWidget {
-  const ClearAdvice({Key? key}) : super(key: key);
+  const ClearAdvice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -266,10 +267,10 @@ class ClearAdvice extends StatelessWidget {
         color: green,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.delete,
               size: 30,
@@ -286,7 +287,7 @@ class ClearAdvice extends StatelessWidget {
 }
 
 class AddAdvice extends StatelessWidget {
-  const AddAdvice({Key? key}) : super(key: key);
+  const AddAdvice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -294,10 +295,10 @@ class AddAdvice extends StatelessWidget {
         color: blue,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.add,
               size: 30,
@@ -314,7 +315,7 @@ class AddAdvice extends StatelessWidget {
 }
 
 class TransformAdvice extends StatelessWidget {
-  const TransformAdvice({Key? key}) : super(key: key);
+  const TransformAdvice({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -322,22 +323,22 @@ class TransformAdvice extends StatelessWidget {
         color: red,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "Users can move widgets.",
               style: TextStyle(color: Colors.white, fontSize: 13),
               textAlign: TextAlign.center,
             ),
-            const Text(
+            Text(
               "To try moving, hold (or long press) the widget and move.",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 13),
             ),
             Row(
-              children: const [
+              children: [
                 Expanded(
                   child: Text(
                     "While moving, it shrinks if possible according to the "
@@ -361,7 +362,7 @@ class TransformAdvice extends StatelessWidget {
 }
 
 class WelcomeWidget extends StatelessWidget {
-  const WelcomeWidget({Key? key}) : super(key: key);
+  const WelcomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -392,7 +393,7 @@ class WelcomeWidget extends StatelessWidget {
 }
 
 class BasicDescription extends StatelessWidget {
-  const BasicDescription({Key? key}) : super(key: key);
+  const BasicDescription({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -400,32 +401,32 @@ class BasicDescription extends StatelessWidget {
         color: yellow,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const AutoSizeText(
+            AutoSizeText(
                 "Each widget on the screen is called \"DashboardItem\"",
                 maxLines: 4,
                 style: TextStyle(color: Colors.white, fontSize: 13),
                 textAlign: TextAlign.center),
-            const AutoSizeText("Each has a location and dimensions by slots.",
+            AutoSizeText("Each has a location and dimensions by slots.",
                 maxLines: 3,
                 style: TextStyle(color: Colors.white, fontSize: 13),
                 textAlign: TextAlign.center),
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: AutoSizeText(
                       "You can switch to edit mode to see these slots.",
                       maxLines: 4,
                       style: TextStyle(color: Colors.white, fontSize: 13),
                       textAlign: TextAlign.center),
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 8,
                 ),
                 Column(
-                  children: const [
+                  children: [
                     Text("Tap: ",
                         style: TextStyle(color: Colors.white, fontSize: 10)),
                     Icon(Icons.edit, color: Colors.white),
@@ -439,7 +440,7 @@ class BasicDescription extends StatelessWidget {
 }
 
 class AdviceResize extends StatelessWidget {
-  const AdviceResize({Key? key, required this.size}) : super(key: key);
+  const AdviceResize({super.key, required this.size});
 
   final int size;
 
@@ -456,11 +457,11 @@ class AdviceResize extends StatelessWidget {
               width: 1,
               color: Colors.white,
             ),
-            Expanded(
+            const Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
+              children: [
                 AutoSizeText("Users can resize widgets.",
                     maxLines: 2,
                     style: TextStyle(color: Colors.white, fontSize: 13),

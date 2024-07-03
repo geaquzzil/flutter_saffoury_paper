@@ -228,7 +228,7 @@ class BaseEditWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
-        new TextEditingController().clear();
+        TextEditingController().clear();
       },
       child: ChangeNotifierProvider.value(
         value: viewAbstractChangeProvider,

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
-import 'package:flutter_view_controller/new_components/lists/square_card.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 
 import 'package:provider/provider.dart';
@@ -17,7 +14,7 @@ import '../../new_components/loading_shimmer.dart';
 
 class POSListWidget<T extends ViewAbstract> extends StatefulWidget {
   AutoRest autoRest;
-  POSListWidget({Key? key, required this.autoRest}) : super(key: key);
+  POSListWidget({super.key, required this.autoRest});
 
   @override
   State<POSListWidget> createState() => _POSListWidget();
@@ -61,18 +58,18 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
           crossAxisSpacing: 3,
           repeatPattern: QuiltedGridRepeatPattern.inverted,
           pattern: [
-            QuiltedGridTile(2, 2),
-            QuiltedGridTile(2, 2),
-            QuiltedGridTile(1, 2),
-            QuiltedGridTile(1, 2),
+            const QuiltedGridTile(2, 2),
+            const QuiltedGridTile(2, 2),
+            const QuiltedGridTile(1, 2),
+            const QuiltedGridTile(1, 2),
           ],
         ),
         itemBuilder: (context, index) {
           if (listProvider.isLoading(widget.autoRest.key) &&
               index == data.length) {
-            return Center(
+            return const Center(
                 child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                     )));
@@ -142,10 +139,10 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
           crossAxisSpacing: 4,
           repeatPattern: QuiltedGridRepeatPattern.inverted,
           pattern: [
-            QuiltedGridTile(1, 2),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 2),
+            const QuiltedGridTile(1, 2),
+            const QuiltedGridTile(1, 1),
+            const QuiltedGridTile(1, 1),
+            const QuiltedGridTile(1, 2),
           ],
         ),
         itemBuilder: (context, index) {
@@ -164,8 +161,8 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 10,
           itemBuilder: (ctx, i) {
-            return Column(
-              children: const [
+            return const Column(
+              children: [
                 ShimmerLoadingList(),
                 SizedBox(
                   height: 10,

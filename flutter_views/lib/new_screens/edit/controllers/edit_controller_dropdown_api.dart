@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 
 class EditControllerDropdownFromViewAbstract<T extends ViewAbstract>
@@ -13,13 +12,12 @@ class EditControllerDropdownFromViewAbstract<T extends ViewAbstract>
   GlobalKey<FormBuilderState>? formKey;
   String field;
   EditControllerDropdownFromViewAbstract(
-      {Key? key,
+      {super.key,
       required this.parent,
       this.formKey,
       required this.enabled,
       required this.viewAbstract,
-      required this.field})
-      : super(key: key);
+      required this.field});
 
   @override
   State<EditControllerDropdownFromViewAbstract<T>> createState() =>
@@ -56,7 +54,7 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
             if (snapshot.connectionState == ConnectionState.done) {
               return getDropdownController(context, snapshot.data as List<T?>);
             }
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           },
         ),
       // getSpace()

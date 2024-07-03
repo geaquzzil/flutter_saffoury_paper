@@ -1,6 +1,4 @@
-import 'package:badges/badges.dart' as customBadges;
 import 'package:flutter/material.dart';
-import 'package:nil/nil.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/cart/cart_provider.dart';
@@ -19,7 +17,7 @@ class CartIconWidget extends StatelessWidget {
           duration: const Duration(milliseconds: 275),
           scale: hideButton ? 0 : 1,
           child: hideButton
-              ? SizedBox()
+              ? const SizedBox()
               : Badge(
                   isLabelVisible: value > 0,
                   smallSize: 4,

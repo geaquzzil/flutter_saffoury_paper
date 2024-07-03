@@ -6,10 +6,10 @@ class SquareCard<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   final Function? press;
   const SquareCard({
-    Key? key,
+    super.key,
     required this.object,
     this.press,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
