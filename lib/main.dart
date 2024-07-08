@@ -78,6 +78,12 @@ void main() async {
       // await DesktopWindow.setMinWindowSize(const Size(800, 600));
     }
   }
+//   SerialPortReader reader = SerialPortReader(myPort,timeout:3000);
+// Stream upcomingData = reader.stream;
+// upcomingData.listen((data) {
+//   print(String.fromCharCodes(data));
+// });
+
   Utils.initVersionNumber();
   svgCode = await rootBundle.loadString("assets/images/vector/logoOnly.svg");
   //TODO what is this ?

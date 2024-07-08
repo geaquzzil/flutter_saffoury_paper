@@ -59,8 +59,8 @@ class BaseAuthenticatingScreen extends StatelessWidget {
 
   Widget getDoneWidget(BuildContext context) {
     // return POSPage();
-    return BaseDashboardMainPage(key: globalKeyBasePageWithApi, title: "TEST");
-    
+    // return BaseDashboardMainPage(key: globalKeyBasePageWithApi, title: "TEST");
+
     // return BaseShared();
     // return PdfTestToBasePage();
     // return TestBasePage();

@@ -214,6 +214,10 @@ dual_screen
 2.12
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/dual_screen-1.0.4/
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/dual_screen-1.0.4/lib/
+dylib
+2.12
+file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/dylib-0.3.3/
+file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/dylib-0.3.3/lib/
 dynamic_color
 2.16
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/dynamic_color-1.7.0/
@@ -322,6 +326,10 @@ flutter_keyboard_visibility_windows
 2.12
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_keyboard_visibility_windows-1.0.0/
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_keyboard_visibility_windows-1.0.0/lib/
+flutter_libserialport
+2.17
+file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_libserialport-0.4.0/
+file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_libserialport-0.4.0/lib/
 flutter_lints
 3.1
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-4.0.0/
@@ -494,6 +502,10 @@ leak_tracker_testing
 3.2
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-3.0.1/
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-3.0.1/lib/
+libserialport
+2.17
+file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/libserialport-0.3.0+1/
+file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/libserialport-0.3.0+1/lib/
 linked_scroll_controller
 2.12
 file:///C:/Users/ETQ/AppData/Local/Pub/Cache/hosted/pub.dev/linked_scroll_controller-0.2.0/

@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus_windows
   desktop_window
   dynamic_color
+  flutter_libserialport
   printing
   screen_retriever
   share_plus
