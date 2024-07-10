@@ -22,7 +22,8 @@ import '../profile/profile_pic_popup_menu.dart';
 import 'components/ext.dart';
 
 class DrawerLargeScreens extends StatefulWidget {
-  const DrawerLargeScreens({super.key});
+  CurrentScreenSize? size;
+  DrawerLargeScreens({super.key, this.size});
 
   @override
   State<DrawerLargeScreens> createState() => _DrawerLargeScreensState();
@@ -30,6 +31,7 @@ class DrawerLargeScreens extends StatefulWidget {
 
 class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     with TickerProviderStateMixin {
+  CurrentScreenSize? _size;
   final padding = const EdgeInsets.symmetric(horizontal: kDefaultPadding);
 
   late DrawerMenuControllerProvider drawerMenuControllerProvider;
@@ -42,7 +44,35 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
         vsync: this, duration: const Duration(milliseconds: 450));
     _animationController.forward();
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
+    _size = widget.size;
     super.initState();
+    debugPrint("DrawerLargeScreens initState");
+  }
+
+  @override
+  void didUpdateWidget(covariant DrawerLargeScreens oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    debugPrint("DrawerLargeScreens didUpdateWidget");
+    _size = widget.size;
+    if (canSmallDrawerWhenOpen()) {
+      WidgetsBinding.instance.addPostFrameCallback((c) {
+        if (drawerMenuControllerProvider.getSideMenuIsClosed) {
+          drawerMenuControllerProvider.setSideMenuIsOpen();
+        }
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    debugPrint("DrawerLargeScreens didChangeDependencies");
+  }
+
+  bool canSmallDrawerWhenOpen() {
+    return showHamburger(_size);
   }
 
   @override
@@ -67,10 +97,19 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
           curve: Curves.fastOutSlowIn,
           child: SizedBox(
             height: v.item2,
-            width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
+            width: showHamburger(_size)
+                ? kDrawerOpenWidth
+                : isOpen
+                    ? kDrawerOpenWidth
+                    : kDefaultClosedDrawer,
             child: Drawer(
-              width: isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer,
-              child: _getDrawerBody(v, context, isOpen),
+              width: showHamburger(_size)
+                  ? kDrawerOpenWidth
+                  : isOpen
+                      ? kDrawerOpenWidth
+                      : kDefaultClosedDrawer,
+              child: _getDrawerBody(
+                  v, context, showHamburger(_size) ? true : isOpen),
             ),
           ),
         );
@@ -211,11 +250,15 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     return IconButton(
       // padding: EdgeInsets.all(kDefaultPadding),
       onPressed: () {
-        drawerMenuControllerProvider.toggleIsOpen();
-        if (drawerMenuControllerProvider.getSideMenuIsOpen) {
-          _animationController.reverse();
+        if (showHamburger(_size)) {
+          drawerMenuControllerProvider.controlStartDrawerMenu();
         } else {
-          _animationController.forward();
+          drawerMenuControllerProvider.toggleIsOpen();
+          if (drawerMenuControllerProvider.getSideMenuIsOpen) {
+            _animationController.reverse();
+          } else {
+            _animationController.forward();
+          }
         }
       },
       icon: AnimatedIcon(

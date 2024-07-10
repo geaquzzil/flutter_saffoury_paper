@@ -112,9 +112,9 @@ class _BaseDashboardMainPageState
                   getExtrasCast(tab: tab).printPage(context);
                 },
                 icon: const Icon(Icons.print)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
+          // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
+          // IconButton(
+          //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
           IconButton(
               onPressed: () {}, icon: const Icon(Icons.notification_add)),
           const ProfilePicturePopupMenu()
@@ -323,7 +323,6 @@ class _BaseDashboardMainPageState
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
       {TabControllerHelper? tab}) {
-    // TODO: implement setPaddingWhenTowPane
     return false;
   }
 

@@ -38,6 +38,11 @@ bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.LARGE_TABLET;
 }
 
+bool showHamburger(CurrentScreenSize? screenSize) {
+  return screenSize == CurrentScreenSize.MOBILE ||
+      screenSize == CurrentScreenSize.SMALL_TABLET;
+}
+
 CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
   return context.read<LayoutChangeListner>().currentScreenSize ??
       CurrentScreenSize.MOBILE;

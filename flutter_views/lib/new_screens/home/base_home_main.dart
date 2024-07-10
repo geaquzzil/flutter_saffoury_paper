@@ -50,7 +50,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     super.initState();
 
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-    drawer = const DrawerLargeScreens();
+    drawer = DrawerLargeScreens();
   }
 
   Widget getSliverPadding(
@@ -272,7 +272,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             builder: (viewAbstract) => HomeNavigationPage(
                   viewAbstract: viewAbstract,
                 ));
-        shopingWidget ??= ListToDetailsPage();
+        shopingWidget ??= ListToDetailsPage(
+          title: "sd",
+        );
         return IndexedStack(index: value, children: [
           shouldWrapNavigatorChild(context, dashboardWidget!),
           shouldWrapNavigatorChild(context, homeWidget!),

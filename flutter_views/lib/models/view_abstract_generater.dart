@@ -137,7 +137,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onDrawerItemClicked(BuildContext context) {
     debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
     if (this is DashableInterface) {
-      Navigator.pushNamed(context, "/dashboard", arguments: this);
+      //TODO Navigator.pushNamed(context, "/dashboard", arguments: this);
       return;
     }
     //Navigator.of(context).pop();

@@ -202,6 +202,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   generateToolbar({Widget? customAppBar, bool? firstPane}) {
     return AppBar(
         surfaceTintColor: Colors.transparent,
+        // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,
         // primary: true,
 
@@ -212,6 +213,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         // backgroundColor: ElevationOverlay.overlayColor(context, 2),
         // leading: ,
         title: customAppBar ?? getBaseAppbar()!,
+        leading: showHamburger(getCurrentScreenSize())
+            ? IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  _drawerMenuControllerProvider.controlStartDrawerMenu();
+                },
+              )
+            : null,
         bottom: customAppBar == null
             ? _hasTabBarList()
                 ? getTabBarWidget()
@@ -243,8 +252,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                 wrapWithSafeArea: true,
                 child: ColoredTabBar(
                   useCard: false,
-                  color:
-                      Theme.of(context).colorScheme.surface.withOpacity(.9),
+                  color: Theme.of(context).colorScheme.surface.withOpacity(.9),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(
@@ -429,7 +437,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    _drawerWidget ??= const DrawerLargeScreens();
     return ScreenHelperSliver(
         requireAutoPadding: false,
         onChangeLayout: (w, h, c) {
@@ -437,6 +444,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           _width = w;
           _height = h;
           _currentScreenSize = c;
+          _drawerWidget = DrawerLargeScreens(
+            size: _currentScreenSize,
+          );
         },
         mobile: (w, h) {
           return _getTabletWidget();
@@ -552,11 +562,13 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   Widget _getTabletWidget() {
     return Scaffold(
+
         // extendBodyBehindAppBar: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getBaseFloatingActionButton(),
+        key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: _drawerWidget,
         body: _getBody());
 

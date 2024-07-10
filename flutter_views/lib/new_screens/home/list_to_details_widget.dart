@@ -1,38 +1,92 @@
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter/material.dart';
 
-import '../../providers/drawer/drawer_controler.dart';
+class ListToDetailsPage extends StatefulWidget {
+  final String title;
 
-class ListToDetailsPage extends StatelessWidget {
-  ListToDetailsPage({super.key});
-
-  Widget? firstPane;
-  Widget? endPane;
-  late DrawerMenuControllerProvider drawerMenuControllerProvider;
+  const ListToDetailsPage({
+    super.key,
+    required this.title,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    init(context);
-    firstPane = getFirstPane(context);
-    endPane ??= getEndPane();
-    return TowPaneExt(
-      startPane: firstPane!,
-      endPane: endPane,
-    );
-  }
+  State<ListToDetailsPage> createState() => _ListToDetailsPageState();
+}
 
-  Widget getEndPane() => BaseSharedDetailsView();
+class _ListToDetailsPageState extends BasePageWithApi<ListToDetailsPage> {
+  @override
+  Widget? getBaseAppbar() => null;
 
-  void init(BuildContext context) {
-    drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-  }
+  @override
+  Widget? getBaseBottomSheet() => null;
 
-  Widget getFirstPane(BuildContext context) {
-    // ListApiSearchableWidget(
-    //         key: context.read<ListActionsProvider>().getListStateKey),
+  @override
+  Widget? getBaseFloatingActionButton() => null;
+
+  @override
+  Future getCallApiFunctionIfNull(BuildContext context,
+          {TabControllerHelper? tab}) =>
+      getExtras(tab: tab).callApi();
+
+  @override
+  getDesktopFirstPane({TabControllerHelper? tab}) => getFirstPane(tab: tab);
+
+  @override
+  getDesktopSecondPane(
+          {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
+      getSecoundPane(tab: tab, secoundTab: secoundTab);
+
+  @override
+  getFirstPane({TabControllerHelper? tab}) {
     return SliverApiMaster();
   }
+
+  @override
+  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return BaseSharedDetailsView();
+  }
+
+  @override
+  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
+
+  @override
+  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
+  @override
+  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
+
+  @override
+  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+
+  @override
+  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
+  @override
+  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
+
+  @override
+  ServerActions getServerActions() => ServerActions.list;
+
+  @override
+  bool isPaneScaffoldOverlayColord(bool firstPane,
+          {TabControllerHelper? tab}) =>
+      false;
+
+  @override
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
+
+  @override
+  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+
+  @override
+  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
+          {TabControllerHelper? tab}) =>
+      false;
+
+  @override
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
 }

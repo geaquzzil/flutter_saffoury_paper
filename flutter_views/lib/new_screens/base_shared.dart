@@ -36,7 +36,7 @@ class _BaseSharedState extends State<BaseShared> {
     // _controller.
     return Scaffold(
         key: drawerMenuControllerProvider.getStartDrawableKey,
-        drawer: const DrawerLargeScreens(),
+        drawer: DrawerLargeScreens(),
         // drawerScrimColor: Colors.transparent,
         // backgroundColor: compexDrawerCanvasColor,
         endDrawer: const BaseHomeCartPage(),

@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +53,12 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
 
   void init() async {
     Utils.initVersionNumber();
+  }
+
+  @override
+  void dispose() {
+    langaugeProvider.dispose();
+    super.dispose();
   }
 
   @override
