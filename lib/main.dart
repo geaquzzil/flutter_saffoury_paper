@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/main_usb.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
@@ -131,6 +132,8 @@ void main() async {
     ProductType(),
   ]);
   try {
+    runApp(MyApp());
+    return;
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => SVGData(svgCode)),
       ChangeNotifierProvider(create: (context) => PreviousColor('#7EB642')),
@@ -170,4 +173,5 @@ void main() async {
   } catch (e) {
     debugPrint("exception => $e");
   }
+
 }
