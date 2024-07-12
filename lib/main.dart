@@ -60,7 +60,7 @@ import 'package:flutter_view_controller/providers/page_large_screens_provider.da
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
-
+import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'models/funds/credits.dart';
 import 'models/products/products_types.dart';
 
@@ -68,6 +68,11 @@ String svgCode = '';
 
 void main() async {
   initializeReflectable();
+  FlutterError.demangleStackTrace = (StackTrace stack) {
+    if (stack is stack_trace.Trace) return stack.vmTrace;
+    if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+    return stack;
+  };
 
   WidgetsFlutterBinding.ensureInitialized();
 

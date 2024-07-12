@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/src/response.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:supercharged/supercharged.dart';
 
 import '../models/dealers/dealer.dart';
@@ -28,7 +30,21 @@ enum Status {
   Guest
 }
 
+
 class AuthProvider<T extends AuthUser> with ChangeNotifier {
+  AuthProvider(Stream<dynamic> stream) {
+    notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
   late List<ViewAbstract> _drawerItems;
   late Map<String?, List<ViewAbstract>> __drawerItemsGrouped;
   final List<ViewAbstract> _drawerItemsPermissions = [];

@@ -84,14 +84,17 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
 class RouteGenerator {
   static GoRouter? _instance;
-  static GoRouter instance({List<RouteBase>? addonRoutes}) {
-    _instance ??= _getGoRouter(addonRoutes: addonRoutes);
+  static GoRouter instance(
+      {required BuildContext context, List<RouteBase>? addonRoutes}) {
+    _instance ??= _getGoRouter(context: context, addonRoutes: addonRoutes);
     return _instance!;
   }
-
-  static GoRouter _getGoRouter({List<RouteBase>? addonRoutes}) {
+  
+  static GoRouter _getGoRouter(
+      {required BuildContext context, List<RouteBase>? addonRoutes}) {
     return GoRouter(
       initialLocation: '/',
+      refreshListenable: AuthProvider(AuthUser().authStateChanges()),
       redirect: !kIsWeb
           ? null
 

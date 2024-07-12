@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:rxdart/rxdart.dart';
 import '../dealers/dealer.dart';
 import '../servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
@@ -142,8 +143,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   Setting? setting;
   Dealers? dealers;
 
-
-
   AuthUser({bool? setPassword}) : super() {
     if (setPassword != null) {
       if (setPassword) {
@@ -156,9 +155,25 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     // }
     setRandomPassword();
   }
+  final BehaviorSubject<AuthUser?> _authState = BehaviorSubject.seeded(null);
+
+  AuthUser? get currentUser => _authState.value;
+
+  Stream<AuthUser?> authStateChanges() {
+    return _authState.stream;
+  }
+
   @override
   AuthUser getSelfNewInstance() {
     return AuthUser();
+  }
+
+  void signIn() {
+    _authState.add(AppUser("98e99-some-test-uid-jkh37"));
+  }
+
+  void signOut() {
+    _authState.add(null);
   }
 
   @override

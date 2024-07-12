@@ -152,15 +152,15 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 restorationScopeId: 'root',
 
                 routeInformationParser: RouteGenerator.instance(
-                        addonRoutes: this.widget.addOnRoutes)
+                        context: context, addonRoutes: this.widget.addOnRoutes)
                     .routeInformationParser,
 
                 routerDelegate: RouteGenerator.instance(
-                        addonRoutes: this.widget.addOnRoutes)
+                        context: context, addonRoutes: this.widget.addOnRoutes)
                     .routerDelegate,
 
                 routeInformationProvider: RouteGenerator.instance(
-                        addonRoutes: this.widget.addOnRoutes)
+                        context: context, addonRoutes: this.widget.addOnRoutes)
                     .routeInformationProvider,
                 // routerDelegate: RouteGenerator.goRouter.routerDelegate,
                 // routeInformationProvider:
