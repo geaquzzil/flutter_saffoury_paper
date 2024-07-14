@@ -72,6 +72,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   Future<void> onAppStart(BuildContext context) async {
+
     await initFakeData();
     await initDrawerItems(context);
     // This is just to demonstrate the splash screen is working.
@@ -148,7 +149,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     try {
       _user = _initUser.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)))
           as T;
-      _user.login = false;
+      _user.login = true;
       _status = Status.Authenticated;
       _permissions = _user.userlevels ?? PermissionLevelAbstract();
       hasSavedUser = true;

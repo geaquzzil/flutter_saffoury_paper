@@ -17,7 +17,6 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -109,11 +108,13 @@ class RouteGenerator {
     final isGoingToLogin = state.path == loginLocation;
     final isGoingToInit = state.path == splashLocation;
     // final isGoingToOnboard = state.path == onboardLocation;
+    debugPrint(
+        "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus}");
 
-    if (!isInitialized) {
+    if (isInitialized) {
       return splashLocation;
       // If not onboard and not going to onboard redirect to OnBoarding
-    } else if (isInitialized && isLogedIn) {
+    } else if (isLogedIn) {
       return homeLocation;
       // If not logedin and not going to login redirect to Login
     } else if (isInitialized && !isLogedIn && !isGoingToLogin) {
