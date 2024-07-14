@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import '../dealers/dealer.dart';
 import '../servers/server_helpers.dart';
@@ -131,6 +132,28 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
   AuthUserLogin fromJsonViewAbstract(Map<String, dynamic> json) => this;
 }
 
+// class AuthRepository {
+//   final BehaviorSubject<AuthUser?> _authState = BehaviorSubject.seeded(null);
+
+//   AuthUser? get currentUser => _authState.value;
+
+//   Stream<AuthUser?> authStateChanges() {
+//     return _authState.stream;
+//   }
+
+//   void signIn() {
+//     _authState.add(AuthUser("98e99-some-test-uid-jkh37"));
+//   }
+
+//   void signOut() {
+//     _authState.add(null);
+//   }
+// }
+
+// final authRepositoryProvider = Provider(create: (ref) {
+//   return AuthRepository();
+// });
+
 @JsonSerializable(explicitToJson: true)
 class AuthUser<T> extends ViewAbstract<AuthUser> {
   bool? login;
@@ -155,6 +178,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     // }
     setRandomPassword();
   }
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final BehaviorSubject<AuthUser?> _authState = BehaviorSubject.seeded(null);
 
   AuthUser? get currentUser => _authState.value;
@@ -163,17 +187,17 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     return _authState.stream;
   }
 
-  @override
-  AuthUser getSelfNewInstance() {
-    return AuthUser();
-  }
-
-  void signIn() {
-    _authState.add(AppUser("98e99-some-test-uid-jkh37"));
+  void signIn(AuthUser user) {
+    _authState.add(user);
   }
 
   void signOut() {
     _authState.add(null);
+  }
+
+  @override
+  AuthUser getSelfNewInstance() {
+    return AuthUser();
   }
 
   @override

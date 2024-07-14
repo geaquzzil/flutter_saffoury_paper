@@ -13,12 +13,32 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class BaseAuthenticatingScreen extends StatelessWidget {
+@Deprecated("This will be removed in to do SplashScreen")
+class BaseAuthenticatingScreen extends StatefulWidget {
   const BaseAuthenticatingScreen({super.key});
 
   @override
+  State<BaseAuthenticatingScreen> createState() =>
+      _BaseAuthenticatingScreenState();
+}
+
+class _BaseAuthenticatingScreenState extends State<BaseAuthenticatingScreen> {
+  late AuthProvider authProvider;
+
+  @override
+  void initState() {
+    authProvider = Provider.of<AuthProvider<AuthUser>>(context);
+    onStartUp();
+    super.initState();
+  }
+
+  void onStartUp() async {
+    await authProvider.onAppStart(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
+    return getLoadingWidget();
     switch (authProvider.getStatus) {
       case Status.Initialization:
         return getLoadingWidget();
@@ -40,6 +60,7 @@ class BaseAuthenticatingScreen extends StatelessWidget {
   Widget getLoadingWidget() => Center(
       child: Lottie.network(
           "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json"));
+
   Widget getFutureDrawerItemsBuilder(
       BuildContext context, AuthProvider authProvider) {
     return FutureBuilder(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -83,287 +85,350 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 //https://assets5.lottiefiles.com/packages/lf20_kcsr6fcp.json
 class RouteGenerator {
-  static GoRouter? _instance;
-  static GoRouter instance(
-      {required BuildContext context, List<RouteBase>? addonRoutes}) {
-    _instance ??= _getGoRouter(context: context, addonRoutes: addonRoutes);
-    return _instance!;
+  AuthProvider appService;
+  GoRouter get router => _goRouter;
+  BuildContext context;
+  List<RouteBase>? addonRoutes;
+
+  RouteGenerator({
+    required this.appService,
+    required this.context,
+    this.addonRoutes,
+  });
+
+  String? getRouterAuth(GoRouterState state) {
+    final loginLocation = state.namedLocation(loginRouteName);
+    final homeLocation = state.namedLocation(homeRouteName);
+    final splashLocation = state.namedLocation("splash");
+    // final onboardLocation = state.namedLocation(APP_PAGE.onBoarding.toName);
+
+    final isLogedIn = appService.getUser.login == true;
+    final isInitialized = appService.getStatus == Status.Initialization;
+    // final isOnboarded = appService.onboarding;
+
+    final isGoingToLogin = state.path == loginLocation;
+    final isGoingToInit = state.path == splashLocation;
+    // final isGoingToOnboard = state.path == onboardLocation;
+
+    if (!isInitialized) {
+      return splashLocation;
+      // If not onboard and not going to onboard redirect to OnBoarding
+    } else if (isInitialized && isLogedIn) {
+      return homeLocation;
+      // If not logedin and not going to login redirect to Login
+    } else if (isInitialized && !isLogedIn && !isGoingToLogin) {
+      return loginLocation;
+      // If all the scenarios are cleared but still going to any of that screen redirect to Home
+    } else if ((isLogedIn && isGoingToLogin) ||
+        (isInitialized && isGoingToInit)) {
+      return homeLocation;
+    } else {
+      // Else Don't do anything
+      return null;
+    }
+    // if (!isInitialized && !isGoingToInit) {
+    //   return splashLocation;
+    // // If not onboard and not going to onboard redirect to OnBoarding
+    // } else if (isInitialized && !isOnboarded && !isGoingToOnboard) {
+    //   return onboardLocation;
+    // // If not logedin and not going to login redirect to Login
+    // } else if (isInitialized && isOnboarded && !isLogedIn && !isGoingToLogin) {
+    //   return loginLocation;
+    // // If all the scenarios are cleared but still going to any of that screen redirect to Home
+    // } else if ((isLogedIn && isGoingToLogin) || (isInitialized && isGoingToInit) || (isOnboarded && isGoingToOnboard)) {
+    //   return homeLocation;
+    // } else {
+    // // Else Don't do anything
+    //   return null;
+    // }
   }
 
-  static GoRouter _getGoRouter(
-      {required BuildContext context, List<RouteBase>? addonRoutes}) {
-    var provider = AuthProvider(AuthUser().authStateChanges());
-    return GoRouter(
-      initialLocation: '/',
-      refreshListenable: AuthProvider(AuthUser().authStateChanges()),
-      redirect: !kIsWeb
-          ? null
+  late final GoRouter _goRouter = GoRouter(
+    debugLogDiagnostics: true,
+    initialLocation: '/',
+    refreshListenable: appService,
+    redirect: !kIsWeb
+        ? (context, state) async {
+            return getRouterAuth(state);
+          }
 
-          // (context, state) async {
-          //     debugPrint(
-          //         "routes !kIsWeb path ${state.fullPath} ${state.name} ${state.uri}");
-          //     return null;
-          //   }
-          : (context, state) async {
-              debugPrint("routes kIsWeb path  ${state.fullPath}");
-              if (kIsWeb) {
-                if (state.fullPath == null) {
-                  return "/index";
-                } else if (state.fullPath == "/") {
-                  return "/index";
-                } else if (state.fullPath!.startsWith("/index")) {
-                  return state.fullPath;
-                } else {
-                  return "Error";
-                }
+        // (context, state) async {
+        //     debugPrint(
+        //         "routes !kIsWeb path ${state.fullPath} ${state.name} ${state.uri}");
+        //     return null;
+        //   }
+        : (context, state) async {
+            debugPrint("routes kIsWeb path  ${state.fullPath}");
+            if (kIsWeb) {
+              if (state.fullPath == null) {
+                return "/index";
+              } else if (state.fullPath == "/") {
+                return "/index";
+              } else if (state.fullPath!.startsWith("/index")) {
+                return state.fullPath;
+              } else {
+                return "Error";
               }
-              return null;
-            },
-      errorPageBuilder: (context, state) {
-        debugPrint("routes errorPageBuilder ${state.fullPath}");
-        return MaterialPage(
-          key: state.pageKey,
-          child: getErrorPage(),
-        );
-      },
-      // redirect: (context, state) {
+            }
+            return null;
+          },
+    errorPageBuilder: (context, state) {
+      debugPrint("routes errorPageBuilder ${state.fullPath}");
+      return MaterialPage(
+        key: state.pageKey,
+        child: getErrorPage(),
+      );
+    },
+    // redirect: (context, state) {
 
-      // },
-      routes: <RouteBase>[
-        GoRoute(
-            path: "/index",
-            name: indexWebRouteName,
-            pageBuilder: (context, state) =>
-                MaterialPage(key: state.pageKey, child: HomeWebPage()),
-            routes: [
-              GoRoute(
-                name: indexWebSignIn,
-                path: indexWebSignIn,
-                pageBuilder: (context, state) {
-                  return MaterialPage(key: state.pageKey, child: SignInPage());
-                },
-              ),
-              GoRoute(
-                path: IndexWebRegister,
-                name: IndexWebRegister,
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey, child: RegisterWebPage());
-                },
-              ),
-              GoRoute(
-                path: indexWebSettingAndAccount,
-                name: indexWebSettingAndAccount,
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: SettingAndProfileWebPage(
-                        currentSetting: state.pathParameters["action"],
-                      ));
-                },
-              ),
-              GoRoute(
-                path: indexReturnPrivecyPolicy,
-                name: indexReturnPrivecyPolicy,
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey, child: ReturnPrivecyPolicyWebPage());
-                },
-              ),
-              GoRoute(
-                path: indexWebContactUs,
-                name: indexWebContactUs,
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey, child: ContactUsWebPage());
-                },
-              ),
-              GoRoute(
-                path: "about-us",
-                name: indexWebAboutUs,
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey, child: AboutUsWebPage());
-                },
-              ),
-              GoRoute(
-                path: indexWebCheckout,
-                name: indexWebCheckout,
-                pageBuilder: (context, state) {
-                  return MaterialPage(key: state.pageKey, child: CheckoutWeb());
-                },
-              ),
-              GoRoute(
-                name: indexWebView,
-                path: "v/:tableName/:id",
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: WebProductView(
-                        iD: int.parse(state.pathParameters['id']!),
-                        tableName: state.pathParameters['tableName']!,
-                        extras: state.extra as ViewAbstract?,
-                      ));
-                },
-              ),
-              GoRoute(
-                name: indexWebMasterToList,
-                path: "list/:tableName",
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: WebMasterToList(
-                        iD: int.parse(state.uri.queryParameters['id']!),
-                        tableName: state.pathParameters['tableName']!,
-                        extras: state.extra as ViewAbstract?,
-                      ));
-                },
-              ),
-              GoRoute(
-                path: indexWebTermsAndConditions,
-                name: indexWebTermsAndConditions,
-                pageBuilder: (context, state) {
-                  return MaterialPage(child: TermsWebPage());
-                },
-              ),
-              GoRoute(
-                path: "products",
-                name: indexWebOurProducts,
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      child: ProductWebPage(
-                    searchQuery: state.uri.queryParameters["search"],
-                    customFilter: state.uri.queryParameters['filter'],
-                  ));
-                },
-              ),
-              GoRoute(
-                path: "services",
-                name: indexWebServices,
-                pageBuilder: (context, state) {
-                  return MaterialPage(child: ServicesWebPage());
-                },
-              )
-            ]),
-        GoRoute(
-            name: homeRouteName,
-            path: '/',
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              return const MaterialPage(child: BaseAuthenticatingScreen());
-            },
-            routes: [
-              GoRoute(
-                name: editRouteName,
-                path: "edit/:tableName/:id",
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: BaseEditNewPage(
-                        viewAbstract: state.extra as ViewAbstract,
-                      ));
-                },
-              ),
-              GoRoute(
-                name: addRouteName,
-                path: "add/:tableName",
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: BaseEditNewPage(
-                        viewAbstract: state.extra as ViewAbstract,
-                      ));
-                },
-              ),
-              GoRoute(
-                name: viewRouteName,
-                path: "view/:tableName/:id",
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: BaseViewNewPage(
-                        viewAbstract: state.extra as ViewAbstract,
-                      ));
-                },
-              ),
-              // GoRoute(
-              //   name: printRouteName,
-              //   path: "print/:tableName/:id",
-              //   pageBuilder: (context, state) {
-              //     debugPrint("go route name=> $printRouteName");
-              //     debugPrint("go route name=> ${state.extra}");
-              //     // return MaterialPage(key: state.pageKey, child: TestBasePage());
-
-              //     return MaterialPage(
-              //         key: state.pageKey,
-              //         child: PdfPage<PrintLocalSetting>(
-              //           iD: int.tryParse(state.pathParameters['id'] ?? "-"),
-              //           tableName: state.pathParameters['tableName'],
-              //           invoiceObj: state.extra as PrintableMaster?,
-              //         ));
-              //   },
-              // ),
-              GoRoute(
-                name: printRouteName,
-                path: "print/:tableName/:id",
-                pageBuilder: (context, state) {
-                  debugPrint("go route name=> $printRouteName");
-                  // debugPrint("go route name=> ${state.extra}");
-                  // return MaterialPage(key: state.pageKey, child: TestBasePage());
-
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: PdfPage<PrintLocalSetting>(
-                        iD: int.tryParse(state.pathParameters['id'] ?? "-"),
-                        tableName: state.pathParameters['tableName'],
-                        invoiceObj: state.extra as PrintableMaster?,
-                      ));
-                },
-              ),
-              GoRoute(
-                name: searchRouteName,
-                path: "search/:tableName",
-                pageBuilder: (context, state) {
-                  return MaterialPage(
-                      key: state.pageKey,
-                      child: SearchPage(
-                        // heroTag: (state.extra as List)[1],
-                        tableName: state.pathParameters["tableName"],
-                        viewAbstract: null,
-                        // viewAbstract: (state.extra as List)[0],
-                      ));
-                },
-              ),
-            ]),
-        GoRoute(
-          name: dashboardRouteName,
-          path: "/dashboard/list/:tableName",
-          pageBuilder: (context, state) {
-            return MaterialPage(
-                key: state.pageKey,
-                child: DashboardListDetails(
-                  list: (state.extra as List)[1],
-                  header: (state.extra as List)[0],
+    // },
+    routes: <RouteBase>[
+      GoRoute(
+          path: "/index",
+          name: indexWebRouteName,
+          pageBuilder: (context, state) =>
+              MaterialPage(key: state.pageKey, child: HomeWebPage()),
+          routes: [
+            GoRoute(
+              name: indexWebSignIn,
+              path: indexWebSignIn,
+              pageBuilder: (context, state) {
+                return MaterialPage(key: state.pageKey, child: SignInPage());
+              },
+            ),
+            GoRoute(
+              path: IndexWebRegister,
+              name: IndexWebRegister,
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey, child: RegisterWebPage());
+              },
+            ),
+            GoRoute(
+              path: indexWebSettingAndAccount,
+              name: indexWebSettingAndAccount,
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: SettingAndProfileWebPage(
+                      currentSetting: state.pathParameters["action"],
+                    ));
+              },
+            ),
+            GoRoute(
+              path: indexReturnPrivecyPolicy,
+              name: indexReturnPrivecyPolicy,
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey, child: ReturnPrivecyPolicyWebPage());
+              },
+            ),
+            GoRoute(
+              path: indexWebContactUs,
+              name: indexWebContactUs,
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey, child: ContactUsWebPage());
+              },
+            ),
+            GoRoute(
+              path: "about-us",
+              name: indexWebAboutUs,
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey, child: AboutUsWebPage());
+              },
+            ),
+            GoRoute(
+              path: indexWebCheckout,
+              name: indexWebCheckout,
+              pageBuilder: (context, state) {
+                return MaterialPage(key: state.pageKey, child: CheckoutWeb());
+              },
+            ),
+            GoRoute(
+              name: indexWebView,
+              path: "v/:tableName/:id",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: WebProductView(
+                      iD: int.parse(state.pathParameters['id']!),
+                      tableName: state.pathParameters['tableName']!,
+                      extras: state.extra as ViewAbstract?,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: indexWebMasterToList,
+              path: "list/:tableName",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: WebMasterToList(
+                      iD: int.parse(state.uri.queryParameters['id']!),
+                      tableName: state.pathParameters['tableName']!,
+                      extras: state.extra as ViewAbstract?,
+                    ));
+              },
+            ),
+            GoRoute(
+              path: indexWebTermsAndConditions,
+              name: indexWebTermsAndConditions,
+              pageBuilder: (context, state) {
+                return MaterialPage(child: TermsWebPage());
+              },
+            ),
+            GoRoute(
+              path: "products",
+              name: indexWebOurProducts,
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    child: ProductWebPage(
+                  searchQuery: state.uri.queryParameters["search"],
+                  customFilter: state.uri.queryParameters['filter'],
                 ));
+              },
+            ),
+            GoRoute(
+              path: "services",
+              name: indexWebServices,
+              pageBuilder: (context, state) {
+                return MaterialPage(child: ServicesWebPage());
+              },
+            )
+          ]),
+
+      GoRoute(
+        path: "/splash",
+        name: "splash",
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: BaseAuthenticatingScreen()),
+      ),
+      GoRoute(
+          name: homeRouteName,
+          path: '/',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return const MaterialPage(child: BaseDeterminePageState());
           },
-        ),
-        GoRoute(
-          name: posRouteName,
-          path: "/pos",
-          pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child: const POSPage());
-          },
-        ),
-        GoRoute(
-          name: loginRouteName,
-          path: "/login",
-          pageBuilder: (context, state) {
-            return MaterialPage(key: state.pageKey, child: SignInPage());
-          },
-        ),
-        if (addonRoutes != null) ...addonRoutes
-      ],
-    );
-  }
+          routes: [
+            // GoRoute(
+            //   path: "/splash",
+            //   name: "splash",
+            //   pageBuilder: (context, state) => MaterialPage(
+            //       key: state.pageKey, child: BaseAuthenticatingScreen()),
+            // ),
+            GoRoute(
+              name: editRouteName,
+              path: "edit/:tableName/:id",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: BaseEditNewPage(
+                      viewAbstract: state.extra as ViewAbstract,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: addRouteName,
+              path: "add/:tableName",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: BaseEditNewPage(
+                      viewAbstract: state.extra as ViewAbstract,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: viewRouteName,
+              path: "view/:tableName/:id",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: BaseViewNewPage(
+                      viewAbstract: state.extra as ViewAbstract,
+                    ));
+              },
+            ),
+            // GoRoute(
+            //   name: printRouteName,
+            //   path: "print/:tableName/:id",
+            //   pageBuilder: (context, state) {
+            //     debugPrint("go route name=> $printRouteName");
+            //     debugPrint("go route name=> ${state.extra}");
+            //     // return MaterialPage(key: state.pageKey, child: TestBasePage());
+
+            //     return MaterialPage(
+            //         key: state.pageKey,
+            //         child: PdfPage<PrintLocalSetting>(
+            //           iD: int.tryParse(state.pathParameters['id'] ?? "-"),
+            //           tableName: state.pathParameters['tableName'],
+            //           invoiceObj: state.extra as PrintableMaster?,
+            //         ));
+            //   },
+            // ),
+            GoRoute(
+              name: printRouteName,
+              path: "print/:tableName/:id",
+              pageBuilder: (context, state) {
+                debugPrint("go route name=> $printRouteName");
+                // debugPrint("go route name=> ${state.extra}");
+                // return MaterialPage(key: state.pageKey, child: TestBasePage());
+
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: PdfPage<PrintLocalSetting>(
+                      iD: int.tryParse(state.pathParameters['id'] ?? "-"),
+                      tableName: state.pathParameters['tableName'],
+                      invoiceObj: state.extra as PrintableMaster?,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: searchRouteName,
+              path: "search/:tableName",
+              pageBuilder: (context, state) {
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: SearchPage(
+                      // heroTag: (state.extra as List)[1],
+                      tableName: state.pathParameters["tableName"],
+                      viewAbstract: null,
+                      // viewAbstract: (state.extra as List)[0],
+                    ));
+              },
+            ),
+          ]),
+      GoRoute(
+        name: dashboardRouteName,
+        path: "/dashboard/list/:tableName",
+        pageBuilder: (context, state) {
+          return MaterialPage(
+              key: state.pageKey,
+              child: DashboardListDetails(
+                list: (state.extra as List)[1],
+                header: (state.extra as List)[0],
+              ));
+        },
+      ),
+      GoRoute(
+        name: posRouteName,
+        path: "/pos",
+        pageBuilder: (context, state) {
+          return MaterialPage(key: state.pageKey, child: const POSPage());
+        },
+      ),
+      GoRoute(
+        name: loginRouteName,
+        path: "/login",
+        pageBuilder: (context, state) {
+          return MaterialPage(key: state.pageKey, child: SignInPage());
+        },
+      ),
+      // if (addonRoutes != null) ...addonRoutes
+    ],
+  );
 
   static dynamic getFromExtra(Map<String, dynamic> extra) {
     // return ViewAbstract()..fromJsonViewAbstract(extra);
@@ -375,6 +440,7 @@ class RouteGenerator {
     );
   }
 
+  @Deprecated("")
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {

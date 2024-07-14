@@ -30,7 +30,6 @@ enum Status {
   Guest
 }
 
-
 class AuthProvider<T extends AuthUser> with ChangeNotifier {
   AuthProvider(Stream<dynamic> stream) {
     notifyListeners();
@@ -72,6 +71,17 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     return "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
   }
 
+  Future<void> onAppStart(BuildContext context) async {
+    await initFakeData();
+    await initDrawerItems(context);
+    // This is just to demonstrate the splash screen is working.
+    // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
+    await Future.delayed(const Duration(seconds: 2));
+
+    // _initialized = true;
+    notifyListeners();
+  }
+
   bool hasFinished() {
     return _hasFinishedUpSettingUp;
   }
@@ -105,7 +115,14 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
-    initFakeData();
+    _user = _initUser;
+    _subscription = _initUser.authStateChanges().asBroadcastStream().listen(
+      (dynamic _) {
+        debugPrint("initUser.authStateChanges() $_");
+        notifyListeners();
+      },
+    );
+    // initFakeData();
   }
   DashableInterface getDashableInterface() {
     return _drawerItems.whereType<DashableInterface>().first;
@@ -126,7 +143,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     );
   }
 
-  void initFakeData() async {
+  Future initFakeData() async {
     // await Future.delayed(const Duration(seconds: 2));
     try {
       _user = _initUser.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)))
@@ -135,7 +152,8 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       _status = Status.Authenticated;
       _permissions = _user.userlevels ?? PermissionLevelAbstract();
       hasSavedUser = true;
-      notifyListeners();
+
+      // notifyListeners();
     } catch (ex) {
       debugPrint("Error initial $ex");
     }

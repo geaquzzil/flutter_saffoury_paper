@@ -7,8 +7,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
@@ -33,10 +35,14 @@ class BaseMaterialAppPage extends StatefulWidget {
 
 class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   late LangaugeProvider langaugeProvider;
+  late AuthProvider authProvider;
+  late RouteGenerator routeGenerator;
   @override
   void initState() {
     super.initState();
     langaugeProvider = Provider.of<LangaugeProvider>(context, listen: false);
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
+    routeGenerator = RouteGenerator(appService: authProvider, context: context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       String? savedLang = await Configurations.getValueString("ln");
       if (savedLang != null) {
@@ -151,17 +157,13 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 debugShowCheckedModeBanner: false,
                 restorationScopeId: 'root',
 
-                routeInformationParser: RouteGenerator.instance(
-                        context: context, addonRoutes: this.widget.addOnRoutes)
-                    .routeInformationParser,
+                routeInformationParser:
+                    routeGenerator.router.routeInformationParser,
 
-                routerDelegate: RouteGenerator.instance(
-                        context: context, addonRoutes: this.widget.addOnRoutes)
-                    .routerDelegate,
+                routerDelegate: routeGenerator.router.routerDelegate,
 
-                routeInformationProvider: RouteGenerator.instance(
-                        context: context, addonRoutes: this.widget.addOnRoutes)
-                    .routeInformationProvider,
+                routeInformationProvider:
+                    routeGenerator.router.routeInformationProvider,
                 // routerDelegate: RouteGenerator.goRouter.routerDelegate,
                 // routeInformationProvider:
                 //     RouteGenerator.goRouter.routeInformationProvider,
