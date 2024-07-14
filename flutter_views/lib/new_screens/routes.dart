@@ -89,9 +89,10 @@ class RouteGenerator {
     _instance ??= _getGoRouter(context: context, addonRoutes: addonRoutes);
     return _instance!;
   }
-  
+
   static GoRouter _getGoRouter(
       {required BuildContext context, List<RouteBase>? addonRoutes}) {
+    var provider = AuthProvider(AuthUser().authStateChanges());
     return GoRouter(
       initialLocation: '/',
       refreshListenable: AuthProvider(AuthUser().authStateChanges()),
