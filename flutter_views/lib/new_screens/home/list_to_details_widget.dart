@@ -19,7 +19,7 @@ class ListToDetailsPage extends StatefulWidget {
   State<ListToDetailsPage> createState() => _ListToDetailsPageState();
 }
 
-class _ListToDetailsPageState extends BasePageWithApi<ListToDetailsPage> {
+class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
   @override
   Widget? getBaseAppbar() => null;
 
@@ -28,11 +28,6 @@ class _ListToDetailsPageState extends BasePageWithApi<ListToDetailsPage> {
 
   @override
   Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  Future getCallApiFunctionIfNull(BuildContext context,
-          {TabControllerHelper? tab}) =>
-      getExtras(tab: tab).callApi();
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) => getFirstPane(tab: tab);

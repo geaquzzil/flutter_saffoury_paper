@@ -35,47 +35,64 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 class BaseDeterminePageState extends StatelessWidget {
   const BaseDeterminePageState({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Selector<DrawerMenuControllerProvider,
-        ViewAbstractStandAloneCustomViewApi?>(
+    return Selector<
+        DrawerMenuControllerProvider,
+        Tuple3<ViewAbstract, ViewAbstractStandAloneCustomViewApi?,
+            ViewAbstract?>>(
       builder: (context, value, child) {
-        ViewAbstract? viewAbstract2 =
-            context.read<DrawerMenuControllerProvider>().getObject;
-        bool isInitViewAbstractCustomView =
-            viewAbstract2 is ViewAbstractStandAloneCustomViewApi;
-        if (viewAbstract2 is DashableInterface) {
-          return BaseDashboardMainPage(
+        ViewAbstract listable = value.item1;
+        ViewAbstract? dashboard = value.item3;
+        ViewAbstractStandAloneCustomViewApi? customView = value.item2;
+        if (dashboard != null) {
+          return const BaseDashboardMainPage(
             title: "D",
           );
-        }
-        if (value != null || isInitViewAbstractCustomView) {
-          // List<Widget>? fabs=value.();
-          value ??= viewAbstract2 as ViewAbstractStandAloneCustomViewApi;
-          return Text("sds");
-          // return Scaffold(
-          //     key: drawerMenuControllerProvider.getStartDrawableKey,
-          //     drawer: drawer,
-          //     endDrawer: const BaseHomeCartPage(),
-          //     floatingActionButton:
-          //         value.getCustomFloatingActionWidget(context),
-          //     body: shouldWrapNavigatorChild(
-          //         context, getSliverPadding(context, value),
-          //         isCustomWidget: true));
+        } else if (customView != null) {
+          return MasterViewStandAlone(viewAbstract: customView);
         } else {
-          return ListToDetailsPage(
+          return const ListToDetailsPage(
             title: "SOSO",
           );
         }
+        // bool isInitViewAbstractCustomView =
+        //     viewAbstract2 is ViewAbstractStandAloneCustomViewApi;
+        // if (viewAbstract2 is DashableInterface) {
+        //   return BaseDashboardMainPage(
+        //     title: "D",
+        //   );
+        // }
+        // if (value != null || isInitViewAbstractCustomView) {
+        //   // List<Widget>? fabs=value.();
+        //   value ??= viewAbstract2 as ViewAbstractStandAloneCustomViewApi;
+        //   return Text("sds");
+        //   // return Scaffold(
+        //   //     key: drawerMenuControllerProvider.getStartDrawableKey,
+        //   //     drawer: drawer,
+        //   //     endDrawer: const BaseHomeCartPage(),
+        //   //     floatingActionButton:
+        //   //         value.getCustomFloatingActionWidget(context),
+        //   //     body: shouldWrapNavigatorChild(
+        //   //         context, getSliverPadding(context, value),
+        //   //         isCustomWidget: true));
+        // } else {
+        //   return ListToDetailsPage(
+        //     title: "SOSO",
+        //   );
+        // }
       },
-      selector: (p0, p1) => p1.getStandAloneCustomView,
+      selector: (p0, p1) =>
+          Tuple3(p1.getObject, p1.getStandAloneCustomView, p1.getDashboard),
     );
   }
 }

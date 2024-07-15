@@ -169,6 +169,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   double getCustomPaneProportion() {
     {
+      debugPrint("getCustomPaneProportion called");
       if (MediaQuery.of(context).hinge != null) return 0.5;
       if (SizeConfig.isMediumFromScreenSize(context)) {
         return 0.5;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -137,13 +138,18 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onDrawerItemClicked(BuildContext context) {
     debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
     if (this is DashableInterface) {
-      //TODO Navigator.pushNamed(context, "/dashboard", arguments: this);
-      return;
+      context
+          .read<DrawerMenuControllerProvider>()
+          .changeToDashboard(context, getSelfNewInstance() as ViewAbstract);
+      debugPrint('onDrawerItemClicked=> dashboard');
+    } else if (this is ViewAbstractStandAloneCustomViewApi) {
+      debugPrint('onDrawerItemClicked=> ViewAbstractStandAloneCustomViewApi');
+    } else {
+      debugPrint('onDrawerItemClicked=> listable');
+      context
+          .read<DrawerMenuControllerProvider>()
+          .change(context, getSelfNewInstance() as ViewAbstract);
     }
-    //Navigator.of(context).pop();
-    context
-        .read<DrawerMenuControllerProvider>()
-        .change(context, getSelfNewInstance() as ViewAbstract);
   }
 
   ListTile getDrawerListTitle(BuildContext context) {
