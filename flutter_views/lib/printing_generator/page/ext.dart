@@ -112,6 +112,7 @@ Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
           pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
     }
   }
+
   if (pls == null) {
     if (firstObj is ModifiablePrintableInterface) {
       pls = (firstObj as ModifiablePrintableInterface)

@@ -3,6 +3,9 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/actions/list_multi_key_provider.dart';
@@ -12,7 +15,7 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
   int? iD;
   String? tableName;
   C? extras;
-  
+
   BaseApiCallPageState({this.iD, this.tableName, this.extras});
   Future<C?> getCallApiFunctionIfNull(BuildContext context);
   Widget buildAfterCall(BuildContext context, C newObject);
@@ -37,10 +40,38 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
     return res;
   }
 
+  Widget beforeBuildAfterCall(BuildContext context) {
+    return ScreenHelperSliver(
+        requireAutoPadding: false,
+        onChangeLayout: (w, h, c) {},
+        mobile: (w, h) {
+          return buildAfterCall(context, extras as C);
+        },
+        smallTablet: (w, h) {
+          WidgetsBinding.instance.addPostFrameCallback((v) {
+            context.pushNamed(homeRouteName);
+          });
+
+          return buildAfterCall(context, extras as C);
+        },
+        largeTablet: (w, h) {
+          WidgetsBinding.instance.addPostFrameCallback((v) {
+            context.pushNamed(homeRouteName);
+          });
+          return buildAfterCall(context, extras as C);
+        },
+        desktop: (w, h) {
+          WidgetsBinding.instance.addPostFrameCallback((v) {
+            context.pushNamed(homeRouteName);
+          });
+          return buildAfterCall(context, extras as C);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (extras != null && getBodyWithoutApi()) {
-      return buildAfterCall(context, extras as C);
+      return beforeBuildAfterCall(context);
     }
 
     return FutureBuilder<C?>(
@@ -65,7 +96,7 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
                     .edit(extras as ViewAbstract);
               });
             }
-            return buildAfterCall(context, snapshot.data as C);
+            return beforeBuildAfterCall(context);
           } else {
             return EmptyWidget(
                 lottiUrl:

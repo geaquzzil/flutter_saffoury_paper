@@ -51,6 +51,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late T _initUser;
   late ViewAbstract _orderSimple;
   Status _status = Status.Initialization;
+  bool _isInitialized = false;
+  bool get isInitialized => this._isInitialized;
+
+  set isInitialized(bool value) => this._isInitialized = value;
   bool _hasFinishedUpSettingUp = false;
   bool hasSavedUser = false;
   late PermissionLevelAbstract _permissions;
@@ -72,7 +76,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   Future<void> onAppStart(BuildContext context) async {
-
     await initFakeData();
     await initDrawerItems(context);
     // This is just to demonstrate the splash screen is working.

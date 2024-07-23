@@ -86,7 +86,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   void onCardClicked(BuildContext context, {bool isMain = true}) {
     debugPrint("Card Clicked");
-    if (SizeConfig.hasSecondScreen(context)) {
+
+    if (getCurrentScreenSizeStatic(context) != CurrentScreenSize.MOBILE) {
       context.read<ActionViewAbstractProvider>().change(
           (this as ViewAbstract).getCopyInstance(), ServerActions.view,
           isMain: isMain);
@@ -96,6 +97,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void viewPage(BuildContext context) {
+    debugPrint("viewPage called");
     context.pushNamed(viewRouteName,
         pathParameters: {
           "tableName": getTableNameApi() ?? "",

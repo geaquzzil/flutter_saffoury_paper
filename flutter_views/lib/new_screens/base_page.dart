@@ -201,6 +201,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
   generateToolbar({Widget? customAppBar, bool? firstPane}) {
+    Widget? baseAppbar = getBaseAppbar();
     return AppBar(
         surfaceTintColor: Colors.transparent,
         // automaticallyImplyLeading: false,
@@ -210,10 +211,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         backgroundColor: customAppBar != null
             ? ElevationOverlay.overlayColor(context, 2)
             : null,
-        toolbarHeight: customAppBar == null ? 100 : null,
+        toolbarHeight: customAppBar == null
+            ? baseAppbar == null
+                ? null
+                : 100
+            : null,
         // backgroundColor: ElevationOverlay.overlayColor(context, 2),
         // leading: ,
-        title: customAppBar ?? getBaseAppbar()!,
+        title: customAppBar ?? baseAppbar,
         leading: showHamburger(getCurrentScreenSize())
             ? IconButton(
                 icon: const Icon(Icons.menu),
@@ -569,7 +574,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getBaseFloatingActionButton(),
-        key: _drawerMenuControllerProvider.getStartDrawableKey,
+        //TODO DublicatedKey key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: _drawerWidget,
         body: _getBody());
 

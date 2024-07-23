@@ -7,19 +7,19 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter/material.dart';
 
-class ListToDetailsPage extends StatefulWidget {
+class ListToDetailsPageNew extends StatefulWidget {
   final String title;
 
-  const ListToDetailsPage({
+  const ListToDetailsPageNew({
     super.key,
     required this.title,
   });
 
   @override
-  State<ListToDetailsPage> createState() => _ListToDetailsPageState();
+  State<ListToDetailsPageNew> createState() => _ListToDetailsPageNewState();
 }
 
-class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
+class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   Widget? getBaseAppbar() => null;
 

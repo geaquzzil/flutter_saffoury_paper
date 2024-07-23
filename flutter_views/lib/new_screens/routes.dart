@@ -97,12 +97,16 @@ class RouteGenerator {
 
   String? getRouterAuth(GoRouterState state) {
     final loginLocation = state.namedLocation(loginRouteName);
-    final homeLocation = state.namedLocation(homeRouteName);
+    var homeLocation = state.namedLocation(homeRouteName);
     final splashLocation = state.namedLocation("splash");
+
+    // homeLocation=state.namedLocation("listable",pathParameters: {"tableName": "products","iD":"213"});
     // final onboardLocation = state.namedLocation(APP_PAGE.onBoarding.toName);
 
     final isLogedIn = appService.getUser.login == true;
     final isInitialized = appService.getStatus == Status.Initialization;
+    final isAuthenticated = appService.getStatus == Status.Authenticated;
+    final isFinishedInitialization = appService.isInitialized;
     // final isOnboarded = appService.onboarding;
 
     final isGoingToLogin = state.path == loginLocation;
@@ -114,16 +118,19 @@ class RouteGenerator {
     if (isInitialized) {
       return splashLocation;
       // If not onboard and not going to onboard redirect to OnBoarding
-    } else if (isLogedIn) {
+    } else if (isLogedIn && !isFinishedInitialization) {
+      appService.isInitialized = true;
       return homeLocation;
       // If not logedin and not going to login redirect to Login
-    } else if (isInitialized && !isLogedIn && !isGoingToLogin) {
-      return loginLocation;
-      // If all the scenarios are cleared but still going to any of that screen redirect to Home
-    } else if ((isLogedIn && isGoingToLogin) ||
-        (isInitialized && isGoingToInit)) {
-      return homeLocation;
-    } else {
+    }
+    // else if (isInitialized && !isLogedIn && !isGoingToLogin) {
+    //   return loginLocation;
+    //   // If all the scenarios are cleared but still going to any of that screen redirect to Home
+    // } else if ((isLogedIn && isGoingToLogin) ||
+    //     (isInitialized && isGoingToInit)) {
+    //   return homeLocation;
+    // }
+    else {
       // Else Don't do anything
       return null;
     }
@@ -301,12 +308,6 @@ class RouteGenerator {
           ]),
 
       GoRoute(
-        path: "/splash",
-        name: "splash",
-        pageBuilder: (context, state) =>
-            MaterialPage(key: state.pageKey, child: BaseAuthenticatingScreen()),
-      ),
-      GoRoute(
           name: homeRouteName,
           path: '/',
           pageBuilder: (BuildContext context, GoRouterState state) {
@@ -314,10 +315,17 @@ class RouteGenerator {
           },
           routes: [
             // GoRoute(
-            //   path: "/splash",
-            //   name: "splash",
-            //   pageBuilder: (context, state) => MaterialPage(
-            //       key: state.pageKey, child: BaseAuthenticatingScreen()),
+            //   name: "listable",
+            //   path: ":tableName",
+            //   pageBuilder: (context, state) {
+            //     return MaterialPage(
+            //         key: state.pageKey,
+            //         child: WebMasterToList(
+            //           iD: int.parse(state.uri.queryParameters['id']!),
+            //           tableName: state.pathParameters['tableName']!,
+            //           extras: state.extra as ViewAbstract?,
+            //         ));
+            //   },
             // ),
             GoRoute(
               name: editRouteName,
@@ -345,6 +353,7 @@ class RouteGenerator {
               name: viewRouteName,
               path: "view/:tableName/:id",
               pageBuilder: (context, state) {
+                debugPrint("BaseViewNewPage");
                 return MaterialPage(
                     key: state.pageKey,
                     child: BaseViewNewPage(
@@ -352,23 +361,6 @@ class RouteGenerator {
                     ));
               },
             ),
-            // GoRoute(
-            //   name: printRouteName,
-            //   path: "print/:tableName/:id",
-            //   pageBuilder: (context, state) {
-            //     debugPrint("go route name=> $printRouteName");
-            //     debugPrint("go route name=> ${state.extra}");
-            //     // return MaterialPage(key: state.pageKey, child: TestBasePage());
-
-            //     return MaterialPage(
-            //         key: state.pageKey,
-            //         child: PdfPage<PrintLocalSetting>(
-            //           iD: int.tryParse(state.pathParameters['id'] ?? "-"),
-            //           tableName: state.pathParameters['tableName'],
-            //           invoiceObj: state.extra as PrintableMaster?,
-            //         ));
-            //   },
-            // ),
             GoRoute(
               name: printRouteName,
               path: "print/:tableName/:id",
@@ -419,6 +411,12 @@ class RouteGenerator {
         pageBuilder: (context, state) {
           return MaterialPage(key: state.pageKey, child: const POSPage());
         },
+      ),
+      GoRoute(
+        path: "/splash",
+        name: "splash",
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: BaseAuthenticatingScreen()),
       ),
       GoRoute(
         name: loginRouteName,

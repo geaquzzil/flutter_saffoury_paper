@@ -92,8 +92,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   GlobalKey<DraggableHomeState> draggableHomeState =
       GlobalKey<DraggableHomeState>();
 
-  Map<int, GlobalKey<ListCardItemEditableState>> _listCardItemEditableState =
-      {};
+  final Map<int, GlobalKey<ListCardItemEditableState>>
+      _listCardItemEditableState = {};
 
   @override
   void dispose() {

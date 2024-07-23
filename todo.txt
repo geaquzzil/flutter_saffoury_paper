@@ -1,0 +1,11 @@
+
+    ListToDetails:
+        Desktop: On Click show detail
+        Fold: On Click show detail
+        Tablet: On Click show detail
+        Mobile: Navigate to detail page
+
+
+                ----------------------------------------------------------------
+        
+        Second pane: if mobile then Navigate to detail page

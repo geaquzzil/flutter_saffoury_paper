@@ -139,7 +139,18 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   FormBuilderLocalizations.delegate,
                 ],
                 builder: (context, widget) => ResponsiveBreakpoints.builder(
-                  child: ClampingScrollWrapper.builder(context, widget!),
+                  child: ClampingScrollWrapper.builder(
+                    context,
+                    MediaQuery(
+                      data: MediaQuery.of(context).copyWith(
+                        textScaler: MediaQuery.of(context)
+                            .textScaler
+                            .clamp(minScaleFactor: 0.8, maxScaleFactor: 1.6),
+                      ),
+                      child: widget!,
+                    ),
+                  ),
+
                   // defaultScale: true,
                   breakpoints: [
                     const Breakpoint(start: 0, end: 450, name: MOBILE),

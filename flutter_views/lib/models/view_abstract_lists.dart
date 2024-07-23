@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -67,6 +66,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       {required BuildContext context,
       required Widget child,
       String? addCustomHeroTag}) {
+    return child;
     return Hero(
         tag: getIDFormat(context) +
             (getTableNameApi() ?? "") +
@@ -332,8 +332,6 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {
     onPopupMenuActionSelected(context, e);
   }
-
-
 
   void onPopupMenuActionSelected(
       BuildContext context, MenuItemBuild result) async {

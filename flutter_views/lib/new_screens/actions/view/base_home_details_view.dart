@@ -8,6 +8,19 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+class BaseDetailsPage extends StatefulWidget {
+  const BaseDetailsPage({super.key});
+
+  @override
+  State<BaseDetailsPage> createState() => _BaseDetailsPageState();
+}
+
+class _BaseDetailsPageState extends State<BaseDetailsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
 
 class BaseSharedDetailsView extends StatelessWidget {
   ViewAbstract? viewAbstract;

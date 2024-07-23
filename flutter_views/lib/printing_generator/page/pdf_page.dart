@@ -271,7 +271,10 @@ class _PdfPageState<T extends PrintLocalSetting>
 
   @override
   Future<ViewAbstract?>? getSettingObject(BuildContext context) {
-    if (getExtras() == null) return null;
+    if (getExtras() == null) {
+      debugPrint("getExtras == null");
+      return null;
+    }
     return getSettingLoadDefaultIfNull(context, getExtras()!);
   }
 
@@ -279,6 +282,7 @@ class _PdfPageState<T extends PrintLocalSetting>
   ViewAbstract getMainObject() {
     return getExtras() as ViewAbstract;
   }
+
   @override
   ServerActions getServerActions() {
     return ServerActions.view;

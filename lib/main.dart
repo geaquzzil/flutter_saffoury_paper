@@ -66,8 +66,30 @@ import 'models/products/products_types.dart';
 
 String svgCode = '';
 
+class ErrorLogger {
+  void logError(FlutterErrorDetails details) async {
+    //FlutterError.dumpErrorToConsole(details);
+    _sendToServer(details.exceptionAsString(), details.stack.toString());
+  }
+
+  void log(Object data, StackTrace stackTrace) async {
+    // print(data);
+    // print(stackTrace);
+    _sendToServer(data.toString(), stackTrace.toString());
+  }
+
+  void _sendToServer(String a, String b) async {
+    debugPrint("error:\na:$a\nb:$b");
+    // Implementation here
+  }
+}
+
 void main() async {
   initializeReflectable();
+
+  FlutterError.onError = (FlutterErrorDetails details) async {
+    ErrorLogger().logError(details);
+  };
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;

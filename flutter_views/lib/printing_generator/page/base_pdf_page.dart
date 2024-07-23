@@ -13,7 +13,7 @@ import 'package:tuple/tuple.dart';
 import '../../configrations.dart';
 
 abstract class BasePdfPage extends StatefulWidget {
-  BasePdfPage({super.key});
+  const BasePdfPage({super.key});
 }
 
 abstract class BasePdfPageState<T extends BasePdfPage, C>

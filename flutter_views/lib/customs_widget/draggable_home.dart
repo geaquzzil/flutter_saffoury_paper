@@ -177,6 +177,7 @@ class DraggableHomeState extends State<DraggableHome>
     isFullyExpanded.close();
     isFullyCollapsed.close();
     _tabController?.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -247,8 +248,7 @@ class DraggableHomeState extends State<DraggableHome>
                 wrapWithSafeArea: true,
                 child: ColoredTabBar(
                   useCard: false,
-                  color:
-                      Theme.of(context).colorScheme.surface.withOpacity(.9),
+                  color: Theme.of(context).colorScheme.surface.withOpacity(.9),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(
