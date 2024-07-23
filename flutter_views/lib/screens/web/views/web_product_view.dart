@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+@immutable
 class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
@@ -137,6 +138,7 @@ class WebProductView extends BaseWebPageSliversApi {
           Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
               child: ClipRRect(
+                
                 borderRadius: BorderRadius.circular(kBorderRadius / 2),
                 child: WebProductImages(
                   item: extras!,

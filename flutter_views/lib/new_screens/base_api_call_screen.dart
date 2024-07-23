@@ -41,6 +41,7 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
   }
 
   Widget beforeBuildAfterCall(BuildContext context) {
+    return buildAfterCall(context, extras as C);
     return ScreenHelperSliver(
         requireAutoPadding: false,
         onChangeLayout: (w, h, c) {},

@@ -1,9 +1,11 @@
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +22,7 @@ class ListToDetailsPageNew extends StatefulWidget {
 }
 
 class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
+  ValueNotifier<ViewAbstract?> dsada = ValueNotifier<ViewAbstract?>(null);
   @override
   Widget? getBaseAppbar() => null;
 
@@ -39,12 +42,28 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
 
   @override
   getFirstPane({TabControllerHelper? tab}) {
-    return SliverApiMaster();
+    return SliverApiMaster(
+      onSelectedCardChangeValueNotifier: dsada,
+    );
   }
 
   @override
   getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return BaseSharedDetailsView();
+    return ValueListenableBuilder(
+      valueListenable: dsada,
+      builder: (context, value, child) {
+        if (value == null) {
+          return Text("NULL");
+        }
+        return WebProductView(
+          iD: int.parse(value.getIDString()),
+          buildFooter: false,
+          tableName: value.getTableNameApi()!,
+          extras: value,
+        );
+      },
+    );
+
   }
 
   @override
@@ -72,7 +91,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => !firstPane;
 
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
@@ -80,5 +99,5 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
       false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => true;
 }

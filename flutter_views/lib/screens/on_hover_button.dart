@@ -78,6 +78,12 @@ class _HoverImageState extends State<HoverImage>
   late bool isHovered;
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     isHovered = false;

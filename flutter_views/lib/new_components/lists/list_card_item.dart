@@ -42,10 +42,12 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   Key? listState;
   bool selectionMood;
+  ValueNotifier<ViewAbstract?>? onSelectedItem;
   ListCardItem({
     Key? key,
     this.listState,
     this.selectionMood = false,
+    this.onSelectedItem,
     required this.object,
   }) : super(key: GlobalKey());
 
@@ -82,7 +84,13 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
     return ListTile(
         selected: isSelected,
         // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-        onTap: () => object.onCardClicked(context),
+        onTap: () {
+          if (onSelectedItem != null) {
+            onSelectedItem!.value = object;
+          } else {
+            object.onCardClicked(context);
+          }
+        },
         onLongPress: () {
           object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
         },

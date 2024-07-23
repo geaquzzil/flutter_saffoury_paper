@@ -46,6 +46,7 @@ class SliverApiMaster extends StatefulWidget {
   List<ViewAbstract>? initialSelectedList;
   void Function(List<ViewAbstract> selectedList)? onSelectedListChange;
   ValueNotifier<List<ViewAbstract>>? onSelectedListChangeValueNotifier;
+  ValueNotifier<ViewAbstract?>? onSelectedCardChangeValueNotifier;
   ViewAbstract? setParentForChild;
   final bool showLeadingAsHamborg;
   @Deprecated("message")
@@ -66,6 +67,7 @@ class SliverApiMaster extends StatefulWidget {
       this.onSelectedListChange,
       this.currentScreenSize,
       this.onSelectedListChangeValueNotifier,
+      this.onSelectedCardChangeValueNotifier,
       this.fetshListAsSearch = false,
       this.buildFabIfMobile = true});
 
@@ -527,7 +529,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                   onSelectedItem(obj, isSelected);
                 },
                 object: va)
-            : ListCardItem(object: va);
+            : ListCardItem(
+                object: va,
+                onSelectedItem: widget.onSelectedCardChangeValueNotifier,
+              );
       }, childCount: count + (isLoading ? 1 : 0))),
     );
   }

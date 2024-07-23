@@ -365,7 +365,8 @@ class RouteGenerator {
               name: printRouteName,
               path: "print/:tableName/:id",
               pageBuilder: (context, state) {
-                debugPrint("go route name=> $printRouteName");
+                debugPrint(
+                    "go route name=> $printRouteName extras=> ${state.extra}");
                 // debugPrint("go route name=> ${state.extra}");
                 // return MaterialPage(key: state.pageKey, child: TestBasePage());
 
