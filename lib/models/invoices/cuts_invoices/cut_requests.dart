@@ -282,7 +282,7 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action,ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
+      {ServerActions? action,ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     if ((action == ServerActions.view || action == ServerActions.edit) &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {
@@ -368,7 +368,7 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
+      {ServerActions? action,ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     if (action == ServerActions.view) {
       return [
         ListHorizontalApiAutoRestWidget(

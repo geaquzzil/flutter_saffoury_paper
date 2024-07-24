@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -370,9 +371,18 @@ class RouteGenerator {
                 // debugPrint("go route name=> ${state.extra}");
                 // return MaterialPage(key: state.pageKey, child: TestBasePage());
 
+                // return MaterialPage(
+                //     key: state.pageKey,
+                //     child: PdfPage<PrintLocalSetting>(
+                //       iD: int.tryParse(state.pathParameters['id'] ?? "-"),
+                //       tableName: state.pathParameters['tableName'],
+                //       invoiceObj: state.extra as PrintableMaster?,
+                //     ));
+
+                    
                 return MaterialPage(
                     key: state.pageKey,
-                    child: PdfPage<PrintLocalSetting>(
+                    child: PdfPageNew<PrintLocalSetting>(
                       iD: int.tryParse(state.pathParameters['id'] ?? "-"),
                       tableName: state.pathParameters['tableName'],
                       invoiceObj: state.extra as PrintableMaster?,

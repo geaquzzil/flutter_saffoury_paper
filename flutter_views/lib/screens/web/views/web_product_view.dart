@@ -21,7 +21,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
-  ValueNotifier<ViewAbstract>? onHorizontalItemClick;
+  ValueNotifier<ViewAbstract?>? onHorizontalItemClick;
   WebProductView(
       {super.key,
       super.extras,

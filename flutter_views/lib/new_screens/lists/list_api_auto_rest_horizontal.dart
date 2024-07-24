@@ -25,7 +25,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   String? titleString;
   bool isSliver;
   Widget Function(ViewAbstract v)? listItembuilder;
-  ValueNotifier<ViewAbstract>? valueNotifier;
+  ValueNotifier<ViewAbstract?>? valueNotifier;
   ListHorizontalApiAutoRestWidget(
       {super.key,
       this.autoRest,

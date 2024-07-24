@@ -208,11 +208,11 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {}
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {}
 
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {}
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {}
 }
 
 class ListableDataRow {

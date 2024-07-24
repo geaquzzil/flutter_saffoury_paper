@@ -835,7 +835,7 @@ class Product extends ViewAbstract<Product>
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -874,7 +874,7 @@ class Product extends ViewAbstract<Product>
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     return [
       if (action != ServerActions.edit)
         ProductTopWidget(

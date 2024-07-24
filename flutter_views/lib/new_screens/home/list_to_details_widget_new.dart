@@ -56,6 +56,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
           return Text("NULL");
         }
         return WebProductView(
+          onHorizontalItemClick: dsada,
           iD: int.parse(value.getIDString()),
           buildFooter: false,
           tableName: value.getTableNameApi()!,
@@ -63,7 +64,6 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
         );
       },
     );
-
   }
 
   @override
