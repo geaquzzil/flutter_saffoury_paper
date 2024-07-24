@@ -25,6 +25,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   String? titleString;
   bool isSliver;
   Widget Function(ViewAbstract v)? listItembuilder;
+  ValueNotifier<ViewAbstract>? valueNotifier;
   ListHorizontalApiAutoRestWidget(
       {super.key,
       this.autoRest,
@@ -33,6 +34,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
       this.titleString,
       this.isSliver = false,
       this.customHeight,
+      this.valueNotifier,
       this.listItembuilder})
       : assert(list != null || autoRest != null);
 
@@ -130,6 +132,11 @@ class _ListHorizontalApiWidgetState
             }
             Widget currentTile = WebGridViewItem(
               setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+              onPress: widget.valueNotifier == null
+                  ? null
+                  : () {
+                      widget.valueNotifier!.value = data[index];
+                    },
               // setDescriptionAtBottom: !kIsWeb,
               item: data[index],
             );

@@ -21,6 +21,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
+  ValueNotifier<ViewAbstract>? onHorizontalItemClick;
   WebProductView(
       {super.key,
       super.extras,
@@ -32,6 +33,7 @@ class WebProductView extends BaseWebPageSliversApi {
       this.usePaddingOnBottomWidgets = false,
       super.pinToolbar,
       super.useSmallFloatingBar,
+      this.onHorizontalItemClick,
       super.customSliverHeader});
 
   @override
@@ -75,16 +77,18 @@ class WebProductView extends BaseWebPageSliversApi {
   }
 
   List<Widget> getTopWidget(BuildContext context) {
-    List<Widget>? topWidget =
-        getExtras()?.getCustomTopWidget(context, action: getServerActions());
+    List<Widget>? topWidget = getExtras()?.getCustomTopWidget(context,
+        action: getServerActions(),
+        onHorizontalListItemClicked: onHorizontalItemClick);
     if (topWidget == null) return [];
     return topWidget;
   }
 
   List<Widget> getBottomWidget(
       BuildContext context, BoxConstraints constraint) {
-    List<Widget>? bottomWidget =
-        getExtras()?.getCustomBottomWidget(context, action: getServerActions());
+    List<Widget>? bottomWidget = getExtras()?.getCustomBottomWidget(context,
+        action: getServerActions(),
+        onHorizontalListItemClicked: onHorizontalItemClick);
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (buildSmallView ?? false) {
@@ -138,7 +142,6 @@ class WebProductView extends BaseWebPageSliversApi {
           Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
               child: ClipRRect(
-                
                 borderRadius: BorderRadius.circular(kBorderRadius / 2),
                 child: WebProductImages(
                   item: extras!,

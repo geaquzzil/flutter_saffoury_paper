@@ -393,7 +393,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action}) {
+      {ServerActions? action,ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();

@@ -85,7 +85,7 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
 
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action}) {
+      {ServerActions? action,ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
     if (isNew()) {
       if (parent is CutRequest) {
         if ((parent as CutRequest).products == null) {

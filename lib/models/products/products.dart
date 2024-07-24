@@ -834,7 +834,8 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action}) {
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -842,6 +843,7 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
+        valueNotifier: onHorizontalListItemClicked,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
             range: 5,
@@ -849,6 +851,7 @@ class Product extends ViewAbstract<Product>
             key: "similarProducts${getSimilarCustomParams(context)}"),
       ),
       ListHorizontalApiAutoRestWidget(
+        valueNotifier: onHorizontalListItemClicked,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,
@@ -870,7 +873,8 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action}) {
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract>? onHorizontalListItemClicked}) {
     return [
       if (action != ServerActions.edit)
         ProductTopWidget(

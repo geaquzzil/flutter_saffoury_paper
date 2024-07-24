@@ -60,24 +60,46 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         secondaryBackground: object.getDismissibleSecondaryBackground(context),
         onDismissed: (direction) =>
             object.onCardDismissedView(context, direction),
-        child: Selector<ActionViewAbstractProvider, ViewAbstract?>(
-          builder: (context, value, child) {
-            bool isLargeScreen = SizeConfig.isLargeScreen(context);
-            bool isSelected =
-                (value?.isEquals(object) ?? false) && isLargeScreen;
-            return isSelected
-                ? CardCorner(
-                    key: UniqueKey(),
-                    // color: Theme.of(context).highlightColor,
-                    // borderSide: BorderSideColor.END,
-                    // elevation: 0,
-                    // color: Theme.of(context).colorScheme.primary,
-                    child: getListTile(isSelected, context),
-                  )
-                : getListTile(isSelected, context);
-          },
-          selector: (p0, p1) => p1.getObject,
-        ));
+        child: getCard());
+  }
+
+  Widget getCard() {
+    if (onSelectedItem != null) {
+      return ValueListenableBuilder(
+        valueListenable: onSelectedItem!,
+        builder: (context, value, child) {
+          bool isLargeScreen = SizeConfig.isLargeScreen(context);
+          bool isSelected = (value?.isEquals(object) ?? false) && isLargeScreen;
+          return isSelected
+              ? CardCorner(
+                  key: UniqueKey(),
+                  // color: Theme.of(context).highlightColor,
+                  // borderSide: BorderSideColor.END,
+                  // elevation: 0,
+                  // color: Theme.of(context).colorScheme.primary,
+                  child: getListTile(isSelected, context),
+                )
+              : getListTile(isSelected, context);
+        },
+      );
+    }
+    return Selector<ActionViewAbstractProvider, ViewAbstract?>(
+      builder: (context, value, child) {
+        bool isLargeScreen = SizeConfig.isLargeScreen(context);
+        bool isSelected = (value?.isEquals(object) ?? false) && isLargeScreen;
+        return isSelected
+            ? CardCorner(
+                key: UniqueKey(),
+                // color: Theme.of(context).highlightColor,
+                // borderSide: BorderSideColor.END,
+                // elevation: 0,
+                // color: Theme.of(context).colorScheme.primary,
+                child: getListTile(isSelected, context),
+              )
+            : getListTile(isSelected, context);
+      },
+      selector: (p0, p1) => p1.getObject,
+    );
   }
 
   Widget getListTile(bool isSelected, BuildContext context) {

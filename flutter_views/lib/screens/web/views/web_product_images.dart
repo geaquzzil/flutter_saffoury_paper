@@ -10,6 +10,24 @@ class WebProductImages extends StatelessWidget {
   final ViewAbstract item;
   const WebProductImages({super.key, required this.item});
 
+
+// 139 x 70 x45
+// 35 => 70
+// 69 => 100
+// 100 => 70
+
+// 102 =>60
+
+// 72 => 100
+
+
+
+// adnan al asdi 
+//   143  =>52  => 90 330g
+//     52 => 100  1750 sheet 
+//     90 => 100  1750 sheet 
+// 
+
   @override
   Widget build(BuildContext context) {
     return item.getHeroTag(
