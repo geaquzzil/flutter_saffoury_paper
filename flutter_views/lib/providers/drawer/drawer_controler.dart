@@ -4,12 +4,27 @@ import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
 
+enum DrawerMenuControllerProviderAction {
+  list_to_details,
+  custom,
+  dashboard,
+  print,
+  view,
+}
+
 class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
   Map<String, GlobalKey<ScaffoldState>> _startDrawerKeyWeb = {};
   ViewAbstract _object;
   ViewAbstract? _dashboard;
   ViewAbstractStandAloneCustomViewApi? _standAloneCustomViewApi;
+
+  DrawerMenuControllerProviderAction _action =
+      DrawerMenuControllerProviderAction.view;
+  DrawerMenuControllerProviderAction get action => _action;
+
+  set action(DrawerMenuControllerProviderAction value) => _action = value;
+
   bool _sideMenuOpen = false;
   int _idx = 0;
 

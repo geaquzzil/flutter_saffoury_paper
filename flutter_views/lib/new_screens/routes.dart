@@ -312,7 +312,7 @@ class RouteGenerator {
           name: homeRouteName,
           path: '/',
           pageBuilder: (BuildContext context, GoRouterState state) {
-            return const MaterialPage(child: BaseDeterminePageState());
+            return  MaterialPage(child: BaseDeterminePageState());
           },
           routes: [
             // GoRoute(

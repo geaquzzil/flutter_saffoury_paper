@@ -11,11 +11,10 @@ import 'package:flutter/material.dart';
 
 class ListToDetailsPageNew extends StatefulWidget {
   final String title;
+  bool buildDrawer;
 
-  const ListToDetailsPageNew({
-    super.key,
-    required this.title,
-  });
+  ListToDetailsPageNew(
+      {super.key, required this.title, this.buildDrawer = true});
 
   @override
   State<ListToDetailsPageNew> createState() => _ListToDetailsPageNewState();
@@ -23,6 +22,13 @@ class ListToDetailsPageNew extends StatefulWidget {
 
 class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   ValueNotifier<ViewAbstract?> dsada = ValueNotifier<ViewAbstract?>(null);
+
+  @override
+  void initState() {
+    buildDrawer = widget.buildDrawer;
+    super.initState();
+  }
+
   @override
   Widget? getBaseAppbar() => null;
 

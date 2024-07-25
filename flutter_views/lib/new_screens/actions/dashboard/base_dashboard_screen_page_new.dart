@@ -14,16 +14,15 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-const mediumPane = 0.65;
-const largePane = 0.75;
+const mediumPane = 0.62;
+const largePane = 0.7;
 
 class BaseDashboardMainPage extends StatefulWidget {
   final String title;
+  bool buildDrawer;
 
-  const BaseDashboardMainPage({
-    super.key,
-    required this.title,
-  });
+  BaseDashboardMainPage(
+      {super.key, required this.title, this.buildDrawer = true});
 
   @override
   State<BaseDashboardMainPage> createState() => _BaseDashboardMainPageState();
@@ -31,6 +30,12 @@ class BaseDashboardMainPage extends StatefulWidget {
 
 class _BaseDashboardMainPageState
     extends BasePageWithApi<BaseDashboardMainPage> {
+  @override
+  void initState() {
+    buildDrawer = widget.buildDrawer;
+    super.initState();
+  }
+
   //  late DashableInterface dashboard;
   @override
   List<TabControllerHelper>? initTabBarList() {

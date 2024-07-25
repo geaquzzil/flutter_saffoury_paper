@@ -50,7 +50,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   bool pinToolbar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
+  bool buildDrawer;
 
+  BasePageState({this.buildDrawer = true});
   // The listener
   final _connectionListener = ConnectionListener();
 
@@ -99,6 +101,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   get getWidth => this._width;
 
   get getHeight => this._height;
+
+  bool isDesktopPlatform() => isDesktop(context);
 
   List<TabControllerHelper>? _getTabBarList() {
     return _tabList;
@@ -450,9 +454,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           _width = w;
           _height = h;
           _currentScreenSize = c;
-          _drawerWidget = DrawerLargeScreens(
-            size: _currentScreenSize,
-          );
+          if (buildDrawer) {
+            _drawerWidget = DrawerLargeScreens(
+              size: _currentScreenSize,
+            );
+          }
         },
         mobile: (w, h) {
           return _getTabletWidget();
@@ -575,7 +581,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getBaseFloatingActionButton(),
         //TODO DublicatedKey key: _drawerMenuControllerProvider.getStartDrawableKey,
-        drawer: _drawerWidget,
+        drawer: buildDrawer ? _drawerWidget : null,
         body: _getBody());
 
     // return t;
@@ -600,50 +606,13 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           children:
               _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
       if (isLarge) {
-        return SafeArea(
-            child: Row(children: [
-          _drawerWidget!,
-          Selector<DrawerMenuControllerProvider, bool>(
-            builder: (__, isOpen, ___) {
-              debugPrint("drawer selector $isOpen");
-
-              Widget toShowWidget;
-              Widget clipRect = ClipRRect(
-                  borderRadius: BorderRadius.circular(kDefualtClipRect),
-                  child: _hasBaseToolbar()
-                      ? Scaffold(
-                          backgroundColor:
-                              ElevationOverlay.overlayColor(context, 2),
-                          appBar: generateToolbar(),
-                          body: currentWidget,
-                        )
-                      : currentWidget);
-
-              if (_secondWidget == null ||
-                  setPaddingWhenTowPane(
-                    getCurrentScreenSize(),
-                  )) {
-                toShowWidget = Padding(
-                  padding: getSuggestionPadding(getWidth),
-                  child: clipRect,
-                );
-              } else {
-                toShowWidget = clipRect;
-              }
-
-              return AnimatedContainer(
-                  key: UniqueKey(),
-                  height: _height,
-                  width: (_width! -
-                          (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
-                              .toNonNullable()) -
-                      0,
-                  duration: const Duration(milliseconds: 100),
-                  child: toShowWidget);
-            },
-            selector: (p0, p1) => p1.getSideMenuIsOpen,
-          )
-        ]));
+        if (buildDrawer) {
+          return SafeArea(
+              child: Row(
+                  children: [_drawerWidget!, getSelectorBody(currentWidget)]));
+        } else {
+          return getSelectorBody(currentWidget);
+        }
       } else {
         return SafeArea(
             child: Scaffold(
@@ -656,51 +625,15 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       currentWidget = _getTowPanes();
     }
     if (isLarge) {
-      return SafeArea(
-          child: Row(
-        children: [
+      if (buildDrawer) {
+        return SafeArea(
+            child: Row(children: [
           _drawerWidget!,
-          Selector<DrawerMenuControllerProvider, bool>(
-            builder: (__, isOpen, ___) {
-              debugPrint("drawer selector $isOpen");
-              Widget toShowWidget;
-              Widget clipRect = ClipRRect(
-                  borderRadius: BorderRadius.circular(kDefualtClipRect),
-                  child: _hasBaseToolbar()
-                      ? Scaffold(
-                          backgroundColor:
-                              ElevationOverlay.overlayColor(context, 2),
-                          appBar: generateToolbar(),
-                          body: currentWidget,
-                        )
-                      : currentWidget);
-
-              if (_secondWidget == null ||
-                  setPaddingWhenTowPane(
-                    getCurrentScreenSize(),
-                  )) {
-                toShowWidget = Padding(
-                  padding: getSuggestionPadding(getWidth),
-                  child: clipRect,
-                );
-              } else {
-                toShowWidget = clipRect;
-              }
-
-              return AnimatedContainer(
-                  key: UniqueKey(),
-                  height: _height,
-                  width: (_width! -
-                          (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
-                              .toNonNullable()) -
-                      0,
-                  duration: const Duration(milliseconds: 100),
-                  child: toShowWidget);
-            },
-            selector: (p0, p1) => p1.getSideMenuIsOpen,
-          )
-        ],
-      ));
+          getSelectorBodyIsLarge(currentWidget)
+        ]));
+      } else {
+        return getSelectorBodyIsLarge(currentWidget);
+      }
     } else {
       return SafeArea(
           child: Scaffold(
@@ -709,6 +642,91 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         body: currentWidget,
       ));
     }
+  }
+
+  Selector<DrawerMenuControllerProvider, bool> getSelectorBodyIsLarge(
+      Widget currentWidget) {
+    return Selector<DrawerMenuControllerProvider, bool>(
+      builder: (__, isOpen, ___) {
+        debugPrint("drawer selector $isOpen");
+        Widget toShowWidget;
+        Widget clipRect = ClipRRect(
+            borderRadius: BorderRadius.circular(kDefualtClipRect),
+            child: _hasBaseToolbar()
+                ? Scaffold(
+                    backgroundColor: ElevationOverlay.overlayColor(context, 2),
+                    appBar: generateToolbar(),
+                    body: currentWidget,
+                  )
+                : currentWidget);
+
+        if (_secondWidget == null ||
+            setPaddingWhenTowPane(
+              getCurrentScreenSize(),
+            )) {
+          toShowWidget = Padding(
+            padding: getSuggestionPadding(getWidth),
+            child: clipRect,
+          );
+        } else {
+          toShowWidget = clipRect;
+        }
+
+        return AnimatedContainer(
+            key: UniqueKey(),
+            height: _height,
+            width: (_width! -
+                    (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
+                        .toNonNullable()) -
+                0,
+            duration: const Duration(milliseconds: 100),
+            child: toShowWidget);
+      },
+      selector: (p0, p1) => p1.getSideMenuIsOpen,
+    );
+  }
+
+  Selector<DrawerMenuControllerProvider, bool> getSelectorBody(
+      Widget currentWidget) {
+    return Selector<DrawerMenuControllerProvider, bool>(
+      builder: (__, isOpen, ___) {
+        debugPrint("drawer selector $isOpen");
+
+        Widget toShowWidget;
+        Widget clipRect = ClipRRect(
+            borderRadius: BorderRadius.circular(kDefualtClipRect),
+            child: _hasBaseToolbar()
+                ? Scaffold(
+                    backgroundColor: ElevationOverlay.overlayColor(context, 2),
+                    appBar: generateToolbar(),
+                    body: currentWidget,
+                  )
+                : currentWidget);
+
+        if (_secondWidget == null ||
+            setPaddingWhenTowPane(
+              getCurrentScreenSize(),
+            )) {
+          toShowWidget = Padding(
+            padding: getSuggestionPadding(getWidth),
+            child: clipRect,
+          );
+        } else {
+          toShowWidget = clipRect;
+        }
+
+        return AnimatedContainer(
+            key: UniqueKey(),
+            height: _height,
+            width: (_width! -
+                    (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
+                        .toNonNullable()) -
+                0,
+            duration: const Duration(milliseconds: 100),
+            child: toShowWidget);
+      },
+      selector: (p0, p1) => p1.getSideMenuIsOpen,
+    );
   }
 
   Widget shouldWrapNavigatorChild(BuildContext context, Widget child,
@@ -774,7 +792,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   dynamic extras;
   bool _isLoading = false;
 
-  BasePageWithApi({this.iD, this.tableName, this.extras});
+  BasePageWithApi({this.iD, this.tableName, this.extras, super.buildDrawer});
   Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab});
   ServerActions getServerActions();
