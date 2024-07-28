@@ -200,8 +200,8 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
   }
 
   void _refresh() {
-    widget.listProvider
-        .refresh(findCustomKey(), drawerViewAbstractObsever.getObject);
+    widget.listProvider.refresh(
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -213,12 +213,14 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
   SpeedDialChild getAddBotton(BuildContext context) {
     return SpeedDialChild(
       child: const Icon(Icons.add),
-      backgroundColor: drawerViewAbstractObsever.getObject.getMainColor(),
+      backgroundColor:
+          drawerViewAbstractObsever.getObjectCastViewAbstract.getMainColor(),
       foregroundColor: Colors.white,
-      label: drawerViewAbstractObsever.getObject
+      label: drawerViewAbstractObsever.getObjectCastViewAbstract
           .getBaseTitle(context, serverAction: ServerActions.add),
       onTap: () {
-        drawerViewAbstractObsever.getObject.onDrawerLeadingItemClicked(context);
+        drawerViewAbstractObsever.getObjectCastViewAbstract
+            .onDrawerLeadingItemClicked(context);
       },
       onLongPress: () => debugPrint('FIRST CHILD LONG PRESS'),
     );
@@ -270,7 +272,8 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
           context
               .read<ActionViewAbstractProvider>()
               .changeCustomWidget(FileExporterPage(
-                viewAbstract: drawerViewAbstractObsever.getObject,
+                viewAbstract:
+                    drawerViewAbstractObsever.getObjectCastViewAbstract,
                 list: widget.listProvider.getList(findCustomKey()).cast(),
               ));
         } else {
@@ -322,7 +325,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
           "${AppLocalizations.of(context)!.printAllAs(AppLocalizations.of(context)!.list)} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
 
       String? printSelfListSetting =
-          "${AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever.getObject.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
+          "${AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever.getObjectCastViewAbstract.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
       return DropdownStringListControllerListenerByIcon(
         icon: Icons.print,
         hint: AppLocalizations.of(context)!.printType,
@@ -334,7 +337,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
           DropdownStringListItem(
               Icons.print,
               AppLocalizations.of(context)!.printAllAs(drawerViewAbstractObsever
-                  .getObject
+                  .getObjectCastViewAbstract
                   .getMainHeaderLabelTextOnly(context))),
           DropdownStringListItem(
               Icons.settings,
@@ -360,9 +363,10 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
                             list:
                                 getList().cast<PrintableSelfListInterface>()));
                   },
-                  viewAbstract: (drawerViewAbstractObsever.getObject
-                          as PrintableSelfListInterface)
-                      .getModifiablePrintableSelfPdfSetting(context),
+                  viewAbstract:
+                      (drawerViewAbstractObsever.getObjectCastViewAbstract
+                              as PrintableSelfListInterface)
+                          .getModifiablePrintableSelfPdfSetting(context),
                 ));
           } else if (object?.label == printSelfListSetting) {
           } else {

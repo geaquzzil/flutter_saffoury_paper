@@ -55,7 +55,7 @@ class BaseFilterableMainWidget extends StatelessWidget {
                   "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json");
             }));
       },
-      selector: (p0, p1) => p1.getObject,
+      selector: (p0, p1) => p1.getObjectCastViewAbstract,
     );
   }
 

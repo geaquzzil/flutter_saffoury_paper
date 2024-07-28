@@ -15,7 +15,7 @@ class SearchWidgetApi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.read<DrawerMenuControllerProvider>().getObject;
+        context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
     return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(20),

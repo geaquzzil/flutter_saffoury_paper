@@ -48,6 +48,12 @@ CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
       CurrentScreenSize.MOBILE;
 }
 
+bool isLargeScreenFromCurrentScreenSize(BuildContext context) {
+  CurrentScreenSize currentScreenSize = getCurrentScreenSizeStatic(context);
+  return currentScreenSize == CurrentScreenSize.DESKTOP ||
+      currentScreenSize == CurrentScreenSize.LARGE_TABLET;
+}
+
 CurrentScreenSize findCurrentScreenSize(BuildContext context, {double? width}) {
   width ??= MediaQuery.of(context).size.width;
 

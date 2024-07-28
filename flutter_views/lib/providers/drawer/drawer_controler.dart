@@ -5,42 +5,44 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import 'package:provider/provider.dart';
 
 enum DrawerMenuControllerProviderAction {
+  none,
   list_to_details,
   custom,
   dashboard,
+  list,
   print,
   view,
+  edit
 }
 
 class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
-  Map<String, GlobalKey<ScaffoldState>> _startDrawerKeyWeb = {};
-  ViewAbstract _object;
-  ViewAbstract? _dashboard;
-  ViewAbstractStandAloneCustomViewApi? _standAloneCustomViewApi;
-
-  DrawerMenuControllerProviderAction _action =
-      DrawerMenuControllerProviderAction.view;
-  DrawerMenuControllerProviderAction get action => _action;
-
-  set action(DrawerMenuControllerProviderAction value) => _action = value;
-
+  dynamic _object;
   bool _sideMenuOpen = false;
   int _idx = 0;
 
   int _navigationIndex = 2;
   bool _navigationRailIsOpen = false;
+  Map<String, GlobalKey<ScaffoldState>> _startDrawerKeyWeb = {};
+
+  DrawerMenuControllerProviderAction _action =
+      DrawerMenuControllerProviderAction.none;
 
   DrawerMenuControllerProvider({required ViewAbstract initViewAbstract})
       : _object = initViewAbstract;
+
+  DrawerMenuControllerProviderAction get getAction => _action;
+
+  set action(DrawerMenuControllerProviderAction value) => _action = value;
   int get getIndex => _idx;
   bool get getSideMenuIsOpen => _sideMenuOpen;
   bool get getSideMenuIsClosed => !_sideMenuOpen;
-  ViewAbstract get getObject => _object;
-  ViewAbstract? get getDashboard => _dashboard;
+  ViewAbstract get getObjectCastViewAbstract => _object;
+  ViewAbstract get getObjectCastDashboard => _object;
+  dynamic get getObject=>_object;
+  ViewAbstractStandAloneCustomViewApi get getObjectCastViewStandAlone =>
+      _object;
 
-  ViewAbstractStandAloneCustomViewApi? get getStandAloneCustomView =>
-      _standAloneCustomViewApi;
   GlobalKey<ScaffoldState> get getStartDrawableKey => _startDrawerKey;
   GlobalKey<ScaffoldState> getStartDrawableKeyWeb(String key) {
     debugPrint("getStartDrawableKey $key");
@@ -54,9 +56,10 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   int get getNavigationIndex => _navigationIndex;
   bool get getNavigationRailIsOpen => _navigationRailIsOpen;
 
-  String get getObjectID => getObject.getIDString();
+  String get getObjectID => getObjectCastViewAbstract.getIDString();
 
-  String get getObjectTableName => getObject.getTableNameApi() ?? "-";
+  String get getObjectTableName =>
+      getObjectCastViewAbstract.getTableNameApi() ?? "-";
 
   set setNavigationIndex(int index) {
     _navigationIndex = index;
@@ -75,31 +78,15 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   String getTitle(BuildContext context) =>
       _object.getMainHeaderLabelTextOnly(context).toLowerCase();
 
-  void changeToStandAloneApi(
-      BuildContext context, ViewAbstractStandAloneCustomViewApi custom) {
-    _standAloneCustomViewApi = custom;
-
+  void change(BuildContext context, dynamic object,
+      DrawerMenuControllerProviderAction action,
+      {bool changeWithFilterable = false}) {
+    _action = action;
+    _object = changeWithFilterable ? object.getCopyInstance() : object;
     notifyListeners();
-  }
-
-  void changeToDashboard(BuildContext context, ViewAbstract dashboard) {
-    _standAloneCustomViewApi = null;
-    _dashboard = dashboard;
-    notifyListeners();
-  }
-
-  void change(BuildContext context, ViewAbstract object) {
-    _object = object;
-    _standAloneCustomViewApi = null;
-    _dashboard = null;
-    notifyListeners();
-    context.read<FilterableProvider>().init(context, object);
-  }
-
-  void changeWithFilterable(BuildContext context, ViewAbstract object) {
-    _object = object.getCopyInstance();
-    _standAloneCustomViewApi = null;
-    notifyListeners();
+    if (action == DrawerMenuControllerProviderAction.list) {
+      context.read<FilterableProvider>().init(context, object);
+    }
   }
 
   void changeDrawerIndex(int idx) {

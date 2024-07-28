@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_view_controller/new_components/edit_listeners/controller
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -25,12 +27,22 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
+import 'package:tuple/tuple.dart';
+
 class PdfPageNew<T extends PrintLocalSetting> extends StatefulWidget {
   int? iD;
   String? tableName;
   PrintableMaster<T>? invoiceObj;
+  bool buildDrawer;
+  bool buildBaseHeader;
 
-  PdfPageNew({super.key, this.iD, this.invoiceObj, this.tableName});
+  PdfPageNew(
+      {super.key,
+      this.iD,
+      this.invoiceObj,
+      this.tableName,
+      this.buildBaseHeader = false,
+      this.buildDrawer = false});
 
   @override
   State<PdfPageNew> createState() => _PdfPageNewState();
@@ -150,11 +162,21 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     printSettingListener =
         Provider.of<PrintSettingLargeScreenProvider>(context, listen: false);
     setExtras(iD: widget.iD, tableName: tableName, ex: widget.invoiceObj);
+    buildDrawer = widget.buildDrawer;
     super.initState();
   }
 
   @override
-  Widget? getBaseAppbar() => null;
+  Widget? getBaseAppbar() {
+    if (widget.buildBaseHeader) {
+      return AppBar(
+        leading: const Icon(Icons.print),
+        title: Text(
+            "${AppLocalizations.of(context)!.print} ${getExtrasCast().getMainHeaderText(context)}"),
+      );
+    }
+    return null;
+  }
 
   @override
   Widget? getBaseBottomSheet() => null;
@@ -163,9 +185,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   Widget? getBaseFloatingActionButton() => null;
 
   @override
-  getDesktopFirstPane({TabControllerHelper? tab}) => const Center(
-        child: Text("FirstPaneDesktop"),
-      );
+  getDesktopFirstPane({TabControllerHelper? tab}) => getSettingWidget();
 
   @override
   getDesktopSecondPane(
@@ -177,8 +197,42 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) {
       return getPdfPreviewWidget();
     }
-    return const Center(
+    return getSettingWidget();
+  }
+
+  Widget getSettingWidget() {
+    Widget setting = const Center(
       child: Text("getFirstPane"),
+    );
+    return FutureBuilder<ViewAbstract?>(
+      future: getSettingLoadDefaultIfNull(context, getExtras()),
+      builder: (_, snapshot) {
+        if (snapshot.hasError) {
+          debugPrint(
+              "getSettingLoadDefaultIfNull=>hasError ${snapshot.error.toString()}");
+          return setting;
+        }
+        debugPrint("getSettingLoadDefaultIfNull=>data ${snapshot.data}");
+        if (snapshot.hasData == false) {
+          return setting;
+        }
+        return Scaffold(
+          body: BaseEditWidget(
+            isTheFirst: true,
+            viewAbstract: snapshot.data as ViewAbstract,
+            onValidate: (viewAbstract) {
+              debugPrint("BasePdfPageConsumer new viewAbstract $viewAbstract");
+
+              if (viewAbstract != null) {
+                // notifyNewViewAbstract(viewAbstract.getCopyInstance());
+                Configurations.save(
+                    "_printsetting${getExtrasCast().runtimeType}",
+                    viewAbstract);
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -199,35 +253,43 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     );
   }
 
-  PdfPreview getPdfPreviewWidget() {
-    return PdfPreview(
-        pdfFileName: getExtras()!.getPrintableQrCodeID(),
-        shareActionExtraEmails: const ["info@saffoury.com"],
-        maxPageWidth: 200,
-        initialPageFormat: PdfPageFormat.a4, //todo setting
-        canDebug: false,
-        scrollViewDecoration:
-            BoxDecoration(color: Theme.of(context).colorScheme.surface),
-        dynamicLayout: true,
-        loadingWidget: const CircularProgressIndicator(),
-        useActions: false,
-        onError: (context, error) {
-          return EmptyWidget(
-              lottiUrl:
-                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-              onSubtitleClicked: () {
-                setState(() {});
-              },
-              title: AppLocalizations.of(context)!.cantConnect,
-              subtitle: error.toString());
-        },
-        // shouldRepaint: ,
-        build: (format) async {
-          loadedFile =
-              getExcelFileUinit(context, getExtras()!, PdfPageFormat.a4);
-          loadedFileBytes = await loadedFile;
-          return loadedFileBytes;
-        });
+  Widget getPdfPreviewWidget() {
+    return Selector<PrintSettingLargeScreenProvider,
+        Tuple2<ViewAbstract?, PdfPageFormat>>(
+      builder: (_, provider, __) {
+        debugPrint("BasePdfPageConsumer Selector =>  getPdfPageConsumer");
+        return PdfPreview(
+            pdfFileName: getExtras()!.getPrintableQrCodeID(),
+            shareActionExtraEmails: const ["info@saffoury.com"],
+            maxPageWidth: getWidth,
+            initialPageFormat: provider.item2, //todo setting
+            canDebug: false,
+            scrollViewDecoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.surface),
+            dynamicLayout: true,
+            loadingWidget: const CircularProgressIndicator(),
+            useActions: false,
+            onError: (context, error) {
+              return EmptyWidget(
+                  lottiUrl:
+                      "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+                  onSubtitleClicked: () {
+                    setState(() {});
+                  },
+                  title: AppLocalizations.of(context)!.cantConnect,
+                  subtitle: error.toString());
+            },
+            // shouldRepaint: ,
+            build: (format) async {
+              loadedFile =
+                  getExcelFileUinit(context, getExtras()!, provider.item2);
+              loadedFileBytes = await loadedFile;
+              return loadedFileBytes;
+            });
+      },
+      selector: (ctx, provider) =>
+          Tuple2(provider.getViewAbstract, provider.getSelectedFormat),
+    );
   }
 
   @override
@@ -286,7 +348,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
   Future getCallApiFunctionIfNull(BuildContext context,

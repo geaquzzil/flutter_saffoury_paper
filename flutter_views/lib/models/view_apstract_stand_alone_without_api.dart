@@ -49,12 +49,6 @@ abstract class ViewAbstractStandAloneCustomView<T>
     throw UnimplementedError();
   }
 
-  @override
-  void onDrawerItemClicked(BuildContext context) {
-    context
-        .read<DrawerMenuControllerProvider>()
-        .changeToStandAloneApi(context, this);
-  }
 
   @override
   String? getSortByFieldName() => null;

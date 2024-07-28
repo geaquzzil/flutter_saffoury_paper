@@ -40,14 +40,11 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alon
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-
-
-
-
 
 class BaseDeterminePageState extends StatelessWidget {
   late Widget _drawerWidget;
@@ -89,38 +86,62 @@ class BaseDeterminePageState extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         //TODO DublicatedKey key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: _drawerWidget,
-        body: Selector<
-            DrawerMenuControllerProvider,
-            Tuple3<ViewAbstract, ViewAbstractStandAloneCustomViewApi?,
-                ViewAbstract?>>(
+        body: Selector<DrawerMenuControllerProvider,
+            Tuple2<dynamic, DrawerMenuControllerProviderAction>>(
           builder: (context, value, child) {
             bool isLarge = isDesktop(context, maxWidth: _width) ||
                 isTablet(context, maxWidth: _width);
-                debugPrint("isLarge: $isLarge" );
+            debugPrint("isLarge: $isLarge");
             Widget widget;
-            ViewAbstract listable = value.item1;
-            ViewAbstract? dashboard = value.item3;
-            ViewAbstractStandAloneCustomViewApi? customView = value.item2;
-            if (dashboard != null) {
-              widget = BaseDashboardMainPage(
-                title: "D",
-                buildDrawer: false,
-              );
-            } else if (customView != null) {
-              widget = MasterViewStandAlone(viewAbstract: customView);
-            } else {
-              widget = ListToDetailsPageNew(
-                title: "SOSO",
-                buildDrawer: false,
-              );
+            switch (value.item2) {
+              case DrawerMenuControllerProviderAction.custom:
+                widget = MasterViewStandAlone(viewAbstract: value.item1);
+                break;
+              case DrawerMenuControllerProviderAction.dashboard:
+                widget = BaseDashboardMainPage(
+                  title: "D",
+                  buildDrawer: false,
+                );
+                break;
+              case DrawerMenuControllerProviderAction.edit:
+                widget = Text("NOIN edit");
+                break;
+              case DrawerMenuControllerProviderAction.list:
+              case DrawerMenuControllerProviderAction.list_to_details:
+                widget = ListToDetailsPageNew(
+                  title: "SOSO",
+                  buildDrawer: false,
+                );
+                break;
+              case DrawerMenuControllerProviderAction.none:
+                widget = Text("NOIN");
+                break;
+              case DrawerMenuControllerProviderAction.print:
+                //         pathParameters: {
+                //   "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+                //   "id": "$iD"
+                // },
+                widget = PdfPageNew(
+                  buildBaseHeader: true,
+                  iD: value.item1.iD,
+                  tableName: value.item1.getTableNameApi() ??
+                      value.item1.getCustomAction() ??
+                      "-",
+                  invoiceObj: value.item1,
+                );
+                break;
+              case DrawerMenuControllerProviderAction.view:
+                widget = Text("NOIN view");
+                break;
             }
             if (isLarge) {
-            return  SafeArea(child: Row(children: [_drawerWidget, Expanded(child: widget)]));
+              return SafeArea(
+                  child:
+                      Row(children: [_drawerWidget, Expanded(child: widget)]));
             }
             return widget;
           },
-          selector: (p0, p1) =>
-              Tuple3(p1.getObject, p1.getStandAloneCustomView, p1.getDashboard),
+          selector: (p0, p1) => Tuple2(p1.getObject, p1.getAction),
         ));
   }
 }

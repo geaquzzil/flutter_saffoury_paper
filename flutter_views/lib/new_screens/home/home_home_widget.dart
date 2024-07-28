@@ -16,7 +16,7 @@ class HomeNavigationPage extends BaseHomeSharedWithWidgets {
   @override
   void init(BuildContext context) {
     drawerMenuControllerProvider = context.read<DrawerMenuControllerProvider>();
-    viewAbstract ??= drawerMenuControllerProvider.getObject;
+    viewAbstract ??= drawerMenuControllerProvider.getObjectCastViewAbstract;
   }
 
   @override

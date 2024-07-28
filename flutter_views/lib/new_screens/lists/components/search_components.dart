@@ -183,7 +183,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
                     }, pathParameters: {
                       "tableName": context
                           .read<DrawerMenuControllerProvider>()
-                          .getObject
+                          .getObjectCastViewAbstract
                           .getTableNameApi()!
                     }),
             title: isEditText
@@ -248,7 +248,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
               ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
         );
       },
-      selector: (p0, p1) => p1.getObject,
+      selector: (p0, p1) => p1.getObjectCastViewAbstract,
     );
   }
 

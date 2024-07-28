@@ -34,13 +34,6 @@ abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
   }
 
   @override
-  void onDrawerItemClicked(BuildContext context) {
-    context
-        .read<DrawerMenuControllerProvider>()
-        .changeToStandAloneApi(context, this);
-  }
-
-  @override
   String? getSortByFieldName() => null;
   @override
   SortByType getSortByType() => SortByType.ASC;

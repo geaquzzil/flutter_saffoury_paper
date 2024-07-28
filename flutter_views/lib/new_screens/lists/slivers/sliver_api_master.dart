@@ -141,7 +141,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           .read<AuthProvider<AuthUser>>()
           .getNewInstance(widget.tableName!)!;
     } else {
-      viewAbstract = drawerViewAbstractObsever.getObject;
+      viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
     }
     fetshListWidgetBinding();
   }
@@ -195,7 +195,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
         return getBuildBodyDraggable();
       },
-      selector: (p0, p1) => p1.getObject,
+      selector: (p0, p1) => p1.getObjectCastViewAbstract,
     );
   }
 
@@ -310,7 +310,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                     const Spacer(),
                     FloatingActionButtonExtended(
                         onPress: () => {
-                              drawerViewAbstractObsever.getObject
+                              drawerViewAbstractObsever.getObjectCastViewAbstract
                                   .onDrawerLeadingItemClicked(context)
                             },
                         expandedWidget:
@@ -584,7 +584,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getAddBotton(BuildContext context) => IconButton(
       onPressed: () {
-        drawerViewAbstractObsever.getObject.onDrawerLeadingItemClicked(context);
+        drawerViewAbstractObsever.getObjectCastViewAbstract.onDrawerLeadingItemClicked(context);
       },
       icon: const Icon(Icons.add));
 
@@ -734,7 +734,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObject);
+    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -842,7 +842,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     //if we get viewAbstract from constructor then we dont need to do anything
     if (widget.viewAbstract != null) return;
 
-    viewAbstract = drawerViewAbstractObsever.getObject;
+    viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
     listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
     debugPrint("ViewAbstractProvider CHANGED");
   }

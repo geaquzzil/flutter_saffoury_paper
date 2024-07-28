@@ -84,7 +84,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
         ViewAbstractStandAloneCustomViewApi?>(
       builder: (context, value, child) {
         ViewAbstract? viewAbstract2 =
-            context.read<DrawerMenuControllerProvider>().getObject;
+            context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
         bool isInitViewAbstractCustomView =
             viewAbstract2 is ViewAbstractStandAloneCustomViewApi;
         if (value != null || isInitViewAbstractCustomView) {
@@ -111,7 +111,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
               body: getMainBodyIndexedStack(context));
         }
       },
-      selector: (p0, p1) => p1.getStandAloneCustomView,
+      selector: (p0, p1) => p1.getObjectCastViewStandAlone,
     );
     // return SliverApiMaster();
 
@@ -257,7 +257,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
       ) builder}) {
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) => builder.call(value),
-      selector: (p0, p1) => p1.getObject,
+      selector: (p0, p1) => p1.getObjectCastViewAbstract,
     );
   }
 

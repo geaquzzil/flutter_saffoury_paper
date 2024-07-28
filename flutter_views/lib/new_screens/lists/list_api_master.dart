@@ -139,7 +139,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (widget.viewAbstract != null) {
       viewAbstract = widget.viewAbstract!;
     } else {
-      viewAbstract = drawerViewAbstractObsever.getObject;
+      viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getPage(getCustomKey()) == 0) {
@@ -218,7 +218,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObject);
+    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -388,7 +388,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     //if we get viewAbstract from constructor then we dont need to do anything
     if (widget.viewAbstract != null) return;
 
-    viewAbstract = drawerViewAbstractObsever.getObject;
+    viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
     listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
     debugPrint("ViewAbstractProvider CHANGED");
   }

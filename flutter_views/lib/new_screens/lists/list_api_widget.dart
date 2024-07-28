@@ -31,7 +31,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
         Provider.of<DrawerMenuControllerProvider>(context, listen: false);
     drawerViewAbstractObsever.addListener(onChangedViewAbstract);
     listProvider
-        .fetchList(context.read<DrawerMenuControllerProvider>().getObject);
+        .fetchList(context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract);
   }
 
   Widget _listItems(List<ViewAbstract> data, ListProvider listProvider) {
@@ -135,7 +135,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider
-          .fetchList(context.read<DrawerMenuControllerProvider>().getObject);
+          .fetchList(context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract);
       // context
       //     .read<ListProvider>()
       //     .fetchList(context.read<DrawerViewAbstractProvider>().getObject);
@@ -151,7 +151,7 @@ class _ListApiWidgetState extends State<ListApiWidget> {
 
   void onChangedViewAbstract() {
     if (mounted) {
-      listProvider.clear(viewAbstract: drawerViewAbstractObsever.getObject);
+      listProvider.clear(viewAbstract: drawerViewAbstractObsever.getObjectCastViewAbstract);
       debugPrint("ViewAbstractProvider CHANGED");
     }
   }

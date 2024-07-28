@@ -23,7 +23,7 @@ class _HeaderTitleMainState extends State<HeaderTitleMain> {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.watch<DrawerMenuControllerProvider>().getObject;
+        context.watch<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),

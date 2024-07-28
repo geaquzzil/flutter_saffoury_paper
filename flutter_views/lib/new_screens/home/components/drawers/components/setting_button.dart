@@ -14,7 +14,7 @@ class DrawerSettingButton extends StatelessWidget {
     return PopupWidget(
       child: const Icon(Icons.settings),
       menuBuilder: () => BaseViewNewPage(
-          viewAbstract: context.read<DrawerMenuControllerProvider>().getObject),
+          viewAbstract: context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract),
     );
     return buildColapsedIcon(
       context,

@@ -22,7 +22,7 @@ class _HeaderMainState extends State<HeaderMain> {
   @override
   Widget build(BuildContext context) {
     ViewAbstract viewAbstract =
-        context.read<DrawerMenuControllerProvider>().getObject;
+        context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
 
     // return ProfileMenu(icon: "", text: "dsa", press: () {});
     // return  SearchWidgetApi();

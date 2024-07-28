@@ -25,6 +25,7 @@ class BaseEditWidget extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isTheFirst;
   bool isStandAloneField;
+  bool buildAsPrint;
   GlobalKey<FormBuilderState>? formKey;
 
   ///if viewabstract has parent then we get the parent form key
@@ -50,6 +51,7 @@ class BaseEditWidget extends StatelessWidget {
       this.isStandAloneField = false,
       required this.viewAbstract,
       required this.isTheFirst,
+      this.buildAsPrint = false,
       this.formKey,
       this.currentScreenSize,
       this.parentFormKey,

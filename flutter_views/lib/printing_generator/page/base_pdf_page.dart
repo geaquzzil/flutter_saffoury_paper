@@ -49,7 +49,7 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
     var future = getSettingObject(context);
     if (future == null) return null;
     // return null;
-    
+
     return FutureBuilder<ViewAbstract?>(
       future: future,
       builder: (_, snapshot) {
@@ -59,7 +59,7 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
             viewAbstract: snapshot.data as ViewAbstract,
             onValidate: (viewAbstract) {
               debugPrint("BasePdfPageConsumer new viewAbstract $viewAbstract");
-          
+
               if (viewAbstract != null) {
                 notifyNewViewAbstract(viewAbstract.getCopyInstance());
                 Configurations.save(

@@ -99,21 +99,25 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
   }
 }
 
-Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
+Future<T> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
     BuildContext context, PrintableMaster firstObj) async {
   T? pls;
   if (firstObj is ModifiablePrintableInterface) {
-    pls = await Configurations.get<T>(
+    pls = await Configurations.get(
         (firstObj as ModifiablePrintableInterface)
             .getModifibleSettingObject(context),
         customKey: "_printsetting${firstObj.runtimeType}");
+    debugPrint("getSettingLoadDefaultIfNull=> pls =>$pls");
     if (pls != null) {
       pls =
           pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
+
+      debugPrint("getSettingLoadDefaultIfNull=>not null pls =>$pls");
     }
   }
 
   if (pls == null) {
+    debugPrint("getSettingLoadDefaultIfNull == null");
     if (firstObj is ModifiablePrintableInterface) {
       pls = (firstObj as ModifiablePrintableInterface)
           .getModifibleSettingObject(context);
@@ -125,7 +129,7 @@ Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
   }
   pls?.primaryColor = firstObj.getPrintablePrimaryColor(pls);
   pls?.secondaryColor = firstObj.getPrintableSecondaryColor(pls);
-  return pls;
+  return pls!;
 }
 
 Future<T?> getSetting<T extends PrintLocalSetting>(

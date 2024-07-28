@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
@@ -113,6 +114,14 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void printPage(BuildContext context) {
+    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    if (isLarge) {
+      context
+          .read<DrawerMenuControllerProvider>()
+          .change(context, this, DrawerMenuControllerProviderAction.print);
+
+      return;
+    }
     context.goNamed(printRouteName,
         pathParameters: {
           "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
@@ -137,21 +146,29 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
-  void onDrawerItemClicked(BuildContext context) {
-    debugPrint('onDrawerItemClicked=> ${getMainHeaderTextOnly(context)}');
+  DrawerMenuControllerProviderAction getDrawerMenuControllerProviderAction() {
     if (this is DashableInterface) {
-      context
-          .read<DrawerMenuControllerProvider>()
-          .changeToDashboard(context, getSelfNewInstance() as ViewAbstract);
-      debugPrint('onDrawerItemClicked=> dashboard');
+      return DrawerMenuControllerProviderAction.dashboard;
     } else if (this is ViewAbstractStandAloneCustomViewApi) {
-      debugPrint('onDrawerItemClicked=> ViewAbstractStandAloneCustomViewApi');
-    } else {
-      debugPrint('onDrawerItemClicked=> listable');
-      context
-          .read<DrawerMenuControllerProvider>()
-          .change(context, getSelfNewInstance() as ViewAbstract);
+      return DrawerMenuControllerProviderAction.custom;
     }
+    // else if (this is PrintableMaster) {
+    //   return DrawerMenuControllerProviderAction.print;
+    // }
+    else {
+      return DrawerMenuControllerProviderAction.list;
+    }
+  }
+
+  void onDrawerItemClicked(BuildContext context) {
+    DrawerMenuControllerProviderAction action =
+        getDrawerMenuControllerProviderAction();
+   
+    debugPrint(
+        'onDrawerItemClicked=> ${getMainHeaderTextOnly(context)} action => $action');
+    context
+        .read<DrawerMenuControllerProvider>()
+        .change(context, getSelfNewInstance() as ViewAbstract, action);
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

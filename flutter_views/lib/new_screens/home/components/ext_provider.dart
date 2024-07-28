@@ -44,18 +44,21 @@ List<ItemModel> getListOfProfileSettings(BuildContext context,
 }
 
 void notifyListApi(BuildContext context) {
-  ViewAbstract? v = context.read<DrawerMenuControllerProvider>().getObject;
+  ViewAbstract? v =
+      context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
   v.setFilterableMap(context.read<FilterableProvider>().getList);
   debugPrint(
       "notifyListApi viewAbstract ${v.getTableNameApi()} customMap ${v.getCustomMap}");
-  context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
+  context.read<DrawerMenuControllerProvider>().change(
+      context, v, DrawerMenuControllerProviderAction.list,
+      changeWithFilterable: true);
 }
 
 void notifyFilterableListApiIsCleared(BuildContext context) {
-  ViewAbstract? v = context.read<DrawerMenuControllerProvider>().getObject;
-  context
-      .read<DrawerMenuControllerProvider>()
-      .change(context, v.getSelfNewInstance());
+  ViewAbstract? v =
+      context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
+  context.read<DrawerMenuControllerProvider>().change(
+      context, v.getSelfNewInstance(), DrawerMenuControllerProviderAction.list);
 }
 
 void addFilterableSort(BuildContext context, SortByType selectedItem) {
