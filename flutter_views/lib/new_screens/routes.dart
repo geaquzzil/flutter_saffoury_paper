@@ -96,6 +96,39 @@ class RouteGenerator {
     this.addonRoutes,
   });
 
+  String? getRouterAuthWeb(GoRouterState state) {
+    debugPrint("GoRouter kIsWeb path  ${state.fullPath}");
+
+    final isLogedIn = appService.getUser.login == true;
+    final isInitialized = appService.getStatus == Status.Initialization;
+    final isAuthenticated = appService.getStatus == Status.Authenticated;
+    final isFinishedInitialization = appService.isInitialized;
+
+    final loginLocation = state.namedLocation(loginRouteName);
+    var homeLocation = "/index";
+    final splashLocation = state.namedLocation("splash");
+    if (isInitialized) {
+      return splashLocation;
+    } else if (isLogedIn && !isFinishedInitialization) {
+      appService.isInitialized = true;
+      return homeLocation;
+
+    }
+    else {
+      if (state.fullPath == null) {
+        return homeLocation;
+      } else if (state.fullPath == "/") {
+        return homeLocation;
+      } else if (state.fullPath!.startsWith("/index")) {
+        debugPrint("GoRouter state.fullPath!.startsWith");
+        return null;
+      } else {
+        debugPrint("GoRouter Error");
+        return "Error";
+      }
+    }
+  }
+
   String? getRouterAuth(GoRouterState state) {
     final loginLocation = state.namedLocation(loginRouteName);
     var homeLocation = state.namedLocation(homeRouteName);
@@ -160,26 +193,8 @@ class RouteGenerator {
         ? (context, state) async {
             return getRouterAuth(state);
           }
-
-        // (context, state) async {
-        //     debugPrint(
-        //         "routes !kIsWeb path ${state.fullPath} ${state.name} ${state.uri}");
-        //     return null;
-        //   }
         : (context, state) async {
-            debugPrint("routes kIsWeb path  ${state.fullPath}");
-            if (kIsWeb) {
-              if (state.fullPath == null) {
-                return "/index";
-              } else if (state.fullPath == "/") {
-                return "/index";
-              } else if (state.fullPath!.startsWith("/index")) {
-                return state.fullPath;
-              } else {
-                return "Error";
-              }
-            }
-            return null;
+            return getRouterAuthWeb(state);
           },
     errorPageBuilder: (context, state) {
       debugPrint("routes errorPageBuilder ${state.fullPath}");
@@ -312,7 +327,7 @@ class RouteGenerator {
           name: homeRouteName,
           path: '/',
           pageBuilder: (BuildContext context, GoRouterState state) {
-            return  MaterialPage(child: BaseDeterminePageState());
+            return MaterialPage(child: BaseDeterminePageState());
           },
           routes: [
             // GoRoute(
@@ -379,7 +394,6 @@ class RouteGenerator {
                 //       invoiceObj: state.extra as PrintableMaster?,
                 //     ));
 
-                    
                 return MaterialPage(
                     key: state.pageKey,
                     child: PdfPageNew<PrintLocalSetting>(

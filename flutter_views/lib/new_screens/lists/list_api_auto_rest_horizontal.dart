@@ -46,7 +46,10 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
 class _ListHorizontalApiWidgetState
     extends State<ListHorizontalApiAutoRestWidget> {
   final _scrollController = ScrollController();
+
   late ListMultiKeyProvider listProvider;
+  AutoRest? _autoRest;
+
   double? _currentHeight;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
@@ -54,17 +57,39 @@ class _ListHorizontalApiWidgetState
   @override
   void initState() {
     super.initState();
+    debugPrint("ListHorizontalApiAutoRestWidget==========>initState");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+    _autoRest = widget.autoRest;
+    callRest();
+  }
 
-    if (widget.autoRest != null) {
+  void callRest() {
+    debugPrint("ListHorizontalApiAutoRestWidget==========>callRest");
+    if (_autoRest != null) {
+      debugPrint("ListHorizontalApiAutoRestWidget==========>callRest !=null");
       _scrollController.addListener(() => _onScroll());
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (listProvider.getCount(widget.autoRest!.key) == 0) {
-          listProvider.fetchList(widget.autoRest!.key,
-              viewAbstract: widget.autoRest!.obj, autoRest: widget.autoRest);
+        if (listProvider.getCount(_autoRest!.key) == 0) {
+          listProvider.fetchList(_autoRest!.key,
+              viewAbstract: _autoRest!.obj, autoRest: _autoRest);
         }
       });
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    debugPrint(
+        "ListHorizontalApiAutoRestWidget==========>didChangeDependencies");
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant ListHorizontalApiAutoRestWidget oldWidget) {
+    debugPrint("ListHorizontalApiAutoRestWidget==========>didUpdateWidget");
+    _autoRest = widget.autoRest;
+    callRest();
+    super.didUpdateWidget(oldWidget);
   }
 
   Widget listShimmerItems() {

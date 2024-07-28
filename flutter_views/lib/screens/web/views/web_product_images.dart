@@ -8,28 +8,11 @@ import 'package:flutter_view_controller/new_screens/actions/components/action_on
 
 class WebProductImages extends StatelessWidget {
   final ViewAbstract item;
-  const WebProductImages({super.key, required this.item});
-
-
-// 139 x 70 x45
-// 35 => 70
-// 69 => 100
-// 100 => 70
-
-// 102 =>60
-
-// 72 => 100
-
-
-
-// adnan al asdi 
-//   143  =>52  => 90 330g
-//     52 => 100  1750 sheet 
-//     90 => 100  1750 sheet 
-// 
-
+  WebProductImages({super.key, required this.item});
   @override
   Widget build(BuildContext context) {
+    String? url = item.getImageUrl(context);
+    bool hasImage = url != null;
     return item.getHeroTag(
         context: context,
         child: Container(
@@ -37,10 +20,12 @@ class WebProductImages extends StatelessWidget {
           child: Column(children: [
             AspectRatio(
               aspectRatio: 1 / 1,
-              child: FastCachedImage(
-                url: item.getImageUrl(context) ?? "",
-                fit: BoxFit.contain,
-              ),
+              child: hasImage
+                  ? FastCachedImage(
+                      url: url,
+                      fit: BoxFit.contain,
+                    )
+                  : item.getIcon(),
             ),
             ActionsOnHeaderWidget(
               viewAbstract: item,
