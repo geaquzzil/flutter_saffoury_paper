@@ -15,6 +15,10 @@ class ErrorWebPage extends BaseWebPageSlivers {
       super.useSmallFloatingBar = false});
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     return [

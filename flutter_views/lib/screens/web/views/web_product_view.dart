@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -21,6 +22,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
+  final bool usePagePadding;
   ValueNotifier<ViewAbstract?>? onHorizontalItemClick;
   WebProductView(
       {super.key,
@@ -31,10 +33,23 @@ class WebProductView extends BaseWebPageSliversApi {
       super.buildFooter,
       super.buildHeader,
       this.usePaddingOnBottomWidgets = false,
+      this.usePagePadding = false,
       super.pinToolbar,
       super.useSmallFloatingBar,
       this.onHorizontalItemClick,
       super.customSliverHeader});
+
+  @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    if (kIsWeb) {
+      return null;
+    } else {
+      return ListTile(
+        leading: BackButton(),
+        title: Text("S"),
+      );
+    }
+  }
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
@@ -143,9 +158,7 @@ class WebProductView extends BaseWebPageSliversApi {
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(kBorderRadius / 2),
-                child: 
-                
-                WebProductImages(
+                child: WebProductImages(
                   item: extras!,
                 ),
               )),

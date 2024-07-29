@@ -37,6 +37,10 @@ class HomeWebPage extends BaseWebPageSlivers {
   }
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   void init(BuildContext context) {
     products = context.read<AuthProvider<AuthUser>>().getWebCategories()[0];
     categories = context.read<AuthProvider<AuthUser>>().getWebCategories()[1];

@@ -259,6 +259,8 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints);
 
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints);
+
   final bool buildHeader;
   final bool buildFooter;
   final bool pinToolbar;
@@ -410,43 +412,48 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
 
   LayoutBuilder getBody(BuildContext context) {
     return LayoutBuilder(
-      builder: (c, constraints) => WebSmoothScroll(
-        controller: _scrollController,
-        scrollOffset: 250, // additional offset to users scroll input
-        animationDuration: 600,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            debugPrint("onNotification  ${notification.metrics.extentBefore}");
-            onScroll.value = notification.metrics.extentBefore;
+      builder: (c, constraints) {
+        Widget? customAppBar = getCustomAppBar(context, constraints);
+        return WebSmoothScroll(
+          controller: _scrollController,
+          scrollOffset: 250, // additional offset to users scroll input
+          animationDuration: 600,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              debugPrint(
+                  "onNotification  ${notification.metrics.extentBefore}");
+              onScroll.value = notification.metrics.extentBefore;
 
-            return false;
-          },
-          child: CustomScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _scrollController,
-              slivers: [
-                if (buildHeader)
-                  SliverPersistentHeader(
-                      pinned: pinToolbar,
-                      floating: true,
-                      delegate: SliverAppBarDelegatePreferedSize(
-                          child: PreferredSize(
-                              preferredSize: const Size.fromHeight(70.0),
-                              child: getHeader(context)))),
-                if (customSliverHeader != null) customSliverHeader!,
-                ...getContentWidget(context, constraints),
-                if (buildFooter)
-                  const SliverToBoxAdapter(
-                    child: Footer(),
-                  )
-              ]),
-        ),
-      ),
+              return false;
+            },
+            child: CustomScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _scrollController,
+                slivers: [
+                  if (buildHeader || customAppBar != null)
+                    SliverPersistentHeader(
+                        pinned: pinToolbar,
+                        floating: true,
+                        delegate: SliverAppBarDelegatePreferedSize(
+                            child: PreferredSize(
+                                preferredSize: const Size.fromHeight(70.0),
+                                child: customAppBar ?? getHeader(context)))),
+                  if (customSliverHeader != null) customSliverHeader!,
+                  ...getContentWidget(context, constraints),
+                  if (buildFooter)
+                    const SliverToBoxAdapter(
+                      child: Footer(),
+                    )
+                ]),
+          ),
+        );
+      },
     );
   }
 
   SizedBox getEndDrawer() {
-    return const SizedBox(width: 500, child: Card(child: WebShoppingCartDrawer()));
+    return const SizedBox(
+        width: 500, child: Card(child: WebShoppingCartDrawer()));
   }
 
   Widget getDrawer(List<HeaderItem> headerItems) {

@@ -9,6 +9,10 @@ class ServicesWebPage extends BaseWebPageSlivers {
   ServicesWebPage({super.key});
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     return [

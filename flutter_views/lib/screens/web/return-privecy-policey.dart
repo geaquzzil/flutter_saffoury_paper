@@ -10,6 +10,10 @@ class ReturnPrivecyPolicyWebPage extends BaseWebPageSlivers {
   ReturnPrivecyPolicyWebPage({super.key});
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     return [

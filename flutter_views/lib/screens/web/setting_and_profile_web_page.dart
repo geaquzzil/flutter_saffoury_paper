@@ -15,6 +15,10 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
   Widget? currentWidget;
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   Widget getScaffold(BuildContext context) {
     if (currentSetting != null) {
       currentWidget = getWidgetFromProfile(

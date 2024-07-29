@@ -12,6 +12,10 @@ class TermsWebPage extends BaseWebPageSlivers {
   TermsWebPage({super.key});
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     return [

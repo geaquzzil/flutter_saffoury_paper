@@ -38,6 +38,11 @@ class WebMasterToList extends BaseWebPageSliversApi {
       super.customSliverHeader});
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+
+  @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =

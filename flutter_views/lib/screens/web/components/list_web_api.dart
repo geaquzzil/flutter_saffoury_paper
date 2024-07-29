@@ -66,6 +66,10 @@ class ListWebApiPage extends BaseWebPageSlivers {
   }
 
   @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
+  @override
   void init(BuildContext context) {
     super.init(context);
     if (customFilter != null) {

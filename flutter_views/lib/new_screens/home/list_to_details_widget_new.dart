@@ -65,6 +65,8 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
           onHorizontalItemClick: dsada,
           iD: int.parse(value.getIDString()),
           buildFooter: false,
+          usePagePadding: false,
+          buildHeader: false,
           tableName: value.getTableNameApi()!,
           extras: value,
         );

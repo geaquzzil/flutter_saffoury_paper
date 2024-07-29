@@ -43,6 +43,11 @@ class CheckoutWeb extends BaseWebPageSlivers {
       )
     ];
   }
+  
+  @override
+  Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
+    return null;
+  }
 }
 
 class WebCheckoutLoginCheck extends StatelessWidget {
