@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'products_color.g.dart';
@@ -159,6 +163,30 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsNewInstance() =>
-      {"top": "", "middle": "", "back": ""};
+  List<Widget>? getCustomBottomWidget(BuildContext context,
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+    if (action == ServerActions.add ||
+        action == ServerActions.edit ||
+        action == ServerActions.list) {
+      return null;
+    }
+    return [
+      ListHorizontalApiAutoRestWidget(
+        valueNotifier: onHorizontalListItemClicked,
+        titleString: AppLocalizations.of(context)!
+            .moreFromFormat(getMainHeaderTextOnly(context)),
+        autoRest: AutoRest<Product>(
+            range: 5,
+            obj: Product()..setCustomMap(getSimilarCustomParams(context)),
+            key: "similarProducts${getSimilarCustomParams(context)}"),
+      ),
+    ];
+  }
+
+  Map<String, String> getSimilarCustomParams(BuildContext context) {
+    Map<String, String> hashMap = getCustomMap;
+    hashMap["<${getForeignKeyName()}>"] = ("$iD");
+    return hashMap;
+  }
 }

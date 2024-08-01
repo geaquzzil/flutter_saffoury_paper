@@ -20,9 +20,12 @@ const largePane = 0.7;
 class BaseDashboardMainPage extends StatefulWidget {
   final String title;
   bool buildDrawer;
-
+  ViewAbstract? customDashboard;
   BaseDashboardMainPage(
-      {super.key, required this.title, this.buildDrawer = true});
+      {super.key,
+      required this.title,
+      this.buildDrawer = true,
+      this.customDashboard});
 
   @override
   State<BaseDashboardMainPage> createState() => _BaseDashboardMainPageState();
@@ -46,7 +49,7 @@ class _BaseDashboardMainPageState
       debugPrint("getTabBarList ${(e as ViewAbstract).getCustomAction()}");
       ViewAbstract v = e as ViewAbstract;
       return TabControllerHelper(
-        v.getCustomAction() ?? "sda",
+        v.getMainHeaderLabelTextOnly(context) ?? "sda",
         extras: v,
         // icon: Icon(v.getMainIconData()),
       );

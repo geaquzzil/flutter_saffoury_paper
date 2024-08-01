@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
@@ -28,6 +29,7 @@ class Credits extends MoneyFunds<Credits> {
   Credits getSelfNewInstance() {
     return Credits();
   }
+
 
   @override
   List<String> getMainFields({BuildContext? context}) =>
@@ -100,4 +102,6 @@ class Credits extends MoneyFunds<Credits> {
       ),
     ];
   }
+
+
 }

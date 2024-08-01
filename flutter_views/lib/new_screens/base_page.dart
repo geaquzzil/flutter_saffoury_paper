@@ -394,11 +394,16 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       onReconnected: () => debugPrint("BasePage RECONNECTED"),
       onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
     );
-    _tabList = initTabBarList();
-    if (_hasTabBarList()) {
-      _tabController = TabController(vsync: this, length: _tabList!.length);
-      _tabController.addListener(_tabControllerChangeListener);
-    }
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+          _tabList = initTabBarList();
+      /// Here you can have your context and do what ever you want
+      if (_hasTabBarList()) {
+        _tabController = TabController(vsync: this, length: _tabList!.length);
+        _tabController.addListener(_tabControllerChangeListener);
+      }
+    });
 
     super.initState();
   }

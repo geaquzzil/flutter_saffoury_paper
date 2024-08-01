@@ -238,6 +238,10 @@ class BaseEditWidget extends StatelessWidget {
             builder: (context, provider, listTile) {
           Widget form = buildForm(context);
           if (isTheFirst) {
+            if(buildAsPrint){
+              
+
+            }
             return form;
           } else if (isStandAloneField) {
             return ControllerViewAbstractAsOneField(

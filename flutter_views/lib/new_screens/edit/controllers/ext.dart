@@ -64,6 +64,8 @@ InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
     {ViewAbstractEnum? viewAbstractEnum}) {
   return const InputDecoration(
     // filled: true,
+
+    // filled: true,
     border: OutlineInputBorder(gapPadding: 0),
     // label: TextBold(
     //   text: dropdownGettLabelWithText(context, viewAbstractEnum),
@@ -88,6 +90,7 @@ InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
   return InputDecoration(
     // filled: true,
     border: const OutlineInputBorder(),
+    
     icon: Icon(viewAbstractEnum.getMainIconData()),
     // labelText: viewAbstractEnum.getMainLabelText(context)
   );

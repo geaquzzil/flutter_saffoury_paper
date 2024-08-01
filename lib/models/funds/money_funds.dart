@@ -8,6 +8,7 @@ import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
 import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_reciept.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -15,6 +16,8 @@ import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -22,6 +25,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
@@ -30,10 +34,11 @@ import 'package:number_to_character/number_to_character.dart';
 import 'package:provider/provider.dart';
 import '../users/customers.dart';
 
-abstract class MoneyFunds<T> extends ViewAbstract<T>
+abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
     implements
         ModifiablePrintableInterface<PrintReceipt>,
-        PrintableReceiptInterface<PrintReceipt> {
+        PrintableReceiptInterface<PrintReceipt>,
+        WebCategoryGridableInterface<T> {
   // int? CashBoxID;
   // int? EmployeeID;
   // int? CustomerID;
@@ -163,8 +168,9 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
       getMainHeaderLabelTextOnly(context);
   @override
   ViewAbstractControllerInputType getInputType(String field) {
-    if (field == "warehouse" || field == "employees" || field == "customers")
+    if (field == "warehouse" || field == "employees" || field == "customers") {
       return ViewAbstractControllerInputType.DROP_DOWN_API;
+    }
     return ViewAbstractControllerInputType.EDIT_TEXT;
   }
 
@@ -235,6 +241,14 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     return q.getQrCode();
   }
 
+  bool isCreditAndDebit() {
+    return runtimeType == Debits || runtimeType == Credits;
+  }
+
+  bool isSpendingAndIncomes() {
+    return runtimeType == Spendings || runtimeType == Incomes;
+  }
+
   bool isSpendings() {
     return runtimeType == Debits || runtimeType == Spendings;
   }
@@ -266,6 +280,19 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
       return Colors.red.toHex();
     } else {
       return Colors.green.toHex();
+    }
+  }
+
+  @override
+  String getForeignKeyName() {
+    if (runtimeType == Credits) {
+      return "CreditID";
+    } else if (runtimeType == Debits) {
+      return "DebitID";
+    } else if (runtimeType == Spendings) {
+      return "SpendingID";
+    } else {
+      return "IncomesID";
     }
   }
 
@@ -346,6 +373,20 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
     }
   }
 
+  String getMoreFromFomrat(BuildContext context) {
+    if (isCreditAndDebit()) {
+      return customers!.getMainHeaderTextOnly(context);
+    } else {
+      if (runtimeType == Spendings) {
+        Spendings ob = this as Spendings;
+        return ob.account_names!.getMainHeaderTextOnly(context);
+      } else {
+        Incomes ob = this as Incomes;
+        return ob.account_names!.getMainHeaderTextOnly(context);
+      }
+    }
+  }
+
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? pca) {
@@ -357,5 +398,64 @@ abstract class MoneyFunds<T> extends ViewAbstract<T>
       ..currencyId = equalities?.currency?.iD
       ..description = getIdWithLabelWithIsDollarForDashboard(context, pca)
       ..iD = iD;
+  }
+
+  @override
+  List<Widget>? getCustomBottomWidget(BuildContext context,
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+    if (action == ServerActions.add ||
+        action == ServerActions.edit ||
+        action == ServerActions.list) {
+      return null;
+    }
+    return [
+      ListHorizontalApiAutoRestWidget(
+        valueNotifier: onHorizontalListItemClicked,
+        titleString: AppLocalizations.of(context)!
+            .moreFromFormat(getMoreFromFomrat(context)),
+        autoRest: AutoRest<T>(
+            range: 5,
+            obj: getSelfNewInstance()
+              ..setCustomMap(getSimilarCustomParams(context)),
+            key: "similarMoneyFund${getSimilarCustomParams(context)}"),
+      ),
+    ];
+  }
+
+  Map<String, String> getSimilarCustomParams(BuildContext context) {
+    Map<String, String> hashMap = getCustomMap;
+    if (isCreditAndDebit()) {
+      hashMap["<CustomerID>"] = ("${customers!.iD}");
+    } else {
+      if (runtimeType == Spendings) {
+        Spendings ob = this as Spendings;
+        hashMap["<NameID>"] = ("${ob.account_names!.iD}");
+      } else {
+        Incomes ob = this as Incomes;
+        hashMap["<NameID>"] = ("${ob.account_names!.iD}");
+      }
+    }
+    return hashMap;
+  }
+
+  @override
+  String? getWebCategoryGridableDescription(BuildContext context) {
+    return value.toCurrencyFormat(symbol: equalities?.currency?.name ?? "");
+  }
+
+  @override
+  T getWebCategoryGridableInterface(BuildContext context) {
+    return getSelfNewInstance();
+  }
+
+  @override
+  ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
+    return null;
+  }
+
+  @override
+  String getWebCategoryGridableTitle(BuildContext context) {
+    return getMainHeaderTextOnly(context);
   }
 }
