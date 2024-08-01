@@ -22,7 +22,6 @@ import 'package:responsive_framework/responsive_framework.dart';
 class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
-  final bool usePagePadding;
   ValueNotifier<ViewAbstract?>? onHorizontalItemClick;
   WebProductView(
       {super.key,
@@ -33,7 +32,7 @@ class WebProductView extends BaseWebPageSliversApi {
       super.buildFooter,
       super.buildHeader,
       this.usePaddingOnBottomWidgets = false,
-      this.usePagePadding = false,
+      super.usePagePadding,
       super.pinToolbar,
       super.useSmallFloatingBar,
       this.onHorizontalItemClick,
@@ -145,9 +144,11 @@ class WebProductView extends BaseWebPageSliversApi {
 
   Widget _buildUi(
       BuildContext context, double width, BoxConstraints constraints) {
+    debugPrint("_buildUi width $width constraints ${constraints.maxWidth}");
     return Center(
         child: MaxWidthBox(
-      maxWidth: width,
+      maxWidth: constraints.maxWidth,
+
       // minWidth: width,
       // defaultScale: false,
       child: Flex(

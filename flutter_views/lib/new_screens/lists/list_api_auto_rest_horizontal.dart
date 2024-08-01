@@ -102,15 +102,6 @@ class _ListHorizontalApiWidgetState
           alignment: Alignment.topCenter,
           itemCount: 5 + Random().nextInt(10 - 5),
           gridDelegate: ResponsiveGridDelegate(
-            // mainAxisSpacing: 20.0,
-            // crossAxisSpacing: 20.0,
-            // maxCrossAxisExtent:
-            //     isTablet(context) || isMobile(context)
-            //         ? constraints.maxWidth / 2.0
-            //         : 250.0,
-            // // Hack to adjust child height
-            // childAspectRatio: isDesktop(context) ? 1 : 1,
-
             mainAxisSpacing: 20,
             minCrossAxisExtent: constraints.maxHeight - 150,
             maxCrossAxisExtent: constraints.maxHeight,
@@ -142,8 +133,10 @@ class _ListHorizontalApiWidgetState
           scrollDirection: Axis.horizontal,
           itemCount: isLoading ? (data.length + 3) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
+            crossAxisExtent: 175,
+            // crossAxisSpacing: 10,
             // from width
-            mainAxisSpacing: 20,
+            mainAxisSpacing: 10,
             minCrossAxisExtent: constraints.maxHeight - 150,
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,

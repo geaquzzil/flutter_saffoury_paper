@@ -546,6 +546,7 @@ class ScreenHelperSliver extends StatelessWidget {
         }
         bool padding = requireAutoPadding ?? false;
         if (padding) {
+          debugPrint("ScreenHelperSliver => padding $padding");
           return getPadding(context, maxWidth, currentWidget);
         } else {
           return currentWidget;

@@ -104,7 +104,7 @@ class BaseDeterminePageState extends StatelessWidget {
                 );
                 break;
               case DrawerMenuControllerProviderAction.edit:
-                widget = Text("NOIN edit");
+                widget = const Text("NOIN edit");
                 break;
               case DrawerMenuControllerProviderAction.list:
               case DrawerMenuControllerProviderAction.list_to_details:
@@ -114,7 +114,7 @@ class BaseDeterminePageState extends StatelessWidget {
                 );
                 break;
               case DrawerMenuControllerProviderAction.none:
-                widget = Text("NOIN");
+                widget = const Text("NOIN");
                 break;
               case DrawerMenuControllerProviderAction.print:
                 //         pathParameters: {
@@ -131,13 +131,12 @@ class BaseDeterminePageState extends StatelessWidget {
                 );
                 break;
               case DrawerMenuControllerProviderAction.view:
-                widget = Text("NOIN view");
+                widget = const Text("NOIN view");
                 break;
             }
             if (isLarge) {
-              return SafeArea(
-                  child:
-                      Row(children: [_drawerWidget, Expanded(child: widget)]));
+              //todo safeArea
+              return Row(children: [_drawerWidget, Expanded(child: widget)]);
             }
             return widget;
           },

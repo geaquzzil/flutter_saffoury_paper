@@ -167,26 +167,18 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 title: "SaffouryPaper",
                 debugShowCheckedModeBanner: false,
                 restorationScopeId: 'root',
-
                 routeInformationParser:
                     routeGenerator.router.routeInformationParser,
-
                 routerDelegate: routeGenerator.router.routerDelegate,
-
                 routeInformationProvider:
                     routeGenerator.router.routeInformationProvider,
-                // routerDelegate: RouteGenerator.goRouter.routerDelegate,
-                // routeInformationProvider:
-                //     RouteGenerator.goRouter.routeInformationProvider,
-                // routerConfig: RouteGenerator.instance(
-                //     addonRoutes: this.widget.addOnRoutes),
-                // initialRoute: '/',
-                // onGenerateRoute: RouteGenerator.generateRoute,
 
                 theme: ThemeData(
                   textTheme: kIsWeb
                       ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
-                      : null,
+                          .apply()
+                      : GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
+                          .apply(fontSizeDelta: 1, fontSizeFactor: .85),
                   visualDensity: SizeConfig.isDesktopOrWebPlatform(context)
                       ? VisualDensity.comfortable
                       : VisualDensity.compact,

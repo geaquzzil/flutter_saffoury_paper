@@ -50,6 +50,8 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   getFirstPane({TabControllerHelper? tab}) {
     return SliverApiMaster(
       onSelectedCardChangeValueNotifier: dsada,
+      // buildAppBar: false,
+      buildSearchWidgetAsEditText: isDesktop(context),
     );
   }
 

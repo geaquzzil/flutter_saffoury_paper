@@ -266,12 +266,14 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   final bool pinToolbar;
   final bool useSmallFloatingBar;
   final Widget? customSliverHeader;
+  final bool usePagePadding;
   BaseWebPageSlivers(
       {super.key,
       this.buildHeader = true,
       this.useSmallFloatingBar = false,
       this.buildFooter = true,
       this.customSliverHeader,
+      this.usePagePadding = true,
       this.pinToolbar = true});
 
   Widget getDescription(
@@ -368,6 +370,9 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   Widget getSliverPadding(
       BuildContext context, BoxConstraints constraints, Widget child,
       {double padd = 2}) {
+    if (usePagePadding == false) {
+      return child;
+    }
     double defualPadding =
         isMobile(context) ? kDefaultPadding * 2 : kDefaultPadding;
     double horizontalPadding = max(
@@ -560,6 +565,7 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
       super.buildFooter,
       super.buildHeader,
       super.pinToolbar,
+      super.usePagePadding,
       super.customSliverHeader,
       super.useSmallFloatingBar});
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context);

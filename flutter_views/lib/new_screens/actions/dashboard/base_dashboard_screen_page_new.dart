@@ -325,7 +325,7 @@ class _BaseDashboardMainPageState
 
   @override
   bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) {
-    return true;
+    return false;
   }
 
   @override

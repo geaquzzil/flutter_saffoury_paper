@@ -395,9 +395,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
     );
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-          _tabList = initTabBarList();
+      _tabList = initTabBarList();
+
       /// Here you can have your context and do what ever you want
       if (_hasTabBarList()) {
         _tabController = TabController(vsync: this, length: _tabList!.length);
@@ -669,6 +669,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
             setPaddingWhenTowPane(
               getCurrentScreenSize(),
             )) {
+          debugPrint("setSuggestionPadding");
           toShowWidget = Padding(
             padding: getSuggestionPadding(getWidth),
             child: clipRect,
