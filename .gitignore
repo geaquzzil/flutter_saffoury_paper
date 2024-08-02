@@ -34,3 +34,4 @@ flutter_views/.packages/
 flutter_views/build/
 flutter_views/.vscode/
 .flutter-plugins-dependencies
+.flutter-plugins
