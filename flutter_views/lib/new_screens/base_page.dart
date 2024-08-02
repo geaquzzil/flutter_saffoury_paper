@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
@@ -58,6 +59,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   final firstPaneScaffold = GlobalKey<ScaffoldMessengerState>();
   final secondPaneScaffold = GlobalKey<ScaffoldMessengerState>();
+  final ValueNotifier<int> baseBottomSheetValueNotifier = ValueNotifier<int>(0);
+  final ValueNotifier<int> firstPaneBottomSheetValueNotifier =
+      ValueNotifier<int>(0);
+  final ValueNotifier<int> secoundPaneBottomSheetValueNotifier =
+      ValueNotifier<int>(0);
 
   ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
   getDesktopFirstPane({TabControllerHelper? tab});
@@ -79,10 +85,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   Widget? getFirstPaneAppbar({TabControllerHelper? tab});
   Widget? getSecondPaneAppbar({TabControllerHelper? tab});
 
-  Widget? getBaseBottomSheet();
+  List<Widget>? getBaseBottomSheet();
 
-  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab});
-  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab});
+  //TODO
+  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab});
+  //TODO
+  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab});
 
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab});
   bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab});
@@ -138,6 +146,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           borderRadius: BorderRadius.circular(80.0),
           color: Theme.of(context).colorScheme.onSecondary,
         ),
+        // labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
         isScrollable: true,
         tabs: _getTabBarList()!);
   }
@@ -151,7 +160,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           borderRadius: BorderRadius.circular(80.0),
           color: Theme.of(context).colorScheme.onSecondary,
         ),
-        isScrollable: true,
+        isScrollable: false,
         tabs: _getTabBarListSecondPane()!);
   }
 
@@ -356,9 +365,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       appBar: isPanesIsSliver(firstPane, tab: tab) || appBarBody == null
           ? null
           : generateToolbar(firstPane: firstPane, customAppBar: appBarBody),
-      bottomSheet: firstPane
-          ? getFirstPaneBottomSheet(tab: tab)
-          : getSecondPaneBottomSheet(tab: tab),
+      bottomSheet: generatePaneBottomSheet(firstPane, tab: tab),
       body: Padding(
         padding: setBodyPadding(firstPane, tab: tab)
             ? const EdgeInsets.all(kDefaultPadding)
@@ -577,15 +584,29 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   //       : _getBody();
   // }
 
+  Widget? generateBaseBottomSheet() {
+    return null;
+  }
+
+  Widget? generatePaneBottomSheet(bool firstPane, {TabControllerHelper? tab}) {
+    return null;
+  }
+
+  SizedBox getEndDrawer() {
+    return const SizedBox(
+        width: 500, child: Card(child: WebShoppingCartDrawer()));
+  }
+
   Widget _getTabletWidget() {
     return Scaffold(
-
+        bottomNavigationBar: generateBaseBottomSheet(),
+        endDrawer: getEndDrawer(),
         // extendBodyBehindAppBar: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getBaseFloatingActionButton(),
-        //TODO DublicatedKey key: _drawerMenuControllerProvider.getStartDrawableKey,
+        key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: buildDrawer ? _drawerWidget : null,
         body: _getBody());
 

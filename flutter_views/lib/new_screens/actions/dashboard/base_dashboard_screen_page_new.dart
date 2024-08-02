@@ -139,7 +139,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getBaseBottomSheet() => null;
+  List<Widget>? getBaseBottomSheet() => null;
 
   @override
   Widget? getBaseFloatingActionButton({TabControllerHelper? tab}) {
@@ -281,7 +281,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab}) {
+  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) {
     // TODO: implement getFirstPaneBottomSheet
     return null;
   }
@@ -303,7 +303,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab}) {
+  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) {
     // TODO: implement getSecondPaneBottomSheet
     return null;
   }

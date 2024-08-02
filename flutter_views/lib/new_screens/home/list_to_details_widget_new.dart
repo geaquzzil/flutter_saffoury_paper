@@ -33,7 +33,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   Widget? getBaseAppbar() => null;
 
   @override
-  Widget? getBaseBottomSheet() => null;
+  List<Widget>? getBaseBottomSheet() => null;
 
   @override
   Widget? getBaseFloatingActionButton() => null;
@@ -80,7 +80,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
+  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
@@ -88,7 +88,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
+  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 

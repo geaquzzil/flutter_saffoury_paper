@@ -104,13 +104,13 @@
 //   }
 
 //   @override
-//   Widget? getBaseBottomSheet() => null;
+//   List<Widget>?  getBaseBottomSheet() => null;
 
 //   @override
-//   Widget? getFirstPaneBottomSheet() => null;
+//   List<Widget>?  getFirstPaneBottomSheet() => null;
 
 //   @override
-//   Widget? getSecondPaneBottomSheet() => null;
+//   List<Widget>?  getSecondPaneBottomSheet() => null;
 
 //   @override
 //   bool setBodyPadding(bool firstPane) => true;

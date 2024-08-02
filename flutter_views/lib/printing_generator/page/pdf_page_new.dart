@@ -179,7 +179,8 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  Widget? getBaseBottomSheet() => null;
+  
+  List<Widget>? getBaseBottomSheet() => null;
 
   @override
   Widget? getBaseFloatingActionButton() => null;
@@ -296,7 +297,8 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
+  
+  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) {
@@ -327,7 +329,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
+  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 

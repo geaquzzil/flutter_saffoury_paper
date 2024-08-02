@@ -20,11 +20,17 @@ class ListToDetailsPage extends StatefulWidget {
 }
 
 class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
+
+  @override
+  List<TabControllerHelper>? initTabBarList() {
+    // TODO: implement initTabBarList
+    return super.initTabBarList();
+  }
   @override
   Widget? getBaseAppbar() => null;
 
   @override
-  Widget? getBaseBottomSheet() => null;
+  List<Widget>? getBaseBottomSheet() => null;
 
   @override
   Widget? getBaseFloatingActionButton() => null;
@@ -51,7 +57,7 @@ class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
+  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
@@ -59,7 +65,7 @@ class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
+  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
