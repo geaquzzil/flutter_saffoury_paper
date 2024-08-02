@@ -95,15 +95,16 @@ class _ListHorizontalApiWidgetState
   Widget listShimmerItems() {
     return LayoutBuilder(
       builder: (co, constraints) {
-        debugPrint("layoutBuilder ${constraints.maxWidth}");
+        debugPrint("layoutBuilder width ${constraints.maxWidth} height ${constraints.maxHeight} ");
         return ResponsiveGridView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           alignment: Alignment.topCenter,
           itemCount: 5 + Random().nextInt(10 - 5),
           gridDelegate: ResponsiveGridDelegate(
+crossAxisExtent:constraints.maxHeight ,
             mainAxisSpacing: 20,
-            minCrossAxisExtent: constraints.maxHeight - 150,
+            
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,
           ),
@@ -133,11 +134,11 @@ class _ListHorizontalApiWidgetState
           scrollDirection: Axis.horizontal,
           itemCount: isLoading ? (data.length + 3) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
-            crossAxisExtent: 175,
+           crossAxisExtent:constraints.maxHeight ,
             // crossAxisSpacing: 10,
             // from width
             mainAxisSpacing: 10,
-            minCrossAxisExtent: constraints.maxHeight - 150,
+          
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,
           ),

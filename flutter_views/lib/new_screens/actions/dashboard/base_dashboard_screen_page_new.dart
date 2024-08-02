@@ -336,8 +336,11 @@ class _BaseDashboardMainPageState
 
   @override
   Future getCallApiFunctionIfNull(BuildContext context,
-          {TabControllerHelper? tab}) =>
-      getExtras(tab: tab).callApi();
+      {TabControllerHelper? tab}) {
+    dynamic ex = getExtras(tab: tab);
+    debugPrint("getCallApiFunctionIfNull extras=> $ex ");
+    return ex.callApi();
+  }
 
   @override
   ServerActions getServerActions() {

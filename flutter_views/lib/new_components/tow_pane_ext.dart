@@ -30,6 +30,7 @@ class TowPaneExt extends StatelessWidget {
             allowedOverrides: const {
               TwoPaneAllowedOverrides.paneProportion,
               TwoPaneAllowedOverrides.direction,
+
               // TwoPaneAllowedOverrides.direction,
               TwoPaneAllowedOverrides.panePriority,
             },
