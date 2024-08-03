@@ -1,13 +1,15 @@
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
+import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListToDetailsPageNew extends StatefulWidget {
   final String title;
@@ -24,13 +26,74 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   ValueNotifier<ViewAbstract?> dsada = ValueNotifier<ViewAbstract?>(null);
 
   @override
+  List<TabControllerHelper>? initTabBarList() {
+    // TODO: implement initTabBarList
+    return [
+      TabControllerHelper(
+        "HOME",
+        // icon: Icon(Icons.home),
+      ),
+      TabControllerHelper(
+        "PAGES",
+        // icon: Icon(Icons.pages),
+      )
+    ];
+  }
+
+  @override
   void initState() {
     buildDrawer = widget.buildDrawer;
     super.initState();
   }
 
   @override
-  Widget? getBaseAppbar() => null;
+  Widget? getBaseAppbar() {
+    if (!isLargeScreenFromCurrentScreenSize(context)) {
+      return null;
+    }
+    return ListTile(
+      title: Row(
+        children: [
+          Expanded(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: kDefaultPadding,
+                ),
+                child: Text(
+                    context
+                        .read<DrawerMenuControllerProvider>()
+                        .getObject
+                        .getMainHeaderLabelTextOnly(context),
+                    style: Theme.of(context).textTheme.headlineMedium)
+
+                // SearchWidgetComponent(onSearchTextChanged: (text) {
+                //   debugPrint("search for $text");
+                // }),
+                ),
+          ),
+
+          // IconButton(
+          //     onPressed: () {
+          //       getExtrasCast(tab: tab).printPage(context);
+          //     },
+          //     icon: const Icon(Icons.print)),
+          // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
+          // IconButton(
+          //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
+          IconButton(
+              onPressed: () {}, icon: const Icon(Icons.notification_add)),
+          const ProfilePicturePopupMenu()
+        ],
+      ),
+      // subtitle: Row(
+      //   children: [
+      //     Expanded(child: DashboardHeader()),
+      //     DateSelector(),
+      //     Spacer()
+      //   ],
+      // ),
+    );
+  }
 
   @override
   List<Widget>? getBaseBottomSheet() => null;
@@ -109,5 +172,5 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
       false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
 }
