@@ -327,7 +327,7 @@ class RouteGenerator {
           name: homeRouteName,
           path: '/',
           pageBuilder: (BuildContext context, GoRouterState state) {
-            return MaterialPage(child: BaseDeterminePageState());
+            return MaterialPage(child: SafeArea(child: BaseDeterminePageState()));
           },
           routes: [
             // GoRoute(

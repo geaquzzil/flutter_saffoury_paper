@@ -114,7 +114,10 @@ class BaseDeterminePageState extends StatelessWidget {
                 );
                 break;
               case DrawerMenuControllerProviderAction.none:
-                widget = const Text("NOIN");
+                widget = ListToDetailsPageNew(
+                  title: "SOSO",
+                  buildDrawer: false,
+                );
                 break;
               case DrawerMenuControllerProviderAction.print:
                 //         pathParameters: {
@@ -135,7 +138,6 @@ class BaseDeterminePageState extends StatelessWidget {
                 break;
             }
             if (isLarge) {
-              //todo safeArea
               return Row(children: [_drawerWidget, Expanded(child: widget)]);
             }
             return widget;

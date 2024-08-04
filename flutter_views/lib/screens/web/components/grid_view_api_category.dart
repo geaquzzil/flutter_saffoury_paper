@@ -354,7 +354,7 @@ class WebGridViewItem extends StatelessWidget {
               opacity: isHovered ? 1 : 0,
               child: AnimatedScale(
                 duration: const Duration(milliseconds: 275),
-                scale: isHovered ? .2 : 0,
+                scale: isHovered ? 1 : 0,
                 child: Center(
                   child: IconButton(
                     icon: const Icon(Icons.add_shopping_cart),

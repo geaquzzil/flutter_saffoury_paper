@@ -182,12 +182,17 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   double getCustomPaneProportion() {
     {
+      CurrentScreenSize s = getCurrentScreenSize();
       debugPrint("getCustomPaneProportion called");
-      if (MediaQuery.of(context).hinge != null) return 0.5;
+      // if ( return 0.5;
+      if (s == CurrentScreenSize.MOBILE ||
+          s == CurrentScreenSize.SMALL_TABLET ||
+          MediaQuery.of(context).hinge != null) {
+        return 0.5;
+      }
       if (SizeConfig.isMediumFromScreenSize(context)) {
         return 0.5;
       } else {
-        CurrentScreenSize s = getCurrentScreenSize();
         double defualtWidth = 0;
         if (s case CurrentScreenSize.DESKTOP) {
           defualtWidth = kDesktopWidth;
@@ -195,6 +200,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         } else if (s case CurrentScreenSize.LARGE_TABLET) {
           defualtWidth = kLargeTablet;
         } else if (s case CurrentScreenSize.MOBILE) {
+          return .5;
+        } else if (s case CurrentScreenSize.SMALL_TABLET) {
           return .5;
         }
 
@@ -368,7 +375,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       bottomSheet: generatePaneBottomSheet(firstPane, tab: tab),
       body: Padding(
         padding: setBodyPadding(firstPane, tab: tab)
-            ? const EdgeInsets.all(kDefaultPadding)
+            ? const EdgeInsets.all(kDefaultPadding / 2)
             : EdgeInsets.zero,
         child: body,
       ),
@@ -376,7 +383,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
     if (setPaneClipRect(firstPane, tab: tab)) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(kDefualtClipRect),
+        borderRadius: BorderRadius.circular(kBorderRadius),
         child: scaffold,
       );
     }
@@ -462,6 +469,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return ScreenHelperSliver(
         requireAutoPadding: false,
         onChangeLayout: (w, h, c) {
+          debugPrint("ScreenHelperSliver build width:$w");
           reset();
           _width = w;
           _height = h;
@@ -621,57 +629,44 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     // }
   }
 
+  Widget getBodyIfHasTabBarList(bool isLarge) {
+    Widget currentWidget;
+    currentWidget = TabBarView(
+        controller: _tabController,
+        children: _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
+    if (isLarge) {
+      if (buildDrawer) {
+        return Row(
+            children: [_drawerWidget!, getSelectorBodyIsLarge(currentWidget)]);
+      } else {
+        return getSelectorBodyIsLarge(currentWidget);
+      }
+    } else {
+      return Scaffold(
+        backgroundColor: ElevationOverlay.overlayColor(context, 2),
+        appBar: generateToolbar(),
+        body: currentWidget,
+      );
+    }
+  }
+
   Widget _getBody() {
     Widget currentWidget;
     bool isLarge = isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
 
     if (_hasTabBarList()) {
-      currentWidget = TabBarView(
-          controller: _tabController,
-          children:
-              _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
-      if (isLarge) {
-        if (buildDrawer) {
-          return SafeArea(
-              child: Row(
-                  children: [_drawerWidget!, getSelectorBody(currentWidget)]));
-        } else {
-          return getSelectorBody(currentWidget);
-        }
-      } else {
-        return SafeArea(
-            child: Scaffold(
-          backgroundColor: ElevationOverlay.overlayColor(context, 2),
-          appBar: generateToolbar(),
-          body: currentWidget,
-        ));
-      }
+      currentWidget = getBodyIfHasTabBarList(isLarge);
     } else {
       currentWidget = _getTowPanes();
     }
-    if (isLarge) {
-      if (buildDrawer) {
-        return SafeArea(
-            child: Row(children: [
-          _drawerWidget!,
-          getSelectorBodyIsLarge(currentWidget)
-        ]));
-      } else {
-        return getSelectorBodyIsLarge(currentWidget);
-      }
-    } else {
-      return SafeArea(
-          child: Scaffold(
-        backgroundColor: ElevationOverlay.overlayColor(context, 2),
-        appBar: generateToolbar(),
-        body: currentWidget,
-      ));
-    }
+    return currentWidget;
   }
 
-  Selector<DrawerMenuControllerProvider, bool> getSelectorBodyIsLarge(
-      Widget currentWidget) {
+  Widget getSelectorBodyIsLarge(Widget currentWidget) {
+    if (!buildDrawer) {
+      return currentWidget;
+    }
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
         debugPrint("drawer selector $isOpen");
@@ -685,12 +680,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                     body: currentWidget,
                   )
                 : currentWidget);
-
         if (_secondWidget == null ||
             setPaddingWhenTowPane(
               getCurrentScreenSize(),
             )) {
-          debugPrint("setSuggestionPadding");
           toShowWidget = Padding(
             padding: getSuggestionPadding(getWidth),
             child: clipRect,
@@ -698,7 +691,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         } else {
           toShowWidget = clipRect;
         }
-
         return AnimatedContainer(
             key: UniqueKey(),
             height: _height,
@@ -711,77 +703,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
-  }
-
-  Selector<DrawerMenuControllerProvider, bool> getSelectorBody(
-      Widget currentWidget) {
-    return Selector<DrawerMenuControllerProvider, bool>(
-      builder: (__, isOpen, ___) {
-        debugPrint("drawer selector $isOpen");
-
-        Widget toShowWidget;
-        Widget clipRect = ClipRRect(
-            borderRadius: BorderRadius.circular(kDefualtClipRect),
-            child: _hasBaseToolbar()
-                ? Scaffold(
-                    backgroundColor: ElevationOverlay.overlayColor(context, 2),
-                    appBar: generateToolbar(),
-                    body: currentWidget,
-                  )
-                : currentWidget);
-
-        if (_secondWidget == null ||
-            setPaddingWhenTowPane(
-              getCurrentScreenSize(),
-            )) {
-          toShowWidget = Padding(
-            padding: getSuggestionPadding(getWidth),
-            child: clipRect,
-          );
-        } else {
-          toShowWidget = clipRect;
-        }
-
-        return AnimatedContainer(
-            key: UniqueKey(),
-            height: _height,
-            width: (_width! -
-                    (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
-                        .toNonNullable()) -
-                0,
-            duration: const Duration(milliseconds: 100),
-            child: toShowWidget);
-      },
-      selector: (p0, p1) => p1.getSideMenuIsOpen,
-    );
-  }
-
-  Widget shouldWrapNavigatorChild(BuildContext context, Widget child,
-      {bool isCustomWidget = false}) {
-    if (isDesktop(context)) {
-      // navigationRailWidget ??= isCustomWidget ? null : getNavigationRail();
-      return SafeArea(
-          child: Row(
-        children: [
-          _drawerWidget!,
-          // if (!isCustomWidget) navigationRailWidget!,
-          Expanded(child: child),
-        ],
-      ));
-    } else if (SizeConfig.isLargeScreen(context)) {
-      // navigationRailWidget ??= getNavigationRail();
-
-      return SafeArea(
-          child: Row(
-        children: [
-          // navigationRailWidget!,
-          const VerticalDivider(width: 1),
-          Expanded(child: child),
-        ],
-      ));
-    } else {
-      return SafeArea(child: child);
-    }
   }
 
   void _tabControllerChangeListener() {

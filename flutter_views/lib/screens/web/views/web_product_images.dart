@@ -18,14 +18,20 @@ class WebProductImages extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
           child: Column(children: [
-            AspectRatio(
-              aspectRatio: 1 / 1,
-              child: hasImage
-                  ? FastCachedImage(
-                      url: url,
-                      fit: BoxFit.contain,
-                    )
-                  : item.getIcon(),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: hasImage
+                    ? FastCachedImage(
+                        url: url,
+                        fit: BoxFit.cover,
+                      )
+                    : item.getIcon(),
+              ),
+            ),
+            SizedBox(
+              height: 20,
             ),
             ActionsOnHeaderWidget(
               viewAbstract: item,
