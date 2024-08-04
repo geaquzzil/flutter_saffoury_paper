@@ -1,4 +1,5 @@
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
@@ -25,6 +26,15 @@ class ListToDetailsPageNew extends StatefulWidget {
 
 class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   ValueNotifier<ViewAbstract?> dsada = ValueNotifier<ViewAbstract?>(null);
+  ViewAbstract? secoundPaneViewAbstract;
+  @override
+  List<TabControllerHelper>? initTabBarListSecondPane(
+      {TabControllerHelper? tab}) {
+    List<TabControllerHelper>? tabs =
+        secoundPaneViewAbstract?.getTabs(context, action: ServerActions.view);
+    debugPrint("initTabBarListSecondPane called ${tabs?.length}");
+    return tabs;
+  }
 
   @override
   List<TabControllerHelper>? initTabBarList() {
@@ -125,12 +135,20 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
     return ValueListenableBuilder(
       valueListenable: dsada,
       builder: (context, value, child) {
+        secoundPaneViewAbstract = value;
+        if (secoundPaneViewAbstract != null && tab?.widget != null) {
+          return tab!.widget!;
+        }
+        // refreshSecondPaneTabBar(
+        //     secoundPaneViewAbstract?.getTabs(context,
+        //         action: ServerActions.view),
+        //     tab: tab);
         if (value == null) {
           return Text("NULL");
         }
-        return BaseViewNewPage(
-          viewAbstract: value,
-        );
+        // return BaseViewNewPage(
+        //   viewAbstract: value,
+        // );
         return WebProductView(
           onHorizontalItemClick: dsada,
           iD: int.parse(value.getIDString()),
@@ -153,7 +171,9 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => ListTile(
+        title: Text("Dasdas"),
+      );
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;

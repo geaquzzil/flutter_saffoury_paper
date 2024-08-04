@@ -338,7 +338,7 @@ class _BaseDashboardMainPageState
   Future getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab}) {
     dynamic ex = getExtras(tab: tab);
-    debugPrint("getCallApiFunctionIfNull extras=> $ex ");
+    debugPrint("getCallApiFunctionIfNull extras=> ${ex?.runtimeType} ");
     return ex.callApi();
   }
 

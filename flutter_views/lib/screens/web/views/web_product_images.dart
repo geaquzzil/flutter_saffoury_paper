@@ -8,11 +8,12 @@ import 'package:flutter_view_controller/new_screens/actions/components/action_on
 
 class WebProductImages extends StatelessWidget {
   final ViewAbstract item;
-  WebProductImages({super.key, required this.item});
+  const WebProductImages({super.key, required this.item});
   @override
   Widget build(BuildContext context) {
     String? url = item.getImageUrl(context);
     bool hasImage = url != null;
+    hasImage = false;
     return item.getHeroTag(
         context: context,
         child: Container(
@@ -24,7 +25,7 @@ class WebProductImages extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: hasImage
                     ? FastCachedImage(
-                        url: url,
+                        url: url!,
                         fit: BoxFit.cover,
                       )
                     : item.getIcon(),
