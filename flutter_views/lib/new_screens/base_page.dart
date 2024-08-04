@@ -387,6 +387,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         : getSecondPaneAppbar(tab: tab);
 
     Widget? body = _getScrollContent(widget, appBarBody, firstPane, tab: tab);
+
     Widget scaffold = Scaffold(
       // key: firstPane ? firstPaneScaffold : secondPaneScaffold,
       backgroundColor: isPaneScaffoldOverlayColord(firstPane, tab: tab)
@@ -577,50 +578,34 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       _firstWidget = beforeGetFirstPaneWidget(tab: tab);
       return _setSubAppBar(_firstWidget, true)!;
     }
-
+    _setupPaneTabBar(false, tab: tab);
+    _setupPaneTabBar(true, tab: tab);
     if (isDesktop(context, maxWidth: getWidth)) {
-      _setupPaneTabBar(false, tab: tab);
-      _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
-      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
-
-      if (_hasTabBarListSecondPane()) {
-        debugPrint("initTabBarListSecondPane hasTabBarListSecondPane");
-        // _secondWidget = _setSubAppBar(
-        //     beforeGetDesktopSecoundPaneWidget(tab: tab, secoundTab: e), false,
-        //     tab: tab)!;
-        _secondWidget = TabBarView(
-            controller: _tabControllerSecondPane,
-            children: _getTabBarListSecondPane()!.map((e) {
-              // return beforeGetDesktopSecoundPaneWidget(tab: tab, secoundTab: e)
-              //     as Widget;
-              return _setSubAppBar(
-                  beforeGetDesktopSecoundPaneWidget(tab: tab, secoundTab: e),
-                  false,
-                  tab: tab)!;
-            }).toList());
-
-        // _secondWidget = _secondWidget = ValueListenableBuilder(
-        //     valueListenable: onTabSelectedSecondPane,
-        //     builder: (c, v, cc) {
-        //       _secondWidget = beforeGetDesktopSecoundPaneWidget(
-        //           tab: tab, secoundTab: _getTabBarListSecondPane()![v]);
-        //       return TabBarView(
-        //           controller: _tabControllerSecondPane,
-        //           children: _getTabBarListSecondPane()!
-        //               .map((e) => _getTowPanes(tab: e))
-        //               .toList());
-        //     });
+      if (_hasTabBarList(firstPane: true)) {
+        _firstWidget = TabBarView(
+            controller: _tabControllerFirstPane,
+            children: _getTabBarListFirstPane()!
+                .map((e) => beforeGetDesktopFirstPaneWidget(tab: e))
+                .toList()
+                .cast());
       } else {
-        _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
-
-        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+        _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
       }
 
-      // if
-    } else {
-      _setupPaneTabBar(false, tab: tab);
-      _setupPaneTabBar(true, tab: tab);
+      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
 
+      if (_hasTabBarList(firstPane: false)) {
+        _secondWidget = TabBarView(
+            controller: _tabControllerSecondPane,
+            children: _getTabBarListSecondPane()!
+                .map((e) => beforeGetDesktopSecoundPaneWidget(tab: e))
+                .toList()
+                .cast());
+      } else {
+        _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
+      }
+      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+    } else {
       _firstWidget = beforeGetFirstPaneWidget(tab: tab);
       _secondWidget = beforeGetSecondPaneWidget(tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
