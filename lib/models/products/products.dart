@@ -891,7 +891,7 @@ class Product extends ViewAbstract<Product>
     return [
       TabControllerHelper(AppLocalizations.of(context)!.movments,
           draggableHeaderWidget: Text(
-            "Movments",
+            AppLocalizations.of(context)!.movments,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge

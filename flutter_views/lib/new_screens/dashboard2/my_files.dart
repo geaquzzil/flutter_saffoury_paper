@@ -42,7 +42,6 @@ class MyFiles extends StatelessWidget {
         Responsive(
           mobile: FileInfoStaggerdGridView(
             list: dgh.widgets.map((e) => e.widget).toList(),
-            crossAxisCount: size.width < 750 ? 2 : 6,
             childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
           ),
           tablet: FileInfoStaggerdGridView(
@@ -50,7 +49,7 @@ class MyFiles extends StatelessWidget {
           ),
           desktop: FileInfoStaggerdGridView(
             list: dgh.widgets.map((e) => e.widget).toList(),
-            crossAxisCount: 6,
+           
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
@@ -147,28 +146,38 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   bool wrapWithCard;
   FileInfoStaggerdGridView(
       {super.key,
-      this.crossAxisCount = 4,
       this.childAspectRatio = 1,
       this.wrapWithCard = false,
       required this.list});
 
-  final int crossAxisCount;
   final double childAspectRatio;
+
+  int getCrossAxisCount(double width) {
+    if (width < 1000) {
+      return 2;
+    } else {
+      int val = ((width / 300)).toInt();
+      debugPrint("getCrossAxisCount val   $val");
+      return val;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     debugPrint("FileInfoStaggerdGridView wrapWithCard $wrapWithCard");
-    return StaggeredGrid.count(
-        crossAxisCount: crossAxisCount,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
-        children: wrapWithCard
-            ? list
-                .map((e) => Card(
-                      child: e,
-                    ))
-                .toList()
-            : list);
+    return LayoutBuilder(builder: (context, constraints) {
+      return StaggeredGrid.count(
+          crossAxisCount: getCrossAxisCount(constraints.maxWidth),
+          mainAxisSpacing: 2,
+          crossAxisSpacing: 2,
+          children: wrapWithCard
+              ? list
+                  .map((e) => Card(
+                        child: e,
+                      ))
+                  .toList()
+              : list);
+    });
   }
 }
 

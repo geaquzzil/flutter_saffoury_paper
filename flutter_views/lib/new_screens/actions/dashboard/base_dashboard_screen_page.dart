@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
@@ -122,7 +121,7 @@ class _BaseDashboardState extends State<BaseDashboard>
                         child: Responsive(
                           mobile: FileInfoStaggerdGridView(
                             list: element.widgets.map((e) => e.widget).toList(),
-                            crossAxisCount: size.width < 750 ? 2 : 4,
+                            // crossAxisCount: size.width < 750 ? 2 : 4,
                             childAspectRatio:
                                 size.width < 750 && size.width > 350 ? 1.3 : 1,
                           ),
@@ -131,7 +130,7 @@ class _BaseDashboardState extends State<BaseDashboard>
                           ),
                           desktop: FileInfoStaggerdGridView(
                             list: element.widgets.map((e) => e.widget).toList(),
-                            crossAxisCount: 6,
+                            // crossAxisCount: 6,
                             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
                           ),
                         ),
@@ -196,7 +195,7 @@ class _BaseDashboardState extends State<BaseDashboard>
           child: Responsive(
             mobile: FileInfoStaggerdGridView(
               list: element.widgets.map((e) => e.widget).toList(),
-              crossAxisCount: size.width < 750 ? 2 : 4,
+              // crossAxisCount: size.width < 750 ? 2 : 4,
               childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
             ),
             tablet: FileInfoStaggerdGridView(
@@ -204,7 +203,7 @@ class _BaseDashboardState extends State<BaseDashboard>
             ),
             desktop: FileInfoStaggerdGridView(
               list: element.widgets.map((e) => e.widget).toList(),
-              crossAxisCount: 6,
+              // crossAxisCount: 6,
               childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
             ),
           ),

@@ -105,13 +105,20 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   void didUpdateWidget(covariant T oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("didUpdateWidget tabController");
-    extras = widget.viewAbstract;
-    iD = widget.viewAbstract.iD;
-    tableName = widget.viewAbstract.getTableNameApi();
-    _tabs.clear();
-    _tabs
-        .addAll(getExtras().getTabs(context, action: widget.getServerAction()));
-    _listCardItemEditableState.clear();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        setState(() {
+          extras = widget.viewAbstract;
+          iD = widget.viewAbstract.iD;
+          tableName = widget.viewAbstract.getTableNameApi();
+          _tabs.clear();
+          _tabs.addAll(
+              getExtras().getTabs(context, action: widget.getServerAction()));
+          _listCardItemEditableState.clear();
+        });
+      },
+    );
   }
 
   GlobalKey<ListCardItemEditableState> getListCardItemEditableKey(

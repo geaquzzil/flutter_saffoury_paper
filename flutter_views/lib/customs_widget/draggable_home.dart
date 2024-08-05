@@ -1,12 +1,16 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/web/views/web_product_images.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'sliver_delegates.dart';
@@ -170,6 +174,8 @@ class DraggableHomeState extends State<DraggableHome>
 
   ValueNotifier<bool> hideWhenScroll = ValueNotifier<bool>(false);
 
+  ScrollController? _scrollController;
+
   List<Widget> animatedWidgets = [];
 
   @override
@@ -182,10 +188,9 @@ class DraggableHomeState extends State<DraggableHome>
   }
 
   @override
-  void initState() {
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 450));
-    _animationController.forward();
+  void didUpdateWidget(covariant DraggableHome oldWidget) {
+    _scrollTop();
+
     if (widget.tabs != null) {
       _tabs = <TabControllerHelper>[];
       _tabs!.clear();
@@ -193,11 +198,24 @@ class DraggableHomeState extends State<DraggableHome>
       _tabController = TabController(length: _tabs!.length, vsync: this)
         ..addListener(() async {
           onTabSelected.value = _tabController!.index;
-          // await widget.scrollController?.animateTo(
-          //   0,
-          //   duration: Duration(seconds: 1),
-          //   curve: Curves.ease,
-          // );
+        });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
+    _animationController.forward();
+    _scrollController = widget.scrollController;
+    if (widget.tabs != null) {
+      _tabs = <TabControllerHelper>[];
+      _tabs!.clear();
+      _tabs!.addAll(widget.tabs!);
+      _tabController = TabController(length: _tabs!.length, vsync: this)
+        ..addListener(() async {
+          onTabSelected.value = _tabController!.index;
         });
     }
     super.initState();
@@ -220,9 +238,36 @@ class DraggableHomeState extends State<DraggableHome>
       backgroundColor:
           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
-      body: PageStorage(
-        bucket: bucket,
-        child: getNotificationListener(expandedHeight, context, appBarHeight,
+      body: ScreenHelper(
+        largeTablet: LayoutBuilder(builder: (context, constraints) {
+          return Center(
+              child: MaxWidthBox(
+            maxWidth: constraints.maxWidth,
+
+            // minWidth: width,
+            // defaultScale: false,
+            child: Flex(
+              direction:
+                  constraints.maxWidth > 500 ? Axis.horizontal : Axis.vertical,
+              children: [
+                // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
+                Expanded(
+                    flex: constraints.maxWidth > 720.0 ? 1 : 0,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(kBorderRadius / 2),
+                        child: AspectRatio(
+                            aspectRatio: 16 / 9, child: widget.headerWidget))),
+                Expanded(
+                    flex: constraints.maxWidth > 720.0 ? 2 : 0,
+                    child: getPageStorage(expandedHeight, context, appBarHeight,
+                        fullyExpandedHeight, topPadding)),
+              ],
+            ),
+          ));
+        }),
+        smallTablet: getPageStorage(expandedHeight, context, appBarHeight,
+            fullyExpandedHeight, topPadding),
+        mobile: getPageStorage(expandedHeight, context, appBarHeight,
             fullyExpandedHeight, topPadding),
       ),
       // appBar: widget.showNormalToolbar,
@@ -231,6 +276,15 @@ class DraggableHomeState extends State<DraggableHome>
       floatingActionButton: getScaffoldFloatingActionButton(),
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
+    );
+  }
+
+  PageStorage getPageStorage(double expandedHeight, BuildContext context,
+      double appBarHeight, double fullyExpandedHeight, double topPadding) {
+    return PageStorage(
+      bucket: bucket,
+      child: getNotificationListener(expandedHeight, context, appBarHeight,
+          fullyExpandedHeight, topPadding),
     );
   }
 
@@ -332,7 +386,7 @@ class DraggableHomeState extends State<DraggableHome>
     }
     return ScrollToHideWidget(
         height: widget.bottomNavigationBarHeight ?? kBottomNavigationBarHeight,
-        controller: widget.scrollController,
+        controller: _scrollController,
         child: child!);
   }
 
@@ -398,7 +452,7 @@ class DraggableHomeState extends State<DraggableHome>
         return SafeArea(
           child: CustomScrollView(
             // key: const PageStorageKey<String>('saveState'),
-            controller: widget.scrollController,
+            controller: _scrollController,
             physics: widget.physics ??
                 const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
@@ -713,23 +767,26 @@ class DraggableHomeState extends State<DraggableHome>
   }
 
   void _scrollDown() {
-    widget.scrollController?.animateTo(
-      widget.scrollController!.position.maxScrollExtent,
+    if (_scrollController == null) return;
+    _scrollController?.animateTo(
+      _scrollController!.position.maxScrollExtent,
       duration: const Duration(milliseconds: 400),
       curve: Curves.fastOutSlowIn,
     );
   }
 
   void _scrollTop() {
-    widget.scrollController?.animateTo(
-      widget.scrollController!.position.minScrollExtent,
+    if (_scrollController == null) return;
+    _scrollController?.animateTo(
+      _scrollController!.position.minScrollExtent,
       duration: const Duration(milliseconds: 700),
       curve: Curves.fastOutSlowIn,
     );
   }
 
   void _scrollToCollapsed() {
-    widget.scrollController?.jumpTo(500);
+    if (_scrollController == null) return;
+    _scrollController?.jumpTo(500);
   }
 
   void notifyListenerWidgetBinding(bool fullyCollapsed, bool fullyExpanded) {
