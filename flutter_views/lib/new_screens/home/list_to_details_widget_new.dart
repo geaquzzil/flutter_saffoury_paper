@@ -146,17 +146,19 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
         if (value == null) {
           return Text("NULL");
         }
-        // return BaseViewNewPage(
-        //   viewAbstract: value,
-        // );
-        return WebProductView(
-          onHorizontalItemClick: dsada,
-          iD: int.parse(value.getIDString()),
-          buildFooter: false,
-          usePagePadding: false,
-          buildHeader: false,
-          tableName: value.getTableNameApi()!,
-          extras: value,
+        // if (isLargeScreenFromScreenSize(getCurrentScreenSize())) {
+        //   return WebProductView(
+        //     onHorizontalItemClick: dsada,
+        //     iD: int.parse(value.getIDString()),
+        //     buildFooter: false,
+        //     usePagePadding: false,
+        //     buildHeader: false,
+        //     tableName: value.getTableNameApi()!,
+        //     extras: value,
+        //   );
+        // }
+        return BaseViewNewPage(
+          viewAbstract: value,
         );
       },
     );
@@ -171,9 +173,12 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => ListTile(
-        title: Text("Dasdas"),
-      );
+  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
+    return null;
+    return ListTile(
+      title: Text("Dasdas"),
+    );
+  }
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -189,7 +194,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => firstPane;
 
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,

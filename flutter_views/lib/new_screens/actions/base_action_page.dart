@@ -180,8 +180,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             stretch: true,
             stretchTriggerOffset: 150,
             automaticallyImplyLeading: true,
-            pinned: true,
-            snap: true,
+            pinned: false,
+            snap: false,
             expandedHeight: MediaQuery.of(context).size.height * .25,
             actions: [
               ActionsOnHeaderWidget(
@@ -562,7 +562,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     if (getBodyIsSliver()) {
       tabs[0].slivers = [
         ...getTopWidget(),
-        // getTabbar(context),
         getBody(context),
         ...getBottomWidget(),
         const SliverToBoxAdapter(
@@ -585,19 +584,20 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         // bottomNavigationBarHeight: 80,
         bottomNavigationBar: isCartableInterface()
             ? BottomAppBar(
+                height: 80,
                 // color: Theme.of(context).colorScheme.surface,
                 // elevation: 2,
-                shape: const AutomaticNotchedShape(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
-                      topRight: Radius.circular(25)),
-                )),
+                // shape: const AutomaticNotchedShape(RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.only(
+                //       topLeft: Radius.circular(25),
+                //       bottomLeft: Radius.circular(25),
+                //       bottomRight: Radius.circular(25),
+                //       topRight: Radius.circular(25)),
+                // )),
                 child: BottomWidgetOnViewIfCartable(
                     viewAbstract: getExtras() as CartableProductItemInterface))
             : null,
-        bottomNavigationBarHeight: 100,
+        bottomNavigationBarHeight: 80,
         // headerBottomBar: Text("sdd"),
         expandedBody:
             isListableInterface() ? getListableInterfaceQrCode() : null,

@@ -22,6 +22,7 @@ import 'package:flutter_view_controller/screens/web/terms.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:provider/provider.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
@@ -231,7 +232,7 @@ abstract class BaseWebPage extends StatelessWidget {
           ),
         ),
       ),
-      body: WebSmoothScroll(
+      body: ResponsiveScroll(
         controller: _scrollController,
         scrollOffset: 250, // additional offset to users scroll input
         animationDuration: 600,
@@ -419,7 +420,7 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     return LayoutBuilder(
       builder: (c, constraints) {
         Widget? customAppBar = getCustomAppBar(context, constraints);
-        return WebSmoothScroll(
+        return ResponsiveScroll(
           controller: _scrollController,
           scrollOffset: 250, // additional offset to users scroll input
           animationDuration: 600,

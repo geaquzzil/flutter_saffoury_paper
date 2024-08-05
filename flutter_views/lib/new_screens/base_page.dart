@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:provider/provider.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -345,7 +346,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       if (SizeConfig.isDesktopOrWebPlatform(context)) {
         debugPrint(
             "BasePage IsPanel  isDesktopOrWebPlatform isSliver ${isPanesIsSliver(firstPane, tab: tab)} body $body");
-        body = WebSmoothScroll(
+        body = ResponsiveScroll(
           controller: getScrollController(firstPane, tab: tab),
           animationDuration: animationDuration,
           scrollOffset: scrollOffset,

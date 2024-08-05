@@ -78,6 +78,14 @@ bool isTabletFromWidth(double maxWidth) {
   return maxWidth >= kLargeTablet && maxWidth < kDesktopWidth;
 }
 
+bool isMobilePlatform() {
+  return Platform.isAndroid || Platform.isIOS;
+}
+
+bool isDesktopPlatform() {
+  return !isMobilePlatform();
+}
+
 bool isMobile(BuildContext context, {double? maxWidth}) {
   double value = maxWidth ?? MediaQuery.of(context).size.width;
   return isMobileFromWidth(value);

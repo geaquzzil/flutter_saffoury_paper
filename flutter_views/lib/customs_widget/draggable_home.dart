@@ -225,7 +225,7 @@ class DraggableHomeState extends State<DraggableHome>
         child: getNotificationListener(expandedHeight, context, appBarHeight,
             fullyExpandedHeight, topPadding),
       ),
-      appBar: widget.showNormalToolbar,
+      // appBar: widget.showNormalToolbar,
       bottomSheet: widget.bottomSheet,
       bottomNavigationBar: getBottomNavigationBar(),
       floatingActionButton: getScaffoldFloatingActionButton(),

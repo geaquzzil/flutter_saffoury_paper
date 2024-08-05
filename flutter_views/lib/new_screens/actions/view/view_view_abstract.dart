@@ -74,7 +74,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                   symbol: viewAbstract.getCartableQuantityUnit(context)),
               style: Theme.of(context)
                   .textTheme
-                  .titleLarge
+                  .titleMedium
                   ?.copyWith(color: Theme.of(context).colorScheme.primary),
             ),
           )),
@@ -97,7 +97,7 @@ class BottomWidgetOnViewIfCartable extends StatelessWidget {
                     // icon: Icon(Icons.plus_one_outlined),
                     // label: Text("ADD TO CART")
                   )
-                : ElevatedButton(
+                : OutlinedButton(
                     onPressed: () {
                       showCartDialog(context, viewAbstract);
                     },
