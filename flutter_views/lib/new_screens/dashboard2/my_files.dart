@@ -49,7 +49,6 @@ class MyFiles extends StatelessWidget {
           ),
           desktop: FileInfoStaggerdGridView(
             list: dgh.widgets.map((e) => e.widget).toList(),
-           
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
@@ -142,19 +141,28 @@ class _TestExpandedState extends State<TestExpanded> {
 }
 
 class FileInfoStaggerdGridView extends StatelessWidget {
-  List<StaggeredGridTile> list;
+  List<StaggeredGridTile>? list;
+
+  ///int 1: is crossCount
+  ///int 2: is suggested crossCount for StraggeredGrid
+  ///int 3: is suggested crossCountMod
+  List<StaggeredGridTile> Function(int, int, int)? builder;
   bool wrapWithCard;
   FileInfoStaggerdGridView(
       {super.key,
       this.childAspectRatio = 1,
       this.wrapWithCard = false,
-      required this.list});
+      this.builder,
+      this.list})
+      : assert(list != null || builder != null);
 
   final double childAspectRatio;
 
   int getCrossAxisCount(double width) {
-    if (width < 1000) {
+    if (width < 500 && width < 0) {
       return 2;
+    } else if (width < 1000 && width > 500) {
+      return 4;
     } else {
       int val = ((width / 300)).toInt();
       debugPrint("getCrossAxisCount val   $val");
@@ -164,19 +172,33 @@ class FileInfoStaggerdGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("FileInfoStaggerdGridView wrapWithCard $wrapWithCard");
+    debugPrint("FileInfoStaggerdGridView====> wrapWithCard $wrapWithCard");
     return LayoutBuilder(builder: (context, constraints) {
+      int crossAxisCount = getCrossAxisCount(constraints.maxWidth);
+      bool isMezouj = crossAxisCount % 2 == 0;
+      debugPrint(
+          "FileInfoStaggerdGridView====> width:${constraints.maxWidth} isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
+      int crossCountFund = crossAxisCount ~/ 4;
+      int crossAxisCountMod = crossAxisCount % 4;
+      int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
+
+      debugPrint(
+          "FileInfoStaggerdGridView====> isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}");
+      if (builder != null) {
+        list = builder!
+            .call(crossAxisCount, crossCountFundCalc, crossAxisCountMod);
+      }
       return StaggeredGrid.count(
-          crossAxisCount: getCrossAxisCount(constraints.maxWidth),
+          crossAxisCount: crossAxisCount,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           children: wrapWithCard
-              ? list
+              ? list!
                   .map((e) => Card(
                         child: e,
                       ))
                   .toList()
-              : list);
+              : list!);
     });
   }
 }

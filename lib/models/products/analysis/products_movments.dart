@@ -144,7 +144,7 @@ class ProductMovments
   @override
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     return FileInfoStaggerdGridView(
-        list: getStaggeredGridTileList(context),
+        builder: (i, i2, i3) => getStaggeredGridTileList(context, i2, i3),
         wrapWithCard: false,
         // crossAxisCount: 2,
         childAspectRatio: 1.4
@@ -167,11 +167,12 @@ class ProductMovments
     // );
   }
 
-  List<StaggeredGridTile> getStaggeredGridTileList(BuildContext context) {
+  List<StaggeredGridTile> getStaggeredGridTileList(
+      BuildContext context, int calc, int mod) {
     return [
       StaggeredGridTile.count(
-          crossAxisCellCount: 8,
-          mainAxisCellCount: 2,
+          crossAxisCellCount: calc + mod,
+          mainAxisCellCount: 1,
           child: MultiLineChartItem<GrowthRate, DateTime>(
             title: "T",
             list: getAnalysisChart(),
@@ -183,8 +184,8 @@ class ProductMovments
           )),
       if (purchases!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: purchases?.cast() ?? [],
@@ -192,8 +193,8 @@ class ProductMovments
                 description: "${purchases?.length}")),
       if (purchases_refunds!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: purchases_refunds?.cast() ?? [],
@@ -202,8 +203,8 @@ class ProductMovments
                 description: "${purchases_refunds?.length}")),
       if (orders!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: orders?.cast() ?? [],
@@ -214,8 +215,8 @@ class ProductMovments
                 footerRight: "23%")),
       if (orders_refunds!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: orders_refunds?.cast() ?? [],
@@ -223,8 +224,8 @@ class ProductMovments
                 description: "${orders_refunds?.length}")),
       if (products_inputs!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: products_inputs?.cast() ?? [],
@@ -232,8 +233,8 @@ class ProductMovments
                 description: "${products_inputs?.length}")),
       if (products_outputs!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: products_outputs?.cast() ?? [],
@@ -241,8 +242,8 @@ class ProductMovments
                 description: "${products_outputs?.length}")),
       if (transfers!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: transfers?.cast() ?? [],
@@ -250,8 +251,8 @@ class ProductMovments
                 description: "${transfers?.length}")),
       if (cut_requests!.isNotEmpty)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: cut_requests?.cast() ?? [],
@@ -259,8 +260,8 @@ class ProductMovments
                 description: "${cut_requests?.length}")),
       if (reservation_invoice?.isNotEmpty ?? false)
         StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 2,
+            crossAxisCellCount: calc,
+            mainAxisCellCount: .5,
             child: wrapContainer(
                 context: context,
                 list: reservation_invoice?.cast() ?? [],
