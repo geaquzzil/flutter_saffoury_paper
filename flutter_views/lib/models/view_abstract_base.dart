@@ -447,10 +447,13 @@ class TabControllerHelper extends Tab {
   Widget? widget;
   List<Widget>? slivers;
 
+  ///this for ViewAbstractStandAloneCustomViewApi to let knw
+  bool isResponsiveIsSliver;
   Widget? draggableHeaderWidget;
   Widget? draggableSwithHeaderFromAppbarToScroll;
   AlignmentDirectional? draggableSwithHeaderFromAppbarToScrollAlignment;
   Widget? draggableExtendedWidget;
+  Function? autoRestWidgetBuilder;
 
   int? iD;
   String? tableName;
@@ -469,12 +472,14 @@ class TabControllerHelper extends Tab {
       this.slivers,
       this.iD,
       this.tableName,
+      this.autoRestWidgetBuilder,
       this.extras,
       this.draggableHeaderWidget,
       this.draggableExtendedWidget,
       this.draggableSwithHeaderFromAppbarToScrollAlignment =
           AlignmentDirectional.topCenter,
       this.draggableSwithHeaderFromAppbarToScroll,
+      this.isResponsiveIsSliver = false,
       this.widget})
       : super(text: title);
 }

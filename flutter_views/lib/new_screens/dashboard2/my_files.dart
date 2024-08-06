@@ -159,7 +159,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   final double childAspectRatio;
 
   int getCrossAxisCount(double width) {
-    if (width < 500 && width < 0) {
+    if (width < 500 && width > 0) {
       return 2;
     } else if (width < 1000 && width > 500) {
       return 4;

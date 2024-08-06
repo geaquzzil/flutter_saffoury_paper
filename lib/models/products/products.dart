@@ -897,6 +897,8 @@ class Product extends ViewAbstract<Product>
                 .titleLarge
                 ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
+          isResponsiveIsSliver: true,
+          // extras: ,
           widget: ListHorizontalCustomViewApiAutoRestWidget(
               autoRest: ProductMovments.init(iD))),
       // TabControllerHelper(

@@ -256,7 +256,7 @@ class DraggableHomeState extends State<DraggableHome>
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(kBorderRadius / 2),
                         child: AspectRatio(
-                            aspectRatio: 16 / 9, child: widget.headerWidget))),
+                            aspectRatio: 16 / 9, child: Text("TODO")))),
                 Expanded(
                     flex: constraints.maxWidth > 720.0 ? 2 : 0,
                     child: getPageStorage(expandedHeight, context, appBarHeight,
@@ -516,21 +516,8 @@ class DraggableHomeState extends State<DraggableHome>
                       collapsedHeight: appBarHeight,
                       expandedHeight:
                           fullyExpanded ? fullyExpandedHeight : expandedHeight,
-                      flexibleSpace: _tabs != null
-                          ? ValueListenableBuilder<int>(
-                              valueListenable: onTabSelected,
-                              builder: (context, value, child) => getSliverSpace(
-                                  fullyExpanded, context, fullyCollapsed,
-                                  tabFullyExpanded:
-                                      _tabs![value].draggableExtendedWidget,
-                                  tabHeaderWidget: _tabs![value]
-                                          .draggableSwithHeaderFromAppbarToScroll ??
-                                      _tabs![value].draggableHeaderWidget),
-                            )
-                          : widget.headerWidget != null
-                              ? getSliverSpace(
-                                  fullyExpanded, context, fullyCollapsed)
-                              : null,
+                      flexibleSpace: getFlixibleSpaceWidget(
+                          fullyExpanded, fullyCollapsed, context),
                       stretchTriggerOffset: widget.stretchTriggerOffset,
                       onStretchTrigger: widget.fullyStretchable
                           ? () async {
@@ -588,6 +575,23 @@ class DraggableHomeState extends State<DraggableHome>
     return child;
   }
 
+  Widget? getFlixibleSpaceWidget(
+      bool fullyExpanded, bool fullyCollapsed, BuildContext context) {
+    return _tabs != null
+        ? ValueListenableBuilder<int>(
+            valueListenable: onTabSelected,
+            builder: (context, value, child) => getSliverSpace(
+                fullyExpanded, context, fullyCollapsed,
+                tabFullyExpanded: _tabs![value].draggableExtendedWidget,
+                tabHeaderWidget:
+                    _tabs![value].draggableSwithHeaderFromAppbarToScroll ??
+                        _tabs![value].draggableHeaderWidget),
+          )
+        : widget.headerWidget != null
+            ? getSliverSpace(fullyExpanded, context, fullyCollapsed)
+            : null;
+  }
+
   Widget? getToggleWidget(TabControllerHelper tab) {
     if (tab.draggableSwithHeaderFromAppbarToScroll == null) return null;
     debugPrint("DraggableHome draggableSwithHeaderFromAppbarToScroll ");
@@ -609,6 +613,14 @@ class DraggableHomeState extends State<DraggableHome>
 
   List<Widget> getTabWidget(TabControllerHelper tab) {
     bool hasSlivers = tab.slivers != null;
+    if (tab.autoRestWidgetBuilder != null) {
+      dynamic call = tab.autoRestWidgetBuilder!.call();
+      if (call is List<Widget>) {
+        return call;
+      } else {
+        return call;
+      }
+    }
     return [
       if (!hasSlivers)
         SliverFillRemaining(
