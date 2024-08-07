@@ -453,7 +453,10 @@ class TabControllerHelper extends Tab {
   Widget? draggableSwithHeaderFromAppbarToScroll;
   AlignmentDirectional? draggableSwithHeaderFromAppbarToScrollAlignment;
   Widget? draggableExtendedWidget;
+
+  ///could return List<Widget> if sliver or Widget if not sliver
   Function? autoRestWidgetBuilder;
+  ViewAbstract? autoRestWidgetBuilderViewAbstract;
 
   int? iD;
   String? tableName;

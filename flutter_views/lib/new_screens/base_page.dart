@@ -53,8 +53,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
   bool buildDrawer;
+  bool buildSecoundPane;
 
-  BasePageState({this.buildDrawer = true});
+  BasePageState({this.buildDrawer = true, this.buildSecoundPane = true});
   // The listener
   final _connectionListener = ConnectionListener();
 
@@ -608,9 +609,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
     } else {
       _firstWidget = beforeGetFirstPaneWidget(tab: tab);
-      _secondWidget = beforeGetSecondPaneWidget(tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
-      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+      if (buildSecoundPane) {
+        _secondWidget = beforeGetSecondPaneWidget(tab: tab);
+        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+      }
     }
     if (_secondWidget == null) {
       return _firstWidget!;
@@ -784,7 +787,12 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   dynamic extras;
   bool _isLoading = false;
 
-  BasePageWithApi({this.iD, this.tableName, this.extras, super.buildDrawer});
+  BasePageWithApi(
+      {this.iD,
+      this.tableName,
+      this.extras,
+      super.buildDrawer,
+      super.buildSecoundPane});
   Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab});
   ServerActions getServerActions();

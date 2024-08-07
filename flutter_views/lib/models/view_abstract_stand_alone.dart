@@ -15,6 +15,14 @@ abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
   Widget? getCustomFloatingActionWidget(BuildContext context);
 
   bool getCustomStandAloneWidgetIsPadding();
+
+ void callApiForCustomStandAloneWidget(BuildContext context){
+  switch(getCustomStandAloneResponseType()){
+    case ResponseType.LIST:
+    case ResponseType.NONE_RESPONSE_TYPE:
+    case ResponseType.SINGLE:
+  }
+ }
   @override
   Map<String, IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap

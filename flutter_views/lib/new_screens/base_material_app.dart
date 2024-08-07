@@ -115,6 +115,12 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         value: langaugeProvider,
         child:
             Consumer<LangaugeProvider>(builder: (context, provider, listTile) {
+          final screenWidth = MediaQuery.of(context).size.width;
+          final scaleFactor =
+              screenWidth / 360; // Adjust as needed based on your design
+
+          final fontSize =
+              14 * scaleFactor; // Base font size multiplied by scaling factor
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
               notifyLogoColor(context, lightDynamic, darkDynamic);
@@ -126,7 +132,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 //           PointerDeviceKind.touch,
                 //           PointerDeviceKind.stylus,
                 //           PointerDeviceKind.unknown
-                //         },
+                //         },rod
                 //       )
                 //     : null,
                 supportedLocales: AppLocalizations.supportedLocales,
@@ -145,7 +151,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                       data: MediaQuery.of(context).copyWith(
                         textScaler: MediaQuery.of(context)
                             .textScaler
-                            .clamp(minScaleFactor: 0.8, maxScaleFactor: 1.6),
+                            .clamp(minScaleFactor: .5, maxScaleFactor: 1.6),
                       ),
                       child: widget!,
                     ),
@@ -174,11 +180,11 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                     routeGenerator.router.routeInformationProvider,
 
                 theme: ThemeData(
-                  textTheme: kIsWeb
-                      ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
-                          .apply()
-                      : GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
-                          .apply(fontSizeDelta: 1, fontSizeFactor: .85),
+                  // textTheme: kIsWeb
+                  //     ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
+                  //         .apply()
+                  //     : GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
+                  //         .apply(fontSizeDelta: .9, fontSizeFactor: .5),
                   visualDensity: SizeConfig.isDesktopOrWebPlatform(context)
                       ? VisualDensity.comfortable
                       : VisualDensity.compact,
