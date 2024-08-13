@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations_images.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -25,7 +26,9 @@ part 'customs_declarations.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
-    implements PrintableCustomFromPDFInterface<PrintLocalSetting> {
+    implements
+        PrintableCustomFromPDFInterface<PrintLocalSetting>,
+        ListableInterface<CustomsDeclarationImages> {
   // int? EmployeeID;
 
   @JsonKey(fromJson: intFromString)
@@ -319,4 +322,82 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
           material.BuildContext context, PrintLocalSetting? pca) =>
       null;
+
+  @override
+  List<CustomsDeclarationImages>? deletedList;
+
+  @override
+  CustomsDeclarationImages? getListableAddFromManual(
+      material.BuildContext context) {
+    return CustomsDeclarationImages();
+  }
+
+  @override
+  material.Widget? getListableCustomHeader(material.BuildContext context) {
+    return null;
+  }
+
+  @override
+  List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
+      material.BuildContext context) {
+    return customs_declarations_images ?? [];
+    //  if (customs_declarations_images == null) return [];
+    // return customs_declarations_images?.map((e) => e.!).toList() ?? [];
+  }
+
+  @override
+  List<CustomsDeclarationImages> getListableList() {
+    return customs_declarations_images ?? [];
+  }
+
+  @override
+  ViewAbstract? getListablePickObject() {
+    return CustomsDeclarationImages();
+  }
+
+  @override
+  ViewAbstract? getListablePickObjectQrCode() => null;
+
+  @override
+  double? getListableTotalDiscount(material.BuildContext context) => null;
+
+  @override
+  double? getListableTotalPrice(material.BuildContext context) => null;
+
+  @override
+  String? getListableTotalQuantity(material.BuildContext context) => null;
+
+  @override
+  bool isListableIsImagable() => true;
+
+  @override
+  bool isListableRequired(material.BuildContext context) => true;
+
+  @override
+  void onListableAddFromManual(
+      material.BuildContext context, CustomsDeclarationImages addedObject) {
+    // TODO: implement onListableAddFromManual
+  }
+
+  @override
+  void onListableDelete(CustomsDeclarationImages item) {
+    // TODO: implement onListableDelete
+  }
+
+  @override
+  void onListableListAddedByQrCode(
+      material.BuildContext context, ViewAbstract? view) {
+    // TODO: implement onListableListAddedByQrCode
+  }
+
+  @override
+  void onListableSelectedListAdded(
+      material.BuildContext context, List<ViewAbstract> list) {
+    // TODO: implement onListableSelectedListAdded
+  }
+
+  @override
+  void onListableUpdate(CustomsDeclarationImages item) {
+    // TODO: implement onListableUpdate
+  }
 }

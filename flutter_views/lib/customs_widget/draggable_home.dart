@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -112,6 +113,8 @@ class DraggableHome extends StatefulWidget {
 
   final PreferredSizeWidget? showNormalToolbar;
 
+  final String? scrollKey;
+
   /// This will create DraggableHome.
   const DraggableHome(
       {super.key,
@@ -125,6 +128,7 @@ class DraggableHome extends StatefulWidget {
       this.valueNotifierExpandTypeOnExpandOny,
       this.showLeadingAsHamborg = true,
       this.alwaysShowTitle = false,
+      this.scrollKey,
       this.showNormalToolbar,
       this.headerExpandedHeight = 0.4,
       this.scrollController,
@@ -177,6 +181,7 @@ class DraggableHomeState extends State<DraggableHome>
   ScrollController? _scrollController;
 
   List<Widget> animatedWidgets = [];
+  late String bucketOffsetKey;
 
   @override
   void dispose() {
@@ -184,12 +189,26 @@ class DraggableHomeState extends State<DraggableHome>
     isFullyCollapsed.close();
     _tabController?.dispose();
     _animationController.dispose();
+    _scrollController?.removeListener(_onScrollChanged);
+    // _scrollController?.dispose();
     super.dispose();
   }
 
   @override
   void didUpdateWidget(covariant DraggableHome oldWidget) {
-    _scrollTop();
+    bucketOffsetKey = widget.scrollKey ?? "scrollKey";
+    debugPrint("didUpdateWidget draggable $bucketOffsetKey");
+    WidgetsBinding.instance.addPostFrameCallback((c) {
+      if (mounted) {
+        double lastSavedScroll =
+            Configurations.currentPageScrollOffset(context, bucketOffsetKey);
+        if (lastSavedScroll != 0) {
+          _scrollTo(lastSavedScroll);
+        } else {
+          _scrollTop();
+        }
+      }
+    });
 
     if (widget.tabs != null) {
       _tabs = <TabControllerHelper>[];
@@ -203,12 +222,16 @@ class DraggableHomeState extends State<DraggableHome>
     super.didUpdateWidget(oldWidget);
   }
 
+  void _onScrollChanged() {}
+
   @override
   void initState() {
+    bucketOffsetKey = widget.scrollKey ?? "scrollKey";
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     _animationController.forward();
     _scrollController = widget.scrollController;
+    _scrollController?.addListener(_onScrollChanged);
     if (widget.tabs != null) {
       _tabs = <TabControllerHelper>[];
       _tabs!.clear();
@@ -282,7 +305,7 @@ class DraggableHomeState extends State<DraggableHome>
   PageStorage getPageStorage(double expandedHeight, BuildContext context,
       double appBarHeight, double fullyExpandedHeight, double topPadding) {
     return PageStorage(
-      bucket: bucket,
+      bucket: appBucket,
       child: getNotificationListener(expandedHeight, context, appBarHeight,
           fullyExpandedHeight, topPadding),
     );
@@ -357,6 +380,12 @@ class DraggableHomeState extends State<DraggableHome>
       {TabControllerHelper? tab}) {
     return NotificationListener<ScrollNotification>(
         onNotification: (notification) {
+          if (notification is ScrollEndNotification) {
+            Configurations.saveScrollOffset(
+                context, notification.metrics.pixels, bucketOffsetKey);
+            debugPrint(
+                "currentPageScroll ${Configurations.currentPageScrollOffset(context, bucketOffsetKey)}");
+          }
           if (notification.metrics.axis == Axis.vertical) {
             // isFullyCollapsed
             if ((isFullyExpanded.value) &&
@@ -641,6 +670,7 @@ class DraggableHomeState extends State<DraggableHome>
         progress: _animationController,
       ),
       onPressed: () {
+        debugPrint("AnimatedIcon clicked");
         context.read<DrawerMenuControllerProvider>().controlStartDrawerMenu();
       },
     );
@@ -780,6 +810,7 @@ class DraggableHomeState extends State<DraggableHome>
 
   void _scrollDown() {
     if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
     _scrollController?.animateTo(
       _scrollController!.position.maxScrollExtent,
       duration: const Duration(milliseconds: 400),
@@ -787,8 +818,21 @@ class DraggableHomeState extends State<DraggableHome>
     );
   }
 
-  void _scrollTop() {
+  void _scrollTo(double pos) {
+    debugPrint("scrollTo pos===> $pos");
     if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.animateTo(
+      pos,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollTop() {
+    debugPrint("scrollTo ===> top");
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
     _scrollController?.animateTo(
       _scrollController!.position.minScrollExtent,
       duration: const Duration(milliseconds: 700),
@@ -798,6 +842,7 @@ class DraggableHomeState extends State<DraggableHome>
 
   void _scrollToCollapsed() {
     if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
     _scrollController?.jumpTo(500);
   }
 

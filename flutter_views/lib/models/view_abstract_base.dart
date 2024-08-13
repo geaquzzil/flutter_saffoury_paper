@@ -314,6 +314,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return this is ListableInterface;
   }
 
+  bool isImagable() {
+    if (this is! ListableInterface) return false;
+    return (this as ListableInterface).isListableIsImagable();
+  }
+
   Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) => {};
   Map<int, List<String>> getMainFieldsHorizontalGroups(BuildContext context) =>
       {};

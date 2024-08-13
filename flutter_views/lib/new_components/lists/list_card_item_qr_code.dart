@@ -54,6 +54,7 @@ class ListCardItemQrCode<T extends ViewAbstract> extends StatelessWidget {
       title: (object.getMainHeaderText(context)),
       subtitle: (object.getMainSubtitleHeaderText(context)),
       leading: object.getCardLeading(context),
+      
     );
     // trailing: object.getPopupMenuActionListWidget(context));
   }

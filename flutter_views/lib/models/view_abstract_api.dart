@@ -422,6 +422,28 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
+  //TODO
+  void deleteCall({required OnResponseCallback onResponse}) async {
+    debugPrint("deleteCall iD=> $iD ");
+    var response = await getRespones(
+        onResponse: onResponse, serverActions: ServerActions.delete_action);
+
+    if (response == null) {
+      onResponse.onServerFailure("response is null");
+      return;
+    }
+    if (response.statusCode == 200) {
+      onResponse.
+    } else if (response.statusCode == 401) {
+      ServerResponseMaster serverResponse =
+          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+      onResponse.onServerFailureResponse(serverResponse);
+  
+    } else {
+      onResponse
+    }
+  }
+
   Future<List<T>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {
     debugPrint("listCall count=> $count page=>$page");

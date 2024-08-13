@@ -393,7 +393,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
@@ -967,6 +968,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   void onListableAddFromManual(
       BuildContext context, InvoiceMasterDetails addedObject) {
     getListableList().add(addedObject);
+  }
+
+  @override
+  bool isListableIsImagable() {
+    return false;
   }
 
   @override

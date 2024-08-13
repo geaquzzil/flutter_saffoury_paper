@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
@@ -28,8 +29,14 @@ class BaseFloatingActionButtons extends StatelessWidget {
         serverActions != ServerActions.edit;
   }
 
+  bool showPrint(BuildContext context) {
+    return viewAbstract.hasPermissionPrint(context) &&
+        viewAbstract is PrintableMaster;
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool canPrint = showPrint(context);
     return Row(
       // crossAxisAlignment: WrapCrossAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -54,8 +61,29 @@ class BaseFloatingActionButtons extends StatelessWidget {
                 ),
               ],
             ),
+
+        if (canPrint) getAddFloatingButtonPrint(context),
+        if (addOnList != null && canPrint)
+          const SizedBox(
+            width: kDefaultPadding,
+          ),
+
         if (addOnList != null) ...addOnList!
+
+        //  ...addOnList!.map((i){
+
+        // })
       ],
+    );
+  }
+
+  FloatingActionButton getAddFloatingButtonPrint(BuildContext context) {
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () async {
+        viewAbstract.printPage(context);
+      },
+      child: const Icon(Icons.print),
     );
   }
 
@@ -72,6 +100,8 @@ class BaseFloatingActionButtons extends StatelessWidget {
             title: viewAbstract.getBaseTitle(context),
             context: context,
             onClose: (value) {
+              debugPrint("onClose: $value");
+              // on close is can be confirm or null
               if (value != null) {
                 context.read<ListMultiKeyProvider>().delete(viewAbstract);
               }
@@ -85,7 +115,8 @@ class BaseFloatingActionButtons extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop("confirm");
+                    //todo translate
+                    Navigator.of(context).pop("confirm ");
                   },
                   child: Text(AppLocalizations.of(context)!.delete)),
             ]);

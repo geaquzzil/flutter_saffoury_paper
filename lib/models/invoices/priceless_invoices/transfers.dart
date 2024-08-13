@@ -70,6 +70,11 @@ class Transfers extends InvoiceMaster<Transfers> {
   @override
   Transfers fromJsonViewAbstract(Map<String, dynamic> json) =>
       Transfers.fromJson(json);
+
+  @override
+  bool isListableIsImagable() {
+    return false;
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

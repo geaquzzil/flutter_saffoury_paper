@@ -21,6 +21,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   AutoRest? autoRest;
   List<ViewAbstract>? list;
   Widget? title;
+  bool isImagable;
   double? customHeight;
   String? titleString;
   bool isSliver;
@@ -35,6 +36,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
       this.isSliver = false,
       this.customHeight,
       this.valueNotifier,
+      this.isImagable=false,
       this.listItembuilder})
       : assert(list != null || autoRest != null);
 

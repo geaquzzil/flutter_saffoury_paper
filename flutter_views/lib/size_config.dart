@@ -125,6 +125,7 @@ enum MainAxisType {
   Chart,
 }
 
+@Deprecated("Move to Current Screen Size")
 class SizeConfig {
   static double screenWidth = 0;
   static double screenHeight = 0;

@@ -179,7 +179,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  
   List<Widget>? getBaseBottomSheet() => null;
 
   @override
@@ -205,6 +204,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     Widget setting = const Center(
       child: Text("getFirstPane"),
     );
+
     return FutureBuilder<ViewAbstract?>(
       future: getSettingLoadDefaultIfNull(context, getExtras()),
       builder: (_, snapshot) {
@@ -297,7 +297,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {

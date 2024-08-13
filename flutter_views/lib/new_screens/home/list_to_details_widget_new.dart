@@ -59,6 +59,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
 
   @override
   Widget? getBaseAppbar() {
+    if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) return null;
     // if (!isLargeScreenFromCurrentScreenSize(context)) {
     //   return null;
     // }

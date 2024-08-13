@@ -66,6 +66,11 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
   @override
   PurchasesRefund fromJsonViewAbstract(Map<String, dynamic> json) =>
       PurchasesRefund.fromJson(json);
+
+  @override
+  bool isListableIsImagable() {
+    return false;
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

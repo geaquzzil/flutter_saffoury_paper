@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cartable_draggable_header.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
@@ -266,15 +267,13 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getBuildBodyDraggable() {
     return DraggableHome(
+        scrollKey: viewAbstract.getScrollKey(ServerActions.list),
         showLeadingAsHamborg:
             isLargeScreenFromScreenSize(widget.currentScreenSize)
                 ? false
                 : widget.showLeadingAsHamborg,
-
-        // key: dr,
         valueNotifierExpandType: expandType,
         valueNotifierExpandTypeOnExpandOny: expandTypeOnlyOnExpand,
-        // drawer: DrawerLargeScreens(),
         scrollController: _scrollController,
         floatingActionButton: !widget.buildFabIfMobile
             ? null
@@ -310,7 +309,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                     const Spacer(),
                     FloatingActionButtonExtended(
                         onPress: () => {
-                              drawerViewAbstractObsever.getObjectCastViewAbstract
+                              drawerViewAbstractObsever
+                                  .getObjectCastViewAbstract
                                   .onDrawerLeadingItemClicked(context)
                             },
                         expandedWidget:
@@ -584,7 +584,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getAddBotton(BuildContext context) => IconButton(
       onPressed: () {
-        drawerViewAbstractObsever.getObjectCastViewAbstract.onDrawerLeadingItemClicked(context);
+        drawerViewAbstractObsever.getObjectCastViewAbstract
+            .onDrawerLeadingItemClicked(context);
       },
       icon: const Icon(Icons.add));
 
@@ -734,7 +735,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
+    listProvider.refresh(
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
   }
 
   Widget getRefreshWidget() => IconButton(

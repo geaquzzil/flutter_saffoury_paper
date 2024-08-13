@@ -282,7 +282,8 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action,ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     if ((action == ServerActions.view || action == ServerActions.edit) &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {
@@ -368,7 +369,8 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     if (action == ServerActions.view) {
       return [
         ListHorizontalApiAutoRestWidget(
@@ -383,6 +385,11 @@ class CutRequest extends ViewAbstract<CutRequest>
       ];
     }
     return null;
+  }
+
+  @override
+  bool isListableIsImagable() {
+    return false;
   }
 
   @override
@@ -571,7 +578,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   Future<pdf.Document> getPrintableCustomFromPDFPage(BuildContext context,
       {required pdf.PageTheme theme,
       required pdf.ThemeData themeData,
-        pdf2.PdfPageFormat? format,
+      pdf2.PdfPageFormat? format,
       PrintCutRequest? setting}) async {
     CutRequestRecieptPDF productsLabel = CutRequestRecieptPDF(context,
         cutRequest: this,
@@ -586,7 +593,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   Future<List<pdf.Page>> getPrintableCustomFromPDFPageLIst(
     BuildContext context, {
-        pdf2.PdfPageFormat? format,
+    pdf2.PdfPageFormat? format,
     PrintCutRequest? setting,
     required pdf.PageTheme themeData,
   }) {

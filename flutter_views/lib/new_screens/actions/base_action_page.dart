@@ -5,12 +5,15 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_view_controller/new_components/listable_draggable_header.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_editable.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
@@ -19,14 +22,21 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_m
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
+import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:responsive_grid_list/responsive_grid_list.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:skeletons/skeletons.dart';
 import '../../screens/base_shared_actions_header.dart';
 import 'components/action_on_header_popup_widget.dart';
@@ -95,6 +105,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   final Map<int, GlobalKey<ListCardItemEditableState>>
       _listCardItemEditableState = {};
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -116,6 +128,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           _tabs.addAll(
               getExtras().getTabs(context, action: widget.getServerAction()));
           _listCardItemEditableState.clear();
+          _tabController.animateTo(0);
         });
       },
     );
@@ -362,6 +375,18 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         // getTabbar(context),
         getBody(context),
         ...getBottomWidget(),
+        if (extras is ListableInterface)
+          const ListTile(
+            leading: Icon(Icons.list),
+            title: Text("Details"),
+          ),
+        if (extras is ListableInterface)
+          ListStaticWidget<ViewAbstract>(
+              list: extras!.getListableInterface().getListableList(),
+              emptyWidget: const Text("null"),
+              listItembuilder: (item) => ListCardItemWeb(
+                    object: item,
+                  )),
         const SliverToBoxAdapter(
           child: SizedBox(height: 80),
         )
@@ -396,6 +421,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   List<Widget> getBottomWidget() {
     List<Widget>? bottomWidget = getExtras()
         .getCustomBottomWidget(context, action: widget.getServerAction());
+    if (getExtras().isImagable()) {}
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (bottomWidget.indexOf(e) == bottomWidget.length) {
@@ -489,6 +515,49 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                   child: getEmptyWidget(context),
                 );
               }
+              if (getListableInterface().isListableIsImagable()) {
+                return ResponsiveSliverGridList(
+                    horizontalGridSpacing:
+                        4, // Horizontal space between grid items
+                    verticalGridSpacing: 4, // Vertical space between grid items
+                    horizontalGridMargin: 4, // Horizontal space around the grid
+                    verticalGridMargin: 4, // Vertical space around the grid
+                    minItemsPerRow:
+                        2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                    maxItemsPerRow:
+                        4, // The maximum items to show in a single row. Can be useful on large screens
+                    sliverChildBuilderDelegateOptions:
+                        SliverChildBuilderDelegateOptions(),
+                    minItemWidth: 50,
+                    children: [
+                      ...getListableInterface().getListableList().map((i) {
+                        return GridTile(
+                            child: Card.outlined(
+                                child: InkWell(
+                          onTap: () async {
+                            final imageUrl = i.getImageUrl(context);
+                            final url = Uri.parse(imageUrl ?? "");
+                            final response =
+                                await HttpWithMiddleware.build().get(url);
+                            final contentType = response.headers['image/jpg'];
+                            final image = XFile.fromData(
+                              response.bodyBytes,
+                              mimeType: contentType,
+                            );
+                            try {
+                              await Share.shareXFiles([image]);
+                              //  await FlutterShare.share(title: "title");
+                            } catch (e) {
+                              debugPrint("$e");
+                            }
+                          },
+                          child: Expanded(
+                              child: FastCachedImage(
+                                  url: i.getImageUrl(context) ?? "")),
+                        )));
+                      })
+                    ]);
+              }
               return SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                 debugPrint(
@@ -514,7 +583,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
               }, childCount: getListableInterface().getListableList().length));
             }),
       ],
-      AppLocalizations.of(context)!.details,
+      AppLocalizations.of(context)!.adsImages,
     );
   }
 
@@ -564,6 +633,13 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   DraggableHome getDraggableHomeBody() {
+    dynamic list;
+    bool isImagable = false;
+    if (extras is ListableInterface) {
+      list = extras!.getListableInterface().getListableList();
+      isImagable = extras!.isImagable();
+      debugPrint("list is count=>${list.length}");
+    }
     List<TabControllerHelper> tabs =
         getExtras().getTabs(context, action: getServerActions());
     if (getBodyIsSliver()) {
@@ -571,6 +647,28 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ...getTopWidget(),
         getBody(context),
         ...getBottomWidget(),
+        if (list != null)
+          const SliverToBoxAdapter(
+            child: ListTile(
+              leading: Icon(Icons.list),
+              title: Text("Images"),
+            ),
+          ),
+        if (list != null)
+          if (isImagable)
+            getSliverImagable(list)
+          else
+            SliverList.builder(
+                itemCount: list.length,
+                itemBuilder: (c, i) => ListCardItemWeb(
+                      object: list[i] as ViewAbstract,
+                    )),
+        // ListStaticWidget<ViewAbstract>(
+        //     list: extras!.getListableInterface().getListableList(),
+        //     emptyWidget: const Text("null"),
+        //     listItembuilder: (item) => ListCardItemWeb(
+        //           object: item,
+        //         )),
         const SliverToBoxAdapter(
           child: SizedBox(height: 80),
         )
@@ -582,6 +680,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       tabs.insert(1, getListableTab());
     }
     return DraggableHome(
+        scrollKey: getExtras().getScrollKey(getServerActions()),
         // backgroundColor: canShowTabBarAsNormal() ? Colors.transparent : null,
         showNormalToolbar: getTabBarIfDesktop(),
         showLeadingAsHamborg: false,
@@ -610,7 +709,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             isListableInterface() ? getListableInterfaceQrCode() : null,
         headerExpandedHeight: .3,
         stretchMaxHeight: .31,
-        scrollController: ScrollController(),
+        scrollController: _scrollController,
         fullyStretchable: isListableInterface(),
         headerWidget: widget.viewAbstract.getHeroTag(
             context: context,
@@ -625,6 +724,96 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           serverActions: widget.getServerAction(),
           addOnList: getFloatingActionWidgetAddOns(context),
         ));
+  }
+
+  Widget getSliverImagable(list) {
+    return SliverToBoxAdapter(
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Container(
+          width: constraints.maxWidth,
+          height: MediaQuery.of(context).size.height * .5,
+          child: PhotoViewGallery.builder(
+            backgroundDecoration: BoxDecoration(color: Colors.transparent),
+            pageSnapping: true,
+            gaplessPlayback: true,
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: (BuildContext context, int index) {
+              GlobalKey buttonKey = GlobalKey();
+              return PhotoViewGalleryPageOptions(
+                key: buttonKey,
+                tightMode: false,
+                imageProvider: FastCachedImageProvider(
+                  list[index].getImageUrl(context),
+                ),
+                onTapDown: (context, details, controllerValue) {
+                  ViewAbstract v = list[index];
+                  v.onCardLongClicked(context,
+                      position: OffsetHelper(details.globalPosition,
+                          Size(constraints.maxWidth, constraints.maxHeight)));
+                },
+                initialScale: PhotoViewComputedScale.contained * 0.8,
+                heroAttributes: PhotoViewHeroAttributes(tag: list[index].iD),
+              );
+            },
+            allowImplicitScrolling: false,
+            pageController: PageController(),
+            itemCount: list.length,
+            loadingBuilder: (context, event) => Center(
+              child: Container(
+                width: 20.0,
+                height: 20.0,
+                child: CircularProgressIndicator(
+                  value: event == null
+                      ? 0
+                      : event.cumulativeBytesLoaded /
+                          event.expectedTotalBytes.toNonNullable(),
+                ),
+              ),
+            ),
+            // backgroundDecoration: widget.backgroundDecoration,
+            // pageController: widget.pageController,
+            // onPageChanged: onPageChanged,
+          ),
+        );
+      }),
+    );
+    return ResponsiveSliverGridList(
+        horizontalGridSpacing: 50, // Horizontal space between grid items
+        verticalGridSpacing: 50, // Vertical space between grid items
+        horizontalGridMargin: 50, // Horizontal space around the grid
+        verticalGridMargin: 50, // Vertical space around the grid
+        minItemsPerRow:
+            2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+        maxItemsPerRow:
+            4, // The maximum items to show in a single row. Can be useful on large screens
+        sliverChildBuilderDelegateOptions: SliverChildBuilderDelegateOptions(),
+        minItemWidth: 200,
+        children: [
+          ...list.map((i) {
+            return GridTile(
+                child: Card.outlined(
+                    child: InkWell(
+              onTap: () async {
+                final imageUrl = i.getImageUrl(context);
+                final url = Uri.parse(imageUrl);
+                final response = await HttpWithMiddleware.build().get(url);
+                final contentType = response.headers['image/jpg'];
+                final image = XFile.fromData(
+                  response.bodyBytes,
+                  mimeType: contentType,
+                );
+                try {
+                  await Share.shareXFiles([image]);
+                  //  await FlutterShare.share(title: "title");
+                } catch (e) {
+                  debugPrint("$e");
+                }
+              },
+              child:
+                  Expanded(child: FastCachedImage(url: i.getImageUrl(context))),
+            )));
+          })
+        ]);
   }
 
   Widget? getListableInterfaceQrCode() {

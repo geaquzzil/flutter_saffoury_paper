@@ -30,14 +30,23 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void showMenuOn(
-      {required BuildContext context, required GlobalKey clickedWidget}) async {
-    RenderBox renderBox =
-        clickedWidget.currentContext?.findRenderObject() as RenderBox;
+      {required BuildContext context,
+      GlobalKey? clickedWidget,
+      OffsetHelper? position}) async {
+    Offset offset;
+    Size size;
+    if (position != null) {
+      offset = position.offset;
+      size = position.size;
+    } else {
+      RenderBox renderBox =
+          clickedWidget!.currentContext?.findRenderObject() as RenderBox;
 
-    final Size size = renderBox.size; // or _widgetKey.currentContext?.size
+      size = renderBox.size; // or _widgetKey.currentContext?.size
+
+      offset = renderBox.localToGlobal(Offset.zero);
+    }
     debugPrint('onCardLongClicked Size: ${size.width}, ${size.height}');
-
-    final Offset offset = renderBox.localToGlobal(Offset.zero);
     debugPrint('onCardLongClicked Offset: ${offset.dx}, ${offset.dy}');
     debugPrint(
         'onCardLongClicked Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
@@ -59,12 +68,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardLongClicked(BuildContext context,
-      {GlobalKey? clickedWidget}) async {
+      {GlobalKey? clickedWidget, OffsetHelper? position}) async {
     debugPrint("onCardLongClicked");
 
-    if (SizeConfig.isLargeScreen(context)) {
-      if (clickedWidget == null) return;
-      showMenuOn(context: context, clickedWidget: clickedWidget);
+    if (isLargeScreenFromCurrentScreenSize(context)) {
+      if (clickedWidget == null && position == null) return;
+      showMenuOn(
+          context: context, clickedWidget: clickedWidget, position: position);
       return;
     }
 
@@ -115,6 +125,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   void printPage(BuildContext context) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    debugPrint("printPageCalled for large => $isLarge");
     if (isLarge) {
       context
           .read<DrawerMenuControllerProvider>()
@@ -122,6 +133,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
       return;
     }
+
     context.goNamed(printRouteName,
         pathParameters: {
           "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
@@ -163,7 +175,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onDrawerItemClicked(BuildContext context) {
     DrawerMenuControllerProviderAction action =
         getDrawerMenuControllerProviderAction();
-   
+
     debugPrint(
         'onDrawerItemClicked=> ${getMainHeaderTextOnly(context)} action => $action');
     context
@@ -191,4 +203,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   //             ),
   //             child: Text('Drawer Header'),
   //           ),
+}
+
+class OffsetHelper {
+  Offset offset;
+  Size size;
+  OffsetHelper(this.offset, this.size);
 }

@@ -91,6 +91,7 @@ class BaseDeterminePageState extends StatelessWidget {
           builder: (context, value, child) {
             bool isLarge = isDesktop(context, maxWidth: _width) ||
                 isTablet(context, maxWidth: _width);
+            bool buildDrawer = !isLarge;
             debugPrint("isLarge: $isLarge");
             Widget widget;
             switch (value.item2) {
@@ -100,7 +101,7 @@ class BaseDeterminePageState extends StatelessWidget {
               case DrawerMenuControllerProviderAction.dashboard:
                 widget = BaseDashboardMainPage(
                   title: "D",
-                  buildDrawer: false,
+                  buildDrawer: buildDrawer,
                 );
                 break;
               case DrawerMenuControllerProviderAction.edit:
@@ -110,13 +111,13 @@ class BaseDeterminePageState extends StatelessWidget {
               case DrawerMenuControllerProviderAction.list_to_details:
                 widget = ListToDetailsPageNew(
                   title: "SOSO",
-                  buildDrawer: false,
+                  buildDrawer: buildDrawer,
                 );
                 break;
               case DrawerMenuControllerProviderAction.none:
                 widget = ListToDetailsPageNew(
                   title: "SOSO",
-                  buildDrawer: false,
+                  buildDrawer: buildDrawer,
                 );
                 break;
               case DrawerMenuControllerProviderAction.print:

@@ -3,6 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../models/view_abstract.dart';
 
+abstract class ImagableInterfaceItem<T extends ViewAbstract> {
+  String? getImagableInterfaceItem();
+}
+
 abstract class ListableInterface<T extends ViewAbstract> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<T>? deletedList = [];
@@ -36,4 +40,7 @@ abstract class ListableInterface<T extends ViewAbstract> {
   void onListableDelete(T item);
 
   void onListableUpdate(T item);
+
+  bool isListableIsImagable();
+
 }

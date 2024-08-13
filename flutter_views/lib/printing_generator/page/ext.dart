@@ -99,7 +99,7 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
   }
 }
 
-Future<T> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
+Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
     BuildContext context, PrintableMaster firstObj) async {
   T? pls;
   if (firstObj is ModifiablePrintableInterface) {
@@ -129,7 +129,7 @@ Future<T> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
   }
   pls?.primaryColor = firstObj.getPrintablePrimaryColor(pls);
   pls?.secondaryColor = firstObj.getPrintableSecondaryColor(pls);
-  return pls!;
+  return pls;
 }
 
 Future<T?> getSetting<T extends PrintLocalSetting>(

@@ -10,6 +10,24 @@ class HeaderListableDraggable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (listableInterface.isListableIsImagable()) {
+      int count = listableInterface.getListableList().length;
+      return Column(
+        children: [
+          MaterialBanner(
+            content: Text('This is a MaterialBanner list=> $count'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // scaffold.hideCurrentMaterialBanner();
+                },
+                child: Text('DISMISS count => $count'),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
     return Column(
       children: [
         if (listableInterface.getListableList().isEmpty)

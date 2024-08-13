@@ -406,11 +406,9 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     return Scaffold(
         backgroundColor: !buildHeader ? Colors.transparent : null,
         floatingActionButton: getFloatingActionButton(),
-        key: !buildHeader
-            ? null
-            : context
-                .read<DrawerMenuControllerProvider>()
-                .getStartDrawableKeyWeb(runtimeType.toString()),
+        key: context
+            .read<DrawerMenuControllerProvider>()
+            .getStartDrawableKeyWeb(runtimeType.toString()),
         endDrawer: getEndDrawer(),
         drawer: WebMobileDrawer(selectedHeader: getSelectedHeader(context)),
         body: getBody(context));

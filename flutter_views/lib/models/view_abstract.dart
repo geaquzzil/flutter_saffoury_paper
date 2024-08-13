@@ -213,6 +213,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {}
+
+  getScrollKey(ServerActions action) {
+    return "$action-${getTableNameApi()}-$iD";
+  }
 }
 
 class ListableDataRow {

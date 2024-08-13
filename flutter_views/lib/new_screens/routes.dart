@@ -112,9 +112,7 @@ class RouteGenerator {
     } else if (isLogedIn && !isFinishedInitialization) {
       appService.isInitialized = true;
       return homeLocation;
-
-    }
-    else {
+    } else {
       if (state.fullPath == null) {
         return homeLocation;
       } else if (state.fullPath == "/") {
@@ -327,7 +325,8 @@ class RouteGenerator {
           name: homeRouteName,
           path: '/',
           pageBuilder: (BuildContext context, GoRouterState state) {
-            return MaterialPage(child: SafeArea(child: BaseDeterminePageState()));
+            return MaterialPage(
+                child: SafeArea(child: BaseDeterminePageState()));
           },
           routes: [
             // GoRoute(
@@ -397,6 +396,7 @@ class RouteGenerator {
                 return MaterialPage(
                     key: state.pageKey,
                     child: PdfPageNew<PrintLocalSetting>(
+                      buildDrawer: true,
                       iD: int.tryParse(state.pathParameters['id'] ?? "-"),
                       tableName: state.pathParameters['tableName'],
                       invoiceObj: state.extra as PrintableMaster?,

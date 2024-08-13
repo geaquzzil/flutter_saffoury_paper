@@ -6,11 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final PageStorageBucket appBucket = PageStorageBucket();
+
 class Configurations {
   static const first_run = "first_run";
   static Future<SharedPreferences> getSharedPreferences() async {
     return await SharedPreferences.getInstance();
   }
+
+ static saveScrollOffset(BuildContext context, double offset, String key) =>
+      appBucket.writeState(context, offset, identifier: ValueKey(key));
+  static double currentPageScrollOffset(BuildContext context, String key) =>
+      appBucket.readState(context, identifier: ValueKey(key)) ?? 0.0;
 
   static Future<bool> hasSavedValue(Object value) async {
     String? objectHistoryList =
