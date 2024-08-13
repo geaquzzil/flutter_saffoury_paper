@@ -18,7 +18,6 @@ enum ServerActions {
   search_viewabstract_by_field,
   call,
   list_reduce_size,
-  
 }
 
 class URLS {
@@ -69,11 +68,13 @@ class URLS {
 }
 
 class OnResponseCallback {
+  final void Function(dynamic response) onServerResponse;
   final void Function() onServerNoMoreItems;
-  final void Function(dynamic o) onServerFailure;
-  final void Function(ServerResponseMaster o) onServerFailureResponse;
+  final void Function(dynamic o) onClientFailure;
+  final void Function(String message) onServerFailureResponse;
   OnResponseCallback(
       {required this.onServerNoMoreItems,
-      required this.onServerFailure,
+      required this.onClientFailure,
+      required this.onServerResponse,
       required this.onServerFailureResponse});
 }

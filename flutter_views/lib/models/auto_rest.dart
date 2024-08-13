@@ -54,7 +54,8 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
+      onResponse?.onServerFailureResponse(
+          serverResponse.getFailureMessage());
       //throw Exception('Failed to load album');
       return null;
     } else {
@@ -80,7 +81,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
+      onResponse?.onServerFailureResponse(serverResponse.getFailureMessage());
       return null;
     } else {
       return null;

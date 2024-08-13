@@ -426,8 +426,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getMainHeaderLabelTextOnly(context).toLowerCase();
   }
 
-  String getBaseMessage(BuildContext context) {
-    return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context)} ${getBaseLabelViewAbstract(context)} ";
+  String getBaseMessage(BuildContext context,{ServerActions? serverAction}) {
+    return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context,serverAction:serverAction)} ${getBaseLabelViewAbstract(context)} ";
   }
 }
 

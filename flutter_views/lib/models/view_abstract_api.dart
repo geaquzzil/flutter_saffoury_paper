@@ -1,20 +1,24 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:collection';
 import 'dart:convert' as convert;
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_response.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/test_var.dart';
-
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
+
 import 'servers/server_helpers.dart';
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
@@ -156,7 +160,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
               printObject: printObject));
     } on Exception catch (e) {
       // Display an alert, no internet
-      onResponse?.onServerFailure(e);
+      onResponse?.onClientFailure(e);
       debugPrint(e.toString());
       return null;
     } catch (err) {
@@ -176,11 +180,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response == null) return null;
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      return null;
     } else {
+      onCallCheckError(response: response);
       return null;
     }
   }
@@ -195,9 +196,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       Iterable l = convert.jsonDecode(response.body);
       List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
       return t[0];
-    } else if (response.statusCode == 401) {
-      return null;
     } else {
+      onCallCheckError(response: response);
       return null;
     }
   }
@@ -212,15 +212,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response == null) return null;
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
-      //throw Exception('Failed to load album');
-      return null;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
+      onCallCheckError(response: response);
       return null;
     }
   }
@@ -232,13 +227,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response == null) return null;
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
+    } else {
+      onCallCheckError(onResponse: onResponse, response: response);
       return null;
     }
-    return null;
   }
 
   // Future<E> getServerDataApi<E extends ServerData>(
@@ -271,12 +263,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       setLastSearchViewAbstractByTextInputList(list);
 
       return list.cast();
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
-      return [];
     } else {
+      onCallCheckError(onResponse: onResponse, response: response);
       return [];
     }
   }
@@ -304,12 +292,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return list
           .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
           .toList();
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
-      return [];
     } else {
+      onCallCheckError(onResponse: onResponse, response: response);
       return [];
     }
   }
@@ -336,12 +320,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return list
           .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
           .toList();
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
-      return [];
     } else {
+      onCallCheckError(onResponse: onResponse, response: response);
       return [];
     }
   }
@@ -365,9 +345,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
       setListReduseSizeViewAbstract(customField, list.cast());
       return list;
-    } else if (response.statusCode == 401) {
-      return [];
     } else {
+      onCallCheckError(response: response);
       return [];
     }
   }
@@ -388,12 +367,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
       Iterable l = convert.jsonDecode(response.body);
       return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
-      return [];
     } else {
+      onCallCheckError(onResponse: onResponse, response: response);
       return [];
     }
   }
@@ -415,32 +390,111 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response == null) return null;
     if (response.statusCode == 200) {
       return response;
-    } else if (response.statusCode == 401) {
-      return null;
     } else {
+      onCallCheckError(response: response);
       return null;
     }
   }
 
-  //TODO
-  void deleteCall({required OnResponseCallback onResponse}) async {
+  ///TODO when code is from 400 to 500 is serverError
+  ///TODO translate
+  String getErrorCodeMessage(BuildContext context, int code) {
+    if (code == 500) {
+      return "Server error access denied";
+    } else if (code == 401) {
+      return "Authentication error access denied";
+    } else if (code == 400) {
+      return "bad request access denied";
+    } else if (code == 200) {
+      return "Success";
+    } else {
+      return "Success";
+    }
+  }
+
+  void onCallCheckError({OnResponseCallback? onResponse, dynamic response}) {
+    if (response is Response) {
+      if (onResponse == null) {
+        debugPrint(
+            "onCallCheckError====> called but no response callback registered");
+        return;
+      }
+      int statusCode = response.statusCode;
+
+      if (statusCode >= 400 && statusCode <= 500) {
+        //this is a error
+        ServerResponseMaster serverResponse =
+            ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+        debugPrint(
+            "onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}");
+        onResponse
+            .onServerFailureResponse((serverResponse.getFailureMessage()));
+      }
+    }
+  }
+
+  bool hasErrorOnDelete() {
+    ViewAbstract t = this as ViewAbstract;
+    bool res = t.serverStatus != "true" || t.serverStatus != "True";
+    debugPrint("hasErrorOnDelete res: $res");
+    return res;
+  }
+
+  bool successOnDelete() {
+    return !hasErrorOnDelete();
+  }
+
+  void onCallCheck200Response(
+      {required BuildContext context,
+      required List list,
+      required ServerActions action,
+      required OnResponseCallback onResponse}) {
+    int faildCount = list.where((i) => i.hasErrorOnDelete()).length;
+    bool allSuccess = faildCount == 0;
+    bool allFaild = faildCount == list.length;
+    //TODO translate
+    if (allSuccess) {
+      onResponse.onServerResponse(AppLocalizations.of(context)!.successDeleted);
+    } else if (allFaild) {
+      onResponse.onServerFailureResponse(
+          "ALL ${AppLocalizations.of(context)!.errOperationFailed}");
+    } else {
+      onResponse.onServerFailureResponse(
+          "${AppLocalizations.of(context)!.errOperationFailed}: $faildCount");
+    }
+  }
+
+  void deleteCall(BuildContext context,
+      {required OnResponseCallback onResponse}) async {
     debugPrint("deleteCall iD=> $iD ");
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.delete_action);
 
     if (response == null) {
-      onResponse.onServerFailure("response is null");
+      // onResponse.onClientFailure("response is null");
       return;
     }
     if (response.statusCode == 200) {
-      onResponse.
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse.onServerFailureResponse(serverResponse);
-  
+      Iterable l = convert.jsonDecode(response.body);
+      List list = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+      if (list.length == 1) {
+        bool success = (list[0] as ViewAbstract).successOnDelete();
+        if (success) {
+          onResponse
+              .onServerResponse(AppLocalizations.of(context)!.successDeleted);
+        } else {
+          onResponse.onServerFailureResponse(
+              "${AppLocalizations.of(context)!.errOperationFailed}: ${(list[0] as ViewAbstract).serverStatus}");
+        }
+      } else {
+        onCallCheck200Response(
+            context: context,
+            action: ServerActions.delete_action,
+            list: list,
+            onResponse: onResponse);
+      }
     } else {
-      onResponse
+      onCallCheckError(onResponse: onResponse, response: response);
     }
   }
 
@@ -455,17 +509,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     if (response == null) return null;
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
       //todo change this when finish testing
       Iterable l = convert.jsonDecode(response.body);
       return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse);
-      return null;
     } else {
+      onCallCheckError(onResponse: onResponse, response: response);
       return null;
     }
   }
@@ -591,4 +639,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
+}
+
+class ViewAbstractListResponseHelper {
+  int count;
+  int faildCount;
+  int successCount;
+  ViewAbstractListResponseHelper({
+    required this.count,
+    required this.faildCount,
+    required this.successCount,
+  });
 }

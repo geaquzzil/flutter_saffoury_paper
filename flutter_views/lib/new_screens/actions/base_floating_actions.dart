@@ -96,13 +96,35 @@ class BaseFloatingActionButtons extends StatelessWidget {
             dialogWidth:
                 SizeConfig.isDesktopOrWebPlatform(context) ? 0.3 : null,
             color: Theme.of(context).colorScheme.surface,
-            msg: viewAbstract.getBaseMessage(context),
-            title: viewAbstract.getBaseTitle(context),
+            msg: viewAbstract.getBaseMessage(context,
+                serverAction: ServerActions.delete_action),
+            title: viewAbstract
+                .getBaseTitle(context,
+                    serverAction: ServerActions.delete_action)
+                .toUpperCase(),
             context: context,
             onClose: (value) {
               debugPrint("onClose: $value");
               // on close is can be confirm or null
               if (value != null) {
+                viewAbstract.deleteCall(context,
+                    onResponse: OnResponseCallback(
+                        onServerNoMoreItems: () {},
+                        onClientFailure: (s) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            // backgroundColor: color,
+                            duration: const Duration(seconds: 2),
+                            content: Text(AppLocalizations.of(context)!
+                                .error_server_not_connected),
+                          ));
+
+                          // Scaffold.of(context).
+                        },
+                        onServerResponse: (s) {},
+                        onServerFailureResponse: (s) {
+                          ///TODO when tow pane change secound pane
+                          ///if mobile pop navigation
+                        }));
                 context.read<ListMultiKeyProvider>().delete(viewAbstract);
               }
             },

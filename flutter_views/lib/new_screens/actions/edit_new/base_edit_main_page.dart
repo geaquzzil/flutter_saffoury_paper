@@ -192,11 +192,11 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                         currentViewAbstract =
                             await currentViewAbstract!.addCall(
                                 onResponse: OnResponseCallback(
+                                    onServerResponse: (response) {},
                                     onServerNoMoreItems: () {},
-                                    onServerFailure: (d) {},
+                                    onClientFailure: (d) {},
                                     onServerFailureResponse: (s) {
-                                      debugPrint(
-                                          "onServerFailure ${s.toJson()}");
+                                      debugPrint("onServerFailure ${s}");
                                       apiCallState.value = ApiCallState.ERROR;
                                     }));
                         if (currentViewAbstract != null) {

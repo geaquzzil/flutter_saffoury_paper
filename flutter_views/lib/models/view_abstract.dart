@@ -14,6 +14,11 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @JsonKey(includeToJson: false, includeFromJson: false)
   bool? _isScannedFromQrCode;
 
+  ///When deleting items this could be true if successfully deleted
+  ///or String of message if error is ocurated
+  @JsonKey(includeFromJson: true, includeToJson: false)
+  String? serverStatus;
+
   ViewAbstract() : super();
 
   bool? get getIsScannedFromQrCode => _isScannedFromQrCode;
