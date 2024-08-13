@@ -120,12 +120,28 @@ class BaseFloatingActionButtons extends StatelessWidget {
 
                           // Scaffold.of(context).
                         },
-                        onServerResponse: (s) {},
+                        onServerResponse: (s) {
+                          if (isLargeScreenFromCurrentScreenSize(context)) {
+                          } else {
+                            Navigator.of(context).pop();
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            duration: const Duration(seconds: 2),
+                            content: Text(s),
+                          ));
+                          context
+                              .read<ListMultiKeyProvider>()
+                              .delete(viewAbstract);
+                        },
                         onServerFailureResponse: (s) {
                           ///TODO when tow pane change secound pane
                           ///if mobile pop navigation
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            duration: const Duration(seconds: 2),
+                            content: Text(s),
+                          ));
                         }));
-                context.read<ListMultiKeyProvider>().delete(viewAbstract);
               }
             },
             actions: [
