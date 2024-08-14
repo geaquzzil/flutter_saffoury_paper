@@ -502,6 +502,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     Iterable l = convert.jsonDecode(fromJsonView);
     return List.from(l.map((model) => fromJsonViewAbstract(model)));
   }
+  String toJsonViewAbstractList(List<ViewAbstract> list){
+    return
+  }
 
   Future<List<T>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {

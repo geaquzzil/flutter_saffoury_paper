@@ -4,10 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
@@ -19,6 +21,8 @@ import 'package:flutter_view_controller/new_screens/filterables/base_filterable_
 import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
@@ -29,6 +33,7 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
@@ -271,12 +276,27 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
         if (object?.label ==
             AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.excel)) {
-          context
-              .read<ActionViewAbstractProvider>()
-              .changeCustomWidget(FileExporterPage(
-                viewAbstract: viewAbstract!,
-                list: listProvider.getList(findCustomKey()).cast(),
-              ));
+          if (isLargeScreenFromCurrentScreenSize(context)) {
+            Globals.keyForLargeScreenListable.currentState
+                ?.setSecoundPane(ListToDetailsSecoundPaneHelper(
+                    action: ServerActions.custom_widget,
+                    customWidget: FileExporterPage(
+                      viewAbstract: viewAbstract!,
+                      list: listProvider.getList(findCustomKey()).cast(),
+                    )));
+          } else {
+            context.goNamed(exportRouteName,pathParameters: {
+              "tableName":viewAbstract!.getTableNameApi()!,
+              "type":FileExporterPageType.LIST.toString(),
+              "data":viewAbstract!.fromJsonViewAbstractList(fromJsonView)
+
+            }
+
+            )
+
+
+          }
+     
         } else {
           ViewAbstract first = getFirstObject();
 

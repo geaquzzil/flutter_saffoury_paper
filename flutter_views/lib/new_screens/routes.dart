@@ -407,14 +407,27 @@ class RouteGenerator {
             ),
             GoRoute(
               name: exportRouteName,
-              path: "export/:tableName/:id",
+              path: "export/:tableName/:type",
               pageBuilder: (context, state) {
-                //TODO api if extra is null
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: FileExporterPage(
-                      viewAbstract: state.extra as ViewAbstract,
-                    ));
+                String? type = state.pathParameters["type"];
+                if (type == null) {
+                  //TODO redirect to 404 not found
+                }
+                Widget w;
+                if (type == FileExporterPageType.LIST.toString()) {
+                  var ex = getRouterStateList(state, state.extra, context);
+                  w = FileExporterPage(
+                    viewAbstract: 
+            context.read<AuthProvider>().getNewInstance(state.pathParameters["tableName"]!)!,
+                    list: (ex as List).cast(),
+                  );
+                } else {
+                  //todo get from api
+                  w = FileExporterPage(
+                    viewAbstract: state.extra as ViewAbstract,
+                  );
+                }
+                return MaterialPage(key: state.pageKey, child: w);
               },
             ),
             GoRoute(
@@ -429,24 +442,7 @@ class RouteGenerator {
               name: printListRouteName,
               path: "print-list/:tableName",
               pageBuilder: (context, state) {
-                var extra = state.extra;
-                String? tableName = state.pathParameters["tableName"];
-                if (extra == null) {
-                  String? data = state.uri.queryParameters["data"];
-                  if (data != null && tableName != null) {
-                    debugPrint("GoRouter data==null && tableName==null");
-                    ViewAbstract? v =
-                        context.read<AuthProvider>().getNewInstance(tableName);
-                    if (v != null) {
-                      List l = v.fromJsonViewAbstractList(data);
-                      extra = l;
-                    }
-                  }
-                }
-                if (extra == null) {
-                  //TODO rediredt to 404 error;
-                  debugPrint("GoRouter extra==null");
-                }
+                var extra = getRouterStateList(state, state.extra, context);
                 return MaterialPage(
                     key: state.pageKey,
                     child: PdfListPage<PrintLocalSetting>(
@@ -533,6 +529,30 @@ class RouteGenerator {
       // if (addonRoutes != null) ...addonRoutes
     ],
   );
+
+  Object? getRouterStateList(
+      GoRouterState state, Object? extra, BuildContext context) {
+    if (extra != null) return extra;
+    String? tableName = state.pathParameters["tableName"];
+    if (extra == null) {
+      String? data = state.uri.queryParameters["data"];
+      if (data != null && tableName != null) {
+        debugPrint("GoRouter data==null && tableName==null");
+        ViewAbstract? v =
+            context.read<AuthProvider>().getNewInstance(tableName);
+        if (v != null) {
+          List l = v.fromJsonViewAbstractList(data);
+          extra = l;
+        }
+      }
+    }
+    if (extra == null) {
+      //TODO rediredt to 404 error;
+      debugPrint("GoRouter extra==null");
+   
+    }
+    return extra;
+  }
 
   static dynamic getFromExtra(Map<String, dynamic> extra) {
     // return ViewAbstract()..fromJsonViewAbstract(extra);

@@ -8,6 +8,10 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'file_raderl_list_object_exporter_view_abstract.dart';
 
+
+enum FileExporterPageType{
+  LIST,SINGLE
+}
 ///TODO api if viewAbstract is null
 class FileExporterPage extends StatefulWidget {
   ViewAbstract viewAbstract;
