@@ -18,6 +18,9 @@ enum ServerActions {
   search_viewabstract_by_field,
   call,
   list_reduce_size,
+  custom_widget,
+  file_import,
+  file_export
 }
 
 class URLS {

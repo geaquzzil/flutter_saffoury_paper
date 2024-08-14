@@ -40,7 +40,8 @@ class ProductTopWidget extends StatelessWidget {
         HeaderDescription(
           iconData: Icons.info_outline,
           title: AppLocalizations.of(context)!.overview,
-          trailing: IconButton(icon: const Icon(Icons.calculate), onPressed: () {}),
+          trailing:
+              IconButton(icon: const Icon(Icons.calculate), onPressed: () {}),
         ),
         getRow(context, [
           TitleAndDescription(

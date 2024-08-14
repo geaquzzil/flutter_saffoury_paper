@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPopupWidget extends StatelessWidget {
@@ -12,14 +13,20 @@ class NotificationPopupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargeScreen = isLargeScreenFromCurrentScreenSize(context);
     return CustomPopupMenu(
-        arrowSize: 20,
+        barrierColor: isLargeScreen ? Colors.black54 : Colors.black26,
+        // arrowSize: 20,
         arrowColor: Theme.of(context).colorScheme.secondaryContainer,
         menuBuilder: () => NotificationWidget(),
         pressType: PressType.singleClick,
-        verticalMargin: -15,
+        // verticalMargin: -15,
         controller: _controller,
-        child: buildColapsedIcon(context, Icons.notifications, null));
+        child: Icon(Icons.notifications)
+
+        // buildColapsedIcon(context, Icons.notifications, null)
+
+        );
   }
 
   OnHoverWidget buildColapsedIcon(

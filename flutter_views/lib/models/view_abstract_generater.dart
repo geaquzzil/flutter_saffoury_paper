@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -146,10 +149,14 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       {ViewAbstract? clickedObject}) {
     debugPrint(
         'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}');
-    if (SizeConfig.hasSecondScreen(context)) {
-      context.read<ActionViewAbstractProvider>().change(
-          clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
-          ServerActions.edit);
+    if (isLargeScreenFromCurrentScreenSize(context)) {
+      Globals.keyForLargeScreenListable.currentState
+          ?.setSecoundPane(ListToDetailsSecoundPaneHelper(
+        action: ServerActions.edit,
+        viewAbstract:
+            clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
+      ));
+
       return;
     } else {
       context.goNamed(editRouteName,

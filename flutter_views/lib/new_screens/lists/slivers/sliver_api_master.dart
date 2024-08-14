@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item_sele
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
@@ -47,7 +48,9 @@ class SliverApiMaster extends StatefulWidget {
   List<ViewAbstract>? initialSelectedList;
   void Function(List<ViewAbstract> selectedList)? onSelectedListChange;
   ValueNotifier<List<ViewAbstract>>? onSelectedListChangeValueNotifier;
-  ValueNotifier<ViewAbstract?>? onSelectedCardChangeValueNotifier;
+  @Deprecated("Use glbal key and check for large screen")
+  ValueNotifier<ListToDetailsSecoundPaneHelper?>?
+      onSelectedCardChangeValueNotifier;
   ViewAbstract? setParentForChild;
   final bool showLeadingAsHamborg;
   @Deprecated("message")

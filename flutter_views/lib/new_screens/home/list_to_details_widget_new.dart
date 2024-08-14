@@ -1,17 +1,32 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
+import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+class ListToDetailsSecoundPaneHelper {
+  ServerActions action;
+  ViewAbstract? viewAbstract;
+  Widget? customWidget;
+  ListToDetailsSecoundPaneHelper(
+      {required this.action, this.viewAbstract, this.customWidget});
+}
 
 class ListToDetailsPageNew extends StatefulWidget {
   final String title;
@@ -21,12 +36,14 @@ class ListToDetailsPageNew extends StatefulWidget {
       {super.key, required this.title, this.buildDrawer = true});
 
   @override
-  State<ListToDetailsPageNew> createState() => _ListToDetailsPageNewState();
+  State<ListToDetailsPageNew> createState() => ListToDetailsPageNewState();
 }
 
-class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
-  ValueNotifier<ViewAbstract?> dsada = ValueNotifier<ViewAbstract?>(null);
+class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
+  final ValueNotifier<ListToDetailsSecoundPaneHelper?> _secoundPaneNotifier =
+      ValueNotifier<ListToDetailsSecoundPaneHelper?>(null);
   ViewAbstract? secoundPaneViewAbstract;
+
   @override
   List<TabControllerHelper>? initTabBarListSecondPane(
       {TabControllerHelper? tab}) {
@@ -65,6 +82,8 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
     // }
     return ListTile(
       title: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
         children: [
           Expanded(
             child: Padding(
@@ -83,6 +102,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
                 // }),
                 ),
           ),
+          const Spacer(),
 
           // IconButton(
           //     onPressed: () {
@@ -92,18 +112,24 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
           // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
           // IconButton(
           //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.notification_add)),
-          const ProfilePicturePopupMenu()
+          // IconButton(
+          //     onPressed: () {}, icon: const Icon(Icons.notification_add)),
+          NotificationPopupWidget(),
+          const SizedBox(
+            width: kDefaultPadding / 2,
+          ),
+          const DrawerLanguageButton(),
+          const SizedBox(
+            width: kDefaultPadding / 2,
+          ),
+          const ProfilePicturePopupMenu(),
+          const SizedBox(
+            width: kDefaultPadding / 2,
+          ),
+
+          const DrawerSettingButton(),
         ],
       ),
-      // subtitle: Row(
-      //   children: [
-      //     Expanded(child: DashboardHeader()),
-      //     DateSelector(),
-      //     Spacer()
-      //   ],
-      // ),
     );
   }
 
@@ -125,7 +151,9 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   getFirstPane({TabControllerHelper? tab}) {
     return SliverApiMaster(
       onSelectedCardChangeValueNotifier:
-          getCurrentScreenSize() == CurrentScreenSize.MOBILE ? null : dsada,
+          getCurrentScreenSize() == CurrentScreenSize.MOBILE
+              ? null
+              : _secoundPaneNotifier,
       // buildAppBar: false,
       buildSearchWidgetAsEditText: isDesktop(context),
     );
@@ -134,33 +162,62 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     return ValueListenableBuilder(
-      valueListenable: dsada,
+      valueListenable: _secoundPaneNotifier,
       builder: (context, value, child) {
-        secoundPaneViewAbstract = value;
+        int iD = value?.viewAbstract?.iD ?? -1;
+        String tableName = value?.viewAbstract?.getTableNameApi() ?? "";
+        Widget currentWidget;
+        if (value == null) {
+          currentWidget = Container();
+          return currentWidget;
+        }
+        switch (value.action) {
+          case ServerActions.custom_widget:
+            currentWidget = value.customWidget!;
+            break;
+          case ServerActions.add:
+            currentWidget = BaseEditNewPage(
+                viewAbstract: context
+                    .read<DrawerMenuControllerProvider>()
+                    .getObjectCastViewAbstract
+                    .getNewInstance());
+            break;
+          case ServerActions.edit:
+            currentWidget = BaseEditNewPage(
+              viewAbstract: value.viewAbstract!,
+            );
+            break;
+          case ServerActions.view:
+            currentWidget = BaseViewNewPage(
+              // key: widget.key,
+              viewAbstract: value.viewAbstract!,
+            );
+            break;
+          case ServerActions.print:
+            currentWidget = PdfPageNew(
+              iD: iD,
+              tableName: tableName,
+              invoiceObj: value.viewAbstract! as PrintableMaster,
+            );
+            break;
+          case ServerActions.delete_action:
+          case ServerActions.call:
+          case ServerActions.file:
+          case ServerActions.list_reduce_size:
+          case ServerActions.search:
+          case ServerActions.search_by_field:
+          case ServerActions.search_viewabstract_by_field:
+          case ServerActions.notification:
+          case ServerActions.file_export:
+          case ServerActions.file_import:
+          case ServerActions.list:
+            currentWidget = Container();
+        }
+        secoundPaneViewAbstract = value.viewAbstract;
         if (secoundPaneViewAbstract != null && tab?.widget != null) {
           return tab!.widget!;
         }
-        // refreshSecondPaneTabBar(
-        //     secoundPaneViewAbstract?.getTabs(context,
-        //         action: ServerActions.view),
-        //     tab: tab);
-        if (value == null) {
-          return Text("NULL");
-        }
-        // if (isLargeScreenFromScreenSize(getCurrentScreenSize())) {
-        //   return WebProductView(
-        //     onHorizontalItemClick: dsada,
-        //     iD: int.parse(value.getIDString()),
-        //     buildFooter: false,
-        //     usePagePadding: false,
-        //     buildHeader: false,
-        //     tableName: value.getTableNameApi()!,
-        //     extras: value,
-        //   );
-        // }
-        return BaseViewNewPage(
-          viewAbstract: value,
-        );
+        return currentWidget;
       },
     );
   }
@@ -176,7 +233,7 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
     return null;
-    return ListTile(
+    return const ListTile(
       title: Text("Dasdas"),
     );
   }
@@ -205,4 +262,8 @@ class _ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) =>
       !firstPane;
+
+  void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
+    _secoundPaneNotifier.value = newState;
+  }
 }

@@ -14,6 +14,7 @@ class ActionViewAbstractProvider with ChangeNotifier {
   ViewAbstract get getObjectNotNull => _object ?? PermissionActionAbstract();
   ServerActions? get getServerActions => serverActions;
   List<StackedActions?> get getStackedActions => _stack;
+  @Deprecated("Use Globals.keyForLargeScreenListable instead")
   void changeCustomWidget(Widget widget) {
     _customWidget = widget;
     _object = null;

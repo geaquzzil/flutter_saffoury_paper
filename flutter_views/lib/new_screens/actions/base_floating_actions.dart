@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -122,6 +127,9 @@ class BaseFloatingActionButtons extends StatelessWidget {
                         },
                         onServerResponse: (s) {
                           if (isLargeScreenFromCurrentScreenSize(context)) {
+                            Globals.keyForLargeScreenListable.currentState
+                                ?.setSecoundPane(null);
+                            // context.read<
                           } else {
                             Navigator.of(context).pop();
                           }
@@ -142,6 +150,35 @@ class BaseFloatingActionButtons extends StatelessWidget {
                             content: Text(s),
                           ));
                         }));
+              } else {
+                //todo remove this is for testing only
+                // if (isLargeScreenFromCurrentScreenSize(context)) {
+                //   keyForLargeScreenListable.currentState?.dsada.value = null;
+                //   // context.read<
+                // } else {
+                //   Navigator.of(context).pop();
+                // }
+
+                // // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                // //   duration: const Duration(seconds: 2),
+                // //   content: Text("Dfsfsd"),
+                // // ));
+
+                // ScaffoldMessenger.maybeOf(context)?.showMaterialBanner(
+                //   const MaterialBanner(
+                //     padding: EdgeInsets.all(20),
+                //     content: Text('Hello, I am a Material Banner'),
+                //     leading: Icon(Icons.error),
+                //     // backgroundColor: Colors.green,
+                //     actions: <Widget>[
+                //       TextButton(
+                //         onPressed: null,
+                //         child: Text('DISMISS'),
+                //       ),
+                //     ],
+                //   ),
+                // );
+                // context.read<ListMultiKeyProvider>().delete(viewAbstract);
               }
             },
             actions: [
@@ -167,17 +204,20 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         onPressed: () {
-          if (SizeConfig.isDesktopOrWebPlatform(context)) {
-            context
-                .read<ActionViewAbstractProvider>()
-                .changeCustomWidget(FileExporterPage(
-                  viewAbstract: viewAbstract,
-                ));
+          if (isLargeScreenFromCurrentScreenSize(context)) {
+            Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+                ListToDetailsSecoundPaneHelper(
+                    action: ServerActions.custom_widget,
+                    customWidget:
+                        FileExporterPage(viewAbstract: viewAbstract)));
           } else {
-            Navigator.pushNamed(context, "/export", arguments: viewAbstract);
+            context.goNamed(exportRouteName,
+                pathParameters: {
+                  "tableName": viewAbstract.getTableNameApi()!,
+                  "id": viewAbstract.getIDString()
+                },
+                extra: viewAbstract);
           }
-
-          // context.read().change()
         },
         child: const Icon(Icons.file_upload_outlined));
   }
@@ -186,14 +226,15 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         onPressed: () {
-          if (SizeConfig.isDesktopOrWebPlatform(context)) {
-            context
-                .read<ActionViewAbstractProvider>()
-                .changeCustomWidget(FileReaderPage(
-                  viewAbstract: viewAbstract,
-                ));
+          if (isLargeScreenFromCurrentScreenSize(context)) {
+            Globals. keyForLargeScreenListable.currentState?.setSecoundPane(
+                ListToDetailsSecoundPaneHelper(
+                    action: ServerActions.custom_widget,
+                    customWidget: FileReaderPage(viewAbstract: viewAbstract)));
           } else {
-            Navigator.pushNamed(context, "/import", arguments: viewAbstract);
+            context.goNamed(importRouteName,
+                pathParameters: {"tableName": viewAbstract.getTableNameApi()!},
+                extra: viewAbstract);
           }
 
           // context.read().change()

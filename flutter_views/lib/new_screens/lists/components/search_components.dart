@@ -104,7 +104,9 @@ class SearchWidgetWebComponent extends StatelessWidget {
                       if (value == null) return;
                       String compressed = Compression.compress(value);
                       debugPrint("Compressing $compressed");
-                      context.goNamed(indexWebOurProducts, queryParameters: {
+                      context.goNamed(indexWebOurProducts, 
+                      
+                      queryParameters: {
                         "filter": Compression.compress(value)
                       });
                       // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);

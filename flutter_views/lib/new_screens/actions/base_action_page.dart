@@ -720,6 +720,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: BaseFloatingActionButtons(
+          // key: widget.key,
           viewAbstract: widget.viewAbstract,
           serverActions: widget.getServerAction(),
           addOnList: getFloatingActionWidgetAddOns(context),

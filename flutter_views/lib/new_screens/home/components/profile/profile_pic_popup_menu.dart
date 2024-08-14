@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/new_components/rounded_icon_button_netwo
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 
@@ -29,19 +30,19 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLargeScreen = isLargeScreenFromCurrentScreenSize(context);
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     return CustomPopupMenu(
-      barrierColor: kIsWeb ? Colors.black54 : Colors.black26,
-      menuBuilder: () => kIsWeb
+      barrierColor: isLargeScreen ? Colors.black54 : Colors.black26,
+      menuBuilder: () => isLargeScreen
           ? SizedBox(width: 700, height: 600, child: SettingAndProfileWeb())
           : ProfileMenuWidget(controller: _controller),
       pressType: PressType.singleClick,
-      arrowColor: kIsWeb
+      arrowColor: isLargeScreen
           ? Theme.of(context).scaffoldBackgroundColor
           : const Color(0xFF4C4C4C),
       controller: _controller,
-      child: RoundedIconButtonNetwork(
-          onTap: () {}, imageUrl: authProvider.getUserImageUrl),
+      child: Icon(Icons.person),
     );
   }
 }

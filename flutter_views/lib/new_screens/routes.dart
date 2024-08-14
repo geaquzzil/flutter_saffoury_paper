@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -11,11 +13,13 @@ import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
+import 'package:flutter_view_controller/new_screens/home/home_notification_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
@@ -51,6 +55,8 @@ const String detailsRouteName = 'details';
 const String homeRouteName = 'home';
 const String loggedInKey = 'LoggedIn';
 const String loginRouteName = 'login';
+const String settingsRouteName = 'settings';
+const String notificationRouteName = "notification";
 const String moreInfoRouteName = 'moreInfo';
 const String paymentRouteName = 'payment';
 const String personalRouteName = 'personal';
@@ -62,6 +68,8 @@ const String profileSigninInfoRouteName = 'profile-signin';
 const String subDetailsRouteName = 'shop-details';
 const String shoppingRouteName = 'shopping';
 const String printRouteName = 'print';
+const String printListRouteName = 'print-list';
+const String printSelfListRouteName = 'print-slist';
 const String viewRouteName = 'view';
 const String editRouteName = 'edit';
 const String addRouteName = 'add';
@@ -80,6 +88,8 @@ const String indexWebCheckout = "checkout";
 const String indexWebView = "v";
 const String indexWebMasterToList = "list";
 const String IndexWebRegister = "register";
+const String importRouteName = "import";
+const String exportRouteName = "export";
 const String indexWebSettingAndAccount = "account";
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
@@ -97,8 +107,6 @@ class RouteGenerator {
   });
 
   String? getRouterAuthWeb(GoRouterState state) {
-    debugPrint("GoRouter kIsWeb path  ${state.fullPath}");
-
     final isLogedIn = appService.getUser.login == true;
     final isInitialized = appService.getStatus == Status.Initialization;
     final isAuthenticated = appService.getStatus == Status.Authenticated;
@@ -143,6 +151,8 @@ class RouteGenerator {
 
     final isGoingToLogin = state.path == loginLocation;
     final isGoingToInit = state.path == splashLocation;
+
+    //todo permission cheking here when go to import or export or any other
     // final isGoingToOnboard = state.path == onboardLocation;
     debugPrint(
         "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus}");
@@ -189,13 +199,17 @@ class RouteGenerator {
     refreshListenable: appService,
     redirect: !kIsWeb
         ? (context, state) async {
+            debugPrint(
+                "GoRouter isWeb===>$kIsWeb\npath===>${state.fullPath}\npathParams===>${state.pathParameters}\nqueryParams===>${state.uri.queryParameters}");
             return getRouterAuth(state);
           }
         : (context, state) async {
+            debugPrint(
+                "GoRouter isWeb===>$kIsWeb\npath===>${state.fullPath}\npathParams===>${state.pathParameters}\nqueryParams===>${state.uri.queryParameters}");
             return getRouterAuthWeb(state);
           },
     errorPageBuilder: (context, state) {
-      debugPrint("routes errorPageBuilder ${state.fullPath}");
+      debugPrint("GoRouter errorPageBuilder ${state.fullPath}");
       return MaterialPage(
         key: state.pageKey,
         child: getErrorPage(),
@@ -368,7 +382,6 @@ class RouteGenerator {
               name: viewRouteName,
               path: "view/:tableName/:id",
               pageBuilder: (context, state) {
-                debugPrint("BaseViewNewPage");
                 return MaterialPage(
                     key: state.pageKey,
                     child: BaseViewNewPage(
@@ -377,22 +390,73 @@ class RouteGenerator {
               },
             ),
             GoRoute(
+              name: importRouteName,
+              path: "import/:tableName",
+              pageBuilder: (context, state) {
+                var ex = state.extra;
+                ex ??= context
+                    .read<AuthProvider>()
+                    .getNewInstance(state.pathParameters["tableName"]!);
+
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: FileReaderPage(
+                      viewAbstract: ex as ViewAbstract,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: exportRouteName,
+              path: "export/:tableName/:id",
+              pageBuilder: (context, state) {
+                //TODO api if extra is null
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: FileExporterPage(
+                      viewAbstract: state.extra as ViewAbstract,
+                    ));
+              },
+            ),
+            GoRoute(
+              name: printSelfListRouteName,
+              path: "print-slist/:tableName",
+              pageBuilder: (context, state) {
+                return MaterialPage(child: Text("TODO"));
+                //TODO
+              },
+            ),
+            GoRoute(
+              name: printListRouteName,
+              path: "print-list/:tableName",
+              pageBuilder: (context, state) {
+                var extra = state.extra;
+                String? tableName = state.pathParameters["tableName"];
+                if (extra == null) {
+                  String? data = state.uri.queryParameters["data"];
+                  if (data != null && tableName != null) {
+                    debugPrint("GoRouter data==null && tableName==null");
+                    ViewAbstract? v =
+                        context.read<AuthProvider>().getNewInstance(tableName);
+                    if (v != null) {
+                      List l = v.fromJsonViewAbstractList(data);
+                      extra = l;
+                    }
+                  }
+                }
+                if (extra == null) {
+                  //TODO rediredt to 404 error;
+                  debugPrint("GoRouter extra==null");
+                }
+                return MaterialPage(
+                    key: state.pageKey,
+                    child: PdfListPage<PrintLocalSetting>(
+                        list: extra as List<PrintableMaster>));
+              },
+            ),
+            GoRoute(
               name: printRouteName,
               path: "print/:tableName/:id",
               pageBuilder: (context, state) {
-                debugPrint(
-                    "go route name=> $printRouteName extras=> ${state.extra}");
-                // debugPrint("go route name=> ${state.extra}");
-                // return MaterialPage(key: state.pageKey, child: TestBasePage());
-
-                // return MaterialPage(
-                //     key: state.pageKey,
-                //     child: PdfPage<PrintLocalSetting>(
-                //       iD: int.tryParse(state.pathParameters['id'] ?? "-"),
-                //       tableName: state.pathParameters['tableName'],
-                //       invoiceObj: state.extra as PrintableMaster?,
-                //     ));
-
                 return MaterialPage(
                     key: state.pageKey,
                     child: PdfPageNew<PrintLocalSetting>(
@@ -450,6 +514,22 @@ class RouteGenerator {
           return MaterialPage(key: state.pageKey, child: SignInPage());
         },
       ),
+      GoRoute(
+        name: settingsRouteName,
+        path: "/settings",
+        pageBuilder: (context, state) {
+          return MaterialPage(
+              key: state.pageKey, child: SettingAndProfileWebPage());
+        },
+      ),
+      GoRoute(
+        name: notificationRouteName,
+        path: "/notification",
+        pageBuilder: (context, state) {
+          return MaterialPage(
+              key: state.pageKey, child: HomeNotificationPage());
+        },
+      )
       // if (addonRoutes != null) ...addonRoutes
     ],
   );
@@ -548,11 +628,11 @@ class RouteGenerator {
                   list: args,
                   listItembuilder: (item) => ListCardItem(object: item),
                   onSearchTextChanged: (query) {
-                    debugPrint("onSearchTextChanged $query");
+                    debugPrint("GoRouter onSearchTextChanged $query");
 
                     return (args).where((element) {
                       debugPrint(
-                          "onSearchTextChanged ${element.toStringValues()}");
+                          "GoRouter onSearchTextChanged ${element.toStringValues()}");
                       return query.contains(element.toStringValues());
                     }).toList();
                   },

@@ -498,6 +498,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
+  List fromJsonViewAbstractList(String fromJsonView) {
+    Iterable l = convert.jsonDecode(fromJsonView);
+    return List.from(l.map((model) => fromJsonViewAbstract(model)));
+  }
+
   Future<List<T>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {
     debugPrint("listCall count=> $count page=>$page");

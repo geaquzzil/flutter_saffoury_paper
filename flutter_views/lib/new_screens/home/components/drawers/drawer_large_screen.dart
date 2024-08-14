@@ -10,11 +10,13 @@ import 'package:flutter_view_controller/new_screens/home/components/drawers/comp
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -119,6 +121,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
 
   Widget _getDrawerBody(
       Tuple2<double?, double?> v, BuildContext context, bool isOpen) {
+    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     return Column(
       // mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +157,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
             ],
           ),
         ),
-        buildDrawerFooter(context, isOpen)
+        if (!isLarge) buildDrawerFooter(context, isOpen)
         // const Divider(height: 2),
         // AnimatedSize(
         //   duration: Duration(milliseconds: 100),
@@ -178,13 +181,8 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
       padding: const EdgeInsets.all(kDefaultPadding),
       child: Flex(
         mainAxisSize: MainAxisSize.min,
-
         crossAxisAlignment: CrossAxisAlignment.end,
-
         mainAxisAlignment: MainAxisAlignment.center,
-
-        // mainAxisAlignment:
-        //     !isOpen ? MainAxisAlignment.center : MainAxisAlignment.end,
         direction: isOpen ? Axis.horizontal : Axis.vertical,
         children: [
           //  Expanded(child: buildProfilePic(context, isOpen)),
@@ -207,7 +205,20 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
           //   ),
           // ),
           // if (AuthProvider.isLoggedIn(context))
-          NotificationPopupWidget(),
+          if (isOpen)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                context.goNamed(settingsRouteName);
+              },
+            ),
+          if (isOpen)
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: () {
+                context.goNamed(notificationRouteName);
+              },
+            ),
           if (isOpen) const Expanded(child: DrawerLanguageButton()),
         ],
       ),
@@ -383,8 +394,6 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
             },
           ),
           // if (AuthProvider.isLoggedIn(context))
-          NotificationPopupWidget(),
-          const DrawerLanguageButton(),
 
           // oldCollapsedIcon(margin, alignemt, context, icon),
         ],

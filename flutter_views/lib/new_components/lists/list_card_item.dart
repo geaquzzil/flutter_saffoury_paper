@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +44,8 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   Key? listState;
   bool selectionMood;
-  ValueNotifier<ViewAbstract?>? onSelectedItem;
+  @Deprecated("Use glbal key")
+  ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
   ListCardItem({
     Key? key,
     this.listState,
@@ -69,7 +72,8 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         valueListenable: onSelectedItem!,
         builder: (context, value, child) {
           bool isLargeScreen = SizeConfig.isLargeScreen(context);
-          bool isSelected = (value?.isEquals(object) ?? false) && isLargeScreen;
+          bool isSelected =
+              (value?.viewAbstract?.isEquals(object) ?? false) && isLargeScreen;
           return isSelected
               ? CardCorner(
                   key: UniqueKey(),
@@ -108,7 +112,8 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
         onTap: () {
           if (onSelectedItem != null) {
-            onSelectedItem!.value = object;
+            onSelectedItem!.value = ListToDetailsSecoundPaneHelper(
+                action: ServerActions.view, viewAbstract: object);
           } else {
             object.onCardClicked(context);
           }

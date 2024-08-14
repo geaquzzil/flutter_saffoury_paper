@@ -4,8 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:ui' as ui;
 
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/size_config.dart';
+
 class Globals {
   static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  static GlobalKey<ListToDetailsPageNewState> keyForLargeScreenListable =
+      GlobalKey<ListToDetailsPageNewState>();
+
+  static changeSecoundPane(
+      {required BuildContext context,
+      required ListToDetailsSecoundPaneHelper? state}) {
+
+        // scaffoldKey.
+
+    if (isLargeScreenFromCurrentScreenSize(context)) {
+
+    }else{
+
+    }
+
+  }
+
   static bool isProbablyArabic(String s) {
     final RegExp arabic = RegExp(r'^[\u0621-\u064A]+');
     return arabic.hasMatch(s);
