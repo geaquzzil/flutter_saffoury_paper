@@ -755,25 +755,13 @@ class CutRequest extends ViewAbstract<CutRequest>
   String getContentSharable(BuildContext context, {ServerActions? action}) {
     String content = getPrintableInvoiceTitle(context, null);
     content = "$content\n\n";
-    // getInvoicDesFirstRow(context, null).forEach((action) {
-    //   content = "$content\n${action.title}: ${action.description}";
-    // });
-    // getInvoiceDesSecRow(context, null).forEach((action) {
-    //   content = "$content\n${action.title}: ${action.description}";
-    // });
-    // content = "$content\nDetiasl:\n";
-    // getPrintableInvoiceDetailsList().forEach((action) {
-    //   content = "$content\n  - $action";
-    // });
-    // content = "$content\nTOTAL\n";
-    // getPrintableInvoiceTotalDescripton(context, null).forEach((action) {
-    //      content = "$content\n  - ${action.title}: ${action.description}";
-    // });
-    // getPrintableSelfListTableHeaderAndContent(context, this, null)
-    //     .entries
-    //     .forEach((k) {
-    //   content = "$content${k.key}: ${k.value}\n ";
-    // });
+    PrintCutRequest setting = PrintCutRequest().copyWithEnableAll();
+    setting.productNameOption = ProductNameOption.ALL;
+    setting.printCutRequestType = PrintCutRequestType.ALL;
+
+    CutRequestRecipt crr = CutRequestRecipt(cutRequest: this, setting: setting);
+    content =
+        "$content ${crr.getPrintableRecieptHeaderTitleAndDescription(context, setting).getString()}";
     return content;
   }
 }

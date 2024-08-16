@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
@@ -136,19 +137,25 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         newO = (await viewCallGetFirstFromList(iD)) as ViewAbstract?;
         debugPrint("sharePage done");
       }
-      if (newO == null) {
+      if (newO != null) {
+        debugPrint("sharePage updated list");
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          context.read<ListMultiKeyProvider>().edit(newO as ViewAbstract);
+        });
+      } else {
         //TODO Show the error
         debugPrint("sharePage object is null return ");
         return;
       }
+      debugPrint("sharePage object is started");
       String content = (newO as SharableInterface)
           .getContentSharable(context, action: action);
       await Share.share(
           subject: AppLocalizations.of(context)!.shareLabel,
           "$content\n\n${newO.getUriShare(action: action)}");
     } catch (e) {
-      //todo show message
-      debugPrint("$e");
+      //TODO Show the error
+      debugPrint("shrePage $e");
     }
   }
 

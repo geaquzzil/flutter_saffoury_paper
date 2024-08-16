@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -38,7 +39,8 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
     implements
         ModifiablePrintableInterface<PrintReceipt>,
         PrintableReceiptInterface<PrintReceipt>,
-        WebCategoryGridableInterface<T> {
+        WebCategoryGridableInterface<T>,
+        SharableInterface {
   // int? CashBoxID;
   // int? EmployeeID;
   // int? CustomerID;
@@ -457,5 +459,15 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   @override
   String getWebCategoryGridableTitle(BuildContext context) {
     return getMainHeaderTextOnly(context);
+  }
+
+  @override
+  String getContentSharable(BuildContext context, {ServerActions? action}) {
+    String content = getPrintableInvoiceTitle(context, null);
+    content = "$content\n\n";
+    PrintReceipt setting = PrintReceipt().copyWithEnableAll();
+    content =
+        "$content ${getPrintableRecieptHeaderTitleAndDescription(context, setting).getString()}";
+    return content;
   }
 }

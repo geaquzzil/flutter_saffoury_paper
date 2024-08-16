@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -19,14 +20,21 @@ extension toStringKeyValue on Map<dynamic, dynamic> {
       {bool newLineOnSubDetials = false, bool requireComma = false}) {
     String result = "";
     forEach((k, v) {
-      result =
-          "$result $k: ${v.replaceAll("\n", " ")}${newLineOnSubDetials ? "\n     " : " "} ${requireComma ? ", " : ""}";
+      if (k is int && v is List<RecieptHeaderTitleAndDescriptionInfo>) {
+        v.forEach((a) {
+          result = "$result${a.title}: ${a.description}\n";
+        });
+      } else {
+        String value = v.toString();
+        result =
+            "$result $k: ${value.replaceAll("\n", " ")}${newLineOnSubDetials ? "\n     " : " "} ${requireComma ? ", " : ""}";
+      }
     });
     return result;
   }
 }
 
-extension toStringTitleDes on List<PrintableInvoiceInterfaceDetails> {
+extension toStringList on List {
   String getString(
       {required BuildContext context,
       PrintLocalSetting? setting,
@@ -34,11 +42,21 @@ extension toStringTitleDes on List<PrintableInvoiceInterfaceDetails> {
       bool newLineOnSubDetials = false,
       bool requireCommaOnSubDetails = true}) {
     String result = "";
-    for (int i = 0; i < length; i++) {
-      var k = this[i];
-      result = "$result -${i + 1}: ";
-      result =
-          "$result${k.getPrintableInvoiceTableHeaderAndContent(context, setting).getString(newLineOnSubDetials: newLineOnSubDetials, requireComma: requireCommaOnSubDetails)}${newLine ? "\n" : " "}";
+    if (this is List<PrintableReceiptInterface>) {
+      for (int i = 0; i < length; i++) {
+        var k = this[i];
+        result = "$result -${i + 1}: ";
+        result =
+            "$result${k.getPrintableRecieptHeaderTitleAndDescription(context, setting).getString(newLineOnSubDetials: newLineOnSubDetials, requireComma: requireCommaOnSubDetails)}${newLine ? "\n" : " "}";
+      }
+    }
+    if (this is List<PrintableInvoiceInterfaceDetails>) {
+      for (int i = 0; i < length; i++) {
+        var k = this[i];
+        result = "$result -${i + 1}: ";
+        result =
+            "$result${k.getPrintableInvoiceTableHeaderAndContent(context, setting).getString(newLineOnSubDetials: newLineOnSubDetials, requireComma: requireCommaOnSubDetails)}${newLine ? "\n" : " "}";
+      }
     }
 
     return result;

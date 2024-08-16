@@ -45,7 +45,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future<void> edit(ViewAbstract obj) async {
     _listMap.entries.forEach((i) async {
       var element = i.value;
-      ViewAbstract? o = (element.objects as List<ViewAbstract>)
+      ViewAbstract? o = (element.objects.cast<ViewAbstract>())
           .firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
         int idx =

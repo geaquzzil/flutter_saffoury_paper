@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
+@Deprecated("Not used anymore")
 class ListProvider with ChangeNotifier {
   bool isLoading = false;
   bool isFetching = false;
