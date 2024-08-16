@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -28,7 +29,8 @@ part 'customs_declarations.g.dart';
 class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
     implements
         PrintableCustomFromPDFInterface<PrintLocalSetting>,
-        ListableInterface<CustomsDeclarationImages> {
+        ListableInterface<CustomsDeclarationImages>,
+        SharableInterface {
   // int? EmployeeID;
 
   @JsonKey(fromJson: intFromString)
@@ -399,5 +401,11 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   @override
   void onListableUpdate(CustomsDeclarationImages item) {
     // TODO: implement onListableUpdate
+  }
+
+  @override
+  String getContentSharable(material.BuildContext context,
+      {ServerActions? action}) {
+    return getMainHeaderLabelWithText(context);
   }
 }

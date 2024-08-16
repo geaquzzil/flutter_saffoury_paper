@@ -28,6 +28,7 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
@@ -59,7 +60,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         PrintableInvoiceInterface<PrintInvoice>,
         ModifiablePrintableInterface<PrintInvoice>,
         ListableInterface<InvoiceMasterDetails>,
-        WebCategoryGridableInterface<InvoiceMaster> {
+        WebCategoryGridableInterface<InvoiceMaster>,
+        SharableInterface {
   // int? EmployeeID;
   // int? CargoTransID;
   // int? CustomerID;
@@ -1128,6 +1130,54 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
                 : 0,
         date: date,
         description: getMainHeaderTextOnly(context));
+  }
+
+  @override
+  String getContentSharable(BuildContext context, {ServerActions? action}) {
+    PrintInvoice settings =
+        getModifibleSettingObject(context).copyWithEnableAll();
+    String content = getPrintableInvoiceTitle(context, settings);
+    content = "$content\n\n";
+    getInvoicDesFirstRow(context, settings).forEach((action) {
+      content = "$content\n${action.title}: ${action.description}";
+    });
+    getInvoiceDesSecRow(context, settings).forEach((action) {
+      content = "$content\n${action.title}: ${action.description}";
+    });
+    getInvoiceDesTherdRow(context, settings).forEach((action) {
+      content = "$content\n${action.title}: ${action.description}";
+    });
+    content = "$content\n";
+
+    String con = getPrintableInvoiceDetailsList().getString(
+        context: context,
+        setting: settings,
+        newLineOnSubDetials: true,
+        requireCommaOnSubDetails: false);
+    content = "$content \nDetiasl:\n$con";
+    // getPrintableInvoiceDetailsList().forEach((action) {
+    //   String d = action
+    //       .getPrintableInvoiceTableHeaderAndContent(context, null)
+    //       .toString();
+
+    //   d = d
+    //       .replaceAll("{", "")
+    //       .replaceAll("}", "")
+    //       .replaceAll("\n", " ")
+    //       .replaceAll(",", "\n    ");
+    //   content = "$content\n  - $d";
+    // });
+    // con = getPrintableInvoiceTotalDescripton(context, null).getString(context:context,setting:null);
+    content = "$content \n\nTOTAL";
+    getPrintableInvoiceTotalDescripton(context, settings).forEach((action) {
+      content = "$content\n  - ${action.title}: ${action.description}";
+    });
+    // getPrintableSelfListTableHeaderAndContent(context, this, null)
+    //     .entries
+    //     .forEach((k) {
+    //   content = "$content${k.key}: ${k.value}\n ";
+    // });
+    return content;
   }
 }
 

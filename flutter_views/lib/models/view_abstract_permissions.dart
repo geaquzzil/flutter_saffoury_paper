@@ -138,8 +138,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
         ? hasPermission(context, this, ServerActions.add)
         : hasPermission(context, viewAbstract, ServerActions.add);
   }
-
+  //todo permission check and check if the object is implemented the interface
   bool hasPermissionShare(BuildContext context, {ViewAbstract? viewAbstract}) {
+    
     return true;
   }
 

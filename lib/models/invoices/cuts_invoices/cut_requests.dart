@@ -21,6 +21,7 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
@@ -56,7 +57,8 @@ class CutRequest extends ViewAbstract<CutRequest>
         PrintableCustomFromPDFInterface<PrintCutRequest>,
         ModifiablePrintableInterface<PrintCutRequest>,
         ListableInterface<SizesCutRequest>,
-        WebCategoryGridableInterface<CutRequest> {
+        WebCategoryGridableInterface<CutRequest>,
+        SharableInterface {
   // int? ProductID;
   // int? CustomerID;
   // int? EmployeeID;
@@ -747,6 +749,32 @@ class CutRequest extends ViewAbstract<CutRequest>
         debit: 0,
         date: date,
         description: getMainHeaderTextOnly(context));
+  }
+
+  @override
+  String getContentSharable(BuildContext context, {ServerActions? action}) {
+    String content = getPrintableInvoiceTitle(context, null);
+    content = "$content\n\n";
+    // getInvoicDesFirstRow(context, null).forEach((action) {
+    //   content = "$content\n${action.title}: ${action.description}";
+    // });
+    // getInvoiceDesSecRow(context, null).forEach((action) {
+    //   content = "$content\n${action.title}: ${action.description}";
+    // });
+    // content = "$content\nDetiasl:\n";
+    // getPrintableInvoiceDetailsList().forEach((action) {
+    //   content = "$content\n  - $action";
+    // });
+    // content = "$content\nTOTAL\n";
+    // getPrintableInvoiceTotalDescripton(context, null).forEach((action) {
+    //      content = "$content\n  - ${action.title}: ${action.description}";
+    // });
+    // getPrintableSelfListTableHeaderAndContent(context, this, null)
+    //     .entries
+    //     .forEach((k) {
+    //   content = "$content${k.key}: ${k.value}\n ";
+    // });
+    return content;
   }
 }
 

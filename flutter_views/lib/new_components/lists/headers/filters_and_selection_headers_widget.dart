@@ -285,18 +285,14 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                       list: listProvider.getList(findCustomKey()).cast(),
                     )));
           } else {
-            context.goNamed(exportRouteName,pathParameters: {
-              "tableName":viewAbstract!.getTableNameApi()!,
-              "type":FileExporterPageType.LIST.toString(),
-              "data":viewAbstract!.fromJsonViewAbstractList(fromJsonView)
-
-            }
-
-            )
-
-
+            context.goNamed(exportRouteName, pathParameters: {
+              "tableName": viewAbstract!.getTableNameApi()!,
+              "type": FileExporterPageType.LIST.toString(),
+            }, queryParameters: {
+              "data": viewAbstract!.toJsonViewAbstractList(
+                  listProvider.getList(findCustomKey()).cast())
+            });
           }
-     
         } else {
           ViewAbstract first = getFirstObject();
 

@@ -28,9 +28,17 @@ class _DropdownCustomListWithFormListenerState
   late List<dynamic> list;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   void initState() {
-    postFram(() => list = widget.viewAbstract
-        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!);
+    if (mounted) {
+      postFram(() => list = widget.viewAbstract
+          .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!);
+    }
     // list = widget.viewAbstract
     //     .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
     super.initState();

@@ -1,5 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +13,37 @@ import 'models/view_abstract.dart';
 
 String dateFormatString = "yyyy-MM-dd HH:mm:ss";
 String dateOnlyFormatString = "yyyy-MM-dd";
+
+extension toStringKeyValue on Map<dynamic, dynamic> {
+  String getString(
+      {bool newLineOnSubDetials = false, bool requireComma = false}) {
+    String result = "";
+    forEach((k, v) {
+      result =
+          "$result $k: ${v.replaceAll("\n", " ")}${newLineOnSubDetials ? "\n     " : " "} ${requireComma ? ", " : ""}";
+    });
+    return result;
+  }
+}
+
+extension toStringTitleDes on List<PrintableInvoiceInterfaceDetails> {
+  String getString(
+      {required BuildContext context,
+      PrintLocalSetting? setting,
+      bool newLine = true,
+      bool newLineOnSubDetials = false,
+      bool requireCommaOnSubDetails = true}) {
+    String result = "";
+    for (int i = 0; i < length; i++) {
+      var k = this[i];
+      result = "$result -${i + 1}: ";
+      result =
+          "$result${k.getPrintableInvoiceTableHeaderAndContent(context, setting).getString(newLineOnSubDetials: newLineOnSubDetials, requireComma: requireCommaOnSubDetails)}${newLine ? "\n" : " "}";
+    }
+
+    return result;
+  }
+}
 
 extension HexColor on Color {
   Color darken([double amount = .1]) {

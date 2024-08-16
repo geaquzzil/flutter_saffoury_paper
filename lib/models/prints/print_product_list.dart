@@ -24,7 +24,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
 
   String? sortByField;
   String? groupedByField;
-  SortByType? sortByType;
+  SortByType? sortByType;  
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   Product? product;

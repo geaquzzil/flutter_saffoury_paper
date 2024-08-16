@@ -110,4 +110,17 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
 
   @override
   String? getTableNameApi() => null;
+
+  T copyWithEnableAll() {
+    T t = getSelfNewInstance();
+    getMirrorFieldsMapNewInstance().entries.forEach(
+      (e) {
+        Type? fieldType = getMirrorFieldType(e.key);
+        if (fieldType == bool) {
+          (t as ViewAbstract).setFieldValue(e.key, false);
+        }
+      },
+    );
+    return t;
+  }
 }

@@ -1,6 +1,7 @@
 // import 'package:bitmap/bitmap.dart';
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names, use_build_context_synchronously, library_prefixes
 
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +90,7 @@ class Product extends ViewAbstract<Product>
         PrintableSelfListInterface<PrintProductList>,
         PosableInterface,
         WebCategoryGridableInterface<Product>,
+        SharableInterface,
         ExcelableReaderInterace {
   // int? ParentID;
   // int? ProductTypeID;
@@ -1615,6 +1617,19 @@ class Product extends ViewAbstract<Product>
       BuildContext context, PrintLocalSetting? dashboardSetting) {
     return null;
   }
+
+  @override
+  String getContentSharable(BuildContext context, {ServerActions? action}) {
+    PrintProductList settings =
+        getModifiablePrintableSelfPdfSetting(context).copyWithEnableAll();
+    return getPrintableSelfListTableHeaderAndContent(context, this, settings)
+        .getString(newLineOnSubDetials: true);
+  }
+
+  // @override
+  // String getUri(BuildContext context) {
+  //   return "https://saffoury.com/view/products/$iD";
+  // }
 }
 
 // enum ProductStatus {

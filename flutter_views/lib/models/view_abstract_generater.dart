@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -14,6 +17,8 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../utils/dialogs.dart';
 import 'menu_item.dart';
@@ -99,50 +104,99 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardClicked(BuildContext context, {bool isMain = true}) {
-    debugPrint("Card Clicked");
-
-    if (getCurrentScreenSizeStatic(context) != CurrentScreenSize.MOBILE) {
-      context.read<ActionViewAbstractProvider>().change(
-          (this as ViewAbstract).getCopyInstance(), ServerActions.view,
-          isMain: isMain);
-      return;
-    }
     viewPage(context);
   }
 
+  String getUriShare({ServerActions? action}) {
+    String uri;
+    String tableName = (this as ViewAbstract).getTableNameApi()!;
+    String iD = (this as ViewAbstract).getIDString();
+    switch (action) {
+      case ServerActions.view:
+        uri = "view";
+        break;
+      case ServerActions.edit:
+        uri = "edit";
+        break;
+      case ServerActions.list:
+        uri = "list";
+        break;
+      default:
+        uri = "view";
+    }
+    return "https://saffoury.com/$uri/$tableName/$iD";
+  }
+
+  Future<void> sharePage(BuildContext context, {ServerActions? action}) async {
+    try {
+      ViewAbstract? newO = this as ViewAbstract;
+      bool b = getBodyWithoutApi(action ?? ServerActions.view);
+      if (!b) {
+        debugPrint("sharePage waiting to get object form api");
+        newO = (await viewCallGetFirstFromList(iD)) as ViewAbstract?;
+        debugPrint("sharePage done");
+      }
+      if (newO == null) {
+        //TODO Show the error
+        debugPrint("sharePage object is null return ");
+        return;
+      }
+      String content = (newO as SharableInterface)
+          .getContentSharable(context, action: action);
+      await Share.share(
+          subject: AppLocalizations.of(context)!.shareLabel,
+          "$content\n\n${newO.getUriShare(action: action)}");
+    } catch (e) {
+      //todo show message
+      debugPrint("$e");
+    }
+  }
+
   void viewPage(BuildContext context) {
-    debugPrint("viewPage called");
-    context.pushNamed(viewRouteName,
-        pathParameters: {
-          "tableName": getTableNameApi() ?? "",
-          "id": iD.toString()
-        },
-        extra: this);
+    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    if (isLarge) {
+      context.read<DrawerMenuControllerProvider>().change(
+          context,
+          (this as ViewAbstract).getCopyInstance(),
+          DrawerMenuControllerProviderAction.view);
+    } else {
+      context.pushNamed(viewRouteName,
+          pathParameters: {
+            "tableName": getTableNameApi() ?? "",
+            "id": iD.toString()
+          },
+          extra: this);
+    }
   }
 
   void editPage(BuildContext context) {
-    context.goNamed(editRouteName,
-        pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-        extra: (this as ViewAbstract).getCopyInstance());
+    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    if (isLarge) {
+      context
+          .read<DrawerMenuControllerProvider>()
+          .change(context, this, DrawerMenuControllerProviderAction.edit);
+    } else {
+      context.goNamed(editRouteName,
+          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+          extra: (this as ViewAbstract).getCopyInstance());
+    }
   }
 
   void printPage(BuildContext context) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
-    debugPrint("printPageCalled for large => $isLarge");
     if (isLarge) {
       context
           .read<DrawerMenuControllerProvider>()
           .change(context, this, DrawerMenuControllerProviderAction.print);
-
-      return;
+    } else {
+      context.goNamed(printRouteName,
+          pathParameters: {
+            "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+            "type": PrintPageType.single.toString()
+          },
+          queryParameters: {"id": "$iD"},
+          extra: this);
     }
-
-    context.goNamed(printRouteName,
-        pathParameters: {
-          "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
-          "id": "$iD"
-        },
-        extra: this);
   }
 
   void onDrawerLeadingItemClicked(BuildContext context,

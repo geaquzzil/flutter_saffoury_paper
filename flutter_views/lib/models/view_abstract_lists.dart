@@ -321,7 +321,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
-      onTap: () => onPopupMenuActionSelected(context, e),
+      onTap: () {
+        Navigator.of(context).pop();
+        onPopupMenuActionSelected(context, e);
+      },
     );
   }
 
@@ -333,17 +336,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     onPopupMenuActionSelected(context, e);
   }
 
-  void onPopupMenuActionSelected(
-      BuildContext context, MenuItemBuild result) async {
+  void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result,
+      {ServerActions? action}) async {
     debugPrint("onPopupMenuActionSelected $result");
     if (result.icon == Icons.share) {
-      try {
-        await Share.share(
-            subject: "sad", 'check out my website https://example.com');
-        //  await FlutterShare.share(title: "title");
-      } catch (e) {
-        debugPrint("$e");
-      }
+      sharePage(context, action: action);
     }
     if (result.icon == Icons.print) {
       printPage(context);

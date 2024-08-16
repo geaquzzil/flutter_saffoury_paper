@@ -4,6 +4,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -68,8 +70,6 @@ const String profileSigninInfoRouteName = 'profile-signin';
 const String subDetailsRouteName = 'shop-details';
 const String shoppingRouteName = 'shopping';
 const String printRouteName = 'print';
-const String printListRouteName = 'print-list';
-const String printSelfListRouteName = 'print-slist';
 const String viewRouteName = 'view';
 const String editRouteName = 'edit';
 const String addRouteName = 'add';
@@ -417,8 +417,9 @@ class RouteGenerator {
                 if (type == FileExporterPageType.LIST.toString()) {
                   var ex = getRouterStateList(state, state.extra, context);
                   w = FileExporterPage(
-                    viewAbstract: 
-            context.read<AuthProvider>().getNewInstance(state.pathParameters["tableName"]!)!,
+                    viewAbstract: context
+                        .read<AuthProvider>()
+                        .getNewInstance(state.pathParameters["tableName"]!)!,
                     list: (ex as List).cast(),
                   );
                 } else {
@@ -431,36 +432,32 @@ class RouteGenerator {
               },
             ),
             GoRoute(
-              name: printSelfListRouteName,
-              path: "print-slist/:tableName",
-              pageBuilder: (context, state) {
-                return MaterialPage(child: Text("TODO"));
-                //TODO
-              },
-            ),
-            GoRoute(
-              name: printListRouteName,
-              path: "print-list/:tableName",
-              pageBuilder: (context, state) {
-                var extra = getRouterStateList(state, state.extra, context);
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: PdfListPage<PrintLocalSetting>(
-                        list: extra as List<PrintableMaster>));
-              },
-            ),
-            GoRoute(
               name: printRouteName,
-              path: "print/:tableName/:id",
+              path: "print/:tableName/:type",
               pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: PdfPageNew<PrintLocalSetting>(
-                      buildDrawer: true,
-                      iD: int.tryParse(state.pathParameters['id'] ?? "-"),
-                      tableName: state.pathParameters['tableName'],
-                      invoiceObj: state.extra as PrintableMaster?,
-                    ));
+                String? type = state.pathParameters["type"];
+                Widget w;
+                if (type == PrintPageType.single.toString()) {
+                  w = PdfPageNew<PrintLocalSetting>(
+                    buildDrawer: true,
+                    iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
+                    tableName: state.pathParameters['tableName'],
+                    invoiceObj: state.extra as PrintableMaster?,
+                  );
+                } else if (type == PrintPageType.list.toString()) {
+                  var ex = getRouterStateList(state, state.extra, context);
+                  //todo get from api
+                  w = PdfListPage(
+                    list: ex as List<PrintableMaster>,
+                  );
+                } else {
+                  var ex = getRouterStateList(state, state.extra, context);
+                  //todo get from api
+                  w = PdfSelfListPage(
+                    list: ex as List<PrintableSelfListInterface>,
+                  );
+                }
+                return MaterialPage(key: state.pageKey, child: w);
               },
             ),
             GoRoute(
@@ -549,7 +546,6 @@ class RouteGenerator {
     if (extra == null) {
       //TODO rediredt to 404 error;
       debugPrint("GoRouter extra==null");
-   
     }
     return extra;
   }

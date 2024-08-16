@@ -9,6 +9,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'file_raderl_list_object_exporter_view_abstract.dart';
 
 
+enum PrintPageType{
+  single,list,self_list
+}
 enum FileExporterPageType{
   LIST,SINGLE
 }

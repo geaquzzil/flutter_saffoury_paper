@@ -78,6 +78,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   String getTitle(BuildContext context) =>
       _object.getMainHeaderLabelTextOnly(context).toLowerCase();
 
+  @Deprecated("Use Global.keyForLargeScreen")
   void change(BuildContext context, dynamic object,
       DrawerMenuControllerProviderAction action,
       {bool changeWithFilterable = false}) {

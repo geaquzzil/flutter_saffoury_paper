@@ -502,8 +502,22 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     Iterable l = convert.jsonDecode(fromJsonView);
     return List.from(l.map((model) => fromJsonViewAbstract(model)));
   }
-  String toJsonViewAbstractList(List<ViewAbstract> list){
-    return
+
+  String toJsonViewAbstractList(List list) {
+    return jsonEncode(list.map((i) => i.toJson()).toList()).toString();
+  }
+
+  bool getBodyWithoutApi(ServerActions action) {
+    bool canGetBody =
+        (this as ViewAbstract).isRequiredObjectsList()?[action] == null;
+    if (canGetBody) {
+      debugPrint("BaseApiCallPageState getBodyWithoutApi skiped");
+      return true;
+    }
+    bool res = (this as ViewAbstract).isNew() ||
+        (this as ViewAbstract).isRequiredObjectsListChecker();
+    debugPrint("BaseApiCallPageState getBodyWithoutApi result => $res");
+    return res;
   }
 
   Future<List<T>?> listCall(

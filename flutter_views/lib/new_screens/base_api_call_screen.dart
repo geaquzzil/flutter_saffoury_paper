@@ -23,7 +23,7 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
   C getExtras() {
     return extras as C;
   }
-
+  @Deprecated("Use the viewAbstract.getBodyWithoutApi")
   bool getBodyWithoutApi() {
     if (extras is! ViewAbstract) return false;
 
