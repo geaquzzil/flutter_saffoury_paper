@@ -29,6 +29,7 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     return null;
   }
+
   @override
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
@@ -121,10 +122,12 @@ class OrdersWeb extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ListTile(
+          //TODO translate
           title: Text("Orders"),
         ),
         const ListTile(
           subtitle:
+              //TODO translate
               Text("By logining you out all of your data will be cleared."),
         ),
         ProductWebPage(),
@@ -165,10 +168,12 @@ class Logout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ListTile(
+          //todo translate
           title: Text("Logout"),
         ),
         const ListTile(
           subtitle:
+            //todo translate
               Text("By logining you out all of your data will be cleared."),
         ),
         Padding(
@@ -193,7 +198,7 @@ class ProfileEdit extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ListTile(
+          const ListTile(  //todo translate
             title: Text("Edit Profile"),
           ),
           BaseEditWidget(
@@ -284,8 +289,10 @@ class MasterToListFromProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
+                  //todo translate
                 title: Text("Orders"),
                 subtitle: Text(
+                    //todo translate
                     "By logining you out all of your data will be cleared."),
               ),
             ],

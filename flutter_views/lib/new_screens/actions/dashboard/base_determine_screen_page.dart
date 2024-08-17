@@ -41,7 +41,6 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-
 class BaseDeterminePageState extends StatelessWidget {
   late Widget _drawerWidget;
   late CurrentScreenSize _currentScreenSize;
@@ -92,6 +91,9 @@ class BaseDeterminePageState extends StatelessWidget {
             debugPrint("isLarge: $isLarge");
             Widget widget;
             switch (value.item2) {
+              case DrawerMenuControllerProviderAction.custom_widget:
+                widget = value.item1 as Widget;
+                break;
               case DrawerMenuControllerProviderAction.custom:
                 widget = MasterViewStandAlone(viewAbstract: value.item1);
                 break;
@@ -113,7 +115,7 @@ class BaseDeterminePageState extends StatelessWidget {
                 break;
               case DrawerMenuControllerProviderAction.none:
                 widget = ListToDetailsPageNew(
-                  key:  Globals.keyForLargeScreenListable,
+                  key: Globals.keyForLargeScreenListable,
                   title: "SOSO",
                   buildDrawer: buildDrawer,
                 );

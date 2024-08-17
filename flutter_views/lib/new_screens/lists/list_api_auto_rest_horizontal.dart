@@ -36,7 +36,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
       this.isSliver = false,
       this.customHeight,
       this.valueNotifier,
-      this.isImagable=false,
+      this.isImagable = false,
       this.listItembuilder})
       : assert(list != null || autoRest != null);
 
@@ -101,12 +101,12 @@ class _ListHorizontalApiWidgetState
             "layoutBuilder width ${constraints.maxWidth} height ${constraints.maxHeight} ");
         return ResponsiveGridView.builder(
           scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          alignment: Alignment.topCenter,
+          // shrinkWrap: true,
+          // alignment: Alignment.topCenter,
           itemCount: 5 + Random().nextInt(10 - 5),
           gridDelegate: ResponsiveGridDelegate(
-            crossAxisExtent: constraints.maxHeight,
-            mainAxisSpacing: 20,
+            crossAxisExtent: constraints.maxHeight * .9,
+            mainAxisSpacing: 10,
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,
           ),
@@ -137,10 +137,7 @@ class _ListHorizontalApiWidgetState
           itemCount: isLoading ? (data.length + 3) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
             crossAxisExtent: constraints.maxHeight * .9,
-            // crossAxisSpacing: 10,
-            // from width
             mainAxisSpacing: 10,
-
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,
           ),

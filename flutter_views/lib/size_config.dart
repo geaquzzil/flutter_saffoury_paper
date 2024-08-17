@@ -43,13 +43,14 @@ bool showHamburger(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.SMALL_TABLET;
 }
 
+@Deprecated("")
 CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
   return context.read<LayoutChangeListner>().currentScreenSize ??
       CurrentScreenSize.MOBILE;
 }
 
 bool isLargeScreenFromCurrentScreenSize(BuildContext context) {
-  CurrentScreenSize currentScreenSize = getCurrentScreenSizeStatic(context);
+  CurrentScreenSize currentScreenSize = findCurrentScreenSize(context);
   return currentScreenSize == CurrentScreenSize.DESKTOP ||
       currentScreenSize == CurrentScreenSize.LARGE_TABLET;
 }

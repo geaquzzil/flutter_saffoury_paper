@@ -12,7 +12,8 @@ enum DrawerMenuControllerProviderAction {
   list,
   print,
   view,
-  edit
+  edit,
+  custom_widget
 }
 
 class DrawerMenuControllerProvider with ChangeNotifier {

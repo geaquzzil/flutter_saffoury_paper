@@ -14,8 +14,10 @@ import 'package:flutter_view_controller/new_screens/home/components/notification
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/new_screens/setting_page_new.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -126,8 +128,17 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
           const SizedBox(
             width: kDefaultPadding / 2,
           ),
-
-          const DrawerSettingButton(),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              context.read<DrawerMenuControllerProvider>().change(
+                  context,
+                  // SettingPageNew(),
+                  SettingAndProfileWeb(),
+                  DrawerMenuControllerProviderAction.custom_widget);
+            },
+          )
+          // const DrawerSettingButton(),
         ],
       ),
     );

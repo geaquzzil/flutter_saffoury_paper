@@ -38,6 +38,7 @@ import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
+import 'package:flutter_view_controller/new_screens/notification_controller.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
@@ -96,7 +97,8 @@ void main() async {
   };
 
   WidgetsFlutterBinding.ensureInitialized();
-
+  await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeIsolateReceivePort();
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
   if (!kIsWeb) {
     if ((Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
@@ -125,6 +127,9 @@ void main() async {
     // systemNavigationBarDividerColor: Colors.transparent,
     // systemNavigationBarIconBrightness: Brightness.dark,
   ));
+  //TODO notifications
+  // runApp(MyApp());
+  // return;
   List<ViewAbstract> views = List<ViewAbstract>.from([
     CustomerDashboard(),
     CustomerBalanceList(),

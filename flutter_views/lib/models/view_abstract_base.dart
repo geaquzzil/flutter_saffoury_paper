@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -232,6 +233,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Color getColor(BuildContext context) => Colors.red;
 
   Widget? getCardTrailing(BuildContext context) {
+    if (isDesktopPlatform()) {
+      return (this as ViewAbstract)
+          .getPopupMenuActionWidget(context, ServerActions.list);
+    }
     return null;
   }
 
@@ -426,8 +431,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getMainHeaderLabelTextOnly(context).toLowerCase();
   }
 
-  String getBaseMessage(BuildContext context,{ServerActions? serverAction}) {
-    return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context,serverAction:serverAction)} ${getBaseLabelViewAbstract(context)} ";
+  String getBaseMessage(BuildContext context, {ServerActions? serverAction}) {
+    return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context, serverAction: serverAction)} ${getBaseLabelViewAbstract(context)} ";
   }
 }
 
