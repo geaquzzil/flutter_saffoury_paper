@@ -39,73 +39,69 @@ class ProfileMenuWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(5),
       child: Container(
         color: Theme.of(context).cardColor,
-        child: IntrinsicWidth(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (showHeader) const ProfileHeaderListTileWidget(),
-              if (showHeader) const Divider(),
-              ...menuItems
-                  .map(
-                    (item) => GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        if (selectedValue != null) {
-                          selectedValue!.value = item;
-                        } else if (selectedValueVoid != null) {
-                          selectedValueVoid?.call(item);
-                        } else {
-                          item.onPress?.call();
-                        }
-                      },
-                      child: OnHoverWidget(
-                          scale: false,
-                          builder: (isHovered) {
-                            Widget child = popMenuItem(context, item);
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (showHeader) const ProfileHeaderListTileWidget(),
+            if (showHeader) const Divider(),
+            ...menuItems.map(
+              (item) => GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  if (selectedValue != null) {
+                    selectedValue!.value = item;
+                  } else if (selectedValueVoid != null) {
+                    selectedValueVoid?.call(item);
+                  } else {
+                    item.onPress?.call();
+                  }
+                },
+                child: OnHoverWidget(
+                    scale: false,
+                    builder: (isHovered) {
+                      Widget child = popMenuItem(context, item);
 
-                            if (selectedValue != null) {
-                              return ValueListenableBuilder<ItemModel?>(
-                                builder: (context, value, _) {
-                                  if (value == null) {
-                                    child = isHovered
-                                        ? Card(
-                                            child: child,
-                                          )
-                                        : child;
-                                    return child;
-                                  }
-                                  child = isHovered && value.title != item.title
-                                      ? Card(
-                                          child: child,
-                                        )
-                                      : child;
-                                  if (value.title == item.title) {
-                                    return ClippedCard(
-                                        elevation: 0,
-                                        customCardColor: Theme.of(context)
-                                            .scaffoldBackgroundColor
-                                            .withOpacity(.5),
-                                        color: kPrimaryColor,
-                                        child: child);
-                                  } else {
-                                    return child;
-                                  }
-                                },
-                                valueListenable: selectedValue!,
-                              );
+                      if (selectedValue != null) {
+                        return ValueListenableBuilder<ItemModel?>(
+                          builder: (context, value, _) {
+                            if (value == null) {
+                              child = isHovered
+                                  ? Card(
+                                      child: child,
+                                    )
+                                  : child;
+                              return child;
                             }
-                            child = isHovered
+                            child = isHovered && value.title != item.title
                                 ? Card(
                                     child: child,
                                   )
                                 : child;
-                            return child;
-                          }),
-                    ),
-                  )
-
-            ],
-          ),
+                            if (value.title == item.title) {
+                              return ClippedCard(
+                                  elevation: 0,
+                                  // customCardColor:
+                                  //     Theme.of(context).highlightColor,
+                                  // .withOpacity(.5),
+                                  color: kPrimaryColor,
+                                  child: child);
+                            } else {
+                              return child;
+                            }
+                          },
+                          valueListenable: selectedValue!,
+                        );
+                      }
+                      child = isHovered
+                          ? Card(
+                              child: child,
+                            )
+                          : child;
+                      return child;
+                    }),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -115,6 +111,7 @@ class ProfileMenuWidget extends StatelessWidget {
     return Container(
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 20),
+      width: double.infinity,
       child: Row(
         children: <Widget>[
           Icon(

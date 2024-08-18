@@ -29,9 +29,9 @@ class ClippedCard extends StatelessWidget {
                 : null,
             shape: customCardColor != null
                 ? const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10)),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   )
                 : null,
             color: customCardColor,

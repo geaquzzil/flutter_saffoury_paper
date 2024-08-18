@@ -26,7 +26,9 @@ List<ItemModel> getListOfProfileSettings(BuildContext context,
           Icons.account_box_outlined),
       ItemModel(
           AppLocalizations.of(context)!.orders, Icons.shopping_basket_rounded),
+      //todo translate
       ItemModel('Chat', Icons.chat_bubble),
+      //todo translate
       ItemModel("Help", Icons.help_outline_rounded),
       ItemModel(AppLocalizations.of(context)!.logout, Icons.logout),
     ];

@@ -30,6 +30,7 @@ import 'package:flutter_view_controller/screens/web/home.dart';
 import 'package:flutter_view_controller/screens/web/return-privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_web_page.dart';
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
@@ -511,8 +512,12 @@ class RouteGenerator {
         name: settingsRouteName,
         path: "/settings",
         pageBuilder: (context, state) {
+          String? page = state.uri.queryParameters["page"];
           return MaterialPage(
-              key: state.pageKey, child: SettingAndProfileWebPage());
+              key: state.pageKey,
+              child: SettingPageNew(
+                currentSettingPage: page,
+              ));
         },
       ),
       GoRoute(

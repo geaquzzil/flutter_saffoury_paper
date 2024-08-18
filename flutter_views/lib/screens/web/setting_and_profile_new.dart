@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/cartable_draggable_header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/setting/list_sticky_setting_page.dart';
+import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
+import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SettingPageNew extends StatefulWidget {
   bool buildDrawer;
-  SettingPageNew({super.key, this.buildDrawer = false});
+  String? currentSettingPage;
+  SettingPageNew(
+      {super.key, this.buildDrawer = false, this.currentSettingPage});
 
   @override
   State<SettingPageNew> createState() => _SettingPageNewState();
@@ -18,11 +26,14 @@ class SettingPageNew extends StatefulWidget {
 
 class _SettingPageNewState extends BasePageState<SettingPageNew> {
   late List<ModifiableInterface> _modifieableList;
-
+  late ValueNotifier<ItemModel?> _selectedValue;
+  late List<ItemModel> _items;
+  String? _currentSettingPageMobile;
   late List<TitleAndDescription> _titleAndDescription;
   @override
   void initState() {
     buildDrawer = widget.buildDrawer;
+    // _items=getListOfProfileSettings();
     _modifieableList =
         context.read<SettingProvider>().getModifiableListSetting(context);
 
@@ -30,9 +41,33 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
       TitleAndDescription(title: "GENERAL"),
       TitleAndDescription(title: "GENERAL"),
       TitleAndDescription(title: "GENERAL"),
-
     ];
+    _selectedValue = ValueNotifier<ItemModel?>(null);
+    _currentSettingPageMobile = widget.currentSettingPage;
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _items = getListOfProfileSettings(context);
+    return super.build(context);
+  }
+
+  ItemModel? getItemModel(String fromName) {
+    return _items.firstWhereOrNull(
+      (p0) => p0.title == fromName,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant SettingPageNew oldWidget) {
+    //
+    setState(() {
+      if (_currentSettingPageMobile != widget.currentSettingPage) {
+        _currentSettingPageMobile = widget.currentSettingPage;
+      }
+    });
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -48,36 +83,32 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
-    // List<Widget> widgets = List.empty(growable: true);
-    // var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsFirstPane(
-    //     context, getCrossAxisCount(getWidth),
-    //     tab: tab, globalKey: globalKeyBasePageWithApi);
-    // if (list is List<DashableGridHelper>) {
-    //   for (var element in list) {
-    //     GlobalKey buttonKey = GlobalKey();
-    //     var group = [
-    //       SectionItemHeader(
-    //         context: context,
-    //         dgh: element,
-    //         buttonKey: buttonKey,
-    //         child: getWidget(element),
-    //       ),
-    //       // SliverToBoxAdapter(child: getWidget(width, element))
-    //     ];
-    //     widgets.addAll(group);
-    //   }
-    // } else if (list is List<Widget>) {
-    //   widgets.addAll(list);
-    // } else {
-    //   widgets.add(list);
-    // }
-    // return widgets;
+    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    if (_currentSettingPageMobile != null) {
+      return getWidgetFromProfile(
+          context, getItemModel(_currentSettingPageMobile ?? ""), true);
+    }
+    return ProfileMenuWidget(
+      selectedValue: isLarge ? _selectedValue : null,
+      selectedValueVoid: !isLarge
+          ? (value) {
+              context.goNamed(settingsRouteName,
+                  queryParameters: {"page": value?.title});
+            }
+          : null,
+    );
   }
 
   @override
   getDesktopSecondPane(
           {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      Text("TODO");
+      ValueListenableBuilder(
+        valueListenable: _selectedValue,
+        builder: (context, value, child) {
+          return Center(
+              child: getWidgetFromProfile(context, value, pinToolbar));
+        },
+      );
 
   @override
   getFirstPane({TabControllerHelper? tab}) => getDesktopFirstPane(tab: tab);
@@ -103,13 +134,13 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane,
           {TabControllerHelper? tab}) =>
-      false;
+      true;
 
   @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => firstPane;
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
 
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,

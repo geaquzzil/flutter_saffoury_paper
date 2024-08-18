@@ -173,7 +173,7 @@ class Logout extends StatelessWidget {
         ),
         const ListTile(
           subtitle:
-            //todo translate
+              //todo translate
               Text("By logining you out all of your data will be cleared."),
         ),
         Padding(
@@ -198,7 +198,8 @@ class ProfileEdit extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ListTile(  //todo translate
+          const ListTile(
+            //todo translate
             title: Text("Edit Profile"),
           ),
           BaseEditWidget(
@@ -289,7 +290,7 @@ class MasterToListFromProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                  //todo translate
+                //todo translate
                 title: Text("Orders"),
                 subtitle: Text(
                     //todo translate
