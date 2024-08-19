@@ -114,6 +114,9 @@ EdgeInsets getSuggestionPadding(double width) {
   double horizontalPadding = max(
       (width - (isTabletFromWidth(width) ? kLargeTablet : kDesktopWidth)) / 4,
       0);
+
+  debugPrint("getSuggetionPadding horizontalPadding : $horizontalPadding");
+
   return EdgeInsets.symmetric(
       vertical: defualPadding,
       horizontal: horizontalPadding > defualPadding

@@ -620,6 +620,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
 
     if (getHasDecorationOnFirstPane(tab: tab)) {
+    
       _firstWidget = _getBorderDecoration(_firstWidget!);
     }
 
@@ -718,6 +719,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
             setPaddingWhenTowPane(
               getCurrentScreenSize(),
             )) {
+          debugPrint("getSuggetionPadding when TowPane is true");
           toShowWidget = Padding(
             padding: getSuggestionPadding(getWidth),
             child: clipRect,
