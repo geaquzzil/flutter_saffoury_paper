@@ -74,7 +74,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   @override
   Widget? getBaseAppbar() =>
       Text(AppLocalizations.of(context)!.action_settings);
-      
+
   @override
   List<Widget>? getBaseBottomSheet() => null;
 
@@ -144,10 +144,11 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
 
   @override
-  bool setMainPageSuggestionPadding() => true;
+  bool setMainPageSuggestionPadding() =>
+      isLargeScreenFromCurrentScreenSize(context);
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;

@@ -12,9 +12,13 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
+import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/responsive_scroll.dart';
@@ -117,47 +121,18 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   bool isDesktopPlatform() => isDesktop(context);
 
-  List<TabControllerHelper>? _getTabBarList() {
-    return _tabList;
+  List<TabControllerHelper>? _getTabBarList({bool? firstPane}) {
+    if (firstPane == null) return _tabList;
+    return firstPane ? _tabListFirstPane : _tabListSecondPane;
   }
 
-  List<TabControllerHelper>? _getTabBarListSecondPane() {
-    return _tabListSecondPane;
-  }
-
-  List<TabControllerHelper>? _getTabBarListFirstPane() {
-    return _tabListFirstPane;
-  }
-
-  List<TabControllerHelper>? initTabBarList() {
+  List<TabControllerHelper>? initTabBarList(
+      {bool? firstPane, TabControllerHelper? tab}) {
     return null;
-  }
-
-  List<TabControllerHelper>? initTabBarListFirstPane(
-      {TabControllerHelper? tab}) {
-    return null;
-  }
-
-  List<TabControllerHelper>? initTabBarListSecondPane(
-      {TabControllerHelper? tab}) {
-    return null;
-  }
-
-  bool _hasBaseTabBarList() {
-    return _getTabBarList() != null;
-  }
-
-  bool _hasTabBarListFirstPane() {
-    return _getTabBarListFirstPane() != null;
-  }
-
-  bool _hasTabBarListSecondPane() {
-    return _getTabBarListSecondPane() != null;
   }
 
   bool _hasTabBarList({bool? firstPane}) {
-    if (firstPane == null) return _hasBaseToolbar();
-    return firstPane ? _hasTabBarListFirstPane() : _hasTabBarListSecondPane();
+    return _getTabBarList(firstPane: firstPane) != null;
   }
 
   TabController getTabController({bool? firstPane}) {
@@ -258,28 +233,54 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         surfaceTintColor: Colors.transparent,
         // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,
+        actions: !isBaseAppBar
+            ? null
+            : [
+                NotificationPopupWidget(),
+                const SizedBox(
+                  width: kDefaultPadding / 2,
+                ),
+                const DrawerLanguageButton(),
+                const SizedBox(
+                  width: kDefaultPadding / 2,
+                ),
+                const ProfilePicturePopupMenu(),
+                const SizedBox(
+                  width: kDefaultPadding / 2,
+                ),
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    context.read<DrawerMenuControllerProvider>().change(
+                        context,
+                        SettingPageNew(),
+                        // SettingAndProfileWeb(),
+                        DrawerMenuControllerProviderAction.custom_widget);
+                  },
+                )
+              ],
         // primary: true,
 
         backgroundColor: customAppBar != null
             ? ElevationOverlay.overlayColor(context, 2)
             : null,
-        toolbarHeight: customAppBar == null
-            ? baseAppbar == null
-                ? null
-                : 100
-            : null,
+        // toolbarHeight: customAppBar == null
+        //     ? baseAppbar == null
+        //         ? null
+        //         : 100
+        //     : null,
 
         // backgroundColor: ElevationOverlay.overlayColor(context, 2),
         // leading: ,
         title: customAppBar ?? baseAppbar,
-        leading: showHamburger(getCurrentScreenSize())
-            ? IconButton(
+        leading: hideHamburger(getCurrentScreenSize())
+            ? null
+            : IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () {
                   _drawerMenuControllerProvider.controlStartDrawerMenu();
                 },
-              )
-            : null,
+              ),
         bottom: getTabBarWidget(firstPane: firstPane));
   }
 
@@ -455,7 +456,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       onReconnected: () => debugPrint("BasePage RECONNECTED"),
       onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
     );
-    _initBaseTab();
 
     super.initState();
   }
@@ -464,7 +464,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     _tabList = initTabBarList();
 
     /// Here you can have your context and do what ever you want
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       _tabBaseController = TabController(vsync: this, length: _tabList!.length);
       _tabBaseController!.addListener(_tabControllerChangeListener);
     }
@@ -473,16 +473,16 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   @override
   void dispose() {
     _connectionListener.dispose();
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       _tabBaseController!.removeListener(_tabControllerChangeListener);
       _tabBaseController!.dispose();
     }
-    if (_hasTabBarListFirstPane()) {
+    if (_hasTabBarList(firstPane: true)) {
       _tabControllerFirstPane!
           .removeListener(_tabControllerChangeListenerFirstPane);
       _tabControllerFirstPane!.dispose();
     }
-    if (_hasTabBarListSecondPane()) {
+    if (_hasTabBarList(firstPane: false)) {
       _tabControllerSecondPane!
           .removeListener(_tabControllerChangeListenerSecondPane);
       _tabControllerSecondPane!.dispose();
@@ -519,15 +519,16 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   @override
   Widget build(BuildContext context) {
+    _initBaseTab();
     return ScreenHelperSliver(
-        requireAutoPadding: false,
+        requireAutoPadding: setMainPageSuggestionPadding(),
         onChangeLayout: (w, h, c) {
           debugPrint("ScreenHelperSliver build width:$w");
           reset();
           _width = w;
           _height = h;
           _currentScreenSize = c;
-          if (buildDrawer) {
+          if (canBuildDrawer()) {
             _drawerWidget = DrawerLargeScreens(
               size: _currentScreenSize,
             );
@@ -567,16 +568,16 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   void _setupPaneTabBar(bool firstPane, {TabControllerHelper? tab}) {
     if (firstPane) {
-      _tabListFirstPane = initTabBarListFirstPane(tab: tab);
-      if (_hasTabBarListFirstPane()) {
+      _tabListFirstPane = initTabBarList(firstPane: firstPane, tab: tab);
+      if (_hasTabBarList(firstPane: firstPane)) {
         _tabControllerFirstPane =
             TabController(vsync: this, length: _tabListFirstPane!.length);
         _tabControllerFirstPane!
             .addListener(_tabControllerChangeListenerFirstPane);
       }
     } else {
-      _tabListSecondPane = initTabBarListSecondPane(tab: tab);
-      if (_hasTabBarListSecondPane()) {
+      _tabListSecondPane = initTabBarList(firstPane: firstPane, tab: tab);
+      if (_hasTabBarList(firstPane: firstPane)) {
         _tabControllerSecondPane =
             TabController(vsync: this, length: _tabListSecondPane!.length);
 
@@ -597,7 +598,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       if (_hasTabBarList(firstPane: true)) {
         _firstWidget = TabBarView(
             controller: _tabControllerFirstPane,
-            children: _getTabBarListFirstPane()!
+            children: _getTabBarList(firstPane: true)!
                 .map((e) => beforeGetDesktopFirstPaneWidget(tab: e))
                 .toList()
                 .cast());
@@ -610,7 +611,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       if (_hasTabBarList(firstPane: false)) {
         _secondWidget = TabBarView(
             controller: _tabControllerSecondPane,
-            children: _getTabBarListSecondPane()!
+            children: _getTabBarList(firstPane: false)!
                 .map((e) => beforeGetDesktopSecoundPaneWidget(tab: e))
                 .toList()
                 .cast());
@@ -666,8 +667,15 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         width: width, child: const Card(child: WebShoppingCartDrawer()));
   }
 
+  bool canBuildDrawer() {
+    if (!isLargeScreenFromCurrentScreenSize(context)) {
+      return true;
+    }
+    return buildDrawer;
+  }
+
   Widget _getMainWidget() {
-    return Scaffold(
+    Widget body = Scaffold(
         bottomNavigationBar: buildDrawer ? null : generateBaseBottomSheet(),
         endDrawer: getEndDrawer(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -675,9 +683,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         floatingActionButton: getBaseFloatingActionButton(),
         key: _drawerMenuControllerProvider.getStartDrawableKey,
-        drawer: buildDrawer ? _drawerWidget : null,
+        drawer: canBuildDrawer() ? _drawerWidget : null,
         appBar: generateToolbar(),
         body: _getBody());
+    return body;
   }
 
   Widget getBodyIfHasTabBarList(bool isLarge) {
@@ -686,12 +695,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         controller: _tabBaseController,
         children: _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
     Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
-    if (setMainPageSuggestionPadding()) {
-      child = Padding(
-        padding: getSuggestionPadding(_width),
-        child: child,
-      );
-    }
+
     if (isLarge && buildDrawer) {
       currentWidget = Row(children: [_drawerWidget!, child]);
     } else {
@@ -705,7 +709,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     bool isLarge = isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
 
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       currentWidget = getBodyIfHasTabBarList(isLarge);
     } else {
       currentWidget = _getTowPanes();
@@ -757,7 +761,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   void changeTabIndex(int index) {
     debugPrint("_tabController $index");
-    if (!_hasBaseTabBarList()) return;
+    if (!_hasTabBarList()) return;
     debugPrint("_tabController $index");
     currentBaseTabIndex = index;
     _tabBaseController!.index = index;
@@ -765,7 +769,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   void changeTabIndexFirstPane(int index) {
     debugPrint("_tabControllerChangeListenerSecondPane $index");
-    if (!_hasTabBarListFirstPane()) return;
+    if (!_hasTabBarList(firstPane: true)) return;
     debugPrint("_tabControllerChangeListenerSecondPane $index");
     currentPaneIndexFirstPane = index;
     _tabControllerFirstPane!.index = index;
@@ -773,7 +777,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   void changeTabIndexSecondPane(int index) {
     debugPrint("_tabControllerChangeListenerSecondPane $index");
-    if (!_hasTabBarListSecondPane()) return;
+    if (!_hasTabBarList(firstPane: false)) return;
     debugPrint("_tabControllerChangeListenerSecondPane $index");
     currentPaneIndexSecondPane = index;
     _tabControllerSecondPane!.index = index;
@@ -799,7 +803,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   ServerActions getServerActions();
 
   dynamic getExtras({TabControllerHelper? tab}) {
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       if (tab != null) {
         dynamic result = _getTabBarList()!.firstWhere(
             (element) => element.extras.runtimeType == tab.extras.runtimeType);
@@ -833,7 +837,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
 
   //todo check return type if not tab bar then return extras ??
   TabControllerHelper? findExtrasViaType(Type extra) {
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       return findExtrasViaTypeList(
           _getTabBarList(), (e) => e.extras.runtimeType == extra);
     } else {
@@ -842,7 +846,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   int findExtrasIndexFromTab(Type extra) {
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       return findExtrasIndexFromTabList(
           _getTabBarList(), (element) => element.extras.runtimeType == extra);
     } else {
@@ -851,7 +855,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   int findExtrasIndexFromTabSecoundPane(Type extra) {
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       return findExtrasIndexFromTabList(
           _getTabBarList(), (element) => element.extras.runtimeType == extra);
     } else {
@@ -874,7 +878,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   void setExtras(
       {int? iD, String? tableName, dynamic ex, TabControllerHelper? tabH}) {
     _isLoading = false;
-    if (_hasBaseTabBarList()) {
+    if (_hasTabBarList()) {
       TabControllerHelper tab = tabH ?? _getTabBarList()![currentBaseTabIndex];
       tab.extras = ex;
       tab.iD = iD;

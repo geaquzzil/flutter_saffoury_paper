@@ -41,19 +41,23 @@ class _BaseDashboardMainPageState
 
   //  late DashableInterface dashboard;
   @override
-  List<TabControllerHelper>? initTabBarList() {
-    return context
-        .read<AuthProvider<AuthUser>>()
-        .getListableOfDashablesInterface()
-        .map((e) {
-      debugPrint("getTabBarList ${(e as ViewAbstract).getCustomAction()}");
-      ViewAbstract v = e as ViewAbstract;
-      return TabControllerHelper(
-        v.getMainHeaderLabelTextOnly(context) ?? "sda",
-        extras: v,
-        // icon: Icon(v.getMainIconData()),
-      );
-    }).toList();
+  List<TabControllerHelper>? initTabBarList(
+      {bool? firstPane, TabControllerHelper? tab}) {
+    if (firstPane == null && tab == null) {
+      return context
+          .read<AuthProvider<AuthUser>>()
+          .getListableOfDashablesInterface()
+          .map((e) {
+        debugPrint("getTabBarList ${(e as ViewAbstract).getCustomAction()}");
+        ViewAbstract v = e as ViewAbstract;
+        return TabControllerHelper(
+          v.getMainHeaderLabelTextOnly(context) ?? "sda",
+          extras: v,
+          // icon: Icon(v.getMainIconData()),
+        );
+      }).toList();
+    }
+    return null;
   }
 
   @override

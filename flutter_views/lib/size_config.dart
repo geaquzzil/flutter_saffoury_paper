@@ -38,6 +38,10 @@ bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.LARGE_TABLET;
 }
 
+bool hideHamburger(CurrentScreenSize? screenSize) {
+  return isLargeScreenFromScreenSize(screenSize);
+}
+
 bool showHamburger(CurrentScreenSize? screenSize) {
   return screenSize == CurrentScreenSize.MOBILE ||
       screenSize == CurrentScreenSize.SMALL_TABLET;

@@ -21,12 +21,6 @@ class ListToDetailsPage extends StatefulWidget {
 
 class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
   @override
-  List<TabControllerHelper>? initTabBarList() {
-    // TODO: implement initTabBarList
-    return super.initTabBarList();
-  }
-
-  @override
   Widget? getBaseAppbar() => null;
 
   @override

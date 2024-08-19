@@ -46,27 +46,21 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   ViewAbstract? secoundPaneViewAbstract;
 
   @override
-  List<TabControllerHelper>? initTabBarListSecondPane(
-      {TabControllerHelper? tab}) {
-    List<TabControllerHelper>? tabs =
-        secoundPaneViewAbstract?.getTabs(context, action: ServerActions.view);
-    debugPrint("initTabBarListSecondPane called ${tabs?.length}");
-    return tabs;
-  }
-
-  @override
-  List<TabControllerHelper>? initTabBarList() {
-    // TODO: implement initTabBarList
-    return [
-      TabControllerHelper(
-        "HOME",
-        // icon: Icon(Icons.home),
-      ),
-      TabControllerHelper(
-        "PAGES",
-        // icon: Icon(Icons.pages),
-      )
-    ];
+  List<TabControllerHelper>? initTabBarList(
+      {bool? firstPane, TabControllerHelper? tab}) {
+    if (firstPane == null && tab == null) {
+      return [
+        TabControllerHelper(
+          "HOME",
+          // icon: Icon(Icons.home),
+        ),
+        TabControllerHelper(
+          "PAGES",
+          // icon: Icon(Icons.pages),
+        )
+      ];
+    }
+    return null;
   }
 
   @override
@@ -81,66 +75,12 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
     // if (!isLargeScreenFromCurrentScreenSize(context)) {
     //   return null;
     // }
-    return ListTile(
-      title: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-        children: [
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: kDefaultPadding,
-                ),
-                child: Text(
-                    context
-                        .read<DrawerMenuControllerProvider>()
-                        .getObject
-                        .getMainHeaderLabelTextOnly(context),
-                    style: Theme.of(context).textTheme.headlineMedium)
-
-                // SearchWidgetComponent(onSearchTextChanged: (text) {
-                //   debugPrint("search for $text");
-                // }),
-                ),
-          ),
-          const Spacer(),
-
-          // IconButton(
-          //     onPressed: () {
-          //       getExtrasCast(tab: tab).printPage(context);
-          //     },
-          //     icon: const Icon(Icons.print)),
-          // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
-          // IconButton(
-          //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
-          // IconButton(
-          //     onPressed: () {}, icon: const Icon(Icons.notification_add)),
-          NotificationPopupWidget(),
-          const SizedBox(
-            width: kDefaultPadding / 2,
-          ),
-          const DrawerLanguageButton(),
-          const SizedBox(
-            width: kDefaultPadding / 2,
-          ),
-          const ProfilePicturePopupMenu(),
-          const SizedBox(
-            width: kDefaultPadding / 2,
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              context.read<DrawerMenuControllerProvider>().change(
-                  context,
-                  SettingPageNew(),
-                  // SettingAndProfileWeb(),
-                  DrawerMenuControllerProviderAction.custom_widget);
-            },
-          )
-          // const DrawerSettingButton(),
-        ],
-      ),
-    );
+    return Text(
+        context
+            .read<DrawerMenuControllerProvider>()
+            .getObject
+            .getMainHeaderLabelTextOnly(context),
+        style: Theme.of(context).textTheme.headlineMedium);
   }
 
   @override
