@@ -262,7 +262,8 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => firstPane;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) =>
+      firstPane;
 
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,

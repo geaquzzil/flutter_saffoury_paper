@@ -140,7 +140,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
 
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,

@@ -324,7 +324,7 @@ class _BaseDashboardMainPageState
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => true;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) {
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) {
     return false;
   }
 

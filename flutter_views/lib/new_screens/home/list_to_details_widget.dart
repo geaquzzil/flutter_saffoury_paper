@@ -20,12 +20,12 @@ class ListToDetailsPage extends StatefulWidget {
 }
 
 class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
-
   @override
   List<TabControllerHelper>? initTabBarList() {
     // TODO: implement initTabBarList
     return super.initTabBarList();
   }
+
   @override
   Widget? getBaseAppbar() => null;
 
@@ -78,7 +78,7 @@ class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
   bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,

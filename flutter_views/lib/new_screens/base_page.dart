@@ -96,7 +96,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab});
   bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab});
-  bool setBodyPadding(bool firstPane, {TabControllerHelper? tab});
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab});
 
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab});
 
@@ -247,6 +247,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ///else if [customAppBar] is not null then generates the app bar based on the panes
   generateToolbar({Widget? customAppBar, bool? firstPane}) {
     Widget? baseAppbar = getBaseAppbar();
+    if (baseAppbar == null && customAppBar == null) {
+      return null;
+    }
     return AppBar(
         surfaceTintColor: Colors.transparent,
         // automaticallyImplyLeading: false,
@@ -405,7 +408,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           : generateToolbar(firstPane: firstPane, customAppBar: appBarBody),
       bottomSheet: generatePaneBottomSheet(firstPane, tab: tab),
       body: Padding(
-        padding: setBodyPadding(firstPane, tab: tab)
+        padding: setPaneBodyPadding(firstPane, tab: tab)
             ? const EdgeInsets.all(kDefaultPadding / 2)
             : EdgeInsets.zero,
         child: body,
@@ -523,16 +526,16 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           }
         },
         mobile: (w, h) {
-          return _getTabletWidget();
+          return _getMainWidget();
         },
         smallTablet: (w, h) {
-          return _getTabletWidget();
+          return _getMainWidget();
         },
         largeTablet: (w, h) {
-          return _getTabletWidget();
+          return _getMainWidget();
         },
         desktop: (w, h) {
-          return _getTabletWidget();
+          return _getMainWidget();
         });
   }
 
@@ -620,7 +623,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
 
     if (getHasDecorationOnFirstPane(tab: tab)) {
-    
       _firstWidget = _getBorderDecoration(_firstWidget!);
     }
 
@@ -648,12 +650,15 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   }
 
   SizedBox getEndDrawer() {
-    return const SizedBox(
-        width: 500, child: Card(child: WebShoppingCartDrawer()));
+    bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
+    double width = isLarge ? MediaQuery.of(context).size.width * .3 : 500;
+    return SizedBox(
+        width: width, child: const Card(child: WebShoppingCartDrawer()));
   }
 
-  Widget _getTabletWidget() {
+  Widget _getMainWidget() {
     return Scaffold(
+        //todo not working becuase of the buildrawer when large screen
         bottomNavigationBar: generateBaseBottomSheet(),
         endDrawer: getEndDrawer(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
