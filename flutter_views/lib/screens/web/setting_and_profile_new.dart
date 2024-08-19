@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SettingPageNew extends StatefulWidget {
   bool buildDrawer;
@@ -71,12 +72,15 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   }
 
   @override
-  Widget? getBaseAppbar() => null;
+  Widget? getBaseAppbar() =>
+      Text(AppLocalizations.of(context)!.action_settings);
+      
   @override
   List<Widget>? getBaseBottomSheet() => null;
 
   @override
   Widget? getBaseFloatingActionButton() => null;
+
   @override
   getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
       getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
@@ -140,12 +144,14 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
-          {TabControllerHelper? tab}) =>
-      true;
+  bool setMainPageSuggestionPadding() => true;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
+
   @override
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => true;
 }

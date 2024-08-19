@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'dart:math';
 
 // import 'package:connectivity_listener/connectivity_listener.dart';
@@ -41,6 +42,16 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+class WidgetNavigationHelper {
+  Widget widget;
+  String title;
+  WidgetNavigationHelper({
+    required this.widget,
+    required this.title,
+  });
+
+}
+List<WidgetNavigationHelper> list=[];
 class BaseDeterminePageState extends StatelessWidget {
   late Widget _drawerWidget;
   late CurrentScreenSize _currentScreenSize;

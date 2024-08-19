@@ -266,9 +266,10 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
       firstPane;
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
-          {TabControllerHelper? tab}) =>
-      false;
+  bool setMainPageSuggestionPadding() => false;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) =>

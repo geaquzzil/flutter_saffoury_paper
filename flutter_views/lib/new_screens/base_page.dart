@@ -101,9 +101,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab});
 
   late CurrentScreenSize _currentScreenSize;
-  late TabController _tabBaseController;
-  late TabController _tabControllerFirstPane;
-  late TabController _tabControllerSecondPane;
+  TabController? _tabBaseController;
+  TabController? _tabControllerFirstPane;
+  TabController? _tabControllerSecondPane;
   int currentBaseTabIndex = 0;
   int currentPaneIndexFirstPane = 0;
   int currentPaneIndexSecondPane = 0;
@@ -161,8 +161,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   }
 
   TabController getTabController({bool? firstPane}) {
-    if (firstPane == null) return _tabBaseController;
-    return firstPane ? _tabControllerFirstPane : _tabControllerSecondPane;
+    if (firstPane == null) return _tabBaseController!;
+    return firstPane ? _tabControllerFirstPane! : _tabControllerSecondPane!;
   }
 
   List<Widget> getTabsForTabController({bool? firstPane}) {
@@ -193,12 +193,15 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ///if this is [true] then we add divider between panes
   ///if this is [false] then we check for second pane if no second pane then we add padding automatically
   ///todo tab not working here it will execute globaley
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
-      {TabControllerHelper? tab});
+  bool setMainPageSuggestionPadding();
 
-  bool getHasDecorationOnFirstPane({TabControllerHelper? tab}) {
-    return _secondWidget != null &&
-        setPaddingWhenTowPane(getCurrentScreenSize(), tab: tab);
+  bool setHorizontalDividerWhenTowPanes();
+
+  bool _hasHorizontalDividerWhenTowPanes() {
+    if (_secondWidget != null) {
+      return setHorizontalDividerWhenTowPanes();
+    }
+    return false;
   }
 
   bool _hasBaseToolbar() {
@@ -247,6 +250,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ///else if [customAppBar] is not null then generates the app bar based on the panes
   generateToolbar({Widget? customAppBar, bool? firstPane}) {
     Widget? baseAppbar = getBaseAppbar();
+    bool isBaseAppBar = firstPane == null;
     if (baseAppbar == null && customAppBar == null) {
       return null;
     }
@@ -264,6 +268,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                 ? null
                 : 100
             : null,
+
         // backgroundColor: ElevationOverlay.overlayColor(context, 2),
         // leading: ,
         title: customAppBar ?? baseAppbar,
@@ -294,9 +299,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   Widget checkTogetTabbarSliver(bool firstPane) {
     if (firstPane) {
-      return getTabbarSliver(_tabListFirstPane!, _tabControllerFirstPane);
+      return getTabbarSliver(_tabListFirstPane!, _tabControllerFirstPane!);
     } else {
-      return getTabbarSliver(_tabListSecondPane!, _tabControllerSecondPane);
+      return getTabbarSliver(_tabListSecondPane!, _tabControllerSecondPane!);
     }
   }
 
@@ -435,6 +440,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   @override
   void didUpdateWidget(covariant T oldWidget) {
+    if (_tabList == null) {
+      _initBaseTab();
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -447,37 +455,37 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       onReconnected: () => debugPrint("BasePage RECONNECTED"),
       onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
     );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _tabList = initTabBarList();
-
-      /// Here you can have your context and do what ever you want
-      if (_hasBaseTabBarList()) {
-        _tabBaseController =
-            TabController(vsync: this, length: _tabList!.length);
-        _tabBaseController.addListener(_tabControllerChangeListener);
-      }
-    });
+    _initBaseTab();
 
     super.initState();
+  }
+
+  void _initBaseTab() {
+    _tabList = initTabBarList();
+
+    /// Here you can have your context and do what ever you want
+    if (_hasBaseTabBarList()) {
+      _tabBaseController = TabController(vsync: this, length: _tabList!.length);
+      _tabBaseController!.addListener(_tabControllerChangeListener);
+    }
   }
 
   @override
   void dispose() {
     _connectionListener.dispose();
     if (_hasBaseTabBarList()) {
-      _tabBaseController.removeListener(_tabControllerChangeListener);
-      _tabBaseController.dispose();
+      _tabBaseController!.removeListener(_tabControllerChangeListener);
+      _tabBaseController!.dispose();
     }
     if (_hasTabBarListFirstPane()) {
-      _tabControllerFirstPane
+      _tabControllerFirstPane!
           .removeListener(_tabControllerChangeListenerFirstPane);
-      _tabControllerFirstPane.dispose();
+      _tabControllerFirstPane!.dispose();
     }
     if (_hasTabBarListSecondPane()) {
-      _tabControllerSecondPane
+      _tabControllerSecondPane!
           .removeListener(_tabControllerChangeListenerSecondPane);
-      _tabControllerSecondPane.dispose();
+      _tabControllerSecondPane!.dispose();
     }
     super.dispose();
   }
@@ -563,7 +571,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       if (_hasTabBarListFirstPane()) {
         _tabControllerFirstPane =
             TabController(vsync: this, length: _tabListFirstPane!.length);
-        _tabControllerFirstPane
+        _tabControllerFirstPane!
             .addListener(_tabControllerChangeListenerFirstPane);
       }
     } else {
@@ -572,7 +580,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         _tabControllerSecondPane =
             TabController(vsync: this, length: _tabListSecondPane!.length);
 
-        _tabControllerSecondPane
+        _tabControllerSecondPane!
             .addListener(_tabControllerChangeListenerSecondPane);
       }
     }
@@ -622,7 +630,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       return _firstWidget!;
     }
 
-    if (getHasDecorationOnFirstPane(tab: tab)) {
+    if (_hasHorizontalDividerWhenTowPanes()) {
       _firstWidget = _getBorderDecoration(_firstWidget!);
     }
 
@@ -642,10 +650,12 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   // }
 
   Widget? generateBaseBottomSheet() {
+    //TODO
     return null;
   }
 
   Widget? generatePaneBottomSheet(bool firstPane, {TabControllerHelper? tab}) {
+    //TODO
     return null;
   }
 
@@ -658,8 +668,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   Widget _getMainWidget() {
     return Scaffold(
-        //todo not working becuase of the buildrawer when large screen
-        bottomNavigationBar: generateBaseBottomSheet(),
+        bottomNavigationBar: buildDrawer ? null : generateBaseBottomSheet(),
         endDrawer: getEndDrawer(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -667,6 +676,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         floatingActionButton: getBaseFloatingActionButton(),
         key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: buildDrawer ? _drawerWidget : null,
+        appBar: generateToolbar(),
         body: _getBody());
   }
 
@@ -675,19 +685,19 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     currentWidget = TabBarView(
         controller: _tabBaseController,
         children: _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
-    if (isLarge) {
-      if (buildDrawer) {
-        currentWidget = Row(
-            children: [_drawerWidget!, getSelectorBodyIsLarge(currentWidget)]);
-      } else {
-        currentWidget = getSelectorBodyIsLarge(currentWidget);
-      }
+    Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
+    if (setMainPageSuggestionPadding()) {
+      child = Padding(
+        padding: getSuggestionPadding(_width),
+        child: child,
+      );
     }
-    return Scaffold(
-      backgroundColor: ElevationOverlay.overlayColor(context, 2),
-      appBar: generateToolbar(),
-      body: currentWidget,
-    );
+    if (isLarge && buildDrawer) {
+      currentWidget = Row(children: [_drawerWidget!, child]);
+    } else {
+      currentWidget = child;
+    }
+    return currentWidget;
   }
 
   Widget _getBody() {
@@ -699,39 +709,23 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       currentWidget = getBodyIfHasTabBarList(isLarge);
     } else {
       currentWidget = _getTowPanes();
+      if (setMainPageSuggestionPadding()) {
+        currentWidget = Padding(
+          padding: getSuggestionPadding(_width),
+          child: currentWidget,
+        );
+      }
     }
     return currentWidget;
   }
 
-  Widget getSelectorBodyIsLarge(Widget currentWidget) {
-    if (!buildDrawer) {
+  Widget getSelectorBodyIsLarge(bool isLarge, Widget currentWidget) {
+    if (!buildDrawer || !isLarge) {
       return currentWidget;
     }
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
         debugPrint("drawer selector $isOpen");
-        Widget toShowWidget;
-        Widget clipRect = ClipRRect(
-            borderRadius: BorderRadius.circular(kDefualtClipRect),
-            child: _hasBaseToolbar()
-                ? Scaffold(
-                    backgroundColor: ElevationOverlay.overlayColor(context, 2),
-                    appBar: generateToolbar(),
-                    body: currentWidget,
-                  )
-                : currentWidget);
-        if (_secondWidget == null ||
-            setPaddingWhenTowPane(
-              getCurrentScreenSize(),
-            )) {
-          debugPrint("getSuggetionPadding when TowPane is true");
-          toShowWidget = Padding(
-            padding: getSuggestionPadding(getWidth),
-            child: clipRect,
-          );
-        } else {
-          toShowWidget = clipRect;
-        }
         return AnimatedContainer(
             key: UniqueKey(),
             height: _height,
@@ -740,24 +734,24 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                         .toNonNullable()) -
                 0,
             duration: const Duration(milliseconds: 100),
-            child: toShowWidget);
+            child: currentWidget);
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
   }
 
   void _tabControllerChangeListener() {
-    currentBaseTabIndex = _tabBaseController.index;
+    currentBaseTabIndex = _tabBaseController!.index;
     debugPrint("_tabController $currentBaseTabIndex");
   }
 
   void _tabControllerChangeListenerFirstPane() {
-    currentPaneIndexFirstPane = _tabControllerFirstPane.index;
+    currentPaneIndexFirstPane = _tabControllerFirstPane!.index;
     debugPrint("_tabController $currentBaseTabIndex");
   }
 
   void _tabControllerChangeListenerSecondPane() {
-    currentPaneIndexSecondPane = _tabControllerSecondPane.index;
+    currentPaneIndexSecondPane = _tabControllerSecondPane!.index;
     debugPrint("_tabControllerChangeListenerSecondPane $currentBaseTabIndex");
   }
 
@@ -766,7 +760,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     if (!_hasBaseTabBarList()) return;
     debugPrint("_tabController $index");
     currentBaseTabIndex = index;
-    _tabBaseController.index = index;
+    _tabBaseController!.index = index;
   }
 
   void changeTabIndexFirstPane(int index) {
@@ -774,7 +768,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     if (!_hasTabBarListFirstPane()) return;
     debugPrint("_tabControllerChangeListenerSecondPane $index");
     currentPaneIndexFirstPane = index;
-    _tabControllerFirstPane.index = index;
+    _tabControllerFirstPane!.index = index;
   }
 
   void changeTabIndexSecondPane(int index) {
@@ -782,7 +776,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     if (!_hasTabBarListSecondPane()) return;
     debugPrint("_tabControllerChangeListenerSecondPane $index");
     currentPaneIndexSecondPane = index;
-    _tabControllerSecondPane.index = index;
+    _tabControllerSecondPane!.index = index;
   }
 }
 

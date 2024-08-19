@@ -329,10 +329,10 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  bool setPaddingWhenTowPane(CurrentScreenSize currentScreenSize,
-      {TabControllerHelper? tab}) {
-    return false;
-  }
+  bool setMainPageSuggestionPadding() => false;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
   Future getCallApiFunctionIfNull(BuildContext context,
