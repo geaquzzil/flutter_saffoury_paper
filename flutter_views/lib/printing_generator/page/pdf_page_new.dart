@@ -204,6 +204,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     Widget setting = const Center(
       child: Text("getFirstPane"),
     );
+    return setting;
 
     return FutureBuilder<ViewAbstract?>(
       future: getSettingLoadDefaultIfNull(context, getExtras()),
