@@ -67,6 +67,7 @@ class _ControllerViewAbstractAsOneField
 
   @override
   void dispose() {
+    debugPrint("dispose ExpanstionTileCustom ");
     _controller.dispose();
     super.dispose();
   }
@@ -118,22 +119,47 @@ class _ControllerViewAbstractAsOneField
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTileTheme.merge(
+                  minVerticalPadding: 10,
+                  selectedTileColor: Colors.transparent,
+                  selectedColor: Colors.transparent,
+                  contentPadding: EdgeInsets.all(_controller.value * 10),
                   iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
                   textColor: _iconColor.value,
                   child: ListTile(
+                    focusColor: Colors.transparent,
                     onTap: () => _handleTap(context),
+                    // leadingAndTrailingTextStyle: ,
                     // contentPadding: expansionTileTheme.tilePadding,
                     leading: SizedBox(
                         width: 25,
                         height: 25,
-                        child:
-                            widget.viewAbstract.getCardLeadingImage(context)),
-                    title: !_isExpanded
-                        ? Text(
-                            widget.viewAbstract.getMainHeaderTextOnly(context),
-                            key: UniqueKey(),
-                          )
-                        : widget.children,
+                        child: Align(
+                            alignment: Alignment.topCenter,
+                            child: widget.viewAbstract
+                                .getCardLeadingImage(context))),
+                    title: AnimatedSwitcher(
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) =>
+                              FadeTransition(opacity: animation, child: child),
+                      duration: Duration(milliseconds: 200),
+                      child: !_isExpanded
+                          ? Text(
+                              widget.viewAbstract
+                                  .getMainHeaderTextOnly(context),
+                              key: UniqueKey(),
+                            )
+                          : Column(
+                              children: [
+                                for (int i = 0; i < 5; i++)
+                                  TextField(
+                                    decoration: InputDecoration(
+                                        hintText: 'Username $i'),
+                                    // cursorHeight: 20,
+                                  ),
+                              ],
+                            ),
+                    ),
+
                     // subtitle: _isExpanded
                     //     ? null
                     //     : widget.viewAbstract.getMainLabelText(context),
@@ -141,7 +167,7 @@ class _ControllerViewAbstractAsOneField
                         ? null
                         : IconButton(
                             onPressed: () => _handleTap(context),
-                            icon: const Icon(Icons.minimize),
+                            icon: const Icon(Icons.minimize_outlined),
                             color: Theme.of(context).colorScheme.error,
                           ),
                   )),

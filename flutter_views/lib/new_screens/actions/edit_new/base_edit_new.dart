@@ -238,10 +238,7 @@ class BaseEditWidget extends StatelessWidget {
             builder: (context, provider, listTile) {
           Widget form = buildForm(context);
           if (isTheFirst) {
-            if(buildAsPrint){
-              
-
-            }
+            if (buildAsPrint) {}
             return form;
           } else if (isStandAloneField) {
             return ControllerViewAbstractAsOneField(
@@ -391,7 +388,7 @@ class BaseEditWidget extends StatelessWidget {
     //   return getControllerWidget(context, fields[index]);
     // }, childCount: fields.length));
     var child = <Widget>[
-      const SizedBox(height: kDefaultPadding),
+      // const SizedBox(height: kDefaultPadding),
       ...fields.map((e) => getControllerWidget(context, e)),
       ...groupedFields.entries.map((e) => ExpansionTileCustom(
           canExpand: () => true,
