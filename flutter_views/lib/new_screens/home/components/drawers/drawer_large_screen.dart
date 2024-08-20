@@ -150,7 +150,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
           //     ? (v.item2 ?? 1000) * .5
           //     : v.item2.toNonNullable() - (100 + (v.item2 ?? 1000) * .25),
           child: CustomScrollView(
-            physics: const NeverScrollableScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             slivers: [
               // SliverToBoxAdapter(child: buildHeader(context, isOpen)),
               // buildList(context, isOpen),

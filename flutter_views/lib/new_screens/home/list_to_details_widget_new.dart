@@ -48,6 +48,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
+    return null;
     if (firstPane == null && tab == null) {
       return [
         TabControllerHelper(

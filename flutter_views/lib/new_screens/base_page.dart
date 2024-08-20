@@ -361,7 +361,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           animationDuration: animationDuration,
           scrollOffset: scrollOffset,
           child: CustomScrollView(
-            physics: const NeverScrollableScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             controller: getScrollController(firstPane, tab: tab),
             slivers: [
               if (appBar != null) getSliverAppBar(appBar),
@@ -375,7 +375,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         debugPrint(
             "BasePage IsPanel  isDesktopOrWebPlatform flassse isSliver ${isPanesIsSliver(firstPane)} body $body");
         return CustomScrollView(
-          physics: const NeverScrollableScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           controller: getScrollController(firstPane, tab: tab),
           slivers: [
             if (appBar != null) getSliverAppBar(appBar),
