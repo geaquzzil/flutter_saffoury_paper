@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
@@ -159,39 +160,78 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
+  void exportPage(BuildContext context) {
+    if (isLargeScreenFromCurrentScreenSize(context)) {
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          ListToDetailsSecoundPaneHelper(
+              action: ServerActions.custom_widget,
+              customWidget:
+                  FileReaderPage(viewAbstract: this as ViewAbstract)));
+    } else {
+      context.goNamed(importRouteName,
+          pathParameters: {"tableName": getTableNameApi()!}, extra: this);
+    }
+  }
+
+  void importPage(BuildContext context) {
+    if (isLargeScreenFromCurrentScreenSize(context)) {
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          ListToDetailsSecoundPaneHelper(
+              action: ServerActions.custom_widget,
+              customWidget:
+                  FileExporterPage(viewAbstract: this as ViewAbstract)));
+    } else {
+      context.goNamed(exportRouteName,
+          pathParameters: getRoutePathParameters(), extra: this);
+    }
+  }
+
+  Map<String, String> getRoutePathParameters() =>
+      {"tableName": getTableNameApi() ?? "", "id": getIDString()};
   void viewPage(BuildContext context) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    debugPrint("Page=>viewPage Page isLarge:$isLarge");
     if (isLarge) {
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          ListToDetailsSecoundPaneHelper(
+              action: ServerActions.view, viewAbstract: this as ViewAbstract));
+      return;
       context.read<DrawerMenuControllerProvider>().change(
           context,
           (this as ViewAbstract).getCopyInstance(),
           DrawerMenuControllerProviderAction.view);
     } else {
       context.pushNamed(viewRouteName,
-          pathParameters: {
-            "tableName": getTableNameApi() ?? "",
-            "id": iD.toString()
-          },
-          extra: this);
+          pathParameters: getRoutePathParameters(), extra: this);
     }
   }
 
   void editPage(BuildContext context) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    debugPrint("Page=>editPage Page isLarge:$isLarge");
     if (isLarge) {
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          ListToDetailsSecoundPaneHelper(
+              action: ServerActions.edit, viewAbstract: this as ViewAbstract));
+      return;
       context
           .read<DrawerMenuControllerProvider>()
           .change(context, this, DrawerMenuControllerProviderAction.edit);
     } else {
       context.goNamed(editRouteName,
-          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+          pathParameters: getRoutePathParameters(),
           extra: (this as ViewAbstract).getCopyInstance());
     }
   }
 
   void printPage(BuildContext context) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    debugPrint("Page=>printPage Page isLarge:$isLarge");
     if (isLarge) {
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          ListToDetailsSecoundPaneHelper(
+              action: ServerActions.print, viewAbstract: this as ViewAbstract));
+      return;
       context
           .read<DrawerMenuControllerProvider>()
           .change(context, this, DrawerMenuControllerProviderAction.print);

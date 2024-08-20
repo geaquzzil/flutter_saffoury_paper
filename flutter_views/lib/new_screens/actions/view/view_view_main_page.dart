@@ -26,7 +26,9 @@ class _BaseViewNewPage extends BaseActionScreenPageState {
   FloatingActionButton getAddFloatingButton2(BuildContext context) {
     return FloatingActionButton.extended(
         heroTag: UniqueKey(),
-        onPressed: () async {},
+        onPressed: () async {
+          widget.viewAbstract.editPage(context);
+        },
         icon: const Icon(Icons.edit),
         label: Text(AppLocalizations.of(context)!.edit));
   }

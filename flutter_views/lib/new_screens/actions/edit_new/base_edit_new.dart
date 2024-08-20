@@ -241,6 +241,7 @@ class BaseEditWidget extends StatelessWidget {
             if (buildAsPrint) {}
             return form;
           } else if (isStandAloneField) {
+            return Text("sda");
             return ControllerViewAbstractAsOneField(
                 viewAbstract: viewAbstract,
                 parent: viewAbstract.parent!,

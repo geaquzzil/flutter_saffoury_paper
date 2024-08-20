@@ -107,71 +107,80 @@ class _ControllerViewAbstractAsOneField
         final Color borderSideColor = _isExpanded
             ? Theme.of(context).colorScheme.primary
             : Colors.transparent;
-        return ClippedCard(
-          wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
-          borderSide: BorderSideColor.START,
-          //todo color: (widget.hasError ?? false)
-          //     ? Theme.of(context).colorScheme.onError
-          //     : borderSideColor,
+        return ListTile(
+          iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
+          textColor: _iconColor.value,
+          leading: SizedBox(
+              width: 25,
+              height: 25,
+              child: Align(
+                  alignment: Alignment.topCenter,
+                  child: widget.viewAbstract.getCardLeadingImage(context))),
+          title: ClippedCard(
+            wrapWithCardOrOutlineCard: widget.wrapWithCardOrOutlineCard,
+            borderSide: BorderSideColor.START,
+            //todo color: (widget.hasError ?? false)
+            //     ? Theme.of(context).colorScheme.onError
+            //     : borderSideColor,
 
-          color: borderSideColor,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTileTheme.merge(
-                  minVerticalPadding: 10,
-                  selectedTileColor: Colors.transparent,
-                  selectedColor: Colors.transparent,
-                  contentPadding: EdgeInsets.all(_controller.value * 10),
-                  iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
-                  textColor: _iconColor.value,
-                  child: ListTile(
-                    focusColor: Colors.transparent,
-                    onTap: () => _handleTap(context),
-                    // leadingAndTrailingTextStyle: ,
-                    // contentPadding: expansionTileTheme.tilePadding,
-                    leading: SizedBox(
-                        width: 25,
-                        height: 25,
-                        child: Align(
-                            alignment: Alignment.topCenter,
-                            child: widget.viewAbstract
-                                .getCardLeadingImage(context))),
-                    title: AnimatedSwitcher(
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) =>
-                              FadeTransition(opacity: animation, child: child),
-                      duration: Duration(milliseconds: 200),
-                      child: !_isExpanded
-                          ? Text(
-                              widget.viewAbstract
-                                  .getMainHeaderTextOnly(context),
-                              key: UniqueKey(),
-                            )
-                          : Column(
-                              children: [
-                                for (int i = 0; i < 5; i++)
+            color: borderSideColor,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTileTheme.merge(
+                    minVerticalPadding: 10,
+                    selectedTileColor: Colors.transparent,
+                    selectedColor: Colors.transparent,
+                    contentPadding: EdgeInsets.all(_controller.value * 10),
+                    iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
+                    textColor: _iconColor.value,
+                    child: ListTile(
+                      focusColor: Colors.transparent,
+                      onTap: () => _handleTap(context),
+                      // leadingAndTrailingTextStyle: ,
+                      // contentPadding: expansionTileTheme.tilePadding,
+
+                      title: AnimatedSwitcher(
+                        transitionBuilder: (Widget child,
+                                Animation<double> animation) =>
+                            FadeTransition(opacity: animation, child: child),
+                        duration: Duration(milliseconds: 200),
+                        child: !_isExpanded
+                            ? Text(
+                                widget.viewAbstract
+                                    .getMainHeaderTextOnly(context),
+                                key: UniqueKey(),
+                              )
+                            : Column(
+                                children: [
                                   TextField(
-                                    decoration: InputDecoration(
-                                        hintText: 'Username $i'),
+                                    decoration:
+                                        InputDecoration(hintText: 'Username'),
                                     // cursorHeight: 20,
                                   ),
-                              ],
-                            ),
-                    ),
+                                  // for (int i = 0; i < 5; i++)
+                                  //   TextField(
+                                  //     decoration: InputDecoration(
+                                  //         hintText: 'Username $i'),
+                                  //     // cursorHeight: 20,
+                                  //   ),
+                                ],
+                              ),
+                      ),
 
-                    // subtitle: _isExpanded
-                    //     ? null
-                    //     : widget.viewAbstract.getMainLabelText(context),
-                    trailing: !_isExpanded
-                        ? null
-                        : IconButton(
-                            onPressed: () => _handleTap(context),
-                            icon: const Icon(Icons.minimize_outlined),
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                  )),
-            ],
+                      // subtitle: _isExpanded
+                      //     ? null
+                      //     : widget.viewAbstract.getMainLabelText(context),
+                      trailing: !_isExpanded
+                          ? null
+                          : IconButton(
+                              onPressed: () => _handleTap(context),
+                              icon: const Icon(Icons.minimize_outlined),
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                    )),
+              ],
+            ),
           ),
         );
       },

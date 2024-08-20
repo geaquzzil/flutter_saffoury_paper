@@ -100,10 +100,10 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   getFirstPane({TabControllerHelper? tab}) {
     return SliverApiMaster(
-      onSelectedCardChangeValueNotifier:
-          getCurrentScreenSize() == CurrentScreenSize.MOBILE
-              ? null
-              : _secoundPaneNotifier,
+      // onSelectedCardChangeValueNotifier:
+      //     getCurrentScreenSize() == CurrentScreenSize.MOBILE
+      //         ? null
+      //         : _secoundPaneNotifier,
       // buildAppBar: false,
       buildSearchWidgetAsEditText: isDesktop(context),
     );
@@ -202,8 +202,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) =>
-      firstPane;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
 
   @override
   bool setMainPageSuggestionPadding() => false;

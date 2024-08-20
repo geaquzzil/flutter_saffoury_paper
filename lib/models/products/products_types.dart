@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -66,7 +67,7 @@ class ProductType extends ViewAbstract<ProductType>
     }
   }
 
-    @override
+  @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
@@ -93,7 +94,6 @@ class ProductType extends ViewAbstract<ProductType>
     hashMap["<${getForeignKeyName()}>"] = ("$iD");
     return hashMap;
   }
-
 
   // @override
   // Future<List<ProductType>?> listCall(
@@ -287,6 +287,13 @@ class ProductType extends ViewAbstract<ProductType>
   @override
   String getWebCategoryGridableTitle(BuildContext context) {
     return getMainHeaderTextOnly(context);
+  }
+
+  @override
+  ViewAbstractControllerInputType getInputType(String field) {
+    return field == "grades"
+        ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
+        : super.getInputType(field);
   }
 }
 

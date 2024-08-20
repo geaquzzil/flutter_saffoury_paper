@@ -90,7 +90,7 @@ InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
   return InputDecoration(
     // filled: true,
     border: const OutlineInputBorder(),
-    
+
     icon: Icon(viewAbstractEnum.getMainIconData()),
     // labelText: viewAbstractEnum.getMainLabelText(context)
   );
@@ -147,12 +147,12 @@ InputDecoration getDecorationIconHintPrefix(
     IconData? icon,
     CurrentScreenSize? currentScreenSize}) {
   return InputDecoration(
-      filled: isDecorationFilled(currentScreenSize),
-      border: !isDecorationFilled(currentScreenSize)
-          ? OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
-            )
-          : null,
+      // filled: isDecorationFilled(currentScreenSize),
+      // border: !isDecorationFilled(currentScreenSize)
+      //     ? OutlineInputBorder(
+      //         borderRadius: BorderRadius.circular(25),
+      //       )
+      //     : null,
       contentPadding: !isDecorationFilled(currentScreenSize)
           ? (const EdgeInsets.all(16))
           : null,
@@ -177,7 +177,7 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
         prefix: viewAbstract.getTextInputPrefix(context, field),
         suffix: viewAbstract.getTextInputSuffix(context, field),
         hint: viewAbstract.getTextInputHint(context, field: field),
-        label: viewAbstract.getTextInputLabel(context, field),
+        // label: viewAbstract.getTextInputLabel(context, field),
         icon: viewAbstract.getTextInputIconData(field));
   } else {
     return getDecorationIconHintPrefix(

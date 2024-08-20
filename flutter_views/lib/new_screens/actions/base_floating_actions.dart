@@ -85,9 +85,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
   FloatingActionButton getAddFloatingButtonPrint(BuildContext context) {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
-      onPressed: () async {
-        viewAbstract.printPage(context);
-      },
+      onPressed: () async => viewAbstract.printPage(context),
       child: const Icon(Icons.print),
     );
   }
@@ -204,20 +202,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         onPressed: () {
-          if (isLargeScreenFromCurrentScreenSize(context)) {
-            Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-                ListToDetailsSecoundPaneHelper(
-                    action: ServerActions.custom_widget,
-                    customWidget:
-                        FileExporterPage(viewAbstract: viewAbstract)));
-          } else {
-            context.goNamed(exportRouteName,
-                pathParameters: {
-                  "tableName": viewAbstract.getTableNameApi()!,
-                  "id": viewAbstract.getIDString()
-                },
-                extra: viewAbstract);
-          }
+          viewAbstract.importPage(context);
         },
         child: const Icon(Icons.file_upload_outlined));
   }
@@ -226,18 +211,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         onPressed: () {
-          if (isLargeScreenFromCurrentScreenSize(context)) {
-            Globals. keyForLargeScreenListable.currentState?.setSecoundPane(
-                ListToDetailsSecoundPaneHelper(
-                    action: ServerActions.custom_widget,
-                    customWidget: FileReaderPage(viewAbstract: viewAbstract)));
-          } else {
-            context.goNamed(importRouteName,
-                pathParameters: {"tableName": viewAbstract.getTableNameApi()!},
-                extra: viewAbstract);
-          }
-
-          // context.read().change()
+          viewAbstract.exportPage(context);
         },
         child: const Icon(Icons.file_download_outlined));
   }

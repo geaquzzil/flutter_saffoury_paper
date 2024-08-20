@@ -49,9 +49,10 @@ class WidgetNavigationHelper {
     required this.widget,
     required this.title,
   });
-
 }
-List<WidgetNavigationHelper> list=[];
+
+List<WidgetNavigationHelper> list = [];
+
 class BaseDeterminePageState extends StatelessWidget {
   late Widget _drawerWidget;
   late CurrentScreenSize _currentScreenSize;
@@ -118,12 +119,7 @@ class BaseDeterminePageState extends StatelessWidget {
                 widget = const Text("NOIN edit");
                 break;
               case DrawerMenuControllerProviderAction.list:
-              case DrawerMenuControllerProviderAction.list_to_details:
-                widget = ListToDetailsPageNew(
-                  title: "SOSO",
-                  buildDrawer: buildDrawer,
-                );
-                break;
+              case DrawerMenuControllerProviderAction.list_to_details:            
               case DrawerMenuControllerProviderAction.none:
                 widget = ListToDetailsPageNew(
                   key: Globals.keyForLargeScreenListable,
