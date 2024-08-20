@@ -114,7 +114,7 @@ class _ListHorizontalApiWidgetState
             return GridTile(
                 // footer: Text("foot"),
                 child: ListHorizontalItemShimmer(
-              lines: 3,
+              lines: SizeConfig.hasPointer(context) ? 0 : 3,
             ));
           },
         );
@@ -145,7 +145,7 @@ class _ListHorizontalApiWidgetState
             if (isLoading && index > data.length - 1) {
               return GridTile(
                   child: ListHorizontalItemShimmer(
-                lines: 3,
+                lines: SizeConfig.hasPointer(context) ? 0 : 3,
               ));
             }
             Widget currentTile = WebGridViewItem(
