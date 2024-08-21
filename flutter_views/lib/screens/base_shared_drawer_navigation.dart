@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<StackedActions?> stack =
+    List<ListToDetailsSecoundPaneHelper?> stack =
         context.watch<ActionViewAbstractProvider>().getStackedActions;
 
     return Padding(
@@ -25,9 +26,10 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
             height: 40,
             child: ListView.separated(
                 separatorBuilder: (context, index) => Center(
-                        child: VerticalDivider(
-                      color: Theme.of(context).colorScheme.outline,
-                    )),
+                      child: Icon(
+                        Icons.arrow_right_outlined,
+                      ),
+                    ),
                 shrinkWrap: true,
                 physics: const ClampingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
@@ -38,18 +40,16 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
                   debugPrint("generate navigate icon index : $index");
                   dynamic v = stack[index];
                   if (v == null) {
-                    return getIconWithText(context, Icons.home,
-                        "Home${stack.length == 1 ? "" : " >"}");
+                    return getIconWithText(context, Icons.home, "Home");
                   }
-                  ViewAbstract? viewAbstract = v!.object;
+                  ViewAbstract? viewAbstract = v!.viewAbstract;
                   if (viewAbstract == null) {
                     return getIconWithText(context, Icons.home, "Home");
                   } else {
                     return getIconWithText(
                         context,
                         viewAbstract.getMainIconData(),
-                        viewAbstract.getMainHeaderLabelTextOnly(context) +
-                            (index == stack.length ? "" : ">"));
+                        viewAbstract.getMainHeaderLabelTextOnly(context));
                   }
                 }),
           ),
@@ -63,22 +63,36 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
       onTap: () {},
       child: OnHoverWidget(
           scale: false,
-          builder: (isHovered) => Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon,
-                      color: isHovered
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary),
-                  Text(
-                    title,
-                    style: TextStyle(
-                        color: isHovered
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.secondary),
-                  ),
-                ],
-              )),
+          builder: (isHovered) => getB(icon, isHovered, context, title)),
+    );
+  }
+
+  Widget getB(
+      IconData icon, bool isHovered, BuildContext context, String title) {
+    return Center(
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            color: isHovered
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary),
+      ),
+    );
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.arrow_right_outlined,
+            color: isHovered
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary),
+        Text(
+          title,
+          style: TextStyle(
+              color: isHovered
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondary),
+        ),
+      ],
     );
   }
 }
