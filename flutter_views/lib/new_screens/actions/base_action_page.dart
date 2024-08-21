@@ -22,11 +22,13 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_m
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -647,6 +649,11 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         getExtras().getTabs(context, action: getServerActions());
     if (getBodyIsSliver()) {
       tabs[0].slivers = [
+        SliverToBoxAdapter(
+          child: BaseSharedActionDrawerNavigation(
+              // viewAbstract: getExtras(),
+              ),
+        ),
         ...getTopWidget(),
         getBody(context),
         ...getBottomWidget(),
@@ -938,7 +945,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Selector<ActionViewAbstractProvider, List<StackedActions?>>(
+            Selector<ActionViewAbstractProvider,
+                List<ListToDetailsSecoundPaneHelper?>>(
               builder: (_, v, __) {
                 debugPrint("SelectorActionViewAbstractProvider ${v.length}");
                 if (v.isEmpty || v.length == 1) {

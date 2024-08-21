@@ -119,7 +119,7 @@ class BaseDeterminePageState extends StatelessWidget {
                 widget = const Text("NOIN edit");
                 break;
               case DrawerMenuControllerProviderAction.list:
-              case DrawerMenuControllerProviderAction.list_to_details:            
+              case DrawerMenuControllerProviderAction.list_to_details:
               case DrawerMenuControllerProviderAction.none:
                 widget = ListToDetailsPageNew(
                   key: Globals.keyForLargeScreenListable,
@@ -146,6 +146,7 @@ class BaseDeterminePageState extends StatelessWidget {
                 break;
             }
             if (isLarge) {
+              // return _drawerWidget;
               return Row(children: [_drawerWidget, Expanded(child: widget)]);
             }
             return widget;

@@ -335,6 +335,46 @@ class _BaseDashboardState extends State<BaseDashboard>
   }
 }
 
+class SectionItemHeaderI extends MultiSliver {
+  bool pinHeader;
+  double pinHeaderPrefferedSize;
+  SectionItemHeaderI(
+      {super.key,
+      required BuildContext context,
+      required Widget title,
+      required GlobalKey buttonKey,
+      super.pushPinnedChildren = true,
+      this.pinHeader = true,
+      this.pinHeaderPrefferedSize = 80,
+      Widget? child})
+      : super(
+          children: [
+            if (pinHeader)
+              SliverPinnedHeader(
+                child: Container(
+                    padding: const EdgeInsets.all(kDefaultPadding),
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: title),
+              )
+            else
+              SliverPadding(
+                padding: EdgeInsets.all(kDefaultPadding),
+                sliver: SliverPersistentHeader(
+                    pinned: false,
+                    delegate: SliverAppBarDelegatePreferedSize(
+                        shouldRebuildWidget: true,
+                        child: PreferredSize(
+                            preferredSize:
+                                Size.fromHeight(pinHeaderPrefferedSize),
+                            child: title))),
+              ),
+            SliverToBoxAdapter(
+              child: child,
+            )
+          ],
+        );
+}
+
 class SectionItemHeader extends MultiSliver {
   SectionItemHeader(
       {super.key,

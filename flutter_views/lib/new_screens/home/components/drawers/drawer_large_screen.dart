@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
@@ -81,99 +84,55 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   Widget build(BuildContext context) {
     return Selector<DrawerMenuControllerProvider, bool>(
       builder: (__, isOpen, ___) {
-        return getBody(isOpen, __);
+        return getBodyScaffold(isOpen, __);
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
   }
 
-  Widget getBody(bool isOpen, BuildContext context) {
+  Widget getBodyScaffold(bool isOpen, BuildContext context) {
     return Selector<LayoutChangeListner, Tuple2<double?, double?>>(
       selector: (_, p) => Tuple2(p.getWidth, p.getHeight),
       builder: (_, v, ___) {
         debugPrint(
-            "getBody DrawerMenuController height ${v.item2} width ${v.item1}");
+            "getBodyScaffold DrawerMenuController height ${v.item2} width ${v.item1}");
         if (v.item1 == null || v.item2 == null) return const SizedBox();
-        return AnimatedSize(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.fastOutSlowIn,
-          child: SizedBox(
-            height: v.item2,
-            width: showHamburger(_size)
-                ? kDrawerOpenWidth
-                : isOpen
-                    ? kDrawerOpenWidth
-                    : kDefaultClosedDrawer,
-            child: Drawer(
-              width: showHamburger(_size)
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.bounceIn,
+          width: showHamburger(_size)
+              ? kDrawerOpenWidth
+              : isOpen
                   ? kDrawerOpenWidth
-                  : isOpen
-                      ? kDrawerOpenWidth
-                      : kDefaultClosedDrawer,
-              child: _getDrawerBody(
-                  v, context, showHamburger(_size) ? true : isOpen),
-            ),
-          ),
+                  : kDefaultClosedDrawer,
+          height: v.item2,
+          child: _getDrawerBodyScaffold(
+              v, context, showHamburger(_size) ? true : isOpen),
         );
       },
     );
   }
 
-  Widget _getDrawerBody(
+  Widget _getDrawerBodyScaffold(
       Tuple2<double?, double?> v, BuildContext context, bool isOpen) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
-    return Column(
-      // mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // DrawerHeaderLogo(
-        //   isOpen: isOpen,
-        // ),
-        // SizedBox(
-        //   height: (v.item2 ?? 1000) * .25,
-        //   child: buildHeader(context, isOpen),
-        // ), // ),
-        // SizedBox(
-        //   height: (v.item2 ?? 1000) * .25,
-        //   child: buildHeader(context, isOpen),
-        // ),
-        // FloatingActionButton(
-        //     onPressed: () => {}, child: Icon(Icons.edit)),
-        Align(
-            alignment: isOpen ? Alignment.center : Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(kDefaultPadding),
-              child: buildHeader(context, isOpen),
-            )),
-        Expanded(
-          // height: !isOpen
-          //     ? (v.item2 ?? 1000) * .5
-          //     : v.item2.toNonNullable() - (100 + (v.item2 ?? 1000) * .25),
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              // SliverToBoxAdapter(child: buildHeader(context, isOpen)),
-              // buildList(context, isOpen),
-              buildListSliver(context, isOpen)
-            ],
-          ),
-        ),
-        if (!isLarge) buildDrawerFooter(context, isOpen)
-        // const Divider(height: 2),
-        // AnimatedSize(
-        //   duration: Duration(milliseconds: 100),
-        //   child: SizedBox(
-        //       height: !isOpen ? ((v.item2 ?? 1000) * .25) : 100,
-        //       child: buildDrawerFooter(context, isOpen)),
-        // )
-        // NotificationPopupWidget()
-        // Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-
-        //   // const Spacer(),
-        // ]),
-
-        // buildProfilePic(context, isOpen),
-      ],
+    return Scaffold(
+      bottomNavigationBar: !isLarge ? buildDrawerFooter(context, isOpen) : null,
+      body: CustomScrollView(
+        controller: ScrollController(),
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          SliverPersistentHeader(
+              pinned: true,
+              delegate: SliverAppBarDelegatePreferedSize(
+                  shouldRebuildWidget: true,
+                  child: PreferredSize(
+                      preferredSize: const Size.fromHeight(60),
+                      child: buildHeader(context, isOpen)))),
+          ...buildListSlivers(context, isOpen)
+        ],
+      ),
     );
   }
 
@@ -259,22 +218,25 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   Widget buildHeader(BuildContext context, bool isOpen) {
     // return Icon(Icons.dangerous);
     // AnimatedSize(,)
-    return IconButton(
-      // padding: EdgeInsets.all(kDefaultPadding),
-      onPressed: () {
-        if (showHamburger(_size)) {
-          drawerMenuControllerProvider.controlStartDrawerMenu();
-        } else {
-          drawerMenuControllerProvider.toggleIsOpen();
-          if (drawerMenuControllerProvider.getSideMenuIsOpen) {
-            _animationController.reverse();
+    return Card(
+      margin: EdgeInsets.zero,
+      child: IconButton(
+        // padding: EdgeInsets.all(kDefaultPadding),
+        onPressed: () {
+          if (showHamburger(_size)) {
+            drawerMenuControllerProvider.controlStartDrawerMenu();
           } else {
-            _animationController.forward();
+            drawerMenuControllerProvider.toggleIsOpen();
+            if (drawerMenuControllerProvider.getSideMenuIsOpen) {
+              _animationController.reverse();
+            } else {
+              _animationController.forward();
+            }
           }
-        }
-      },
-      icon: AnimatedIcon(
-          icon: AnimatedIcons.arrow_menu, progress: _animationController),
+        },
+        icon: AnimatedIcon(
+            icon: AnimatedIcons.arrow_menu, progress: _animationController),
+      ),
     );
     return Column(
       children: [
@@ -301,62 +263,48 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     );
   }
 
-  Widget buildListSliver(BuildContext context, bool isOpen) {
+  List<Widget> buildListSlivers(BuildContext context, bool isOpen) {
+    List<Widget> widgets = List.empty(growable: true);
     AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-            // addRepaintBoundaries: true,
-            (context, index) =>
-                buildSubList(context, index, isOpen, authProvider),
-            childCount: authProvider.getDrawerItemsGrouped.length));
-  }
-
-  Widget buildList(BuildContext context, bool isOpen) {
-    AuthProvider authProvider = Provider.of<AuthProvider<AuthUser>>(context);
-    return ListView.builder(
-        itemCount: authProvider.getDrawerItemsGrouped.length,
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (context, index) {
-          return buildSubList(context, index, isOpen, authProvider);
-        });
-  }
-
-  Widget buildSubList(
-      BuildContext context, int index, bool isOpen, AuthProvider authProvider) {
-    bool isClosed = !isOpen;
-    String? groupLabel =
-        authProvider.getDrawerItemsGrouped.keys.elementAt(index);
-
-    debugPrint(
-        "getDrawerItemsGrouped current index=> $index groupLabel=> $groupLabel count of group items => ${authProvider.getDrawerItemsGrouped[groupLabel]?.length}");
-    if (groupLabel != null) {
-      return isOpen
-          ? DrawerListTileDesktopGroupOpen(
-              groupedDrawerItems:
-                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-              idx: index)
-          : DrawerListTileDesktopGroupClosed(
-              groupedDrawerItems:
-                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-              idx: index,
-            );
-    } else if (authProvider.getDrawerItemsGrouped[groupLabel]!.length > 1 &&
-        groupLabel == null) {
-      return isOpen
-          ? DrawerListTileDesktopGroupOpen(
-              groupedDrawerItems:
-                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-              idx: index)
-          : DrawerListTileDesktopGroupClosed(
-              groupedDrawerItems:
-                  authProvider.getDrawerItemsGrouped[groupLabel] ?? [],
-              idx: index,
-            );
+    Map<String?, List<ViewAbstract<dynamic>>> l =
+        authProvider.getDrawerItemsGrouped;
+    for (var a in l.entries) {
+      GlobalKey buttonKey = GlobalKey();
+      var group = [
+        SectionItemHeaderI(
+            context: context,
+            pinHeader: isOpen,
+            pinHeaderPrefferedSize: 4,
+            title: AnimatedSwitcher(
+              duration: Duration(milliseconds: 1500),
+              child: isOpen
+                  ? Text(
+                      a.key ?? "_",
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
+                  : Divider(),
+            ),
+            buttonKey: buttonKey,
+            child: Column(
+              children: [
+                for (int i = 0; i < a.value.length; i++)
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 600),
+                    child: (isOpen)
+                        ? DrawerListTileDesktopOpen(
+                            viewAbstract: a.value[i],
+                            idx: i,
+                          )
+                        : DrawerListTileDesktopClosed(
+                            viewAbstract: a.value[i], idx: i),
+                  )
+              ],
+            )),
+        // SliverToBoxAdapter(child: getWidget(width, element))
+      ];
+      widgets.addAll(group);
     }
-    ViewAbstract viewAbstract =
-        authProvider.getDrawerItemsGrouped[groupLabel]![index];
-    return DrawerListTileDesktopOpen(viewAbstract: viewAbstract, idx: index);
+    return widgets;
   }
 
   Widget buildProfilePic(BuildContext context, bool isOpen) {
@@ -452,6 +400,7 @@ class DrawerListTileDesktopGroupOpen extends StatelessWidget {
   Widget build(BuildContext context) {
     String? title = groupedDrawerItems[0].getMainDrawerGroupName(context);
     if (title == null) {
+      // if (wrapeWithColumn) {}
       return ListView.builder(
           itemCount: groupedDrawerItems.length,
           shrinkWrap: true,
@@ -461,20 +410,6 @@ class DrawerListTileDesktopGroupOpen extends StatelessWidget {
                 viewAbstract: viewAbstract, idx: index);
           });
     }
-    // return Column(
-    //   children: [
-    //     Divider(),
-    //     ListView.builder(
-    //         itemCount: groupedDrawerItems.length,
-    //         shrinkWrap: true,
-    //         itemBuilder: (context, index) {
-    //           ViewAbstract viewAbstract = groupedDrawerItems[index];
-    //           return DrawerListTileDesktopOpen(
-    //               viewAbstract: viewAbstract, idx: index);
-    //         })
-    //   ],
-    // );
-
     return ListView.builder(
       itemCount: groupedDrawerItems.length,
       shrinkWrap: true,
@@ -534,78 +469,6 @@ class DrawerListTile extends StatelessWidget {
       },
       selector: (p0, p1) => p1.getIndex,
     );
-  }
-}
-
-@immutable
-class DrawerListTileDesktopGroupClosed extends StatefulWidget {
-  List<ViewAbstract> groupedDrawerItems;
-  int idx;
-  DrawerListTileDesktopGroupClosed(
-      {super.key, required this.groupedDrawerItems, required this.idx});
-
-  @override
-  State<DrawerListTileDesktopGroupClosed> createState() =>
-      _DrawerListTileDesktopGroupClosedState();
-}
-
-class _DrawerListTileDesktopGroupClosedState
-    extends State<DrawerListTileDesktopGroupClosed> {
-  Widget listItems(BuildContext context) {
-    return ListView.separated(
-        padding: EdgeInsets.zero,
-        separatorBuilder: (context, index) {
-          return const SizedBox(
-            height: kDefaultPadding / 2,
-          );
-        },
-        itemCount: widget.groupedDrawerItems.length,
-        shrinkWrap: true,
-        primary: true,
-        itemBuilder: (context, index) {
-          ViewAbstract viewAbstract = widget.groupedDrawerItems[index];
-
-          Widget currentWidget = DrawerListTileDesktopClosed(
-              viewAbstract: viewAbstract, idx: index);
-          if (index == widget.groupedDrawerItems.length - 1) {
-            return Column(
-              children: [
-                currentWidget,
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  child: Divider(indent: 2),
-                )
-              ],
-            );
-          }
-          return currentWidget;
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return listItems(context);
-    return OnHoverWidget(builder: (isHovered) {
-      if (!isHovered) {
-        return SizedBox(
-            width: 40,
-            height: 40,
-            child: Selector<DrawerMenuControllerProvider, int>(
-              builder: (context, value, child) => Icon(
-                widget.groupedDrawerItems[0].getMainDrawerGroupIconData() ??
-                    Icons.abc,
-                color: widget.groupedDrawerItems.firstWhereOrNull(
-                            (element) => element.hashCode == value) !=
-                        null
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
-              ),
-              selector: (p0, p1) => p1.getIndex,
-            ));
-      } else {
-        return listItems(context);
-      }
-    });
   }
 }
 
@@ -739,7 +602,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
       getIcon(ds, context),
       // if (ds.getIndex == viewAbstract.hashCode)
       AnimatedScale(
-        duration: const Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 200),
         scale: ds.getIndex == viewAbstract.hashCode ? 1 : 0,
         child: Text(
           viewAbstract.getMainHeaderLabelTextOnly(context),
@@ -752,30 +615,6 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
       return getSelectedWidget(context, c);
     }
     return c;
-
-    return OnHoverWidget(
-        scale: false,
-        builder: (onHover) {
-          return IconButton(
-
-              // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
-
-              icon: Icon(
-                viewAbstract.getMainIconData(),
-                color: onHover
-                    ? Theme.of(context).colorScheme.primary
-                    : ds.getIndex == viewAbstract.hashCode
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-              ),
-              onPressed: () {
-                context
-                    .read<DrawerMenuControllerProvider>()
-                    .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
-
-                viewAbstract.onDrawerItemClicked(context);
-              });
-        });
   }
 
   IconButton getIcon(DrawerMenuControllerProvider ds, BuildContext context) {

@@ -15,7 +15,9 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
+import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -73,6 +75,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   @override
   Widget? getBaseAppbar() {
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) return null;
+    return BaseSharedActionDrawerNavigation();
     // if (!isLargeScreenFromCurrentScreenSize(context)) {
     //   return null;
     // }
@@ -216,6 +219,9 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
       !firstPane;
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
+    if (newState != null) {
+      context.read<ActionViewAbstractProvider>().add(newState);
+    }
     _secoundPaneNotifier.value = newState;
   }
 }

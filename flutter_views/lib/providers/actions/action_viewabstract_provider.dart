@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 
 class ActionViewAbstractProvider with ChangeNotifier {
   ViewAbstract? _object;
   ServerActions? serverActions;
-  List<StackedActions?> _stack = [];
+  List<ListToDetailsSecoundPaneHelper?> _stack = [];
   ActionViewAbstractProvider();
   Widget? _customWidget;
   Widget? get getCustomWidget => _customWidget;
   ViewAbstract? get getObject => _object;
   ViewAbstract get getObjectNotNull => _object ?? PermissionActionAbstract();
   ServerActions? get getServerActions => serverActions;
-  List<StackedActions?> get getStackedActions => _stack;
+  List<ListToDetailsSecoundPaneHelper?> get getStackedActions => _stack;
   @Deprecated("Use Globals.keyForLargeScreenListable instead")
   void changeCustomWidget(Widget widget) {
     _customWidget = widget;
@@ -21,6 +22,13 @@ class ActionViewAbstractProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void add(ListToDetailsSecoundPaneHelper l) {
+    _stack.add(l);
+    debugPrint("ActionViewAbstractProvider add change ${_stack.length}");
+    notifyListeners();
+  }
+
+  @Deprecated("Use add() instead")
   void change(ViewAbstract object, ServerActions? serverActions,
       {bool isMain = false}) {
     _customWidget = null;
@@ -35,7 +43,7 @@ class ActionViewAbstractProvider with ChangeNotifier {
     //     // (element) => element?.object?.isEqualsAsType(object) ?? false);
     //   }
     // }
-    _stack.add(StackedActions(object, serverActions, _stack.isEmpty));
+    // _stack.add(StackedActions(object, serverActions, _stack.isEmpty));
     debugPrint("popS change ${_stack.length}");
     notifyListeners();
   }
@@ -45,14 +53,14 @@ class ActionViewAbstractProvider with ChangeNotifier {
   ///
   void pop() {
     if (_stack.isNotEmpty) {
-      StackedActions? s;
+      ListToDetailsSecoundPaneHelper? s;
       for (int i = _stack.length - 1; i >= 0; i--) {
         bool selectingTheShowingObject =
-            _stack[i]?.object?.isEqualsAsType(_object) ?? false;
+            _stack[i]?.viewAbstract?.isEqualsAsType(_object) ?? false;
         if (selectingTheShowingObject) {
           _stack.removeAt(i);
           debugPrint(
-              "popS selecting the previous objcet index ${i - 1}  ${_stack[i - 1]?.object?.getTableNameApi()}");
+              "popS selecting the previous objcet index ${i - 1}  ${_stack[i - 1]?.viewAbstract?.getTableNameApi()}");
           s = _stack[i - 1];
           break;
         }
@@ -60,11 +68,11 @@ class ActionViewAbstractProvider with ChangeNotifier {
 
       // s = _stack.removeLast();
       // s = _stack.removeLast();
-      debugPrint("popS lastItem ${s?.object?.getTableNameApi()}");
+      debugPrint("popS lastItem ${s?.viewAbstract?.getTableNameApi()}");
 
       if (s != null) {
-        _object = s.object;
-        serverActions = s.serverActions;
+        _object = s.viewAbstract;
+        serverActions = s.action;
         debugPrint(
             "popS ${_object?.getTableNameApi()} serverActions $serverActions  list $_stack");
         // _stack.removeAt(_stack.length - 2);
