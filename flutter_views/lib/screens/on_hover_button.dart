@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:sprung/sprung.dart';
 
 class OnHoverWidget extends StatefulWidget {
@@ -93,12 +94,8 @@ class _HoverImageState extends State<HoverImage>
     );
     _animation = Tween(begin: 1.0, end: 1.08).animate(CurvedAnimation(
         parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
-    padding =
-        Tween(begin: 0.0, end: widget.bottomWidget == null ? -10.0 : -10.0)
-            .animate(CurvedAnimation(
-                parent: _controller,
-                curve: Curves.ease,
-                reverseCurve: Curves.easeIn));
+    padding = Tween(begin: 1.0, end: 0.95).animate(CurvedAnimation(
+        parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
     _controller.addListener(() {
       setState(() {});
     });
@@ -124,7 +121,7 @@ class _HoverImageState extends State<HoverImage>
         });
       },
       child: Container(
-        margin: const EdgeInsets.all(8),
+        // margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius:
               widget.roundedCorners ? BorderRadius.circular(20.0) : null,
@@ -141,30 +138,22 @@ class _HoverImageState extends State<HoverImage>
         ),
         child: widget.bottomWidget == null
             ? _getAspectRatio()
-            : Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        child: AspectRatio(aspectRatio: 1, child: getBody())),
-                    AnimatedOpacity(
-                        opacity: isHovered ? 0 : 1,
-                        duration: const Duration(milliseconds: 275),
-                        // height: isHovered ? 0 : 100,
-                        child: widget.bottomWidget)
-                  ],
-                ),
+            : Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child: AspectRatio(aspectRatio: 1 / 1, child: getBody())),
+                  AnimatedOpacity(
+                      opacity: isHovered ? 0 : 1,
+                      duration: const Duration(milliseconds: 275),
+                      // height: isHovered ? 0 : 100,
+                      child: widget.bottomWidget)
+                ],
               ),
       ),
     );
-    if (widget.bottomWidget != null) {
-      return AspectRatio(
-        aspectRatio: 1 / 1,
-        child: child,
-      );
-    }
     return child;
   }
 
@@ -177,21 +166,19 @@ class _HoverImageState extends State<HoverImage>
 
   Container getBody() {
     return Container(
-        // height: 220.0,
-        // width: 170.0,
         decoration: BoxDecoration(
           borderRadius:
               widget.roundedCorners ? BorderRadius.circular(20.0) : null,
         ),
         clipBehavior: Clip.hardEdge,
-        // transform: Matrix4.identity()..scale(1, 1, 1),
-        transform: Matrix4(_animation.value, 0, 0, 0, 0, _animation.value, 0, 0,
-            0, 0, 1, 0, padding.value, padding.value, 0, 1),
-        child: widget.builder == null
-            ? Image.network(
-                widget.image,
-                fit: BoxFit.contain,
-              )
-            : widget.builder!(isHovered));
+        child: Transform.scale(
+          scale: padding.value,
+          child: widget.builder == null
+              ? Image.network(
+                  widget.image,
+                  fit: BoxFit.contain,
+                )
+              : widget.builder!(isHovered),
+        ));
   }
 }

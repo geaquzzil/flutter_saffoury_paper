@@ -271,11 +271,6 @@ class WebGridViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _categoryGridable = item as WebCategoryGridableInterface;
-    // return item.getImageUrl(context) == null
-    //     ? Container()
-    //     : HoverImage(
-    //         image: item.getImageUrl(context)!,
-    //       );
     return HoverImage(
       bottomWidget: setDescriptionAtBottom
           ? Padding(
@@ -295,42 +290,32 @@ class WebGridViewItem extends StatelessWidget {
       // scale: false,
       builder: (isHovered) {
         Widget child = GestureDetector(
-          onTap: onPress ??
-              () {
-                ViewAbstract? isMasterToList = _categoryGridable
-                    .getWebCategoryGridableIsMasterToList(context);
-                if (isMasterToList != null) {
-                  context.goNamed(indexWebMasterToList,
-                      pathParameters: {"tableName": item.getTableNameApi()!},
-                      queryParameters: {
-                        "id": item.iD.toString(),
-                      },
-                      extra: item);
-                } else {
-                  context.goNamed(indexWebView,
-                      // queryParameters: {
-                      //   "id": item.iD.toString(),
-                      //   "tableName": item.getTableNameApi()!
-                      // },
-                      pathParameters: {
-                        "id": item.iD.toString(),
-                        "tableName": item.getTableNameApi()!
-                      },
-                      extra: item);
-                }
-              },
-          child: setDescriptionAtBottom
-              ? _getStack(context, isHovered)
-              : _getStack(context, isHovered),
-        );
+            onTap: onPress ??
+                () {
+                  ViewAbstract? isMasterToList = _categoryGridable
+                      .getWebCategoryGridableIsMasterToList(context);
+                  if (isMasterToList != null) {
+                    context.goNamed(indexWebMasterToList,
+                        pathParameters: {"tableName": item.getTableNameApi()!},
+                        queryParameters: {
+                          "id": item.iD.toString(),
+                        },
+                        extra: item);
+                  } else {
+                    context.goNamed(indexWebView,
+                        // queryParameters: {
+                        //   "id": item.iD.toString(),
+                        //   "tableName": item.getTableNameApi()!
+                        // },
+                        pathParameters: {
+                          "id": item.iD.toString(),
+                          "tableName": item.getTableNameApi()!
+                        },
+                        extra: item);
+                  }
+                },
+            child: _getStack(context, isHovered));
         return child;
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 275),
-          padding: isHovered
-              ? const EdgeInsets.all(kDefaultPadding)
-              : EdgeInsets.zero,
-          child: child,
-        );
       },
     );
   }
@@ -340,7 +325,7 @@ class WebGridViewItem extends StatelessWidget {
       children: [
         _buildBackground(context),
         // _buildBackground(context),
-        _buildGradient(isHovered),
+        _buildGradient(context, isHovered),
         _buildTitleAndSubtitle(context, isHovered),
 
         if (item is CartableProductItemInterface)
@@ -348,24 +333,7 @@ class WebGridViewItem extends StatelessWidget {
                   .getCartableProductItemInterface()
                   .getCartableProductQuantity() !=
               0)
-            Positioned.fill(
-                child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 275),
-              opacity: isHovered ? 1 : 0,
-              child: AnimatedScale(
-                duration: const Duration(milliseconds: 275),
-                scale: isHovered ? 1 : 0,
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.add_shopping_cart),
-                    onPressed: () {
-                      showCartDialog(
-                          context, item as CartableProductItemInterface);
-                    },
-                  ),
-                ),
-              ),
-            )),
+            _buildCartIcon(isHovered, context),
         if (hightLightonSelect)
           Selector<ActionViewAbstractProvider, ViewAbstract?>(
             builder: (context, value, child) {
@@ -393,7 +361,7 @@ class WebGridViewItem extends StatelessWidget {
                             Theme.of(context)
                                 .colorScheme
                                 .surfaceTint
-                                .withOpacity(.2)
+                                .withOpacity(.9)
                             // .withOpacity(.9),
                             // Colors.black.withOpacity(0.7),
                           ],
@@ -406,10 +374,28 @@ class WebGridViewItem extends StatelessWidget {
             },
             selector: (p0, p1) => p1.getObject,
           ),
-        // Positioned(bottom: 0.0, left: 0.0, child: Text("das"))
-        // _buildCenterWidget(context)
       ],
     );
+  }
+
+  Positioned _buildCartIcon(bool isHovered, BuildContext context) {
+    return Positioned.fill(
+        child: AnimatedOpacity(
+      duration: const Duration(milliseconds: 275),
+      opacity: isHovered ? 1 : 0,
+      child: AnimatedScale(
+        duration: const Duration(milliseconds: 275),
+        scale: isHovered ? 1 : 0,
+        child: Center(
+          child: IconButton(
+            icon: const Icon(Icons.add_shopping_cart),
+            onPressed: () {
+              showCartDialog(context, item as CartableProductItemInterface);
+            },
+          ),
+        ),
+      ),
+    ));
   }
 
   Widget _buildHoverBackground(BuildContext context) {
@@ -441,37 +427,49 @@ class WebGridViewItem extends StatelessWidget {
     ));
   }
 
-  Widget _buildGradient(bool isHoverd) {
+  Widget _buildGradient(BuildContext context, bool isHoverd) {
     return Positioned.fill(
         child: AnimatedContainer(
       duration: const Duration(milliseconds: 275),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: const [0.6, 0.95],
-        ),
+        gradient: getLinearGradient(context, isHoverd),
       ),
-    )
+    ));
+  }
 
-        //  DecoratedBox(
-        //   decoration: BoxDecoration(
-        //     gradient: LinearGradient(
-        //       colors: [
-        //         Colors.black.withOpacity(0.7),
-        //         Colors.black.withOpacity(0.7)
-        //       ],
-        //       begin: Alignment.topCenter,
-        //       end: Alignment.bottomCenter,
-        //       stops: const [0.6, 0.95],
-        //     ),
-        //   ),
-        // ),
-        );
+  LinearGradient getLinearGradient(BuildContext context, bool isHoverd) {
+    List<Color> colors = [];
+    List<double> stops = [];
+    if (setDescriptionAtBottom) {
+      colors = [
+        // isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+        // isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+        // isHoverd
+        //     ? Colors.black.withOpacity(0.7)
+        //     : Theme.of(context).scaffoldBackgroundColor,
+
+        isHoverd
+            ? Colors.black.withOpacity(0.5)
+            : Colors.black.withOpacity(0.3),
+        !isHoverd
+            ? Theme.of(context).scaffoldBackgroundColor
+            : Colors.black.withOpacity(0.5),
+      ];
+      stops = [0, 0.99];
+    } else {
+      colors = [
+        isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+        isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+      ];
+
+      stops = [6, 0.95];
+    }
+    return LinearGradient(
+      colors: colors,
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: stops,
+    );
   }
 
   Widget _buildTitleAndSubtitle(BuildContext context, bool isHoverd) {

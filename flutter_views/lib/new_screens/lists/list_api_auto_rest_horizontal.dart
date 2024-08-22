@@ -137,7 +137,7 @@ class _ListHorizontalApiWidgetState
           itemCount: isLoading ? (data.length + 3) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
             crossAxisExtent: constraints.maxHeight * .9,
-            mainAxisSpacing: 10,
+            mainAxisSpacing: 20,
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,
           ),
@@ -149,7 +149,7 @@ class _ListHorizontalApiWidgetState
               ));
             }
             Widget currentTile = WebGridViewItem(
-              setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+              setDescriptionAtBottom: true,
               onPress: widget.valueNotifier == null
                   ? null
                   : () {
