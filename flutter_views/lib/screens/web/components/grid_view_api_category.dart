@@ -18,6 +18,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class GridViewApi extends StatelessWidget {
   final ViewAbstract viewAbstract;
   double? customHeight;
+ 
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
   GridViewApi({
@@ -69,67 +70,9 @@ class GridViewApi extends StatelessWidget {
     );
   }
 
-  ValueListenableBuilder<bool> getButtons() {
-    return ValueListenableBuilder<bool>(
-      valueListenable: valueNotifier,
-      builder: (context, value, child) {
-        return Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 275),
-              opacity: value ? 1 : 0,
-              child: AnimatedScale(
-                duration: const Duration(milliseconds: 275),
-                scale: value ? 1 : 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RoundedIconButton(
-                      icon: Icons.arrow_back_ios_new_sharp,
-                      onTap: () {
-                        if (valuePageNotifier.value == 0) {
-                          return;
-                        }
-                        valuePageNotifier.value = valuePageNotifier.value - 1;
-                      },
-                    ),
-                    RoundedIconButton(
-                        onTap: () {
-                          valuePageNotifier.value = valuePageNotifier.value + 1;
-                        },
-                        icon: Icons.arrow_forward_ios_sharp),
-                  ],
-                ),
-              ),
-            ),
-
-            //  value == false
-            //     ? Container()
-            //     : Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           RoundedIconButton(
-            //             icon: Icons.arrow_back_ios_new_sharp,
-            //             onTap: () {
-            //               if (valuePageNotifier.value == 0) {
-            //                 return;
-            //               }
-            //               valuePageNotifier.value = valuePageNotifier.value - 1;
-            //             },
-            //           ),
-            //           RoundedIconButton(
-            //               onTap: () {
-            //                 valuePageNotifier.value =
-            //                     valuePageNotifier.value + 1;
-            //               },
-            //               icon: Icons.arrow_forward_ios_sharp),
-            //         ],
-            //       ),
-          ),
-        );
-      },
-    );
+  Widget getButtons() {
+    return HoverButtons(
+        valueNotifier: valueNotifier, valuePageNotifier: valuePageNotifier);
   }
 
   Widget _buildUi(BuildContext context, double width) {
@@ -254,6 +197,67 @@ class GridViewApi extends StatelessWidget {
   }
 }
 
+class HoverButtons extends StatelessWidget {
+  HoverButtons(
+      {super.key,
+      required this.valueNotifier,
+      this.valuePageNotifier,
+      this.valuePageNotifierVoid});
+
+  final ValueNotifier<bool> valueNotifier;
+  final ValueNotifier<int>? valuePageNotifier;
+  final Function(int idx)? valuePageNotifierVoid;
+
+  int idx = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: valueNotifier,
+      builder: (context, value, child) {
+        return Positioned.fill(
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 275),
+            opacity: value ? 1 : 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RoundedIconButton(
+                  icon: Icons.arrow_back_ios_new_sharp,
+                  onTap: () {
+                    int i = valuePageNotifier?.value ?? idx;
+
+                    if (i == 0) return;
+                    idx = i - 1;
+                    if (valuePageNotifierVoid != null) {
+                      valuePageNotifierVoid!.call(idx);
+                    }
+                    if (valuePageNotifier != null) {
+                      valuePageNotifier?.value = idx;
+                    }
+                  },
+                ),
+                RoundedIconButton(
+                    onTap: () {
+                      int i = valuePageNotifier?.value ?? idx;
+                      idx = i + 1;
+                      if (valuePageNotifierVoid != null) {
+                        valuePageNotifierVoid!.call(idx);
+                      }
+                      if (valuePageNotifier != null) {
+                        valuePageNotifier?.value = idx;
+                      }
+                    },
+                    icon: Icons.arrow_forward_ios_sharp),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class WebGridViewItem extends StatelessWidget {
   final ViewAbstract item;
   final bool hightLightonSelect;
@@ -320,14 +324,12 @@ class WebGridViewItem extends StatelessWidget {
     );
   }
 
-  Stack _getStack(BuildContext context, bool isHovered) {
+  Widget _getStack(BuildContext context, bool isHovered) {
     return Stack(
       children: [
         _buildBackground(context),
-        // _buildBackground(context),
         _buildGradient(context, isHovered),
         _buildTitleAndSubtitle(context, isHovered),
-
         if (item is CartableProductItemInterface)
           if (item
                   .getCartableProductItemInterface()
@@ -412,26 +414,33 @@ class WebGridViewItem extends StatelessWidget {
         child: item.getHeroTag(
       context: context,
       child: Container(
-          decoration: BoxDecoration(
-              image: item.getImageUrl(context) == null
-                  ? null
-                  : DecorationImage(
-                      image:
-                          FastCachedImageProvider(item.getImageUrl(context)!),
-                      fit: BoxFit.cover),
-              color: null,
-              borderRadius: const BorderRadius.all(Radius.circular(18))),
+          decoration: getBoxDecoration(context),
           child: item.getImageUrl(context) == null
               ? item.getImageIfNoUrl()
               : null),
     ));
   }
 
+  BoxDecoration getBoxDecoration(BuildContext context) {
+    return BoxDecoration(
+        image: item.getImageUrl(context) == null
+            ? null
+            : DecorationImage(
+                image: FastCachedImageProvider(item.getImageUrl(context)!),
+                fit: BoxFit.cover),
+        color: null,
+        borderRadius: getBorderRedius());
+  }
+
+  BorderRadius getBorderRedius() =>
+      const BorderRadius.all(Radius.circular(kDefaultPadding));
+
   Widget _buildGradient(BuildContext context, bool isHoverd) {
     return Positioned.fill(
         child: AnimatedContainer(
       duration: const Duration(milliseconds: 275),
       decoration: BoxDecoration(
+        borderRadius: getBorderRedius(),
         gradient: getLinearGradient(context, isHoverd),
       ),
     ));
@@ -449,11 +458,11 @@ class WebGridViewItem extends StatelessWidget {
         //     : Theme.of(context).scaffoldBackgroundColor,
 
         isHoverd
-            ? Colors.black.withOpacity(0.5)
+            ? Colors.black.withOpacity(0.7)
             : Colors.black.withOpacity(0.3),
         !isHoverd
             ? Theme.of(context).scaffoldBackgroundColor
-            : Colors.black.withOpacity(0.5),
+            : Theme.of(context).scaffoldBackgroundColor,
       ];
       stops = [0, 0.99];
     } else {
@@ -478,7 +487,11 @@ class WebGridViewItem extends StatelessWidget {
       bottom: 20,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 275),
-        opacity: isHoverd ? 1 : 0,
+        opacity: isHoverd
+            ? 1
+            : setDescriptionAtBottom
+                ? 1
+                : 0,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

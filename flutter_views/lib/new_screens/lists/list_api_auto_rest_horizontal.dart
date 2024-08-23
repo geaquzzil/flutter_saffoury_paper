@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   String? titleString;
   bool isSliver;
   Widget Function(ViewAbstract v)? listItembuilder;
+
   ValueNotifier<ViewAbstract?>? valueNotifier;
   ListHorizontalApiAutoRestWidget(
       {super.key,
@@ -47,11 +49,13 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
 
 class _ListHorizontalApiWidgetState
     extends State<ListHorizontalApiAutoRestWidget> {
-  final _scrollController = ScrollController();
-
+  ScrollController _scrollController = ScrollController();
+  ValueNotifier<bool> _valueNotifier = ValueNotifier<bool>(false);
   late ListMultiKeyProvider listProvider;
   AutoRest? _autoRest;
-
+  double itemShowingHeight = 0;
+  double itemsShowingWidth = 0;
+  bool isButtonScrolling = false;
   double? _currentHeight;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
@@ -129,8 +133,10 @@ class _ListHorizontalApiWidgetState
         : listProvider!.isLoading(widget.autoRest!.key);
     return LayoutBuilder(
       builder: (co, constraints) {
+        itemShowingHeight = constraints.maxHeight;
+        itemsShowingWidth = constraints.maxWidth;
         debugPrint(
-            "layoutBuilder maxWidth  ${constraints.maxWidth} maxHeight ${constraints.maxHeight}");
+            "layoutBuilder horizontal maxWidth  ${constraints.maxWidth} maxHeight ${constraints.maxHeight}");
         return ResponsiveGridView.builder(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
@@ -149,13 +155,12 @@ class _ListHorizontalApiWidgetState
               ));
             }
             Widget currentTile = WebGridViewItem(
-              setDescriptionAtBottom: true,
+              setDescriptionAtBottom: !SizeConfig.hasPointer(context),
               onPress: widget.valueNotifier == null
                   ? null
                   : () {
                       widget.valueNotifier!.value = data[index];
                     },
-              // setDescriptionAtBottom: !kIsWeb,
               item: data[index],
             );
             return GridTile(child: currentTile);
@@ -201,6 +206,12 @@ class _ListHorizontalApiWidgetState
         value: listProvider,
         child: Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
           builder: (context, value, child) {
+            if (isButtonScrolling) {
+              isButtonScrolling = false;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _scroll();
+              });
+            }
             debugPrint(
                 "ListHorizontalApiAutoRestWidget building widget: ${widget.autoRest?.key}");
             bool isLoading = value.item1;
@@ -246,6 +257,46 @@ class _ListHorizontalApiWidgetState
   }
 
   Widget wrapHeader(BuildContext context, Widget child) {
+    Widget c = _currentHeight != null
+        ? SizedBox(
+            height: _currentHeight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              child: child,
+            ))
+        : Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              child: child,
+            ),
+          );
+    if (SizeConfig.hasPointer(context)) {
+      c = SizedBox(
+        height: _currentHeight,
+        child: OnHoverWidget(
+          onHover: _valueNotifier,
+          scale: false,
+          builder: (isHovered) {
+            return Stack(clipBehavior: Clip.none, children: [
+              Positioned.fill(child: child),
+              HoverButtons(
+                valueNotifier: _valueNotifier,
+                valuePageNotifierVoid: (idx) {
+                  if (_isBottom) {
+                    listProvider.fetchList(widget.autoRest!.key,
+                        viewAbstract: widget.autoRest!.obj,
+                        autoRest: widget.autoRest);
+                    isButtonScrolling = true;
+                  } else {
+                    _scroll();
+                  }
+                },
+              )
+            ]);
+          },
+        ),
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -254,15 +305,20 @@ class _ListHorizontalApiWidgetState
           const SizedBox(
             height: kDefaultPadding,
           ),
-        if (_currentHeight != null)
-          SizedBox(height: _currentHeight, child: child)
-        else
-          Expanded(child: child)
+        c
         // if (widget.isSliver)
         //   child
         // else
         // SizedBox(height: widget.customHeight, child: child)
       ],
+    );
+  }
+
+  void _scroll() {
+    _scrollController.position.animateTo(
+      _scrollController.offset + itemsShowingWidth - 20,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
     );
   }
 

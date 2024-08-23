@@ -121,38 +121,44 @@ class _HoverImageState extends State<HoverImage>
         });
       },
       child: Container(
-        // margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius:
-              widget.roundedCorners ? BorderRadius.circular(20.0) : null,
-          boxShadow: widget.bottomWidget != null
-              ? null
-              : const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0.0, 0.0),
-                    spreadRadius: -10.0,
-                    blurRadius: 20.0,
-                  )
-                ],
-        ),
-        child: widget.bottomWidget == null
-            ? _getAspectRatio()
-            : Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                      child: AspectRatio(aspectRatio: 1 / 1, child: getBody())),
-                  AnimatedOpacity(
-                      opacity: isHovered ? 0 : 1,
-                      duration: const Duration(milliseconds: 275),
-                      // height: isHovered ? 0 : 100,
-                      child: widget.bottomWidget)
-                ],
-              ),
-      ),
+          clipBehavior: Clip.antiAlias,
+          // margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: widget.roundedCorners
+                ? BorderRadius.circular(kBorderRadius)
+                : null,
+            boxShadow: widget.bottomWidget != null
+                ? null
+                : const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0.0, 0.0),
+                      spreadRadius: -10.0,
+                      blurRadius: 20.0,
+                    )
+                  ],
+          ),
+          child: _getAspectRatio()
+
+          //  widget.bottomWidget == null
+          //     ? _getAspectRatio()
+          //     : AspectRatio(
+          //         aspectRatio: 1 / 1,
+          //         child: Column(
+          //           mainAxisSize: MainAxisSize.max,
+          //           crossAxisAlignment: CrossAxisAlignment.center,
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             Expanded(child: getBody()),
+          //             AnimatedOpacity(
+          //                 opacity: isHovered ? 0 : 1,
+          //                 duration: const Duration(milliseconds: 275),
+          //                 // height: isHovered ? 0 : 100,
+          //                 child: widget.bottomWidget)
+          //           ],
+          //         ),
+          //       ),
+          ),
     );
     return child;
   }
@@ -164,21 +170,15 @@ class _HoverImageState extends State<HoverImage>
     );
   }
 
-  Container getBody() {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius:
-              widget.roundedCorners ? BorderRadius.circular(20.0) : null,
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: Transform.scale(
-          scale: padding.value,
-          child: widget.builder == null
-              ? Image.network(
-                  widget.image,
-                  fit: BoxFit.contain,
-                )
-              : widget.builder!(isHovered),
-        ));
+  Widget getBody() {
+    return Transform.scale(
+      scale: padding.value,
+      child: widget.builder == null
+          ? Image.network(
+              widget.image,
+              fit: BoxFit.contain,
+            )
+          : widget.builder!(isHovered),
+    );
   }
 }
