@@ -325,9 +325,9 @@ class ProductWebPage extends BaseWebPageSlivers {
           horizontalGridMargin: 10, // Horizontal space around the grid
           verticalGridMargin: 10, // Vertical space around the grid
           minItemsPerRow:
-              2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+              3, // The minimum items to show in a single row. Takes precedence over minItemWidth
           maxItemsPerRow:
-              4, // The maximum items to show in a single row. Can be useful on large screens
+              8, // The maximum items to show in a single row. Can be useful on large screens
           sliverChildBuilderDelegateOptions:
               SliverChildBuilderDelegateOptions(),
           minItemWidth: 250,

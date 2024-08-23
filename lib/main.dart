@@ -31,6 +31,7 @@ import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_li
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -38,6 +39,7 @@ import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/notification_controller.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
@@ -128,7 +130,7 @@ void main() async {
     // systemNavigationBarIconBrightness: Brightness.dark,
   ));
   //TODO notifications
-  // runApp(MyApp());
+
   // return;
   List<ViewAbstract> views = List<ViewAbstract>.from([
     CustomerDashboard(),
@@ -196,8 +198,19 @@ void main() async {
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(
             FilterableDataApi()),
       )
-    ], child: BaseMaterialAppPage()));
+    ], child: getWidget()));
   } catch (e) {
     debugPrint("exception => $e");
   }
+}
+
+Widget getWidget() {
+  // return Scaffold(
+  //   body: (ListHorizontalApiAutoRestWidget(
+  //       // valueNotifier: onHorizontalListItemClicked,
+  //       titleString: "dsd",
+  //       autoRest:
+  //           AutoRest<Product>(range: 5, obj: Product(), key: "similarProduct"))),
+  // );
+  return BaseMaterialAppPage();
 }

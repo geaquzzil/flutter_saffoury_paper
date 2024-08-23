@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/components/scroll_snap_list.dart';
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_view_controller/screens/web/components/grid_view_api_cat
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../new_components/loading_shimmer.dart';
@@ -51,12 +54,14 @@ class _ListHorizontalApiWidgetState
     extends State<ListHorizontalApiAutoRestWidget> {
   ScrollController _scrollController = ScrollController();
   ValueNotifier<bool> _valueNotifier = ValueNotifier<bool>(false);
+  PositionRetainedScrollPhysics _p = PositionRetainedScrollPhysics();
   late ListMultiKeyProvider listProvider;
   AutoRest? _autoRest;
   double itemShowingHeight = 0;
   double itemsShowingWidth = 0;
   bool isButtonScrolling = false;
   double? _currentHeight;
+  late String bucketOffsetKey;
   var loadingLottie =
       "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json";
 
@@ -66,6 +71,9 @@ class _ListHorizontalApiWidgetState
     debugPrint("ListHorizontalApiAutoRestWidget==========>initState");
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     _autoRest = widget.autoRest;
+    _scrollController.addListener(() => _onScroll());
+    bucketOffsetKey =
+        widget.autoRest?.key ?? "-ListHorizontalApiAutoRestWidget ";
     callRest();
   }
 
@@ -73,7 +81,7 @@ class _ListHorizontalApiWidgetState
     debugPrint("ListHorizontalApiAutoRestWidget==========>callRest");
     if (_autoRest != null) {
       debugPrint("ListHorizontalApiAutoRestWidget==========>callRest !=null");
-      _scrollController.addListener(() => _onScroll());
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (listProvider.getCount(_autoRest!.key) == 0) {
           listProvider.fetchList(_autoRest!.key,
@@ -95,34 +103,29 @@ class _ListHorizontalApiWidgetState
     debugPrint("ListHorizontalApiAutoRestWidget==========>didUpdateWidget");
     _autoRest = widget.autoRest;
     callRest();
+    bucketOffsetKey =
+        widget.autoRest?.key ?? "-ListHorizontalApiAutoRestWidget ";
+    debugPrint(
+        "ListHorizontalApiAutoRestWidget==========>didUpdateWidget draggable $bucketOffsetKey");
+    WidgetsBinding.instance.addPostFrameCallback((c) {
+      if (mounted) {
+        double lastSavedScroll =
+            Configurations.currentPageScrollOffset(context, bucketOffsetKey);
+        if (lastSavedScroll != 0) {
+          _scrollTo(lastSavedScroll);
+        } else {
+          // _scroll();
+        }
+      }
+    });
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget listShimmerItems() {
-    return LayoutBuilder(
-      builder: (co, constraints) {
-        debugPrint(
-            "layoutBuilder width ${constraints.maxWidth} height ${constraints.maxHeight} ");
-        return ResponsiveGridView.builder(
-          scrollDirection: Axis.horizontal,
-          // shrinkWrap: true,
-          // alignment: Alignment.topCenter,
-          itemCount: 5 + Random().nextInt(10 - 5),
-          gridDelegate: ResponsiveGridDelegate(
-            crossAxisExtent: constraints.maxHeight * .9,
-            mainAxisSpacing: 10,
-            maxCrossAxisExtent: constraints.maxHeight,
-            childAspectRatio: isDesktop(context) ? 1 : 1,
-          ),
-          itemBuilder: (context, index) {
-            return GridTile(
-                // footer: Text("foot"),
-                child: ListHorizontalItemShimmer(
-              lines: SizeConfig.hasPointer(context) ? 0 : 3,
-            ));
-          },
-        );
-      },
+  void _scrollTo(double pos) {
+    debugPrint("ListHorizontalApiAutoRestWidget scrollTo pos===> $pos");
+    if (_scrollController.hasClients == false) return;
+    _scrollController.jumpTo(
+      pos,
     );
   }
 
@@ -131,18 +134,62 @@ class _ListHorizontalApiWidgetState
     bool isLoading = widget.autoRest == null
         ? false
         : listProvider!.isLoading(widget.autoRest!.key);
+
     return LayoutBuilder(
       builder: (co, constraints) {
         itemShowingHeight = constraints.maxHeight;
         itemsShowingWidth = constraints.maxWidth;
         debugPrint(
             "layoutBuilder horizontal maxWidth  ${constraints.maxWidth} maxHeight ${constraints.maxHeight}");
-        return ResponsiveGridView.builder(
-          controller: _scrollController,
+        return ScrollSnapList(
+          itemCount: data.length + (isLoading ? 5 : 0),
+          selectedItemAnchor: SelectedItemAnchor.START,
           scrollDirection: Axis.horizontal,
-          itemCount: isLoading ? (data.length + 3) : (data.length),
+          itemSize: constraints.maxHeight,
+          listController: _scrollController,
+          itemBuilder: (c, index) {
+            if (isLoading && index > data.length - 1) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+                child: GridTile(
+                    child: SizedBox(
+                        height: constraints.maxHeight,
+                        width: constraints.maxHeight,
+                        child: ListHorizontalItemShimmer(
+                          lines: SizeConfig.hasPointer(context) ? 0 : 3,
+                        ))),
+              );
+            }
+            Widget currentTile = WebGridViewItem(
+              setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+              onPress: widget.valueNotifier == null
+                  ? null
+                  : () {
+                      widget.valueNotifier!.value = data[index];
+                    },
+              item: data[index],
+            );
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+              child: GridTile(child: currentTile),
+            );
+          },
+          onItemFocus: (p0) {},
+
+          // dynamicItemSize: true,
+          // dynamicSizeEquation: customEquation, //optional
+        );
+        // return  GridView(gridDelegate: gridDelegate)
+        return ResponsiveGridView.builder(
+          key: ObjectKey("d"),
+          controller: _scrollController,
+          physics: _p,
+          scrollDirection: Axis.horizontal,
+          itemCount: isLoading ? (data.length + 5) : (data.length),
           gridDelegate: ResponsiveGridDelegate(
-            crossAxisExtent: constraints.maxHeight * .9,
+            crossAxisExtent: constraints.maxHeight,
             mainAxisSpacing: 20,
             maxCrossAxisExtent: constraints.maxHeight,
             childAspectRatio: isDesktop(context) ? 1 : 1,
@@ -199,57 +246,41 @@ class _ListHorizontalApiWidgetState
   Widget build(BuildContext context) {
     _currentHeight =
         widget.customHeight ?? MediaQuery.of(context).size.height * .25;
+    Widget d;
     if (widget.list != null) {
-      return wrapHeader(context, _listItems(widget.list!));
+      d = wrapHeader(context, _listItems(widget.list!));
+    } else {
+      d = ChangeNotifierProvider.value(
+          value: listProvider,
+          child: Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
+            builder: (context, value, child) {
+              bool isLoading = value.item1;
+              int count = value.item2;
+              bool isError = value.item3;
+              if (!isLoading && isButtonScrolling) {
+                isButtonScrolling = false;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _scroll();
+                });
+              }
+              if (!isLoading && (count == 0 || isError)) {
+                return getEmptyWidget(context, isError: isError);
+              }
+              debugPrint(
+                  "ListHorizontalApiAutoRestWidget building widget: ${widget.autoRest?.key}");
+
+              return _listItems(listProvider.getList(widget.autoRest!.key),
+                  listProvider: listProvider);
+            },
+            selector: (p0, p1) => Tuple3(
+                p1.isLoading(widget.autoRest!.key),
+                p1.getCount(widget.autoRest!.key),
+                p1.isHasError(widget.autoRest!.key)),
+          ));
+      d = wrapHeader(context, d);
     }
-    return ChangeNotifierProvider.value(
-        value: listProvider,
-        child: Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
-          builder: (context, value, child) {
-            if (isButtonScrolling) {
-              isButtonScrolling = false;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _scroll();
-              });
-            }
-            debugPrint(
-                "ListHorizontalApiAutoRestWidget building widget: ${widget.autoRest?.key}");
-            bool isLoading = value.item1;
-            int count = value.item2;
-            bool isError = value.item3;
-            if (isError) {
-              if (count == 0) {
-                return getErrorWidget(context);
-              } else {
-                return wrapHeader(
-                    context,
-                    _listItems(listProvider.getList(widget.autoRest!.key),
-                        listProvider: listProvider));
-              }
-            } else if (isLoading) {
-              if (count == 0) {
-                return wrapHeader(context, listShimmerItems());
-              } else {
-                return wrapHeader(
-                    context,
-                    _listItems(listProvider.getList(widget.autoRest!.key),
-                        listProvider: listProvider));
-              }
-            } else {
-              if (count == 0) {
-                return getEmptyWidget(context);
-              }
-              return wrapHeader(
-                  context,
-                  _listItems(listProvider.getList(widget.autoRest!.key),
-                      listProvider: listProvider));
-            }
-          },
-          selector: (p0, p1) => Tuple3(
-              p1.isLoading(widget.autoRest!.key),
-              p1.getCount(widget.autoRest!.key),
-              p1.isHasError(widget.autoRest!.key)),
-        ));
+
+    return PageStorage(bucket: appBucket, child: d);
   }
 
   bool hasTitle() {
@@ -278,7 +309,11 @@ class _ListHorizontalApiWidgetState
           scale: false,
           builder: (isHovered) {
             return Stack(clipBehavior: Clip.none, children: [
-              Positioned.fill(child: child),
+              Positioned.fill(
+                  child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: child,
+              )),
               HoverButtons(
                 valueNotifier: _valueNotifier,
                 valuePageNotifierVoid: (idx) {
@@ -363,6 +398,8 @@ class _ListHorizontalApiWidgetState
   }
 
   void _onScroll() {
+    Configurations.saveScrollOffset(
+        context, _scrollController.position.pixels, bucketOffsetKey);
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider.fetchList(widget.autoRest!.key,
@@ -375,5 +412,43 @@ class _ListHorizontalApiWidgetState
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
+  }
+}
+
+class PositionRetainedScrollPhysics extends ScrollPhysics {
+  final bool shouldRetain;
+  const PositionRetainedScrollPhysics({super.parent, this.shouldRetain = true});
+
+  @override
+  PositionRetainedScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return PositionRetainedScrollPhysics(
+      parent: buildParent(ancestor),
+      shouldRetain: shouldRetain,
+    );
+  }
+
+  @override
+  double adjustPositionForNewDimensions({
+    required ScrollMetrics oldPosition,
+    required ScrollMetrics newPosition,
+    required bool isScrolling,
+    required double velocity,
+  }) {
+    final position = super.adjustPositionForNewDimensions(
+      oldPosition: oldPosition,
+      newPosition: newPosition,
+      isScrolling: isScrolling,
+      velocity: velocity,
+    );
+
+    final diff = newPosition.maxScrollExtent - oldPosition.maxScrollExtent;
+
+    if (oldPosition.pixels > oldPosition.minScrollExtent &&
+        diff > 0 &&
+        shouldRetain) {
+      return position + diff;
+    } else {
+      return position;
+    }
   }
 }

@@ -18,7 +18,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class GridViewApi extends StatelessWidget {
   final ViewAbstract viewAbstract;
   double? customHeight;
- 
+
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
   GridViewApi({

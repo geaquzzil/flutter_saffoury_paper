@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
@@ -26,10 +29,12 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
+import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 
@@ -360,6 +365,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           if (widget.buildSearchWidget) getSearchWidget(),
           if (widget.buildFilterableView) getFilterableWidget(),
           if (widget.buildToggleView) getToggleView(),
+          if (searchStringQuery != "") getSearchDescription(),
           ValueListenableBuilder<ExpandType>(
               valueListenable: expandTypeOnlyOnExpand,
               builder: (context, value, child) {
@@ -443,27 +449,19 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>> getListSelector() {
     return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
       builder: (context, value, child) {
-        // List<Widget> widgets;
-
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
         debugPrint(
             "SliverApiMaster building widget: ${findCustomKey()} isloading: $isLoading iserror: $isError count: $count");
-        if (isLoading) {
-          if (count == 0) {
-            return getShimmerLoading();
-          }
-        } else {
-          if (count == 0 || isError) {
-            return getEmptyWidget(isError: isError);
-          }
+        if (!isLoading && (count == 0 || isError)) {
+          return getEmptyWidget(isError: isError);
         }
         return ValueListenableBuilder<bool>(
           valueListenable: valueNotifierGrid,
           builder: (context, value, child) {
             if (value) {
-              return getSliverGrid(count, isLoading);
+              return getSliverGrideResponsive(count, isLoading);
             } else {
               return getSliverList(count, isLoading);
             }
@@ -481,6 +479,34 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       child: Center(
         child: CircularProgressIndicator(),
       ),
+    );
+  }
+
+//todo
+  Widget getSliverGrideResponsive(int count, bool isLoading) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      sliver: ResponsiveSliverGridList(
+          horizontalGridSpacing: 10, // Horizontal space between grid items
+          verticalGridSpacing: 10, // Vertical space between grid items
+          horizontalGridMargin: 10, // Horizontal space around the grid
+          verticalGridMargin: 10, // Vertical space around the grid
+          minItemsPerRow:
+              3, // The minimum items to show in a single row. Takes precedence over minItemWidth
+          maxItemsPerRow:
+              8, // The maximum items to show in a single row. Can be useful on large screens
+          sliverChildBuilderDelegateOptions:
+              SliverChildBuilderDelegateOptions(),
+          minItemWidth: 100,
+          children: [
+            ...listProvider.getList(findCustomKey()).map((e) => WebGridViewItem(
+                  item: e,
+                  setDescriptionAtBottom: false,
+                )),
+            if (isLoading)
+              ...List.generate(
+                  5, (index) => GridTile(child: ListHorizontalItemShimmer()))
+          ]),
     );
   }
 
@@ -519,8 +545,13 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
       sliver: SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
-        if (isLoading && index == count) {
-          return getSharedLoadingItem(context);
+        if (isLoading && index >= count - 1) {
+          return SkeletonListTile(
+            hasLeading: true,
+            hasSubtitle: true,
+            padding: const EdgeInsets.symmetric(
+                horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
+          );
         }
         ViewAbstract va = listProvider.getList(findCustomKey())[index];
         va.setParent(widget.setParentForChild);
@@ -536,7 +567,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                 object: va,
                 onSelectedItem: widget.onSelectedCardChangeValueNotifier,
               );
-      }, childCount: count + (isLoading ? 1 : 0))),
+      }, childCount: count + (isLoading ? 8 : 0))),
     );
   }
 
@@ -624,6 +655,60 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                             ]),
                       ))));
         });
+  }
+
+  Widget getSearchDescription() {
+    return SliverToBoxAdapter(
+        child: HeaderText(
+      fontSize: 12,
+      useRespnosiveLayout: false,
+      text: searchStringQuery != ""
+          ? "Search results: “$searchStringQuery“"
+          // : customFilterChecker != null
+          //     ? "Showing products by filter"
+          : "Showing products",
+    )
+        // description: searchStringQuery != ""
+        //     // || customFilterChecker != null
+        //     ? Html(
+        //         data:
+        //             "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
+        //       )
+        //     : null),
+        );
+    // return SliverPersistentHeader(
+    //     pinned: true,
+    //     delegate: SliverAppBarDelegatePreferedSize(
+    //       shouldRebuildWidget: true,
+    //       child: PreferredSize(
+    //         preferredSize: const Size.fromHeight(60),
+    //         child: AnimatedSwitcher(
+    //           duration: const Duration(milliseconds: 400),
+    //           transitionBuilder: (child, animation) => ScaleTransition(
+    //             scale: animation,
+    //             child: child,
+    //           ),
+    //           child: value == ExpandType.EXPANDED
+    //               ? Text(
+    //                   key: const ValueKey(1),
+    //                   AppLocalizations.of(context)!.scan,
+    //                   style: Theme.of(context).textTheme.titleLarge,
+    //                 )
+    //               : SearchWidgetComponent(
+    //                   currentScreenSize: widget.currentScreenSize,
+    //                   appBardExpandType: expandType,
+    //                   onSearchTextChanged: !widget.buildSearchWidgetAsEditText
+    //                       ? null
+    //                       : (serchQuery) {
+    //                           searchStringQuery = serchQuery;
+    //                           fetshList();
+    //                         },
+    //                   key: const ValueKey(2),
+    //                   heroTag: "list/search",
+    //                 ),
+    //         ),
+    //       ),
+    //     ));
   }
 
   Widget getSearchWidget() {

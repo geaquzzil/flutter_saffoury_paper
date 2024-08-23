@@ -380,7 +380,8 @@ class DraggableHomeState extends State<DraggableHome>
       {TabControllerHelper? tab}) {
     return NotificationListener<ScrollNotification>(
         onNotification: (notification) {
-          if (notification is ScrollEndNotification) {
+          if (notification is ScrollEndNotification &&
+              notification.metrics.axis == Axis.vertical) {
             Configurations.saveScrollOffset(
                 context, notification.metrics.pixels, bucketOffsetKey);
             debugPrint(

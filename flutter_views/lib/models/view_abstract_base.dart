@@ -205,7 +205,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget getHorizontalCardMainHeader(BuildContext context) {
-    return Text(getMainHeaderTextOnly(context));
+    return Text(
+      getMainHeaderTextOnly(context),
+      style: Theme.of(context).textTheme.bodySmall,
+    );
   }
 
   Widget getHorizontalCardSubtitle(BuildContext context) {
