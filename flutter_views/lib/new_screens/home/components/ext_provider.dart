@@ -9,37 +9,44 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'profile/profile_pic_popup_menu.dart';
 
-List<ItemModel> getListOfProfileSettings(BuildContext context,
+List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
     {CustomPopupMenuController? controller}) {
-  List<ItemModel> menuItems = [];
+  List<ActionOnToolbarItem> menuItems = [];
   AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
   if (authProvider.hasSavedUser) {
     menuItems = [
-      ItemModel(authProvider.getUserName, Icons.chat_bubble),
-      ItemModel(
-          "${AppLocalizations.of(context)!.edit} ${AppLocalizations.of(context)!.profile}",
-          Icons.account_box_outlined),
-      ItemModel(
-          AppLocalizations.of(context)!.orders, Icons.shopping_basket_rounded),
+      ActionOnToolbarItem(
+          title: authProvider.getUserName, icon: Icons.chat_bubble),
+      ActionOnToolbarItem(
+          title:
+              "${AppLocalizations.of(context)!.edit} ${AppLocalizations.of(context)!.profile}",
+          icon: Icons.account_box_outlined),
+      ActionOnToolbarItem(
+          title: AppLocalizations.of(context)!.orders,
+          icon: Icons.shopping_basket_rounded),
       //todo translate
-      ItemModel('Chat', Icons.chat_bubble),
+      ActionOnToolbarItem(title: 'Chat', icon: Icons.chat_bubble),
       //todo translate
-      ItemModel("Help", Icons.help_outline_rounded),
-      ItemModel(AppLocalizations.of(context)!.logout, Icons.logout),
+      ActionOnToolbarItem(title: "Help", icon: Icons.help_outline_rounded),
+      ActionOnToolbarItem(
+          title: AppLocalizations.of(context)!.logout, icon: Icons.logout),
     ];
   } else {
     menuItems = [
-      ItemModel(AppLocalizations.of(context)!.action_sign_in_short, Icons.login,
+      ActionOnToolbarItem(
+          title: AppLocalizations.of(context)!.action_sign_in_short,
+          icon: Icons.login,
           onPress: () {
-        debugPrint("onPress sing_in");
-        controller?.hideMenu();
-        context.goNamed(kIsWeb ? indexWebSignIn : loginRouteName);
-      }),
+            debugPrint("onPress sing_in");
+            controller?.hideMenu();
+            context.goNamed(kIsWeb ? indexWebSignIn : loginRouteName);
+          }),
     ];
   }
   return menuItems;

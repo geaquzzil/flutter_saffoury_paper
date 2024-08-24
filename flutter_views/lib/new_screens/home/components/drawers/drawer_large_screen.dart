@@ -602,7 +602,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
       getIcon(ds, context),
       // if (ds.getIndex == viewAbstract.hashCode)
       AnimatedScale(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 700),
         scale: ds.getIndex == viewAbstract.hashCode ? 1 : 0,
         child: Text(
           viewAbstract.getMainHeaderLabelTextOnly(context),
@@ -619,6 +619,9 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
 
   IconButton getIcon(DrawerMenuControllerProvider ds, BuildContext context) {
     return IconButton(
+        tooltip: isLargeScreenFromCurrentScreenSize(context)
+            ? viewAbstract.getMainHeaderLabelTextOnly(context)
+            : null,
         isSelected: ds.getIndex == viewAbstract.hashCode,
         // iconSize: 20,
         // tooltip: viewAbstract.getMainHeaderLabelTextOnly(context),
@@ -629,10 +632,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
               : null,
         ),
         onPressed: () {
-          context
-              .read<DrawerMenuControllerProvider>()
-              .setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
-
+          ds.setSideMenuIsClosed(byIdx: viewAbstract.hashCode);
           viewAbstract.onDrawerItemClicked(context);
         });
   }

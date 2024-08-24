@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_n
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
@@ -17,7 +18,7 @@ import 'package:provider/provider.dart';
 import '../../customs_widget/sliver_delegates.dart';
 
 class SettingAndProfileWeb extends BaseWebPageSlivers {
-  ValueNotifier<ItemModel?> selectedValue = ValueNotifier<ItemModel?>(null);
+  ValueNotifier<ActionOnToolbarItem?> selectedValue = ValueNotifier<ActionOnToolbarItem?>(null);
 
   SettingAndProfileWeb({
     super.key,
@@ -72,7 +73,7 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                               height: 500,
                               child: Padding(
                                 padding: const EdgeInsets.all(kDefaultPadding),
-                                child: ValueListenableBuilder<ItemModel?>(
+                                child: ValueListenableBuilder<ActionOnToolbarItem?>(
                                     valueListenable: selectedValue,
                                     builder: (context, value, child) {
                                       return getWidgetFromProfile(

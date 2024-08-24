@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
@@ -25,10 +26,10 @@ class SettingPageNew extends StatefulWidget {
   State<SettingPageNew> createState() => _SettingPageNewState();
 }
 
-class _SettingPageNewState extends BasePageState<SettingPageNew> {
+class _SettingPageNewState extends BasePageState<SettingPageNew>
+    with BasePageActionOnToolbarMixin {
   late List<ModifiableInterface> _modifieableList;
-  late ValueNotifier<ItemModel?> _selectedValue;
-  late List<ItemModel> _items;
+  late List<ActionOnToolbarItem> _items;
   String? _currentSettingPageMobile;
   late List<TitleAndDescription> _titleAndDescription;
   @override
@@ -43,9 +44,13 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
       TitleAndDescription(title: "GENERAL"),
       TitleAndDescription(title: "GENERAL"),
     ];
-    _selectedValue = ValueNotifier<ItemModel?>(null);
     _currentSettingPageMobile = widget.currentSettingPage;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -54,7 +59,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
     return super.build(context);
   }
 
-  ItemModel? getItemModel(String fromName) {
+  ActionOnToolbarItem? getItemModel(String fromName) {
     return _items.firstWhereOrNull(
       (p0) => p0.title == fromName,
     );
@@ -71,9 +76,9 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
     super.didUpdateWidget(oldWidget);
   }
 
-  @override
-  Widget? getBaseAppbar() =>
-      Text(AppLocalizations.of(context)!.action_settings);
+  // @override
+  // Widget? getBaseAppbar() =>
+  //     Text(AppLocalizations.of(context)!.action_settings);
 
   @override
   List<Widget>? getBaseBottomSheet() => null;
@@ -87,6 +92,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
+    super.getDesktopFirstPane(tab: tab);
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     if (_currentSettingPageMobile != null) {
       return getWidgetFromProfile(
@@ -144,7 +150,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
   bool setMainPageSuggestionPadding() =>
@@ -155,4 +161,24 @@ class _SettingPageNewState extends BasePageState<SettingPageNew> {
 
   @override
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => true;
+
+  @override
+  ActionOnToolbarItem onActionInitial() {
+    return ActionOnToolbarItem(
+        title: AppLocalizations.of(context)!.action_settings);
+  }
+
+  @override
+  onActionOnToolbarCalled(ActionOnToolbarItem? item) {
+    // _selectedValue.value = getItemModel(item?.title ?? "");
+  }
+
+  void _onSelectedValueChanged() {
+    debugPrint("_onSelectedValueChanged called");
+    ItemModel? model = _selectedValue.value;
+    if (model != null) {
+      onActionAdd.value =
+          ActionOnToolbarItem(title: model.title, icon: model.icon);
+    }
+  }
 }

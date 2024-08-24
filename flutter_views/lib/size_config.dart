@@ -508,17 +508,20 @@ class ScreenHelperSliver extends StatelessWidget {
 
     double horizontalPadding = max(
         (width -
-                (isTablet(context, maxWidth: width)
-                    ? kLargeTablet
+                (isDesktop(context, maxWidth: width)
+                    ? kFoldableSmallTablet
                     : kDesktopWidth)) /
             2,
         0);
+    debugPrint(
+        "ScreenHelperSliver getPadding vertical: $defualPadding horizontal: $horizontalPadding");
+    int padd = 2;
     return Padding(
         padding: EdgeInsets.symmetric(
-            vertical: defualPadding,
-            horizontal: horizontalPadding > defualPadding
-                ? horizontalPadding
-                : defualPadding),
+            vertical: 15,
+            horizontal: max((width - 1200) / padd, 0) > kDefaultPadding
+                ? max((width - 1200) / padd, 0)
+                : kDefaultPadding),
         child: widget);
   }
 

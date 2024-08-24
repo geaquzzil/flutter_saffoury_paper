@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/models/header_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
@@ -39,7 +40,7 @@ launchMailtoSaffouryPaperCustom(String email, String body) async {
 }
 
 Widget getWidgetFromProfile(
-    BuildContext context, ItemModel? value, bool pinToolbar) {
+    BuildContext context, ActionOnToolbarItem? value, bool pinToolbar) {
   if (value == null) {
     return const Center(
       child: Text("Select setting to show"),

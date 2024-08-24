@@ -5,10 +5,11 @@ import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
 class ProfileMenuWidgetList extends StatelessWidget {
-  final List<ItemModel> menuItems;
+  final List<ActionOnToolbarItem> menuItems;
 
   const ProfileMenuWidgetList({super.key, required this.menuItems});
 
@@ -22,9 +23,9 @@ class ProfileMenuWidgetList extends StatelessWidget {
 class ProfileMenuWidget extends StatelessWidget {
   CustomPopupMenuController? controller;
   bool showHeader;
-  List<ItemModel> menuItems = [];
-  ValueNotifier<ItemModel?>? selectedValue;
-  void Function(ItemModel? value)? selectedValueVoid;
+  List<ActionOnToolbarItem> menuItems = [];
+  ValueNotifier<ActionOnToolbarItem?>? selectedValue;
+  void Function(ActionOnToolbarItem? value)? selectedValueVoid;
   ProfileMenuWidget(
       {super.key,
       this.controller,
@@ -62,7 +63,7 @@ class ProfileMenuWidget extends StatelessWidget {
                       Widget child = popMenuItem(context, item);
 
                       if (selectedValue != null) {
-                        return ValueListenableBuilder<ItemModel?>(
+                        return ValueListenableBuilder<ActionOnToolbarItem?>(
                           builder: (context, value, _) {
                             if (value == null) {
                               child = isHovered
@@ -107,7 +108,7 @@ class ProfileMenuWidget extends StatelessWidget {
     );
   }
 
-  Widget popMenuItem(BuildContext context, ItemModel item) {
+  Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
     return Container(
       height: 40,
       padding: const EdgeInsets.symmetric(horizontal: 20),
