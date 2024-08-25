@@ -14,20 +14,21 @@ import '../providers/actions/action_viewabstract_provider.dart';
 enum ValueNotifierPane { FIRST, SECOND, BOTH }
 
 mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
-  ValueNotifier<ActionOnToolbarItem?> getOnActionAdd();
-  ValueNotifier onChangeThatHasToAddAction();
+  ValueNotifier<ActionOnToolbarItem?>? getOnActionAdd();
+  ValueNotifier? onChangeThatHasToAddAction();
 
   ///this determines which action to
+  ///todo not that importanted
   IconData getIconDataID();
 
-  late ValueNotifier _notifier;
+  ValueNotifier? _notifier;
 
   @override
   void initState() {
     // TODO: implement initState
 
     _notifier = onChangeThatHasToAddAction();
-    _notifier.addListener(onChangeListener);
+    _notifier?.addListener(onChangeListener);
 
     super.initState();
   }
@@ -35,12 +36,12 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
   void onChangeListener() {
     if (_notifier is ValueNotifier<ViewAbstract?> ||
         _notifier is ValueNotifier<ViewAbstract>) {
-      ViewAbstract? v = _notifier.value;
+      ViewAbstract? v = _notifier?.value;
       if (v == null) {
         debugPrint("ActionOnToolbarSubPaneMixin is  null");
         return;
       }
-      getOnActionAdd().value = ActionOnToolbarItem(
+      getOnActionAdd()?.value = ActionOnToolbarItem(
           title: v.getIDWithLabel(context),
           subObject: v,
           icon: getIconDataID());
@@ -49,7 +50,7 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
-    _notifier.removeListener(onChangeListener);
+    _notifier?.removeListener(onChangeListener);
     super.dispose();
   }
 }
@@ -58,24 +59,43 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
   GlobalKey<_ActionOnToolbarsasState> key =
       GlobalKey<_ActionOnToolbarsasState>();
   List<ActionOnToolbarItem> actions = [];
-  ValueNotifier<ActionOnToolbarItem?> onActionAdd = ValueNotifier(null);
+  ValueNotifier<ActionOnToolbarItem?>? onActionAdd;
+
+  // CurrentScreenSize _lastScreenSize;
 
   ValueNotifierPane getValueNotifierPane();
 
+  void addAction(ActionOnToolbarItem item) {
+    onActionAdd?.value = item;
+  }
+
+  void addActionString(String title) {
+    onActionAdd?.value = ActionOnToolbarItem(title: title);
+  }
+
+  @override
+  void didUpdateWidget(covariant oldWidget) {
+    // TODO: implement didUpdateWidget
+    initAction();
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   void initState() {
-    onActionAdd.addListener(onActionAddListner);
+    // _lastScreenSize=getCurrentScreenSize();
+    initAction();
+    onActionAdd?.addListener(onActionAddListner);
     super.initState();
   }
 
   @override
   void dispose() {
-    onActionAdd.removeListener(onActionAddListner);
+    onActionAdd?.removeListener(onActionAddListner);
     super.dispose();
   }
 
   void onActionAddListner() {
-    key.currentState?.add(onActionAdd.value);
+    key.currentState?.add(onActionAdd?.value);
   }
 
   getActionFirstPane(bool isDesktop,
@@ -92,6 +112,7 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
 
   @override
   Widget? getBaseAppbar() {
+    if (!isLargeScreenFromCurrentScreenSize(context)) return null;
     if (actions.isEmpty) {
       actions = [onActionInitial()];
     }
@@ -144,10 +165,13 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
     }
   }
 
-  ValueListenableBuilder<ActionOnToolbarItem?> getValueListenableBuilder(
+  Widget getValueListenableBuilder(
       bool firstPane, bool isDesktop, TabControllerHelper? tab) {
+    if (onActionAdd == null) {
+      return getWidget(firstPane, isDesktop, tab: tab, item: null);
+    }
     return ValueListenableBuilder(
-        valueListenable: onActionAdd,
+        valueListenable: onActionAdd!,
         builder: (context, value, child) {
           return getWidget(firstPane, isDesktop, tab: tab, item: value);
         });
@@ -163,6 +187,18 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
         : getActionSecondPane(isDesktop,
             tab: tab, secoundTab: secoundTab, selectedItem: item);
   }
+
+  void initAction() {
+    onActionAdd = ValueNotifier(null);
+    return;
+    WidgetsBinding.instance.addPostFrameCallback((s) {
+      if (isLargeScreenFromCurrentScreenSize(context) && onActionAdd == null) {
+        onActionAdd = ValueNotifier(null);
+      } else {
+        onActionAdd = null;
+      }
+    });
+  }
 }
 
 class ActionOnToolbarItem {
@@ -170,11 +206,13 @@ class ActionOnToolbarItem {
   IconData? icon;
   String? path;
   GestureTapCallback? onPress;
+  Object? mainObject;
   Object? subObject;
   ActionOnToolbarItem(
       {required this.title,
       this.icon,
       this.path,
+      this.mainObject,
       this.onPress,
       this.subObject});
 }
@@ -245,7 +283,7 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
             debugPrint("_ActionOnToolbarsasState return ");
             return;
           }
-          widget.widget.onActionAdd.value = _actions[idx];
+          widget.widget.addAction(_actions[idx]);
           setState(() {
             _actions = _actions.sublist(0, idx + 1);
             debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
@@ -271,6 +309,7 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
   }
 }
 
+@Deprecated("Use  BasePageActionOnToolbarMixin instead")
 class BaseSharedActionDrawerNavigation extends StatelessWidget {
   const BaseSharedActionDrawerNavigation({super.key});
 

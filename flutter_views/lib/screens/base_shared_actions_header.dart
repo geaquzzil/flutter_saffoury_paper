@@ -70,7 +70,7 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
 
         // BaseSharedHeaderDescription(viewAbstract: viewAbstract),
         // BaseSharedDetailsRating(viewAbstract: viewAbstract),
-        const BaseSharedActionDrawerNavigation()
+        // const BaseSharedActionDrawerNavigation()
       ],
     );
   }

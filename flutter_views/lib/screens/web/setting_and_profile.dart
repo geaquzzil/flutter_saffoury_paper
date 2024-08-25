@@ -229,14 +229,14 @@ class MasterToListFromProfile extends StatefulWidget {
   bool buildSmallView;
   bool useSmallFloatingBar;
   ViewAbstract? initialValue;
-  ValueNotifier<ActionOnToolbarItem?> valueNotiferActionOnToolbarItem;
+  ValueNotifier<ActionOnToolbarItem?>? valueNotiferActionOnToolbarItem;
   MasterToListFromProfile(
       {super.key,
       required this.pinToolbar,
       this.buildFooter = false,
       this.buildSmallView = true,
       this.useSmallFloatingBar = true,
-      required this.valueNotiferActionOnToolbarItem,
+       this.valueNotiferActionOnToolbarItem,
       this.initialValue,
       this.buildHeader = false});
 
@@ -343,7 +343,7 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
   }
 
   @override
-  ValueNotifier<ActionOnToolbarItem?> getOnActionAdd() {
+  ValueNotifier<ActionOnToolbarItem?>? getOnActionAdd() {
     return widget.valueNotiferActionOnToolbarItem;
   }
 

@@ -42,10 +42,12 @@ class ListToDetailsPageNew extends StatefulWidget {
   State<ListToDetailsPageNew> createState() => ListToDetailsPageNewState();
 }
 
-class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
+class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
+    with BasePageActionOnToolbarMixin {
   final ValueNotifier<ListToDetailsSecoundPaneHelper?> _secoundPaneNotifier =
       ValueNotifier<ListToDetailsSecoundPaneHelper?>(null);
   ViewAbstract? secoundPaneViewAbstract;
+  bool isInitialization = true;
 
   @override
   List<TabControllerHelper>? initTabBarList(
@@ -72,7 +74,6 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
     super.initState();
   }
 
-
   @override
   List<Widget>? getBaseBottomSheet() => null;
 
@@ -80,33 +81,85 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   Widget? getBaseFloatingActionButton() => null;
 
   @override
-  getDesktopFirstPane({TabControllerHelper? tab}) => getFirstPane(tab: tab);
+  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
-  getDesktopSecondPane(
-          {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      getSecoundPane(tab: tab, secoundTab: secoundTab);
+  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
+  @override
+  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
   @override
-  getFirstPane({TabControllerHelper? tab}) {
+  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
+  @override
+  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
+
+  @override
+  bool isPaneScaffoldOverlayColord(bool firstPane,
+          {TabControllerHelper? tab}) =>
+      !firstPane;
+
+  @override
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
+
+  @override
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
+
+  @override
+  bool setMainPageSuggestionPadding() => false;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
+
+  @override
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) =>
+      !firstPane;
+
+  void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
+    if (newState != null) {
+      context.read<ActionViewAbstractProvider>().add(newState);
+    }
+    _secoundPaneNotifier.value = newState;
+  }
+
+  @override
+  getActionFirstPane(bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? selectedItem}) {
     return SliverApiMaster(
       // onSelectedCardChangeValueNotifier:
       //     getCurrentScreenSize() == CurrentScreenSize.MOBILE
       //         ? null
       //         : _secoundPaneNotifier,
       // buildAppBar: false,
-      buildSearchWidgetAsEditText: isDesktop(context),
+      buildSearchWidgetAsEditText: isDesktop,
     );
   }
 
   @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+  getActionSecondPane(bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? selectedItem}) {
+        
     return ValueListenableBuilder(
       valueListenable: _secoundPaneNotifier,
       builder: (context, value, child) {
+        if (selectedItem != null &&
+            selectedItem.mainObject is ListToDetailsSecoundPaneHelper?) {
+          value = selectedItem.mainObject as ListToDetailsSecoundPaneHelper? ??
+              value;
+        }
         int iD = value?.viewAbstract?.iD ?? -1;
         String tableName = value?.viewAbstract?.getTableNameApi() ?? "";
         Widget currentWidget;
+        if (!isInitialization) {
+          addAction(
+            ActionOnToolbarItem(
+                title: value?.action.toString() ?? "__", mainObject: value),
+          );
+          isInitialization = false;
+        }
         if (value == null) {
           currentWidget = Container();
           return currentWidget;
@@ -129,6 +182,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
             break;
           case ServerActions.view:
             currentWidget = BaseViewNewPage(
+              actionOnToolbarItem: onActionAdd,
               // key: widget.key,
               viewAbstract: value.viewAbstract!,
             );
@@ -163,51 +217,17 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
   }
 
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
-    return null;
-    return const ListTile(
-      title: Text("Dasdas"),
-    );
+  ValueNotifierPane getValueNotifierPane() {
+    return ValueNotifierPane.SECOND;
   }
 
   @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
+  ActionOnToolbarItem onActionInitial() => ActionOnToolbarItem(
+      title: context
+          .read<DrawerMenuControllerProvider>()
+          .getObjectCastViewAbstract
+          .getMain(context));
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      !firstPane;
-
-  @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
-
-  @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
-
-  @override
-  bool setMainPageSuggestionPadding() => false;
-
-  @override
-  bool setHorizontalDividerWhenTowPanes() => false;
-
-  @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) =>
-      !firstPane;
-
-  void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
-    if (newState != null) {
-      context.read<ActionViewAbstractProvider>().add(newState);
-    }
-    _secoundPaneNotifier.value = newState;
-  }
+  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
 }

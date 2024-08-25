@@ -6,11 +6,13 @@ class ViewCardItem extends StatelessWidget {
   String description;
   IconData icon;
   ViewAbstract? object;
+  ValueNotifier<ViewAbstract>? valueNotifier;
   ViewCardItem(
       {super.key,
       this.object,
       required this.title,
       required this.description,
+      this.valueNotifier,
       required this.icon});
 
   @override

@@ -45,6 +45,7 @@ import 'components/action_on_header_popup_widget.dart';
 import 'view/view_view_abstract.dart';
 
 abstract class BaseActionScreenPage extends StatefulWidget {
+  ValueNotifier<ActionOnToolbarItem?>? actionOnToolbarItem;
   ViewAbstract viewAbstract;
   PaletteGenerator? color;
   CurrentScreenSize? currentScreenSize;
@@ -53,6 +54,7 @@ abstract class BaseActionScreenPage extends StatefulWidget {
       {super.key,
       required this.viewAbstract,
       this.color,
+      this.actionOnToolbarItem,
       this.currentScreenSize});
 
   ServerActions getServerAction() {
@@ -649,11 +651,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         getExtras().getTabs(context, action: getServerActions());
     if (getBodyIsSliver()) {
       tabs[0].slivers = [
-        SliverToBoxAdapter(
-          child: BaseSharedActionDrawerNavigation(
-              // viewAbstract: getExtras(),
-              ),
-        ),
         ...getTopWidget(),
         getBody(context),
         ...getBottomWidget(),

@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstr
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class BaseViewNewPage extends BaseActionScreenPage {
-  BaseViewNewPage({super.key, required super.viewAbstract}) : super();
+  BaseViewNewPage({super.key, required super.viewAbstract,super.actionOnToolbarItem}) : super();
 
   @override
   State<BaseActionScreenPage> createState() => _BaseViewNewPage();

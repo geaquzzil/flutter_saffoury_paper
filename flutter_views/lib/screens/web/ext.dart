@@ -43,7 +43,7 @@ Widget getWidgetFromProfile(
     {required BuildContext context,
     ActionOnToolbarItem? value,
     required bool pinToolbar,
-     required ValueNotifier<ActionOnToolbarItem?> valueNotifier}) {
+     ValueNotifier<ActionOnToolbarItem?>? valueNotifier}) {
   if (value == null) {
     return const Center(
       child: Text("Select setting to show"),
