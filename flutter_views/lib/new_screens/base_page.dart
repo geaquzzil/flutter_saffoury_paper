@@ -231,6 +231,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
     return AppBar(
         surfaceTintColor: Colors.transparent,
+
         // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,
         actions: !isBaseAppBar
@@ -272,7 +273,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
         // backgroundColor: ElevationOverlay.overlayColor(context, 2),
         // leading: ,
-        title: customAppBar ?? baseAppbar,
+        title: Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: customAppBar ?? baseAppbar,
+        ),
         leading: hideHamburger(getCurrentScreenSize())
             ? null
             : IconButton(

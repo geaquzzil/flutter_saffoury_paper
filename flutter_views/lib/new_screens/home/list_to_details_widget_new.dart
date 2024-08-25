@@ -27,8 +27,12 @@ class ListToDetailsSecoundPaneHelper {
   ServerActions action;
   ViewAbstract? viewAbstract;
   Widget? customWidget;
+  bool isSecoundPaneView;
   ListToDetailsSecoundPaneHelper(
-      {required this.action, this.viewAbstract, this.customWidget});
+      {required this.action,
+      this.viewAbstract,
+      this.customWidget,
+      this.isSecoundPaneView = false});
 }
 
 class ListToDetailsPageNew extends StatefulWidget {
@@ -47,7 +51,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   final ValueNotifier<ListToDetailsSecoundPaneHelper?> _secoundPaneNotifier =
       ValueNotifier<ListToDetailsSecoundPaneHelper?>(null);
   ViewAbstract? secoundPaneViewAbstract;
-  bool isInitialization = true;
+  bool _isInitialization = true;
 
   @override
   List<TabControllerHelper>? initTabBarList(
@@ -115,9 +119,9 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       !firstPane;
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
-    if (newState != null) {
-      context.read<ActionViewAbstractProvider>().add(newState);
-    }
+    // if (newState != null) {
+    //   context.read<ActionViewAbstractProvider>().add(newState);
+    // }
     _secoundPaneNotifier.value = newState;
   }
 
@@ -141,7 +145,6 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ActionOnToolbarItem? selectedItem}) {
-        
     return ValueListenableBuilder(
       valueListenable: _secoundPaneNotifier,
       builder: (context, value, child) {
@@ -152,14 +155,21 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
         }
         int iD = value?.viewAbstract?.iD ?? -1;
         String tableName = value?.viewAbstract?.getTableNameApi() ?? "";
+        debugPrint(
+            "ListToDetailsSecoundPane is _isInitialization $_isInitialization");
         Widget currentWidget;
-        if (!isInitialization) {
+        if (!_isInitialization && value != null) {
+          debugPrint("ListToDetailsSecoundPane is initial call addAction");
           addAction(
             ActionOnToolbarItem(
-                title: value?.action.toString() ?? "__", mainObject: value),
+                subObject: value.isSecoundPaneView == true ? value : null,
+                title: value.action.toString() ?? "__",
+                mainObject: value),
           );
-          isInitialization = false;
+        } else {
+          _isInitialization = false;
         }
+
         if (value == null) {
           currentWidget = Container();
           return currentWidget;
@@ -182,7 +192,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
             break;
           case ServerActions.view:
             currentWidget = BaseViewNewPage(
-              actionOnToolbarItem: onActionAdd,
+              // actionOnToolbarItem: onActionAdd,
               // key: widget.key,
               viewAbstract: value.viewAbstract!,
             );
@@ -218,7 +228,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
 
   @override
   ValueNotifierPane getValueNotifierPane() {
-    return ValueNotifierPane.SECOND;
+    return ValueNotifierPane.FIRST;
   }
 
   @override
@@ -226,7 +236,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       title: context
           .read<DrawerMenuControllerProvider>()
           .getObjectCastViewAbstract
-          .getMain(context));
+          .getMainHeaderLabelTextOnly(context));
 
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;

@@ -97,16 +97,17 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-  void onCardClickedView(BuildContext context) {
-    onCardClicked(context, isMain: false);
+  void onCardClickedView(BuildContext context, {bool? isSecoundSubPaneView}) {
+    onCardClicked(context, isMain: false,isSecoundSubPaneView: isSecoundSubPaneView);
   }
 
   void onCardClickedFromSearchResult(BuildContext context) {
     onCardClicked(context);
   }
 
-  void onCardClicked(BuildContext context, {bool isMain = true}) {
-    viewPage(context);
+  void onCardClicked(BuildContext context,
+      {bool isMain = true, bool? isSecoundSubPaneView}) {
+    viewPage(context,isSecoundSubPaneView: isSecoundSubPaneView);
   }
 
   String getUriShare({ServerActions? action}) {
@@ -188,13 +189,15 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   Map<String, String> getRoutePathParameters() =>
       {"tableName": getTableNameApi() ?? "", "id": getIDString()};
-  void viewPage(BuildContext context) {
+  void viewPage(BuildContext context, {bool? isSecoundSubPaneView}) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     debugPrint("Page=>viewPage Page isLarge:$isLarge");
     if (isLarge) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
           ListToDetailsSecoundPaneHelper(
-              action: ServerActions.view, viewAbstract: this as ViewAbstract));
+              isSecoundPaneView: isSecoundSubPaneView ?? false,
+              action: ServerActions.view,
+              viewAbstract: this as ViewAbstract));
       return;
       context.read<DrawerMenuControllerProvider>().change(
           context,

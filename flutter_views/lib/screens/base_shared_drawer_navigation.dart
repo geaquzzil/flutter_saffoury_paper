@@ -25,8 +25,6 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
     _notifier = onChangeThatHasToAddAction();
     _notifier?.addListener(onChangeListener);
 
@@ -58,25 +56,26 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
     on BasePageState<T> {
   GlobalKey<_ActionOnToolbarsasState> key =
       GlobalKey<_ActionOnToolbarsasState>();
-  List<ActionOnToolbarItem> actions = [];
-  ValueNotifier<ActionOnToolbarItem?>? onActionAdd;
+  ValueNotifier<ActionOnToolbarItem?>? _onActionAdd;
 
   // CurrentScreenSize _lastScreenSize;
 
   ValueNotifierPane getValueNotifierPane();
 
   void addAction(ActionOnToolbarItem item) {
-    onActionAdd?.value = item;
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      _onActionAdd?.value = item;
+    });
   }
 
   void addActionString(String title) {
-    onActionAdd?.value = ActionOnToolbarItem(title: title);
+    _onActionAdd?.value = ActionOnToolbarItem(title: title);
   }
 
   @override
   void didUpdateWidget(covariant oldWidget) {
     // TODO: implement didUpdateWidget
-    initAction();
+    // initAction();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -84,18 +83,18 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
   void initState() {
     // _lastScreenSize=getCurrentScreenSize();
     initAction();
-    onActionAdd?.addListener(onActionAddListner);
+    _onActionAdd?.addListener(onActionAddListner);
     super.initState();
   }
 
   @override
   void dispose() {
-    onActionAdd?.removeListener(onActionAddListner);
+    _onActionAdd?.removeListener(onActionAddListner);
     super.dispose();
   }
 
   void onActionAddListner() {
-    key.currentState?.add(onActionAdd?.value);
+    key.currentState?.add(_onActionAdd?.value);
   }
 
   getActionFirstPane(bool isDesktop,
@@ -113,12 +112,10 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
   @override
   Widget? getBaseAppbar() {
     if (!isLargeScreenFromCurrentScreenSize(context)) return null;
-    if (actions.isEmpty) {
-      actions = [onActionInitial()];
-    }
     debugPrint("BasePageActionOnToolbar mixin is called");
     return ActionOnToolbarsas(
-      this,
+      widget: this,
+      actions: [onActionInitial()],
       key: key,
     );
   }
@@ -146,6 +143,7 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
 
   getWidgetFromBase(bool firstPane, bool isDesktop,
       {TabControllerHelper? tab}) {
+    debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
     ValueNotifierPane pane = getValueNotifierPane();
     if (pane == ValueNotifierPane.BOTH) {
       return getValueListenableBuilder(firstPane, isDesktop, tab);
@@ -167,12 +165,14 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
 
   Widget getValueListenableBuilder(
       bool firstPane, bool isDesktop, TabControllerHelper? tab) {
-    if (onActionAdd == null) {
+    if (_onActionAdd == null) {
       return getWidget(firstPane, isDesktop, tab: tab, item: null);
     }
     return ValueListenableBuilder(
-        valueListenable: onActionAdd!,
+        valueListenable: _onActionAdd!,
         builder: (context, value, child) {
+          debugPrint(
+              "BasePageActionOnToolbarMixin getValueListenableBuilder called value $value");
           return getWidget(firstPane, isDesktop, tab: tab, item: value);
         });
   }
@@ -189,15 +189,15 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
   }
 
   void initAction() {
-    onActionAdd = ValueNotifier(null);
+    _onActionAdd = ValueNotifier(null);
     return;
-    WidgetsBinding.instance.addPostFrameCallback((s) {
-      if (isLargeScreenFromCurrentScreenSize(context) && onActionAdd == null) {
-        onActionAdd = ValueNotifier(null);
-      } else {
-        onActionAdd = null;
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((s) {
+    //   if (isLargeScreenFromCurrentScreenSize(context) && onActionAdd == null) {
+    //     onActionAdd = ValueNotifier(null);
+    //   } else {
+    //     onActionAdd = null;
+    //   }
+    // });
   }
 }
 
@@ -219,8 +219,9 @@ class ActionOnToolbarItem {
 
 class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin>
     extends StatefulWidget {
+  List<ActionOnToolbarItem> actions;
   T widget;
-  ActionOnToolbarsas(this.widget, {super.key});
+  ActionOnToolbarsas({required this.widget, required this.actions, super.key});
 
   @override
   State<ActionOnToolbarsas<T>> createState() => _ActionOnToolbarsasState<T>();
@@ -233,7 +234,7 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
   @override
   void initState() {
     debugPrint("_ActionOnToolbarsasState init");
-    _actions = widget.widget.actions;
+    _actions = widget.actions;
     super.initState();
   }
 
@@ -249,7 +250,9 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
       _actions.clear();
       _actions = [i, item];
     }
-    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((s) {
+      setState(() {});
+    });
   }
 
   @override

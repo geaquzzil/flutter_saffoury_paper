@@ -138,7 +138,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
 
     return ProfileMenuWidget(
       size: getCurrentScreenSize(),
-      selectedValue: onActionAdd,
+      // selectedValue: onActionAdd,
       // selectedValueVoid: !isLarge
       //     ? (value) {
       //         context.goNamed(settingsRouteName,
@@ -155,7 +155,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
       ActionOnToolbarItem? selectedItem}) {
     return Center(
         child: getWidgetFromProfile(
-            valueNotifier: onActionAdd,
+            // valueNotifier: onActionAdd,
             context: context,
             value: selectedItem,
             pinToolbar: pinToolbar));

@@ -18,7 +18,8 @@ class ViewCardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => object?.onCardClickedView(context),
+      onTap: () =>
+          object?.onCardClickedView(context, isSecoundSubPaneView: true),
       onLongPress: () => object?.onCardLongClickedView(context),
       title: getTextTitle(
           context, object?.getMainHeaderLabelTextOnly(context) ?? title),
