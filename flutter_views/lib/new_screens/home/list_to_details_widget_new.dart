@@ -72,20 +72,6 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew> {
     super.initState();
   }
 
-  @override
-  Widget? getBaseAppbar() {
-    if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) return null;
-    return BaseSharedActionDrawerNavigation();
-    // if (!isLargeScreenFromCurrentScreenSize(context)) {
-    //   return null;
-    // }
-    return Text(
-        context
-            .read<DrawerMenuControllerProvider>()
-            .getObject
-            .getMainHeaderLabelTextOnly(context),
-        style: Theme.of(context).textTheme.headlineMedium);
-  }
 
   @override
   List<Widget>? getBaseBottomSheet() => null;

@@ -40,7 +40,10 @@ launchMailtoSaffouryPaperCustom(String email, String body) async {
 }
 
 Widget getWidgetFromProfile(
-    BuildContext context, ActionOnToolbarItem? value, bool pinToolbar) {
+    {required BuildContext context,
+    ActionOnToolbarItem? value,
+    required bool pinToolbar,
+     required ValueNotifier<ActionOnToolbarItem?> valueNotifier}) {
   if (value == null) {
     return const Center(
       child: Text("Select setting to show"),
@@ -53,7 +56,10 @@ Widget getWidgetFromProfile(
   } else if (value.icon == Icons.account_box_outlined) {
     return const ProfileEdit();
   } else if (value.icon == Icons.shopping_basket_rounded) {
-    return MasterToListFromProfile(pinToolbar: pinToolbar);
+    return MasterToListFromProfile(
+      pinToolbar: pinToolbar,
+      valueNotiferActionOnToolbarItem: valueNotifier,
+    );
   }
   return const Center(
     child: Text("not seleting setting to show"),

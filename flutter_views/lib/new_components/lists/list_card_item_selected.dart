@@ -14,7 +14,7 @@ class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
 }
 
 class _ListCardItemSelected<T extends ViewAbstract>
-    extends State<ListCardItemSelected<T>> {
+    extends State<ListCardItemSelected<T>>  {
   late bool isSelected;
   @override
   void initState() {

@@ -232,6 +232,11 @@ class Product extends ViewAbstract<Product>
     String? gsm = gsms?.getMainHeaderTextOnly(context);
     return Html(
       data: "$productType $size X $gsm",
+
+      // style:{
+
+      //   "body":Theme.of(context).textTheme.bodySmall
+      // }
     );
   }
 

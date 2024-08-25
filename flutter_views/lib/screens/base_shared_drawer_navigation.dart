@@ -11,27 +11,84 @@ import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
 
+enum ValueNotifierPane { FIRST, SECOND, BOTH }
+
+mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
+  ValueNotifier<ActionOnToolbarItem?> getOnActionAdd();
+  ValueNotifier onChangeThatHasToAddAction();
+
+  ///this determines which action to
+  IconData getIconDataID();
+
+  late ValueNotifier _notifier;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    _notifier = onChangeThatHasToAddAction();
+    _notifier.addListener(onChangeListener);
+
+    super.initState();
+  }
+
+  void onChangeListener() {
+    if (_notifier is ValueNotifier<ViewAbstract?> ||
+        _notifier is ValueNotifier<ViewAbstract>) {
+      ViewAbstract? v = _notifier.value;
+      if (v == null) {
+        debugPrint("ActionOnToolbarSubPaneMixin is  null");
+        return;
+      }
+      getOnActionAdd().value = ActionOnToolbarItem(
+          title: v.getIDWithLabel(context),
+          subObject: v,
+          icon: getIconDataID());
+    }
+  }
+
+  @override
+  void dispose() {
+    _notifier.removeListener(onChangeListener);
+    super.dispose();
+  }
+}
 mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
     on BasePageState<T> {
+  GlobalKey<_ActionOnToolbarsasState> key =
+      GlobalKey<_ActionOnToolbarsasState>();
   List<ActionOnToolbarItem> actions = [];
+  ValueNotifier<ActionOnToolbarItem?> onActionAdd = ValueNotifier(null);
 
-  onActionOnToolbarCalled(ActionOnToolbarItem? item);
+  ValueNotifierPane getValueNotifierPane();
 
-  getActionDesktopFirstPane(
-      {TabControllerHelper? tab, ActionOnToolbarItem? selectedItem});
+  @override
+  void initState() {
+    onActionAdd.addListener(onActionAddListner);
+    super.initState();
+  }
 
-  getActionDesktopSecondPane(
-      {TabControllerHelper? tab, ActionOnToolbarItem? selectedItem});
+  @override
+  void dispose() {
+    onActionAdd.removeListener(onActionAddListner);
+    super.dispose();
+  }
 
-  getActionFirstPane(
-      {TabControllerHelper? tab, ActionOnToolbarItem? selectedItem});
+  void onActionAddListner() {
+    key.currentState?.add(onActionAdd.value);
+  }
 
-  getActionSecondPane(
-      {TabControllerHelper? tab, ActionOnToolbarItem? selectedItem});
+  getActionFirstPane(bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? selectedItem});
+
+  getActionSecondPane(bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? selectedItem});
 
   ActionOnToolbarItem onActionInitial();
-
-  ValueNotifier<ActionOnToolbarItem?> onActionAdd = ValueNotifier(null);
 
   @override
   Widget? getBaseAppbar() {
@@ -39,25 +96,73 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
       actions = [onActionInitial()];
     }
     debugPrint("BasePageActionOnToolbar mixin is called");
-    return ActionOnToolbarsas(this);
+    return ActionOnToolbarsas(
+      this,
+      key: key,
+    );
   }
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
-    return    ValueListenableBuilder(
-        valueListenable: _selectedValue,
+    return getWidgetFromBase(true, true, tab: tab);
+  }
+
+  @override
+  getDesktopSecondPane(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(false, true, tab: tab);
+  }
+
+  @override
+  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(false, false, tab: tab);
+  }
+
+  @override
+  getFirstPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(true, false, tab: tab);
+  }
+
+  getWidgetFromBase(bool firstPane, bool isDesktop,
+      {TabControllerHelper? tab}) {
+    ValueNotifierPane pane = getValueNotifierPane();
+    if (pane == ValueNotifierPane.BOTH) {
+      return getValueListenableBuilder(firstPane, isDesktop, tab);
+    }
+    if (firstPane) {
+      if (pane == ValueNotifierPane.FIRST) {
+        return getValueListenableBuilder(firstPane, isDesktop, tab);
+      } else {
+        return getWidget(firstPane, isDesktop, tab: tab, item: null);
+      }
+    } else {
+      if (pane == ValueNotifierPane.SECOND) {
+        return getValueListenableBuilder(firstPane, isDesktop, tab);
+      } else {
+        return getWidget(firstPane, isDesktop, tab: tab, item: null);
+      }
+    }
+  }
+
+  ValueListenableBuilder<ActionOnToolbarItem?> getValueListenableBuilder(
+      bool firstPane, bool isDesktop, TabControllerHelper? tab) {
+    return ValueListenableBuilder(
+        valueListenable: onActionAdd,
         builder: (context, value, child) {
-          return Center(
-              child: getWidgetFromProfile(context, value, pinToolbar));
-        },
-      );
+          return getWidget(firstPane, isDesktop, tab: tab, item: value);
+        });
   }
 
-  Widget getWidget(bool firstPane,bool isDesktop) {
-  
+  Widget getWidget(bool firstPane, bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? item}) {
+    return firstPane
+        ? getActionFirstPane(isDesktop,
+            tab: tab, secoundTab: secoundTab, selectedItem: item)
+        : getActionSecondPane(isDesktop,
+            tab: tab, secoundTab: secoundTab, selectedItem: item);
   }
-
-
 }
 
 class ActionOnToolbarItem {
@@ -65,14 +170,19 @@ class ActionOnToolbarItem {
   IconData? icon;
   String? path;
   GestureTapCallback? onPress;
+  Object? subObject;
   ActionOnToolbarItem(
-      {required this.title, this.icon, this.path, this.onPress});
+      {required this.title,
+      this.icon,
+      this.path,
+      this.onPress,
+      this.subObject});
 }
 
 class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin>
     extends StatefulWidget {
   T widget;
-  ActionOnToolbarsas(this.widget);
+  ActionOnToolbarsas(this.widget, {super.key});
 
   @override
   State<ActionOnToolbarsas<T>> createState() => _ActionOnToolbarsasState<T>();
@@ -81,27 +191,27 @@ class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin>
 class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
     extends State<ActionOnToolbarsas<T>> {
   late List<ActionOnToolbarItem> _actions;
-  void onActionAdd() {
-    debugPrint("_ActionOnToolbarsasState onActionAdd called");
-    if (widget.widget.onActionAdd.value != null) {
-      _actions.add(widget.widget.onActionAdd.value!);
-    }
-    widget.widget.onActionOnToolbarCalled(widget.widget.onActionAdd.value);
-    setState(() {});
-  }
 
   @override
   void initState() {
     debugPrint("_ActionOnToolbarsasState init");
     _actions = widget.widget.actions;
-    widget.widget.onActionAdd.addListener(onActionAdd);
     super.initState();
   }
 
-  @override
-  void dispose() {
-    widget.widget.onActionAdd.removeListener(onActionAdd);
-    super.dispose();
+  void removeBeforeAdd() {}
+  void add(ActionOnToolbarItem? item) {
+    if (item == null) {
+      return;
+    }
+    if (item.subObject != null) {
+      _actions.add(item);
+    } else {
+      ActionOnToolbarItem i = _actions[0];
+      _actions.clear();
+      _actions = [i, item];
+    }
+    setState(() {});
   }
 
   @override
@@ -118,7 +228,7 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
         scrollDirection: Axis.horizontal,
         itemCount: _actions.length,
         itemBuilder: (context, index) =>
-            getIconWithText(context, widget.widget.actions[index]),
+            getIconWithText(context, _actions[index]),
       ),
     );
   }
@@ -135,7 +245,7 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
             debugPrint("_ActionOnToolbarsasState return ");
             return;
           }
-          widget.widget.onActionOnToolbarCalled(item);
+          widget.widget.onActionAdd.value = _actions[idx];
           setState(() {
             _actions = _actions.sublist(0, idx + 1);
             debugPrint("_ActionOnToolbarsasState  subList = $_actions ");

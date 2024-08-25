@@ -117,6 +117,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Widget? getMainSubtitleHeaderText(BuildContext context) {
     return Text(
       getMainHeaderLabelTextOnly(context),
+      style: Theme.of(context).textTheme.bodySmall,
       // style: const TextStyle(color: kTextLightColor)
     );
   }
@@ -137,9 +138,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget getMainHeaderText(BuildContext context) {
-    return Text(getMainHeaderTextOnly(context)
-        // style: const TextStyle(color: kTextLightColor)
-        );
+    return Text(
+      getMainHeaderTextOnly(context)
+      // style: const TextStyle(color: kTextLightColor)
+      ,
+      style: Theme.of(context).textTheme.bodyMedium,
+    );
   }
 
   Widget? getWebListTileItemTitle(BuildContext context) {
@@ -258,6 +262,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String getIDFormat(BuildContext context) {
     return "#${iD.toString()}";
+  }
+
+  String getIDWithLabel(BuildContext context) {
+    return getMainHeaderLabelTextOnly(context) + getIDFormat(context);
   }
 
   String getIDString() {

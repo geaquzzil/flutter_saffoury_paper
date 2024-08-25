@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
+import 'package:flutter_view_controller/size_config.dart';
 
 class ProfileMenuWidgetList extends StatelessWidget {
   final List<ActionOnToolbarItem> menuItems;
@@ -25,11 +26,11 @@ class ProfileMenuWidget extends StatelessWidget {
   bool showHeader;
   List<ActionOnToolbarItem> menuItems = [];
   ValueNotifier<ActionOnToolbarItem?>? selectedValue;
-  void Function(ActionOnToolbarItem? value)? selectedValueVoid;
+  CurrentScreenSize? size;
   ProfileMenuWidget(
       {super.key,
       this.controller,
-      this.selectedValueVoid,
+      this.size,
       this.showHeader = true,
       this.selectedValue});
 
@@ -51,61 +52,76 @@ class ProfileMenuWidget extends StatelessWidget {
                 onTap: () {
                   if (selectedValue != null) {
                     selectedValue!.value = item;
-                  } else if (selectedValueVoid != null) {
-                    selectedValueVoid?.call(item);
                   } else {
                     item.onPress?.call();
                   }
                 },
-                child: OnHoverWidget(
-                    scale: false,
-                    builder: (isHovered) {
-                      Widget child = popMenuItem(context, item);
-
-                      if (selectedValue != null) {
-                        return ValueListenableBuilder<ActionOnToolbarItem?>(
-                          builder: (context, value, _) {
-                            if (value == null) {
-                              child = isHovered
-                                  ? Card(
-                                      child: child,
-                                    )
-                                  : child;
-                              return child;
-                            }
-                            child = isHovered && value.title != item.title
-                                ? Card(
-                                    child: child,
-                                  )
-                                : child;
-                            if (value.title == item.title) {
-                              return ClippedCard(
-                                  elevation: 0,
-                                  // customCardColor:
-                                  //     Theme.of(context).highlightColor,
-                                  // .withOpacity(.5),
-                                  color: kPrimaryColor,
-                                  child: child);
-                            } else {
-                              return child;
-                            }
-                          },
-                          valueListenable: selectedValue!,
-                        );
-                      }
-                      child = isHovered
-                          ? Card(
-                              child: child,
-                            )
-                          : child;
-                      return child;
-                    }),
+                child: isLargeScreenFromScreenSize(size)
+                    ? getDesktopChild(context, item)
+                    : getMobileChild(context, item),
               ),
             )
           ],
         ),
       ),
     );
+  }
+
+  void Function()? _onTap(ActionOnToolbarItem item) {
+    {
+      if (selectedValue != null) {
+        selectedValue!.value = item;
+      } else {
+        item.onPress?.call();
+      }
+    }
+  }
+
+  OnHoverWidget getDesktopChild(
+      BuildContext context, ActionOnToolbarItem item) {
+    return OnHoverWidget(
+        scale: false,
+        builder: (isHovered) {
+          Widget child = popMenuItem(context, item);
+
+          if (selectedValue != null) {
+            return ValueListenableBuilder<ActionOnToolbarItem?>(
+              builder: (context, value, _) {
+                if (value == null) {
+                  child = isHovered
+                      ? Card(
+                          child: child,
+                        )
+                      : child;
+                  return child;
+                }
+                child = isHovered && value.title != item.title
+                    ? Card(
+                        child: child,
+                      )
+                    : child;
+                if (value.title == item.title) {
+                  return ClippedCard(
+                      elevation: 0,
+                      // customCardColor:
+                      //     Theme.of(context).highlightColor,
+                      // .withOpacity(.5),
+                      color: kPrimaryColor,
+                      child: child);
+                } else {
+                  return child;
+                }
+              },
+              valueListenable: selectedValue!,
+            );
+          }
+          child = isHovered
+              ? Card(
+                  child: child,
+                )
+              : child;
+          return child;
+        });
   }
 
   Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
@@ -179,6 +195,14 @@ class ProfileMenuWidget extends StatelessWidget {
               .toList(),
         ),
       ),
+    );
+  }
+
+  Widget getMobileChild(BuildContext context, ActionOnToolbarItem item) {
+    return ListTile(
+      title: Text(item.title),
+      subtitle: Text("this is a description for ${item.title}"),
+      trailing: Icon(item.icon),
     );
   }
 }

@@ -18,7 +18,8 @@ import 'package:provider/provider.dart';
 import '../../customs_widget/sliver_delegates.dart';
 
 class SettingAndProfileWeb extends BaseWebPageSlivers {
-  ValueNotifier<ActionOnToolbarItem?> selectedValue = ValueNotifier<ActionOnToolbarItem?>(null);
+  ValueNotifier<ActionOnToolbarItem?> selectedValue =
+      ValueNotifier<ActionOnToolbarItem?>(null);
 
   SettingAndProfileWeb({
     super.key,
@@ -73,11 +74,16 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                               height: 500,
                               child: Padding(
                                 padding: const EdgeInsets.all(kDefaultPadding),
-                                child: ValueListenableBuilder<ActionOnToolbarItem?>(
+                                child: ValueListenableBuilder<
+                                        ActionOnToolbarItem?>(
                                     valueListenable: selectedValue,
                                     builder: (context, value, child) {
                                       return getWidgetFromProfile(
-                                          context, value, pinToolbar);
+                                          context: context,
+                                          value: value,
+                                          valueNotifier: ValueNotifier<
+                                              ActionOnToolbarItem?>(null),
+                                          pinToolbar: pinToolbar);
                                     }),
                               ),
                             ),
@@ -216,23 +222,36 @@ class ProfileEdit extends StatelessWidget {
   }
 }
 
-class MasterToListFromProfile extends StatelessWidget {
+class MasterToListFromProfile extends StatefulWidget {
   final bool pinToolbar;
-  ValueNotifier<ViewAbstract?> selectedCardValue =
-      ValueNotifier<ViewAbstract?>(null);
   bool buildFooter;
   bool buildHeader;
   bool buildSmallView;
   bool useSmallFloatingBar;
-  Widget? customSliverHeader;
-
+  ViewAbstract? initialValue;
+  ValueNotifier<ActionOnToolbarItem?> valueNotiferActionOnToolbarItem;
   MasterToListFromProfile(
       {super.key,
       required this.pinToolbar,
       this.buildFooter = false,
       this.buildSmallView = true,
       this.useSmallFloatingBar = true,
+      required this.valueNotiferActionOnToolbarItem,
+      this.initialValue,
       this.buildHeader = false});
+
+  @override
+  State<MasterToListFromProfile> createState() =>
+      _MasterToListFromProfileState();
+}
+
+class _MasterToListFromProfileState extends State<MasterToListFromProfile>
+    with ActionOnToolbarSubPaneMixin {
+  ValueNotifier<ViewAbstract?> selectedCardValue =
+      ValueNotifier<ViewAbstract?>(null);
+
+  Widget? customSliverHeader;
+  ViewAbstract? _initialValue;
 
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
@@ -245,21 +264,34 @@ class MasterToListFromProfile extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    _initialValue = widget.initialValue;
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ViewAbstract?>(
       valueListenable: selectedCardValue,
       builder: (context, value, child) {
+        value = _initialValue ?? value;
         if (value != null) {
           return WebProductView(
-            buildSmallView: buildSmallView,
-            buildHeader: buildHeader,
-            useSmallFloatingBar: useSmallFloatingBar,
+            buildSmallView: widget.buildSmallView,
+            buildHeader: widget.buildHeader,
+            useSmallFloatingBar: widget.useSmallFloatingBar,
             iD: value.iD,
             tableName: value.getTableNameApi()!,
             extras: value,
-            buildFooter: buildFooter,
+            buildFooter: widget.buildFooter,
             customSliverHeader: SliverPersistentHeader(
-              pinned: pinToolbar,
+              pinned: widget.pinToolbar,
               // floating: true,
               delegate: SliverAppBarDelegatePreferedSize(
                   child: PreferredSize(
@@ -281,10 +313,10 @@ class MasterToListFromProfile extends StatelessWidget {
           );
         }
         return ListWebApiPage(
-          buildHeader: buildHeader,
-          buildFooter: buildFooter,
-          useSmallFloatingBar: useSmallFloatingBar,
-          pinToolbar: pinToolbar,
+          buildHeader: widget.buildHeader,
+          buildFooter: widget.buildFooter,
+          useSmallFloatingBar: widget.useSmallFloatingBar,
+          pinToolbar: widget.pinToolbar,
           onCardTap: selectedCardValue,
           customHeader: const Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -303,6 +335,21 @@ class MasterToListFromProfile extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  IconData getIconDataID() {
+    return Icons.shopping_basket_rounded;
+  }
+
+  @override
+  ValueNotifier<ActionOnToolbarItem?> getOnActionAdd() {
+    return widget.valueNotiferActionOnToolbarItem;
+  }
+
+  @override
+  ValueNotifier onChangeThatHasToAddAction() {
+    return selectedCardValue;
   }
 }
 

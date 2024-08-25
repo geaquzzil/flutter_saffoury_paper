@@ -49,11 +49,6 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _items = getListOfProfileSettings(context);
     return super.build(context);
@@ -76,52 +71,11 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
     super.didUpdateWidget(oldWidget);
   }
 
-  // @override
-  // Widget? getBaseAppbar() =>
-  //     Text(AppLocalizations.of(context)!.action_settings);
-
   @override
   List<Widget>? getBaseBottomSheet() => null;
 
   @override
   Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
-
-  @override
-  getDesktopFirstPane({TabControllerHelper? tab}) {
-    super.getDesktopFirstPane(tab: tab);
-    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
-    if (_currentSettingPageMobile != null) {
-      return getWidgetFromProfile(
-          context, getItemModel(_currentSettingPageMobile ?? ""), true);
-    }
-    return ProfileMenuWidget(
-      selectedValue: isLarge ? _selectedValue : null,
-      selectedValueVoid: !isLarge
-          ? (value) {
-              context.goNamed(settingsRouteName,
-                  queryParameters: {"page": value?.title});
-            }
-          : null,
-    );
-  }
-
-  @override
-  getDesktopSecondPane(
-          {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      ValueListenableBuilder(
-        valueListenable: _selectedValue,
-        builder: (context, value, child) {
-          return Center(
-              child: getWidgetFromProfile(context, value, pinToolbar));
-        },
-      );
-
-  @override
-  getFirstPane({TabControllerHelper? tab}) => getDesktopFirstPane(tab: tab);
 
   @override
   Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
@@ -169,16 +123,44 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  onActionOnToolbarCalled(ActionOnToolbarItem? item) {
-    // _selectedValue.value = getItemModel(item?.title ?? "");
+  getActionFirstPane(bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? selectedItem}) {
+    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+    if (_currentSettingPageMobile != null) {
+      return getWidgetFromProfile(
+        valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
+          context: context,
+          value: getItemModel(_currentSettingPageMobile ?? ""),
+          pinToolbar: true);
+    }
+
+    return ProfileMenuWidget(
+      size: getCurrentScreenSize(),
+      selectedValue: onActionAdd,
+      // selectedValueVoid: !isLarge
+      //     ? (value) {
+      //         context.goNamed(settingsRouteName,
+      //             queryParameters: {"page": value?.title});
+      //       }
+      //     : null,
+    );
   }
 
-  void _onSelectedValueChanged() {
-    debugPrint("_onSelectedValueChanged called");
-    ItemModel? model = _selectedValue.value;
-    if (model != null) {
-      onActionAdd.value =
-          ActionOnToolbarItem(title: model.title, icon: model.icon);
-    }
+  @override
+  getActionSecondPane(bool isDesktop,
+      {TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      ActionOnToolbarItem? selectedItem}) {
+    return Center(
+        child: getWidgetFromProfile(
+            valueNotifier: onActionAdd,
+            context: context,
+            value: selectedItem,
+            pinToolbar: pinToolbar));
   }
+
+  @override
+  ValueNotifierPane getValueNotifierPane() => ValueNotifierPane.BOTH;
 }

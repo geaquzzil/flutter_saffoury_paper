@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:go_router/go_router.dart';
@@ -18,14 +19,17 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     return null;
   }
+
   @override
   Widget getScaffold(BuildContext context) {
     if (currentSetting != null) {
       currentWidget = getWidgetFromProfile(
-          context,
-          getListOfProfileSettings(context)
+        
+        valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
+          context: context,
+          value: getListOfProfileSettings(context)
               .firstWhereOrNull((p0) => p0.title == currentSetting!),
-          true);
+          pinToolbar: true);
     }
     if (currentWidget is MasterToListFromProfile) {
       return MasterToListFromProfile(
@@ -33,6 +37,7 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
         buildHeader: true,
         buildFooter: true,
         useSmallFloatingBar: false,
+        valueNotiferActionOnToolbarItem: ValueNotifier<ActionOnToolbarItem?>(null),
       );
     }
     return super.getScaffold(context);
@@ -64,17 +69,18 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
                   color:
                       Theme.of(context).scaffoldBackgroundColor.withOpacity(.5),
                   child: ProfileMenuWidget(
-                    selectedValueVoid: (value) {
-                      if (value == null) {
-                        context.goNamed(
-                          indexWebSettingAndAccount,
-                        );
-                      } else {
-                        context.goNamed(indexWebSettingAndAccount,
-                            queryParameters: {"action": value.title});
-                      }
-                    },
-                  ),
+                      //todo set anew value notifier and set listener for it
+                      // selectedValueVoid: (value) {
+                      //   if (value == null) {
+                      //     context.goNamed(
+                      //       indexWebSettingAndAccount,
+                      //     );
+                      //   } else {
+                      //     context.goNamed(indexWebSettingAndAccount,
+                      //         queryParameters: {"action": value.title});
+                      //   }
+                      // },
+                      ),
                 ),
               ),
             ))
