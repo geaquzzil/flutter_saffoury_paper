@@ -261,38 +261,41 @@ class DraggableHomeState extends State<DraggableHome>
       backgroundColor:
           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
-      body: ScreenHelper(
-        largeTablet: LayoutBuilder(builder: (context, constraints) {
-          return Center(
-              child: MaxWidthBox(
-            maxWidth: constraints.maxWidth,
+      body: getPageStorage(expandedHeight, context, appBarHeight,
+             fullyExpandedHeight, topPadding),
+      
+      // ScreenHelper(
+      //   largeTablet: LayoutBuilder(builder: (context, constraints) {
+      //     return Center(
+      //         child: MaxWidthBox(
+      //       maxWidth: constraints.maxWidth,
 
-            // minWidth: width,
-            // defaultScale: false,
-            child: Flex(
-              direction:
-                  constraints.maxWidth > 500 ? Axis.horizontal : Axis.vertical,
-              children: [
-                // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-                Expanded(
-                    flex: constraints.maxWidth > 720.0 ? 1 : 0,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(kBorderRadius / 2),
-                        child: AspectRatio(
-                            aspectRatio: 16 / 9, child: Text("TODO")))),
-                Expanded(
-                    flex: constraints.maxWidth > 720.0 ? 2 : 0,
-                    child: getPageStorage(expandedHeight, context, appBarHeight,
-                        fullyExpandedHeight, topPadding)),
-              ],
-            ),
-          ));
-        }),
-        smallTablet: getPageStorage(expandedHeight, context, appBarHeight,
-            fullyExpandedHeight, topPadding),
-        mobile: getPageStorage(expandedHeight, context, appBarHeight,
-            fullyExpandedHeight, topPadding),
-      ),
+      //       // minWidth: width,
+      //       // defaultScale: false,
+      //       child: Flex(
+      //         direction:
+      //             constraints.maxWidth > 500 ? Axis.horizontal : Axis.vertical,
+      //         children: [
+      //           // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
+      //           Expanded(
+      //               flex: constraints.maxWidth > 720.0 ? 1 : 0,
+      //               child: ClipRRect(
+      //                   borderRadius: BorderRadius.circular(kBorderRadius / 2),
+      //                   child: AspectRatio(
+      //                       aspectRatio: 16 / 9, child: Text("TODO")))),
+      //           Expanded(
+      //               flex: constraints.maxWidth > 720.0 ? 2 : 0,
+      //               child: getPageStorage(expandedHeight, context, appBarHeight,
+      //                   fullyExpandedHeight, topPadding)),
+      //         ],
+      //       ),
+      //     ));
+      //   }),
+      //   smallTablet: getPageStorage(expandedHeight, context, appBarHeight,
+      //       fullyExpandedHeight, topPadding),
+      //   mobile: getPageStorage(expandedHeight, context, appBarHeight,
+      //       fullyExpandedHeight, topPadding),
+      // ),
       // appBar: widget.showNormalToolbar,
       bottomSheet: widget.bottomSheet,
       bottomNavigationBar: getBottomNavigationBar(),

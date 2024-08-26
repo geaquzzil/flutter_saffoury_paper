@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -55,7 +56,8 @@ class ListToDetailsPageNew extends StatefulWidget {
 class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
     with
         BasePageActionOnToolbarMixin<ListToDetailsPageNew,
-            ListToDetailsSecoundPaneHelper> {
+            ListToDetailsSecoundPaneHelper>,
+        BasePageWithThirdPaneMixin<ListToDetailsPageNew, Widget> {
   ViewAbstract? secoundPaneViewAbstract;
   bool _isInitialization = true;
 
@@ -209,7 +211,14 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
     if (secoundPaneViewAbstract != null && tab?.widget != null) {
       return tab!.widget!;
     }
-    return currentWidget;
+    if (selectedItem.subObject != null) {
+      addThirdPane(currentWidget);
+    }
+    return FadeInUp(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.fastOutSlowIn,
+        key: UniqueKey(),
+        child: currentWidget);
   }
 
   @override

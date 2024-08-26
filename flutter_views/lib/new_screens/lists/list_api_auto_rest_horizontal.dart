@@ -245,7 +245,7 @@ class _ListHorizontalApiWidgetState
   @override
   Widget build(BuildContext context) {
     _currentHeight =
-        widget.customHeight ?? MediaQuery.of(context).size.height * .25;
+        widget.customHeight ?? MediaQuery.of(context).size.height * .2;
     Widget d;
     if (widget.list != null) {
       d = wrapHeader(context, _listItems(widget.list!));

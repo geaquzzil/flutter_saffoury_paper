@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'home/components/drawers/drawer_large_screen.dart';
@@ -38,6 +40,116 @@ const double kDefualtAppBar = 70;
 const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
+
+mixin BasePageWithThirdPaneMixin<T extends StatefulWidget, E extends Widget>
+    on BasePageState<T> {
+  final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
+  void addThirdPane(E value) {
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      _valueNotifierSecondToThird.value = value;
+    });
+  }
+
+  @override
+  Widget getTowPanes({TabControllerHelper? tab}) {
+    if (isMobile(context, maxWidth: getWidth)) {
+      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+      return _setSubAppBar(_firstWidget, true)!;
+    }
+    _setupPaneTabBar(false, tab: tab);
+    _setupPaneTabBar(true, tab: tab);
+    if (isDesktop(context, maxWidth: getWidth)) {
+      if (_hasTabBarList(firstPane: true)) {
+        _firstWidget = TabBarView(
+            controller: _tabControllerFirstPane,
+            children: _getTabBarList(firstPane: true)!
+                .map((e) => beforeGetDesktopFirstPaneWidget(tab: e))
+                .toList()
+                .cast());
+      } else {
+        _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
+      }
+
+      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
+
+      if (_hasTabBarList(firstPane: false)) {
+        _secondWidget = TabBarView(
+            controller: _tabControllerSecondPane,
+            children: _getTabBarList(firstPane: false)!
+                .map((e) => beforeGetDesktopSecoundPaneWidget(tab: e))
+                .toList()
+                .cast());
+      } else {
+        _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
+      }
+      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+    } else {
+      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
+      if (buildSecoundPane) {
+        _secondWidget = beforeGetSecondPaneWidget(tab: tab);
+        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+      }
+    }
+    if (_secondWidget == null) {
+      return _firstWidget!;
+    }
+
+    if (_hasHorizontalDividerWhenTowPanes()) {
+      _firstWidget = _getBorderDecoration(_firstWidget!);
+    }
+
+    return TowPaneExt(
+      startPane: _firstWidget!,
+      endPane: _getSecondPaneWidgetMixin(_secondWidget),
+      customPaneProportion: getCustomPaneProportion(),
+    );
+  }
+
+  Widget _getSecondPaneWidgetMixin(Widget secondWidget) {
+    if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
+      return secondWidget;
+    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ValueListenableBuilder(
+          valueListenable: _valueNotifierSecondToThird,
+          builder: (context, value, child) {
+            bool showThirdPane = value != null;
+            double width = showThirdPane
+                ? constraints.maxWidth * 0.5
+                : constraints.maxWidth;
+
+            return SizedBox(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: Row(
+                children: [
+                  AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.easeInBack,
+                      height: constraints.maxHeight,
+                      width: width,
+                      child: secondWidget),
+                  ResponsiveVisibility(
+                    visible: showThirdPane,
+                    child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.easeInBack,
+                        height: constraints.maxHeight,
+                        width: width,
+                        child: value),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+    // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
+  }
+}
 
 ///Auto generate view
 ///[CurrentScreenSize.MOBILE] if this  is true
@@ -591,7 +703,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
   }
 
-  Widget _getTowPanes({TabControllerHelper? tab}) {
+  Widget getTowPanes({TabControllerHelper? tab}) {
     if (isMobile(context, maxWidth: getWidth)) {
       _firstWidget = beforeGetFirstPaneWidget(tab: tab);
       return _setSubAppBar(_firstWidget, true)!;
@@ -697,7 +809,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     Widget currentWidget;
     currentWidget = TabBarView(
         controller: _tabBaseController,
-        children: _getTabBarList()!.map((e) => _getTowPanes(tab: e)).toList());
+        children: _getTabBarList()!.map((e) => getTowPanes(tab: e)).toList());
     Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
 
     if (isLarge && buildDrawer) {
@@ -716,7 +828,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     if (_hasTabBarList()) {
       currentWidget = getBodyIfHasTabBarList(isLarge);
     } else {
-      currentWidget = _getTowPanes();
+      currentWidget = getTowPanes();
       if (setMainPageSuggestionPadding()) {
         currentWidget = Padding(
           padding: getSuggestionPadding(_width),
@@ -1002,12 +1114,12 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   @override
-  Widget _getTowPanes({TabControllerHelper? tab}) {
+  Widget getTowPanes({TabControllerHelper? tab}) {
     debugPrint("getBody _getTowPanes TabController ${tab?.extras.runtimeType}");
     dynamic ex = getExtras(tab: tab);
     _isLoading = !getBodyWithoutApi(tab: tab);
     if (ex != null && !_isLoading) {
-      return super._getTowPanes(tab: tab);
+      return super.getTowPanes(tab: tab);
     }
     return FutureBuilder<dynamic>(
       future: getCallApiFunctionIfNull(context, tab: tab),
@@ -1027,7 +1139,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
               //   context.read<ListMultiKeyProvider>().edit(ex);
               // });
             }
-            return super._getTowPanes(tab: tab);
+            return super.getTowPanes(tab: tab);
           } else {
             debugPrint("BasePageApi FutureBuilder !done");
             return getErrorWidget();
@@ -1035,7 +1147,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           debugPrint("BasePageApi FutureBuilder waiting");
           _isLoading = true;
-          return super._getTowPanes(tab: tab);
+          return super.getTowPanes(tab: tab);
         } else {
           debugPrint("BasePageApi FutureBuilder !TOTODO");
           return const Text("TOTODO");
