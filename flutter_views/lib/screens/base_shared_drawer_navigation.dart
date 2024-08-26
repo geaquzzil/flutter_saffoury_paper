@@ -11,10 +11,11 @@ import 'package:provider/provider.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
 
-enum ValueNotifierPane { FIRST, SECOND, BOTH }
+enum ValueNotifierPane { FIRST, SECOND, BOTH, NONE }
 
-mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
-  ValueNotifier<ActionOnToolbarItem?>? getOnActionAdd();
+mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget,
+    E extends ActionOnToolbarItem> on State<T> {
+  ValueNotifier<E?>? getOnActionAdd();
   ValueNotifier? onChangeThatHasToAddAction();
 
   ///this determines which action to
@@ -39,10 +40,11 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
         debugPrint("ActionOnToolbarSubPaneMixin is  null");
         return;
       }
-      getOnActionAdd()?.value = ActionOnToolbarItem(
-          title: v.getIDWithLabel(context),
-          subObject: v,
-          icon: getIconDataID());
+      //TODO
+      // getOnActionAdd()?.value = ActionOnToolbarItem(
+      //     actionTitle: v.getIDWithLabel(context),
+      //     subObject: v,
+      //     icon: getIconDataID());
     }
   }
 
@@ -52,30 +54,26 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 }
-mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
-    on BasePageState<T> {
+mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
+    E extends ActionOnToolbarItem> on BasePageState<T> {
   GlobalKey<_ActionOnToolbarsasState> key =
       GlobalKey<_ActionOnToolbarsasState>();
-  ValueNotifier<ActionOnToolbarItem?>? _onActionAdd;
+  ValueNotifier<E?>? _onActionAdd;
+
+  ValueNotifier<E?>? get getOnActionAdd => _onActionAdd;
 
   // CurrentScreenSize _lastScreenSize;
 
   ValueNotifierPane getValueNotifierPane();
 
-  void addAction(ActionOnToolbarItem item) {
+  void addAction(E? item) {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       _onActionAdd?.value = item;
     });
   }
 
-  void addActionString(String title) {
-    _onActionAdd?.value = ActionOnToolbarItem(title: title);
-  }
-
   @override
   void didUpdateWidget(covariant oldWidget) {
-    // TODO: implement didUpdateWidget
-    // initAction();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -100,14 +98,14 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
   getActionFirstPane(bool isDesktop,
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
-      ActionOnToolbarItem? selectedItem});
+      E? selectedItem});
 
   getActionSecondPane(bool isDesktop,
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
-      ActionOnToolbarItem? selectedItem});
+      E? selectedItem});
 
-  ActionOnToolbarItem onActionInitial();
+  E onActionInitial();
 
   @override
   Widget? getBaseAppbar() {
@@ -145,6 +143,9 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
       {TabControllerHelper? tab}) {
     debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
     ValueNotifierPane pane = getValueNotifierPane();
+    if (pane == ValueNotifierPane.NONE) {
+      return getWidget(firstPane, isDesktop, tab: tab, item: null);
+    }
     if (pane == ValueNotifierPane.BOTH) {
       return getValueListenableBuilder(firstPane, isDesktop, tab);
     }
@@ -178,9 +179,7 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
   }
 
   Widget getWidget(bool firstPane, bool isDesktop,
-      {TabControllerHelper? tab,
-      TabControllerHelper? secoundTab,
-      ActionOnToolbarItem? item}) {
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab, E? item}) {
     return firstPane
         ? getActionFirstPane(isDesktop,
             tab: tab, secoundTab: secoundTab, selectedItem: item)
@@ -202,14 +201,14 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget>
 }
 
 class ActionOnToolbarItem {
-  String title;
+  String actionTitle;
   IconData? icon;
   String? path;
   GestureTapCallback? onPress;
   Object? mainObject;
   Object? subObject;
   ActionOnToolbarItem(
-      {required this.title,
+      {required this.actionTitle,
       this.icon,
       this.path,
       this.mainObject,
@@ -217,19 +216,20 @@ class ActionOnToolbarItem {
       this.subObject});
 }
 
-class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin>
-    extends StatefulWidget {
-  List<ActionOnToolbarItem> actions;
+class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin,
+    E extends ActionOnToolbarItem> extends StatefulWidget {
+  List<E> actions;
   T widget;
   ActionOnToolbarsas({required this.widget, required this.actions, super.key});
 
   @override
-  State<ActionOnToolbarsas<T>> createState() => _ActionOnToolbarsasState<T>();
+  State<ActionOnToolbarsas<T, E>> createState() =>
+      _ActionOnToolbarsasState<T, E>();
 }
 
-class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
-    extends State<ActionOnToolbarsas<T>> {
-  late List<ActionOnToolbarItem> _actions;
+class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
+    E extends ActionOnToolbarItem> extends State<ActionOnToolbarsas<T, E>> {
+  late List<E> _actions;
 
   @override
   void initState() {
@@ -238,15 +238,25 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant ActionOnToolbarsas<T, E> oldWidget) {
+    debugPrint(
+        "_ActionOnToolbarsasState update new  ${widget.actions[0].actionTitle} current ${_actions[0].actionTitle}");
+    if (widget.actions[0].actionTitle != _actions[0].actionTitle) {
+      _actions = widget.actions;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void removeBeforeAdd() {}
-  void add(ActionOnToolbarItem? item) {
+  void add(E? item) {
     if (item == null) {
       return;
     }
     if (item.subObject != null) {
       _actions.add(item);
     } else {
-      ActionOnToolbarItem i = _actions[0];
+      E i = _actions[0];
       _actions.clear();
       _actions = [i, item];
     }
@@ -274,11 +284,11 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
     );
   }
 
-  Widget getIconWithText(BuildContext context, ActionOnToolbarItem item) {
+  Widget getIconWithText(BuildContext context, E item) {
     return InkWell(
         onTap: () {
-          int idx = _actions
-              .indexWhere((s) => s.title == item.title && s.icon == item.icon);
+          int idx = _actions.indexWhere(
+              (s) => s.actionTitle == item.actionTitle && s.icon == item.icon);
 
           debugPrint("_ActionOnToolbarsasState  idx = $idx ");
           if (idx == _actions.length - 1 ||
@@ -295,7 +305,7 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin>
         child: OnHoverWidget(
             scale: false,
             builder: (isHovered) =>
-                getB(item.icon, isHovered, context, item.title)));
+                getB(item.icon, isHovered, context, item.actionTitle)));
   }
 
   Widget getB(

@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
@@ -16,6 +17,9 @@ import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
+import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
+import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +102,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardClickedView(BuildContext context, {bool? isSecoundSubPaneView}) {
-    onCardClicked(context, isMain: false,isSecoundSubPaneView: isSecoundSubPaneView);
+    onCardClicked(context,
+        isMain: false, isSecoundSubPaneView: isSecoundSubPaneView);
   }
 
   void onCardClickedFromSearchResult(BuildContext context) {
@@ -107,7 +112,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   void onCardClicked(BuildContext context,
       {bool isMain = true, bool? isSecoundSubPaneView}) {
-    viewPage(context,isSecoundSubPaneView: isSecoundSubPaneView);
+    viewPage(context, isSecoundSubPaneView: isSecoundSubPaneView);
   }
 
   String getUriShare({ServerActions? action}) {
@@ -164,7 +169,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void exportPage(BuildContext context) {
     if (isLargeScreenFromCurrentScreenSize(context)) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          //todo traanslate
           ListToDetailsSecoundPaneHelper(
+              actionTitle:
+                  getIDWithLabel(context, action: ServerActions.custom_widget),
               action: ServerActions.custom_widget,
               customWidget:
                   FileReaderPage(viewAbstract: this as ViewAbstract)));
@@ -177,7 +185,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void importPage(BuildContext context) {
     if (isLargeScreenFromCurrentScreenSize(context)) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+          //todo traanslate
           ListToDetailsSecoundPaneHelper(
+              actionTitle:
+                  getIDWithLabel(context, action: ServerActions.custom_widget),
               action: ServerActions.custom_widget,
               customWidget:
                   FileExporterPage(viewAbstract: this as ViewAbstract)));
@@ -192,21 +203,65 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void viewPage(BuildContext context, {bool? isSecoundSubPaneView}) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     debugPrint("Page=>viewPage Page isLarge:$isLarge");
+    bool isGridableItem = isGridable();
+    ViewAbstract? isMasterToList = isGridableItem
+        ? (this as WebCategoryGridableInterface)
+            .getWebCategoryGridableIsMasterToList(context)
+        : null;
     if (isLarge) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-          ListToDetailsSecoundPaneHelper(
-              isSecoundPaneView: isSecoundSubPaneView ?? false,
-              action: ServerActions.view,
-              viewAbstract: this as ViewAbstract));
+          isMasterToList == null
+              ? ListToDetailsSecoundPaneHelper(
+                  subObject: isSecoundSubPaneView == true ? this : null,
+                  actionTitle:
+                      getIDWithLabel(context, action: ServerActions.view),
+                  isSecoundPaneView: isSecoundSubPaneView ?? false,
+                  action: ServerActions.view,
+                  viewAbstract: this as ViewAbstract)
+              : ListToDetailsSecoundPaneHelper(
+                  subObject: isSecoundSubPaneView == true ? this : null,
+                  actionTitle:
+                      getIDWithLabel(context, action: ServerActions.view),
+                  isSecoundPaneView: isSecoundSubPaneView ?? false,
+                  action: ServerActions.custom_widget,
+                  customWidget: _getMasterToListWidget(context)));
       return;
-      context.read<DrawerMenuControllerProvider>().change(
-          context,
-          (this as ViewAbstract).getCopyInstance(),
-          DrawerMenuControllerProviderAction.view);
     } else {
-      context.pushNamed(viewRouteName,
-          pathParameters: getRoutePathParameters(), extra: this);
+      context.pushNamed(
+          isMasterToList == null ? viewRouteName : indexWebMasterToList,
+          pathParameters: getRoutePathParameters(),
+          extra: this);
     }
+  }
+
+  Widget _getMasterToListWidget(BuildContext context) {
+    return ListWebApiPage(
+      buildFooter: true,
+      buildHeader: true,
+      pinToolbar: true,
+      useSmallFloatingBar: false,
+      valueNotifierGrid: ValueNotifier<bool>(true),
+      // customHeader: Column(
+      //   children: [
+      //     LocationListItem(
+      //         usePadding: false,
+      //         useResponsiveLayout: false,
+      //         useClipRect: false,
+      //         // soildColor: Colors.black38,
+      //         imageUrl: getImageUrl(context) ?? "",
+      //         name: getMainHeaderTextOnly(context),
+      //         country: ""),
+      //   ],
+      // ),
+      viewAbstract: (this as WebCategoryGridableInterface)
+          .getWebCategoryGridableIsMasterToList(context)!,
+    );
+    return WebMasterToList(
+      buildSmallView: true,
+      iD: int.parse(getIDString()),
+      tableName: getTableNameApi()!,
+      extras: this as ViewAbstract,
+    );
   }
 
   void editPage(BuildContext context) {
@@ -215,7 +270,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (isLarge) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
           ListToDetailsSecoundPaneHelper(
-              action: ServerActions.edit, viewAbstract: this as ViewAbstract));
+              actionTitle: getIDWithLabel(context, action: ServerActions.edit),
+              action: ServerActions.edit,
+              viewAbstract: this as ViewAbstract));
       return;
       context
           .read<DrawerMenuControllerProvider>()
@@ -233,7 +290,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (isLarge) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
           ListToDetailsSecoundPaneHelper(
-              action: ServerActions.print, viewAbstract: this as ViewAbstract));
+              actionTitle: getIDWithLabel(context, action: ServerActions.print),
+              action: ServerActions.print,
+              viewAbstract: this as ViewAbstract));
       return;
       context
           .read<DrawerMenuControllerProvider>()
@@ -256,6 +315,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (isLargeScreenFromCurrentScreenSize(context)) {
       Globals.keyForLargeScreenListable.currentState
           ?.setSecoundPane(ListToDetailsSecoundPaneHelper(
+        actionTitle: getIDWithLabel(context, action: ServerActions.edit),
         action: ServerActions.edit,
         viewAbstract:
             clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),

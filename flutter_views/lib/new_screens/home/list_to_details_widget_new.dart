@@ -23,7 +23,7 @@ import 'package:flutter_view_controller/screens/web/views/web_product_view.dart'
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
-class ListToDetailsSecoundPaneHelper {
+class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
   ServerActions action;
   ViewAbstract? viewAbstract;
   Widget? customWidget;
@@ -32,7 +32,13 @@ class ListToDetailsSecoundPaneHelper {
       {required this.action,
       this.viewAbstract,
       this.customWidget,
-      this.isSecoundPaneView = false});
+      this.isSecoundPaneView = false,
+      required super.actionTitle,
+      super.icon,
+      super.mainObject,
+      super.onPress,
+      super.path,
+      super.subObject});
 }
 
 class ListToDetailsPageNew extends StatefulWidget {
@@ -47,9 +53,9 @@ class ListToDetailsPageNew extends StatefulWidget {
 }
 
 class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
-    with BasePageActionOnToolbarMixin {
-  final ValueNotifier<ListToDetailsSecoundPaneHelper?> _secoundPaneNotifier =
-      ValueNotifier<ListToDetailsSecoundPaneHelper?>(null);
+    with
+        BasePageActionOnToolbarMixin<ListToDetailsPageNew,
+            ListToDetailsSecoundPaneHelper> {
   ViewAbstract? secoundPaneViewAbstract;
   bool _isInitialization = true;
 
@@ -119,17 +125,14 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       !firstPane;
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
-    // if (newState != null) {
-    //   context.read<ActionViewAbstractProvider>().add(newState);
-    // }
-    _secoundPaneNotifier.value = newState;
+    addAction(newState);
   }
 
   @override
   getActionFirstPane(bool isDesktop,
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
-      ActionOnToolbarItem? selectedItem}) {
+      ListToDetailsSecoundPaneHelper? selectedItem}) {
     return SliverApiMaster(
       // onSelectedCardChangeValueNotifier:
       //     getCurrentScreenSize() == CurrentScreenSize.MOBILE
@@ -144,99 +147,84 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   getActionSecondPane(bool isDesktop,
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
-      ActionOnToolbarItem? selectedItem}) {
-    return ValueListenableBuilder(
-      valueListenable: _secoundPaneNotifier,
-      builder: (context, value, child) {
-        if (selectedItem != null &&
-            selectedItem.mainObject is ListToDetailsSecoundPaneHelper?) {
-          value = selectedItem.mainObject as ListToDetailsSecoundPaneHelper? ??
-              value;
-        }
-        int iD = value?.viewAbstract?.iD ?? -1;
-        String tableName = value?.viewAbstract?.getTableNameApi() ?? "";
-        debugPrint(
-            "ListToDetailsSecoundPane is _isInitialization $_isInitialization");
-        Widget currentWidget;
-        if (!_isInitialization && value != null) {
-          debugPrint("ListToDetailsSecoundPane is initial call addAction");
-          addAction(
-            ActionOnToolbarItem(
-                subObject: value.isSecoundPaneView == true ? value : null,
-                title: value.action.toString() ?? "__",
-                mainObject: value),
-          );
-        } else {
-          _isInitialization = false;
-        }
-
-        if (value == null) {
-          currentWidget = Container();
-          return currentWidget;
-        }
-        switch (value.action) {
-          case ServerActions.custom_widget:
-            currentWidget = value.customWidget!;
-            break;
-          case ServerActions.add:
-            currentWidget = BaseEditNewPage(
-                viewAbstract: context
-                    .read<DrawerMenuControllerProvider>()
-                    .getObjectCastViewAbstract
-                    .getNewInstance());
-            break;
-          case ServerActions.edit:
-            currentWidget = BaseEditNewPage(
-              viewAbstract: value.viewAbstract!,
-            );
-            break;
-          case ServerActions.view:
-            currentWidget = BaseViewNewPage(
-              // actionOnToolbarItem: onActionAdd,
-              // key: widget.key,
-              viewAbstract: value.viewAbstract!,
-            );
-            break;
-          case ServerActions.print:
-            currentWidget = PdfPageNew(
-              iD: iD,
-              tableName: tableName,
-              invoiceObj: value.viewAbstract! as PrintableMaster,
-            );
-            break;
-          case ServerActions.delete_action:
-          case ServerActions.call:
-          case ServerActions.file:
-          case ServerActions.list_reduce_size:
-          case ServerActions.search:
-          case ServerActions.search_by_field:
-          case ServerActions.search_viewabstract_by_field:
-          case ServerActions.notification:
-          case ServerActions.file_export:
-          case ServerActions.file_import:
-          case ServerActions.list:
-            currentWidget = Container();
-        }
-        secoundPaneViewAbstract = value.viewAbstract;
-        if (secoundPaneViewAbstract != null && tab?.widget != null) {
-          return tab!.widget!;
-        }
-        return currentWidget;
-      },
-    );
+      ListToDetailsSecoundPaneHelper? selectedItem}) {
+    if (selectedItem == null) {
+      return Text("NONE ");
+    }
+    int iD = selectedItem.viewAbstract?.iD ?? -1;
+    String tableName = selectedItem.viewAbstract?.getTableNameApi() ?? "";
+    debugPrint(
+        "ListToDetailsSecoundPane is _isInitialization $_isInitialization");
+    Widget currentWidget;
+    if (!_isInitialization) {
+      debugPrint("ListToDetailsSecoundPane is initial call addAction");
+      addAction(selectedItem);
+    } else {
+      _isInitialization = false;
+    }
+    switch (selectedItem.action) {
+      case ServerActions.custom_widget:
+        currentWidget = selectedItem.customWidget!;
+        break;
+      case ServerActions.add:
+        currentWidget = BaseEditNewPage(
+            viewAbstract: context
+                .read<DrawerMenuControllerProvider>()
+                .getObjectCastViewAbstract
+                .getNewInstance());
+        break;
+      case ServerActions.edit:
+        currentWidget = BaseEditNewPage(
+          viewAbstract: selectedItem.viewAbstract!,
+        );
+        break;
+      case ServerActions.view:
+        currentWidget = BaseViewNewPage(
+          // actionOnToolbarItem: getOnActionAdd,
+          // key: widget.key,
+          viewAbstract: selectedItem.viewAbstract!,
+        );
+        break;
+      case ServerActions.print:
+        currentWidget = PdfPageNew(
+          iD: iD,
+          tableName: tableName,
+          invoiceObj: selectedItem.viewAbstract! as PrintableMaster,
+        );
+        break;
+      case ServerActions.delete_action:
+      case ServerActions.call:
+      case ServerActions.file:
+      case ServerActions.list_reduce_size:
+      case ServerActions.search:
+      case ServerActions.search_by_field:
+      case ServerActions.search_viewabstract_by_field:
+      case ServerActions.notification:
+      case ServerActions.file_export:
+      case ServerActions.file_import:
+      case ServerActions.list:
+        currentWidget = Container();
+    }
+    secoundPaneViewAbstract = selectedItem.viewAbstract;
+    if (secoundPaneViewAbstract != null && tab?.widget != null) {
+      return tab!.widget!;
+    }
+    return currentWidget;
   }
 
   @override
   ValueNotifierPane getValueNotifierPane() {
-    return ValueNotifierPane.FIRST;
+    return ValueNotifierPane.SECOND;
   }
 
   @override
-  ActionOnToolbarItem onActionInitial() => ActionOnToolbarItem(
-      title: context
-          .read<DrawerMenuControllerProvider>()
-          .getObjectCastViewAbstract
-          .getMainHeaderLabelTextOnly(context));
+  ListToDetailsSecoundPaneHelper onActionInitial() =>
+      ListToDetailsSecoundPaneHelper(
+          action: ServerActions.list,
+          actionTitle: context
+              .read<DrawerMenuControllerProvider>()
+              .getObjectCastViewAbstract
+              .getMainHeaderLabelTextOnly(context));
 
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;

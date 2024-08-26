@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -264,8 +265,46 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "#${iD.toString()}";
   }
 
-  String getIDWithLabel(BuildContext context) {
-    return getMainHeaderLabelTextOnly(context) + getIDFormat(context);
+  String getIDWithLabel(BuildContext context, {ServerActions? action}) {
+    String v = "";
+    if (action != null) {
+      switch (action) {
+        case ServerActions.view:
+          v = AppLocalizations.of(context)!.view;
+          break;
+        case ServerActions.edit:
+          v = AppLocalizations.of(context)!.edit;
+          break;
+        case ServerActions.print:
+          v = AppLocalizations.of(context)!.print;
+          break;
+
+        case ServerActions.list:
+          v = AppLocalizations.of(context)!.list;
+          break;
+
+        case ServerActions.add:
+          v = AppLocalizations.of(context)!.add;
+          break;
+
+        case ServerActions.file_export:
+          //todo translate
+          v = "EXPORT";
+          break;
+        case ServerActions.file_import:
+          //todo translate
+          v = "IMPORT";
+          break;
+        default:
+          v = "";
+          break;
+      }
+
+      v = "$v ${getMainHeaderLabelTextOnly(context)}${getIDFormat(context)}";
+    } else {
+      v = getMainHeaderLabelTextOnly(context) + getIDFormat(context);
+    }
+    return v;
   }
 
   String getIDString() {
@@ -328,6 +367,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   bool isListable() {
     return this is ListableInterface;
+  }
+  bool isGridable(){
+    return this is WebCategoryGridableInterface;
   }
 
   bool isImagable() {

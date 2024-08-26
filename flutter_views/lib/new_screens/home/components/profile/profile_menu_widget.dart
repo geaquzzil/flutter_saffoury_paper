@@ -95,12 +95,12 @@ class ProfileMenuWidget extends StatelessWidget {
                       : child;
                   return child;
                 }
-                child = isHovered && value.title != item.title
+                child = isHovered && value.actionTitle != item.actionTitle
                     ? Card(
                         child: child,
                       )
                     : child;
-                if (value.title == item.title) {
+                if (value.actionTitle == item.actionTitle) {
                   return ClippedCard(
                       elevation: 0,
                       // customCardColor:
@@ -140,7 +140,7 @@ class ProfileMenuWidget extends StatelessWidget {
               margin: const EdgeInsets.only(left: 10),
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                item.title,
+                item.actionTitle,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -179,7 +179,7 @@ class ProfileMenuWidget extends StatelessWidget {
                             margin: const EdgeInsets.only(left: 10),
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              item.title,
+                              item.actionTitle,
                               style: const TextStyle(
                                 color: Colors.black87,
                                 fontSize: 12,
@@ -200,8 +200,8 @@ class ProfileMenuWidget extends StatelessWidget {
 
   Widget getMobileChild(BuildContext context, ActionOnToolbarItem item) {
     return ListTile(
-      title: Text(item.title),
-      subtitle: Text("this is a description for ${item.title}"),
+      title: Text(item.actionTitle),
+      subtitle: Text("this is a description for ${item.actionTitle}"),
       trailing: Icon(item.icon),
     );
   }

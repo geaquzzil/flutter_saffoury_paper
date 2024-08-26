@@ -24,11 +24,10 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
   Widget getScaffold(BuildContext context) {
     if (currentSetting != null) {
       currentWidget = getWidgetFromProfile(
-        
-        valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
+          valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
           context: context,
           value: getListOfProfileSettings(context)
-              .firstWhereOrNull((p0) => p0.title == currentSetting!),
+              .firstWhereOrNull((p0) => p0.actionTitle == currentSetting!),
           pinToolbar: true);
     }
     if (currentWidget is MasterToListFromProfile) {
@@ -37,7 +36,8 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
         buildHeader: true,
         buildFooter: true,
         useSmallFloatingBar: false,
-        valueNotiferActionOnToolbarItem: ValueNotifier<ActionOnToolbarItem?>(null),
+        valueNotiferActionOnToolbarItem:
+            ValueNotifier<ActionOnToolbarItem?>(null),
       );
     }
     return super.getScaffold(context);

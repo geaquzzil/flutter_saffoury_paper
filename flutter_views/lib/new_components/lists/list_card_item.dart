@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
   final T object;
@@ -113,7 +114,9 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         onTap: () {
           if (onSelectedItem != null) {
             onSelectedItem!.value = ListToDetailsSecoundPaneHelper(
-                action: ServerActions.view, viewAbstract: object);
+                actionTitle: AppLocalizations.of(context)!.view,
+                action: ServerActions.view,
+                viewAbstract: object);
           } else {
             object.onCardClicked(context);
           }

@@ -22,25 +22,27 @@ List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
   if (authProvider.hasSavedUser) {
     menuItems = [
       ActionOnToolbarItem(
-          title: authProvider.getUserName, icon: Icons.chat_bubble),
+          actionTitle: authProvider.getUserName, icon: Icons.chat_bubble),
       ActionOnToolbarItem(
-          title:
+          actionTitle:
               "${AppLocalizations.of(context)!.edit} ${AppLocalizations.of(context)!.profile}",
           icon: Icons.account_box_outlined),
       ActionOnToolbarItem(
-          title: AppLocalizations.of(context)!.orders,
+          actionTitle: AppLocalizations.of(context)!.orders,
           icon: Icons.shopping_basket_rounded),
       //todo translate
-      ActionOnToolbarItem(title: 'Chat', icon: Icons.chat_bubble),
+      ActionOnToolbarItem(actionTitle: 'Chat', icon: Icons.chat_bubble),
       //todo translate
-      ActionOnToolbarItem(title: "Help", icon: Icons.help_outline_rounded),
       ActionOnToolbarItem(
-          title: AppLocalizations.of(context)!.logout, icon: Icons.logout),
+          actionTitle: "Help", icon: Icons.help_outline_rounded),
+      ActionOnToolbarItem(
+          actionTitle: AppLocalizations.of(context)!.logout,
+          icon: Icons.logout),
     ];
   } else {
     menuItems = [
       ActionOnToolbarItem(
-          title: AppLocalizations.of(context)!.action_sign_in_short,
+          actionTitle: AppLocalizations.of(context)!.action_sign_in_short,
           icon: Icons.login,
           onPress: () {
             debugPrint("onPress sing_in");

@@ -279,6 +279,8 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
           if (isLargeScreenFromCurrentScreenSize(context)) {
             Globals.keyForLargeScreenListable.currentState
                 ?.setSecoundPane(ListToDetailsSecoundPaneHelper(
+                    //todo translate
+                    actionTitle: "ُEXPORT",
                     action: ServerActions.custom_widget,
                     customWidget: FileExporterPage(
                       viewAbstract: viewAbstract!,

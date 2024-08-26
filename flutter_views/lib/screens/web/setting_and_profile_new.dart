@@ -56,7 +56,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
 
   ActionOnToolbarItem? getItemModel(String fromName) {
     return _items.firstWhereOrNull(
-      (p0) => p0.title == fromName,
+      (p0) => p0.actionTitle == fromName,
     );
   }
 
@@ -119,7 +119,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   @override
   ActionOnToolbarItem onActionInitial() {
     return ActionOnToolbarItem(
-        title: AppLocalizations.of(context)!.action_settings);
+        actionTitle: AppLocalizations.of(context)!.action_settings);
   }
 
   @override
@@ -130,7 +130,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     if (_currentSettingPageMobile != null) {
       return getWidgetFromProfile(
-        valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
+          valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
           context: context,
           value: getItemModel(_currentSettingPageMobile ?? ""),
           pinToolbar: true);

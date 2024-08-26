@@ -263,7 +263,6 @@ class WebGridViewItem extends StatelessWidget {
   final bool hightLightonSelect;
   final Function()? onPress;
   final bool setDescriptionAtBottom;
-  late WebCategoryGridableInterface _categoryGridable;
 
   WebGridViewItem(
       {super.key,
@@ -274,7 +273,6 @@ class WebGridViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _categoryGridable = item as WebCategoryGridableInterface;
     return HoverImage(
       bottomWidget: setDescriptionAtBottom
           ? Padding(
@@ -296,27 +294,7 @@ class WebGridViewItem extends StatelessWidget {
         Widget child = GestureDetector(
             onTap: onPress ??
                 () {
-                  ViewAbstract? isMasterToList = _categoryGridable
-                      .getWebCategoryGridableIsMasterToList(context);
-                  if (isMasterToList != null) {
-                    context.goNamed(indexWebMasterToList,
-                        pathParameters: {"tableName": item.getTableNameApi()!},
-                        queryParameters: {
-                          "id": item.iD.toString(),
-                        },
-                        extra: item);
-                  } else {
-                    context.goNamed(indexWebView,
-                        // queryParameters: {
-                        //   "id": item.iD.toString(),
-                        //   "tableName": item.getTableNameApi()!
-                        // },
-                        pathParameters: {
-                          "id": item.iD.toString(),
-                          "tableName": item.getTableNameApi()!
-                        },
-                        extra: item);
-                  }
+                  item.onCardClicked(context, isSecoundSubPaneView: true);
                 },
             child: _getStack(context, isHovered));
         return child;
