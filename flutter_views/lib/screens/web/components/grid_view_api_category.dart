@@ -294,7 +294,7 @@ class WebGridViewItem extends StatelessWidget {
         Widget child = GestureDetector(
             onTap: onPress ??
                 () {
-                  item.onCardClicked(context, isSecoundSubPaneView: true);
+                  item.onCardClicked(context, isSecoundSubPaneView: false);
                 },
             child: _getStack(context, isHovered));
         return child;

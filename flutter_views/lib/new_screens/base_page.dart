@@ -69,6 +69,7 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
     if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
       return _secondWidget;
     }
+    return _secondWidget;
     return LayoutBuilder(
       builder: (context, constraints) {
         debugPrint(
@@ -100,7 +101,7 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
                       child: SlideInRight(
                         duration: Duration(milliseconds: 200),
                         key: Key(value?.actionTitle.toString() ?? ""),
-                        delay: Duration(milliseconds: 1000),
+                        // delay: Duration(milliseconds: 1000),
                         curve: Curves.fastLinearToSlowEaseIn,
                         child: getWidgetFromListToDetailsSecoundPaneHelper(
                             selectedItem: value),

@@ -544,7 +544,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return HttpWithMiddleware.build(
         requestTimeout: const Duration(seconds: 60),
         middlewares: [
-          HttpLogger(logLevel: LogLevel.BODY),
+          HttpLogger(logLevel: LogLevel.BASIC),
         ]);
   }
 

@@ -850,7 +850,7 @@ class Product extends ViewAbstract<Product>
     }
     return [
       ListHorizontalApiAutoRestWidget(
-        valueNotifier: onHorizontalListItemClicked,
+        // valueNotifier: onHorizontalListItemClicked,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
             range: 5,
@@ -858,7 +858,7 @@ class Product extends ViewAbstract<Product>
             key: "similarProducts${getSimilarCustomParams(context)}"),
       ),
       ListHorizontalApiAutoRestWidget(
-        valueNotifier: onHorizontalListItemClicked,
+        // valueNotifier: onHorizontalListItemClicked,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
             range: 5,

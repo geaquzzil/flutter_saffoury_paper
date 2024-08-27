@@ -149,11 +149,10 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
-        
     return FadeInUp(
         duration: Duration(milliseconds: 200),
         curve: Curves.fastOutSlowIn,
-        key: UniqueKey(),
+        key: Key(selectedItem.toString()),
         child: getWidgetFromListToDetailsSecoundPaneHelper(
             selectedItem: selectedItem, tab: tab));
   }

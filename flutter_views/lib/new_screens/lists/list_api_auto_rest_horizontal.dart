@@ -163,11 +163,11 @@ class _ListHorizontalApiWidgetState
             }
             Widget currentTile = WebGridViewItem(
               setDescriptionAtBottom: !SizeConfig.hasPointer(context),
-              onPress: widget.valueNotifier == null
-                  ? null
-                  : () {
-                      widget.valueNotifier!.value = data[index];
-                    },
+              // onPress: widget.valueNotifier == null
+              //     ? null
+              //     : () {
+              //         widget.valueNotifier!.value = data[index];
+              //       },
               item: data[index],
             );
             return Padding(
