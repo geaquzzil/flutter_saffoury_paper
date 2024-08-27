@@ -209,23 +209,24 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             .getWebCategoryGridableIsMasterToList(context)
         : null;
     if (isLarge) {
-      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-          isMasterToList == null
-              ? ListToDetailsSecoundPaneHelper(
-                  subObject: isSecoundSubPaneView == true ? this : null,
-                  actionTitle:
-                      getIDWithLabel(context, action: ServerActions.view),
-                  isSecoundPaneView: isSecoundSubPaneView ?? false,
-                  action: ServerActions.view,
-                  viewAbstract: this as ViewAbstract)
-              : ListToDetailsSecoundPaneHelper(
-                  subObject: isSecoundSubPaneView == true ? this : null,
-                  actionTitle:
-                      getIDWithLabel(context, action: ServerActions.view),
-                  isSecoundPaneView: isSecoundSubPaneView ?? false,
-                  action: ServerActions.custom_widget,
-                  customWidget: _getMasterToListWidget(context)));
-      return;
+      ListToDetailsSecoundPaneHelper l = isMasterToList == null
+          ? ListToDetailsSecoundPaneHelper(
+              subObject: isSecoundSubPaneView == true ? this : null,
+              actionTitle: getIDWithLabel(context, action: ServerActions.view),
+              isSecoundPaneView: isSecoundSubPaneView ?? false,
+              action: ServerActions.view,
+              viewAbstract: this as ViewAbstract)
+          : ListToDetailsSecoundPaneHelper(
+              subObject: isSecoundSubPaneView == true ? this : null,
+              actionTitle: getIDWithLabel(context, action: ServerActions.view),
+              isSecoundPaneView: isSecoundSubPaneView ?? false,
+              action: ServerActions.custom_widget,
+              customWidget: _getMasterToListWidget(context));
+      if (isSecoundSubPaneView == true) {
+        Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
+      } else {
+        Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
+      }
     } else {
       context.pushNamed(
           isMasterToList == null ? viewRouteName : indexWebMasterToList,
@@ -235,6 +236,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   Widget _getMasterToListWidget(BuildContext context) {
+    return Center(
+      child: Text("_getMasterToListWidget"),
+    );
     return ListWebApiPage(
       buildFooter: true,
       buildHeader: true,

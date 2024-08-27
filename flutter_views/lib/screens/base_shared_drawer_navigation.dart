@@ -66,10 +66,14 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
 
   ValueNotifierPane getValueNotifierPane();
 
-  void addAction(E? item) {
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
-      _onActionAdd?.value = item;
-    });
+  void addAction(E? item, {bool notifyListener = false}) {
+    if (notifyListener) {
+      WidgetsBinding.instance.addPostFrameCallback((callback) {
+        _onActionAdd?.value = item;
+      });
+    } else {
+      key.currentState?.add(_onActionAdd?.value);
+    }
   }
 
   @override
@@ -172,6 +176,12 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
     return ValueListenableBuilder(
         valueListenable: _onActionAdd!,
         builder: (context, value, child) {
+          if (this is BasePageWithThirdPaneMixin) {
+            debugPrint(
+                "BasePageActionOnToolbarMixin is =>> BasePageWithThirdPaneMixin removing third pane");
+
+            (this as BasePageWithThirdPaneMixin).setThirdPane(null);
+          }
           debugPrint(
               "BasePageActionOnToolbarMixin getValueListenableBuilder called value $value");
           return getWidget(firstPane, isDesktop, tab: tab, item: value);

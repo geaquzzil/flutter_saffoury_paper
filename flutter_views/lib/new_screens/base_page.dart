@@ -9,16 +9,22 @@ import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -41,77 +47,32 @@ const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
 
-mixin BasePageWithThirdPaneMixin<T extends StatefulWidget, E extends Widget>
-    on BasePageState<T> {
+mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
+    E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
   final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
-  void addThirdPane(E value) {
+  void setThirdPane(E? value) {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       _valueNotifierSecondToThird.value = value;
     });
   }
 
   @override
-  Widget getTowPanes({TabControllerHelper? tab}) {
-    if (isMobile(context, maxWidth: getWidth)) {
-      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
-      return _setSubAppBar(_firstWidget, true)!;
-    }
-    _setupPaneTabBar(false, tab: tab);
-    _setupPaneTabBar(true, tab: tab);
-    if (isDesktop(context, maxWidth: getWidth)) {
-      if (_hasTabBarList(firstPane: true)) {
-        _firstWidget = TabBarView(
-            controller: _tabControllerFirstPane,
-            children: _getTabBarList(firstPane: true)!
-                .map((e) => beforeGetDesktopFirstPaneWidget(tab: e))
-                .toList()
-                .cast());
-      } else {
-        _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
-      }
-
-      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
-
-      if (_hasTabBarList(firstPane: false)) {
-        _secondWidget = TabBarView(
-            controller: _tabControllerSecondPane,
-            children: _getTabBarList(firstPane: false)!
-                .map((e) => beforeGetDesktopSecoundPaneWidget(tab: e))
-                .toList()
-                .cast());
-      } else {
-        _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
-      }
-      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
-    } else {
-      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
-      _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
-      if (buildSecoundPane) {
-        _secondWidget = beforeGetSecondPaneWidget(tab: tab);
-        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
-      }
-    }
-    if (_secondWidget == null) {
-      return _firstWidget!;
-    }
-
-    if (_hasHorizontalDividerWhenTowPanes()) {
-      _firstWidget = _getBorderDecoration(_firstWidget!);
-    }
-
+  TowPaneExt getPaneExt() {
     return TowPaneExt(
       startPane: _firstWidget!,
-      endPane: _getSecondPaneWidgetMixin(_secondWidget),
+      endPane: _getSecondPaneWidgetMixin(),
       customPaneProportion: getCustomPaneProportion(),
     );
   }
 
-  Widget _getSecondPaneWidgetMixin(Widget secondWidget) {
+  Widget? _getSecondPaneWidgetMixin() {
     if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
-      return secondWidget;
+      return _secondWidget;
     }
     return LayoutBuilder(
       builder: (context, constraints) {
+        debugPrint(
+            "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}");
         return ValueListenableBuilder(
           valueListenable: _valueNotifierSecondToThird,
           builder: (context, value, child) {
@@ -130,15 +91,21 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget, E extends Widget>
                       curve: Curves.easeInBack,
                       height: constraints.maxHeight,
                       width: width,
-                      child: secondWidget),
+                      child: _secondWidget),
                   ResponsiveVisibility(
                     visible: showThirdPane,
                     child: AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      width: width,
+                      child: SlideInRight(
                         duration: Duration(milliseconds: 200),
-                        curve: Curves.easeInBack,
-                        height: constraints.maxHeight,
-                        width: width,
-                        child: value),
+                        key: Key(value?.actionTitle.toString() ?? ""),
+                        delay: Duration(milliseconds: 1000),
+                        curve: Curves.fastLinearToSlowEaseIn,
+                        child: getWidgetFromListToDetailsSecoundPaneHelper(
+                            selectedItem: value),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -162,7 +129,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   dynamic _secondWidget;
   dynamic _width;
   dynamic _height;
-
+  bool _isInitialization = true;
   final ScrollController _scrollFirstPaneController = ScrollController();
   final ScrollController _scrollSecoundPaneController = ScrollController();
   bool pinToolbar = false;
@@ -664,6 +631,80 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         });
   }
 
+  Widget getWidgetFromListToDetailsSecoundPaneHelper(
+      {TabControllerHelper? tab,
+      ListToDetailsSecoundPaneHelper? selectedItem}) {
+    if (selectedItem == null) {
+      return Text("NONE ");
+    }
+    int iD = selectedItem.viewAbstract?.iD ?? -1;
+    String tableName = selectedItem.viewAbstract?.getTableNameApi() ?? "";
+    debugPrint(
+        "ListToDetailsSecoundPane is _isInitialization $_isInitialization");
+    Widget currentWidget;
+    if (!_isInitialization) {
+      debugPrint("ListToDetailsSecoundPane is initial call addAction");
+      if (this is BasePageActionOnToolbarMixin) {
+        (this as BasePageActionOnToolbarMixin)
+            .addAction(selectedItem, notifyListener: false);
+      }
+    } else {
+      _isInitialization = false;
+    }
+    switch (selectedItem.action) {
+      case ServerActions.custom_widget:
+        currentWidget = selectedItem.customWidget!;
+        break;
+      case ServerActions.add:
+        currentWidget = BaseEditNewPage(
+            viewAbstract: context
+                .read<DrawerMenuControllerProvider>()
+                .getObjectCastViewAbstract
+                .getNewInstance());
+        break;
+      case ServerActions.edit:
+        currentWidget = BaseEditNewPage(
+          viewAbstract: selectedItem.viewAbstract!,
+        );
+        break;
+      case ServerActions.view:
+        currentWidget = BaseViewNewPage(
+          // actionOnToolbarItem: getOnActionAdd,
+          // key: widget.key,
+          viewAbstract: selectedItem.viewAbstract!,
+        );
+        break;
+      case ServerActions.print:
+        currentWidget = PdfPageNew(
+          iD: iD,
+          tableName: tableName,
+          invoiceObj: selectedItem.viewAbstract! as PrintableMaster,
+        );
+        break;
+      case ServerActions.delete_action:
+      case ServerActions.call:
+      case ServerActions.file:
+      case ServerActions.list_reduce_size:
+      case ServerActions.search:
+      case ServerActions.search_by_field:
+      case ServerActions.search_viewabstract_by_field:
+      case ServerActions.notification:
+      case ServerActions.file_export:
+      case ServerActions.file_import:
+      case ServerActions.list:
+        currentWidget = Container();
+    }
+    ViewAbstract? secoundPaneViewAbstract = selectedItem.viewAbstract;
+    if (secoundPaneViewAbstract != null && tab?.widget != null) {
+      return tab!.widget!;
+    }
+    // if (selectedItem.subObject != null) {
+    //   if (this is BasePageWithThirdPaneMixin)
+    //     (this as BasePageWithThirdPaneMixin).setThirdPane(currentWidget);
+    // }
+    return currentWidget;
+  }
+
   beforeGetDesktopFirstPaneWidget({TabControllerHelper? tab}) {
     return getDesktopFirstPane(tab: tab);
   }
@@ -751,6 +792,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       _firstWidget = _getBorderDecoration(_firstWidget!);
     }
 
+    return getPaneExt();
+  }
+
+  TowPaneExt getPaneExt() {
     return TowPaneExt(
       startPane: _firstWidget!,
       endPane: _secondWidget,

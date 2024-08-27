@@ -57,10 +57,8 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
     with
         BasePageActionOnToolbarMixin<ListToDetailsPageNew,
             ListToDetailsSecoundPaneHelper>,
-        BasePageWithThirdPaneMixin<ListToDetailsPageNew, Widget> {
-  ViewAbstract? secoundPaneViewAbstract;
-  bool _isInitialization = true;
-
+        BasePageWithThirdPaneMixin<ListToDetailsPageNew,
+            ListToDetailsSecoundPaneHelper> {
   @override
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
@@ -114,7 +112,8 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) =>
+      firstPane;
 
   @override
   bool setMainPageSuggestionPadding() => false;
@@ -127,7 +126,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       !firstPane;
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
-    addAction(newState);
+    addAction(newState, notifyListener: true);
   }
 
   @override
@@ -150,75 +149,13 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
-    if (selectedItem == null) {
-      return Text("NONE ");
-    }
-    int iD = selectedItem.viewAbstract?.iD ?? -1;
-    String tableName = selectedItem.viewAbstract?.getTableNameApi() ?? "";
-    debugPrint(
-        "ListToDetailsSecoundPane is _isInitialization $_isInitialization");
-    Widget currentWidget;
-    if (!_isInitialization) {
-      debugPrint("ListToDetailsSecoundPane is initial call addAction");
-      addAction(selectedItem);
-    } else {
-      _isInitialization = false;
-    }
-    switch (selectedItem.action) {
-      case ServerActions.custom_widget:
-        currentWidget = selectedItem.customWidget!;
-        break;
-      case ServerActions.add:
-        currentWidget = BaseEditNewPage(
-            viewAbstract: context
-                .read<DrawerMenuControllerProvider>()
-                .getObjectCastViewAbstract
-                .getNewInstance());
-        break;
-      case ServerActions.edit:
-        currentWidget = BaseEditNewPage(
-          viewAbstract: selectedItem.viewAbstract!,
-        );
-        break;
-      case ServerActions.view:
-        currentWidget = BaseViewNewPage(
-          // actionOnToolbarItem: getOnActionAdd,
-          // key: widget.key,
-          viewAbstract: selectedItem.viewAbstract!,
-        );
-        break;
-      case ServerActions.print:
-        currentWidget = PdfPageNew(
-          iD: iD,
-          tableName: tableName,
-          invoiceObj: selectedItem.viewAbstract! as PrintableMaster,
-        );
-        break;
-      case ServerActions.delete_action:
-      case ServerActions.call:
-      case ServerActions.file:
-      case ServerActions.list_reduce_size:
-      case ServerActions.search:
-      case ServerActions.search_by_field:
-      case ServerActions.search_viewabstract_by_field:
-      case ServerActions.notification:
-      case ServerActions.file_export:
-      case ServerActions.file_import:
-      case ServerActions.list:
-        currentWidget = Container();
-    }
-    secoundPaneViewAbstract = selectedItem.viewAbstract;
-    if (secoundPaneViewAbstract != null && tab?.widget != null) {
-      return tab!.widget!;
-    }
-    if (selectedItem.subObject != null) {
-      addThirdPane(currentWidget);
-    }
+        
     return FadeInUp(
         duration: Duration(milliseconds: 200),
         curve: Curves.fastOutSlowIn,
         key: UniqueKey(),
-        child: currentWidget);
+        child: getWidgetFromListToDetailsSecoundPaneHelper(
+            selectedItem: selectedItem, tab: tab));
   }
 
   @override
