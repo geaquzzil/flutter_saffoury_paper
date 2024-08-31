@@ -29,17 +29,20 @@ class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
   ViewAbstract? viewAbstract;
   Widget? customWidget;
   bool isSecoundPaneView;
-  ListToDetailsSecoundPaneHelper(
-      {required this.action,
-      this.viewAbstract,
-      this.customWidget,
-      this.isSecoundPaneView = false,
-      required super.actionTitle,
-      super.icon,
-      super.mainObject,
-      super.onPress,
-      super.path,
-      super.subObject});
+  bool shouldAddToThirdPaneList;
+  ListToDetailsSecoundPaneHelper({
+    required this.action,
+    this.viewAbstract,
+    this.customWidget,
+    this.isSecoundPaneView = false,
+    this.shouldAddToThirdPaneList = true,
+    required super.actionTitle,
+    super.icon,
+    super.mainObject,
+    super.subObject,
+    super.onPress,
+    super.path,
+  });
 }
 
 class ListToDetailsPageNew extends StatefulWidget {

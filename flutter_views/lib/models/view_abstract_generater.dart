@@ -201,14 +201,18 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   Map<String, String> getRoutePathParameters() =>
       {"tableName": getTableNameApi() ?? "", "id": getIDString()};
   void viewPage(BuildContext context, {bool? isSecoundSubPaneView}) {
-    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
-    debugPrint("Page=>viewPage Page isLarge:$isLarge");
+    CurrentScreenSize currentScreenSize = findCurrentScreenSize(context);
+    bool isSoLarge = isLargeScreenFromCurrentScreenSize(context);
+    bool canSecondPane =
+        isSoLarge || currentScreenSize == CurrentScreenSize.SMALL_TABLET;
+
+    bool canThirdPane = isSoLarge;
     bool isGridableItem = isGridable();
     ViewAbstract? isMasterToList = isGridableItem
         ? (this as WebCategoryGridableInterface)
             .getWebCategoryGridableIsMasterToList(context)
         : null;
-    if (isLarge) {
+    if (canSecondPane) {
       ListToDetailsSecoundPaneHelper l = isMasterToList == null
           ? ListToDetailsSecoundPaneHelper(
               subObject: isSecoundSubPaneView == true ? this : null,
@@ -222,8 +226,12 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
               isSecoundPaneView: isSecoundSubPaneView ?? false,
               action: ServerActions.custom_widget,
               customWidget: _getMasterToListWidget(context));
-      if (isSecoundSubPaneView == true) {
-        Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
+      if (canThirdPane) {
+        if (isSecoundSubPaneView == true) {
+          Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
+        } else {
+          Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
+        }
       } else {
         Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
       }

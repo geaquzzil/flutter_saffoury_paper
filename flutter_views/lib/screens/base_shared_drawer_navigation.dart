@@ -270,9 +270,13 @@ class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
       _actions.clear();
       _actions = [i, item];
     }
-    WidgetsBinding.instance.addPostFrameCallback((s) {
-      setState(() {});
-    });
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((s) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
   }
 
   @override

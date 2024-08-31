@@ -138,6 +138,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
 
     return ProfileMenuWidget(
       size: getCurrentScreenSize(),
+      selectedVa
       // selectedValue: onActionAdd,
       // selectedValueVoid: !isLarge
       //     ? (value) {
