@@ -143,7 +143,7 @@ class _ListHorizontalApiWidgetState
             "layoutBuilder horizontal maxWidth  ${constraints.maxWidth} maxHeight ${constraints.maxHeight}");
         return ScrollSnapList(
           itemCount: data.length + (isLoading ? 5 : 0),
-          selectedItemAnchor: SelectedItemAnchor.START,
+          selectedItemAnchor: SelectedItemAnchor.MIDDLE,
           scrollDirection: Axis.horizontal,
           itemSize: constraints.maxHeight,
           listController: _scrollController,
