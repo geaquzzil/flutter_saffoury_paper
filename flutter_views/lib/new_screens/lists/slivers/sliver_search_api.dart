@@ -52,7 +52,7 @@ class _SliverSearchApiState extends SliverApiMasterState<SliverSearchApi> {
   }
 
   @override
-  void fetshList() {
+  void fetshList({bool notifyNotSearchable=false}) {
     listProvider.fetchListSearch(findCustomKey(), viewAbstract, searchQuery);
   }
 

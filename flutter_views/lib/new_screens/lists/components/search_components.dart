@@ -31,10 +31,9 @@ class SearchWidgetWebComponent extends StatelessWidget {
         debugPrint("onSubmitted $value");
         onSearchTextChanged?.call(value);
       },
-      decoration: InputDecoration(
-          fillColor: Colors.transparent,
-          hintText: AppLocalizations.of(context)?.search,
-          border: InputBorder.none),
+      decoration: InputDecoration.collapsed(
+        hintText: AppLocalizations.of(context)?.search,
+      ),
     );
   }
 
@@ -104,9 +103,7 @@ class SearchWidgetWebComponent extends StatelessWidget {
                       if (value == null) return;
                       String compressed = Compression.compress(value);
                       debugPrint("Compressing $compressed");
-                      context.goNamed(indexWebOurProducts, 
-                      
-                      queryParameters: {
+                      context.goNamed(indexWebOurProducts, queryParameters: {
                         "filter": Compression.compress(value)
                       });
                       // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
@@ -122,8 +119,8 @@ class SearchWidgetWebComponent extends StatelessWidget {
 class SearchWidgetComponent extends StatefulWidget {
   String heroTag;
   ViewAbstract? viewAbstract;
-  Function(String)? onSearchTextChanged;
-  ValueNotifier<String>? onSearchTextChangedValueNotifier;
+  Function(String?)? onSearchTextChanged;
+  ValueNotifier<String?>? onSearchTextChangedValueNotifier;
   ValueNotifier<ExpandType>? appBardExpandType;
   CurrentScreenSize? currentScreenSize;
   SearchWidgetComponent(
@@ -144,7 +141,10 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   late AnimationController _animationController;
   bool isPlaying = false;
   bool isEditText = false;
-  final Debouncer _debouncer = Debouncer(milliseconds: 1000);
+  final Debouncer _debouncer = Debouncer(milliseconds: 200);
+  final TextEditingController _textEditingController = TextEditingController();
+
+  final ValueNotifier<String?> _valueNotifierOnTextChange = ValueNotifier(null);
   @override
   void initState() {
     _animationController = AnimationController(
@@ -152,52 +152,59 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     _animationController.forward();
     isEditText = widget.onSearchTextChanged != null ||
         widget.onSearchTextChangedValueNotifier != null;
+    _textEditingController.addListener(onTextEditingChanged);
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SearchWidgetComponent oldWidget) {
+    isEditText = widget.onSearchTextChanged != null ||
+        widget.onSearchTextChangedValueNotifier != null;
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _animationController.dispose();
+    _textEditingController.removeListener(onTextEditingChanged);
+    _textEditingController.dispose();
+    _valueNotifierOnTextChange.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      //todo it was padding default /2  all exept the bottom
-      padding: EdgeInsets.zero,
-      child: Hero(
-        tag: widget.heroTag,
-        child: CardCorner(
-          margin: 2,
-          // elevation: 3,
-          // color: Theme.of(context).colorScheme.primary,
-          child: ListTile(
-            leading: isEditText
-                ? const Icon(Icons.search)
-                : getLeadingWidget(context),
-            onTap: isEditText
-                ? null
-                : () => context.goNamed(searchRouteName, queryParameters: {
-                      "query": "q"
-                    }, pathParameters: {
-                      "tableName": context
-                          .read<DrawerMenuControllerProvider>()
-                          .getObjectCastViewAbstract
-                          .getTableNameApi()!
-                    }),
-            title: isEditText
-                ? getSearchTitleEditable()
-                : getSearchTitleClickable(),
-            trailing: CartIconWidget(
-              onPressed: () {
-                context
-                    .read<DrawerMenuControllerProvider>()
-                    .controlEndDrawerMenu();
-              },
-            ),
-          ),
+    return Hero(
+      tag: widget.heroTag,
+      child: CardCorner(
+        // margin: 2,
+        // elevation: 3,
+        // color: Theme.of(context).colorScheme.primary,
+        child: ListTile(
+          leading:
+              isEditText ? const Icon(Icons.search) : getLeadingWidget(context),
+          onTap: isEditText
+              ? null
+              : () => context.goNamed(searchRouteName, queryParameters: {
+                    "query": "q"
+                  }, pathParameters: {
+                    "tableName": context
+                        .read<DrawerMenuControllerProvider>()
+                        .getObjectCastViewAbstract
+                        .getTableNameApi()!
+                  }),
+          title:
+              isEditText ? getSearchTitleEditable() : getSearchTitleClickable(),
+          trailing: isEditText
+              ? getTrailingLargeScreen()
+              : CartIconWidget(
+                  onPressed: () {
+                    context
+                        .read<DrawerMenuControllerProvider>()
+                        .controlEndDrawerMenu();
+                  },
+                ),
         ),
       ),
     );
@@ -205,15 +212,13 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
 
   Widget getSearchTitleEditable() {
     return TextField(
+      controller: _textEditingController,
       textInputAction: TextInputAction.search,
       onSubmitted: (value) async {
         debugPrint("onSubmitted $value");
         callDebouncer(value);
       },
-      decoration: InputDecoration(
-          fillColor: Colors.transparent,
-          contentPadding: EdgeInsets.zero,
-          alignLabelWithHint: true,
+      decoration: InputDecoration.collapsed(
           hintStyle: Theme.of(context)
               .textTheme
               .bodyLarge
@@ -225,7 +230,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     );
   }
 
-  void callDebouncer(String query) {
+  void callDebouncer(String? query) {
     _debouncer.run(() async {
       widget.onSearchTextChanged?.call(query);
       widget.onSearchTextChangedValueNotifier?.value = query;
@@ -316,5 +321,32 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.secondary);
         });
+  }
+
+  Widget getTrailingLargeScreen() {
+    return ValueListenableBuilder(
+        valueListenable: _valueNotifierOnTextChange,
+        builder: (context, value, w) {
+          return AnimatedOpacity(
+            duration: const Duration(milliseconds: 250),
+            opacity: value == null ? 0 : 1,
+            child: AnimatedScale(
+              duration: const Duration(microseconds: 250),
+              scale: value == null ? 0 : 1,
+              child: IconButton(
+                  onPressed: () {
+                    _textEditingController.clear();
+                    callDebouncer(null);
+                  },
+                  icon: const Icon(Icons.close)),
+            ),
+          );
+        });
+  }
+
+  void onTextEditingChanged() {
+    String value = _textEditingController.value.text;
+    _valueNotifierOnTextChange.value =
+        (value.isEmpty || value == "") ? null : value;
   }
 }

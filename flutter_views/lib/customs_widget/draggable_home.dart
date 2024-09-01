@@ -262,8 +262,8 @@ class DraggableHomeState extends State<DraggableHome>
           widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       drawer: widget.drawer,
       body: getPageStorage(expandedHeight, context, appBarHeight,
-             fullyExpandedHeight, topPadding),
-      
+          fullyExpandedHeight, topPadding),
+
       // ScreenHelper(
       //   largeTablet: LayoutBuilder(builder: (context, constraints) {
       //     return Center(
@@ -828,6 +828,17 @@ class DraggableHomeState extends State<DraggableHome>
     if (_scrollController?.hasClients == false) return;
     _scrollController?.animateTo(
       pos,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollToHideTopWidget() {
+    debugPrint("_scrollToHideTopWidget ===> top");
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.animateTo(
+      _scrollController!.position.minScrollExtent,
       duration: const Duration(milliseconds: 700),
       curve: Curves.fastOutSlowIn,
     );

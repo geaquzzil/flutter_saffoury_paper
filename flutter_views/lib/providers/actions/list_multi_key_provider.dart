@@ -45,12 +45,12 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future<void> edit(ViewAbstract obj) async {
     _listMap.entries.forEach((i) async {
       var element = i.value;
-      ViewAbstract? o = (element.objects.cast<ViewAbstract>())
+      ViewAbstract? o = (element.getObjects.cast<ViewAbstract>())
           .firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
         int idx =
-            element.objects.indexWhere((element) => element.isEquals(obj));
-        element.objects[idx] = obj;
+            element.getObjects.indexWhere((element) => element.isEquals(obj));
+        element.getObjects[idx] = obj;
         debugPrint("ListMultiKeyProvider changed element ");
         _listMap[i.key]?.page = getPage(i.key);
         // element.objects.insert(0, o);
@@ -71,9 +71,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   Future<void> delete(ViewAbstract obj) async {
     await Future.forEach(_listMap.values, (element) {
-      (element)
-          .objects
-          .removeWhere((element) => element.isEquals(obj));
+      (element).getObjects.removeWhere((element) => element.isEquals(obj));
     });
 
     notifyListeners();
@@ -82,7 +80,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   ///clear all the objects list and load the other objects list from viewAbstract if not null
   Future<void> clear(String key) async {
     MultiListProviderHelper? multiListProviderHelper = _listMap[key];
-    multiListProviderHelper?.objects.clear();
+    multiListProviderHelper?.getObjects.clear();
 
     notifyListeners();
   }
@@ -90,7 +88,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   ///clear all the objects list and load the other objects list from viewAbstract if not null
   Future<void> recall(String key, ViewAbstract t, ResponseType type) async {
     MultiListProviderHelper? multiListProviderHelper = _listMap[key];
-    multiListProviderHelper?.objects.clear();
+    multiListProviderHelper?.getObjects.clear();
     multiListProviderHelper?.page = 0;
     multiListProviderHelper?.isLoading = false;
 
@@ -115,6 +113,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future fetchListSearch(
       String key, ViewAbstract viewAbstract, String query) async {
     late MultiListProviderHelper? multiListProviderHelper;
+    debugPrint("ListMultiKeyProvider===> fetchListSearch query:$query");
     if (_listMap.containsKey(key)) {
       multiListProviderHelper = _listMap[key];
     } else {
@@ -134,7 +133,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     List? list = await viewAbstract.search(viewAbstract.getPageItemCountSearch,
         multiListProviderHelper.page, query);
     multiListProviderHelper.isLoading = false;
-    multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+    multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
     multiListProviderHelper.page++;
     notifyListeners();
   }
@@ -148,7 +147,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper!.isLoading = false;
-    multiListProviderHelper.objects.addAll(viewAbstract);
+    multiListProviderHelper.getObjects.addAll(viewAbstract);
     multiListProviderHelper.page++;
     notifyListeners();
   }
@@ -162,7 +161,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper!.isLoading = false;
-    multiListProviderHelper.objects.add(viewAbstract);
+    multiListProviderHelper.getObjects.add(viewAbstract);
     multiListProviderHelper.page++;
     notifyListeners();
   }
@@ -204,7 +203,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper.isLoading = false;
 
       if (list != null) {
-        multiListProviderHelper.objects.addAll(list as List<ViewAbstract>);
+        multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
         multiListProviderHelper.page = multiListProviderHelper.page + 1;
         notifyListeners();
       } else {
@@ -218,6 +217,24 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper.hasError = true;
       notifyListeners();
     }
+  }
+
+  ///after clear search we should call this function
+  void notifyNotSearchable(String key,
+      {AutoRest? autoRest,
+      ViewAbstract? viewAbstract,
+      AutoRestCustom? customAutoRest,
+      int? customCount,
+      int? customPage}) {
+    MultiListProviderHelper multiListProviderHelper;
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key]!;
+    } else {
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key]!;
+    }
+    multiListProviderHelper.setObjects = multiListProviderHelper.getObjects;
+    notifyListeners();
   }
 
   Future fetchList(String key,
@@ -262,7 +279,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper.isLoading = false;
       multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
       if (list != null) {
-        multiListProviderHelper.objects.addAll(list);
+        multiListProviderHelper.getObjects.addAll(list);
         multiListProviderHelper.page =
             customPage ?? multiListProviderHelper.page + 1;
         notifyListeners();
@@ -307,7 +324,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
     multiListProviderHelper.isLoading = false;
     if (list != null) {
-      multiListProviderHelper.objects.add(list);
+      multiListProviderHelper.getObjects.add(list);
       multiListProviderHelper.page++;
       notifyListeners();
     }
@@ -320,11 +337,14 @@ class MultiListProviderHelper {
   bool isNoMoreItem = false;
   bool hasError = false;
   // All movies (that will be displayed on the Home screen)
-  final List objects = [];
+  List _objects = [];
   int page = 0;
   // Retrieve all movies
-  List get getObjects => objects;
+  List get getObjects => _objects;
+  set setObjects(List objects) {
+    _objects = objects;
+  }
 
-  int get getCount => objects.length;
+  int get getCount => _objects.length;
   MultiListProviderHelper();
 }

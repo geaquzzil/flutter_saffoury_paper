@@ -219,28 +219,18 @@ class HoverButtons extends StatelessWidget {
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 275),
             opacity: value ? 1 : 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RoundedIconButton(
-                  icon: Icons.arrow_back_ios_new_sharp,
-                  onTap: () {
-                    int i = valuePageNotifier?.value ?? idx;
-
-                    if (i == 0) return;
-                    idx = i - 1;
-                    if (valuePageNotifierVoid != null) {
-                      valuePageNotifierVoid!.call(idx);
-                    }
-                    if (valuePageNotifier != null) {
-                      valuePageNotifier?.value = idx;
-                    }
-                  },
-                ),
-                RoundedIconButton(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RoundedIconButton(
+                    icon: Icons.arrow_back_ios_new_sharp,
                     onTap: () {
                       int i = valuePageNotifier?.value ?? idx;
-                      idx = i + 1;
+
+                      if (i == 0) return;
+                      idx = i - 1;
                       if (valuePageNotifierVoid != null) {
                         valuePageNotifierVoid!.call(idx);
                       }
@@ -248,8 +238,21 @@ class HoverButtons extends StatelessWidget {
                         valuePageNotifier?.value = idx;
                       }
                     },
-                    icon: Icons.arrow_forward_ios_sharp),
-              ],
+                  ),
+                  RoundedIconButton(
+                      onTap: () {
+                        int i = valuePageNotifier?.value ?? idx;
+                        idx = i + 1;
+                        if (valuePageNotifierVoid != null) {
+                          valuePageNotifierVoid!.call(idx);
+                        }
+                        if (valuePageNotifier != null) {
+                          valuePageNotifier?.value = idx;
+                        }
+                      },
+                      icon: Icons.arrow_forward_ios_sharp),
+                ],
+              ),
             ),
           ),
         );

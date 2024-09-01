@@ -53,8 +53,7 @@ class EmptyWidget extends StatelessWidget {
       this.title,
       this.expand = true,
       this.subtitle,
-      this.lottieJson})
-      : assert(lottiUrl != null || lottieJson != null);
+      this.lottieJson});
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +102,14 @@ class EmptyWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Text("TODO Lottie.network"),
-          expand
-              ? Expanded(
-                  flex: 4,
-                  child: getLottieWidget(
-                    context,
-                  ))
-              : getLottieWidget(context, height: 100),
+          if (lottiUrl != null || lottieJson != null)
+            expand
+                ? Expanded(
+                    flex: 4,
+                    child: getLottieWidget(
+                      context,
+                    ))
+                : getLottieWidget(context, height: 100),
           if (expand)
             Expanded(
               flex: 8,

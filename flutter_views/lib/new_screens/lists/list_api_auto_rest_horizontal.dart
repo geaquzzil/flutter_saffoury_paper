@@ -143,7 +143,9 @@ class _ListHorizontalApiWidgetState
             "layoutBuilder horizontal maxWidth  ${constraints.maxWidth} maxHeight ${constraints.maxHeight}");
         return ScrollSnapList(
           itemCount: data.length + (isLoading ? 5 : 0),
-          selectedItemAnchor: SelectedItemAnchor.MIDDLE,
+          selectedItemAnchor: SelectedItemAnchor.START,
+
+          // endOfListTolerance: constraints.maxWidth,
           scrollDirection: Axis.horizontal,
           itemSize: constraints.maxHeight,
           listController: _scrollController,
@@ -222,24 +224,21 @@ class _ListHorizontalApiWidgetState
   }
 
   Widget getEmptyWidget(BuildContext context, {bool isError = false}) {
-    return wrapHeader(
-        context,
-        EmptyWidget(
-            onSubtitleClicked: isError
-                ? () {
-                    listProvider.fetchList(widget.autoRest!.key,
-                        viewAbstract: widget.autoRest!.obj,
-                        autoRest: widget.autoRest);
-                  }
-                : null,
-            lottiUrl:
-                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-            title: isError
-                ? AppLocalizations.of(context)!.cantConnect
-                : AppLocalizations.of(context)!.noItems,
-            subtitle: isError
-                ? AppLocalizations.of(context)!.cantConnectConnectToRetry
-                : AppLocalizations.of(context)!.no_content));
+    return EmptyWidget(
+        onSubtitleClicked: isError
+            ? () {
+                listProvider.fetchList(widget.autoRest!.key,
+                    viewAbstract: widget.autoRest!.obj,
+                    autoRest: widget.autoRest);
+              }
+            : null,
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        title: isError
+            ? AppLocalizations.of(context)!.cantConnect
+            : AppLocalizations.of(context)!.noItems,
+        subtitle: isError
+            ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+            : AppLocalizations.of(context)!.no_content);
   }
 
   @override
@@ -288,6 +287,8 @@ class _ListHorizontalApiWidgetState
   }
 
   Widget wrapHeader(BuildContext context, Widget child) {
+    bool isEmptyWidget = child is EmptyWidget;
+    debugPrint("wrapHeader child type => ${child.runtimeType}");
     Widget c = _currentHeight != null
         ? SizedBox(
             height: _currentHeight,
@@ -301,7 +302,7 @@ class _ListHorizontalApiWidgetState
               child: child,
             ),
           );
-    if (SizeConfig.hasPointer(context)) {
+    if (SizeConfig.hasPointer(context) && !isEmptyWidget) {
       c = SizedBox(
         height: _currentHeight,
         child: OnHoverWidget(

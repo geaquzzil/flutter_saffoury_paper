@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
+import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -94,8 +96,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   GlobalKey<FabsOnListWidgetState> fabsOnListWidgetState =
       GlobalKey<FabsOnListWidgetState>();
   ValueNotifier<bool> valueNotifierGrid = ValueNotifier<bool>(false);
+  final GlobalKey<SliverAnimatedListState> _listKey =
+      GlobalKey<SliverAnimatedListState>();
 
-  String searchStringQuery = "";
+  String? _searchStringQuery;
 
   bool _selectMood = false;
 
@@ -365,7 +369,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           if (widget.buildSearchWidget) getSearchWidget(),
           if (widget.buildFilterableView) getFilterableWidget(),
           if (widget.buildToggleView) getToggleView(),
-          if (searchStringQuery != "") getSearchDescription(),
+          // if (searchStringQuery != "") getSearchDescription(),
           ValueListenableBuilder<ExpandType>(
               valueListenable: expandTypeOnlyOnExpand,
               builder: (context, value, child) {
@@ -542,35 +546,74 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   Widget getSliverList(int count, bool isLoading) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
-      sliver: SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-        if (isLoading && index >= count - 1) {
-          return SkeletonListTile(
-            hasLeading: true,
-            hasSubtitle: true,
-            padding: const EdgeInsets.symmetric(
-                horizontal: kDefaultPadding / 2, vertical: kDefaultPadding / 2),
-          );
-        }
-        ViewAbstract va = listProvider.getList(findCustomKey())[index];
-        va.setParent(widget.setParentForChild);
-        return _selectMood
-            ? ListCardItemSelected(
-                isSelected: isSelected(va),
-                onSelected: (obj, isSelected) {
-                  debugPrint("ListCardItemSelected $isSelected");
-                  onSelectedItem(obj, isSelected);
-                },
-                object: va)
-            : ListCardItem(
-                object: va,
-                onSelectedItem: widget.onSelectedCardChangeValueNotifier,
-              );
-      }, childCount: count + (isLoading ? 8 : 0))),
-    );
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
+        sliver: LiveSliverList(
+            controller: _scrollController,
+
+            // key: _listKey,
+            showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
+            showItemDuration: Duration(milliseconds: isLoading ? 0 : 100),
+            itemBuilder: animationItemBuilder(
+              (index) {
+                if (isLoading && index >= count - 1) {
+                  return SkeletonListTile(
+                    hasLeading: true,
+                    hasSubtitle: true,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding / 2,
+                        vertical: kDefaultPadding / 2),
+                  );
+                }
+                ViewAbstract va = listProvider.getList(findCustomKey())[index];
+                va.setParent(widget.setParentForChild);
+                Widget w = _selectMood
+                    ? ListCardItemSelected(
+                        isSelected: isSelected(va),
+                        onSelected: (obj, isSelected) {
+                          debugPrint("ListCardItemSelected $isSelected");
+                          onSelectedItem(obj, isSelected);
+                        },
+                        object: va)
+                    : ListCardItem(
+                        object: va,
+                        onSelectedItem:
+                            widget.onSelectedCardChangeValueNotifier,
+                      );
+                return w;
+              },
+            ),
+            itemCount: count + (isLoading ? 8 : 0)));
   }
 
+  Widget Function(
+    BuildContext context,
+    int index,
+    Animation<double> animation,
+  ) animationItemBuilder(
+    Widget Function(int index) child, {
+    EdgeInsets padding = EdgeInsets.zero,
+  }) =>
+      (
+        BuildContext context,
+        int index,
+        Animation<double> animation,
+      ) =>
+          FadeTransition(
+            opacity: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(animation),
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, -0.1),
+                end: Offset.zero,
+              ).animate(animation),
+              child: Padding(
+                padding: padding,
+                child: child(index),
+              ),
+            ),
+          );
   void onSelectedItem(ViewAbstract obj, bool isSelected) {
     if (!isSelected) {
       List<ViewAbstract> list = onSelectedListChangeValueNotifier.value;
@@ -662,8 +705,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
         child: HeaderText(
       fontSize: 12,
       useRespnosiveLayout: false,
-      text: searchStringQuery != ""
-          ? "Search results: “$searchStringQuery“"
+      text: _searchStringQuery != null
+          ? "Search results: “$_searchStringQuery"
           // : customFilterChecker != null
           //     ? "Showing products by filter"
           : "Showing products",
@@ -741,8 +784,12 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                                 !widget.buildSearchWidgetAsEditText
                                     ? null
                                     : (serchQuery) {
-                                        searchStringQuery = serchQuery;
-                                        fetshList();
+                                        _searchStringQuery = serchQuery;
+                                        // expandType.value = ExpandType.HALF_EXPANDED;
+                                        _scrollTop();
+                                        fetshList(
+                                            notifyNotSearchable:
+                                                _searchStringQuery == null);
                                       },
                             key: const ValueKey(2),
                             heroTag: "list/search",
@@ -855,16 +902,22 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             : AppLocalizations.of(context)!.no_content);
   }
 
-  void fetshList() {
+  void fetshList({bool notifyNotSearchable = false}) {
     String customKey = findCustomKey();
+
     debugPrint("findCustomKey fetshList $customKey");
+
+    if (notifyNotSearchable) {
+      listProvider.notifyNotSearchable(customKey,
+          viewAbstract: scanedQr ?? viewAbstract);
+    }
     if (listProvider.getCount(customKey) == 0) {
-      if (searchStringQuery.isEmpty) {
+      if (_searchStringQuery == null) {
         listProvider.fetchList(customKey,
             viewAbstract: scanedQr ?? viewAbstract);
       } else {
         listProvider.fetchListSearch(
-            customKey, viewAbstract, searchStringQuery);
+            customKey, viewAbstract, _searchStringQuery!);
       }
     }
   }
@@ -940,7 +993,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   String findCustomKey() {
     if (scanedQr != null) return scanedQr!.getListableKey();
     String key = viewAbstract.getListableKey();
-    key = key + searchStringQuery;
+    key = key + (_searchStringQuery ?? "");
     debugPrint("findCustomKey getCustomKey $key");
     return key;
   }
@@ -960,7 +1013,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       context.read<ListScrollProvider>().setScrollDirection = direction;
     }
     if (_isBottom) {
-      listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
+      fetshList();
     }
   }
 }
