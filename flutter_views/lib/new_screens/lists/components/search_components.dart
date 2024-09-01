@@ -118,7 +118,7 @@ class SearchWidgetWebComponent extends StatelessWidget {
 
 class SearchWidgetComponent extends StatefulWidget {
   String heroTag;
-  ViewAbstract? viewAbstract;
+  ViewAbstract viewAbstract;
   Function(String?)? onSearchTextChanged;
   ValueNotifier<String?>? onSearchTextChangedValueNotifier;
   ValueNotifier<ExpandType>? appBardExpandType;
@@ -128,7 +128,7 @@ class SearchWidgetComponent extends StatefulWidget {
       this.heroTag = "/search",
       this.appBardExpandType,
       this.currentScreenSize,
-      this.viewAbstract,
+      required this.viewAbstract,
       this.onSearchTextChangedValueNotifier,
       this.onSearchTextChanged});
 
@@ -143,7 +143,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   bool isEditText = false;
   final Debouncer _debouncer = Debouncer(milliseconds: 200);
   final TextEditingController _textEditingController = TextEditingController();
-
+  late ViewAbstract _viewAbstract;
   final ValueNotifier<String?> _valueNotifierOnTextChange = ValueNotifier(null);
   @override
   void initState() {
@@ -153,6 +153,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     isEditText = widget.onSearchTextChanged != null ||
         widget.onSearchTextChangedValueNotifier != null;
     _textEditingController.addListener(onTextEditingChanged);
+    _viewAbstract = widget.viewAbstract;
     super.initState();
   }
 
@@ -160,12 +161,15 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   void didUpdateWidget(covariant SearchWidgetComponent oldWidget) {
     isEditText = widget.onSearchTextChanged != null ||
         widget.onSearchTextChangedValueNotifier != null;
+    if (_viewAbstract.runtimeType != widget.viewAbstract.runtimeType) {
+      _viewAbstract = widget.viewAbstract;
+      _textEditingController.value = const TextEditingValue(text: "");
+    }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     _textEditingController.removeListener(onTextEditingChanged);
     _textEditingController.dispose();
@@ -223,9 +227,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
               .textTheme
               .bodyLarge
               ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
-          hintText: widget.viewAbstract == null
-              ? AppLocalizations.of(context)?.search
-              : getSearchHint(widget.viewAbstract!),
+          hintText: getSearchHint(widget.viewAbstract),
           border: InputBorder.none),
     );
   }
@@ -242,8 +244,8 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
         .searchInFormat(value.getMainHeaderLabelTextOnly(context));
   }
 
-  Selector<DrawerMenuControllerProvider, ViewAbstract<dynamic>>
-      getSearchTitleClickable() {
+  Widget getSearchTitleClickable() {
+    return Text(getSearchHint(_viewAbstract));
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) {
         return Text(

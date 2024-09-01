@@ -159,9 +159,32 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     fetshListWidgetBinding();
   }
 
+  void checkToUpdate() {
+    ViewAbstract checkedViewAbstract;
+    if (widget.viewAbstract != null) {
+      checkedViewAbstract = widget.viewAbstract!;
+    } else if (widget.tableName != null) {
+      //todo check for table name if exits first
+      checkedViewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(widget.tableName!)!;
+    } else {
+      checkedViewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
+    }
+    debugPrint(
+        "didUpdateWidget sliverApiMaster checkedViewAbstract :${checkedViewAbstract.runtimeType} current:${viewAbstract.runtimeType}");
+    if (checkedViewAbstract.runtimeType != viewAbstract.runtimeType) {
+      debugPrint(
+          "didUpdateWidget sliverApiMaster checkedViewAbstract.runtimeType!=viewAbstract.runtimeType updateing");
+      viewAbstract = checkedViewAbstract;
+      _searchStringQuery = null;
+    }
+    fetshListWidgetBinding();
+  }
+
   @override
   void didUpdateWidget(covariant T oldWidget) {
-    if (valueNotifierGrid == null) {}
+    checkToUpdate();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -181,35 +204,35 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
-      builder: (context, value, child) {
-        debugPrint(
-            "drawerViewAbstractObsever SliverList ViewAbstract has changed from DrawerMenuController ${value.getTableNameApi()} customMap ${value.getCustomMap}");
-        // if (viewAbstract== null) {
-        //   viewAbstract = value;
-        //   fetshListWidgetBinding();
-        //   debugPrint(
-        //       "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
-        // }
-        // view
-        // if (!value.isEqualsAsType(viewAbstract)) {
-        //   viewAbstract = value;
-        //   WidgetsBinding.instance.addPostFrameCallback((_) {
-        //     _scrollTop();
-        //     fetshList();
-        //   });
-        //   // fetshListWidgetBinding();
-        // }
-        viewAbstract = value;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          // _scrollTop();
-          fetshList();
-        });
+    return getBuildBodyDraggable();
+    // return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+    //   builder: (context, value, child) {
+    //     debugPrint(
+    //         "drawerViewAbstractObsever SliverList ViewAbstract has changed from DrawerMenuController ${value.getTableNameApi()} customMap ${value.getCustomMap}");
+    //     // if (viewAbstract== null) {
+    //     //   viewAbstract = value;
+    //     //   fetshListWidgetBinding();
+    //     //   debugPrint(
+    //     //       "SliverList ViewAbstract has changed from DrawerMenuController ViewAbstractProvider CHANGED");
+    //     // }
+    //     // view
+    //     // if (!value.isEqualsAsType(viewAbstract)) {
+    //     //   viewAbstract = value;
+    //     //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     //     _scrollTop();
+    //     //     fetshList();
+    //     //   });
+    //     //   // fetshListWidgetBinding();
+    //     // }
+    //     viewAbstract = value;
 
-        return getBuildBodyDraggable();
-      },
-      selector: (p0, p1) => p1.getObjectCastViewAbstract,
-    );
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       // _scrollTop();
+    //       fetshList();
+    //     });
+    //   },
+    //   selector: (p0, p1) => p1.getObjectCastViewAbstract,
+    // );
   }
 
   Widget getAppbarTitle() {
@@ -780,6 +803,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
                         : SearchWidgetComponent(
                             currentScreenSize: widget.currentScreenSize,
                             appBardExpandType: expandType,
+                            viewAbstract: viewAbstract,
                             onSearchTextChanged:
                                 !widget.buildSearchWidgetAsEditText
                                     ? null

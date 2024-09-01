@@ -137,13 +137,15 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
-    return SliverApiMaster(
-      // onSelectedCardChangeValueNotifier:
-      //     getCurrentScreenSize() == CurrentScreenSize.MOBILE
-      //         ? null
-      //         : _secoundPaneNotifier,
-      // buildAppBar: false,
-      buildSearchWidgetAsEditText: isDesktop,
+        
+    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+      builder: (context, value, child) {
+        return SliverApiMaster(
+          viewAbstract: value,
+          buildSearchWidgetAsEditText: isDesktop,
+        );
+      },
+      selector: (p0, p1) => p1.getObjectCastViewAbstract,
     );
   }
 

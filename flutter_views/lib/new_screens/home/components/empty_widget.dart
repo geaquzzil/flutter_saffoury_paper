@@ -134,6 +134,7 @@ class EmptyWidget extends StatelessWidget {
         lottieAssetPath + lottieJson!,
       );
     }
+    return widget;
     return ColorFiltered(
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.surface,

@@ -179,7 +179,10 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   Widget getLargeScreenWidget() {
     return Column(
       children: <Widget>[
-        if (widget.buildSearchWidget) SearchWidgetComponent(),
+        if (widget.buildSearchWidget)
+          SearchWidgetComponent(
+            viewAbstract: viewAbstract,
+          ),
         // FiltersAndSelectionListHeader(),
         Expanded(
             child: ChangeNotifierProvider.value(
@@ -218,7 +221,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
+    listProvider.refresh(
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -248,7 +252,9 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
             children: [
               getConsumer(),
               if (!isSelectedMode && widget.buildSearchWidget)
-                SearchWidgetComponent(),
+                SearchWidgetComponent(
+                  viewAbstract: viewAbstract,
+                ),
             ]),
       ),
     );
