@@ -49,7 +49,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   List<ViewAbstract>? customList;
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
-  bool buildSearchAsEditText;
+  bool buildSearchWidgetAsEditText;
 
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
   Axis scrollDirection;
@@ -61,7 +61,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.tableName,
       this.isGridView = true,
       this.scrollDirection = Axis.vertical,
-      this.buildSearchAsEditText=false,
+      this.buildSearchWidgetAsEditText = false,
       this.onSeletedListItemsChanged,
       this.customList,
       this.setParentForChildCardItem})
@@ -87,12 +87,17 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   bool _selectMood = false;
   final double minGridItemSize = 100;
 
+  final Curve _defualtScrollCurve = Curves.fastOutSlowIn;
+  final Duration _defaultScrollDuration = const Duration(milliseconds: 700);
+
+  final ValueNotifier<ExpandType> _expandType =
+      ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
+
   late bool _isCustomList;
 
   String? get setSearchString => this._searchString;
 
   set getSearchString(String? value) => this._searchString = value;
-
   String findListCustomKey();
   void toggleSelectedMood() {
     if (mounted) {
@@ -176,15 +181,14 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Widget getSearchWidget() {
     return SearchWidgetComponent(
-      appBardExpandType: expandType,
-      viewAbstract: viewAbstract,
+      appBardExpandType: _expandType,
+      viewAbstract: _viewAbstract,
       onSearchTextChanged: !widget.buildSearchWidgetAsEditText
           ? null
           : (serchQuery) {
-              _searchStringQuery = serchQuery;
-              // expandType.value = ExpandType.HALF_EXPANDED;
+              _searchString = serchQuery;
               _scrollTop();
-              fetshList(notifyNotSearchable: _searchStringQuery == null);
+              fetshList(notifyNotSearchable: _searchString == null);
             },
       key: const ValueKey(2),
       heroTag: "list/search",
@@ -235,6 +239,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               ),
             ),
           );
+
+
 
   Widget getSliverList(int count, bool isLoading) {
     return SliverPadding(
@@ -458,11 +464,11 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     return currentScroll >= (maxScroll * 0.9);
   }
 
-  void scrollTop() {
+  void _scrollTop() {
     _scrollController.animateTo(
       _scrollController.position.minScrollExtent,
-      duration: const Duration(milliseconds: 700),
-      curve: Curves.fastOutSlowIn,
+      duration: _defaultScrollDuration,
+      curve: _defualtScrollCurve,
     );
   }
 
@@ -477,8 +483,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   void scrollToCollapsed() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 700),
-      curve: Curves.fastOutSlowIn,
+      duration: _defaultScrollDuration,
+      curve: _defualtScrollCurve,
     );
   }
 
