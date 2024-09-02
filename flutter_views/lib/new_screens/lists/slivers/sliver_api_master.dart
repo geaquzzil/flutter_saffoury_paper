@@ -4,10 +4,12 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_view_controller/components/scroll_snap_list.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -39,6 +41,466 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
+
+abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
+  ViewAbstract? viewAbstract;
+  String? tableName;
+
+  List<ViewAbstract>? customList;
+  ViewAbstract? setParentForChildCardItem;
+  ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
+  bool buildSearchAsEditText;
+
+  ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
+  Axis scrollDirection;
+  bool isGridView;
+
+  SliverApiMixinWithStaticStateful(
+      {super.key,
+      this.viewAbstract,
+      this.tableName,
+      this.isGridView = true,
+      this.scrollDirection = Axis.vertical,
+      this.buildSearchAsEditText=false,
+      this.onSeletedListItemsChanged,
+      this.customList,
+      this.setParentForChildCardItem})
+      : assert(
+            (tableName != null && viewAbstract != null && customList != null));
+}
+
+mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
+    on State<T> {
+  late ViewAbstract _viewAbstract;
+  ViewAbstract? _setParentForChildCardItem;
+  String? _searchString;
+  final _scrollController = ScrollController();
+  late ListMultiKeyProvider listProvider;
+  late ValueNotifier<bool> valueNotifierGrid;
+  late ValueNotifier<List<ViewAbstract>>? _onSeletedListItemsChanged;
+  final double horizontalGridSpacing = 10;
+  final double verticalGridSpacing = 10;
+  final double horizontalGridMargin = 10;
+  final double verticalGridMargin = 10;
+  final int minItemsPerRow = 3;
+  final int maxItemsPerRow = 8;
+  bool _selectMood = false;
+  final double minGridItemSize = 100;
+
+  late bool _isCustomList;
+
+  String? get setSearchString => this._searchString;
+
+  set getSearchString(String? value) => this._searchString = value;
+
+  String findListCustomKey();
+  void toggleSelectedMood() {
+    if (mounted) {
+      setState(() {
+        _selectMood = !_selectMood;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+    _setParentForChildCardItem = widget.setParentForChildCardItem;
+    _scrollController.addListener(_onScroll);
+    _isCustomList = widget.customList != null;
+
+    ///override the gride view when the scroll axis is horizontal
+    valueNotifierGrid = ValueNotifier<bool>(
+        widget.isGridView || widget.scrollDirection == Axis.horizontal);
+
+    _onSeletedListItemsChanged =
+        widget.onSeletedListItemsChanged ?? ValueNotifier([]);
+
+    if (widget.viewAbstract != null) {
+      _viewAbstract = widget.viewAbstract!;
+    } else {
+      _viewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(widget.tableName!)!;
+    }
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.customList != null) {
+      return getListValueListenableIsGrid(
+          count: widget.customList!.length,
+          isLoading: false,
+          list: widget.customList);
+    }
+    return super.build(context);
+  }
+
+  @override
+  void didUpdateWidget(covariant oldWidget) {
+    _checkToUpdateViewAbstract();
+    _isCustomList = widget.customList != null;
+    _setParentForChildCardItem = widget.setParentForChildCardItem;
+    if (valueNotifierGrid.value != widget.isGridView) {
+      valueNotifierGrid.value = widget.isGridView;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>> getListSelector() {
+    return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
+      builder: (context, value, child) {
+        bool isLoading = value.item1;
+        int count = value.item2;
+        bool isError = value.item3;
+        debugPrint(
+            "SliverApiMaster building widget: ${findListCustomKey()} isloading: $isLoading iserror: $isError count: $count");
+        if (!isLoading && (count == 0 || isError)) {
+          return getEmptyWidget(isError: isError);
+        }
+        return getListValueListenableIsGrid(count: count, isLoading: isLoading);
+      },
+      selector: (p0, p1) => Tuple3(p1.isLoading(findListCustomKey()),
+          p1.getCount(findListCustomKey()), p1.isHasError(findListCustomKey())),
+    );
+  }
+
+  Widget getSearchWidget() {
+    return SearchWidgetComponent(
+      appBardExpandType: expandType,
+      viewAbstract: viewAbstract,
+      onSearchTextChanged: !widget.buildSearchWidgetAsEditText
+          ? null
+          : (serchQuery) {
+              _searchStringQuery = serchQuery;
+              // expandType.value = ExpandType.HALF_EXPANDED;
+              _scrollTop();
+              fetshList(notifyNotSearchable: _searchStringQuery == null);
+            },
+      key: const ValueKey(2),
+      heroTag: "list/search",
+    );
+  }
+
+  ValueListenableBuilder<bool> getListValueListenableIsGrid(
+      {List? list, required int count, required bool isLoading}) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: valueNotifierGrid,
+      builder: (context, value, child) {
+        if (value) {
+          return getSliverGridList(
+              list: list, count: count, isLoading: isLoading);
+        } else {
+          return getSliverList(count, isLoading);
+        }
+      },
+    );
+  }
+
+  Widget Function(
+    BuildContext context,
+    int index,
+    Animation<double> animation,
+  ) animationItemBuilder(
+    Widget Function(int index) child, {
+    EdgeInsets padding = EdgeInsets.zero,
+  }) =>
+      (
+        BuildContext context,
+        int index,
+        Animation<double> animation,
+      ) =>
+          FadeTransition(
+            opacity: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(animation),
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, -0.1),
+                end: Offset.zero,
+              ).animate(animation),
+              child: Padding(
+                padding: padding,
+                child: child(index),
+              ),
+            ),
+          );
+
+  Widget getSliverList(int count, bool isLoading) {
+    return SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
+        sliver: LiveSliverList(
+            controller: _scrollController,
+            showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
+            itemBuilder: animationItemBuilder(
+              (index) {
+                if (isLoading && index >= count - 1) {
+                  return SkeletonListTile(
+                    hasLeading: true,
+                    hasSubtitle: true,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding / 2,
+                        vertical: kDefaultPadding / 2),
+                  );
+                }
+                ViewAbstract va =
+                    listProvider.getList(findListCustomKey())[index];
+                va.setParent(_setParentForChildCardItem);
+                Widget w = _selectMood
+                    ? ListCardItemSelected(
+                        isSelected: _isSelectedItem(va),
+                        onSelected: _onSelectedItem,
+                        object: va)
+                    : ListCardItem(
+                        object: va,
+                      );
+                return w;
+              },
+            ),
+            itemCount: count + (isLoading ? 8 : 0)));
+  }
+
+  bool _isSelectedItem(ViewAbstract va) {
+    return _onSeletedListItemsChanged?.value
+            .firstWhereOrNull((p0) => p0.isEquals(va)) !=
+        null;
+  }
+
+  void _onSelectedItem(ViewAbstract obj, bool isSelected) {
+    List<ViewAbstract>? list = _onSeletedListItemsChanged?.value;
+    if (!isSelected) {
+      list?.removeWhere((element) => element.isEquals(obj));
+      _onSeletedListItemsChanged?.value = [
+        if (list != null) ...list else ...[]
+      ];
+    } else {
+      ViewAbstract? isFounded = _onSeletedListItemsChanged?.value
+          .firstWhereOrNull((p0) => p0.isEquals(obj));
+      if (isFounded == null) {
+        _onSeletedListItemsChanged?.value = [
+          if (list != null) ...list else ...[],
+          obj
+        ];
+      }
+    }
+  }
+
+  List<Widget> getGridList(
+      {List? list, required int count, required bool isLoading}) {
+    return [
+      if (list == null)
+        ...listProvider.getList(findListCustomKey()).map(getGridItem),
+      if (list == null)
+        if (isLoading)
+          ...List.generate(
+              5, (index) => GridTile(child: ListHorizontalItemShimmer())),
+      if (list != null) ...list.map(getGridItem)
+    ];
+  }
+
+  Widget getGridItem(e) => WebGridViewItem(
+        item: e,
+        setDescriptionAtBottom: false,
+      );
+
+  /// if axis is horizontal then we do need to padding or adding the hover puttons
+  Widget getSliverGridList(
+      {List? list, required int count, required bool isLoading}) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      sliver: widget.scrollDirection == Axis.vertical
+          ? getGridViewWhenAxisIsVertical(list, count, isLoading)
+          : getGridViewWhenAxisIsHorizontal(list, count, isLoading),
+    );
+  }
+
+  Widget getGridViewWhenAxisIsHorizontal(
+      List<dynamic>? list, int count, bool isLoading) {
+    list = list ?? listProvider.getList(findListCustomKey());
+    return LayoutBuilder(
+      builder: (co, constraints) {
+        return ScrollSnapList(
+          itemCount: list!.length + (isLoading ? 5 : 0),
+          selectedItemAnchor: SelectedItemAnchor.START,
+          // endOfListTolerance: constraints.maxWidth,
+          scrollDirection: Axis.horizontal,
+          itemSize: constraints.maxHeight,
+          listController: _scrollController,
+          itemBuilder: (c, index) {
+            if (isLoading && index > list!.length - 1) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+                child: GridTile(
+                    child: SizedBox(
+                        height: constraints.maxHeight,
+                        width: constraints.maxHeight,
+                        child: ListHorizontalItemShimmer(
+                          lines: SizeConfig.hasPointer(context) ? 0 : 3,
+                        ))),
+              );
+            }
+            Widget currentTile = WebGridViewItem(
+              setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+              item: list![index],
+            );
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+              child: GridTile(child: currentTile),
+            );
+          },
+          onItemFocus: (p0) {},
+        );
+      },
+    );
+  }
+
+  Widget getGridViewWhenAxisIsVertical(
+      List<dynamic>? list, int count, bool isLoading) {
+    return ResponsiveSliverGridList(
+        horizontalGridSpacing:
+            horizontalGridSpacing, // Horizontal space between grid items
+        verticalGridSpacing:
+            verticalGridSpacing, // Vertical space between grid items
+        horizontalGridMargin:
+            horizontalGridMargin, // Horizontal space around the grid
+        verticalGridMargin:
+            verticalGridMargin, // Vertical space around the grid
+        minItemsPerRow:
+            minItemsPerRow, // The minimum items to show in a single row. Takes precedence over minItemWidth
+        maxItemsPerRow:
+            maxItemsPerRow, // The maximum items to show in a single row. Can be useful on large screens
+        sliverChildBuilderDelegateOptions: SliverChildBuilderDelegateOptions(),
+        minItemWidth: minGridItemSize,
+        children: getGridList(list: list, count: count, isLoading: isLoading));
+  }
+
+  Widget getEmptyWidget({bool isError = false}) {
+    return SliverFillRemaining(
+      child: _getEmptyWidget(isError),
+    );
+  }
+
+  EmptyWidget _getEmptyWidget(bool isError) {
+    return EmptyWidget(
+        onSubtitleClicked: isError
+            ? () {
+                fetshList();
+              }
+            : null,
+        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+        title: isError
+            ? AppLocalizations.of(context)!.cantConnect
+            : AppLocalizations.of(context)!.noItems,
+        subtitle: isError
+            ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+            : AppLocalizations.of(context)!.no_content);
+  }
+
+  void _checkToUpdateViewAbstract() {
+    ViewAbstract checkedViewAbstract;
+    if (widget.viewAbstract != null) {
+      checkedViewAbstract = widget.viewAbstract!;
+    } else {
+      checkedViewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(widget.tableName!)!;
+    }
+    if (checkedViewAbstract.runtimeType != _viewAbstract.runtimeType) {
+      _viewAbstract = checkedViewAbstract;
+      _resetValues();
+    }
+    fetshListWidgetBinding();
+  }
+
+  void _resetValues() {
+    _searchString = null;
+    _onSeletedListItemsChanged?.value = [];
+  }
+
+  void fetshList({bool notifyNotSearchable = false, ViewAbstract? scanedQr}) {
+    if (_isCustomList) return;
+    String customKey = findListCustomKey();
+
+    if (notifyNotSearchable) {
+      listProvider.notifyNotSearchable(customKey,
+          viewAbstract: scanedQr ?? _viewAbstract);
+    }
+    if (listProvider.getCount(customKey) == 0) {
+      if (_searchString == null) {
+        listProvider.fetchList(customKey,
+            viewAbstract: scanedQr ?? _viewAbstract);
+      } else {
+        listProvider.fetchListSearch(customKey, _viewAbstract, _searchString!);
+      }
+    }
+  }
+
+  void refresh() {
+    listProvider.refresh(findListCustomKey(), _viewAbstract);
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  void scrollTop() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void scrollTo(double pos) {
+    debugPrint("ListHorizontalApiAutoRestWidget scrollTo pos===> $pos");
+    if (_scrollController.hasClients == false) return;
+    _scrollController.jumpTo(
+      pos,
+    );
+  }
+
+  void scrollToCollapsed() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _onScroll() {
+    final direction = _scrollController.position.userScrollDirection;
+    if (direction == ScrollDirection.forward) {
+      context.read<ListScrollProvider>().setScrollDirection = direction;
+    } else if (direction == ScrollDirection.reverse) {
+      context.read<ListScrollProvider>().setScrollDirection = direction;
+    }
+    if (_isBottom) {
+      fetshList();
+    }
+  }
+
+  void fetshListWidgetBinding() {
+    if (_isCustomList) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetshList();
+    });
+  }
+}
 
 class SliverApiMaster extends StatefulWidget {
   ViewAbstract? viewAbstract;
@@ -488,7 +950,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           valueListenable: valueNotifierGrid,
           builder: (context, value, child) {
             if (value) {
-              return getSliverGrideResponsive(count, isLoading);
+              return getSliverGridResponsive(count, isLoading);
             } else {
               return getSliverList(count, isLoading);
             }
@@ -510,9 +972,9 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
   }
 
 //todo
-  Widget getSliverGrideResponsive(int count, bool isLoading) {
+  Widget getSliverGridResponsive(int count, bool isLoading) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       sliver: ResponsiveSliverGridList(
           horizontalGridSpacing: 10, // Horizontal space between grid items
           verticalGridSpacing: 10, // Vertical space between grid items
@@ -944,74 +1406,6 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
             customKey, viewAbstract, _searchStringQuery!);
       }
     }
-  }
-
-  Widget getShimmerLoading() {
-    return SliverFillRemaining(
-      child: SkeletonTheme(
-        shimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFFD8E3E7),
-            Color(0xFFC8D5DA),
-            Color(0xFFD8E3E7),
-          ],
-          stops: [
-            0.1,
-            0.5,
-            0.9,
-          ],
-        ),
-        darkShimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF222222),
-            Color(0xFF242424),
-            Color(0xFF2B2B2B),
-            Color(0xFF242424),
-            Color(0xFF222222),
-            // Color(0xFF242424),
-            // Color(0xFF2B2B2B),
-            // Color(0xFF242424),
-            // Color(0xFF222222),
-          ],
-          stops: [
-            0.0,
-            0.2,
-            0.5,
-            0.8,
-            1,
-          ],
-          // begin: Alignment(-2.4, -0.2),
-          // end: Alignment(2.4, 0.2),
-          // tileMode: TileMode.clamp,
-        ),
-        child: SkeletonListView(
-          itemCount: viewAbstract.getPageItemCount,
-        ),
-      ),
-    );
-  }
-
-  Padding _getShimmerLoadingBody() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 75),
-      child: Skeleton(
-        // darkShimmerGradient: ,
-        isLoading: true,
-        skeleton: SkeletonListView(
-          itemCount: viewAbstract.getPageItemCount,
-        ),
-        child: Container(child: const Center(child: Text("Content"))),
-      ),
-    );
-  }
-
-  void _onChangedViewAbstract() {
-    //if we get viewAbstract from constructor then we dont need to do anything
-    if (widget.viewAbstract != null) return;
-
-    viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
-    listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
-    debugPrint("ViewAbstractProvider CHANGED");
   }
 
   String findCustomKey() {

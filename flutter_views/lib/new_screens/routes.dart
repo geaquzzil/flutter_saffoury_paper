@@ -77,6 +77,8 @@ const String addRouteName = 'add';
 const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
 const String posRouteName = "pos";
+const String reelCutterRouteName = "cuts";
+const String goodsInventoryRouteName = "inventory";
 const String indexWebRouteName = "index";
 const String indexWebSignIn = "sign-in";
 const String indexReturnPrivecyPolicy = "return-policy";
@@ -139,6 +141,9 @@ class RouteGenerator {
   String? getRouterAuth(GoRouterState state) {
     final loginLocation = state.namedLocation(loginRouteName);
     var homeLocation = state.namedLocation(homeRouteName);
+    var posLocation = state.namedLocation(posRouteName);
+    var reelCutterLocation = state.namedLocation(reelCutterRouteName);
+    var goodsInventoryLocation = state.namedLocation(goodsInventoryRouteName);
     final splashLocation = state.namedLocation("splash");
 
     // homeLocation=state.namedLocation("listable",pathParameters: {"tableName": "products","iD":"213"});
@@ -163,7 +168,17 @@ class RouteGenerator {
       // If not onboard and not going to onboard redirect to OnBoarding
     } else if (isLogedIn && !isFinishedInitialization) {
       appService.isInitialized = true;
-      return homeLocation;
+      AuthProvider authProvider = context.read<AuthProvider>();
+      if (authProvider.isGoodsInventory(context)) {
+        return goodsInventoryLocation;
+      } else if (authProvider.isPOS(context)) {
+        return posRouteName;
+      } else if (authProvider.isReelCutter(context) ||
+          authProvider.isPalletCutter(context)) {
+        return reelCutterLocation;
+      } else {
+        return homeLocation;
+      }
       // If not logedin and not going to login redirect to Login
     }
     // else if (isInitialized && !isLogedIn && !isGoingToLogin) {
@@ -491,6 +506,20 @@ class RouteGenerator {
       GoRoute(
         name: posRouteName,
         path: "/pos",
+        pageBuilder: (context, state) {
+          return MaterialPage(key: state.pageKey, child: const POSPage());
+        },
+      ),
+      GoRoute(
+        name: reelCutterRouteName,
+        path: "/cuts",
+        pageBuilder: (context, state) {
+          return MaterialPage(key: state.pageKey, child: const POSPage());
+        },
+      ),
+      GoRoute(
+        name: goodsInventoryRouteName,
+        path: "/inventory",
         pageBuilder: (context, state) {
           return MaterialPage(key: state.pageKey, child: const POSPage());
         },

@@ -24,7 +24,7 @@ class POSPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: TowPaneExt(
-          customPaneProportion: SizeConfig.getPaneProportion(context),
+          customPaneProportion: .7,
           startPane: FutureBuilder(
             future: (pos[0]).getPosableInitObj(context),
             builder: (context, snapshot) {

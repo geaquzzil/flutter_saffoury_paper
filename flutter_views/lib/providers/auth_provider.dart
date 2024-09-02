@@ -98,6 +98,15 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   List<ViewAbstract> get getDrawerItems => _drawerItems;
   List<ViewAbstract> get getDrawerItemsPermissions => _drawerItemsPermissions;
 
+  ///each of this has seperate pages
+  bool isPOS(BuildContext context) => _permissions.isPOS(context);
+  bool isPalletCutter(BuildContext context) =>
+      _permissions.isPalletCutter(context);
+  bool isReelCutter(BuildContext context) => _permissions.isReelCutter(context);
+
+  bool isGoodsInventory(BuildContext context) =>
+      _permissions.isGoodsInventoryWorker(context);
+
   Map<String?, List<ViewAbstract>> get getDrawerItemsGrouped =>
       __drawerItemsGrouped;
 

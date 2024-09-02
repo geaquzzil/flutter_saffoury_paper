@@ -55,7 +55,7 @@ class _PortsPageState extends State<PortsPage> {
   }
 
   void initPorts() {
-    print(SerialPort.availablePorts);
+    // debugPrint(SerialPort.availablePorts);
     setState(
       () => {
         availablePorts.addAll(SerialPort.availablePorts),
@@ -152,14 +152,14 @@ class _IOPortPageState extends State<IOPortPage> {
   _IOPortPageState(this.portName);
   startListening() {
     if (port.isOpen == true) {
-      print("selection was open. ");
+      debugPrint("selection was open. ");
     }
 
     if (port.open(mode: 1) != true) {
-      print(
+      debugPrint(
           "=============> Something went wrong ${SerialPort.lastError?.message}");
       // ignore: unnecessary_null_comparison
-      // print();
+      // debugPrint();
     } else {
       port.config = SerialPortConfig()
         ..baudRate = 9600
@@ -171,21 +171,21 @@ class _IOPortPageState extends State<IOPortPage> {
 
       // ..xonXoff = 1;
       // final data = await _selected?.read(128, timeout: 200);
-      // print("=======> data");
-      // print(String.fromCharCodes(data!));
+      // debugPrint("=======> data");
+      // debugPrint(String.fromCharCodes(data!));
       // _selected?.close();
-      print("=============> port.open(mode: 1)");
+      debugPrint("=============> port.open(mode: 1)");
 
       reader = SerialPortReader(port);
       reader.stream.listen(
         (event) {
-          print("============> onData: ${port.name}");
-          print("$event => ${String.fromCharCodes(event)}");
+          debugPrint("============> onData: ${port.name}");
+          debugPrint("$event => ${String.fromCharCodes(event)}");
         },
         onError: (error, stackTrace) {
-          print(
+          debugPrint(
               "error: ${error.toString()}\nstackTrace: ${stackTrace.toString()} ");
-          // print("stackTrace: ${stackTrace.toString()}");
+          // debugPrint("stackTrace: ${stackTrace.toString()}");
         },
         onDone: () {
           port.close();
@@ -214,7 +214,7 @@ class _IOPortPageState extends State<IOPortPage> {
       port = SerialPort(portName);
       // port.openReadWrite();
     } catch (e, _) {
-      print("----------  There is no port ---------\n ${portName}");
+      debugPrint("----------  There is no port ---------\n ${portName}");
       Navigator.of(context).pop();
     }
     startListening();
@@ -231,8 +231,8 @@ class _IOPortPageState extends State<IOPortPage> {
     // s.dsr = 0;
     // s.xonXoff = 3;
     // reader.port.config = s;
-    // print(reader);
-    // print();
+    // debugPrint(reader);
+    // debugPrint();
     String stringData;
 
     return Scaffold(
@@ -279,11 +279,11 @@ class _IOPortPageState extends State<IOPortPage> {
                   child: Scrollbar(child: Text("SDASD)")
                       // StreamBuilder(
                       //   stream: reader.stream.map((data) {
-                      //     print("read: $data");
+                      //     debugPrint("read: $data");
                       //     stringData = String.fromCharCodes(data);
                       //     stringData.replaceAll('\r', "");
                       //     stringData.replaceAll('\n', "");
-                      //     print("read: $stringData");
+                      //     debugPrint("read: $stringData");
                       //     io_Buffer.add("# $stringData");
                       //   }),
                       //   builder: ((context, snapshot) {
@@ -351,7 +351,7 @@ class _IOPortPageState extends State<IOPortPage> {
                               Uint8List data =
                                   Uint8List.fromList(inputData.text.codeUnits);
                               await port.write(data);
-                              print("write : $inputData");
+                              debugPrint("write : $inputData");
                               // port.write(Uint8List.fromList(" ".codeUnits));
                               // port.write(inputData.text);
                               // port.write(" ");

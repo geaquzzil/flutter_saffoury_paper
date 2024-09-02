@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+@Deprecated("Use ValueNotifier instead")
 class ListScrollProvider with ChangeNotifier {
   ScrollDirection? _scrollDirection;
 

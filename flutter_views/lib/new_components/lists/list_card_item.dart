@@ -44,13 +44,11 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
 class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   Key? listState;
-  bool selectionMood;
   @Deprecated("Use glbal key")
   ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
   ListCardItem({
     Key? key,
     this.listState,
-    this.selectionMood = false,
     this.onSelectedItem,
     required this.object,
   }) : super(key: GlobalKey());

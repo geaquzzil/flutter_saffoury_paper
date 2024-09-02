@@ -200,7 +200,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   Map<String, String> getRoutePathParameters() =>
       {"tableName": getTableNameApi() ?? "", "id": getIDString()};
-  void viewPage(BuildContext context, {bool? isSecoundSubPaneView}) {
+  void viewPage(BuildContext context,
+      {bool? isSecoundSubPaneView, bool disableMasterToListOverride = true}) {
     CurrentScreenSize currentScreenSize = findCurrentScreenSize(context);
     bool isSoLarge = isLargeScreenFromCurrentScreenSize(context);
     bool canSecondPane =
@@ -212,6 +213,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         ? (this as WebCategoryGridableInterface)
             .getWebCategoryGridableIsMasterToList(context)
         : null;
+    isMasterToList = disableMasterToListOverride ? null : isMasterToList;
     if (canSecondPane) {
       ListToDetailsSecoundPaneHelper l = isMasterToList == null
           ? ListToDetailsSecoundPaneHelper(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
+
+
 class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   bool? isSelected;
@@ -37,7 +39,8 @@ class _ListCardItemSelected<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
+    
+    return CheckboxListTile.adaptive(
       controlAffinity: ListTileControlAffinity.leading,
       value: isSelected,
       onChanged: (value) {

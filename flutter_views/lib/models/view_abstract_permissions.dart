@@ -22,6 +22,22 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   static const int ADMIN_ID = -1;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
+  static const int REEL_CUTTER = -14;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  static const int PALLET_CUTTER = -15;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  static const int POS = -11;
+
+  ///TODO هاد الزلمة
+  ///لازم يكون معو موبايل تبع يلي بيجرد
+  ///الافاكر هيه نعمل جدول فيه بضائع ع طريق مع باركود تبعها او معلوماتها
+  ///وهو بيعمل سكان من موبايلو
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  static const int GOODS_INVENTORY_WORKER = -16;
+
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool isNull = false;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -138,9 +154,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
         ? hasPermission(context, this, ServerActions.add)
         : hasPermission(context, viewAbstract, ServerActions.add);
   }
+
   //todo permission check and check if the object is implemented the interface
   bool hasPermissionShare(BuildContext context, {ViewAbstract? viewAbstract}) {
-    
     return true;
   }
 
@@ -219,8 +235,17 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
         : hasPermission(context, viewAbstract, ServerActions.delete_action);
   }
 
+  bool isReelCutter(BuildContext context) =>
+      getUserPermissionLevel(context).iD == REEL_CUTTER;
+  bool isPOS(BuildContext context) => getUserPermissionLevel(context).iD == POS;
+  bool isPalletCutter(BuildContext context) =>
+      getUserPermissionLevel(context).iD == PALLET_CUTTER;
   bool isAdmin(BuildContext context) =>
       getUserPermissionLevel(context).iD == ADMIN_ID;
+
+  bool isGoodsInventoryWorker(BuildContext context) =>
+    getUserPermissionLevel(context).iD == GOODS_INVENTORY_WORKER;
+  
 
   bool isGuest(BuildContext context) => getUserPermissionLevel(context).iD == 0;
 

@@ -312,7 +312,8 @@ class _ListHorizontalApiWidgetState
             return Stack(clipBehavior: Clip.none, children: [
               Positioned.fill(
                   child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 child: child,
               )),
               HoverButtons(

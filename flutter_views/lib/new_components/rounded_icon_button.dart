@@ -14,13 +14,45 @@ class RoundedIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double d = MediaQuery.of(context).devicePixelRatio;
+    debugPrint("d ==> $d");
+    return ElevatedButton.icon(
+      iconAlignment: IconAlignment.end,
+      style: ElevatedButton.styleFrom(
+        shape: CircleBorder(),
+      ),
+      onPressed: onTap,
+      icon: Icon(icon),
+      label: const Text(""),
+    );
+    // return ElevatedButton(
+    //   onPressed: onTap,
+    //   child: Icon(
+    //     icon,
+    //     // size: 20,
+    //   ),
+    //   style:ElevatedButton.styleFrom()
+
+    //    ButtonStyle(
+    //     shape: WidgetStateProperty.all(const CircleBorder()),
+
+    //     // shadowColor: Theme.of(context).colorScheme.,
+    //     // padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+    //     // backgroundColor: Theme.of(context).colorScheme.surfaceContainer
+    //     // MaterialStateProperty.all(Colors.blue), // <-- Button color
+    //     // overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
+    //     //   if (states.contains(MaterialState.pressed))
+    //     //     return Colors.red; // <-- Splash color
+    //     // }),
+    //   ),
+    // );
     return GestureDetector(
         onTap: onTap,
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            width: size,
-            height: size,
+            width: size * d,
+            height: size * d,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
               color: kWhite,

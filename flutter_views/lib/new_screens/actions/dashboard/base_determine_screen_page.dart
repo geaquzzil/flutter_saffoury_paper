@@ -36,7 +36,9 @@ import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashb
 import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -63,29 +65,31 @@ class BaseDeterminePageState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenHelperSliver(
-        requireAutoPadding: false,
-        onChangeLayout: (w, h, c) {
-          _currentScreenSize = c;
+    {
+      return ScreenHelperSliver(
+          requireAutoPadding: false,
+          onChangeLayout: (w, h, c) {
+            _currentScreenSize = c;
 
-          _height = h;
-          _width = w;
-          _drawerWidget = DrawerLargeScreens(
-            size: _currentScreenSize,
-          );
-        },
-        mobile: (w, h) {
-          return _getTabletWidget(context);
-        },
-        smallTablet: (w, h) {
-          return _getTabletWidget(context);
-        },
-        largeTablet: (w, h) {
-          return _getTabletWidget(context);
-        },
-        desktop: (w, h) {
-          return _getTabletWidget(context);
-        });
+            _height = h;
+            _width = w;
+            _drawerWidget = DrawerLargeScreens(
+              size: _currentScreenSize,
+            );
+          },
+          mobile: (w, h) {
+            return _getTabletWidget(context);
+          },
+          smallTablet: (w, h) {
+            return _getTabletWidget(context);
+          },
+          largeTablet: (w, h) {
+            return _getTabletWidget(context);
+          },
+          desktop: (w, h) {
+            return _getTabletWidget(context);
+          });
+    }
   }
 
   Widget _getTabletWidget(BuildContext context) {

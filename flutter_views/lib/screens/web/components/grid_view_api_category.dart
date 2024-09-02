@@ -219,18 +219,28 @@ class HoverButtons extends StatelessWidget {
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 275),
             opacity: value ? 1 : 0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RoundedIconButton(
-                    icon: Icons.arrow_back_ios_new_sharp,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RoundedIconButton(
+                  icon: Icons.arrow_back_ios_new_sharp,
+                  onTap: () {
+                    int i = valuePageNotifier?.value ?? idx;
+
+                    if (i == 0) return;
+                    idx = i - 1;
+                    if (valuePageNotifierVoid != null) {
+                      valuePageNotifierVoid!.call(idx);
+                    }
+                    if (valuePageNotifier != null) {
+                      valuePageNotifier?.value = idx;
+                    }
+                  },
+                ),
+                RoundedIconButton(
                     onTap: () {
                       int i = valuePageNotifier?.value ?? idx;
-
-                      if (i == 0) return;
-                      idx = i - 1;
+                      idx = i + 1;
                       if (valuePageNotifierVoid != null) {
                         valuePageNotifierVoid!.call(idx);
                       }
@@ -238,21 +248,8 @@ class HoverButtons extends StatelessWidget {
                         valuePageNotifier?.value = idx;
                       }
                     },
-                  ),
-                  RoundedIconButton(
-                      onTap: () {
-                        int i = valuePageNotifier?.value ?? idx;
-                        idx = i + 1;
-                        if (valuePageNotifierVoid != null) {
-                          valuePageNotifierVoid!.call(idx);
-                        }
-                        if (valuePageNotifier != null) {
-                          valuePageNotifier?.value = idx;
-                        }
-                      },
-                      icon: Icons.arrow_forward_ios_sharp),
-                ],
-              ),
+                    icon: Icons.arrow_forward_ios_sharp),
+              ],
             ),
           ),
         );
@@ -263,6 +260,10 @@ class HoverButtons extends StatelessWidget {
 
 class WebGridViewItem extends StatelessWidget {
   final ViewAbstract item;
+  final bool isSelectMood;
+  final bool isSelected;
+  void Function(ViewAbstract item, bool isSelectd)? onSelected;
+
   final bool hightLightonSelect;
   final Function()? onPress;
   final bool setDescriptionAtBottom;
@@ -271,7 +272,10 @@ class WebGridViewItem extends StatelessWidget {
       {super.key,
       required this.item,
       this.setDescriptionAtBottom = false,
+      this.isSelectMood = false,
       this.hightLightonSelect = false,
+      this.isSelected = false,
+      this.onSelected,
       this.onPress});
 
   @override
@@ -410,6 +414,11 @@ class WebGridViewItem extends StatelessWidget {
                 image: FastCachedImageProvider(item.getImageUrl(context)!),
                 fit: BoxFit.cover),
         color: null,
+        border: isSelected && isSelectMood
+            ? Border.all(
+              width: 2,
+              color: Theme.of(context).highlightColor)
+            : null,
         borderRadius: getBorderRedius());
   }
 
@@ -430,29 +439,42 @@ class WebGridViewItem extends StatelessWidget {
   LinearGradient getLinearGradient(BuildContext context, bool isHoverd) {
     List<Color> colors = [];
     List<double> stops = [];
-    if (setDescriptionAtBottom) {
-      colors = [
-        // isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-        // isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-        // isHoverd
-        //     ? Colors.black.withOpacity(0.7)
-        //     : Theme.of(context).scaffoldBackgroundColor,
-
-        isHoverd
-            ? Colors.black.withOpacity(0.7)
-            : Colors.black.withOpacity(0.3),
-        !isHoverd
-            ? Theme.of(context).scaffoldBackgroundColor
-            : Theme.of(context).scaffoldBackgroundColor,
-      ];
-      stops = [0, 0.99];
+    if (isSelectMood) {
+      if (isSelected) {
+        colors = [
+          isHoverd
+              ? Colors.black.withOpacity(0.7)
+              : Theme.of(context).highlightColor.withOpacity(.7),
+          isHoverd
+              ? Colors.black.withOpacity(0.7)
+              : Theme.of(context).highlightColor.withOpacity(.7),
+        ];
+        stops = [0, 0.99];
+      } else {
+        colors = [
+          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+        ];
+      }
     } else {
-      colors = [
-        isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-        isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-      ];
+      if (setDescriptionAtBottom) {
+        colors = [
+          isHoverd
+              ? Colors.black.withOpacity(0.7)
+              : Colors.black.withOpacity(0.3),
+          !isHoverd
+              ? Theme.of(context).scaffoldBackgroundColor
+              : Theme.of(context).scaffoldBackgroundColor,
+        ];
+        stops = [0, 0.99];
+      } else {
+        colors = [
+          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+        ];
 
-      stops = [6, 0.95];
+        stops = [6, 0.95];
+      }
     }
     return LinearGradient(
       colors: colors,
