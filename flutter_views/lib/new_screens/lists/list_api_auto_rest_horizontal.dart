@@ -21,6 +21,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../new_components/loading_shimmer.dart';
 
+@Deprecated("Use [SliverApiMixinAutoRestWidget]")
 class ListHorizontalApiAutoRestWidget extends StatefulWidget {
   AutoRest? autoRest;
   List<ViewAbstract>? list;

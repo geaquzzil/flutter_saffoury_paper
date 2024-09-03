@@ -183,6 +183,19 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
       trailing: dropDownTile,
     );
   }
+
+  @override
+  Widget? getCustomViewOnResponse(ChangesRecords<ViewAbstract> response) {
+    // TODO: implement getCustomViewOnResponse
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? getCustomViewOnResponseAddWidget(
+      ChangesRecords<ViewAbstract> response) {
+    // TODO: implement getCustomViewOnResponseAddWidget
+    throw UnimplementedError();
+  }
   // @Override
   // public ViewAbstract<?> onReadNewObject(Context context, ViewAbstract<?> newObject, ViewAbstract<?> oldCalledViewAbstract) {
   //     ((ChangesRecords) newObject).viewAbstract = ((ChangesRecords) oldCalledViewAbstract).viewAbstract;

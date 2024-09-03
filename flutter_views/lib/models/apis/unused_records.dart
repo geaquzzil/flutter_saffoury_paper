@@ -124,4 +124,17 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
       BuildContext context, ValueNotifier valueNotifier) {
     return null;
   }
+
+  @override
+  Widget? getCustomViewOnResponse(UnusedRecords<ViewAbstract> response) {
+    // TODO: implement getCustomViewOnResponse
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? getCustomViewOnResponseAddWidget(
+      UnusedRecords<ViewAbstract> response) {
+    // TODO: implement getCustomViewOnResponseAddWidget
+    throw UnimplementedError();
+  }
 }

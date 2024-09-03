@@ -382,4 +382,16 @@ class ProductMovments
   Widget? getCustomFloatingActionWidget(BuildContext context) {
     return null;
   }
+
+  @override
+  Widget? getCustomViewOnResponse(ProductMovments response) {
+    // TODO: implement getCustomViewOnResponse
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? getCustomViewOnResponseAddWidget(ProductMovments response) {
+    // TODO: implement getCustomViewOnResponseAddWidget
+    throw UnimplementedError();
+  }
 }

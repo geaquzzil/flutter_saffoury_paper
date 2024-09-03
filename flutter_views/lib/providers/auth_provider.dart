@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/posable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/test_var.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/src/response.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -50,6 +52,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late T _user;
   late T _initUser;
   late ViewAbstract _orderSimple;
+  List<RouteableInterface>? _getGoRoutesAddOns;
   Status _status = Status.Initialization;
   bool _isInitialized = false;
   bool get isInitialized => this._isInitialized;
@@ -80,7 +83,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     await initDrawerItems(context);
     // This is just to demonstrate the splash screen is working.
     // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     // _initialized = true;
     notifyListeners();
@@ -123,12 +126,20 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         .cast();
   }
 
-  AuthProvider.initialize(
-      T initUser, List<ViewAbstract> drawerItems, ViewAbstract orderSimple) {
+  List<GoRoute?>? getGoRoutesAddOns(BuildContext context) {
+    return _getGoRoutesAddOns
+        ?.map((toElement) => toElement.getGoRouteAddOn(context))
+        .toList()
+        .cast();
+  }
+
+  AuthProvider.initialize(T initUser, List<ViewAbstract> drawerItems,
+      ViewAbstract orderSimple, List<RouteableInterface>? getGoRoutesAddOns) {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
     _user = _initUser;
+    _getGoRoutesAddOns = getGoRoutesAddOns;
     _subscription = _initUser.authStateChanges().asBroadcastStream().listen(
       (dynamic _) {
         debugPrint("initUser.authStateChanges() $_");
@@ -163,9 +174,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
           as T;
       _user.login = true;
       _status = Status.Authenticated;
+
       _permissions = _user.userlevels ?? PermissionLevelAbstract();
       hasSavedUser = true;
-
+      debugPrint("initFakeData _permissions :$_permissions");
       // notifyListeners();
     } catch (ex) {
       debugPrint("Error initial $ex");

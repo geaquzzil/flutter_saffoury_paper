@@ -27,6 +27,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
@@ -412,10 +413,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
       return null;
     }
     return [
-      ListHorizontalApiAutoRestWidget(
-        valueNotifier: onHorizontalListItemClicked,
-        titleString: AppLocalizations.of(context)!
-            .moreFromFormat(getMoreFromFomrat(context)),
+      SliverApiMixinAutoRestWidget(
         autoRest: AutoRest<T>(
             range: 5,
             obj: getSelfNewInstance()

@@ -36,7 +36,6 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   static const int GOODS_INVENTORY_WORKER = -16;
 
-
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool isNull = false;
 
@@ -236,16 +235,20 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool isReelCutter(BuildContext context) =>
-      getUserPermissionLevel(context).iD == REEL_CUTTER;
-  bool isPOS(BuildContext context) => getUserPermissionLevel(context).iD == POS;
+      getUserPermissionLevel(context).iD == REEL_CUTTER || isAdmin(context);
+
+  bool isPOS(BuildContext context) =>
+      getUserPermissionLevel(context).iD == POS || isAdmin(context);
+
   bool isPalletCutter(BuildContext context) =>
-      getUserPermissionLevel(context).iD == PALLET_CUTTER;
+      getUserPermissionLevel(context).iD == PALLET_CUTTER || isAdmin(context);
+
   bool isAdmin(BuildContext context) =>
       getUserPermissionLevel(context).iD == ADMIN_ID;
 
   bool isGoodsInventoryWorker(BuildContext context) =>
-    getUserPermissionLevel(context).iD == GOODS_INVENTORY_WORKER;
-  
+      getUserPermissionLevel(context).iD == GOODS_INVENTORY_WORKER ||
+      isAdmin(context);
 
   bool isGuest(BuildContext context) => getUserPermissionLevel(context).iD == 0;
 

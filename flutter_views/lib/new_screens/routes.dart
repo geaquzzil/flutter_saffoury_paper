@@ -101,7 +101,7 @@ class RouteGenerator {
   AuthProvider appService;
   GoRouter get router => _goRouter;
   BuildContext context;
-  List<RouteBase>? addonRoutes;
+  List<RouteBase?>? addonRoutes;
 
   RouteGenerator({
     required this.appService,
@@ -116,12 +116,21 @@ class RouteGenerator {
     final isFinishedInitialization = appService.isInitialized;
 
     final loginLocation = state.namedLocation(loginRouteName);
+    final posLocation = state.namedLocation(posRouteName);
+
+    final goodsLocation = state.namedLocation(goodsInventoryRouteName);
+
+    final reelLocation = state.namedLocation(reelCutterRouteName);
+
     var homeLocation = "/index";
     final splashLocation = state.namedLocation("splash");
     if (isInitialized) {
       return splashLocation;
     } else if (isLogedIn && !isFinishedInitialization) {
       appService.isInitialized = true;
+      if (appService.getPermissions.isReelCutter(context)) {
+        return reelLocation;
+      }
       return homeLocation;
     } else {
       if (state.fullPath == null) {
@@ -161,12 +170,14 @@ class RouteGenerator {
     //todo permission cheking here when go to import or export or any other
     // final isGoingToOnboard = state.path == onboardLocation;
     debugPrint(
-        "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus}");
+        "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus} ");
 
     if (isInitialized) {
       return splashLocation;
       // If not onboard and not going to onboard redirect to OnBoarding
     } else if (isLogedIn && !isFinishedInitialization) {
+      debugPrint(
+          "getRouterAuth: userPermissionID ${appService.getPermissions.iD}");
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
@@ -503,23 +514,11 @@ class RouteGenerator {
               ));
         },
       ),
+
+      ///@Deprecated("Use RouteableInterface instead") deprecated
       GoRoute(
         name: posRouteName,
         path: "/pos",
-        pageBuilder: (context, state) {
-          return MaterialPage(key: state.pageKey, child: const POSPage());
-        },
-      ),
-      GoRoute(
-        name: reelCutterRouteName,
-        path: "/cuts",
-        pageBuilder: (context, state) {
-          return MaterialPage(key: state.pageKey, child: const POSPage());
-        },
-      ),
-      GoRoute(
-        name: goodsInventoryRouteName,
-        path: "/inventory",
         pageBuilder: (context, state) {
           return MaterialPage(key: state.pageKey, child: const POSPage());
         },
@@ -556,8 +555,9 @@ class RouteGenerator {
           return MaterialPage(
               key: state.pageKey, child: HomeNotificationPage());
         },
-      )
-      // if (addonRoutes != null) ...addonRoutes
+      ),
+      if (addonRoutes != null)
+        ...addonRoutes!.where((test) => test != null).toList().cast()
     ],
   );
 

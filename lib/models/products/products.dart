@@ -55,6 +55,7 @@ import 'package:flutter_view_controller/new_screens/home/components/ext_provider
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -649,15 +650,9 @@ class Product extends ViewAbstract<Product>
   List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
     // TODO: implement getHomeListHeaderWidgetList
     return [
-      ListHorizontalApiAutoRestWidget(
-        isSliver: true,
-        titleString: "Category TODO",
-
-        // listItembuilder: (v) =>
-        //     ListItemProductTypeCategory(productType: v as ProductType),
-        autoRest: AutoRest<ProductType>(
-            obj: ProductType.init(true), key: "ProductType<Category>"),
-      ),
+      SliverApiMixinAutoRestWidget(
+          autoRest: AutoRest<ProductType>(
+              obj: ProductType.init(true), key: "ProductType<Category>")),
     ];
   }
 

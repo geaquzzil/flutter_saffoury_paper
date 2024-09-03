@@ -15,8 +15,8 @@ class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
   T autoRest;
   @Deprecated("Use CustomViewHorizontalListResponse override instead")
   Widget Function(dynamic response)? onResponse;
-  
-  @Deprecated("Use CustomViewHorizontalListResponse override instead") 
+
+  @Deprecated("Use CustomViewHorizontalListResponse override instead")
   Widget? Function(dynamic response)? onResponseAddWidget;
 
   ListHorizontalCustomViewApiAutoRestWidget(
@@ -238,7 +238,6 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       WidgetsBinding.instance.addPostFrameCallback((_) {
         fetshList();
       });
-    });    
+    });
   }
-              
-              
+}

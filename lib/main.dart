@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
+import 'package:flutter_saffoury_paper/models/add_ons/add_ons_classes.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
@@ -183,7 +184,10 @@ void main() async {
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
           create: (context) => AuthProvider<AuthUser>.initialize(
-              Employee(), views, Purchases())),
+                  Employee(), views, Purchases(), [
+                CutWorkerRouteAddon(),
+                GoodsInventoryRouteAddon(),
+              ])),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),

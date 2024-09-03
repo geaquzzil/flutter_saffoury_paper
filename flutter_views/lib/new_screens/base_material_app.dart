@@ -42,7 +42,11 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     super.initState();
     langaugeProvider = Provider.of<LangaugeProvider>(context, listen: false);
     authProvider = Provider.of<AuthProvider>(context, listen: false);
-    routeGenerator = RouteGenerator(appService: authProvider, context: context);
+    routeGenerator = RouteGenerator(
+        appService: authProvider,
+        context: context,
+        addonRoutes: authProvider.getGoRoutesAddOns(context));
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       String? savedLang = await Configurations.getValueString("ln");
       if (savedLang != null) {

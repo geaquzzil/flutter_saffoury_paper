@@ -48,23 +48,47 @@ const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
 
-mixin BasePageWithListApi<T extends StatefulWidget> on BasePageState<T> {
+mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
+  ValueNotifier valueFirstPane = ValueNotifier(null);
+  ValueNotifier valueSecondPane = ValueNotifier(null);
 
+  ValueNotifierPane getTickerPane();
 
-    
+  getTickerFirstPane(
+    bool isDesktop, {
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  });
 
-}
-mixin BasePageWithListApiTicker<T extends StatefulWidget> on BasePageState<T> {
+  getTickerSecondPane(
+    bool isDesktop, {
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  });
+
   int getTickerSecond();
 
   Timer? _timer;
 
   void initTimer() {
     if (_timer != null && _timer!.isActive) return;
-
+    ValueNotifierPane p = getTickerPane();
     _timer = Timer.periodic(Duration(seconds: getTickerSecond()), (timer) {
-      //job
-      setState(() {});
+      debugPrint("Ticker is active");
+      switch (p) {
+        case ValueNotifierPane.FIRST:
+          valueFirstPane.value = Random().nextDouble();
+          break;
+        case ValueNotifierPane.SECOND:
+          valueSecondPane.value = Random().nextDouble();
+          break;
+        case ValueNotifierPane.BOTH:
+          valueFirstPane.value = Random().nextDouble();
+          valueSecondPane.value = Random().nextDouble();
+          break;
+        default:
+          break;
+      }
     });
   }
 
@@ -78,6 +102,92 @@ mixin BasePageWithListApiTicker<T extends StatefulWidget> on BasePageState<T> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  @override
+  getDesktopFirstPane({TabControllerHelper? tab}) {
+    return getWidgetFromBase(true, true, tab: tab);
+  }
+
+  @override
+  getDesktopSecondPane(
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(false, true, tab: tab);
+  }
+
+  @override
+  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(false, false, tab: tab);
+  }
+
+  @override
+  getFirstPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(true, false, tab: tab);
+  }
+
+  getWidgetFromBase(bool firstPane, bool isDesktop,
+      {TabControllerHelper? tab}) {
+    debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
+    ValueNotifierPane pane = getTickerPane();
+    if (pane == ValueNotifierPane.NONE) {
+      return getWidget(
+        firstPane,
+        isDesktop,
+        tab: tab,
+      );
+    }
+    if (pane == ValueNotifierPane.BOTH) {
+      return getValueListenableBuilder(firstPane, isDesktop, tab);
+    }
+    if (firstPane) {
+      if (pane == ValueNotifierPane.FIRST) {
+        return getValueListenableBuilder(firstPane, isDesktop, tab);
+      } else {
+        return getWidget(
+          firstPane,
+          isDesktop,
+          tab: tab,
+        );
+      }
+    } else {
+      if (pane == ValueNotifierPane.SECOND) {
+        return getValueListenableBuilder(firstPane, isDesktop, tab);
+      } else {
+        return getWidget(
+          firstPane,
+          isDesktop,
+          tab: tab,
+        );
+      }
+    }
+  }
+
+  Widget getValueListenableBuilder(
+      bool firstPane, bool isDesktop, TabControllerHelper? tab) {
+    return ValueListenableBuilder(
+        valueListenable: firstPane ? valueFirstPane : valueSecondPane,
+        builder: (context, value, child) {
+          return getWidget(
+            firstPane,
+            isDesktop,
+            tab: tab,
+          );
+        });
+  }
+
+  Widget getWidget(bool firstPane, bool isDesktop,
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return firstPane
+        ? getTickerFirstPane(
+            isDesktop,
+            tab: tab,
+            secoundTab: secoundTab,
+          )
+        : getTickerSecondPane(
+            isDesktop,
+            tab: tab,
+            secoundTab: secoundTab,
+          );
   }
 }
 mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,

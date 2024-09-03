@@ -196,6 +196,19 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       trailing: row,
     );
   }
+
+  @override
+  Widget? getCustomViewOnResponse(ChartRecordAnalysis<ViewAbstract> response) {
+    // TODO: implement getCustomViewOnResponse
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget? getCustomViewOnResponseAddWidget(
+      ChartRecordAnalysis<ViewAbstract> response) {
+    // TODO: implement getCustomViewOnResponseAddWidget
+    throw UnimplementedError();
+  }
 }
 
 enum EnteryInteval implements ViewAbstractEnum<EnteryInteval> {

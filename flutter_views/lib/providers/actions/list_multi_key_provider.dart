@@ -237,6 +237,21 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void fetchStaticList(String key, List<ViewAbstract> list) {
+    MultiListProviderHelper multiListProviderHelper;
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key]!;
+    } else {
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key]!;
+    }
+    multiListProviderHelper.isLoading = false;
+    multiListProviderHelper.hasError = false;
+    multiListProviderHelper.setObjects = list;
+    multiListProviderHelper.isNoMoreItem = true;
+    notifyListeners();
+  }
+
   Future fetchList(String key,
       {AutoRest? autoRest,
       ViewAbstract? viewAbstract,
