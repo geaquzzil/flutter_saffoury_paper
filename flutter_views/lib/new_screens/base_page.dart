@@ -175,6 +175,9 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
         });
   }
 
+  @override
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
+
   Widget getWidget(bool firstPane, bool isDesktop,
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     return firstPane
@@ -505,6 +508,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   bool _hasBaseToolbar() {
     return getBaseAppbar() != null;
+  }
+
+  bool reverseCustomPane() {
+    return false;
   }
 
   double getCustomPaneProportion() {
@@ -1044,7 +1051,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return TowPaneExt(
       startPane: _firstWidget!,
       endPane: _secondWidget,
-      customPaneProportion: getCustomPaneProportion(),
+      customPaneProportion: reverseCustomPane()
+          ? 1 - getCustomPaneProportion()
+          : getCustomPaneProportion(),
     );
   }
 

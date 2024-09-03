@@ -39,6 +39,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
   String? searchString;
+  bool isSliver;
 
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
   Axis scrollDirection;
@@ -51,6 +52,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.scrollDirection = Axis.vertical,
       this.onSeletedListItemsChanged,
       this.searchString,
+      this.isSliver = true,
       this.setParentForChildCardItem});
 }
 
@@ -81,6 +83,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   String? get getSearchString => this._searchString;
 
+  EdgeInsets defaultSliverListPadding =
+      const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3);
+  EdgeInsets defaultSliverGridPadding =
+      const EdgeInsets.symmetric(vertical: 15, horizontal: 15);
   set setSearchString(String? value) => this._searchString = value;
 
   String getListProviderKey();
@@ -265,10 +271,15 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       valueListenable: valueNotifierGrid,
       builder: (context, value, child) {
         if (value) {
-          return getSliverGridList(
-              list: list, count: count, isLoading: isLoading);
+          return widget.isSliver
+              ? getSliverGridList(
+                  list: list, count: count, isLoading: isLoading)
+              : getNonSliverGridList(
+                  list: list, count: count, isLoading: isLoading);
         } else {
-          return getSliverList(count, isLoading);
+          return widget.isSliver
+              ? getSliverList(count, isLoading)
+              : getNonSliverList(count, isLoading);
         }
       },
     );
@@ -303,10 +314,41 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               ),
             ),
           );
+  Widget getNonSliverList(int count, bool isLoading) {
+    return Padding(
+      padding: defaultSliverListPadding,
+      child: ListView.builder(
+        itemCount: count + (isLoading ? 8 : 0),
+        itemBuilder: (context, index) {
+          if (isLoading && index >= count - 1) {
+            return SkeletonListTile(
+              hasLeading: true,
+              hasSubtitle: true,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding / 2,
+                  vertical: kDefaultPadding / 2),
+            );
+          }
+          ViewAbstract va = listProvider.getList(getListProviderKey())[index];
+          va.setParent(_setParentForChildCardItem);
+          Widget w = _selectMood
+              ? ListCardItemSelected(
+                  isSelected: _isSelectedItem(va),
+                  onSelected: _onSelectedItem,
+                  object: va)
+              : ListCardItem(
+                  state: this,
+                  object: va,
+                );
+          return w;
+        },
+      ),
+    );
+  }
 
   Widget getSliverList(int count, bool isLoading) {
     return SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3),
+        padding: defaultSliverListPadding,
         sliver: LiveSliverList(
             controller: _scrollController,
             showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
@@ -386,11 +428,22 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         setDescriptionAtBottom: false,
       );
 
+  Widget getNonSliverGridList(
+      {List? list, required int count, required bool isLoading}) {
+    list = list ?? listProvider.getList(getListProviderKey());
+    return Padding(
+      padding: defaultSliverGridPadding,
+      child: widget.scrollDirection == Axis.vertical
+          ? getGridViewWhenAxisIsVerticalNonSliver(list, count, isLoading)
+          : getGridViewWhenAxisIsHorizontalSizedBox(list, isLoading),
+    );
+  }
+
   /// if axis is horizontal then we do need to padding or adding the hover puttons
   Widget getSliverGridList(
       {List? list, required int count, required bool isLoading}) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      padding: defaultSliverGridPadding,
       sliver: widget.scrollDirection == Axis.vertical
           ? getGridViewWhenAxisIsVertical(list, count, isLoading)
           : getGridViewWhenAxisIsHorizontal(list, count, isLoading),
@@ -402,48 +455,59 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       List<dynamic>? list, int count, bool isLoading) {
     list = list ?? listProvider.getList(getListProviderKey());
     return SliverToBoxAdapter(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * .15,
-        child: LayoutBuilder(
-          builder: (co, constraints) {
-            double size = constraints.maxHeight;
-            return ScrollSnapList(
-              itemCount: list!.length + (isLoading ? 5 : 0),
-              selectedItemAnchor: SelectedItemAnchor.START,
-              // endOfListTolerance: constraints.maxWidth,
-              scrollDirection: Axis.horizontal,
-              itemSize: size,
-              listController: _scrollController,
-              itemBuilder: (c, index) {
-                if (isLoading && index > list!.length - 1) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: kDefaultPadding / 2),
-                    child: GridTile(
-                        child: SizedBox(
-                            height: size,
-                            width: size,
-                            child: ListHorizontalItemShimmer(
-                              lines: SizeConfig.hasPointer(context) ? 0 : 3,
-                            ))),
-                  );
-                }
-                Widget currentTile = WebGridViewItem(
-                  setDescriptionAtBottom: !SizeConfig.hasPointer(context),
-                  item: list![index],
-                );
+        child: getGridViewWhenAxisIsHorizontalSizedBox(list, isLoading));
+  }
+
+  Widget getGridViewWhenAxisIsHorizontalSizedBox(
+      List<dynamic>? list, bool isLoading) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * .15,
+      child: LayoutBuilder(
+        builder: (co, constraints) {
+          double size = constraints.maxHeight;
+          return ScrollSnapList(
+            itemCount: list!.length + (isLoading ? 5 : 0),
+            selectedItemAnchor: SelectedItemAnchor.START,
+            // endOfListTolerance: constraints.maxWidth,
+            scrollDirection: Axis.horizontal,
+            itemSize: size,
+            listController: _scrollController,
+            itemBuilder: (c, index) {
+              if (isLoading && index > list!.length - 1) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: kDefaultPadding / 2),
-                  child: GridTile(child: currentTile),
+                  child: GridTile(
+                      child: SizedBox(
+                          height: size,
+                          width: size,
+                          child: ListHorizontalItemShimmer(
+                            lines: SizeConfig.hasPointer(context) ? 0 : 3,
+                          ))),
                 );
-              },
-              onItemFocus: (p0) {},
-            );
-          },
-        ),
+              }
+              Widget currentTile = WebGridViewItem(
+                setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+                item: list![index],
+              );
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
+                child: GridTile(child: currentTile),
+              );
+            },
+            onItemFocus: (p0) {},
+          );
+        },
       ),
     );
+  }
+
+  Widget getGridViewWhenAxisIsVerticalNonSliver(
+      List<dynamic>? list, int count, bool isLoading) {
+    return ResponsiveGridList(
+        minItemWidth: minGridItemSize,
+        children: getGridList(list: list, count: count, isLoading: isLoading));
   }
 
   Widget getGridViewWhenAxisIsVertical(
@@ -467,9 +531,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   Widget getEmptyWidget({bool isError = false}) {
-    return SliverFillRemaining(
-      child: _getEmptyWidget(isError),
-    );
+    if (widget.isSliver) {
+      return SliverFillRemaining(
+        child: _getEmptyWidget(isError),
+      );
+    }
+    return _getEmptyWidget(isError);
   }
 
   EmptyWidget _getEmptyWidget(bool isError) {
