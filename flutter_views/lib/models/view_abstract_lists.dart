@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -210,6 +211,14 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return image;
   }
 
+  MenuItemBuild getMenuItemSelect(BuildContext context) {
+    return MenuItemBuild(
+      AppLocalizations.of(context)!.selectItems,
+      Icons.list,
+      '/print',
+    );
+  }
+
   MenuItemBuild getMenuItemPrint(BuildContext context) {
     return MenuItemBuild(
       AppLocalizations.of(context)!.print,
@@ -266,16 +275,20 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return [];
   }
 
-  List<MenuItemBuild> getPopupMenuActionsEdit(BuildContext context) {
+  List<MenuItemBuild> getPopupMenuActionsEdit(BuildContext context,
+      {SliverApiWithStaticMixin? state}) {
     return [
+      if (state != null) getMenuItemSelect(context),
       if (hasPermissionPrint(context)) getMenuItemPrint(context),
       if (hasPermissionShare(context)) getMenuItemShare(context),
       if (hasPermissionEdit(context)) getMenuItemEdit(context),
     ];
   }
 
-  List<MenuItemBuild> getPopupMenuActionsList(BuildContext context) {
+  List<MenuItemBuild> getPopupMenuActionsList(BuildContext context,
+      {SliverApiWithStaticMixin? state}) {
     return [
+      if (state != null) getMenuItemSelect(context),
       if (hasPermissionShare(context)) getMenuItemShare(context),
       if (hasPermissionPrint(context)) getMenuItemPrint(context),
       if (hasPermissionEdit(context)) getMenuItemEdit(context),
@@ -285,45 +298,46 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   @Deprecated("Not future anymore")
   Widget onFutureAllPopupMenuLoaded(BuildContext context, ServerActions action,
-      {required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded}) {
+      {required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded,
+      SliverApiWithStaticMixin? state}) {
     List<MenuItemBuild> list = action == ServerActions.edit
-        ? getPopupMenuActionsEdit(context)
-        : getPopupMenuActionsList(context);
+        ? getPopupMenuActionsEdit(context, state: state)
+        : getPopupMenuActionsList(context, state: state);
     return onPopupMenuListLoaded(list);
   }
 
-  Widget getPopupMenuActionWidget(BuildContext c, ServerActions action) {
+  Widget getPopupMenuActionWidget(BuildContext c, ServerActions action,{SliverApiWithStaticMixin? state}) {
     //TODO for divider use PopupMenuDivider()
     List<MenuItemBuild> items = action == ServerActions.edit
         ? getPopupMenuActionsEdit(c)
         : getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
       onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(c, result);
+        onPopupMenuActionSelected(c, result,state:state);
       },
       itemBuilder: (BuildContext context) =>
           items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 
-  Widget getPopupMenuActionListWidget(BuildContext c) {
+  Widget getPopupMenuActionListWidget(BuildContext c,{SliverApiWithStaticMixin? state}) {
     List<MenuItemBuild> items = getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
       onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(c, result);
+        onPopupMenuActionSelected(c, result,state:state);
       },
       itemBuilder: (BuildContext context) =>
           items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 
-  ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e) {
+  ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e,{SliverApiWithStaticMixin? state}) {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
       onTap: () {
         Navigator.of(context).pop();
-        onPopupMenuActionSelected(context, e);
+        onPopupMenuActionSelected(context, e,state:state);
       },
     );
   }
@@ -332,22 +346,25 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
           BuildContext context, MenuItemBuild e) =>
       PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));
 
-  void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e) {
-    onPopupMenuActionSelected(context, e);
+  void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e,
+      {SliverApiWithStaticMixin? state}) {
+    onPopupMenuActionSelected(context, e,state:state);
   }
 
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result,
-      {ServerActions? action}) async {
+      {ServerActions? action, SliverApiWithStaticMixin? state}) async {
     debugPrint("onPopupMenuActionSelected $result");
+
     if (result.icon == Icons.share) {
       sharePage(context, action: action);
-    }
-    if (result.icon == Icons.print) {
+    } else if (result.icon == Icons.print) {
       printPage(context);
     } else if (result.icon == Icons.edit) {
       editPage(context);
     } else if (result.icon == Icons.view_agenda) {
       viewPage(context);
+    } else if (result.icon == Icons.list) {
+      state?.toggleSelectedMood();
     }
   }
 }

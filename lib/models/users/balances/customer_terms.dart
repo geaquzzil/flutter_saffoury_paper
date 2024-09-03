@@ -118,4 +118,16 @@ class CustomerTerms extends Customer
   CustomerTerms fromJson(Map<String, dynamic> data) {
     return CustomerTerms.fromJson(data);
   }
+  
+  @override
+  Widget? getCustomViewOnResponse(CustomerTerms response) {
+    // TODO: implement getCustomViewOnResponse
+    throw UnimplementedError();
+  }
+  
+  @override
+  Widget? getCustomViewOnResponseAddWidget(CustomerTerms response) {
+    // TODO: implement getCustomViewOnResponseAddWidget
+    throw UnimplementedError();
+  }
 }

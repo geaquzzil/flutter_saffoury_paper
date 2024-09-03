@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/new_screens/actions/dashboard/base_deter
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
@@ -46,7 +47,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void showMenuOn(
       {required BuildContext context,
       GlobalKey? clickedWidget,
-      OffsetHelper? position}) async {
+      OffsetHelper? position,
+      SliverApiWithStaticMixin? state}) async {
     Offset offset;
     Size size;
     if (position != null) {
@@ -82,13 +84,18 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardLongClicked(BuildContext context,
-      {GlobalKey? clickedWidget, OffsetHelper? position}) async {
+      {GlobalKey? clickedWidget,
+      OffsetHelper? position,
+      SliverApiWithStaticMixin? state}) async {
     debugPrint("onCardLongClicked");
 
     if (isLargeScreenFromCurrentScreenSize(context)) {
       if (clickedWidget == null && position == null) return;
       showMenuOn(
-          context: context, clickedWidget: clickedWidget, position: position);
+          context: context,
+          clickedWidget: clickedWidget,
+          position: position,
+          state: state);
       return;
     }
 
@@ -97,7 +104,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       withHeightFactor: false,
       context: context,
       builder: (context) =>
-          BottomSheetDialogWidget(viewAbstract: this as ViewAbstract),
+          BottomSheetDialogWidget(viewAbstract: this as ViewAbstract,state:state),
     );
   }
 

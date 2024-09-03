@@ -9,10 +9,14 @@ import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 ///no scroll controller for now
+@Deprecated("Use Mixin")
 class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
     T extends CustomViewHorizontalListResponse<E>> extends StatefulWidget {
   T autoRest;
+  @Deprecated("Use CustomViewHorizontalListResponse override instead")
   Widget Function(dynamic response)? onResponse;
+  
+  @Deprecated("Use CustomViewHorizontalListResponse override instead") 
   Widget? Function(dynamic response)? onResponseAddWidget;
 
   ListHorizontalCustomViewApiAutoRestWidget(
@@ -234,6 +238,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       WidgetsBinding.instance.addPostFrameCallback((_) {
         fetshList();
       });
-    });
+    });    
   }
-}
+              
+              

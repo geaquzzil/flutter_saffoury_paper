@@ -14,6 +14,7 @@ abstract class JsonHelper<T> {
 
 class AutoRest<T extends ViewAbstract> {
   T obj;
+  @Deprecated("Should implement a function instead ")
   String key;
   int? range;
 
@@ -54,8 +55,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(
-          serverResponse.getFailureMessage());
+      onResponse?.onServerFailureResponse(serverResponse.getFailureMessage());
       //throw Exception('Failed to load album');
       return null;
     } else {
@@ -166,6 +166,9 @@ abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   double? getCustomViewHeight();
   ResponseType getCustomViewResponseType();
   String getCustomViewKey();
+
+  Widget? getCustomViewOnResponse(T response);
+  Widget? getCustomViewOnResponseAddWidget(T response);
 }
 
 enum ResponseType {

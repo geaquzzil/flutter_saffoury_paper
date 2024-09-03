@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
@@ -263,20 +264,21 @@ class WebGridViewItem extends StatelessWidget {
   final bool isSelectMood;
   final bool isSelected;
   void Function(ViewAbstract item, bool isSelectd)? onSelected;
-
+  SliverApiWithStaticMixin? state;
   final bool hightLightonSelect;
   final Function()? onPress;
   final bool setDescriptionAtBottom;
 
   WebGridViewItem(
-      {super.key,
+      {
       required this.item,
       this.setDescriptionAtBottom = false,
       this.isSelectMood = false,
       this.hightLightonSelect = false,
       this.isSelected = false,
       this.onSelected,
-      this.onPress});
+      this.state,
+      this.onPress}):super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
@@ -296,12 +298,20 @@ class WebGridViewItem extends StatelessWidget {
             )
           : null,
       image: item.getImageUrl(context) ?? "",
+
       // scale: false,
       builder: (isHovered) {
         Widget child = GestureDetector(
+            onLongPress: () {
+              item.onCardLongClicked(context,
+                  state: state, clickedWidget: key as GlobalKey);
+            },
             onTap: onPress ??
                 () {
-                  item.onCardClicked(context, isSecoundSubPaneView: false);
+                  item.onCardClicked(
+                    context,
+                    isSecoundSubPaneView: false,
+                  );
                 },
             child: _getStack(context, isHovered));
         return child;
@@ -415,9 +425,7 @@ class WebGridViewItem extends StatelessWidget {
                 fit: BoxFit.cover),
         color: null,
         border: isSelected && isSelectMood
-            ? Border.all(
-              width: 2,
-              color: Theme.of(context).highlightColor)
+            ? Border.all(width: 2, color: Theme.of(context).highlightColor)
             : null,
         borderRadius: getBorderRedius());
   }

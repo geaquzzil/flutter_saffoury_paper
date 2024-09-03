@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
-
-
 class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   bool? isSelected;
+
   void Function(T obj, bool selected)? onSelected;
 
   ListCardItemSelected(
@@ -16,7 +15,7 @@ class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
 }
 
 class _ListCardItemSelected<T extends ViewAbstract>
-    extends State<ListCardItemSelected<T>>  {
+    extends State<ListCardItemSelected<T>> {
   late bool isSelected;
   @override
   void initState() {
@@ -39,16 +38,15 @@ class _ListCardItemSelected<T extends ViewAbstract>
 
   @override
   Widget build(BuildContext context) {
-    
     return CheckboxListTile.adaptive(
       controlAffinity: ListTileControlAffinity.leading,
       value: isSelected,
       onChanged: (value) {
         debugPrint("CheckboxListTile changed  => $value");
-        if ((widget.object.getParnet
-                    ?.hasPermissionFromParentSelectItem(context, widget.object) ??
+        if ((widget.object.getParnet?.hasPermissionFromParentSelectItem(
+                    context, widget.object) ??
                 true) ==
-            false ) return;
+            false) return;
         setState(() {
           widget.object.isSelected = value ?? false;
           isSelected = value ?? false;

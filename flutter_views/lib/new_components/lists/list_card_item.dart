@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -44,12 +45,15 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
 class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   final T object;
   Key? listState;
+
+  SliverApiWithStaticMixin? state;
   @Deprecated("Use glbal key")
   ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
   ListCardItem({
     Key? key,
     this.listState,
     this.onSelectedItem,
+    this.state,
     required this.object,
   }) : super(key: GlobalKey());
 
@@ -120,7 +124,8 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
           }
         },
         onLongPress: () {
-          object.onCardLongClicked(context, clickedWidget: key as GlobalKey);
+          object.onCardLongClicked(context,
+              clickedWidget: key as GlobalKey, state: state);
         },
         title: (object.getMainHeaderText(context)),
         subtitle: (object.getMainSubtitleHeaderText(context)),

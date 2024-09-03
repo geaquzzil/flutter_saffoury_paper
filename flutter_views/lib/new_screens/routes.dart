@@ -666,34 +666,6 @@ class RouteGenerator {
             useDraggableWidget: true,
           );
         });
-      case "/list":
-        return MaterialPageRoute(builder: (context) {
-          if (args == null) {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          } else if (args is List<ViewAbstract>) {
-            return Scaffold(
-              body: SafeArea(
-                child: ListStaticSearchableWidget<ViewAbstract>(
-                  list: args,
-                  listItembuilder: (item) => ListCardItem(object: item),
-                  onSearchTextChanged: (query) {
-                    debugPrint("GoRouter onSearchTextChanged $query");
-
-                    return (args).where((element) {
-                      debugPrint(
-                          "GoRouter onSearchTextChanged ${element.toStringValues()}");
-                      return query.contains(element.toStringValues());
-                    }).toList();
-                  },
-                ),
-              ),
-            );
-          } else {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          }
-        });
       case "/import":
         return MaterialPageRoute(builder: (context) {
           if (args == null) {
