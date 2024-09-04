@@ -307,38 +307,41 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return onPopupMenuListLoaded(list);
   }
 
-  Widget getPopupMenuActionWidget(BuildContext c, ServerActions action,{SliverApiWithStaticMixin? state}) {
+  Widget getPopupMenuActionWidget(BuildContext c, ServerActions action,
+      {SliverApiWithStaticMixin? state}) {
     //TODO for divider use PopupMenuDivider()
     List<MenuItemBuild> items = action == ServerActions.edit
         ? getPopupMenuActionsEdit(c)
         : getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
       onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(c, result,state:state);
+        onPopupMenuActionSelected(c, result, state: state);
       },
       itemBuilder: (BuildContext context) =>
           items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 
-  Widget getPopupMenuActionListWidget(BuildContext c,{SliverApiWithStaticMixin? state}) {
+  Widget getPopupMenuActionListWidget(BuildContext c,
+      {SliverApiWithStaticMixin? state}) {
     List<MenuItemBuild> items = getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
       onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(c, result,state:state);
+        onPopupMenuActionSelected(c, result, state: state);
       },
       itemBuilder: (BuildContext context) =>
           items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 
-  ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e,{SliverApiWithStaticMixin? state}) {
+  ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e,
+      {SliverApiWithStaticMixin? state}) {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
       onTap: () {
         Navigator.of(context).pop();
-        onPopupMenuActionSelected(context, e,state:state);
+        onPopupMenuActionSelected(context, e, state: state);
       },
     );
   }
@@ -349,7 +352,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e,
       {SliverApiWithStaticMixin? state}) {
-    onPopupMenuActionSelected(context, e,state:state);
+    onPopupMenuActionSelected(context, e, state: state);
   }
 
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result,

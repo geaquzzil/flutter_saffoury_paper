@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
 extension OnPressed on Widget {
+  Widget padding() {
+    return Padding(padding: const EdgeInsets.all(kDefaultPadding), child: this);
+  }
+
   Widget ripple(Function onPressed,
           {BorderRadiusGeometry borderRadius =
               const BorderRadius.all(Radius.circular(5))}) =>

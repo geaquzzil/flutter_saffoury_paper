@@ -41,6 +41,8 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   String? searchString;
   bool isSliver;
 
+  Widget Function(ViewAbstract item)? hasCustomCardBuilder;
+
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
   Axis scrollDirection;
   bool isGridView;
@@ -51,6 +53,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.isGridView = true,
       this.scrollDirection = Axis.vertical,
       this.onSeletedListItemsChanged,
+      this.hasCustomCardBuilder,
       this.searchString,
       this.isSliver = true,
       this.setParentForChildCardItem});
@@ -193,8 +196,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _searchString = widget.searchString;
 
     ///override the gride view when the scroll axis is horizontal
-    valueNotifierGrid = ValueNotifier<bool>(
-        widget.isGridView || widget.scrollDirection == Axis.horizontal);
+    valueNotifierGrid = ValueNotifier<bool>(widget.isGridView);
 
     _onSeletedListItemsChanged =
         widget.onSeletedListItemsChanged ?? ValueNotifier([]);
@@ -336,10 +338,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                   isSelected: _isSelectedItem(va),
                   onSelected: _onSelectedItem,
                   object: va)
-              : ListCardItem(
-                  state: this,
-                  object: va,
-                );
+              : widget.hasCustomCardBuilder != null
+                  ? widget.hasCustomCardBuilder!.call(va)
+                  : ListCardItem(
+                      state: this,
+                      object: va,
+                    );
           return w;
         },
       ),
@@ -371,10 +375,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                         isSelected: _isSelectedItem(va),
                         onSelected: _onSelectedItem,
                         object: va)
-                    : ListCardItem(
-                        state: this,
-                        object: va,
-                      );
+                    : widget.hasCustomCardBuilder != null
+                        ? widget.hasCustomCardBuilder!.call(va)
+                        : ListCardItem(
+                            state: this,
+                            object: va,
+                          );
                 return w;
               },
             ),
@@ -419,14 +425,19 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     ];
   }
 
-  Widget getGridItem(e) => WebGridViewItem(
-        isSelectMood: _selectMood,
-        isSelected: _isSelectedItem(e),
-        onSelected: _onSelectedItem,
-        item: e,
-        state: this,
-        setDescriptionAtBottom: false,
-      );
+  Widget getGridItem(e) {
+    if (widget.hasCustomCardBuilder != null) {
+      return widget.hasCustomCardBuilder!.call(e);
+    }
+    return WebGridViewItem(
+      isSelectMood: _selectMood,
+      isSelected: _isSelectedItem(e),
+      onSelected: _onSelectedItem,
+      item: e,
+      state: this,
+      setDescriptionAtBottom: false,
+    );
+  }
 
   Widget getNonSliverGridList(
       {List? list, required int count, required bool isLoading}) {
@@ -461,7 +472,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   Widget getGridViewWhenAxisIsHorizontalSizedBox(
       List<dynamic>? list, bool isLoading) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .15,
+      height: MediaQuery.of(context).size.height * .3,
       child: LayoutBuilder(
         builder: (co, constraints) {
           double size = constraints.maxHeight;
@@ -557,6 +568,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   void _checkToUpdateToListObject() {
     bool shouldFetsh = false;
+    _searchString = widget.searchString;
     _ObjectType lastUpdated = getToListObjectType();
     if (lastUpdated == _ObjectType.VIEW_ABSTRACT &&
         _toListObjectType == _ObjectType.VIEW_ABSTRACT) {

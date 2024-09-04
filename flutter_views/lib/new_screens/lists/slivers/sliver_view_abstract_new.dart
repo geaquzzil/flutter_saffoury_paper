@@ -10,6 +10,10 @@ class SliverApiMixinViewAbstractWidget
   SliverApiMixinViewAbstractWidget(
       {super.key,
       super.scrollDirection,
+      super.isSliver,
+      super.isGridView=false,
+      super.hasCustomCardBuilder,
+      
       required super.toListObject,
       super.searchString});
 
