@@ -8,20 +8,23 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchWidgetComponentEditable extends StatelessWidget {
   TextEditingController controller = TextEditingController();
+  String? initialSearch;
   bool trailingIsCart;
   final Debouncer _debouncer = Debouncer(milliseconds: 700);
   ValueNotifier<String?>? notiferSearch;
-  void Function(String ?value)? notiferSearchVoid;
+  void Function(String? value)? notiferSearchVoid;
 
   SearchWidgetComponentEditable({
     super.key,
     this.trailingIsCart = false,
     this.notiferSearch,
+    this.initialSearch,
     this.notiferSearchVoid,
   }) : assert(notiferSearch != null || notiferSearchVoid != null);
 
   @override
   Widget build(BuildContext context) {
+    controller.value = TextEditingValue(text: initialSearch ?? '');
     return _buildSearchBox(context);
   }
 

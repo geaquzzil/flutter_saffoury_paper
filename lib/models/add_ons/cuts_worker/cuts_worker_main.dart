@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
@@ -60,13 +61,21 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   }
 
   @override
-  Widget? getBaseAppbar() => SearchWidgetComponentEditable(
-        trailingIsCart: false,
-        notiferSearchVoid: (value) {
-          setState(() {
-            _searchQuery = value;
-          });
-        },
+  Widget? getBaseAppbar() => ListTile(
+        leading: TodayTextTicker(
+          requireTime: true,
+        ),
+        title: Card(
+          child: SearchWidgetComponentEditable(
+            initialSearch: _searchQuery,
+            trailingIsCart: false,
+            notiferSearchVoid: (value) {
+              setState(() {
+                _searchQuery = value;
+              });
+            },
+          ),
+        ),
       );
 
   @override
@@ -176,7 +185,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
               );
             },
             toListObject: CutRequestWorker()
-              ..setCustomMap({"<cut_status>": "PENDING"}),
+              ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
           ),
         ),
       ],
@@ -190,27 +199,27 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         getPrimaryText("ON PROGRESS"),
-        Expanded(
-          child: Card(
-            child: SliverApiMixinViewAbstractWidget(
-              searchString: _searchQuery,
-              isSliver: false,
-              scrollDirection: Axis.vertical,
-              toListObject: CutRequestWorker()
-                ..setCustomMap({"<cut_status>": "PROCESSING"}),
-            ),
-          ),
-        ),
-        getPrimaryText("COMPLETED WITH IN A WEEK"),
-        Expanded(
-          child: SliverApiMixinViewAbstractWidget(
-            searchString: _searchQuery,
-            isSliver: false,
-            scrollDirection: Axis.vertical,
-            toListObject: CutRequestWorker()
-              ..setCustomMap({"<cut_status>": "COMPLETED"}),
-          ),
-        ),
+        // Expanded(
+        //   child: Card(
+        //     child: SliverApiMixinViewAbstractWidget(
+        //       searchString: _searchQuery,
+        //       isSliver: false,
+        //       scrollDirection: Axis.vertical,
+        //       toListObject: CutRequestWorker()
+        //         ..setCustomMapOnListAndSearch({"<cut_status>": "PROCESSING"}),
+        //     ),
+        //   ),
+        // ),
+        // getPrimaryText("COMPLETED WITH IN A WEEK"),
+        // Expanded(
+        //   child: SliverApiMixinViewAbstractWidget(
+        //     searchString: _searchQuery,
+        //     isSliver: false,
+        //     scrollDirection: Axis.vertical,
+        //     toListObject: CutRequestWorker()
+        //       ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
+        //   ),
+        // ),
       ],
     );
   }

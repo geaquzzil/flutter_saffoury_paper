@@ -48,6 +48,31 @@ const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
 
+mixin TickerWidget<T extends StatefulWidget> on State<T> {
+  int getTickerSecond();
+
+  Timer? _timer;
+
+  void initTimer() {
+    if (_timer != null && _timer!.isActive) return;
+    _timer = Timer.periodic(Duration(seconds: getTickerSecond()), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    initTimer();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+
+    super.dispose();
+  }
+}
 mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
   ValueNotifier valueFirstPane = ValueNotifier(null);
   ValueNotifier valueSecondPane = ValueNotifier(null);
@@ -562,6 +587,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
     return AppBar(
         surfaceTintColor: Colors.transparent,
+        toolbarHeight: 100,
 
         // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,

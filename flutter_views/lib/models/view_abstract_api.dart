@@ -35,13 +35,24 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, String>? _customMap;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Map<String, String>? _customMapOnSearch;
 
-  Map<String, String> getCustomMapOnSearch() => {};
+  Map<String, String> get getCustomMapOnSearch => _customMapOnSearch ?? {};
 
   Map<String, String> get getCustomMap => _customMap ?? {};
 
   void setCustomMap(Map<String, String> customMap) {
     _customMap = customMap;
+  }
+
+  void setCustomMapOnSearch(Map<String, String> customMap) {
+    _customMapOnSearch = customMap;
+  }
+
+  void setCustomMapOnListAndSearch(Map<String, String> customMap) {
+    setCustomMap(customMap);
+    setCustomMapOnSearch(customMap);
   }
 
   void setCustomMapAsSearchable(String? searchQuery) {
@@ -115,6 +126,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     defaultHeaders['Platform'] = "Flutter";
     defaultHeaders['Auth'] =
         Encriptions.encypt("HIIAMANANDROIDUSERFROMSAFFOURYCOMPANY");
+    debugPrint("AUTH:${defaultHeaders['Auth']}");
 
     defaultHeaders['X-Authorization'] =
         "WNYDGno8agC7nVmX99/uxyz24UgjvUTsjWFk3T94bERF9JLgBubq4cwiga3q5r9XExvUiE5rezZ5axsWvBjfmOwyW0GL34NS0y5y1UeVM12OU6JLnAEWfO6TxkMe7O9nr+H1LUkn4uYhVJFcJ0t8pYZF9iO7UHQXZTnDzTRQ4vnDRrWazwgtPXrBjMHNrYzNhxiuBzsH5CGtE2ZPnX+slhCI4F1KWfJHrXJX7n+Ddvc=";
@@ -544,7 +556,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return HttpWithMiddleware.build(
         requestTimeout: const Duration(seconds: 60),
         middlewares: [
-          HttpLogger(logLevel: LogLevel.BASIC),
+          HttpLogger(logLevel: LogLevel.BODY),
         ]);
   }
 
@@ -612,7 +624,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             itemCount?.toString() ?? getPageItemCount.toString();
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
 
-        mainBody.addAll(getCustomMapOnSearch());
+        mainBody.addAll(getCustomMapOnSearch);
         break;
 
       case ServerActions.list_reduce_size:

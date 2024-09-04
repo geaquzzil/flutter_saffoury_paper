@@ -1321,7 +1321,7 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Map<String, String> getCustomMapOnSearch() => {
+  Map<String, String> get getCustomMapOnSearch => {
         "requireInventory": "true",
         if (parent is CutRequest) ...getOnlyReelsCustomParams()
       };
