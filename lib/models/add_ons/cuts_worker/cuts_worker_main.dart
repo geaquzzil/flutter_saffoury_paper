@@ -199,27 +199,27 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         getPrimaryText("ON PROGRESS"),
-        // Expanded(
-        //   child: Card(
-        //     child: SliverApiMixinViewAbstractWidget(
-        //       searchString: _searchQuery,
-        //       isSliver: false,
-        //       scrollDirection: Axis.vertical,
-        //       toListObject: CutRequestWorker()
-        //         ..setCustomMapOnListAndSearch({"<cut_status>": "PROCESSING"}),
-        //     ),
-        //   ),
-        // ),
-        // getPrimaryText("COMPLETED WITH IN A WEEK"),
-        // Expanded(
-        //   child: SliverApiMixinViewAbstractWidget(
-        //     searchString: _searchQuery,
-        //     isSliver: false,
-        //     scrollDirection: Axis.vertical,
-        //     toListObject: CutRequestWorker()
-        //       ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
-        //   ),
-        // ),
+        Expanded(
+          child: Card(
+            child: SliverApiMixinViewAbstractWidget(
+              searchString: _searchQuery,
+              isSliver: false,
+              scrollDirection: Axis.vertical,
+              toListObject: CutRequestWorker()
+                ..setCustomMapOnListAndSearch({"<cut_status>": "PROCESSING"}),
+            ),
+          ),
+        ),
+        getPrimaryText("COMPLETED WITH IN A WEEK"),
+        Expanded(
+          child: SliverApiMixinViewAbstractWidget(
+            searchString: _searchQuery,
+            isSliver: false,
+            scrollDirection: Axis.vertical,
+            toListObject: CutRequestWorker()
+              ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
+          ),
+        ),
       ],
     );
   }
