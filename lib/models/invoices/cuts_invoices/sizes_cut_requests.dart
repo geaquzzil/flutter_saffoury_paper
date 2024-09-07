@@ -61,9 +61,13 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   }
 
   Widget getQunaityWithSheets(BuildContext context, CutRequest item) {
-    return Html(
-      
-        data: "<big>${getSheets(context, item)}/${getQuantity(context)}</big>");
+    return Html(style: {
+      "body": Style(
+        fontSize: FontSize(12.0),
+        // fontWeight: FontWeight.bold,
+        // color: item.getCutStatusColor()
+      ),
+    }, data: "<big>${getSheets(context, item)}/${getQuantity(context)}</big>");
   }
 
   @override

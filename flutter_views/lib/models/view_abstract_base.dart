@@ -155,6 +155,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getMainSubtitleHeaderText(context);
   }
 
+
+
   Widget? getWebListTileItemLeading(BuildContext context) {
     return getCardTrailing(context);
   }

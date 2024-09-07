@@ -119,7 +119,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   void toggleSelectedMood() {
-    if(!widget.enableSelection)return;
+    if (!widget.enableSelection) return;
     if (mounted) {
       setState(() {
         _selectMood = !_selectMood;
@@ -139,8 +139,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     return _toListObject as ViewAbstract;
   }
 
-  List<ViewAbstract> getToListObjectCastList() {
-    return _toListObject as List<ViewAbstract>;
+  List? getToListObjectCastList() {
+    if (_toListObjectType != _ObjectType.CUSTOM_LIST) return null;
+    return _toListObject as List;
   }
 
   bool isToListObjectIsViewAbstract() {
@@ -239,6 +240,11 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   @override
   Widget build(BuildContext context) {
+    List? customList = getToListObjectCastList();
+    if (customList != null) {
+      return getListValueListenableIsGrid(
+          list: customList, count: customList.length, isLoading: false);
+    }
     return getListSelector();
   }
 
@@ -285,8 +291,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                   list: list, count: count, isLoading: isLoading);
         } else {
           return widget.isSliver
-              ? getSliverList(count, isLoading)
-              : getNonSliverList(count, isLoading);
+              ? getSliverList(count, isLoading, customList: list)
+              : getNonSliverList(count, isLoading, customList: list);
         }
       },
     );
@@ -321,7 +327,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               ),
             ),
           );
-  Widget getNonSliverList(int count, bool isLoading) {
+  Widget getNonSliverList(int count, bool isLoading, {List? customList}) {
     Widget? seperatedWidget = widget.hasCustomSeperater;
     Widget w = seperatedWidget == null
         ? ListView.builder(
@@ -336,8 +342,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                       vertical: kDefaultPadding / 2),
                 );
               }
-              ViewAbstract va =
-                  listProvider.getList(getListProviderKey())[index];
+              ViewAbstract va = customList != null
+                  ? customList[index]
+                  : listProvider.getList(getListProviderKey())[index];
               va.setParent(_setParentForChildCardItem);
               Widget w = _selectMood
                   ? ListCardItemSelected(
@@ -354,6 +361,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
             },
           )
         : ListView.separated(
+            shrinkWrap: true,
             itemCount: count + (isLoading ? 8 : 0),
             separatorBuilder: (c, i) {
               return seperatedWidget!;
@@ -368,8 +376,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                       vertical: kDefaultPadding / 2),
                 );
               }
-              ViewAbstract va =
-                  listProvider.getList(getListProviderKey())[index];
+              ViewAbstract va = customList != null
+                  ? customList[index]
+                  : listProvider.getList(getListProviderKey())[index];
               va.setParent(_setParentForChildCardItem);
               Widget w = _selectMood
                   ? ListCardItemSelected(
@@ -392,7 +401,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     );
   }
 
-  Widget getSliverList(int count, bool isLoading) {
+  Widget getSliverList(int count, bool isLoading, {List? customList}) {
     return SliverPadding(
         padding: defaultSliverListPadding,
         sliver: LiveSliverList(

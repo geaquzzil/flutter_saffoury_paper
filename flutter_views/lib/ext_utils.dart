@@ -186,6 +186,16 @@ extension StringsUtils on String? {
     return dateFormat.parse(this ?? "");
   }
 
+  String toDateTimeOnlyMonthAndDayString() {
+    DateFormat dateFormat = DateFormat("MMMd", 'en-US');
+    return dateFormat.format(toDateTime());
+  }
+
+  String toDateTimeOnlyTimeString() {
+    DateFormat dateFormat = DateFormat('jm', 'en-US');
+    return dateFormat.format(toDateTime());
+  }
+
   String toDateTimeOnlyDateString() {
     DateFormat dateFormat = DateFormat(dateOnlyFormatString, 'en-US');
     return dateFormat.format(toDateTime());

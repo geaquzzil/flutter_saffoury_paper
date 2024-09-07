@@ -26,23 +26,23 @@ enum ServerActions {
 class URLS {
   static String getBaseUrl() {
     if (!kIsWeb) {
-      return 'https://saffoury.com/api/index.php';
+      return 'https://saffoury.com/api2/index.php';
     }
     if (kIsWeb && kDebugMode) {
-      return 'https://saffoury.com/api/index.php';
+      return 'https://saffoury.com/api2/index.php';
     } else {
-      return 'https://saffoury.com/api/index.php';
+      return 'https://saffoury.com/api2/index.php';
     }
   }
 
   static String getBaseUrlPrint() {
     if (!kIsWeb) {
-      return 'https://saffoury.com/api/print/index.php';
+      return 'https://saffoury.com/api2/print/index.php';
     }
     if (kIsWeb && kDebugMode) {
-      return 'https://saffoury.com/api/print/index.php';
+      return 'https://saffoury.com/api2/print/index.php';
     } else {
-      return 'https://saffoury.com/api/print/index.php';
+      return 'https://saffoury.com/api2/print/index.php';
     }
   }
 

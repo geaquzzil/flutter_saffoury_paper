@@ -73,8 +73,8 @@ class NotificationWidget extends StatelessWidget {
               width: 400,
               height: 400,
               child: SliverApiMixinViewAbstractWidget(
-                enableSelection:false,
-                hasCustomSeperator:Divider();
+                enableSelection: false,
+                hasCustomSeperater: Divider(),
                 isSliver: false,
                 toListObject: context
                     .read<AuthProvider<AuthUser>>()

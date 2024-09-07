@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_saffoury_paper/models/add_ons/cuts_worker/cut_request_list_card.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -135,54 +136,63 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
           child: SliverApiMixinViewAbstractWidget(
             isGridView: false,
             scrollDirection: Axis.vertical,
+            enableSelection: false,
+            // hasCustomSeperater: Divider(),
             isSliver: false,
             searchString: _searchQuery,
             hasCustomCardBuilder: (item) {
-              return ListTile(
-                // trailing: item.getCount,
-                leading: Card(
-                    child: SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: item.getCachedImage(context))),
-                title: item.getWebListTileItemTitle(context),
-                subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      item.getWebListTileItemSubtitle(context)!,
-                      getPrimaryText(AppLocalizations.of(context)!.details),
-                      ...item.getListableInterface().getListableList().map(
-                          (toElement) => ListTile(
-                              // selected: isSelected,
-                              // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-                              // onTap: onTap,
-                              // onLongPress: onLongTap,
-                              leading: getPrimaryText(
-                                  "${item.getListableInterface().getListableList().indexOf(toElement) + 1}",
-                                  withPadding: false),
-                              title: (toElement as SizesCutRequest)
-                                  .getTitleTextHtml(
-                                      context, item as CutRequest),
-                              trailing: SizedBox(
-                                  width: 200,
-                                  child: toElement.getQunaityWithSheets(
-                                      context, item))
+              CutRequest cutRequest = item as CutRequest;
+              return CutRequestListCard(
+                item: cutRequest,
+              );
+              return Card(
+                child: ListTile(
+                  // trailing: item.getCount,
+                  trailing: cutRequest.customers?.getMainHeaderText(context),
+                  leading: Card(
+                      child: SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: item.getCachedImage(context))),
+                  title: item.getWebListTileItemTitle(context),
+                  subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        item.getWebListTileItemSubtitle(context)!,
+                        getPrimaryText(AppLocalizations.of(context)!.details),
+                        ...item.getListableInterface().getListableList().map(
+                            (toElement) => ListTile(
+                                // selected: isSelected,
+                                // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+                                // onTap: onTap,
+                                // onLongPress: onLongTap,
+                                leading: getPrimaryText(
+                                    "${item.getListableInterface().getListableList().indexOf(toElement) + 1}",
+                                    withPadding: false),
+                                title: (toElement as SizesCutRequest)
+                                    .getTitleTextHtml(
+                                        context, item as CutRequest),
+                                trailing: SizedBox(
+                                    width: 200,
+                                    child: toElement.getQunaityWithSheets(
+                                        context, item))
 
-                              // leading: toElement.getWebListTileItemLeading(context),
-                              // trailing: object.getCardTrailing(context)
-                              ))
+                                // leading: toElement.getWebListTileItemLeading(context),
+                                // trailing: object.getCardTrailing(context)
+                                ))
 
-                      // ListStaticWidget<ViewAbstract>(
-                      //     list: item!.getListableInterface().getListableList(),
-                      //     emptyWidget: const Text("null"),
-                      //     listItembuilder: (item) => ListCardItemWeb(
-                      //           object: item,
-                      //         )),
-                    ]),
+                        // ListStaticWidget<ViewAbstract>(
+                        //     list: item!.getListableInterface().getListableList(),
+                        //     emptyWidget: const Text("null"),
+                        //     listItembuilder: (item) => ListCardItemWeb(
+                        //           object: item,
+                        //         )),
+                      ]),
+                ),
               );
             },
             toListObject: CutRequestWorker()
-              ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
+              ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
           ),
         ),
       ],
