@@ -9,6 +9,8 @@ part of 'purchasers_refunds.dart';
 PurchasesRefund _$PurchasesRefundFromJson(Map<String, dynamic> json) =>
     PurchasesRefund()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
@@ -100,6 +102,8 @@ PurchasesRefundDetails _$PurchasesRefundDetailsFromJson(
         Map<String, dynamic> json) =>
     PurchasesRefundDetails()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

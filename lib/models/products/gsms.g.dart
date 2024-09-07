@@ -8,6 +8,8 @@ part of 'gsms.dart';
 
 GSM _$GSMFromJson(Map<String, dynamic> json) => GSM()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..gsm = (json['gsm'] as num?)?.toInt()
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

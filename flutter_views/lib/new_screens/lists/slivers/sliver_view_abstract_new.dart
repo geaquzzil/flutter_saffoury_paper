@@ -13,6 +13,8 @@ class SliverApiMixinViewAbstractWidget
       super.isSliver,
       super.isGridView=false,
       super.hasCustomCardBuilder,
+      super.hasCustomSeperater,
+      super.enableSelection,
       
       required super.toListObject,
       super.searchString});

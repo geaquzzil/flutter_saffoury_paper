@@ -8,6 +8,8 @@ part of 'debits.dart';
 
 Debits _$DebitsFromJson(Map<String, dynamic> json) => Debits()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..fromBox = (json['fromBox'] as num?)?.toInt()
   ..isDirect = (json['isDirect'] as num?)?.toInt()
   ..date = json['date'] as String?

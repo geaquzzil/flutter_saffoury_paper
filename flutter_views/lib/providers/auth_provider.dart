@@ -3,10 +3,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/notification_interface.dart';
 import 'package:flutter_view_controller/interfaces/posable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -52,6 +54,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late T _user;
   late T _initUser;
   late ViewAbstract _orderSimple;
+
+  NotificationHandlerInterface? _notificationHandler;
+  late NotificationHandlerInterface _notificationHandlerSimple;
+
   List<RouteableInterface>? _getGoRoutesAddOns;
   Status _status = Status.Initialization;
   bool _isInitialized = false;
@@ -93,6 +99,12 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     return _hasFinishedUpSettingUp;
   }
 
+  bool hasNotificationWidget() {
+    return _notificationHandler != null;
+  }
+  NotificationHandlerInterface getNotificationHandler(){
+    return _notificationHandler!;
+  }
   static bool isLoggedIn(BuildContext context) {
     return context.read<AuthProvider<AuthUser>>().getUser.login == true;
   }
@@ -134,12 +146,14 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   AuthProvider.initialize(T initUser, List<ViewAbstract> drawerItems,
-      ViewAbstract orderSimple, List<RouteableInterface>? getGoRoutesAddOns) {
+      ViewAbstract orderSimple, List<RouteableInterface>? getGoRoutesAddOns,
+      {required NotificationHandlerInterface notificationHandlerSimple}) {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
     _user = _initUser;
     _getGoRoutesAddOns = getGoRoutesAddOns;
+    _notificationHandlerSimple = notificationHandlerSimple;
     _subscription = _initUser.authStateChanges().asBroadcastStream().listen(
       (dynamic _) {
         debugPrint("initUser.authStateChanges() $_");
@@ -178,6 +192,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       _permissions = _user.userlevels ?? PermissionLevelAbstract();
       hasSavedUser = true;
       debugPrint("initFakeData _permissions :$_permissions");
+
+      _notificationHandler = _user.setting?.DISABLE_NOTIFICATIONS == 1
+          ? null
+          : _notificationHandlerSimple;
       // notifyListeners();
     } catch (ex) {
       debugPrint("Error initial $ex");

@@ -25,6 +25,7 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/notifications.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
@@ -184,10 +185,14 @@ void main() async {
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
           create: (context) => AuthProvider<AuthUser>.initialize(
-                  Employee(), views, Purchases(), [
-                CutWorkerRouteAddon(),
-                GoodsInventoryRouteAddon(),
-              ])),
+                  notificationHandlerSimple: NotificationsClinet(),
+                  Employee(),
+                  views,
+                  Purchases(),
+                  [
+                    CutWorkerRouteAddon(),
+                    GoodsInventoryRouteAddon(),
+                  ])),
       ChangeNotifierProvider(create: (_) => CartProvider.init(Order())),
       ChangeNotifierProvider(create: (_) => LargeScreenPageProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),

@@ -8,6 +8,8 @@ part of 'cut_requests.dart';
 
 CutRequest _$CutRequestFromJson(Map<String, dynamic> json) => CutRequest()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..date = json['date'] as String?
   ..comments = json['comments'] as String?
   ..quantity = (json['quantity'] as num?)?.toDouble()

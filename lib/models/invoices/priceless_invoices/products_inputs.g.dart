@@ -8,6 +8,8 @@ part of 'products_inputs.dart';
 
 ProductInput _$ProductInputFromJson(Map<String, dynamic> json) => ProductInput()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
@@ -92,6 +94,8 @@ const _$InvoiceStatusEnumMap = {
 ProductInputDetails _$ProductInputDetailsFromJson(Map<String, dynamic> json) =>
     ProductInputDetails()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

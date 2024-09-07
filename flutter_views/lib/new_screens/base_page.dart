@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
@@ -594,10 +596,16 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         actions: !isBaseAppBar
             ? null
             : [
-                NotificationPopupWidget(),
-                const SizedBox(
-                  width: kDefaultPadding / 2,
-                ),
+                if (context
+                    .read<AuthProvider<AuthUser>>()
+                    .hasNotificationWidget())
+                  NotificationPopupWidget(),
+                if (context
+                    .read<AuthProvider<AuthUser>>()
+                    .hasNotificationWidget())
+                  const SizedBox(
+                    width: kDefaultPadding / 2,
+                  ),
                 const DrawerLanguageButton(),
                 const SizedBox(
                   width: kDefaultPadding / 2,

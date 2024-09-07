@@ -1557,7 +1557,7 @@ final loginJson = {
   "setting": {
     "iD": 1,
     "ENABLE_APP": 1,
-    "DISABLE_NOTIFICATIONS": 1,
+    "DISABLE_NOTIFICATIONS": 0,
     "ENABLE_MULTI_EDIT": 1,
     "EXCHANGE_RATE": 3950,
     "OLD_EXCHANGE_RATE": 3950,

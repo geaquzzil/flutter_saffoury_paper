@@ -9,6 +9,8 @@ part of 'server_data_api.dart';
 FilterableDataApi _$FilterableDataApiFromJson(Map<String, dynamic> json) =>
     FilterableDataApi()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..products_types = (json['products_types'] as List<dynamic>?)
           ?.map((e) => ProductType.fromJson(e as Map<String, dynamic>))
           .toList()

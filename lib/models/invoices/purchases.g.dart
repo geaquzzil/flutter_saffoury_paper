@@ -8,6 +8,8 @@ part of 'purchases.dart';
 
 Purchases _$PurchasesFromJson(Map<String, dynamic> json) => Purchases()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
   ..TermsID = (json['TermsID'] as num?)?.toInt()
   ..date = json['date'] as String?
@@ -93,6 +95,8 @@ const _$InvoiceStatusEnumMap = {
 PurchasesDetails _$PurchasesDetailsFromJson(Map<String, dynamic> json) =>
     PurchasesDetails()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

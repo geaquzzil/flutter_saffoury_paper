@@ -8,6 +8,8 @@ part of 'qualities.dart';
 
 Quality _$QualityFromJson(Map<String, dynamic> json) => Quality()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..name = BaseWithNameString.intFromString(json['name'])
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

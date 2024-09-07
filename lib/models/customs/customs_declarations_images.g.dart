@@ -10,6 +10,8 @@ CustomsDeclarationImages _$CustomsDeclarationImagesFromJson(
         Map<String, dynamic> json) =>
     CustomsDeclarationImages()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..image = json['image'] as String?
       ..comments = json['comments'] as String?
       ..customs_declarations = json['customs_declarations'] == null

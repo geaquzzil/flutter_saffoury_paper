@@ -10,6 +10,8 @@ ExcelToProductConverter _$ExcelToProductConverterFromJson(
         Map<String, dynamic> json) =>
     ExcelToProductConverter()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..product = json['product'] as String?
       ..quantity = ExcelToProductConverter.convertToDouble(json['quantity']);
 

@@ -8,6 +8,8 @@ part of 'currency.dart';
 
 Currency _$CurrencyFromJson(Map<String, dynamic> json) => Currency()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..name = BaseWithNameString.intFromString(json['name'])
   ..nameAr = json['nameAr'] as String?;
 

@@ -9,6 +9,8 @@ part of 'customs_declarations.dart';
 CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
     CustomsDeclaration()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..number = CustomsDeclaration.intFromString(json['number'])
       ..date = json['date'] as String?
       ..fromCountry = json['fromCountry'] as String?
@@ -23,7 +25,11 @@ CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
           (json['customs_declarations_images_count'] as num?)?.toInt()
       ..employees = json['employees'] == null
           ? null
-          : Employee.fromJson(json['employees'] as Map<String, dynamic>);
+          : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+      ..deletedList = (json['deletedList'] as List<dynamic>?)
+          ?.map((e) =>
+              CustomsDeclarationImages.fromJson(e as Map<String, dynamic>))
+          .toList();
 
 Map<String, dynamic> _$CustomsDeclarationToJson(CustomsDeclaration instance) =>
     <String, dynamic>{
@@ -39,4 +45,5 @@ Map<String, dynamic> _$CustomsDeclarationToJson(CustomsDeclaration instance) =>
       'customs_declarations_images_count':
           instance.customs_declarations_images_count,
       'employees': instance.employees?.toJson(),
+      'deletedList': instance.deletedList?.map((e) => e.toJson()).toList(),
     };

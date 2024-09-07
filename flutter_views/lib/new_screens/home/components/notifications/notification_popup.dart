@@ -1,7 +1,13 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/interfaces/notification_interface.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -17,7 +23,7 @@ class NotificationPopupWidget extends StatelessWidget {
     return CustomPopupMenu(
         barrierColor: isLargeScreen ? Colors.black54 : Colors.black26,
         // arrowSize: 20,
-        arrowColor: Theme.of(context).colorScheme.secondaryContainer,
+        arrowColor: Theme.of(context).colorScheme.surface,
         menuBuilder: () => NotificationWidget(),
         pressType: PressType.singleClick,
         // verticalMargin: -15,
@@ -61,18 +67,33 @@ class NotificationWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        color: Theme.of(context).colorScheme.secondaryContainer,
+        color: Theme.of(context).colorScheme.surface,
         child: IntrinsicWidth(
           child: SizedBox(
-            width: 400,
-            height: 400,
-            child: ListStaticWidget(
-                list: context.watch<NotificationProvider>().getList,
-                emptyWidget: EmptyWidget(
-                    lottiUrl: notifiactionLottie,
-                    title: title,
-                    subtitle: subtitle)),
-          ),
+              width: 400,
+              height: 400,
+              child: SliverApiMixinViewAbstractWidget(
+                enableSelection:false,
+                hasCustomSeperator:Divider();
+                isSliver: false,
+                toListObject: context
+                    .read<AuthProvider<AuthUser>>()
+                    .getNotificationHandler(),
+                hasCustomCardBuilder: (item) {
+                  ViewAbstract v =
+                      (item as NotificationHandlerInterface).getObject(context);
+
+                  return ListCardItem(object: v);
+                },
+              )
+
+              // ListStaticWidget(
+              //     list: context.watch<NotificationProvider>().getList,
+              //     emptyWidget: EmptyWidget(
+              //         lottiUrl: notifiactionLottie,
+              //         title: title,
+              //         subtitle: subtitle)),
+              ),
         ),
       ),
     );

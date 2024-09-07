@@ -8,6 +8,8 @@ part of 'products_types.dart';
 
 ProductType _$ProductTypeFromJson(Map<String, dynamic> json) => ProductType()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..name = json['name'] as String?
   ..unit = $enumDecodeNullable(_$ProductTypeUnitEnumMap, json['unit'])
   ..purchasePrice = (json['purchasePrice'] as num?)?.toDouble()

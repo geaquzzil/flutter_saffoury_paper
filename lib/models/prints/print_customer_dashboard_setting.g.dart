@@ -10,6 +10,8 @@ PrintCustomerDashboardSetting _$PrintCustomerDashboardSettingFromJson(
         Map<String, dynamic> json) =>
     PrintCustomerDashboardSetting()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..printerOptions = json['printerOptions'] == null
           ? null
           : PrinterOptions.fromJson(

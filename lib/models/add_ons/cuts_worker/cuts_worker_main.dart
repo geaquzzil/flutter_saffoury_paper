@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -27,6 +28,7 @@ class CutRequestWorker extends CutRequest {
         ServerActions.edit: ["cut_request_results", "sizes_cut_requests"],
         ServerActions.view: ["cut_request_results", "sizes_cut_requests"],
         ServerActions.list: ["cut_request_results", "sizes_cut_requests"],
+        ServerActions.search: ["cut_request_results", "sizes_cut_requests"],
       };
 }
 
@@ -106,15 +108,19 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
     return true;
   }
 
-  Widget getPrimaryText(String text) {
-    return Text(
+  Widget getPrimaryText(String text, {withPadding = true}) {
+    Widget t = Text(
       //TODO translate
       text,
       style: Theme.of(context)
           .textTheme
           .bodyLarge!
           .copyWith(color: Theme.of(context).colorScheme.secondary),
-    ).padding();
+    );
+    if (withPadding) {
+      return t.padding();
+    }
+    return t;
   }
 
   @override
@@ -134,47 +140,38 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
             hasCustomCardBuilder: (item) {
               return ListTile(
                 // trailing: item.getCount,
-                leading: ClipRRect(
-                    child: Padding(
-                        padding: const EdgeInsets.all(kDefaultPadding),
-                        child: SizedBox(
-                            height: 200,
-                            width: 200,
-                            child: item.getCachedImage(context)))),
+                leading: Card(
+                    child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: item.getCachedImage(context))),
                 title: item.getWebListTileItemTitle(context),
                 subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       item.getWebListTileItemSubtitle(context)!,
                       getPrimaryText(AppLocalizations.of(context)!.details),
-                      ...item
-                          .getListableInterface()
-                          .getListableList()
-                          .map((toElement) => OutlinedCard(
-                                child: ListTile(
-                                  // selected: isSelected,
-                                  // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-                                  // onTap: onTap,
-                                  // onLongPress: onLongTap,
-                                  title: (toElement
-                                      .getWebListTileItemSubtitle(context)),
-                                  subtitle: Column(
-                                    children: [
-                                      (toElement
-                                          .getWebListTileItemTitle(context))!,
-                                      Text(
-                                        (toElement as SizesCutRequest)
-                                            .quantity
-                                            .toCurrencyFormat(),
-                                      ),
-                                    ],
-                                  ),
+                      ...item.getListableInterface().getListableList().map(
+                          (toElement) => ListTile(
+                              // selected: isSelected,
+                              // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+                              // onTap: onTap,
+                              // onLongPress: onLongTap,
+                              leading: getPrimaryText(
+                                  "${item.getListableInterface().getListableList().indexOf(toElement) + 1}",
+                                  withPadding: false),
+                              title: (toElement as SizesCutRequest)
+                                  .getTitleTextHtml(
+                                      context, item as CutRequest),
+                              trailing: SizedBox(
+                                  width: 200,
+                                  child: toElement.getQunaityWithSheets(
+                                      context, item))
 
-                                  // leading: toElement.getWebListTileItemLeading(context),
-                                  // trailing: object.getCardTrailing(context)
-                                ),
+                              // leading: toElement.getWebListTileItemLeading(context),
+                              // trailing: object.getCardTrailing(context)
                               ))
-                          .toList()
+
                       // ListStaticWidget<ViewAbstract>(
                       //     list: item!.getListableInterface().getListableList(),
                       //     emptyWidget: const Text("null"),

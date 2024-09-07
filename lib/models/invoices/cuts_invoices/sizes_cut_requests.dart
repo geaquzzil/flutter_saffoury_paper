@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -27,6 +29,41 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   @override
   SizesCutRequest getSelfNewInstance() {
     return SizesCutRequest();
+  }
+
+  Widget getTitleTextHtml(BuildContext context, CutRequest item) {
+    String? productType =
+        item.products?.products_types?.getMainHeaderTextOnly(context);
+    String? size =
+        sizes?.getSizeHtmlFormatString(context, fiberLines: "Length");
+    String? gsm = item.products?.gsms?.getMainHeaderTextOnly(context);
+    return Html(
+      data: "$productType $size X $gsm",
+
+      // style:{
+
+      //   "body":Theme.of(context).textTheme.bodySmall
+      // }
+    );
+  }
+
+  String? getQuantity(BuildContext context) {
+    return AppLocalizations.of(context)!.kg_format(quantity.toCurrencyFormat());
+  }
+
+  String? getSheets(BuildContext context, CutRequest item) {
+    // item.products
+    //     ?.getSheets(customSize: sizes, customQuantity: quantity)
+    //     .toCurrencyFormat();
+    return AppLocalizations.of(context)!.sheets_string_f(item.products
+        ?.getSheets(customSize: sizes, customQuantity: quantity)
+        .toCurrencyFormat() as Object);
+  }
+
+  Widget getQunaityWithSheets(BuildContext context, CutRequest item) {
+    return Html(
+      
+        data: "<big>${getSheets(context, item)}/${getQuantity(context)}</big>");
   }
 
   @override
@@ -85,7 +122,8 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
 
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action,ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      {ServerActions? action,
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
     if (isNew()) {
       if (parent is CutRequest) {
         if ((parent as CutRequest).products == null) {

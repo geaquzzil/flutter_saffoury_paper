@@ -40,8 +40,10 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
   String? searchString;
   bool isSliver;
+  bool enableSelection;
 
   Widget Function(ViewAbstract item)? hasCustomCardBuilder;
+  Widget? hasCustomSeperater;
 
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
   Axis scrollDirection;
@@ -55,7 +57,9 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.onSeletedListItemsChanged,
       this.hasCustomCardBuilder,
       this.searchString,
+      this.enableSelection = true,
       this.isSliver = true,
+      this.hasCustomSeperater,
       this.setParentForChildCardItem});
 }
 
@@ -115,6 +119,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   void toggleSelectedMood() {
+    if(!widget.enableSelection)return;
     if (mounted) {
       setState(() {
         _selectMood = !_selectMood;
@@ -317,36 +322,73 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
             ),
           );
   Widget getNonSliverList(int count, bool isLoading) {
+    Widget? seperatedWidget = widget.hasCustomSeperater;
+    Widget w = seperatedWidget == null
+        ? ListView.builder(
+            itemCount: count + (isLoading ? 8 : 0),
+            itemBuilder: (context, index) {
+              if (isLoading && index >= count - 1) {
+                return SkeletonListTile(
+                  hasLeading: true,
+                  hasSubtitle: true,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kDefaultPadding / 2,
+                      vertical: kDefaultPadding / 2),
+                );
+              }
+              ViewAbstract va =
+                  listProvider.getList(getListProviderKey())[index];
+              va.setParent(_setParentForChildCardItem);
+              Widget w = _selectMood
+                  ? ListCardItemSelected(
+                      isSelected: _isSelectedItem(va),
+                      onSelected: _onSelectedItem,
+                      object: va)
+                  : widget.hasCustomCardBuilder != null
+                      ? widget.hasCustomCardBuilder!.call(va)
+                      : ListCardItem(
+                          state: this,
+                          object: va,
+                        );
+              return w;
+            },
+          )
+        : ListView.separated(
+            itemCount: count + (isLoading ? 8 : 0),
+            separatorBuilder: (c, i) {
+              return seperatedWidget!;
+            },
+            itemBuilder: (context, index) {
+              if (isLoading && index >= count - 1) {
+                return SkeletonListTile(
+                  hasLeading: true,
+                  hasSubtitle: true,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: kDefaultPadding / 2,
+                      vertical: kDefaultPadding / 2),
+                );
+              }
+              ViewAbstract va =
+                  listProvider.getList(getListProviderKey())[index];
+              va.setParent(_setParentForChildCardItem);
+              Widget w = _selectMood
+                  ? ListCardItemSelected(
+                      isSelected: _isSelectedItem(va),
+                      onSelected: _onSelectedItem,
+                      object: va)
+                  : widget.hasCustomCardBuilder != null
+                      ? widget.hasCustomCardBuilder!.call(va)
+                      : ListCardItem(
+                          state: this,
+                          object: va,
+                        );
+              return w;
+            },
+          );
+
     return Padding(
       padding: defaultSliverListPadding,
-      child: ListView.builder(
-        itemCount: count + (isLoading ? 8 : 0),
-        itemBuilder: (context, index) {
-          if (isLoading && index >= count - 1) {
-            return SkeletonListTile(
-              hasLeading: true,
-              hasSubtitle: true,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding / 2,
-                  vertical: kDefaultPadding / 2),
-            );
-          }
-          ViewAbstract va = listProvider.getList(getListProviderKey())[index];
-          va.setParent(_setParentForChildCardItem);
-          Widget w = _selectMood
-              ? ListCardItemSelected(
-                  isSelected: _isSelectedItem(va),
-                  onSelected: _onSelectedItem,
-                  object: va)
-              : widget.hasCustomCardBuilder != null
-                  ? widget.hasCustomCardBuilder!.call(va)
-                  : ListCardItem(
-                      state: this,
-                      object: va,
-                    );
-          return w;
-        },
-      ),
+      child: w,
     );
   }
 

@@ -8,6 +8,8 @@ part of 'print_invoice.dart';
 
 PrintInvoice _$PrintInvoiceFromJson(Map<String, dynamic> json) => PrintInvoice()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..printerOptions = json['printerOptions'] == null
       ? null
       : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)

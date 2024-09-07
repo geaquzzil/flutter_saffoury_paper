@@ -9,6 +9,8 @@ part of 'products_outputs.dart';
 ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
@@ -96,6 +98,8 @@ ProductOutputDetails _$ProductOutputDetailsFromJson(
         Map<String, dynamic> json) =>
     ProductOutputDetails()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

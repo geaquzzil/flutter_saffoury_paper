@@ -251,6 +251,24 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.isNoMoreItem = true;
     notifyListeners();
   }
+/// we request a query of options okey ? 
+/// then we put ids in the request
+  Future fetchTicker(String key,
+      {AutoRest? autoRest,
+      ViewAbstract? viewAbstract,
+      AutoRestCustom? customAutoRest,
+      int? customCount,
+      int? customPage}) async{
+    MultiListProviderHelper multiListProviderHelper;
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key]!;
+    } else {
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key]!;
+    }
+    await Future.delayed(Duration(milliseconds: 100));
+    
+  }
 
   Future fetchList(String key,
       {AutoRest? autoRest,

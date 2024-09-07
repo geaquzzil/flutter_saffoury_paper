@@ -241,11 +241,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Color getColor(BuildContext context) => Colors.red;
 
   Widget? getCardTrailing(BuildContext context) {
+    ViewAbstract viewAbstract = this as ViewAbstract;
     if (isDesktopPlatform()) {
-      return (this as ViewAbstract)
-          .getPopupMenuActionWidget(context, ServerActions.list);
+      return viewAbstract.getFBIcon() ??
+          viewAbstract.getPopupMenuActionWidget(context, ServerActions.list);
     }
-    return null;
+    return viewAbstract.getFBIcon();
   }
 
   bool hasImageLoadButton() {
@@ -368,7 +369,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   bool isListable() {
     return this is ListableInterface;
   }
-  bool isGridable(){
+
+  bool isGridable() {
     return this is WebCategoryGridableInterface;
   }
 

@@ -1,25 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'products_color.dart';
+part of 'notifications.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProductsColor _$ProductsColorFromJson(Map<String, dynamic> json) =>
-    ProductsColor()
+NotificationsClinet _$NotificationsClinetFromJson(Map<String, dynamic> json) =>
+    NotificationsClinet()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..top = json['top'] as String?
-      ..middle = json['middle'] as String?
-      ..back = json['back'] as String?;
+      ..json = json['json'] as String?
+      ..tokens = json['tokens'] as String?
+      ..date = json['date'] as String?;
 
-Map<String, dynamic> _$ProductsColorToJson(ProductsColor instance) =>
+Map<String, dynamic> _$NotificationsClinetToJson(
+        NotificationsClinet instance) =>
     <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
-      'top': instance.top,
-      'middle': instance.middle,
-      'back': instance.back,
+      'json': instance.json,
+      'tokens': instance.tokens,
+      'date': instance.date,
     };

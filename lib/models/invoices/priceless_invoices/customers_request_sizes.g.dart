@@ -9,6 +9,8 @@ part of 'customers_request_sizes.dart';
 CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
     CustomerRequestSize()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
@@ -97,6 +99,8 @@ CustomerRequestSizeDetails _$CustomerRequestSizeDetailsFromJson(
         Map<String, dynamic> json) =>
     CustomerRequestSizeDetails()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..products = json['products'] == null
           ? null
           : Product.fromJson(json['products'] as Map<String, dynamic>)

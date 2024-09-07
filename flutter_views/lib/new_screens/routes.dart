@@ -422,7 +422,7 @@ class RouteGenerator {
               pageBuilder: (context, state) {
                 var ex = state.extra;
                 ex ??= context
-                    .read<AuthProvider>()
+                    .read<AuthProvider<AuthUser>>()
                     .getNewInstance(state.pathParameters["tableName"]!);
 
                 return MaterialPage(
@@ -445,7 +445,7 @@ class RouteGenerator {
                   var ex = getRouterStateList(state, state.extra, context);
                   w = FileExporterPage(
                     viewAbstract: context
-                        .read<AuthProvider>()
+                        .read<AuthProvider<AuthUser>>()
                         .getNewInstance(state.pathParameters["tableName"]!)!,
                     list: (ex as List).cast(),
                   );
@@ -570,7 +570,7 @@ class RouteGenerator {
       if (data != null && tableName != null) {
         debugPrint("GoRouter data==null && tableName==null");
         ViewAbstract? v =
-            context.read<AuthProvider>().getNewInstance(tableName);
+            context.read<AuthProvider<AuthUser>>().getNewInstance(tableName);
         if (v != null) {
           List l = v.fromJsonViewAbstractList(data);
           extra = l;

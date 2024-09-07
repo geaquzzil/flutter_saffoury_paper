@@ -8,6 +8,8 @@ part of 'grades.dart';
 
 Grades _$GradesFromJson(Map<String, dynamic> json) => Grades()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..name = BaseWithNameString.intFromString(json['name'])
   ..products = (json['products'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

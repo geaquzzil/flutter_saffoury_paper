@@ -8,6 +8,8 @@ part of 'print_product.dart';
 
 PrintProduct _$PrintProductFromJson(Map<String, dynamic> json) => PrintProduct()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
   ..printerOptions = json['printerOptions'] == null
       ? null
       : PrinterOptions.fromJson(json['printerOptions'] as Map<String, dynamic>)

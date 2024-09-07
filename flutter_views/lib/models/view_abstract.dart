@@ -19,6 +19,10 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @JsonKey(includeFromJson: true, includeToJson: false)
   String? serverStatus;
 
+  ///this helps with the notification action to know if editing or new record
+  @JsonKey(includeFromJson: true, includeToJson: false)
+  String? fb_edit;
+
   ViewAbstract() : super();
 
   bool? get getIsScannedFromQrCode => _isScannedFromQrCode;
@@ -34,6 +38,21 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   Widget? getHomeHeaderWidget(BuildContext context) {
     return null;
+  }
+  Icon ? getFBIcon(){
+    IconData? ic= getFBEditIconData();
+    return ic==null? null:Icon(ic,);
+  }
+
+  IconData? getFBEditIconData() {
+    if (fb_edit == null) return null;
+    if (fb_edit == "edit") {
+      return Icons.edit;
+    } else if (fb_edit == "new") {
+      return Icons.abc;
+    } else {
+      return Icons.delete;
+    }
   }
 
   bool isEqualsAsType(ViewAbstract? object) {
