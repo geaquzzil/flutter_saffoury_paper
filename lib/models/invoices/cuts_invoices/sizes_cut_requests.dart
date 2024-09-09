@@ -31,19 +31,27 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
     return SizesCutRequest();
   }
 
-  Widget getTitleTextHtml(BuildContext context, CutRequest item) {
-    String? productType =
-        item.products?.products_types?.getMainHeaderTextOnly(context);
+  Widget getTitleTextHtml(BuildContext context, CutRequest item,
+      {bool withProductType = false}) {
+    String? productType = withProductType
+        ? item.products?.products_types?.getMainHeaderTextOnly(context)
+        : "";
     String? size =
         sizes?.getSizeHtmlFormatString(context, fiberLines: "Length");
     String? gsm = item.products?.gsms?.getMainHeaderTextOnly(context);
-    return Html(
-      data: "$productType $size X $gsm",
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Html(
+        data: "$productType $size X $gsm",
+        // style: {
+        //   "direction":
+        // },
 
-      // style:{
+        // style:{
 
-      //   "body":Theme.of(context).textTheme.bodySmall
-      // }
+        //   "body":Theme.of(context).textTheme.bodySmall
+        // }
+      ),
     );
   }
 

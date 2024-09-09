@@ -7,15 +7,20 @@ import '../models/apis/date_object.dart';
 
 class TodayText extends StatelessWidget {
   DateObject? dateObject;
+  bool requireTodayText;
   bool requireTime;
-  TodayText({super.key, this.dateObject, this.requireTime = false});
+  TodayText(
+      {super.key,
+      this.dateObject,
+      this.requireTime = false,
+      this.requireTodayText = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         constraints: const BoxConstraints(maxWidth: 300),
         child: ListTile(
-          title: getTitle(context),
+          title: requireTodayText ? getTitle(context) : null,
           subtitle: getDate(context),
         ));
   }
@@ -37,7 +42,7 @@ class TodayText extends StatelessWidget {
   Widget getDate(BuildContext context) {
     String date = DateFormat.yMMMEd().format(DateTime.now());
     date = requireTime
-        ? "$date ${DateFormat("HH:mm").format(DateTime.now())}"
+        ? "$date\n${DateFormat('jm').format(DateTime.now())}"
         : date;
     if (dateObject != null) {
       date = dateObject!.getDate(context);
@@ -50,7 +55,9 @@ class TodayText extends StatelessWidget {
 
 class TodayTextTicker extends StatefulWidget {
   bool requireTime;
-  TodayTextTicker({super.key, this.requireTime = false});
+  bool requireTodayText;
+  TodayTextTicker(
+      {super.key, this.requireTime = false, this.requireTodayText = false});
 
   @override
   State<TodayTextTicker> createState() => _TodayTextTickerState();
@@ -60,8 +67,8 @@ class _TodayTextTickerState extends State<TodayTextTicker> with TickerWidget {
   @override
   Widget build(BuildContext context) {
     return TodayText(
-      requireTime: widget.requireTime,
-    );
+        requireTime: widget.requireTime,
+        requireTodayText: widget.requireTodayText);
   }
 
   @override

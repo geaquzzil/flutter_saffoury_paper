@@ -51,6 +51,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
@@ -475,6 +476,13 @@ class Product extends ViewAbstract<Product>
 
   bool hasGSM() {
     return gsms != null;
+  }
+
+  Widget getFullDescription() {
+    return MasterView(
+      viewAbstract: this,
+      isSliver: false,
+    );
   }
 
   double getSheets({ProductSize? customSize, double? customQuantity}) {

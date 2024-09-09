@@ -79,7 +79,7 @@ class NotificationWidget extends StatelessWidget {
                 toListObject: context
                     .read<AuthProvider<AuthUser>>()
                     .getNotificationHandler(),
-                hasCustomCardBuilder: (item) {
+                hasCustomCardBuilder: (index,item) {
                   ViewAbstract v =
                       (item as NotificationHandlerInterface).getObject(context);
 

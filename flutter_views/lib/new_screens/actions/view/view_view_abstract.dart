@@ -13,7 +13,8 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class MasterView extends StatelessWidget {
   ViewAbstract viewAbstract;
-  MasterView({super.key, required this.viewAbstract});
+  bool isSliver;
+  MasterView({super.key, required this.viewAbstract, this.isSliver = true});
   Widget buildItem(BuildContext context, String field) {
     debugPrint("MasterView buildItem $field");
     dynamic fieldValue = viewAbstract.getFieldValue(field);
@@ -42,14 +43,21 @@ class MasterView extends StatelessWidget {
         .getMainFields(context: context)
         .where((element) => viewAbstract.getFieldValue(element) != null)
         .toList();
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-      (BuildContext context, int index) {
-        return buildItem(context, fields[index]);
-      },
-      // 40 list items
-      childCount: fields.length,
-    ));
+    return isSliver
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return buildItem(context, fields[index]);
+            },
+            // 40 list items
+            childCount: fields.length,
+          ))
+        : Column(
+            children: [
+              for (int i = 0; i < fields.length; i++)
+                buildItem(context, fields[i])
+            ],
+          );
   }
 }
 

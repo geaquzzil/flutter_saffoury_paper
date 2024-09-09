@@ -2,10 +2,13 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CutRequestListCard extends StatelessWidget {
   CutRequest item;
@@ -19,85 +22,7 @@ class CutRequestListCard extends StatelessWidget {
       ),
       // color: Colors.white70,
       elevation: 10,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ConstrainedBox(
-            constraints: BoxConstraints(
-                minHeight: 200,
-                maxWidth: MediaQuery.of(context).size.width * 0.1),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomLeft: Radius.circular(10)),
-                  image: DecorationImage(
-                    opacity: .5,
-                    scale: 2,
-                    image: FastCachedImageProvider(
-                        item.getImageUrl(context) ?? "",
-                        scale: 2),
-                    fit: BoxFit.cover,
-                  )),
-              // child: Expanded(
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         item.getIDFormat(context),
-              //         style: Theme.of(context).textTheme.titleLarge,
-              //       ),
-              //       Spacer(),
-              //       DateTimeWidget(
-              //         date: item.date!,
-              //       )
-              //     ],
-              //   ),
-              // ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(kDefaultPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: (item.products?.getMainHeaderText(context)) ??
-                      const SizedBox.shrink(),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Text(
-                    'Texas Angus Burger',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Text(
-                      '100% Australian Angus grain-fed beef with cheese and pickles.  Served with fries.',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                ),
-              ],
-            ),
-          ),
-          const Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(5, 40, 0, 0),
-                child: Text(
-                  '\$ 24.00',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      child: getCard(context),
     );
     return Container(
       padding: const EdgeInsets.only(bottom: kDefaultPadding),
@@ -160,39 +85,12 @@ class CutRequestListCard extends StatelessWidget {
         ],
       ),
     );
-    return Card(
-        child: ListTile(
-      leading: SizedBox(
-        width: 144,
-        height: 500,
-        child: Container(
-          // height: 500,
-          decoration: BoxDecoration(
-              // color: Colors.green,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10)),
-              image: DecorationImage(
-                opacity: .5,
-                scale: 2,
-                image: FastCachedImageProvider(item.getImageUrl(context) ?? "",
-                    scale: 2),
-                fit: BoxFit.cover,
-              )),
-          child: Column(
-            children: [
-              Text(
-                item.getIDFormat(context),
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const Spacer(),
-              DateTimeWidget(
-                date: item.date!,
-              )
-            ],
-          ),
-        ),
-      ),
+  }
+
+  Widget getCard(BuildContext context) {
+    return ListTile(
+      trailing: getTrailing(context),
+      leading: getLeading(context),
       title: (item.products?.getMainHeaderText(context)),
       subtitle: Padding(
         padding: const EdgeInsets.all(20),
@@ -210,10 +108,16 @@ class CutRequestListCard extends StatelessWidget {
             list: item.getListableList(),
             enableSelection: false,
             hasCustomSeperater: const Divider(),
-            hasCustomCardBuilder: (item) {
-              return const ListTile(
-                title: Text("Title"),
-                subtitle: Text("subtitle"),
+            hasCustomCardBuilder: (index, size) {
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Text(
+                  "${index + 1}",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                title: (size as SizesCutRequest)
+                    .getTitleTextHtml(context, item, withProductType: false),
+                subtitle: (size).getQunaityWithSheets(context, item),
               );
             },
           )
@@ -247,7 +151,201 @@ class CutRequestListCard extends StatelessWidget {
           //         )),
         ]),
       ),
-    ));
+    );
+  }
+
+  Widget getTrailing(BuildContext context) {
+    return DateTimeWidget(
+      date: item.date!,
+    );
+  }
+
+  Widget getLeading(BuildContext context) {
+    return SizedBox(
+      width: 144,
+      child: Column(
+        children: [
+          Text(
+            textAlign: TextAlign.center,
+            item.getIDFormat(context),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          // (item.products?.getMainHeaderText(context))!
+        ],
+      ),
+    );
+    return SizedBox(
+      width: 144,
+      height: 500,
+      child: Container(
+        // height: 500,
+        decoration: BoxDecoration(
+            // color: Colors.green,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+            image: DecorationImage(
+              opacity: .5,
+              scale: 2,
+              image: FastCachedImageProvider(item.getImageUrl(context) ?? "",
+                  scale: 2),
+              fit: BoxFit.cover,
+            )),
+        child: Column(
+          children: [
+            Text(
+              item.getIDFormat(context),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const Spacer(),
+            DateTimeWidget(
+              date: item.date!,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Row get(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: 200,
+            maxHeight: 300,
+            minWidth: 300,
+            maxWidth: 300,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onPrimary,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)),
+                image: DecorationImage(
+                  opacity: .1,
+                  scale: 2,
+                  image: FastCachedImageProvider(
+                      item.getImageUrl(context) ?? "",
+                      scale: 2),
+                  fit: BoxFit.cover,
+                )),
+            child: Padding(
+              padding: const EdgeInsets.all(kDefaultPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    item.getIDFormat(context),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    item.products?.getMainHeaderTextOnly(context) ?? "",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: kDefaultPadding,
+                  ),
+                  Text("Requested Quantity",
+                      style: Theme.of(context).textTheme.titleSmall!),
+                  Text(
+                    item.quantity?.toCurrencyFormat(symbol: 'KG') ?? "",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: kDefaultPadding,
+                  ),
+                  Text("Customer",
+                      style: Theme.of(context).textTheme.titleSmall!),
+                  Text(
+                    item.customers?.getMainHeaderTextOnly(context) ?? "",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  const Spacer(),
+                  DateTimeWidget(
+                    date: item.date!,
+                  )
+                ],
+              ),
+            ),
+            // child: Expanded(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       Text(
+            //         item.getIDFormat(context),
+            //         style: Theme.of(context).textTheme.titleLarge,
+            //       ),
+            //       Spacer(),
+            //       DateTimeWidget(
+            //         date: item.date!,
+            //       )
+            //     ],
+            //   ),
+            // ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: double.maxFinite,
+                child: Text(
+                  AppLocalizations.of(context)!.requestedSizeLabel,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              Container(
+                width: double.maxFinite,
+                child: SliverApiMixinStaticList(
+                  list: item.getListableList(),
+                  hasCustomCardBuilder: (i, c) {
+                    return ListTile(
+                        // selected: isSelected,
+                        // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+                        // onTap: onTap,
+                        // onLongPress: onLongTap,
+                        leading: getPrimaryText(context, "${i + 1}",
+                            withPadding: false),
+                        title: (c as SizesCutRequest)
+                            .getTitleTextHtml(context, item),
+                        trailing: SizedBox(
+                            width: 200,
+                            child: (c).getQunaityWithSheets(context, item)));
+                  },
+                  enableSelection: false,
+                  isSliver: false,
+                  isGridView: false,
+                  hasCustomSeperater: Divider(),
+                ),
+              )
+              // Container(
+              //   width: double.maxFinite,
+              //   child: Text(
+              //       '100% Australian Angus grain-fed beef with cheese and pickles.  Served with fries.',
+              //       style: Theme.of(context).textTheme.bodyMedium),
+              // ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
 

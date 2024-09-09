@@ -110,6 +110,19 @@ class ListMultiKeyProvider with ChangeNotifier {
     fetchList(key, viewAbstract: viewAbstract);
   }
 
+  void addCardToRequest(String key, ViewAbstract viewAbstract) {
+    late MultiListProviderHelper? multiListProviderHelper;
+    debugPrint("ListMultiKeyProvider===> addManual ");
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
+    } else {
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
+    }
+    multiListProviderHelper?.getObjects.addAll([viewAbstract]);
+     notifyListeners();
+  }
+
   Future fetchListSearch(
       String key, ViewAbstract viewAbstract, String query) async {
     late MultiListProviderHelper? multiListProviderHelper;
@@ -251,14 +264,15 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.isNoMoreItem = true;
     notifyListeners();
   }
-/// we request a query of options okey ? 
-/// then we put ids in the request
+
+  /// we request a query of options okey ?
+  /// then we put ids in the request
   Future fetchTicker(String key,
       {AutoRest? autoRest,
       ViewAbstract? viewAbstract,
       AutoRestCustom? customAutoRest,
       int? customCount,
-      int? customPage}) async{
+      int? customPage}) async {
     MultiListProviderHelper multiListProviderHelper;
     if (_listMap.containsKey(key)) {
       multiListProviderHelper = _listMap[key]!;
@@ -267,7 +281,6 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key]!;
     }
     await Future.delayed(Duration(milliseconds: 100));
-    
   }
 
   Future fetchList(String key,

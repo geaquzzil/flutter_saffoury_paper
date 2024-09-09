@@ -220,6 +220,22 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
           );
   }
 }
+mixin BasePageWithThirdPaneMixinStatic<T extends StatefulWidget,
+    E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
+  Widget? getThirdPane();
+  @override
+  TowPaneExt getPaneExt() {
+    return TowPaneExt(
+      startPane: _firstWidget!,
+      endPane: TowPaneExt(
+        startPane: _secondWidget,
+        customPaneProportion: .5,
+        endPane: getThirdPane(),
+      ),
+      customPaneProportion: 1 / 3,
+    );
+  }
+}
 mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
     E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
   final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
