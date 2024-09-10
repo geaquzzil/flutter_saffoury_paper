@@ -169,17 +169,18 @@ class _FileReaderPageState extends State<FileReaderPage> {
                 BaseEditWidget(
                   isTheFirst: true,
                   onValidate: (viewAbstract) {
+                    debugPrint(
+                        "Selected columns changed is null viewAbsract = > ${viewAbstract == null}");
+                    validatefileReaderObject =
+                        viewAbstract as FileReaderObject?;
+                    if (viewAbstract == null) return;
                     setState(() {
-                      validatefileReaderObject =
-                          viewAbstract as FileReaderObject?;
-                      if (viewAbstract != null) {
-                        _addOnPageViewModel = widget.viewAbstract
-                                is ExcelableReaderInteraceCustom
-                            ? (widget.viewAbstract
-                                    as ExcelableReaderInteraceCustom)
-                                .getExceableAddOnList(context, fileReaderObject)
-                            : [];
-                      }
+                      _addOnPageViewModel = widget.viewAbstract
+                              is ExcelableReaderInteraceCustom
+                          ? (widget.viewAbstract
+                                  as ExcelableReaderInteraceCustom)
+                              .getExceableAddOnList(context, fileReaderObject)
+                          : [];
                     });
                   },
                   viewAbstract: fileReaderObject,

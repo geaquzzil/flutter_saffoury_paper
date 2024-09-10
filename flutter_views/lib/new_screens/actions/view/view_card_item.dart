@@ -7,12 +7,14 @@ class ViewCardItem extends StatelessWidget {
   IconData icon;
   ViewAbstract? object;
   ValueNotifier<ViewAbstract>? valueNotifier;
+  bool overrideTrailingToNull;
   ViewCardItem(
       {super.key,
       this.object,
       required this.title,
       required this.description,
       this.valueNotifier,
+      this.overrideTrailingToNull=false,
       required this.icon});
 
   @override
@@ -28,7 +30,10 @@ class ViewCardItem extends StatelessWidget {
       leading: object != null
           ? Hero(tag: object!, child: Icon(object?.getMainIconData()))
           : Icon(icon),
-      trailing: object != null
+      trailing: overrideTrailingToNull?null:
+      
+      
+      object != null
           ? InkWell(
               onTap: () => object?.onCardTrailingClickedView(context),
               child: const Icon(Icons.arrow_forward_ios))

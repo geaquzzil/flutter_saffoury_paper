@@ -339,7 +339,9 @@ class BaseEditWidget extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formKey,
         onChanged: () {
-          onValidateForm(context);
+          debugPrint("_BaseEdit onChanged");
+          
+          // onValidateForm(context);
         },
         child: getFormContent(context));
   }

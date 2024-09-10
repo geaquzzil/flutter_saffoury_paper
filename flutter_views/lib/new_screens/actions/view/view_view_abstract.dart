@@ -14,23 +14,26 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class MasterView extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isSliver;
-  MasterView({super.key, required this.viewAbstract, this.isSliver = true});
+  bool overrideTrailingToNull;
+  MasterView({super.key, required this.viewAbstract, this.isSliver = true,this.overrideTrailingToNull=false});
   Widget buildItem(BuildContext context, String field) {
     debugPrint("MasterView buildItem $field");
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     if (fieldValue == null) {
-      return ViewCardItem(title: field, description: "null", icon: Icons.abc);
+      return ViewCardItem(title: field, description: "null", icon: Icons.abc,overrideTrailingToNull: overrideTrailingToNull);
     } else if (fieldValue is ViewAbstract) {
       return ViewCardItem(
-          title: "", description: "", icon: Icons.abc, object: fieldValue);
+          title: "", description: "", icon: Icons.abc, object: fieldValue,overrideTrailingToNull: overrideTrailingToNull);
     } else if (fieldValue is ViewAbstractEnum) {
       return ViewCardItem(
           title: fieldValue.getMainLabelText(context),
           description: fieldValue.getFieldLabelString(context, fieldValue),
           icon: fieldValue.getFieldLabelIconData(context, fieldValue),
+          overrideTrailingToNull: overrideTrailingToNull,
           object: null);
     } else {
       return ViewCardItem(
+        overrideTrailingToNull: overrideTrailingToNull,
           title: viewAbstract.getFieldLabel(context, field),
           description: fieldValue.toString(),
           icon: viewAbstract.getFieldIconData(field));

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/goods_worker/goods_inventory_list_card.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_controllers_utils.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
 
@@ -88,8 +91,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                   viewAbstract: Warehouse(),
                   field: "name", onSelected: (selectedViewAbstract) {
                 Warehouse selected = selectedViewAbstract as Warehouse;
-
-                _selectedWarehouse = selected.isNew() ? null : selected;
+                setState(() {
+                  _selectedWarehouse = selected.isNew() ? null : selected;
+                });
               }, controller: TextEditingController()),
             ),
           ],
@@ -130,8 +134,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   getDesktopSecondPane(
           {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      const Center(
-        child: Text("Second"),
+      FileReaderPage(
+        viewAbstract: Product(),
       );
   @override
   Widget? getThirdPane() {
@@ -148,13 +152,16 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   int testId = 0;
+  double testQuantity = 100;
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) =>
       FloatingActionButton.extended(
           onPressed: () {
             Product p = Product();
+            p.qrQuantity = testQuantity + 100;
             p.iD = 2405 + testId;
             testId = testId + 1;
+            testQuantity = testQuantity + 100;
             key.currentState?.addAnimatedListItem(p);
           },
           label: Icon(Icons.add));

@@ -76,13 +76,17 @@ class _DropdownCustomListWithFormListenerState
             debugPrint("getControllerDropdownCustomList onReset");
             debugPrint(
                 "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!}");
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              setState(() {
-                list = widget.viewAbstract
-                    .getTextInputIsAutoCompleteCustomListMap(
-                        context)[widget.field]!;
+            if (mounted) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                if (mounted) {
+                  setState(() {
+                    list = widget.viewAbstract
+                        .getTextInputIsAutoCompleteCustomListMap(
+                            context)[widget.field]!;
+                  });
+                }
               });
-            });
+            }
           },
           validator: widget.viewAbstract
               .getTextInputValidatorCompose(context, widget.field),

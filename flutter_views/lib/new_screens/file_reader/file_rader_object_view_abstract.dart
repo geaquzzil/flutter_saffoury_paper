@@ -202,7 +202,6 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       } else {
         fileColumns = [];
       }
-      //  generatedFieldsAutoCompleteCustom[field] = fileColumns;
       notifyOtherControllers(context: context, formKey: formKey);
     } else {
       selectedFields[field] = value.toString();

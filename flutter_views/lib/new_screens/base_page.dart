@@ -222,6 +222,11 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
 }
 mixin BasePageWithThirdPaneMixinStatic<T extends StatefulWidget,
     E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
+  @override
+  double getCustomPaneProportion() {
+    return getThirdPane() == null ? .5 : 1 / 3;
+  }
+
   Widget? getThirdPane();
   @override
   TowPaneExt getPaneExt() {
@@ -232,7 +237,7 @@ mixin BasePageWithThirdPaneMixinStatic<T extends StatefulWidget,
         customPaneProportion: .5,
         endPane: getThirdPane(),
       ),
-      customPaneProportion: 1 / 3,
+      customPaneProportion: getCustomPaneProportion(),
     );
   }
 }

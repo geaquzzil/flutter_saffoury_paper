@@ -155,6 +155,9 @@ class Product extends ViewAbstract<Product>
   List<TransfersDetails>? transfers_details;
   int? transfers_details_count;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  double? qrQuantity;
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
@@ -482,6 +485,7 @@ class Product extends ViewAbstract<Product>
     return MasterView(
       viewAbstract: this,
       isSliver: false,
+      overrideTrailingToNull: true,
     );
   }
 
@@ -1541,6 +1545,12 @@ class Product extends ViewAbstract<Product>
         AppLocalizations.of(context)!.unit_price:
             item.getUnitSellPrice().toCurrencyFormatFromSetting(context),
     };
+  }
+
+  @override
+  Product onResponse200K(Product oldValue) {
+    qrQuantity = oldValue.qrQuantity;
+    return this;
   }
 
   @override

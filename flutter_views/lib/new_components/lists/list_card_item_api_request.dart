@@ -50,7 +50,15 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
           }
           _viewAbstract = a.data;
           if (_viewAbstract == null) {
-            return Text("NOT FOUND");
+            return Card(
+                child: ListTile(
+              title: Text("NotFound"),
+              trailing: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {});
+                  },
+                  label: const Icon(Icons.refresh)),
+            ));
           }
           return getItem();
         });

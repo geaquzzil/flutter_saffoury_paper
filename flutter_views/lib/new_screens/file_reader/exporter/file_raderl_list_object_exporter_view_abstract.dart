@@ -10,12 +10,10 @@ import 'package:path/path.dart';
 @reflector
 class FileExporterListObject extends FileExporterObject {
   late List<ViewAbstract> list;
-  FileExporterListObject(
-      {required super.viewAbstract, required this.list});
+  FileExporterListObject({required super.viewAbstract, required this.list});
 
   @override
   Future<void> generateExcel(BuildContext context) async {
-    Stopwatch stopwatch = Stopwatch()..start();
     excel = Excel.createExcel();
 
     Sheet sh = excel[excel.getDefaultSheet()!];
@@ -37,17 +35,16 @@ class FileExporterListObject extends FileExporterObject {
       generateExcelCells(context, list[i], sh, fields, rowIndex: i);
     }
 
-    debugPrint('generateExcel Generating executed in ${stopwatch.elapsed}');
-    stopwatch.reset();
+    // debugPrint('generateExcel Generating executed in ${stopwatch.elapsed}');
+    // stopwatch.reset();
     var fileBytes = excel.encode();
 
-    debugPrint('generateExcel Encoding executed in ${stopwatch.elapsed}');
-    stopwatch.reset();
+    // debugPrint('generateExcel Encoding executed in ${stopwatch.elapsed}');
     if (fileBytes != null) {
       File(join("$fileName-list.xlsx"))
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes);
     }
-    debugPrint('generateExcel Downloaded executed in ${stopwatch.elapsed}');
+    // debugPrint('generateExcel Downloaded executed in ${stopwatch.elapsed}');
   }
 }

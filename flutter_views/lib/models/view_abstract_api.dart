@@ -198,6 +198,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
+  T onResponse200K(T oldValue) {
+    return this as T;
+  }
+
   Future<T?> viewCallGetFirstFromList(
     int iD,
   ) async {
@@ -207,7 +211,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response.statusCode == 200) {
       Iterable l = convert.jsonDecode(response.body);
       List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-      return t[0];
+      return (t[0] as ViewAbstract).onResponse200K(this as ViewAbstract);
     } else {
       onCallCheckError(response: response);
       return null;
