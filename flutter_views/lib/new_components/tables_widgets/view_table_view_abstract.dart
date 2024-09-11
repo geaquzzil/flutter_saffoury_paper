@@ -148,8 +148,12 @@ class _ViewableTableViewAbstractWidget
       var myData = MyData(context, list_invoice_details,
           buildActions: widget.buildActions);
       return PaginatedDataTable2(
+          // wrapInCard: ,
           header: const Text("Person Table"),
           showCheckboxColumn: false,
+          autoRowsToHeight: true,
+          fit: FlexFit.tight,
+          columnSpacing: 0,
           showFirstLastButtons: true,
           rowsPerPage: 4,
 

@@ -26,7 +26,10 @@ class _FileReaderPageState extends State<FileReaderPage> {
   List<PageViewModel> _addOnPageViewModel = [];
   GlobalKey<BaseEditWidgetState>? baseEditKey =
       GlobalKey<BaseEditWidgetState>();
-  FileReaderObject? validatefileReaderObject;
+
+  ValueNotifier<FileReaderObject?> valueNotifier =
+      ValueNotifier<FileReaderObject?>(null);
+
   bool isCustom() {
     return widget.viewAbstract is ExcelableReaderInteraceCustom;
   }
@@ -35,6 +38,11 @@ class _FileReaderPageState extends State<FileReaderPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _addOnPageViewModel = widget.viewAbstract is ExcelableReaderInteraceCustom
+        ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
+            .getExceableAddOnList(context, fileReaderObject)
+        : [];
   }
 
   @override
@@ -104,26 +112,27 @@ class _FileReaderPageState extends State<FileReaderPage> {
     );
     return IntroductionScreen(
       key: introKey,
+
       canProgress: (page) {
         debugPrint("canProgress page=>$page ");
         int currentPage = page.round();
         if (currentPage == 0) {
-          bool res = _filePath != null;
-          return res;
+          return _filePath != null;
         } else if (currentPage == 1) {
-          validatefileReaderObject = baseEditKey?.currentState
-              ?.onValidateFormReturnViewAbstract() as FileReaderObject?;
-
-          if (validatefileReaderObject != null) {
-            setState(() {
-              _addOnPageViewModel =
-                  widget.viewAbstract is ExcelableReaderInteraceCustom
-                      ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
-                          .getExceableAddOnList(context, fileReaderObject)
-                      : [];
-            });
-          }
-          return validatefileReaderObject != null;
+          var ob = baseEditKey?.currentState?.validateFormGetViewAbstract()
+              as FileReaderObject?;
+          valueNotifier.value = ob;
+          // if (validatefileReaderObject != null) {
+          //   setState(() {
+          //     _addOnPageViewModel =
+          //         widget.viewAbstract is ExcelableReaderInteraceCustom
+          //             ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
+          //                 .getExceableAddOnList(context, fileReaderObject)
+          //             : [];
+          //   });
+          // }
+          // return validatefileReaderObject != null;
+          return ob != null;
         }
         return true;
       },
@@ -204,10 +213,15 @@ class _FileReaderPageState extends State<FileReaderPage> {
         if (!isCustom())
           PageViewModel(
             title: "Validations",
-            bodyWidget: validatefileReaderObject == null
-                ? const Text("NULL validatefileReaderObject ")
-                : FileReaderValidationWidget(
-                    fileReaderObject: fileReaderObject),
+            bodyWidget: ValueListenableBuilder(
+              valueListenable: valueNotifier,
+              builder: (context, value, child) {
+                return value == null
+                    ? const Text("NULL validatefileReaderObject ")
+                    : FileReaderValidationWidget(fileReaderObject: value);
+              },
+            ),
+
             // image: _buildImage(Icons.access_time),
             decoration: pageDecoration,
           ),

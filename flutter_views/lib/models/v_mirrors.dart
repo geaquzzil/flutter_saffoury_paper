@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
+import 'package:provider/provider.dart';
 import 'package:reflectable/reflectable.dart';
 
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
@@ -25,7 +28,7 @@ abstract class VMirrors<T> {
   T getSelfNewInstance();
 
   /// value it could be map of (field:vlaue) or it could be field and value
-  T getSelfNewInstanceFileImporter(
+  T? getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, dynamic value}) {
     return getSelfNewInstance();
   }
@@ -132,27 +135,28 @@ abstract class VMirrors<T> {
       BuildContext context, String field) {
     // 0.toCurrencyFormat();
     TextInputType? type = (this as ViewAbstract).getTextInputType(field);
-    // debugPrint(
-    // "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  ${type}");
+
+    debugPrint(
+        "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  ${type} this type $runtimeType");
     if (type == null) return getFieldValueCheckType(context, field);
     if (type == TextInputType.number) {
-      return (getFieldValue(field, context: context) as double)
+      return (getFieldValue(field, context: context) as double?)
           .toCurrencyFormat();
     } else if (type ==
         const TextInputType.numberWithOptions(signed: false, decimal: true)) {
-      return (getFieldValue(field, context: context) as double)
+      return (getFieldValue(field, context: context) as double?)
           .toCurrencyFormat();
     } else if (type ==
         const TextInputType.numberWithOptions(signed: true, decimal: false)) {
-      return (getFieldValue(field, context: context) as double)
+      return (getFieldValue(field, context: context) as double?)
           .toCurrencyFormat();
     } else if (type ==
         const TextInputType.numberWithOptions(signed: true, decimal: true)) {
-      return (getFieldValue(field, context: context) as double)
+      return (getFieldValue(field, context: context) as double?)
           .toCurrencyFormat();
     } else if (type ==
         const TextInputType.numberWithOptions(signed: false, decimal: false)) {
-      return (getFieldValue(field, context: context) as double)
+      return (getFieldValue(field, context: context) as double?)
           .toCurrencyFormat();
     }
     return getFieldValueCheckType(context, field);

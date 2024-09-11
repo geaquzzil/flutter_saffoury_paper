@@ -13,6 +13,11 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
   FilterableListApiProvider.initialize(T filterOb) {
     _filterOb = filterOb;
   }
+  T? getLastFilterableData() {
+    return _filterData;
+  }
+
+
   Future<T?> getServerData(ViewAbstract viewAbstract) async {
     _lastViewAbstract = viewAbstract;
     _filterData ??= await _filterOb.viewCall(0);

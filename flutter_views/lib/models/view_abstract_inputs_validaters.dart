@@ -289,6 +289,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   void _notifyController(FormBuilderFieldState? v, String field) {
+    debugPrint("_notifyController called");
     if (v == null) {
       debugPrint("_notifyController FormBuilderFieldState  is null");
       return;
@@ -318,6 +319,7 @@ abstract class ViewAbstractInputAndValidater<T>
       {required BuildContext context,
       GlobalKey<FormBuilderState>? formKey,
       String? notifySpecificField}) {
+    debugPrint("notifyOtherControllers");
     if (notifySpecificField != null) {
       FormBuilderFieldState? f =
           formKey?.currentState?.fields[notifySpecificField];

@@ -367,9 +367,7 @@ class Product extends ViewAbstract<Product>
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "id": TextInputType.number,
-        "sizes": TextInputType.number,
         "date": TextInputType.datetime,
-        "products_types": TextInputType.number,
         "comments": TextInputType.multiline,
         "barcode": TextInputType.text,
         "products_count": TextInputType.number,

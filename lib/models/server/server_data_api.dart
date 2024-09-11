@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/cities/manufactures.dart';
@@ -12,8 +13,10 @@ import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'server_data_api.g.dart';
@@ -62,6 +65,27 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
   String? getTableNameApi() => "";
   @override
   String? getCustomAction() => "list_server_data";
+
+  T? searchForValue<T extends ViewAbstract>(
+      T viewAbstract, dynamic value, bool Function(T) test) {
+    if (value == null) return null;
+
+    List<T?>? list = getFieldValue(viewAbstract.getTableNameApi()!);
+    if (list != null) {
+      debugPrint(
+          "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is ${list.length}");
+      T? getSearchedValue = list.firstWhereOrNull(test);
+      debugPrint(
+          "searchForValue searchForValue search for $value =>founded value is $getSearchedValue ");
+      if (getSearchedValue != null) {
+        return getSearchedValue;
+      }
+    } else {
+      debugPrint(
+          "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is null skipped ");
+    }
+    return null;
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() {

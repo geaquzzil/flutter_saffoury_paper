@@ -185,8 +185,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       }
     } else {
       for (var element in generatedFieldsAutoCompleteCustom.entries) {
-          generatedFieldsAutoCompleteCustom[element.key] = fileColumns;
-        }
+        generatedFieldsAutoCompleteCustom[element.key] = fileColumns;
+      }
     }
   }
 
@@ -203,6 +203,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       {GlobalKey<FormBuilderState>? formKey}) {
     super.onDropdownChanged(context, field, value);
     if (field == "selectedSheet") {
+      debugPrint("onDropdownChanged selectedSheet $value");
       selectedSheet = value.toString();
       var f = excel.tables[value.toString()]?.rows;
       if (f != null && f.isNotEmpty) {
@@ -239,8 +240,16 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       Data? data = list[index];
       dynamic dataValue = data?.value;
       debugPrint(
-          "getDataFromExcelTable getObjectFromRow selectedKey=>$key rowName:$value index:$index  data:$dataValue");
+          "getDataFromExcelTable getObjectFromRow selectedKey=>$key rowName:$value index:$index  data:$dataValue type ${dataValue.runtimeType}");
 
+      if (dataValue is TextCellValue) {
+        bool res = dataValue.value.isEmpty ||
+            dataValue.value == "null" ||
+            dataValue.value == "";
+        debugPrint(
+            "getDataFromExcelTable key : $key dataValue is TextCellValue   dataValue isEmpty =>$res ");
+        dataValue = res ? null : dataValue.value;
+      }
       // checking if the main viewAbstract has main field
       String? field = view.getMainFields().firstWhereOrNull((p0) => p0 == key);
       debugPrint("getDataFromExcelTable founded field $field");
@@ -295,14 +304,14 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
                               context: context,
                               field: fieldsValues.keys.toList().first,
                               value: fieldsValues.values.toList().first)
-                          as ViewAbstract)
-                      .toJsonViewAbstract());
+                          as ViewAbstract?)
+                      ?.toJsonViewAbstract());
             } else {
               generatedJsonData[element.getTableNameApi()!] =
                   ((element.getSelfNewInstanceFileImporter(
                           context: context,
-                          value: fieldsValues) as ViewAbstract)
-                      .toJsonViewAbstract());
+                          value: fieldsValues) as ViewAbstract?)
+                      ?.toJsonViewAbstract());
             }
           }
         }
@@ -310,19 +319,24 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         //then its from subViewAbstract;
       } else {
         if (view.isViewAbstract(field)) {
-          generatedJsonData[view.getTableNameApi()!] =
-              (((view.getMirrorNewInstance(field) as ViewAbstract)
+          generatedJsonData[field] = dataValue == null
+              ? null
+              : (((view.getMirrorNewInstance(field) as ViewAbstract)
                       .getSelfNewInstanceFileImporter(
                           context: context,
                           field: field,
-                          value: dataValue) as ViewAbstract)
-                  .toJsonViewAbstract());
+                          value: dataValue) as ViewAbstract?)
+                  ?.toJsonViewAbstract());
           debugPrint(
               "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}");
+          debugPrint(
+              "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label ${view.getTableNameApi()} value :${generatedJsonData[view.getTableNameApi()!]}");
         } else {
           debugPrint(
               "getDataFromExcelTable getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}");
-          generatedJsonData[field] = view.castFieldValue(field, dataValue);
+
+          generatedJsonData[field] =
+              dataValue == null ? null : view.castFieldValue(field, dataValue);
         }
       }
 

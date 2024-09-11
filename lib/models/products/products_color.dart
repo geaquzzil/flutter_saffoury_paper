@@ -26,8 +26,9 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  ProductsColor getSelfNewInstanceFileImporter(
+  ProductsColor? getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, value}) {
+    if (value == null) return null;
     if (value is Map) {
       String hexValidation = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\$";
       final alphanumeric = RegExp(hexValidation);

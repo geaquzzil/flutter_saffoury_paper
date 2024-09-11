@@ -42,11 +42,13 @@ class _DropdownCustomListWithFormListenerState
 
   @override
   void didUpdateWidget(covariant DropdownCustomListWithFormListener oldWidget) {
-    if (_field != widget.field) {
-      _field = widget.field;
-      list = widget.viewAbstract
-          .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
-    }
+    list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+    // if (_field != widget.field) {
+    //   _field = widget.field;
+    //   list = widget.viewAbstract
+    //       .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+    // }
     super.didUpdateWidget(oldWidget);
   }
 

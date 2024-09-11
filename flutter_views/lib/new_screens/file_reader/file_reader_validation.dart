@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
@@ -12,10 +13,14 @@ import '../../new_components/tables_widgets/view_table_view_abstract.dart';
 
 class FileReaderValidationWidget extends StatelessWidget {
   FileReaderObject fileReaderObject;
-  FileReaderValidationWidget({super.key, required this.fileReaderObject});
+  FileReaderValidationWidget({
+    super.key,
+    required this.fileReaderObject,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // return getWidget(context);
     debugPrint(
         "FileReaderValidationWidget fileReaderObject=> $fileReaderObject");
     return FutureBuilder(
@@ -24,7 +29,7 @@ class FileReaderValidationWidget extends StatelessWidget {
             .getServerData(fileReaderObject.viewAbstract),
         builder: ((s, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return getWidget(context, snapshot);
+            return getWidget(context, snapshot: snapshot);
           }
           return Center(
             child: Lottie.network(
@@ -62,14 +67,18 @@ class FileReaderValidationWidget extends StatelessWidget {
     Excel excel = fileReader.excel;
     var f = excel.tables[fileReader.selectedSheet]?.rows;
     var columns = fileReader.fileColumns;
+
     // debugPrint("getDataFromExcelTable $f  ");
     // debugPrint("getDataFromExcelTable $columns  ");
     List<ViewAbstract> generatedViewAbstract = [];
     List<String> exceptions = [];
     if (f != null) {
-      var rows = f.sublist(0 + 1, f.length - 1);
+      debugPrint("getDataFromExcelTable f != null f length =>${f.length} ");
+      var rows = f.sublist(0 + 1, f.length);
+      debugPrint("getDataFromExcelTable rows length  ${rows.length}");
       for (var element in rows) {
         int rowNumber = rows.indexOf(element) + 1;
+        debugPrint("getDataFromExcelTable row int rowNumber $rowNumber ");
 
         try {
           //  debugPrint("getDataFromExcelTable exception: " + e.toString());
@@ -86,16 +95,24 @@ class FileReaderValidationWidget extends StatelessWidget {
     return generatedViewAbstract;
   }
 
-  Widget getWidget(BuildContext context, AsyncSnapshot<Object?> snapshot) {
+  Widget getWidget(BuildContext context, {AsyncSnapshot<Object?>? snapshot}) {
     Excel excel = fileReaderObject.excel;
     var f = excel.tables[fileReaderObject.selectedSheet]?.rows;
     var columns = fileReaderObject.fileColumns;
+    // debugPrint("getDataFromExcelTable => ros=>f $f  ");
+    // debugPrint("getDataFromExcelTable=>fileColumns $columns  ");
     List<ViewAbstract> generatedViewAbstract = [];
+
     List<String> exceptions = [];
+
     if (f != null) {
-      var rows = f.sublist(0 + 1, f.length - 1);
+      debugPrint("getDataFromExcelTable f != null f length =>${f.length} ");
+      var rows = f.sublist(0 + 1, f.length);
+      debugPrint("getDataFromExcelTable=>rows length ${rows.length}  ");
       for (var element in rows) {
         int rowNumber = rows.indexOf(element) + 1;
+        debugPrint(
+            "getDataFromExcelTable=>rowNumber ${rowNumber}   type ${element.runtimeType}");
 
         try {
           var obj = fileReaderObject.getObjectFromRow(context, element);
@@ -109,14 +126,18 @@ class FileReaderValidationWidget extends StatelessWidget {
         return Text(exceptions.join("\n"));
       }
       // return getExcelDataTable(columns, context, rows);
-      return ViewableTableViewAbstractWidget(
-        viewAbstract: generatedViewAbstract,
-        usePag: true,
+      return SizedBox( 
+        width: double.maxFinite,
+        height: 1000,
+        child: ViewableTableViewAbstractWidget(
+          viewAbstract: generatedViewAbstract,
+          usePag: true,
+        ),
       );
       return getViewAbstractDataTable(context, generatedViewAbstract);
     }
 
-    return Text(snapshot.data.toString());
+    return Text(snapshot?.data.toString() ?? "");
   }
 
   List<DataRow> getRowsViewAbstract(

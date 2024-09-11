@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 
 part 'gsms.g.dart';
 
@@ -26,7 +30,6 @@ class GSM extends ViewAbstract<GSM> {
   GSM getSelfNewInstance() {
     return GSM();
   }
-
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
@@ -57,10 +60,28 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  GSM getSelfNewInstanceFileImporter(
+  GSM? getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, value}) {
+    if (value == null) return null;
+    FilterableDataApi? filterData = context
+        .read<FilterableListApiProvider<FilterableData>>()
+        .getLastFilterableData() as FilterableDataApi?;
+    if (value == null) {
+      return null;
+    }
+    if (filterData != null) {
+      GSM? getSearchedValue = filterData.searchForValue(
+        this,
+        value,
+        (p0) => p0.gsm.toString() == value.toString(),
+      );
+      if (getSearchedValue != null) {
+        return getSearchedValue;
+      }
+    }
     int? gs = int.tryParse(value.toString());
     if (gs != null) {
+      iD = -1;
       gsm = gs;
       return this;
     } else {

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/converters.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:provider/provider.dart';
 
 @JsonIntToString()
 abstract class BaseWithNameString<T> extends ViewAbstract<T>
@@ -16,21 +21,26 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
 
   BaseWithNameString() : super();
   @override
-  T getSelfNewInstanceFileImporter(
+  T? getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, value}) {
-    if (value == null) {
-      throw Exception(
-          "${getMainHeaderLabelTextOnly(context)} cant convert empty value for the field => name");
-    } else if (value.toString().isEmpty) {
-      throw Exception(
-          "${getMainHeaderLabelTextOnly(context)} cant convert empty value for the field => name");
-    } else if (value.toString() == "null") {
-      throw Exception(
-          "${getMainHeaderLabelTextOnly(context)} cant convert empty value for the field => name");
+    FilterableDataApi? filterData = context
+        .read<FilterableListApiProvider<FilterableData>>()
+        .getLastFilterableData() as FilterableDataApi?;
+    if (value == null) return null;
+    if (filterData != null) {
+      BaseWithNameString? getSearchedValue = filterData.searchForValue(
+        this,
+        value,
+        (p0) =>
+            p0.name == value.toString() || p0.iD.toString() == value.toString(),
+      );
+      if (getSearchedValue != null) {
+        return getSearchedValue as T;
+      }
     } else {
       name = value.toString();
     }
-    return this as T;
+    return null;
   }
 
   @override

@@ -32,7 +32,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  ProductSize getSelfNewInstanceFileImporter(
+  ProductSize? getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, value}) {
     debugPrint("getSelfNewInstanceFileImporter $runtimeType value=>$value");
     if (value is Map) {

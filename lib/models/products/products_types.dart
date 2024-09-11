@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -14,8 +16,10 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 part 'products_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -50,21 +54,29 @@ class ProductType extends ViewAbstract<ProductType>
   ProductType.init(this.requestAvailablity);
 
   @override
-  ProductType getSelfNewInstanceFileImporter(
+  ProductType? getSelfNewInstanceFileImporter(
       {required BuildContext context, String? field, value}) {
     debugPrint("getSelfNewInstanceFileImporter $runtimeType value=>$value");
-    if (value is int) {
-      iD = value;
-      return this;
-    }
-    int? gs = int.tryParse("$value");
-    if (gs != null) {
-      iD = gs;
-      return this;
-    } else {
+    FilterableDataApi? filterData = context
+        .read<FilterableListApiProvider<FilterableData>>()
+        .getLastFilterableData() as FilterableDataApi?;
+    if (value == null) {
       throw Exception(
-          "${getMainHeaderLabelTextOnly(context)}: Cannot convert value of iD to => $value to a number");
+          "${getMainHeaderLabelTextOnly(context)}: Cannot be empty");
     }
+    if (filterData != null) {
+      ProductType? getSearchedValue = filterData.searchForValue(
+        this,
+        value,
+        (p0) =>
+            p0.name == value.toString() || p0.iD.toString() == value.toString(),
+      );
+      if (getSearchedValue != null) {
+        return getSearchedValue;
+      }
+    }
+    throw Exception(
+        "${getMainHeaderLabelTextOnly(context)}: not found for value => $value");
   }
 
   @override

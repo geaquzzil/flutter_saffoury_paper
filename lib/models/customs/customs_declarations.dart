@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations_images.dart';
+import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
@@ -8,11 +9,13 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/pdf.dart';
@@ -70,16 +73,27 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   }
 
   @override
-  CustomsDeclaration getSelfNewInstanceFileImporter(
+  CustomsDeclaration? getSelfNewInstanceFileImporter(
       {required material.BuildContext context, String? field, value}) {
-    int? parsedValue = int.tryParse(value);
-    if (parsedValue != null) {
-      number = parsedValue.toString();
-      return this;
-    } else {
-      throw Exception(
-          "${getMainHeaderLabelTextOnly(context)}: Can't convert number to value of $value");
+    FilterableDataApi? filterData = context
+        .read<FilterableListApiProvider<FilterableData>>()
+        .getLastFilterableData() as FilterableDataApi?;
+    if (value == null) {
+      return null;
     }
+    if (filterData != null) {
+      CustomsDeclaration? getSearchedValue = filterData.searchForValue(
+        this,
+        value,
+        (p0) =>
+            p0.number.toString() == value.toString() ||
+            p0.iD.toString() == value.toString(),
+      );
+      if (getSearchedValue != null) {
+        return getSearchedValue;
+      }
+    }
+    return null;
   }
 
   @override
