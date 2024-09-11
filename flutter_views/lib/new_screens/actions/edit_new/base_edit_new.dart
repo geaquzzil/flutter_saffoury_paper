@@ -21,7 +21,7 @@ import '../../edit/controllers/ext.dart';
 import 'edit_controllers_utils.dart';
 
 @immutable
-class BaseEditWidget extends StatelessWidget {
+class BaseEditWidget extends StatefulWidget {
   ViewAbstract viewAbstract;
   bool isTheFirst;
   bool isStandAloneField;
@@ -30,16 +30,8 @@ class BaseEditWidget extends StatelessWidget {
 
   ///if viewabstract has parent then we get the parent form key
   GlobalKey<FormBuilderState>? parentFormKey;
-  late List<String> fields;
-  late Map<GroupItem, List<String>> groupedFields;
-  late Map<int, List<String>> groupedHorizontalFields;
-
-  Map<String, TextEditingController> controllers = {};
-  Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
-  late ViewAbstractChangeProvider viewAbstractChangeProvider;
   void Function(ViewAbstract? viewAbstract)? onValidate;
 
-  late GlobalKey<EditSubViewAbstractHeaderState> keyExpansionTile;
   bool isRequiredSubViewAbstract;
 
   bool requireOnValidateEvenIfNull;
@@ -59,29 +51,67 @@ class BaseEditWidget extends StatelessWidget {
       this.requireOnValidateEvenIfNull = false,
       this.isRequiredSubViewAbstract = true,
       this.onValidate});
+
+  @override
+  State<BaseEditWidget> createState() => BaseEditWidgetState();
+}
+
+class BaseEditWidgetState extends State<BaseEditWidget> {
+  late List<String> fields;
+
+  late Map<GroupItem, List<String>> groupedFields;
+  GlobalKey<FormBuilderState>? formKey;
+
+  late Map<int, List<String>> groupedHorizontalFields;
+
+  Map<String, TextEditingController> controllers = {};
+
+  Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
+
+  late ViewAbstractChangeProvider viewAbstractChangeProvider;
+
+  late GlobalKey<EditSubViewAbstractHeaderState> keyExpansionTile;
+
+  ViewAbstract? viewAbstract;
+
+  @override
+  void initState() {
+    init(context);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant BaseEditWidget oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    debugPrint("didUpdateWidget baseEditNew");
+  }
+
   void init(BuildContext context) {
-    formKey = formKey ?? GlobalKey<FormBuilderState>();
+    formKey = widget.formKey ?? GlobalKey<FormBuilderState>();
     keyExpansionTile = GlobalKey<EditSubViewAbstractHeaderState>(
-        debugLabel: "${viewAbstract.runtimeType}");
-    viewAbstractChangeProvider = ViewAbstractChangeProvider.init(viewAbstract);
-    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
-    debugPrint("BaseEditNew currentScreenSize $currentScreenSize");
+        debugLabel: "${widget.viewAbstract.runtimeType}");
+    viewAbstractChangeProvider =
+        ViewAbstractChangeProvider.init(widget.viewAbstract);
+    widget.viewAbstract
+        .onBeforeGenerateView(context, action: ServerActions.edit);
+    debugPrint("BaseEditNew currentScreenSize ${widget.currentScreenSize}");
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;
-    if (!isRequiredSubViewAbstract) {
-      fields = viewAbstract
+    if (!widget.isRequiredSubViewAbstract) {
+      fields = widget.viewAbstract
           .getMainFields(context: context)
-          .where((element) => !viewAbstract.isViewAbstract(element))
+          .where((element) => !widget.viewAbstract.isViewAbstract(element))
           .toList();
     } else {
-      fields = viewAbstract.getMainFields(context: context);
-      groupedFields = viewAbstract.getMainFieldsGroups(context);
+      fields = widget.viewAbstract.getMainFields(context: context);
+      groupedFields = widget.viewAbstract.getMainFieldsGroups(context);
       groupedHorizontalFields =
-          viewAbstract.getMainFieldsHorizontalGroups(context);
+          widget.viewAbstract.getMainFieldsHorizontalGroups(context);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewAbstract.hasParent()) {
+      if (widget.viewAbstract.hasParent()) {
         //TODO viewAbstractChangeProvider.notifyListeners();
         keyExpansionTile.currentState?.setError(hasError(context));
       }
@@ -89,27 +119,29 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   bool isFieldEnableSubViewAbstract() {
-    if (viewAbstract.hasParent()) {
-      bool isEnabled = viewAbstract.getParnet!
-          .isFieldEnabled(viewAbstract.getFieldNameFromParent!);
+    if (widget.viewAbstract.hasParent()) {
+      bool isEnabled = widget.viewAbstract.getParnet!
+          .isFieldEnabled(widget.viewAbstract.getFieldNameFromParent!);
       return isEnabled;
     }
     return true;
   }
 
   bool isFieldEnabled(String field) {
-    if (!viewAbstract.hasParent()) return viewAbstract.isFieldEnabled(field);
-    if (disableCheckEnableFromParent) return true;
-    return viewAbstract.isNew() && viewAbstract.isFieldEnabled(field);
+    if (!widget.viewAbstract.hasParent())
+      return widget.viewAbstract.isFieldEnabled(field);
+    if (widget.disableCheckEnableFromParent) return true;
+    return widget.viewAbstract.isNew() &&
+        widget.viewAbstract.isFieldEnabled(field);
   }
 
   void refreshControllers(BuildContext context, String currentField) {
     controllers.forEach((key, value) {
       if (key != currentField) {
-        viewAbstract.toJsonViewAbstract().forEach((field, value) {
+        widget.viewAbstract.toJsonViewAbstract().forEach((field, value) {
           if (key == field) {
             controllers[key]!.text =
-                getEditControllerText(viewAbstract.getFieldValue(field));
+                getEditControllerText(widget.viewAbstract.getFieldValue(field));
           }
         });
       }
@@ -117,10 +149,11 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   bool isValidated(BuildContext context) {
-    bool? isValidate = formKey?.currentState?.validate(focusOnInvalid: false);
+    bool? isValidate =
+        widget.formKey?.currentState?.validate(focusOnInvalid: false);
     if (isValidate == null) {
       debugPrint("isValidated is null manually checking");
-      return viewAbstract.onManuallyValidate(context) != null;
+      return widget.viewAbstract.onManuallyValidate(context) != null;
     } else {
       debugPrint("isValidated is not null  automatic checking");
       return isValidate;
@@ -129,7 +162,7 @@ class BaseEditWidget extends StatelessWidget {
 
   bool hasErrorGroupWidget(BuildContext context, List<String> groupedFields) {
     for (var element in groupedFields) {
-      bool? res = formKey?.currentState?.fields[element]?.validate();
+      bool? res = widget.formKey?.currentState?.fields[element]?.validate();
       if (res != null) {
         if (res == false) {
           return true;
@@ -140,13 +173,14 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   bool hasError(BuildContext context) {
-    if (viewAbstract.isEditing()) return false;
-    bool isFieldCanBeNullable = viewAbstract.parent!
-        .isFieldCanBeNullable(context, viewAbstract.getFieldNameFromParent!);
+    if (widget.viewAbstract.isEditing()) return false;
+    bool isFieldCanBeNullable = widget.viewAbstract.parent!
+        .isFieldCanBeNullable(
+            context, widget.viewAbstract.getFieldNameFromParent!);
 
     bool hasErr =
-        formKey?.currentState?.validate(focusOnInvalid: false) == false;
-    bool isNull = viewAbstract.isNull;
+        widget.formKey?.currentState?.validate(focusOnInvalid: false) == false;
+    bool isNull = widget.viewAbstract.isNull;
     if (!isFieldCanBeNullable) {
       return hasErr;
     }
@@ -182,34 +216,38 @@ class BaseEditWidget extends StatelessWidget {
     controllers[field]!.text = value;
 
     controllers[field]!.addListener(() {
-      bool? validate = formKey?.currentState!.fields[viewAbstract.getTag(field)]
+      bool? validate = widget
+          .formKey?.currentState!.fields[widget.viewAbstract.getTag(field)]
           ?.validate(focusOnInvalid: false);
       // formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       if (validate ?? false) {
-        formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
+        widget.formKey?.currentState!.fields[widget.viewAbstract.getTag(field)]
+            ?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
-      viewAbstract.setFieldValue(field, controllers[field]!.text);
-      viewAbstract.onTextChangeListener(
+      widget.viewAbstract.setFieldValue(field, controllers[field]!.text);
+      widget.viewAbstract.onTextChangeListener(
           context, field, controllers[field]!.text,
-          formKey: formKey);
+          formKey: widget.formKey);
 
-      if (viewAbstract.getParnet != null) {
-        viewAbstract.getParnet!.onTextChangeListenerOnSubViewAbstract(
-            context, viewAbstract, viewAbstract.getFieldNameFromParent!,
-            parentformKey: parentFormKey);
+      if (widget.viewAbstract.getParnet != null) {
+        widget.viewAbstract.getParnet!.onTextChangeListenerOnSubViewAbstract(
+            context,
+            widget.viewAbstract,
+            widget.viewAbstract.getFieldNameFromParent!,
+            parentformKey: widget.parentFormKey);
       }
       if (isAutoCompleteVA) {
         if (controllers[field]!.text ==
-            getEditControllerText(viewAbstract.getFieldValue(field))) {
+            getEditControllerText(widget.viewAbstract.getFieldValue(field))) {
           return;
         }
         viewAbstract =
-            viewAbstract.copyWithSetNew(field, controllers[field]!.text);
-        viewAbstract.parent?.setFieldValue(field, viewAbstract);
+            widget.viewAbstract.copyWithSetNew(field, controllers[field]!.text);
+        widget.viewAbstract.parent?.setFieldValue(field, widget.viewAbstract);
         //  refreshControllers(context);
 
-        viewAbstractChangeProvider.change(viewAbstract);
+        viewAbstractChangeProvider.change(widget.viewAbstract);
       }
 
       // }
@@ -219,14 +257,12 @@ class BaseEditWidget extends StatelessWidget {
     // WidgetsBinding.instance
     //     .addPostFrameCallback((_) => controllers[field]!.clear());
 
-    viewAbstract.addTextFieldController(field, controllers[field]!);
+    widget.viewAbstract.addTextFieldController(field, controllers[field]!);
     return controllers[field]!;
   }
 
   @override
   Widget build(BuildContext context) {
-    init(context);
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -237,14 +273,14 @@ class BaseEditWidget extends StatelessWidget {
         child: Consumer<ViewAbstractChangeProvider>(
             builder: (context, provider, listTile) {
           Widget form = buildForm(context);
-          if (isTheFirst) {
-            if (buildAsPrint) {}
+          if (widget.isTheFirst) {
+            if (widget.buildAsPrint) {}
             return form;
-          } else if (isStandAloneField) {
+          } else if (widget.isStandAloneField) {
             return Text("sda");
             return ControllerViewAbstractAsOneField(
-                viewAbstract: viewAbstract,
-                parent: viewAbstract.parent!,
+                viewAbstract: widget.viewAbstract,
+                parent: widget.viewAbstract.parent!,
                 children: form);
           } else {
             return getExpansionTileCustom(context, form);
@@ -257,99 +293,109 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   Widget getExpansionTileCustom(BuildContext context, Widget form) {
-    bool f = viewAbstract.getParnet?.getIsSubViewAbstractIsExpanded(
-            viewAbstract.getFieldNameFromParent ?? "") ??
+    bool f = widget.viewAbstract.getParnet?.getIsSubViewAbstractIsExpanded(
+            widget.viewAbstract.getFieldNameFromParent ?? "") ??
         false;
     debugPrint(
-        "getExpansionTileCustom initiallyExpanded => $f field=>${viewAbstract.getFieldNameFromParent} table= ${viewAbstract.getParnet?.getTableNameApi()}");
+        "getExpansionTileCustom initiallyExpanded => $f field=>${widget.viewAbstract.getFieldNameFromParent} table= ${widget.viewAbstract.getParnet?.getTableNameApi()}");
     return ExpansionTileCustom(
         key: keyExpansionTile,
         padding: false,
         useLeadingOutSideCard: SizeConfig.isSoLargeScreen(context),
-        wrapWithCardOrOutlineCard: viewAbstract.getParentsCount() == 1,
+        wrapWithCardOrOutlineCard: widget.viewAbstract.getParentsCount() == 1,
         initiallyExpanded: f,
         // isExpanded: false,
-        isDeleteButtonClicked: viewAbstract.isNullTriggerd,
+        isDeleteButtonClicked: widget.viewAbstract.isNullTriggerd,
         hasError: hasError(context),
         canExpand: () => isFieldEnableSubViewAbstract(),
         leading: SizedBox(
             width: 25,
             height: 25,
-            child: viewAbstract.getCardLeadingImage(context)),
+            child: widget.viewAbstract.getCardLeadingImage(context)),
         subtitle: !_canBuildChildern()
             ? null
-            : viewAbstract.getMainLabelSubtitleText(context),
+            : widget.viewAbstract.getMainLabelSubtitleText(context),
         trailing: getTrailing(context),
         title: !_canBuildChildern()
             ? form
-            : viewAbstract.getMainHeaderTextOnEdit(context),
+            : widget.viewAbstract.getMainHeaderTextOnEdit(context),
         children: [if (_canBuildChildern()) form else const Text("dsa")]);
   }
 
   bool canExpand(BuildContext context) {
-    String? field = viewAbstract.getFieldNameFromParent;
+    String? field = widget.viewAbstract.getFieldNameFromParent;
     if (field == null) return true;
     // return viewAbstract.isNull
-    return !viewAbstract.isNull;
+    return !widget.viewAbstract.isNull;
     // return viewAbstract.isNullableAlreadyFromParentCheck(field) ==
     //     false;
   }
 
   Widget getTrailing(BuildContext context) {
-    String? field = viewAbstract.getFieldNameFromParent;
+    String? field = widget.viewAbstract.getFieldNameFromParent;
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       alignment: WrapAlignment.end,
       children: [
-        if (viewAbstract.isNew()) const Icon(Icons.fiber_new_outlined),
+        if (widget.viewAbstract.isNew()) const Icon(Icons.fiber_new_outlined),
         if (field != null)
-          if (viewAbstract.canBeNullableFromParentCheck(context, field) ??
+          if (widget.viewAbstract
+                  .canBeNullableFromParentCheck(context, field) ??
               false)
             IconButton(
                 icon: Icon(
-                  !viewAbstract.isNull
+                  !widget.viewAbstract.isNull
                       ? Icons.delete
                       : Icons.delete_forever_rounded,
-                  color: !viewAbstract.isNull
+                  color: !widget.viewAbstract.isNull
                       ? Theme.of(context).colorScheme.onSurfaceVariant
                       : Theme.of(context).colorScheme.error,
                 ),
                 onPressed: () {
-                  viewAbstract.toggleIsNullable();
-                  viewAbstract.parent!.setFieldValue(
-                      viewAbstract.fieldNameFromParent!, viewAbstract);
+                  widget.viewAbstract.toggleIsNullable();
+                  widget.viewAbstract.parent!.setFieldValue(
+                      widget.viewAbstract.fieldNameFromParent!,
+                      widget.viewAbstract);
                   viewAbstractChangeProvider.toggleNullbale();
-                  if (viewAbstract.isNull) {
+                  if (widget.viewAbstract.isNull) {
                     keyExpansionTile.currentState?.collapsedOnlyIfExpanded();
                   } else {
                     keyExpansionTile.currentState?.setError(hasError(context));
                   }
                   debugPrint(
-                      "onToggleNullbale pressed null ${viewAbstract.isNull}");
+                      "onToggleNullbale pressed null ${widget.viewAbstract.isNull}");
                 }),
-        if (viewAbstract.isEditing())
-          viewAbstract.getPopupMenuActionWidget(context, ServerActions.edit)
+        if (widget.viewAbstract.isEditing())
+          widget.viewAbstract
+              .getPopupMenuActionWidget(context, ServerActions.edit)
       ],
     );
   }
 
   Widget buildForm(BuildContext context) {
-    debugPrint("_BaseEdit buildForm ${viewAbstract.runtimeType}");
+    debugPrint("_BaseEdit buildForm ${widget.viewAbstract.runtimeType}");
+    
     return FormBuilder(
+
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        key: formKey,
+        key: widget.formKey,
         onChanged: () {
           debugPrint("_BaseEdit onChanged");
-          
+
           // onValidateForm(context);
         },
         child: getFormContent(context));
   }
 
+  ViewAbstract? onValidateFormReturnViewAbstract() {
+    onValidateForm(context);
+    return viewAbstract;
+  }
+
   void onValidateForm(BuildContext context) {
     // return;
-    if (onValidate != null) {
-      bool? validate = formKey?.currentState!
+    if (widget.onValidate != null) {
+      bool? validate = widget.formKey?.currentState!
           .validate(focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
       _subformKeys.forEach((key, value) {
         bool? subValidate = value.currentState?.validate(
@@ -364,19 +410,19 @@ class BaseEditWidget extends StatelessWidget {
         validate = (validate ?? false) && subValidate;
       });
       if (validate ?? false) {
-        formKey?.currentState!.save();
-        ViewAbstract? objcet = viewAbstract.onAfterValidate(context);
-        onValidate!(objcet);
+        widget.formKey?.currentState!.save();
+        ViewAbstract? objcet = widget.viewAbstract.onAfterValidate(context);
+        widget.onValidate!(objcet);
         debugPrint("BaseEdit main form onValidate => ${objcet?.toJsonString()}",
             wrapWidth: 1024);
-        if (viewAbstract.parent != null) {
+        if (widget.viewAbstract.parent != null) {
           debugPrint(
               "BaseEdit main form onValidate => ${objcet?.getTableNameApi()}  has parent and has error=> false");
           keyExpansionTile.currentState?.setError(false);
         }
       } else {
-        onValidate!(null);
-        if (viewAbstract.parent != null) {
+        widget.onValidate!(null);
+        if (widget.viewAbstract.parent != null) {
           debugPrint(
               "BaseEdit main form onValidate =>  has parent and has error=> true");
           keyExpansionTile.currentState?.setError(true);
@@ -417,46 +463,36 @@ class BaseEditWidget extends StatelessWidget {
   }
 
   Widget getControllerWidget(BuildContext context, String field) {
-    dynamic fieldValue = viewAbstract.getFieldValue(field);
-    fieldValue ??= viewAbstract.getMirrorNewInstance(field);
-    TextInputType? textInputType = viewAbstract.getTextInputType(field);
+    dynamic fieldValue = widget.viewAbstract.getFieldValue(field);
+    fieldValue ??= widget.viewAbstract.getMirrorNewInstance(field);
+    TextInputType? textInputType = widget.viewAbstract.getTextInputType(field);
     ViewAbstractControllerInputType textFieldTypeVA =
-        viewAbstract.getInputType(field);
+        widget.viewAbstract.getInputType(field);
 
-    bool isAutoComplete = viewAbstract.getTextInputTypeIsAutoComplete(field);
+    bool isAutoComplete =
+        widget.viewAbstract.getTextInputTypeIsAutoComplete(field);
     bool isAutoCompleteViewAbstract =
-        viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);
-    bool isAutoCompleteByCustomList =
-        viewAbstract.getTextInputIsAutoCompleteCustomList(context, field);
+        widget.viewAbstract.getTextInputTypeIsAutoCompleteViewAbstract(field);
+    bool isAutoCompleteByCustomList = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomList(context, field);
     debugPrint(
         "getControllerWidget field => $field isAutoComplete=> $isAutoComplete isAutoCompleteViewAbstract=>$isAutoCompleteViewAbstract  isAutoCompleteByCustomList=>$isAutoCompleteByCustomList");
     if (isAutoComplete) {
       return getControllerEditTextAutoComplete(context,
           enabled: isFieldEnabled(field),
-          viewAbstract: viewAbstract,
+          viewAbstract: widget.viewAbstract,
           field: field,
           controller: getController(context, field: field, value: fieldValue),
-          currentScreenSize: currentScreenSize);
+          currentScreenSize: widget.currentScreenSize);
     }
     if (isAutoCompleteByCustomList) {
       // return wrapController(Text("dsa"));
       return DropdownCustomListWithFormListener(
-        viewAbstract: viewAbstract,
+        viewAbstract: widget.viewAbstract,
         field: field,
-        formKey: formKey,
+        formKey: widget.formKey,
         onSelected: (selectedObj) {
-          viewAbstract.setFieldValue(field, selectedObj);
-        },
-      );
-      return getControllerDropdownCustomList(
-        context,
-        field: field,
-        viewAbstract: viewAbstract,
-        list: viewAbstract
-            .getTextInputIsAutoCompleteCustomListMap(context)[field]!,
-        formKey: formKey,
-        onSelected: (selectedObj) {
-          viewAbstract.setFieldValue(field, selectedObj);
+          widget.viewAbstract.setFieldValue(field, selectedObj);
         },
       );
     }
@@ -466,29 +502,30 @@ class BaseEditWidget extends StatelessWidget {
         throw Exception(
             "Do not select isAutoCompleteViewAbstract and DROP_DOWN_TEXT_SEARCH_API");
       }
-      if (viewAbstract.getParnet == null) {
+      if (widget.viewAbstract.getParnet == null) {
         return getControllerEditText(context,
-            viewAbstract: viewAbstract,
+            viewAbstract: widget.viewAbstract,
             field: field,
             controller: getController(context, field: field, value: fieldValue),
             enabled: isFieldEnabled(field),
-            currentScreenSize: currentScreenSize);
+            currentScreenSize: widget.currentScreenSize);
       }
       return getControllerEditTextViewAbstractAutoComplete(
         context,
-        viewAbstract: viewAbstract,
-        withDecoration: !isStandAloneField,
+        viewAbstract: widget.viewAbstract,
+        withDecoration: !widget.isStandAloneField,
         // enabled: isFieldEnabled(field),
         field: field,
         controller: getController(context,
             field: field, value: fieldValue, isAutoCompleteVA: true),
         onSelected: (selectedViewAbstract) {
-          viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
-          viewAbstract.parent
+          widget.viewAbstract.parent
+              ?.setFieldValue(field, selectedViewAbstract);
+          widget.viewAbstract.parent
               ?.onDropdownChanged(context, field, selectedViewAbstract);
           viewAbstract = selectedViewAbstract;
           refreshControllers(context, field);
-          viewAbstractChangeProvider.change(viewAbstract);
+          viewAbstractChangeProvider.change(widget.viewAbstract);
           keyExpansionTile.currentState?.manualExpand(false);
 
           // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
@@ -497,38 +534,38 @@ class BaseEditWidget extends StatelessWidget {
     }
     if (fieldValue is ViewAbstract) {
       fieldValue.setFieldNameFromParent(field);
-      fieldValue.setParent(viewAbstract);
+      fieldValue.setParent(widget.viewAbstract);
       if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
         return wrapController(
             EditControllerChipsFromViewAbstract(
                 enabled: isFieldEnabled(field),
-                parent: viewAbstract,
+                parent: widget.viewAbstract,
                 viewAbstract: fieldValue,
                 field: field),
             requiredSpace: true,
-            currentScreenSize: currentScreenSize);
+            currentScreenSize: widget.currentScreenSize);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_API) {
         return wrapController(
             EditControllerDropdownFromViewAbstract(
-                formKey: formKey,
+                formKey: widget.formKey,
                 enabled: isFieldEnabled(field),
-                parent: viewAbstract,
+                parent: widget.viewAbstract,
                 viewAbstract: fieldValue,
                 field: field),
             requiredSpace: true,
-            currentScreenSize: currentScreenSize);
+            currentScreenSize: widget.currentScreenSize);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD) {
         return BaseEditWidget(
           viewAbstract: fieldValue,
           isStandAloneField: true,
-          currentScreenSize: currentScreenSize,
+          currentScreenSize: widget.currentScreenSize,
           isTheFirst: false,
           onValidate: ((ob) {
             // String? fieldName = ob?.getFieldNameFromParent()!;
             debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
-            viewAbstract.setFieldValue(field, ob);
+            widget.viewAbstract.setFieldValue(field, ob);
           }),
         );
       } else if (textFieldTypeVA ==
@@ -556,19 +593,19 @@ class BaseEditWidget extends StatelessWidget {
           refreshControllers(context, field);
           // //TODO viewAbstractChangeProvider.change(viewAbstract);
           // // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
-        }, currentScreenSize: currentScreenSize);
+        }, currentScreenSize: widget.currentScreenSize);
       }
 
       return BaseEditWidget(
         viewAbstract: fieldValue,
-        parentFormKey: formKey,
-        currentScreenSize: currentScreenSize,
+        parentFormKey: widget.formKey,
+        currentScreenSize: widget.currentScreenSize,
         formKey: getSubFormState(context, field),
         isTheFirst: false,
         onValidate: ((ob) {
           // String? fieldName = ob?.getFieldNameFromParent()!;
           debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
-          viewAbstract.setFieldValue(field, ob);
+          widget.viewAbstract.setFieldValue(field, ob);
           // if (ob != null) {
           //   viewAbstractChangeProvider.change(viewAbstract);
           // }
@@ -577,45 +614,47 @@ class BaseEditWidget extends StatelessWidget {
     } else if (fieldValue is ViewAbstractEnum) {
       return wrapController(
           EditControllerDropdown(
-              parent: viewAbstract, enumViewAbstract: fieldValue, field: field),
+              parent: widget.viewAbstract,
+              enumViewAbstract: fieldValue,
+              field: field),
           requiredSpace: true);
     } else {
       if (textFieldTypeVA == ViewAbstractControllerInputType.CHECKBOX) {
         return getContollerCheckBox(context,
-            viewAbstract: viewAbstract,
+            viewAbstract: widget.viewAbstract,
             field: field,
             value: fieldValue,
             enabled: isFieldEnabled(field),
-            currentScreenSize: currentScreenSize);
+            currentScreenSize: widget.currentScreenSize);
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.COLOR_PICKER) {
         return getContolerColorPicker(context,
-            viewAbstract: viewAbstract,
+            viewAbstract: widget.viewAbstract,
             field: field,
             value: fieldValue,
             enabled: isFieldEnabled(field),
-            currentScreenSize: currentScreenSize);
+            currentScreenSize: widget.currentScreenSize);
       } else if (textFieldTypeVA == ViewAbstractControllerInputType.IMAGE) {
         return EditControllerFilePicker(
-          viewAbstract: viewAbstract,
+          viewAbstract: widget.viewAbstract,
           field: field,
         );
       } else {
         if (textInputType == TextInputType.datetime) {
           return getControllerDateTime(context,
-              viewAbstract: viewAbstract,
+              viewAbstract: widget.viewAbstract,
               field: field,
               value: fieldValue,
               enabled: isFieldEnabled(field),
-              currentScreenSize: currentScreenSize);
+              currentScreenSize: widget.currentScreenSize);
         } else {
           return getControllerEditText(context,
-              viewAbstract: viewAbstract,
+              viewAbstract: widget.viewAbstract,
               field: field,
               controller:
                   getController(context, field: field, value: fieldValue),
               enabled: isFieldEnabled(field),
-              currentScreenSize: currentScreenSize);
+              currentScreenSize: widget.currentScreenSize);
         }
       }
     }

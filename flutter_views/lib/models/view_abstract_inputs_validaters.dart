@@ -318,16 +318,12 @@ abstract class ViewAbstractInputAndValidater<T>
       {required BuildContext context,
       GlobalKey<FormBuilderState>? formKey,
       String? notifySpecificField}) {
-    formKey?.currentState?.fields.forEach((key, value) {
-      debugPrint("notifyOtherControllers  formKey $key");
-    });
     if (notifySpecificField != null) {
       FormBuilderFieldState? f =
           formKey?.currentState?.fields[notifySpecificField];
       _notifyController(f, notifySpecificField);
     } else {
       formKey?.currentState?.fields.forEach((key, value) {
-        debugPrint("notifyOtherControllers  formKey $key");
         _notifyController(value, key);
       });
     }

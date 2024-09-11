@@ -26,29 +26,28 @@ class DropdownCustomListWithFormListener extends StatefulWidget {
 class _DropdownCustomListWithFormListenerState
     extends State<DropdownCustomListWithFormListener> {
   late List<dynamic> list;
-
+  late String _field;
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    if (mounted) {
-      postFram(() => list = widget.viewAbstract
-          .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!);
-    }
-    // list = widget.viewAbstract
-    //     .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
+    _field = widget.field;
+    list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    postFram(() => list = widget.viewAbstract
-        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!);
-    super.didChangeDependencies();
+  void didUpdateWidget(covariant DropdownCustomListWithFormListener oldWidget) {
+    if (_field != widget.field) {
+      _field = widget.field;
+      list = widget.viewAbstract
+          .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   void postFram(Function c) {
@@ -59,51 +58,40 @@ class _DropdownCustomListWithFormListenerState
 
   @override
   Widget build(BuildContext context) {
-    list = widget.viewAbstract
-        .getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!;
     return wrapController(
         FormBuilderDropdown<dynamic>(
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: (obj) {
-            widget.viewAbstract.onDropdownChanged(context, widget.field, obj,
+            widget.viewAbstract.onDropdownChanged(context, _field, obj,
                 formKey: widget.formKey);
-            widget.viewAbstract.setFieldValue(widget.field, obj);
+            widget.viewAbstract.setFieldValue(_field, obj);
             debugPrint(
-                'getControllerDropdownCustomList onChanged= field= ${widget.field} value=   $obj');
+                'getControllerDropdownCustomList onChanged= field= ${_field} value=   $obj');
             widget.onSelected(obj);
           },
           onReset: () {
             debugPrint("getControllerDropdownCustomList onReset");
             debugPrint(
-                "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[widget.field]!}");
-            if (mounted) {
-              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                if (mounted) {
-                  setState(() {
-                    list = widget.viewAbstract
-                        .getTextInputIsAutoCompleteCustomListMap(
-                            context)[widget.field]!;
-                  });
-                }
-              });
-            }
+                "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[_field]!}");
+            setState(() {
+              list = widget.viewAbstract
+                  .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+            });
           },
-          validator: widget.viewAbstract
-              .getTextInputValidatorCompose(context, widget.field),
-          name: widget.viewAbstract.getTag(widget.field),
+          validator:
+              widget.viewAbstract.getTextInputValidatorCompose(context, _field),
+          name: widget.viewAbstract.getTag(_field),
           initialValue: list.firstWhereOrNull((p0) =>
-              widget.viewAbstract
-                  .getFieldValue(widget.field, context: context) ==
+              widget.viewAbstract.getFieldValue(_field, context: context) ==
               p0),
           decoration: getDecorationIconLabel(context,
-              label: widget.viewAbstract.getFieldLabel(context, widget.field),
-              icon: widget.viewAbstract
-                  .getFieldIconDataNullAccepted(widget.field)),
+              label: widget.viewAbstract.getFieldLabel(context, _field),
+              icon: widget.viewAbstract.getFieldIconDataNullAccepted(_field)),
           items: list
               .map((item) => DropdownMenuItem<dynamic>(
                     value: item,
                     child: Text(item == null
-                        ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, widget.field)}"
+                        ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
                         : item.toString()),
                   ))
               .toList(),

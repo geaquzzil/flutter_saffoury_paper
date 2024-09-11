@@ -152,6 +152,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   bool checkHasViewAbstract(BuildContext context, ViewAbstract view) {
+    debugPrint("checkHasViewAbstract");
     return view
             .getMainFields(context: context)
             .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
@@ -160,25 +161,32 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   void refreshDropdownList(BuildContext context) {
     List<String> listOfFields = viewAbstract.getMainFields(context: context);
-    generatedFieldsAutoCompleteCustom = {};
 
-    for (var element in listOfFields) {
-      if (viewAbstract.isViewAbstract(element)) {
-        ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
-        view.getMainFields().forEach((element) {
-          generatedFieldsAutoCompleteCustom[element] = fileColumns;
-        });
-        int lengthOfChilds = view.getMainFields(context: context).length;
-        bool hasViewAbstract = checkHasViewAbstract(context, view);
-        if (!hasViewAbstract && lengthOfChilds > 1) {
+    if (generatedFieldsAutoCompleteCustom.isEmpty) {
+      generatedFieldsAutoCompleteCustom = {};
+
+      for (var element in listOfFields) {
+        if (viewAbstract.isViewAbstract(element)) {
+          ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
+          view.getMainFields().forEach((element) {
+            generatedFieldsAutoCompleteCustom[element] = fileColumns;
+          });
+          int lengthOfChilds = view.getMainFields(context: context).length;
+          bool hasViewAbstract = checkHasViewAbstract(context, view);
+          if (!hasViewAbstract && lengthOfChilds > 1) {
+          } else {
+            generatedFieldsAutoCompleteCustom[element] = fileColumns;
+          }
+
+          //check that no other view abstract or else
         } else {
           generatedFieldsAutoCompleteCustom[element] = fileColumns;
         }
-
-        //check that no other view abstract or else
-      } else {
-        generatedFieldsAutoCompleteCustom[element] = fileColumns;
       }
+    } else {
+      for (var element in generatedFieldsAutoCompleteCustom.entries) {
+          generatedFieldsAutoCompleteCustom[element.key] = fileColumns;
+        }
     }
   }
 
@@ -212,6 +220,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
       BuildContext context) {
+    debugPrint("getTextInputIsAutoCompleteCustomListMap");
     Map<String, List> list = {};
     list["selectedSheet"] = fileSheets;
     refreshDropdownList(context);

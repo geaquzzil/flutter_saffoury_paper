@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
@@ -23,6 +24,8 @@ class _FileReaderPageState extends State<FileReaderPage> {
   String? _filePath;
   late FileReaderObject fileReaderObject;
   List<PageViewModel> _addOnPageViewModel = [];
+  GlobalKey<BaseEditWidgetState>? baseEditKey =
+      GlobalKey<BaseEditWidgetState>();
   FileReaderObject? validatefileReaderObject;
   bool isCustom() {
     return widget.viewAbstract is ExcelableReaderInteraceCustom;
@@ -32,6 +35,13 @@ class _FileReaderPageState extends State<FileReaderPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant FileReaderPage oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    debugPrint("didUpdateWidget fileReader");
   }
 
   void _onIntroEnd(context) {
@@ -95,14 +105,25 @@ class _FileReaderPageState extends State<FileReaderPage> {
     return IntroductionScreen(
       key: introKey,
       canProgress: (page) {
+        debugPrint("canProgress page=>$page ");
         int currentPage = page.round();
         if (currentPage == 0) {
           bool res = _filePath != null;
-          if (res) {}
           return res;
         } else if (currentPage == 1) {
-          bool res = validatefileReaderObject != null;
-          return res;
+          validatefileReaderObject = baseEditKey?.currentState
+              ?.onValidateFormReturnViewAbstract() as FileReaderObject?;
+
+          if (validatefileReaderObject != null) {
+            setState(() {
+              _addOnPageViewModel =
+                  widget.viewAbstract is ExcelableReaderInteraceCustom
+                      ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
+                          .getExceableAddOnList(context, fileReaderObject)
+                      : [];
+            });
+          }
+          return validatefileReaderObject != null;
         }
         return true;
       },
@@ -162,27 +183,14 @@ class _FileReaderPageState extends State<FileReaderPage> {
             )),
         PageViewModel(
           title: "Select columns",
+
           bodyWidget: Column(
             children: [
               const Text("SOSO"),
               if (_filePath != null)
                 BaseEditWidget(
+                  key: baseEditKey,
                   isTheFirst: true,
-                  onValidate: (viewAbstract) {
-                    debugPrint(
-                        "Selected columns changed is null viewAbsract = > ${viewAbstract == null}");
-                    validatefileReaderObject =
-                        viewAbstract as FileReaderObject?;
-                    if (viewAbstract == null) return;
-                    setState(() {
-                      _addOnPageViewModel = widget.viewAbstract
-                              is ExcelableReaderInteraceCustom
-                          ? (widget.viewAbstract
-                                  as ExcelableReaderInteraceCustom)
-                              .getExceableAddOnList(context, fileReaderObject)
-                          : [];
-                    });
-                  },
                   viewAbstract: fileReaderObject,
                 )
             ],
