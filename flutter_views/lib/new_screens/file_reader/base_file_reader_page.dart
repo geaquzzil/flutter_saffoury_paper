@@ -27,6 +27,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
   GlobalKey<BaseEditWidgetState>? baseEditKey =
       GlobalKey<BaseEditWidgetState>();
 
+  GlobalKey<FileReaderValidationWidgetState> validateFileReaderState =
+      GlobalKey<FileReaderValidationWidgetState>();
+
   ValueNotifier<FileReaderObject?> valueNotifier =
       ValueNotifier<FileReaderObject?>(null);
 
@@ -218,7 +221,8 @@ class _FileReaderPageState extends State<FileReaderPage> {
               builder: (context, value, child) {
                 return value == null
                     ? const Text("NULL validatefileReaderObject ")
-                    : FileReaderValidationWidget(fileReaderObject: value);
+                    : FileReaderValidationWidget(
+                        key: validateFileReaderState, fileReaderObject: value);
               },
             ),
 

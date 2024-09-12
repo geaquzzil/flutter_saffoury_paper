@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../new_components/tables_widgets/view_table_view_abstract.dart';
 
-class FileReaderValidationWidget extends StatelessWidget {
+class FileReaderValidationWidget extends StatefulWidget {
   FileReaderObject fileReaderObject;
   FileReaderValidationWidget({
     super.key,
@@ -19,48 +19,8 @@ class FileReaderValidationWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    // return getWidget(context);
-    debugPrint(
-        "FileReaderValidationWidget fileReaderObject=> $fileReaderObject");
-    return FutureBuilder(
-        future: context
-            .read<FilterableListApiProvider<FilterableData>>()
-            .getServerData(fileReaderObject.viewAbstract),
-        builder: ((s, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return getWidget(context, snapshot: snapshot);
-          }
-          return Center(
-            child: Lottie.network(
-                "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json"),
-          );
-        }));
-  }
-
-  List<DataRow> getRows(BuildContext context, List<List<Data?>> rows) {
-    return rows.map((e) {
-      int index = rows.indexOf(e);
-      return DataRow(
-          // selected: lastIndexOfSelected == index,
-          // onSelectChanged: (s) {
-          //   debugPrint(
-          //       "dataRow selectChange $s index=> ${list_invoice_details.indexOf(e)}");
-          //   setState(() {
-          //     lastIndexOfSelected = index;
-          //   });
-          // },
-          cells: e
-              .map((ee) => DataCell(
-                  Text(
-                    "${ee?.value}",
-                    overflow: TextOverflow.visible,
-                    softWrap: true,
-                  ),
-                  showEditIcon: false))
-              .toList());
-    }).toList();
-  }
+  State<FileReaderValidationWidget> createState() =>
+      FileReaderValidationWidgetState();
 
   static List<ViewAbstract> getDataFromExcelTable(
       BuildContext context, FileReaderObject fileReader) {
@@ -94,14 +54,41 @@ class FileReaderValidationWidget extends StatelessWidget {
     }
     return generatedViewAbstract;
   }
+}
+
+class FileReaderValidationWidgetState
+    extends State<FileReaderValidationWidget> {
+  List<ViewAbstract> _generatedViewAbstract = [];
+  List<ViewAbstract> getListGeneratedList() {
+    return _generatedViewAbstract;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // return getWidget(context);
+    debugPrint(
+        "FileReaderValidationWidget fileReaderObject=> ${widget.fileReaderObject}");
+    return FutureBuilder(
+        future: context
+            .read<FilterableListApiProvider<FilterableData>>()
+            .getServerData(widget.fileReaderObject.viewAbstract),
+        builder: ((s, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return getWidget(context, snapshot: snapshot);
+          }
+          return Center(
+            child: Lottie.network(
+                "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json"),
+          );
+        }));
+  }
 
   Widget getWidget(BuildContext context, {AsyncSnapshot<Object?>? snapshot}) {
-    Excel excel = fileReaderObject.excel;
-    var f = excel.tables[fileReaderObject.selectedSheet]?.rows;
-    var columns = fileReaderObject.fileColumns;
+    Excel excel = widget.fileReaderObject.excel;
+    var f = excel.tables[widget.fileReaderObject.selectedSheet]?.rows;
+    var columns = widget.fileReaderObject.fileColumns;
     // debugPrint("getDataFromExcelTable => ros=>f $f  ");
     // debugPrint("getDataFromExcelTable=>fileColumns $columns  ");
-    List<ViewAbstract> generatedViewAbstract = [];
 
     List<String> exceptions = [];
 
@@ -115,8 +102,8 @@ class FileReaderValidationWidget extends StatelessWidget {
             "getDataFromExcelTable=>rowNumber ${rowNumber}   type ${element.runtimeType}");
 
         try {
-          var obj = fileReaderObject.getObjectFromRow(context, element);
-          generatedViewAbstract.add(obj);
+          var obj = widget.fileReaderObject.getObjectFromRow(context, element);
+          _generatedViewAbstract.add(obj);
         } catch (e) {
           debugPrint(e.toString());
           exceptions.add("in row number $rowNumber: ${e.toString()}");
@@ -126,86 +113,16 @@ class FileReaderValidationWidget extends StatelessWidget {
         return Text(exceptions.join("\n"));
       }
       // return getExcelDataTable(columns, context, rows);
-      return SizedBox( 
+      return SizedBox(
         width: double.maxFinite,
         height: 1000,
         child: ViewableTableViewAbstractWidget(
-          viewAbstract: generatedViewAbstract,
+          viewAbstract: _generatedViewAbstract,
           usePag: true,
         ),
       );
-      return getViewAbstractDataTable(context, generatedViewAbstract);
     }
 
     return Text(snapshot?.data.toString() ?? "");
-  }
-
-  List<DataRow> getRowsViewAbstract(
-      BuildContext context, List<ViewAbstract> data) {
-    {
-      return data.map((e) {
-        int index = data.indexOf(e);
-        return DataRow(
-            // selected: lastIndexOfSelected == index,
-            // onSelectChanged: (s) {
-            //   debugPrint(
-            //       "dataRow selectChange $s index=> ${list_invoice_details.indexOf(e)}");
-            //   setState(() {
-            //     lastIndexOfSelected = index;
-            //   });
-            // },
-            cells: e
-                .getMainFields(context: context)
-                .map((ee) => DataCell(
-                    Text(
-                      e.getFieldValueCheckType(context, ee),
-                      overflow: TextOverflow.fade,
-                      // softWrap: true,
-                    ),
-                    showEditIcon: false))
-                .toList());
-      }).toList();
-    }
-  }
-
-  Widget getViewAbstractDataTable(
-      BuildContext context, List<ViewAbstract> data) {
-    ViewAbstract first = data[0];
-    List<DataColumn> columns = first
-        .getMainFields()
-        .map((e) => DataColumn(label: Text(first.getFieldLabel(context, e))))
-        .toList();
-    return ScrollableWidget(
-      child: DataTable(
-        // header: Text("Dada"),
-        // source: _data,
-        // columnSpacing: 20,
-        // horizontalMargin: 10,
-        // rowsPerPage: 8,
-        showCheckboxColumn: true,
-        // sortAscending: isAscending,
-        // sortColumnIndex: sortColumnIndex,
-        columns: columns,
-        rows: getRowsViewAbstract(context, data),
-      ),
-    );
-  }
-
-  ScrollableWidget getExcelDataTable(
-      List<String> columns, BuildContext context, List<List<Data?>> rows) {
-    return ScrollableWidget(
-      child: DataTable(
-        // header: Text("Dada"),
-        // source: _data,
-        columnSpacing: 100,
-        horizontalMargin: 10,
-        // rowsPerPage: 8,
-        showCheckboxColumn: false,
-        // sortAscending: isAscending,
-        // sortColumnIndex: sortColumnIndex,
-        columns: columns.map((e) => DataColumn(label: Text(e))).toList(),
-        rows: getRows(context, rows),
-      ),
-    );
   }
 }
