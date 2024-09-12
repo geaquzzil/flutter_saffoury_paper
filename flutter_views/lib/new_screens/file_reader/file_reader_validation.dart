@@ -5,14 +5,17 @@ import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../new_components/tables_widgets/view_table_view_abstract.dart';
 
 class FileReaderValidationWidget extends StatefulWidget {
   FileReaderObject fileReaderObject;
+
   FileReaderValidationWidget({
     super.key,
     required this.fileReaderObject,
@@ -75,6 +78,23 @@ class FileReaderValidationWidgetState
         builder: ((s, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return getWidget(context, snapshot: snapshot);
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError || snapshot.hasData == false) {
+            return EmptyWidget(
+                expand: true,
+                onSubtitleClicked: () {
+                  setState(() {});
+                },
+                lottiUrl:
+                    "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+                title: AppLocalizations.of(context)!.cantConnect,
+                subtitle:
+                    AppLocalizations.of(context)!.cantConnectConnectToRetry);
           }
           return Center(
             child: Lottie.network(

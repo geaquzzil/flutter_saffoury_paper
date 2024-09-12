@@ -120,7 +120,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper?.getObjects.addAll([viewAbstract]);
-     notifyListeners();
+    notifyListeners();
   }
 
   Future fetchListSearch(
@@ -149,6 +149,19 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
     multiListProviderHelper.page++;
     notifyListeners();
+  }
+
+  void initCustomList(String key, List<ViewAbstract> viewAbstract) {
+    late MultiListProviderHelper? multiListProviderHelper;
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
+    } else {
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
+    }
+    multiListProviderHelper!.isLoading = false;
+    multiListProviderHelper.getObjects.addAll(viewAbstract);
+    // multiListProviderHelper.page++;
   }
 
   void addCustomList(String key, List<ViewAbstract> viewAbstract) async {

@@ -6,12 +6,14 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 
 class SliverApiMixinStaticList extends SliverApiMixinWithStaticStateful {
   List<ViewAbstract> list;
+  String? listKey;
   SliverApiMixinStaticList(
       {super.key,
       required this.list,
       super.isSliver,
       super.scrollDirection,
       super.isGridView = false,
+     this.listKey,
       super.enableSelection = false,
       super.hasCustomCardBuilder,
       super.hasCustomSeperater})
@@ -26,7 +28,7 @@ class _SliverApiMixinStaticListState extends State<SliverApiMixinStaticList>
     with SliverApiWithStaticMixin {
   @override
   String getListProviderKey() {
-    return widget.list[0].getListableKey();
+    return  widget.listKey?? widget.list[0].getListableKey();
   }
 
   @override

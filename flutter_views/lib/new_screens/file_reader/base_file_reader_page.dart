@@ -13,7 +13,13 @@ import 'file_reader_validation.dart';
 
 class FileReaderPage extends StatefulWidget {
   ViewAbstract viewAbstract;
-  FileReaderPage({super.key, required this.viewAbstract});
+  Function(List<ViewAbstract>?)? onValidatedList;
+  Function(List<ViewAbstract>?)? onDone;
+  FileReaderPage(
+      {super.key,
+      required this.viewAbstract,
+      this.onValidatedList,
+      this.onDone});
 
   @override
   State<StatefulWidget> createState() => _FileReaderPageState();
@@ -39,9 +45,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     _addOnPageViewModel = widget.viewAbstract is ExcelableReaderInteraceCustom
         ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
             .getExceableAddOnList(context, fileReaderObject)
@@ -50,16 +54,18 @@ class _FileReaderPageState extends State<FileReaderPage> {
 
   @override
   void didUpdateWidget(covariant FileReaderPage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     debugPrint("didUpdateWidget fileReader");
   }
 
   void _onIntroEnd(context) {
-    Navigator.pop(context);
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(builder: (_) => HomePage()),
-    // );
+    if (widget.onDone != null) {
+      widget.onDone
+          ?.call(validateFileReaderState.currentState?.getListGeneratedList());
+    } else {
+      Navigator.pop(context,
+          validateFileReaderState.currentState?.getListGeneratedList());
+    }
   }
 
   Widget _buildFullscreenImage() {
@@ -140,7 +146,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
         return true;
       },
       onSkip: () {},
-      onChange: (value) {},
+      onChange: (value) {
+        debugPrint("onChange $value");
+      },
 
       // globalBackgroundColor: Colors.white,
       // autoScrollDuration: 3000,
@@ -212,7 +220,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
           // image: _buildImage(Icons.abc_sharp, 50),
           decoration: pageDecoration,
         ),
-        if (isCustom()) ..._addOnPageViewModel,
+
+        // if (isCustom()) ..._addOnPageViewModel,
+
         if (!isCustom())
           PageViewModel(
             title: "Validations",
@@ -225,59 +235,60 @@ class _FileReaderPageState extends State<FileReaderPage> {
                         key: validateFileReaderState, fileReaderObject: value);
               },
             ),
+          )
 
-            // image: _buildImage(Icons.access_time),
-            decoration: pageDecoration,
-          ),
-        if (!isCustom())
-          PageViewModel(
-            title: "Full Screen Page",
-            body:
-                "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
-            // image: _buildFullscreenImage(),
-            decoration: pageDecoration.copyWith(
-              contentMargin: const EdgeInsets.symmetric(horizontal: 16),
-              fullScreen: true,
-              bodyFlex: 2,
-              imageFlex: 3,
-            ),
-          ),
-        if (!isCustom())
-          PageViewModel(
-            title: "Another title page",
-            body: "Another beautiful body text for this example onboarding",
-            image: _buildImage(Icons.sos),
-            footer: ElevatedButton(
-              onPressed: () {
-                introKey.currentState?.animateScroll(0);
-              },
-              child: const Text(
-                'FooButton',
-                // style: TextStyle(color: Colors.white),
-              ),
-            ),
-            decoration: pageDecoration,
-          ),
-        if (!isCustom())
-          PageViewModel(
-            title: "Title of last page - reversed",
-            bodyWidget: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Click on ", style: bodyStyle),
-                Icon(Icons.edit),
-                Text(" to edit a post", style: bodyStyle),
-              ],
-            ),
-            decoration: pageDecoration.copyWith(
-              bodyFlex: 2,
-              imageFlex: 4,
-              bodyAlignment: Alignment.bottomCenter,
-              imageAlignment: Alignment.topCenter,
-            ),
-            image: _buildImage(Icons.face),
-            reverse: true,
-          ),
+        //     // image: _buildImage(Icons.access_time),
+        //     decoration: pageDecoration,
+        //   ),
+        // if (!isCustom())
+        //   PageViewModel(
+        //     title: "Full Screen Page",
+        //     body:
+        //         "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+        //     // image: _buildFullscreenImage(),
+        //     decoration: pageDecoration.copyWith(
+        //       contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+        //       fullScreen: true,
+        //       bodyFlex: 2,
+        //       imageFlex: 3,
+        //     ),
+        //   ),
+        // if (!isCustom())
+        //   PageViewModel(
+        //     title: "Another title page",
+        //     body: "Another beautiful body text for this example onboarding",
+        //     image: _buildImage(Icons.sos),
+        //     footer: ElevatedButton(
+        //       onPressed: () {
+        //         introKey.currentState?.animateScroll(0);
+        //       },
+        //       child: const Text(
+        //         'FooButton',
+        //         // style: TextStyle(color: Colors.white),
+        //       ),
+        //     ),
+        //     decoration: pageDecoration,
+        //   ),
+        // if (!isCustom())
+        //   PageViewModel(
+        //     title: "Title of last page - reversed",
+        //     bodyWidget: const Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         Text("Click on ", style: bodyStyle),
+        //         Icon(Icons.edit),
+        //         Text(" to edit a post", style: bodyStyle),
+        //       ],
+        //     ),
+        //     decoration: pageDecoration.copyWith(
+        //       bodyFlex: 2,
+        //       imageFlex: 4,
+        //       bodyAlignment: Alignment.bottomCenter,
+        //       imageAlignment: Alignment.topCenter,
+        //     ),
+        //     image: _buildImage(Icons.face),
+        //     reverse: true,
+        //   ),
       ],
       onDone: () => _onIntroEnd(context),
       //onSkip: () => _onIntroEnd(context), // You can override onSkip callback

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/goods_worker/goods_inventory_list_card.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_contro
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
 
@@ -65,8 +67,13 @@ class GoodsInventoryPage extends StatefulWidget {
 class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     with BasePageWithThirdPaneMixinStatic {
   final key = GlobalKey<SliverApiMixinAutoRestState>();
+  final keyToImportFrom = GlobalKey<SliverApiMixinAutoRestState>();
+  final keyToExportTo = GlobalKey<SliverApiMixinAutoRestState>();
   GoodsType _type = GoodsType.INVERTORY;
   Warehouse? _selectedWarehouse;
+  final ValueNotifier<List<ViewAbstract>?> _notifier =
+      ValueNotifier<List<ViewAbstract>?>(null);
+  Function(List<ViewAbstract<dynamic>>?)? onDone;
 
   @override
   Widget? getBaseAppbar() {
@@ -119,8 +126,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   Widget? getBaseFloatingActionButton() => null;
 
   @override
-  getDesktopFirstPane({TabControllerHelper? tab}) =>
-      SliverApiMixinViewAbstractCardApiWidget(
+  getDesktopFirstPane({TabControllerHelper? tab}) {
+    if (_type == GoodsType.INVERTORY) {
+      return SliverApiMixinViewAbstractCardApiWidget(
         key: key,
         isSliver: false,
         toListObject: Product(),
@@ -131,12 +139,65 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           );
         },
       );
+    } else {
+      return SliverApiMixinStaticList(
+        listKey: "exportTo",
+        key: keyToExportTo,
+        isSliver: false,
+        list: const [],
+        hasCustomCardBuilder: (idx, item) {
+          return getListItemForPurchasesCheck(idx, item, context);
+        },
+      );
+    }
+  }
+
   @override
   getDesktopSecondPane(
-          {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      FileReaderPage(
-        viewAbstract: Product(),
-      );
+      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    if (_type == GoodsType.PURCHASES) {
+      return ValueListenableBuilder(
+          valueListenable: _notifier,
+          builder: (context, v, o) {
+            if (v != null) {
+              return SliverApiMixinStaticList(
+                listKey: "emportFrom",
+                list: v,
+                isSliver: false,
+                enableSelection: false,
+                key: keyToImportFrom,
+                hasCustomCardBuilder: (i, v) =>
+                    getListItemForPurchasesCheck(i, v, context),
+              );
+            } else {
+              return FileReaderPage(
+                onDone: (p0) {
+                  debugPrint("onDone FileReaderPage=> $p0");
+                  _notifier.value = p0;
+                },
+                viewAbstract: Product(),
+              );
+            }
+          });
+    }
+    return Center(
+      child: Text("TODO"),
+    );
+  }
+
+  ExpansionTile getListItemForPurchasesCheck(
+      int i, ViewAbstract<dynamic> v, BuildContext context) {
+    return ExpansionTile(
+      leading: Text("${i + 1}"),
+      trailing: Text(
+        (v as Product).qrQuantity.toCurrencyFormat(),
+      ),
+      title: (v.sizes?.getMainHeaderText(context))!,
+      subtitle: v.gsms?.getMainHeaderText(context),
+      children: [v.getFullDescription()],
+    );
+  }
+
   @override
   Widget? getThirdPane() {
     return _type == GoodsType.INVERTORY
@@ -153,18 +214,35 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   int testId = 0;
   double testQuantity = 100;
+  double testBarCode = 1;
   @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) =>
-      FloatingActionButton.extended(
-          onPressed: () {
+  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
+    return FloatingActionButton.extended(
+        onPressed: () {
+          if (_type == GoodsType.INVERTORY) {
             Product p = Product();
             p.qrQuantity = testQuantity + 100;
             p.iD = 2405 + testId;
             testId = testId + 1;
             testQuantity = testQuantity + 100;
             key.currentState?.addAnimatedListItem(p);
-          },
-          label: Icon(Icons.add));
+          } else {
+            int bar = 1000;
+            Product? t =
+                keyToImportFrom.currentState?.searchForItem<Product>((t) {
+              debugPrint("found product barcode: ${t.barcode}");
+              return t.barcode == bar.toString();
+            });
+            bar = bar + 1;
+            debugPrint("found product $t");
+            if (t != null) {
+              keyToExportTo.currentState?.addAnimatedListItem(t);
+            }
+          }
+        },
+        label: Icon(Icons.add));
+  }
+
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
 

@@ -222,7 +222,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _toListObject = checkToInitToListObject();
 
     checkForOverridingSetttings();
-
+    List? customList = getToListObjectCastList();
+    if (customList != null) {
+      listProvider.initCustomList(findListCustomKey(), customList.cast());
+    }
     debugPrint(
         "SliverApiWithStaticMixin===> initState=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}");
     super.initState();
@@ -252,11 +255,6 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   @override
   Widget build(BuildContext context) {
-    List? customList = getToListObjectCastList();
-    if (customList != null) {
-      return getListValueListenableIsGrid(
-          count: customList.length, isLoading: false);
-    }
     return getListSelector();
   }
 
@@ -761,12 +759,17 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   List getList() {
-    return getToListObjectCastList() ??
-        listProvider.getList(getListProviderKey());
+    return listProvider.getList(getListProviderKey());
   }
 
   void addAnimatedListItem(ViewAbstract view) {
-    listProvider.addCardToRequest(getListProviderKey(), view);
+    _ObjectType type = getToListObjectType();
+    if (type == _ObjectType.FROM_CARD_API) {
+      listProvider.addCardToRequest(getListProviderKey(), view);
+    } else {
+      listProvider.addCardToRequest(getListProviderKey(), view);
+    }
+
     // int idx = getList().indexOf(widget);
     // debugPrint("SliverApiWithStaticMixin addAnimatedListItem  at $idx");
     // _listKey.currentState?.insertItem(idx);
@@ -792,5 +795,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         idx,
         (context, animation) =>
             SliverAnimatedCard(animation: animation, child: removed));
+  }
+
+  T? searchForItem<T>(bool Function(T) test) {
+    return listProvider
+        .getList(findListCustomKey())
+        .cast<T>()
+        .firstWhereOrNull(test);
   }
 }
