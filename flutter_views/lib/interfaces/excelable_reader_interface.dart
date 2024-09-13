@@ -4,7 +4,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 
 abstract class ExcelableReaderInterace {
-  List<String> getExcelableRemovedFields();
+  List<String> getExcelableFields(BuildContext context);
 }
 
 abstract class ExcelableReaderInteraceCustom extends ExcelableReaderInterace {

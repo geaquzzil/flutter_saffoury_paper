@@ -50,6 +50,11 @@ class ExcelToProductConverter
   }
 
   @override
+  List<String> getExcelableFields(BuildContext context) {
+    return getMainFields(context: context);
+  }
+
+  @override
   List<String> getMainFields({BuildContext? context}) =>
       ["product", "quantity"];
 
@@ -86,9 +91,6 @@ class ExcelToProductConverter
   bool getCustomStandAloneWidgetIsPadding() {
     return true;
   }
-
-  @override
-  List<String> getExcelableRemovedFields() => [];
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;

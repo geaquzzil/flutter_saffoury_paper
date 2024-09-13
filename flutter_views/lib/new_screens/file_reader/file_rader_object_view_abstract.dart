@@ -43,13 +43,10 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     obj = viewAbstract as ExcelableReaderInterace;
   }
   void init(BuildContext context) {
-    List<String> listOfFields = viewAbstract.getMainFields(context: context);
+    List<String> listOfFields =
+        (viewAbstract as ExcelableReaderInterace).getExcelableFields(context);
     refreshDropdownList(context);
     for (var element in listOfFields) {
-      if (obj
-              .getExcelableRemovedFields()
-              .firstWhereOrNull((p0) => p0 == element) !=
-          null) continue;
       if (viewAbstract.isViewAbstract(element)) {
         ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
         String? tableName = view.getTableNameApi();
@@ -101,15 +98,17 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         generatedRequiredFields[element] =
             viewAbstract.isFieldRequired(element);
         generatedMainFields.add(element);
+        generatedFieldsLabels[element] =
+            (viewAbstract.getFieldLabel(context, element));
+        generatedFieldsIconMap[element] =
+            viewAbstract.getFieldIconData(element);
+
+        generatedMirrorNewInstance[element] =
+            viewAbstract.getMirrorNewInstance(element);
       }
     }
     debugPrint(
         "FileReaderObject generated generatedRequiredFields $generatedRequiredFields");
-  }
-
-  @override
-  String getTag(String field) {
-    return super.getTag(field);
   }
 
   @override
@@ -164,7 +163,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   void refreshDropdownList(BuildContext context) {
-    List<String> listOfFields = viewAbstract.getMainFields(context: context);
+    List<String> listOfFields =
+        (viewAbstract as ExcelableReaderInterace).getExcelableFields(context);
 
     if (generatedFieldsAutoCompleteCustom.isEmpty) {
       generatedFieldsAutoCompleteCustom = {};
@@ -255,7 +255,9 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         dataValue = res ? null : dataValue.value;
       }
       // checking if the main viewAbstract has main field
-      String? field = view.getMainFields().firstWhereOrNull((p0) => p0 == key);
+      String? field = (view as ExcelableReaderInterace)
+          .getExcelableFields(context)
+          .firstWhereOrNull((p0) => p0 == key);
       debugPrint("getDataFromExcelTable founded field $field");
 
       if (field == null) {

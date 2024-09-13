@@ -320,6 +320,23 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  List<String> getExcelableFields(BuildContext context) {
+    return [
+      "customs_declarations",
+      "products_types",
+      "sizes",
+      "gsms",
+      "qualities",
+      "grades",
+      "countries_manufactures",
+      "products_colors",
+      "comments",
+      "barcode",
+      "qrQuantity"
+    ];
+  }
+
+  @override
   List<String> getMainFields({BuildContext? context}) {
     return [
       "customs_declarations",
@@ -373,6 +390,7 @@ class Product extends ViewAbstract<Product>
         "products_count": TextInputType.number,
         "pending_reservation_invoice": TextInputType.phone,
         "cut_request_quantity": TextInputType.number,
+        "qrQuantity": TextInputType.number,
       };
 
   @override
@@ -382,6 +400,7 @@ class Product extends ViewAbstract<Product>
         "barcode": Icons.qr_code,
         "fiberLines": Icons.face,
         "comments": Icons.notes,
+        "qrQuantity": Icons.line_weight
       };
 
   @override
@@ -390,6 +409,7 @@ class Product extends ViewAbstract<Product>
         "barcode": AppLocalizations.of(context)!.barcode,
         "fiberLines": AppLocalizations.of(context)!.grain,
         "comments": AppLocalizations.of(context)!.comments,
+        "qrQuantity": AppLocalizations.of(context)!.quantity,
       };
 
   @override
@@ -424,7 +444,7 @@ class Product extends ViewAbstract<Product>
       };
 
   @override
-  Map<String, bool> isFieldRequiredMap() => {};
+  Map<String, bool> isFieldRequiredMap() => {"qrQuantity": true};
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
@@ -1587,11 +1607,6 @@ class Product extends ViewAbstract<Product>
   @override
   PrintProductList getModifiablePrintableSelfPdfSetting(BuildContext context) {
     return PrintProductList()..product = this;
-  }
-
-  @override
-  List<String> getExcelableRemovedFields() {
-    return ["date", "status"];
   }
 
   @override
