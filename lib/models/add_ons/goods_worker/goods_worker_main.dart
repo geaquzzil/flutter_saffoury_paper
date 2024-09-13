@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_contro
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
@@ -66,9 +67,11 @@ class GoodsInventoryPage extends StatefulWidget {
 
 class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     with BasePageWithThirdPaneMixinStatic {
-  final key = GlobalKey<SliverApiMixinAutoRestState>();
-  final keyToImportFrom = GlobalKey<SliverApiMixinAutoRestState>();
-  final keyToExportTo = GlobalKey<SliverApiMixinAutoRestState>();
+  final key = GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invontery');
+  final keyToImportFrom =
+      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'import');
+  final keyToExportTo =
+      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'export');
   GoodsType _type = GoodsType.INVERTORY;
   Warehouse? _selectedWarehouse;
   final ValueNotifier<List<ViewAbstract>?> _notifier =
@@ -214,7 +217,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
   int testId = 0;
   double testQuantity = 100;
-  double testBarCode = 1;
+  double testBarCode = 1000;
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
     return FloatingActionButton.extended(
@@ -227,15 +230,16 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
             testQuantity = testQuantity + 100;
             key.currentState?.addAnimatedListItem(p);
           } else {
-            int bar = 1000;
+            debugPrint("$keyToImportFrom");
             Product? t =
                 keyToImportFrom.currentState?.searchForItem<Product>((t) {
               debugPrint("found product barcode: ${t.barcode}");
-              return t.barcode == bar.toString();
+              return t.barcode == testBarCode.toString();
             });
-            bar = bar + 1;
+
             debugPrint("found product $t");
             if (t != null) {
+              testBarCode = testBarCode + 1;
               keyToExportTo.currentState?.addAnimatedListItem(t);
             }
           }

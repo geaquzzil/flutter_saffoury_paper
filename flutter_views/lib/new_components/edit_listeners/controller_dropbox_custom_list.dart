@@ -78,6 +78,8 @@ class _DropdownCustomListWithFormListenerState
             setState(() {
               list = widget.viewAbstract
                   .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+              //on reset list then updated initialValue not set this funcion to set the initalValue is selected
+            
             });
           },
           validator:

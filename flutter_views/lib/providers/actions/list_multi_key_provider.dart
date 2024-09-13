@@ -119,6 +119,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       _listMap[key] = MultiListProviderHelper();
       multiListProviderHelper = _listMap[key];
     }
+    multiListProviderHelper?.hasError = false;
     multiListProviderHelper?.getObjects.addAll([viewAbstract]);
     notifyListeners();
   }

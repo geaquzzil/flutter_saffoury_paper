@@ -378,6 +378,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     debugPrint(
         "getFieldValue from file_reader_objcet field => $field fieldName=>$fieldName   finedeInTable => $findedInTable  => generatedFieldsLabels => $generatedFieldsLabels");
     if (findedInTable != null) {
+      selectedFields[field] = findedInTable;
       return findedInTable;
     }
 
