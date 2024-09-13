@@ -111,22 +111,6 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Widget? onLoadingHasCustomWidget();
 
-  String findListCustomKey() {
-    ViewAbstract? v = getToListObjectCastViewAbstractNullIfNot();
-    if (v != null) {
-      String key = v.getListableKey();
-      key = key + (_searchString ?? "");
-      return key;
-    }
-    if (_toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
-      return getToListObjectHorizontalListResponse().getCustomViewKey();
-    } else if (_toListObjectType == _ObjectType.AUTO_REST) {
-      return getToListObjectCastAutoRest().key;
-    } else {
-      return "";
-    }
-  }
-
   void toggleSelectedMood() {
     if (!widget.enableSelection) return;
     if (mounted) {
@@ -224,7 +208,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     checkForOverridingSetttings();
     List? customList = getToListObjectCastList();
     if (customList != null) {
-      listProvider.initCustomList(findListCustomKey(), customList.cast());
+      listProvider.initCustomList(getListProviderKey(), customList.cast());
     }
     debugPrint(
         "SliverApiWithStaticMixin===> initState=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}");
@@ -603,7 +587,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     bool shouldFetsh = false;
     _searchString = widget.searchString;
     _ObjectType lastUpdated = getToListObjectType();
-    if (lastUpdated == _ObjectType.VIEW_ABSTRACT &&
+    if (_toListObjectType == _ObjectType.CUSTOM_LIST) {
+      listProvider.initCustomList(
+          getListProviderKey(), getToListObjectCastList()?.cast() ?? []);
+    } else if (lastUpdated == _ObjectType.VIEW_ABSTRACT &&
         _toListObjectType == _ObjectType.VIEW_ABSTRACT) {
       ViewAbstract checkedViewAbstract = widget.toListObject as ViewAbstract;
       if (checkedViewAbstract.runtimeType !=
@@ -664,11 +651,28 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   void fetshList({bool notifyNotSearchable = false}) {
     if (!canFetshList()) return;
-    String customKey = findListCustomKey();
+    String customKey = getListProviderKey();
     if (_toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
       CustomViewHorizontalListResponse c =
           getToListObjectHorizontalListResponse();
       switch (c.getCustomViewResponseType()) {
+        //TODO this is the customKey should pressentes here !
+        //         String findListCustomKey() {
+        //   ViewAbstract? v = getToListObjectCastViewAbstractNullIfNot();
+        //   if (v != null) {
+        //     String key = v.getListableKey();
+        //     key = key + (_searchString ?? "");
+        //     return key;
+        //   }
+        //   if (_toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
+        //     return getToListObjectHorizontalListResponse().getCustomViewKey();
+        //   } else if (_toListObjectType == _ObjectType.AUTO_REST) {
+        //     return getToListObjectCastAutoRest().key;
+        //   } else {
+        //     return "";
+        //   }
+        // }
+
         case ResponseType.LIST:
           listProvider.fetchList(customKey, viewAbstract: c as ViewAbstract);
           break;
@@ -703,7 +707,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   void refresh() {
     ViewAbstract? v = getToListObjectCastViewAbstractNullIfNot();
     if (v == null) return;
-    listProvider.refresh(findListCustomKey(), v);
+    listProvider.refresh(getListProviderKey(), v);
   }
 
   bool get _isBottom {
@@ -798,8 +802,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   T? searchForItem<T>(bool Function(T) test) {
+    debugPrint(
+        "searchForItem list length => ${listProvider.getList(getListProviderKey()).length}");
     return listProvider
-        .getList(findListCustomKey())
+        .getList(getListProviderKey())
         .cast<T>()
         .firstWhereOrNull(test);
   }

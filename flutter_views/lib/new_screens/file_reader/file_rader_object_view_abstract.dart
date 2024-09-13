@@ -52,7 +52,11 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
           null) continue;
       if (viewAbstract.isViewAbstract(element)) {
         ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
-
+        String? tableName = view.getTableNameApi();
+        if (tableName != null) {
+          generatedFieldsLabels[tableName] =
+              view.getMainHeaderLabelTextOnly(context);
+        }
         generatedMirrorNewInstance.addAll(view.getMirrorFieldsMapNewInstance());
         generatedFieldsIconMap.addAll(view.getFieldIconDataMap());
         generatedFieldsLabels.addAll(view.getFieldLabelMap(context));
@@ -362,10 +366,22 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   @override
   dynamic getFieldValue(String field, {BuildContext? context}) {
-    var value =
-        selectedFields.entries.firstWhereOrNull((p0) => p0.key == field);
-    if (value != null) return value.value;
-    return super.getFieldValue(field);
+    // var value =
+    //     selectedFields.entries.firstWhereOrNull((p0) => p0.key == field);
+    // // debugPrint(
+    // //     "getFieldValue from file_reader_objcet field => $field selectedFields=> $selectedFields value => ${value?.value}");
+    // if (value != null) return value.value;
+    String fieldName = generatedFieldsLabels[field] ?? field;
+    String? findedInTable = fileColumns.firstWhereOrNull((f) =>
+        f.toLowerCase().contains(fieldName.toLowerCase()) ||
+        f.toLowerCase().startsWith(fieldName.toLowerCase()));
+    debugPrint(
+        "getFieldValue from file_reader_objcet field => $field fieldName=>$fieldName   finedeInTable => $findedInTable  => generatedFieldsLabels => $generatedFieldsLabels");
+    if (findedInTable != null) {
+      return findedInTable;
+    }
+
+    return super.getFieldValue(field, context: context);
   }
 
   @override
