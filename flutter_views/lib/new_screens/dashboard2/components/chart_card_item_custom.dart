@@ -232,7 +232,7 @@ class ChartCardItemCustom extends StatelessWidget {
                 Text(
                   title,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.clip,
                   style: Theme.of(context).textTheme.bodySmall!,
                 ),
                 if (icon != null) Icon(icon)
@@ -242,6 +242,7 @@ class ChartCardItemCustom extends StatelessWidget {
             Text(
               description,
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               // overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.bodyLarge!,
             ),
@@ -253,12 +254,11 @@ class ChartCardItemCustom extends StatelessWidget {
                 title: title,
                 // title:
                 //     CutRequest().getMainHeaderLabelTextOnly(context),
-                dataLabelMapper: (item, idx) =>
-                    item.total?.toCurrencyFormat(),
+                dataLabelMapper: (item, idx) => item.total?.toCurrencyFormat(),
                 xValueMapper: (item, value) {
                   // debugPrint("ChartItem $item");
-                  return DateFormat.yMMM().format(
-                      DateTime(item.year!, item.month!, item.day ?? 1));
+                  return DateFormat.yMMM()
+                      .format(DateTime(item.year!, item.month!, item.day ?? 1));
                 },
                 yValueMapper: (item, n) => item.total,
               ),

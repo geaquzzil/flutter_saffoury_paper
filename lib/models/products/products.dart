@@ -155,7 +155,7 @@ class Product extends ViewAbstract<Product>
   List<TransfersDetails>? transfers_details;
   int? transfers_details_count;
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(includeFromJson: true, includeToJson: false)
   double? qrQuantity;
 
   @override
@@ -176,7 +176,8 @@ class Product extends ViewAbstract<Product>
         "qualities": Quality(),
         "grades": Grades(),
         "products_colors": ProductsColor(),
-        "inStock": List<Stocks>.empty()
+        "inStock": List<Stocks>.empty(),
+        "qrQuantity": 0.0,
       };
 
   Product() : super() {

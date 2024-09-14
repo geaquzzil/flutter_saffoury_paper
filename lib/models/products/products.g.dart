@@ -16,6 +16,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..barcode = Product.intFromString(json['barcode'])
   ..fiberLines = json['fiberLines'] as String?
   ..comments = json['comments'] as String?
+  ..qrQuantity=(json['qrQuantity'] as num?)?.toDouble()
   ..pending_reservation_invoice =
       (json['pending_reservation_invoice'] as num?)?.toDouble()
   ..pending_cut_requests = (json['pending_cut_requests'] as num?)?.toDouble()

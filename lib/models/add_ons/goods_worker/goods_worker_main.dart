@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/goods_worker/goods_inventory_list_card.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_controllers_utils.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
@@ -77,6 +80,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   final ValueNotifier<List<ViewAbstract>?> _notifier =
       ValueNotifier<List<ViewAbstract>?>(null);
   Function(List<ViewAbstract<dynamic>>?)? onDone;
+
+  final ValueNotifier<List<ViewAbstract>?> _notifierOnImportAndExport =
+      ValueNotifier<List<ViewAbstract>?>(null);
 
   @override
   Widget? getBaseAppbar() {
@@ -203,9 +209,73 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   Widget? getThirdPane() {
-    return _type == GoodsType.INVERTORY
-        ? null
-        : Card(child: const Center(child: Text("Third")));
+    if (_type == GoodsType.INVERTORY) {
+      return null;
+    }
+    return FileInfoStaggerdGridView(
+      childAspectRatio: 16 / 9,
+      list: [
+        StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: .75,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              icon: Icons.today,
+              title: "TOTAL ITEMS IMPORTED",
+              description: "getTotalTodayBalance()",
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            )),
+        StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: .75,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              // icon: Icons.today,
+              title: "TOTAL QUANTITY IMPORTED",
+              description: "getTotalTodayBalance()",
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            )),
+        StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: .75,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              // icon: Icons.today,
+              title: "TOTAL ITEMS SCANED",
+              description: "getTotalTodayBalance()",
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            )),
+        StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: .75,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              // icon: Icons.today,
+              title: "TOTAL ITEMS SCANNED QUANTITY",
+              description: "getTotalTodayBalance()",
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            )),
+        StaggeredGridTile.count(
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 1,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              // icon: Icons.today,
+              title: "TOTAL ",
+              description: "getTotalTodayBalance()",
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            ))
+      ],
+      wrapWithCard: true,
+      // crossAxisCount: getCrossAxisCount(getWidth),
+
+      // width < 1400 ? 1.1 : 1.4,
+    );
   }
 
   @override
