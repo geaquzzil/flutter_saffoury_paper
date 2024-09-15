@@ -206,13 +206,13 @@ class CutRequest extends ViewAbstract<CutRequest>
         "sizes_cut_requests_count": 0
       };
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.edit: ["cut_request_results", "sizes_cut_requests"],
         ServerActions.view: ["cut_request_results", "sizes_cut_requests"],
       };
 
   @override
-  bool isRequiredObjectsListChecker() {
+  bool canGetObjectWithoutApiChecker(ServerActions action) {
     return cut_request_results?.length == cut_request_results_count;
   }
 

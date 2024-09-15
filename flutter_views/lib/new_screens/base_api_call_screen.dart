@@ -23,50 +23,14 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
   C getExtras() {
     return extras as C;
   }
-  @Deprecated("Use the viewAbstract.getBodyWithoutApi")
-  bool getBodyWithoutApi() {
-    if (extras is! ViewAbstract) return false;
-
-    bool canGetBody =
-        (extras as ViewAbstract).isRequiredObjectsList()?[getServerActions()] ==
-            null;
-    if (canGetBody) {
-      debugPrint("BaseApiCallPageState getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = (extras as ViewAbstract).isNew() ||
-        (extras as ViewAbstract).isRequiredObjectsListChecker();
-    debugPrint("BaseApiCallPageState getBodyWithoutApi result => $res");
-    return res;
-  }
 
   Widget beforeBuildAfterCall(BuildContext context) {
     return buildAfterCall(context, extras as C);
-    return ScreenHelperSliver(
-        requireAutoPadding: false,
-        onChangeLayout: (w, h, c) {},
-        mobile: (w, h) {
-          return buildAfterCall(context, extras as C);
-        },
-        smallTablet: (w, h) {
-          WidgetsBinding.instance.addPostFrameCallback((v) {
-            context.pushNamed(homeRouteName);
-          });
+  }
 
-          return buildAfterCall(context, extras as C);
-        },
-        largeTablet: (w, h) {
-          WidgetsBinding.instance.addPostFrameCallback((v) {
-            context.pushNamed(homeRouteName);
-          });
-          return buildAfterCall(context, extras as C);
-        },
-        desktop: (w, h) {
-          WidgetsBinding.instance.addPostFrameCallback((v) {
-            context.pushNamed(homeRouteName);
-          });
-          return buildAfterCall(context, extras as C);
-        });
+  bool getBodyWithoutApi() {
+    return (extras as ViewAbstract?)?.getBodyWithoutApi(getServerActions()) ==
+        true;
   }
 
   @override

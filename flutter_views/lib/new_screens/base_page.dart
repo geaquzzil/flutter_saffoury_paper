@@ -1476,16 +1476,9 @@ abstract class BasePageWithApi<T extends StatefulWidget>
           null) {
         return true;
       }
-      return (ex).isRequiredObjectsListChecker();
+      return (ex).canGetObjectWithoutApiChecker(getServerActions());
     }
-    bool canGetBody = (ex).isRequiredObjectsList()?[getServerActions()] == null;
-    if (canGetBody) {
-      debugPrint("BasePageWithApi getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = (ex).isNew() || (ex).isRequiredObjectsListChecker();
-    debugPrint("BasePageWithApi getBodyWithoutApi result => $res");
-    return res;
+    return ex.getBodyWithoutApi(getServerActions());
   }
 
   // @override

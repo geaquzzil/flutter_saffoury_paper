@@ -553,7 +553,7 @@ class DraggableHomeState extends State<DraggableHome>
                           : widget.alwaysShowTitle
                               ? widget.title
                               : AnimatedOpacity(
-                                  opacity: fullyCollapsed ? 1 : 0,
+                                  opacity: fullyExpanded ? 1 : 0,
                                   duration: const Duration(milliseconds: 100),
                                   child: widget.title,
                                 ),

@@ -25,7 +25,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 class CutRequestWorker extends CutRequest {
   CutRequestWorker();
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.edit: ["cut_request_results", "sizes_cut_requests"],
         ServerActions.view: ["cut_request_results", "sizes_cut_requests"],
         ServerActions.list: ["cut_request_results", "sizes_cut_requests"],
@@ -140,7 +140,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
             // hasCustomSeperater: Divider(),
             isSliver: false,
             searchString: _searchQuery,
-            hasCustomCardBuilder: (index,item) {
+            hasCustomCardBuilder: (index, item) {
               CutRequest cutRequest = item as CutRequest;
               return CutRequestListCard(
                 item: cutRequest,

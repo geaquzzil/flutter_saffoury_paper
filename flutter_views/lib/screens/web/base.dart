@@ -575,18 +575,7 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
 
   bool getBodyWithoutApi() {
     if (extras is! ViewAbstract) return false;
-
-    bool canGetBody =
-        (extras as ViewAbstract).isRequiredObjectsList()?[getServerActions()] ==
-            null;
-    if (canGetBody) {
-      debugPrint("BaseApiCallPageState getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = (extras as ViewAbstract).isNew() ||
-        (extras as ViewAbstract).isRequiredObjectsListChecker();
-    debugPrint("BaseApiCallPageState getBodyWithoutApi result => $res");
-    return res;
+    return extras!.getBodyWithoutApi(getServerActions());
   }
 
   @override

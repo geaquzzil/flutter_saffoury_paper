@@ -45,7 +45,7 @@ class Transfers extends InvoiceMaster<Transfers> {
   String? getTableNameApi() => "transfers";
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["transfers_details"],
       };
   @override

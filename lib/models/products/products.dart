@@ -356,6 +356,18 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() {
+    // TODO: implement canGetObjectWithoutApiCheckerList
+    return {ServerActions.list: []};
+  }
+
+  @override
+  bool canGetObjectWithoutApiChecker(ServerActions action) {
+    debugPrint("Product canGetObjectWithoutApiChecker action => $action");
+    return products_types != null;
+  }
+
+  @override
   List<CustomFilterableField> getCustomFilterableFields(BuildContext context) =>
       super.getCustomFilterableFields(context)
         ..addAll([

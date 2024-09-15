@@ -68,7 +68,7 @@ class Order extends InvoiceMaster<Order>
   String? getTableNameApi() => "orders";
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["orders_details"],
       };
 

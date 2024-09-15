@@ -76,7 +76,7 @@ class Employee extends User<Employee> {
   }
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["warehouse_employees"]
       };
 

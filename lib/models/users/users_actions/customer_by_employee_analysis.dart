@@ -36,7 +36,7 @@ class CustomerByEmployeeAnanlysis
   }
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["orders"],
       };
   @override

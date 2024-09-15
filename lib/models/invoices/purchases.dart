@@ -41,14 +41,14 @@ class Purchases extends InvoiceMaster<Purchases> {
   }
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.add: ["purchases_details"],
         ServerActions.edit: ["purchases_details"],
         ServerActions.view: ["purchases_details"],
       };
 
   @override
-  bool isRequiredObjectsListChecker() {
+  bool canGetObjectWithoutApiChecker(ServerActions action) {
     return purchases_details?.length == purchases_details_count;
   }
 

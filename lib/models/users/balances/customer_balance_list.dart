@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -397,7 +398,7 @@ class CustomerBalanceList
       null;
 
   @override
-  bool isRequiredObjectsListChecker() {
+  bool canGetObjectWithoutApiChecker(ServerActions action) {
     return customers != null;
   }
 
@@ -413,7 +414,7 @@ class CustomerBalanceList
   }
 
   @override
-    DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
+  DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
     return null;
   }

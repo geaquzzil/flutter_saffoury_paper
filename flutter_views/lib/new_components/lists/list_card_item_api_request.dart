@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
@@ -22,9 +23,11 @@ class ListCardItemApi extends StatefulWidget {
 
 class _ListCardItemApiState extends State<ListCardItemApi> {
   ViewAbstract? _viewAbstract;
+
   @override
   void didUpdateWidget(covariant ListCardItemApi oldWidget) {
     if (_viewAbstract?.iD != widget.viewAbstract.iD) {
+      debugPrint("ListCardItemApi update ===> iD: ${widget.viewAbstract.iD}");
       _viewAbstract = null;
     }
     super.didUpdateWidget(oldWidget);
@@ -35,10 +38,16 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
     if (_viewAbstract != null) {
       return getItem();
     }
+    if (widget.viewAbstract.getBodyWithoutApi(ServerActions.list)) {
+      _viewAbstract = widget.viewAbstract;
+      return getItem();
+    }
+    
     return FutureBuilder(
         future: widget.viewAbstract
             .viewCallGetFirstFromList(widget.viewAbstract.iD),
         builder: (c, a) {
+          debugPrint("ListCardItemApi futureBuilder ");
           if (a.connectionState == ConnectionState.waiting) {
             if (_viewAbstract == null) {
               return widget.hasCustomLoadingWidget ??
@@ -48,18 +57,23 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
                   );
             }
           }
-          _viewAbstract = a.data;
-          if (_viewAbstract == null) {
-            return Card(
-                child: ListTile(
-              title: Text("NotFound"),
-              trailing: ElevatedButton.icon(
-                  onPressed: () {
-                    setState(() {});
-                  },
-                  label: const Icon(Icons.refresh)),
-            ));
+          if (a.connectionState == ConnectionState.done) {
+            _viewAbstract = a.data;
+            if (_viewAbstract == null) {
+              return Card(
+                  child: ListTile(
+                title: Text("NotFound"),
+                trailing: ElevatedButton.icon(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    label: const Icon(Icons.refresh)),
+              ));
+            } else {
+              widget.viewAbstract = _viewAbstract!;
+            }
           }
+
           return getItem();
         });
   }

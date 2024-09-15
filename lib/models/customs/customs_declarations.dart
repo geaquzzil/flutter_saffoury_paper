@@ -113,7 +113,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["customs_declarations_images"],
       };
 

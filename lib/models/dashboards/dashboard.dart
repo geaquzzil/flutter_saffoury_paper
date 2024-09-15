@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +152,7 @@ class Dashboard extends UserLists<Dashboard>
       Dashboard.fromJson(json);
 
   @override
-  bool isRequiredObjectsListChecker() {
+  bool canGetObjectWithoutApiChecker(ServerActions action) {
     return debitsDue != null;
   }
 

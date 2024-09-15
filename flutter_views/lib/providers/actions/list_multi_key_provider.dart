@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
 import '../../models/auto_rest.dart';
@@ -55,7 +56,7 @@ class ListMultiKeyProvider with ChangeNotifier {
         _listMap[i.key]?.page = getPage(i.key);
         // element.objects.insert(0, o);
         debugPrint(
-            "ListMultiKeyProvider changed element required list=> ${o.isRequiredObjectsListChecker()} ");
+            "ListMultiKeyProvider changed element required list=> ${o.canGetObjectWithoutApiChecker(ServerActions.edit)} ");
         _listMap[i.key]?.isLoading = true;
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 500), () {

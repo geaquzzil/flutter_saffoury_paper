@@ -44,7 +44,7 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   String? getTableNameApi() => "customers_request_sizes";
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["customers_request_sizes_details"],
       };
 

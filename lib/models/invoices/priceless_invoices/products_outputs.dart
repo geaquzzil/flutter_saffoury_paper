@@ -52,7 +52,7 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   String? getTableNameApi() => "products_outputs";
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["products_outputs_details"],
       };
 

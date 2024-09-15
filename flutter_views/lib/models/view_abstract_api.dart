@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
@@ -87,12 +88,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return true;
   }
 
-  Map<ServerActions, List<String>>? isRequiredObjectsList() {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() {
     return null;
   }
 
   /// call api to get objects list if its false
-  bool isRequiredObjectsListChecker() {
+  bool canGetObjectWithoutApiChecker(ServerActions action) {
     return false;
   }
 
@@ -126,7 +127,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     defaultHeaders['Platform'] = "Flutter";
     defaultHeaders['Auth'] =
         Encriptions.encypt("HIIAMANANDROIDUSERFROMSAFFOURYCOMPANY");
-    debugPrint("AUTH:${defaultHeaders['Auth']}");
+    debugPrint("ViewAbstractApi ViewAbstractApiAUTH:${defaultHeaders['Auth']}");
 
     defaultHeaders['X-Authorization'] =
         "WNYDGno8agC7nVmX99/uxyz24UgjvUTsjWFk3T94bERF9JLgBubq4cwiga3q5r9XExvUiE5rezZ5axsWvBjfmOwyW0GL34NS0y5y1UeVM12OU6JLnAEWfO6TxkMe7O9nr+H1LUkn4uYhVJFcJ0t8pYZF9iO7UHQXZTnDzTRQ4vnDRrWazwgtPXrBjMHNrYzNhxiuBzsH5CGtE2ZPnX+slhCI4F1KWfJHrXJX7n+Ddvc=";
@@ -184,10 +185,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   ///call only with custom action and added custom params
   Future<T?> callApi() async {
     var response = await getRespones(serverActions: ServerActions.call);
-    // debugPrint("callApi $response");
+    // debugPrint("ViewAbstractApi ViewAbstractApicallApi $response");
 
-    debugPrint("callApi status code ${response?.statusCode}");
-    // debugPrint("callApi response =>${response?.body}");
+    debugPrint(
+        "ViewAbstractApi ViewAbstractApi callApi status code ${response?.statusCode}");
+    // debugPrint("ViewAbstractApi ViewAbstractApi callApi response =>${response?.body}");
 
     if (response == null) return null;
     if (response.statusCode == 200) {
@@ -394,7 +396,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       Iterable l = convert.jsonDecode(convert.jsonEncode(productsJson));
       return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
     } catch (e) {
-      debugPrint("listCallFake ${e.toString()}");
+      debugPrint(
+          "ViewAbstractApi ViewAbstractApi listCallFake ${e.toString()}");
     }
     return null;
   }
@@ -432,7 +435,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response is Response) {
       if (onResponse == null) {
         debugPrint(
-            "onCallCheckError====> called but no response callback registered");
+            "ViewAbstractApi onCallCheckError====> called but no response callback registered");
         return;
       }
       int statusCode = response.statusCode;
@@ -442,7 +445,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         ServerResponseMaster serverResponse =
             ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
         debugPrint(
-            "onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}");
+            "ViewAbstractApi onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}");
         onResponse
             .onServerFailureResponse((serverResponse.getFailureMessage()));
       }
@@ -452,7 +455,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   bool hasErrorOnDelete() {
     ViewAbstract t = this as ViewAbstract;
     bool res = t.serverStatus != "true" || t.serverStatus != "True";
-    debugPrint("hasErrorOnDelete res: $res");
+    debugPrint("ViewAbstractApi ViewAbstractApi hasErrorOnDelete res: $res");
     return res;
   }
 
@@ -482,7 +485,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   void deleteCall(BuildContext context,
       {required OnResponseCallback onResponse}) async {
-    debugPrint("deleteCall iD=> $iD ");
+    debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.delete_action);
 
@@ -525,20 +528,23 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   bool getBodyWithoutApi(ServerActions action) {
     bool canGetBody =
-        (this as ViewAbstract).isRequiredObjectsList()?[action] == null;
+        (this as ViewAbstract).canGetObjectWithoutApiCheckerList()?[action] ==
+            null;
     if (canGetBody) {
-      debugPrint("BaseApiCallPageState getBodyWithoutApi skiped");
+      debugPrint(
+          "ViewAbstractApi BaseApiCallPageState getBodyWithoutApi skiped");
       return true;
     }
     bool res = (this as ViewAbstract).isNew() ||
-        (this as ViewAbstract).isRequiredObjectsListChecker();
-    debugPrint("BaseApiCallPageState getBodyWithoutApi result => $res");
+        (this as ViewAbstract).canGetObjectWithoutApiChecker(action);
+    debugPrint(
+        "ViewAbstractApi BaseApiCallPageState getBodyWithoutApi result => $res");
     return res;
   }
 
   Future<List<T>?> listCall(
       {int? count, int? page, OnResponseCallback? onResponse}) async {
-    debugPrint("listCall count=> $count page=>$page");
+    debugPrint("ViewAbstractApi listCall count=> $count page=>$page");
     var response = await getRespones(
         itemCount: count,
         pageIndex: page,
@@ -580,9 +586,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             ? "list_reduce_size"
             : customAction ?? action.toString().split(".").last;
     mainBody['objectTables'] = convert.jsonEncode(isRequiredObjects());
-    mainBody['detailTables'] = isRequiredObjectsList() == null
+    mainBody['detailTables'] = canGetObjectWithoutApiCheckerList() == null
         ? convert.jsonEncode([])
-        : convert.jsonEncode(isRequiredObjectsList()?[action] ?? []);
+        : convert
+            .jsonEncode(canGetObjectWithoutApiCheckerList()?[action] ?? []);
 
     String? table = getTableNameApi();
     if (table != null) {

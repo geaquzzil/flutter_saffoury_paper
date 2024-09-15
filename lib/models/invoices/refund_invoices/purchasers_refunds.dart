@@ -48,7 +48,7 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
   String? getTableNameApi() => "purchasers_refunds";
 
   @override
-  Map<ServerActions, List<String>>? isRequiredObjectsList() => {
+  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
         ServerActions.list: ["purchases_refunds_purchases_details"],
       };
   @override
