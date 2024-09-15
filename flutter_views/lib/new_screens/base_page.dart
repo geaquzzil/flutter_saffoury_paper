@@ -50,6 +50,11 @@ const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
 
+
+mixin BasePageWithDraggablePage on BasePageState{
+  
+}    
+
 mixin TickerWidget<T extends StatefulWidget> on State<T> {
   int getTickerSecond();
 

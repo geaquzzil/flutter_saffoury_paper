@@ -22,6 +22,7 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
+import 'package:flutter_view_controller/size_config.dart';
 
 enum GoodsType implements ViewAbstractEnum<GoodsType> {
   INVERTORY,
@@ -70,6 +71,9 @@ class GoodsInventoryPage extends StatefulWidget {
 
 class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     with BasePageWithThirdPaneMixinStatic {
+  int testId = 0;
+  double testQuantity = 100;
+  double testBarCode = 1000;
   final key = GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invontery');
   final keyToImportFrom =
       GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'import');
@@ -85,7 +89,22 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       ValueNotifier<List<ViewAbstract>?>(null);
 
   @override
+  List<TabControllerHelper>? initTabBarList(
+      {bool? firstPane, TabControllerHelper? tab}) {
+    if (findCurrentScreenSize(context) == CurrentScreenSize.MOBILE) {
+      return [
+        TabControllerHelper("INVENTORY"),
+        TabControllerHelper("PURCHASES")
+      ];
+    }
+    return super.initTabBarList(firstPane: firstPane, tab: tab);
+  }
+
+  @override
   Widget? getBaseAppbar() {
+    if (findCurrentScreenSize(context) == CurrentScreenSize.MOBILE) {
+      return Text("dsa");
+    }
     return ListTile(
         leading: TodayTextTicker(
           requireTime: true,
@@ -136,6 +155,14 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
+    if (tab != null) {
+      ///this means that is mobile View
+      return getMobileFirstPaneWidget(tab);
+    }
+    return getLargeScreenFirstWidget();
+  }
+
+  SliverApiMixinWithStaticStateful getLargeScreenFirstWidget() {
     if (_type == GoodsType.INVERTORY) {
       return SliverApiMixinViewAbstractCardApiWidget(
         key: key,
@@ -159,6 +186,12 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         },
       );
     }
+  }
+
+  Center getMobileFirstPaneWidget(TabControllerHelper tab) {
+    return Center(
+      child: Text(tab.text!),
+    );
   }
 
   @override
@@ -282,12 +315,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   getFirstPane({TabControllerHelper? tab}) => getDesktopFirstPane(tab: tab);
 
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
-  @override
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-  int testId = 0;
-  double testQuantity = 100;
-  double testBarCode = 1000;
+
   @override
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
     return FloatingActionButton.extended(
@@ -319,6 +348,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+  @override
+  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
