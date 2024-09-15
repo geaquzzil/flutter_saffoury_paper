@@ -7,6 +7,7 @@ import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
+import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
@@ -50,11 +52,6 @@ const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
 
-
-mixin BasePageWithDraggablePage on BasePageState{
-  
-}    
-
 mixin TickerWidget<T extends StatefulWidget> on State<T> {
   int getTickerSecond();
 
@@ -80,6 +77,97 @@ mixin TickerWidget<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 }
+
+mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
+  ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane);
+
+  Widget _getDraggableHomePane(widget, bool firstPane,
+      {TabControllerHelper? tab}) {
+    bool isLargeScreen = isLargeScreenFromScreenSize(_currentScreenSize);
+    return DraggableHome(
+      valueNotifierQrState: getValueNotifierQrState(firstPane),
+      showLeadingAsHamborg: !isLargeScreen,
+      floatingActionButton: firstPane
+          ? getFirstPaneFloatingActionButton(tab: tab)
+          : getSecondPaneFloatingActionButton(tab: tab),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      stretchTriggerOffset: .41,
+
+      title: firstPane
+          ? getFirstPaneAppbar(tab: tab)
+          : getSecondPaneAppbar(tab: tab),
+      headerExpandedHeight: isLargeScreen
+          ? 0.1
+          : isSelectedMode
+              ? 0.25
+              : 0.4,
+      stretchMaxHeight: isSelectedMode ? .3 : .5,
+      fullyStretchable: isLargeScreen
+          ? false
+          : isSelectedMode
+              ? false
+              : true,
+      // headerBottomBar: getHeaderWidget(),
+      pinnedToolbar: isSelectedMode,
+      centerTitle: false,
+      actions: [
+        // if (isSelectedMode)
+        IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
+      ],
+      tabs: _getTabBarList(firstPane: firstPane),
+      // actions: getSharedAppBarActions,
+      slivers: widget as List<Widget>,
+    );
+  }
+
+  @override
+  Widget getTowPanes({TabControllerHelper? tab}) {
+    _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+    _firstWidget = _getDraggableHomePane(_firstWidget, true, tab: tab);
+
+    _secondWidget = beforeGetSecondPaneWidget(tab: tab);
+    _secondWidget = _getDraggableHomePane(_secondWidget, false, tab: tab);
+
+    return getPaneExt();
+  }
+  // NotificationListener<ScrollNotification> getNotificationListener(
+  //     double expandedHeight,
+  //     double appBarHeight,
+  //     double fullyExpandedHeight,
+  //     double topPadding,
+  //     {TabControllerHelper? tab}) {
+  //   return NotificationListener<ScrollNotification>(
+  //       onNotification: (notification) {
+  //         if (notification is ScrollEndNotification &&
+  //             notification.metrics.axis == Axis.vertical) {
+  //           Configurations.saveScrollOffset(
+  //               context, notification.metrics.pixels, bucketOffsetKey);
+  //           debugPrint(
+  //               "currentPageScroll ${Configurations.currentPageScrollOffset(context, bucketOffsetKey)}");
+  //         }
+  //         if (notification.metrics.axis == Axis.vertical) {
+  //           // isFullyCollapsed
+  //           if ((isFullyExpanded.value) &&
+  //               notification.metrics.extentBefore > 100) {
+  //             isFullyExpanded.add(false);
+  //           }
+
+  //           //isFullyCollapsed
+  //           if (notification.metrics.extentBefore >
+  //               expandedHeight - AppBar().preferredSize.height - 40) {
+  //             if (!(isFullyCollapsed.value)) isFullyCollapsed.add(true);
+  //           } else {
+  //             if ((isFullyCollapsed.value)) isFullyCollapsed.add(false);
+  //           }
+  //         }
+  //         return false;
+  //       },
+  //       child: sliver(context, appBarHeight, fullyExpandedHeight,
+  //           expandedHeight, topPadding));
+  // }
+}
+
 mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
   ValueNotifier valueFirstPane = ValueNotifier(null);
   ValueNotifier valueSecondPane = ValueNotifier(null);
@@ -362,31 +450,33 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
                       width: width,
                       child: _secondWidget),
                   !showThirdPane
-                      ? SizedBox.shrink()
+                      ? const SizedBox.shrink()
                       : FutureBuilder(
                           builder: (context, snapshot) {
                             if (snapshot.connectionState !=
                                 ConnectionState.done) {
-                              return SizedBox.shrink();
+                              return const SizedBox.shrink();
                             }
                             return AnimatedOpacity(
-                              duration: Duration(milliseconds: 500),
+                              duration: const Duration(milliseconds: 500),
                               opacity: showThirdPane ? 1 : 0,
                               key: UniqueKey(),
-                              child: VerticalDivider(
+                              child: const VerticalDivider(
                                 width: 1,
                               ),
                             );
                           },
-                          future: Future.delayed(Duration(milliseconds: 300)),
+                          future:
+                              Future.delayed(const Duration(milliseconds: 300)),
                         ),
                   !showThirdPane
-                      ? SizedBox.shrink()
+                      ? const SizedBox.shrink()
                       : FutureBuilder(
-                          future: Future.delayed(Duration(milliseconds: 300)),
+                          future:
+                              Future.delayed(const Duration(milliseconds: 300)),
                           builder: (c, d) {
                             if (d.connectionState != ConnectionState.done) {
-                              return SizedBox.shrink();
+                              return const SizedBox.shrink();
                             }
                             return SizedBox(
                               width: width - 1,
@@ -438,6 +528,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   Widget? _drawerWidget;
   bool buildDrawer;
   bool buildSecoundPane;
+  bool isSelectedMode = false;
 
   BasePageState({this.buildDrawer = true, this.buildSecoundPane = true});
   // The listener
@@ -619,38 +710,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
         // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,
-        actions: !isBaseAppBar
-            ? null
-            : [
-                if (context
-                    .read<AuthProvider<AuthUser>>()
-                    .hasNotificationWidget())
-                  NotificationPopupWidget(),
-                if (context
-                    .read<AuthProvider<AuthUser>>()
-                    .hasNotificationWidget())
-                  const SizedBox(
-                    width: kDefaultPadding / 2,
-                  ),
-                const DrawerLanguageButton(),
-                const SizedBox(
-                  width: kDefaultPadding / 2,
-                ),
-                const ProfilePicturePopupMenu(),
-                const SizedBox(
-                  width: kDefaultPadding / 2,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    context.read<DrawerMenuControllerProvider>().change(
-                        context,
-                        SettingPageNew(),
-                        // SettingAndProfileWeb(),
-                        DrawerMenuControllerProviderAction.custom_widget);
-                  },
-                )
-              ],
+        actions: !isBaseAppBar ? null : getSharedAppBarActions,
         // primary: true,
 
         backgroundColor: customAppBar != null
@@ -677,6 +737,35 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
                 },
               ),
         bottom: getTabBarWidget(firstPane: firstPane));
+  }
+
+  List<Widget> get getSharedAppBarActions {
+    return [
+      if (context.read<AuthProvider<AuthUser>>().hasNotificationWidget())
+        NotificationPopupWidget(),
+      if (context.read<AuthProvider<AuthUser>>().hasNotificationWidget())
+        const SizedBox(
+          width: kDefaultPadding / 2,
+        ),
+      const DrawerLanguageButton(),
+      const SizedBox(
+        width: kDefaultPadding / 2,
+      ),
+      const ProfilePicturePopupMenu(),
+      const SizedBox(
+        width: kDefaultPadding / 2,
+      ),
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () {
+          context.read<DrawerMenuControllerProvider>().change(
+              context,
+              SettingPageNew(),
+              // SettingAndProfileWeb(),
+              DrawerMenuControllerProviderAction.custom_widget);
+        },
+      )
+    ];
   }
 
   ///by default this is hidden when scrolling
@@ -755,35 +844,35 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           controller: getScrollController(firstPane, tab: tab),
           animationDuration: animationDuration,
           scrollOffset: scrollOffset,
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            controller: getScrollController(firstPane, tab: tab),
-            slivers: [
-              if (appBar != null) getSliverAppBar(appBar),
-              if (_hasTabBarList(firstPane: firstPane))
-                checkTogetTabbarSliver(firstPane),
-              ...list
-            ],
-          ),
+          child: getCustomScrollView(firstPane, tab, appBar, list),
         );
       } else {
         debugPrint(
             "BasePage IsPanel  isDesktopOrWebPlatform flassse isSliver ${isPanesIsSliver(firstPane)} body $body");
-        return CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          controller: getScrollController(firstPane, tab: tab),
-          slivers: [
-            if (appBar != null) getSliverAppBar(appBar),
-            if (_hasTabBarList(firstPane: firstPane))
-              checkTogetTabbarSliver(firstPane),
-            ...list
-          ],
-        );
+        return getCustomScrollView(firstPane, tab, appBar, list);
       }
     }
     debugPrint(
         "BasePage IsPanel isSliver=> ${isPanesIsSliver(firstPane, tab: tab)} body $body");
     return body;
+  }
+
+  Widget getCustomScrollView(bool firstPane, TabControllerHelper? tab,
+      Widget? appBar, List<Widget> list) {
+    return SafeArea(
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: const AlwaysScrollableScrollPhysics(),
+        ),
+        controller: getScrollController(firstPane, tab: tab),
+        slivers: [
+          if (appBar != null) getSliverAppBar(appBar),
+          if (_hasTabBarList(firstPane: firstPane))
+            checkTogetTabbarSliver(firstPane),
+          ...list
+        ],
+      ),
+    );
   }
 
   ///setting appbar but when is sliver then we added to CustomScrollView Sliver

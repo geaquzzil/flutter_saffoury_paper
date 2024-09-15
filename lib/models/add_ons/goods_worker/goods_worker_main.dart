@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
+import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_controllers_utils.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -70,7 +71,7 @@ class GoodsInventoryPage extends StatefulWidget {
 }
 
 class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
-    with BasePageWithThirdPaneMixinStatic {
+    with BasePageWithDraggablePage {
   int testId = 0;
   double testQuantity = 100;
   double testBarCode = 1000;
@@ -91,19 +92,13 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
-    if (findCurrentScreenSize(context) == CurrentScreenSize.MOBILE) {
-      return [
-        TabControllerHelper("INVENTORY"),
-        TabControllerHelper("PURCHASES")
-      ];
-    }
     return super.initTabBarList(firstPane: firstPane, tab: tab);
   }
 
   @override
   Widget? getBaseAppbar() {
     if (findCurrentScreenSize(context) == CurrentScreenSize.MOBILE) {
-      return Text("dsa");
+      return null;
     }
     return ListTile(
         leading: TodayTextTicker(
@@ -155,6 +150,19 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
+    return [
+      SliverApiMixinViewAbstractCardApiWidget(
+        key: key,
+        isSliver: true,
+        toListObject: Product(),
+        hasCustomCardBuilder: (idx, item) {
+          return GoodsInventoryListCard(
+            product: item as Product,
+            selectedWarehouse: _selectedWarehouse,
+          );
+        },
+      )
+    ];
     if (tab != null) {
       ///this means that is mobile View
       return getMobileFirstPaneWidget(tab);
@@ -197,6 +205,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   getDesktopSecondPane(
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    return [SliverToBoxAdapter(child: Text("SADA"))];
     if (_type == GoodsType.PURCHASES) {
       return ValueListenableBuilder(
           valueListenable: _notifier,
@@ -347,9 +356,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => Text("INVINTORY");
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => Text("FIRST");
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -379,4 +388,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+
+  @override
+  ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane) {
+    return firstPane ? ValueNotifier<QrCodeNotifierState?>(null) : null;
+  }
 }

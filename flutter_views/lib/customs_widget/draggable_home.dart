@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
+import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_images.dart';
@@ -115,6 +116,8 @@ class DraggableHome extends StatefulWidget {
 
   final String? scrollKey;
 
+  final ValueNotifier<QrCodeNotifierState?>? valueNotifierQrState;
+
   /// This will create DraggableHome.
   const DraggableHome(
       {super.key,
@@ -137,6 +140,7 @@ class DraggableHome extends StatefulWidget {
       this.hideBottomNavigationBarOnScroll = true,
       this.backgroundColor,
       this.valueNotifierExpandType,
+      this.valueNotifierQrState,
       this.appBarColor,
       this.curvedBodyRadius = 20,
       required this.slivers,
@@ -182,6 +186,7 @@ class DraggableHomeState extends State<DraggableHome>
 
   List<Widget> animatedWidgets = [];
   late String bucketOffsetKey;
+  Widget? expandedBodyIfCamera;
 
   @override
   void dispose() {
@@ -226,11 +231,18 @@ class DraggableHomeState extends State<DraggableHome>
 
   @override
   void initState() {
+    expandedBodyIfCamera = widget.valueNotifierQrState != null
+        ? QrCodeReader(
+            getViewAbstract: true,
+            currentHeight: 20,
+            valueNotifierQrState: widget.valueNotifierQrState,
+          )
+        : null;
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 450));
     _animationController.forward();
-    _scrollController = widget.scrollController;
+    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController?.addListener(_onScrollChanged);
     if (widget.tabs != null) {
       _tabs = <TabControllerHelper>[];
@@ -802,7 +814,9 @@ class DraggableHomeState extends State<DraggableHome>
               ),
               onPressed: () {
                 // _scrollDown();
-                _scrollDown();
+                _scrollToHideTopWidget();
+                // _scrollToHideTopWidget();
+                // _scrollDown();
               },
               // color: (snapshot.data ?? false) ? null : Colors.transparent,
             ),
