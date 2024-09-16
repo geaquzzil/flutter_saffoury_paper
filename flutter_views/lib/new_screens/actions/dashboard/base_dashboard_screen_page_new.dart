@@ -275,7 +275,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) {
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) {
     return getExtrasCastDashboard(tab: tab).getDashboardAppbar(
       context,
       firstPane: true,
@@ -297,7 +297,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) {
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) {
     return getExtrasCastDashboard(tab: tab).getDashboardAppbar(
       context,
       firstPane: false,

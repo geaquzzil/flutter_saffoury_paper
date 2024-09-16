@@ -4,11 +4,13 @@ import 'package:flutter_saffoury_paper/models/add_ons/goods_worker/goods_invento
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_api_list.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
@@ -18,12 +20,15 @@ import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
+import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown_api.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 
 enum GoodsType implements ViewAbstractEnum<GoodsType> {
   INVERTORY,
@@ -89,9 +94,69 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   final ValueNotifier<List<ViewAbstract>?> _notifierOnImportAndExport =
       ValueNotifier<List<ViewAbstract>?>(null);
 
+  final qrCode = ValueNotifier<QrCodeNotifierState?>(null);
   @override
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
+    if (isMobile(context)) {
+      if (firstPane == true) {
+        return [
+          TabControllerHelper(
+            "INVONTERY",
+            draggableHeaderWidget: getHeaderForInventory(),
+            slivers: getFirstPane(),
+          ),
+          TabControllerHelper(
+            "PURCHASES CHECK",
+            draggableHeaderWidget: ListTile(
+              leading: Icon(Icons.import_export_sharp),
+              title: Text("Start by importing product from xsl formal "),
+              trailing: ElevatedButton(
+                  onPressed: () async {
+                    final p = Product();
+                    List<ViewAbstract<dynamic>>? l = await context.pushNamed(
+                        importRouteName,
+                        pathParameters: {"tableName": p.getTableNameApi()!},
+                        extra: p);
+                    debugPrint("list is $l");
+                    if (l != null) {
+                      if (mounted) {
+                        final scaffold = ScaffoldMessenger.of(context);
+                        scaffold.showSnackBar(SnackBar(
+                            action: SnackBarAction(
+                                label: 'OK',
+                                onPressed: scaffold.hideCurrentSnackBar),
+                            content: Text(
+                                "${l.length} items imported successfully")));
+
+                        // scaffold.showMaterialBanner(MaterialBanner(
+
+                        //     content: const Text('Hello, I am Material Banner!'),
+                        //     contentTextStyle: const TextStyle(
+                        //         color: Colors.black, fontSize: 30),
+                        //     backgroundColor: Colors.yellow,
+                        //     leadingPadding: const EdgeInsets.only(right: 30),
+                        //     leading: const Icon(
+                        //       Icons.info,
+                        //       size: 32,
+                        //     ),
+                        //     actions: [
+                        //       TextButton(
+                        //           onPressed: () {},
+                        //           child: const Text('Dismiss')),
+                        //       TextButton(
+                        //           onPressed: () {},
+                        //           child: const Text('Continue')),
+                        //     ]));
+                      }
+                    }
+                  },
+                  child: Text("IMPORT")),
+            ),
+          )
+        ];
+      }
+    }
     return super.initTabBarList(firstPane: firstPane, tab: tab);
   }
 
@@ -100,33 +165,24 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     if (findCurrentScreenSize(context) == CurrentScreenSize.MOBILE) {
       return null;
     }
+    return getHeaderForInventory();
+  }
+
+  Widget getHeaderForInventory() {
+    if (isMobile(context)) {
+      return Padding(
+        padding: const EdgeInsets.all(kDefaultPadding),
+        child: Column(
+          children: [...getHeaderInvonteryControlls],
+        ),
+      );
+    }
     return ListTile(
         leading: TodayTextTicker(
           requireTime: true,
         ),
         title: Row(
-          children: [
-            Expanded(
-                child: DropdownEnumControllerListenerByIcon(
-              viewAbstractEnum: _type,
-              initialValue: _type,
-              onSelected: (object) {
-                setState(() {
-                  _type = object ?? GoodsType.INVERTORY;
-                });
-              },
-            )),
-            Expanded(
-              child: getControllerEditTextViewAbstractAutoComplete(context,
-                  viewAbstract: Warehouse(),
-                  field: "name", onSelected: (selectedViewAbstract) {
-                Warehouse selected = selectedViewAbstract as Warehouse;
-                setState(() {
-                  _selectedWarehouse = selected.isNew() ? null : selected;
-                });
-              }, controller: TextEditingController()),
-            ),
-          ],
+          children: getHeaderInvonteryControlls,
         )
 
         //  Card(
@@ -141,6 +197,43 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         //   ),
         // ),
         );
+  }
+
+  List<Widget> get getHeaderInvonteryControlls {
+    return [
+      Expanded(
+          child: DropdownEnumControllerListenerByIcon(
+        viewAbstractEnum: _type,
+        initialValue: _type,
+        onSelected: (object) {
+          setState(() {
+            _type = object ?? GoodsType.INVERTORY;
+          });
+        },
+      )),
+      Expanded(
+        child: DropdownFromViewAbstractApi(
+          initialValue: _selectedWarehouse,
+          onChanged: (selectedViewAbstract) {
+            Warehouse? selected = selectedViewAbstract;
+            setState(() {
+              _selectedWarehouse = selected;
+            });
+          },
+          viewAbstract: Warehouse(),
+        ),
+      ),
+      Expanded(
+        child: getControllerEditTextViewAbstractAutoComplete(context,
+            viewAbstract: Warehouse(),
+            field: "name", onSelected: (selectedViewAbstract) {
+          Warehouse selected = selectedViewAbstract as Warehouse;
+          setState(() {
+            _selectedWarehouse = selected.isNew() ? null : selected;
+          });
+        }, controller: TextEditingController()),
+      ),
+    ];
   }
 
   @override
@@ -356,9 +449,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => Text("INVINTORY");
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) =>
+      Text("INVINTORY");
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => Text("FIRST");
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => Text("FIRST");
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -391,6 +485,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane) {
-    return firstPane ? ValueNotifier<QrCodeNotifierState?>(null) : null;
+    return firstPane ? qrCode : null;
   }
 }

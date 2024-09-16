@@ -4,6 +4,8 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
+///The nested ListView.builder is set to have shrinkWrap: true and
+///physics: NeverScrollableScrollPhysics() to ensure that it doesn't scroll independently within each card but still scrolls as a whole list.
 class SliverApiMixinStaticList extends SliverApiMixinWithStaticStateful {
   List<ViewAbstract> list;
   String? listKey;
@@ -13,7 +15,7 @@ class SliverApiMixinStaticList extends SliverApiMixinWithStaticStateful {
       super.isSliver,
       super.scrollDirection,
       super.isGridView = false,
-     this.listKey,
+      this.listKey,
       super.enableSelection = false,
       super.hasCustomCardBuilder,
       super.hasCustomSeperater})
@@ -28,7 +30,7 @@ class _SliverApiMixinStaticListState extends State<SliverApiMixinStaticList>
     with SliverApiWithStaticMixin {
   @override
   String getListProviderKey() {
-    return  widget.listKey?? widget.list[0].getListableKey();
+    return widget.listKey ?? widget.list[0].getListableKey();
   }
 
   @override

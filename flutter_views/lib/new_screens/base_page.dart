@@ -93,10 +93,13 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       stretchTriggerOffset: .41,
+      leading: Icon(Icons.date_range),
+      alwaysShowLeadingAndAction: false,
+      showAppbarOnTopOnly: false,
 
       title: firstPane
-          ? getFirstPaneAppbar(tab: tab)
-          : getSecondPaneAppbar(tab: tab),
+          ? getFirstPaneAppbarTitle(tab: tab)
+          : getSecondPaneAppbarTitle(tab: tab),
       headerExpandedHeight: isLargeScreen
           ? 0.1
           : isSelectedMode
@@ -111,11 +114,13 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       // headerBottomBar: getHeaderWidget(),
       pinnedToolbar: isSelectedMode,
       centerTitle: false,
-      actions: [
-        // if (isSelectedMode)
-        IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
-      ],
+      actions: !isSelectedMode
+          ? getPaneAppbarActions(firstPane, tab: tab)
+          : [IconButton(onPressed: () {}, icon: const Icon(Icons.delete))],
       tabs: _getTabBarList(firstPane: firstPane),
+      // tabBuilder: (p0) {
+      //   return getF
+      // },
       // actions: getSharedAppBarActions,
       slivers: widget as List<Widget>,
     );
@@ -123,7 +128,10 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
 
   @override
   Widget getTowPanes({TabControllerHelper? tab}) {
+    _setupPaneTabBar(true, tab: tab);
+    _setupPaneTabBar(false, tab: tab);
     _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+
     _firstWidget = _getDraggableHomePane(_firstWidget, true, tab: tab);
 
     _secondWidget = beforeGetSecondPaneWidget(tab: tab);
@@ -559,8 +567,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab});
   Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab});
   Widget? getBaseAppbar();
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab});
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab});
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab});
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab});
 
   List<Widget>? getBaseBottomSheet();
 
@@ -695,6 +703,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
   }
 
+  List<Widget>? getPaneAppbarActions(bool firstPane,
+      {TabControllerHelper? tab}) {
+    return null;
+  }
+
   ///generate all toolbars for the base and first pane and second pane
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
@@ -710,7 +723,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
         // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,
-        actions: !isBaseAppBar ? null : getSharedAppBarActions,
+        actions: !isBaseAppBar
+            ? getPaneAppbarActions(firstPane)
+            : getSharedAppBarActions,
         // primary: true,
 
         backgroundColor: customAppBar != null
@@ -878,8 +893,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ///setting appbar but when is sliver then we added to CustomScrollView Sliver
   Widget? _setSubAppBar(widget, bool firstPane, {TabControllerHelper? tab}) {
     Widget? appBarBody = firstPane
-        ? getFirstPaneAppbar(tab: tab)
-        : getSecondPaneAppbar(tab: tab);
+        ? getFirstPaneAppbarTitle(tab: tab)
+        : getSecondPaneAppbarTitle(tab: tab);
 
     Widget? body = _getScrollContent(widget, appBarBody, firstPane, tab: tab);
 

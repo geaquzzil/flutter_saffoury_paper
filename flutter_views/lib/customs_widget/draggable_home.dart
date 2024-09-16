@@ -2,17 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/screens/web/views/web_product_images.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'sliver_delegates.dart';
@@ -22,6 +18,8 @@ enum ExpandType { CLOSED, HALF_EXPANDED, EXPANDED }
 class DraggableHome extends StatefulWidget {
   @override
   DraggableHomeState createState() => DraggableHomeState();
+
+  final List<Widget> Function(TabControllerHelper)? tabBuilder;
 
   final bool pinnedToolbar;
 
@@ -145,6 +143,7 @@ class DraggableHome extends StatefulWidget {
       this.curvedBodyRadius = 20,
       required this.slivers,
       this.tabs,
+      this.tabBuilder,
       this.drawer,
       this.fullyStretchable = false,
       this.stretchTriggerOffset = 100,
@@ -275,40 +274,6 @@ class DraggableHomeState extends State<DraggableHome>
       drawer: widget.drawer,
       body: getPageStorage(expandedHeight, context, appBarHeight,
           fullyExpandedHeight, topPadding),
-
-      // ScreenHelper(
-      //   largeTablet: LayoutBuilder(builder: (context, constraints) {
-      //     return Center(
-      //         child: MaxWidthBox(
-      //       maxWidth: constraints.maxWidth,
-
-      //       // minWidth: width,
-      //       // defaultScale: false,
-      //       child: Flex(
-      //         direction:
-      //             constraints.maxWidth > 500 ? Axis.horizontal : Axis.vertical,
-      //         children: [
-      //           // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-      //           Expanded(
-      //               flex: constraints.maxWidth > 720.0 ? 1 : 0,
-      //               child: ClipRRect(
-      //                   borderRadius: BorderRadius.circular(kBorderRadius / 2),
-      //                   child: AspectRatio(
-      //                       aspectRatio: 16 / 9, child: Text("TODO")))),
-      //           Expanded(
-      //               flex: constraints.maxWidth > 720.0 ? 2 : 0,
-      //               child: getPageStorage(expandedHeight, context, appBarHeight,
-      //                   fullyExpandedHeight, topPadding)),
-      //         ],
-      //       ),
-      //     ));
-      //   }),
-      //   smallTablet: getPageStorage(expandedHeight, context, appBarHeight,
-      //       fullyExpandedHeight, topPadding),
-      //   mobile: getPageStorage(expandedHeight, context, appBarHeight,
-      //       fullyExpandedHeight, topPadding),
-      // ),
-      // appBar: widget.showNormalToolbar,
       bottomSheet: widget.bottomSheet,
       bottomNavigationBar: getBottomNavigationBar(),
       floatingActionButton: getScaffoldFloatingActionButton(),
@@ -528,16 +493,8 @@ class DraggableHomeState extends State<DraggableHome>
 
                     return SliverAppBar(
                       automaticallyImplyLeading: true,
-
                       backgroundColor: Theme.of(context).colorScheme.surface,
-                      // surfaceTintColor: Theme.of(context).colorScheme.primary,
-                      // !fullyCollapsed ? widget.backgroundColor : widget.appBarColor,
                       leading: getLeadingAppBar(context),
-                      // leading: widget.alwaysShowLeadingAndAction
-                      //     ? widget.leading
-                      //     : !fullyCollapsed
-                      //         ? const SizedBox()
-                      //         : widget.leading,
                       actions: widget.alwaysShowLeadingAndAction
                           ? widget.actions
                           : !fullyCollapsed
@@ -545,7 +502,6 @@ class DraggableHomeState extends State<DraggableHome>
                               : widget.actions,
                       elevation: 0,
                       pinned: widget.pinnedToolbar,
-                      // floating: true,
                       stretch: true,
                       centerTitle: widget.centerTitle,
                       title: widget.title == null
@@ -553,11 +509,10 @@ class DraggableHomeState extends State<DraggableHome>
                           : widget.alwaysShowTitle
                               ? widget.title
                               : AnimatedOpacity(
-                                  opacity: fullyExpanded ? 1 : 0,
+                                  opacity: fullyCollapsed ? 1 : 1,
                                   duration: const Duration(milliseconds: 100),
                                   child: widget.title,
                                 ),
-
                       collapsedHeight: appBarHeight,
                       expandedHeight:
                           fullyExpanded ? fullyExpandedHeight : expandedHeight,
@@ -665,6 +620,9 @@ class DraggableHomeState extends State<DraggableHome>
       } else {
         return call;
       }
+    }
+    if (widget.tabBuilder != null && widget.tabs != null) {
+      return widget.tabBuilder!.call(tab);
     }
     return [
       if (!hasSlivers)

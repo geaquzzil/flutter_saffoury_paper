@@ -1,13 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
@@ -15,7 +12,6 @@ import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/home_notification_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
@@ -428,6 +424,7 @@ class RouteGenerator {
                 return MaterialPage(
                     key: state.pageKey,
                     child: FileReaderPage(
+                      buildToolbar: true,
                       viewAbstract: ex as ViewAbstract,
                     ));
               },

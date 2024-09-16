@@ -78,7 +78,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   Widget? getBaseFloatingActionButton() => null;
 
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
 
   @override
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -87,7 +87,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;

@@ -1,4 +1,3 @@
-
 // ignore_for_file: constant_identifier_names
 
 import 'package:file_picker/file_picker.dart';
@@ -256,6 +255,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
 
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
+        hideOnEmpty: true,
+        
           onTap: () => controller.selection = TextSelection(
               baseOffset: 0, extentOffset: controller.value.text.length),
           enabled: enabled,
@@ -317,7 +318,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
             debugPrint(
                 'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
           },
-          hideOnLoading: false,
+          hideOnLoading: true,
+
           loadingBuilder: (context) => const SizedBox(
               width: double.infinity,
               height: 200,

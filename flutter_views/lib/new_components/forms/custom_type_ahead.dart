@@ -386,6 +386,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
             final theme = Theme.of(state.context);
 
             return TypeAheadField<T>(
+              
               textFieldConfiguration: textFieldConfiguration.copyWith(
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,
@@ -417,7 +418,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                 onSuggestionSelected?.call(suggestion);
               },
               minCharsForSuggestions: 2,
-
               getImmediateSuggestions: getImmediateSuggestions,
               errorBuilder: errorBuilder,
               noItemsFoundBuilder: noItemsFoundBuilder,

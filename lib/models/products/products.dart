@@ -212,7 +212,7 @@ class Product extends ViewAbstract<Product>
   }
 
   String getQuantityStringAndLabel(BuildContext context) {
-    double quantity = getQuantity();
+    double quantity = qrQuantity ?? getQuantity();
     if (quantity > 0) {
       return "${AppLocalizations.of(context)!.instock}: ${getQuantityStringFormat(context: context)}";
     }
@@ -221,7 +221,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   Text? getMainSubtitleHeaderText(BuildContext context) {
-    double quantity = getQuantity();
+    double quantity = qrQuantity ?? getQuantity();
     return Text(
       getQuantityStringAndLabel(context),
       style: TextStyle(
@@ -625,7 +625,7 @@ class Product extends ViewAbstract<Product>
 
   String getQuantityStringFormat(
       {required BuildContext context, Warehouse? warehouse}) {
-    return getQuantity(warehouse: warehouse)
+    return (qrQuantity ?? getQuantity(warehouse: warehouse))
         .toCurrencyFormat(symbol: getProductTypeUnit(context));
   }
 

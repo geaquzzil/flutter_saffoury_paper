@@ -295,7 +295,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
 
   @override
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -326,7 +326,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;

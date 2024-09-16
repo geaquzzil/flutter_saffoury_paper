@@ -2,7 +2,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 
-
 class DropdownEnumControllerListenerByIcon<T extends ViewAbstractEnum>
     extends StatefulWidget {
   T viewAbstractEnum;
@@ -58,6 +57,8 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
   @override
   Widget build(BuildContext context) {
     Widget pop = PopupMenuButton<T>(
+      elevation: 10,
+
       tooltip: _viewAbstractEnum.getFieldLabelString(
           context, selectedValue ?? _viewAbstractEnum),
       icon: Icon(
@@ -89,7 +90,7 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
       return Row(
         children: [
           FadeInLeft(
-              key: UniqueKey(),
+              key: Key('$selectedValue'),
               duration: const Duration(milliseconds: 500),
               child: Text(
                 selectedValue!.getFieldLabelString(context, selectedValue),

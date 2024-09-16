@@ -374,6 +374,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     Widget? seperatedWidget = widget.hasCustomSeperater;
     Widget w = seperatedWidget == null
         ? ListView.builder(
+            shrinkWrap: true,
             controller: _scrollController,
             itemCount: count + (isLoading ? 8 : 0),
             itemBuilder: (context, index) {

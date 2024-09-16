@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +17,10 @@ import '../../new_components/tables_widgets/view_table_view_abstract.dart';
 
 class FileReaderValidationWidget extends StatefulWidget {
   FileReaderObject fileReaderObject;
+  bool useTableView;
 
-  FileReaderValidationWidget({
-    super.key,
-    required this.fileReaderObject,
-  });
+  FileReaderValidationWidget(
+      {super.key, required this.fileReaderObject, this.useTableView = true});
 
   @override
   State<FileReaderValidationWidget> createState() =>
@@ -107,6 +108,7 @@ class FileReaderValidationWidgetState
     Excel excel = widget.fileReaderObject.excel;
     var f = excel.tables[widget.fileReaderObject.selectedSheet]?.rows;
     var columns = widget.fileReaderObject.fileColumns;
+    _generatedViewAbstract.clear();
     // debugPrint("getDataFromExcelTable => ros=>f $f  ");
     // debugPrint("getDataFromExcelTable=>fileColumns $columns  ");
 
@@ -133,14 +135,26 @@ class FileReaderValidationWidgetState
         return Text(exceptions.join("\n"));
       }
       // return getExcelDataTable(columns, context, rows);
-      return SizedBox(
-        width: double.maxFinite,
-        height: 1000,
-        child: ViewableTableViewAbstractWidget(
-          viewAbstract: _generatedViewAbstract,
-          usePag: true,
-        ),
-      );
+      return !widget.useTableView
+          ? Column(
+              children: [
+                ..._generatedViewAbstract.map((toElement) {
+                  return ListTile(
+                    title: toElement.getMainHeaderText(context),
+                    leading: toElement.getCardLeading(context),
+                    subtitle: toElement.getMainSubtitleHeaderText(context),
+                    // trailing: toElement.,
+                  );
+                })
+              ],
+            )
+          : SizedBox(
+              width: double.maxFinite,
+              height: 1000,
+              child: ViewableTableViewAbstractWidget(
+                viewAbstract: _generatedViewAbstract,
+                usePag: true,
+              ));
     }
 
     return Text(snapshot?.data.toString() ?? "");

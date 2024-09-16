@@ -94,7 +94,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   Widget? getBaseFloatingActionButton() => null;
 
   @override
-  Widget? getFirstPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
 
   @override
   List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -137,7 +137,6 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       {TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
-        
     return Selector<DrawerMenuControllerProvider, ViewAbstract>(
       builder: (context, value, child) {
         return SliverApiMaster(
@@ -177,5 +176,5 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
               .getMainHeaderLabelTextOnly(context));
 
   @override
-  Widget? getSecondPaneAppbar({TabControllerHelper? tab}) => null;
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
 }
