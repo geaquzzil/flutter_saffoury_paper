@@ -80,6 +80,8 @@ mixin TickerWidget<T extends StatefulWidget> on State<T> {
 
 mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane);
+  Widget ? getDraggableHeaderWidget(bool firstPane);
+  Widget ? getDraggableHeaderExpandedWidget(bool firstPane);
 
   Widget _getDraggableHomePane(widget, bool firstPane,
       {TabControllerHelper? tab}) {
@@ -96,15 +98,8 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       leading: Icon(Icons.date_range),
       alwaysShowLeadingAndAction: false,
       showAppbarOnTopOnly: false,
-      headerWidget: Text("Dsa"),
-      headerWidget:
-      expandedBody: isDesktopPlatform()
-          ? null
-          : QrCodeReader(
-              getViewAbstract: true,
-              currentHeight: 20,
-              valueNotifierQrState: getValueNotifierQrState(firstPane),
-            ),
+      headerWidget: getDraggableHeaderWidget(firstPane),
+      expandedBody: getDraggableHeaderExpandedWidget(firstPane),
 
       title: firstPane
           ? getFirstPaneAppbarTitle(tab: tab)
@@ -126,7 +121,7 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       actions: !isSelectedMode
           ? getPaneAppbarActions(firstPane, tab: tab)
           : [IconButton(onPressed: () {}, icon: const Icon(Icons.delete))],
-      tabs: _getTabBarList(firstPane: firstPane),
+      
       // tabBuilder: (p0) {
       //   return getF
       // },

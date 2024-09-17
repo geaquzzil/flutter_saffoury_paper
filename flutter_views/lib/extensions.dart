@@ -4,33 +4,29 @@ import 'package:flutter_view_controller/constants.dart';
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
 
-// extension Texts on Text{
-//   Widget primery(String text,{bool requestPadding=false}){
-//       this.
-//     return Text(
-//       //TODO translate
-//       text,
-//       style: Theme.of(context)
-//           .textTheme
-//           .bodyLarge!
-//           .copyWith(color: Theme.of(context).colorScheme.secondary),
+// extension Texts on Text {
+//   Text primery(BuildContext context) {
+//     this.style = Theme.of(context)
+//         .textTheme
+//         .bodyLarge!
+//         .copyWith(color: Theme.of(context).colorScheme.secondary);
 //   }
 // }
 
-  Widget getPrimaryText(BuildContext context,String text, {withPadding = true}) {
-    Widget t = Text(
-      //TODO translate
-      text,
-      style: Theme.of(context)
-          .textTheme
-          .bodyLarge!
-          .copyWith(color: Theme.of(context).colorScheme.secondary),
-    );
-    if (withPadding) {
-      return t.padding();
-    }
-    return t;
+Widget getPrimaryText(BuildContext context, String text, {withPadding = true}) {
+  Widget t = Text(
+    //TODO translate
+    text,
+    style: Theme.of(context)
+        .textTheme
+        .bodyLarge!
+        .copyWith(color: Theme.of(context).colorScheme.secondary),
+  );
+  if (withPadding) {
+    return t.padding();
   }
+  return t;
+}
 
 extension OnPressed on Widget {
   Widget padding() {

@@ -86,7 +86,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'import');
   final keyToExportTo =
       GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'export');
-  GoodsType _type = GoodsType.INVERTORY;
   Warehouse? _selectedWarehouse;
   final ValueNotifier<List<ViewAbstract>?> _notifier =
       ValueNotifier<List<ViewAbstract>?>(null);
@@ -98,6 +97,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   final qrCode = ValueNotifier<QrCodeNotifierState?>(null);
 
   @override
+  double getCustomPaneProportion() {
+    return .5;
+  }
+
+  @override
   Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
     return {
       "": [
@@ -107,69 +111,50 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     };
   }
 
-  @override
-  List<TabControllerHelper>? initTabBarList(
-      {bool? firstPane, TabControllerHelper? tab}) {
-    if (isMobile(context)) {
-      if (firstPane == true) {
-        return [
-          TabControllerHelper(
-            "INVONTERY",
-            draggableHeaderWidget: getHeaderForInventory(),
-            slivers: getFirstPane(),
-          ),
-          TabControllerHelper(
-            "PURCHASES CHECK",
-            draggableHeaderWidget: ListTile(
-              leading: Icon(Icons.import_export_sharp),
-              title: Text("Start by importing product from xsl formal "),
-              trailing: ElevatedButton(
-                  onPressed: () async {
-                    final p = Product();
-                    List<ViewAbstract<dynamic>>? l = await context.pushNamed(
-                        importRouteName,
-                        pathParameters: {"tableName": p.getTableNameApi()!},
-                        extra: p);
-                    debugPrint("list is $l");
-                    if (l != null) {
-                      if (mounted) {
-                        final scaffold = ScaffoldMessenger.of(context);
-                        scaffold.showSnackBar(SnackBar(
-                            action: SnackBarAction(
-                                label: 'OK',
-                                onPressed: scaffold.hideCurrentSnackBar),
-                            content: Text(
-                                "${l.length} items imported successfully")));
+  ListTile getHeaderWidgetForPurchuses() {
+    return ListTile(
+      leading: Icon(Icons.import_export_sharp),
+      title: Text("Start by importing product from xsl formal "),
+      trailing: ElevatedButton(
+          onPressed: () async {
+            final p = Product();
+            List<ViewAbstract<dynamic>>? l = await context.pushNamed(
+                importRouteName,
+                pathParameters: {"tableName": p.getTableNameApi()!},
+                extra: p);
+            debugPrint("list is $l");
+            if (l != null) {
+              if (mounted) {
+                final scaffold = ScaffoldMessenger.of(context);
+                scaffold.showSnackBar(SnackBar(
+                    action: SnackBarAction(
+                        label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+                    content: Text("${l.length} items imported successfully")));
 
-                        // scaffold.showMaterialBanner(MaterialBanner(
+                // scaffold.showMaterialBanner(MaterialBanner(
 
-                        //     content: const Text('Hello, I am Material Banner!'),
-                        //     contentTextStyle: const TextStyle(
-                        //         color: Colors.black, fontSize: 30),
-                        //     backgroundColor: Colors.yellow,
-                        //     leadingPadding: const EdgeInsets.only(right: 30),
-                        //     leading: const Icon(
-                        //       Icons.info,
-                        //       size: 32,
-                        //     ),
-                        //     actions: [
-                        //       TextButton(
-                        //           onPressed: () {},
-                        //           child: const Text('Dismiss')),
-                        //       TextButton(
-                        //           onPressed: () {},
-                        //           child: const Text('Continue')),
-                        //     ]));
-                      }
-                    }
-                  },
-                  child: Text("IMPORT")),
-            ),
-          )
-        ];
-      }
-    }
-    return super.initTabBarList(firstPane: firstPane, tab: tab);
+                //     content: const Text('Hello, I am Material Banner!'),
+                //     contentTextStyle: const TextStyle(
+                //         color: Colors.black, fontSize: 30),
+                //     backgroundColor: Colors.yellow,
+                //     leadingPadding: const EdgeInsets.only(right: 30),
+                //     leading: const Icon(
+                //       Icons.info,
+                //       size: 32,
+                //     ),
+                //     actions: [
+                //       TextButton(
+                //           onPressed: () {},
+                //           child: const Text('Dismiss')),
+                //       TextButton(
+                //           onPressed: () {},
+                //           child: const Text('Continue')),
+                //     ]));
+              }
+            }
+          },
+          child: Text("IMPORT")),
+    );
   }
 
   @override
@@ -214,16 +199,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   List<Widget> get getHeaderInvonteryControlls {
     return [
       Expanded(
-          child: DropdownEnumControllerListenerByIcon(
-        viewAbstractEnum: _type,
-        initialValue: _type,
-        onSelected: (object) {
-          setState(() {
-            _type = object ?? GoodsType.INVERTORY;
-          });
-        },
-      )),
-      Expanded(
         child: DropdownFromViewAbstractApi(
           initialValue: _selectedWarehouse,
           onChanged: (selectedViewAbstract) {
@@ -248,49 +223,29 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     debugPrint(
         "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
     return [
-      SliverApiMixinViewAbstractCardApiWidget(
-        key: key,
-        isSliver: true,
-        toListObject: Product(),
-        hasCustomCardBuilder: (idx, item) {
-          return GoodsInventoryListCard(
-            product: item as Product,
-            selectedWarehouse: _selectedWarehouse,
-          );
-        },
-      )
+      if (!isPurchuses())
+        SliverApiMixinViewAbstractCardApiWidget(
+          key: key,
+          isSliver: true,
+          toListObject: Product(),
+          hasCustomCardBuilder: (idx, item) {
+            return GoodsInventoryListCard(
+              product: item as Product,
+              selectedWarehouse: _selectedWarehouse,
+            );
+          },
+        )
+      else
+        SliverApiMixinStaticList(
+          listKey: "exportTo",
+          key: keyToExportTo,
+          isSliver: true,
+          list: const [],
+          hasCustomCardBuilder: (idx, item) {
+            return getListItemForPurchasesCheck(idx, item, context);
+          },
+        )
     ];
-    if (tab != null) {
-      ///this means that is mobile View
-      return getMobileFirstPaneWidget(tab);
-    }
-    return getLargeScreenFirstWidget();
-  }
-
-  SliverApiMixinWithStaticStateful getLargeScreenFirstWidget() {
-    if (_type == GoodsType.INVERTORY) {
-      return SliverApiMixinViewAbstractCardApiWidget(
-        key: key,
-        isSliver: false,
-        toListObject: Product(),
-        hasCustomCardBuilder: (idx, item) {
-          return GoodsInventoryListCard(
-            product: item as Product,
-            selectedWarehouse: _selectedWarehouse,
-          );
-        },
-      );
-    } else {
-      return SliverApiMixinStaticList(
-        listKey: "exportTo",
-        key: keyToExportTo,
-        isSliver: false,
-        list: const [],
-        hasCustomCardBuilder: (idx, item) {
-          return getListItemForPurchasesCheck(idx, item, context);
-        },
-      );
-    }
   }
 
   Center getMobileFirstPaneWidget(TabControllerHelper tab) {
@@ -302,120 +257,149 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   getDesktopSecondPane(
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return [SliverToBoxAdapter(child: Text("SADA"))];
-    if (_type == GoodsType.PURCHASES) {
-      return ValueListenableBuilder(
-          valueListenable: _notifier,
-          builder: (context, v, o) {
-            if (v != null) {
-              return SliverApiMixinStaticList(
-                listKey: "emportFrom",
-                list: v,
-                isSliver: false,
-                enableSelection: false,
-                key: keyToImportFrom,
-                hasCustomCardBuilder: (i, v) =>
-                    getListItemForPurchasesCheck(i, v, context),
-              );
-            } else {
-              return FileReaderPage(
-                onDone: (p0) {
-                  debugPrint("onDone FileReaderPage=> $p0");
-                  _notifier.value = p0;
-                },
-                viewAbstract: Product(),
-              );
-            }
-          });
+    if (isPurchuses()) {
+      return [
+        ValueListenableBuilder(
+            valueListenable: _notifier,
+            builder: (context, v, o) {
+              if (v != null) {
+                return SliverApiMixinStaticList(
+                  listKey: "emportFrom",
+                  list: v,
+                  isSliver: true,
+                  enableSelection: false,
+                  key: keyToImportFrom,
+                  hasCustomCardBuilder: (i, v) =>
+                      getListItemForPurchasesCheck(i, v, context),
+                );
+              } else {
+                return SliverFillRemaining(
+                  child: FileReaderPage(
+                    onDone: (p0) {
+                      debugPrint("onDone FileReaderPage=> $p0");
+                      _notifier.value = p0;
+                    },
+                    viewAbstract: Product(),
+                  ),
+                );
+              }
+            })
+      ];
     }
-    return Center(
-      child: Text("TODO"),
-    );
+    return [
+      SliverFillRemaining(
+        child: Center(
+          child: Text("TODO"),
+        ),
+      )
+    ];
   }
 
-  ExpansionTile getListItemForPurchasesCheck(
+  Widget getListItemForPurchasesCheck(
       int i, ViewAbstract<dynamic> v, BuildContext context) {
-    return ExpansionTile(
-      leading: Text("${i + 1}"),
-      trailing: Text(
-        (v as Product).qrQuantity.toCurrencyFormat(),
+    return Card(
+      child: ExpansionTile(
+        leading: Text("${i + 1}"),
+        trailing: Text(
+          (v as Product)
+              .qrQuantity
+              .toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+        ),
+        title: (v.getMainHeaderText(context)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            v.gsms?.getLabelWithTextWidget(
+                    context: context,
+                    AppLocalizations.of(context)!.gsm,
+                    v.gsms?.gsm.toNonNullable().toString() ?? "") ??
+                const Text(""),
+            v.getLabelWithTextWidget(
+                context: context,
+                AppLocalizations.of(context)!.barcode,
+                color: Theme.of(context).colorScheme.tertiary,
+                v.barcode ?? "-"),
+          ],
+        ),
+        children: [v.getFullDescription()],
       ),
-      title: (v.sizes?.getMainHeaderText(context))!,
-      subtitle: v.gsms?.getMainHeaderText(context),
-      children: [v.getFullDescription()],
     );
   }
 
-  @override
-  Widget? getThirdPane() {
-    if (_type == GoodsType.INVERTORY) {
-      return null;
-    }
-    return FileInfoStaggerdGridView(
-      childAspectRatio: 16 / 9,
-      list: [
-        StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
-              color: Colors.blue,
-              icon: Icons.today,
-              title: "TOTAL ITEMS IMPORTED",
-              description: "getTotalTodayBalance()",
-              // footer: incomes?.length.toString(),
-              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-            )),
-        StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
-              color: Colors.blue,
-              // icon: Icons.today,
-              title: "TOTAL QUANTITY IMPORTED",
-              description: "getTotalTodayBalance()",
-              // footer: incomes?.length.toString(),
-              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-            )),
-        StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
-              color: Colors.blue,
-              // icon: Icons.today,
-              title: "TOTAL ITEMS SCANED",
-              description: "getTotalTodayBalance()",
-              // footer: incomes?.length.toString(),
-              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-            )),
-        StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
-              color: Colors.blue,
-              // icon: Icons.today,
-              title: "TOTAL ITEMS SCANNED QUANTITY",
-              description: "getTotalTodayBalance()",
-              // footer: incomes?.length.toString(),
-              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-            )),
-        StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 1,
-            child: ChartCardItemCustom(
-              color: Colors.blue,
-              // icon: Icons.today,
-              title: "TOTAL ",
-              description: "getTotalTodayBalance()",
-              // footer: incomes?.length.toString(),
-              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-            ))
-      ],
-      wrapWithCard: true,
-      // crossAxisCount: getCrossAxisCount(getWidth),
+  // @override
+  // Widget? getThirdPane() {
+  //   if (_type == GoodsType.INVERTORY) {
+  //     return null;
+  //   }
+  //   return FileInfoStaggerdGridView(
+  //     childAspectRatio: 16 / 9,
+  //     list: [
+  //       StaggeredGridTile.count(
+  //           crossAxisCellCount: 2,
+  //           mainAxisCellCount: .75,
+  //           child: ChartCardItemCustom(
+  //             color: Colors.blue,
+  //             icon: Icons.today,
+  //             title: "TOTAL ITEMS IMPORTED",
+  //             description: "getTotalTodayBalance()",
+  //             // footer: incomes?.length.toString(),
+  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+  //           )),
+  //       StaggeredGridTile.count(
+  //           crossAxisCellCount: 2,
+  //           mainAxisCellCount: .75,
+  //           child: ChartCardItemCustom(
+  //             color: Colors.blue,
+  //             // icon: Icons.today,
+  //             title: "TOTAL QUANTITY IMPORTED",
+  //             description: "getTotalTodayBalance()",
+  //             // footer: incomes?.length.toString(),
+  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+  //           )),
+  //       StaggeredGridTile.count(
+  //           crossAxisCellCount: 2,
+  //           mainAxisCellCount: .75,
+  //           child: ChartCardItemCustom(
+  //             color: Colors.blue,
+  //             // icon: Icons.today,
+  //             title: "TOTAL ITEMS SCANED",
+  //             description: "getTotalTodayBalance()",
+  //             // footer: incomes?.length.toString(),
+  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+  //           )),
+  //       StaggeredGridTile.count(
+  //           crossAxisCellCount: 2,
+  //           mainAxisCellCount: .75,
+  //           child: ChartCardItemCustom(
+  //             color: Colors.blue,
+  //             // icon: Icons.today,
+  //             title: "TOTAL ITEMS SCANNED QUANTITY",
+  //             description: "getTotalTodayBalance()",
+  //             // footer: incomes?.length.toString(),
+  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+  //           )),
+  //       StaggeredGridTile.count(
+  //           crossAxisCellCount: 2,
+  //           mainAxisCellCount: 1,
+  //           child: ChartCardItemCustom(
+  //             color: Colors.blue,
+  //             // icon: Icons.today,
+  //             title: "TOTAL ",
+  //             description: "getTotalTodayBalance()",
+  //             // footer: incomes?.length.toString(),
+  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+  //           ))
+  //     ],
+  //     wrapWithCard: true,
+  //     // crossAxisCount: getCrossAxisCount(getWidth),
 
-      // width < 1400 ? 1.1 : 1.4,
-    );
-  }
+  //     // width < 1400 ? 1.1 : 1.4,
+  //   );
+  // }
 
   @override
   getFirstPane({TabControllerHelper? tab}) => getDesktopFirstPane(tab: tab);
@@ -427,7 +411,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
     return FloatingActionButton.extended(
         onPressed: () {
-          if (_type == GoodsType.INVERTORY) {
+          if (!isPurchuses()) {
             Product p = Product();
             p.qrQuantity = testQuantity + 100;
             p.iD = 2405 + testId;
@@ -453,10 +437,20 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) =>
-      Text("INVINTORY");
+  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) {
+    if (isPurchuses()) {
+      return Text("Purhuses");
+    }
+    return Text("INVINTORY");
+  }
+
   @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => Text("FIRST");
+  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) {
+    if (isPurchuses()) {
+      return Text("Purhuses");
+    }
+    return Text("INVINTORY");
+  }
 
   @override
   List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
@@ -490,5 +484,31 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane) {
     return firstPane ? qrCode : null;
+  }
+
+  @override
+  Widget? getDraggableHeaderExpandedWidget(bool firstPane) {
+    return isDesktopPlatform()
+        ? null
+        : QrCodeReader(
+            getViewAbstract: true,
+            currentHeight: 20,
+            valueNotifierQrState: getValueNotifierQrState(firstPane),
+          );
+  }
+
+  @override
+  Widget? getDraggableHeaderWidget(bool firstPane) {
+    if (isLargeScreenFromCurrentScreenSize(context)) {
+      return null;
+    }
+    if (isPurchuses()) {
+      return getHeaderWidgetForPurchuses();
+    }
+    return getHeaderForInventory();
+  }
+
+  bool isPurchuses() {
+    return lastDrawerItemSelected?.icon == Icons.document_scanner;
   }
 }

@@ -92,9 +92,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Text getLabelWithTextWidget(String label, String text,
-      {BuildContext? context, Color? color}) {
+      {required BuildContext context, Color? color}) {
     return Text(getLabelWithText(label, text),
-        style: context != null && color != null
+        style: color != null
             ? Theme.of(context).textTheme.bodySmall!.copyWith(color: color)
             : Theme.of(context!).textTheme.bodySmall!);
   }
@@ -154,8 +154,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Widget? getWebListTileItemSubtitle(BuildContext context) {
     return getMainSubtitleHeaderText(context);
   }
-
-
 
   Widget? getWebListTileItemLeading(BuildContext context) {
     return getCardTrailing(context);
