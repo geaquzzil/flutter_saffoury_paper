@@ -567,7 +567,7 @@ class Dashboard extends UserLists<Dashboard>
     return DashboardHeader(
       object: this,
       date: date ?? DateObject(),
-      current_screen_size: getCurrentScreenSizeStatic(context),
+      current_screen_size: findCurrentScreenSize(context),
       onSelectedDate: (d) {
         if (d == null) return;
         date = d;

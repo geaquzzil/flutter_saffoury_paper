@@ -22,6 +22,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_dropdown_api.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
@@ -95,6 +96,17 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       ValueNotifier<List<ViewAbstract>?>(null);
 
   final qrCode = ValueNotifier<QrCodeNotifierState?>(null);
+
+  @override
+  Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
+    return {
+      "": [
+        DrawerMenuItem(title: "INVENTORY", icon: Icons.inventory),
+        DrawerMenuItem(title: "Purchases", icon: Icons.document_scanner),
+      ]
+    };
+  }
+
   @override
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
@@ -223,16 +235,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           viewAbstract: Warehouse(),
         ),
       ),
-      Expanded(
-        child: getControllerEditTextViewAbstractAutoComplete(context,
-            viewAbstract: Warehouse(),
-            field: "name", onSelected: (selectedViewAbstract) {
-          Warehouse selected = selectedViewAbstract as Warehouse;
-          setState(() {
-            _selectedWarehouse = selected.isNew() ? null : selected;
-          });
-        }, controller: TextEditingController()),
-      ),
     ];
   }
 
@@ -243,6 +245,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
+    debugPrint(
+        "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
     return [
       SliverApiMixinViewAbstractCardApiWidget(
         key: key,

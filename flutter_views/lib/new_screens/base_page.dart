@@ -92,10 +92,19 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
           : getSecondPaneFloatingActionButton(tab: tab),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      stretchTriggerOffset: .41,
+      stretchTriggerOffset: .7,
       leading: Icon(Icons.date_range),
       alwaysShowLeadingAndAction: false,
       showAppbarOnTopOnly: false,
+      headerWidget: Text("Dsa"),
+      headerWidget:
+      expandedBody: isDesktopPlatform()
+          ? null
+          : QrCodeReader(
+              getViewAbstract: true,
+              currentHeight: 20,
+              valueNotifierQrState: getValueNotifierQrState(firstPane),
+            ),
 
       title: firstPane
           ? getFirstPaneAppbarTitle(tab: tab)
@@ -598,6 +607,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   get getHeight => this._height;
 
+  DrawerMenuItem? lastDrawerItemSelected;
+
   bool isDesktopPlatform() => isDesktop(context);
 
   List<TabControllerHelper>? _getTabBarList({bool? firstPane}) {
@@ -727,7 +738,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
             ? getPaneAppbarActions(firstPane)
             : getSharedAppBarActions,
         // primary: true,
-
+        automaticallyImplyLeading: false,
         backgroundColor: customAppBar != null
             ? ElevationOverlay.overlayColor(context, 2)
             : null,
@@ -1028,9 +1039,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           _height = h;
           _currentScreenSize = c;
           if (canBuildDrawer()) {
-            _drawerWidget = DrawerLargeScreens(
-              size: _currentScreenSize,
-            );
+            _drawerWidget = _generateCustomDrawer() ??
+                DrawerLargeScreens(
+                  size: _currentScreenSize,
+                );
           }
         },
         mobile: (w, h) {
@@ -1239,21 +1251,53 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return null;
   }
 
-  SizedBox getEndDrawer() {
+  SizedBox? getEndDrawer() {
+    Widget? customEnd = getCustomEndDrawer();
     bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
     double width = isLarge ? MediaQuery.of(context).size.width * .3 : 500;
     return SizedBox(
-        width: width, child: const Card(child: WebShoppingCartDrawer()));
+        width: width, child: Card(child: customEnd ?? WebShoppingCartDrawer()));
+  }
+
+  Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
+    return null;
+  }
+
+  Widget? _generateCustomDrawer() {
+    Map<String, List<DrawerMenuItem>>? drawer = getCustomDrawer();
+    return drawer == null
+        ? null
+        : DrawerLargeScreens(
+            customItems: drawer,
+            size: findCurrentScreenSize(context),
+          );
+  }
+
+  Widget? getCustomEndDrawer() {
+    return null;
   }
 
   bool canBuildDrawer() {
+    //this overrides if small screen then set the default drawer
     if (!isLargeScreenFromCurrentScreenSize(context)) {
       return true;
     }
-    return buildDrawer;
+    return getCustomDrawer() != null || buildDrawer;
   }
 
+  // bool _canWrapDrawerOnLargeScreen() {
+  //   return wrapDrawerOnLargeScreen() &&
+  //       isLargeScreenFromCurrentScreenSize(context);
+  // }
+
+  // bool wrapDrawerOnLargeScreen() {
+  //   return false;
+  // }
+
   Widget _getMainWidget() {
+    bool isLarge = isDesktop(context, maxWidth: getWidth) ||
+        isTablet(context, maxWidth: getWidth);
+    bool isCustomDrawer = getCustomDrawer() != null;
     Widget body = Scaffold(
         bottomNavigationBar: buildDrawer ? null : generateBaseBottomSheet(),
         endDrawer: getEndDrawer(),
@@ -1264,7 +1308,19 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: canBuildDrawer() ? _drawerWidget : null,
         appBar: generateToolbar(),
-        body: _getBody());
+        body: (isCustomDrawer)
+            ? Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
+                builder: (__, v, ___) {
+                  lastDrawerItemSelected = v;
+                  return _getBody();
+                },
+                selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
+              )
+            : _getBody());
+
+    if ((isLarge && buildDrawer) || (isLarge && isCustomDrawer)) {
+      body = Row(children: [_drawerWidget!, Expanded(child: body)]);
+    }
     return body;
   }
 
@@ -1274,12 +1330,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         controller: _tabBaseController,
         children: _getTabBarList()!.map((e) => getTowPanes(tab: e)).toList());
     Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
-
-    if (isLarge && buildDrawer) {
-      currentWidget = Row(children: [_drawerWidget!, child]);
-    } else {
-      currentWidget = child;
-    }
+    currentWidget = child;
     return currentWidget;
   }
 
@@ -1287,18 +1338,29 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     Widget currentWidget;
     bool isLarge = isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
+    bool isCustomDrawer = getCustomDrawer() != null;
 
     if (_hasTabBarList()) {
       currentWidget = getBodyIfHasTabBarList(isLarge);
     } else {
       currentWidget = getTowPanes();
-      if (setMainPageSuggestionPadding()) {
-        currentWidget = Padding(
-          padding: getSuggestionPadding(_width),
-          child: currentWidget,
-        );
-      }
     }
+    if (setMainPageSuggestionPadding()) {
+      currentWidget = Padding(
+        padding: getSuggestionPadding(_width),
+        child: currentWidget,
+      );
+    }
+    // if (isCustomDrawer) {
+    //   currentWidget = Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
+    //     builder: (__, v, ___) {
+    //       lastDrawerItemSelected = v;
+    //       return currentWidget;
+    //     },
+    //     selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
+    //   );
+    // }
+
     return currentWidget;
   }
 

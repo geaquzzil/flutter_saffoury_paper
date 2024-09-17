@@ -200,9 +200,9 @@ void main() async {
           create: (_) => ViewAbstractChangeProvider.init(Product())),
       ChangeNotifierProvider(create: (_) => FilterableProvider()),
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
-      ChangeNotifierProvider(create: (_) => IsHoveredOnDrawerClosed()),
+
       ChangeNotifierProvider(create: (_) => LangaugeProvider()),
-      ChangeNotifierProvider(create: (_) => LayoutChangeListner()),
+  
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),

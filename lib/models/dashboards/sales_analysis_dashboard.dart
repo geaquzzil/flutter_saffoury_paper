@@ -416,7 +416,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
     if (firstPane == false) return null;
     return DashboardHeader(
       date: dateObject ?? DateObject(),
-      current_screen_size: getCurrentScreenSizeStatic(context),
+      current_screen_size: findCurrentScreenSize(context),
       onSelectedDate: (d) {
         if (d == null) return;
         dateObject = d;

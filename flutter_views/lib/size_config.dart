@@ -28,7 +28,7 @@ double? convertToDouble(dynamic number) =>
 
 Size findPopupSizeSquare(BuildContext context,
     {CurrentScreenSize? screenSize}) {
-  screenSize ??= getCurrentScreenSizeStatic(context);
+  screenSize ??= findCurrentScreenSize(context);
   Size s = MediaQuery.of(context).size;
   return const Size(400, 400);
 }
@@ -45,12 +45,6 @@ bool hideHamburger(CurrentScreenSize? screenSize) {
 bool showHamburger(CurrentScreenSize? screenSize) {
   return screenSize == CurrentScreenSize.MOBILE ||
       screenSize == CurrentScreenSize.SMALL_TABLET;
-}
-
-@Deprecated("")
-CurrentScreenSize getCurrentScreenSizeStatic(BuildContext context) {
-  return context.read<LayoutChangeListner>().currentScreenSize ??
-      CurrentScreenSize.MOBILE;
 }
 
 bool isLargeScreenFromCurrentScreenSize(BuildContext context) {
@@ -544,24 +538,12 @@ class ScreenHelperSliver extends StatelessWidget {
             findCurrentScreenSize(context, width: maxWidth));
 
         if (isMobile(context, maxWidth: maxWidth)) {
-          addFramPost((p) => context
-              .read<LayoutChangeListner>()
-              .setSize(maxWidth, maxLength, current: CurrentScreenSize.MOBILE));
           currentWidget = mobile.call(maxWidth, maxLength);
         } else if (isSmallTablet(context, maxWidth: maxWidth)) {
-          addFramPost((p) => context.read<LayoutChangeListner>().setSize(
-              maxWidth, maxLength,
-              current: CurrentScreenSize.SMALL_TABLET));
           currentWidget = smallTablet.call(maxWidth, maxLength);
         } else if (isTablet(context, maxWidth: maxWidth)) {
-          addFramPost((p) => context.read<LayoutChangeListner>().setSize(
-              maxWidth, maxLength,
-              current: CurrentScreenSize.LARGE_TABLET));
           currentWidget = largeTablet.call(maxWidth, maxLength);
         } else {
-          addFramPost((p) => context.read<LayoutChangeListner>().setSize(
-              maxWidth, maxLength,
-              current: CurrentScreenSize.DESKTOP));
           currentWidget = desktop.call(maxWidth, maxLength);
         }
         bool padding = requireAutoPadding ?? false;
@@ -573,30 +555,6 @@ class ScreenHelperSliver extends StatelessWidget {
         }
       },
     );
-  }
-}
-
-class LayoutChangeListner with ChangeNotifier {
-  double? _width;
-  double? _height;
-  CurrentScreenSize? currentScreenSize = CurrentScreenSize.MOBILE;
-
-  set setHeight(double? value) => _height = value;
-
-  set setWidth(double? value) => _width = value;
-
-  double? get getHeight => _height;
-
-  double? get getWidth => _width;
-
-  void setSize(double? width, double? height, {CurrentScreenSize? current}) {
-    setHeight = height;
-    setWidth = width;
-    currentScreenSize = current;
-    debugPrint(
-        "getBody DrawerMenuController layout height $height width $width");
-    if (width == null || height == null) return;
-    notifyListeners();
   }
 }
 

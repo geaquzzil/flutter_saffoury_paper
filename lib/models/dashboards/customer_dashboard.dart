@@ -311,7 +311,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         if (firstPane)
           SliverFillRemaining(
             child: BaseEditWidget(
-              currentScreenSize: getCurrentScreenSizeStatic(context),
+              currentScreenSize: findCurrentScreenSize(context),
               viewAbstract: CustomerDashboardSelector(), isTheFirst: true,
               onValidate: (v) {
                 if (v == null) return;
@@ -352,7 +352,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
     }
     return DashboardHeader(
       date: dateObject ?? DateObject(),
-      current_screen_size: getCurrentScreenSizeStatic(context),
+      current_screen_size: findCurrentScreenSize(context),
       onSelectedDate: (d) {
         if (d == null) return;
         dateObject = d;

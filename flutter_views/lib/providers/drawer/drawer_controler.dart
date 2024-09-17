@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
+import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   final GlobalKey<ScaffoldState> _startDrawerKey = GlobalKey<ScaffoldState>();
   dynamic _object;
   bool _sideMenuOpen = false;
-  int _idx = 0;
+  DrawerMenuItem? _lastDrawerMenuItemClicked;
 
   int _navigationIndex = 2;
   bool _navigationRailIsOpen = false;
@@ -35,12 +36,13 @@ class DrawerMenuControllerProvider with ChangeNotifier {
   DrawerMenuControllerProviderAction get getAction => _action;
 
   set action(DrawerMenuControllerProviderAction value) => _action = value;
-  int get getIndex => _idx;
+  DrawerMenuItem? get getLastDrawerMenuItemClicked =>
+      _lastDrawerMenuItemClicked;
   bool get getSideMenuIsOpen => _sideMenuOpen;
   bool get getSideMenuIsClosed => !_sideMenuOpen;
   ViewAbstract get getObjectCastViewAbstract => _object;
   ViewAbstract get getObjectCastDashboard => _object;
-  dynamic get getObject=>_object;
+  dynamic get getObject => _object;
   ViewAbstractStandAloneCustomViewApi get getObjectCastViewStandAlone =>
       _object;
 
@@ -91,22 +93,15 @@ class DrawerMenuControllerProvider with ChangeNotifier {
     }
   }
 
-  void changeDrawerIndex(int idx) {
-    _idx = idx;
-    notifyListeners();
-  }
-
   void toggleIsOpen() {
     _sideMenuOpen = !_sideMenuOpen;
     debugPrint("Toggling isOpen");
     notifyListeners();
   }
 
-  void setSideMenuIsClosed({int? byIdx}) {
+  void setSideMenuIsClosed({DrawerMenuItem? byIdx}) {
     _sideMenuOpen = false;
-    if (byIdx != null) {
-      _idx = byIdx;
-    }
+    _lastDrawerMenuItemClicked = byIdx;
     notifyListeners();
   }
 
