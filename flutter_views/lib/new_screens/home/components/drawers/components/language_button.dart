@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,9 +18,9 @@ class DrawerLanguageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     List<DropdownStringListItem> l = [
       DropdownStringListItem(
-          Icons.translate, AppLocalizations.of(context)!.english),
+          icon: Icons.translate, label: AppLocalizations.of(context)!.english),
       DropdownStringListItem(
-          Icons.translate, AppLocalizations.of(context)!.arabic),
+          icon: Icons.translate, label: AppLocalizations.of(context)!.arabic),
     ];
     bool? isEng = isEnglish(context);
     return DropdownStringListControllerListenerByIcon(

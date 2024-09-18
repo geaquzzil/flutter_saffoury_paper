@@ -12,10 +12,10 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../models/view_abstract.dart';
 import '../../models/view_abstract_enum.dart';
 import '../../models/view_abstract_inputs_validaters.dart';
-import '../../new_screens/edit/controllers/edit_controller_checkbox.dart';
-import '../../new_screens/edit/controllers/edit_controller_dropdown.dart';
-import '../../new_screens/edit/controllers/edit_controller_file_picker.dart';
-import '../../new_screens/edit/controllers/ext.dart';
+import '../../new_screens/controllers/edit_controller_checkbox.dart';
+import '../../new_screens/controllers/edit_controller_dropdown.dart';
+import '../../new_screens/controllers/edit_controller_file_picker.dart';
+import '../../new_screens/controllers/ext.dart';
 import '../../new_screens/actions/edit_new/edit_controllers_utils.dart';
 
 @immutable

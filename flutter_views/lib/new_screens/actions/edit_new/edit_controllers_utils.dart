@@ -11,7 +11,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
-import '../../edit/controllers/ext.dart';
+import '../../controllers/ext.dart';
 
 Widget wrapController(Widget controller,
     {bool? requiredSpace,

@@ -12,9 +12,9 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
@@ -101,9 +101,9 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                     initialValue: viewAbstract?.getSortByFieldName() == null
                         ? null
                         : DropdownStringListItem(
-                            viewAbstract!.getFieldIconData(
+                            icon: viewAbstract!.getFieldIconData(
                                 viewAbstract!.getSortByFieldName()!),
-                            viewAbstract!.getFieldLabel(
+                            label: viewAbstract!.getFieldLabel(
                                 context, viewAbstract!.getSortByFieldName()!),
                             value: viewAbstract?.getSortByFieldName()),
                     hint: AppLocalizations.of(context)!.sortBy,
@@ -264,12 +264,12 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
       showSelectedValueBeside: false,
       list: [
         DropdownStringListItem(
-            Icons.picture_as_pdf,
-            AppLocalizations.of(context)!
+            icon: Icons.picture_as_pdf,
+            label: AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.pdf)),
         DropdownStringListItem(
-            Icons.source,
-            AppLocalizations.of(context)!
+            icon: Icons.source,
+            label: AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.excel)),
       ],
       onSelected: (object) async {
@@ -351,20 +351,21 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
         hint: AppLocalizations.of(context)!.printType,
         list: [
           DropdownStringListItem(
-              Icons.print,
-              AppLocalizations.of(context)!
+              icon: Icons.print,
+              label: AppLocalizations.of(context)!
                   .printAllAs(AppLocalizations.of(context)!.list)),
           DropdownStringListItem(
-              Icons.print,
-              AppLocalizations.of(context)!.printAllAs(viewAbstract!
+              icon: Icons.print,
+              label: AppLocalizations.of(context)!.printAllAs(viewAbstract!
                   .getMainHeaderLabelTextOnly(context)
                   .toLowerCase())),
           DropdownStringListItem(
-              Icons.settings,
+              icon: Icons.settings,
               enabled: false,
-              AppLocalizations.of(context)!.printerSetting),
-          DropdownStringListItem(Icons.settings, printListSetting),
-          DropdownStringListItem(Icons.settings, printSelfListSetting),
+              label: AppLocalizations.of(context)!.printerSetting),
+          DropdownStringListItem(icon: Icons.settings, label: printListSetting),
+          DropdownStringListItem(
+              icon: Icons.settings, label: printSelfListSetting),
         ],
         onSelected: (object) {
           if (object?.label ==

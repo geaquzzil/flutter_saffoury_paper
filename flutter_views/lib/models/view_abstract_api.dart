@@ -29,7 +29,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<T>? _lastSearchViewAbstractByTextInputList;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  static Map<String, List<ViewAbstract>>? _lastListReduseSizeViewAbstract;
+  static Map<String, List<ViewAbstract?>>? _lastListReduseSizeViewAbstract;
 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
@@ -344,7 +344,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  Future<List<T>>? listApiReduceSizes(String customField) async {
+  Future<List<T>>? listApiReduceSizes() async {
+    String customField = (this as ViewAbstract).getFieldToReduceSize();
     if (getLastReduseSize(customField).isNotEmpty) {
       return getLastReduseSize(customField).cast();
     }
@@ -664,7 +665,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     _lastSearchViewAbstractByTextInputList = lastList;
   }
 
-  List<ViewAbstract> getLastReduseSize(String field) {
+  List<ViewAbstract?> getLastReduseSize(String field) {
     return _lastListReduseSizeViewAbstract?["$T$field"] ?? [];
   }
 

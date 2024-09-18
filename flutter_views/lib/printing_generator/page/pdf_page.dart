@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -196,11 +196,14 @@ class _PdfPageState<T extends PrintLocalSetting>
                 hint: "Select size",
                 list: [
                   DropdownStringListItem(
-                      null, AppLocalizations.of(context)!.a3ProductLabel),
+                      icon: null,
+                      label: AppLocalizations.of(context)!.a3ProductLabel),
                   DropdownStringListItem(
-                      null, AppLocalizations.of(context)!.a4ProductLabel),
+                      icon: null,
+                      label: AppLocalizations.of(context)!.a4ProductLabel),
                   DropdownStringListItem(
-                      null, AppLocalizations.of(context)!.a5ProductLabel),
+                      icon: null,
+                      label: AppLocalizations.of(context)!.a5ProductLabel),
                 ],
               ),
             )

@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../../models/view_abstract_filterable.dart';
 import '../../new_screens/home/components/ext_provider.dart';
 import '../../providers/page_large_screens_provider.dart';
-import '../edit_listeners/controller_dropbox_enum.dart';
-import '../edit_listeners/controller_dropbox_list.dart';
+import '../../new_screens/controllers/controller_dropbox_enum.dart';
+import '../../new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchFilterableWidget extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class EditControllerChipsFromViewAbstract<T extends ViewAbstract>
@@ -30,7 +30,7 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
   Future<List<T?>?> getFuture() async {
     if (_list != null) return _list;
     _list = await widget.viewAbstract
-            .listApiReduceSizes(widget.viewAbstract.getFieldToReduceSize())
+            .listApiReduceSizes()
         as List<T?>;
     if (mounted) {
       setState(() {});

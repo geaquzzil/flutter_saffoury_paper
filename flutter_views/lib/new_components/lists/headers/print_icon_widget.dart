@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -84,12 +84,12 @@ class PrintListIconWidget extends StatelessWidget {
   List<DropdownStringListItem?> getListMenuItems(BuildContext context) {
     return [
       DropdownStringListItem(
-          Icons.picture_as_pdf,
-          AppLocalizations.of(context)!
+          icon: Icons.picture_as_pdf,
+          label: AppLocalizations.of(context)!
               .exportAllAs(AppLocalizations.of(context)!.pdf)),
       DropdownStringListItem(
-          Icons.source,
-          AppLocalizations.of(context)!
+          icon: Icons.source,
+          label: AppLocalizations.of(context)!
               .exportAllAs(AppLocalizations.of(context)!.excel)),
     ];
   }

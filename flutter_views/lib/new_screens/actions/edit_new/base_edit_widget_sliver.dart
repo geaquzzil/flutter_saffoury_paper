@@ -4,8 +4,8 @@ import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_custom_list.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/edit_controller_chipds.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_custom_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/edit_controller_chipds.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +13,10 @@ import '../../../constants.dart';
 import '../../../models/view_abstract.dart';
 import '../../../models/view_abstract_inputs_validaters.dart';
 
-import '../../edit/controllers/edit_controller_dropdown.dart';
-import '../../edit/controllers/edit_controller_dropdown_api.dart';
-import '../../edit/controllers/edit_controller_file_picker.dart';
-import '../../edit/controllers/ext.dart';
+import '../../controllers/edit_controller_dropdown.dart';
+import '../../controllers/edit_controller_dropdown_api.dart';
+import '../../controllers/edit_controller_file_picker.dart';
+import '../../controllers/ext.dart';
 import 'edit_controllers_utils.dart';
 
 @immutable

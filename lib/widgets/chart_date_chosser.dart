@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 

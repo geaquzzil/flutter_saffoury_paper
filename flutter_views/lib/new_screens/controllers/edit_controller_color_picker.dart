@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 
 class EditControllerColorPicker extends StatefulWidget {

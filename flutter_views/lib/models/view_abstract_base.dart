@@ -8,7 +8,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -417,11 +417,29 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return value.toDateTime();
   }
 
+  String? getFieldDateTimeFormat(DateTime? dateTime) {
+    return dateTime?.toLocal().toString();
+  }
+
+  List<DropdownStringListItem?> generateListFromViewAbstract(
+      BuildContext context, List<ViewAbstract?> list) {
+    return list.map((o) {
+      return DropdownStringListItem(
+        label: o == null
+            ? (this as ViewAbstract).getTextInputHint(context) ?? ""
+            : o.getMainHeaderTextOnly(context),
+        icon: o == null ? null : (this as ViewAbstract).getMainIconData(),
+        value: o,
+      );
+    }).toList();
+  }
+
   List<DropdownStringListItem> getMainFieldsIconsAndValues(
       BuildContext context) {
     return getMainFields(context: context)
         .map((e) => DropdownStringListItem(
-            getFieldIconData(e), getFieldLabel(context, e),
+            icon: getFieldIconData(e),
+            label: getFieldLabel(context, e),
             value: isViewAbstract(e)
                 ? getMirrorNewInstanceViewAbstract(e).getForeignKeyName()
                 : e))

@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:introduction_screen/introduction_screen.dart';

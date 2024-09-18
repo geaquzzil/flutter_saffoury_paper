@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 
 class EditControllerDropdownFromViewAbstract<T extends ViewAbstract>
     extends StatefulWidget {
@@ -30,9 +30,7 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   Future<List<T?>?> getFuture() async {
     if (_list != null) return _list;
     _list = [null];
-    _list!.addAll(await widget.viewAbstract
-            .listApiReduceSizes(widget.viewAbstract.getFieldToReduceSize())
-        as List<T?>);
+    _list!.addAll(await widget.viewAbstract.listApiReduceSizes() as List<T?>);
     // if (mounted) {
     //   setState(() {});
     // }

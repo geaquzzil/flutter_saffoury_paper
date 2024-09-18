@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_screens/home/components/ext_provider
 import 'package:provider/provider.dart';
 
 import '../../providers/filterables/filterable_provider.dart';
-import '../edit/controllers/ext.dart';
+import '../controllers/ext.dart';
 
 class CustomFilterableController extends StatelessWidget {
   CustomFilterableField customFilterableField;

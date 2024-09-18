@@ -2,9 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/globals.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_enum_icon.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
-
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 
 class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   final String hint;
@@ -53,7 +52,10 @@ class _DropdownStringListControllerListenerByIconState
           ? Column(
               children: [
                 const PopupMenuDivider(),
-                Text(e.label),
+                Text(
+                  e.label,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
                 const PopupMenuDivider()
               ],
             )
@@ -65,10 +67,15 @@ class _DropdownStringListControllerListenerByIconState
                   children: [
                     if (e.icon != null)
                       Icon(
+                        size: 15,
                         e.icon,
                       ),
                     const SizedBox(width: kDefaultPadding / 3),
-                    Text(e.label, overflow: TextOverflow.clip),
+                    Text(
+                      e.label,
+                      overflow: TextOverflow.clip,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     // TextBold(
                     //   text: "${widget.hint}: ${e.label}",
                     //   regex: e.label.toString(),
@@ -143,23 +150,23 @@ class _DropdownStringListControllerListenerByIconState
           )
           .toList(),
     );
-    if (widget.showSelectedValueBeside && lastSelected != null) {
+    if (widget.showSelectedValueBeside) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Globals.isArabic(context)
               ? FadeInRight(
-                  key: UniqueKey(),
+                  key: Key('${lastSelected?.label}'),
                   duration: const Duration(milliseconds: 500),
                   child: Text(
-                    lastSelected!.label,
+                    lastSelected?.label ?? widget.hint,
                     style: Theme.of(context).textTheme.bodySmall,
                   ))
               : FadeInLeft(
-                  key: UniqueKey(),
+                  key: Key('${lastSelected?.label}'),
                   duration: const Duration(milliseconds: 500),
                   child: Text(
-                    lastSelected!.label,
+                    lastSelected?.label ?? widget.hint,
                     style: Theme.of(context).textTheme.bodySmall,
                   )),
           pop

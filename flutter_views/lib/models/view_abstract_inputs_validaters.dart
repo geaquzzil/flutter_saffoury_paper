@@ -113,10 +113,10 @@ abstract class ViewAbstractInputAndValidater<T>
 
   String? getTextInputHint(BuildContext context, {String? field}) {
     if (field == null) {
-      return getMainHeaderLabelTextOnly(context);
+      // return getMainHeaderLabelTextOnly(context);
       return "${AppLocalizations.of(context)!.enter} ${getMainHeaderLabelTextOnly(context)}";
     } else {
-      return getTextInputLabel(context, field);
+      // return getTextInputLabel(context, field);
       String? label = getTextInputLabel(context, field);
       return "${AppLocalizations.of(context)!.enter} $label";
     }

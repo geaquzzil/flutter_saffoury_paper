@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/text_bold.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 
 class DropdownDateControllerListener extends StatelessWidget {
   final DateEnum viewAbstractEnum;

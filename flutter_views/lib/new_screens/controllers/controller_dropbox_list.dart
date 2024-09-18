@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
-import '../text_bold.dart';
+import '../../new_components/text_bold.dart';
 
 class DropdownStringListControllerListener extends StatelessWidget {
   String tag;
@@ -57,5 +57,6 @@ class DropdownStringListItem {
   String label;
   Object? value;
   bool? enabled;
-  DropdownStringListItem(this.icon, this.label, {this.value, this.enabled});
+  DropdownStringListItem(
+      {this.icon, required this.label, this.value, this.enabled});
 }

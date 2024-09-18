@@ -119,7 +119,7 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       pinnedToolbar: isSelectedMode,
       centerTitle: false,
       actions: !isSelectedMode
-          ? getPaneAppbarActions(firstPane, tab: tab)
+          ? getAppbarActions(firstPane: firstPane, tab: tab)
           : [IconButton(onPressed: () {}, icon: const Icon(Icons.delete))],
 
       // tabBuilder: (p0) {
@@ -709,8 +709,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
   }
 
-  List<Widget>? getPaneAppbarActions(bool firstPane,
-      {TabControllerHelper? tab}) {
+  List<Widget>? getAppbarActions(
+      {bool? firstPane, TabControllerHelper? tab}) {
     return null;
   }
 
@@ -730,8 +730,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         // automaticallyImplyLeading: false,
         forceMaterialTransparency: false,
         actions: !isBaseAppBar
-            ? getPaneAppbarActions(firstPane)
-            : getSharedAppBarActions,
+            ? getAppbarActions(firstPane: firstPane)
+            : [
+                ...getAppbarActions(firstPane: null) ?? [],
+                ...getSharedAppBarActions
+              ],
         // primary: true,
         automaticallyImplyLeading: false,
         backgroundColor: customAppBar != null

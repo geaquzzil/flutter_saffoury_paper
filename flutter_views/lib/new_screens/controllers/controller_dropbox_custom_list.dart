@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/edit/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_controllers_utils.dart';
 
@@ -44,11 +44,6 @@ class _DropdownCustomListWithFormListenerState
   void didUpdateWidget(covariant DropdownCustomListWithFormListener oldWidget) {
     list = widget.viewAbstract
         .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
-    // if (_field != widget.field) {
-    //   _field = widget.field;
-    //   list = widget.viewAbstract
-    //       .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
-    // }
     super.didUpdateWidget(oldWidget);
   }
 

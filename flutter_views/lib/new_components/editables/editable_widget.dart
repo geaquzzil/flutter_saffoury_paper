@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart'
     as v;
-import '../../new_screens/edit/controllers/ext.dart';
+import '../../new_screens/controllers/ext.dart';
 
 class EditableWidget extends StatefulWidget {
   ViewAbstract viewAbstract;

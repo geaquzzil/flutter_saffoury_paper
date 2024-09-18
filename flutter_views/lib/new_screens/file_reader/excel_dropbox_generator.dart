@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_components/edit_listeners/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 
 class ExcelDropboxGenerator extends StatefulWidget {
   String filePath;
@@ -51,7 +51,8 @@ class _ExcelDropboxGeneratorState extends State<ExcelDropboxGenerator> {
       tag: "",
       hint: "Select worksheet",
       list: excel.tables.keys
-          .map((e) => DropdownStringListItem(null, e.toString(), value: e))
+          .map((e) =>
+              DropdownStringListItem(icon: null, label: e.toString(), value: e))
           .toList(),
       onSelected: (object) {},
     );
