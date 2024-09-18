@@ -59,6 +59,10 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
             return getDropdownController(context, snapshot.data as List<T?>);
           }
         }
+        if (widget.byIcon) {
+          return SizedBox(
+              width: 15, height: 15, child: CircularProgressIndicator());
+        }
         return SkeletonListTile(
           hasLeading: false,
           hasSubtitle: false,

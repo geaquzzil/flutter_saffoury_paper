@@ -93,8 +93,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   final qrCode = ValueNotifier<QrCodeNotifierState?>(null);
 
-  List<ViewAbstract>? importedList;
+  List<ViewAbstract>? _importedList;
   List<ViewAbstract> exportedList = [];
+
+  List<Product>? allProducts;
 
   @override
   void initState() {
@@ -127,7 +129,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   void whenFileReaderImportList() {
     debugPrint("whenFileReaderImportList called");
     setState(() {
-      importedList = _notifier.value;
+      _importedList =
+          _notifier.value == null ? null : List.empty(growable: true)
+            ?..addAll(_notifier.value!.cast());
     });
   }
 
@@ -302,17 +306,31 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     if (isPurchuses()) {
       return [
-        if (importedList != null)
+        if (_importedList != null)
+          SliverToBoxAdapter(
+            child: ListTile(
+              title: Text("ReImport xsl file "),
+              trailing: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _importedList = null;
+                  });
+                },
+                child: Text(AppLocalizations.of(context)!.improterInfo),
+              ),
+            ),
+          ),
+        if (_importedList != null)
           SliverToBoxAdapter(
             child: getSummary(),
           ),
-        if (importedList != null)
+        if (_importedList != null)
           SliverToBoxAdapter(
             child: Text(AppLocalizations.of(context)!.details,
                     style: Theme.of(context).textTheme.titleMedium)
                 .padding(),
           ),
-        if (importedList == null)
+        if (_importedList == null)
           SliverFillRemaining(
             child: FileReaderPage(
               onDone: (p0) {
@@ -325,7 +343,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         else
           SliverApiMixinStaticList(
             listKey: "emportFrom",
-            list: importedList!,
+            list: _importedList!,
             isSliver: true,
             enableSelection: false,
             key: keyToImportFrom,
@@ -335,8 +353,33 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       ];
     }
     return [
-      const SliverToBoxAdapter(
-        child: Text("t"),
+      FutureBuilder(
+        
+        future: Product().listCall(count: 10000000, page: 0),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return SliverApiMixinStaticList(
+              listKey: "emportFrom",
+              list: snapshot.data!,
+              isSliver: true,
+              enableSelection: false,
+              key: keyToImportFrom,
+              hasCustomCardBuilder: (i, v) =>
+                  getListItemForPurchasesCheck(i, v, context),
+            );
+          }
+          return const SliverFillRemaining(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                      "We are doing a backgorund works analysis your products"),
+                  Text("Please wait for the task to finish")
+                ],
+              ),
+            ),
+          );
+        },
       )
     ];
   }
@@ -377,7 +420,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   Widget getSummary() {
-    List<Product>? productList = importedList?.cast<Product>();
+    List<Product>? productList = _importedList?.cast<Product>();
+    debugPrint("productList size ${productList?.length}");
     double getTotalImportedFromFile = productList == null
         ? 0
         : productList

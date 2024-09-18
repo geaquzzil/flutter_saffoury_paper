@@ -127,9 +127,11 @@ class ListMultiKeyProvider with ChangeNotifier {
     ];
     notifyListeners();
   }
-  bool removeItemObjcet<T>(String key,T value){
-    return removeItem(key, (k)=>k==value)!=null;
+
+  bool removeItemObjcet<T>(String key, T value) {
+    return removeItem(key, (k) => k == value) != null;
   }
+
   T? removeItem<T>(String key, bool Function(T) test) {
     late MultiListProviderHelper? multiListProviderHelper;
     debugPrint("ListMultiKeyProvider===> removeItem");
@@ -190,7 +192,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper!.isLoading = false;
-    multiListProviderHelper.setObjects = (viewAbstract);
+    multiListProviderHelper.setObjects = List.from(viewAbstract);
     // multiListProviderHelper.page++;
   }
 
