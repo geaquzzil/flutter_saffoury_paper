@@ -64,12 +64,11 @@ class _ListSliverGridState extends ListApiMasterState {
           }
         }
         return SliverGrid(
-          
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3),
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
-              return ListCardItemHorizontal(object: data[index]);
+              return ListCardItemHorizontal<ViewAbstract>(object: data[index]);
             }, childCount: count));
       },
       selector: (p0, p1) => Tuple3(p1.isLoading(findCustomKey()),

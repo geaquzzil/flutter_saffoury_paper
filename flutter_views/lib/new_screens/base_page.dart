@@ -80,8 +80,8 @@ mixin TickerWidget<T extends StatefulWidget> on State<T> {
 
 mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane);
-  Widget ? getDraggableHeaderWidget(bool firstPane);
-  Widget ? getDraggableHeaderExpandedWidget(bool firstPane);
+  Widget? getDraggableHeaderWidget(bool firstPane);
+  Widget? getDraggableHeaderExpandedWidget(bool firstPane);
 
   Widget _getDraggableHomePane(widget, bool firstPane,
       {TabControllerHelper? tab}) {
@@ -121,7 +121,7 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       actions: !isSelectedMode
           ? getPaneAppbarActions(firstPane, tab: tab)
           : [IconButton(onPressed: () {}, icon: const Icon(Icons.delete))],
-      
+
       // tabBuilder: (p0) {
       //   return getF
       // },
@@ -1249,7 +1249,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   SizedBox? getEndDrawer() {
     Widget? customEnd = getCustomEndDrawer();
     bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
-    double width = isLarge ? MediaQuery.of(context).size.width * .3 : 500;
+    double width = isLarge ? MediaQuery.of(context).size.width * .4 : 500;
     return SizedBox(
         width: width, child: Card(child: customEnd ?? WebShoppingCartDrawer()));
   }

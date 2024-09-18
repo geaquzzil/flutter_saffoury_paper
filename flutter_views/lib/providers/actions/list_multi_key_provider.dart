@@ -13,8 +13,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     return _listMap[key]?.getCount ?? 0;
   }
 
-  List<ViewAbstract> getList(String key) {
-    return _listMap[key]?.getObjects.cast() ?? [].cast();
+  List<T> getList<T>(String key) {
+    return _listMap[key]?.getObjects.cast<T>() ?? [].cast<T>();
   }
 
   List getListNotViewAbstract(String key) {
@@ -121,8 +121,36 @@ class ListMultiKeyProvider with ChangeNotifier {
       multiListProviderHelper = _listMap[key];
     }
     multiListProviderHelper?.hasError = false;
-    multiListProviderHelper?.getObjects.addAll([viewAbstract]);
+    multiListProviderHelper?.setObjects = [
+      ...multiListProviderHelper.getObjects,
+      (viewAbstract)
+    ];
     notifyListeners();
+  }
+  bool removeItemObjcet<T>(String key,T value){
+    return removeItem(key, (k)=>k==value)!=null;
+  }
+  T? removeItem<T>(String key, bool Function(T) test) {
+    late MultiListProviderHelper? multiListProviderHelper;
+    debugPrint("ListMultiKeyProvider===> removeItem");
+    if (_listMap.containsKey(key)) {
+      multiListProviderHelper = _listMap[key];
+    } else {
+      _listMap[key] = MultiListProviderHelper();
+      multiListProviderHelper = _listMap[key];
+    }
+    List<T>? list = multiListProviderHelper?.getObjects.cast<T>();
+    if (list == null || list.isEmpty) return null;
+
+    T? res = list.firstWhereOrNull(test);
+    if (res == null) return null;
+
+    if (!list.remove(res)) {
+      return null;
+    }
+    multiListProviderHelper?.setObjects = [...list];
+    notifyListeners();
+    return res;
   }
 
   Future fetchListSearch(
@@ -397,13 +425,15 @@ class MultiListProviderHelper {
   bool isFetching = false;
   bool isNoMoreItem = false;
   bool hasError = false;
-  // All movies (that will be displayed on the Home screen)
   List _objects = [];
   int page = 0;
-  // Retrieve all movies
   List get getObjects => _objects;
   set setObjects(List objects) {
     _objects = objects;
+  }
+
+  void addObject(object) {
+    _objects.add(object);
   }
 
   int get getCount => _objects.length;

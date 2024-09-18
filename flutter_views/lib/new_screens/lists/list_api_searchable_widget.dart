@@ -9,10 +9,7 @@ import 'list_api_master.dart';
 @immutable
 class ListApiSearchableWidget extends ListApiMaster {
   ListApiSearchableWidget(
-      {super.key,
-      super.viewAbstract,
-      bool? buildSearchWidget,
-      bool? buildFabs})
+      {super.key, super.viewAbstract, bool? buildSearchWidget, bool? buildFabs})
       : super(
             buildFabIfMobile: buildFabs ?? true,
             buildSearchWidget: buildSearchWidget ?? true);
@@ -29,7 +26,7 @@ class ListApiSearchableWidget extends ListApiMaster {
       required String key,
       required ScrollController scrollController,
       required ListMultiKeyProvider listProvider}) {
-    var data = listProvider.getList(key);
+    var data = listProvider.getList<ViewAbstract>(key);
     var listView = ListView.builder(
       key: const ValueKey(2),
       physics: const AlwaysScrollableScrollPhysics(),
@@ -42,7 +39,7 @@ class ListApiSearchableWidget extends ListApiMaster {
         if (listProvider.isLoading(key) && index == data.length) {
           return getSharedLoadingItem(context);
         }
-        return ListCardItem( object: data[index]);
+        return ListCardItem(object: data[index]);
       },
     );
     return listView;

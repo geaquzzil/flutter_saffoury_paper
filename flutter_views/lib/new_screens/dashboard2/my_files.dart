@@ -146,7 +146,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   ///int 1: is crossCount
   ///int 2: is suggested crossCount for StraggeredGrid
   ///int 3: is suggested crossCountMod
-  List<StaggeredGridTile> Function(int, int, int)? builder;
+  List<StaggeredGridTile> Function(int crossAxisCount, int crossCountFundCalc, int crossAxisCountMod)? builder;
   bool wrapWithCard;
   FileInfoStaggerdGridView(
       {super.key,

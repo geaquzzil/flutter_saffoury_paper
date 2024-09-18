@@ -934,6 +934,7 @@ class Product extends ViewAbstract<Product>
       {ServerActions? action}) {
     if (action == ServerActions.list) return [];
     return [
+      if(isEditing())
       TabControllerHelper(AppLocalizations.of(context)!.movments,
           draggableHeaderWidget: Text(
             AppLocalizations.of(context)!.movments,

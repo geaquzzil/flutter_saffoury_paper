@@ -75,6 +75,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   late _ObjectType _toListObjectType;
   ViewAbstract? _setParentForChildCardItem;
   String? _searchString;
+  late String _lastKey;
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
   late ValueNotifier<bool> valueNotifierGrid;
@@ -202,13 +203,13 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
     _onSeletedListItemsChanged =
         widget.onSeletedListItemsChanged ?? ValueNotifier([]);
-
+    _lastKey = getListProviderKey();
     _toListObject = checkToInitToListObject();
 
     checkForOverridingSetttings();
     List? customList = getToListObjectCastList();
     if (customList != null) {
-      listProvider.initCustomList(getListProviderKey(), customList.cast());
+      listProvider.initCustomList(_lastKey, customList.cast());
     }
     debugPrint(
         "SliverApiWithStaticMixin===> initState=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}");
@@ -216,12 +217,88 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     fetshListWidgetBinding();
   }
 
+  void _checkToUpdateToListObject() {
+    bool shouldFetsh = false;
+    _searchString = widget.searchString;
+    _ObjectType lastUpdated = getToListObjectType();
+
+    if (_toListObjectType == _ObjectType.CUSTOM_LIST) {
+      listProvider.initCustomList(
+          getListProviderKey(), getToListObjectCastList()?.cast() ?? []);
+    } else if (lastUpdated == _ObjectType.VIEW_ABSTRACT &&
+        _toListObjectType == _ObjectType.VIEW_ABSTRACT) {
+      ViewAbstract checkedViewAbstract = widget.toListObject as ViewAbstract;
+      if (checkedViewAbstract.runtimeType !=
+          getToListObjectCastViewAbstract().runtimeType) {
+        shouldFetsh = true;
+        _toListObject = checkedViewAbstract;
+        _resetValues();
+      } else if (lastUpdated == _ObjectType.STRING &&
+          _toListObjectType == _ObjectType.STRING) {
+        String tableName = widget.toListObject as String;
+        if (tableName != getToListObjectCastViewAbstract().getTableNameApi()) {
+          shouldFetsh = true;
+          _toListObject = checkToInitToListObject();
+          _resetValues();
+        }
+      } else if (lastUpdated == _ObjectType.CUSTOM_VIEW_RESPONSE &&
+          _toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
+        CustomViewHorizontalListResponse newObject =
+            widget.toListObject as CustomViewHorizontalListResponse;
+
+        if (newObject.getCustomViewKey() !=
+            getToListObjectHorizontalListResponse().getCustomViewKey()) {
+          shouldFetsh = true;
+          _toListObject = newObject;
+          _resetValues();
+        }
+      } else if (lastUpdated == _ObjectType.AUTO_REST &&
+          _toListObjectType == _ObjectType.AUTO_REST) {
+        AutoRest autoRest = widget.toListObject as AutoRest;
+        if (autoRest.key != getToListObjectCastAutoRest().key) {
+          shouldFetsh = true;
+          _toListObject = autoRest;
+          _resetValues();
+        }
+      } else {
+        shouldFetsh = true;
+        _toListObject = widget.toListObject;
+        _toListObjectType = getToListObjectType();
+      }
+    }
+
+    debugPrint(
+        "SliverApiWithStaticMixin===> didUpdateWidget=>shouldFetsh : $shouldFetsh");
+    if (shouldFetsh) {
+      fetshListWidgetBinding();
+    }
+  }
+
   @override
   void didUpdateWidget(covariant oldWidget) {
-    _checkToUpdateToListObject();
+    // _checkToUpdateToListObject();
     _setParentForChildCardItem = widget.setParentForChildCardItem;
     if (valueNotifierGrid.value != widget.isGridView) {
       valueNotifierGrid.value = widget.isGridView;
+    }
+    _ObjectType lastUpdated = getToListObjectType();
+    bool shouldFetsh = false;
+    if (_lastKey != getListProviderKey()) {
+      shouldFetsh = lastUpdated != _ObjectType.CUSTOM_LIST;
+      _lastKey = getListProviderKey();
+      _toListObject = widget.toListObject;
+      _toListObjectType = lastUpdated;
+      if (lastUpdated == _ObjectType.CUSTOM_LIST) {
+        List? customList = getToListObjectCastList();
+        if (customList != null) {
+          listProvider.initCustomList(_lastKey, customList.cast());
+        }
+      } else {
+        _resetValues();
+      }
+    }
+    if (shouldFetsh) {
+      fetshListWidgetBinding();
     }
 
     debugPrint(
@@ -584,62 +661,6 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
             : AppLocalizations.of(context)!.no_content);
   }
 
-  void _checkToUpdateToListObject() {
-    bool shouldFetsh = false;
-    _searchString = widget.searchString;
-    _ObjectType lastUpdated = getToListObjectType();
-    if (_toListObjectType == _ObjectType.CUSTOM_LIST) {
-      listProvider.initCustomList(
-          getListProviderKey(), getToListObjectCastList()?.cast() ?? []);
-    } else if (lastUpdated == _ObjectType.VIEW_ABSTRACT &&
-        _toListObjectType == _ObjectType.VIEW_ABSTRACT) {
-      ViewAbstract checkedViewAbstract = widget.toListObject as ViewAbstract;
-      if (checkedViewAbstract.runtimeType !=
-          getToListObjectCastViewAbstract().runtimeType) {
-        shouldFetsh = true;
-        _toListObject = checkedViewAbstract;
-        _resetValues();
-      } else if (lastUpdated == _ObjectType.STRING &&
-          _toListObjectType == _ObjectType.STRING) {
-        String tableName = widget.toListObject as String;
-        if (tableName != getToListObjectCastViewAbstract().getTableNameApi()) {
-          shouldFetsh = true;
-          _toListObject = checkToInitToListObject();
-          _resetValues();
-        }
-      } else if (lastUpdated == _ObjectType.CUSTOM_VIEW_RESPONSE &&
-          _toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
-        CustomViewHorizontalListResponse newObject =
-            widget.toListObject as CustomViewHorizontalListResponse;
-
-        if (newObject.getCustomViewKey() !=
-            getToListObjectHorizontalListResponse().getCustomViewKey()) {
-          shouldFetsh = true;
-          _toListObject = newObject;
-          _resetValues();
-        }
-      } else if (lastUpdated == _ObjectType.AUTO_REST &&
-          _toListObjectType == _ObjectType.AUTO_REST) {
-        AutoRest autoRest = widget.toListObject as AutoRest;
-        if (autoRest.key != getToListObjectCastAutoRest().key) {
-          shouldFetsh = true;
-          _toListObject = autoRest;
-          _resetValues();
-        }
-      } else {
-        shouldFetsh = true;
-        _toListObject = widget.toListObject;
-        _toListObjectType = getToListObjectType();
-      }
-    }
-
-    debugPrint(
-        "SliverApiWithStaticMixin===> didUpdateWidget=>shouldFetsh : $shouldFetsh");
-    if (shouldFetsh) {
-      fetshListWidgetBinding();
-    }
-  }
-
   void _resetValues() {
     _searchString = null;
     _onSeletedListItemsChanged?.value = [];
@@ -763,16 +784,16 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     });
   }
 
-  List getList() {
-    return listProvider.getList(getListProviderKey());
+  List<T> getList<T>() {
+    return listProvider.getList<T>(getListProviderKey());
   }
 
   void addAnimatedListItem(ViewAbstract view) {
     _ObjectType type = getToListObjectType();
     if (type == _ObjectType.FROM_CARD_API) {
-      listProvider.addCardToRequest(getListProviderKey(), view);
+      listProvider.addCardToRequest(_lastKey, view);
     } else {
-      listProvider.addCardToRequest(getListProviderKey(), view);
+      listProvider.addCardToRequest(_lastKey, view);
     }
 
     // int idx = getList().indexOf(widget);
@@ -780,17 +801,22 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     // _listKey.currentState?.insertItem(idx);
   }
 
-  void removeAnimatedListItem(ViewAbstract widget) {
-    if (getList().isEmpty) return;
-    int idx = getList().indexOf(widget);
-    debugPrint(
-        "SliverApiWithStaticMixin removeAnimatedListItemByWidget  at $idx");
-    if (idx == -1) return;
-    Widget removed = getList().removeAt(idx);
-    _listKey.currentState?.removeItem(
-        idx,
-        (context, animation) =>
-            SliverAnimatedCard(animation: animation, child: removed));
+  bool removeByValue<C>(C value){
+     return listProvider.removeItemObjcet(_lastKey, value);
+  }
+
+  C? removeByWhere<C>(bool Function(C) test) {
+    return listProvider.removeItem(_lastKey, test);
+    // if (getList().isEmpty) return;
+    // int idx = getList().indexOf(widget);
+    // debugPrint(
+    //     "SliverApiWithStaticMixin removeAnimatedListItemByWidget  at $idx");
+    // if (idx == -1) return;
+    // Widget removed = getList().removeAt(idx);
+    // _listKey.currentState?.removeItem(
+    //     idx,
+    //     (context, animation) =>
+    //         SliverAnimatedCard(animation: animation, child: removed));
   }
 
   void removeAnimatedListItemByIndex(int idx) {
@@ -802,12 +828,15 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
             SliverAnimatedCard(animation: animation, child: removed));
   }
 
-  T? searchForItem<T>(bool Function(T) test) {
+  C? removeItem<C>(bool Function(C) test) {
     debugPrint(
         "searchForItem list length => ${listProvider.getList(getListProviderKey()).length}");
-    return listProvider
-        .getList(getListProviderKey())
-        .cast<T>()
-        .firstWhereOrNull(test);
+    return listProvider.getList(_lastKey).cast<C>().firstWhereOrNull(test);
+  }
+
+  C? searchForItem<C>(bool Function(C) test) {
+    debugPrint(
+        "searchForItem list length => ${listProvider.getList(getListProviderKey()).length}");
+    return listProvider.getList(_lastKey).cast<C>().firstWhereOrNull(test);
   }
 }

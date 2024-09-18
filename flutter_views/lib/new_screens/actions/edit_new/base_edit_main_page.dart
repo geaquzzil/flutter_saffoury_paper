@@ -19,6 +19,7 @@ import '../../../constants.dart';
 import '../../../new_components/fabs/floating_action_button_extended.dart';
 import '../../../providers/actions/list_multi_key_provider.dart';
 
+
 class BaseEditNewPage extends BaseActionScreenPage {
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 

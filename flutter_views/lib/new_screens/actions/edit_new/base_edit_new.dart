@@ -145,8 +145,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
   }
 
   bool isValidated(BuildContext context) {
-    bool? isValidate =
-        formKey?.currentState?.validate(focusOnInvalid: false);
+    bool? isValidate = formKey?.currentState?.validate(focusOnInvalid: false);
     if (isValidate == null) {
       debugPrint("isValidated is null manually checking");
       return _viewAbstract.onManuallyValidate(context) != null;
@@ -216,8 +215,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
           ?.validate(focusOnInvalid: false);
       // formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
       if (validate ?? false) {
-        formKey?.currentState!.fields[_viewAbstract.getTag(field)]
-            ?.save();
+        formKey?.currentState!.fields[_viewAbstract.getTag(field)]?.save();
       }
       debugPrint("onTextChangeListener field=> $field validate=$validate");
       _viewAbstract.setFieldValue(field, controllers[field]!.text);
@@ -262,7 +260,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
       if (widget.buildAsPrint) {}
       return form;
     } else if (widget.isStandAloneField) {
-      return Text("sda");
+      // return Text("sda");
       return ControllerViewAbstractAsOneField(
           viewAbstract: _viewAbstract,
           parent: _viewAbstract.parent!,
@@ -360,8 +358,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         key: formKey,
         onChanged: () {
           debugPrint("_BaseEdit onChanged");
-
-          // onValidateForm(context);
+          onValidateForm(context);
         },
         child: getFormContent(context));
   }
