@@ -492,14 +492,16 @@ class DraggableHomeState extends State<DraggableHome>
                     notifyListenerWidgetBinding(fullyCollapsed, fullyExpanded);
 
                     return SliverAppBar(
-                      automaticallyImplyLeading: true,
+                      automaticallyImplyLeading: false,
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       leading: getLeadingAppBar(context),
-                      actions: widget.alwaysShowLeadingAndAction
-                          ? widget.actions
-                          : !fullyCollapsed
-                              ? []
-                              : widget.actions,
+                      actions: widget.actions,
+
+                      // widget.alwaysShowLeadingAndAction
+                      //     ? widget.actions
+                      //     : !fullyCollapsed
+                      //         ? []
+                      //         : widget.actions,
                       elevation: 0,
                       pinned: widget.pinnedToolbar,
                       stretch: true,

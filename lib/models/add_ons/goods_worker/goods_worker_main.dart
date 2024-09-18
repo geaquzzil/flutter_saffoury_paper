@@ -220,6 +220,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         )
       ];
     }
+    if (!firstPane) return [const Icon(Icons.refresh)];
     return null;
   }
 
