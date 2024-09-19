@@ -143,16 +143,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? generatePaneBottomSheet(bool firstPane, {TabControllerHelper? tab}) {
-    if (isMobile(context)) {
-      return BaseFilterableMainWidget(
-        viewAbstract: Product(),
-      );
-    }
-    return super.generatePaneBottomSheet(firstPane, tab: tab);
-  }
-
-  @override
   double getCustomPaneProportion() {
     return .5;
   }
@@ -160,7 +150,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
     return {
-      "": [
+      //todo translate
+      "Details": [
         DrawerMenuItem(title: "INVENTORY", icon: Icons.inventory),
         DrawerMenuItem(title: "Purchases", icon: Icons.document_scanner),
       ]
@@ -214,17 +205,30 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? getBaseAppbar() {
-    if (findCurrentScreenSize(context) == CurrentScreenSize.MOBILE) {
-      return null;
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane == null) {
+      return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
+          ? null
+          : getHeaderForInventory();
+    } else {
+      if (isPurchuses()) {
+        return const Text("Purhuses");
+      }
+      return const Text("INVINTORY");
     }
-    return getHeaderForInventory();
+    return null;
   }
 
   @override
-  List<Widget>? getAppbarActions({bool? firstPane, TabControllerHelper? tab}) {
+  List<Widget>? getAppbarActions(
+      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
     if (firstPane == null) {
-      return [FilterIcon(viewAbstract: Product())];
+      return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
+          ? null
+          : [FilterIcon(viewAbstract: Product())];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
     return null;
@@ -263,11 +267,15 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  List<Widget>? getBaseBottomSheet() => null;
-  @override
-  Widget? getBaseFloatingActionButton() => null;
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return firstPane
+        ? getDesktopFirstPane(tab: tab)
+        : getDesktopSecondPane(secoundTab: secoundTab);
+  }
 
-  @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint(
         "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
@@ -303,7 +311,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     );
   }
 
-  @override
   getDesktopSecondPane(
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     if (isPurchuses()) {
@@ -513,142 +520,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       // width < 1400 ? 1.1 : 1.4,
     );
   }
-  // @override
-  // Widget? getThirdPane() {
-  //   if (_type == GoodsType.INVERTORY) {
-  //     return null;
-  //   }
-  //   return FileInfoStaggerdGridView(
-  //     childAspectRatio: 16 / 9,
-  //     list: [
-  //       StaggeredGridTile.count(
-  //           crossAxisCellCount: 2,
-  //           mainAxisCellCount: .75,
-  //           child: ChartCardItemCustom(
-  //             color: Colors.blue,
-  //             icon: Icons.today,
-  //             title: "TOTAL ITEMS IMPORTED",
-  //             description: "getTotalTodayBalance()",
-  //             // footer: incomes?.length.toString(),
-  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-  //           )),
-  //       StaggeredGridTile.count(
-  //           crossAxisCellCount: 2,
-  //           mainAxisCellCount: .75,
-  //           child: ChartCardItemCustom(
-  //             color: Colors.blue,
-  //             // icon: Icons.today,
-  //             title: "TOTAL QUANTITY IMPORTED",
-  //             description: "getTotalTodayBalance()",
-  //             // footer: incomes?.length.toString(),
-  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-  //           )),
-  //       StaggeredGridTile.count(
-  //           crossAxisCellCount: 2,
-  //           mainAxisCellCount: .75,
-  //           child: ChartCardItemCustom(
-  //             color: Colors.blue,
-  //             // icon: Icons.today,
-  //             title: "TOTAL ITEMS SCANED",
-  //             description: "getTotalTodayBalance()",
-  //             // footer: incomes?.length.toString(),
-  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-  //           )),
-  //       StaggeredGridTile.count(
-  //           crossAxisCellCount: 2,
-  //           mainAxisCellCount: .75,
-  //           child: ChartCardItemCustom(
-  //             color: Colors.blue,
-  //             // icon: Icons.today,
-  //             title: "TOTAL ITEMS SCANNED QUANTITY",
-  //             description: "getTotalTodayBalance()",
-  //             // footer: incomes?.length.toString(),
-  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-  //           )),
-  //       StaggeredGridTile.count(
-  //           crossAxisCellCount: 2,
-  //           mainAxisCellCount: 1,
-  //           child: ChartCardItemCustom(
-  //             color: Colors.blue,
-  //             // icon: Icons.today,
-  //             title: "TOTAL ",
-  //             description: "getTotalTodayBalance()",
-  //             // footer: incomes?.length.toString(),
-  //             // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-  //           ))
-  //     ],
-  //     wrapWithCard: true,
-  //     // crossAxisCount: getCrossAxisCount(getWidth),
-
-  //     // width < 1400 ? 1.1 : 1.4,
-  //   );
-  // }
-
-  @override
-  getFirstPane({TabControllerHelper? tab}) => getDesktopFirstPane(tab: tab);
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
-    return FloatingActionButton.extended(
-        onPressed: () {
-          if (!isPurchuses()) {
-            Product p = Product();
-            p.qrQuantity = testQuantity + 100;
-            p.iD = 2405 + testId;
-            testId = testId + 1;
-            testQuantity = testQuantity + 100;
-            keyInventory.currentState?.addAnimatedListItem(p);
-          } else {
-            Product? t =
-                keyToImportFrom.currentState?.searchForItem<Product>((t) {
-              debugPrint(
-                  "found product barcode: ${t.barcode} testBarcode: ${testBarCode.toString()}");
-              return t.barcode == ((testBarCode)).toString();
-            });
-
-            debugPrint("found product founded $t");
-            if (t != null) {
-              testBarCode = testBarCode + 1;
-              keyToExportTo.currentState?.addAnimatedListItem(t);
-              keyToImportFrom.currentState?.removeByValue(t);
-              setState(() {});
-            } else {
-              context
-                  .read<DrawerMenuControllerProvider>()
-                  .controlEndDrawerMenu();
-            }
-          }
-        },
-        label: const Icon(Icons.add));
-  }
-
-  @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) {
-    if (isPurchuses()) {
-      return const Text("Purhuses");
-    }
-    return const Text("INVINTORY");
-  }
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) {
-    if (isPurchuses()) {
-      return const Text("Purhuses");
-    }
-    return const Text("INVINTORY");
-  }
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
 
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane,
@@ -699,5 +570,53 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   bool isPurchuses() {
     return lastDrawerItemSelected?.icon == Icons.document_scanner;
+  }
+
+  @override
+  Widget? getDraggableBottomExpandedWidget(bool firstPane) {
+    return null;
+  }
+
+  @override
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane != null) {
+      if (firstPane) {
+        return FloatingActionButton.extended(
+            onPressed: () {
+              if (!isPurchuses()) {
+                Product p = Product();
+                p.qrQuantity = testQuantity + 100;
+                p.iD = 2405 + testId;
+                testId = testId + 1;
+                testQuantity = testQuantity + 100;
+                keyInventory.currentState?.addAnimatedListItem(p);
+              } else {
+                Product? t =
+                    keyToImportFrom.currentState?.searchForItem<Product>((t) {
+                  debugPrint(
+                      "found product barcode: ${t.barcode} testBarcode: ${testBarCode.toString()}");
+                  return t.barcode == ((testBarCode)).toString();
+                });
+
+                debugPrint("found product founded $t");
+                if (t != null) {
+                  testBarCode = testBarCode + 1;
+                  keyToExportTo.currentState?.addAnimatedListItem(t);
+                  keyToImportFrom.currentState?.removeByValue(t);
+                  setState(() {});
+                } else {
+                  context
+                      .read<DrawerMenuControllerProvider>()
+                      .controlEndDrawerMenu();
+                }
+              }
+            },
+            label: const Icon(Icons.add));
+      }
+    }
+    return null;
   }
 }

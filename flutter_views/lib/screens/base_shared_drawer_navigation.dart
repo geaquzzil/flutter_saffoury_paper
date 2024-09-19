@@ -99,48 +99,39 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
     key.currentState?.add(_onActionAdd?.value);
   }
 
-  getActionFirstPane(bool isDesktop,
-      {TabControllerHelper? tab,
-      TabControllerHelper? secoundTab,
-      E? selectedItem});
-
-  getActionSecondPane(bool isDesktop,
-      {TabControllerHelper? tab,
+  getActionPane(bool isDesktop,
+      {required bool firstPane,
+      TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       E? selectedItem});
 
   E onActionInitial();
 
   @override
-  Widget? getBaseAppbar() {
-    if (!isLargeScreenFromCurrentScreenSize(context)) return null;
-    debugPrint("BasePageActionOnToolbar mixin is called");
-    return ActionOnToolbarsas(
-      widget: this,
-      actions: [onActionInitial()],
-      key: key,
-    );
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane == null) {
+      if (!isLargeScreenFromCurrentScreenSize(context)) return null;
+      debugPrint("BasePageActionOnToolbar mixin is called");
+      return ActionOnToolbarsas(
+        widget: this,
+        actions: [onActionInitial()],
+        key: key,
+      );
+    }
+    return null;
   }
 
   @override
-  getDesktopFirstPane({TabControllerHelper? tab}) {
-    return getWidgetFromBase(true, true, tab: tab);
-  }
-
-  @override
-  getDesktopSecondPane(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(false, true, tab: tab);
-  }
-
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(false, false, tab: tab);
-  }
-
-  @override
-  getFirstPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(true, false, tab: tab);
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(
+        firstPane, isLargeScreenFromCurrentScreenSize(context),
+        tab: tab ?? secoundTab);
   }
 
   getWidgetFromBase(bool firstPane, bool isDesktop,
@@ -190,23 +181,15 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
 
   Widget getWidget(bool firstPane, bool isDesktop,
       {TabControllerHelper? tab, TabControllerHelper? secoundTab, E? item}) {
-    return firstPane
-        ? getActionFirstPane(isDesktop,
-            tab: tab, secoundTab: secoundTab, selectedItem: item)
-        : getActionSecondPane(isDesktop,
-            tab: tab, secoundTab: secoundTab, selectedItem: item);
+    return getActionPane(isDesktop,
+        firstPane: firstPane,
+        tab: tab,
+        secoundTab: secoundTab,
+        selectedItem: item);
   }
 
   void initAction() {
     _onActionAdd = ValueNotifier(null);
-    return;
-    // WidgetsBinding.instance.addPostFrameCallback((s) {
-    //   if (isLargeScreenFromCurrentScreenSize(context) && onActionAdd == null) {
-    //     onActionAdd = ValueNotifier(null);
-    //   } else {
-    //     onActionAdd = null;
-    //   }
-    // });
   }
 }
 

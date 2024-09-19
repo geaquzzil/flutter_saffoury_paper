@@ -34,7 +34,9 @@ class _SliverApiMixinStaticListState extends State<SliverApiMixinStaticList>
   }
 
   @override
-  Widget? onLoadingHasCustomWidget() {}
+  Widget? onLoadingHasCustomWidget() {
+    return null;
+  }
 
   @override
   Widget? onResponseHasCustomWidget() => null;

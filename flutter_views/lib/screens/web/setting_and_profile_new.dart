@@ -72,30 +72,6 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  List<Widget>? getBaseBottomSheet() => null;
-
-  @override
-  Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
   bool isPaneScaffoldOverlayColord(bool firstPane,
           {TabControllerHelper? tab}) =>
       true;
@@ -123,8 +99,9 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  getActionFirstPane(bool isDesktop,
-      {TabControllerHelper? tab,
+  getActionPane(bool isDesktop,
+      {required bool firstPane,
+      TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ActionOnToolbarItem? selectedItem}) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
@@ -135,7 +112,14 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
           value: getItemModel(_currentSettingPageMobile ?? ""),
           pinToolbar: true);
     }
-
+    if (!firstPane) {
+      return Center(
+          child: getWidgetFromProfile(
+              // valueNotifier: onActionAdd,
+              context: context,
+              value: selectedItem,
+              pinToolbar: pinToolbar));
+    }
     return ProfileMenuWidget(
       size: getCurrentScreenSize(),
       selectedValue: getOnActionAdd,
@@ -150,18 +134,13 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  getActionSecondPane(bool isDesktop,
-      {TabControllerHelper? tab,
-      TabControllerHelper? secoundTab,
-      ActionOnToolbarItem? selectedItem}) {
-    return Center(
-        child: getWidgetFromProfile(
-            // valueNotifier: onActionAdd,
-            context: context,
-            value: selectedItem,
-            pinToolbar: pinToolbar));
-  }
+  ValueNotifierPane getValueNotifierPane() => ValueNotifierPane.BOTH;
 
   @override
-  ValueNotifierPane getValueNotifierPane() => ValueNotifierPane.BOTH;
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
+  }
 }

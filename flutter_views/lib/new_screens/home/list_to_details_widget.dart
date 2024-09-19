@@ -21,52 +21,34 @@ class ListToDetailsPage extends StatefulWidget {
 
 class _ListToDetailsPageState extends BasePageState<ListToDetailsPage> {
   @override
-  Widget? getBaseAppbar() => null;
-
-  @override
-  List<Widget>? getBaseBottomSheet() => null;
-
-  @override
-  Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  getDesktopFirstPane({TabControllerHelper? tab}) => getFirstPane(tab: tab);
-
-  @override
-  getDesktopSecondPane(
-          {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      getSecoundPane(tab: tab, secoundTab: secoundTab);
-
-  @override
-  getFirstPane({TabControllerHelper? tab}) {
-    return SliverApiMaster();
-  }
-
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return BaseSharedDetailsView();
-  }
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
   bool isPaneScaffoldOverlayColord(bool firstPane,
           {TabControllerHelper? tab}) =>
       false;
+
+  @override
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    // TODO: implement getAppbarTitle
+    return null;
+  }
+
+  @override
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
+  }
+
+  @override
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return firstPane ? SliverApiMaster() : BaseSharedDetailsView();
+  }
 
   @override
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;

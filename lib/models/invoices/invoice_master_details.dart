@@ -123,7 +123,6 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   //   return this as T;
   // }
 
-  @override
   List<ListableDataRow> getListableDetailsColumns(BuildContext context) => [
         ListableDataRow("quantity", AppLocalizations.of(context)!.quantity),
         ListableDataRow("unitPrice", AppLocalizations.of(context)!.unit_price),

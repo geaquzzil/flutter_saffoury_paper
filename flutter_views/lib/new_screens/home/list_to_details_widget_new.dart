@@ -66,19 +66,6 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
     return null;
-    if (firstPane == null && tab == null) {
-      return [
-        TabControllerHelper(
-          "HOME",
-          // icon: Icon(Icons.home),
-        ),
-        TabControllerHelper(
-          "PAGES",
-          // icon: Icon(Icons.pages),
-        )
-      ];
-    }
-    return null;
   }
 
   @override
@@ -86,25 +73,6 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
     buildDrawer = widget.buildDrawer;
     super.initState();
   }
-
-  @override
-  List<Widget>? getBaseBottomSheet() => null;
-
-  @override
-  Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane,
@@ -133,26 +101,22 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   }
 
   @override
-  getActionFirstPane(bool isDesktop,
-      {TabControllerHelper? tab,
+  getActionPane(bool isDesktop,
+      {required bool firstPane,
+      TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
-    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
-      builder: (context, value, child) {
-        return SliverApiMaster(
-          viewAbstract: value,
-          buildSearchWidgetAsEditText: isDesktop,
-        );
-      },
-      selector: (p0, p1) => p1.getObjectCastViewAbstract,
-    );
-  }
-
-  @override
-  getActionSecondPane(bool isDesktop,
-      {TabControllerHelper? tab,
-      TabControllerHelper? secoundTab,
-      ListToDetailsSecoundPaneHelper? selectedItem}) {
+    if (firstPane) {
+      return Selector<DrawerMenuControllerProvider, ViewAbstract>(
+        builder: (context, value, child) {
+          return SliverApiMaster(
+            viewAbstract: value,
+            buildSearchWidgetAsEditText: isDesktop,
+          );
+        },
+        selector: (p0, p1) => p1.getObjectCastViewAbstract,
+      );
+    }
     return FadeInUp(
         duration: Duration(milliseconds: 200),
         curve: Curves.fastOutSlowIn,
@@ -176,5 +140,10 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
               .getMainHeaderLabelTextOnly(context));
 
   @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
+  }
 }

@@ -57,14 +57,20 @@ class _BaseDashboardMainPageState
         );
       }).toList();
     }
+    if (firstPane != null && !firstPane) {
+          return getExtrasCastDashboard(tab: tab)
+        .getDashboardTabbarSectionSecoundPaneList(context);
+    }
     return null;
   }
 
+
   @override
-  List<TabControllerHelper>? initTabBarListSecondPane(
-      {TabControllerHelper? tab}) {
-    return getExtrasCastDashboard(tab: tab)
-        .getDashboardTabbarSectionSecoundPaneList(context);
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
   }
 
   @override
@@ -101,54 +107,57 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getBaseAppbar({TabControllerHelper? tab}) {
-    return ListTile(
-      title: Row(
-        children: [
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: kDefaultPadding,
-                ),
-                child: Text(AppLocalizations.of(context)!.dashboard_and_rep,
-                    style: Theme.of(context).textTheme.headlineMedium)
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane == null) {
+      return ListTile(
+        title: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: kDefaultPadding,
+                  ),
+                  child: Text(AppLocalizations.of(context)!.dashboard_and_rep,
+                      style: Theme.of(context).textTheme.headlineMedium)
 
-                // SearchWidgetComponent(onSearchTextChanged: (text) {
-                //   debugPrint("search for $text");
-                // }),
-                ),
-          ),
-          if (isPrintable(tab: tab))
+                  // SearchWidgetComponent(onSearchTextChanged: (text) {
+                  //   debugPrint("search for $text");
+                  // }),
+                  ),
+            ),
+            if (isPrintable(tab: tab))
+              IconButton(
+                  onPressed: () {
+                    getExtrasCast(tab: tab).printPage(context);
+                  },
+                  icon: const Icon(Icons.print)),
+            // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
+            // IconButton(
+            //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
             IconButton(
-                onPressed: () {
-                  getExtrasCast(tab: tab).printPage(context);
-                },
-                icon: const Icon(Icons.print)),
-          // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
-          // IconButton(
-          //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.notification_add)),
-          const ProfilePicturePopupMenu()
-        ],
-      ),
-      // subtitle: Row(
-      //   children: [
-      //     Expanded(child: DashboardHeader()),
-      //     DateSelector(),
-      //     Spacer()
-      //   ],
-      // ),
-    );
-  }
-
-  @override
-  List<Widget>? getBaseBottomSheet() => null;
-
-  @override
-  Widget? getBaseFloatingActionButton({TabControllerHelper? tab}) {
-    // TODO: implement getBaseFloatingActionButton
-    return null;
+                onPressed: () {}, icon: const Icon(Icons.notification_add)),
+            const ProfilePicturePopupMenu()
+          ],
+        ),
+        // subtitle: Row(
+        //   children: [
+        //     Expanded(child: DashboardHeader()),
+        //     DateSelector(),
+        //     Spacer()
+        //   ],
+        // ),
+      );
+    } else {
+      return getExtrasCastDashboard(tab: tab ?? secoundTab).getDashboardAppbar(
+        context,
+        firstPane: firstPane,
+        tab: tab ?? secoundTab,
+        globalKey: globalKeyBasePageWithApi,
+      );
+    }
   }
 
   ///cross axis count is from width how many items
@@ -204,7 +213,6 @@ class _BaseDashboardMainPageState
         );
   }
 
-  @override
   getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint("getDesktopFirstPane tab is ${tab?.extras.runtimeType}");
     // debugPrint("getDesktopFirstPane tab getExtras ${getExtras().debitsDue}");
@@ -234,7 +242,6 @@ class _BaseDashboardMainPageState
     return widgets;
   }
 
-  @override
   getDesktopSecondPane(
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
@@ -269,59 +276,15 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getFirstPane({TabControllerHelper? tab}) {
-    // TODO: implement getFirstPane
-    return getDesktopFirstPane(tab: tab);
-  }
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) {
-    return getExtrasCastDashboard(tab: tab).getDashboardAppbar(
-      context,
-      firstPane: true,
-      tab: tab,
-      globalKey: globalKeyBasePageWithApi,
-    );
-  }
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) {
-    // TODO: implement getFirstPaneBottomSheet
-    return null;
-  }
-
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
-    // TODO: implement getFirstPaneFloatingActionButton
-    return null;
-  }
-
-  @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) {
-    return getExtrasCastDashboard(tab: tab).getDashboardAppbar(
-      context,
-      firstPane: false,
-      tab: tab,
-      globalKey: globalKeyBasePageWithApi,
-    );
-  }
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) {
-    // TODO: implement getSecondPaneBottomSheet
-    return null;
-  }
-
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) {
-    // TODO: implement getSecondPaneFloatingActionButton
-    return null;
-  }
-
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    // TODO: implement getSecoundPane
-    return getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane) {
+      return getDesktopFirstPane(tab: tab);
+    } else {
+      return getDesktopSecondPane(secoundTab: secoundTab, tab: tab);
+    }
   }
 
   @override
@@ -354,12 +317,10 @@ class _BaseDashboardMainPageState
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab}) {
     return false;
-    return !firstPane;
   }
 
   @override
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) {
     return false;
-    return !firstPane;
   }
 }

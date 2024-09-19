@@ -429,7 +429,6 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     return getSecondaryColor().toHex().substring(1, 7);
   }
 
-  @override
   pw.Widget buildTitle() {
     String title = (printObj)
         .getPrintableSelfListInvoiceTitle(context, setting)

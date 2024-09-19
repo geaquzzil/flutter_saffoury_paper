@@ -353,7 +353,7 @@ class SectionItemHeaderI extends MultiSliver {
               SliverPinnedHeader(
                 child: Container(
                     padding: const EdgeInsets.all(kDefaultPadding),
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    // color: Theme.of(context).scaffoldBackgroundColor,
                     child: title),
               )
             else

@@ -11,78 +11,69 @@ class SliverCustomScrollView extends StatefulWidget {
   ScrollController? scrollController;
   String? scrollKey;
   ScrollPhysics? physics;
-  String title;
-  bool pinToolbar;
-  List<Widget>? actions;
-  Widget? expandHeaderWidget;
-  Widget? headerWidget;
-  Widget? expandBottomWidget;
   SliverCustomScrollView(
       {super.key,
       required this.slivers,
-      required this.title,
       this.scrollController,
-      this.pinToolbar = false,
-      this.expandHeaderWidget,
-      this.expandBottomWidget,
-      this.headerWidget,
-      this.actions,
       this.physics,
       this.scrollKey});
 
   @override
-  State<SliverCustomScrollView> createState() => _SliverCustomScrollViewState();
+  State<SliverCustomScrollView> createState() =>
+      _SliverCustomScrollViewDraggableState();
 }
 
-class _SliverCustomScrollViewState extends State<SliverCustomScrollView> {
+class _SliverCustomScrollViewDraggableState
+    extends State<SliverCustomScrollView> {
   late final _scrollController;
   late String bucketOffsetKey;
+
   final BehaviorSubject<bool> isFullyExpanded =
       BehaviorSubject<bool>.seeded(false);
   final BehaviorSubject<bool> isFullyCollapsed =
       BehaviorSubject<bool>.seeded(false);
 
-  late double appBarHeight;
-  late double topPadding;
   late double expandedHeight;
-  late double fullyExpandedHeight;
 
-  static const double stretchMaxHeight = .7;
   static const double headerExpandedHeight = .7;
-  static const double curvedBodyRadius = 20;
-
   @override
   void initState() {
     _scrollController = widget.scrollController ?? ScrollController();
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
-
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void didUpdateWidget(covariant SliverCustomScrollView oldWidget) {
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
+    debugPrint("didUpdateWidget draggable $bucketOffsetKey");
+    WidgetsBinding.instance.addPostFrameCallback((c) {
+      if (mounted) {
+        double lastSavedScroll =
+            Configurations.currentPageScrollOffset(context, bucketOffsetKey);
+        if (lastSavedScroll != 0) {
+          _scrollTo(lastSavedScroll);
+        } else {
+          _scrollTop();
+        }
+      }
+    });
     super.didUpdateWidget(oldWidget);
+  }
+
+  bool canExpandBody() {
+    return isMobile(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    appBarHeight = AppBar().preferredSize.height + curvedBodyRadius;
-
-    topPadding = MediaQuery.of(context).padding.top;
-
     expandedHeight = canExpandBody()
         ? MediaQuery.of(context).size.height * headerExpandedHeight
-        : 0;
-
-    fullyExpandedHeight = canExpandBody()
-        ? MediaQuery.of(context).size.height * (stretchMaxHeight)
         : 0;
 
     return PageStorage(
@@ -94,182 +85,11 @@ class _SliverCustomScrollViewState extends State<SliverCustomScrollView> {
   Widget sliver() {
     return SafeArea(
       child: CustomScrollView(
-        controller: _scrollController,
-        physics: widget.physics ??
-            const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-        slivers: [
-          StreamBuilder<List<bool>>(
-            stream: CombineLatestStream.list<bool>([
-              isFullyCollapsed.stream,
-              isFullyExpanded.stream,
-            ]),
-            builder:
-                (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-              final List<bool> streams = (snapshot.data ?? [false, false]);
-              final bool fullyCollapsed = streams[0];
-              final bool fullyExpanded = streams[1];
-
-              return getSliverAppbar(context, fullyCollapsed, appBarHeight,
-                  fullyExpanded, fullyExpandedHeight, expandedHeight);
-            },
-          ),
-          SliverToBoxAdapter(
-            child: expandedUpArrow(),
-          ),
-          ...widget.slivers,
-        ],
-      ),
-    );
-  }
-
-  StreamBuilder<bool> expandedUpArrow() {
-    return StreamBuilder<bool>(
-      stream: isFullyExpanded.stream,
-      builder: (context, snapshot) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          height: (snapshot.data ?? false) ? 40 : 0,
-          width: MediaQuery.of(context).size.width,
-          child: Center(
-            child: IconButton(
-              icon: const Icon(
-                Icons.keyboard_arrow_up_rounded,
-              ),
-              onPressed: () {},
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget getSliverTitle(bool fullyCollapsed) {
-    return AnimatedOpacity(
-      opacity: canExpandBody() ? (fullyCollapsed ? 0 : 1) : 1,
-      duration: const Duration(milliseconds: 100),
-      child: Text(widget.title),
-    );
-  }
-
-  Widget? getSliverAppbarLeading() {
-    return null;
-  }
-
-  List<Widget>? getSliverAppbarActions() {
-    return widget.actions ?? [Container()];
-  }
-
-  bool canExpandBody() {
-    return isMobile(context);
-  }
-
-  bool hasFlexibleSpace() {
-    return canExpandBody();
-  }
-
-  Widget? getFlexibleSpace(
-    bool fullyExpanded,
-    bool fullyCollapsed,
-  ) {
-    if (!hasFlexibleSpace()) {
-      return null;
-    }
-    return getFlixibleSpaceWidget(fullyExpanded, fullyCollapsed);
-  }
-
-  Widget getFlixibleSpaceWidget(bool fullyExpanded, bool fullyCollapsed) {
-    return Center(
-      child: Stack(
-        children: [
-          FlexibleSpaceBar(
-            background: Card(
-                child: Container(
-                    // color: Theme.of(context).colorScheme.surfaceVariant,
-                    margin: EdgeInsets.only(
-                        bottom: 0.2, top: AppBar().preferredSize.height),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      child: fullyExpanded
-                          ? (widget.expandHeaderWidget ?? const SizedBox())
-                          : widget.headerWidget,
-                    ))),
-          ),
-          Positioned(
-            bottom: -1,
-            left: 0,
-            right: 0,
-            child: roundedCorner(context),
-          ),
-          Positioned(
-            bottom: 0 + curvedBodyRadius,
-            child: AnimatedContainer(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              curve: Curves.easeInOutCirc,
-              duration: const Duration(milliseconds: 100),
-              height: fullyCollapsed
-                  ? 0
-                  : fullyExpanded
-                      ? 0
-                      : kToolbarHeight,
-              width: MediaQuery.of(context).size.width,
-              child: fullyCollapsed
-                  ? const SizedBox()
-                  : fullyExpanded
-                      ? const SizedBox()
-                      : widget.expandBottomWidget ?? Container(),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container roundedCorner(BuildContext context) {
-    return Container(
-      height: curvedBodyRadius,
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(curvedBodyRadius),
-        ),
-      ),
-    );
-  }
-
-  Future<void> Function()? onStretchTrigger() {}
-  double getStretchTriggerOffset() {
-    if (canExpandBody()) {
-      return 50;
-    }
-    return 100;
-  }
-
-  SliverAppBar getSliverAppbar(
-      BuildContext context,
-      bool fullyCollapsed,
-      double appBarHeight,
-      bool fullyExpanded,
-      double fullyExpandedHeight,
-      double expandedHeight) {
-    return SliverAppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      leading: getSliverAppbarLeading(),
-      actions: getSliverAppbarActions(),
-      elevation: 10,
-      pinned: false,
-      stretch: canExpandBody(),
-      title: getSliverTitle(fullyCollapsed),
-      collapsedHeight: appBarHeight,
-      expandedHeight: fullyExpanded ? fullyExpandedHeight : expandedHeight,
-      flexibleSpace: getFlexibleSpace(fullyExpanded, fullyCollapsed),
-      stretchTriggerOffset: getStretchTriggerOffset(),
-      onStretchTrigger: canExpandBody()
-          ? () async {
-              if (!fullyExpanded) isFullyExpanded.add(true);
-            }
-          : null,
+          controller: _scrollController,
+          physics: widget.physics ??
+              const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+          slivers: widget.slivers),
     );
   }
 
@@ -298,5 +118,54 @@ class _SliverCustomScrollViewState extends State<SliverCustomScrollView> {
           return false;
         },
         child: sliver());
+  }
+
+  void _scrollDown() {
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.animateTo(
+      _scrollController!.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollTo(double pos) {
+    debugPrint("scrollTo pos===> $pos");
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.animateTo(
+      pos,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollToHideTopWidget() {
+    debugPrint("_scrollToHideTopWidget ===> top");
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.animateTo(
+      _scrollController!.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollTop() {
+    debugPrint("scrollTo ===> top");
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.animateTo(
+      _scrollController!.position.minScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _scrollToCollapsed() {
+    if (_scrollController == null) return;
+    if (_scrollController?.hasClients == false) return;
+    _scrollController?.jumpTo(500);
   }
 }

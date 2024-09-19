@@ -145,11 +145,14 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                 hint: "Select size",
                 list: [
                   DropdownStringListItem(
-                     icon: null, label:AppLocalizations.of(context)!.a3ProductLabel),
+                      icon: null,
+                      label: AppLocalizations.of(context)!.a3ProductLabel),
                   DropdownStringListItem(
-                     icon: null, label:AppLocalizations.of(context)!.a4ProductLabel),
+                      icon: null,
+                      label: AppLocalizations.of(context)!.a4ProductLabel),
                   DropdownStringListItem(
-                      icon:null,label: AppLocalizations.of(context)!.a5ProductLabel),
+                      icon: null,
+                      label: AppLocalizations.of(context)!.a5ProductLabel),
                 ],
               ),
             )
@@ -167,8 +170,11 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  Widget? getBaseAppbar() {
-    if (widget.buildBaseHeader) {
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (widget.buildBaseHeader && firstPane == null) {
       return AppBar(
         leading: const Icon(Icons.print),
         title: Text(
@@ -179,25 +185,44 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  List<Widget>? getBaseBottomSheet() => null;
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (getCurrentScreenSize() == CurrentScreenSize.MOBILE &&
+        firstPane == true) {
+      return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
+        return BaseFloatingActionButtons(
+          viewAbstract: getExtras() as ViewAbstract,
+          serverActions: ServerActions.print,
+          addOnList: [
+            if (!isExpanded) getPrintShareFloating(context),
+            if (!isExpanded)
+              const SizedBox(
+                width: kDefaultPadding,
+              ),
+            if (!isExpanded) getPrintFloating(context),
+            if (!isExpanded)
+              const SizedBox(
+                width: kDefaultPadding,
+              ),
+            getPrintPageOptions()
+          ],
+        );
+      });
+    }
+    return null;
+  }
 
   @override
-  Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  getDesktopFirstPane({TabControllerHelper? tab}) => getSettingWidget();
-
-  @override
-  getDesktopSecondPane(
-          {TabControllerHelper? tab, TabControllerHelper? secoundTab}) =>
-      getPdfPreviewWidget();
-
-  @override
-  getFirstPane({TabControllerHelper? tab}) {
-    if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) {
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (getCurrentScreenSize() == CurrentScreenSize.MOBILE && firstPane) {
       return getPdfPreviewWidget();
     }
-    return getSettingWidget();
+    return firstPane ? getSettingWidget() : getPdfPreviewWidget();
   }
 
   Widget getSettingWidget() {
@@ -236,11 +261,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
         );
       },
     );
-  }
-
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getPdfPreviewWidget();
   }
 
   Widget getFloatingActionButtonConsomer(BuildContext context,
@@ -293,45 +313,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
           Tuple2(provider.getViewAbstract, provider.getSelectedFormat),
     );
   }
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) {
-    if (getCurrentScreenSize() == CurrentScreenSize.MOBILE) {
-      return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
-        return BaseFloatingActionButtons(
-          viewAbstract: getExtras() as ViewAbstract,
-          serverActions: ServerActions.print,
-          addOnList: [
-            if (!isExpanded) getPrintShareFloating(context),
-            if (!isExpanded)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            if (!isExpanded) getPrintFloating(context),
-            if (!isExpanded)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            getPrintPageOptions()
-          ],
-        );
-      });
-    }
-    return null;
-  }
-
-  @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
 
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane,

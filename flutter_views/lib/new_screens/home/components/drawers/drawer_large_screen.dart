@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/new_screens/home/components/drawers/comp
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -135,21 +136,21 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     return Scaffold(
       bottomNavigationBar: !isLarge ? buildDrawerFooter(context, isOpen) : null,
-      body: CustomScrollView(
-        controller: ScrollController(),
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        slivers: [
-          SliverPersistentHeader(
-              pinned: true,
-              delegate: SliverAppBarDelegatePreferedSize(
-                  shouldRebuildWidget: true,
-                  child: PreferredSize(
-                      preferredSize: const Size.fromHeight(60),
-                      child: buildHeader(context, isOpen)))),
-          ...buildListSlivers(context, isOpen)
-        ],
-      ),
+      body: Card(
+          margin: EdgeInsets.zero,
+          child: SliverCustomScrollView(
+            scrollKey: "drawerScroll",
+            slivers: [
+              SliverPersistentHeader(
+                  pinned: true,
+                  delegate: SliverAppBarDelegatePreferedSize(
+                      shouldRebuildWidget: true,
+                      child: PreferredSize(
+                          preferredSize: const Size.fromHeight(60),
+                          child: buildHeader(context, isOpen)))),
+              ...buildListSlivers(context, isOpen)
+            ],
+          )),
     );
   }
 
@@ -183,24 +184,21 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   }
 
   Widget buildHeader(BuildContext context, bool isOpen) {
-    return Card(
-      margin: EdgeInsets.zero,
-      child: IconButton(
-        onPressed: () {
-          if (showHamburger(_size)) {
-            drawerMenuControllerProvider.controlStartDrawerMenu();
+    return IconButton(
+      onPressed: () {
+        if (showHamburger(_size)) {
+          drawerMenuControllerProvider.controlStartDrawerMenu();
+        } else {
+          drawerMenuControllerProvider.toggleIsOpen();
+          if (drawerMenuControllerProvider.getSideMenuIsOpen) {
+            _animationController.reverse();
           } else {
-            drawerMenuControllerProvider.toggleIsOpen();
-            if (drawerMenuControllerProvider.getSideMenuIsOpen) {
-              _animationController.reverse();
-            } else {
-              _animationController.forward();
-            }
+            _animationController.forward();
           }
-        },
-        icon: AnimatedIcon(
-            icon: AnimatedIcons.arrow_menu, progress: _animationController),
-      ),
+        }
+      },
+      icon: AnimatedIcon(
+          icon: AnimatedIcons.arrow_menu, progress: _animationController),
     );
   }
 
@@ -220,13 +218,11 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
             pinHeader: isOpen,
             pinHeaderPrefferedSize: 4,
             title: AnimatedSwitcher(
-              duration: Duration(milliseconds: 1500),
+              duration: const Duration(milliseconds: 1500),
               child: isOpen
-                  ? Text(
-                      key ?? "_",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    )
-                  : Divider(),
+                  ? Text(key ?? "_",
+                      style: Theme.of(context).textTheme.titleSmall)
+                  : const Divider(),
             ),
             buttonKey: buttonKey,
             child: Column(
@@ -244,7 +240,7 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
                       icon: p.getMainIconData());
 
               return AnimatedSwitcher(
-                duration: Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 600),
                 child: (isOpen)
                     ? DrawerListTileDesktopOpen(item: item)
                     : DrawerListTileDesktopClosed(

@@ -266,48 +266,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  String getMainLabelSubtitleTextOnly(BuildContext context) {
-    // TODO: implement getMainLabelSubtitleTextOnly
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputHintMap(BuildContext context) {
-    // TODO: implement getTextInputHintMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, IconData> getTextInputIconMap() {
-    // TODO: implement getTextInputIconMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() {
-    // TODO: implement getTextInputIsAutoCompleteMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
-    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Map<String, String> getTextInputLabelMap(BuildContext context) {
-    // TODO: implement getTextInputLabelMap
-    throw UnimplementedError();
-  }
-
-  @override
   Map<String, int> getTextInputMaxLengthMap() {
     // TODO: implement getTextInputMaxLengthMap
     throw UnimplementedError();
@@ -360,8 +318,18 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
+  String getMainHeaderLabelTextOnly(BuildContext context) =>
+      AppLocalizations.of(context)!.customer;
+
+  @override
+  String getMainHeaderTextOnly(BuildContext context) => "not found";
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
+  @override
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
+    // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
     throw UnimplementedError();
   }
 }

@@ -25,7 +25,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget_draggable.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -83,73 +83,30 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane);
   Widget? getDraggableHeaderWidget(bool firstPane);
   Widget? getDraggableHeaderExpandedWidget(bool firstPane);
+  Widget? getDraggableBottomExpandedWidget(bool firstPane);
 
   Widget _getDraggableHomePane(widget, bool firstPane,
       {TabControllerHelper? tab}) {
-    if (firstPane) {
-      return SliverCustomScrollView(
-        slivers: getFirstPane(),
-        title: "TEST",
-        expandHeaderWidget: getDraggableHeaderWidget(true),
-        expandBottomWidget: Text("Footer"),
-        headerWidget: Text("Header"),
-        // actions: [Icon(Icons.ac_unit_outlined)]
-      );
-    }
-    bool isLargeScreen = isLargeScreenFromScreenSize(_currentScreenSize);
-    return DraggableHome(
-      valueNotifierQrState: getValueNotifierQrState(firstPane),
-      showLeadingAsHamborg: !isLargeScreen,
-      floatingActionButton: firstPane
-          ? getFirstPaneFloatingActionButton(tab: tab)
-          : getSecondPaneFloatingActionButton(tab: tab),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      stretchTriggerOffset: .7,
-      leading: Icon(Icons.date_range),
-      alwaysShowLeadingAndAction: false,
-      showAppbarOnTopOnly: false,
-      headerWidget: getDraggableHeaderWidget(firstPane),
-      expandedBody: getDraggableHeaderExpandedWidget(firstPane),
-
-      title: firstPane
-          ? getFirstPaneAppbarTitle(tab: tab)
-          : getSecondPaneAppbarTitle(tab: tab),
-      headerExpandedHeight: isLargeScreen
-          ? 0.1
-          : isSelectedMode
-              ? 0.25
-              : 0.4,
-      stretchMaxHeight: isSelectedMode ? .3 : .5,
-      fullyStretchable: isLargeScreen
-          ? false
-          : isSelectedMode
-              ? false
-              : true,
-      // headerBottomBar: getHeaderWidget(),
-      pinnedToolbar: isSelectedMode,
-      centerTitle: false,
-      actions: !isSelectedMode
-          ? getAppbarActions(firstPane: firstPane, tab: tab)
-          : [IconButton(onPressed: () {}, icon: const Icon(Icons.delete))],
-
-      // tabBuilder: (p0) {
-      //   return getF
-      // },
-      // actions: getSharedAppBarActions,
-      slivers: widget as List<Widget>,
-    );
+    return SliverCustomScrollViewDraggable(
+        slivers: getPane(firstPane: firstPane),
+        title: getAppbarTitle(firstPane: firstPane),
+        expandHeaderWidget: getDraggableHeaderExpandedWidget(firstPane),
+        expandBottomWidget: getDraggableBottomExpandedWidget(firstPane),
+        headerWidget: getDraggableHeaderWidget(firstPane),
+        actions: getAppbarActions(firstPane: firstPane));
   }
 
   @override
-  Widget getTowPanes({TabControllerHelper? tab}) {
+  Widget getTowPanes({TabControllerHelper? tab, TabControllerHelper? sec}) {
     _setupPaneTabBar(true, tab: tab);
     _setupPaneTabBar(false, tab: tab);
-    _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+    _firstWidget =
+        beforeGetPaneWidget(firstPane: true, tab: tab, secoundTab: tab);
 
     _firstWidget = _getDraggableHomePane(_firstWidget, true, tab: tab);
 
-    _secondWidget = beforeGetSecondPaneWidget(tab: tab);
+    _secondWidget =
+        beforeGetPaneWidget(firstPane: false, tab: tab, secoundTab: tab);
     _secondWidget = _getDraggableHomePane(_secondWidget, false, tab: tab);
 
     return getPaneExt();
@@ -197,14 +154,9 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
 
   ValueNotifierPane getTickerPane();
 
-  getTickerFirstPane(
+  getTickerPaneWidget(
     bool isDesktop, {
-    TabControllerHelper? tab,
-    TabControllerHelper? secoundTab,
-  });
-
-  getTickerSecondPane(
-    bool isDesktop, {
+    required bool firstPane,
     TabControllerHelper? tab,
     TabControllerHelper? secoundTab,
   });
@@ -248,24 +200,13 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
   }
 
   @override
-  getDesktopFirstPane({TabControllerHelper? tab}) {
-    return getWidgetFromBase(true, true, tab: tab);
-  }
-
-  @override
-  getDesktopSecondPane(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(false, true, tab: tab);
-  }
-
-  @override
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(false, false, tab: tab);
-  }
-
-  @override
-  getFirstPane({TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(true, false, tab: tab);
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return getWidgetFromBase(
+        firstPane, isLargeScreenFromCurrentScreenSize(context),
+        tab: tab ?? secoundTab);
   }
 
   getWidgetFromBase(bool firstPane, bool isDesktop,
@@ -323,17 +264,12 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
 
   Widget getWidget(bool firstPane, bool isDesktop,
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return firstPane
-        ? getTickerFirstPane(
-            isDesktop,
-            tab: tab,
-            secoundTab: secoundTab,
-          )
-        : getTickerSecondPane(
-            isDesktop,
-            tab: tab,
-            secoundTab: secoundTab,
-          );
+    return getTickerPaneWidget(
+      isDesktop,
+      firstPane: firstPane,
+      tab: tab,
+      secoundTab: secoundTab,
+    );
   }
 }
 mixin BasePageWithThirdPaneMixinStatic<T extends StatefulWidget,
@@ -564,40 +500,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       ValueNotifier<int>(0);
   final ValueNotifier<int> secoundPaneBottomSheetValueNotifier =
       ValueNotifier<int>(0);
-
-  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getDesktopFirstPane({TabControllerHelper? tab});
-
-  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getDesktopSecondPane(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab});
-
-  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getFirstPane({TabControllerHelper? tab});
-
-  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getSecoundPane({TabControllerHelper? tab, TabControllerHelper? secoundTab});
-
-  Widget? getBaseFloatingActionButton();
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab});
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab});
-  Widget? getBaseAppbar();
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab});
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab});
-
-  List<Widget>? getBaseBottomSheet();
-
-  //TODO
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab});
-  //TODO
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab});
-
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab});
-  bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab});
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab});
-
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab});
-
   late CurrentScreenSize _currentScreenSize;
   TabController? _tabBaseController;
   TabController? _tabControllerFirstPane;
@@ -609,6 +511,29 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   List<TabControllerHelper>? _tabListFirstPane;
   List<TabControllerHelper>? _tabListSecondPane;
   ValueNotifier<int> onTabSelectedSecondPane = ValueNotifier<int>(0);
+
+  ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab});
+
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab});
+
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab});
+
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab});
+  bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab});
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab});
+
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab});
+
   get getWidth => this._width;
 
   get getHeight => this._height;
@@ -675,10 +600,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return false;
   }
 
-  bool _hasBaseToolbar() {
-    return getBaseAppbar() != null;
-  }
-
   bool reverseCustomPane() {
     return false;
   }
@@ -720,47 +641,38 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
   }
 
-  List<Widget>? getAppbarActions({bool? firstPane, TabControllerHelper? tab}) {
+  List<Widget>? getAppbarActions(
+      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
     return null;
   }
 
   ///generate all toolbars for the base and first pane and second pane
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
-  generateToolbar({Widget? customAppBar, bool? firstPane}) {
-    Widget? baseAppbar = getBaseAppbar();
+  generateToolbar(
+      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
     bool isBaseAppBar = firstPane == null;
-    if (baseAppbar == null && customAppBar == null) {
-      return null;
-    }
+    List<Widget>? actions =
+        getAppbarActions(firstPane: firstPane, sec: sec, tab: tab);
+    Widget? title =
+        getAppbarTitle(firstPane: firstPane, secoundTab: sec, tab: tab);
+    bool isEmpty = !isBaseAppBar && actions?.isEmpty == true;
+    if (actions == null && title == null) return null;
     return AppBar(
         surfaceTintColor: Colors.transparent,
-        toolbarHeight: 100,
-
-        // automaticallyImplyLeading: false,
+        elevation: 10,
+        // toolbarHeight: 100,
         forceMaterialTransparency: false,
-        actions: !isBaseAppBar
-            ? getAppbarActions(firstPane: firstPane)
-            : [
-                ...getAppbarActions(firstPane: null) ?? [],
-                ...getSharedAppBarActions
-              ],
-        // primary: true,
+        actions: isEmpty
+            ? [Container()]
+            : !isBaseAppBar
+                ? actions
+                : [...actions ?? [], ...getSharedAppBarActions],
         automaticallyImplyLeading: false,
-        backgroundColor: customAppBar != null
-            ? ElevationOverlay.overlayColor(context, 2)
-            : null,
-        // toolbarHeight: customAppBar == null
-        //     ? baseAppbar == null
-        //         ? null
-        //         : 100
-        //     : null,
-
-        // backgroundColor: ElevationOverlay.overlayColor(context, 2),
-        // leading: ,
+        backgroundColor: ElevationOverlay.overlayColor(context, 1),
         title: Padding(
           padding: const EdgeInsets.all(kDefaultPadding),
-          child: customAppBar ?? baseAppbar,
+          child: title,
         ),
         leading: hideHamburger(getCurrentScreenSize())
             ? null
@@ -910,11 +822,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   }
 
   ///setting appbar but when is sliver then we added to CustomScrollView Sliver
-  Widget? _setSubAppBar(widget, bool firstPane, {TabControllerHelper? tab}) {
-    Widget? appBarBody = firstPane
-        ? getFirstPaneAppbarTitle(tab: tab)
-        : getSecondPaneAppbarTitle(tab: tab);
-
+  Widget? _setSubAppBar(widget, bool firstPane,
+      {TabControllerHelper? tab, TabControllerHelper? sec}) {
+    Widget? appBarBody =
+        getAppbarTitle(firstPane: firstPane, tab: tab, secoundTab: sec);
     Widget? body = _getScrollContent(widget, appBarBody, firstPane, tab: tab);
 
     Widget scaffold = Scaffold(
@@ -924,13 +835,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      floatingActionButton: firstPane
-          ? getFirstPaneFloatingActionButton(tab: tab)
-          : getSecondPaneFloatingActionButton(tab: tab),
-      appBar: isPanesIsSliver(firstPane, tab: tab) || appBarBody == null
+      floatingActionButton: getFloatingActionButton(
+          firstPane: firstPane, tab: tab, secoundTab: sec),
+      appBar: isPanesIsSliver(firstPane, tab: tab)
           ? null
-          : generateToolbar(firstPane: firstPane, customAppBar: appBarBody),
-      bottomSheet: generatePaneBottomSheet(firstPane, tab: tab),
+          : generateToolbar(firstPane: firstPane, tab: tab, sec: sec),
       body: Padding(
         padding: setPaneBodyPadding(firstPane, tab: tab)
             ? const EdgeInsets.all(kDefaultPadding / 2)
@@ -1141,22 +1050,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return currentWidget;
   }
 
-  beforeGetDesktopFirstPaneWidget({TabControllerHelper? tab}) {
-    return getDesktopFirstPane(tab: tab);
-  }
-
-  beforeGetDesktopSecoundPaneWidget(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getDesktopSecondPane(tab: tab, secoundTab: secoundTab);
-  }
-
-  beforeGetFirstPaneWidget({TabControllerHelper? tab}) {
-    return getFirstPane(tab: tab);
-  }
-
-  beforeGetSecondPaneWidget(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return getSecoundPane(tab: tab, secoundTab: secoundTab);
+  beforeGetPaneWidget(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return getPane(firstPane: firstPane, tab: tab, secoundTab: secoundTab);
   }
 
   void _setupPaneTabBar(bool firstPane, {TabControllerHelper? tab}) {
@@ -1180,9 +1078,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
   }
 
-  Widget getTowPanes({TabControllerHelper? tab}) {
+  Widget getTowPanes({TabControllerHelper? tab, TabControllerHelper? sec}) {
     if (isMobile(context, maxWidth: getWidth)) {
-      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+      _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
       return _setSubAppBar(_firstWidget, true)!;
     }
     _setupPaneTabBar(false, tab: tab);
@@ -1192,11 +1090,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         _firstWidget = TabBarView(
             controller: _tabControllerFirstPane,
             children: _getTabBarList(firstPane: true)!
-                .map((e) => beforeGetDesktopFirstPaneWidget(tab: e))
+                .map((e) => beforeGetPaneWidget(firstPane: true, tab: e))
                 .toList()
                 .cast());
       } else {
-        _firstWidget = beforeGetDesktopFirstPaneWidget(tab: tab);
+        _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
       }
 
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
@@ -1205,18 +1103,20 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         _secondWidget = TabBarView(
             controller: _tabControllerSecondPane,
             children: _getTabBarList(firstPane: false)!
-                .map((e) => beforeGetDesktopSecoundPaneWidget(tab: e))
+                .map(
+                    (e) => beforeGetPaneWidget(firstPane: false, secoundTab: e))
                 .toList()
                 .cast());
       } else {
-        _secondWidget = beforeGetDesktopSecoundPaneWidget(tab: tab);
+        _secondWidget = beforeGetPaneWidget(firstPane: false, secoundTab: tab);
       }
-      _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+      _secondWidget = _setSubAppBar(_secondWidget, false, sec: tab);
     } else {
-      _firstWidget = beforeGetFirstPaneWidget(tab: tab);
+      _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
       if (buildSecoundPane) {
-        _secondWidget = beforeGetSecondPaneWidget(tab: tab);
+        _secondWidget =
+            beforeGetPaneWidget(firstPane: false, tab: tab, secoundTab: tab);
         _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
       }
     }
@@ -1239,24 +1139,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           ? 1 - getCustomPaneProportion()
           : getCustomPaneProportion(),
     );
-  }
-
-  // Widget getBody() {
-  //   return _hasTabBarList()
-  //       ? TabBarView(
-  //           controller: _tabController,
-  //           children: _getTabBarList()!.map((e) => _getBody(tab: e)).toList())
-  //       : _getBody();
-  // }
-
-  Widget? generateBaseBottomSheet() {
-    //TODO
-    return null;
-  }
-
-  Widget? generatePaneBottomSheet(bool firstPane, {TabControllerHelper? tab}) {
-    //TODO
-    return null;
   }
 
   SizedBox? getEndDrawer() {
@@ -1293,26 +1175,17 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return getCustomDrawer() != null || buildDrawer;
   }
 
-  // bool _canWrapDrawerOnLargeScreen() {
-  //   return wrapDrawerOnLargeScreen() &&
-  //       isLargeScreenFromCurrentScreenSize(context);
-  // }
-
-  // bool wrapDrawerOnLargeScreen() {
-  //   return false;
-  // }
-
   Widget _getMainWidget() {
     bool isLarge = isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
     bool isCustomDrawer = getCustomDrawer() != null;
     Widget body = Scaffold(
-        bottomNavigationBar: buildDrawer ? null : generateBaseBottomSheet(),
         endDrawer: getEndDrawer(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: getBaseFloatingActionButton(),
+        floatingActionButton: getFloatingActionButton(
+            firstPane: null, tab: null, secoundTab: null),
         key: _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: canBuildDrawer() ? _drawerWidget : null,
         appBar: generateToolbar(),
@@ -1327,7 +1200,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
             : _getBody());
 
     if ((isLarge && buildDrawer) || (isLarge && isCustomDrawer)) {
-      body = Row(children: [_drawerWidget!, Expanded(child: body)]);
+      body = Row(children: [
+        _drawerWidget!,
+        // const VerticalDivider(
+        //   width: 1,
+        //   thickness: 1,
+        // ),
+        Expanded(child: body)
+      ]);
     }
     return body;
   }
@@ -1359,16 +1239,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         child: currentWidget,
       );
     }
-    // if (isCustomDrawer) {
-    //   currentWidget = Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
-    //     builder: (__, v, ___) {
-    //       lastDrawerItemSelected = v;
-    //       return currentWidget;
-    //     },
-    //     selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
-    //   );
-    // }
-
     return currentWidget;
   }
 
@@ -1586,66 +1456,32 @@ abstract class BasePageWithApi<T extends StatefulWidget>
   }
 
   @override
-  beforeGetFirstPaneWidget({TabControllerHelper? tab}) {
-    if (_isLoading) return getLoadingWidget(true, tab: tab);
-
-    var shouldWaitWidget;
-    if (isExtrasIsDashboard()) {
-      shouldWaitWidget = getExtrasCastDashboard(tab: tab)
-          .getDashboardShouldWaitBeforeRequest(context,
-              globalKey: globalKeyBasePageWithApi, firstPane: true, tab: tab);
-    }
-    return shouldWaitWidget ?? super.beforeGetFirstPaneWidget(tab: tab);
-  }
-
-  @override
-  beforeGetDesktopFirstPaneWidget({TabControllerHelper? tab}) {
+  beforeGetPaneWidget({
+    required bool firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (_isLoading) return getLoadingWidget(true, tab: tab);
     var shouldWaitWidget;
     if (isExtrasIsDashboard()) {
       shouldWaitWidget = getExtrasCastDashboard(tab: tab)
           .getDashboardShouldWaitBeforeRequest(context,
-              globalKey: globalKeyBasePageWithApi, firstPane: true, tab: tab);
-    }
-    return shouldWaitWidget ?? super.beforeGetDesktopFirstPaneWidget(tab: tab);
-  }
-
-  @override
-  beforeGetDesktopSecoundPaneWidget(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    if (_isLoading) return getLoadingWidget(false, tab: tab);
-    var shouldWaitWidget;
-    if (isExtrasIsDashboard()) {
-      shouldWaitWidget = getExtrasCastDashboard(tab: tab)
-          .getDashboardShouldWaitBeforeRequest(context,
-              globalKey: globalKeyBasePageWithApi, firstPane: false, tab: tab);
+              globalKey: globalKeyBasePageWithApi,
+              firstPane: firstPane,
+              tab: tab);
     }
     return shouldWaitWidget ??
-        super.beforeGetDesktopSecoundPaneWidget(
-            tab: tab, secoundTab: secoundTab);
+        super.beforeGetPaneWidget(
+            firstPane: firstPane, tab: tab, secoundTab: secoundTab);
   }
 
   @override
-  beforeGetSecondPaneWidget(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    if (_isLoading) return getLoadingWidget(false, tab: tab);
-    var shouldWaitWidget;
-    if (isExtrasIsDashboard()) {
-      shouldWaitWidget = getExtrasCastDashboard(tab: tab)
-          .getDashboardShouldWaitBeforeRequest(context,
-              globalKey: globalKeyBasePageWithApi, firstPane: false, tab: tab);
-    }
-    return shouldWaitWidget ??
-        super.beforeGetSecondPaneWidget(tab: tab, secoundTab: secoundTab);
-  }
-
-  @override
-  Widget getTowPanes({TabControllerHelper? tab}) {
+  Widget getTowPanes({TabControllerHelper? tab, TabControllerHelper? sec}) {
     debugPrint("getBody _getTowPanes TabController ${tab?.extras.runtimeType}");
     dynamic ex = getExtras(tab: tab);
     _isLoading = !getBodyWithoutApi(tab: tab);
     if (ex != null && !_isLoading) {
-      return super.getTowPanes(tab: tab);
+      return super.getTowPanes(tab: tab, sec: sec);
     }
     return FutureBuilder<dynamic>(
       future: getCallApiFunctionIfNull(context, tab: tab),
@@ -1692,45 +1528,6 @@ abstract class BasePageWithApi<T extends StatefulWidget>
         title: AppLocalizations.of(context)!.cantConnect,
         subtitle: AppLocalizations.of(context)!.cantConnectRetry);
   }
-
-  // @override
-  // Widget _getBody({TabControllerHelper? tab}) {
-  //   debugPrint(
-  //       "getBody getDesktopFirstPane TabController ${tab?.extras.runtimeType}");
-  //   dynamic ex = getExtras(tab: tab);
-  //   _isLoading = !getBodyWithoutApi(tab: tab);
-  //   if (ex != null && !_isLoading) {
-  //     return super._getBody(tab: tab);
-  //   }
-
-  //   return FutureBuilder<dynamic>(
-  //     future: getCallApiFunctionIfNull(context, tab: tab),
-  //     builder: (context, snapshot) {
-  //       // debugPrint("BasePageApi snapshot: $snapshot");
-  //       if (snapshot.hasError) {
-  //         return getErrorWidget();
-  //       } else if (snapshot.connectionState == ConnectionState.done) {
-  //         _isLoading = false;
-  //         if (snapshot.data != null) {
-  //           setExtras(ex: snapshot.data, tabH: tab);
-  //           if (ex is ViewAbstract) {
-  //             // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //             //   context.read<ListMultiKeyProvider>().edit(ex);
-  //             // });
-  //           }
-  //           return super._getBody(tab: tab);
-  //         } else {
-  //           return getErrorWidget();
-  //         }
-  //       } else if (snapshot.connectionState == ConnectionState.waiting) {
-  //         _isLoading = true;
-  //         return super._getBody(tab: tab);
-  //       } else {
-  //         return const Text("TOTODO");
-  //       }
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

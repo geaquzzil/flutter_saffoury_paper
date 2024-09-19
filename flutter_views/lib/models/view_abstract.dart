@@ -39,9 +39,14 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   Widget? getHomeHeaderWidget(BuildContext context) {
     return null;
   }
-  Icon ? getFBIcon(){
-    IconData? ic= getFBEditIconData();
-    return ic==null? null:Icon(ic,);
+
+  Icon? getFBIcon() {
+    IconData? ic = getFBEditIconData();
+    return ic == null
+        ? null
+        : Icon(
+            ic,
+          );
   }
 
   IconData? getFBEditIconData() {
@@ -232,11 +237,15 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {}
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+    return null;
+  }
 
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {}
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+    return null;
+  }
 
   getScrollKey(ServerActions action) {
     return "$action-${getTableNameApi()}-$iD";

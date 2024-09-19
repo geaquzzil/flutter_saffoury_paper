@@ -43,28 +43,14 @@ class CutWorkerPage extends StatefulWidget {
 class _CutWorkerPageState extends BasePageState<CutWorkerPage>
     with BasePageWithTicker {
   String? _searchQuery;
-  @override
-  List<TabControllerHelper>? initTabBarList(
-      {bool? firstPane, TabControllerHelper? tab}) {
-    // if (firstPane == true) {
-    //   return [
-    //     TabControllerHelper(
-    //        'Tab 1',
-    //       icon: const Icon(Icons.home),
-    //       extras: ,
-    //     ),
-    //     TabControllerHelper(
-    //       title: 'Tab 2',
-    //       icon: const Icon(Icons.add),
-    //       selectedIcon: const Icon(Icons.add_circle),
-    //     ),
-    //   ];
-    // }
-    return null;
-  }
 
   @override
-  Widget? getBaseAppbar() => ListTile(
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane == null) {
+      return ListTile(
         leading: TodayTextTicker(
           requireTime: true,
         ),
@@ -80,29 +66,9 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
           ),
         ),
       );
-
-  @override
-  List<Widget>? getBaseBottomSheet() => null;
-
-  @override
-  Widget? getBaseFloatingActionButton() => null;
-
-  @override
-  Widget? getFirstPaneAppbarTitle({TabControllerHelper? tab}) => null;
-  @override
-  List<Widget>? getFirstPaneBottomSheet({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getFirstPaneFloatingActionButton({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneAppbarTitle({TabControllerHelper? tab}) => null;
-
-  @override
-  List<Widget>? getSecondPaneBottomSheet({TabControllerHelper? tab}) => null;
-
-  @override
-  Widget? getSecondPaneFloatingActionButton({TabControllerHelper? tab}) => null;
+    }
+    return null;
+  }
 
   @override
   bool reverseCustomPane() {
@@ -125,38 +91,37 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   }
 
   @override
-  getTickerFirstPane(bool isDesktop,
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        getPrimaryText(
-            "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress "),
-        Expanded(
-          child: SliverApiMixinViewAbstractWidget(
-            isGridView: false,
-            scrollDirection: Axis.vertical,
-            enableSelection: false,
-            // hasCustomSeperater: Divider(),
-            isSliver: false,
-            searchString: _searchQuery,
-            hasCustomCardBuilder: (index, item) {
-              CutRequest cutRequest = item as CutRequest;
-              return CutRequestListCard(
-                item: cutRequest,
-              );
-            },
-            toListObject: CutRequestWorker()
-              ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
+  getTickerPaneWidget(bool isDesktop,
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    if (firstPane) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          getPrimaryText(
+              "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress "),
+          Expanded(
+            child: SliverApiMixinViewAbstractWidget(
+              isGridView: false,
+              scrollDirection: Axis.vertical,
+              enableSelection: false,
+              // hasCustomSeperater: Divider(),
+              isSliver: false,
+              searchString: _searchQuery,
+              hasCustomCardBuilder: (index, item) {
+                CutRequest cutRequest = item as CutRequest;
+                return CutRequestListCard(
+                  item: cutRequest,
+                );
+              },
+              toListObject: CutRequestWorker()
+                ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
+            ),
           ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  getTickerSecondPane(bool isDesktop,
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+        ],
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -210,12 +175,10 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  Future getCallApiFunctionIfNull(BuildContext context,
-      {TabControllerHelper? tab}) {
-    // TODO: implement getCallApiFunctionIfNull
-    throw UnimplementedError();
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
   }
-
-  @override
-  ServerActions getServerActions() => ServerActions.list;
 }

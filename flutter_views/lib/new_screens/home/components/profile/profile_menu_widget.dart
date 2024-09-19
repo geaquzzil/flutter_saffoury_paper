@@ -68,13 +68,12 @@ class ProfileMenuWidget extends StatelessWidget {
   }
 
   void Function()? _onTap(ActionOnToolbarItem item) {
-    {
-      if (selectedValue != null) {
-        selectedValue!.value = item;
-      } else {
-        item.onPress?.call();
-      }
+    if (selectedValue != null) {
+      selectedValue!.value = item;
+    } else {
+      item.onPress?.call();
     }
+    return null;
   }
 
   OnHoverWidget getDesktopChild(
