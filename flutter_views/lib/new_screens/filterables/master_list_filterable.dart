@@ -15,30 +15,33 @@ class MasterFilterableController extends StatelessWidget {
     return ExpansionTile(
       title: viewAbstract.getMainLabelText(context),
       leading: Selector<FilterableProvider, int>(
-        selector: (p0, p1) => p1.getCount(field:viewAbstract.getForeignKeyName()),
-        builder: (context, value, child) => Badge(
-          smallSize: 4,
-          isLabelVisible: value > 0,
-          label: Text(
-            "$value",
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-          // badgeColor: Theme.of(context).colorScheme.primary,
-          // badgeContent: Text(
-          //   "$value",
-          //   style: Theme.of(context)
-          //       .textTheme
-          //       .titleSmall!
-          //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          // ),
-          // toAnimate: true,
-          // showBadge: value > 0,
-          // animationType: BadgeAnimationType.slide,
-          child: viewAbstract.getIcon(),
-        ),
+        selector: (p0, p1) =>
+            p1.getCount(field: viewAbstract.getForeignKeyName()),
+        builder: (context, value, child) {
+          return Badge(
+            smallSize: 4,
+            isLabelVisible: value > 0,
+            label: Text(
+              "$value",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+            // badgeColor: Theme.of(context).colorScheme.primary,
+            // badgeContent: Text(
+            //   "$value",
+            //   style: Theme.of(context)
+            //       .textTheme
+            //       .titleSmall!
+            //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            // ),
+            // toAnimate: true,
+            // showBadge: value > 0,
+            // animationType: BadgeAnimationType.slide,
+            child: viewAbstract.getIcon(),
+          );
+        },
       ),
       children: [
         Wrap(

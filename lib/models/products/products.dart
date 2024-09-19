@@ -158,6 +158,9 @@ class Product extends ViewAbstract<Product>
   @JsonKey(includeFromJson: true, includeToJson: false)
   double? qrQuantity;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  bool requireObjcetsResquest = true;
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
@@ -217,6 +220,11 @@ class Product extends ViewAbstract<Product>
       return "${AppLocalizations.of(context)!.instock}: ${getQuantityStringFormat(context: context)}";
     }
     return AppLocalizations.of(context)!.outOfStock;
+  }
+
+  @override
+  bool isRequiredObjects() {
+    return requireObjcetsResquest;
   }
 
   @override
@@ -934,19 +942,19 @@ class Product extends ViewAbstract<Product>
       {ServerActions? action}) {
     if (action == ServerActions.list) return [];
     return [
-      if(isEditing())
-      TabControllerHelper(AppLocalizations.of(context)!.movments,
-          draggableHeaderWidget: Text(
-            AppLocalizations.of(context)!.movments,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
-          isResponsiveIsSliver: true,
-          // extras: ,
-          widget: ListHorizontalCustomViewApiAutoRestWidget(
-              autoRest: ProductMovments.init(iD))),
+      if (isEditing())
+        TabControllerHelper(AppLocalizations.of(context)!.movments,
+            draggableHeaderWidget: Text(
+              AppLocalizations.of(context)!.movments,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
+            isResponsiveIsSliver: true,
+            // extras: ,
+            widget: ListHorizontalCustomViewApiAutoRestWidget(
+                autoRest: ProductMovments.init(iD))),
       // TabControllerHelper(
       //   AppLocalizations.of(context)!.movments,
       //   widget: ListHorizontalCustomViewApiAutoRestWidget(

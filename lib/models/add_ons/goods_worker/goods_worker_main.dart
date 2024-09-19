@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/filter_icon.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_view_controller/new_screens/controllers/controller_dropb
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
@@ -78,7 +80,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   int testId = 0;
   double testQuantity = 100;
   int testBarCode = 1000;
-  final key = GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invontery');
+  final keyInventory =
+      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invontery');
   final keyToImportFrom =
       GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'import');
   final keyToExportTo =
@@ -98,10 +101,14 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   List<Product>? allProducts;
 
+  late Product inventoryProduct;
   @override
   void initState() {
     super.initState();
     _notifier.addListener(whenFileReaderImportList);
+    inventoryProduct = Product();
+    inventoryProduct.requireObjcetsResquest = false;
+    inventoryProduct.setCustomMap({"requireInventory": "yes"});
   }
 
   @override
@@ -133,6 +140,16 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           _notifier.value == null ? null : List.empty(growable: true)
             ?..addAll(_notifier.value!.cast());
     });
+  }
+
+  @override
+  Widget? generatePaneBottomSheet(bool firstPane, {TabControllerHelper? tab}) {
+    if (isMobile(context)) {
+      return BaseFilterableMainWidget(
+        viewAbstract: Product(),
+      );
+    }
+    return super.generatePaneBottomSheet(firstPane, tab: tab);
   }
 
   @override
@@ -207,22 +224,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   List<Widget>? getAppbarActions({bool? firstPane, TabControllerHelper? tab}) {
     if (firstPane == null) {
-      return [
-        const SizedBox(
-          width: kDefaultPadding / 2,
-        ),
-        DropdownFromViewAbstractApi(
-          byIcon: true,
-          initialValue: _selectedWarehouse,
-          onChanged: (selectedViewAbstract) {
-            Warehouse? selected = selectedViewAbstract;
-            setState(() {
-              _selectedWarehouse = selected;
-            });
-          },
-          viewAbstract: Warehouse(),
-        )
-      ];
+      return [FilterIcon(viewAbstract: Product())];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
     return null;
@@ -272,7 +274,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     return [
       if (!isPurchuses())
         SliverApiMixinViewAbstractCardApiWidget(
-          key: key,
+          key: keyInventory,
           isSliver: true,
           toListObject: Product(),
           hasCustomCardBuilder: (idx, item) {
@@ -352,35 +354,48 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           ),
       ];
     }
+
     return [
       FutureBuilder(
-        
-        future: Product().listCall(count: 10000000, page: 0),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return SliverApiMixinStaticList(
-              listKey: "emportFrom",
-              list: snapshot.data!,
-              isSliver: true,
-              enableSelection: false,
-              key: keyToImportFrom,
-              hasCustomCardBuilder: (i, v) =>
-                  getListItemForPurchasesCheck(i, v, context),
-            );
-          }
-          return const SliverFillRemaining(
-            child: Center(
-              child: Column(
-                children: [
-                  Text(
-                      "We are doing a backgorund works analysis your products"),
-                  Text("Please wait for the task to finish")
-                ],
+          future: inventoryProduct.listCall(count: 10000000, page: 0),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                allProducts = snapshot.data!;
+                return Text("allProducts ${allProducts?.length}");
+                return SliverApiMixinStaticList(
+                  listKey: "emportFrom",
+                  list: snapshot.data!,
+                  isSliver: true,
+                  enableSelection: false,
+                  hasCustomCardBuilder: (i, v) =>
+                      getListItemForPurchasesCheck(i, v, context),
+                );
+              } else {
+                return const SliverFillRemaining(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Text("Error no data available"),
+                        Text("Error no data available")
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+            return const SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                        "We are doing a backgorund works analysis your products"),
+                    Text("Please wait for the task to finish")
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      )
+            );
+          })
     ];
   }
 
@@ -582,7 +597,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
             p.iD = 2405 + testId;
             testId = testId + 1;
             testQuantity = testQuantity + 100;
-            key.currentState?.addAnimatedListItem(p);
+            keyInventory.currentState?.addAnimatedListItem(p);
           } else {
             Product? t =
                 keyToImportFrom.currentState?.searchForItem<Product>((t) {

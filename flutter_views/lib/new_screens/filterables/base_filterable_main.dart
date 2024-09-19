@@ -197,8 +197,10 @@ class BaseFilterableMainWidget extends StatelessWidget {
 
   Widget getBadge(BuildContext context) {
     return Selector<FilterableProvider, int>(
-      builder: (context, value, child) => Badge(
-        isLabelVisible: value > 0,
+      builder: (context, value, child) {
+        return Badge(
+        isLabelVisible: false,
+        largeSize: 40,
         label: Text(
           value.toString(),
           style: Theme.of(context)
@@ -218,7 +220,8 @@ class BaseFilterableMainWidget extends StatelessWidget {
         // showBadge: value > 0,
         // animationType: BadgeAnimationType.slide,
         child: const Icon(Icons.filter_alt),
-      ),
+      );
+      },
       selector: (p0, p1) => p1.getList.length,
     );
   }
