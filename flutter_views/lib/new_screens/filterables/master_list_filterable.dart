@@ -18,6 +18,12 @@ class MasterFilterableController extends StatelessWidget {
         selector: (p0, p1) =>
             p1.getCount(field: viewAbstract.getForeignKeyName()),
         builder: (context, value, child) {
+          return Badge.count(
+            count: value,
+            isLabelVisible: value > 0,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: viewAbstract.getIcon(),
+          );
           return Badge(
             smallSize: 4,
             isLabelVisible: value > 0,
@@ -28,17 +34,6 @@ class MasterFilterableController extends StatelessWidget {
                   .titleSmall!
                   .copyWith(color: Theme.of(context).colorScheme.onPrimary),
             ),
-            // badgeColor: Theme.of(context).colorScheme.primary,
-            // badgeContent: Text(
-            //   "$value",
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .titleSmall!
-            //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-            // ),
-            // toAnimate: true,
-            // showBadge: value > 0,
-            // animationType: BadgeAnimationType.slide,
             child: viewAbstract.getIcon(),
           );
         },
@@ -56,10 +51,6 @@ class MasterFilterableController extends StatelessWidget {
   Widget getListItem(BuildContext context, ViewAbstract item) {
     return Selector<FilterableProvider, bool>(
       builder: (context, value, child) => ChoiceChip(
-          // surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-          // backgroundColor: Theme.of(context).colorScheme.background,
-          // shadowColor: Theme.of(context).colorScheme.shadow,
-          // selectedColor: Theme.of(context).colorScheme.primary,
           label: item.getMainHeaderText(context),
           avatar: item.getCardLeadingCircleAvatar(context),
           selected: value,

@@ -19,6 +19,8 @@ class BaseFilterableMainWidget extends StatelessWidget {
   bool setHeaderTitle;
   ViewAbstract? viewAbstract;
   Function()? onDoneClickedPopResults;
+
+  
   BaseFilterableMainWidget(
       {super.key,
       this.useDraggableWidget = false,

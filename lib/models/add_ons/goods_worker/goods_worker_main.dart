@@ -356,46 +356,49 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     }
 
     return [
-      FutureBuilder(
-          future: inventoryProduct.listCall(count: 10000000, page: 0),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                allProducts = snapshot.data!;
-                return Text("allProducts ${allProducts?.length}");
-                return SliverApiMixinStaticList(
-                  listKey: "emportFrom",
-                  list: snapshot.data!,
-                  isSliver: true,
-                  enableSelection: false,
-                  hasCustomCardBuilder: (i, v) =>
-                      getListItemForPurchasesCheck(i, v, context),
-                );
-              } else {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Text("Error no data available"),
-                        Text("Error no data available")
-                      ],
-                    ),
-                  ),
-                );
-              }
-            }
-            return const SliverFillRemaining(
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                        "We are doing a backgorund works analysis your products"),
-                    Text("Please wait for the task to finish")
-                  ],
-                ),
-              ),
-            );
-          })
+      SliverToBoxAdapter(
+        child: Text(""),
+      )
+      // FutureBuilder(
+      //     future: inventoryProduct.listCall(count: 1, page: 0),
+      //     builder: (context, snapshot) {
+      //       if (snapshot.connectionState == ConnectionState.done) {
+      //         if (snapshot.hasData) {
+      //           allProducts = snapshot.data!;
+      //           return Text("allProducts ${allProducts?.length}");
+      //           return SliverApiMixinStaticList(
+      //             listKey: "emportFrom",
+      //             list: snapshot.data!,
+      //             isSliver: true,
+      //             enableSelection: false,
+      //             hasCustomCardBuilder: (i, v) =>
+      //                 getListItemForPurchasesCheck(i, v, context),
+      //           );
+      //         } else {
+      //           return const SliverFillRemaining(
+      //             child: Center(
+      //               child: Column(
+      //                 children: [
+      //                   Text("Error no data available"),
+      //                   Text("Error no data available")
+      //                 ],
+      //               ),
+      //             ),
+      //           );
+      //         }
+      //       }
+      //       return const SliverFillRemaining(
+      //         child: Center(
+      //           child: Column(
+      //             children: [
+      //               Text(
+      //                   "We are doing a backgorund works analysis your products"),
+      //               Text("Please wait for the task to finish")
+      //             ],
+      //           ),
+      //         ),
+      //       );
+      //     })
     ];
   }
 

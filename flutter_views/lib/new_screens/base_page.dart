@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -85,6 +86,16 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
 
   Widget _getDraggableHomePane(widget, bool firstPane,
       {TabControllerHelper? tab}) {
+    if (firstPane) {
+      return SliverCustomScrollView(
+        slivers: getFirstPane(),
+        title: "TEST",
+        expandHeaderWidget: getDraggableHeaderWidget(true),
+        expandBottomWidget: Text("Footer"),
+        headerWidget: Text("Header"),
+        // actions: [Icon(Icons.ac_unit_outlined)]
+      );
+    }
     bool isLargeScreen = isLargeScreenFromScreenSize(_currentScreenSize);
     return DraggableHome(
       valueNotifierQrState: getValueNotifierQrState(firstPane),
@@ -709,8 +720,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     }
   }
 
-  List<Widget>? getAppbarActions(
-      {bool? firstPane, TabControllerHelper? tab}) {
+  List<Widget>? getAppbarActions({bool? firstPane, TabControllerHelper? tab}) {
     return null;
   }
 
