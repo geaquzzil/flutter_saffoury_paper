@@ -42,8 +42,6 @@ class _SliverCustomScrollViewDraggableState
   late String bucketOffsetKey;
   final BehaviorSubject<bool> isFullyExpanded =
       BehaviorSubject<bool>.seeded(false);
-  final BehaviorSubject<bool> isFullyCollapsed =
-      BehaviorSubject<bool>.seeded(false);
 
   late double appBarHeight;
   late double topPadding;
@@ -91,21 +89,11 @@ class _SliverCustomScrollViewDraggableState
       physics: widget.physics,
       scrollController: _scrollController,
       scrollKey: widget.scrollKey,
+      builderAppbar: (fullyCol, fullyExp) {
+        return getSliverAppbar(context, fullyCol, appBarHeight, fullyExp,
+            fullyExpandedHeight, expandedHeight);
+      },
       slivers: [
-        StreamBuilder<List<bool>>(
-          stream: CombineLatestStream.list<bool>([
-            isFullyCollapsed.stream,
-            isFullyExpanded.stream,
-          ]),
-          builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-            final List<bool> streams = (snapshot.data ?? [false, false]);
-            final bool fullyCollapsed = streams[0];
-            final bool fullyExpanded = streams[1];
-
-            return getSliverAppbar(context, fullyCollapsed, appBarHeight,
-                fullyExpanded, fullyExpandedHeight, expandedHeight);
-          },
-        ),
         SliverToBoxAdapter(
           child: expandedUpArrow(),
         ),

@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -17,19 +18,56 @@ import 'package:provider/provider.dart';
 class BaseFilterableMainWidget extends StatelessWidget {
   bool useDraggableWidget;
   bool setHeaderTitle;
-  ViewAbstract? viewAbstract;
+  ViewAbstract viewAbstract;
   Function()? onDoneClickedPopResults;
 
-  
   BaseFilterableMainWidget(
       {super.key,
       this.useDraggableWidget = false,
       this.setHeaderTitle = true,
-      this.viewAbstract,
+      required this.viewAbstract,
       this.onDoneClickedPopResults});
 
   @override
   Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SliverCustomScrollView(
+          scrollKey: 'bottomSheet',
+          builderAppbar: (fullyCol, fullyExp) {
+            return SliverAppBar(
+                leading: CloseButton(),
+                actions: [
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    child: fullyExp ? Container() : Text("2"),
+                  )
+                ],
+                title: ListTile(
+                  title: Text("this is atitle"),
+                ));
+          },
+          slivers: [
+            const SliverToBoxAdapter(
+              child: ListTile(
+                title: Text("test"),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+    return ListView.builder(
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text("sds $index"),
+        );
+      },
+    );
+
     if (viewAbstract != null) {
       return FutureBuilder(
           future: context
@@ -201,28 +239,28 @@ class BaseFilterableMainWidget extends StatelessWidget {
     return Selector<FilterableProvider, int>(
       builder: (context, value, child) {
         return Badge(
-        isLabelVisible: false,
-        largeSize: 40,
-        label: Text(
-          value.toString(),
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-        ),
-        // badgeColor: Theme.of(context).colorScheme.primary,
-        // badgeContent: Text(
-        //   value.toString(),
-        //   style: Theme.of(context)
-        //       .textTheme
-        //       .titleSmall!
-        //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-        // ),
-        // toAnimate: true,
-        // showBadge: value > 0,
-        // animationType: BadgeAnimationType.slide,
-        child: const Icon(Icons.filter_alt),
-      );
+          isLabelVisible: false,
+          largeSize: 40,
+          label: Text(
+            value.toString(),
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+          // badgeColor: Theme.of(context).colorScheme.primary,
+          // badgeContent: Text(
+          //   value.toString(),
+          //   style: Theme.of(context)
+          //       .textTheme
+          //       .titleSmall!
+          //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          // ),
+          // toAnimate: true,
+          // showBadge: value > 0,
+          // animationType: BadgeAnimationType.slide,
+          child: const Icon(Icons.filter_alt),
+        );
       },
       selector: (p0, p1) => p1.getList.length,
     );

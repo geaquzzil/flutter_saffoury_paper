@@ -21,15 +21,34 @@ class FilterIcon extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.filter_alt_rounded),
       onPressed: () async {
+        showBottomSheetExt(
+          isScrollable: true,
+          withHeightFactor: false,
+          context: context,
+          builder: (p0) {
+            return BaseFilterableMainWidget(
+              useDraggableWidget: useDraggableWidget,
+              onDoneClickedPopResults: onDoneClickedPopResults,
+              setHeaderTitle: setHeaderTitle,
+              viewAbstract: viewAbstract,
+            );
+          },
+        );
+        return;
+
         if (SizeConfig.isSmallTabletFromScreenSize(context)) {
           showBottomSheetExt(
+            isScrollable: false,
             context: context,
             builder: (p0) {
-              return BaseFilterableMainWidget(
-                useDraggableWidget: useDraggableWidget,
-                onDoneClickedPopResults: onDoneClickedPopResults,
-                setHeaderTitle: setHeaderTitle,
-                viewAbstract: viewAbstract,
+              return FractionallySizedBox(
+                heightFactor: .9,
+                child: BaseFilterableMainWidget(
+                  useDraggableWidget: useDraggableWidget,
+                  onDoneClickedPopResults: onDoneClickedPopResults,
+                  setHeaderTitle: setHeaderTitle,
+                  viewAbstract: viewAbstract,
+                ),
               );
             },
           );

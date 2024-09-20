@@ -225,11 +225,21 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   List<Widget>? getAppbarActions(
       {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
+    if (isMobile(context) && firstPane == true) {
+      return [
+        FilterIcon(
+          useDraggableWidget: true,
+          viewAbstract: Product(),
+          onDoneClickedPopResults: () {},
+        )
+      ];
+    }
     if (firstPane == null) {
       return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
           ? null
           : [
               FilterIcon(
+                useDraggableWidget: true,
                 viewAbstract: Product(),
                 onDoneClickedPopResults: () {},
               )

@@ -11,10 +11,14 @@ class SliverCustomScrollView extends StatefulWidget {
   ScrollController? scrollController;
   String? scrollKey;
   ScrollPhysics? physics;
+
+  //this works with one object only todo cant retrun full List
+  Widget Function(bool fullyCol, bool fullyExp)? builderAppbar;
   SliverCustomScrollView(
       {super.key,
       required this.slivers,
       this.scrollController,
+      this.builderAppbar,
       this.physics,
       this.scrollKey});
 
@@ -89,7 +93,24 @@ class _SliverCustomScrollViewDraggableState
           physics: widget.physics ??
               const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
-          slivers: widget.slivers),
+          slivers: [
+            if (widget.builderAppbar != null)
+              StreamBuilder<List<bool>>(
+                stream: CombineLatestStream.list<bool>([
+                  isFullyCollapsed.stream,
+                  isFullyExpanded.stream,
+                ]),
+                builder:
+                    (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                  final List<bool> streams = (snapshot.data ?? [false, false]);
+                  final bool fullyCollapsed = streams[0];
+                  final bool fullyExpanded = streams[1];
+                  return widget.builderAppbar!
+                      .call(fullyCollapsed, fullyExpanded);
+                },
+              ),
+            ...widget.slivers
+          ]),
     );
   }
 
