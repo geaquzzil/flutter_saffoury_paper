@@ -262,10 +262,6 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
 
   Widget buildCollapseIcon(BuildContext context, bool isOpen) {
     const double size = 52;
-    IconData icon = !isOpen ? Icons.arrow_forward_ios : Icons.arrow_back_ios;
-    final alignemt = isOpen ? Alignment.centerRight : Alignment.center;
-    final margin = isOpen ? const EdgeInsets.only(right: 16) : null;
-    final width = isOpen ? size : double.infinity;
     if (!isOpen) {
       return buildColapsedIcon(
         context,

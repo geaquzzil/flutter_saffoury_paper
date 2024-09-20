@@ -228,7 +228,12 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     if (firstPane == null) {
       return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
           ? null
-          : [FilterIcon(viewAbstract: Product())];
+          : [
+              FilterIcon(
+                viewAbstract: Product(),
+                onDoneClickedPopResults: () {},
+              )
+            ];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
     return null;
