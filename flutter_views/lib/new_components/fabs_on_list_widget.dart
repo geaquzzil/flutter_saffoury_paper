@@ -227,7 +227,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
   }
 
   Widget? getFilterWidget(BuildContext context) {
-    if (SizeConfig.isMobile(context)) {
+    if (isMobile(context)) {
       return IconButton(
         icon: const Icon(Icons.filter_alt_rounded),
         onPressed: () async {
@@ -235,7 +235,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
             context: context,
             builder: (p0) {
               return BaseFilterableMainWidget(
-                useDraggableWidget: false,
+        
               );
             },
           );

@@ -657,12 +657,6 @@ class RouteGenerator {
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
           }
         });
-      case "/search":
-        return MaterialPageRoute(builder: (context) {
-          return BaseFilterableMainWidget(
-            useDraggableWidget: true,
-          );
-        });
       case "/import":
         return MaterialPageRoute(builder: (context) {
           if (args == null) {

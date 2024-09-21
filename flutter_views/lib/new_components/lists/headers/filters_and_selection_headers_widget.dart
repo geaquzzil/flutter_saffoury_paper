@@ -200,7 +200,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
             context: context,
             builder: (p0) {
               return BaseFilterableMainWidget(
-                useDraggableWidget: false,
+            
               );
             },
           );

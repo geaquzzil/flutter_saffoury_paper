@@ -5,52 +5,28 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 
 class FilterIcon extends StatelessWidget {
-  bool useDraggableWidget;
-  bool setHeaderTitle;
-  ViewAbstract? viewAbstract;
-  Function()? onDoneClickedPopResults;
+  ViewAbstract viewAbstract;
+  Function(dynamic value)? onDoneClickedPopResults;
   FilterIcon(
-      {super.key,
-      this.useDraggableWidget = false,
-      this.setHeaderTitle = true,
-      this.viewAbstract,
-      this.onDoneClickedPopResults});
+      {super.key, required this.viewAbstract, this.onDoneClickedPopResults});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.filter_alt_rounded),
       onPressed: () async {
-        showBottomSheetExt(
-          isScrollable: true,
-          withHeightFactor: false,
-          context: context,
-          builder: (p0) {
-            return BaseFilterableMainWidget(
-              useDraggableWidget: useDraggableWidget,
-              onDoneClickedPopResults: onDoneClickedPopResults,
-              setHeaderTitle: setHeaderTitle,
-              viewAbstract: viewAbstract,
-            );
-          },
-        );
-        return;
-
-        if (SizeConfig.isSmallTabletFromScreenSize(context)) {
-          showBottomSheetExt(
-            isScrollable: false,
+        if (isMobile(context)) {
+          await showBottomSheetExt(
+            isScrollable: true,
+            withHeightFactor: false,
             context: context,
             builder: (p0) {
-              return FractionallySizedBox(
-                heightFactor: .9,
-                child: BaseFilterableMainWidget(
-                  useDraggableWidget: useDraggableWidget,
-                  onDoneClickedPopResults: onDoneClickedPopResults,
-                  setHeaderTitle: setHeaderTitle,
-                  viewAbstract: viewAbstract,
-                ),
+              return BaseFilterableMainWidget(
+                viewAbstract: viewAbstract,
               );
             },
+          ).then(
+            (value) {},
           );
         } else {
           await showFullScreenDialogExt<ViewAbstract?>(
@@ -64,12 +40,9 @@ class FilterIcon extends StatelessWidget {
                     child: IntrinsicWidth(
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width *
-                              (SizeConfig.isTablet(context) ? 0.5 : 0.25),
+                              (isTablet(context) ? 0.5 : 0.25),
                           height: MediaQuery.of(context).size.height * .8,
                           child: BaseFilterableMainWidget(
-                            useDraggableWidget: useDraggableWidget,
-                            onDoneClickedPopResults: onDoneClickedPopResults,
-                            setHeaderTitle: setHeaderTitle,
                             viewAbstract: viewAbstract,
                           )),
                     ),

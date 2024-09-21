@@ -112,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
             context: context,
             builder: (p0) {
               return BaseFilterableMainWidget(
-                useDraggableWidget: false,
+                viewAbstract: viewAbstract,
               );
             },
           );
@@ -375,8 +375,7 @@ class _SearchPageState extends State<SearchPage> {
         itemBuilder: (context) => SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
               child: BaseFilterableMainWidget(
-                setHeaderTitle: false,
-                useDraggableWidget: false,
+                viewAbstract: viewAbstract,
               ),
             ));
   }

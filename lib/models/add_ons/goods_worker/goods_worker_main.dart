@@ -228,9 +228,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     if (isMobile(context) && firstPane == true) {
       return [
         FilterIcon(
-          useDraggableWidget: true,
           viewAbstract: Product(),
-          onDoneClickedPopResults: () {},
+          onDoneClickedPopResults: (v) {},
         )
       ];
     }
@@ -239,9 +238,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           ? null
           : [
               FilterIcon(
-                useDraggableWidget: true,
                 viewAbstract: Product(),
-                onDoneClickedPopResults: () {},
+                onDoneClickedPopResults: (v) {},
               )
             ];
     }

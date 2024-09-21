@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class LottieColorFilter extends StatelessWidget {
   final String? lottiUrl;
@@ -46,6 +47,7 @@ class EmptyWidget extends StatelessWidget {
   final String lottieAssetPath = "assets/lotties/";
 
   final Function()? onSubtitleClicked;
+
   const EmptyWidget(
       {super.key,
       this.onSubtitleClicked,
@@ -54,6 +56,38 @@ class EmptyWidget extends StatelessWidget {
       this.expand = true,
       this.subtitle,
       this.lottieJson});
+
+  EmptyWidget.loading({
+    super.key,
+    this.lottiUrl = "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json",
+    this.expand = true,
+  })  : onSubtitleClicked = null,
+        lottieJson = null,
+        title = null,
+        subtitle = null;
+
+  EmptyWidget.error(
+    BuildContext context, {
+    super.key,
+    this.onSubtitleClicked,
+    this.expand=true,
+  })  : subtitle = AppLocalizations.of(context)!.cantConnectConnectToRetry,
+        lottiUrl =
+            "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+            
+            lottieJson=null,
+        title = AppLocalizations.of(context)!.cantConnect;
+
+  EmptyWidget.empty(
+    BuildContext context, {
+    super.key,
+    this.lottiUrl =
+        "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+    this.expand = true,
+    this.onSubtitleClicked,
+    this.lottieJson,
+  })  : subtitle = AppLocalizations.of(context)!.noItems,
+        title = AppLocalizations.of(context)!.no_content;
 
   @override
   Widget build(BuildContext context) {

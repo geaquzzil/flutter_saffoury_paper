@@ -391,9 +391,9 @@ class ListWebApiPage extends BaseWebPageSlivers {
                 child: SizedBox(
                   width: 500,
                   child: BaseFilterableMainWidget(
-                    onDoneClickedPopResults: () {},
+                    onDoneClickedPopResults: (v) {},
                     viewAbstract: viewAbstract,
-                    useDraggableWidget: false,
+            
                   ),
                 ),
               ),

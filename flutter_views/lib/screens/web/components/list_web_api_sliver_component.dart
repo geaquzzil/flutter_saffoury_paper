@@ -350,7 +350,6 @@ class ListWebApiSliverComponent extends StatelessWidget {
                   child: BaseFilterableMainWidget(
                     onDoneClickedPopResults: () {},
                     viewAbstract: viewAbstract,
-                    useDraggableWidget: false,
                   ),
                 ),
               ),

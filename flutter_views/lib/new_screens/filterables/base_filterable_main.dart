@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
@@ -16,17 +17,11 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class BaseFilterableMainWidget extends StatelessWidget {
-  bool useDraggableWidget;
-  bool setHeaderTitle;
   ViewAbstract viewAbstract;
-  Function()? onDoneClickedPopResults;
+  Function(dynamic v)? onDoneClickedPopResults;
 
   BaseFilterableMainWidget(
-      {super.key,
-      this.useDraggableWidget = false,
-      this.setHeaderTitle = true,
-      required this.viewAbstract,
-      this.onDoneClickedPopResults});
+      {super.key, required this.viewAbstract, this.onDoneClickedPopResults});
 
   @override
   Widget build(BuildContext context) {
@@ -34,122 +29,83 @@ class BaseFilterableMainWidget extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SliverCustomScrollView(
-          scrollKey: 'bottomSheet',
-          builderAppbar: (fullyCol, fullyExp) {
-            return SliverAppBar(
-                leading: CloseButton(),
-                actions: [
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 500),
-                    child: fullyExp ? Container() : Text("2"),
-                  )
-                ],
-                title: ListTile(
-                  title: Text("this is atitle"),
-                ));
-          },
-          slivers: [
-            const SliverToBoxAdapter(
-              child: ListTile(
-                title: Text("test"),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-    return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text("sds $index"),
-        );
-      },
-    );
-
-    if (viewAbstract != null) {
-      return FutureBuilder(
-          future: context
-              .read<FilterableListApiProvider<FilterableData>>()
-              .getServerData(viewAbstract!),
-          builder: ((context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return getListFilterableControlers(context, viewAbstract!);
-            }
-            return Lottie.network(
-                "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json");
-          }));
-    }
-    return Selector<DrawerMenuControllerProvider, ViewAbstract>(
-      builder: (context, value, child) {
-        return FutureBuilder(
+        body: FutureBuilder(
             future: context
                 .read<FilterableListApiProvider<FilterableData>>()
-                .getServerData(value),
+                .getServerData(viewAbstract),
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return getListFilterableControlers(context, value);
+                if (snapshot.hasData) {
+                  return getSliverCustomScrollViewBody(context);
+                } else {
+                  EmptyWidget.error(
+                    context,
+                  );
+                }
               }
-              return Lottie.network(
-                  "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json");
-            }));
-      },
-      selector: (p0, p1) => p1.getObjectCastViewAbstract,
+              return const EmptyWidget(
+                expand: true,
+                lottiUrl:
+                    "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json",
+              );
+            })),
+      ),
     );
   }
 
-  Widget getListFilterableControlers(
-      BuildContext context, ViewAbstract drawerViewAbstract) {
-    Map<ViewAbstract, List<dynamic>> list = context
-        .read<FilterableListApiProvider<FilterableData>>()
-        .getRequiredFiltter;
-    if (useDraggableWidget) {
-      return getDraggableWidget(context, list, drawerViewAbstract);
-    }
-    if (onDoneClickedPopResults != null) {
-      return Scaffold(
-        body: _getBody(context, drawerViewAbstract, list),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context)
-                .pop(context.read<FilterableProvider>().getList);
-          },
-          isExtended: true,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          icon: const Icon(Icons.arrow_forward),
-          label: Text(AppLocalizations.of(context)!.subment),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      );
-    }
-    return _getBody(context, drawerViewAbstract, list);
-  }
-
-  CustomScrollView _getBody(
-      BuildContext context,
-      ViewAbstract<dynamic> drawerViewAbstract,
-      Map<ViewAbstract<dynamic>, List<dynamic>> list) {
-    return CustomScrollView(
+  SliverCustomScrollView getSliverCustomScrollViewBody(BuildContext context) {
+    return SliverCustomScrollView(
+      scrollKey: 'bottomSheet',
+      builderAppbar: (fullyCol, fullyExp) {
+        return SliverAppBar.large(
+            leading: CloseButton(),
+            actions: [
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                child: fullyExp ? Container() : Text("2"),
+              )
+            ],
+            title: getTitle(context));
+      },
       slivers: [
-        if (setHeaderTitle)
-          SliverToBoxAdapter(
-            child: getHeader(context, drawerViewAbstract),
-          ),
-        if (SizeConfig.isMobile(context) && (setHeaderTitle))
-          const SliverToBoxAdapter(child: Divider()),
-        ...getControllersSliver(list, drawerViewAbstract, context),
-
-        // SliverFillRemaining(child: getButtons(context),)
+        const SliverToBoxAdapter(child: Divider()),
+        ...getControllersSliver(context)
       ],
     );
   }
 
-  List<Widget> getControllersSliver(
-      Map<ViewAbstract<dynamic>, List<dynamic>> list,
-      ViewAbstract<dynamic> drawerViewAbstract,
-      BuildContext context,
+  // Widget getListFilterableControlers(
+  //     BuildContext context, ViewAbstract drawerViewAbstract) {
+  //   Map<ViewAbstract, List<dynamic>> list = context
+  //       .read<FilterableListApiProvider<FilterableData>>()
+  //       .getRequiredFiltter;
+  //   if (useDraggableWidget) {
+  //     return getDraggableWidget(context, list, drawerViewAbstract);
+  //   }
+  //   if (onDoneClickedPopResults != null) {
+  //     return Scaffold(
+  //       body: _getBody(context, drawerViewAbstract, list),
+  //       floatingActionButton: FloatingActionButton.extended(
+  //         onPressed: () {
+  //           Navigator.of(context)
+  //               .pop(context.read<FilterableProvider>().getList);
+  //         },
+  //         isExtended: true,
+  //         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  //         icon: const Icon(Icons.arrow_forward),
+  //         label: Text(AppLocalizations.of(context)!.subment),
+  //       ),
+  //       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+  //     );
+  //   }
+  //   return _getBody(context, drawerViewAbstract, list);
+  // }
+
+  List<Widget> getControllersSliver(BuildContext context,
       {ScrollController? scrollController}) {
+    Map<ViewAbstract, List<dynamic>> list = context
+        .read<FilterableListApiProvider<FilterableData>>()
+        .getRequiredFiltter;
     return [
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
@@ -169,11 +125,8 @@ class BaseFilterableMainWidget extends StatelessWidget {
             delegate: SliverChildBuilderDelegate((context, index) {
           return CustomFilterableController(
               customFilterableField:
-                  drawerViewAbstract.getCustomFilterableFields(context)[index]);
-        },
-                childCount: drawerViewAbstract
-                    .getCustomFilterableFields(context)
-                    .length)),
+                  viewAbstract.getCustomFilterableFields(context)[index]);
+        }, childCount: viewAbstract.getCustomFilterableFields(context).length)),
       ),
     ];
   }
@@ -266,39 +219,39 @@ class BaseFilterableMainWidget extends StatelessWidget {
     );
   }
 
-  Widget getHeader(
-      BuildContext context, ViewAbstract<dynamic> drawerViewAbstract) {
-    if (SizeConfig.isMobile(context)) {
-      return ListTile(
-        leading: getBadge(context),
-        title: getTitle(context, drawerViewAbstract),
-      );
-    }
-    return Card(
-      child: ListTile(
-        leading: kIsWeb ? const BackButton() : getBadge(context),
-        trailing: kIsWeb ? getBadge(context) : null,
-        title: getTitle(context, drawerViewAbstract),
-      ),
-    );
-  }
+  // Widget getHeader(
+  //     BuildContext context, ViewAbstract<dynamic> drawerViewAbstract) {
+  //   if (SizeConfig.isMobile(context)) {
+  //     return ListTile(
+  //       leading: getBadge(context),
+  //       title: getTitle(context, drawerViewAbstract),
+  //     );
+  //   }
+  //   return Card(
+  //     child: ListTile(
+  //       leading: kIsWeb ? const BackButton() : getBadge(context),
+  //       trailing: kIsWeb ? getBadge(context) : null,
+  //       title: getTitle(context, drawerViewAbstract),
+  //     ),
+  //   );
+  // }
 
-  Text getTitle(BuildContext context, ViewAbstract v) => Text(
-      "${AppLocalizations.of(context)!.filter} ${v.getMainHeaderLabelTextOnly(context).toLowerCase()}");
+  Text getTitle(BuildContext context) => Text(
+      "${AppLocalizations.of(context)!.filter} ${viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase()}");
 
-  Widget getDraggableWidget(BuildContext context,
-      Map<ViewAbstract, List<dynamic>> list, ViewAbstract drawerViewAbstract) {
-    return Scaffold(
-      appBar: AppBar(title: getHeader(context, drawerViewAbstract)),
-      body: SizedBox.expand(
-        child: DraggableScrollableSheet(
-          initialChildSize: .3,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return getControllers(list, drawerViewAbstract, context,
-                scrollController: scrollController);
-          },
-        ),
-      ),
-    );
-  }
+  // Widget getDraggableWidget(BuildContext context,
+  //     Map<ViewAbstract, List<dynamic>> list, ViewAbstract drawerViewAbstract) {
+  //   return Scaffold(
+  //     appBar: AppBar(title: getHeader(context, drawerViewAbstract)),
+  //     body: SizedBox.expand(
+  //       child: DraggableScrollableSheet(
+  //         initialChildSize: .3,
+  //         builder: (BuildContext context, ScrollController scrollController) {
+  //           return getControllers(list, drawerViewAbstract, context,
+  //               scrollController: scrollController);
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 }
