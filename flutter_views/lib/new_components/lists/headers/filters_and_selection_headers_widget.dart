@@ -12,13 +12,12 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/filter_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
-import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
-import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
@@ -32,7 +31,6 @@ import 'package:flutter_view_controller/providers/actions/list_multi_key_provide
 
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -41,13 +39,12 @@ import 'package:provider/provider.dart';
 import '../../../providers/drawer/drawer_controler.dart';
 
 class FiltersAndSelectionListHeader extends StatelessWidget {
-  late DrawerMenuControllerProvider drawerViewAbstractObsever;
-  ViewAbstract? viewAbstract;
+  ViewAbstract viewAbstract;
   String customKey;
   ListMultiKeyProvider listProvider;
   FiltersAndSelectionListHeader(
       {super.key,
-      this.viewAbstract,
+      required this.viewAbstract,
       required this.listProvider,
       required this.customKey});
 
@@ -57,10 +54,6 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    drawerViewAbstractObsever =
-        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
-    viewAbstract ??= drawerViewAbstractObsever.getObjectCastViewAbstract;
-    debugPrint("drawerViewAbstractObsever ${viewAbstract?.getTableNameApi()}");
     Widget? printButton = kIsWeb
         ? null
         : (context
@@ -98,21 +91,21 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 DropdownStringListControllerListenerByIcon(
                     showSelectedValueBeside: false,
                     icon: Icons.sort_by_alpha,
-                    initialValue: viewAbstract?.getSortByFieldName() == null
+                    initialValue: viewAbstract.getSortByFieldName() == null
                         ? null
                         : DropdownStringListItem(
-                            icon: viewAbstract!.getFieldIconData(
-                                viewAbstract!.getSortByFieldName()!),
-                            label: viewAbstract!.getFieldLabel(
-                                context, viewAbstract!.getSortByFieldName()!),
-                            value: viewAbstract?.getSortByFieldName()),
+                            icon: viewAbstract.getFieldIconData(
+                                viewAbstract.getSortByFieldName()!),
+                            label: viewAbstract.getFieldLabel(
+                                context, viewAbstract.getSortByFieldName()!),
+                            value: viewAbstract.getSortByFieldName()),
                     hint: AppLocalizations.of(context)!.sortBy,
-                    list: viewAbstract?.getMainFieldsIconsAndValues(context) ??
-                        viewAbstract!.getMainFieldsIconsAndValues(context),
+                    list: viewAbstract.getMainFieldsIconsAndValues(context) ??
+                        viewAbstract.getMainFieldsIconsAndValues(context),
                     onSelected: (obj) {
                       debugPrint("is selected ${obj.runtimeType}");
                       if (obj == null) {
-                        removeFilterableSelected(context, viewAbstract!);
+                        removeFilterableSelected(context, viewAbstract);
                       } else {
                         listProvider.clear(findCustomKey());
                         addFilterableSortField(
@@ -123,7 +116,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                     }),
                 DropdownEnumControllerListenerByIcon<SortByType>(
                   viewAbstractEnum: SortByType.ASC,
-                  initialValue: viewAbstract?.getSortByType(),
+                  initialValue: viewAbstract.getSortByType(),
                   showSelectedValueBeside: false,
                   onSelected: (object) {
                     // listProvider.clear(findCustomKey());
@@ -177,7 +170,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), viewAbstract!);
+    listProvider.refresh(findCustomKey(), viewAbstract);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -188,69 +181,14 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
 
   Widget getAddBotton(BuildContext context) => IconButton(
       onPressed: () {
-        viewAbstract!.onDrawerLeadingItemClicked(context);
+        viewAbstract.onDrawerLeadingItemClicked(context);
       },
       icon: const Icon(Icons.add));
   Widget? getFilterWidget(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.filter_alt_rounded),
-      onPressed: () async {
-        if (SizeConfig.isSmallTabletFromScreenSize(context)) {
-          showBottomSheetExt(
-            context: context,
-            builder: (p0) {
-              return BaseFilterableMainWidget(
-            
-              );
-            },
-          );
-        } else {
-          await showFullScreenDialogExt<ViewAbstract?>(
-              anchorPoint: const Offset(1000, 1000),
-              context: context,
-              builder: (p0) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Container(
-                    // color: Theme.of(context).colorScheme.secondaryContainer,
-                    child: IntrinsicWidth(
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              (SizeConfig.isTablet(context) ? 0.5 : 0.25),
-                          height: MediaQuery.of(context).size.height * .8,
-                          child: BaseFilterableMainWidget()),
-                    ),
-                  ),
-                );
-              }).then((value) {
-            {
-              if (value != null) {}
-              debugPrint("getEditDialog result $value");
-            }
-          });
-        }
-        // Navigator.pushNamed(context, "/search");
-      },
+    return FilterIcon(
+      viewAbstract: viewAbstract,
+      onDoneClickedPopResults: (value) {},
     );
-
-    if (SizeConfig.isMobile(context)) {
-      return IconButton(
-        icon: const Icon(Icons.filter_alt_rounded),
-        onPressed: () async {
-          showBottomSheetExt(
-            context: context,
-            builder: (p0) {
-              return BaseFilterableMainWidget(
-                useDraggableWidget: false,
-              );
-            },
-          );
-          // Navigator.pushNamed(context, "/search");
-        },
-      );
-    }
-
-    return FilterablePopupIconWidget();
   }
 
   Widget? getExportButton(BuildContext context) {
@@ -283,15 +221,15 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                     actionTitle: "ُEXPORT",
                     action: ServerActions.custom_widget,
                     customWidget: FileExporterPage(
-                      viewAbstract: viewAbstract!,
+                      viewAbstract: viewAbstract,
                       list: listProvider.getList(findCustomKey()).cast(),
                     )));
           } else {
             context.goNamed(exportRouteName, pathParameters: {
-              "tableName": viewAbstract!.getTableNameApi()!,
+              "tableName": viewAbstract.getTableNameApi()!,
               "type": FileExporterPageType.LIST.toString(),
             }, queryParameters: {
-              "data": viewAbstract!.toJsonViewAbstractList(
+              "data": viewAbstract.toJsonViewAbstractList(
                   listProvider.getList(findCustomKey()).cast())
             });
           }
@@ -344,7 +282,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
           "${AppLocalizations.of(context)!.printAllAs(AppLocalizations.of(context)!.list)} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
 
       String? printSelfListSetting =
-          "${AppLocalizations.of(context)!.printAllAs(viewAbstract!.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
+          "${AppLocalizations.of(context)!.printAllAs(viewAbstract.getMainHeaderLabelTextOnly(context))} ${AppLocalizations.of(context)!.action_settings.toLowerCase()}";
       return DropdownStringListControllerListenerByIcon(
         icon: Icons.print,
         showSelectedValueBeside: false,
@@ -356,7 +294,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                   .printAllAs(AppLocalizations.of(context)!.list)),
           DropdownStringListItem(
               icon: Icons.print,
-              label: AppLocalizations.of(context)!.printAllAs(viewAbstract!
+              label: AppLocalizations.of(context)!.printAllAs(viewAbstract
                   .getMainHeaderLabelTextOnly(context)
                   .toLowerCase())),
           DropdownStringListItem(
@@ -390,7 +328,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                                       .cast<PrintableSelfListInterface>()));
                         },
                         viewAbstract:
-                            (viewAbstract! as PrintableSelfListInterface)
+                            (viewAbstract as PrintableSelfListInterface)
                                 .getModifiablePrintableSelfPdfSetting(context),
                       )),
                 ));

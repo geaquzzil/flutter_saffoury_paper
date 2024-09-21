@@ -348,7 +348,7 @@ class ListWebApiSliverComponent extends StatelessWidget {
                 child: SizedBox(
                   width: 500,
                   child: BaseFilterableMainWidget(
-                    onDoneClickedPopResults: () {},
+                    onDoneClickedPopResults: (v) {},
                     viewAbstract: viewAbstract,
                   ),
                 ),
@@ -393,12 +393,10 @@ class ListWebApiSliverComponent extends StatelessWidget {
               SliverChildBuilderDelegateOptions(),
           minItemWidth: 200,
           children: [
-            ...list
-                .map((e) => WebGridViewItem(
-                      item: e,
-                      setDescriptionAtBottom: true,
-                    ))
-                ,
+            ...list.map((e) => WebGridViewItem(
+                  item: e,
+                  setDescriptionAtBottom: true,
+                )),
             if (isLoading)
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),

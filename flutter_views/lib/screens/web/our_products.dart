@@ -58,6 +58,7 @@ class ProductWebPage extends BaseWebPageSlivers {
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     return null;
   }
+
   @override
   void init(BuildContext context) {
     super.init(context);
@@ -293,9 +294,8 @@ class ProductWebPage extends BaseWebPageSlivers {
                 child: SizedBox(
                   width: 500,
                   child: BaseFilterableMainWidget(
-                    onDoneClickedPopResults: () {},
+                    onDoneClickedPopResults: (v) {},
                     viewAbstract: viewAbstract,
-                    useDraggableWidget: false,
                   ),
                 ),
               ),

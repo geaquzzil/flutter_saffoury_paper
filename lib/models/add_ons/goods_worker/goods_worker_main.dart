@@ -20,12 +20,14 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
+import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -102,6 +104,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   List<Product>? allProducts;
 
   late Product inventoryProduct;
+
+  Map<String, FilterableProviderHelper>? filterData;
   @override
   void initState() {
     super.initState();
@@ -222,26 +226,38 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     return null;
   }
 
+  Widget getFilterIcon() {
+    return FilterIcon(
+      viewAbstract: Product(),
+      initialData: filterData,
+      onDoneClickedPopResults: (v) {
+        if (v is bool) {
+          if (v) {
+            setState(() {
+              filterData = null;
+            });
+          }
+          return;
+        }
+        setState(() {
+          filterData = v;
+        });
+
+        debugPrint("onDoneClickedPopResults $filterData");
+      },
+    );
+  }
+
   @override
   List<Widget>? getAppbarActions(
       {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
     if (isMobile(context) && firstPane == true) {
-      return [
-        FilterIcon(
-          viewAbstract: Product(),
-          onDoneClickedPopResults: (v) {},
-        )
-      ];
+      return [getFilterIcon()];
     }
     if (firstPane == null) {
       return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
           ? null
-          : [
-              FilterIcon(
-                viewAbstract: Product(),
-                onDoneClickedPopResults: (v) {},
-              )
-            ];
+          : [getFilterIcon()];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
     return null;
@@ -293,6 +309,17 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     debugPrint(
         "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
     return [
+      if (filterData != null)
+        SliverToBoxAdapter(
+          child: HorizontalFilterableSelectedList(
+            onFilterableChanged: (onFilter) {
+              setState(() {
+                filterData = onFilter;
+              });
+            },
+            onFilterable: filterData,
+          ),
+        ),
       if (!isPurchuses())
         SliverApiMixinViewAbstractCardApiWidget(
           key: keyInventory,

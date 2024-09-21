@@ -16,93 +16,156 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-class BaseFilterableMainWidget extends StatelessWidget {
+class BaseFilterableMainWidget extends StatefulWidget {
   ViewAbstract viewAbstract;
+  Map<String, FilterableProviderHelper>? initialData;
   Function(dynamic v)? onDoneClickedPopResults;
 
   BaseFilterableMainWidget(
-      {super.key, required this.viewAbstract, this.onDoneClickedPopResults});
+      {super.key,
+      required this.viewAbstract,
+      this.onDoneClickedPopResults,
+      this.initialData});
+
+  @override
+  State<BaseFilterableMainWidget> createState() =>
+      _BaseFilterableMainWidgetState();
+}
+
+class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
+  FilterableData? _lastData;
+  Map<String, FilterableProviderHelper>? _initialData;
+  late ViewAbstract _viewAbstract;
+
+  @override
+  void initState() {
+    _viewAbstract = widget.viewAbstract;
+    _initialData = widget.initialData;
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        context
+            .read<FilterableProvider>()
+            .init(context, _viewAbstract, savedList: _initialData);
+      },
+    );
+
+    debugPrint("initState initialData = $_initialData");
+
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant BaseFilterableMainWidget oldWidget) {
+    if (_viewAbstract != widget.viewAbstract) {
+      debugPrint("didUpdateWidget base filter widget");
+      _lastData = null;
+    }
+    if (_initialData != widget.initialData) {
+      _initialData = widget.initialData;
+      debugPrint("didUpdateWidget base filter _initialData $_initialData");
+      context
+          .read<FilterableProvider>()
+          .init(context, _viewAbstract, savedList: _initialData);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  Widget buildFooter() {
+    return Padding(
+      padding: const EdgeInsets.all(kDefaultPadding),
+      child: Flex(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        direction: Axis.horizontal,
+        children: [
+          TextButton(
+            child: Text(
+              AppLocalizations.of(context)!.clearFiltters.toUpperCase(),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+          const Spacer(),
+          TextButton(
+            child: Text(
+              AppLocalizations.of(context)!.dismiss.toUpperCase(),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+          const SizedBox(
+            width: kDefaultPadding,
+          ),
+          FilledButton.tonal(
+            child: Text(
+              AppLocalizations.of(context)!.subment.toUpperCase(),
+            ),
+            onPressed: () {
+              onDonePop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       child: Scaffold(
+        bottomNavigationBar: buildFooter(),
+        floatingActionButton: FloatingActionButton.extended(
+          label: const Icon(Icons.arrow_forward_ios_rounded),
+          onPressed: () {
+            onDonePop();
+          },
+        ),
         backgroundColor: Colors.transparent,
-        body: FutureBuilder(
-            future: context
-                .read<FilterableListApiProvider<FilterableData>>()
-                .getServerData(viewAbstract),
-            builder: ((context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return getSliverCustomScrollViewBody(context);
-                } else {
-                  EmptyWidget.error(
-                    context,
-                  );
-                }
-              }
-              return const EmptyWidget(
-                expand: true,
-                lottiUrl:
-                    "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json",
-              );
-            })),
+        body: _lastData != null
+            ? getSliverCustomScrollViewBody()
+            : FutureBuilder(
+                future: context
+                    .read<FilterableListApiProvider<FilterableData>>()
+                    .getServerData(widget.viewAbstract),
+                builder: ((context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      _lastData = snapshot.data;
+                      return getSliverCustomScrollViewBody();
+                    } else {
+                      EmptyWidget.error(
+                        context,
+                        onSubtitleClicked: () {
+                          setState(() {});
+                        },
+                      );
+                    }
+                  }
+                  return EmptyWidget.loading();
+                })),
       ),
     );
   }
 
-  SliverCustomScrollView getSliverCustomScrollViewBody(BuildContext context) {
+  Widget getSliverCustomScrollViewBody() {
     return SliverCustomScrollView(
       scrollKey: 'bottomSheet',
       builderAppbar: (fullyCol, fullyExp) {
-        return SliverAppBar.large(
-            leading: CloseButton(),
-            actions: [
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 500),
-                child: fullyExp ? Container() : Text("2"),
-              )
-            ],
+        return SliverAppBar.medium(
+            leading: const CloseButton(),
+            // actions: [Container()],
             title: getTitle(context));
       },
-      slivers: [
-        const SliverToBoxAdapter(child: Divider()),
-        ...getControllersSliver(context)
-      ],
+      slivers: getControllersSliver(),
     );
   }
 
   // Widget getListFilterableControlers(
-  //     BuildContext context, ViewAbstract drawerViewAbstract) {
-  //   Map<ViewAbstract, List<dynamic>> list = context
-  //       .read<FilterableListApiProvider<FilterableData>>()
-  //       .getRequiredFiltter;
-  //   if (useDraggableWidget) {
-  //     return getDraggableWidget(context, list, drawerViewAbstract);
-  //   }
-  //   if (onDoneClickedPopResults != null) {
-  //     return Scaffold(
-  //       body: _getBody(context, drawerViewAbstract, list),
-  //       floatingActionButton: FloatingActionButton.extended(
-  //         onPressed: () {
-  //           Navigator.of(context)
-  //               .pop(context.read<FilterableProvider>().getList);
-  //         },
-  //         isExtended: true,
-  //         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  //         icon: const Icon(Icons.arrow_forward),
-  //         label: Text(AppLocalizations.of(context)!.subment),
-  //       ),
-  //       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-  //     );
-  //   }
-  //   return _getBody(context, drawerViewAbstract, list);
-  // }
-
-  List<Widget> getControllersSliver(BuildContext context,
-      {ScrollController? scrollController}) {
+  List<Widget> getControllersSliver() {
     Map<ViewAbstract, List<dynamic>> list = context
         .read<FilterableListApiProvider<FilterableData>>()
         .getRequiredFiltter;
@@ -124,47 +187,21 @@ class BaseFilterableMainWidget extends StatelessWidget {
         sliver: SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
           return CustomFilterableController(
-              customFilterableField:
-                  viewAbstract.getCustomFilterableFields(context)[index]);
-        }, childCount: viewAbstract.getCustomFilterableFields(context).length)),
+              customFilterableField: widget.viewAbstract
+                  .getCustomFilterableFields(context)[index]);
+        },
+                childCount: widget.viewAbstract
+                    .getCustomFilterableFields(context)
+                    .length)),
       ),
     ];
   }
 
-  Widget getControllers(Map<ViewAbstract<dynamic>, List<dynamic>> list,
-      ViewAbstract<dynamic> drawerViewAbstract, BuildContext context,
-      {ScrollController? scrollController}) {
-    return ListView(
-      children: [
-        ListView.builder(
-          controller: scrollController,
-          // separatorBuilder: (context, index) {
-          //   return const Divider();
-          // },
-          itemCount: list.length,
-          shrinkWrap: true,
-          primary: false,
-          itemBuilder: (context, index) {
-            ViewAbstract viewAbstract = list.keys.elementAt(index);
-            List<dynamic> itemsViewAbstract = list[viewAbstract] ?? [];
-            debugPrint(
-                "getListFilterableControlers is => ${viewAbstract.runtimeType.toString()} count is ${itemsViewAbstract.length}");
-            return MasterFilterableController(
-                viewAbstract: viewAbstract, list: itemsViewAbstract);
-          },
-        ),
-        ListView.builder(
-            itemCount:
-                drawerViewAbstract.getCustomFilterableFields(context).length,
-            shrinkWrap: true,
-            primary: false,
-            itemBuilder: (context, index) {
-              return CustomFilterableController(
-                  customFilterableField: drawerViewAbstract
-                      .getCustomFilterableFields(context)[index]);
-            }),
-      ],
-    );
+  void onDonePop() {
+    var result = context.read<FilterableProvider>().getList;
+    debugPrint("onDonePop result is => $result");
+    widget.onDoneClickedPopResults?.call(result);
+    Navigator.of(context).pop(result);
   }
 
   Row getButtons(BuildContext context) {
@@ -174,84 +211,14 @@ class BaseFilterableMainWidget extends StatelessWidget {
         ElevatedButton(
           child: const Text("DONE"),
           onPressed: () {
-            if (onDoneClickedPopResults != null) {
-              onDoneClickedPopResults!();
-              Navigator.of(context)
-                  .pop(context.read<FilterableProvider>().getList);
-              return;
-            }
-            // Navigator.pop(context);
-            // debugPrint(context.read<FilterableProvider>().getList.toString());
+            onDonePop();
           },
         )
       ],
     );
   }
 
-  Widget getBadge(BuildContext context) {
-    return Selector<FilterableProvider, int>(
-      builder: (context, value, child) {
-        return Badge(
-          isLabelVisible: false,
-          largeSize: 40,
-          label: Text(
-            value.toString(),
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-          // badgeColor: Theme.of(context).colorScheme.primary,
-          // badgeContent: Text(
-          //   value.toString(),
-          //   style: Theme.of(context)
-          //       .textTheme
-          //       .titleSmall!
-          //       .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          // ),
-          // toAnimate: true,
-          // showBadge: value > 0,
-          // animationType: BadgeAnimationType.slide,
-          child: const Icon(Icons.filter_alt),
-        );
-      },
-      selector: (p0, p1) => p1.getList.length,
-    );
-  }
-
   // Widget getHeader(
-  //     BuildContext context, ViewAbstract<dynamic> drawerViewAbstract) {
-  //   if (SizeConfig.isMobile(context)) {
-  //     return ListTile(
-  //       leading: getBadge(context),
-  //       title: getTitle(context, drawerViewAbstract),
-  //     );
-  //   }
-  //   return Card(
-  //     child: ListTile(
-  //       leading: kIsWeb ? const BackButton() : getBadge(context),
-  //       trailing: kIsWeb ? getBadge(context) : null,
-  //       title: getTitle(context, drawerViewAbstract),
-  //     ),
-  //   );
-  // }
-
   Text getTitle(BuildContext context) => Text(
-      "${AppLocalizations.of(context)!.filter} ${viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase()}");
-
-  // Widget getDraggableWidget(BuildContext context,
-  //     Map<ViewAbstract, List<dynamic>> list, ViewAbstract drawerViewAbstract) {
-  //   return Scaffold(
-  //     appBar: AppBar(title: getHeader(context, drawerViewAbstract)),
-  //     body: SizedBox.expand(
-  //       child: DraggableScrollableSheet(
-  //         initialChildSize: .3,
-  //         builder: (BuildContext context, ScrollController scrollController) {
-  //           return getControllers(list, drawerViewAbstract, context,
-  //               scrollController: scrollController);
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
+      "${AppLocalizations.of(context)!.filter} ${widget.viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase()}");
 }

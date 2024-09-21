@@ -17,9 +17,15 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
     return _filterData;
   }
 
-
   Future<T?> getServerData(ViewAbstract viewAbstract) async {
     _lastViewAbstract = viewAbstract;
+    if (viewAbstract == _lastViewAbstract &&
+        _requiredFiltter.isNotEmpty &&
+        _filterData != null) {
+      debugPrint(
+          "setRequiredFilterList called with no process to do viewAbstract == _lastViewAbstract && _requiredFiltter.isNotEmpty _filterData!=null");
+      return _filterData;
+    }
     _filterData ??= await _filterOb.viewCall(0);
     await setRequiredFilterList(viewAbstract);
     return _filterData;
@@ -28,6 +34,11 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
   Future<void> setRequiredFilterList(ViewAbstract viewAbstract) async {
     if (_filterData == null) {
       debugPrint("setRequiredFilterList called with no filter data");
+      return;
+    }
+    if (viewAbstract == _lastViewAbstract && _requiredFiltter.isNotEmpty) {
+      debugPrint(
+          "setRequiredFilterList called with no process to do viewAbstract == _lastViewAbstract && _requiredFiltter.isNotEmpty");
       return;
     }
     _requiredFiltter.clear();

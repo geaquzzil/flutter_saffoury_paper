@@ -9,12 +9,12 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/filter_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
-import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
@@ -227,24 +227,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
   }
 
   Widget? getFilterWidget(BuildContext context) {
-    if (isMobile(context)) {
-      return IconButton(
-        icon: const Icon(Icons.filter_alt_rounded),
-        onPressed: () async {
-          showBottomSheetExt(
-            context: context,
-            builder: (p0) {
-              return BaseFilterableMainWidget(
-        
-              );
-            },
-          );
-          // Navigator.pushNamed(context, "/search");
-        },
-      );
-    }
-
-    return FilterablePopupIconWidget();
+    return null;
   }
 
   Widget? getExportButton(BuildContext context) {
@@ -256,10 +239,12 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
       icon: Icons.file_upload_outlined,
       hint: AppLocalizations.of(context)!.exportAll,
       list: [
-        DropdownStringListItem(icon:Icons.picture_as_pdf,
+        DropdownStringListItem(
+            icon: Icons.picture_as_pdf,
             label: AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.pdf)),
-        DropdownStringListItem(icon:Icons.source,
+        DropdownStringListItem(
+            icon: Icons.source,
             label: AppLocalizations.of(context)!
                 .exportAllAs(AppLocalizations.of(context)!.excel)),
       ],

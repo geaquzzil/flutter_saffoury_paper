@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/components/expansion_tile_custom_expand_to_card.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 class MasterFilterableController extends StatelessWidget {
   List<dynamic> list;
@@ -12,47 +15,52 @@ class MasterFilterableController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      title: viewAbstract.getMainLabelText(context),
-      leading: Selector<FilterableProvider, int>(
-        selector: (p0, p1) =>
-            p1.getCount(field: viewAbstract.getForeignKeyName()),
-        builder: (context, value, child) {
-          return Badge.count(
-            count: value,
-            isLabelVisible: value > 0,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: viewAbstract.getIcon(),
-          );
-          return Badge(
-            smallSize: 4,
-            isLabelVisible: value > 0,
-            label: Text(
-              "$value",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-            ),
-            child: viewAbstract.getIcon(),
-          );
-        },
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: ExpansionTile(
+        childrenPadding: const EdgeInsets.all(kDefaultPadding / 2),
+        backgroundColor: ElevationOverlay.overlayColor(context, 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        title: viewAbstract.getMainLabelText(context),
+        leading: Selector<FilterableProvider, int>(
+          selector: (p0, p1) =>
+              p1.getCount(field: viewAbstract.getForeignKeyName()),
+          builder: (context, value, child) {
+            return badges.Badge(
+              badgeStyle: badges.BadgeStyle(
+                shape: badges.BadgeShape.circle,
+                borderRadius: BorderRadius.circular(10),
+                badgeColor: Theme.of(context).colorScheme.primary,
+                elevation: 0,
+              ),
+              showBadge: value > 0,
+              badgeAnimation: const badges.BadgeAnimation.scale(
+                animationDuration: Duration(milliseconds: 200),
+                toAnimate: true,
+                disappearanceFadeAnimationDuration: Duration(milliseconds: 100),
+              ),
+              child: viewAbstract.getIcon(),
+            );
+          },
+        ),
+        children: [
+          Wrap(
+              runSpacing: 10,
+              spacing: 10,
+              direction: Axis.horizontal,
+              children: list.map((i) => getListItem(context, i)).toList()),
+        ],
       ),
-      children: [
-        Wrap(
-            runSpacing: 20,
-            spacing: 10,
-            direction: Axis.horizontal,
-            children: list.map((i) => getListItem(context, i)).toList()),
-      ],
     );
   }
 
   Widget getListItem(BuildContext context, ViewAbstract item) {
     return Selector<FilterableProvider, bool>(
-      builder: (context, value, child) => ChoiceChip(
+      builder: (context, value, child) => ChoiceChip.elevated(
           label: item.getMainHeaderText(context),
-          avatar: item.getCardLeadingCircleAvatar(context),
+          // avatar: item.getCardLeadingCircleAvatar(context),
           selected: value,
           onSelected: (v) {
             if (v) {

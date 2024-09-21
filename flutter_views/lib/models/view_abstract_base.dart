@@ -111,8 +111,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Icon(getFieldIconDataMap()[field]);
   }
 
-  Icon getIcon() {
-    return Icon(getMainIconData());
+  Icon getIcon({double ?size}) {
+    return Icon(getMainIconData(),size: size,);
   }
 
   Widget? getMainSubtitleHeaderText(BuildContext context) {

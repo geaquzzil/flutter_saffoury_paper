@@ -10,7 +10,6 @@ import 'package:flutter_view_controller/new_components/cards/card_background_wit
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
-import 'package:flutter_view_controller/new_screens/filterables/filterable_icon_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_sticky_widget.dart';
@@ -101,27 +100,6 @@ class _SearchPageState extends State<SearchPage> {
             },
           )),
     );
-  }
-
-  Widget getFilterWidget(BuildContext context) {
-    if (SizeConfig.isMobile(context)) {
-      return IconButton(
-        icon: const Icon(Icons.filter_alt_rounded),
-        onPressed: () async {
-          showBottomSheetExt(
-            context: context,
-            builder: (p0) {
-              return BaseFilterableMainWidget(
-                viewAbstract: viewAbstract,
-              );
-            },
-          );
-          // Navigator.pushNamed(context, "/search");
-        },
-      );
-    }
-
-    return FilterablePopupIconWidget();
   }
 
   Widget getSearchTraling() {

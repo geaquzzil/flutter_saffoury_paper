@@ -203,6 +203,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
             return ListView(
               children: [
                 FiltersAndSelectionListHeader(
+                  viewAbstract: viewAbstract,
                   customKey: findCustomKey(),
                   listProvider: listProvider,
                 ),

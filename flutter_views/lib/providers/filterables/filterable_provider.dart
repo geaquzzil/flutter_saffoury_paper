@@ -13,13 +13,15 @@ class FilterableProvider with ChangeNotifier {
   Map<String, FilterableProviderHelper> _list = {};
 
   Map<String, FilterableProviderHelper> get getList => _list;
+  set setInitialList(value) => _list = value;
 
   void init(BuildContext context, ViewAbstract selectedViewAbstract,
       {Map<String, FilterableProviderHelper>? savedList}) {
-    _list.clear();
     if (savedList != null) {
+      debugPrint("savedList is not emppty $savedList");
       _list = savedList;
     } else {
+      _list.clear();
       if (selectedViewAbstract.isSortAvailable()) {
         _list[SORTKEY] = FilterableProviderHelper(
             field: SORTKEY,
