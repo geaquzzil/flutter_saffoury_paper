@@ -155,15 +155,8 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "top";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
-
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "top", type: SortByType.ASC);
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action,

@@ -185,12 +185,6 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "gsm";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "gsm", type: SortByType.ASC);
 }

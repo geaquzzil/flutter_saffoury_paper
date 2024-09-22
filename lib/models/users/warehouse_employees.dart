@@ -59,10 +59,7 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
       "${warehouse?.name}: ${employees?.name}";
 
   @override
-  String? getSortByInitialFieldName() => null;
-
-  @override
-  SortByType getSortByInitialType() => SortByType.ASC;
+  SortFieldValue? getSortByInitialType() => null;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

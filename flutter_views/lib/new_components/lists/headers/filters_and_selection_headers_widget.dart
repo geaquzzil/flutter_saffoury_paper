@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filter_icon.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/sort_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
@@ -42,6 +43,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   ViewAbstract viewAbstract;
   String customKey;
   ListMultiKeyProvider listProvider;
+
   FiltersAndSelectionListHeader(
       {super.key,
       required this.viewAbstract,
@@ -88,42 +90,8 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
             child: Row(
               children: [
                 if (filterButton != null) filterButton,
-                DropdownStringListControllerListenerByIcon(
-                    showSelectedValueBeside: false,
-                    icon: Icons.sort_by_alpha,
-                    initialValue: viewAbstract.getSortByInitialFieldName() ==
-                            null
-                        ? null
-                        : DropdownStringListItem(
-                            icon: viewAbstract.getFieldIconData(
-                                viewAbstract.getSortByInitialFieldName()!),
-                            label: viewAbstract.getFieldLabel(context,
-                                viewAbstract.getSortByInitialFieldName()!),
-                            value: viewAbstract.getSortByInitialFieldName()),
-                    hint: AppLocalizations.of(context)!.sortBy,
-                    list: viewAbstract.getMainFieldsIconsAndValues(context) ??
-                        viewAbstract.getMainFieldsIconsAndValues(context),
-                    onSelected: (obj) {
-                      debugPrint("is selected ${obj.runtimeType}");
-                      if (obj == null) {
-                        removeFilterableSelected(context, viewAbstract);
-                      } else {
-                        listProvider.clear(findCustomKey());
-                        addFilterableSortField(
-                            context, obj.value.toString(), obj.label);
-                      }
-                      notifyListApi(context);
-                      debugPrint("is selected $obj");
-                    }),
-                DropdownEnumControllerListenerByIcon<SortByType>(
-                  viewAbstractEnum: SortByType.ASC,
-                  initialValue: viewAbstract.getSortByInitialType(),
-                  showSelectedValueBeside: false,
-                  onSelected: (object) {
-                    // listProvider.clear(findCustomKey());
-                    addFilterableSort(context, object as SortByType);
-                    notifyListApi(context);
-                  },
+                SortIcon(
+                  viewAbstract: viewAbstract,
                 ),
                 const Spacer(),
                 if (!kIsWeb) getAddBotton(context),
@@ -139,7 +107,9 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               if (kIsWeb) return const SizedBox();
               if (value == 0) return const SizedBox();
 
-              return HorizontalFilterableSelectedList();
+              return HorizontalFilterableSelectedList(
+                onFilterable: {},
+              );
             },
             selector: (p0, p1) => p1.getCount(),
           )

@@ -117,10 +117,8 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
   IconData getMainIconData() => Icons.type_specimen;
 
   @override
-  String? getSortByInitialFieldName() => "type";
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "type", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "account_names_types";

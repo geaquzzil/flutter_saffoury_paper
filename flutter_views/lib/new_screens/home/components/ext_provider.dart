@@ -73,16 +73,6 @@ void notifyFilterableListApiIsCleared(BuildContext context) {
       context, v.getSelfNewInstance(), DrawerMenuControllerProviderAction.list);
 }
 
-void addFilterableSort(BuildContext context, SortByType selectedItem) {
-  context.read<FilterableProvider>().addSortBy(context, selectedItem);
-}
-
-void addFilterableSortField(
-    BuildContext context, String selectedItem, String selectedItemMainValue) {
-  context
-      .read<FilterableProvider>()
-      .addSortFieldName(context, selectedItem, selectedItemMainValue);
-}
 
 void addFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
   addFilterableSelectedStringValue(

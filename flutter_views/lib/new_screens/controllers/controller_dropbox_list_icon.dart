@@ -41,17 +41,18 @@ class _DropdownStringListControllerListenerByIconState
   late ValueNotifier<DropdownStringListItem?> radioPos;
   List<DropdownStringListItem?> _list = [null];
 
-  bool hasRadioNotifier() {
-    return widget.initialValueIfRadio != null;
-  }
-
   @override
   void initState() {
     _initialValue = widget.initialValue;
 
     radioPos = ValueNotifier(widget.initialValueIfRadio);
-    radioPos.addListener(onChangeRadio);
-
+    // debugPrint("initState radio1  ${radioPos.value}");
+    // radioPos.addListener(onChangeRadio);
+    // if (widget.initialValueIfRadio != null) {
+    //   WidgetsBinding.instance.addPostFrameCallback((o) {
+    //     radioPos.value = widget.initialValueIfRadio;
+    //   });
+    // }
     _list.addAll(widget.list);
     debugPrint(
         "DropdownStringListControllerListenerByIcon buildMenuItem lastSelected $_initialValue initailValue ${widget.initialValue} list $_list");
@@ -63,7 +64,7 @@ class _DropdownStringListControllerListenerByIconState
       return item;
     }
     return DropdownStringListItemWithRadio(
-        label: "", value: item, radio: radioPos.value);
+        label: "", value: item?.value, radio: radioPos.value);
   }
 
   void onChangeRadio() {}
@@ -71,8 +72,15 @@ class _DropdownStringListControllerListenerByIconState
   void didUpdateWidget(
       covariant DropdownStringListControllerListenerByIcon oldWidget) {
     debugPrint("DropdownStringListControllerListenerByIcon didUpdateWidget");
-    _initialValue = widget.initialValue;
-    radioPos.value = widget.initialValueIfRadio;
+    if (_initialValue != widget.initialValue) {
+      _initialValue = widget.initialValue;
+    }
+    if (widget.initialValueIfRadio != radioPos.value) {
+      WidgetsBinding.instance.addPostFrameCallback((o) {
+        debugPrint("didUpdateWidget radio");
+        radioPos.value = widget.initialValueIfRadio;
+      });
+    }
     _list = [null];
     _list.addAll(widget.list);
     super.didUpdateWidget(oldWidget);
@@ -80,7 +88,7 @@ class _DropdownStringListControllerListenerByIconState
 
   @override
   void dispose() {
-    radioPos.removeListener(onChangeRadio);
+    // radioPos.removeListener(onChangeRadio);
     radioPos.dispose();
     super.dispose();
   }
@@ -104,21 +112,27 @@ class _DropdownStringListControllerListenerByIconState
   Widget getRadioChild(DropdownStringListItem? item) {
     return ValueListenableBuilder(
       valueListenable: radioPos,
-      builder: (c, v, e) => ListTile(
-        onTap: () => radioPos.value = item,
-        title: Text(
-          item!.label,
-          overflow: TextOverflow.clip,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        leading: Radio<DropdownStringListItem>(
-            value: item,
-            groupValue: v,
-            onChanged: (i) {
-              debugPrint("radio $i");
-              radioPos.value = i;
-            }),
-      ),
+      builder: (c, v, e) {
+        debugPrint("ValueListenableBuilder  radio $v");
+        return ListTile(
+          onTap: () {
+            debugPrint("onTap radio");
+            radioPos.value = item;
+          },
+          title: Text(
+            item!.label,
+            overflow: TextOverflow.clip,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          leading: Radio<DropdownStringListItem>(
+              value: item,
+              groupValue: v,
+              onChanged: (i) {
+                debugPrint("radio $i");
+                radioPos.value = i;
+              }),
+        );
+      },
     );
   }
 

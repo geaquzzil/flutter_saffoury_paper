@@ -27,9 +27,8 @@ abstract class VObject<T> extends ViewAbstract<T> {
   IconData getMainIconData() => Icons.abc;
 
   @override
-  String? getSortByInitialFieldName() => "iD";
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "iD", type: SortByType.DESC);
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};

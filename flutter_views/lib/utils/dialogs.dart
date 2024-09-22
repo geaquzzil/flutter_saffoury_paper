@@ -67,7 +67,8 @@ Future<T?> showBottomSheetExt<T>(
   return showModalBottomSheet<T>(
     isScrollControlled: isScrollable,
     context: context,
-    elevation: 4,
+    isDismissible: false,
+    elevation: 10,
     enableDrag: true,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),

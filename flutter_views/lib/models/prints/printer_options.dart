@@ -65,11 +65,6 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
   IconData getMainIconData() => Icons.print;
 
   @override
-  String? getSortByInitialFieldName() => null;
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
-
-  @override
   String? getTableNameApi() => null;
 
   @override
@@ -119,6 +114,9 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
         "startEndPage": "",
         "printPaperSize": PrintPaperSize.Default
       };
+
+  @override
+  SortFieldValue? getSortByInitialType() => null;
 
   // @override
   // Map<String, Type> getMirrorFieldsTypeMap() => {

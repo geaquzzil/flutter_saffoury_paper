@@ -50,9 +50,7 @@ class ReportOptions extends ViewAbstract<ReportOptions> {
   IconData getMainIconData() => Icons.document_scanner;
 
   @override
-  String? getSortByInitialFieldName() => null;
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() => null;

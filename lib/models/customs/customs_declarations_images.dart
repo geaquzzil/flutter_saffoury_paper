@@ -80,10 +80,8 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages>
   material.IconData getMainIconData() => material.Icons.gavel_sharp;
 
   @override
-  String? getSortByInitialFieldName() => "comments";
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "comments", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "customs_declarations_images";

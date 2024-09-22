@@ -78,14 +78,8 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
       };
 
   @override
-  String getSortByInitialFieldName() {
-    return "name";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "name", type: SortByType.ASC);
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -302,15 +296,8 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "phone";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
-
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "phone", type: SortByType.ASC);
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     // TODO: implement getMainDrawerGroupName

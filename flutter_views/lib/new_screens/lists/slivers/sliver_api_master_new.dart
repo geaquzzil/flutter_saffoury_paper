@@ -41,6 +41,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Object toListObject;
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
+  
   String? searchString;
   bool isSliver;
   bool enableSelection;

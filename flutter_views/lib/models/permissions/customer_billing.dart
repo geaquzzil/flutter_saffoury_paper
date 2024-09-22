@@ -186,14 +186,8 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
       };
 
   @override
-  String getSortByInitialFieldName() {
-    return "name";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "name", type: SortByType.ASC);
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>

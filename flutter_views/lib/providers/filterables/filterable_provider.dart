@@ -8,8 +8,6 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
 class FilterableProvider with ChangeNotifier {
-  static const String SORTKEY = "sortByFieldName";
-  static const String SORTKEYAD = "sortBy";
   Map<String, FilterableProviderHelper> _list = {};
 
   Map<String, FilterableProviderHelper> get getList => _list;
@@ -22,20 +20,6 @@ class FilterableProvider with ChangeNotifier {
       _list = savedList;
     } else {
       _list.clear();
-      if (selectedViewAbstract.isSortAvailable()) {
-        _list[SORTKEY] = FilterableProviderHelper(
-            field: SORTKEY,
-            fieldNameApi: selectedViewAbstract.getSortByInitialType().name,
-            values: [selectedViewAbstract.getSortByFieldNameApi()],
-            mainFieldName: selectedViewAbstract
-                .getSortByInitialType()
-                .getMainLabelText(context),
-            mainValuesName: [
-              selectedViewAbstract.getSortByInitialType().getFieldLabelString(
-                  context, selectedViewAbstract.getSortByInitialType())
-            ],
-            requestTheFirstValueOnly: true);
-      }
     }
     notifyListeners();
   }
@@ -78,39 +62,6 @@ class FilterableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addSortBy(BuildContext context, SortByType sort) {
-    // _list[SORTKEY] = _list[SORTKEY]?.setKey(sort.name) ??
-    //     FilterableProviderHelper(SORTKEY, sort.name, [],
-    //         requestTheFirstValueOnly: true);
-
-    _list[SORTKEY] = _list[SORTKEY]?.setKey(sort.name) ??
-        FilterableProviderHelper(
-            mainFieldName: sort.getMainLabelText(context),
-            mainValuesName: [],
-            field: SORTKEY,
-            fieldNameApi: sort.name,
-            requestTheFirstValueOnly: true,
-            values: []);
-    // notifyListApi(context);
-  }
-
-  void addSortFieldName(
-      BuildContext context, String value, String mainValueName) {
-    // _list[SORTKEY] = _list[SORTKEY]?.setValue(value) ??
-    //     FilterableProviderHelper(SORTKEY, SortByType.ASC.name, [value],
-    //         requestTheFirstValueOnly: true);
-
-    _list[SORTKEY] = _list[SORTKEY]?.setValue(value, mainValueName) ??
-        FilterableProviderHelper(
-            mainFieldName: SortByType.ASC.getMainLabelText(context),
-            mainValuesName: [mainValueName],
-            field: SORTKEY,
-            fieldNameApi: SortByType.ASC.name,
-            requestTheFirstValueOnly: true,
-            values: [value]);
-    // notifyListApi(context);
-  }
-
   bool isSelected(String field, String value) {
     if (_list.containsKey(field)) {
       return _list[field]?.isSelected(value) ?? false;
@@ -122,12 +73,6 @@ class FilterableProvider with ChangeNotifier {
     debugPrint("getCount => $field  is ${_list[field]}");
     if (field != null) {
       return _list[field]?.getCount() ?? 0;
-    }
-    bool isSortRequired = requireCountWithSort ?? false;
-    if (!isSortRequired) {
-      if (_list.length == 1) {
-        return _list.containsKey(SORTKEY) ? 0 : _list.length;
-      }
     }
     return _list.length;
   }
@@ -146,17 +91,23 @@ class FilterableProvider with ChangeNotifier {
     }
   }
 
-  static isListContainsSortOny(BuildContext context) {}
   static Map<String, FilterableProviderHelper> removeStatic(
       Map<String, FilterableProviderHelper> list, String field,
       {String? value, String? mainValueName}) {
     if (value == null) {
+      debugPrint(
+          "onFilterable  value == null $value contains key ${list.containsKey(field)}");
       if (list.containsKey(field)) {
         list.remove(field);
       }
     } else {
+      debugPrint(
+          "onFilterable value $value mainValueName $mainValueName contains key ${list.containsKey(field)}");
       if (list.containsKey(field)) {
         list[field]?.remove(value, mainValueName!);
+        if (list[field]?.deleteKey() == true) {
+          list.remove(field);
+        }
       }
     }
     return list;
@@ -232,6 +183,12 @@ class FilterableProviderHelper {
   void remove(String value, String mainValueName) {
     values.remove(value);
     mainValuesName.remove(mainValueName);
+  }
+
+  bool deleteKey() {
+    debugPrint(
+        "onFilterable deleteKey ${values.isEmpty} ${mainFieldName.isEmpty} ");
+    return values.isEmpty || mainFieldName.isEmpty;
   }
 
   String getKey() {

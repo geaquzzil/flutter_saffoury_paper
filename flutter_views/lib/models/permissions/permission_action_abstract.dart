@@ -144,14 +144,7 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "table_name";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.DESC;
-  }
+  SortFieldValue? getSortByInitialType() => SortFieldValue(field: "table_name",type: SortByType.DESC);
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {

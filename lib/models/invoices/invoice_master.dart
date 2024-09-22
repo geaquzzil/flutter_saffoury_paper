@@ -279,11 +279,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  String? getSortByInitialFieldName() => "date";
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
-
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "date", type: SortByType.DESC);
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 

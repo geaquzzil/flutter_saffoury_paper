@@ -661,11 +661,10 @@ class Product extends ViewAbstract<Product>
       _$ProductFromJson(data);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
-  @override
-  String getSortByInitialFieldName() {
-    return "date";
-  }
 
+  @override
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "date", type: SortByType.DESC);
   @override
   IconData? getCardLeadingBottomIcon() {
     switch (status) {
@@ -681,11 +680,6 @@ class Product extends ViewAbstract<Product>
         }
         return null;
     }
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.DESC;
   }
 
   @override

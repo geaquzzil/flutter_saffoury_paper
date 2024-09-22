@@ -257,7 +257,16 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     if (firstPane == null) {
       return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
           ? null
-          : [getFilterIcon(),SortIcon(viewAbstract: Product(),)];
+          : [
+              getFilterIcon(),
+              SortIcon(
+                initialValue: Product().getSortByInitialType(),
+                viewAbstract: Product(),
+                onChange: (o) {
+                  debugPrint("onChange $o");
+                },
+              )
+            ];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
     return null;
@@ -317,7 +326,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 filterData = onFilter;
               });
             },
-            onFilterable: filterData,
+            onFilterable: filterData ?? {},
           ),
         ),
       if (!isPurchuses())

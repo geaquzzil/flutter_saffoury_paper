@@ -298,10 +298,7 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
   }
 
   @override
-  String? getSortByInitialFieldName() => null;
-
-  @override
-  SortByType getSortByInitialType() => SortByType.ASC;
+  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() => null;

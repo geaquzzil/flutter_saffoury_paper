@@ -1,35 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
-class SortFieldValue {
-  String? field;
-  SortByType? type;
-
-  SortFieldValue({
-    this.field,
-    this.type,
-  });
-
-  Map<String, String>? getMap() {
-    return field == null || type == null ? null : {type!.name: field!};
-  }
-
-  DropdownStringListItem? getDropdownStringListItem(
-      BuildContext context, ViewAbstract parent) {
-    return field == null
-        ? null
-        : DropdownStringListItem(
-            label: parent.getFieldLabel(context, field!),
-            icon: parent.getFieldIconData(field!),
-            value: field);
-  }
-}
 
 class SortIcon extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -51,18 +28,10 @@ class _SortIconState extends State<SortIcon> {
 
   List<DropdownStringListItem>? _generatedList;
 
-  String? field;
-  SortByType? type;
-  void setVariables() {
-    type = _initialValue?.type ?? _viewAbstract.getSortByInitialType();
-    field = _initialValue?.field ?? _viewAbstract.getSortByInitialFieldName();
-  }
-
   @override
   void initState() {
-    _initialValue = widget.initialValue;
     _viewAbstract = widget.viewAbstract;
-    setVariables();
+    _initialValue = widget.initialValue ?? _viewAbstract.getSortByInitialType();
     super.initState();
   }
 
@@ -70,37 +39,37 @@ class _SortIconState extends State<SortIcon> {
   void didUpdateWidget(covariant SortIcon oldWidget) {
     if (_initialValue != widget.initialValue) {
       _initialValue = widget.initialValue;
-      setVariables();
     }
     if (_viewAbstract != widget.viewAbstract) {
       _viewAbstract = widget.viewAbstract;
-      _initialValue = widget.initialValue;
+      _initialValue =
+          widget.initialValue ?? _viewAbstract.getSortByInitialType();
       _generatedList = null;
-      setVariables();
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  SortFieldValue? getValue() {
-    return SortFieldValue(field: field, type: type);
-  }
-
   List<DropdownStringListItem> getSortTypeList() {
     return SortByType.values.map((o) {
-      return DropdownStringListItem(
-        isRadio: true,
-        label: o.getFieldLabelString(context, o),
-        value: o,
-      );
+      return getSortByTypeItem(o);
     }).toList();
+  }
+
+  DropdownStringListItem getSortByTypeItem(SortByType o) {
+    return DropdownStringListItem(
+      isRadio: true,
+      label: o.getFieldLabelString(context, o),
+      value: o,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    List<DropdownStringListItem> l = getSortTypeList();
     _generatedList ??= [
-      ...getSortTypeList(),
+      ...l,
       DropdownStringListItem(label: "", isDivider: true),
-      ..._viewAbstract.getMainFieldsIconsAndValues(context)!
+      ..._viewAbstract.getMainFieldsIconsAndValues(context)
     ];
 
     return DropdownStringListControllerListenerByIcon(
@@ -108,72 +77,25 @@ class _SortIconState extends State<SortIcon> {
         icon: Icons.sort_by_alpha,
         initialValue:
             _initialValue?.getDropdownStringListItem(context, _viewAbstract),
-        // multipleInitialValues: [
-        //   DropdownStringListItem(
-        //     label: _viewAbstract.getSortByInitialType().getFieldLabelString(
-        //         context, _viewAbstract.getSortByInitialType()),
-        //     value: _viewAbstract.getSortByInitialType(),
-        //   ),
-        //   DropdownStringListItem(
-        //     label: _viewAbstract.getSortByInitialFieldName() ?? "",
-        //     icon: _viewAbstract.getFieldIconData(
-        //         _viewAbstract.getSortByInitialFieldName() ?? ""),
-        //     value: _viewAbstract.getSortByInitialFieldName(),
-        //   )
-        // ],
+        initialValueIfRadio: _initialValue == null
+            ? null
+            : l.firstWhereOrNull((o) =>
+                o.label ==
+                _initialValue?.type
+                    .getFieldLabelString(context, _initialValue!.type)),
         hint: AppLocalizations.of(context)!.sortBy,
         list: _generatedList!,
         onSelected: (obj) {
-          debugPrint("is selected ${obj.runtimeType}");
-          field = obj?.value.toString();
-          widget.onChange?.call(getValue());
-          // if (obj == null) {
-          //   removeFilterableSelected(context, widget.viewAbstract);
-          // } else {
-          //   listProvider.clear(findCustomKey());
-          //   addFilterableSortField(
-          //       context, obj.value.toString(), obj.label);
-          // }
-          // notifyListApi(context);
-          // debugPrint("is selected $obj");
+          debugPrint("is selected ${obj}");
+          if (obj is DropdownStringListItem) {
+            widget.onChange?.call(SortFieldValue(
+                type: SortByType.ASC, field: obj.value as String));
+          }
+          if (obj is DropdownStringListItemWithRadio) {
+            widget.onChange?.call(SortFieldValue(
+                type: obj.radio!.value as SortByType,
+                field: obj.value as String));
+          }
         });
-    return Row(
-      children: [
-        DropdownStringListControllerListenerByIcon(
-            showSelectedValueBeside: true,
-            icon: Icons.sort_by_alpha,
-            initialValue: _initialValue?.getDropdownStringListItem(
-                context, _viewAbstract),
-            hint: AppLocalizations.of(context)!.sortBy,
-            list: widget.viewAbstract.getMainFieldsIconsAndValues(context),
-            onSelected: (obj) {
-              debugPrint("is selected ${obj.runtimeType}");
-              field = obj?.value.toString();
-              widget.onChange?.call(getValue());
-              // if (obj == null) {
-              //   removeFilterableSelected(context, widget.viewAbstract);
-              // } else {
-              //   listProvider.clear(findCustomKey());
-              //   addFilterableSortField(
-              //       context, obj.value.toString(), obj.label);
-              // }
-              // notifyListApi(context);
-              // debugPrint("is selected $obj");
-            }),
-        DropdownEnumControllerListenerByIcon<SortByType>(
-          viewAbstractEnum: SortByType.ASC,
-          initialValue: _initialValue?.type,
-          showSelectedValueBeside: true,
-          onSelected: (object) {
-            type = object;
-            widget.onChange?.call(getValue());
-
-            // addFilterableSort(context, object as SortByType);
-            // notifyListApi(context);
-          },
-        ),
-        const Spacer(),
-      ],
-    );
   }
 }

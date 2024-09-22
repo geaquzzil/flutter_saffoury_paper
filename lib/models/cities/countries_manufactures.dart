@@ -55,12 +55,7 @@ class CountryManufacture extends ViewAbstract<CountryManufacture> {
   IconData getMainIconData() => Icons.maps_home_work_rounded;
 
   @override
-  String? getSortByInitialFieldName() {
-    return null;
-  }
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() => "countries_manufactures";

@@ -162,14 +162,8 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "date";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.DESC;
-  }
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "date", type: SortByType.DESC);
 
 //  return FloatingActionButton(
 //         heroTag: UniqueKey(),

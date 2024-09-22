@@ -43,9 +43,7 @@ abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
   }
 
   @override
-  String? getSortByInitialFieldName() => null;
-  @override
-  SortByType getSortByInitialType() => SortByType.ASC;
+  SortFieldValue? getSortByInitialType() => null;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() {

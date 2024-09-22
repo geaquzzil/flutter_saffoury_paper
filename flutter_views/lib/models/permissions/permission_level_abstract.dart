@@ -170,14 +170,8 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "userlevelname";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "userlevelname", type: SortByType.ASC);
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"userlevelname": ""};

@@ -57,8 +57,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
       this.valueNotifierGrid,
       Widget? customSliverWidget,
       super.buildHeader = false})
-      : super(
-            customSliverHeader: customSliverWidget);
+      : super(customSliverHeader: customSliverWidget);
   void fetshListWidgetBinding() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();
@@ -69,6 +68,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     return null;
   }
+
   @override
   void init(BuildContext context) {
     super.init(context);
@@ -337,7 +337,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
               viewAbstract: viewAbstract,
             ),
             HorizontalFilterableSelectedList(
-              onFilterable: customFilterChecker,
+              onFilterable: customFilterChecker ?? {},
               onFilterableChanged: (onFilter) {
                 if (onFilter == null) {
                   context.goNamed(indexWebOurProducts);
@@ -393,7 +393,6 @@ class ListWebApiPage extends BaseWebPageSlivers {
                   child: BaseFilterableMainWidget(
                     onDoneClickedPopResults: (v) {},
                     viewAbstract: viewAbstract,
-            
                   ),
                 ),
               ),
@@ -430,12 +429,10 @@ class ListWebApiPage extends BaseWebPageSlivers {
               SliverChildBuilderDelegateOptions(),
           minItemWidth: 200,
           children: [
-            ...list
-                .map((e) => WebGridViewItem(
-                      item: e,
-                      setDescriptionAtBottom: true,
-                    ))
-                ,
+            ...list.map((e) => WebGridViewItem(
+                  item: e,
+                  setDescriptionAtBottom: true,
+                )),
             if (isLoading)
               ...List.generate(5, (index) => ListHorizontalItemShimmer())
           ]),

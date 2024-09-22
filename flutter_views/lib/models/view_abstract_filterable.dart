@@ -5,9 +5,35 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/sort_icon.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+class SortFieldValue {
+  String field;
+  SortByType type;
+
+  SortFieldValue({
+    required this.field,
+    required this.type,
+  });
+
+  @override
+  String toString() => getMap().toString();
+  Map<String, String> getMap() {
+    return {type.name: field};
+  }
+
+  DropdownStringListItem? getDropdownStringListItem(
+      BuildContext context, ViewAbstract parent) {
+    return DropdownStringListItem(
+        label: parent.getFieldLabel(context, field),
+        icon: parent.getFieldIconData(field),
+        value: field);
+  }
+}
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -22,8 +48,16 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   SortByType? _lastFilterableSortType;
 
-  String? getSortByInitialFieldName();
-  SortByType getSortByInitialType();
+  SortFieldValue? getSortByInitialType();
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  SortFieldValue? _sortFieldValue;
+
+  //set initial value  if
+  SortFieldValue? get getSortFieldValue =>
+      this._sortFieldValue ?? getSortByInitialType();
+
+  set setSortFieldValue(SortFieldValue? value) => this._sortFieldValue = value;
 
   String getForeignKeyName() {
     return getTableNameApi() ?? " no_foreign_key";
@@ -33,7 +67,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "iD";
   }
 
-  bool isSortAvailable() => getSortByInitialFieldName() != null;
+  bool isSortAvailable() => getSortFieldValue != null;
 
   List<String> getFilterableFields() => getMainFields();
 
@@ -49,7 +83,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
             type: TextInputType.datetime)
       ];
   String getSortByFieldNameApi() {
-    return getSortByInitialFieldName() ?? "";
+    return getSortFieldValue?.field ?? "";
   }
 
   String getFilterableFieldNameApi(String field) {
@@ -77,11 +111,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     debugPrint("setFilterableMap=> $map");
     Map<String, String> bodyMap = {};
     map.forEach((key, value) {
-      if (key == FilterableProvider.SORTKEY) {
-        bodyMap[map[key]!.fieldNameApi] = map[key]!.getValue();
-      } else {
-        bodyMap["<${map[key]!.fieldNameApi}>"] = map[key]!.getValue();
-      }
+      bodyMap["<${map[key]!.fieldNameApi}>"] = map[key]!.getValue();
     });
     debugPrint("setFilterableMap bodyMap $bodyMap");
     setCustomMap(bodyMap);

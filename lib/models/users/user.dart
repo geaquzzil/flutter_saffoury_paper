@@ -138,14 +138,8 @@ class User<T> extends UserLists<T> {
       {"name": true, "phone": true, "password": true};
 
   @override
-  String getSortByInitialFieldName() {
-    return "name";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "name", type: SortByType.ASC);
 
   double getTotalAnalsis(List<GrowthRate>? growthRateList) {
     if (growthRateList?.length == 1) {

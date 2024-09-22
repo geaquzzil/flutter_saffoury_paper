@@ -107,10 +107,8 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   @override
   IconData getMainIconData() => Icons.screen_rotation_alt_sharp;
   @override
-  String? getSortByInitialFieldName() => "iD";
-
-  @override
-  SortByType getSortByInitialType() => SortByType.ASC;
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "iD", type: SortByType.ASC);
 
   @override
   String? getTableNameApi() => "sizes_cut_requests";

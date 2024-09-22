@@ -103,10 +103,7 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  String? getSortByInitialFieldName() => null;
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() => null;

@@ -71,10 +71,8 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
   IconData getMainIconData() => Icons.content_cut;
 
   @override
-  String? getSortByInitialFieldName() => "iD";
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "iD", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "cut_request_results";

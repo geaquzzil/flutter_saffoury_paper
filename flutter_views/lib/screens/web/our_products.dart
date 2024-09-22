@@ -232,7 +232,7 @@ class ProductWebPage extends BaseWebPageSlivers {
               viewAbstract: viewAbstract,
             ),
             HorizontalFilterableSelectedList(
-              onFilterable: customFilterChecker,
+              onFilterable: customFilterChecker ?? {},
               onFilterableChanged: (onFilter) {
                 debugPrint("onFiltercHANGE $onFilter");
                 if (onFilter == null) {

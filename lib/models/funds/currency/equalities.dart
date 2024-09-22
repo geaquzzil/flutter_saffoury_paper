@@ -76,10 +76,8 @@ class Equalities extends ViewAbstract<Equalities> {
   IconData getMainIconData() => Icons.currency_exchange;
 
   @override
-  String? getSortByInitialFieldName() => "date";
-
-  @override
-  SortByType getSortByInitialType() => SortByType.DESC;
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "date", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "equalities";

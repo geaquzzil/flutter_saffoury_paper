@@ -7,12 +7,12 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../home/components/ext_provider.dart';
 
 class HorizontalFilterableSelectedList extends StatelessWidget {
-  Map<String, FilterableProviderHelper>? onFilterable;
+  Map<String, FilterableProviderHelper> onFilterable;
 
   Function(Map<String, FilterableProviderHelper>? onFilter)?
       onFilterableChanged;
   HorizontalFilterableSelectedList(
-      {super.key, this.onFilterable, this.onFilterableChanged});
+      {super.key, required this.onFilterable, this.onFilterableChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -37,37 +37,24 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-
       itemCount: finalList.length,
       itemBuilder: (context, index) {
         var item = finalList[index];
         {
           return Chip(
-            // selected: true,
-
             label: Text("${item.mainFieldName} :${item.mainValuesName[0]}"),
-
-            // avatar:Text(item.field),
             onDeleted: () {
-              if (onFilterable != null) {
-                onFilterable = FilterableProvider.removeStatic(
-                    onFilterable!, item.field,
-                    value: item.values[0],
-                    mainValueName: item.mainValuesName[0]);
-                onFilterableChanged?.call(onFilterable!);
-                return;
-              }
-              removeFilterableSelectedStringValue(
-                  context, item.field, item.values[0], item.mainValuesName[0]);
-              notifyListApi(context);
+              debugPrint(
+                  "onFilterable before  ${onFilterable.entries.length} $onFilterable");
+              onFilterable = FilterableProvider.removeStatic(
+                  onFilterable, item.field,
+                  value: item.values[0], mainValueName: item.mainValuesName[0]);
+              debugPrint(
+                  "onFilterable after  ${onFilterable.entries.length} $onFilterable");
+              onFilterableChanged
+                  ?.call(onFilterable.isEmpty ? null : onFilterable);
+              return;
             },
-            // onSelected: (v) {
-            //   if (v) {
-            //     addFilterableSelected(context, item);
-            //   } else {
-            //     removeFilterableSelected(context, item);
-            //   }
-            // }
           );
         }
       },
@@ -76,25 +63,13 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
   }
 
   Widget _clearAllText(BuildContext context) {
-    if (kIsWeb) {
-      if (onFilterable == null) {
-        return const SizedBox();
-      } else if (onFilterable?.isEmpty ?? false) {
-        return const SizedBox();
-      } else {
-        return TextButton(
-          //todo translate
-          child: const Text("CLEAR FILTERS"),
-          onPressed: () {
-            onFilterableChanged?.call(null);
-          },
-        );
-      }
+    if (onFilterable.isEmpty) {
+      return const SizedBox();
     }
+
     return TextButton(
         onPressed: () {
-          context.read<FilterableProvider>().clearAll();
-          notifyFilterableListApiIsCleared(context);
+          onFilterableChanged?.call(null);
         },
         child: Text(AppLocalizations.of(context)!.clearFiltters));
   }

@@ -306,15 +306,9 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  String getSortByInitialFieldName() {
-    return "width";
-  }
-
-  @override
-  SortByType getSortByInitialType() {
-    return SortByType.ASC;
-  }
-
+  SortFieldValue? getSortByInitialType() =>
+      SortFieldValue(field: "width", type: SortByType.ASC);
+      
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"width": 0, "length": 0};
