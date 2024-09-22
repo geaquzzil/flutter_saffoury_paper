@@ -52,12 +52,24 @@ class DropdownStringListControllerListener extends StatelessWidget {
   }
 }
 
+class DropdownStringListItemWithRadio extends DropdownStringListItem {
+  DropdownStringListItem? radio;
+  DropdownStringListItemWithRadio(
+      {required super.label, super.value, this.radio});
+}
+
 class DropdownStringListItem {
   IconData? icon;
   String label;
   Object? value;
   bool? enabled;
   bool isDivider;
+  bool isRadio;
   DropdownStringListItem(
-      {this.icon, required this.label, this.value, this.enabled,this.isDivider=false});
+      {this.icon,
+      required this.label,
+      this.value,
+      this.enabled,
+      this.isDivider = false,
+      this.isRadio = false});
 }

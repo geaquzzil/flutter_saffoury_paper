@@ -19,6 +19,9 @@ class ActionsOnHeaderPopupWidget extends StatelessWidget {
         viewAbstract.getPopupMenuActionsThreeDot(context, serverActions);
 
     return PopupMenuButton<MenuItemBuildGenirc>(
+      elevation: 10,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       onSelected: (MenuItemBuildGenirc result) {
         Navigator.pushNamed(context, result.route, arguments: result.value);
         // viewAbstract.onPopupMenuActionSelected(c, result);

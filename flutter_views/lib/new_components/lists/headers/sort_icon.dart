@@ -88,6 +88,7 @@ class _SortIconState extends State<SortIcon> {
   List<DropdownStringListItem> getSortTypeList() {
     return SortByType.values.map((o) {
       return DropdownStringListItem(
+        isRadio: true,
         label: o.getFieldLabelString(context, o),
         value: o,
       );
@@ -107,6 +108,19 @@ class _SortIconState extends State<SortIcon> {
         icon: Icons.sort_by_alpha,
         initialValue:
             _initialValue?.getDropdownStringListItem(context, _viewAbstract),
+        // multipleInitialValues: [
+        //   DropdownStringListItem(
+        //     label: _viewAbstract.getSortByInitialType().getFieldLabelString(
+        //         context, _viewAbstract.getSortByInitialType()),
+        //     value: _viewAbstract.getSortByInitialType(),
+        //   ),
+        //   DropdownStringListItem(
+        //     label: _viewAbstract.getSortByInitialFieldName() ?? "",
+        //     icon: _viewAbstract.getFieldIconData(
+        //         _viewAbstract.getSortByInitialFieldName() ?? ""),
+        //     value: _viewAbstract.getSortByInitialFieldName(),
+        //   )
+        // ],
         hint: AppLocalizations.of(context)!.sortBy,
         list: _generatedList!,
         onSelected: (obj) {

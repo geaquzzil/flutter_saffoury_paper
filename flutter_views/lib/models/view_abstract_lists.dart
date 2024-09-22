@@ -314,6 +314,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         ? getPopupMenuActionsEdit(c)
         : getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
+      elevation: 10,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       onSelected: (MenuItemBuild result) {
         onPopupMenuActionSelected(c, result, state: state);
       },
@@ -326,6 +329,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       {SliverApiWithStaticMixin? state}) {
     List<MenuItemBuild> items = getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
+      elevation: 10,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       onSelected: (MenuItemBuild result) {
         onPopupMenuActionSelected(c, result, state: state);
       },

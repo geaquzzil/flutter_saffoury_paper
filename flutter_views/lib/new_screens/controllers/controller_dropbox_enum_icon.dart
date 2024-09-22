@@ -57,6 +57,8 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
   @override
   Widget build(BuildContext context) {
     Widget pop = PopupMenuButton<T>(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       elevation: 10,
 
       tooltip: _viewAbstractEnum.getFieldLabelString(
@@ -124,12 +126,15 @@ class _DropdownEnumControllerListenerByIconState<T extends ViewAbstractEnum>
 
 class CustomPopupMenuItem<T> extends PopupMenuItem<T> {
   final Color? color;
+  bool dontPop;
 
-  const CustomPopupMenuItem({
+  CustomPopupMenuItem({
     super.key,
     super.value,
+    super.onTap,
     super.enabled,
     super.child,
+    this.dontPop = false,
     this.color,
   });
 
@@ -145,5 +150,14 @@ class _CustomPopupMenuItemState<T>
       color: widget.color,
       child: super.build(context),
     );
+  }
+
+  @override
+  void handleTap() {
+    if (widget.dontPop) {
+      widget.onTap?.call();
+      return;
+    }
+    super.handleTap();
   }
 }
