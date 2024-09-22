@@ -342,10 +342,10 @@ class CutRequest extends ViewAbstract<CutRequest>
   IconData getMainIconData() => Icons.content_cut;
 
   @override
-  String? getSortByFieldName() => "date";
+  String? getSortByInitialFieldName() => "date";
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   String? getTableNameApi() => "cut_requests";

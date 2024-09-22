@@ -10,6 +10,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   final IconData icon;
   final List<DropdownStringListItem?> list;
   final DropdownStringListItem? initialValue;
+  final List<DropdownStringListItem>? multipleInitialValues;
   final bool showSelectedValueBeside;
   final bool showFirstValueAsTitle;
   void Function(DropdownStringListItem? object) onSelected;
@@ -19,6 +20,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
       required this.hint,
       required this.list,
       this.initialValue,
+      this.multipleInitialValues,
       this.showFirstValueAsTitle = true,
       this.showSelectedValueBeside = true,
       required this.icon,
@@ -36,6 +38,13 @@ class _DropdownStringListControllerListenerByIconState
   List<DropdownStringListItem?> _list = [null];
   CustomPopupMenuItem<DropdownStringListItem?> buildMenuItem(
       BuildContext context, DropdownStringListItem? e) {
+    if (e?.isDivider == true) {
+      return const CustomPopupMenuItem<DropdownStringListItem?>(
+        enabled: false,
+        value: null,
+        child: PopupMenuDivider(),
+      );
+    }
     return CustomPopupMenuItem<DropdownStringListItem?>(
       value: e,
       color: lastSelected == null

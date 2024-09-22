@@ -54,6 +54,7 @@ List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
   return menuItems;
 }
 
+@Deprecated("")
 void notifyListApi(BuildContext context) {
   ViewAbstract? v =
       context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;

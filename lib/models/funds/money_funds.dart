@@ -108,10 +108,10 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   @override
   IconData? getMainDrawerGroupIconData() => Icons.credit_card;
   @override
-  String? getSortByFieldName() => "date";
+  String? getSortByInitialFieldName() => "date";
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

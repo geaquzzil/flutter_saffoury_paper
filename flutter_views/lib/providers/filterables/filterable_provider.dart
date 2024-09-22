@@ -25,13 +25,14 @@ class FilterableProvider with ChangeNotifier {
       if (selectedViewAbstract.isSortAvailable()) {
         _list[SORTKEY] = FilterableProviderHelper(
             field: SORTKEY,
-            fieldNameApi: selectedViewAbstract.getSortByType().name,
+            fieldNameApi: selectedViewAbstract.getSortByInitialType().name,
             values: [selectedViewAbstract.getSortByFieldNameApi()],
-            mainFieldName:
-                selectedViewAbstract.getSortByType().getMainLabelText(context),
+            mainFieldName: selectedViewAbstract
+                .getSortByInitialType()
+                .getMainLabelText(context),
             mainValuesName: [
-              selectedViewAbstract.getSortByType().getFieldLabelString(
-                  context, selectedViewAbstract.getSortByType())
+              selectedViewAbstract.getSortByInitialType().getFieldLabelString(
+                  context, selectedViewAbstract.getSortByInitialType())
             ],
             requestTheFirstValueOnly: true);
       }

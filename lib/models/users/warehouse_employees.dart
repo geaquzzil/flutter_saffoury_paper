@@ -59,10 +59,10 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
       "${warehouse?.name}: ${employees?.name}";
 
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
 
   @override
-  SortByType getSortByType() => SortByType.ASC;
+  SortByType getSortByInitialType() => SortByType.ASC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -101,6 +101,4 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"warehouse": Warehouse(), "employee": Employee()};
-
-  
 }

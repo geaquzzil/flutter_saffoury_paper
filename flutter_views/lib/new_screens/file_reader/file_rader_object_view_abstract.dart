@@ -388,10 +388,10 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
 
   @override
-  SortByType getSortByType() => SortByType.ASC;
+  SortByType getSortByInitialType() => SortByType.ASC;
 
   @override
   String? getTableNameApi() => null;

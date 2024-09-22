@@ -155,12 +155,12 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "top";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 

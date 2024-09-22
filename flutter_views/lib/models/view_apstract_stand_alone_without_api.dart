@@ -49,11 +49,10 @@ abstract class ViewAbstractStandAloneCustomView<T>
     throw UnimplementedError();
   }
 
-
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
   @override
-  SortByType getSortByType() => SortByType.ASC;
+  SortByType getSortByInitialType() => SortByType.ASC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() {

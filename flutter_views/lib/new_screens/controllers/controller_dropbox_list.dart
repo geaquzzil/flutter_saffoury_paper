@@ -57,6 +57,7 @@ class DropdownStringListItem {
   String label;
   Object? value;
   bool? enabled;
+  bool isDivider;
   DropdownStringListItem(
-      {this.icon, required this.label, this.value, this.enabled});
+      {this.icon, required this.label, this.value, this.enabled,this.isDivider=false});
 }

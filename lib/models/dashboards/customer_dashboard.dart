@@ -633,10 +633,10 @@ class CustomerDashboardSelector
   CustomerDashboardSelector getSelfNewInstance() => CustomerDashboardSelector();
 
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   String? getTableNameApi() => null;

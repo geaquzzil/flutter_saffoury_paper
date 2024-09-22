@@ -59,14 +59,14 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
       name ?? "not found for $T";
 
   @override
-  String? getSortByFieldName() => "name";
+  String? getSortByInitialFieldName() => "name";
   @override
   String getFieldToReduceSize() {
     return "name";
   }
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

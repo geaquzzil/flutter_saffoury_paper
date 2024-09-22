@@ -106,13 +106,13 @@ class Setting extends ViewAbstract<Setting> {
   }
 
   @override
-  String? getSortByFieldName() {
+  String? getSortByInitialFieldName() {
     // TODO: implement getSortByFieldName
     throw UnimplementedError();
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     // TODO: implement getSortByType
     throw UnimplementedError();
   }

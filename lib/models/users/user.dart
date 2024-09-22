@@ -138,12 +138,12 @@ class User<T> extends UserLists<T> {
       {"name": true, "phone": true, "password": true};
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "name";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 

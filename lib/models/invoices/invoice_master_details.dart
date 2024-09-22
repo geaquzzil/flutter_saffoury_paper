@@ -196,10 +196,10 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   IconData getMainIconData() => Icons.list;
 
   @override
-  String? getSortByFieldName() => "iD";
+  String? getSortByInitialFieldName() => "iD";
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

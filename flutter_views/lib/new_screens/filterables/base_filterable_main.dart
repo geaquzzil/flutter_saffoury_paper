@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/rounded_corner.dart';
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -33,7 +34,8 @@ class BaseFilterableMainWidget extends StatefulWidget {
 }
 
 class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
-  FilterableData? _lastData;
+  ValueNotifier<FilterableData?> _lastData =
+      ValueNotifier<FilterableData?>(null);
   Map<String, FilterableProviderHelper>? _initialData;
   late ViewAbstract _viewAbstract;
 
@@ -58,7 +60,8 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
   void didUpdateWidget(covariant BaseFilterableMainWidget oldWidget) {
     if (_viewAbstract != widget.viewAbstract) {
       debugPrint("didUpdateWidget base filter widget");
-      _lastData = null;
+      _lastData.value = null;
+      _viewAbstract = widget.viewAbstract;
     }
     if (_initialData != widget.initialData) {
       _initialData = widget.initialData;
@@ -127,9 +130,13 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       child: Scaffold(
-        bottomNavigationBar: buildFooter(),
+        bottomNavigationBar: ValueListenableBuilder(
+          valueListenable: _lastData,
+          builder: (context, value, child) =>
+              value == null ? Container() : buildFooter(),
+        ),
         backgroundColor: Colors.transparent,
-        body: _lastData != null
+        body: _lastData.value != null
             ? getSliverCustomScrollViewBody()
             : FutureBuilder(
                 future: context
@@ -138,7 +145,10 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
-                      _lastData = snapshot.data;
+                      WidgetsBinding.instance.addPostFrameCallback((o) {
+                        _lastData.value = snapshot.data;
+                      });
+
                       return getSliverCustomScrollViewBody();
                     } else {
                       EmptyWidget.error(
@@ -149,22 +159,26 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
                       );
                     }
                   }
-                  return EmptyWidget.loading();
+                  return 
+                  
+                  EmptyWidget.loading();
                 })),
       ),
     );
   }
 
   Widget getSliverCustomScrollViewBody() {
-    return SliverCustomScrollView(
-      scrollKey: 'bottomSheet',
-      builderAppbar: (fullyCol, fullyExp) {
-        return SliverAppBar.medium(
-            leading: const CloseButton(),
-            // actions: [Container()],
-            title: getTitle(context));
-      },
-      slivers: getControllersSliver(),
+    return RoundedCornerContainer(
+      child: SliverCustomScrollView(
+        scrollKey: 'bottomSheet',
+        builderAppbar: (fullyCol, fullyExp) {
+          return SliverAppBar.medium(
+              leading: const CloseButton(),
+              // actions: [Container()],
+              title: getTitle(context));
+        },
+        slivers: getControllersSliver(),
+      ),
     );
   }
 

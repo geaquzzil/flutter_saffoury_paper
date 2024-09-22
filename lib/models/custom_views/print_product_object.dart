@@ -162,12 +162,12 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   }
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "date";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.DESC;
   }
 

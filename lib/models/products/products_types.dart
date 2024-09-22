@@ -267,12 +267,12 @@ class ProductType extends ViewAbstract<ProductType>
   ProductType fromJsonViewAbstract(Map<String, dynamic> json) =>
       ProductType.fromJson(json);
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "name";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 

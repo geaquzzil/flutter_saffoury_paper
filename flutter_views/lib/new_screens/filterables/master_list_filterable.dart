@@ -59,8 +59,10 @@ class MasterFilterableController extends StatelessWidget {
   Widget getListItem(BuildContext context, ViewAbstract item) {
     return Selector<FilterableProvider, bool>(
       builder: (context, value, child) => ChoiceChip.elevated(
+          pressElevation: 20,
           label: item.getMainHeaderText(context),
           // avatar: item.getCardLeadingCircleAvatar(context),
+          avatar: null,
           selected: value,
           onSelected: (v) {
             if (v) {

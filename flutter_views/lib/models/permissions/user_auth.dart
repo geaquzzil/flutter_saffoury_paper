@@ -78,12 +78,12 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
       };
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "name";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 
@@ -302,12 +302,12 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "phone";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 

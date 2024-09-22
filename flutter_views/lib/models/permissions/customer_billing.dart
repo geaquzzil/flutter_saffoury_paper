@@ -186,12 +186,12 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
       };
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "name";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 

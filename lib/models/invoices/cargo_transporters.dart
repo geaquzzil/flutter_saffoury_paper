@@ -76,10 +76,10 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   IconData getMainIconData() => Icons.local_shipping;
 
   @override
-  String? getSortByFieldName() => "name";
+  String? getSortByInitialFieldName() => "name";
 
   @override
-  SortByType getSortByType() => SortByType.ASC;
+  SortByType getSortByInitialType() => SortByType.ASC;
 
   @override
   String? getTableNameApi() => "cargo_transporters";

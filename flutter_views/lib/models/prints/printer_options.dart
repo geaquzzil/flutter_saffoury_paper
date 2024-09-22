@@ -65,9 +65,9 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
   IconData getMainIconData() => Icons.print;
 
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   String? getTableNameApi() => null;

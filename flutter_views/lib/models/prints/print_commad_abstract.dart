@@ -98,10 +98,10 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   String? getTableNameApi() => null;

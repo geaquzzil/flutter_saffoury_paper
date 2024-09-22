@@ -306,12 +306,12 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "width";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 

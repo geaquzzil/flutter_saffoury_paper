@@ -662,7 +662,7 @@ class Product extends ViewAbstract<Product>
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "date";
   }
 
@@ -684,7 +684,7 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.DESC;
   }
 

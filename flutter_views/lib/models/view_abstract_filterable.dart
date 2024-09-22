@@ -16,8 +16,14 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, FilterableProviderHelper>? _lastFilterableMap;
 
-  String? getSortByFieldName();
-  SortByType getSortByType();
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? _lastFilterableFieldName;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  SortByType? _lastFilterableSortType;
+
+  String? getSortByInitialFieldName();
+  SortByType getSortByInitialType();
 
   String getForeignKeyName() {
     return getTableNameApi() ?? " no_foreign_key";
@@ -27,7 +33,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "iD";
   }
 
-  bool isSortAvailable() => getSortByFieldName() != null;
+  bool isSortAvailable() => getSortByInitialFieldName() != null;
 
   List<String> getFilterableFields() => getMainFields();
 
@@ -43,7 +49,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
             type: TextInputType.datetime)
       ];
   String getSortByFieldNameApi() {
-    return getSortByFieldName() ?? "";
+    return getSortByInitialFieldName() ?? "";
   }
 
   String getFilterableFieldNameApi(String field) {

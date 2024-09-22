@@ -144,12 +144,12 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   }
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "table_name";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.DESC;
   }
 

@@ -44,7 +44,7 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
         {
           return Chip(
             // selected: true,
-            
+
             label: Text("${item.mainFieldName} :${item.mainValuesName[0]}"),
 
             // avatar:Text(item.field),
@@ -83,6 +83,7 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
         return const SizedBox();
       } else {
         return TextButton(
+          //todo translate
           child: const Text("CLEAR FILTERS"),
           onPressed: () {
             onFilterableChanged?.call(null);

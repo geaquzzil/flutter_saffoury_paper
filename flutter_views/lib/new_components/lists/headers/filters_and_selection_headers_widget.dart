@@ -91,14 +91,15 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 DropdownStringListControllerListenerByIcon(
                     showSelectedValueBeside: false,
                     icon: Icons.sort_by_alpha,
-                    initialValue: viewAbstract.getSortByFieldName() == null
+                    initialValue: viewAbstract.getSortByInitialFieldName() ==
+                            null
                         ? null
                         : DropdownStringListItem(
                             icon: viewAbstract.getFieldIconData(
-                                viewAbstract.getSortByFieldName()!),
-                            label: viewAbstract.getFieldLabel(
-                                context, viewAbstract.getSortByFieldName()!),
-                            value: viewAbstract.getSortByFieldName()),
+                                viewAbstract.getSortByInitialFieldName()!),
+                            label: viewAbstract.getFieldLabel(context,
+                                viewAbstract.getSortByInitialFieldName()!),
+                            value: viewAbstract.getSortByInitialFieldName()),
                     hint: AppLocalizations.of(context)!.sortBy,
                     list: viewAbstract.getMainFieldsIconsAndValues(context) ??
                         viewAbstract.getMainFieldsIconsAndValues(context),
@@ -116,7 +117,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                     }),
                 DropdownEnumControllerListenerByIcon<SortByType>(
                   viewAbstractEnum: SortByType.ASC,
-                  initialValue: viewAbstract.getSortByType(),
+                  initialValue: viewAbstract.getSortByInitialType(),
                   showSelectedValueBeside: false,
                   onSelected: (object) {
                     // listProvider.clear(findCustomKey());

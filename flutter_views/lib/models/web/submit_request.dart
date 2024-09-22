@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
-class SubmitARequest extends ViewAbstract<SubmitARequest>{
+class SubmitARequest extends ViewAbstract<SubmitARequest> {
   @override
   SubmitARequest fromJsonViewAbstract(Map<String, dynamic> json) {
     // TODO: implement fromJsonViewAbstract
@@ -58,13 +58,13 @@ class SubmitARequest extends ViewAbstract<SubmitARequest>{
   }
 
   @override
-  String? getSortByFieldName() {
+  String? getSortByInitialFieldName() {
     // TODO: implement getSortByFieldName
     throw UnimplementedError();
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     // TODO: implement getSortByType
     throw UnimplementedError();
   }
@@ -128,5 +128,4 @@ class SubmitARequest extends ViewAbstract<SubmitARequest>{
     // TODO: implement toJsonViewAbstract
     throw UnimplementedError();
   }
-
 }

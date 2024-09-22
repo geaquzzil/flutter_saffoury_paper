@@ -186,10 +186,10 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   material.IconData getMainIconData() => material.Icons.document_scanner;
 
   @override
-  String? getSortByFieldName() => "date";
+  String? getSortByInitialFieldName() => "date";
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   String? getTableNameApi() => "customs_declarations";

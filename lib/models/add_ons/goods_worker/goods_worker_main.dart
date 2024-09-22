@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filter_icon.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/sort_icon.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
@@ -256,7 +257,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     if (firstPane == null) {
       return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
           ? null
-          : [getFilterIcon()];
+          : [getFilterIcon(),SortIcon(viewAbstract: Product(),)];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
     return null;

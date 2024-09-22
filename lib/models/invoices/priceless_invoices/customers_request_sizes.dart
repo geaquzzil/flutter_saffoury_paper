@@ -114,10 +114,10 @@ class CustomerRequestSizeDetails
       AppLocalizations.of(context)!.customer;
 
   @override
-  String? getSortByFieldName() => "date";
+  String? getSortByInitialFieldName() => "date";
 
   @override
-  SortByType getSortByType() => SortByType.DESC;
+  SortByType getSortByInitialType() => SortByType.DESC;
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

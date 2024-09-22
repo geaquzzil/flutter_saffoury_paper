@@ -16,13 +16,14 @@ abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
 
   bool getCustomStandAloneWidgetIsPadding();
 
- void callApiForCustomStandAloneWidget(BuildContext context){
-  switch(getCustomStandAloneResponseType()){
-    case ResponseType.LIST:
-    case ResponseType.NONE_RESPONSE_TYPE:
-    case ResponseType.SINGLE:
+  void callApiForCustomStandAloneWidget(BuildContext context) {
+    switch (getCustomStandAloneResponseType()) {
+      case ResponseType.LIST:
+      case ResponseType.NONE_RESPONSE_TYPE:
+      case ResponseType.SINGLE:
+    }
   }
- }
+
   @override
   Map<String, IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap
@@ -42,9 +43,9 @@ abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
   }
 
   @override
-  String? getSortByFieldName() => null;
+  String? getSortByInitialFieldName() => null;
   @override
-  SortByType getSortByType() => SortByType.ASC;
+  SortByType getSortByInitialType() => SortByType.ASC;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() {

@@ -170,12 +170,12 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   }
 
   @override
-  String getSortByFieldName() {
+  String getSortByInitialFieldName() {
     return "userlevelname";
   }
 
   @override
-  SortByType getSortByType() {
+  SortByType getSortByInitialType() {
     return SortByType.ASC;
   }
 
