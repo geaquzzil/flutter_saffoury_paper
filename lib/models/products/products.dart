@@ -161,6 +161,9 @@ class Product extends ViewAbstract<Product>
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool requireObjcetsResquest = true;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  bool disbleStatusAndSizeOnFilter = false;
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
@@ -187,6 +190,9 @@ class Product extends ViewAbstract<Product>
     date = "".toDateTimeNowString();
     status = ProductStatus.NONE;
   }
+
+  Product.disableCustomFilterable({this.disbleStatusAndSizeOnFilter = true});
+
   @override
   Product copyWithSetNewFileReader() {
     date = "".toDateTimeNowString();
@@ -376,26 +382,29 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  List<CustomFilterableField> getCustomFilterableFields(BuildContext context) =>
-      super.getCustomFilterableFields(context)
-        ..addAll([
-          CustomFilterableField(
-              this,
-              ProductStatus.NONE.getMainLabelText(context),
-              Icons.date_range,
-              "status",
-              "status",
-              ProductStatus.NONE,
-              singleChoiceIfList: true),
-          CustomFilterableField(
-              this, "width", Icons.border_left_outlined, "width", "width", "",
-              type: const TextInputType.numberWithOptions(
-                  decimal: false, signed: false)),
-          CustomFilterableField(
-              this, "length", Icons.border_top_outlined, "length", "length", "",
-              type: const TextInputType.numberWithOptions(
-                  decimal: false, signed: false)),
-        ]);
+  List<CustomFilterableField> getCustomFilterableFields(BuildContext context) {
+    return super.getCustomFilterableFields(context)
+      ..addAll(!disbleStatusAndSizeOnFilter
+          ? [
+              CustomFilterableField(
+                  this,
+                  ProductStatus.NONE.getMainLabelText(context),
+                  Icons.date_range,
+                  "status",
+                  "status",
+                  ProductStatus.NONE,
+                  singleChoiceIfList: true),
+              CustomFilterableField(this, "width", Icons.border_left_outlined,
+                  "width", "width", "",
+                  type: const TextInputType.numberWithOptions(
+                      decimal: false, signed: false)),
+              CustomFilterableField(this, "length", Icons.border_top_outlined,
+                  "length", "length", "",
+                  type: const TextInputType.numberWithOptions(
+                      decimal: false, signed: false)),
+            ]
+          : []);
+  }
 
   @override
   IconData getMainIconData() {

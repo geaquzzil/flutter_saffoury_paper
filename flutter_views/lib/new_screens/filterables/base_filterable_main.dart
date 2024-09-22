@@ -79,13 +79,23 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.horizontal,
         children: [
-          TextButton(
-            child: Text(
-              AppLocalizations.of(context)!.clearFiltters.toUpperCase(),
+          getFilterSelector(
+            builder: (_, v, __) => AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: v == 0
+                  ? const SizedBox.shrink()
+                  : TextButton(
+                      child: Text(
+                        AppLocalizations.of(context)!
+                            .clearFiltters
+                            .toUpperCase(),
+                        // style:v>0 ? null:Theme.of(context).
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                    ),
             ),
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
           ),
           const Spacer(),
           TextButton(
@@ -118,12 +128,6 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       child: Scaffold(
         bottomNavigationBar: buildFooter(),
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Icon(Icons.arrow_forward_ios_rounded),
-          onPressed: () {
-            onDonePop();
-          },
-        ),
         backgroundColor: Colors.transparent,
         body: _lastData != null
             ? getSliverCustomScrollViewBody()
@@ -221,4 +225,12 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
   // Widget getHeader(
   Text getTitle(BuildContext context) => Text(
       "${AppLocalizations.of(context)!.filter} ${widget.viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase()}");
+}
+
+Widget getFilterSelector(
+    {required Widget Function(BuildContext, int, Widget?) builder}) {
+  return Selector<FilterableProvider, int>(
+    selector: (p0, p1) => p1.getCount(),
+    builder: builder,
+  );
 }

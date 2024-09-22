@@ -117,7 +117,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   @override
   Widget? getCustomEndDrawer() {
-    // TODO: implement getCustomEndDrawer
     return BaseEditNewPage(
       onFabClickedConfirm: (v) {
         if (v != null) {
@@ -228,7 +227,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   Widget getFilterIcon() {
     return FilterIcon(
-      viewAbstract: Product(),
+      viewAbstract: Product.disableCustomFilterable(),
       initialData: filterData,
       onDoneClickedPopResults: (v) {
         if (v is bool) {
