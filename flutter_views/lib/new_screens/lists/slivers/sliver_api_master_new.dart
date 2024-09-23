@@ -236,10 +236,17 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       valueNotifierGrid.value = widget.isGridView;
     }
     _ObjectType lastUpdated = getToListObjectType();
+    if (_filterData != widget.filterData) {
+      _filterData = widget.filterData;
+    }
+    if (_searchString != widget.searchString) {
+      _searchString = widget.searchString;
+    }
     bool shouldFetsh = false;
     if (_lastKey != getListProviderKey()) {
       shouldFetsh = lastUpdated != _ObjectType.CUSTOM_LIST;
       _lastKey = getListProviderKey();
+
       _toListObject = widget.toListObject;
       _toListObjectType = lastUpdated;
       if (lastUpdated == _ObjectType.CUSTOM_LIST) {
@@ -256,7 +263,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     }
 
     debugPrint(
-        "SliverApiWithStaticMixin===> didUpdateWidget=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}");
+        "SliverApiWithStaticMixin===> didUpdateWidget=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value} should fetish $shouldFetsh filter=>$_filterData");
 
     super.didUpdateWidget(oldWidget);
   }
@@ -622,8 +629,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   void _resetValues() {
-    _searchString = null;
-    _filterData = null;
+    // _searchString = null;
+    // _filterData = null;
     _onSeletedListItemsChanged?.value = [];
   }
 
@@ -670,21 +677,21 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       if (notifyNotSearchable) {
         listProvider.notifyNotSearchable(customKey);
       }
-      if (listProvider.getCount(customKey) == 0) {
-        if (_searchString == null) {
-          listProvider.fetchList(customKey,
-              filter: _filterData,
-              autoRest: getToListObjectCastAutoRestNullIfNot(),
-              viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
-                  getToListObjectCastViewAbstractNullIfNot());
-        } else {
-          listProvider.fetchListSearch(
-            customKey,
-            getToListObjectCastViewAbstract(),
-            _searchString!,
+      // if (listProvider.getCount(customKey) == 0) {
+      if (_searchString == null) {
+        listProvider.fetchList(customKey,
             filter: _filterData,
-          );
-        }
+            autoRest: getToListObjectCastAutoRestNullIfNot(),
+            viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
+                getToListObjectCastViewAbstractNullIfNot());
+      } else {
+        listProvider.fetchListSearch(
+          customKey,
+          getToListObjectCastViewAbstract(),
+          _searchString!,
+          filter: _filterData,
+        );
+        // }
       }
     }
   }

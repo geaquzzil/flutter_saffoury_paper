@@ -356,10 +356,12 @@ class ListMultiKeyProvider with ChangeNotifier {
       if (customAutoRest != null) {
         debugPrint("errrrrrrr s");
         list = await customAutoRest.listCall(
+            filter: filter,
             count: customCount ?? customAutoRest.getPageItemCount,
             page: customPage ?? multiListProviderHelper.page);
       } else {
         list = await viewAbstract!.listCall(
+            filter: filter,
             count:
                 customCount ?? autoRest?.range ?? viewAbstract.getPageItemCount,
             page: customPage ?? multiListProviderHelper.page);

@@ -31,6 +31,7 @@ class _SliverApiMixinAutoRestState
   String getListProviderKey() {
     String key = getToListObjectCastViewAbstract().getListableKey();
     key = key + (getSearchString ?? "") + (getFilterData.toString());
+    debugPrint("SliverApiWithStaticMixin===> getListProviderKey $key");
     return key;
   }
 
