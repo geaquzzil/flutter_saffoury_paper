@@ -574,6 +574,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
+  ViewAbstract castViewAbstract() {
+    return this as ViewAbstract;
+  }
+
   HttpWithMiddleware getHttp() {
     return HttpWithMiddleware.build(
         requestTimeout: const Duration(seconds: 180),
@@ -629,6 +633,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           mainBody.addAll(sort.getMap());
         }
         mainBody.addAll(getCustomMap);
+        mainBody.addAll(castViewAbstract().getFilterableMap(map));
         break;
       case ServerActions.call:
         mainBody.addAll(getCustomMap);
@@ -640,6 +645,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
 
         mainBody.addAll(getCustomMapOnSearch);
+        mainBody.addAll(castViewAbstract().getFilterableMap(map));
         break;
 
       case ServerActions.list_reduce_size:

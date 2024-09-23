@@ -9,6 +9,7 @@ import 'package:rxdart/streams.dart';
 class SliverCustomScrollView extends StatefulWidget {
   List<Widget> slivers;
   ScrollController? scrollController;
+  List<Widget> Function(ScrollController)? builder;
   String? scrollKey;
   ScrollPhysics? physics;
 

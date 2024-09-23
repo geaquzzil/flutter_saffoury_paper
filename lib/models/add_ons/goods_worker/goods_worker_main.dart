@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/new_screens/filterables/horizontal_selec
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_request_from_card.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -414,6 +415,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     return [
       SliverToBoxAdapter(
         child: Text(""),
+      ),
+      SliverApiMixinViewAbstractWidget(
+        toListObject: Product(),
+        filterData: filterData,
       )
       // FutureBuilder(
       //     future: inventoryProduct.listCall(count: 1, page: 0),

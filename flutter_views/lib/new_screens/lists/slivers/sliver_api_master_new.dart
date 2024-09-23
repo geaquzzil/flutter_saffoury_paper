@@ -201,9 +201,13 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   @override
   void initState() {
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
+    _toListObjectType = getToListObjectType();
+    _toListObject = checkToInitToListObject();
     _setParentForChildCardItem = widget.setParentForChildCardItem;
     _scrollController.addListener(_onScroll);
-    _toListObjectType = getToListObjectType();
+
+    _lastKey = getListProviderKey();
+
     _searchString = widget.searchString;
     _filterData = widget.filterData;
 
@@ -212,8 +216,6 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
     _onSeletedListItemsChanged =
         widget.onSeletedListItemsChanged ?? ValueNotifier([]);
-    _lastKey = getListProviderKey();
-    _toListObject = checkToInitToListObject();
 
     checkForOverridingSetttings();
     List? customList = getToListObjectCastList();
@@ -430,17 +432,23 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Widget getSliverList(int count, bool isLoading, {List? customList}) {
     return SliverPadding(
-        padding: defaultSliverListPadding,
-        sliver: LiveSliverList(
-            key: _listKey,
-            controller: _scrollController,
-            showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
-            itemBuilder: animationItemBuilder(
-              (index) {
-                return getListItem(index, count, isLoading);
-              },
-            ),
-            itemCount: count + (isLoading ? 8 : 0)));
+      padding: defaultSliverListPadding,
+      sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return getListItem(index, count, isLoading);
+      }, childCount: count + (isLoading ? 8 : 0))),
+
+      //  LiveSliverList(
+      //     key: _listKey,
+      //     controller: _scrollController,
+      //     showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
+      //     itemBuilder: animationItemBuilder(
+      //       (index) {
+      //         return getListItem(index, count, isLoading);
+      //       },
+      //     ),
+      //     itemCount: count + (isLoading ? 8 : 0))
+    );
   }
 
   bool _isSelectedItem(ViewAbstract va) {
@@ -719,6 +727,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   void _onScroll() {
+    debugPrint("_onScroll");
     final direction = _scrollController.position.userScrollDirection;
     if (direction == ScrollDirection.forward) {
       context.read<ListScrollProvider>().setScrollDirection = direction;
@@ -726,7 +735,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       context.read<ListScrollProvider>().setScrollDirection = direction;
     }
     bool bottom = _isBottom;
-    debugPrint("SliverApiWithStaticMixin===> _onScroll=> isBottom: $bottom");
+    debugPrint(
+        "_onScroll SliverApiWithStaticMixin===> _onScroll=> isBottom: $bottom");
     if (bottom) {
       fetshList();
     }

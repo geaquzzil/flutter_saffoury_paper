@@ -9,6 +9,7 @@ import 'package:rxdart/streams.dart';
 
 class SliverCustomScrollViewDraggable extends StatefulWidget {
   List<Widget> slivers;
+  List<Widget> Function(ScrollController)? builder;
   ScrollController? scrollController;
   String? scrollKey;
   ScrollPhysics? physics;
@@ -23,6 +24,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
       required this.slivers,
       this.title,
       this.scrollController,
+      this.builder,
       this.pinToolbar = false,
       this.expandHeaderWidget,
       this.expandBottomWidget,

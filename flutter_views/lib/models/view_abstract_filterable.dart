@@ -107,7 +107,8 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   }
 
   Map<String, String> getFilterableMap(
-      Map<String, FilterableProviderHelper> map) {
+      Map<String, FilterableProviderHelper>? map) {
+    if (map == null) return {};
     debugPrint("getFilterableMap=> $map");
     Map<String, String> bodyMap = {};
     map.forEach((key, value) {
