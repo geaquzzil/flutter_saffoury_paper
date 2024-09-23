@@ -306,13 +306,27 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  getPane(
+  getPaneController(
       {required bool firstPane,
       TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+      TabControllerHelper? secoundTab,
+      required ScrollController scrollController}) {
     return firstPane
         ? getDesktopFirstPane(tab: tab)
-        : getDesktopSecondPane(secoundTab: secoundTab);
+        : [
+            SliverApiMixinViewAbstractWidget(
+              toListObject: Product(),
+              scrollController: scrollController,
+              requiresFullFetsh: true,
+              hasCustomWidgetBuilder: (response) {
+                return SliverFillRemaining(
+                  child: Product().getSummary(
+                      context: context, productList: response.cast()),
+                );
+              },
+              filterData: filterData,
+            )
+          ];
   }
 
   getDesktopFirstPane({TabControllerHelper? tab}) {
@@ -358,6 +372,83 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   Center getMobileFirstPaneWidget(TabControllerHelper tab) {
     return Center(
       child: Text(tab.text!),
+    );
+  }
+
+  Widget getSummary() {
+    List<Product>? productList = _importedList?.cast<Product>();
+    debugPrint("productList size ${productList?.length}");
+    double getTotalImportedFromFile = productList == null
+        ? 0
+        : productList
+                .map((e) => e.qrQuantity)
+                .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
+            0;
+    productList = keyToExportTo.currentState?.getList<Product>();
+    double getTotalImportedFromBarcode = productList == null ||
+            productList.isEmpty
+        ? 0
+        : productList
+                .map((e) => e.qrQuantity)
+                .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
+            0;
+    double getTotalRemainingImported =
+        getTotalImportedFromFile - getTotalImportedFromBarcode;
+
+    int totalImportedLength =
+        keyToImportFrom.currentState?.getList().length ?? 0;
+    int totalImportedBarcodeLength =
+        keyToExportTo.currentState?.getList().length ?? 0;
+    int totalRemainingLength = totalImportedLength - totalImportedBarcodeLength;
+    return FileInfoStaggerdGridView(
+      childAspectRatio: 16 / 9,
+      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod) {
+        return [
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                color: Colors.blue,
+                icon: Icons.list,
+                title: "TOTAL ITEMS IMPORTED",
+                description: getTotalImportedFromFile.toCurrencyFormat(
+                    symbol: AppLocalizations.of(context)!.kg),
+                footer: totalImportedLength.toCurrencyFormat(),
+
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                color: const Color.fromARGB(255, 243, 82, 33),
+                icon: Icons.barcode_reader,
+                title: "TOTAL ITEMS SCANED",
+                description: getTotalImportedFromBarcode.toCurrencyFormat(
+                    symbol: AppLocalizations.of(context)!.kg),
+                footer: totalImportedBarcodeLength.toCurrencyFormat(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount + crossAxisCountMod,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                color: Colors.blue,
+                // icon: Icons.today,
+                title: "TOTAL REMAINING",
+                description: getTotalRemainingImported.toCurrencyFormat(
+                    symbol: AppLocalizations.of(context)!.kg),
+                footer: totalRemainingLength.toCurrencyFormat(),
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+        ];
+      },
+      wrapWithCard: false,
+      // crossAxisCount: getCrossAxisCount(getWidth),
+
+      // width < 1400 ? 1.1 : 1.4,
     );
   }
 
@@ -495,83 +586,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         ),
         children: [v.getFullDescription()],
       ),
-    );
-  }
-
-  Widget getSummary() {
-    List<Product>? productList = _importedList?.cast<Product>();
-    debugPrint("productList size ${productList?.length}");
-    double getTotalImportedFromFile = productList == null
-        ? 0
-        : productList
-                .map((e) => e.qrQuantity)
-                .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
-            0;
-    productList = keyToExportTo.currentState?.getList<Product>();
-    double getTotalImportedFromBarcode = productList == null ||
-            productList.isEmpty
-        ? 0
-        : productList
-                .map((e) => e.qrQuantity)
-                .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
-            0;
-    double getTotalRemainingImported =
-        getTotalImportedFromFile - getTotalImportedFromBarcode;
-
-    int totalImportedLength =
-        keyToImportFrom.currentState?.getList().length ?? 0;
-    int totalImportedBarcodeLength =
-        keyToExportTo.currentState?.getList().length ?? 0;
-    int totalRemainingLength = totalImportedLength - totalImportedBarcodeLength;
-    return FileInfoStaggerdGridView(
-      childAspectRatio: 16 / 9,
-      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod) {
-        return [
-          StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: Colors.blue,
-                icon: Icons.list,
-                title: "TOTAL ITEMS IMPORTED",
-                description: getTotalImportedFromFile.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalImportedLength.toCurrencyFormat(),
-
-                // footer: incomes?.length.toString(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
-          StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: const Color.fromARGB(255, 243, 82, 33),
-                icon: Icons.barcode_reader,
-                title: "TOTAL ITEMS SCANED",
-                description: getTotalImportedFromBarcode.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalImportedBarcodeLength.toCurrencyFormat(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
-          StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount + crossAxisCountMod,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: Colors.blue,
-                // icon: Icons.today,
-                title: "TOTAL REMAINING",
-                description: getTotalRemainingImported.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalRemainingLength.toCurrencyFormat(),
-                // footer: incomes?.length.toString(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
-        ];
-      },
-      wrapWithCard: false,
-      // crossAxisCount: getCrossAxisCount(getWidth),
-
-      // width < 1400 ? 1.1 : 1.4,
     );
   }
 

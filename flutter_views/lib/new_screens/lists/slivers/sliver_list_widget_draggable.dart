@@ -89,6 +89,16 @@ class _SliverCustomScrollViewDraggableState
 
     return SliverCustomScrollView(
       physics: widget.physics,
+      builder: widget.builder == null
+          ? null
+          : (scrollController) {
+              return [
+                SliverToBoxAdapter(
+                  child: expandedUpArrow(),
+                ),
+                ...widget.builder!.call(scrollController)
+              ];
+            },
       scrollController: _scrollController,
       scrollKey: widget.scrollKey,
       builderAppbar: (fullyCol, fullyExp) {

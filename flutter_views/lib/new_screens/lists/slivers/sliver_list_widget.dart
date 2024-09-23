@@ -19,6 +19,7 @@ class SliverCustomScrollView extends StatefulWidget {
       {super.key,
       required this.slivers,
       this.scrollController,
+      this.builder,
       this.builderAppbar,
       this.physics,
       this.scrollKey});
@@ -110,7 +111,10 @@ class _SliverCustomScrollViewDraggableState
                       .call(fullyCollapsed, fullyExpanded);
                 },
               ),
-            ...widget.slivers
+            if (widget.builder != null)
+              ...widget.builder!.call(_scrollController)
+            else
+              ...widget.slivers
           ]),
     );
   }

@@ -94,14 +94,14 @@ ValueNotifier<QRCodeID?> onQrCodeChanged = ValueNotifier<QRCodeID?>(null);
 void main() async {
   initializeReflectable();
 
-  FlutterError.onError = (FlutterErrorDetails details) async {
-    ErrorLogger().logError(details);
-  };
-  FlutterError.demangleStackTrace = (StackTrace stack) {
-    if (stack is stack_trace.Trace) return stack.vmTrace;
-    if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
-    return stack;
-  };
+  // FlutterError.onError = (FlutterErrorDetails details) async {
+  //   ErrorLogger().logError(details);
+  // };
+  // FlutterError.demangleStackTrace = (StackTrace stack) {
+  //   if (stack is stack_trace.Trace) return stack.vmTrace;
+  //   if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+  //   return stack;
+  // };
 
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationController.initializeLocalNotifications();

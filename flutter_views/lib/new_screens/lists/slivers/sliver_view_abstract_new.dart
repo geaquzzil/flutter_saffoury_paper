@@ -9,8 +9,11 @@ class SliverApiMixinViewAbstractWidget
   /// [toListObject] could be String [tableName] or [ViewAbstract]
   SliverApiMixinViewAbstractWidget(
       {super.key,
+      super.scrollController,
       super.scrollDirection,
+      super.hasCustomWidgetBuilder,
       super.isSliver,
+      super.requiresFullFetsh,
       super.isGridView = false,
       super.hasCustomCardBuilder,
       super.hasCustomSeperater,

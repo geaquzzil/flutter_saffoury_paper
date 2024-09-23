@@ -84,11 +84,26 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
   Widget? getDraggableHeaderWidget(bool firstPane);
   Widget? getDraggableHeaderExpandedWidget(bool firstPane);
   Widget? getDraggableBottomExpandedWidget(bool firstPane);
+  getPaneController(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab,
+      required ScrollController scrollController});
+
+  @override
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
+  }
 
   Widget _getDraggableHomePane(widget, bool firstPane,
       {TabControllerHelper? tab}) {
     return SliverCustomScrollViewDraggable(
-        slivers: getPane(firstPane: firstPane),
+        slivers: [],
+        builder: (c) =>
+            getPaneController(firstPane: firstPane, scrollController: c),
         title: getAppbarTitle(firstPane: firstPane),
         expandHeaderWidget: getDraggableHeaderExpandedWidget(firstPane),
         expandBottomWidget: getDraggableBottomExpandedWidget(firstPane),
@@ -513,10 +528,11 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   ValueNotifier<int> onTabSelectedSecondPane = ValueNotifier<int>(0);
 
   ///on enable sliver [isPanesIsSliver] then this method should return List<Widget> else Widget?
-  getPane(
-      {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab});
+  getPane({
+    required bool firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  });
 
   Widget? getFloatingActionButton(
       {bool? firstPane,

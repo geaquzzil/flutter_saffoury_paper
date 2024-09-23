@@ -157,7 +157,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,
-      {Map<String, FilterableProviderHelper>? filter}) async {
+      {Map<String, FilterableProviderHelper>? filter, int? customCount}) async {
     late MultiListProviderHelper? multiListProviderHelper;
     debugPrint("ListMultiKeyProvider===> fetchListSearch query:$query");
     if (_listMap.containsKey(key)) {
@@ -176,8 +176,10 @@ class ListMultiKeyProvider with ChangeNotifier {
     //     notifyListeners();
     //   },
     // );
-    List? list = await viewAbstract.search(viewAbstract.getPageItemCountSearch,
-        multiListProviderHelper.page, query,
+    List? list = await viewAbstract.search(
+        customCount ?? viewAbstract.getPageItemCountSearch,
+        customCount != null ? 0 : multiListProviderHelper.page,
+        query,
         filter: filter);
     multiListProviderHelper.isLoading = false;
     multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);

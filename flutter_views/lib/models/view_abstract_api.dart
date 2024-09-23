@@ -2,8 +2,10 @@
 import 'dart:collection';
 import 'dart:convert' as convert;
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
@@ -217,6 +219,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response == null) return null;
     if (response.statusCode == 200) {
       Iterable l = convert.jsonDecode(response.body);
+
       List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
       return (t[0] as ViewAbstract).onResponse200K(this as ViewAbstract);
     } else {
@@ -388,11 +391,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     if (response == null) return [];
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      Iterable l = convert.jsonDecode(response.body);
-      return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+      final parser = ResultsParser<T>(response.body, castViewAbstract());
+      return parser.parseInBackground();
     } else {
       onCallCheckError(onResponse: onResponse, response: response);
       return [];
@@ -565,9 +565,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     if (response == null) return null;
     if (response.statusCode == 200) {
-      //todo change this when finish testing
-      Iterable l = convert.jsonDecode(response.body);
-      return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+      final parser = ResultsParser<T>(response.body, castViewAbstract());
+      return parser.parseInBackground();
     } else {
       onCallCheckError(onResponse: onResponse, response: response);
       return null;
@@ -705,4 +704,29 @@ class ViewAbstractListResponseHelper {
     required this.faildCount,
     required this.successCount,
   });
+}
+
+class ResultsParser<T> {
+  // 1. pass the encoded json as a constructor argument
+  final ViewAbstract viewAbstract;
+  ResultsParser(this.encodedJson, this.viewAbstract);
+  final String encodedJson;
+
+  // 2. public method that does the parsing in the background
+  Future<List<T>> parseInBackground() async {
+    // create a port
+    final p = ReceivePort();
+    // spawn the isolate and wait for it to complete
+    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
+    // get and return the result data
+    return await p.first;
+  }
+
+  // 3. json parsing
+  Future<void> _decodeAndParseJson(SendPort p) async {
+    Iterable l = convert.jsonDecode(encodedJson);
+    List<T> t = List<T>.from(
+        l.map((model) => viewAbstract.fromJsonViewAbstract(model)));
+    Isolate.exit(p, t);
+  }
 }

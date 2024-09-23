@@ -12,6 +12,7 @@ class SliverApiMixinStaticList extends SliverApiMixinWithStaticStateful {
   SliverApiMixinStaticList(
       {super.key,
       required this.list,
+      super.scrollController,
       super.isSliver,
       super.scrollDirection,
       super.isGridView = false,

@@ -52,11 +52,15 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_static.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -1370,9 +1374,89 @@ class Product extends ViewAbstract<Product>
     );
   }
 
-  @override
-  String getTextInputChangeViewAbstractToAutoComplete() {
-    return super.getTextInputChangeViewAbstractToAutoComplete();
+  Widget getSummary(
+      {required BuildContext context, required List<Product> productList}) {
+    double getTotalImportQuanity = productList.isEmpty
+        ? 0
+        : productList
+            .map((e) => e.getQuantity())
+            .reduce((value, element) => (value) + (element));
+
+    int totalImportedLength = productList.length;
+
+    return FileInfoStaggerdGridView(
+      childAspectRatio: 16 / 9,
+      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod) {
+        return [
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                color: Colors.blue,
+                icon: Icons.list,
+                title: "TOTAL ITEMS IMPORTED",
+                description: getTotalImportQuanity.toCurrencyFormat(
+                    symbol: AppLocalizations.of(context)!.kg),
+                footer: totalImportedLength.toCurrencyFormat(),
+
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: ChartCardItemCustom(
+                color: Colors.blue,
+                icon: Icons.list,
+                title: "TOTAL ITEMS IMPORTED",
+                description: getTotalImportQuanity.toCurrencyFormat(
+                    symbol: AppLocalizations.of(context)!.kg),
+                footer: totalImportedLength.toCurrencyFormat(),
+
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              )),
+          StaggeredGridTile.count(
+              crossAxisCellCount: 4,
+              mainAxisCellCount: 4,
+              child: Card(
+                child: SliverApiMixinStaticList(
+                  list: productList,
+                ),
+              )),
+
+          // StaggeredGridTile.count(
+          //     crossAxisCellCount: 2,
+          //     mainAxisCellCount: 1,
+          //     child: ChartCardItemCustom(
+          //       color: const Color.fromARGB(255, 243, 82, 33),
+          //       icon: Icons.barcode_reader,
+          //       title: "TOTAL ITEMS SCANED",
+          //       description: getTotalImportedFromBarcode.toCurrencyFormat(
+          //           symbol: AppLocalizations.of(context)!.kg),
+          //       footer: totalImportedBarcodeLength.toCurrencyFormat(),
+          //       // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+          //     )),
+          // StaggeredGridTile.count(
+          //     crossAxisCellCount: crossAxisCount + crossAxisCountMod,
+          //     mainAxisCellCount: 1,
+          //     child: ChartCardItemCustom(
+          //       color: Colors.blue,
+          //       // icon: Icons.today,
+          //       title: "TOTAL REMAINING",
+          //       description: getTotalRemainingImported.toCurrencyFormat(
+          //           symbol: AppLocalizations.of(context)!.kg),
+          //       footer: totalRemainingLength.toCurrencyFormat(),
+          //       // footer: incomes?.length.toString(),
+          //       // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+          //     )),
+        ];
+      },
+      wrapWithCard: false,
+      // crossAxisCount: getCrossAxisCount(getWidth),
+
+      // width < 1400 ? 1.1 : 1.4,
+    );
   }
 
   @override

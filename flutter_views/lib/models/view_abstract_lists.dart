@@ -14,6 +14,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:skeletons/skeletons.dart';
 import '../providers/actions/action_viewabstract_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
@@ -80,8 +81,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       {String? addCustomHeroTag, bool addBottomWidget = true}) {
     return getHeroTag(
         context: context,
-        child: getCardLeadingCircleAvatar(context,
-            addBottomWidget: addBottomWidget));
+        child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
   }
 
   DismissDirection getDismissibleDirection() {
@@ -114,11 +114,29 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getCachedImage(BuildContext context, {String? url}) {
+    return Container(
+        width: 60,
+        height: 100,
+        // width: 60,
+        // height: 60,
+        // width: 150,
+        // height: 100,
+        decoration: BoxDecoration(
+          // color: Colors.blueAccent,
+          borderRadius: BorderRadius.circular(12),
+
+          image: url == null
+              ? null
+              : DecorationImage(
+                  image: FastCachedImageProvider(url), fit: BoxFit.cover),
+          // color: url == null ? null : color?.darkVibrantColor?.color,
+          // borderRadius: const BorderRadius.all(Radius.circular(20))
+        ));
     // return Image.network(url);
     //TODO: this is for leading card
-    // CachedNetworkImage(
+    // return CachedNetworkImage(
     //   color: Theme.of(context).colorScheme.onBackground,
-    //   imageUrl: imageUrl,
+    //   imageUrl: url,
     //   imageBuilder: (context, imageProvider) => Container(
     //     decoration: BoxDecoration(
     //       shape: BoxShape.circle,
@@ -150,11 +168,15 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     //   placeholder: (context, url) => const CircularProgressIndicator(),
     //   errorWidget: (context, url, error) => Icon(getMainIconData()),
     // );
+
     return FastCachedImage(
       url: url ?? "",
-      fit: BoxFit.contain,
+      fit: BoxFit.cover,
+      width: 60,
+      height: 60,
+
       // color: Theme.of(context).colorScheme.onBackground,
-      loadingBuilder: (context, url) => const CircularProgressIndicator(),
+      loadingBuilder: (context, url) => SkeletonAvatar(),
       errorBuilder: (context, url, error) => Icon(getMainIconData()),
     );
   }
@@ -204,9 +226,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         addBottomWidget ? getCardLeadingBottomIcon() : null;
     Widget image = getCachedImage(context, url: imageUrl);
     if (iconOnButton != null) {
-      return TowIcons(
+      return TowIconsWithTextBadge(
         largChild: image,
-        smallIcon: iconOnButton,
+        text: "WASTED",
       );
     }
     return image;

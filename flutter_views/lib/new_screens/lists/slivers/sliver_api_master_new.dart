@@ -42,14 +42,17 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Object toListObject;
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
-
+  ScrollController? scrollController;
   String? searchString;
   Map<String, FilterableProviderHelper>? filterData;
   bool isSliver;
   bool enableSelection;
   bool isCardRequestApi;
 
+  Widget Function(List response)? hasCustomWidgetBuilder;
+
   Widget Function(int idx, ViewAbstract item)? hasCustomCardBuilder;
+  bool requiresFullFetsh;
   Widget? hasCustomSeperater;
   Widget? hasCustomLoadingItem;
 
@@ -64,8 +67,11 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.scrollDirection = Axis.vertical,
       this.onSeletedListItemsChanged,
       this.hasCustomCardBuilder,
+      this.scrollController,
       this.searchString,
+      this.hasCustomWidgetBuilder,
       this.filterData,
+      this.requiresFullFetsh = false,
       this.isCardRequestApi = false,
       this.enableSelection = true,
       this.isSliver = true,
@@ -82,7 +88,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   Map<String, FilterableProviderHelper>? _filterData;
 
   late String _lastKey;
-  final _scrollController = ScrollController();
+  late final _scrollController;
   late ListMultiKeyProvider listProvider;
   late ValueNotifier<bool> valueNotifierGrid;
   late ValueNotifier<List<ViewAbstract>>? _onSeletedListItemsChanged;
@@ -204,6 +210,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _toListObjectType = getToListObjectType();
     _toListObject = checkToInitToListObject();
     _setParentForChildCardItem = widget.setParentForChildCardItem;
+    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_onScroll);
 
     _lastKey = getListProviderKey();
@@ -301,7 +308,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         if (customWidget != null) {
           return customWidget;
         }
-        return getListValueListenableIsGrid(count: count, isLoading: isLoading);
+        return widget.hasCustomWidgetBuilder != null
+            ? widget.hasCustomWidgetBuilder!.call(getList())
+            : getListValueListenableIsGrid(count: count, isLoading: isLoading);
       },
       selector: (p0, p1) {
         String key = getListProviderKey();
@@ -439,23 +448,24 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Widget getSliverList(int count, bool isLoading, {List? customList}) {
     return SliverPadding(
-      padding: defaultSliverListPadding,
-      sliver: SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-        return getListItem(index, count, isLoading);
-      }, childCount: count + (isLoading ? 8 : 0))),
+        padding: defaultSliverListPadding,
+        sliver:
 
-      //  LiveSliverList(
-      //     key: _listKey,
-      //     controller: _scrollController,
-      //     showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
-      //     itemBuilder: animationItemBuilder(
-      //       (index) {
-      //         return getListItem(index, count, isLoading);
-      //       },
-      //     ),
-      //     itemCount: count + (isLoading ? 8 : 0))
-    );
+            //  SliverList(
+            //     delegate: SliverChildBuilderDelegate((context, index) {
+            //   return getListItem(index, count, isLoading);
+            // }, childCount: count + (isLoading ? 8 : 0))),
+
+            LiveSliverList(
+                key: _listKey,
+                controller: _scrollController,
+                showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
+                itemBuilder: animationItemBuilder(
+                  (index) {
+                    return getListItem(index, count, isLoading);
+                  },
+                ),
+                itemCount: count + (isLoading ? 8 : 0)));
   }
 
   bool _isSelectedItem(ViewAbstract va) {
@@ -679,17 +689,22 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       }
       // if (listProvider.getCount(customKey) == 0) {
       if (_searchString == null) {
-        listProvider.fetchList(customKey,
-            filter: _filterData,
-            autoRest: getToListObjectCastAutoRestNullIfNot(),
-            viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
-                getToListObjectCastViewAbstractNullIfNot());
+        listProvider.fetchList(
+          customKey,
+          filter: _filterData,
+          autoRest: getToListObjectCastAutoRestNullIfNot(),
+          viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
+              getToListObjectCastViewAbstractNullIfNot(),
+          customCount: widget.requiresFullFetsh == true ? 10000000 : null,
+          customPage: widget.requiresFullFetsh == true ? 0 : null,
+        );
       } else {
         listProvider.fetchListSearch(
           customKey,
           getToListObjectCastViewAbstract(),
           _searchString!,
           filter: _filterData,
+          customCount: widget.requiresFullFetsh==true?10000000:null
         );
         // }
       }

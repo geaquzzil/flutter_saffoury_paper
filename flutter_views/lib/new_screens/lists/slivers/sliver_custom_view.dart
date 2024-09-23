@@ -9,6 +9,7 @@ class SliverApiMixinCustomWidget extends SliverApiMixinWithStaticStateful {
   SliverApiMixinCustomWidget({
     super.key,
     required this.object,
+    super.scrollController,
   }) : super(toListObject: object);
 
   @override
