@@ -106,15 +106,20 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "${getTableNameApi()}listAPI$_lastFilterableMap$getCustomMap";
   }
 
-  void setFilterableMap(Map<String, FilterableProviderHelper> map) {
-    _lastFilterableMap = map;
-    debugPrint("setFilterableMap=> $map");
+  Map<String, String> getFilterableMap(
+      Map<String, FilterableProviderHelper> map) {
+    debugPrint("getFilterableMap=> $map");
     Map<String, String> bodyMap = {};
     map.forEach((key, value) {
       bodyMap["<${map[key]!.fieldNameApi}>"] = map[key]!.getValue();
     });
-    debugPrint("setFilterableMap bodyMap $bodyMap");
-    setCustomMap(bodyMap);
+    debugPrint("getFilterableMap bodyMap $bodyMap");
+    return bodyMap;
+  }
+
+  void setFilterableMap(Map<String, FilterableProviderHelper> map) {
+    _lastFilterableMap = map;
+    setCustomMap(getFilterableMap(map));
   }
 }
 

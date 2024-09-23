@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'dart:convert' as convert;
 import 'view_abstract_api.dart';
 
@@ -67,8 +68,12 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
 
   @override
   Future<List<T>?> listCall(
-      {int? count, int? page, OnResponseCallback? onResponse}) async {
+      {int? count,
+      int? page,
+      OnResponseCallback? onResponse,
+      Map<String, FilterableProviderHelper>? filter}) async {
     var response = await getRespones(
+        map: filter,
         itemCount: count,
         pageIndex: page,
         onResponse: onResponse,

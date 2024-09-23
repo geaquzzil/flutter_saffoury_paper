@@ -19,13 +19,16 @@ class HorizontalFilterableSelectedList extends StatelessWidget {
     List<FilterableProviderHelper> finalList =
         getAllSelectedFiltersRead(context);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 50, child: _buildList(finalList)),
-        _clearAllText(context)
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(kDefaultPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 50, child: _buildList(finalList)),
+          _clearAllText(context)
+        ],
+      ),
     );
   }
 

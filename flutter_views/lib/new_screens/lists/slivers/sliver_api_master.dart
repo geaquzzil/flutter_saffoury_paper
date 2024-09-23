@@ -919,8 +919,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     debugPrint("findCustomKey fetshList $customKey");
 
     if (notifyNotSearchable) {
-      listProvider.notifyNotSearchable(customKey,
-          viewAbstract: scanedQr ?? viewAbstract);
+      listProvider.notifyNotSearchable(customKey);
     }
     if (listProvider.getCount(customKey) == 0) {
       if (_searchStringQuery == null) {

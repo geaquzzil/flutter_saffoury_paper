@@ -11,12 +11,12 @@ class SliverApiMixinViewAbstractWidget
       {super.key,
       super.scrollDirection,
       super.isSliver,
-      super.isGridView=false,
+      super.isGridView = false,
       super.hasCustomCardBuilder,
       super.hasCustomSeperater,
       super.enableSelection,
-      
       required super.toListObject,
+      super.filterData,
       super.searchString});
 
   @override
@@ -30,7 +30,7 @@ class _SliverApiMixinAutoRestState
   @override
   String getListProviderKey() {
     String key = getToListObjectCastViewAbstract().getListableKey();
-    key = key + (getSearchString ?? "");
+    key = key + (getSearchString ?? "") + (getFilterData.toString());
     return key;
   }
 

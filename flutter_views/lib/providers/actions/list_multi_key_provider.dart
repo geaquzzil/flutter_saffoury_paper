@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 
 import '../../models/auto_rest.dart';
 
@@ -155,8 +156,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     return res;
   }
 
-  Future fetchListSearch(
-      String key, ViewAbstract viewAbstract, String query) async {
+  Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,
+      {Map<String, FilterableProviderHelper>? filter}) async {
     late MultiListProviderHelper? multiListProviderHelper;
     debugPrint("ListMultiKeyProvider===> fetchListSearch query:$query");
     if (_listMap.containsKey(key)) {
@@ -176,7 +177,8 @@ class ListMultiKeyProvider with ChangeNotifier {
     //   },
     // );
     List? list = await viewAbstract.search(viewAbstract.getPageItemCountSearch,
-        multiListProviderHelper.page, query);
+        multiListProviderHelper.page, query,
+        filter: filter);
     multiListProviderHelper.isLoading = false;
     multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
     multiListProviderHelper.page++;
@@ -278,12 +280,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   ///after clear search we should call this function
-  void notifyNotSearchable(String key,
-      {AutoRest? autoRest,
-      ViewAbstract? viewAbstract,
-      AutoRestCustom? customAutoRest,
-      int? customCount,
-      int? customPage}) {
+  void notifyNotSearchable(String key) {
     MultiListProviderHelper multiListProviderHelper;
     if (_listMap.containsKey(key)) {
       multiListProviderHelper = _listMap[key]!;
@@ -332,6 +329,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       {AutoRest? autoRest,
       ViewAbstract? viewAbstract,
       AutoRestCustom? customAutoRest,
+      Map<String, FilterableProviderHelper>? filter,
       int? customCount,
       int? customPage}) async {
     MultiListProviderHelper multiListProviderHelper;

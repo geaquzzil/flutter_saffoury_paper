@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item_api_
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -41,8 +42,9 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Object toListObject;
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
-  
+
   String? searchString;
+  Map<String, FilterableProviderHelper>? filterData;
   bool isSliver;
   bool enableSelection;
   bool isCardRequestApi;
@@ -63,6 +65,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.onSeletedListItemsChanged,
       this.hasCustomCardBuilder,
       this.searchString,
+      this.filterData,
       this.isCardRequestApi = false,
       this.enableSelection = true,
       this.isSliver = true,
@@ -76,6 +79,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   late _ObjectType _toListObjectType;
   ViewAbstract? _setParentForChildCardItem;
   String? _searchString;
+  Map<String, FilterableProviderHelper>? _filterData;
+
   late String _lastKey;
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
@@ -100,6 +105,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
 
   String? get getSearchString => this._searchString;
+
+  Map<String, FilterableProviderHelper>? get getFilterData => this._filterData;
 
   EdgeInsets defaultSliverListPadding =
       const EdgeInsets.symmetric(horizontal: kDefaultPadding / 3);
@@ -198,6 +205,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _scrollController.addListener(_onScroll);
     _toListObjectType = getToListObjectType();
     _searchString = widget.searchString;
+    _filterData = widget.filterData;
 
     ///override the gride view when the scroll axis is horizontal
     valueNotifierGrid = ValueNotifier<bool>(widget.isGridView);
@@ -216,63 +224,6 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         "SliverApiWithStaticMixin===> initState=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}");
     super.initState();
     fetshListWidgetBinding();
-  }
-
-  void _checkToUpdateToListObject() {
-    bool shouldFetsh = false;
-    _searchString = widget.searchString;
-    _ObjectType lastUpdated = getToListObjectType();
-
-    if (_toListObjectType == _ObjectType.CUSTOM_LIST) {
-      listProvider.initCustomList(
-          getListProviderKey(), getToListObjectCastList()?.cast() ?? []);
-    } else if (lastUpdated == _ObjectType.VIEW_ABSTRACT &&
-        _toListObjectType == _ObjectType.VIEW_ABSTRACT) {
-      ViewAbstract checkedViewAbstract = widget.toListObject as ViewAbstract;
-      if (checkedViewAbstract.runtimeType !=
-          getToListObjectCastViewAbstract().runtimeType) {
-        shouldFetsh = true;
-        _toListObject = checkedViewAbstract;
-        _resetValues();
-      } else if (lastUpdated == _ObjectType.STRING &&
-          _toListObjectType == _ObjectType.STRING) {
-        String tableName = widget.toListObject as String;
-        if (tableName != getToListObjectCastViewAbstract().getTableNameApi()) {
-          shouldFetsh = true;
-          _toListObject = checkToInitToListObject();
-          _resetValues();
-        }
-      } else if (lastUpdated == _ObjectType.CUSTOM_VIEW_RESPONSE &&
-          _toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
-        CustomViewHorizontalListResponse newObject =
-            widget.toListObject as CustomViewHorizontalListResponse;
-
-        if (newObject.getCustomViewKey() !=
-            getToListObjectHorizontalListResponse().getCustomViewKey()) {
-          shouldFetsh = true;
-          _toListObject = newObject;
-          _resetValues();
-        }
-      } else if (lastUpdated == _ObjectType.AUTO_REST &&
-          _toListObjectType == _ObjectType.AUTO_REST) {
-        AutoRest autoRest = widget.toListObject as AutoRest;
-        if (autoRest.key != getToListObjectCastAutoRest().key) {
-          shouldFetsh = true;
-          _toListObject = autoRest;
-          _resetValues();
-        }
-      } else {
-        shouldFetsh = true;
-        _toListObject = widget.toListObject;
-        _toListObjectType = getToListObjectType();
-      }
-    }
-
-    debugPrint(
-        "SliverApiWithStaticMixin===> didUpdateWidget=>shouldFetsh : $shouldFetsh");
-    if (shouldFetsh) {
-      fetshListWidgetBinding();
-    }
   }
 
   @override
@@ -664,6 +615,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   void _resetValues() {
     _searchString = null;
+    _filterData = null;
     _onSeletedListItemsChanged?.value = [];
   }
 
@@ -708,20 +660,22 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       }
     } else {
       if (notifyNotSearchable) {
-        listProvider.notifyNotSearchable(customKey,
-            autoRest: getToListObjectCastAutoRestNullIfNot(),
-            viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
-                getToListObjectCastViewAbstractNullIfNot());
+        listProvider.notifyNotSearchable(customKey);
       }
       if (listProvider.getCount(customKey) == 0) {
         if (_searchString == null) {
           listProvider.fetchList(customKey,
+              filter: _filterData,
               autoRest: getToListObjectCastAutoRestNullIfNot(),
               viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
                   getToListObjectCastViewAbstractNullIfNot());
         } else {
           listProvider.fetchListSearch(
-              customKey, getToListObjectCastViewAbstract(), _searchString!);
+            customKey,
+            getToListObjectCastViewAbstract(),
+            _searchString!,
+            filter: _filterData,
+          );
         }
       }
     }
@@ -785,8 +739,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     });
   }
 
-  List<T> getList<T>() {
-    return listProvider.getList<T>(getListProviderKey());
+  List<E> getList<E>() {
+    return listProvider.getList<E>(getListProviderKey());
   }
 
   void addAnimatedListItem(ViewAbstract view) {
@@ -802,8 +756,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     // _listKey.currentState?.insertItem(idx);
   }
 
-  bool removeByValue<C>(C value){
-     return listProvider.removeItemObjcet(_lastKey, value);
+  bool removeByValue<C>(C value) {
+    return listProvider.removeItemObjcet(_lastKey, value);
   }
 
   C? removeByWhere<C>(bool Function(C) test) {

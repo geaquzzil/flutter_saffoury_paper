@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/models/servers/server_response_master.da
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -109,6 +110,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {String? fieldBySearchQuery,
       String? searchQuery,
       int? itemCount,
+      Map<String, FilterableProviderHelper>? map,
       int? pageIndex,
       ViewAbstract? printObject}) {
     Map<String, String> mainBody = HashMap<String, String>();
@@ -117,6 +119,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         fieldBySearchQuery: fieldBySearchQuery,
         searchQuery: searchQuery,
         itemCount: itemCount,
+        map: map,
         pageIndex: pageIndex,
         printObject: printObject));
     return mainBody;
@@ -154,6 +157,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<Response?> getRespones(
       {ServerActions? serverActions,
       OnResponseCallback? onResponse,
+      Map<String, FilterableProviderHelper>? map,
       String? searchQuery,
       String? fieldBySearchQuery,
       int? itemCount,
@@ -170,6 +174,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
               fieldBySearchQuery: fieldBySearchQuery,
               itemCount: itemCount,
               pageIndex: pageIndex,
+              map: map,
               printObject: printObject));
     } on Exception catch (e) {
       // Display an alert, no internet
@@ -371,9 +376,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<List<T>> search(int count, int pageIndex, String searchQuery,
-      {OnResponseCallback? onResponse}) async {
+      {OnResponseCallback? onResponse,
+      Map<String, FilterableProviderHelper>? filter}) async {
     var response = await getRespones(
         onResponse: onResponse,
+        map: filter,
         serverActions: ServerActions.search,
         searchQuery: searchQuery,
         itemCount: count,
@@ -544,9 +551,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<List<T>?> listCall(
-      {int? count, int? page, OnResponseCallback? onResponse}) async {
+      {int? count,
+      int? page,
+      OnResponseCallback? onResponse,
+      Map<String, FilterableProviderHelper>? filter}) async {
     debugPrint("ViewAbstractApi listCall count=> $count page=>$page");
     var response = await getRespones(
+        map: filter,
         itemCount: count,
         pageIndex: page,
         onResponse: onResponse,
@@ -574,6 +585,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Map<String, String> getBodyCurrentAction(ServerActions? action,
       {String? fieldBySearchQuery,
       String? searchQuery,
+      Map<String, FilterableProviderHelper>? map,
       int? itemCount,
       int? pageIndex,
       ViewAbstract? printObject}) {

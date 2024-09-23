@@ -11,6 +11,8 @@ class SliverApiMixinAutoRestWidget extends SliverApiMixinWithStaticStateful {
       super.hasCustomCardBuilder,
       super.scrollDirection = Axis.horizontal,
       super.isSliver,
+      super.filterData,
+      super.searchString,
       required this.autoRest})
       : super(toListObject: autoRest);
 
