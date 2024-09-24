@@ -1421,6 +1421,8 @@ class Product extends ViewAbstract<Product>
               mainAxisCellCount: 4,
               child: Card(
                 child: SliverApiMixinStaticList(
+                  isSliver: false,
+                  listKey: "products_goods_working",
                   list: productList,
                 ),
               )),
