@@ -314,6 +314,16 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     return firstPane
         ? getDesktopFirstPane(tab: tab)
         : [
+            SliverToBoxAdapter(
+              child: HorizontalFilterableSelectedList(
+                onFilterableChanged: (onFilter) {
+                  setState(() {
+                    filterData = onFilter;
+                  });
+                },
+                onFilterable: filterData ?? {},
+              ),
+            ),
             SliverApiMixinViewAbstractWidget(
               toListObject: Product(),
               scrollController: scrollController,
@@ -402,7 +412,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     int totalRemainingLength = totalImportedLength - totalImportedBarcodeLength;
     return FileInfoStaggerdGridView(
       childAspectRatio: 16 / 9,
-      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod) {
+      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod,h) {
         return [
           StaggeredGridTile.count(
               crossAxisCellCount: 2,

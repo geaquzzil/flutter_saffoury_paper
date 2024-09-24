@@ -569,8 +569,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     if (response == null) return null;
     if (response.statusCode == 200) {
-      final parser = ResultsParser<T>(response.body, castViewAbstract());
-      return parser.parseInBackground();
+      // final parser = ResultsParser<T>(response.body, castViewAbstract());
+      // return parser.parseInBackground();
+
+      Iterable l = convert.jsonDecode(response.body);
+      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+
+      return t;
     } else {
       onCallCheckError(onResponse: onResponse, response: response);
       return null;

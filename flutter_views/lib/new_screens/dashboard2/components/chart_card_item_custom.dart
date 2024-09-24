@@ -223,20 +223,17 @@ class ChartCardItemCustom extends StatelessWidget {
         padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
-                  style: Theme.of(context).textTheme.bodySmall!,
-                ),
-                if (icon != null) Icon(icon)
-              ],
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall!,
+              ),
+              trailing: (icon != null) ? Icon(icon) : null,
             ),
 
             Text(

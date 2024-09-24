@@ -54,6 +54,7 @@ import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.d
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
@@ -1376,6 +1377,9 @@ class Product extends ViewAbstract<Product>
 
   Widget getSummary(
       {required BuildContext context, required List<Product> productList}) {
+    if (productList.isEmpty) {
+      return EmptyWidget.empty(context);
+    }
     double getTotalImportQuanity = productList.isEmpty
         ? 0
         : productList
@@ -1386,11 +1390,11 @@ class Product extends ViewAbstract<Product>
 
     return FileInfoStaggerdGridView(
       childAspectRatio: 16 / 9,
-      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod) {
+      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod, h) {
         return [
           StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
+              crossAxisCellCount: crossCountFundCalc,
+              mainAxisCellCount: h,
               child: ChartCardItemCustom(
                 color: Colors.blue,
                 icon: Icons.list,

@@ -297,7 +297,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         Widget? customWidget = onResponseHasCustomWidget();
         Widget? customLoading = onLoadingHasCustomWidget();
         debugPrint(
-            "SliverApiWithStaticMixin===> didUpdateWidget=>Selector=> key: $key isloading: $isLoading iserror: $isError count: $count");
+            "SliverApiWithStaticMixin===> Selector=>Selector=> key: $key isloading: $isLoading iserror: $isError count: $count");
 
         if (!isLoading && (count == 0 || isError)) {
           return getEmptyWidget(isError: isError);
@@ -645,8 +645,11 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   bool canFetshList() {
-    return _toListObjectType != _ObjectType.CUSTOM_LIST ||
-        _toListObjectType != _ObjectType.FROM_CARD_API;
+    if (_toListObjectType == _ObjectType.FROM_CARD_API ||
+        _toListObjectType == _ObjectType.CUSTOM_LIST) {
+      return false;
+    }
+    return true;
   }
 
   void fetshList({bool notifyNotSearchable = false}) {
@@ -700,12 +703,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         );
       } else {
         listProvider.fetchListSearch(
-          customKey,
-          getToListObjectCastViewAbstract(),
-          _searchString!,
-          filter: _filterData,
-          customCount: widget.requiresFullFetsh==true?10000000:null
-        );
+            customKey, getToListObjectCastViewAbstract(), _searchString!,
+            filter: _filterData,
+            customCount: widget.requiresFullFetsh == true ? 10000000 : null);
         // }
       }
     }
