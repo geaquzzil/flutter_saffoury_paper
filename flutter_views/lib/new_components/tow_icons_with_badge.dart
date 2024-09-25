@@ -21,7 +21,7 @@ class TowIconsWithTextBadge extends StatelessWidget {
             BorderSide(color: Theme.of(context).colorScheme.surface, width: 1),
         badgeColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
       ),
       badgeContent: Text(text,
           style: Theme.of(context)
@@ -31,7 +31,7 @@ class TowIconsWithTextBadge extends StatelessWidget {
       position: badges.BadgePosition.topEnd(
           // top: -10,
           ),
-      badgeAnimation: badges.BadgeAnimation.size(toAnimate: true),
+      badgeAnimation: const badges.BadgeAnimation.size(toAnimate: true),
       onTap: () {
         print('asdfsadfs');
       },

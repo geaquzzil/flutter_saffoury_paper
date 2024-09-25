@@ -77,11 +77,6 @@ mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
   }
 
   @override
-  void didUpdateWidget(covariant oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void initState() {
     // _lastScreenSize=getCurrentScreenSize();
     initAction();
@@ -338,7 +333,7 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
           SizedBox(
             height: 40,
             child: ListView.separated(
-                separatorBuilder: (context, index) => Center(
+                separatorBuilder: (context, index) => const Center(
                       child: Icon(
                         Icons.arrow_right_outlined,
                       ),

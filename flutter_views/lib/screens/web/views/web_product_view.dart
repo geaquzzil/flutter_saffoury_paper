@@ -43,7 +43,7 @@ class WebProductView extends BaseWebPageSliversApi {
     if (kIsWeb) {
       return null;
     } else {
-      return ListTile(
+      return const ListTile(
         leading: BackButton(),
         title: Text("S"),
       );

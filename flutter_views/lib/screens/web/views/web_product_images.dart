@@ -30,7 +30,7 @@ class WebProductImages extends StatelessWidget {
                     : item.getIcon(),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ActionsOnHeaderWidget(

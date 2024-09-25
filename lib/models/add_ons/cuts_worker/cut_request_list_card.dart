@@ -209,7 +209,7 @@ class CutRequestListCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ConstrainedBox(
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             minHeight: 200,
             maxHeight: 300,
             minWidth: 300,
@@ -249,7 +249,7 @@ class CutRequestListCard extends StatelessWidget {
                         .titleLarge!
                         .copyWith(fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: kDefaultPadding,
                   ),
                   Text("Requested Quantity",
@@ -261,7 +261,7 @@ class CutRequestListCard extends StatelessWidget {
                         .titleLarge!
                         .copyWith(fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: kDefaultPadding,
                   ),
                   Text("Customer",
@@ -302,14 +302,14 @@ class CutRequestListCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
+              SizedBox(
                 width: double.maxFinite,
                 child: Text(
                   AppLocalizations.of(context)!.requestedSizeLabel,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: double.maxFinite,
                 child: SliverApiMixinStaticList(
                   list: item.getListableList(),
@@ -330,7 +330,7 @@ class CutRequestListCard extends StatelessWidget {
                   enableSelection: false,
                   isSliver: false,
                   isGridView: false,
-                  hasCustomSeperater: Divider(),
+                  hasCustomSeperater: const Divider(),
                 ),
               )
               // Container(
@@ -349,7 +349,7 @@ class CutRequestListCard extends StatelessWidget {
 
 class DateTimeWidget extends StatelessWidget {
   String date;
-  DateTimeWidget({required this.date});
+  DateTimeWidget({super.key, required this.date});
   @override
   Widget build(BuildContext context) {
     return Column(

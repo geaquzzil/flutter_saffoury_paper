@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class LineChartItem<T, E> extends StatelessWidget {
-  List<T> list;
+  final List<T> list;
   String? title;
   bool smallView;
   Color? color;

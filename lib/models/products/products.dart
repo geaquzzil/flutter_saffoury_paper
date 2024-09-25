@@ -1385,12 +1385,12 @@ class Product extends ViewAbstract<Product>
     if (productList.isEmpty) {
       return Card(
         child: ListTile(
-          title: Text("Select filter data to view list"),
-          subtitle: Text(
+          title: const Text("Select filter data to view list"),
+          subtitle: const Text(
               "Start filtering by presssing the filter data to view summary"),
           trailing: ElevatedButton.icon(
-            icon: Icon(Icons.filter_alt_rounded),
-            label: Text("Filter"),
+            icon: const Icon(Icons.filter_alt_rounded),
+            label: const Text("Filter"),
             onPressed: () {},
           ),
         ),

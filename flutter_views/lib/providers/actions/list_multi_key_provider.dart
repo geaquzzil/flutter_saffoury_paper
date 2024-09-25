@@ -8,7 +8,7 @@ import '../../models/auto_rest.dart';
 
 class ListMultiKeyProvider with ChangeNotifier {
   // ListMultiKeyProvider list= ListMultiKeyProvider();
-  Map<String, MultiListProviderHelper> _listMap = {};
+  final Map<String, MultiListProviderHelper> _listMap = {};
 
   int getCount(String key) {
     return _listMap[key]?.getCount ?? 0;
@@ -116,8 +116,8 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   void addCardToRequest(String key, ViewAbstract viewAbstract) {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
-    multiListProviderHelper?.hasError = false;
-    multiListProviderHelper?.setObjects = [
+    multiListProviderHelper.hasError = false;
+    multiListProviderHelper.setObjects = [
       ...multiListProviderHelper.getObjects,
       (viewAbstract)
     ];
@@ -130,8 +130,8 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   T? removeItem<T>(String key, bool Function(T) test) {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
-    List<T>? list = multiListProviderHelper?.getObjects.cast<T>();
-    if (list == null || list.isEmpty) return null;
+    List<T>? list = multiListProviderHelper.getObjects.cast<T>();
+    if (list.isEmpty) return null;
 
     T? res = list.firstWhereOrNull(test);
     if (res == null) return null;
@@ -139,7 +139,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     if (!list.remove(res)) {
       return null;
     }
-    multiListProviderHelper?.setObjects = [...list];
+    multiListProviderHelper.setObjects = [...list];
     notifyListeners();
     return res;
   }
@@ -252,7 +252,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       int? customCount,
       int? customPage}) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
   }
 
   Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,

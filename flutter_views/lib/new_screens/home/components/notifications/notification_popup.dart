@@ -25,7 +25,7 @@ class NotificationPopupWidget extends StatelessWidget {
         pressType: PressType.singleClick,
         // verticalMargin: -15,
         controller: _controller,
-        child: Icon(Icons.notifications)
+        child: const Icon(Icons.notifications)
 
         // buildColapsedIcon(context, Icons.notifications, null)
 
@@ -71,7 +71,7 @@ class NotificationWidget extends StatelessWidget {
               height: 400,
               child: SliverApiMixinViewAbstractWidget(
                 enableSelection: false,
-                hasCustomSeperater: Divider(),
+                hasCustomSeperater: const Divider(),
                 isSliver: false,
                 toListObject: context
                     .read<AuthProvider<AuthUser>>()

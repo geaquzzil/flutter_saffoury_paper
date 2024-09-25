@@ -60,7 +60,7 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
           }
         }
         if (widget.byIcon) {
-          return SizedBox(
+          return const SizedBox(
               width: 15, height: 15, child: CircularProgressIndicator());
         }
         return SkeletonListTile(

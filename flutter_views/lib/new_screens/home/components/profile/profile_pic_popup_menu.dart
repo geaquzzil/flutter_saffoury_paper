@@ -40,7 +40,7 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
           ? Theme.of(context).scaffoldBackgroundColor
           : const Color(0xFF4C4C4C),
       controller: _controller,
-      child: Icon(Icons.person),
+      child: const Icon(Icons.person),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/cuts_worker/cuts_worker_main.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/goods_worker/goods_worker_main.dart';
 import 'package:flutter_view_controller/interfaces/posable_interface.dart';
@@ -14,7 +13,7 @@ class CutWorkerRouteAddon extends RouteableInterface {
         path: '/cuts',
         pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
-              child: CutWorkerPage(),
+              child: const CutWorkerPage(),
             ));
   }
 }
@@ -35,7 +34,7 @@ class GoodsInventoryRouteAddon extends RouteableInterface {
         path: '/inventory',
         pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
-              child: GoodsInventoryPage(),
+              child: const GoodsInventoryPage(),
             ));
   }
 }

@@ -358,7 +358,7 @@ class SectionItemHeaderI extends MultiSliver {
               )
             else
               SliverPadding(
-                padding: EdgeInsets.all(kDefaultPadding),
+                padding: const EdgeInsets.all(kDefaultPadding),
                 sliver: SliverPersistentHeader(
                     pinned: false,
                     delegate: SliverAppBarDelegatePreferedSize(

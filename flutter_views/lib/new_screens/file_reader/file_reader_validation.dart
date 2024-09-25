@@ -59,7 +59,7 @@ class FileReaderValidationWidget extends StatefulWidget {
 
 class FileReaderValidationWidgetState
     extends State<FileReaderValidationWidget> {
-  List<ViewAbstract> _generatedViewAbstract = [];
+  final List<ViewAbstract> _generatedViewAbstract = [];
   List<ViewAbstract> getListGeneratedList() {
     return _generatedViewAbstract;
   }
@@ -78,7 +78,7 @@ class FileReaderValidationWidgetState
             return getWidget(context, snapshot: snapshot);
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -118,7 +118,7 @@ class FileReaderValidationWidgetState
       for (var element in rows) {
         int rowNumber = rows.indexOf(element) + 1;
         debugPrint(
-            "getDataFromExcelTable=>rowNumber ${rowNumber}   type ${element.runtimeType}");
+            "getDataFromExcelTable=>rowNumber $rowNumber   type ${element.runtimeType}");
 
         try {
           var obj = widget.fileReaderObject.getObjectFromRow(context, element);

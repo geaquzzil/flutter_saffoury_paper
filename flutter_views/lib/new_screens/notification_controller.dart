@@ -120,7 +120,7 @@ class NotificationController {
           return AlertDialog(
             title: Text('Get Notified!',
                 style: Theme.of(context).textTheme.titleLarge),
-            content: Column(
+            content: const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
@@ -133,8 +133,8 @@ class NotificationController {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: 20),
+                Text(
                     'Allow Awesome Notifications to send you beautiful notifications!'),
               ],
             ),
@@ -379,10 +379,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
+          children: <Widget>[
             Text(
               'Push the buttons below to create new notifications',
             ),
@@ -434,9 +434,9 @@ class _MyHomePageState extends State<MyHomePage> {
 ///  *********************************************
 class NotificationPage extends StatefulWidget {
   const NotificationPage({
-    Key? key,
+    super.key,
     required this.receivedAction,
-  }) : super(key: key);
+  });
 
   final ReceivedAction receivedAction;
 

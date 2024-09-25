@@ -102,7 +102,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               if (value == 0) return const SizedBox();
 
               return HorizontalFilterableSelectedList(
-                onFilterable: {},
+                onFilterable: const {},
               );
             },
             selector: (p0, p1) => p1.getCount(),

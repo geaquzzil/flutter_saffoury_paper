@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
-import 'package:flutter/foundation.dart';
 
 class ManagePort {
   late SerialPort port;
@@ -26,14 +26,14 @@ class MyApp extends StatelessWidget {
 
         scaffoldBackgroundColor: Colors.grey[300],
         // splashColor: Colors.bl,
-        primaryColor: Color(0xFF12181b),
-        appBarTheme: AppBarTheme(
+        primaryColor: const Color(0xFF12181b),
+        appBarTheme: const AppBarTheme(
           color: Color(0xFF12181b),
         ),
         // scaffoldBackgroundColor: Colors.black,
       ),
       title: 'Flutter Serial App',
-      home: PortsPage(),
+      home: const PortsPage(),
     );
   }
 }
@@ -57,8 +57,8 @@ class _PortsPageState extends State<PortsPage> {
   void initPorts() {
     // debugPrint(SerialPort.availablePorts);
     setState(
-      () => {
-        availablePorts.addAll(SerialPort.availablePorts),
+      () {
+        availablePorts.addAll(SerialPort.availablePorts);
       },
     );
   }
@@ -71,8 +71,8 @@ class _PortsPageState extends State<PortsPage> {
           color: const Color.fromARGB(247, 13, 16, 20),
           borderRadius: BorderRadius.circular(20),
         ),
-        margin: EdgeInsets.all(20),
-        constraints: BoxConstraints(),
+        margin: const EdgeInsets.all(20),
+        constraints: const BoxConstraints(),
         child: Scrollbar(
             child: ListView(
           children: [
@@ -141,7 +141,7 @@ class _IOPortPageState extends State<IOPortPage> {
   late SerialPort port;
   late SerialPortReader reader;
 
-  FocusNode keepFocus = new FocusNode();
+  FocusNode keepFocus = FocusNode();
 
   List<String> io_Buffer = <String>[];
 
@@ -214,7 +214,7 @@ class _IOPortPageState extends State<IOPortPage> {
       port = SerialPort(portName);
       // port.openReadWrite();
     } catch (e, _) {
-      debugPrint("----------  There is no port ---------\n ${portName}");
+      debugPrint("----------  There is no port ---------\n $portName");
       Navigator.of(context).pop();
     }
     startListening();
@@ -350,7 +350,7 @@ class _IOPortPageState extends State<IOPortPage> {
                               io_Buffer.add(inputData.text);
                               Uint8List data =
                                   Uint8List.fromList(inputData.text.codeUnits);
-                              await port.write(data);
+                              port.write(data);
                               debugPrint("write : $inputData");
                               // port.write(Uint8List.fromList(" ".codeUnits));
                               // port.write(inputData.text);

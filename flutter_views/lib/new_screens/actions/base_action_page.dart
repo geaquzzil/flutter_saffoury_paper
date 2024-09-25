@@ -8,7 +8,6 @@ import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -27,7 +26,6 @@ import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
@@ -109,7 +107,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   final Map<int, GlobalKey<ListCardItemEditableState>>
       _listCardItemEditableState = {};
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -181,15 +179,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
-    if (getExtras() == null) {
-      ViewAbstract newViewAbstract =
-          context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
-      return newViewAbstract.viewCallGetFirstFromList(iD!)
-          as Future<ViewAbstract?>;
-    } else {
-      return (getExtras()).viewCallGetFirstFromList((getExtras()).iD)
-          as Future<ViewAbstract?>;
-    }
+    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD)
+        as Future<ViewAbstract?>;
   }
 
   @override
@@ -737,11 +728,12 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   Widget getSliverImagable(list) {
     return SliverToBoxAdapter(
       child: LayoutBuilder(builder: (context, constraints) {
-        return Container(
+        return SizedBox(
           width: constraints.maxWidth,
           height: MediaQuery.of(context).size.height * .5,
           child: PhotoViewGallery.builder(
-            backgroundDecoration: BoxDecoration(color: Colors.transparent),
+            backgroundDecoration:
+                const BoxDecoration(color: Colors.transparent),
             pageSnapping: true,
             gaplessPlayback: true,
             scrollPhysics: const BouncingScrollPhysics(),
@@ -767,7 +759,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             pageController: PageController(),
             itemCount: list.length,
             loadingBuilder: (context, event) => Center(
-              child: Container(
+              child: SizedBox(
                 width: 20.0,
                 height: 20.0,
                 child: CircularProgressIndicator(

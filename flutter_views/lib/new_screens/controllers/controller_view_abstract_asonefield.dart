@@ -144,14 +144,14 @@ class _ControllerViewAbstractAsOneField
                         transitionBuilder: (Widget child,
                                 Animation<double> animation) =>
                             FadeTransition(opacity: animation, child: child),
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         child: !_isExpanded
                             ? Text(
                                 widget.viewAbstract
                                     .getMainHeaderTextOnly(context),
                                 key: UniqueKey(),
                               )
-                            : Column(
+                            : const Column(
                                 children: [
                                   TextField(
                                     decoration:

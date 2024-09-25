@@ -19,7 +19,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
   Widget build(BuildContext context) {
     // return FormBuilderChoiceChip();
     return FormBuilderChoiceChip(
-      decoration: InputDecoration.collapsed(hintText: ""),
+      decoration: const InputDecoration.collapsed(hintText: ""),
       enabled: parent.isFieldEnabled(field),
       // style: TextStyle(fontSize: 8),
       onChanged: (obj) => parent.onDropdownChanged(context, field, obj),
@@ -34,7 +34,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
       runSpacing: 10,
       spacing: 10,
 
-      labelPadding: EdgeInsets.all(5),
+      labelPadding: const EdgeInsets.all(5),
       options: dropdownGetValues(enumViewAbstract)
           .map((v) => FormBuilderChipOption(
                 value: v,

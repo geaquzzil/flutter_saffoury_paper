@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -12,17 +13,17 @@ import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.d
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/home_home_widget.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:tuple/tuple.dart';
+
 import 'components/drawers/drawer_large_screen.dart';
 import 'components/profile/profile_pic_popup_menu.dart';
 import 'home_notification_widget.dart';
@@ -83,8 +84,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
     return Selector<DrawerMenuControllerProvider,
         ViewAbstractStandAloneCustomViewApi?>(
       builder: (context, value, child) {
-        ViewAbstract? viewAbstract2 =
-            context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
+        ViewAbstract? viewAbstract2 = context
+            .read<DrawerMenuControllerProvider>()
+            .getObjectCastViewAbstract;
         bool isInitViewAbstractCustomView =
             viewAbstract2 is ViewAbstractStandAloneCustomViewApi;
         if (value != null || isInitViewAbstractCustomView) {
@@ -272,7 +274,7 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             builder: (viewAbstract) => HomeNavigationPage(
                   viewAbstract: viewAbstract,
                 ));
-        shopingWidget ??= ListToDetailsPage(
+        shopingWidget ??= const ListToDetailsPage(
           title: "sd",
         );
         return IndexedStack(index: value, children: [

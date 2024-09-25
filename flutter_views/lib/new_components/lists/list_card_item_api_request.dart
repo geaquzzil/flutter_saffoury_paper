@@ -42,7 +42,7 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
       _viewAbstract = widget.viewAbstract;
       return getItem();
     }
-    
+
     return FutureBuilder(
         future: widget.viewAbstract
             .viewCallGetFirstFromList(widget.viewAbstract.iD),
