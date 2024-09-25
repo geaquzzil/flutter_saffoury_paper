@@ -20,6 +20,7 @@ import 'package:flutter_view_controller/new_screens/controllers/controller_dropb
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
@@ -685,37 +686,55 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       TabControllerHelper? secoundTab}) {
     if (firstPane != null) {
       if (firstPane) {
-        return FloatingActionButton.extended(
-            onPressed: () {
-              if (!isPurchuses()) {
-                Product p = Product();
-                p.qrQuantity = testQuantity + 100;
-                p.iD = 2405 + testId;
-                testId = testId + 1;
-                testQuantity = testQuantity + 100;
-                keyInventory.currentState?.addAnimatedListItem(p);
-              } else {
-                Product? t =
-                    keyToImportFrom.currentState?.searchForItem<Product>((t) {
-                  debugPrint(
-                      "found product barcode: ${t.barcode} testBarcode: ${testBarCode.toString()}");
-                  return t.barcode == ((testBarCode)).toString();
-                });
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton.small(
+              onPressed: () {
+                context.pushNamed(printRouteName, pathParameters: {
+                  "tableName": "products",
+                  "type": PrintPageType.list.name
+                }, extra: []);
+              },
+              child: Icon(Icons.print),
+            ),
+            SizedBox(
+              width: kDefaultPadding / 2,
+            ),
+            FloatingActionButton.extended(
+                onPressed: () {
+                  if (!isPurchuses()) {
+                    Product p = Product();
+                    p.qrQuantity = testQuantity + 100;
+                    p.iD = 2405 + testId;
+                    testId = testId + 1;
+                    testQuantity = testQuantity + 100;
+                    keyInventory.currentState?.addAnimatedListItem(p);
+                  } else {
+                    Product? t = keyToImportFrom.currentState
+                        ?.searchForItem<Product>((t) {
+                      debugPrint(
+                          "found product barcode: ${t.barcode} testBarcode: ${testBarCode.toString()}");
+                      return t.barcode == ((testBarCode)).toString();
+                    });
 
-                debugPrint("found product founded $t");
-                if (t != null) {
-                  testBarCode = testBarCode + 1;
-                  keyToExportTo.currentState?.addAnimatedListItem(t);
-                  keyToImportFrom.currentState?.removeByValue(t);
-                  setState(() {});
-                } else {
-                  context
-                      .read<DrawerMenuControllerProvider>()
-                      .controlEndDrawerMenu();
-                }
-              }
-            },
-            label: const Icon(Icons.add));
+                    debugPrint("found product founded $t");
+                    if (t != null) {
+                      testBarCode = testBarCode + 1;
+                      keyToExportTo.currentState?.addAnimatedListItem(t);
+                      keyToImportFrom.currentState?.removeByValue(t);
+                      setState(() {});
+                    } else {
+                      context
+                          .read<DrawerMenuControllerProvider>()
+                          .controlEndDrawerMenu();
+                    }
+                  }
+                },
+                label: const Icon(Icons.add)),
+          ],
+        );
       }
     }
     return null;

@@ -84,6 +84,9 @@ class GoodsInventoryListCard extends StatelessWidget {
       elevation: 10,
       // color: getCardColor(context),
       child: ExpansionTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         leading: product.getCardLeading(context),
         title: product.getMainHeaderText(context),
         trailing: getTrailing(context),

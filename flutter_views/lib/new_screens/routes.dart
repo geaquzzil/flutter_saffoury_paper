@@ -461,14 +461,14 @@ class RouteGenerator {
               pageBuilder: (context, state) {
                 String? type = state.pathParameters["type"];
                 Widget w;
-                if (type == PrintPageType.single.toString()) {
+                if (type == PrintPageType.single.name.toString()) {
                   w = PdfPageNew<PrintLocalSetting>(
                     buildDrawer: true,
                     iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
                     tableName: state.pathParameters['tableName'],
                     invoiceObj: state.extra as PrintableMaster?,
                   );
-                } else if (type == PrintPageType.list.toString()) {
+                } else if (type == PrintPageType.list.name.toString()) {
                   var ex = getRouterStateList(state, state.extra, context);
                   //todo get from api
                   w = PdfListPage(

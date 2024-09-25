@@ -101,16 +101,19 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
 
   Widget _getDraggableHomePane(widget, bool firstPane,
       {TabControllerHelper? tab}) {
-    return SliverCustomScrollViewDraggable(
-        slivers: [],
-        builder: (c) =>
-            getPaneController(firstPane: firstPane, scrollController: c),
-        title: getAppbarTitle(firstPane: firstPane),
-        expandHeaderWidget: getDraggableHeaderExpandedWidget(firstPane),
-        expandBottomWidget: getDraggableBottomExpandedWidget(firstPane),
-        headerWidget: getDraggableHeaderWidget(firstPane),
-        
-        actions: getAppbarActions(firstPane: firstPane));
+    return Scaffold(
+      floatingActionButton: getFloatingActionButton(
+          firstPane: firstPane, secoundTab: tab, tab: tab),
+      body: SliverCustomScrollViewDraggable(
+          slivers: [],
+          builder: (c) =>
+              getPaneController(firstPane: firstPane, scrollController: c),
+          title: getAppbarTitle(firstPane: firstPane),
+          expandHeaderWidget: getDraggableHeaderExpandedWidget(firstPane),
+          expandBottomWidget: getDraggableBottomExpandedWidget(firstPane),
+          headerWidget: getDraggableHeaderWidget(firstPane),
+          actions: getAppbarActions(firstPane: firstPane)),
+    );
   }
 
   @override
