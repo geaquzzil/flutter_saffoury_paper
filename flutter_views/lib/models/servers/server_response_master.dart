@@ -16,7 +16,7 @@ class ServerResponseMaster {
   Map<String, dynamic> toJson() => _$ServerResponseMasterToJson(this);
 
   ///this is th
-  String getFailureMessage() {
+  String getFailureMessage(BuildContext context) {
     debugPrint("getFailureMessage ===> ${toJson()}");
     bool isLogin = serverResponse.login ?? false;
     bool isBlocked = serverResponse.activated == 0;

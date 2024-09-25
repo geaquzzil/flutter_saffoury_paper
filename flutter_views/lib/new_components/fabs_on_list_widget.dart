@@ -197,7 +197,7 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
 
   void _refresh() {
     widget.listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,context:context);
   }
 
   Widget getRefreshWidget() => IconButton(

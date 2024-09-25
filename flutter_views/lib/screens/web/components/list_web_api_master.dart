@@ -76,14 +76,14 @@ class ListWebApiMaster extends StatelessWidget {
       _listProvider.fetchList(customKey,
           viewAbstract: viewAbstract,
           customPage: customPage,
-          customCount: customCount);
+          customCount: customCount,context:context);
     } else if (searchQuery == null) {
       _listProvider.fetchList(customKey,
           viewAbstract: viewAbstract,
           customPage: customPage,
-          customCount: customCount);
+          customCount: customCount,context:context);
     } else {
-      _listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
+      _listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,context:  context);
     }
   }
 

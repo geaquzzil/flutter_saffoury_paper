@@ -501,6 +501,12 @@ abstract class AppLocalizations {
   /// **'Block'**
   String get block;
 
+  /// No description provided for @blockDes.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been blocked, please contact support'**
+  String get blockDes;
+
   /// No description provided for @blockMood.
   ///
   /// In en, this message translates to:
@@ -1437,6 +1443,24 @@ abstract class AppLocalizations {
   /// **'Error'**
   String get error;
 
+  /// No description provided for @error400.
+  ///
+  /// In en, this message translates to:
+  /// **'Bad request access denied'**
+  String get error400;
+
+  /// No description provided for @error401.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication error access denied'**
+  String get error401;
+
+  /// No description provided for @error500.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error access denied'**
+  String get error500;
+
   /// No description provided for @errorCantTransferringToSameAccount.
   ///
   /// In en, this message translates to:
@@ -1449,11 +1473,23 @@ abstract class AppLocalizations {
   /// **'Error founded!'**
   String get errorFounded;
 
+  /// No description provided for @errorOccured.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while trying to perform this action '**
+  String get errorOccured;
+
   /// No description provided for @errorOneOrMoreWarehouseIsNotSelected.
   ///
   /// In en, this message translates to:
   /// **'Error, one or the both warehouses is not selected!'**
   String get errorOneOrMoreWarehouseIsNotSelected;
+
+  /// No description provided for @errorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An unknown error occurred'**
+  String get errorUnknown;
 
   /// No description provided for @errorWarehouseIsEquals.
   ///
@@ -2150,6 +2186,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in'**
   String get log_in;
+
+  /// No description provided for @logingoutDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'By logging you out all of your data will be cleared.'**
+  String get logingoutDesc;
 
   /// No description provided for @logout.
   ///
@@ -3711,6 +3753,12 @@ abstract class AppLocalizations {
   /// **'Have questions before making a purchase? See the contacts below for more information..'**
   String get submitRequestDes;
 
+  /// No description provided for @success200.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully connected'**
+  String get success200;
+
   /// No description provided for @successAdded.
   ///
   /// In en, this message translates to:
@@ -4340,6 +4388,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Year'**
   String get year;
+
+  /// No description provided for @youAreNotLog.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not logged in'**
+  String get youAreNotLog;
+
+  /// No description provided for @youDontHavePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to perform this action'**
+  String get youDontHavePermission;
 
   /// No description provided for @youHave.
   ///

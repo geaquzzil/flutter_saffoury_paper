@@ -219,6 +219,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get block => 'حظر';
 
   @override
+  String get blockDes => 'لقد تم حظر حسابك، يرجى الاتصال بالدعم';
+
+  @override
   String get blockMood => 'نوع الحجب';
 
   @override
@@ -707,13 +710,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get error => 'خطأ';
 
   @override
+  String get error400 => 'تم رفض طلب الوصول السيئ';
+
+  @override
+  String get error401 => 'خطأ في المصادقة تم رفض الوصول';
+
+  @override
+  String get error500 => 'خطأ في الخادم تم رفض الوصول';
+
+  @override
   String get errorCantTransferringToSameAccount => 'لا يمكن التحويل لنفس الحساب ، يرجى تحديد حساب آخر';
 
   @override
   String get errorFounded => 'يوجد خطأ!';
 
   @override
+  String get errorOccured => 'حدث خطأ أثناء محاولة تنفيذ هذا الإجراء';
+
+  @override
   String get errorOneOrMoreWarehouseIsNotSelected => 'خطأ ، لم يتم تحديد أحد المستودعات أو كلا المستودعات!';
+
+  @override
+  String get errorUnknown => 'حدث خطأ غير معروف';
 
   @override
   String get errorWarehouseIsEquals => 'الرجاء تحديد مستودع مختلف';
@@ -1078,6 +1096,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get log_in => 'تسجيل الدخول';
+
+  @override
+  String get logingoutDesc => 'عند تسجيل خروجك، سيتم مسح جميع بياناتك.';
 
   @override
   String get logout => 'تسجيل الخروج';
@@ -1912,6 +1933,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get submitRequestDes => 'هل لديك أسئلة قبل إجراء عملية الشراء؟ انظر جهات الاتصال أدناه لمزيد من المعلومات.';
 
   @override
+  String get success200 => 'تم الاتصال بنجاح';
+
+  @override
   String get successAdded => 'أضيف بنجاح!';
 
   @override
@@ -2247,6 +2271,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get year => 'سنة';
+
+  @override
+  String get youAreNotLog => 'لم يتم تسجيل دخولك';
+
+  @override
+  String get youDontHavePermission => 'ليس لديك الإذن للقيام بهذا الإجراء';
 
   @override
   String get youHave => 'لديك';

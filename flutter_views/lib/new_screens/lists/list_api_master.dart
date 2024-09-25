@@ -143,7 +143,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getPage(getCustomKey()) == 0) {
-        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract);
+        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract,context:context);
       }
     });
   }
@@ -223,7 +223,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
 
   void _refresh() {
     listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,context:context);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -346,7 +346,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
 
   void fetshList() {
     if (listProvider.getCount(getCustomKey()) == 0) {
-      listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract);
+      listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract,context:context);
     }
   }
 
@@ -388,7 +388,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   void fetshListSearch(String query) {
     controller.text = query;
     listProvider.fetchListSearch(
-        getCustomKey(searchTextKey: query), viewAbstract, query);
+        getCustomKey(searchTextKey: query), viewAbstract, query,context:context);
   }
 
   void _onChangedViewAbstract() {
@@ -396,7 +396,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (widget.viewAbstract != null) return;
 
     viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
-    listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract);
+    listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract,context:context);
     debugPrint("ViewAbstractProvider CHANGED");
   }
 
@@ -429,12 +429,12 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (_isBottom) {
       // debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
-        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract);
+        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract,context:context);
       } else {
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),
             viewAbstract,
-            controller.text);
+            controller.text,context:context);
       }
       widget.onScroll(
           context: context,

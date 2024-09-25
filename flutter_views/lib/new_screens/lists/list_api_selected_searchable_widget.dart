@@ -38,7 +38,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     _scrollController.addListener(() => _onScroll());
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      listProvider.fetchList(getCustomKey(), viewAbstract: widget.viewAbstract);
+      listProvider.fetchList(getCustomKey(), viewAbstract: widget.viewAbstract,context:context);
     });
   }
 
@@ -86,7 +86,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), widget.viewAbstract);
+    listProvider.refresh(findCustomKey(), widget.viewAbstract,context:context);
   }
 
   Widget _buildSearchBox() {
@@ -243,12 +243,12 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
       debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
         listProvider.fetchList(getCustomKey(),
-            viewAbstract: widget.viewAbstract);
+            viewAbstract: widget.viewAbstract,context:context);
       } else {
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),
             widget.viewAbstract,
-            controller.text);
+            controller.text,context:context);
       }
     }
   }
@@ -260,7 +260,7 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),
             widget.viewAbstract,
-            controller.text);
+            controller.text,context:context);
         // setState(() {});
       },
     );

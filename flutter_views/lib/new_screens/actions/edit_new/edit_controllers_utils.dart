@@ -349,12 +349,12 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
             if (query.isEmpty) return [];
             if (query.trim().isEmpty) return [];
             if (autoCompleteBySearchQuery) {
-              return viewAbstract.search(5, 0, query)
+              return viewAbstract.search(5, 0, query,context: context)
                   as Future<List<ViewAbstract>>;
               // field: field, searchQuery: query);
             }
             return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                field: field, searchQuery: query);
+                field: field, searchQuery: query,context: context);
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
@@ -468,12 +468,12 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
             if (query.isEmpty) return [];
             if (query.trim().isEmpty) return [];
             if (autoCompleteBySearchQuery) {
-              return viewAbstract.search(5, 0, query)
+              return viewAbstract.search(5, 0, query,context: context)
                   as Future<List<ViewAbstract>>;
               // field: field, searchQuery: query);
             }
             return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                field: field, searchQuery: query);
+                field: field, searchQuery: query,context: context);
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
@@ -532,7 +532,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
             if (query.trim().isEmpty) return [];
 
             return viewAbstract.searchByFieldName(
-                field: field, searchQuery: query);
+                field: field, searchQuery: query,context: context);
           }),
       requiredSpace:
           viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0,

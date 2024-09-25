@@ -72,7 +72,7 @@ class FileReaderValidationWidgetState
     return FutureBuilder(
         future: context
             .read<FilterableListApiProvider<FilterableData>>()
-            .getServerData(widget.fileReaderObject.viewAbstract),
+            .getServerData(widget.fileReaderObject.viewAbstract,context: context),
         builder: ((s, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return getWidget(context, snapshot: snapshot);

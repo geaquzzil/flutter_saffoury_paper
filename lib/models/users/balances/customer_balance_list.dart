@@ -41,7 +41,7 @@ class CustomerBalanceList
   }
 
   @override
-  Future<CustomerBalanceList?> callApi() async {
+  Future<CustomerBalanceList?> callApi({required BuildContext context}) async {
     return fromJsonViewAbstract(jsonDecode(jsonEncode(customerbalances)));
   }
 

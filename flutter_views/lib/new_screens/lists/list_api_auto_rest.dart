@@ -33,7 +33,7 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {
         listProvider.fetchList(widget.autoRest.key,
-            viewAbstract: widget.autoRest.obj);
+            viewAbstract: widget.autoRest.obj,context:context);
       }
     });
   }
@@ -125,7 +125,7 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider.fetchList(widget.autoRest.key,
-          viewAbstract: widget.autoRest.obj);
+          viewAbstract: widget.autoRest.obj,context:context);
     }
   }
 

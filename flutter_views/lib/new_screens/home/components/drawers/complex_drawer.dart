@@ -108,21 +108,26 @@ class _TxtState extends State<Txt> {
     if (widget.text is String) finalText = widget.text ?? "Error";
 //Numbers
     if ((widget.text is double || widget.text is int)) {
-      if (widget.toRupees)
-        finalText = NumberFormat.simpleCurrency().format(widget.text)
+      if (widget.toRupees) {
+        finalText = NumberFormat.simpleCurrency()
+            .format(widget.text)
             .replaceAll('\$', '₹')
             .replaceAll(".00", "");
-      if (widget.toTimeAgo)
+      }
+      if (widget.toTimeAgo) {
         finalText = timeAgo(widget.text, prefix: widget.prefix);
-      if (widget.toRupees == false && widget.toTimeAgo == false)
+      }
+      if (widget.toRupees == false && widget.toTimeAgo == false) {
         finalText = widget.text.toString();
+      }
     }
 
-    if (widget.upperCaseFirst && finalText.length > 1)
+    if (widget.upperCaseFirst && finalText.length > 1) {
       finalText =
           "${finalText[0].toUpperCase()}${finalText.substring(1, finalText.length).toLowerCase()}";
+    }
     if (widget.fullUpperCase) finalText = finalText.toUpperCase();
-    if (widget.useFiler)
+    if (widget.useFiler) {
       finalText = finalText
           .replaceAll("*", "")
           .replaceAll("_", "")
@@ -132,6 +137,7 @@ class _TxtState extends State<Txt> {
           .replaceAll("!", "")
           .replaceAll('[', '')
           .replaceAll(']', '');
+    }
     if (widget.quoted) finalText = "❝$finalText❞";
 
     return Text((finalText).toString(),
@@ -369,7 +375,7 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
                   bool selected = selectedIndex == index;
                   bool isValidSubMenu = selected && cmd.submenus.isNotEmpty;
                   return subMenuWidget(
-                      [cmd.title]..addAll(cmd.submenus), isValidSubMenu);
+                      [cmd.title, ...cmd.submenus], isValidSubMenu);
                 }),
           ),
         ],

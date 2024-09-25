@@ -136,7 +136,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
             : FutureBuilder(
                 future: context
                     .read<FilterableListApiProvider<FilterableData>>()
-                    .getServerData(widget.viewAbstract),
+                    .getServerData(widget.viewAbstract,context:context),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {

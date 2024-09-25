@@ -136,9 +136,9 @@ class WebProductList extends StatelessWidget {
                 builder: (context, value, child) =>
                     FutureBuilder<List<dynamic>?>(
                   future: searchQuery != null
-                      ? viewAbstract.search(20, value, searchQuery!)
+                      ? viewAbstract.search(20, value, searchQuery!,context: context)
                       : viewAbstract.listCall(
-                          count: isDesktop(context) ? 20 : 4, page: value),
+                          count: isDesktop(context) ? 20 : 4, page: value,context: context),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();

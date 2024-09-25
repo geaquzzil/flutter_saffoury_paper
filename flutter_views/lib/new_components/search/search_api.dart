@@ -69,7 +69,7 @@ class SearchWidgetApi extends StatelessWidget {
 
                     // return await viewAbstract.search(5, pageIndex, searchQuery);
                     return Future.delayed(const Duration(milliseconds: 1000),
-                        () => viewAbstract.search(5, pageIndex, searchQuery));
+                        () => viewAbstract.search(5, pageIndex, searchQuery,context: context));
                   },
                   itemBuilder: (
                     context, {

@@ -67,11 +67,11 @@ class _PdfPageState<T extends PrintLocalSetting>
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =
           context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
-      return newViewAbstract.viewCallGetFirstFromList(iD!)
+      return newViewAbstract.viewCallGetFirstFromList(iD!,context: context)
           as Future<PrintableMaster<T>?>;
     } else {
       return (getExtras() as ViewAbstract)
-              .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD)
+              .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD,context: context)
           as Future<PrintableMaster<T>?>;
     }
   }
@@ -84,7 +84,7 @@ class _PdfPageState<T extends PrintLocalSetting>
     }
     return FutureBuilder(
       future: (newObject as ViewAbstract)
-          .viewCallGetFirstFromList((newObject as ViewAbstract).iD),
+          .viewCallGetFirstFromList((newObject as ViewAbstract).iD,context:context),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return EmptyWidget(

@@ -203,8 +203,6 @@ class _IOPortPageState extends State<IOPortPage> {
   void dispose() {
     port.close();
     port.dispose();
-
-    // TODO: implement dispose
     super.dispose();
   }
 

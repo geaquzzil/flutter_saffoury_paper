@@ -30,7 +30,7 @@ class BasePrintableViewWidget extends StatelessWidget {
           centerTitle: true,
         ),
         body: FutureBuilder(
-            future: printObject.printCall(printCommand),
+            future: printObject.printCall(printCommand,context: context),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 

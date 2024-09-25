@@ -63,7 +63,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
 
   Map<String, TextEditingController> controllers = {};
 
-  Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
+  final Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
 
   late GlobalKey<EditSubViewAbstractHeaderState> keyExpansionTile;
 
@@ -90,7 +90,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     //removed
     //viewAbstractChangeProvider =
     //     ViewAbstractChangeProvider.init(widget.viewAbstract);
-    _viewAbstract?.onBeforeGenerateView(context, action: ServerActions.edit);
+    _viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
     debugPrint("BaseEditNew currentScreenSize ${widget.currentScreenSize}");
     // _formKey = Provider.of<ErrorFieldsProvider>(context, listen: false)
     //     .getFormBuilderState;

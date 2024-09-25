@@ -62,7 +62,7 @@ class _DropdownCustomListWithFormListenerState
                 formKey: widget.formKey);
             widget.viewAbstract.setFieldValue(_field, obj);
             debugPrint(
-                'getControllerDropdownCustomList onChanged= field= ${_field} value=   $obj');
+                'getControllerDropdownCustomList onChanged= field= $_field value=   $obj');
             widget.onSelected(obj);
           },
           onReset: () {

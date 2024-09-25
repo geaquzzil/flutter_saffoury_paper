@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -20,7 +20,7 @@ abstract class ViewAbstractInputAndValidater<T>
   GlobalKey<FormBuilderState>? _formKey;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
+  final Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
 
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();

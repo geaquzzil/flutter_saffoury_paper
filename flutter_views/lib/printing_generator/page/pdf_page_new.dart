@@ -334,7 +334,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   Future getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab}) {
     return (getExtras() as ViewAbstract)
-            .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD)
+            .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD,context:context)
         as Future<PrintableMaster?>;
   }
 

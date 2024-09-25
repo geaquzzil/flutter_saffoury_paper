@@ -10,8 +10,6 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-
-  
   @override
   Widget build(BuildContext context) {
     return Container();

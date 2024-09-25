@@ -58,9 +58,9 @@ class ListWebApiPage extends BaseWebPageSlivers {
       Widget? customSliverWidget,
       super.buildHeader = false})
       : super(customSliverHeader: customSliverWidget);
-  void fetshListWidgetBinding() {
+  void fetshListWidgetBinding(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetshList();
+      fetshList(context);
     });
   }
 
@@ -89,23 +89,23 @@ class ListWebApiPage extends BaseWebPageSlivers {
     valueNotifierGrid ??= ValueNotifier<bool>(false);
   }
 
-  void fetshList() {
+  void fetshList(BuildContext context) {
     String customKey = findCustomKey();
     if (listProvider.getCount(customKey) == 0) {
-      fetshListNotCheckingZero();
+      fetshListNotCheckingZero(context);
     }
   }
 
-  void fetshListNotCheckingZero() {
+  void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract: viewAbstract,context:context);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
+      listProvider.fetchList(customKey, viewAbstract: viewAbstract,context:context);
     } else {
-      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
+      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,context:context);
     }
   }
 
@@ -121,7 +121,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
           expand: false,
           onSubtitleClicked: isError
               ? () {
-                  fetshList();
+                  fetshList(context);
                 }
               : null,
           lottiUrl:
@@ -284,7 +284,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    fetshListWidgetBinding();
+    fetshListWidgetBinding(context);
     return [
       if (customHeader != null)
         SliverToBoxAdapter(
@@ -405,7 +405,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
 
   @override
   void isScrolled(BuildContext context) {
-    fetshListNotCheckingZero();
+    fetshListNotCheckingZero(context);
   }
 
   SliverPadding getGridList(BoxConstraints constraints,

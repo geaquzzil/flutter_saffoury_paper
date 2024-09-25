@@ -673,10 +673,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         // }
 
         case ResponseType.LIST:
-          listProvider.fetchList(customKey, viewAbstract: c as ViewAbstract);
+          listProvider.fetchList(customKey, viewAbstract: c as ViewAbstract,context:context);
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(customKey, viewAbstract: c as ViewAbstract);
+          listProvider.fetchView(customKey, viewAbstract: c as ViewAbstract,context:context);
           break;
 
         case ResponseType.NONE_RESPONSE_TYPE:
@@ -696,14 +696,14 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
           viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
               getToListObjectCastViewAbstractNullIfNot(),
           customCount: widget.requiresFullFetsh == true ? 10000000 : null,
-          customPage: widget.requiresFullFetsh == true ? 0 : null,
+          customPage: widget.requiresFullFetsh == true ? 0 : null,context:context
         );
       } else {
         listProvider.fetchListSearch(
             customKey, getToListObjectCastViewAbstract(), _searchString!,
             requiresFullFetsh: widget.requiresFullFetsh,
             filter: _filterData,
-            customCount: widget.requiresFullFetsh == true ? 10000000 : null);
+            customCount: widget.requiresFullFetsh == true ? 10000000 : null,context:context);
         // }
       }
     }
@@ -712,7 +712,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   void refresh() {
     ViewAbstract? v = getToListObjectCastViewAbstractNullIfNot();
     if (v == null) return;
-    listProvider.refresh(getListProviderKey(), v);
+    listProvider.refresh(getListProviderKey(), v,context:context);
   }
 
   bool get _isBottom {

@@ -131,7 +131,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
                       context.read<ListMultiKeyProvider>().recall(
                           getCustomViewKey(),
                           this,
-                          getCustomViewResponseType());
+                          getCustomViewResponseType(),context: context);
                     }
                   }),
             )

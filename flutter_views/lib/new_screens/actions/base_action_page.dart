@@ -179,7 +179,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
-    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD)
+    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD,context: context)
         as Future<ViewAbstract?>;
   }
 

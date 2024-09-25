@@ -155,7 +155,7 @@ class GridViewApi extends StatelessWidget {
 
         return FutureBuilder<List<dynamic>?>(
           future: viewAbstract.listCall(
-              count: isDesktop(context) ? 10 : 4, page: value),
+              count: isDesktop(context) ? 10 : 4, page: value,context: context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();

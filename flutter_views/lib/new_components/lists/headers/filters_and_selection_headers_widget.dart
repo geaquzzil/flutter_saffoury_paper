@@ -89,7 +89,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
                 ),
                 const Spacer(),
                 if (!kIsWeb) getAddBotton(context),
-                getRefreshWidget(),
+                getRefreshWidget(context),
                 if (exportButton != null) exportButton,
                 if (printButton != null) printButton
               ],
@@ -134,13 +134,13 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     return first;
   }
 
-  void _refresh() {
-    listProvider.refresh(findCustomKey(), viewAbstract);
+  void _refresh(BuildContext context) {
+    listProvider.refresh(findCustomKey(), viewAbstract,context:context);
   }
 
-  Widget getRefreshWidget() => IconButton(
+  Widget getRefreshWidget(BuildContext context) => IconButton(
       onPressed: () {
-        _refresh();
+        _refresh(context);
       },
       icon: const Icon(Icons.refresh));
 

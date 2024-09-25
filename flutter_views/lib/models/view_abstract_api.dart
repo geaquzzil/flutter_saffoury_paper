@@ -187,7 +187,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   ///call only with custom action and added custom params
-  Future<T?> callApi() async {
+  Future<T?> callApi({required BuildContext context}) async {
     var response = await getRespones(serverActions: ServerActions.call);
     // debugPrint("ViewAbstractApi ViewAbstractApicallApi $response");
 
@@ -199,7 +199,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));
     } else {
-      onCallCheckError(response: response);
+      onCallCheckError(response: response,context:context);
       return null;
     }
   }
@@ -209,7 +209,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<T?> viewCallGetFirstFromList(
-    int iD,
+    int iD,{required BuildContext context}
   ) async {
     this.iD = iD;
     var response = await getRespones(serverActions: ServerActions.view);
@@ -220,14 +220,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
       return (t[0] as ViewAbstract).onResponse200K(this as ViewAbstract);
     } else {
-      onCallCheckError(response: response);
+      onCallCheckError(response: response,context:context);
       return null;
     }
   }
 
   Future<T?> viewCall(
     int iD, {
-    OnResponseCallback? onResponse,
+    OnResponseCallback? onResponse,required BuildContext context,
   }) async {
     this.iD = iD;
     var response = await getRespones(
@@ -238,12 +238,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      onCallCheckError(response: response);
+      onCallCheckError(response: response,context:context);
       return null;
     }
   }
 
-  Future<T?> addCall({OnResponseCallback? onResponse}) async {
+  Future<T?> addCall({OnResponseCallback? onResponse,required BuildContext context,}) async {
     var response = await getRespones(
         onResponse: onResponse,
         serverActions: isEditing() ? ServerActions.edit : ServerActions.add);
@@ -251,7 +251,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response.statusCode == 200) {
       return fromJsonViewAbstract(convert.jsonDecode(response.body));
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context:context);
       return null;
     }
   }
@@ -267,7 +267,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   // }
   Future<List<ViewAbstract>> searchViewAbstractByTextInputViewAbstract(
       {required String field,
-      required String searchQuery,
+      required String searchQuery,required BuildContext context,
       OnResponseCallback? onResponse}) async {
     var response = await getRespones(
         onResponse: onResponse,
@@ -287,7 +287,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
       return list.cast();
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context: context);
       return [];
     }
   }
@@ -295,7 +295,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<List<String>> searchViewAbstractByTextInput(
       {required String field,
       required String searchQuery,
-      OnResponseCallback? onResponse}) async {
+      OnResponseCallback? onResponse,required BuildContext context}) async {
     var response = await getRespones(
         onResponse: onResponse,
         fieldBySearchQuery: field,
@@ -316,7 +316,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
           .toList();
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context:context);
       return [];
     }
   }
@@ -324,7 +324,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<List<String>> searchByFieldName(
       {required String field,
       required String searchQuery,
-      OnResponseCallback? onResponse}) async {
+      OnResponseCallback? onResponse,required BuildContext context}) async {
     var response = await getRespones(
         onResponse: onResponse,
         fieldBySearchQuery: field,
@@ -344,12 +344,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
           .toList();
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context:context);
       return [];
     }
   }
 
-  Future<List<T>>? listApiReduceSizes() async {
+  Future<List<T>>? listApiReduceSizes({required BuildContext context}) async {
     String customField = (this as ViewAbstract).getFieldToReduceSize();
     if (getLastReduseSize(customField).isNotEmpty) {
       return getLastReduseSize(customField).cast();
@@ -370,14 +370,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       setListReduseSizeViewAbstract(customField, list.cast());
       return list;
     } else {
-      onCallCheckError(response: response);
+      onCallCheckError(response: response,context: context);
       return [];
     }
   }
 
   Future<List<T>> search(int count, int pageIndex, String searchQuery,
       {OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? filter}) async {
+      Map<String, FilterableProviderHelper>? filter,required BuildContext context}) async {
     var response = await getRespones(
         onResponse: onResponse,
         map: filter,
@@ -395,7 +395,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
       return t;
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context:context);
       return [];
     }
   }
@@ -411,7 +411,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
-  Future<Response?> printCall(ViewAbstract printObject) async {
+  Future<Response?> printCall(ViewAbstract printObject,{required BuildContext context}) async {
     var response = await getRespones(
         serverActions: ServerActions.print, printObject: printObject);
 
@@ -419,7 +419,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (response.statusCode == 200) {
       return response;
     } else {
-      onCallCheckError(response: response);
+      onCallCheckError(response: response,context:context);
       return null;
     }
   }
@@ -445,7 +445,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  void onCallCheckError({OnResponseCallback? onResponse, dynamic response}) {
+  void onCallCheckError({OnResponseCallback? onResponse, dynamic response,required BuildContext context}) {
     if (response is Response) {
       if (onResponse == null) {
         debugPrint(
@@ -453,7 +453,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return;
       }
       int statusCode = response.statusCode;
-
+ 
       if (statusCode >= 400 && statusCode <= 500) {
         //this is a error
         ServerResponseMaster serverResponse =
@@ -461,7 +461,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         debugPrint(
             "ViewAbstractApi onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}");
         onResponse
-            .onServerFailureResponse((serverResponse.getFailureMessage()));
+            .onServerFailureResponse((serverResponse.getFailureMessage(context)));
       }
     }
   }
@@ -527,7 +527,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             onResponse: onResponse);
       }
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context:context);
     }
   }
 
@@ -560,7 +560,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {int? count,
       int? page,
       OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? filter}) async {
+      Map<String, FilterableProviderHelper>? filter,required BuildContext context}) async {
     debugPrint("ViewAbstractApi listCall count=> $count page=>$page");
     var response = await getRespones(
         map: filter,
@@ -579,7 +579,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
       return t;
     } else {
-      onCallCheckError(onResponse: onResponse, response: response);
+      onCallCheckError(onResponse: onResponse, response: response,context:context);
       return null;
     }
   }

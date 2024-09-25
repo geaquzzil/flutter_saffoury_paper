@@ -1288,7 +1288,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   Future getPosableInitObj(BuildContext context) {
-    return ProductType.init(true).listCall();
+    return ProductType.init(true).listCall(context: context);
   }
 
   @override

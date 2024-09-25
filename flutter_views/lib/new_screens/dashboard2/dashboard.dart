@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: (dashboard as ViewAbstract).callApi(),
+      future: (dashboard as ViewAbstract).callApi(context:context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           dashboard = snapshot.data as DashableInterface;

@@ -107,7 +107,7 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
-  Future<Dashboard?> callApi() async {
+  Future<Dashboard?> callApi({required BuildContext context}) async {
     // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
     return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
   }

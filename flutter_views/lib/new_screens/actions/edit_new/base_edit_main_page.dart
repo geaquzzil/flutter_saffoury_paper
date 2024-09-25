@@ -2,23 +2,22 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
+
 import '../../../constants.dart';
 import '../../../new_components/fabs/floating_action_button_extended.dart';
 import '../../../providers/actions/list_multi_key_provider.dart';
-
 
 class BaseEditNewPage extends BaseActionScreenPage {
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
@@ -191,13 +190,13 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                             currentViewAbstract!.copyToUplode();
                         apiCallState.value = ApiCallState.LOADING;
                         currentViewAbstract =
-                            await currentViewAbstract!.addCall(
+                            await currentViewAbstract!.addCall(context: context,
                                 onResponse: OnResponseCallback(
                                     onServerResponse: (response) {},
                                     onServerNoMoreItems: () {},
                                     onClientFailure: (d) {},
                                     onServerFailureResponse: (s) {
-                                      debugPrint("onServerFailure ${s}");
+                                      debugPrint("onServerFailure $s");
                                       apiCallState.value = ApiCallState.ERROR;
                                     }));
                         if (currentViewAbstract != null) {
@@ -206,7 +205,7 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                           currentViewAbstract!.onCardClicked(context);
                           context
                               .read<ListMultiKeyProvider>()
-                              .notifyAdd(currentViewAbstract!);
+                              .notifyAdd(currentViewAbstract!,context:context);
                         }
 
                         // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);

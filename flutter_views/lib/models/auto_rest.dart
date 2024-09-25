@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, constant_identifier_names
+import 'dart:convert' as convert;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'dart:convert' as convert;
+
 import 'view_abstract_api.dart';
 
 abstract class JsonHelper<T> {
@@ -45,6 +47,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   @override
   Future<T?> viewCall(
     int iD, {
+    required BuildContext context,
     OnResponseCallback? onResponse,
   }) async {
     this.iD = iD;
@@ -56,7 +59,8 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.getFailureMessage());
+      onResponse
+          ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
       //throw Exception('Failed to load album');
       return null;
     } else {
@@ -71,6 +75,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
       {int? count,
       int? page,
       OnResponseCallback? onResponse,
+      required BuildContext context,
       Map<String, FilterableProviderHelper>? filter}) async {
     var response = await getRespones(
         map: filter,
@@ -86,7 +91,8 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     } else if (response.statusCode == 401) {
       ServerResponseMaster serverResponse =
           ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse?.onServerFailureResponse(serverResponse.getFailureMessage());
+      onResponse
+          ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
       return null;
     } else {
       return null;

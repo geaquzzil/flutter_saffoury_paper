@@ -46,7 +46,6 @@ import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.da
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -201,7 +200,6 @@ void main() async {
       ChangeNotifierProvider(create: (_) => LangaugeProvider()),
 
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
-      ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),
       ChangeNotifierProvider(
         create: (_) => FilterableListApiProvider<FilterableData>.initialize(

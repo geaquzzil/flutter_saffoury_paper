@@ -52,6 +52,7 @@ class ScrollSnapList extends StatefulWidget {
   final double itemSize;
 
   ///Global key that's used to call `focusToItem` method to manually trigger focus event.
+  @override
   final Key? key;
 
   ///Global key that passed to child ListView. Can be used for PageStorageKey
@@ -172,6 +173,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
   //Current scroll-position in pixel
   double currentPixel = 0;
 
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -184,8 +186,8 @@ class ScrollSnapListState extends State<ScrollSnapList> {
     });
 
     ///After initial jump, set isInit to false
-    Future.delayed(Duration(milliseconds: 10), () {
-      if (this.mounted) {
+    Future.delayed(const Duration(milliseconds: 10), () {
+      if (mounted) {
         setState(() {
           isInit = false;
         });
@@ -198,7 +200,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
     Future.delayed(Duration.zero, () {
       widget.listController.animateTo(
         location,
-        duration: new Duration(milliseconds: widget.duration),
+        duration: Duration(milliseconds: widget.duration),
         curve: widget.curve,
       );
     });
@@ -241,14 +243,15 @@ class ScrollSnapListState extends State<ScrollSnapList> {
     }
 
     if (widget.dynamicItemOpacity != null) {
-      child = Opacity(child: child, opacity: calculateOpacity(index));
+      child = Opacity(opacity: calculateOpacity(index), child: child);
     }
 
-    if (widget.focusOnItemTap)
+    if (widget.focusOnItemTap) {
       return GestureDetector(
         onTap: () => focusToItem(index),
         child: child,
       );
+    }
 
     return child;
   }
@@ -263,7 +266,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
     //substracted by itemSize/2 (to center the item)
     //divided by pixels taken by each item
     int cardIndex =
-        index != null ? index : ((pixel! - itemSize / 2) / itemSize).ceil();
+        index ?? ((pixel! - itemSize / 2) / itemSize).ceil();
 
     //Avoid index getting out of bounds
     if (cardIndex < 0) {
@@ -333,7 +336,7 @@ class ScrollSnapListState extends State<ScrollSnapList> {
       margin: widget.margin,
       child: LayoutBuilder(
         builder: (BuildContext ctx, BoxConstraints constraint) {
-          double _listPadding = calculateListPadding(constraint);
+          double listPadding = calculateListPadding(constraint);
 
           return GestureDetector(
             //by catching onTapDown gesture, it's possible to keep animateTo from removing user's scroll listener
@@ -420,12 +423,12 @@ class ScrollSnapListState extends State<ScrollSnapList> {
                         ? EdgeInsets.symmetric(
                             horizontal: max(
                             0,
-                            _listPadding,
+                            listPadding,
                           ))
                         : EdgeInsets.symmetric(
                             vertical: max(
                               0,
-                              _listPadding,
+                              listPadding,
                             ),
                           )),
                 reverse: widget.reverse,

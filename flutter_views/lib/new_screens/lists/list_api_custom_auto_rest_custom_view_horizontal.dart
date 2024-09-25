@@ -53,10 +53,10 @@ class _ListHorizontalCustomApiWidgetState
     if (listProvider.getCount(key) == 0) {
       switch (autoRest.getCustomViewResponseType()) {
         case ResponseType.LIST:
-          listProvider.fetchList(key, customAutoRest: autoRest);
+          listProvider.fetchList(key, customAutoRest: autoRest,context:context);
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(key, customAutoRest: autoRest);
+          listProvider.fetchView(key, customAutoRest: autoRest,context:context);
           break;
 
         case ResponseType.NONE_RESPONSE_TYPE:

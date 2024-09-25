@@ -85,7 +85,7 @@ class _SortIconState extends State<SortIcon> {
         hint: AppLocalizations.of(context)!.sortBy,
         list: _generatedList!,
         onSelected: (obj) {
-          debugPrint("is selected ${obj}");
+          debugPrint("is selected $obj");
           if (obj is DropdownStringListItem) {
             widget.onChange?.call(SortFieldValue(
                 type: SortByType.ASC, field: obj.value as String));

@@ -30,7 +30,7 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
   Future<List<T?>?> getFuture() async {
     if (_list != null) return _list;
     _list = await widget.viewAbstract
-            .listApiReduceSizes()
+            .listApiReduceSizes(context: context)
         as List<T?>;
     if (mounted) {
       setState(() {});

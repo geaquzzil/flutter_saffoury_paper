@@ -882,7 +882,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   void _refresh() {
     listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract);
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,context:context);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -924,10 +924,10 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     if (listProvider.getCount(customKey) == 0) {
       if (_searchStringQuery == null) {
         listProvider.fetchList(customKey,
-            viewAbstract: scanedQr ?? viewAbstract);
+            viewAbstract: scanedQr ?? viewAbstract,context:context);
       } else {
         listProvider.fetchListSearch(
-            customKey, viewAbstract, _searchStringQuery!);
+            customKey, viewAbstract, _searchStringQuery!,context:context);
       }
     }
   }

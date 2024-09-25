@@ -37,7 +37,7 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {
         listProvider.fetchList(widget.autoRest.key,
-            viewAbstract: widget.autoRest.obj);
+            viewAbstract: widget.autoRest.obj,context:context);
       }
     });
   }
@@ -186,7 +186,7 @@ class _POSListWidget<T extends ViewAbstract> extends State<POSListWidget<T>> {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider.fetchList(widget.autoRest.key,
-          viewAbstract: widget.autoRest.obj);
+          viewAbstract: widget.autoRest.obj,context:context);
     }
   }
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class RoundedCornerContainer extends StatelessWidget {
-  Color? backgroundColor;
-  Widget child;
+  final Color? backgroundColor;
+  final Widget child;
 
-  RoundedCornerContainer({this.backgroundColor, required this.child});
+  const RoundedCornerContainer({super.key, this.backgroundColor, required this.child});
   @override
   Widget build(BuildContext context) {
     return Container(

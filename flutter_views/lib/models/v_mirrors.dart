@@ -134,7 +134,7 @@ abstract class VMirrors<T> {
     TextInputType? type = (this as ViewAbstract).getTextInputType(field);
 
     debugPrint(
-        "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  ${type} this type $runtimeType");
+        "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  $type this type $runtimeType");
     if (type == null) return getFieldValueCheckType(context, field);
     if (type == TextInputType.number) {
       return (getFieldValue(field, context: context) as double?)

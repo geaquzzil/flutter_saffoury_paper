@@ -45,7 +45,7 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
 
     return FutureBuilder(
         future: widget.viewAbstract
-            .viewCallGetFirstFromList(widget.viewAbstract.iD),
+            .viewCallGetFirstFromList(widget.viewAbstract.iD,context: context),
         builder: (c, a) {
           debugPrint("ListCardItemApi futureBuilder ");
           if (a.connectionState == ConnectionState.waiting) {
@@ -62,7 +62,7 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
             if (_viewAbstract == null) {
               return Card(
                   child: ListTile(
-                title: Text("NotFound"),
+                title: const Text("NotFound"),
                 trailing: ElevatedButton.icon(
                     onPressed: () {
                       setState(() {});

@@ -143,7 +143,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       bool b = getBodyWithoutApi(action ?? ServerActions.view);
       if (!b) {
         debugPrint("sharePage waiting to get object form api");
-        newO = (await viewCallGetFirstFromList(iD)) as ViewAbstract?;
+        newO = (await viewCallGetFirstFromList(iD,context: context)) as ViewAbstract?;
         debugPrint("sharePage done");
       }
       if (newO != null) {

@@ -10,15 +10,15 @@ import '../../../providers/actions/action_viewabstract_provider.dart';
 class MasterViewStandAlone extends StatelessWidget {
   ViewAbstractStandAloneCustomViewApi viewAbstract;
   MasterViewStandAlone({super.key, required this.viewAbstract});
-  Future<dynamic>? getFuture() {
+  Future<dynamic>? getFuture(BuildContext context) {
     debugPrint(
         "getFuture responseType=> ${viewAbstract.getCustomStandAloneResponseType()}");
-    return viewAbstract.callApi();
+    return viewAbstract.callApi(context: context);
   }
 
   Widget getFutureBuilder(BuildContext context) {
     return FutureBuilder(
-        future: getFuture(),
+        future: getFuture(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             debugPrint("getFutureBuilder ${snapshot.data}");

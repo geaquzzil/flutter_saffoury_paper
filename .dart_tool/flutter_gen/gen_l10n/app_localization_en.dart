@@ -219,6 +219,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get block => 'Block';
 
   @override
+  String get blockDes => 'Your account has been blocked, please contact support';
+
+  @override
   String get blockMood => 'Block mood';
 
   @override
@@ -707,13 +710,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error => 'Error';
 
   @override
+  String get error400 => 'Bad request access denied';
+
+  @override
+  String get error401 => 'Authentication error access denied';
+
+  @override
+  String get error500 => 'Server error access denied';
+
+  @override
   String get errorCantTransferringToSameAccount => 'Can not transferring to same account, please select another account';
 
   @override
   String get errorFounded => 'Error founded!';
 
   @override
+  String get errorOccured => 'An error occurred while trying to perform this action ';
+
+  @override
   String get errorOneOrMoreWarehouseIsNotSelected => 'Error, one or the both warehouses is not selected!';
+
+  @override
+  String get errorUnknown => 'An unknown error occurred';
 
   @override
   String get errorWarehouseIsEquals => 'Please select different  from to warehouse';
@@ -1078,6 +1096,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get log_in => 'Sign in';
+
+  @override
+  String get logingoutDesc => 'By logging you out all of your data will be cleared.';
 
   @override
   String get logout => 'Logout';
@@ -1912,6 +1933,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submitRequestDes => 'Have questions before making a purchase? See the contacts below for more information..';
 
   @override
+  String get success200 => 'Successfully connected';
+
+  @override
   String get successAdded => 'Successfully added!';
 
   @override
@@ -2247,6 +2271,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get year => 'Year';
+
+  @override
+  String get youAreNotLog => 'You are not logged in';
+
+  @override
+  String get youDontHavePermission => 'You do not have permission to perform this action';
 
   @override
   String get youHave => 'You have';

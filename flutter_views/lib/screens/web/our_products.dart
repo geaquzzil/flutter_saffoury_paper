@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
@@ -25,10 +26,8 @@ import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../models/permissions/user_auth.dart';
 
@@ -48,9 +47,9 @@ class ProductWebPage extends BaseWebPageSlivers {
     this.customFilter,
     super.pinToolbar = false,
   });
-  void fetshListWidgetBinding() {
+  void fetshListWidgetBinding(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetshList();
+      fetshList(context);
     });
   }
 
@@ -83,23 +82,26 @@ class ProductWebPage extends BaseWebPageSlivers {
     }
   }
 
-  void fetshList() {
+  void fetshList(BuildContext context) {
     String customKey = findCustomKey();
     if (listProvider.getCount(customKey) == 0) {
-      fetshListNotCheckingZero();
+      fetshListNotCheckingZero(context);
     }
   }
 
-  void fetshListNotCheckingZero() {
+  void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
+      listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract, context: context);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract: viewAbstract);
+      listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract, context: context);
     } else {
-      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!);
+      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,
+          context: context);
     }
   }
 
@@ -113,7 +115,7 @@ class ProductWebPage extends BaseWebPageSlivers {
     return EmptyWidget(
         onSubtitleClicked: isError
             ? () {
-                fetshList();
+                fetshList(context);
               }
             : null,
         lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
@@ -184,7 +186,7 @@ class ProductWebPage extends BaseWebPageSlivers {
   List<Widget> getContentWidget(
       BuildContext context, BoxConstraints constraints) {
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
-    fetshListWidgetBinding();
+    fetshListWidgetBinding(context);
     return [
       SliverPersistentHeader(
           pinned: true,
@@ -308,7 +310,7 @@ class ProductWebPage extends BaseWebPageSlivers {
 
   @override
   void isScrolled(BuildContext context) {
-    fetshListNotCheckingZero();
+    fetshListNotCheckingZero(context);
   }
 
   SliverPadding getGridList(BoxConstraints constraints,

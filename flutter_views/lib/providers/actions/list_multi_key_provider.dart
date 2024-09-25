@@ -36,12 +36,12 @@ class ListMultiKeyProvider with ChangeNotifier {
     return _listMap[key]?.hasError ?? false;
   }
 
-  void notifyAdd(ViewAbstract viewAbstract) {
+  void notifyAdd(ViewAbstract viewAbstract,{required BuildContext context}) {
     for (var i in _listMap.entries) {
       if (i.key == viewAbstract.getListableKey()) {
         _listMap.remove(i.key);
         notifyListeners();
-        fetchList(i.key, viewAbstract: viewAbstract);
+        fetchList(i.key, viewAbstract: viewAbstract,context:context);
       }
     }
   }
@@ -90,7 +90,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   ///clear all the objects list and load the other objects list from viewAbstract if not null
-  Future<void> recall(String key, ViewAbstract t, ResponseType type) async {
+  Future<void> recall(String key, ViewAbstract t, ResponseType type,{required BuildContext context}) async {
     MultiListProviderHelper? multiListProviderHelper = _listMap[key];
     multiListProviderHelper?.getObjects.clear();
     multiListProviderHelper?.page = 0;
@@ -99,19 +99,19 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
     switch (type) {
       case ResponseType.LIST:
-        fetchList(key, viewAbstract: t);
+        fetchList(key, viewAbstract: t,context:context);
         break;
       case ResponseType.SINGLE:
-        fetchView(key, viewAbstract: t);
+        fetchView(key, viewAbstract: t,context:context);
         break;
       case ResponseType.NONE_RESPONSE_TYPE:
         break;
     }
   }
 
-  void refresh(String key, ViewAbstract viewAbstract) {
+  void refresh(String key, ViewAbstract viewAbstract,{required BuildContext context}) {
     clear(key);
-    fetchList(key, viewAbstract: viewAbstract);
+    fetchList(key, viewAbstract: viewAbstract,context:context);
   }
 
   void addCardToRequest(String key, ViewAbstract viewAbstract) {
@@ -180,11 +180,11 @@ class ListMultiKeyProvider with ChangeNotifier {
     return multiListProviderHelper;
   }
 
-  Future fetchListOfObjectAutoRest(List<AutoRest> list) async {
-    return fetchListOfObject(list.map((e) => e.obj).toList(), range: 5);
+  Future fetchListOfObjectAutoRest(List<AutoRest> list,{required BuildContext context}) async {
+    return fetchListOfObject(list.map((e) => e.obj).toList(), range: 5,context:context);
   }
 
-  Future fetchListOfObject(List<ViewAbstract> list, {int? range}) async {
+  Future fetchListOfObject(List<ViewAbstract> list, {int? range,required BuildContext context}) async {
     ViewAbstract first = list[0];
 
     String key = first.getListableKeyWithoutCustomMap();
@@ -207,7 +207,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
     try {
       List? list = await viewAbstract.listCall(
-          count: range ?? viewAbstract.getPageItemCount, page: 0);
+          count: range ?? viewAbstract.getPageItemCount, page: 0,context: context);
       multiListProviderHelper.isLoading = false;
 
       if (list != null) {
@@ -258,7 +258,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,
       {Map<String, FilterableProviderHelper>? filter,
       int? customCount,
-      bool requiresFullFetsh = false}) async {
+      bool requiresFullFetsh = false,required BuildContext context}) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     if (multiListProviderHelper.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
@@ -269,7 +269,7 @@ class ListMultiKeyProvider with ChangeNotifier {
         customCount ?? viewAbstract.getPageItemCountSearch,
         customCount != null ? 0 : multiListProviderHelper.page,
         query,
-        filter: filter);
+        filter: filter,context: context,);
 
     multiListProviderHelper.isLoading = false;
     if (requiresFullFetsh) {
@@ -289,7 +289,7 @@ class ListMultiKeyProvider with ChangeNotifier {
       Map<String, FilterableProviderHelper>? filter,
       int? customCount,
       int? customPage,
-      bool requiresFullFetsh = false}) async {
+      bool requiresFullFetsh = false,required BuildContext context}) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     if (multiListProviderHelper.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
@@ -302,13 +302,13 @@ class ListMultiKeyProvider with ChangeNotifier {
         list = await customAutoRest.listCall(
             filter: filter,
             count: customCount ?? customAutoRest.getPageItemCount,
-            page: customPage ?? multiListProviderHelper.page);
+            page: customPage ?? multiListProviderHelper.page,context:context);
       } else {
         list = await viewAbstract!.listCall(
             filter: filter,
             count:
                 customCount ?? autoRest?.range ?? viewAbstract.getPageItemCount,
-            page: customPage ?? multiListProviderHelper.page);
+            page: customPage ?? multiListProviderHelper.page,context: context);
       }
 
       multiListProviderHelper.isLoading = false;
@@ -337,7 +337,7 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   Future fetchView(String key,
-      {ViewAbstract? viewAbstract, AutoRestCustom? customAutoRest}) async {
+      {ViewAbstract? viewAbstract, AutoRestCustom? customAutoRest,required BuildContext context}) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     if (multiListProviderHelper.isLoading) return;
 
@@ -351,9 +351,9 @@ class ListMultiKeyProvider with ChangeNotifier {
     // );
     dynamic list;
     if (customAutoRest != null) {
-      list = await customAutoRest.callApi();
+      list = await customAutoRest.callApi(context:context);
     } else {
-      list = await viewAbstract!.callApi();
+      list = await viewAbstract!.callApi(context:context);
     }
 
     multiListProviderHelper.isLoading = false;
