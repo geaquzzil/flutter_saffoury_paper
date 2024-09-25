@@ -227,6 +227,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     if (iconOnButton != null) {
       return TowIconsWithTextBadge(
         largChild: image,
+         //TODO Translate
         text: "WASTED",
       );
     }

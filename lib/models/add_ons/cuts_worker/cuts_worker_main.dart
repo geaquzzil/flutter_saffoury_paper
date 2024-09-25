@@ -65,7 +65,6 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
 
   Widget getPrimaryText(String text, {withPadding = true}) {
     Widget t = Text(
-      //TODO translate
       text,
       style: Theme.of(context)
           .textTheme

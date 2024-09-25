@@ -130,6 +130,7 @@ class _FileExporterPage extends State<FileExporterPage> {
       // ),
       pages: [
         PageViewModel(
+           //TODO Translate
           title: "Select columns",
           bodyWidget: Column(
             children: [
@@ -158,6 +159,7 @@ class _FileExporterPage extends State<FileExporterPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
+           //TODO Translate
           title: "Exporting verfication",
           body:
               "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",

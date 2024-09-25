@@ -209,6 +209,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
                 ],
               )),
           PageViewModel(
+             //TODO Translate
             title: "Select columns",
 
             bodyWidget: Column(
@@ -232,6 +233,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
 
           if (!isCustom())
             PageViewModel(
+               //TODO Translate
               title: "Validations",
               bodyWidget: ValueListenableBuilder(
                 valueListenable: valueNotifier,

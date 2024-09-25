@@ -90,6 +90,7 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
       
       builder: (BuildContext context) {
         return DateRangePickerDialog(
+           //TODO Translate
           helpText: "This is the date range",
           restorationId: 'date_picker_dialog',
           initialDateRange:

@@ -252,6 +252,7 @@ class CutRequestListCard extends StatelessWidget {
                   const SizedBox(
                     height: kDefaultPadding,
                   ),
+                   //TODO Translate
                   Text("Requested Quantity",
                       style: Theme.of(context).textTheme.titleSmall!),
                   Text(
@@ -264,6 +265,7 @@ class CutRequestListCard extends StatelessWidget {
                   const SizedBox(
                     height: kDefaultPadding,
                   ),
+                  //TODO Translate
                   Text("Customer",
                       style: Theme.of(context).textTheme.titleSmall!),
                   Text(

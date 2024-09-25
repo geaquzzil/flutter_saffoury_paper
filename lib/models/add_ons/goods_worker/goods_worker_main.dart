@@ -48,10 +48,10 @@ enum GoodsType implements ViewAbstractEnum<GoodsType> {
   String getFieldLabelString(BuildContext context, GoodsType field) {
     switch (field) {
       case GoodsType.INVERTORY:
-        //todo translate
+         //TODO Translate
         return "invertory";
       case GoodsType.PURCHASES:
-        //todo translate
+         //TODO Translate
         return "PURCH";
     }
   }
@@ -205,6 +205,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               }
             }
           },
+           //TODO Translate
           child: const Text("IMPORT")),
     );
   }
@@ -220,8 +221,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           : getHeaderForInventory();
     } else {
       if (isPurchuses()) {
+         //TODO Translate
         return const Text("Purhuses");
+
       }
+       //TODO Translate
       return const Text("INVINTORY");
     }
     return null;
@@ -443,6 +447,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               child: ChartCardItemCustom(
                 color: Colors.blue,
                 icon: Icons.list,
+                 //TODO Translate
                 title: "TOTAL ITEMS IMPORTED",
                 description: getTotalImportedFromFile.toCurrencyFormat(
                     symbol: AppLocalizations.of(context)!.kg),
@@ -457,6 +462,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               child: ChartCardItemCustom(
                 color: const Color.fromARGB(255, 243, 82, 33),
                 icon: Icons.barcode_reader,
+                 //TODO Translate
                 title: "TOTAL ITEMS SCANED",
                 description: getTotalImportedFromBarcode.toCurrencyFormat(
                     symbol: AppLocalizations.of(context)!.kg),
@@ -469,6 +475,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               child: ChartCardItemCustom(
                 color: Colors.blue,
                 // icon: Icons.today,
+                 //TODO Translate
                 title: "TOTAL REMAINING",
                 description: getTotalRemainingImported.toCurrencyFormat(
                     symbol: AppLocalizations.of(context)!.kg),

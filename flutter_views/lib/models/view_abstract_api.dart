@@ -428,14 +428,19 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   ///TODO translate
   String getErrorCodeMessage(BuildContext context, int code) {
     if (code == 500) {
+      //todo translate error500
       return "Server error access denied";
     } else if (code == 401) {
+      //todo translate error401
       return "Authentication error access denied";
     } else if (code == 400) {
+        //todo translate error400
       return "bad request access denied";
     } else if (code == 200) {
+        //todo translate success200
       return "Success";
     } else {
+        //todo translate error200
       return "Success";
     }
   }

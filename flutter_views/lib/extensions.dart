@@ -15,7 +15,6 @@ import 'package:flutter_view_controller/constants.dart';
 
 Widget getPrimaryText(BuildContext context, String text, {withPadding = true}) {
   Widget t = Text(
-    //TODO translate
     text,
     style: Theme.of(context)
         .textTheme

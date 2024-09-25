@@ -23,18 +23,20 @@ class ServerResponseMaster {
     bool notHasPermission = serverResponse.permission ?? false;
     bool error = serverResponse.error ?? false;
     if (isBlocked) {
-      ///todo translate
+      ///todo translate blockDes
+      ///
       return "Your account has been blocked, please contact support";
     } else if (!isLogin) {
-      ///todo translate
+      ///todo translate youAreNotLog
       return "You are not logged in";
     } else if (!notHasPermission) {
-      ///todo translate
+      ///todo translate youDontHavePermission
       return "You do not have permission to perform this action";
     } else if (error) {
-      //TODO translate
+      //TODO translate errorOccured
       return "An error occurred while trying to perform this action => ${serverResponse.message}";
     }
+    //TODO translate errorUnknown
     return "An unknown error occurred";
   }
 }

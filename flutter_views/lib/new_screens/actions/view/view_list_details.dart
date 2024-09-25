@@ -21,6 +21,7 @@ class ViewDetailsListWidget extends StatelessWidget {
           dynamic fieldValue = viewAbstract.getFieldValue(label);
           if (fieldValue == null) {
             return ViewCardItem(
+               //TODO Translate
                 title: label, description: "null", icon: Icons.abc);
           } else if (fieldValue is ViewAbstract) {
             return ViewCardItem(

@@ -93,6 +93,7 @@ class GoodsInventoryListCard extends StatelessWidget {
           Expanded(
               child: getText(
                   context,
+                   //TODO Translate
                   "CurrentQuantity",
                   product.qrQuantity.toNonNullable().toCurrencyFormat(
                       symbol: AppLocalizations.of(context)!.kg))),

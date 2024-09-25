@@ -30,7 +30,7 @@ class WelcomMessageTermsWhoWeAre extends StatelessWidget {
       description: getDescription,
     );
   }
-
+ //TODO Translate
   String get getDescription => useForReturnPolicy
       ? "Welcome to Saffoury Co. The following are the return policy for your use of and access to the pages of the “Al-Saffoury.com” saffoury.com website and all pages, links, tools and features derived from it. By using the Saffoury application, you agree to accept the terms and conditions and return policy of this Agreement, which includes all the details below, and is a confirmation of your commitment to comply with the content of this Agreement of Saffoury “saffoury.com”, hereinafter referred to as “we” and also referred to as “Al-Saffoury.com”. , in connection with your use of the Application, referred to herein as the “Usage Agreement” and this Agreement shall be in effect if you accept the option to consent"
       : "Welcome to Saffoury Co. The following are the privecy policy & terms and conditions for your use of and access to the pages of the “Al-Saffoury.com” saffoury.com website and all pages, links, tools and features derived from it. By using the Saffoury application, you agree to accept the terms and conditions of this Agreement, which includes all the details below, and is a confirmation of your commitment to comply with the content of this Agreement of Saffoury “saffoury.com”, hereinafter referred to as “we” and also referred to as “Al-Saffoury.com”. , in connection with your use of the Application, referred to herein as the “Usage Agreement” and this Agreement shall be in effect if you accept the option to consent";

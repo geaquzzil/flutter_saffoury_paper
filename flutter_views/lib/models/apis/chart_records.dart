@@ -192,6 +192,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       ),
     );
     return HeaderDescription(
+       //TODO Translate
       title: "Changes records",
       trailing: row,
     );

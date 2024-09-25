@@ -133,7 +133,8 @@ class OrdersWeb extends StatelessWidget {
         ),
         const ListTile(
           subtitle:
-              //TODO translate
+              //TODO translate logingoutDesc
+              
               Text("By logining you out all of your data will be cleared."),
         ),
         ProductWebPage(),

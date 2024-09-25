@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'grid_view_api_category.dart';
-
+ //TODO Translate
 final List<DesignProcess> designProcesses = [
   DesignProcess(
     title: "CUSTOMIZE",
