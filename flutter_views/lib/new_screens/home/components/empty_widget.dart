@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:lottie/lottie.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class LottieColorFilter extends StatelessWidget {
   final String? lottiUrl;
@@ -57,7 +57,7 @@ class EmptyWidget extends StatelessWidget {
       this.subtitle,
       this.lottieJson});
 
-  EmptyWidget.loading({
+  const EmptyWidget.loading({
     super.key,
     this.lottiUrl = "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json",
     this.expand = true,
@@ -70,12 +70,11 @@ class EmptyWidget extends StatelessWidget {
     BuildContext context, {
     super.key,
     this.onSubtitleClicked,
-    this.expand=true,
+    this.expand = true,
   })  : subtitle = AppLocalizations.of(context)!.cantConnectConnectToRetry,
         lottiUrl =
             "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-            
-            lottieJson=null,
+        lottieJson = null,
         title = AppLocalizations.of(context)!.cantConnect;
 
   EmptyWidget.empty(

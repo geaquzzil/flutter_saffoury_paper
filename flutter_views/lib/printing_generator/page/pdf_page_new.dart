@@ -1,5 +1,8 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -7,26 +10,18 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
-import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' as math;
-
 import 'package:tuple/tuple.dart';
 
 class PdfPageNew<T extends PrintLocalSetting> extends StatefulWidget {
@@ -174,12 +169,10 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    return null;
     if (widget.buildBaseHeader && firstPane == null) {
-      return AppBar(
-        leading: const Icon(Icons.print),
-        title: Text(
-            "${AppLocalizations.of(context)!.print} ${getExtrasCast().getMainHeaderText(context)}"),
-      );
+      return Text(
+          "${AppLocalizations.of(context)!.print} ${getExtrasCast().getMainHeaderText(context)}");
     }
     return null;
   }
@@ -189,6 +182,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    return null;
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE &&
         firstPane == true) {
       return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
@@ -219,10 +213,11 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    return const Text("DSadas");
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE && firstPane) {
       return getPdfPreviewWidget();
     }
-    return firstPane ? getSettingWidget() : getPdfPreviewWidget();
+    return getPdfPreviewWidget();
   }
 
   Widget getSettingWidget() {

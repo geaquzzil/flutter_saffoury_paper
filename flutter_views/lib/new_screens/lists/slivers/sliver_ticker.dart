@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 
 mixin SliverApiMixinTicker on SliverApiWithStaticMixin {
-
-  
   int getTickerSecond();
 
   Timer? _timer;
@@ -22,7 +19,6 @@ mixin SliverApiMixinTicker on SliverApiWithStaticMixin {
     bool res = super.canFetshList();
     if (!res) return false;
     return true;
-
   }
 
   @override

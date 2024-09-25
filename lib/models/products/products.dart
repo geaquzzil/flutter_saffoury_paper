@@ -1,10 +1,8 @@
 // import 'package:bitmap/bitmap.dart';
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names, use_build_context_synchronously, library_prefixes
 
-import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
-import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
@@ -16,8 +14,8 @@ import 'package:flutter_saffoury_paper/models/prints/printable_product_label_wid
 import 'package:flutter_saffoury_paper/models/products/analysis/products_movments.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
-import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/products_color.dart';
+import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/qualities.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
@@ -35,6 +33,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
@@ -42,14 +41,16 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
@@ -60,7 +61,6 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_cus
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_static.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
@@ -73,8 +73,8 @@ import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:supercharged/supercharged.dart';
+
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/orders.dart';
 import '../invoices/priceless_invoices/products_inputs.dart';
@@ -83,6 +83,7 @@ import '../invoices/priceless_invoices/transfers.dart';
 import '../invoices/purchases.dart';
 import '../invoices/refund_invoices/purchasers_refunds.dart';
 import '../prints/print_product_list.dart';
+
 part 'products.g.dart';
 
 @JsonSerializable(

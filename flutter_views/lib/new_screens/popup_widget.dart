@@ -1,6 +1,5 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
 class PopupWidgetBuilder extends StatelessWidget {

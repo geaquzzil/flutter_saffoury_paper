@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 enum DrawerMenuControllerProviderAction {

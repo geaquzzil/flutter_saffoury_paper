@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom_expand_to_card.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:badges/badges.dart' as badges;
 
 class MasterFilterableController extends StatelessWidget {
   List<dynamic> list;
@@ -17,12 +17,9 @@ class MasterFilterableController extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: ExpansionTile(
+      child: ExpansionTileCard(
+        context: context,
         childrenPadding: const EdgeInsets.all(kDefaultPadding / 2),
-        backgroundColor: ElevationOverlay.overlayColor(context, 2),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
         title: viewAbstract.getMainLabelText(context),
         leading: Selector<FilterableProvider, int>(
           selector: (p0, p1) =>

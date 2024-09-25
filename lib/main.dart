@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,38 +35,34 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/notification_controller.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/end_drawer_changed_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
+import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
+import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
+import 'package:flutter_view_controller/providers/server_data.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/providers/therd_screen_provider.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
-import 'package:flutter_view_controller/providers/server_data.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:flutter_view_controller/providers/actions/list_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
-import 'package:flutter_view_controller/providers/page_large_screens_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
-import 'package:stack_trace/stack_trace.dart' as stack_trace;
+
 import 'models/funds/credits.dart';
 import 'models/products/products_types.dart';
 
@@ -202,7 +199,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ServerDataProvider()),
 
       ChangeNotifierProvider(create: (_) => LangaugeProvider()),
-  
+
       ChangeNotifierProvider(create: (_) => ActionViewAbstractProvider()),
       ChangeNotifierProvider(create: (_) => ListProvider()),
       ChangeNotifierProvider(create: (_) => ListMultiKeyProvider()),

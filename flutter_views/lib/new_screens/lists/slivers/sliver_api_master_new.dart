@@ -1,32 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item_api_request.dart';
-import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
-import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
-
 import 'package:auto_animated/auto_animated.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_api_request.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
+import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
-
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:tuple/tuple.dart';
 
 enum _ObjectType {
   AUTO_REST,

@@ -1,17 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/scrollable_widget.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../new_components/tables_widgets/view_table_view_abstract.dart';
 

@@ -309,7 +309,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
         AppLocalizations.of(context)!.quantity:
             quantity?.toCurrencyFormat() ?? "0",
         if (!isPricelessInvoice())
-          if (((pca?.hideUnitPriceAndTotalPrice == false) ?? false))
+          if (((pca?.hideUnitPriceAndTotalPrice == false)))
             AppLocalizations.of(context)!.unit_price:
                 unitPrice?.toStringAsFixed(2) ?? "0",
         if (!isPricelessInvoice())
@@ -317,7 +317,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
             AppLocalizations.of(context)!.discount:
                 discount?.toStringAsFixed(2) ?? "0",
         if (!isPricelessInvoice())
-          if (((pca?.hideUnitPriceAndTotalPrice == false) ?? false))
+          if (((pca?.hideUnitPriceAndTotalPrice == false)))
             AppLocalizations.of(context)!.total_price:
                 price?.toCurrencyFormat() ?? "0",
       };

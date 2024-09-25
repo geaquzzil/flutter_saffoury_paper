@@ -1,15 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/text_input.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:flutter_view_controller/interfaces/notification_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';

@@ -58,12 +58,11 @@ class _BaseDashboardMainPageState
       }).toList();
     }
     if (firstPane != null && !firstPane) {
-          return getExtrasCastDashboard(tab: tab)
-        .getDashboardTabbarSectionSecoundPaneList(context);
+      return getExtrasCastDashboard(tab: tab)
+          .getDashboardTabbarSectionSecoundPaneList(context);
     }
     return null;
   }
-
 
   @override
   Widget? getFloatingActionButton(
@@ -131,7 +130,8 @@ class _BaseDashboardMainPageState
             if (isPrintable(tab: tab))
               IconButton(
                   onPressed: () {
-                    getExtrasCast(tab: tab).printPage(context);
+                    getExtrasCast(tab: tab)
+                        .printPage(context, standAlone: true);
                   },
                   icon: const Icon(Icons.print)),
             // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
@@ -244,6 +244,13 @@ class _BaseDashboardMainPageState
 
   getDesktopSecondPane(
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+    debugPrint("getPane $tab secoundTab $secoundTab");
+
+    return [
+      SliverToBoxAdapter(
+        child: Text("dsads ${secoundTab?.extras}"),
+      )
+    ];
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
         context, getCrossAxisCount(getWidth),
         tab: tab,
@@ -280,6 +287,8 @@ class _BaseDashboardMainPageState
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    debugPrint(
+        "getPane =>firstPane $firstPane=>tab $tab=> secoundTab $secoundTab");
     if (firstPane) {
       return getDesktopFirstPane(tab: tab);
     } else {

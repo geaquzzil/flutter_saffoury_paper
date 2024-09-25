@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -9,12 +8,8 @@ import 'package:flutter_view_controller/new_screens/filterables/custom_list_filt
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
-import 'package:flutter_view_controller/size_config.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class BaseFilterableMainWidget extends StatefulWidget {
@@ -34,7 +29,7 @@ class BaseFilterableMainWidget extends StatefulWidget {
 }
 
 class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
-  ValueNotifier<FilterableData?> _lastData =
+  final ValueNotifier<FilterableData?> _lastData =
       ValueNotifier<FilterableData?>(null);
   Map<String, FilterableProviderHelper>? _initialData;
   late ViewAbstract _viewAbstract;
@@ -161,7 +156,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
                   }
                   return 
                   
-                  EmptyWidget.loading();
+                  const EmptyWidget.loading();
                 })),
       ),
     );

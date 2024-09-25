@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/funds/accounts/account_names.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
 import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_reciept.dart';
-import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -24,16 +24,15 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:pdf/widgets.dart' as pdf;
 import 'package:number_to_character/number_to_character.dart';
+import 'package:pdf/widgets.dart' as pdf;
 import 'package:provider/provider.dart';
+
 import '../users/customers.dart';
 
 abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>

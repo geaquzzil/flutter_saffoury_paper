@@ -2,19 +2,18 @@
 
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:skeletons/skeletons.dart';
+
 import '../providers/actions/action_viewabstract_provider.dart';
 
 abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
@@ -176,7 +175,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       height: 60,
 
       // color: Theme.of(context).colorScheme.onBackground,
-      loadingBuilder: (context, url) => SkeletonAvatar(),
+      loadingBuilder: (context, url) => const SkeletonAvatar(),
       errorBuilder: (context, url, error) => Icon(getMainIconData()),
     );
   }

@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
-import 'package:flutter_view_controller/screens/web/parallex/parallexes.dart';
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../utils/dialogs.dart';
 import 'menu_item.dart';
@@ -104,8 +98,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       isScrollable: false,
       withHeightFactor: false,
       context: context,
-      builder: (context) =>
-          BottomSheetDialogWidget(viewAbstract: this as ViewAbstract,state:state),
+      builder: (context) => BottomSheetDialogWidget(
+          viewAbstract: this as ViewAbstract, state: state),
     );
   }
 
@@ -254,7 +248,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   Widget _getMasterToListWidget(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text("_getMasterToListWidget"),
     );
     return ListWebApiPage(
@@ -306,10 +300,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
-  void printPage(BuildContext context) {
+  void printPage(BuildContext context, {bool standAlone = false}) {
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     debugPrint("Page=>printPage Page isLarge:$isLarge");
-    if (isLarge) {
+    if (isLarge && !standAlone) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
           ListToDetailsSecoundPaneHelper(
               actionTitle: getIDWithLabel(context, action: ServerActions.print),
@@ -320,13 +314,23 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           .read<DrawerMenuControllerProvider>()
           .change(context, this, DrawerMenuControllerProviderAction.print);
     } else {
-      context.goNamed(printRouteName,
-          pathParameters: {
-            "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
-            "type": PrintPageType.single.toString()
-          },
-          queryParameters: {"id": "$iD"},
-          extra: this);
+      if (standAlone) {
+        context.pushNamed(printRouteName,
+            pathParameters: {
+              "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+              "type": PrintPageType.single.toString()
+            },
+            queryParameters: {"id": "$iD"},
+            extra: this);
+      } else {
+        context.goNamed(printRouteName,
+            pathParameters: {
+              "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+              "type": PrintPageType.single.toString()
+            },
+            queryParameters: {"id": "$iD"},
+            extra: this);
+      }
     }
   }
 

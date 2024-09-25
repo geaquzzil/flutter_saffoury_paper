@@ -4,11 +4,8 @@ import 'package:flutter_view_controller/interfaces/notification_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/notifications/notification_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +76,7 @@ class NotificationWidget extends StatelessWidget {
                 toListObject: context
                     .read<AuthProvider<AuthUser>>()
                     .getNotificationHandler(),
-                hasCustomCardBuilder: (index,item) {
+                hasCustomCardBuilder: (index, item) {
                   ViewAbstract v =
                       (item as NotificationHandlerInterface).getObject(context);
 

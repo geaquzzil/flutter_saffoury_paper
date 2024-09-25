@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
-import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/home/home_notification_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/search/search_page.dart';
@@ -23,8 +23,8 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_pa
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
-import 'package:flutter_view_controller/screens/web/return-privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/register.dart';
+import 'package:flutter_view_controller/screens/web/return-privecy-policey.dart';
 import 'package:flutter_view_controller/screens/web/services.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_web_page.dart';
@@ -37,14 +37,13 @@ import 'package:provider/provider.dart';
 import '../interfaces/dashable_interface.dart';
 import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import '../screens/web/contact-us.dart';
 import '../screens/web/error-page.dart';
 import '../screens/web/our_products.dart';
 import '../screens/web/terms.dart';
+import 'actions/edit_new/base_edit_main_page.dart';
 import 'actions/view/view_view_main_page.dart';
 import 'authentecation/base_authentication_screen.dart';
-import 'actions/edit_new/base_edit_main_page.dart';
 import 'home/base_home_main.dart';
 
 const String rootRouteName = 'root';
@@ -177,6 +176,7 @@ class RouteGenerator {
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
+        return homeLocation;
         return goodsInventoryLocation;
       } else if (authProvider.isPOS(context)) {
         return posRouteName;
@@ -523,8 +523,8 @@ class RouteGenerator {
       GoRoute(
         path: "/splash",
         name: "splash",
-        pageBuilder: (context, state) =>
-            MaterialPage(key: state.pageKey, child: BaseAuthenticatingScreen()),
+        pageBuilder: (context, state) => MaterialPage(
+            key: state.pageKey, child: const BaseAuthenticatingScreen()),
       ),
       GoRoute(
         name: loginRouteName,

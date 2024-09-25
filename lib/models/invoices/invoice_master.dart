@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
@@ -40,7 +41,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
@@ -49,8 +49,8 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
-import 'package:provider/provider.dart';
 import 'package:pdf/widgets.dart' as pdf;
+import 'package:provider/provider.dart';
 
 import 'invoice_master_details.dart';
 import 'orders.dart';
@@ -200,11 +200,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  bool isFieldEnabled(String field) {
-    return super.isFieldEnabled(field);
-  }
-
-  @override
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -304,8 +299,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       };
   @override
   ViewAbstractControllerInputType getInputType(String field) {
-    if (field == "warehouse")
+    if (field == "warehouse") {
       return ViewAbstractControllerInputType.DROP_DOWN_API;
+    }
     return ViewAbstractControllerInputType.EDIT_TEXT;
   }
 
@@ -724,7 +720,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       if ((pca?.hideInvoiceDate == false))
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.date,
-          description: date.toString() ?? "",
+          description: date.toString(),
           // icon: Icons.date_range
         ),
       if ((pca?.hideInvoiceDueDate == false))
@@ -1008,11 +1004,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       number == null ? 0 : double.tryParse(number.toString());
 
   static String? intFromString(dynamic number) => number?.toString();
-
-  @override
-  Widget? getWebListTileItemLeading(BuildContext context) {
-    return super.getWebListTileItemLeading(context);
-  }
 
   @override
   Widget? getWebListTileItemSubtitle(BuildContext context) {

@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_view_controller/test_var.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/src/response.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:supercharged/supercharged.dart';
 
 import '../models/dealers/dealer.dart';

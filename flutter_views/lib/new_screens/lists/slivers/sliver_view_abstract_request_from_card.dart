@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 class SliverApiMixinViewAbstractCardApiWidget

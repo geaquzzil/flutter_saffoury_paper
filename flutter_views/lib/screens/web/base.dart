@@ -24,7 +24,6 @@ import 'package:flutter_view_controller/screens/web/web_theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:provider/provider.dart';
-import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 import '../../models/servers/server_helpers.dart';
 import '../../models/view_abstract.dart';

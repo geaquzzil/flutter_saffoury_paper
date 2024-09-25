@@ -2,18 +2,14 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
-import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api_master.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -271,15 +267,15 @@ class WebGridViewItem extends StatelessWidget {
   final bool setDescriptionAtBottom;
 
   WebGridViewItem(
-      {
-      required this.item,
+      {required this.item,
       this.setDescriptionAtBottom = false,
       this.isSelectMood = false,
       this.hightLightonSelect = false,
       this.isSelected = false,
       this.onSelected,
       this.state,
-      this.onPress}):super(key: GlobalKey());
+      this.onPress})
+      : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {

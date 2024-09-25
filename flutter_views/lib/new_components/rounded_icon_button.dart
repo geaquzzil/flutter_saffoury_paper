@@ -19,7 +19,7 @@ class RoundedIconButton extends StatelessWidget {
     return ElevatedButton.icon(
       iconAlignment: IconAlignment.end,
       style: ElevatedButton.styleFrom(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
       ),
       onPressed: onTap,
       icon: Icon(icon),

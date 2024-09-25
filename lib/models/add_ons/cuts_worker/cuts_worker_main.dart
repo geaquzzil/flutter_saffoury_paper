@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/cuts_worker/cut_request_list_card.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
-import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/extensions.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CutRequestWorker extends CutRequest {
   CutRequestWorker();

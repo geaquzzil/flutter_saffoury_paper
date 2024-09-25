@@ -1,27 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
-import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
-import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
-import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
-import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
-import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
-import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
-import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
@@ -118,7 +104,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       );
     }
     return FadeInUp(
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         curve: Curves.fastOutSlowIn,
         key: Key(selectedItem.toString()),
         child: getWidgetFromListToDetailsSecoundPaneHelper(

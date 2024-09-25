@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
-import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
@@ -37,8 +36,6 @@ import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
-import 'package:web_smooth_scroll/web_smooth_scroll.dart';
 
 import 'home/components/drawers/drawer_large_screen.dart';
 
@@ -105,7 +102,7 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
       floatingActionButton: getFloatingActionButton(
           firstPane: firstPane, secoundTab: tab, tab: tab),
       body: SliverCustomScrollViewDraggable(
-          slivers: [],
+          slivers: const [],
           builder: (c) =>
               getPaneController(firstPane: firstPane, scrollController: c),
           title: getAppbarTitle(firstPane: firstPane),
@@ -466,7 +463,7 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
                                 curve: Curves.linear,
                                 child: SlideInRight(
                                   duration: const Duration(milliseconds: 200),
-                                  key: Key(value.actionTitle.toString() ?? ""),
+                                  key: Key(value.actionTitle.toString()),
                                   // delay: Duration(milliseconds: 1000),
                                   curve: Curves.fastLinearToSlowEaseIn,
                                   child: wrapScaffoldInThirdPane(
@@ -829,7 +826,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     return SafeArea(
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(
-          parent: const AlwaysScrollableScrollPhysics(),
+          parent: AlwaysScrollableScrollPhysics(),
         ),
         controller: getScrollController(firstPane, tab: tab),
         slivers: [
@@ -1046,6 +1043,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           tableName: tableName,
           invoiceObj: selectedItem.viewAbstract! as PrintableMaster,
         );
+        // currentWidget = const Text("dsadaz");
         break;
       case ServerActions.delete_action:
       case ServerActions.call:
@@ -1124,21 +1122,26 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         _secondWidget = TabBarView(
             controller: _tabControllerSecondPane,
             children: _getTabBarList(firstPane: false)!
-                .map(
-                    (e) => beforeGetPaneWidget(firstPane: false, secoundTab: e))
+                .map((e) {
+                  debugPrint("getPane tab:$tab secondpane $e");
+                  return beforeGetPaneWidget(
+                      firstPane: false, tab: tab, secoundTab: e);
+                })
                 .toList()
                 .cast());
       } else {
-        _secondWidget = beforeGetPaneWidget(firstPane: false, secoundTab: tab);
+        _secondWidget =
+            beforeGetPaneWidget(firstPane: false, tab: tab, secoundTab: sec);
       }
-      _secondWidget = _setSubAppBar(_secondWidget, false, sec: tab);
+      _secondWidget = _setSubAppBar(_secondWidget, false, sec: sec, tab: tab);
     } else {
-      _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
+      _firstWidget =
+          beforeGetPaneWidget(firstPane: true, tab: tab, secoundTab: sec);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
       if (buildSecoundPane) {
         _secondWidget =
             beforeGetPaneWidget(firstPane: false, tab: tab, secoundTab: tab);
-        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab);
+        _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab, sec: sec);
       }
     }
     if (_secondWidget == null) {
@@ -1167,7 +1170,8 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
     double width = isLarge ? MediaQuery.of(context).size.width * .4 : 500;
     return SizedBox(
-        width: width, child: Card(child: customEnd ?? WebShoppingCartDrawer()));
+        width: width,
+        child: Card(child: customEnd ?? const WebShoppingCartDrawer()));
   }
 
   Map<String, List<DrawerMenuItem>>? getCustomDrawer() {

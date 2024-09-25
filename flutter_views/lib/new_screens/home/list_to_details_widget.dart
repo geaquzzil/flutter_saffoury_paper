@@ -1,11 +1,8 @@
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/base_home_details_view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter/material.dart';
 
 class ListToDetailsPage extends StatefulWidget {
   final String title;

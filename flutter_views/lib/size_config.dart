@@ -1,16 +1,15 @@
 // ignore_for_file: constant_identifier_names, library_prefixes
 
 import 'dart:io';
+import 'dart:math' as Math;
 import 'dart:math';
+import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'dart:ui' as ui;
-import 'dart:math' as Math;
-import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'constants.dart';

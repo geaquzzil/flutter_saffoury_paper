@@ -1,13 +1,11 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_components/rounded_icon_button_network.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 
 class ItemModel {
   String title;

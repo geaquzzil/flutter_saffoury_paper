@@ -8,12 +8,9 @@ import 'package:flutter_view_controller/new_screens/controllers/controller_dropb
 import 'package:flutter_view_controller/new_screens/controllers/controller_view_abstract_asonefield.dart';
 import 'package:flutter_view_controller/new_screens/controllers/edit_controller_chipds.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:provider/provider.dart';
 
-import '../../../constants.dart';
 import '../../../models/view_abstract.dart';
 import '../../../models/view_abstract_inputs_validaters.dart';
-
 import '../../controllers/edit_controller_dropdown.dart';
 import '../../controllers/edit_controller_dropdown_api.dart';
 import '../../controllers/edit_controller_file_picker.dart';

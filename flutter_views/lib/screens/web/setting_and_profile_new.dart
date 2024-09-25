@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -6,15 +7,11 @@ import 'package:flutter_view_controller/new_components/cartable_draggable_header
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
-import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SettingPageNew extends StatefulWidget {
   bool buildDrawer;

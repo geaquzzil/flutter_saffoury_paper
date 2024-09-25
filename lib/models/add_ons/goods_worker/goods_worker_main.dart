@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/goods_worker/goods_inventory_list_card.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
@@ -15,13 +16,11 @@ import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_api_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
-import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
@@ -493,7 +492,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         if (_importedList != null)
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text("ReImport xsl file "),
+              title: const Text("ReImport xsl file "),
               trailing: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -538,7 +537,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     }
 
     return [
-      SliverToBoxAdapter(
+      const SliverToBoxAdapter(
         child: Text(""),
       ),
       SliverApiMixinViewAbstractWidget(
@@ -697,9 +696,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                   "type": PrintPageType.list.name
                 }, extra: []);
               },
-              child: Icon(Icons.print),
+              child: const Icon(Icons.print),
             ),
-            SizedBox(
+            const SizedBox(
               width: kDefaultPadding / 2,
             ),
             FloatingActionButton.extended(

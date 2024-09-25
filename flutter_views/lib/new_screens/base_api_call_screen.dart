@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/size_config.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/actions/list_multi_key_provider.dart';

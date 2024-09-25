@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
-
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 ///The nested ListView.builder is set to have shrinkWrap: true and

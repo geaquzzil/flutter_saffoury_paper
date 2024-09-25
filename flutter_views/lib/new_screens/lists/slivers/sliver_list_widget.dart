@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
-import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/streams.dart';
 
 class SliverCustomScrollView extends StatefulWidget {
   List<Widget> slivers;

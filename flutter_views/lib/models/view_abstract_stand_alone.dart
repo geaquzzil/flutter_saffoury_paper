@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-import 'package:provider/provider.dart';
 
 abstract class ViewAbstractStandAloneCustomViewApi<T> extends ViewAbstract<T> {
   ViewAbstractStandAloneCustomViewApi() : super();

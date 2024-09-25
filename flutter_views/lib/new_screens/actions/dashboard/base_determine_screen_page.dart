@@ -1,44 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// import 'dart:math';
-
-// import 'package:connectivity_listener/connectivity_listener.dart';
-// import 'package:dual_screen/dual_screen.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_view_controller/constants.dart';
-// import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
-// import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
-// import 'package:flutter_view_controller/ext_utils.dart';
-// import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
-// import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-// import 'package:flutter_view_controller/models/view_abstract.dart';
-// import 'package:flutter_view_controller/models/view_abstract_base.dart';
-// import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-// import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-// import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
-// import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-// import 'package:flutter_view_controller/size_config.dart';
-// import 'package:provider/provider.dart';
-// import 'package:web_smooth_scroll/web_smooth_scroll.dart';
-// import 'package:flutter_gen/gen_l10n/app_localization.dart';
-// /// WebSmothSceroll additional offset to users scroll input WEB WAS 150
-// const scrollOffset = 10;
-
-// ///WebSmothSceroll animation duration WEB WAS 600
-// const animationDuration = 250;
-
-// const double kDefualtAppBar = 70;
-
-// const double kDefualtClipRect = 25;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 RelativeRect getRealativPosition(GlobalKey clickedWidget) {
   RenderBox renderBox =

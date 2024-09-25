@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -16,7 +14,6 @@ import 'package:flutter_view_controller/screens/web/components/grid_view_api_cat
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../new_components/loading_shimmer.dart';
@@ -53,9 +50,10 @@ class ListHorizontalApiAutoRestWidget extends StatefulWidget {
 
 class _ListHorizontalApiWidgetState
     extends State<ListHorizontalApiAutoRestWidget> {
-  ScrollController _scrollController = ScrollController();
-  ValueNotifier<bool> _valueNotifier = ValueNotifier<bool>(false);
-  PositionRetainedScrollPhysics _p = PositionRetainedScrollPhysics();
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _valueNotifier = ValueNotifier<bool>(false);
+  final PositionRetainedScrollPhysics _p =
+      const PositionRetainedScrollPhysics();
   late ListMultiKeyProvider listProvider;
   AutoRest? _autoRest;
   double itemShowingHeight = 0;
@@ -186,7 +184,7 @@ class _ListHorizontalApiWidgetState
         );
         // return  GridView(gridDelegate: gridDelegate)
         return ResponsiveGridView.builder(
-          key: ObjectKey("d"),
+          key: const ObjectKey("d"),
           controller: _scrollController,
           physics: _p,
           scrollDirection: Axis.horizontal,

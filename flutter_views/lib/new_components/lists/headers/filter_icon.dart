@@ -1,14 +1,10 @@
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/customs_widget/popup_widget.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
-import 'package:flutter_view_controller/new_screens/popup_widget.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
-
-import 'package:badges/badges.dart' as badges;
 
 class FilterIcon extends StatelessWidget {
   ViewAbstract viewAbstract;

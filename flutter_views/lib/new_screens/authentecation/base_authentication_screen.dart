@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
-import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 

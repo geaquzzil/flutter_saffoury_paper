@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import '../../interfaces/dashable_interface.dart';
 import 'components/chart_card_item.dart';
 import 'dashboard.dart';
-import 'dart:ui' as ui;
 
 class MyFiles extends StatelessWidget {
   DashableGridHelper dgh;
@@ -178,6 +178,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
     } else if (height < 1000 && height > 500) {
       return 1;
     } else {
+      return 1;
       int val = ((height / 300)).toInt();
       debugPrint("getCrossAxisCount val   $val");
       return val;
