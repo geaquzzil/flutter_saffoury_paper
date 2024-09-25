@@ -144,30 +144,6 @@ class ListMultiKeyProvider with ChangeNotifier {
     return res;
   }
 
-  Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,
-      {Map<String, FilterableProviderHelper>? filter, int? customCount}) async {
-    MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
-    if (multiListProviderHelper.isLoading) return;
-    if (multiListProviderHelper.isNoMoreItem) return;
-    multiListProviderHelper.isLoading = true;
-    notifyListeners();
-    // await Future.delayed(
-    //   const Duration(milliseconds: 200),
-    //   () {
-    //     notifyListeners();
-    //   },
-    // );
-    List? list = await viewAbstract.search(
-        customCount ?? viewAbstract.getPageItemCountSearch,
-        customCount != null ? 0 : multiListProviderHelper.page,
-        query,
-        filter: filter);
-    multiListProviderHelper.isLoading = false;
-    multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
-    multiListProviderHelper.page++;
-    notifyListeners();
-  }
-
   void initCustomList(String key, List<ViewAbstract> viewAbstract) {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     multiListProviderHelper.isLoading = false;
@@ -279,30 +255,50 @@ class ListMultiKeyProvider with ChangeNotifier {
     await Future.delayed(Duration(milliseconds: 100));
   }
 
+  Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,
+      {Map<String, FilterableProviderHelper>? filter,
+      int? customCount,
+      bool requiresFullFetsh = false}) async {
+    MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
+    if (multiListProviderHelper.isLoading) return;
+    if (multiListProviderHelper.isNoMoreItem) return;
+
+    multiListProviderHelper.isLoading = true;
+    notifyListeners();
+    List? list = await viewAbstract.search(
+        customCount ?? viewAbstract.getPageItemCountSearch,
+        customCount != null ? 0 : multiListProviderHelper.page,
+        query,
+        filter: filter);
+
+    multiListProviderHelper.isLoading = false;
+    if (requiresFullFetsh) {
+      multiListProviderHelper.isNoMoreItem = true;
+    } else {
+      multiListProviderHelper.isNoMoreItem = list.isEmpty;
+    }
+    multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
+    multiListProviderHelper.page = multiListProviderHelper.page + 1;
+    notifyListeners();
+  }
+
   Future fetchList(String key,
       {AutoRest? autoRest,
       ViewAbstract? viewAbstract,
       AutoRestCustom? customAutoRest,
       Map<String, FilterableProviderHelper>? filter,
       int? customCount,
-      int? customPage}) async {
+      int? customPage,
+      bool requiresFullFetsh = false}) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     if (multiListProviderHelper.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
     multiListProviderHelper.hasError = false;
     multiListProviderHelper.isLoading = true;
     notifyListeners();
-    // await Future.delayed(
-    //   const Duration(milliseconds: 200),
-    //   () {
-    //     notifyListeners();
-    //   },
-    // );
-
     try {
       List? list;
       if (customAutoRest != null) {
-        debugPrint("errrrrrrr s");
         list = await customAutoRest.listCall(
             filter: filter,
             count: customCount ?? customAutoRest.getPageItemCount,
@@ -316,7 +312,12 @@ class ListMultiKeyProvider with ChangeNotifier {
       }
 
       multiListProviderHelper.isLoading = false;
-      multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
+      if (requiresFullFetsh) {
+        multiListProviderHelper.isNoMoreItem = true;
+      } else {
+        multiListProviderHelper.isNoMoreItem = list?.isEmpty ?? false;
+      }
+
       if (list != null) {
         multiListProviderHelper.getObjects.addAll(list);
         multiListProviderHelper.page =

@@ -176,7 +176,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
     if (height < 500 && height > 0) {
       return 1;
     } else if (height < 1000 && height > 500) {
-      return .8;
+      return 1;
     } else {
       int val = ((height / 300)).toInt();
       debugPrint("getCrossAxisCount val   $val");

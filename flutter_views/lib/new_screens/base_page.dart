@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
@@ -38,7 +39,7 @@ import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:web_smooth_scroll/web_smooth_scroll.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import 'home/components/drawers/drawer_large_screen.dart';
 
 /// WebSmothSceroll additional offset to users scroll input WEB WAS 150
@@ -108,6 +109,7 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
         expandHeaderWidget: getDraggableHeaderExpandedWidget(firstPane),
         expandBottomWidget: getDraggableBottomExpandedWidget(firstPane),
         headerWidget: getDraggableHeaderWidget(firstPane),
+        
         actions: getAppbarActions(firstPane: firstPane));
   }
 

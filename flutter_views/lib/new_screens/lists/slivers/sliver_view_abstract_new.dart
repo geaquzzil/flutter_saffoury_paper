@@ -13,6 +13,7 @@ class SliverApiMixinViewAbstractWidget
       super.scrollDirection,
       super.hasCustomWidgetBuilder,
       super.isSliver,
+    
       super.requiresFullFetsh,
       super.isGridView = false,
       super.hasCustomCardBuilder,

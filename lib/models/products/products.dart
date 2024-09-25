@@ -198,6 +198,10 @@ class Product extends ViewAbstract<Product>
 
   Product.disableCustomFilterable({this.disbleStatusAndSizeOnFilter = true});
 
+  Product.requiresInventory() {
+    setCustomMap({"requireInventory": "true"});
+  }
+
   @override
   Product copyWithSetNewFileReader() {
     date = "".toDateTimeNowString();
@@ -1375,8 +1379,47 @@ class Product extends ViewAbstract<Product>
     );
   }
 
-  Widget getSummary(
+  Widget getSummaryTotal(
       {required BuildContext context, required List<Product> productList}) {
+    if (productList.isEmpty) {
+      return Card(
+        child: ListTile(
+          title: Text("Select filter data to view list"),
+          subtitle: Text(
+              "Start filtering by presssing the filter data to view summary"),
+          trailing: ElevatedButton.icon(
+            icon: Icon(Icons.filter_alt_rounded),
+            label: Text("Filter"),
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
+    double getTotalImportQuanity = productList.isEmpty
+        ? 0
+        : productList
+            .map((e) => e.getQuantity())
+            .reduce((value, element) => (value) + (element));
+
+    int totalImportedLength = productList.length;
+
+    return ChartCardItemCustom(
+      color: Colors.blue,
+      icon: Icons.list,
+      title: "TOTAL ITEMS IMPORTED",
+      description: getTotalImportQuanity.toCurrencyFormat(
+          symbol: AppLocalizations.of(context)!.kg),
+      footer: totalImportedLength.toCurrencyFormat(),
+
+      // footer: incomes?.length.toString(),
+      // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+    );
+  }
+
+  Widget getSummary(
+      {required BuildContext context,
+      required List<Product> productList,
+      String customKey = ""}) {
     if (productList.isEmpty) {
       return EmptyWidget.empty(context);
     }
@@ -1426,7 +1469,7 @@ class Product extends ViewAbstract<Product>
               child: Card(
                 child: SliverApiMixinStaticList(
                   isSliver: false,
-                  listKey: "products_goods_working",
+                  listKey: "products_goods_working$customKey",
                   list: productList,
                 ),
               )),

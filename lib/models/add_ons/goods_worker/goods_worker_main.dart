@@ -324,25 +324,48 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 onFilterable: filterData ?? {},
               ),
             ),
-            SliverApiMixinViewAbstractWidget(
-              toListObject: Product(),
-              scrollController: scrollController,
-              requiresFullFetsh: true,
-              hasCustomWidgetBuilder: (response) {
-                return SliverFillRemaining(
-                  child: Product().getSummary(
-                      context: context, productList: response.cast()),
-                );
-              },
-              filterData: filterData,
-            )
+            if (filterData != null)
+              SliverApiMixinViewAbstractWidget(
+                toListObject: Product.requiresInventory(),
+                scrollController: scrollController,
+                requiresFullFetsh: true,
+                hasCustomWidgetBuilder: (response) {
+                  return SliverFillRemaining(
+                    child: Product().getSummary(
+                        context: context,
+                        productList: response.cast(),
+                        customKey: filterData.toString()),
+                  );
+                },
+                filterData: filterData,
+              )
           ];
+  }
+
+  Widget getMobileToSecPane() {
+    if (filterData == null) {
+      return SliverToBoxAdapter(
+        child:
+            inventoryProduct.getSummaryTotal(context: context, productList: []),
+      );
+    }
+    return SliverApiMixinViewAbstractWidget(
+      toListObject: Product.requiresInventory(),
+      requiresFullFetsh: true,
+      hasCustomWidgetBuilder: (response) {
+        return SliverToBoxAdapter(
+            child: inventoryProduct.getSummaryTotal(
+                context: context, productList: response.cast()));
+      },
+      filterData: filterData,
+    );
   }
 
   getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint(
         "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
     return [
+      if (isMobile(context)) getMobileToSecPane(),
       if (filterData != null)
         SliverToBoxAdapter(
           child: HorizontalFilterableSelectedList(
@@ -412,7 +435,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
     int totalRemainingLength = totalImportedLength - totalImportedBarcodeLength;
     return FileInfoStaggerdGridView(
       childAspectRatio: 16 / 9,
-      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod,h) {
+      builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod, h) {
         return [
           StaggeredGridTile.count(
               crossAxisCellCount: 2,

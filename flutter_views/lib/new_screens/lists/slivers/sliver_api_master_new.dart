@@ -696,6 +696,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
           customKey,
           filter: _filterData,
           autoRest: getToListObjectCastAutoRestNullIfNot(),
+          requiresFullFetsh: widget.requiresFullFetsh,
           viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
               getToListObjectCastViewAbstractNullIfNot(),
           customCount: widget.requiresFullFetsh == true ? 10000000 : null,
@@ -704,6 +705,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       } else {
         listProvider.fetchListSearch(
             customKey, getToListObjectCastViewAbstract(), _searchString!,
+            requiresFullFetsh: widget.requiresFullFetsh,
             filter: _filterData,
             customCount: widget.requiresFullFetsh == true ? 10000000 : null);
         // }
@@ -750,12 +752,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   void _onScroll() {
     debugPrint("_onScroll");
-    final direction = _scrollController.position.userScrollDirection;
-    if (direction == ScrollDirection.forward) {
-      context.read<ListScrollProvider>().setScrollDirection = direction;
-    } else if (direction == ScrollDirection.reverse) {
-      context.read<ListScrollProvider>().setScrollDirection = direction;
-    }
+    // final direction = _scrollController.position.userScrollDirection;
+    // if (direction == ScrollDirection.forward) {
+    //   context.read<ListScrollProvider>().setScrollDirection = direction;
+    // } else if (direction == ScrollDirection.reverse) {
+    //   context.read<ListScrollProvider>().setScrollDirection = direction;
+    // }
     bool bottom = _isBottom;
     debugPrint(
         "_onScroll SliverApiWithStaticMixin===> _onScroll=> isBottom: $bottom");
