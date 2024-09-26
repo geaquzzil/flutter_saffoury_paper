@@ -127,7 +127,6 @@ class _FileExporterPage extends State<FileExporterPage> {
       // ),
       pages: [
         PageViewModel(
-      
           title: AppLocalizations.of(context)!.selectColXsl,
           bodyWidget: Column(
             children: [
@@ -192,7 +191,7 @@ class _FileExporterPage extends State<FileExporterPage> {
           style: const TextStyle(fontWeight: FontWeight.w600)),
       next: const Icon(Icons.arrow_forward),
       done: Text(AppLocalizations.of(context)!.done,
-          style: TextStyle(fontWeight: FontWeight.w600)),
+          style: const TextStyle(fontWeight: FontWeight.w600)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb

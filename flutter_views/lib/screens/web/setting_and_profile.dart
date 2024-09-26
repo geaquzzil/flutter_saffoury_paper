@@ -14,7 +14,7 @@ import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import '../../customs_widget/sliver_delegates.dart';
 
 class SettingAndProfileWeb extends BaseWebPageSlivers {
@@ -310,12 +310,12 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
           useSmallFloatingBar: widget.useSmallFloatingBar,
           pinToolbar: widget.pinToolbar,
           onCardTap: selectedCardValue,
-          customHeader: const Column(
+          customHeader: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text("Orders"),
+                title: const Text("Orders"),
                 subtitle: Text(AppLocalizations.of(context)!.logingoutDesc),
               ),
             ],

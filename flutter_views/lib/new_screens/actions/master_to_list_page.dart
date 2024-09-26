@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -126,7 +126,7 @@ class _MasterToListPageState extends State<MasterToListPage> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor,
                           shape: const StadiumBorder()),
-                      child:  Text(AppLocalizations.toOffset),
+                      child: Text(AppLocalizations.of(context)!.done),
                     ),
                   ),
                 )

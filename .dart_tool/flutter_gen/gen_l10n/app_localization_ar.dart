@@ -308,6 +308,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get changeAll => 'تغيير الكل';
 
   @override
+  String get changeChart => 'مخطط التغييرات';
+
+  @override
   String get changeInvoiceProductNameDes => 'تغيير اسم المنتج (اتركه فارغا إذا كنت تريد الاحتفاظ بالاسم الأصلي)';
 
   @override
@@ -318,6 +321,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chart => 'الرسم البياني';
+
+  @override
+  String get chat => 'محادثة';
 
   @override
   String get checkout => 'المتابعة';
@@ -579,6 +585,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String dollar_format(Object r) {
     return 'S\$ $r';
   }
+
+  @override
+  String get done => 'انهاء';
 
   @override
   String get dontHaveAccount => 'اذا لم يكن لديك حساب';
@@ -1775,6 +1784,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get seeMore => 'شاهد المزيد';
 
   @override
+  String get selectColXsl => 'حدد أسماء العواميد الموجودة في ملف الإكسل';
+
+  @override
   String selectFormat(Object r) {
     return 'اختيار $r';
   }
@@ -2141,6 +2153,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String totalFormat(Object r) {
     return 'مجموع $r';
   }
+
+  @override
+  String get totalImported => 'مجموع العناصر المستوردة';
 
   @override
   String get totalIncomesAndExpences => 'اجمالي الوارد والصادر';

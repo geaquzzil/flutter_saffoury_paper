@@ -308,6 +308,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changeAll => 'Change all';
 
   @override
+  String get changeChart => 'Changes chart';
+
+  @override
   String get changeInvoiceProductNameDes => 'Change product name (Leave blank if you want to keep the original name)';
 
   @override
@@ -318,6 +321,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chart => 'Charting';
+
+  @override
+  String get chat => 'Chat';
 
   @override
   String get checkout => 'Check out';
@@ -579,6 +585,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String dollar_format(Object r) {
     return 'S\$ $r';
   }
+
+  @override
+  String get done => 'Done';
 
   @override
   String get dontHaveAccount => 'If you don\'t have an account';
@@ -1775,6 +1784,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seeMore => 'See more';
 
   @override
+  String get selectColXsl => 'Select the names of the columns in the Excel file.';
+
+  @override
   String selectFormat(Object r) {
     return 'Select $r';
   }
@@ -2141,6 +2153,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String totalFormat(Object r) {
     return 'Total $r';
   }
+
+  @override
+  String get totalImported => 'Total imported items';
 
   @override
   String get totalIncomesAndExpences => 'Total incoming and outgoing';

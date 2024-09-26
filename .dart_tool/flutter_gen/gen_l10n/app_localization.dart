@@ -675,6 +675,12 @@ abstract class AppLocalizations {
   /// **'Change all'**
   String get changeAll;
 
+  /// No description provided for @changeChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes chart'**
+  String get changeChart;
+
   /// No description provided for @changeInvoiceProductNameDes.
   ///
   /// In en, this message translates to:
@@ -698,6 +704,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Charting'**
   String get chart;
+
+  /// No description provided for @chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chat;
 
   /// No description provided for @checkout.
   ///
@@ -1196,6 +1208,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'S\$ {r}'**
   String dollar_format(Object r);
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
 
   /// No description provided for @dontHaveAccount.
   ///
@@ -3453,6 +3471,12 @@ abstract class AppLocalizations {
   /// **'See more'**
   String get seeMore;
 
+  /// No description provided for @selectColXsl.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the names of the columns in the Excel file.'**
+  String get selectColXsl;
+
   /// No description provided for @selectFormat.
   ///
   /// In en, this message translates to:
@@ -4136,6 +4160,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total {r}'**
   String totalFormat(Object r);
+
+  /// No description provided for @totalImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Total imported items'**
+  String get totalImported;
 
   /// No description provided for @totalIncomesAndExpences.
   ///
