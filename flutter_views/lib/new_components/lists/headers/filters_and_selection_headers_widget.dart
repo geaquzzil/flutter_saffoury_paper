@@ -135,7 +135,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   }
 
   void _refresh(BuildContext context) {
-    listProvider.refresh(findCustomKey(), viewAbstract,context:context);
+    listProvider.refresh(findCustomKey(), viewAbstract, context: context);
   }
 
   Widget getRefreshWidget(BuildContext context) => IconButton(
@@ -182,8 +182,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
           if (isLargeScreenFromCurrentScreenSize(context)) {
             Globals.keyForLargeScreenListable.currentState
                 ?.setSecoundPane(ListToDetailsSecoundPaneHelper(
-                    //todo translate
-                    actionTitle: "ُEXPORT",
+                    actionTitle: AppLocalizations.of(context)!.exportFile,
                     action: ServerActions.custom_widget,
                     customWidget: FileExporterPage(
                       viewAbstract: viewAbstract,

@@ -374,9 +374,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         getBody(context),
         ...getBottomWidget(),
         if (extras is ListableInterface)
-          const ListTile(
+           ListTile(
             leading: Icon(Icons.list),
-            title: Text("Details"),
+            title: Text(AppLocalizations.of(context)!.details),
           ),
         if (extras is ListableInterface)
           ListStaticWidget<ViewAbstract>(

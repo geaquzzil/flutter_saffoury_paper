@@ -252,8 +252,7 @@ class CutRequestListCard extends StatelessWidget {
                   const SizedBox(
                     height: kDefaultPadding,
                   ),
-                   //TODO Translate
-                  Text("Requested Quantity",
+                  Text(AppLocalizations.of(context)!.requrestedQuanty,
                       style: Theme.of(context).textTheme.titleSmall!),
                   Text(
                     item.quantity?.toCurrencyFormat(symbol: 'KG') ?? "",
@@ -265,8 +264,7 @@ class CutRequestListCard extends StatelessWidget {
                   const SizedBox(
                     height: kDefaultPadding,
                   ),
-                  //TODO Translate
-                  Text("Customer",
+                  Text(AppLocalizations.of(context)!.customer,
                       style: Theme.of(context).textTheme.titleSmall!),
                   Text(
                     item.customers?.getMainHeaderTextOnly(context) ?? "",

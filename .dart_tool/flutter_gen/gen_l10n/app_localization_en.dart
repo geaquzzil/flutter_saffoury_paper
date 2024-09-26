@@ -119,6 +119,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allClintes => 'All Clients Notebook';
 
   @override
+  String allForamt(Object r) {
+    return 'All $r';
+  }
+
+  @override
   String get anotherScanCodeDetected => 'Skipped! Another scan code detected';
 
   @override
@@ -385,6 +390,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copies => 'Copies';
 
   @override
+  String get copyRight => 'Copyright (c) 2025 SaffouryPaper. All rights Reserved';
+
+  @override
   String get countinue => 'Continue';
 
   @override
@@ -395,6 +403,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get currency => 'Currency';
+
+  @override
+  String get currentQuantity => 'Current quantity';
 
   @override
   String get custom => 'Custom';
@@ -452,6 +463,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dateEnum => 'Date';
+
+  @override
+  String get dateRange => 'Date range';
 
   @override
   String date_format_and_by(Object r) {
@@ -522,6 +536,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get details => 'Details';
 
   @override
+  String get developmentBy => 'Development And Designed by Qussai Al-Saffoury';
+
+  @override
   String get directPayment => 'Direct payment';
 
   @override
@@ -564,6 +581,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get dontHaveAccount => 'If you don\'t have an account';
+
+  @override
   String get dontPrintWasteProductLabel => 'Do not print the wasted product';
 
   @override
@@ -571,6 +591,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edit => 'Edit';
+
+  @override
+  String editFormat(Object r) {
+    return 'Edit $r';
+  }
 
   @override
   String get editing => 'Editing';
@@ -787,6 +812,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get exportFile => 'Export file';
+
+  @override
   String get facebook => 'Facebook';
 
   @override
@@ -848,6 +876,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guest => 'GUEST';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get helpCenter => 'Help center';
 
   @override
   String get hi => 'Hi';
@@ -978,6 +1012,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iD => 'ID';
 
   @override
+  String get importFile => 'Import file';
+
+  @override
   String get improterInfo => 'Supplier Company Information';
 
   @override
@@ -1002,6 +1039,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inventory => 'Inventory';
 
   @override
+  String get inventoryprocess => 'Inventory process';
+
+  @override
   String get invoice => 'Invoice';
 
   @override
@@ -1023,8 +1063,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get itemCount => 'Item count';
 
   @override
+  String itemsExportedFormat(Object r) {
+    return '$r item(s) exported successfully';
+  }
+
+  @override
   String itemsFormat(Object r) {
     return '$r items';
+  }
+
+  @override
+  String itemsImportedFormat(Object r) {
+    return '$r item(s) imported successfully';
   }
 
   @override
@@ -1038,6 +1088,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kg => '(KG)';
+
+  @override
+  String get kgWithoutBraces => 'KG';
 
   @override
   String kg_format(Object r) {
@@ -1078,6 +1131,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String level_f(Object r) {
     return 'Level: $r';
   }
+
+  @override
+  String get license => 'Licenses';
 
   @override
   String get lifetime => 'Life time';
@@ -1587,6 +1643,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get publish => 'Publish phone number';
 
   @override
+  String get purchaseVe => 'Purchase verification process';
+
+  @override
   String get purchases => 'Purchases';
 
   @override
@@ -1611,6 +1670,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rate => 'Rate';
 
   @override
+  String reImportFormat(Object r) {
+    return 'ReImport $r';
+  }
+
+  @override
   String get reams => '(Reams)';
 
   @override
@@ -1623,10 +1687,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reel => 'Reel(s)';
 
   @override
+  String get regestierHere => 'Register here!';
+
+  @override
+  String get reimport => 'Reimport';
+
+  @override
   String get remainingBalance => 'Remaining balance';
 
   @override
   String get remaining_weight_label => 'Remaining weight';
+
+  @override
+  String get remaning => 'Remaning';
 
   @override
   String get reportHeader => 'Report header';
@@ -1639,6 +1712,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestedSizeLabel => 'Requested sizes';
+
+  @override
+  String get requrestedQuanty => 'Requested quantity';
 
   @override
   String get reservationInvoice => 'Reservation';
@@ -1662,6 +1738,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String rowCountFormat(Object r) {
     return '$r row(s) was';
   }
+
+  @override
+  String get saffouryPaper => 'SaffouryPaper';
+
+  @override
+  String get saffouryPaperLTD => 'SaffouryPaper LTD. Co.';
 
   @override
   String get sales_analysis => 'Sales Analysis';
@@ -1909,6 +1991,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startAddingToCartHint => 'Hint:\\nStart adding to cart, by swiping the product item to the left';
 
   @override
+  String startByImportFormat(Object r) {
+    return 'Start by importing $r from xsl format';
+  }
+
+  @override
   String get startEndPage => 'Pages';
 
   @override
@@ -1986,7 +2073,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tenByTwintyProductLabel => 'Print as (20 x 10) size';
 
   @override
-  String get termsAndConitions => 'Terms and conditions';
+  String get termsAndConitions => 'Terms and Privacy Policy';
 
   @override
   String get termsDate => 'Payment Date';
@@ -2066,6 +2153,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get totalPerMonth => 'Total per month';
+
+  @override
+  String get totalScaned => 'Total scanned item(s)';
 
   @override
   String get totalSheetNumberByReams => 'Total sheet(s)';
@@ -2174,6 +2264,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get users => 'Users';
 
   @override
+  String get validating => 'Validating';
+
+  @override
   String get value => 'Value';
 
   @override
@@ -2267,13 +2360,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get width => 'Width';
 
   @override
+  String get worksheet => 'Worksheet';
+
+  @override
   String get write_review_tow => 'Write';
+
+  @override
+  String get xsl => 'XSL File';
 
   @override
   String get year => 'Year';
 
   @override
   String get youAreNotLog => 'You are not logged in';
+
+  @override
+  String get youCan => 'You can';
 
   @override
   String get youDontHavePermission => 'You do not have permission to perform this action';

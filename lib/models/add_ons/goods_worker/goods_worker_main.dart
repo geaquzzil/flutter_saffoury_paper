@@ -48,11 +48,9 @@ enum GoodsType implements ViewAbstractEnum<GoodsType> {
   String getFieldLabelString(BuildContext context, GoodsType field) {
     switch (field) {
       case GoodsType.INVERTORY:
-         //TODO Translate
-        return "invertory";
+        return AppLocalizations.of(context)!.inventoryprocess;
       case GoodsType.PURCHASES:
-         //TODO Translate
-        return "PURCH";
+        return AppLocalizations.of(context)!.purchaseVe;
     }
   }
 
@@ -155,10 +153,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
     return {
-      //todo translate
+
       "Details": [
-        DrawerMenuItem(title: "INVENTORY", icon: Icons.inventory),
-        DrawerMenuItem(title: "Purchases", icon: Icons.document_scanner),
+        DrawerMenuItem(title: AppLocalizations.of(context)!.inventoryprocess, icon: Icons.inventory),
+        DrawerMenuItem(title: AppLocalizations.of(context)!.purchaseVe, icon: Icons.document_scanner),
       ]
     };
   }
@@ -166,7 +164,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   ListTile getHeaderWidgetForPurchuses() {
     return ListTile(
       leading: const Icon(Icons.import_export_sharp),
-      title: const Text("Start by importing product from xsl formal "),
+      title: Text(AppLocalizations.of(context)!.startByImportFormat(
+          AppLocalizations.of(context)!.product.toLowerCase())),
       trailing: ElevatedButton(
           onPressed: () async {
             final p = Product();
@@ -180,8 +179,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 final scaffold = ScaffoldMessenger.of(context);
                 scaffold.showSnackBar(SnackBar(
                     action: SnackBarAction(
-                        label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
-                    content: Text("${l.length} items imported successfully")));
+                        label: AppLocalizations.of(context)!.ok,
+                        onPressed: scaffold.hideCurrentSnackBar),
+                    content: Text(AppLocalizations.of(context)!
+                        .itemsImportedFormat(l.length.toString()))));
 
                 // scaffold.showMaterialBanner(MaterialBanner(
 
@@ -205,8 +206,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               }
             }
           },
-           //TODO Translate
-          child: const Text("IMPORT")),
+          child: Text(AppLocalizations.of(context)!.importFile)),
     );
   }
 
@@ -221,12 +221,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           : getHeaderForInventory();
     } else {
       if (isPurchuses()) {
-         //TODO Translate
-        return const Text("Purhuses");
-
+        return Text(AppLocalizations.of(context)!.purchaseVe);
       }
-       //TODO Translate
-      return const Text("INVINTORY");
+      return Text(AppLocalizations.of(context)!.inventoryprocess);
     }
     return null;
   }
@@ -447,8 +444,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               child: ChartCardItemCustom(
                 color: Colors.blue,
                 icon: Icons.list,
-                 //TODO Translate
-                title: "TOTAL ITEMS IMPORTED",
+
+                title: AppLocalizations.of(context)!.totalImported,
                 description: getTotalImportedFromFile.toCurrencyFormat(
                     symbol: AppLocalizations.of(context)!.kg),
                 footer: totalImportedLength.toCurrencyFormat(),
@@ -462,8 +459,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               child: ChartCardItemCustom(
                 color: const Color.fromARGB(255, 243, 82, 33),
                 icon: Icons.barcode_reader,
-                 //TODO Translate
-                title: "TOTAL ITEMS SCANED",
+                title: AppLocalizations.of(context)!.totalScaned,
                 description: getTotalImportedFromBarcode.toCurrencyFormat(
                     symbol: AppLocalizations.of(context)!.kg),
                 footer: totalImportedBarcodeLength.toCurrencyFormat(),
@@ -474,9 +470,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
               mainAxisCellCount: 1,
               child: ChartCardItemCustom(
                 color: Colors.blue,
-                // icon: Icons.today,
-                 //TODO Translate
-                title: "TOTAL REMAINING",
+                title: AppLocalizations.of(context)!.totalFormat(
+                    AppLocalizations.of(context)!.remaning.toLowerCase()),
                 description: getTotalRemainingImported.toCurrencyFormat(
                     symbol: AppLocalizations.of(context)!.kg),
                 footer: totalRemainingLength.toCurrencyFormat(),
@@ -499,7 +494,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
         if (_importedList != null)
           SliverToBoxAdapter(
             child: ListTile(
-              title: const Text("ReImport xsl file "),
+              title: Text(AppLocalizations.of(context)!
+                  .reImportFormat(AppLocalizations.of(context)!.xsl)),
               trailing: ElevatedButton(
                 onPressed: () {
                   setState(() {

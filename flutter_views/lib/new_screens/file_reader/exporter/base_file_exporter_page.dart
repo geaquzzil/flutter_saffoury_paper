@@ -1,20 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/file_rader_object_exporter_view_abstract.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'file_raderl_list_object_exporter_view_abstract.dart';
 
+enum PrintPageType { single, list, self_list }
 
-enum PrintPageType{
-  single,list,self_list
-}
-enum FileExporterPageType{
-  LIST,SINGLE
-}
+enum FileExporterPageType { LIST, SINGLE }
+
 ///TODO api if viewAbstract is null
 class FileExporterPage extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -130,8 +127,8 @@ class _FileExporterPage extends State<FileExporterPage> {
       // ),
       pages: [
         PageViewModel(
-           //TODO Translate
-          title: "Select columns",
+      
+          title: AppLocalizations.of(context)!.selectColXsl,
           bodyWidget: Column(
             children: [
               const Text("SOSO"),
@@ -159,7 +156,7 @@ class _FileExporterPage extends State<FileExporterPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-           //TODO Translate
+          //TODO Translate
           title: "Exporting verfication",
           body:
               "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
@@ -191,9 +188,11 @@ class _FileExporterPage extends State<FileExporterPage> {
       showBackButton: true,
       //rtl: true, // Display as right-to-left
       back: const Icon(Icons.arrow_back),
-      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+      skip: Text(AppLocalizations.of(context)!.skip,
+          style: const TextStyle(fontWeight: FontWeight.w600)),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: Text(AppLocalizations.of(context)!.done,
+          style: TextStyle(fontWeight: FontWeight.w600)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb

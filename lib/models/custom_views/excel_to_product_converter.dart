@@ -223,8 +223,7 @@ class ExcelToProductConverter
 
     return [
       PageViewModel(
-         //TODO Translate
-          title: "Validations",
+          title: AppLocalizations.of(context)!.validating,
           bodyWidget: SizedBox(
             height: 800,
             child: PdfSelfListPage<PrintProductList>(

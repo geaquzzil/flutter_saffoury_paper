@@ -309,6 +309,12 @@ abstract class AppLocalizations {
   /// **'All Clients Notebook'**
   String get allClintes;
 
+  /// No description provided for @allForamt.
+  ///
+  /// In en, this message translates to:
+  /// **'All {r}'**
+  String allForamt(Object r);
+
   /// No description provided for @anotherScanCodeDetected.
   ///
   /// In en, this message translates to:
@@ -825,6 +831,12 @@ abstract class AppLocalizations {
   /// **'Copies'**
   String get copies;
 
+  /// No description provided for @copyRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright (c) 2025 SaffouryPaper. All rights Reserved'**
+  String get copyRight;
+
   /// No description provided for @countinue.
   ///
   /// In en, this message translates to:
@@ -848,6 +860,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Currency'**
   String get currency;
+
+  /// No description provided for @currentQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Current quantity'**
+  String get currentQuantity;
 
   /// No description provided for @custom.
   ///
@@ -962,6 +980,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date'**
   String get dateEnum;
+
+  /// No description provided for @dateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get dateRange;
 
   /// No description provided for @date_format_and_by.
   ///
@@ -1095,6 +1119,12 @@ abstract class AppLocalizations {
   /// **'Details'**
   String get details;
 
+  /// No description provided for @developmentBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Development And Designed by Qussai Al-Saffoury'**
+  String get developmentBy;
+
   /// No description provided for @directPayment.
   ///
   /// In en, this message translates to:
@@ -1167,6 +1197,12 @@ abstract class AppLocalizations {
   /// **'S\$ {r}'**
   String dollar_format(Object r);
 
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'If you don\'t have an account'**
+  String get dontHaveAccount;
+
   /// No description provided for @dontPrintWasteProductLabel.
   ///
   /// In en, this message translates to:
@@ -1184,6 +1220,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit'**
   String get edit;
+
+  /// No description provided for @editFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {r}'**
+  String editFormat(Object r);
 
   /// No description provided for @editing.
   ///
@@ -1593,6 +1635,12 @@ abstract class AppLocalizations {
   /// **'Export all as {r}'**
   String exportAllAs(String r);
 
+  /// No description provided for @exportFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Export file'**
+  String get exportFile;
+
   /// No description provided for @facebook.
   ///
   /// In en, this message translates to:
@@ -1718,6 +1766,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'GUEST'**
   String get guest;
+
+  /// No description provided for @help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get help;
+
+  /// No description provided for @helpCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Help center'**
+  String get helpCenter;
 
   /// No description provided for @hi.
   ///
@@ -1971,6 +2031,12 @@ abstract class AppLocalizations {
   /// **'ID'**
   String get iD;
 
+  /// No description provided for @importFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Import file'**
+  String get importFile;
+
   /// No description provided for @improterInfo.
   ///
   /// In en, this message translates to:
@@ -2019,6 +2085,12 @@ abstract class AppLocalizations {
   /// **'Inventory'**
   String get inventory;
 
+  /// No description provided for @inventoryprocess.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory process'**
+  String get inventoryprocess;
+
   /// No description provided for @invoice.
   ///
   /// In en, this message translates to:
@@ -2061,11 +2133,23 @@ abstract class AppLocalizations {
   /// **'Item count'**
   String get itemCount;
 
+  /// No description provided for @itemsExportedFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'{r} item(s) exported successfully'**
+  String itemsExportedFormat(Object r);
+
   /// No description provided for @itemsFormat.
   ///
   /// In en, this message translates to:
   /// **'{r} items'**
   String itemsFormat(Object r);
+
+  /// No description provided for @itemsImportedFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'{r} item(s) imported successfully'**
+  String itemsImportedFormat(Object r);
 
   /// No description provided for @journalAccount.
   ///
@@ -2090,6 +2174,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'(KG)'**
   String get kg;
+
+  /// No description provided for @kgWithoutBraces.
+  ///
+  /// In en, this message translates to:
+  /// **'KG'**
+  String get kgWithoutBraces;
 
   /// No description provided for @kg_format.
   ///
@@ -2150,6 +2240,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Level: {r}'**
   String level_f(Object r);
+
+  /// No description provided for @license.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get license;
 
   /// No description provided for @lifetime.
   ///
@@ -3105,6 +3201,12 @@ abstract class AppLocalizations {
   /// **'Publish phone number'**
   String get publish;
 
+  /// No description provided for @purchaseVe.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase verification process'**
+  String get purchaseVe;
+
   /// No description provided for @purchases.
   ///
   /// In en, this message translates to:
@@ -3153,6 +3255,12 @@ abstract class AppLocalizations {
   /// **'Rate'**
   String get rate;
 
+  /// No description provided for @reImportFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'ReImport {r}'**
+  String reImportFormat(Object r);
+
   /// No description provided for @reams.
   ///
   /// In en, this message translates to:
@@ -3177,6 +3285,18 @@ abstract class AppLocalizations {
   /// **'Reel(s)'**
   String get reel;
 
+  /// No description provided for @regestierHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Register here!'**
+  String get regestierHere;
+
+  /// No description provided for @reimport.
+  ///
+  /// In en, this message translates to:
+  /// **'Reimport'**
+  String get reimport;
+
   /// No description provided for @remainingBalance.
   ///
   /// In en, this message translates to:
@@ -3188,6 +3308,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remaining weight'**
   String get remaining_weight_label;
+
+  /// No description provided for @remaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaning'**
+  String get remaning;
 
   /// No description provided for @reportHeader.
   ///
@@ -3212,6 +3338,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Requested sizes'**
   String get requestedSizeLabel;
+
+  /// No description provided for @requrestedQuanty.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested quantity'**
+  String get requrestedQuanty;
 
   /// No description provided for @reservationInvoice.
   ///
@@ -3254,6 +3386,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{r} row(s) was'**
   String rowCountFormat(Object r);
+
+  /// No description provided for @saffouryPaper.
+  ///
+  /// In en, this message translates to:
+  /// **'SaffouryPaper'**
+  String get saffouryPaper;
+
+  /// No description provided for @saffouryPaperLTD.
+  ///
+  /// In en, this message translates to:
+  /// **'SaffouryPaper LTD. Co.'**
+  String get saffouryPaperLTD;
 
   /// No description provided for @sales_analysis.
   ///
@@ -3705,6 +3849,12 @@ abstract class AppLocalizations {
   /// **'Hint:\\nStart adding to cart, by swiping the product item to the left'**
   String get startAddingToCartHint;
 
+  /// No description provided for @startByImportFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Start by importing {r} from xsl format'**
+  String startByImportFormat(Object r);
+
   /// No description provided for @startEndPage.
   ///
   /// In en, this message translates to:
@@ -3858,7 +4008,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsAndConitions.
   ///
   /// In en, this message translates to:
-  /// **'Terms and conditions'**
+  /// **'Terms and Privacy Policy'**
   String get termsAndConitions;
 
   /// No description provided for @termsDate.
@@ -4010,6 +4160,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total per month'**
   String get totalPerMonth;
+
+  /// No description provided for @totalScaned.
+  ///
+  /// In en, this message translates to:
+  /// **'Total scanned item(s)'**
+  String get totalScaned;
 
   /// No description provided for @totalSheetNumberByReams.
   ///
@@ -4215,6 +4371,12 @@ abstract class AppLocalizations {
   /// **'Users'**
   String get users;
 
+  /// No description provided for @validating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating'**
+  String get validating;
+
   /// No description provided for @value.
   ///
   /// In en, this message translates to:
@@ -4377,11 +4539,23 @@ abstract class AppLocalizations {
   /// **'Width'**
   String get width;
 
+  /// No description provided for @worksheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Worksheet'**
+  String get worksheet;
+
   /// No description provided for @write_review_tow.
   ///
   /// In en, this message translates to:
   /// **'Write'**
   String get write_review_tow;
+
+  /// No description provided for @xsl.
+  ///
+  /// In en, this message translates to:
+  /// **'XSL File'**
+  String get xsl;
 
   /// No description provided for @year.
   ///
@@ -4394,6 +4568,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You are not logged in'**
   String get youAreNotLog;
+
+  /// No description provided for @youCan.
+  ///
+  /// In en, this message translates to:
+  /// **'You can'**
+  String get youCan;
 
   /// No description provided for @youDontHavePermission.
   ///

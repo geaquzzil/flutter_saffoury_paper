@@ -111,8 +111,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Icon(getFieldIconDataMap()[field]);
   }
 
-  Icon getIcon({double ?size}) {
-    return Icon(getMainIconData(),size: size,);
+  Icon getIcon({double? size}) {
+    return Icon(
+      getMainIconData(),
+      size: size,
+    );
   }
 
   Widget? getMainSubtitleHeaderText(BuildContext context) {
@@ -289,12 +292,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
           break;
 
         case ServerActions.file_export:
-          //todo translate
-          v = "EXPORT";
+          v = AppLocalizations.of(context)!.exportFile;
           break;
         case ServerActions.file_import:
-          //todo translate
-          v = "IMPORT";
+          v = AppLocalizations.of(context)!.importFile;
           break;
         default:
           v = "";

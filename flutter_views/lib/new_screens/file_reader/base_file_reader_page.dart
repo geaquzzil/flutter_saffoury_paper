@@ -209,7 +209,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
                 ],
               )),
           PageViewModel(
-             //TODO Translate
+            //TODO Translate
             title: "Select columns",
 
             bodyWidget: Column(
@@ -233,14 +233,12 @@ class _FileReaderPageState extends State<FileReaderPage> {
 
           if (!isCustom())
             PageViewModel(
-               //TODO Translate
-              title: "Validations",
+              title: AppLocalizations.of(context)!.validating,
               bodyWidget: ValueListenableBuilder(
                 valueListenable: valueNotifier,
                 builder: (context, value, child) {
                   return value == null
-                      //todo translate
-                      ? const Text("NULL validatefileReaderObject ")
+                      ? Text(AppLocalizations.of(context)!.errorUnknown)
                       : FileReaderValidationWidget(
                           useTableView: false,
                           key: validateFileReaderState,

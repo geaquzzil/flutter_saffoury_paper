@@ -140,8 +140,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            //todo translate
-                            "If you don't have an account",
+                            AppLocalizations.of(context)!.dontHaveAccount,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           const SizedBox(
@@ -150,8 +149,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                //todo translate
-                                "You can",
+                                AppLocalizations.of(context)!.youCan,
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               const SizedBox(width: 15),
@@ -160,8 +158,7 @@ class SignInPageWithoutHeaders extends StatelessWidget {
                                   onPressRegister?.call();
                                 },
                                 child: Text(
-                                  //todo translate
-                                  "Register here!",
+                                  AppLocalizations.of(context)!.regestierHere,
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
                               ),
@@ -209,8 +206,7 @@ class SignInPage extends BaseWebPage {
           height: 30,
         ),
         Text(
-          //todo translate
-          "If you don't have an account",
+          AppLocalizations.of(context)!.youDontHavePermission,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(
@@ -219,8 +215,7 @@ class SignInPage extends BaseWebPage {
         Row(
           children: [
             Text(
-              //todo translate
-              "You can",
+              AppLocalizations.of(context)!.youCan,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(width: 15),
@@ -229,8 +224,7 @@ class SignInPage extends BaseWebPage {
                 debugPrint("${MediaQuery.of(context).size.width}");
               },
               child: Text(
-                //todo translate
-                "Register here!",
+                AppLocalizations.of(context)!.regestierHere,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),

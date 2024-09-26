@@ -29,10 +29,6 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   static const int POS = -11;
 
-  ///TODO هاد الزلمة
-  ///لازم يكون معو موبايل تبع يلي بيجرد
-  ///الافاكر هيه نعمل جدول فيه بضائع ع طريق مع باركود تبعها او معلوماتها
-  ///وهو بيعمل سكان من موبايلو
   @JsonKey(includeFromJson: false, includeToJson: false)
   static const int GOODS_INVENTORY_WORKER = -16;
 

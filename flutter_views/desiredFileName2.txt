@@ -1,7 +1,6 @@
 {
   "ar": [
     "ad_app_id",
-    "app_name_spanned",
     "approx",
     "content",
     "empty",

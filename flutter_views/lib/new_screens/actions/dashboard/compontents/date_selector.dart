@@ -87,11 +87,9 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
   ) {
     return DialogRoute<DateTimeRange?>(
       context: context,
-      
       builder: (BuildContext context) {
         return DateRangePickerDialog(
-           //TODO Translate
-          helpText: "This is the date range",
+          helpText: AppLocalizations.of(context)!.dateRange,
           restorationId: 'date_picker_dialog',
           initialDateRange:
               _initialDateTimeRange(arguments! as Map<dynamic, dynamic>),

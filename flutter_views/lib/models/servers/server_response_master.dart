@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import 'server_response.dart';
 
@@ -23,20 +24,25 @@ class ServerResponseMaster {
     bool notHasPermission = serverResponse.permission ?? false;
     bool error = serverResponse.error ?? false;
     if (isBlocked) {
-      ///todo translate blockDes
+      return AppLocalizations.of(context)!.blockDes;
+    
       ///
       return "Your account has been blocked, please contact support";
     } else if (!isLogin) {
-      ///todo translate youAreNotLog
+          return AppLocalizations.of(context)!.youAreNotLog;
       return "You are not logged in";
     } else if (!notHasPermission) {
-      ///todo translate youDontHavePermission
+         return AppLocalizations.of(context)!.youDontHavePermission;
+    
+      ///
       return "You do not have permission to perform this action";
     } else if (error) {
-      //TODO translate errorOccured
+        return"${AppLocalizations.of(context)!.errorOccured} => ${serverResponse.message}";
+  
       return "An error occurred while trying to perform this action => ${serverResponse.message}";
     }
-    //TODO translate errorUnknown
+           return AppLocalizations.of(context)!.errorUnknown;
+    
     return "An unknown error occurred";
   }
 }

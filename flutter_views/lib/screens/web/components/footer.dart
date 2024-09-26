@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
- //TODO Translate
 final List<FooterItem> footerItems = [
   FooterItem(
     icon: const Icon(Icons.add_home_work, size: 25),

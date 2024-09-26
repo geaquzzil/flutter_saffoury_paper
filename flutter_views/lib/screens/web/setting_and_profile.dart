@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import '../../customs_widget/sliver_delegates.dart';
 
 class SettingAndProfileWeb extends BaseWebPageSlivers {
@@ -131,11 +132,8 @@ class OrdersWeb extends StatelessWidget {
           //TODO translate
           title: Text("Orders"),
         ),
-        const ListTile(
-          subtitle:
-              //TODO translate logingoutDesc
-              
-              Text("By logining you out all of your data will be cleared."),
+        ListTile(
+          subtitle: Text(AppLocalizations.of(context)!.logingoutDesc),
         ),
         ProductWebPage(),
         Padding(
@@ -174,18 +172,17 @@ class Logout extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ListTile(
-          //todo translate
-          title: Text("Logout"),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.logout),
         ),
-        const ListTile(
-          subtitle:
-              //todo translate
-              Text("By logining you out all of your data will be cleared."),
+        ListTile(
+          subtitle: Text(AppLocalizations.of(context)!.logingoutDesc),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextButton(onPressed: () {}, child: const Text("Logout")),
+          child: TextButton(
+              onPressed: () {},
+              child: Text(AppLocalizations.of(context)!.logout)),
         ),
       ],
     );
@@ -205,9 +202,9 @@ class ProfileEdit extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ListTile(
-            //todo translate
-            title: Text("Edit Profile"),
+          ListTile(
+            title: Text(AppLocalizations.of(context)!
+                .editFormat(AppLocalizations.of(context)!.profile)),
           ),
           BaseEditWidget(
             viewAbstract: context.read<AuthProvider<AuthUser>>().getUser,
@@ -236,7 +233,7 @@ class MasterToListFromProfile extends StatefulWidget {
       this.buildFooter = false,
       this.buildSmallView = true,
       this.useSmallFloatingBar = true,
-       this.valueNotiferActionOnToolbarItem,
+      this.valueNotiferActionOnToolbarItem,
       this.initialValue,
       this.buildHeader = false});
 
@@ -268,11 +265,6 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
     _initialValue = widget.initialValue;
 
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -323,11 +315,8 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                //todo translate
                 title: Text("Orders"),
-                subtitle: Text(
-                    //todo translate
-                    "By logining you out all of your data will be cleared."),
+                subtitle: Text(AppLocalizations.of(context)!.logingoutDesc),
               ),
             ],
           ),
@@ -362,43 +351,40 @@ class Help extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ListTile(
-          //todo translate
-          title: Text("Help"),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.help),
         ),
         ListTile(
-          //todo translate
-          title: const Text("SaffouryPaper LTD. Co."),
+          title: Text(AppLocalizations.of(context)!.saffouryPaperLTD),
           subtitle: Text(Utils.version),
         ),
         const Divider(),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          //todo translate
-          child: TextButton(onPressed: () {}, child: const Text("Help Center")),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          //todo translate
-          child: TextButton(onPressed: () {}, child: const Text("Contact Us")),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          //todo translate
-          child: TextButton(onPressed: () {}, child: const Text("Licenses")),
+          child: TextButton(
+              onPressed: () {},
+              child: Text(AppLocalizations.of(context)!.helpCenter)),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: TextButton(
-              //todo translate
               onPressed: () {},
-              child: const Text("Terms and Privacy Policy")),
+              child: Text(AppLocalizations.of(context)!.contactUs)),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: TextButton(
+              onPressed: () {},
+              child: Text(AppLocalizations.of(context)!.license)),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: TextButton(
+              onPressed: () {},
+              child: Text(AppLocalizations.of(context)!.termsAndConitions)),
         ),
         const Divider(),
-        const ListTile(
-            subtitle:
-                //todo translate
-                Text("Copyright (c) 2023 SaffouryPaper. All rights Reserved")),
+        ListTile(subtitle: Text(AppLocalizations.of(context)!.copyRight)),
         const Spacer(),
         Padding(
           padding: const EdgeInsets.only(left: 8.0, top: kDefaultPadding),
@@ -407,8 +393,7 @@ class Help extends StatelessWidget {
                   foregroundColor:
                       WidgetStateProperty.all<Color>(Colors.orange)),
               onPressed: () {},
-              child:
-                  const Text("Development And Designed by Qussai Al-Saffoury")),
+              child: Text(AppLocalizations.of(context)!.developmentBy)),
         ),
       ],
     );

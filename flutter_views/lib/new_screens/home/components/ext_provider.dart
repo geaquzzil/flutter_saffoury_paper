@@ -27,11 +27,12 @@ List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
       ActionOnToolbarItem(
           actionTitle: AppLocalizations.of(context)!.orders,
           icon: Icons.shopping_basket_rounded),
-      //todo translate
-      ActionOnToolbarItem(actionTitle: 'Chat', icon: Icons.chat_bubble),
-      //todo translate
       ActionOnToolbarItem(
-          actionTitle: "Help", icon: Icons.help_outline_rounded),
+          actionTitle: AppLocalizations.of(context)!.chat,
+          icon: Icons.chat_bubble),
+      ActionOnToolbarItem(
+          actionTitle: AppLocalizations.of(context)!.help,
+          icon: Icons.help_outline_rounded),
       ActionOnToolbarItem(
           actionTitle: AppLocalizations.of(context)!.logout,
           icon: Icons.logout),
@@ -69,7 +70,6 @@ void notifyFilterableListApiIsCleared(BuildContext context) {
   context.read<DrawerMenuControllerProvider>().change(
       context, v.getSelfNewInstance(), DrawerMenuControllerProviderAction.list);
 }
-
 
 void addFilterableSelected(BuildContext context, ViewAbstract selectedItem) {
   addFilterableSelectedStringValue(

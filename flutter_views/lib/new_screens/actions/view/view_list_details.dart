@@ -4,8 +4,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'view_card_item.dart';
 
 class ViewDetailsListWidget extends StatelessWidget {
-  ViewAbstract viewAbstract;
-  ViewDetailsListWidget({super.key, required this.viewAbstract});
+  final ViewAbstract viewAbstract;
+  const ViewDetailsListWidget({super.key, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,6 @@ class ViewDetailsListWidget extends StatelessWidget {
           dynamic fieldValue = viewAbstract.getFieldValue(label);
           if (fieldValue == null) {
             return ViewCardItem(
-               //TODO Translate
                 title: label, description: "null", icon: Icons.abc);
           } else if (fieldValue is ViewAbstract) {
             return ViewCardItem(

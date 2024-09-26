@@ -119,6 +119,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get allClintes => 'أرصدة كل الزبائن';
 
   @override
+  String allForamt(Object r) {
+    return 'كل $r';
+  }
+
+  @override
   String get anotherScanCodeDetected => 'تم تخطي! تم الكشف عن رمز آخر';
 
   @override
@@ -385,6 +390,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get copies => 'النسخ';
 
   @override
+  String get copyRight => 'Copyright (c) 2023 SaffouryPaper. All rights Reserved';
+
+  @override
   String get countinue => 'استمر';
 
   @override
@@ -395,6 +403,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get currency => 'العملة';
+
+  @override
+  String get currentQuantity => 'الكمية الحالية';
 
   @override
   String get custom => 'مخصص';
@@ -452,6 +463,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dateEnum => 'التاريخ';
+
+  @override
+  String get dateRange => 'نطاق التاريخ';
 
   @override
   String date_format_and_by(Object r) {
@@ -522,6 +536,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get details => 'التفاصيل';
 
   @override
+  String get developmentBy => 'Development And Designed by Qussai Al-Saffoury';
+
+  @override
   String get directPayment => 'دفعة مباشرة (قيد)';
 
   @override
@@ -564,6 +581,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get dontHaveAccount => 'اذا لم يكن لديك حساب';
+
+  @override
   String get dontPrintWasteProductLabel => 'لا تطبع المنتج المهدر';
 
   @override
@@ -571,6 +591,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get edit => 'تعديل';
+
+  @override
+  String editFormat(Object r) {
+    return 'تعديل $r';
+  }
 
   @override
   String get editing => 'في التحرير';
@@ -787,6 +812,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get exportFile => 'تصدير ملف';
+
+  @override
   String get facebook => 'فيسبوك';
 
   @override
@@ -848,6 +876,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guest => 'زائر';
+
+  @override
+  String get help => 'مساعدة';
+
+  @override
+  String get helpCenter => 'مركز المساعدة';
 
   @override
   String get hi => 'مرحبا';
@@ -978,6 +1012,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get iD => 'الرمز';
 
   @override
+  String get importFile => 'استيراد ملف';
+
+  @override
   String get improterInfo => 'معلومات الشركة الموردة';
 
   @override
@@ -1002,6 +1039,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inventory => 'جرد';
 
   @override
+  String get inventoryprocess => 'عملية جرد';
+
+  @override
   String get invoice => 'فاتورة';
 
   @override
@@ -1023,8 +1063,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemCount => 'عدد الأصناف';
 
   @override
+  String itemsExportedFormat(Object r) {
+    return 'تم تصدير $r عنصر بنجاح';
+  }
+
+  @override
   String itemsFormat(Object r) {
     return '$r عنصر';
+  }
+
+  @override
+  String itemsImportedFormat(Object r) {
+    return 'تم استيراد $r عنصر بنجاح';
   }
 
   @override
@@ -1038,6 +1088,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get kg => '(كغ)';
+
+  @override
+  String get kgWithoutBraces => 'كغ';
 
   @override
   String kg_format(Object r) {
@@ -1078,6 +1131,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String level_f(Object r) {
     return 'المستوى: $r';
   }
+
+  @override
+  String get license => 'التراخيص';
 
   @override
   String get lifetime => 'مدى الحياة';
@@ -1587,6 +1643,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get publish => 'عرض رقم الهاتف';
 
   @override
+  String get purchaseVe => 'عملية التحقق من الشراء';
+
+  @override
   String get purchases => 'مشتريات';
 
   @override
@@ -1611,6 +1670,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rate => 'تقييم';
 
   @override
+  String reImportFormat(Object r) {
+    return 'اعادة استيراد$r';
+  }
+
+  @override
   String get reams => '(ماعون)';
 
   @override
@@ -1623,10 +1687,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reel => 'رول';
 
   @override
+  String get regestierHere => 'التسجيل من هنا!';
+
+  @override
+  String get reimport => 'إعادة الاستيراد';
+
+  @override
   String get remainingBalance => 'الرصيد المتبقي';
 
   @override
   String get remaining_weight_label => 'الوزن المتبقي';
+
+  @override
+  String get remaning => 'المتبقي';
 
   @override
   String get reportHeader => 'رأس التقرير';
@@ -1639,6 +1712,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get requestedSizeLabel => 'القياسات المطلوبة';
+
+  @override
+  String get requrestedQuanty => 'الكمية المطلوبة';
 
   @override
   String get reservationInvoice => 'حجز';
@@ -1662,6 +1738,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String rowCountFormat(Object r) {
     return '$r حقل';
   }
+
+  @override
+  String get saffouryPaper => 'SaffouryPaper';
+
+  @override
+  String get saffouryPaperLTD => 'SaffouryPaper LTD. Co.';
 
   @override
   String get sales_analysis => 'تحليل المبيعات';
@@ -1909,6 +1991,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get startAddingToCartHint => 'تلميح:\\nابدأ في الإضافة إلى عربة التسوق ، عن طريق تمرير عنصر المنتج إلى اليسار';
 
   @override
+  String startByImportFormat(Object r) {
+    return 'ابدأ باستيراد $r من تنسيق xsl';
+  }
+
+  @override
   String get startEndPage => 'الصفحات';
 
   @override
@@ -1986,7 +2073,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tenByTwintyProductLabel => 'طباعة بحجم (20 × 10)';
 
   @override
-  String get termsAndConitions => 'الأحكام والشروط';
+  String get termsAndConitions => 'الشروط وسياسة الخصوصية';
 
   @override
   String get termsDate => 'تاريخ الدفعة المستحقة';
@@ -2066,6 +2153,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get totalPerMonth => 'الإجمالي في الشهر';
+
+  @override
+  String get totalScaned => 'مجموع العناصر الممسوحة';
 
   @override
   String get totalSheetNumberByReams => 'إجمالي عدد الأوراق';
@@ -2174,6 +2264,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get users => 'المستخدمين';
 
   @override
+  String get validating => 'التحقق من صحة المعلومات';
+
+  @override
   String get value => 'القيمة';
 
   @override
@@ -2267,13 +2360,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get width => 'العرض';
 
   @override
+  String get worksheet => 'ورقة العمل';
+
+  @override
   String get write_review_tow => 'اكتب هنا';
+
+  @override
+  String get xsl => 'XSL ملف';
 
   @override
   String get year => 'سنة';
 
   @override
   String get youAreNotLog => 'لم يتم تسجيل دخولك';
+
+  @override
+  String get youCan => 'يمكنك';
 
   @override
   String get youDontHavePermission => 'ليس لديك الإذن للقيام بهذا الإجراء';

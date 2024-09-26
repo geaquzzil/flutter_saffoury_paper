@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 
-@immutable
 class BaseFloatingActionButtons extends StatelessWidget {
   ViewAbstract viewAbstract;
   ServerActions serverActions;
@@ -181,8 +180,9 @@ class BaseFloatingActionButtons extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    //todo translate
-                    Navigator.of(context).pop("confirm ");
+                    //todo check for pop result 
+                    Navigator.of(context)
+                        .pop(AppLocalizations.of(context)!.subment);
                   },
                   child: Text(AppLocalizations.of(context)!.delete)),
             ]);
