@@ -37,6 +37,7 @@ class _FloatingActionButtonExtendedState
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+        highlightElevation: 0,
         heroTag: UniqueKey(),
         onPressed: widget.onPress == null ? null : _onFabPress,
         label: AnimatedSize(

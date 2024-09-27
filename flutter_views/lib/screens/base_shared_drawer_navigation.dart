@@ -54,7 +54,7 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget,
     super.dispose();
   }
 }
-mixin BasePageActionOnToolbarMixin<T extends StatefulWidget,
+mixin BasePageActionOnToolbarMixin<T extends BasePage,
     E extends ActionOnToolbarItem> on BasePageState<T> {
   GlobalKey<_ActionOnToolbarsasState> key =
       GlobalKey<_ActionOnToolbarsasState>();

@@ -70,8 +70,8 @@ enum GoodsType implements ViewAbstractEnum<GoodsType> {
   }
 }
 
-class GoodsInventoryPage extends StatefulWidget {
-  const GoodsInventoryPage({super.key});
+class GoodsInventoryPage extends BasePage {
+  GoodsInventoryPage({super.key, super.buildDrawer});
 
   @override
   State<GoodsInventoryPage> createState() => _GoodsInventoryPageState();
@@ -153,10 +153,13 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   @override
   Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
     return {
-
       "Details": [
-        DrawerMenuItem(title: AppLocalizations.of(context)!.inventoryprocess, icon: Icons.inventory),
-        DrawerMenuItem(title: AppLocalizations.of(context)!.purchaseVe, icon: Icons.document_scanner),
+        DrawerMenuItem(
+            title: AppLocalizations.of(context)!.inventoryprocess,
+            icon: Icons.inventory),
+        DrawerMenuItem(
+            title: AppLocalizations.of(context)!.purchaseVe,
+            icon: Icons.document_scanner),
       ]
     };
   }

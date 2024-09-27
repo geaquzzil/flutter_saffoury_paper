@@ -13,7 +13,6 @@ import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.d
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/home_home_widget.dart';
-import 'package:flutter_view_controller/new_screens/home/list_to_details_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
@@ -274,9 +273,9 @@ class _BaseHomeMainPageState extends State<BaseHomeMainPage> {
             builder: (viewAbstract) => HomeNavigationPage(
                   viewAbstract: viewAbstract,
                 ));
-        shopingWidget ??= const ListToDetailsPage(
-          title: "sd",
-        );
+        // shopingWidget ??= const ListToDetailsPage(
+        //   title: "sd",
+        // );
         return IndexedStack(index: value, children: [
           shouldWrapNavigatorChild(context, dashboardWidget!),
           shouldWrapNavigatorChild(context, homeWidget!),

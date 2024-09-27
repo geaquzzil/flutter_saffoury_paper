@@ -561,7 +561,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     if (firstPane == false) return null;
     return DashboardHeader(
@@ -582,7 +582,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }

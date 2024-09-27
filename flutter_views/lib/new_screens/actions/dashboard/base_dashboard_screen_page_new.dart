@@ -17,15 +17,14 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 const mediumPane = 0.62;
 const largePane = 0.7;
 
-class BaseDashboardMainPage extends StatefulWidget {
-  final String title;
-  bool buildDrawer;
-  ViewAbstract? customDashboard;
+class BaseDashboardMainPage extends BasePageApi {
   BaseDashboardMainPage(
       {super.key,
-      required this.title,
-      this.buildDrawer = true,
-      this.customDashboard});
+      super.buildDrawer,
+      super.buildSecondPane,
+      super.iD,
+      super.tableName,
+      super.extras});
 
   @override
   State<BaseDashboardMainPage> createState() => _BaseDashboardMainPageState();
@@ -33,12 +32,6 @@ class BaseDashboardMainPage extends StatefulWidget {
 
 class _BaseDashboardMainPageState
     extends BasePageWithApi<BaseDashboardMainPage> {
-  @override
-  void initState() {
-    buildDrawer = widget.buildDrawer;
-    super.initState();
-  }
-
   //  late DashableInterface dashboard;
   @override
   List<TabControllerHelper>? initTabBarList(

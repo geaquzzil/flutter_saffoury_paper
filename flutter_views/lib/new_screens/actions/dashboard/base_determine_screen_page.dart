@@ -82,7 +82,6 @@ class BaseDeterminePageState extends StatelessWidget {
                 break;
               case DrawerMenuControllerProviderAction.dashboard:
                 widget = BaseDashboardMainPage(
-                  title: "D",
                   buildDrawer: buildDrawer,
                 );
                 break;
@@ -94,7 +93,6 @@ class BaseDeterminePageState extends StatelessWidget {
               case DrawerMenuControllerProviderAction.none:
                 widget = ListToDetailsPageNew(
                   key: Globals.keyForLargeScreenListable,
-                  title: "SOSO",
                   buildDrawer: buildDrawer,
                 );
                 break;
@@ -104,7 +102,6 @@ class BaseDeterminePageState extends StatelessWidget {
                 //   "id": "$iD"
                 // },
                 widget = PdfPage(
-                  
                   iD: value.item1.iD,
                   tableName: value.item1.getTableNameApi() ??
                       value.item1.getCustomAction() ??

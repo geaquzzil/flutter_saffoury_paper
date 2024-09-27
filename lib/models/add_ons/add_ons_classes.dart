@@ -13,7 +13,7 @@ class CutWorkerRouteAddon extends RouteableInterface {
         path: '/cuts',
         pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
-              child: const CutWorkerPage(),
+              child: CutWorkerPage(),
             ));
   }
 }
@@ -34,7 +34,7 @@ class GoodsInventoryRouteAddon extends RouteableInterface {
         path: '/inventory',
         pageBuilder: (context, state) => MaterialPage(
               key: state.pageKey,
-              child: const GoodsInventoryPage(),
+              child: GoodsInventoryPage(),
             ));
   }
 }

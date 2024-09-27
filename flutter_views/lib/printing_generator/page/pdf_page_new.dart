@@ -11,7 +11,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
-import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
@@ -19,25 +19,24 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-class PdfPageNew<T extends PrintLocalSetting> extends StatefulWidget {
-  int? iD;
-  String? tableName;
-  PrintableMaster<T>? invoiceObj;
-  bool buildDrawer;
+class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;
 
   PdfPageNew(
       {super.key,
-      this.iD,
-      this.invoiceObj,
-      this.tableName,
+      super.iD,
+      super.extras,
+      super.tableName,
       this.buildBaseHeader = false,
-      this.buildDrawer = false});
+      super.buildSecondPane,
+      super.isFirstToSecOrThirdPane,
+      super.buildDrawer = false});
 
   @override
   State<PdfPageNew> createState() => _PdfPageNewState();
@@ -63,6 +62,40 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
             onLayout: (PdfPageFormat format) async => loadedFile));
   }
 
+  Widget getPrintAdvancedFloating() {
+    return FloatingActionButton(
+        heroTag: UniqueKey(),
+        child: const Icon(Icons.settings),
+        onPressed: () async {
+          var v = await getSettingLoadDefaultIfNull(context, getExtras());
+          await showFullScreenDialogExt<ViewAbstract?>(
+              anchorPoint: const Offset(1000, 1000),
+              context: context,
+              builder: (p0) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    // color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: IntrinsicWidth(
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width *
+                              (isTablet(context) ? 0.5 : 0.25),
+                          height: MediaQuery.of(context).size.height * .8,
+                          child: BaseEditNewPage(
+                            viewAbstract: v as ViewAbstract,
+                          )),
+                    ),
+                  ),
+                );
+              }).then((value) {
+            {
+              if (value != null) {}
+              debugPrint("getEditDialog result $value");
+            }
+          });
+        });
+  }
+
   void notifyToggleFloatingButton(BuildContext context, {bool? isExpaned}) {
     if (isExpaned != null) {
       printSettingListener.setFloatActionIsExpanded = isExpaned;
@@ -76,17 +109,13 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   double getSizeOfController() {
-    if (SizeConfig.isFoldableWithOpenDualScreen(context)) {
-      Size size = MediaQuery.of(context).size;
-      return ((size.width / 2) / 3) - kDefaultPadding;
-    }
-    return (MediaQuery.of(context).size.width / 3) - kDefaultPadding;
+    return getWidth * .4;
   }
 
   FloatingActionButtonExtended getPrintPageOptions() {
     return FloatingActionButtonExtended(
-        colapsed: Icons.settings,
-        onExpandIcon: Icons.settings,
+        colapsed: Icons.note_add,
+        onExpandIcon: Icons.arrow_forward_ios_rounded,
         onPress: () {},
         onToggle: () {
           notifyToggleFloatingButton(context);
@@ -137,6 +166,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                     notifyNewSelectedFormat(context, chosedPageFormat);
                   }
                 },
+                //todo translate
                 hint: "Select size",
                 list: [
                   DropdownStringListItem(
@@ -150,7 +180,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                       label: AppLocalizations.of(context)!.a5ProductLabel),
                 ],
               ),
-            )
+            ),
           ],
         ));
   }
@@ -159,9 +189,19 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   void initState() {
     printSettingListener =
         Provider.of<PrintSettingLargeScreenProvider>(context, listen: false);
-    setExtras(iD: widget.iD, tableName: tableName, ex: widget.invoiceObj);
-    buildDrawer = widget.buildDrawer;
     super.initState();
+  }
+
+  @override
+  List<Widget>? getAppbarActionsWhenThirdPane() {
+    debugPrint("getAppbarActionsWhenThirdPane");
+    return [const Icon(Icons.settings)];
+  }
+
+  @override
+  List<Widget>? getAppbarActions(
+      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
+    return null;
   }
 
   @override
@@ -184,16 +224,20 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE &&
         firstPane == true) {
       return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
-        return BaseFloatingActionButtons(
-          viewAbstract: getExtras() as ViewAbstract,
-          serverActions: ServerActions.print,
-          addOnList: [
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
             if (!isExpanded) getPrintShareFloating(context),
             if (!isExpanded)
               const SizedBox(
                 width: kDefaultPadding,
               ),
             if (!isExpanded) getPrintFloating(context),
+            if (!isExpanded)
+              const SizedBox(
+                width: kDefaultPadding,
+              ),
+            if (!isExpanded) getPrintAdvancedFloating(),
             if (!isExpanded)
               const SizedBox(
                 width: kDefaultPadding,
@@ -211,7 +255,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    return Text("das");
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE && firstPane) {
       return getPdfPreviewWidget();
     }
@@ -258,10 +301,10 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   Widget getFloatingActionButtonConsomer(BuildContext context,
       {required Widget Function(BuildContext, bool) builder}) {
     return Selector<PrintSettingLargeScreenProvider, bool>(
-      builder: (_, isExpanded, __) {
+      builder: (v, isExpanded, __) {
         debugPrint(
             "BasePdfPageConsumer Selector =>  getFloatingActionButtonConsomer");
-        return builder(_, isExpanded);
+        return builder(v, isExpanded);
       },
       selector: (ctx, provider) => provider.getFloatActionIsExpanded,
     );

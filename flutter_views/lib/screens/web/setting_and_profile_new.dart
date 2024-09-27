@@ -13,11 +13,10 @@ import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
-class SettingPageNew extends StatefulWidget {
-  bool buildDrawer;
+class SettingPageNew extends BasePage {
   String? currentSettingPage;
   SettingPageNew(
-      {super.key, this.buildDrawer = false, this.currentSettingPage});
+      {super.key, super.buildDrawer = false, this.currentSettingPage});
 
   @override
   State<SettingPageNew> createState() => _SettingPageNewState();
@@ -31,7 +30,6 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   late List<TitleAndDescription> _titleAndDescription;
   @override
   void initState() {
-    buildDrawer = widget.buildDrawer;
     // _items=getListOfProfileSettings();
     _modifieableList =
         context.read<SettingProvider>().getModifiableListSetting(context);

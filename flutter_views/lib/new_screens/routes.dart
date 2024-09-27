@@ -466,7 +466,7 @@ class RouteGenerator {
                     buildDrawer: true,
                     iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
                     tableName: state.pathParameters['tableName'],
-                    invoiceObj: state.extra as PrintableMaster?,
+                    extras: state.extra as PrintableMaster?,
                   );
                 } else if (type == PrintPageType.list.name.toString()) {
                   var ex = getRouterStateList(state, state.extra, context);

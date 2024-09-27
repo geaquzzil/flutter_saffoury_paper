@@ -136,7 +136,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }
@@ -411,7 +411,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     if (firstPane == false) return null;
     return DashboardHeader(

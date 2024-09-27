@@ -16,7 +16,14 @@ class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
   Widget? customWidget;
   bool isSecoundPaneView;
   bool shouldAddToThirdPaneList;
+
+  ///Key to basePage stateful widget
+  GlobalKey<BasePageState>? key;
+  GlobalKey<BasePageState>? get getKey => key;
+
+  set setKey(GlobalKey<BasePageState> key) => this.key = key;
   ListToDetailsSecoundPaneHelper({
+    this.key,
     required this.action,
     this.viewAbstract,
     this.customWidget,
@@ -31,12 +38,9 @@ class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
   });
 }
 
-class ListToDetailsPageNew extends StatefulWidget {
-  final String title;
-  bool buildDrawer;
-
+class ListToDetailsPageNew extends BasePage {
   ListToDetailsPageNew(
-      {super.key, required this.title, this.buildDrawer = true});
+      {super.key, super.buildDrawer = true, super.buildSecondPane});
 
   @override
   State<ListToDetailsPageNew> createState() => ListToDetailsPageNewState();

@@ -479,7 +479,7 @@ class ScreenHelperSliver extends StatelessWidget {
   final Widget Function(double width, double height) smallTablet;
   final Widget Function(double width, double height) largeTablet;
   final Widget Function(double width, double height) desktop;
-
+  final bool forceSmallView;
   final Function(double width, double height, CurrentScreenSize c)?
       onChangeLayout;
 
@@ -492,6 +492,7 @@ class ScreenHelperSliver extends StatelessWidget {
       required this.mobile,
       required this.smallTablet,
       required this.desktop,
+      this.forceSmallView = false,
       this.onChangeLayout});
 
   Widget getPadding(BuildContext context, double width, Widget widget) {
@@ -533,17 +534,25 @@ class ScreenHelperSliver extends StatelessWidget {
         debugPrint(
             "layoutBuilder width $maxWidth height $maxLength currentScreenSize ${findCurrentScreenSize(context, width: maxWidth)}");
 
-        onChangeLayout?.call(maxWidth, maxLength,
-            findCurrentScreenSize(context, width: maxWidth));
+        onChangeLayout?.call(
+            maxWidth,
+            maxLength,
+            forceSmallView
+                ? CurrentScreenSize.MOBILE
+                : findCurrentScreenSize(context, width: maxWidth));
 
-        if (isMobile(context, maxWidth: maxWidth)) {
+        if (forceSmallView) {
           currentWidget = mobile.call(maxWidth, maxLength);
-        } else if (isSmallTablet(context, maxWidth: maxWidth)) {
-          currentWidget = smallTablet.call(maxWidth, maxLength);
-        } else if (isTablet(context, maxWidth: maxWidth)) {
-          currentWidget = largeTablet.call(maxWidth, maxLength);
         } else {
-          currentWidget = desktop.call(maxWidth, maxLength);
+          if (isMobile(context, maxWidth: maxWidth)) {
+            currentWidget = mobile.call(maxWidth, maxLength);
+          } else if (isSmallTablet(context, maxWidth: maxWidth)) {
+            currentWidget = smallTablet.call(maxWidth, maxLength);
+          } else if (isTablet(context, maxWidth: maxWidth)) {
+            currentWidget = largeTablet.call(maxWidth, maxLength);
+          } else {
+            currentWidget = desktop.call(maxWidth, maxLength);
+          }
         }
         bool padding = requireAutoPadding ?? false;
         if (padding) {

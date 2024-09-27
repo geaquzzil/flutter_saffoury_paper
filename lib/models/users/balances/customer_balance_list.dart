@@ -77,7 +77,7 @@ class CustomerBalanceList
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }
@@ -85,7 +85,7 @@ class CustomerBalanceList
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }

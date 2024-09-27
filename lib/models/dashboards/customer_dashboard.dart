@@ -345,7 +345,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi<StatefulWidget>>? globalKey,
+      GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab}) {
     if (iD == -1 || firstPane == false) {
       return null;

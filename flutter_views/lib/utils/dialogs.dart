@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import '../providers/cart/cart_provider.dart';
 
 ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e) {
@@ -86,7 +87,7 @@ Future<T?> showFullScreenDialogExt<T>(
     {required BuildContext context,
     required Widget Function(BuildContext) builder,
     Offset? anchorPoint}) {
-  if (SizeConfig.isLargeScreenGeneral(context)) {
+  if (isLargeScreenFromCurrentScreenSize(context)) {
     return showGeneralDialog(
       anchorPoint: anchorPoint,
       context: context,
@@ -104,7 +105,7 @@ Future<T?> showFullScreenDialogExt<T>(
             begin: const Offset(1.0, 0.0),
             end: Offset.zero,
           ).animate(animation),
-          child: child,
+          child: Align(alignment: Alignment.topRight, child: child),
         );
       },
       transitionDuration: const Duration(milliseconds: 500),

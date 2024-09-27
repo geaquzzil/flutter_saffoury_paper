@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:math';
 
@@ -77,7 +78,7 @@ mixin TickerWidget<T extends StatefulWidget> on State<T> {
   }
 }
 
-mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
+mixin BasePageWithDraggablePage<T extends BasePage> on BasePageState<T> {
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane);
   Widget? getDraggableHeaderWidget(bool firstPane);
   Widget? getDraggableHeaderExpandedWidget(bool firstPane);
@@ -165,7 +166,7 @@ mixin BasePageWithDraggablePage<T extends StatefulWidget> on BasePageState<T> {
   // }
 }
 
-mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
+mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
   ValueNotifier valueFirstPane = ValueNotifier(null);
   ValueNotifier valueSecondPane = ValueNotifier(null);
 
@@ -289,7 +290,7 @@ mixin BasePageWithTicker<T extends StatefulWidget> on BasePageState<T> {
     );
   }
 }
-mixin BasePageWithThirdPaneMixinStatic<T extends StatefulWidget,
+mixin BasePageWithThirdPaneMixinStatic<T extends BasePage,
     E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
   @override
   double getCustomPaneProportion() {
@@ -310,7 +311,7 @@ mixin BasePageWithThirdPaneMixinStatic<T extends StatefulWidget,
     );
   }
 }
-mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
+mixin BasePageWithThirdPaneMixin<T extends BasePage,
     E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
   final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
 
@@ -365,24 +366,25 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
     }
   }
 
-  AppBar getAppBarForThirdPane(E? selectedItem) {
+  AppBar getAppBarForThirdPane(E? selectedItem, Widget widget) {
+    
     return AppBar(
       leading: getAppBarLeading(selectedItem),
       title: Text(selectedItem?.actionTitle ?? ""),
+      //todo this flow not working
+      actions: selectedItem?.getKey!.currentState?.getAppbarActionsWhenThirdPane(),
     );
   }
 
   Widget wrapScaffoldInThirdPane(
       {TabControllerHelper? tab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
-    debugPrint("wrapScaffoldInThirdPane");
-    return const Text("das");
-    return super.getWidgetFromListToDetailsSecoundPaneHelper(
-        tab: tab, selectedItem: selectedItem);
+    Widget widget = getWidgetFromListToDetailsSecoundPaneHelper(
+        selectedItem: selectedItem, tab: tab);
+
     return Scaffold(
-        appBar: getAppBarForThirdPane(selectedItem as E?),
-        body: super.getWidgetFromListToDetailsSecoundPaneHelper(
-            tab: tab, selectedItem: selectedItem));
+        appBar: getAppBarForThirdPane(selectedItem as E?, widget),
+        body: widget);
   }
 
   void checkValueToAddToList(E? value) {
@@ -492,12 +494,38 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
   }
 }
 
+abstract class BasePage extends StatefulWidget {
+  bool buildDrawer;
+  bool buildSecondPane;
+  bool isFirstToSecOrThirdPane;
+  BasePage({
+    super.key,
+    this.buildDrawer = false,
+    this.buildSecondPane = true,
+    this.isFirstToSecOrThirdPane = false,
+  });
+}
+
+abstract class BasePageApi extends BasePage {
+  int? iD;
+  String? tableName;
+  dynamic extras;
+  BasePageApi(
+      {super.key,
+      this.iD,
+      this.tableName,
+      required this.extras,
+      super.buildDrawer,
+      super.isFirstToSecOrThirdPane,
+      super.buildSecondPane});
+}
+
 ///Auto generate view
 ///[CurrentScreenSize.MOBILE] if this  is true
 ///
 ///
 ///
-abstract class BasePageState<T extends StatefulWidget> extends State<T>
+abstract class BasePageState<T extends BasePage> extends State<T>
     with TickerProviderStateMixin {
   dynamic _firstWidget;
   dynamic _secondWidget;
@@ -509,11 +537,34 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   bool pinToolbar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
   Widget? _drawerWidget;
-  bool buildDrawer;
-  bool buildSecoundPane;
+  late bool buildDrawer;
+  late bool _buildSecoundPane;
   bool isSelectedMode = false;
 
-  BasePageState({this.buildDrawer = true, this.buildSecoundPane = true});
+  @override
+  void didUpdateWidget(covariant T oldWidget) {
+    if (_tabList == null) {
+      _initBaseTab();
+    }
+    buildDrawer = widget.buildDrawer;
+    _buildSecoundPane = widget.buildSecondPane;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    _drawerMenuControllerProvider =
+        context.read<DrawerMenuControllerProvider>();
+    buildDrawer = widget.buildDrawer;
+    _buildSecoundPane = widget.buildSecondPane;
+    _connectionListener.init(
+      onConnected: () => debugPrint("BasePage CONNECTED"),
+      onReconnected: () => debugPrint("BasePage RECONNECTED"),
+      onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
+    );
+    super.initState();
+  }
+
   // The listener
   final _connectionListener = ConnectionListener();
 
@@ -668,6 +719,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   List<Widget>? getAppbarActions(
       {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
+    return null;
+  }
+
+  List<Widget>? getAppbarActionsWhenThirdPane() {
     return null;
   }
 
@@ -886,27 +941,6 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         child: widget);
   }
 
-  @override
-  void didUpdateWidget(covariant T oldWidget) {
-    if (_tabList == null) {
-      _initBaseTab();
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void initState() {
-    _drawerMenuControllerProvider =
-        context.read<DrawerMenuControllerProvider>();
-    _connectionListener.init(
-      onConnected: () => debugPrint("BasePage CONNECTED"),
-      onReconnected: () => debugPrint("BasePage RECONNECTED"),
-      onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
-    );
-
-    super.initState();
-  }
-
   void _initBaseTab() {
     _tabList = initTabBarList();
 
@@ -967,7 +1001,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   @override
   Widget build(BuildContext context) {
     _initBaseTab();
+
     return ScreenHelperSliver(
+        forceSmallView: !_buildSecoundPane || widget.isFirstToSecOrThirdPane,
         requireAutoPadding: setMainPageSuggestionPadding(),
         onChangeLayout: (w, h, c) {
           debugPrint("ScreenHelperSliver build width:$w");
@@ -983,7 +1019,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           }
         },
         mobile: (w, h) {
-          return _getMainWidget();
+          _firstWidget = beforeGetPaneWidget(firstPane: true);
+          _firstWidget = _setSubAppBar(_firstWidget, true)!;
+          return _firstWidget;
         },
         smallTablet: (w, h) {
           return _getMainWidget();
@@ -1040,10 +1078,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
         );
         break;
       case ServerActions.print:
+        selectedItem.setKey = GlobalKey<BasePageWithApi>();
         currentWidget = PdfPageNew(
+          key: selectedItem.getKey,
+          buildSecondPane: false,
+          isFirstToSecOrThirdPane: true,
           iD: iD,
           tableName: tableName,
-          invoiceObj: selectedItem.viewAbstract! as PrintableMaster,
+          extras: selectedItem.viewAbstract! as PrintableMaster,
         );
         // currentWidget = const Text("dsadaz");
         break;
@@ -1100,8 +1142,9 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   }
 
   Widget getTowPanes({TabControllerHelper? tab, TabControllerHelper? sec}) {
+    debugPrint("BasePage getTowPanes width=$getWidth ");
     if (isMobile(context, maxWidth: getWidth)) {
-      debugPrint("BasePage getTowPane started");
+      debugPrint("BasePage getTowPanes started");
       _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true)!;
       return _firstWidget;
@@ -1142,7 +1185,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
       _firstWidget =
           beforeGetPaneWidget(firstPane: true, tab: tab, secoundTab: sec);
       _firstWidget = _setSubAppBar(_firstWidget, true, tab: tab);
-      if (buildSecoundPane) {
+      if (_buildSecoundPane) {
         _secondWidget =
             beforeGetPaneWidget(firstPane: false, tab: tab, secoundTab: tab);
         _secondWidget = _setSubAppBar(_secondWidget, false, tab: tab, sec: sec);
@@ -1332,20 +1375,29 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   }
 }
 
-abstract class BasePageWithApi<T extends StatefulWidget>
-    extends BasePageState<T> {
+abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
   final refreshListener = ValueNotifier<bool>(true);
-  int? iD;
-  String? tableName;
-  dynamic extras;
+  int? _iD;
+  String? _tableName;
+  dynamic _extras;
   bool _isLoading = false;
 
-  BasePageWithApi(
-      {this.iD,
-      this.tableName,
-      this.extras,
-      super.buildDrawer,
-      super.buildSecoundPane});
+  @override
+  void initState() {
+    _iD = widget.iD;
+    _tableName = widget.tableName;
+    _extras = widget.extras;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant T oldWidget) {
+    _iD = widget.iD;
+    _tableName = widget.tableName;
+    _extras = widget.extras;
+    super.didUpdateWidget(oldWidget);
+  }
+
   Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab});
   ServerActions getServerActions();
@@ -1362,7 +1414,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
       }
       return _getTabBarList()![currentBaseTabIndex].extras;
     }
-    return extras;
+    return _extras;
   }
 
   TabControllerHelper? findExtrasViaTypeList(List<TabControllerHelper>? list,
@@ -1370,7 +1422,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
     if (list != null) {
       return list.firstWhereOrNull(test);
     } else {
-      return extras;
+      return _extras;
     }
   }
 
@@ -1389,7 +1441,7 @@ abstract class BasePageWithApi<T extends StatefulWidget>
       return findExtrasViaTypeList(
           _getTabBarList(), (e) => e.extras.runtimeType == extra);
     } else {
-      return extras;
+      return _extras;
     }
   }
 
@@ -1438,9 +1490,9 @@ abstract class BasePageWithApi<T extends StatefulWidget>
         _getTabBarList()![currentBaseTabIndex] = tab;
       }
     } else {
-      this.extras = ex;
-      this.iD = iD;
-      this.tableName = tableName;
+      this._extras = ex;
+      this._iD = iD;
+      this._tableName = tableName;
     }
   }
 

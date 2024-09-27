@@ -21,8 +21,8 @@ class CutRequestWorker extends CutRequest {
       };
 }
 
-class CutWorkerPage extends StatefulWidget {
-  const CutWorkerPage({super.key});
+class CutWorkerPage extends BasePage {
+  CutWorkerPage({super.key});
 
   @override
   State<CutWorkerPage> createState() => _CutWorkerPageState();
