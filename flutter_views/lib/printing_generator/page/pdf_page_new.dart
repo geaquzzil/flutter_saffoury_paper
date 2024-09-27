@@ -169,7 +169,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    return null;
     if (widget.buildBaseHeader && firstPane == null) {
       return Text(
           "${AppLocalizations.of(context)!.print} ${getExtrasCast().getMainHeaderText(context)}");
@@ -182,7 +181,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    return null;
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE &&
         firstPane == true) {
       return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
@@ -213,7 +211,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    return const Text("DSadas");
+    return Text("das");
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE && firstPane) {
       return getPdfPreviewWidget();
     }
@@ -224,7 +222,6 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     Widget setting = const Center(
       child: Text("getFirstPane"),
     );
-    return setting;
 
     return FutureBuilder<ViewAbstract?>(
       future: getSettingLoadDefaultIfNull(context, getExtras()),
@@ -333,9 +330,10 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   @override
   Future getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab}) {
-    return (getExtras() as ViewAbstract)
-            .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD,context:context)
-        as Future<PrintableMaster?>;
+    debugPrint("getCallApiFunctionIfNull");
+    return (getExtras() as ViewAbstract).viewCallGetFirstFromList(
+        (getExtras() as ViewAbstract).iD,
+        context: context) as Future<PrintableMaster?>;
   }
 
   @override

@@ -143,7 +143,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       bool b = getBodyWithoutApi(action ?? ServerActions.view);
       if (!b) {
         debugPrint("sharePage waiting to get object form api");
-        newO = (await viewCallGetFirstFromList(iD,context: context)) as ViewAbstract?;
+        newO = (await viewCallGetFirstFromList(iD, context: context))
+            as ViewAbstract?;
         debugPrint("sharePage done");
       }
       if (newO != null) {
@@ -169,77 +170,78 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void exportPage(BuildContext context) {
-    if (isLargeScreenFromCurrentScreenSize(context)) {
-      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-          //todo traanslate
-          ListToDetailsSecoundPaneHelper(
-              actionTitle:
-                  getIDWithLabel(context, action: ServerActions.custom_widget),
-              action: ServerActions.custom_widget,
-              customWidget:
-                  FileReaderPage(viewAbstract: this as ViewAbstract)));
-    } else {
-      context.goNamed(importRouteName,
-          pathParameters: {"tableName": getTableNameApi()!}, extra: this);
-    }
-  }
-
-  void importPage(BuildContext context) {
-    if (isLargeScreenFromCurrentScreenSize(context)) {
-      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-          //todo traanslate
-          ListToDetailsSecoundPaneHelper(
-              actionTitle:
-                  getIDWithLabel(context, action: ServerActions.custom_widget),
-              action: ServerActions.custom_widget,
-              customWidget:
-                  FileExporterPage(viewAbstract: this as ViewAbstract)));
-    } else {
+    if (!setPaneToSecondOrThird(
+        context,
+        ListToDetailsSecoundPaneHelper(
+            actionTitle:
+                getIDWithLabel(context, action: ServerActions.custom_widget),
+            action: ServerActions.custom_widget,
+            customWidget: FileReaderPage(viewAbstract: this as ViewAbstract)),
+        tryToSetToSecoundPane: false)) {
       context.goNamed(exportRouteName,
           pathParameters: getRoutePathParameters(), extra: this);
     }
   }
 
-  Map<String, String> getRoutePathParameters() =>
-      {"tableName": getTableNameApi() ?? "", "id": getIDString()};
-  void viewPage(BuildContext context,
-      {bool? isSecoundSubPaneView, bool disableMasterToListOverride = true}) {
+  void importPage(BuildContext context) {
+    if (!setPaneToSecondOrThird(
+        context,
+        ListToDetailsSecoundPaneHelper(
+            actionTitle:
+                getIDWithLabel(context, action: ServerActions.custom_widget),
+            action: ServerActions.custom_widget,
+            customWidget: FileExporterPage(viewAbstract: this as ViewAbstract)),
+        tryToSetToSecoundPane: false)) {
+      context.goNamed(importRouteName,
+          pathParameters: getRoutePathParameters(), extra: this);
+    }
+  }
+
+  bool setPaneToSecondOrThird(
+      BuildContext context, ListToDetailsSecoundPaneHelper l,
+      {bool tryToSetToSecoundPane = true}) {
     CurrentScreenSize currentScreenSize = findCurrentScreenSize(context);
     bool isSoLarge = isLargeScreenFromCurrentScreenSize(context);
     bool canSecondPane =
         isSoLarge || currentScreenSize == CurrentScreenSize.SMALL_TABLET;
-
     bool canThirdPane = isSoLarge;
+    if (!canSecondPane) return false;
+    if (canThirdPane && !tryToSetToSecoundPane) {
+      Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
+    } else {
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
+    }
+    return true;
+  }
+
+  Map<String, String> getRoutePathParameters() =>
+      {"tableName": getTableNameApi() ?? "", "id": getIDString()};
+
+  //TODO isSecoundSubPaneView should i deprecate it ?
+  void viewPage(BuildContext context,
+      {bool? isSecoundSubPaneView, bool disableMasterToListOverride = true}) {
+    bool setToThirdPane = isSecoundSubPaneView ?? false;
     bool isGridableItem = isGridable();
     ViewAbstract? isMasterToList = isGridableItem
         ? (this as WebCategoryGridableInterface)
             .getWebCategoryGridableIsMasterToList(context)
         : null;
     isMasterToList = disableMasterToListOverride ? null : isMasterToList;
-    if (canSecondPane) {
-      ListToDetailsSecoundPaneHelper l = isMasterToList == null
-          ? ListToDetailsSecoundPaneHelper(
-              subObject: isSecoundSubPaneView == true ? this : null,
-              actionTitle: getIDWithLabel(context, action: ServerActions.view),
-              isSecoundPaneView: isSecoundSubPaneView ?? false,
-              action: ServerActions.view,
-              viewAbstract: this as ViewAbstract)
-          : ListToDetailsSecoundPaneHelper(
-              subObject: isSecoundSubPaneView == true ? this : null,
-              actionTitle: getIDWithLabel(context, action: ServerActions.view),
-              isSecoundPaneView: isSecoundSubPaneView ?? false,
-              action: ServerActions.custom_widget,
-              customWidget: _getMasterToListWidget(context));
-      if (canThirdPane) {
-        if (isSecoundSubPaneView == true) {
-          Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
-        } else {
-          Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
-        }
-      } else {
-        Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
-      }
-    } else {
+    ListToDetailsSecoundPaneHelper l = isMasterToList == null
+        ? ListToDetailsSecoundPaneHelper(
+            subObject: isSecoundSubPaneView == true ? this : null,
+            actionTitle: getIDWithLabel(context, action: ServerActions.view),
+            isSecoundPaneView: isSecoundSubPaneView ?? false,
+            action: ServerActions.view,
+            viewAbstract: this as ViewAbstract)
+        : ListToDetailsSecoundPaneHelper(
+            subObject: isSecoundSubPaneView == true ? this : null,
+            actionTitle: getIDWithLabel(context, action: ServerActions.view),
+            isSecoundPaneView: isSecoundSubPaneView ?? false,
+            action: ServerActions.custom_widget,
+            customWidget: _getMasterToListWidget(context));
+    if (!setPaneToSecondOrThird(context, l,
+        tryToSetToSecoundPane: !setToThirdPane)) {
       context.pushNamed(
           isMasterToList == null ? viewRouteName : indexWebMasterToList,
           pathParameters: getRoutePathParameters(),
@@ -281,19 +283,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void editPage(BuildContext context) {
-    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
-    debugPrint("Page=>editPage Page isLarge:$isLarge");
-    if (isLarge) {
-      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-          ListToDetailsSecoundPaneHelper(
-              actionTitle: getIDWithLabel(context, action: ServerActions.edit),
-              action: ServerActions.edit,
-              viewAbstract: this as ViewAbstract));
-      return;
-      context
-          .read<DrawerMenuControllerProvider>()
-          .change(context, this, DrawerMenuControllerProviderAction.edit);
-    } else {
+    if (!setPaneToSecondOrThird(
+      context,
+      ListToDetailsSecoundPaneHelper(
+          actionTitle: getIDWithLabel(context, action: ServerActions.edit),
+          action: ServerActions.edit,
+          viewAbstract: this as ViewAbstract),
+    )) {
       context.goNamed(editRouteName,
           pathParameters: getRoutePathParameters(),
           extra: (this as ViewAbstract).getCopyInstance());
@@ -301,19 +297,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void printPage(BuildContext context, {bool standAlone = false}) {
-    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
-    debugPrint("Page=>printPage Page isLarge:$isLarge");
-    if (isLarge && !standAlone) {
-      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
-          ListToDetailsSecoundPaneHelper(
-              actionTitle: getIDWithLabel(context, action: ServerActions.print),
-              action: ServerActions.print,
-              viewAbstract: this as ViewAbstract));
-      return;
-      context
-          .read<DrawerMenuControllerProvider>()
-          .change(context, this, DrawerMenuControllerProviderAction.print);
-    } else {
+    if (!setPaneToSecondOrThird(
+        context,
+        ListToDetailsSecoundPaneHelper(
+            actionTitle: getIDWithLabel(context, action: ServerActions.print),
+            action: ServerActions.print,
+            viewAbstract: this as ViewAbstract),
+        tryToSetToSecoundPane: false)) {
       if (standAlone) {
         context.pushNamed(printRouteName,
             pathParameters: {

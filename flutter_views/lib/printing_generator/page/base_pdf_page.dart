@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
@@ -31,10 +30,11 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
   @override
   Widget buildAfterCall(BuildContext context, C newObject) {
     return TowPaneExt(
-      startPane: SizeConfig.isMobile(context)
-          ? getFirstPane(context, newObject)
-          : (getEndPane(context) ?? getFirstPane(context, newObject)),
-      endPane: getFirstPane(context, newObject),
+      // startPane: SizeConfig.isMobile(context)
+      //     ? getFirstPane(context, newObject)
+      //     : (getEndPane(context) ?? getFirstPane(context, newObject)),
+      startPane: getFirstPane(context, newObject),
+      endPane: null,
     );
   }
 

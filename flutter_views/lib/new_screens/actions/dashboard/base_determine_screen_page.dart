@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashb
 import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -102,8 +103,8 @@ class BaseDeterminePageState extends StatelessWidget {
                 //   "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
                 //   "id": "$iD"
                 // },
-                widget = PdfPageNew(
-                  buildBaseHeader: true,
+                widget = PdfPage(
+                  
                   iD: value.item1.iD,
                   tableName: value.item1.getTableNameApi() ??
                       value.item1.getCustomAction() ??

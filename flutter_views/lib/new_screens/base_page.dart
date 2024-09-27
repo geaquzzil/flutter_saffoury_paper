@@ -375,6 +375,10 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
   Widget wrapScaffoldInThirdPane(
       {TabControllerHelper? tab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
+    debugPrint("wrapScaffoldInThirdPane");
+    return const Text("das");
+    return super.getWidgetFromListToDetailsSecoundPaneHelper(
+        tab: tab, selectedItem: selectedItem);
     return Scaffold(
         appBar: getAppBarForThirdPane(selectedItem as E?),
         body: super.getWidgetFromListToDetailsSecoundPaneHelper(
@@ -413,6 +417,8 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
             double width = showThirdPane
                 ? constraints.maxWidth * 0.5
                 : constraints.maxWidth;
+
+            double height = constraints.maxHeight;
 
             return SizedBox(
               height: constraints.maxHeight,
@@ -456,6 +462,7 @@ mixin BasePageWithThirdPaneMixin<T extends StatefulWidget,
                             }
                             return SizedBox(
                               width: width - 1,
+                              height: height,
                               child: AnimatedOpacity(
                                 key: UniqueKey(),
                                 duration: const Duration(milliseconds: 500),
@@ -794,16 +801,14 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
   Widget? _getScrollContent(widget, Widget? appBar, bool firstPane,
       {TabControllerHelper? tab}) {
     dynamic body = widget;
+    bool isPaneIsSliver = isPanesIsSliver(firstPane, tab: tab);
     debugPrint(
-        "BasePage IsPanel isSliver started=> firstPane ${isPanesIsSliver(firstPane, tab: tab)}");
+        "BasePage IsPanel isSliver started=> firstPane $firstPane ,isPaneIsSliver:$isPaneIsSliver body : $body");
 
-    if (isPanesIsSliver(firstPane, tab: tab)) {
+    if (isPaneIsSliver) {
       List<Widget> list = body;
-      debugPrint(
-          "BasePage IsPanel isSliver ${isPanesIsSliver(firstPane, tab: tab)} body $body");
+
       if (SizeConfig.isDesktopOrWebPlatform(context)) {
-        debugPrint(
-            "BasePage IsPanel  isDesktopOrWebPlatform isSliver ${isPanesIsSliver(firstPane, tab: tab)} body $body");
         body = ResponsiveScroll(
           controller: getScrollController(firstPane, tab: tab),
           animationDuration: animationDuration,
@@ -811,13 +816,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
           child: getCustomScrollView(firstPane, tab, appBar, list),
         );
       } else {
-        debugPrint(
-            "BasePage IsPanel  isDesktopOrWebPlatform flassse isSliver ${isPanesIsSliver(firstPane)} body $body");
         return getCustomScrollView(firstPane, tab, appBar, list);
       }
     }
-    debugPrint(
-        "BasePage IsPanel isSliver=> ${isPanesIsSliver(firstPane, tab: tab)} body $body");
+
     return body;
   }
 
@@ -845,7 +847,7 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
     Widget? appBarBody =
         getAppbarTitle(firstPane: firstPane, tab: tab, secoundTab: sec);
     Widget? body = _getScrollContent(widget, appBarBody, firstPane, tab: tab);
-
+    debugPrint("BasePage getScrollContent finished");
     Widget scaffold = Scaffold(
       // key: firstPane ? firstPaneScaffold : secondPaneScaffold,
       backgroundColor: isPaneScaffoldOverlayColord(firstPane, tab: tab)
@@ -1099,8 +1101,10 @@ abstract class BasePageState<T extends StatefulWidget> extends State<T>
 
   Widget getTowPanes({TabControllerHelper? tab, TabControllerHelper? sec}) {
     if (isMobile(context, maxWidth: getWidth)) {
+      debugPrint("BasePage getTowPane started");
       _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
-      return _setSubAppBar(_firstWidget, true)!;
+      _firstWidget = _setSubAppBar(_firstWidget, true)!;
+      return _firstWidget;
     }
     _setupPaneTabBar(false, tab: tab);
     _setupPaneTabBar(true, tab: tab);
