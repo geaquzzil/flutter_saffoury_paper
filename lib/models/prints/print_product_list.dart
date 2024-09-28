@@ -24,7 +24,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
 
   String? sortByField;
   String? groupedByField;
-  SortByType? sortByType;  
+  SortByType? sortByType;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   Product? product;
@@ -141,6 +141,7 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
           "hideUnitPriceAndTotalPrice":
               AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
           "sortByField": AppLocalizations.of(context)!.sortBy,
+          //todo translate
           "groupedByField": "Group by todo"
         });
 

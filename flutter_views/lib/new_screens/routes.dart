@@ -174,7 +174,7 @@ class RouteGenerator {
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
-        return homeLocation;
+        // return homeLocation;
         return goodsInventoryLocation;
       } else if (authProvider.isPOS(context)) {
         return posRouteName;
@@ -464,8 +464,7 @@ class RouteGenerator {
                   type: PrintPageType.values
                       .firstWhereOrNull((o) => o.toString() == type),
                   iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
-                  asList: getRouterStateList(state, context)
-                      as List<PrintableMaster>?,
+                  asList: getRouterStateList(state, context)?.cast(),
                   tableName: state.pathParameters['tableName'],
                   extras: state.extra as PrintableMaster?,
                 );
@@ -549,7 +548,7 @@ class RouteGenerator {
 
   ///[extra] is ViewAbstract
   ///this function to get list data from route
-  Object? getRouterStateList(GoRouterState state, BuildContext context) {
+  List? getRouterStateList(GoRouterState state, BuildContext context) {
     String? tableName = state.pathParameters["tableName"];
     dynamic extra = state.extra;
     extra ??=

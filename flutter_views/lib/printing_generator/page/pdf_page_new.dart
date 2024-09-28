@@ -11,7 +11,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -78,37 +77,24 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
         heroTag: UniqueKey(),
         child: const Icon(Icons.settings),
         onPressed: () async {
-          var v = await getSettingLoadDefaultIfNull(context, getExtras());
+          var v = await getSettingFuture();
           await showFullScreenDialogExt<ViewAbstract?>(
               barrierDismissible: true,
               anchorPoint: const Offset(1000, 1000),
               context: context,
               builder: (p0) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    // color: Theme.of(context).colorScheme.secondaryContainer,
-                    child: IntrinsicWidth(
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              (isTablet(context) ? 0.5 : 0.3),
-                          height: MediaQuery.of(context).size.height,
-                          child: BaseEditNewPage(
-                            viewAbstract: v as ViewAbstract,
-                            onFabClickedConfirm: (viewAbstract) {
-                              if (viewAbstract != null) {
-                                // notifyNewViewAbstract(viewAbstract.getCopyInstance());
-                                Configurations.save(
-                                    "_printsetting${getExtrasCast().runtimeType}",
-                                    viewAbstract);
-                                printSettingListener.setViewAbstract =
-                                    viewAbstract;
-                                context.pop();
-                              }
-                            },
-                          )),
-                    ),
-                  ),
+                return BaseEditNewPage(
+                  viewAbstract: v as ViewAbstract,
+                  onFabClickedConfirm: (viewAbstract) {
+                    if (viewAbstract != null) {
+                      // notifyNewViewAbstract(viewAbstract.getCopyInstance());
+                      Configurations.save(
+                          "_printsetting${getExtrasCast().runtimeType}",
+                          viewAbstract);
+                      printSettingListener.setViewAbstract = viewAbstract;
+                      context.pop();
+                    }
+                  },
                 );
               }).then((value) {
             {
@@ -284,13 +270,20 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     return getPdfPreviewWidget();
   }
 
+  Future getSettingFuture() {
+    dynamic extra = getExtras();
+    return widget.type == PrintPageType.self_list
+        ? getSettingLoadDefaultIfNullSelfList(context, extra)
+        : getSettingLoadDefaultIfNull(context, extra);
+  }
+
   Widget getSettingWidget() {
     Widget setting = const Center(
       child: Text("getFirstPane"),
     );
 
-    return FutureBuilder<ViewAbstract?>(
-      future: getSettingLoadDefaultIfNull(context, getExtras()),
+    return FutureBuilder(
+      future: getSettingFuture(),
       builder: (_, snapshot) {
         if (snapshot.hasError) {
           debugPrint(
@@ -357,30 +350,26 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
         },
         // shouldRepaint: ,
         build: (format) async {
-          if (widget.type == null) {
+          if (widget.type == PrintPageType.list) {
+            dynamic setting =
+                await getSetting(context, getExtras() as PrintableMaster);
+            loadedFileBytes = await PDFListApi<PrintLocalSetting>(
+                    list: widget.asList!.cast(),
+                    context: context,
+                    setting: setting)
+                .generate(format);
+            return loadedFileBytes;
+          } else if (widget.type == PrintPageType.self_list) {
+            // PrintLocalSetting? setting = await getSetting();
+            loadedFileBytes = await PdfSelfListApi<PrintLocalSetting>(
+                    widget.asList!.cast(), context, getExtras(),
+                    printCommand: widget.customSetting)
+                .generate(format);
+            return loadedFileBytes;
+          } else {
             loadedFile = getExcelFileUinit(context, getExtras()!, fomat);
             loadedFileBytes = await loadedFile;
             return loadedFileBytes;
-          } else {
-            if (widget.type == PrintPageType.list) {
-              dynamic setting =
-                  await getSetting(context, getExtras() as PrintableMaster);
-
-              loadedFileBytes = await PDFListApi<PrintLocalSetting>(
-                      list: widget.asList!.cast(),
-                      context: context,
-                      setting: setting)
-                  .generate(format);
-              return loadedFileBytes;
-            } else {
-              // PrintLocalSetting? setting = await getSetting();
-              loadedFileBytes = await PdfSelfListApi<PrintLocalSetting>(
-                
-                      widget.asList!.cast(), context, getExtras(),
-                      printCommand: widget.customSetting)
-                  .generate(format);
-              return loadedFileBytes;
-            }
           }
         });
   }

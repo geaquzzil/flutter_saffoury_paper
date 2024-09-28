@@ -20,7 +20,6 @@ import 'package:flutter_view_controller/new_screens/controllers/controller_dropb
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
-import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
@@ -697,10 +696,12 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
           children: [
             FloatingActionButton.small(
               onPressed: () {
-                context.pushNamed(printRouteName, pathParameters: {
-                  "tableName": "products",
-                  "type": PrintPageType.list.name
-                }, extra: []);
+                List? l = keyInventory.currentState?.getList();
+                if (l != null) {
+                  debugPrint("onPrint");
+                  inventoryProduct.printDialog(context,
+                      list: l.cast(), isSelfListPrint: true,standAlone: true);
+                }
               },
               child: const Icon(Icons.print),
             ),

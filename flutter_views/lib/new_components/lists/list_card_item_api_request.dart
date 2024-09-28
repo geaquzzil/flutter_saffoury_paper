@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:skeletons/skeletons.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ListCardItemApi extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -72,6 +72,7 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
               ));
             } else {
               widget.viewAbstract = _viewAbstract!;
+              widget.state?.listProvider.edit(_viewAbstract!);
             }
           }
 

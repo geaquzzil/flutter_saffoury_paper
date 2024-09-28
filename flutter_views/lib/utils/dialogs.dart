@@ -86,7 +86,8 @@ Future<T?> showBottomSheetExt<T>(
 Future<T?> showFullScreenDialogExt<T>(
     {required BuildContext context,
     required Widget Function(BuildContext) builder,
-    Offset? anchorPoint,bool barrierDismissible=false }) {
+    Offset? anchorPoint,
+    bool barrierDismissible = false}) {
   if (isLargeScreenFromCurrentScreenSize(context)) {
     return showGeneralDialog(
       anchorPoint: anchorPoint,
@@ -109,8 +110,18 @@ Future<T?> showFullScreenDialogExt<T>(
         );
       },
       transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          builder.call(context),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: IntrinsicWidth(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width *
+                    (isTablet(context) ? 0.5 : 0.3),
+                height: MediaQuery.of(context).size.height,
+                child: builder.call(context)),
+          ),
+        );
+      },
     );
   } else {
     return Navigator.of(context).push(MaterialPageRoute(

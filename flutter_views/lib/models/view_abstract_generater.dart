@@ -13,9 +13,7 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
@@ -224,8 +222,14 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     bool canThirdPane = isSoLarge;
     if (!canSecondPane) return false;
     if (canThirdPane && !tryToSetToSecoundPane) {
+      if (Globals.keyForLargeScreenListable.currentState == null) {
+        return false;
+      }
       Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
     } else {
+      if (Globals.keyForLargeScreenListable.currentState == null) {
+        return false;
+      }
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
     }
     return true;
@@ -311,6 +315,34 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           pathParameters: getRoutePathParameters(),
           extra: (this as ViewAbstract).getCopyInstance());
     }
+  }
+
+  Future<void> printDialog(BuildContext context,
+      {bool standAlone = false,
+      List<ViewAbstract>? list,
+      bool? isSelfListPrint}) async {
+    bool isListPrint = list != null;
+    bool isSelfList = isSelfListPrint ?? false;
+    PrintPageType type = !isListPrint
+        ? PrintPageType.single
+        : isSelfList
+            ? PrintPageType.self_list
+            : PrintPageType.list;
+    await showFullScreenDialogExt<ViewAbstract?>(
+        barrierDismissible: true,
+        anchorPoint: const Offset(1000, 1000),
+        context: context,
+        builder: (p0) {
+          return PdfPageNew(
+            buildSecondPane: false,
+            isFirstToSecOrThirdPane: true,
+            asList: list?.cast(),
+            type: type,
+            iD: iD,
+            tableName: getTableNameApi(),
+            extras: this,
+          );
+        });
   }
 
   void printPage(BuildContext context,

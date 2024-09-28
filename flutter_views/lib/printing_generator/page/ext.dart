@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -99,36 +100,37 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
   }
 }
 
-Future<T?> getSettingLoadDefaultIfNull<T extends PrintLocalSetting>(
+///return [null] if the firstObj is not [PrintableSelfListInterface]
+///load from setting if null load from default
+Future<PrintLocalSetting?> getSettingLoadDefaultIfNullSelfList(
+    BuildContext context, PrintableSelfListInterface firstObj) async {
+  dynamic value = (firstObj).getModifiablePrintableSelfPdfSetting(context);
+  PrintLocalSetting pls = await Configurations.get(value,
+          customKey: "_printsettingSelf${firstObj.runtimeType}") ??
+      value;
+
+  pls = pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
+
+  pls.primaryColor = firstObj.getPrintableSelfListPrimaryColor(pls);
+  pls.secondaryColor = firstObj.getPrintableSelfListSecondaryColor(pls);
+  debugPrint("getSetting val => $pls");
+  return pls;
+}
+
+Future<PrintLocalSetting?> getSettingLoadDefaultIfNull(
     BuildContext context, PrintableMaster firstObj) async {
-  T? pls;
-  if (firstObj is ModifiablePrintableInterface) {
-    pls = await Configurations.get(
-        (firstObj as ModifiablePrintableInterface)
-            .getModifibleSettingObject(context),
-        customKey: "_printsetting${firstObj.runtimeType}");
-    debugPrint("getSettingLoadDefaultIfNull=> pls =>$pls");
-    if (pls != null) {
-      pls =
-          pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
+  if (firstObj is! ModifiablePrintableInterface) return null;
+  dynamic value = (firstObj as ModifiablePrintableInterface)
+      .getModifibleSettingObject(context);
 
-      debugPrint("getSettingLoadDefaultIfNull=>not null pls =>$pls");
-    }
-  }
+  PrintLocalSetting pls = await Configurations.get(value,
+          customKey: "_printsetting${firstObj.runtimeType}") ??
+      value;
 
-  if (pls == null) {
-    debugPrint("getSettingLoadDefaultIfNull == null");
-    if (firstObj is ModifiablePrintableInterface) {
-      pls = (firstObj as ModifiablePrintableInterface)
-          .getModifibleSettingObject(context);
-      if (pls != null) {
-        pls = pls.onSavedModiablePrintableLoaded(
-            context, firstObj as ViewAbstract);
-      }
-    }
-  }
-  pls?.primaryColor = firstObj.getPrintablePrimaryColor(pls);
-  pls?.secondaryColor = firstObj.getPrintableSecondaryColor(pls);
+  pls = pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
+  pls.primaryColor = firstObj.getPrintablePrimaryColor(pls);
+  pls.secondaryColor = firstObj.getPrintableSecondaryColor(pls);
+  debugPrint("getSetting val => $pls");
   return pls;
 }
 

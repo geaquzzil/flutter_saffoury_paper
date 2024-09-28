@@ -34,8 +34,12 @@ class _DropdownCustomListWithFormListenerState
   @override
   void initState() {
     _field = widget.field;
-    list = widget.viewAbstract
-        .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+    //todo check if postFram is doing some errors to fileImport or export
+    // postFram((c) {
+    //   list = widget.viewAbstract
+    //       .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+    // });
+
     super.initState();
   }
 
@@ -54,6 +58,8 @@ class _DropdownCustomListWithFormListenerState
 
   @override
   Widget build(BuildContext context) {
+     list = widget.viewAbstract
+          .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
     return wrapController(
         FormBuilderDropdown<dynamic>(
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -73,7 +79,6 @@ class _DropdownCustomListWithFormListenerState
               list = widget.viewAbstract
                   .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
               //on reset list then updated initialValue not set this funcion to set the initalValue is selected
-            
             });
           },
           validator:
