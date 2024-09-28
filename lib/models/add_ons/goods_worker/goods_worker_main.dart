@@ -699,8 +699,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 List? l = keyInventory.currentState?.getList();
                 if (l != null) {
                   debugPrint("onPrint");
+                  //todo
+                  2
+                  inventoryProduct.setFilterableMap(filterData ?? {});
                   inventoryProduct.printDialog(context,
-                      list: l.cast(), isSelfListPrint: true,standAlone: true);
+                      list: l.cast(), isSelfListPrint: true, standAlone: true);
                 }
               },
               child: const Icon(Icons.print),
