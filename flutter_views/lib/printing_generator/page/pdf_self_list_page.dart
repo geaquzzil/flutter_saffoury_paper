@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
+@Deprecated("Use [PdfPageNew]")
 class PdfSelfListPage<T extends PrintLocalSetting> extends StatefulWidget {
   List<PrintableSelfListInterface<T>> list;
   T? setting;

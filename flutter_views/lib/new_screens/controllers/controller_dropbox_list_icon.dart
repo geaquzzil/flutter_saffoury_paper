@@ -9,6 +9,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   final String hint;
   final IconData icon;
   final List<DropdownStringListItem?> list;
+  final bool isLoading;
   final DropdownStringListItem? initialValue;
   final DropdownStringListItem? initialValueIfRadio;
 
@@ -23,6 +24,7 @@ class DropdownStringListControllerListenerByIcon extends StatefulWidget {
       this.initialValue,
       this.initialValueIfRadio,
       this.showFirstValueAsTitle = true,
+      this.isLoading = false,
       this.showSelectedValueBeside = true,
       required this.icon,
       required this.onSelected});
@@ -36,6 +38,7 @@ class _DropdownStringListControllerListenerByIconState
     extends State<DropdownStringListControllerListenerByIcon> {
   bool firstRun = true;
   DropdownStringListItem? _initialValue;
+  late bool _isLoading;
   late ValueNotifier<DropdownStringListItem?> radioPos;
   List<DropdownStringListItem?> _list = [null];
 
@@ -44,6 +47,7 @@ class _DropdownStringListControllerListenerByIconState
     _initialValue = widget.initialValue;
 
     radioPos = ValueNotifier(widget.initialValueIfRadio);
+    _isLoading = widget.isLoading;
     // debugPrint("initState radio1  ${radioPos.value}");
     // radioPos.addListener(onChangeRadio);
     // if (widget.initialValueIfRadio != null) {
@@ -78,6 +82,9 @@ class _DropdownStringListControllerListenerByIconState
         debugPrint("didUpdateWidget radio");
         radioPos.value = widget.initialValueIfRadio;
       });
+    }
+    if (_isLoading != widget.isLoading) {
+      _isLoading = widget.isLoading;
     }
     _list = [null];
     _list.addAll(widget.list);
@@ -190,6 +197,16 @@ class _DropdownStringListControllerListenerByIconState
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      double? size = IconTheme.of(context).size;
+      return SizedBox(
+          height: size,
+          width: size,
+          child: const CircularProgressIndicator.adaptive(
+            strokeWidth: 2,
+          ));
+    }
+
     Widget pop = PopupMenuButton<DropdownStringListItem?>(
       elevation: 10,
       shape: const RoundedRectangleBorder(

@@ -11,6 +11,7 @@ import '../../interfaces/printable/printable_master.dart';
 import 'ext.dart';
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
+@Deprecated("Use [PdfPageNew]")
 class PdfListPage<T extends PrintLocalSetting> extends StatefulWidget {
   List<PrintableMaster<T>> list;
 

@@ -367,12 +367,12 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
   }
 
   AppBar getAppBarForThirdPane(E? selectedItem, Widget widget) {
-    
     return AppBar(
       leading: getAppBarLeading(selectedItem),
       title: Text(selectedItem?.actionTitle ?? ""),
       //todo this flow not working
-      actions: selectedItem?.getKey!.currentState?.getAppbarActionsWhenThirdPane(),
+      actions:
+          selectedItem?.getKey?.currentState?.getAppbarActionsWhenThirdPane(),
     );
   }
 
@@ -1381,12 +1381,21 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
   String? _tableName;
   dynamic _extras;
   bool _isLoading = false;
+  int? get iD => this._iD;
+
+  String? get getTableName => this._tableName;
+  int? get getID => this._iD;
+
+
+  bool get getIsLoading => this._isLoading;
 
   @override
   void initState() {
     _iD = widget.iD;
     _tableName = widget.tableName;
     _extras = widget.extras;
+    _extras ??=
+        context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
     super.initState();
   }
 
@@ -1395,6 +1404,8 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
     _iD = widget.iD;
     _tableName = widget.tableName;
     _extras = widget.extras;
+    _extras ??=
+        context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
     super.didUpdateWidget(oldWidget);
   }
 

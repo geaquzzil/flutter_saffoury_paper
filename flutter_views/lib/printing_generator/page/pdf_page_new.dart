@@ -11,15 +11,20 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_self_list_api.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +32,9 @@ import 'package:tuple/tuple.dart';
 
 class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;
+  List<PrintableMaster>? asList;
+  PrintPageType? type;
+  T? customSetting;
 
   PdfPageNew(
       {super.key,
@@ -34,6 +42,9 @@ class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
       super.extras,
       super.tableName,
       this.buildBaseHeader = false,
+      this.asList,
+      this.type,
+      this.customSetting,
       super.buildSecondPane,
       super.isFirstToSecOrThirdPane,
       super.buildDrawer = false});
@@ -69,20 +80,32 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
         onPressed: () async {
           var v = await getSettingLoadDefaultIfNull(context, getExtras());
           await showFullScreenDialogExt<ViewAbstract?>(
+              barrierDismissible: true,
               anchorPoint: const Offset(1000, 1000),
               context: context,
               builder: (p0) {
                 return ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(20),
                   child: Container(
                     // color: Theme.of(context).colorScheme.secondaryContainer,
                     child: IntrinsicWidth(
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width *
-                              (isTablet(context) ? 0.5 : 0.25),
-                          height: MediaQuery.of(context).size.height * .8,
+                              (isTablet(context) ? 0.5 : 0.3),
+                          height: MediaQuery.of(context).size.height,
                           child: BaseEditNewPage(
                             viewAbstract: v as ViewAbstract,
+                            onFabClickedConfirm: (viewAbstract) {
+                              if (viewAbstract != null) {
+                                // notifyNewViewAbstract(viewAbstract.getCopyInstance());
+                                Configurations.save(
+                                    "_printsetting${getExtrasCast().runtimeType}",
+                                    viewAbstract);
+                                printSettingListener.setViewAbstract =
+                                    viewAbstract;
+                                context.pop();
+                              }
+                            },
                           )),
                     ),
                   ),
@@ -310,39 +333,136 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     );
   }
 
+  Widget getPdfPreview(PdfPageFormat fomat) {
+    return PdfPreview(
+        pdfFileName: getExtras()!.getPrintableQrCodeID(),
+        shareActionExtraEmails: const ["info@saffoury.com"],
+        maxPageWidth: getWidth,
+        initialPageFormat: fomat,
+        canDebug: false,
+        scrollViewDecoration:
+            BoxDecoration(color: Theme.of(context).colorScheme.surface),
+        dynamicLayout: true,
+        loadingWidget: const CircularProgressIndicator(),
+        useActions: false,
+        onError: (context, error) {
+          return EmptyWidget(
+              lottiUrl:
+                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+              onSubtitleClicked: () {
+                setState(() {});
+              },
+              title: AppLocalizations.of(context)!.cantConnect,
+              subtitle: error.toString());
+        },
+        // shouldRepaint: ,
+        build: (format) async {
+          if (widget.type == null) {
+            loadedFile = getExcelFileUinit(context, getExtras()!, fomat);
+            loadedFileBytes = await loadedFile;
+            return loadedFileBytes;
+          } else {
+            if (widget.type == PrintPageType.list) {
+              dynamic setting =
+                  await getSetting(context, getExtras() as PrintableMaster);
+
+              loadedFileBytes = await PDFListApi<PrintLocalSetting>(
+                      list: widget.asList!.cast(),
+                      context: context,
+                      setting: setting)
+                  .generate(format);
+              return loadedFileBytes;
+            } else {
+              // PrintLocalSetting? setting = await getSetting();
+              loadedFileBytes = await PdfSelfListApi<PrintLocalSetting>(
+                
+                      widget.asList!.cast(), context, getExtras(),
+                      printCommand: widget.customSetting)
+                  .generate(format);
+              return loadedFileBytes;
+            }
+          }
+        });
+  }
+
+  //    else {
+  //     if (widget.type == PrintPageType.list) {
+  //       return PdfPreview(
+  //           shareActionExtraEmails: const ["info@saffoury.com"],
+  //           initialPageFormat: fomat,
+  //           canChangePageFormat: true,
+  //           canChangeOrientation: true,
+
+  //           // pdfPreviewPageDecoration:
+  //           canDebug: false,
+  //           pageFormats: {
+  //             AppLocalizations.of(context)!.a3ProductLabel: PdfPageFormat.a3,
+  //             AppLocalizations.of(context)!.a4ProductLabel: PdfPageFormat.a4,
+  //             AppLocalizations.of(context)!.a5ProductLabel: PdfPageFormat.a5,
+  //           },
+  //           scrollViewDecoration:
+  //               BoxDecoration(color: Theme.of(context).colorScheme.outline),
+  //           shareActionExtraBody: "shareActionExtraBody",
+  //           dynamicLayout: true,
+  //           loadingWidget: const CircularProgressIndicator(),
+  //           // actions: [Icon(Icons.search), Icon(Icons.ac_unit_sharp)],
+  //           // pdfPreviewPageDecoration: BoxDecoration(color: Colors.green),
+  //           useActions: true,
+
+  //           // shouldRepaint: ,
+  //           build: (format) async {
+  //             dynamic setting =
+  //                 await getSetting(context, getExtras() as PrintableMaster);
+  //             return await PDFListApi(
+  //                     list: widget.asList!.cast(),
+  //                     context: context,
+  //                     setting: setting)
+  //                 .generate(format);
+  //           });
+  //     } else {
+  //       ///self list
+  //       ///
+  //       ///
+
+  //       return PdfPreview(
+  //           shareActionExtraEmails: const ["info@saffoury.com"],
+  //           initialPageFormat: fomat,
+  //           canChangePageFormat: true,
+  //           canChangeOrientation: true,
+  //           // pdfPreviewPageDecoration:
+  //           canDebug: false,
+  //           pageFormats: {
+  //             AppLocalizations.of(context)!.a3ProductLabel: PdfPageFormat.a3,
+  //             AppLocalizations.of(context)!.a4ProductLabel: PdfPageFormat.a4,
+  //             AppLocalizations.of(context)!.a5ProductLabel: PdfPageFormat.a5,
+  //           },
+  //           scrollViewDecoration:
+  //               BoxDecoration(color: Theme.of(context).colorScheme.outline),
+  //           shareActionExtraBody: "shareActionExtraBody",
+  //           dynamicLayout: true,
+  //           loadingWidget: const CircularProgressIndicator(),
+  //           // actions: [Icon(Icons.search), Icon(Icons.ac_unit_sharp)],
+  //           // pdfPreviewPageDecoration: BoxDecoration(color: Colors.green),
+  //           useActions: true,
+
+  //           // shouldRepaint: ,
+  //           build: (format) async {
+  //             // PrintLocalSetting? setting = await getSetting();
+  //             return await PdfSelfListApi(
+  //                     widget.asList!.cast(), context, getExtras(),
+  //                     printCommand: widget.customSetting)
+  //                 .generate(format);
+  //           });
+  //     }
+  //   }
+  // }
+
   Widget getPdfPreviewWidget() {
     return Selector<PrintSettingLargeScreenProvider,
         Tuple2<ViewAbstract?, PdfPageFormat>>(
       builder: (_, provider, __) {
         debugPrint("BasePdfPageConsumer Selector =>  getPdfPageConsumer");
-        return PdfPreview(
-            pdfFileName: getExtras()!.getPrintableQrCodeID(),
-            shareActionExtraEmails: const ["info@saffoury.com"],
-            maxPageWidth: getWidth,
-            initialPageFormat: provider.item2, //todo setting
-            canDebug: false,
-            scrollViewDecoration:
-                BoxDecoration(color: Theme.of(context).colorScheme.surface),
-            dynamicLayout: true,
-            loadingWidget: const CircularProgressIndicator(),
-            useActions: false,
-            onError: (context, error) {
-              return EmptyWidget(
-                  lottiUrl:
-                      "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-                  onSubtitleClicked: () {
-                    setState(() {});
-                  },
-                  title: AppLocalizations.of(context)!.cantConnect,
-                  subtitle: error.toString());
-            },
-            // shouldRepaint: ,
-            build: (format) async {
-              loadedFile =
-                  getExcelFileUinit(context, getExtras()!, provider.item2);
-              loadedFileBytes = await loadedFile;
-              return loadedFileBytes;
-            });
+        return getPdfPreview(provider.item2);
       },
       selector: (ctx, provider) =>
           Tuple2(provider.getViewAbstract, provider.getSelectedFormat),

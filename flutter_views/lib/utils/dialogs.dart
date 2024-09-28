@@ -86,12 +86,12 @@ Future<T?> showBottomSheetExt<T>(
 Future<T?> showFullScreenDialogExt<T>(
     {required BuildContext context,
     required Widget Function(BuildContext) builder,
-    Offset? anchorPoint}) {
+    Offset? anchorPoint,bool barrierDismissible=false }) {
   if (isLargeScreenFromCurrentScreenSize(context)) {
     return showGeneralDialog(
       anchorPoint: anchorPoint,
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: barrierDismissible,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black45,
       transitionBuilder: (

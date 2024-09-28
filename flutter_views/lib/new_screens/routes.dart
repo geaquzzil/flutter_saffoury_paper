@@ -2,7 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -16,10 +16,8 @@ import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
 import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:flutter_view_controller/screens/web/about-us.dart';
 import 'package:flutter_view_controller/screens/web/checout.dart';
 import 'package:flutter_view_controller/screens/web/home.dart';
@@ -437,9 +435,10 @@ class RouteGenerator {
                 if (type == null) {
                   //TODO redirect to 404 not found
                 }
+                //todo when type is list then queryParams has data:[List]
                 Widget w;
                 if (type == FileExporterPageType.LIST.toString()) {
-                  var ex = getRouterStateList(state, state.extra, context);
+                  var ex = getRouterStateList(state, context);
                   w = FileExporterPage(
                     viewAbstract: context
                         .read<AuthProvider<AuthUser>>()
@@ -460,27 +459,17 @@ class RouteGenerator {
               path: "print/:tableName/:type",
               pageBuilder: (context, state) {
                 String? type = state.pathParameters["type"];
-                Widget w;
-                if (type == PrintPageType.single.name.toString()) {
-                  w = PdfPageNew<PrintLocalSetting>(
-                    buildDrawer: true,
-                    iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
-                    tableName: state.pathParameters['tableName'],
-                    extras: state.extra as PrintableMaster?,
-                  );
-                } else if (type == PrintPageType.list.name.toString()) {
-                  var ex = getRouterStateList(state, state.extra, context);
-                  //todo get from api
-                  w = PdfListPage(
-                    list: ex as List<PrintableMaster>,
-                  );
-                } else {
-                  var ex = getRouterStateList(state, state.extra, context);
-                  //todo get from api
-                  w = PdfSelfListPage(
-                    list: ex as List<PrintableSelfListInterface>,
-                  );
-                }
+                Widget w = PdfPageNew<PrintLocalSetting>(
+                  buildDrawer: true,
+                  type: PrintPageType.values
+                      .firstWhereOrNull((o) => o.toString() == type),
+                  iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
+                  asList: getRouterStateList(state, context)
+                      as List<PrintableMaster>?,
+                  tableName: state.pathParameters['tableName'],
+                  extras: state.extra as PrintableMaster?,
+                );
+
                 return MaterialPage(key: state.pageKey, child: w);
               },
             ),
@@ -558,27 +547,15 @@ class RouteGenerator {
     ],
   );
 
-  Object? getRouterStateList(
-      GoRouterState state, Object? extra, BuildContext context) {
-    if (extra != null) return extra;
+  ///[extra] is ViewAbstract
+  ///this function to get list data from route
+  Object? getRouterStateList(GoRouterState state, BuildContext context) {
     String? tableName = state.pathParameters["tableName"];
-    if (extra == null) {
-      String? data = state.uri.queryParameters["data"];
-      if (data != null && tableName != null) {
-        debugPrint("GoRouter data==null && tableName==null");
-        ViewAbstract? v =
-            context.read<AuthProvider<AuthUser>>().getNewInstance(tableName);
-        if (v != null) {
-          List l = v.fromJsonViewAbstractList(data);
-          extra = l;
-        }
-      }
-    }
-    if (extra == null) {
-      //TODO rediredt to 404 error;
-      debugPrint("GoRouter extra==null");
-    }
-    return extra;
+    dynamic extra = state.extra;
+    extra ??=
+        context.read<AuthProvider<AuthUser>>().getNewInstance(tableName ?? "");
+    return extra
+        ?.fromJsonViewAbstractList(state.uri.queryParameters["data"] ?? "");
   }
 
   static dynamic getFromExtra(Map<String, dynamic> extra) {

@@ -13,6 +13,9 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_list_page.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
@@ -169,17 +172,31 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
-  void exportPage(BuildContext context) {
+  ///routes if list is found then extras could be type of [List] and requires [tableName]
+  ///routes if viewAbstract then extras is [ViewAbstract] and required [tableName] TODO [iD]
+  void exportPage(BuildContext context, {List<ViewAbstract>? asList}) {
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
             actionTitle:
                 getIDWithLabel(context, action: ServerActions.custom_widget),
             action: ServerActions.custom_widget,
-            customWidget: FileReaderPage(viewAbstract: this as ViewAbstract)),
+            customWidget: FileExporterPage(
+              viewAbstract: this as ViewAbstract,
+              list: asList,
+            )),
         tryToSetToSecoundPane: false)) {
       context.goNamed(exportRouteName,
-          pathParameters: getRoutePathParameters(), extra: this);
+          pathParameters: {
+            "tableName": getTableNameApi()!,
+            "type": asList != null
+                ? FileExporterPageType.LIST.toString()
+                : FileExporterPageType.SINGLE.toString(),
+          },
+          queryParameters: {
+            if (asList != null) "data": toJsonViewAbstractList(asList.cast())
+          },
+          extra: asList ?? this);
     }
   }
 
@@ -190,7 +207,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             actionTitle:
                 getIDWithLabel(context, action: ServerActions.custom_widget),
             action: ServerActions.custom_widget,
-            customWidget: FileExporterPage(viewAbstract: this as ViewAbstract)),
+            customWidget: FileReaderPage(viewAbstract: this as ViewAbstract)),
         tryToSetToSecoundPane: false)) {
       context.goNamed(importRouteName,
           pathParameters: getRoutePathParameters(), extra: this);
@@ -296,31 +313,62 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
-  void printPage(BuildContext context, {bool standAlone = false}) {
+  void printPage(BuildContext context,
+      {bool standAlone = false,
+      List<ViewAbstract>? list,
+      bool? isSelfListPrint}) {
+    bool isListPrint = list != null;
+    bool isSelfList = isSelfListPrint ?? false;
+    PrintPageType type = !isListPrint
+        ? PrintPageType.single
+        : isSelfList
+            ? PrintPageType.self_list
+            : PrintPageType.list;
+    final typeString = type.toString();
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
             actionTitle: getIDWithLabel(context, action: ServerActions.print),
-            action: ServerActions.print,
+            action: ServerActions.custom_widget,
+            customWidget: PdfPageNew(
+              buildSecondPane: false,
+              isFirstToSecOrThirdPane: true,
+              asList: list?.cast(),
+              type: type,
+              iD: iD,
+              tableName: getTableNameApi(),
+              extras: this,
+            ),
             viewAbstract: this as ViewAbstract),
         tryToSetToSecoundPane: false)) {
-      if (standAlone) {
-        context.pushNamed(printRouteName,
-            pathParameters: {
-              "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
-              "type": PrintPageType.single.toString()
-            },
-            queryParameters: {"id": "$iD"},
-            extra: this);
-      } else {
-        context.goNamed(printRouteName,
-            pathParameters: {
-              "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
-              "type": PrintPageType.single.toString()
-            },
-            queryParameters: {"id": "$iD"},
-            extra: this);
-      }
+      context.goNamed(printRouteName,
+          pathParameters: {
+            "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+            "type": typeString
+          },
+          queryParameters: {
+            "id": "$iD",
+            if (list != null) "data": toJsonViewAbstractList(list)
+          },
+          extra: this);
+
+      // if (standAlone) {
+      //   context.pushNamed(printRouteName,
+      //       pathParameters: {
+      //         "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+      //         "type": typeString
+      //       },
+      //       queryParameters: {"id": "$iD"},
+      //       extra: this);
+      // } else {
+      //   context.goNamed(printRouteName,
+      //       pathParameters: {
+      //         "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+      //         "type": typeString
+      //       },
+      //       queryParameters: {"id": "$iD"},
+      //       extra: this);
+      // }
     }
   }
 
