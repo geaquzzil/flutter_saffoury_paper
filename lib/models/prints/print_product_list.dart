@@ -13,6 +13,11 @@ import '../products/products.dart';
 
 part 'print_product_list.g.dart';
 
+//todo disable some settings on inventory process
+///Disable hidQuantiy
+///Disable wareHouse
+///Disable 
+///Disable Date
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PrintProductList extends PrintLocalSetting<PrintProductList> {

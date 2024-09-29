@@ -3,11 +3,11 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 
 abstract class PrintableComparableListInterface<T extends PrintLocalSetting> {
-  List<PrintableSelfListInterface> getComparedList();
-  Map<String, String> getPrintableComparableTableHeaderAndContent(
-      BuildContext context, dynamic item,dynamic comparedItem, T? pca);
-  bool compare(dynamic item, dynamic comparedItem);
+  List? getComparableList();
 
+  Map<String, String> getPrintableComparableTableHeaderAndContent(
+      BuildContext context, dynamic item, dynamic comparedItem, T? pca);
+  bool compare(dynamic item, dynamic comparedItem);
 }
 
 abstract class PrintableSelfListInterface<T extends PrintLocalSetting> {

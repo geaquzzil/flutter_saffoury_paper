@@ -83,6 +83,9 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   int testBarCode = 1000;
   final keyInventory =
       GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invontery');
+
+  final keyInventoryFilterList =
+      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invonteryfilter');
   final keyToImportFrom =
       GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'import');
   final keyToExportTo =
@@ -331,6 +334,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 toListObject: Product.requiresInventory(),
                 scrollController: scrollController,
                 requiresFullFetsh: true,
+                key: keyInventoryFilterList,
                 hasCustomWidgetBuilder: (response) {
                   return SliverFillRemaining(
                     child: Product().getSummary(
@@ -699,8 +703,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 if (l != null) {
                   debugPrint("onPrint");
                   //todo
-                  
+
                   inventoryProduct.setFilterableMap(filterData ?? {});
+                  inventoryProduct.setComparedList =
+                      (keyInventoryFilterList.currentState?.getList());
                   inventoryProduct.printDialog(context,
                       list: l.cast(), isSelfListPrint: true, standAlone: true);
                 }

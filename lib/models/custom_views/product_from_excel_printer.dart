@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product_list.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProductFromExcel extends Product {
   @override
@@ -149,4 +149,5 @@ class ProductFromExcel extends Product {
       //     ),
     ];
   }
+  
 }

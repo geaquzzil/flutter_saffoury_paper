@@ -33,6 +33,20 @@ extension toStringKeyValue on Map<dynamic, dynamic> {
 }
 
 extension toStringList on List {
+  double sumCustom<T>(double Function(T t) toElement) {
+    return isEmpty
+        ? 0
+        : map((t) => toElement.call(t))
+            .reduce((value, element) => (value) + (element));
+  }
+
+  String sumToCurrencyFormat<T>(double Function(T t) toElement,
+      {String symbol = ""}) {
+    return sumCustom(
+      toElement
+    ).toCurrencyFormat(symbol:symbol );
+  }
+
   String getString(
       {required BuildContext context,
       PrintLocalSetting? setting,

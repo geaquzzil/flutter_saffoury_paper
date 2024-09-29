@@ -101,6 +101,7 @@ class Product extends ViewAbstract<Product>
         PrintableSelfListInterface<PrintProductList>,
         PosableInterface,
         WebCategoryGridableInterface<Product>,
+        PrintableComparableListInterface<PrintProductList>,
         SharableInterface,
         ExcelableReaderInterace {
   // int? ParentID;
@@ -201,7 +202,6 @@ class Product extends ViewAbstract<Product>
   Product() : super() {
     date = "".toDateTimeNowString();
     status = ProductStatus.NONE;
-    inStock.where
   }
 
   Product.disableCustomFilterable({this.disbleStatusAndSizeOnFilter = true});
@@ -1620,6 +1620,49 @@ class Product extends ViewAbstract<Product>
       });
     }
 
+    return isComparablePrint()
+        ? getInvoiceDesWhenComparable(pca, context, list)
+        : getInvoiceDesWhenNotComparable(pca, context, total);
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesWhenComparable(
+      PrintProductList? pca, BuildContext context, List<Product> list) {
+    return [
+      InvoiceHeaderTitleAndDescriptionInfo(
+          //todo translate
+          title: "C.I.Q: Current invdntory quantity",
+          description: "${list.sumToCurrencyFormat(
+            (t) => (t as Product).qrQuantity.toNonNullable(),
+          )} items: ${list.where((p) => p.qrQuantity != 0).length}",
+          hexColor: getPrintablePrimaryColor(
+              PrintProduct()..primaryColor = pca?.primaryColor)
+          // icon: Icons.tag
+          ),
+      InvoiceHeaderTitleAndDescriptionInfo(
+          //todo translate
+          title: "TOTAL ",
+          description: list.sumToCurrencyFormat(
+            (t) => (t as Product).getQuantity().toNonNullable(),
+          ),
+          hexColor: getPrintablePrimaryColor(
+              PrintProduct()..primaryColor = pca?.primaryColor)
+          // icon: Icons.tag
+          ),
+      InvoiceHeaderTitleAndDescriptionInfo(
+          //todo translate
+          title: "Remainig ",
+          description: list.sumToCurrencyFormat(
+            (t) => (t as Product).getQuantityFromTow(t, t),
+          ),
+          hexColor: getPrintablePrimaryColor(
+              PrintProduct()..primaryColor = pca?.primaryColor)
+          // icon: Icons.tag
+          ),
+    ];
+  }
+
+  List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesWhenNotComparable(
+      PrintProductList? pca, BuildContext context, double? total) {
     return [
       if (pca?.currentGroupNameFromList != null)
         InvoiceHeaderTitleAndDescriptionInfo(
@@ -1657,6 +1700,10 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
+  bool isComparablePrint() {
+    return getComparableList() != null && getComparableList()!.isNotEmpty;
+  }
+
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
       BuildContext context, List<Product> list, PrintProductList? pca) {
     // if (customers == null) return [];
@@ -1672,11 +1719,12 @@ class Product extends ViewAbstract<Product>
     });
 
     return [
-      InvoiceHeaderTitleAndDescriptionInfo(
-        title: AppLocalizations.of(context)!.filter,
-        description: results.join("\n"),
-        // icon: Icons.account_circle_rounded
-      ),
+      if (getLastFilterableMap!.isNotEmpty)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: AppLocalizations.of(context)!.filter,
+          description: results.join("\n"),
+          // icon: Icons.account_circle_rounded
+        ),
       if (pca?.groupedByField != null)
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.grainOn,
@@ -1850,6 +1898,47 @@ class Product extends ViewAbstract<Product>
         getModifiablePrintableSelfPdfSetting(context).copyWithEnableAll();
     return getPrintableSelfListTableHeaderAndContent(context, this, settings)
         .getString(newLineOnSubDetials: true);
+  }
+
+  @override
+  bool compare(item, comparedItem) {
+    if (item == null || comparedItem == null) {
+      return false;
+    }
+    return item?.iD == comparedItem?.iD;
+  }
+
+  double getQuantityFromTow(dynamic current, dynamic comparable) {
+    Product? p = current as Product?;
+    Product? comp = comparable as Product?;
+    return (p?.getQuantity().toNonNullable() ?? 0) -
+        (p?.qrQuantity.toNonNullable() ?? 0);
+  }
+
+  @override
+  Map<String, String> getPrintableComparableTableHeaderAndContent(
+      BuildContext context, item, comparedItem, PrintProductList? pca) {
+    debugPrint(
+        "getPrintableComparableTableHeaderAndContent  item=> ${item.runtimeType} compared=>${comparedItem.runtimeType}");
+    return {
+      //todo translate
+      //Current Inventory Quantity
+      "C.I.Q":
+          item == null ? "0" : (item as Product).qrQuantity.toCurrencyFormat(),
+      AppLocalizations.of(context)!.remaning:
+          getQuantityFromTow(item, comparedItem).toString()
+    };
+  }
+
+  List? _comparedList;
+
+  set setComparedList(List? l) {
+    _comparedList = l;
+  }
+
+  @override
+  List? getComparableList() {
+    return _comparedList;
   }
 
   // @override
