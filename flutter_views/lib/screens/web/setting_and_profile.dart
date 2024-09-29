@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
-import 'package:flutter_view_controller/new_screens/setting/list_sticky_setting_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_list_grouped.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
@@ -15,6 +19,7 @@ import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
+import 'package:supercharged/supercharged.dart';
 
 import '../../customs_widget/sliver_delegates.dart';
 
@@ -190,19 +195,140 @@ class Logout extends StatelessWidget {
   }
 }
 
-class PrintSetting extends StatelessWidget {
-  const PrintSetting({super.key});
+class PrintSetting extends BasePage {
+  PrintSetting({super.key, super.buildSecondPane});
 
-s
   @override
-  Widget build(BuildContext context) {
-    return const Row(
-      children: [
-        Expanded(child: ListStickySettingWidget()),
-        Expanded(flex: 3, child: Text("sad")),
-      ],
+  State<PrintSetting> createState() => _PrintSettingState();
+}
+
+class _PrintSettingState extends BasePageState<PrintSetting> {
+  late Map<String, List<dynamic>> _list;
+  Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      width: double.infinity,
+      child: Row(
+        children: <Widget>[
+          Icon(
+            item.icon,
+            size: 15,
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                item.actionTitle,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
+
+  Widget _getItem(BuildContext ctx, ModifiableInterface element) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 40,
+      child: ListTile(
+        // selectedTileColor: Colors.white,
+        selected: ctx.watch<SettingProvider>().getSelectedObject?.hashCode ==
+            element.hashCode,
+        onTap: () {
+          ctx.read<SettingProvider>().change(element);
+        },
+        // contentPadding:
+        //     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        leading: Icon(
+          element.getModifibleIconData(),
+          size: 15,
+        ),
+        title: Text(
+          element.getModifibleTitleName(ctx),
+          style: Theme.of(ctx).textTheme.bodySmall,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<ModifiableInterface> modifieableList =
+        context.read<SettingProvider>().getModifiableListSetting(context);
+    _list = modifieableList.groupBy(
+      (element) => element.getModifiableMainGroupName(context),
+    );
+    return super.build(context);
+  }
+
+  @override
+  Widget? getAppbarTitle(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
+  }
+
+  @override
+  Widget? getFloatingActionButton(
+      {bool? firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    return null;
+  }
+
+  @override
+  getPane(
+      {required bool firstPane,
+      TabControllerHelper? tab,
+      TabControllerHelper? secoundTab}) {
+    // debugPrint("PrintSetting $f");
+    if (firstPane) {
+      return getListStickyWidget(
+          context,
+          _list.entries
+              .map(
+                (e) => StickyItem(
+                    title: e.key,
+                    widgets: e.value
+                        .map(
+                          (c) => _getItem(context, c),
+                        )
+                        .toList()),
+              )
+              .toList());
+    } else {
+      return [
+        const SliverToBoxAdapter(
+          child: Text("dsa"),
+        )
+      ];
+    }
+  }
+
+  @override
+  bool isPaneScaffoldOverlayColord(bool firstPane,
+          {TabControllerHelper? tab}) =>
+      false;
+
+  @override
+  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => true;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
+
+  @override
+  bool setMainPageSuggestionPadding() => false;
+
+  @override
+  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+
+  @override
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
 }
 
 class AdminSetting extends StatelessWidget {

@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/new_components/lists/headers/rounded_cor
 import 'package:flutter_view_controller/new_screens/filterables/custom_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/filterables/master_list_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:provider/provider.dart';

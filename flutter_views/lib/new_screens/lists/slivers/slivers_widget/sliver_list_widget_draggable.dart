@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:rxdart/rxdart.dart';
 

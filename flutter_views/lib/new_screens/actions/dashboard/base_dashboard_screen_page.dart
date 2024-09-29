@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -349,11 +349,18 @@ class SectionItemHeaderI extends MultiSliver {
       Widget? child})
       : super(
           children: [
+            
             if (pinHeader)
               SliverPinnedHeader(
+                
                 child: Container(
+
                     padding: const EdgeInsets.all(kDefaultPadding),
-                    // color: Theme.of(context).scaffoldBackgroundColor,
+                    //todo
+                    color: ElevationOverlay.colorWithOverlay(
+                        Theme.of(context).colorScheme.surface,
+                        Theme.of(context).colorScheme.surfaceBright,
+                        10),
                     child: title),
               )
             else

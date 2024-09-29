@@ -10,7 +10,7 @@ import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashb
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';

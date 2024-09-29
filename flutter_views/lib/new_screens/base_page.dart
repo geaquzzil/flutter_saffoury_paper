@@ -26,7 +26,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_list_widget_draggable.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_list_widget_draggable.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
