@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/globals.dart';
@@ -20,6 +22,7 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -343,6 +346,16 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             extras: this,
           );
         });
+  }
+
+  Future<void> printDirect(BuildContext context, Uint8List file) async {
+    Printer? p = await Printing.pickPrinter(context: context);
+    if (p != null) {
+      Printing.directPrintPdf(
+        onLayout: (format) => file,
+        printer: p,
+      );
+    }
   }
 
   void printPage(BuildContext context,

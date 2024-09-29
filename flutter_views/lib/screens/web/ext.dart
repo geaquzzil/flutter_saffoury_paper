@@ -42,7 +42,7 @@ Widget getWidgetFromProfile(
     {required BuildContext context,
     ActionOnToolbarItem? value,
     required bool pinToolbar,
-     ValueNotifier<ActionOnToolbarItem?>? valueNotifier}) {
+    ValueNotifier<ActionOnToolbarItem?>? valueNotifier}) {
   if (value == null) {
     return const Center(
       child: Text("Select setting to show"),
@@ -52,6 +52,10 @@ Widget getWidgetFromProfile(
     return const Logout();
   } else if (value.icon == Icons.help_outline_rounded) {
     return const Help();
+  } else if (value.icon == Icons.admin_panel_settings) {
+    return const AdminSetting();
+  } else if (value.icon == Icons.local_print_shop) {
+    return const PrintSetting();
   } else if (value.icon == Icons.account_box_outlined) {
     return const ProfileEdit();
   } else if (value.icon == Icons.shopping_basket_rounded) {

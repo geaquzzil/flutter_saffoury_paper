@@ -100,9 +100,11 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   bool hasNotificationWidget() {
     return _notificationHandler != null;
   }
-  NotificationHandlerInterface getNotificationHandler(){
+
+  NotificationHandlerInterface getNotificationHandler() {
     return _notificationHandler!;
   }
+
   static bool isLoggedIn(BuildContext context) {
     return context.read<AuthProvider<AuthUser>>().getUser.login == true;
   }
@@ -119,6 +121,8 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
   bool isGoodsInventory(BuildContext context) =>
       _permissions.isGoodsInventoryWorker(context);
+
+  bool isAdmin(BuildContext context) => _permissions.isAdmin(context);
 
   Map<String?, List<ViewAbstract>> get getDrawerItemsGrouped =>
       __drawerItemsGrouped;

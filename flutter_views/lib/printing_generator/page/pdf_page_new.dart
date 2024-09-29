@@ -61,7 +61,9 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         child: const Icon(Icons.share),
-        onPressed: () async => await Printing.sharePdf(bytes: loadedFileBytes));
+        onPressed: () async {
+          await Printing.sharePdf(bytes: loadedFileBytes);
+        });
   }
 
   Widget getPrintFloating(BuildContext context) {
@@ -330,6 +332,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
 
   Widget getPdfPreview(PdfPageFormat fomat) {
     return PdfPreview(
+        pages: const [0, 1],
         pdfFileName: getExtras()!.getPrintableQrCodeID(),
         shareActionExtraEmails: const ["info@saffoury.com"],
         maxPageWidth: getWidth,

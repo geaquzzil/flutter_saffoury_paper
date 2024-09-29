@@ -177,6 +177,37 @@ class Product extends ViewAbstract<Product>
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool isInventoryWorker = false;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  double? totalInventoryQuantity;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  int? totalInventoryItmes;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  double? totalQrQuantity;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  int? totalQrItems;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  double? totalRemaining;
+
+  void setTotalsFromPrintable(List<Product> list) {
+    totalQrQuantity ??= list.sumCustom<Product>(
+      (t) => t.qrQuantity.toNonNullable(),
+    );
+    totalInventoryQuantity ??= list.sumCustom<Product>(
+      (t) => t.getQuantity().toNonNullable(),
+    );
+    totalInventoryItmes ??= list.length;
+    totalQrItems ??= list
+        .where(
+          (t) => t.qrQuantity != null,
+        )
+        .length;
+    totalRemaining ??=
+        list.sumCustom<Product>((o) => o.getQuantityFromTow(o, o));
+  }
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
@@ -1587,6 +1618,7 @@ class Product extends ViewAbstract<Product>
   Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?
       getPrintableSelfListHeaderInfo(
           BuildContext context, List list, PrintProductList? pca) async {
+    setTotalsFromPrintable(list.cast());
     return [
       getInvoicDesFirstRow(context, list.cast(), pca),
       getInvoiceDesSecRow(context, list.cast(), pca),
@@ -1631,9 +1663,7 @@ class Product extends ViewAbstract<Product>
       InvoiceHeaderTitleAndDescriptionInfo(
           //todo translate
           title: "C.I.Q: Current invdntory quantity",
-          description: "${list.sumToCurrencyFormat(
-            (t) => (t as Product).qrQuantity.toNonNullable(),
-          )} items: ${list.where((p) => p.qrQuantity != 0).length}",
+          description: "$totalQrQuantity items: $totalQrItems",
           hexColor: getPrintablePrimaryColor(
               PrintProduct()..primaryColor = pca?.primaryColor)
           // icon: Icons.tag
@@ -1641,9 +1671,7 @@ class Product extends ViewAbstract<Product>
       InvoiceHeaderTitleAndDescriptionInfo(
           //todo translate
           title: "TOTAL ",
-          description: list.sumToCurrencyFormat(
-            (t) => (t as Product).getQuantity().toNonNullable(),
-          ),
+          description: "$totalInventoryQuantity items: $totalInventoryItmes",
           hexColor: getPrintablePrimaryColor(
               PrintProduct()..primaryColor = pca?.primaryColor)
           // icon: Icons.tag
@@ -1651,9 +1679,7 @@ class Product extends ViewAbstract<Product>
       InvoiceHeaderTitleAndDescriptionInfo(
           //todo translate
           title: "Remainig ",
-          description: list.sumToCurrencyFormat(
-            (t) => (t as Product).getQuantityFromTow(t, t),
-          ),
+          description: totalRemaining.toCurrencyFormat(),
           hexColor: getPrintablePrimaryColor(
               PrintProduct()..primaryColor = pca?.primaryColor)
           // icon: Icons.tag

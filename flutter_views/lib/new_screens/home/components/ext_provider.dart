@@ -18,6 +18,10 @@ List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
   AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
   if (authProvider.hasSavedUser) {
     menuItems = [
+      if (authProvider.isAdmin(context))
+        ActionOnToolbarItem(
+            actionTitle: AppLocalizations.of(context)!.adminSetting,
+            icon: Icons.admin_panel_settings),
       ActionOnToolbarItem(
           actionTitle: authProvider.getUserName, icon: Icons.chat_bubble),
       ActionOnToolbarItem(
@@ -27,9 +31,12 @@ List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
       ActionOnToolbarItem(
           actionTitle: AppLocalizations.of(context)!.orders,
           icon: Icons.shopping_basket_rounded),
+      // ActionOnToolbarItem(
+      //     actionTitle: AppLocalizations.of(context)!.chat,
+      //     icon: Icons.chat_bubble),
       ActionOnToolbarItem(
-          actionTitle: AppLocalizations.of(context)!.chat,
-          icon: Icons.chat_bubble),
+          actionTitle: AppLocalizations.of(context)!.printerSetting,
+          icon: Icons.local_print_shop),
       ActionOnToolbarItem(
           actionTitle: AppLocalizations.of(context)!.help,
           icon: Icons.help_outline_rounded),
@@ -90,6 +97,7 @@ void addFilterableSelectedStringValue(BuildContext context, String field,
 void clearFilterableSelected(BuildContext context, String field) {
   context.read<FilterableProvider>().clear(field: field);
 }
+
 ///TODO context.read deprecated
 List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context,
     {Map<String, FilterableProviderHelper>? map}) {

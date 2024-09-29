@@ -174,7 +174,7 @@ class RouteGenerator {
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
-        // return homeLocation;
+        return homeLocation;
         return goodsInventoryLocation;
       } else if (authProvider.isPOS(context)) {
         return posRouteName;
