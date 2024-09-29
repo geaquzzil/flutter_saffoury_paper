@@ -106,7 +106,7 @@ Future<PrintLocalSetting?> getSettingLoadDefaultIfNullSelfList(
     BuildContext context, PrintableSelfListInterface firstObj) async {
   dynamic value = (firstObj).getModifiablePrintableSelfPdfSetting(context);
   PrintLocalSetting pls = await Configurations.get(value,
-          customKey: "_printsettingSelf${firstObj.runtimeType}") ??
+          customKey: "_printsetting${firstObj.runtimeType}") ??
       value;
 
   pls = pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);

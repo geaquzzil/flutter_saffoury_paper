@@ -87,6 +87,8 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                   viewAbstract: v as ViewAbstract,
                   onFabClickedConfirm: (viewAbstract) {
                     if (viewAbstract != null) {
+                      debugPrint(
+                          "BasePdfPageConsumer newViewAbstract $viewAbstract");
                       // notifyNewViewAbstract(viewAbstract.getCopyInstance());
                       Configurations.save(
                           "_printsetting${getExtrasCast().runtimeType}",
@@ -350,9 +352,8 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
         },
         // shouldRepaint: ,
         build: (format) async {
+          dynamic setting = await getSettingFuture();
           if (widget.type == PrintPageType.list) {
-            dynamic setting =
-                await getSetting(context, getExtras() as PrintableMaster);
             loadedFileBytes = await PDFListApi<PrintLocalSetting>(
                     list: widget.asList!.cast(),
                     context: context,
@@ -363,11 +364,12 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
             // PrintLocalSetting? setting = await getSetting();
             loadedFileBytes = await PdfSelfListApi<PrintLocalSetting>(
                     widget.asList!.cast(), context, getExtras(),
-                    printCommand: widget.customSetting)
+                    printCommand: setting)
                 .generate(format);
             return loadedFileBytes;
           } else {
-            loadedFile = getExcelFileUinit(context, getExtras()!, fomat);
+            loadedFile = getExcelFileUinit(context, getExtras()!, fomat,
+                hasCustomSetting: setting as PrintLocalSetting);
             loadedFileBytes = await loadedFile;
             return loadedFileBytes;
           }

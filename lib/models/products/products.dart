@@ -173,6 +173,9 @@ class Product extends ViewAbstract<Product>
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool disbleStatusAndSizeOnFilter = false;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  bool isInventoryWorker = false;
+
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "status": ProductStatus.NONE,
@@ -198,14 +201,24 @@ class Product extends ViewAbstract<Product>
   Product() : super() {
     date = "".toDateTimeNowString();
     status = ProductStatus.NONE;
+    inStock.where
   }
 
   Product.disableCustomFilterable({this.disbleStatusAndSizeOnFilter = true});
 
   Product.requiresInventory() {
     setCustomMap({"requireInventory": "true"});
+    date = "".toDateTimeNowString();
+    status = ProductStatus.NONE;
   }
 
+  Product.inventoryWorker() {
+    setCustomMap({"requireInventory": "true"});
+    disbleStatusAndSizeOnFilter = true;
+    isInventoryWorker = true;
+    date = "".toDateTimeNowString();
+    status = ProductStatus.NONE;
+  }
   @override
   Product copyWithSetNewFileReader() {
     date = "".toDateTimeNowString();
@@ -1392,6 +1405,7 @@ class Product extends ViewAbstract<Product>
     if (productList.isEmpty) {
       return Card(
         child: ListTile(
+          //todo translate
           title: const Text("Select filter data to view list"),
           subtitle: const Text(
               "Start filtering by presssing the filter data to view summary"),
@@ -1646,20 +1660,21 @@ class Product extends ViewAbstract<Product>
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
       BuildContext context, List<Product> list, PrintProductList? pca) {
     // if (customers == null) return [];
+
     List<FilterableProviderHelper> finalList =
-        getAllSelectedFiltersRead(context);
+        getAllSelectedFiltersRead(context, map: getLastFilterableMap);
 
     var t = finalList.groupBy((item) => item.mainFieldName,
         valueTransform: (v) => v.mainValuesName[0]);
     List<String> results = [];
     t.forEach((key, value) {
-      results.add("-$key:\n$value\n");
+      results.add("- $key:\n  ${value.join(",")}\n");
     });
 
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
         title: AppLocalizations.of(context)!.filter,
-        description: results.join("\n\n"),
+        description: results.join("\n"),
         // icon: Icons.account_circle_rounded
       ),
       if (pca?.groupedByField != null)
@@ -1688,7 +1703,9 @@ class Product extends ViewAbstract<Product>
   @override
   String getPrintableSelfListInvoiceTitle(
       BuildContext context, PrintProductList? pca) {
-    return getMainHeaderLabelTextOnly(context);
+    return isInventoryWorker
+        ? AppLocalizations.of(context)!.inventoryprocess
+        : getMainHeaderLabelTextOnly(context);
   }
 
   @override
@@ -1725,6 +1742,9 @@ class Product extends ViewAbstract<Product>
       if (((pca?.hideQuantity == false)))
         AppLocalizations.of(context)!.quantity:
             item.getQuantity().toCurrencyFormat(),
+      if (((pca?.hideWarehouse == false)))
+        AppLocalizations.of(context)!.availableIn:
+            item.getWareHouseAvailableIn(context),
       if (((pca?.hideUnitPriceAndTotalPrice == false)))
         AppLocalizations.of(context)!.unit_price:
             item.getUnitSellPrice().toCurrencyFormatFromSetting(context),
@@ -1813,6 +1833,15 @@ class Product extends ViewAbstract<Product>
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
     return null;
+  }
+
+  String getWareHouseAvailableIn(BuildContext context,
+      {String joinString = "\n"}) {
+    return inStock
+            ?.map((o) => o.warehouse?.name ?? "")
+            .toList()
+            .join(joinString) ??
+        "-";
   }
 
   @override

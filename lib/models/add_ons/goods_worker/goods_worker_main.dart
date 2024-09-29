@@ -109,9 +109,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   void initState() {
     super.initState();
     _notifier.addListener(whenFileReaderImportList);
-    inventoryProduct = Product();
+    inventoryProduct = Product.inventoryWorker();
     inventoryProduct.requireObjcetsResquest = false;
-    inventoryProduct.setCustomMap({"requireInventory": "yes"});
   }
 
   @override
@@ -232,7 +231,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   Widget getFilterIcon() {
     return FilterIcon(
-      viewAbstract: Product.disableCustomFilterable(),
+      viewAbstract: Product.inventoryWorker(),
       initialData: filterData,
       onDoneClickedPopResults: (v) {
         if (v is bool) {
@@ -353,7 +352,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
       );
     }
     return SliverApiMixinViewAbstractWidget(
-      toListObject: Product.requiresInventory(),
+      toListObject: Product.inventoryWorker(),
       requiresFullFetsh: true,
       hasCustomWidgetBuilder: (response) {
         return SliverToBoxAdapter(
@@ -700,7 +699,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
                 if (l != null) {
                   debugPrint("onPrint");
                   //todo
-                  2
+                  
                   inventoryProduct.setFilterableMap(filterData ?? {});
                   inventoryProduct.printDialog(context,
                       list: l.cast(), isSelfListPrint: true, standAlone: true);

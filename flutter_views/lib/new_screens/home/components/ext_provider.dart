@@ -90,9 +90,11 @@ void addFilterableSelectedStringValue(BuildContext context, String field,
 void clearFilterableSelected(BuildContext context, String field) {
   context.read<FilterableProvider>().clear(field: field);
 }
-
-List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context) {
-  var list = context.read<FilterableProvider>().getList.values.toList();
+///TODO context.read deprecated
+List<FilterableProviderHelper> getAllSelectedFiltersRead(BuildContext context,
+    {Map<String, FilterableProviderHelper>? map}) {
+  var list = map?.values.toList() ??
+      context.read<FilterableProvider>().getList.values.toList();
   var listSelectd = list
       .map((master) => master.values
           .map((e) => FilterableProviderHelper(

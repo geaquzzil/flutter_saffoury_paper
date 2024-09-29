@@ -56,6 +56,9 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   SortFieldValue? get getSortFieldValue =>
       this._sortFieldValue ?? getSortByInitialType();
 
+  Map<String, FilterableProviderHelper>? get getLastFilterableMap =>
+      _lastFilterableMap;
+
   set setSortFieldValue(SortFieldValue? value) => this._sortFieldValue = value;
 
   String getForeignKeyName() {
