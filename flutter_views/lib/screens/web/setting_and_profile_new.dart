@@ -69,7 +69,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane,
           {TabControllerHelper? tab}) =>
-      true;
+      false;
 
   @override
   bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
@@ -78,14 +78,14 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setMainPageSuggestionPadding() =>
-      isLargeScreenFromCurrentScreenSize(context);
+  bool setMainPageSuggestionPadding() => false;
+  // isLargeScreenFromCurrentScreenSize(context);
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
   ActionOnToolbarItem onActionInitial() {

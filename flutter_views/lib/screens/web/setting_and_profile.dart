@@ -5,9 +5,11 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_list_grouped.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
@@ -262,7 +264,55 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
     _list = modifieableList.groupBy(
       (element) => element.getModifiableMainGroupName(context),
     );
-    return super.build(context);
+    return LayoutBuilder(builder: (context, c) {
+      return Scaffold(
+        body: TowPaneExt(
+          customPaneProportion: .3,
+          startPane: Scaffold(
+            body: SliverCustomScrollView(
+              slivers: getListStickyWidget(
+                  context,
+                  _list.entries
+                      .map(
+                        (e) => StickyItem(
+                            title: e.key,
+                            widgets: e.value
+                                .map(
+                                  (c) => _getItem(context, c),
+                                )
+                                .toList()),
+                      )
+                      .toList()),
+            ),
+          ),
+          endPane: const Scaffold(body: Text("Dsada")),
+        ),
+      );
+    });
+    return Scaffold(
+      body: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: SliverCustomScrollView(
+                slivers: getListStickyWidget(
+                    context,
+                    _list.entries
+                        .map(
+                          (e) => StickyItem(
+                              title: e.key,
+                              widgets: e.value
+                                  .map(
+                                    (c) => _getItem(context, c),
+                                  )
+                                  .toList()),
+                        )
+                        .toList()),
+              )),
+          const Expanded(flex: 3, child: Text("Dsada")),
+        ],
+      ),
+    );
   }
 
   @override

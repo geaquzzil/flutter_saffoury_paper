@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/responsive_scroll.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SliverCustomScrollView extends StatefulWidget {
@@ -87,32 +88,35 @@ class _SliverCustomScrollViewDraggableState
 
   Widget sliver() {
     return SafeArea(
-      child: CustomScrollView(
-          controller: _scrollController,
-          physics: widget.physics ??
-              const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-          slivers: [
-            if (widget.builderAppbar != null)
-              StreamBuilder<List<bool>>(
-                stream: CombineLatestStream.list<bool>([
-                  isFullyCollapsed.stream,
-                  isFullyExpanded.stream,
-                ]),
-                builder:
-                    (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-                  final List<bool> streams = (snapshot.data ?? [false, false]);
-                  final bool fullyCollapsed = streams[0];
-                  final bool fullyExpanded = streams[1];
-                  return widget.builderAppbar!
-                      .call(fullyCollapsed, fullyExpanded);
-                },
-              ),
-            if (widget.builder != null)
-              ...widget.builder!.call(_scrollController)
-            else
-              ...widget.slivers
-          ]),
+      child: ResponsiveScroll(
+        controller: _scrollController,
+        child: CustomScrollView(
+            controller: _scrollController,
+            physics: widget.physics ??
+                const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              if (widget.builderAppbar != null)
+                StreamBuilder<List<bool>>(
+                  stream: CombineLatestStream.list<bool>([
+                    isFullyCollapsed.stream,
+                    isFullyExpanded.stream,
+                  ]),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                    final List<bool> streams = (snapshot.data ?? [false, false]);
+                    final bool fullyCollapsed = streams[0];
+                    final bool fullyExpanded = streams[1];
+                    return widget.builderAppbar!
+                        .call(fullyCollapsed, fullyExpanded);
+                  },
+                ),
+              if (widget.builder != null)
+                ...widget.builder!.call(_scrollController)
+              else
+                ...widget.slivers
+            ]),
+      ),
     );
   }
 

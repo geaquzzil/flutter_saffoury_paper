@@ -690,7 +690,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           MediaQuery.of(context).hinge != null) {
         return 0.5;
       }
-      if (SizeConfig.isMediumFromScreenSize(context)) {
+      if (SizeConfig.isMediumFromScreenSize(context,width:getWidth)) {
         return 0.5;
       } else {
         double defualtWidth = 0;
@@ -1019,9 +1019,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           }
         },
         mobile: (w, h) {
+          debugPrint("BasePage forcing mobile widget");
           _firstWidget = beforeGetPaneWidget(firstPane: true);
           _firstWidget = _setSubAppBar(_firstWidget, true)!;
-          return _firstWidget;
+          return _getMainWidget();
         },
         smallTablet: (w, h) {
           return _getMainWidget();
@@ -1144,7 +1145,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   Widget getTowPanes({TabControllerHelper? tab, TabControllerHelper? sec}) {
     debugPrint("BasePage getTowPanes width=$getWidth ");
     if (isMobile(context, maxWidth: getWidth)) {
-      debugPrint("BasePage getTowPanes started");
+      debugPrint("BasePage getTowPanes isMobile");
       _firstWidget = beforeGetPaneWidget(firstPane: true, tab: tab);
       _firstWidget = _setSubAppBar(_firstWidget, true)!;
       return _firstWidget;
@@ -1202,7 +1203,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return getPaneExt();
   }
 
-  TowPaneExt getPaneExt() {
+  Widget getPaneExt() {
     return TowPaneExt(
       startPane: _firstWidget!,
       endPane: _secondWidget,
@@ -1385,7 +1386,6 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
 
   String? get getTableName => this._tableName;
   int? get getID => this._iD;
-
 
   bool get getIsLoading => this._isLoading;
 

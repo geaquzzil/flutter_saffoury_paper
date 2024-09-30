@@ -275,8 +275,8 @@ class SizeConfig {
     return width > kFoldableSmallTablet;
   }
 
-  static bool isMediumFromScreenSize(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+  static bool isMediumFromScreenSize(BuildContext context, {double? width}) {
+    width = width ?? MediaQuery.of(context).size.width;
     return isSmallTablet(context, maxWidth: width);
   }
 
