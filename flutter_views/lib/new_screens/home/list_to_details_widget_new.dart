@@ -39,7 +39,7 @@ class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
 }
 
 class ListToDetailsPageNew extends BasePage {
-  ListToDetailsPageNew(
+  const ListToDetailsPageNew(
       {super.key, super.buildDrawer = true, super.buildSecondPane});
 
   @override
@@ -65,12 +65,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      !firstPane;
-
-  @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => !firstPane;
 
   @override
   bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) =>
@@ -83,15 +78,14 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) =>
-      !firstPane;
+  bool setPaneClipRect(bool firstPane) => !firstPane;
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
     addAction(newState, notifyListener: true);
   }
 
   @override
-  getActionPane(bool isDesktop,
+  getActionPane(
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
@@ -101,7 +95,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
         builder: (context, value, child) {
           return SliverApiMaster(
             viewAbstract: value,
-            buildSearchWidgetAsEditText: isDesktop,
+            buildSearchWidgetAsEditText: true,//todo 
           );
         },
         selector: (p0, p1) => p1.getObjectCastViewAbstract,
@@ -134,6 +128,18 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
     return null;
   }
 }

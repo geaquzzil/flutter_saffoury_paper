@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -12,13 +13,12 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 const mediumPane = 0.62;
 const largePane = 0.7;
 
 class BaseDashboardMainPage extends BasePageApi {
-  BaseDashboardMainPage(
+  const BaseDashboardMainPage(
       {super.key,
       super.buildDrawer,
       super.buildSecondPane,
@@ -239,11 +239,6 @@ class _BaseDashboardMainPageState
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     debugPrint("getPane $tab secoundTab $secoundTab");
 
-    return [
-      SliverToBoxAdapter(
-        child: Text("dsads ${secoundTab?.extras}"),
-      )
-    ];
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
         context, getCrossAxisCount(getWidth),
         tab: tab,
@@ -276,24 +271,21 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  getPane(
-      {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
-    debugPrint(
-        "getPane =>firstPane $firstPane=>tab $tab=> secoundTab $secoundTab");
+  List<Widget> getPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
+    debugPrint("getPane =>firstPane $firstPane=>tab $tab=> ");
     if (firstPane) {
       return getDesktopFirstPane(tab: tab);
     } else {
-      return getDesktopSecondPane(secoundTab: secoundTab, tab: tab);
+      return getDesktopSecondPane(tab: tab);
     }
   }
 
   @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => true;
-
-  @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) {
+  bool setPaneBodyPadding(bool firstPane) {
     return false;
   }
 
@@ -317,12 +309,24 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane, {TabControllerHelper? tab}) {
+  bool isPaneScaffoldOverlayColord(bool firstPane) {
     return false;
   }
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) {
+  bool setPaneClipRect(bool firstPane) {
     return false;
+  }
+
+  @override
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
   }
 }

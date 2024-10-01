@@ -549,6 +549,10 @@ class RouteGenerator {
   ///[extra] is ViewAbstract
   ///this function to get list data from route
   List? getRouterStateList(GoRouterState state, BuildContext context) {
+    if (state.uri.queryParameters["data"] == null) {
+      debugPrint("GoRouter error no data state.uri.queryParameters");
+      return null;
+    }
     String? tableName = state.pathParameters["tableName"];
     dynamic extra = state.extra;
     extra ??=

@@ -264,14 +264,14 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   }
 
   @override
-  getPane(
+  List<Widget>? getPane(
       {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+      ScrollController? controler,
+      TabControllerHelper? tab}) {
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE && firstPane) {
-      return getPdfPreviewWidget();
+      return [getPdfPreviewWidget()];
     }
-    return getPdfPreviewWidget();
+    return [getPdfPreviewWidget()];
   }
 
   Future getSettingFuture() {
@@ -452,24 +452,21 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   // }
 
   Widget getPdfPreviewWidget() {
-    return Selector<PrintSettingLargeScreenProvider,
-        Tuple2<ViewAbstract?, PdfPageFormat>>(
-      builder: (_, provider, __) {
-        debugPrint("BasePdfPageConsumer Selector =>  getPdfPageConsumer");
-        return getPdfPreview(provider.item2);
-      },
-      selector: (ctx, provider) =>
-          Tuple2(provider.getViewAbstract, provider.getSelectedFormat),
+    return SliverFillRemaining(
+      child: Selector<PrintSettingLargeScreenProvider,
+          Tuple2<ViewAbstract?, PdfPageFormat>>(
+        builder: (_, provider, __) {
+          debugPrint("BasePdfPageConsumer Selector =>  getPdfPageConsumer");
+          return getPdfPreview(provider.item2);
+        },
+        selector: (ctx, provider) =>
+            Tuple2(provider.getViewAbstract, provider.getSelectedFormat),
+      ),
     );
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      false;
-
-  @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
   bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) =>
@@ -482,7 +479,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneClipRect(bool firstPane) => false;
 
   @override
   Future getCallApiFunctionIfNull(BuildContext context,
@@ -496,5 +493,17 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   @override
   ServerActions getServerActions() {
     return ServerActions.view;
+  }
+
+  @override
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
   }
 }

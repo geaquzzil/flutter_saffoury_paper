@@ -67,15 +67,10 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
-
-  @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneBodyPadding(bool firstPane) => false;
 
   @override
   bool setMainPageSuggestionPadding() => false;
@@ -85,7 +80,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneClipRect(bool firstPane) => false;
 
   @override
   ActionOnToolbarItem onActionInitial() {
@@ -94,12 +89,12 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  getActionPane(bool isDesktop,
+  getActionPane(
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ActionOnToolbarItem? selectedItem}) {
-    bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+   
     if (_currentSettingPageMobile != null) {
       return getWidgetFromProfile(
           valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),
@@ -108,12 +103,11 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
           pinToolbar: true);
     }
     if (!firstPane) {
-      return Center(
-          child: getWidgetFromProfile(
-              // valueNotifier: onActionAdd,
-              context: context,
-              value: selectedItem,
-              pinToolbar: pinToolbar));
+      return getWidgetFromProfile(
+          // valueNotifier: onActionAdd,
+          context: context,
+          value: selectedItem,
+          pinToolbar: pinToolbar);
     }
     return ProfileMenuWidget(
       size: getCurrentScreenSize(),
@@ -136,6 +130,18 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
     return null;
   }
 }

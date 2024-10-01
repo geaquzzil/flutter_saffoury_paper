@@ -70,14 +70,13 @@ enum GoodsType implements ViewAbstractEnum<GoodsType> {
 }
 
 class GoodsInventoryPage extends BasePage {
-  GoodsInventoryPage({super.key, super.buildDrawer});
+  const GoodsInventoryPage({super.key, super.buildDrawer});
 
   @override
   State<GoodsInventoryPage> createState() => _GoodsInventoryPageState();
 }
 
-class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
-    with BasePageWithDraggablePage {
+class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   int testId = 0;
   double testQuantity = 100;
   int testBarCode = 1000;
@@ -311,11 +310,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  getPaneController(
+  List<Widget>? getPane(
       {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab,
-      required ScrollController scrollController}) {
+      ScrollController? controler,
+      TabControllerHelper? tab}) {
     return firstPane
         ? getDesktopFirstPane(tab: tab)
         : [
@@ -332,7 +330,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
             if (filterData != null)
               SliverApiMixinViewAbstractWidget(
                 toListObject: Product.requiresInventory(),
-                scrollController: scrollController,
+                scrollController: controler,
                 requiresFullFetsh: true,
                 key: keyInventoryFilterList,
                 hasCustomWidgetBuilder: (response) {
@@ -631,12 +629,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      false;
-
-  @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;
@@ -648,7 +641,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneClipRect(bool firstPane) => false;
 
   @override
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane) {
@@ -656,7 +649,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? getDraggableHeaderExpandedWidget(bool firstPane) {
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
     return isDesktopPlatform()
         ? null
         : QrCodeReader(
@@ -667,7 +661,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
   }
 
   @override
-  Widget? getDraggableHeaderWidget(bool firstPane) {
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
     if (isLargeScreenFromCurrentScreenSize(context)) {
       return null;
     }
@@ -679,11 +674,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage>
 
   bool isPurchuses() {
     return lastDrawerItemSelected?.icon == Icons.document_scanner;
-  }
-
-  @override
-  Widget? getDraggableBottomExpandedWidget(bool firstPane) {
-    return null;
   }
 
   @override

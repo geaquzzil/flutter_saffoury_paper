@@ -94,11 +94,8 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
     key.currentState?.add(_onActionAdd?.value);
   }
 
-  getActionPane(bool isDesktop,
-      {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab,
-      E? selectedItem});
+  Widget getActionPane(
+      {required bool firstPane, TabControllerHelper? tab, E? selectedItem});
 
   E onActionInitial();
 
@@ -120,44 +117,49 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
   }
 
   @override
-  getPane(
-      {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
-    return getWidgetFromBase(
-        firstPane, isLargeScreenFromCurrentScreenSize(context),
-        tab: tab ?? secoundTab);
+  List<Widget>? getPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
+    return [
+      SliverFillRemaining(
+        child: getWidgetFromBase(
+            firstPane,
+            tab: tab),
+      )
+    ];
   }
 
-  getWidgetFromBase(bool firstPane, bool isDesktop,
+  Widget getWidgetFromBase(bool firstPane,
       {TabControllerHelper? tab}) {
     debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
     ValueNotifierPane pane = getValueNotifierPane();
     if (pane == ValueNotifierPane.NONE) {
-      return getWidget(firstPane, isDesktop, tab: tab, item: null);
+      return getWidget(firstPane,tab: tab, item: null);
     }
     if (pane == ValueNotifierPane.BOTH) {
-      return getValueListenableBuilder(firstPane, isDesktop, tab);
+      return getValueListenableBuilder(firstPane, tab);
     }
     if (firstPane) {
       if (pane == ValueNotifierPane.FIRST) {
-        return getValueListenableBuilder(firstPane, isDesktop, tab);
+        return getValueListenableBuilder(firstPane,  tab);
       } else {
-        return getWidget(firstPane, isDesktop, tab: tab, item: null);
+        return getWidget(firstPane,tab: tab, item: null);
       }
     } else {
       if (pane == ValueNotifierPane.SECOND) {
-        return getValueListenableBuilder(firstPane, isDesktop, tab);
+        return getValueListenableBuilder(firstPane,tab);
       } else {
-        return getWidget(firstPane, isDesktop, tab: tab, item: null);
+        return getWidget(firstPane,  tab: tab, item: null);
       }
     }
   }
 
   Widget getValueListenableBuilder(
-      bool firstPane, bool isDesktop, TabControllerHelper? tab) {
+      bool firstPane, TabControllerHelper? tab) {
     if (_onActionAdd == null) {
-      return getWidget(firstPane, isDesktop, tab: tab, item: null);
+      return getWidget(firstPane,  tab: tab, item: null);
     }
     return ValueListenableBuilder(
         valueListenable: _onActionAdd!,
@@ -170,17 +172,14 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
           }
           debugPrint(
               "BasePageActionOnToolbarMixin getValueListenableBuilder called value $value");
-          return getWidget(firstPane, isDesktop, tab: tab, item: value);
+          return getWidget(firstPane, tab: tab, item: value);
         });
   }
 
-  Widget getWidget(bool firstPane, bool isDesktop,
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab, E? item}) {
-    return getActionPane(isDesktop,
-        firstPane: firstPane,
-        tab: tab,
-        secoundTab: secoundTab,
-        selectedItem: item);
+  Widget getWidget(bool firstPane,
+      {TabControllerHelper? tab, E? item}) {
+    return getActionPane(
+        firstPane: firstPane, tab: tab, selectedItem: item);
   }
 
   void initAction() {

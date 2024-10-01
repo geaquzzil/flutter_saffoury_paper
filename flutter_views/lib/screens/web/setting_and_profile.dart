@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_draggable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_list_grouped.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
@@ -198,7 +200,7 @@ class Logout extends StatelessWidget {
 }
 
 class PrintSetting extends BasePage {
-  PrintSetting({super.key, super.buildSecondPane});
+  const PrintSetting({super.key, super.buildSecondPane});
 
   @override
   State<PrintSetting> createState() => _PrintSettingState();
@@ -259,36 +261,28 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
 
   @override
   Widget build(BuildContext context) {
+    // return super.build(context);
     List<ModifiableInterface> modifieableList =
         context.read<SettingProvider>().getModifiableListSetting(context);
     _list = modifieableList.groupBy(
       (element) => element.getModifiableMainGroupName(context),
     );
-    return LayoutBuilder(builder: (context, c) {
-      return Scaffold(
-        body: TowPaneExt(
-          customPaneProportion: .3,
-          startPane: Scaffold(
-            body: SliverCustomScrollView(
-              slivers: getListStickyWidget(
-                  context,
-                  _list.entries
-                      .map(
-                        (e) => StickyItem(
-                            title: e.key,
-                            widgets: e.value
-                                .map(
-                                  (c) => _getItem(context, c),
-                                )
-                                .toList()),
-                      )
-                      .toList()),
-            ),
-          ),
-          endPane: const Scaffold(body: Text("Dsada")),
-        ),
-      );
-    });
+    return ScreenHelperSliver(
+        forceSmallView: false,
+        requireAutoPadding: setMainPageSuggestionPadding(),
+        onChangeLayout: (w, h, c) {},
+        mobile: (w, h) {
+          return newMethod(context);
+        },
+        smallTablet: (w, h) {
+          return newMethod(context);
+        },
+        largeTablet: (w, h) {
+          return newMethod(context);
+        },
+        desktop: (w, h) {
+          return newMethod(context);
+        });
     return Scaffold(
       body: Row(
         children: [
@@ -315,6 +309,37 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
     );
   }
 
+  Scaffold newMethod(BuildContext context) {
+    return Scaffold(
+      body: TowPaneExt(
+        customPaneProportion: .5,
+        startPane: Scaffold(
+          body: SliverCustomScrollViewDraggable(
+            slivers: getListStickyWidget(
+                context,
+                _list.entries
+                    .map(
+                      (e) => StickyItem(
+                          title: e.key,
+                          widgets: e.value
+                              .map(
+                                (c) => _getItem(context, c),
+                              )
+                              .toList()),
+                    )
+                    .toList()),
+          ),
+        ),
+        endPane: const Scaffold(
+            body: SliverCustomScrollViewDraggable(slivers: [
+          SliverToBoxAdapter(
+            child: Text("sdkkjjk"),
+          )
+        ])),
+      ),
+    );
+  }
+
   @override
   Widget? getAppbarTitle(
       {bool? firstPane,
@@ -332,10 +357,23 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
   }
 
   @override
-  getPane(
-      {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  List<Widget> getPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
     // debugPrint("PrintSetting $f");
     if (firstPane) {
       return getListStickyWidget(
@@ -361,12 +399,7 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      false;
-
-  @override
-  bool isPanesIsSliver(bool firstPane, {TabControllerHelper? tab}) => true;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;
@@ -378,7 +411,7 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
   bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneClipRect(bool firstPane) => false;
 }
 
 class AdminSetting extends StatelessWidget {

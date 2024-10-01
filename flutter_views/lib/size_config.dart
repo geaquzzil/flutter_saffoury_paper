@@ -46,8 +46,8 @@ bool showHamburger(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.SMALL_TABLET;
 }
 
-bool isLargeScreenFromCurrentScreenSize(BuildContext context) {
-  CurrentScreenSize currentScreenSize = findCurrentScreenSize(context);
+bool isLargeScreenFromCurrentScreenSize(BuildContext context,{double?width}) {
+  CurrentScreenSize currentScreenSize = findCurrentScreenSize(context,width: width);
   return currentScreenSize == CurrentScreenSize.DESKTOP ||
       currentScreenSize == CurrentScreenSize.LARGE_TABLET;
 }

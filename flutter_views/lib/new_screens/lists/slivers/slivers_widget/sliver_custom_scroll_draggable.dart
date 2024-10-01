@@ -1,21 +1,38 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SliverCustomScrollViewDraggable extends StatefulWidget {
-  List<Widget> slivers;
-  List<Widget> Function(ScrollController)? builder;
-  ScrollController? scrollController;
-  String? scrollKey;
-  ScrollPhysics? physics;
-  Widget? title;
-  bool pinToolbar;
-  List<Widget>? actions;
+class SliverCustomScrollViewDraggableHelper {
+  List<Widget> widget;
   Widget? expandHeaderWidget;
   Widget? headerWidget;
   Widget? expandBottomWidget;
-  SliverCustomScrollViewDraggable(
+  SliverCustomScrollViewDraggableHelper({
+    required this.widget,
+    this.expandHeaderWidget,
+    this.headerWidget,
+    this.expandBottomWidget,
+  });
+}
+
+class SliverCustomScrollViewDraggable extends StatefulWidget {
+  final List<Widget> slivers;
+  final SliverCustomScrollViewDraggableHelper Function(
+      ScrollController, TabControllerHelper?)? builder;
+  final List<TabControllerHelper>? tabs;
+  final ScrollController? scrollController;
+  final String? scrollKey;
+  final ScrollPhysics? physics;
+  final Widget? title;
+  final bool pinToolbar;
+  final List<Widget>? actions;
+  final Widget? expandHeaderWidget;
+  final Widget? headerWidget;
+  final Widget? expandBottomWidget;
+  const SliverCustomScrollViewDraggable(
       {super.key,
       required this.slivers,
       this.title,
@@ -23,6 +40,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
       this.builder,
       this.pinToolbar = false,
       this.expandHeaderWidget,
+      this.tabs,
       this.expandBottomWidget,
       this.headerWidget,
       this.actions,
@@ -36,7 +54,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
 
 class _SliverCustomScrollViewDraggableState
     extends State<SliverCustomScrollViewDraggable> {
-  late final _scrollController;
+  late ScrollController _scrollController;
   late String bucketOffsetKey;
   final BehaviorSubject<bool> isFullyExpanded =
       BehaviorSubject<bool>.seeded(false);
@@ -84,23 +102,31 @@ class _SliverCustomScrollViewDraggableState
         : 0;
 
     return SliverCustomScrollView(
+      tabs: widget.tabs,
       physics: widget.physics,
       builder: widget.builder == null
           ? null
-          : (scrollController) {
+          : (scrollController, tab) {
               return [
                 SliverToBoxAdapter(
                   child: expandedUpArrow(),
                 ),
-                ...widget.builder!.call(scrollController)
+                ...widget.builder!.call(scrollController, tab).widget
               ];
             },
       scrollController: _scrollController,
       scrollKey: widget.scrollKey,
-      builderAppbar: (fullyCol, fullyExp) {
-        return getSliverAppbar(context, fullyCol, appBarHeight, fullyExp,
-            fullyExpandedHeight, expandedHeight);
-      },
+      builderAppbar: widget.title == null
+          ? null
+          : (fullyCol, fullyExp, tab) {
+              return getSliverAppbar(context, fullyCol, appBarHeight, fullyExp,
+                  fullyExpandedHeight, expandedHeight,
+                  customTabHeader:
+                      widget.builder?.call(_scrollController, tab).headerWidget,
+                  customTabExpandedHeader: widget.builder
+                      ?.call(_scrollController, tab)
+                      .expandHeaderWidget);
+            },
       slivers: [
         SliverToBoxAdapter(
           child: expandedUpArrow(),
@@ -155,17 +181,18 @@ class _SliverCustomScrollViewDraggableState
     return canExpandBody();
   }
 
-  Widget? getFlexibleSpace(
-    bool fullyExpanded,
-    bool fullyCollapsed,
-  ) {
+  Widget? getFlexibleSpace(bool fullyExpanded, bool fullyCollapsed,
+      {Widget? customTabHeader, Widget? customTabExpandedHeader}) {
     if (!hasFlexibleSpace()) {
       return null;
     }
-    return getFlixibleSpaceWidget(fullyExpanded, fullyCollapsed);
+    return getFlixibleSpaceWidget(fullyExpanded, fullyCollapsed,
+        customTabHeader: customTabHeader,
+        customTabExpandedHeader: customTabExpandedHeader);
   }
 
-  Widget getFlixibleSpaceWidget(bool fullyExpanded, bool fullyCollapsed) {
+  Widget getFlixibleSpaceWidget(bool fullyExpanded, bool fullyCollapsed,
+      {Widget? customTabHeader, Widget? customTabExpandedHeader}) {
     return Center(
       child: Stack(
         children: [
@@ -178,8 +205,10 @@ class _SliverCustomScrollViewDraggableState
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       child: fullyExpanded
-                          ? (widget.expandHeaderWidget ?? const SizedBox())
-                          : widget.headerWidget,
+                          ? (customTabExpandedHeader ??
+                              widget.expandHeaderWidget ??
+                              const SizedBox())
+                          : customTabHeader ?? widget.headerWidget,
                     ))),
           ),
           Positioned(
@@ -241,7 +270,9 @@ class _SliverCustomScrollViewDraggableState
       double appBarHeight,
       bool fullyExpanded,
       double fullyExpandedHeight,
-      double expandedHeight) {
+      double expandedHeight,
+      {Widget? customTabHeader,
+      Widget? customTabExpandedHeader}) {
     return SliverAppBar(
       automaticallyImplyLeading: canExpandBody(),
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -251,9 +282,12 @@ class _SliverCustomScrollViewDraggableState
       pinned: false,
       stretch: canExpandBody(),
       title: getSliverTitle(fullyCollapsed),
-      collapsedHeight: appBarHeight,
+      collapsedHeight: canExpandBody() ? appBarHeight : null,
       expandedHeight: fullyExpanded ? fullyExpandedHeight : expandedHeight,
-      flexibleSpace: getFlexibleSpace(fullyExpanded, fullyCollapsed),
+      flexibleSpace: getFlexibleSpace(
+        fullyExpanded,
+        fullyCollapsed,
+      ),
       stretchTriggerOffset: getStretchTriggerOffset(),
       onStretchTrigger: canExpandBody()
           ? () async {

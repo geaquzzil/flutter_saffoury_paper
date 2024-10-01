@@ -22,7 +22,7 @@ class CutRequestWorker extends CutRequest {
 }
 
 class CutWorkerPage extends BasePage {
-  CutWorkerPage({super.key});
+  const CutWorkerPage({super.key});
 
   @override
   State<CutWorkerPage> createState() => _CutWorkerPageState();
@@ -78,7 +78,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   }
 
   @override
-  getTickerPaneWidget(bool isDesktop,
+  getTickerPaneWidget(
       {required bool firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
@@ -145,9 +145,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   int getTickerSecond() => 1000;
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane,
-          {TabControllerHelper? tab}) =>
-      false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;
@@ -159,13 +157,25 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
 
   @override
-  bool setPaneClipRect(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneClipRect(bool firstPane) => false;
 
   @override
   Widget? getFloatingActionButton(
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableExpandedHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Widget? getPaneDraggableHeader(
+      {required bool firstPane, TabControllerHelper? tab}) {
     return null;
   }
 }
