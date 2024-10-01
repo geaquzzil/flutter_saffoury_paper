@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_self_list_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
@@ -18,7 +18,7 @@ class PdfSelfListPage<T extends PrintLocalSetting> extends StatefulWidget {
   List<PrintableSelfListInterface<T>> list;
   T? setting;
 
-  PdfSelfListPage({super.key, required this.list,this.setting});
+  PdfSelfListPage({super.key, required this.list, this.setting});
 
   @override
   State<StatefulWidget> createState() => _PdfSelfListPage();
@@ -57,7 +57,6 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
 
     return PdfPreview(
         shareActionExtraEmails: const ["info@saffoury.com"],
-        
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,
@@ -94,9 +93,8 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
     T? pls;
     if (firstObj is ModifiablePrintableInterface) {
       pls = await Configurations.get<T>(
-          (firstObj as ModifiablePrintableInterface)
-              .getModifibleSettingObject(context),
-          customKey: "_printsetting${firstObj.runtimeType}");
+          await (firstObj as ModifiablePrintableInterface)
+              .getModifibleSettingObject(context) as T);
       if (pls != null) {
         pls = pls.onSavedModiablePrintableLoaded(
             context, firstObj as ViewAbstract);

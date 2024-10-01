@@ -105,8 +105,9 @@ Future<Uint8List> getExcelFileUinit<T extends PrintLocalSetting>(
 Future<PrintLocalSetting?> getSettingLoadDefaultIfNullSelfList(
     BuildContext context, PrintableSelfListInterface firstObj) async {
   dynamic value = (firstObj).getModifiablePrintableSelfPdfSetting(context);
-  PrintLocalSetting pls = await Configurations.get(value,
-          customKey: "_printsetting${firstObj.runtimeType}") ??
+  PrintLocalSetting pls = await Configurations.get(
+        value,
+      ) ??
       value;
 
   pls = pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
@@ -120,12 +121,10 @@ Future<PrintLocalSetting?> getSettingLoadDefaultIfNullSelfList(
 Future<PrintLocalSetting?> getSettingLoadDefaultIfNull(
     BuildContext context, PrintableMaster firstObj) async {
   if (firstObj is! ModifiablePrintableInterface) return null;
-  dynamic value = (firstObj as ModifiablePrintableInterface)
+  dynamic value = await (firstObj as ModifiablePrintableInterface)
       .getModifibleSettingObject(context);
 
-  PrintLocalSetting pls = await Configurations.get(value,
-          customKey: "_printsetting${firstObj.runtimeType}") ??
-      value;
+  PrintLocalSetting pls = await Configurations.get(value) ?? value;
 
   pls = pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);
   pls.primaryColor = firstObj.getPrintablePrimaryColor(pls);
@@ -139,9 +138,9 @@ Future<T?> getSetting<T extends PrintLocalSetting>(
   T? pls;
   if (firstObj is ModifiablePrintableInterface) {
     pls = await Configurations.get<T>(
-        (firstObj as ModifiablePrintableInterface)
-            .getModifibleSettingObject(context),
-        customKey: "_printsetting${firstObj.runtimeType}");
+      await (firstObj as ModifiablePrintableInterface)
+          .getModifibleSettingObject(context) as T,
+    );
     if (pls != null) {
       pls =
           pls.onSavedModiablePrintableLoaded(context, firstObj as ViewAbstract);

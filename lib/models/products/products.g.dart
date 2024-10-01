@@ -16,7 +16,6 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..barcode = Product.intFromString(json['barcode'])
   ..fiberLines = json['fiberLines'] as String?
   ..comments = json['comments'] as String?
-  ..qrQuantity=(json['qrQuantity'] as num?)?.toDouble()
   ..pending_reservation_invoice =
       (json['pending_reservation_invoice'] as num?)?.toDouble()
   ..pending_cut_requests = (json['pending_cut_requests'] as num?)?.toDouble()
@@ -100,8 +99,8 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..transfers_details = (json['transfers_details'] as List<dynamic>?)
       ?.map((e) => TransfersDetails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..transfers_details_count =
-      (json['transfers_details_count'] as num?)?.toInt();
+  ..transfers_details_count = (json['transfers_details_count'] as num?)?.toInt()
+  ..qrQuantity = (json['qrQuantity'] as num?)?.toDouble();
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,

@@ -92,9 +92,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                       debugPrint(
                           "BasePdfPageConsumer newViewAbstract $viewAbstract");
                       // notifyNewViewAbstract(viewAbstract.getCopyInstance());
-                      Configurations.save(
-                          "_printsetting${getExtrasCast().runtimeType}",
-                          viewAbstract);
+                      Configurations.saveViewAbstract(viewAbstract);
                       printSettingListener.setViewAbstract = viewAbstract;
                       context.pop();
                     }
@@ -307,9 +305,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
 
               if (viewAbstract != null) {
                 // notifyNewViewAbstract(viewAbstract.getCopyInstance());
-                Configurations.save(
-                    "_printsetting${getExtrasCast().runtimeType}",
-                    viewAbstract);
+                Configurations.saveViewAbstract(viewAbstract);
               }
             },
           ),
@@ -469,8 +465,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) =>
-      !firstPane;
+  bool setPaneBodyPadding(bool firstPane) => !firstPane;
 
   @override
   bool setMainPageSuggestionPadding() => false;

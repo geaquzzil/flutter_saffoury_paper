@@ -19,11 +19,11 @@ class BaseSettingDetailsView extends StatelessWidget {
   Future<ViewAbstract?> getSetting(
       BuildContext context, ModifiableInterface settingObject) async {
     ViewAbstract? saved = await Configurations.get<ViewAbstract>(
-        settingObject.getModifibleSettingObject(context),
-        customKey: "_printsetting${settingObject.runtimeType}");
+      await settingObject.getModifibleSettingObject(context),
+    );
 
     if (saved == null) {
-      return settingObject.getModifibleSettingObject(context);
+      return await settingObject.getModifibleSettingObject(context);
     } else {
       if (saved is PrintLocalSetting) {
         return saved.onSavedModiablePrintableLoaded(
@@ -53,9 +53,9 @@ class BaseSettingDetailsView extends StatelessWidget {
                     viewAbstract: snapshot.data!,
                     isTheFirst: true,
                     onValidate: (viewAbstract) {
-                      Configurations.save(
-                          "_printsetting${settingObject.runtimeType}",
-                          viewAbstract);
+                      // Configurations.saveViewAbstract(
+
+                      //     viewAbstract);
                       if (onValidate != null) {
                         onValidate!(viewAbstract);
                       } else {

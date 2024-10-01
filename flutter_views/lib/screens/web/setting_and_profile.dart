@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_list_grouped.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -341,10 +344,24 @@ class _PrintSettingState extends BasePageState<PrintSetting>
         SliverFillRemaining(
           child: valueNotifier == null
               ? const Text("NON")
-              : BaseEditNewPage(
-                  viewAbstract: valueNotifier.getModifibleSettingObject(context)
-                      as ViewAbstract,
-                  onFabClickedConfirm: (validateObj) {},
+              : FutureOrBuilder<ViewAbstract>(
+                  future: valueNotifier.getModifibleSettingObject(context),
+                  builder: (c, snapshot) {
+                    if (snapshot.hasData) {
+                      return BaseEditWidget(
+                        viewAbstract: 
+                        snapshot.data!,
+                        isTheFirst: true,
+                        onValidate: (validateObj) {
+                          debugPrint("validateObj $validateObj");
+                          if (validateObj != null) {
+                            Configurations.saveViewAbstract(validateObj);
+                          }
+                        },
+                      );
+                    }
+                    return EmptyWidget.empty(context);
+                  },
                 ),
         )
       ];
@@ -584,5 +601,39 @@ class Help extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class FutureOrBuilder<T> extends StatelessWidget {
+  final FutureOr<T>? futureOrValue;
+
+  final T? initialData;
+
+  final AsyncWidgetBuilder<T> builder;
+
+  const FutureOrBuilder({
+    super.key,
+    FutureOr<T>? future,
+    this.initialData,
+    required this.builder,
+  }) : futureOrValue = future;
+
+  @override
+  Widget build(BuildContext context) {
+    final futureOrValue = this.futureOrValue;
+    if (futureOrValue is T) {
+      debugPrint("FutureBuild futureOrValue T");
+      return builder(
+        context,
+        AsyncSnapshot.withData(ConnectionState.done, futureOrValue),
+      );
+    } else {
+      debugPrint("FutureBuild FutureBuilder");
+      return FutureBuilder(
+        future: futureOrValue,
+        initialData: initialData,
+        builder: builder,
+      );
+    }
   }
 }

@@ -14,7 +14,7 @@ class Configurations {
     return await SharedPreferences.getInstance();
   }
 
- static saveScrollOffset(BuildContext context, double offset, String key) =>
+  static saveScrollOffset(BuildContext context, double offset, String key) =>
       appBucket.writeState(context, offset, identifier: ValueKey(key));
   static double currentPageScrollOffset(BuildContext context, String key) =>
       appBucket.readState(context, identifier: ValueKey(key)) ?? 0.0;
@@ -62,7 +62,14 @@ class Configurations {
     save("${viewAbstract.runtimeType}list-query", jsonEncode(objects));
   }
 
+  static Future<void> saveViewAbstract(ViewAbstract value,
+      {String? customKey}) async {
+    save((value.runtimeType.toString()) + (customKey ?? ""),
+        jsonEncode(value.toJsonViewAbstract()));
+  }
+
   static void save(String key, dynamic value) async {
+    debugPrint("Configrations  save key: $key value:$value");
     final prefs = await SharedPreferences.getInstance();
     if (value is String) {
       await prefs.setString(key, value);
@@ -79,6 +86,20 @@ class Configurations {
     } else {
       debugPrint("Configrations cant ! save value as ViewAbstract");
     }
+  }
+
+  static Future<T> getReturnDefaultOnNull<T extends ViewAbstract>(T obj,
+      {String? customKey}) async {
+    String key = (obj.runtimeType.toString()) + (customKey ?? "");
+    String? objectHistoryList = await getValueString(key);
+    if (objectHistoryList == null) {
+      debugPrint("Configrations  cant get saved value for key =>$key");
+      return obj;
+    }
+    debugPrint("Configrations getting saved value for key =>$key");
+    Map<String, dynamic> map = {};
+    map = jsonDecode(objectHistoryList) as Map<String, dynamic>;
+    return obj.fromJsonViewAbstract(map);
   }
 
   static Future<T?> get<T extends ViewAbstract>(T obj,

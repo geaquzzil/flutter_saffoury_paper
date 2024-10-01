@@ -62,9 +62,9 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
 
               if (viewAbstract != null) {
                 notifyNewViewAbstract(viewAbstract.getCopyInstance());
-                Configurations.save(
-                    "_printsetting${getMainObject().runtimeType}",
-                    viewAbstract);
+                // Configurations.save(
+                //     "_printsetting${getMainObject().runtimeType}",
+                //     viewAbstract);
               }
             },
           ),
