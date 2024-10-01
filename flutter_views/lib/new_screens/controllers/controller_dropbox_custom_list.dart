@@ -58,11 +58,13 @@ class _DropdownCustomListWithFormListenerState
 
   @override
   Widget build(BuildContext context) {
-     list = widget.viewAbstract
-          .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+    list = widget.viewAbstract
+        .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
     return wrapController(
         FormBuilderDropdown<dynamic>(
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          // itemHeight: 48,
+          
           onChanged: (obj) {
             widget.viewAbstract.onDropdownChanged(context, _field, obj,
                 formKey: widget.formKey);
@@ -95,9 +97,12 @@ class _DropdownCustomListWithFormListenerState
           items: list
               .map((item) => DropdownMenuItem<dynamic>(
                     value: item,
-                    child: Text(item == null
-                        ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-                        : item.toString()),
+                    child: Text(
+                      item == null
+                          ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+                          : item.toString(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ))
               .toList(),
         ),

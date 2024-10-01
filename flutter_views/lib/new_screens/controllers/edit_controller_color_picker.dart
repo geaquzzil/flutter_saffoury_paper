@@ -27,8 +27,11 @@ class _EditControllerColorPicker extends State<EditControllerColorPicker> {
     dynamic fieldValue =
         widget.viewAbstract.getFieldValue(widget.field, context: context);
     return Column(children: [
-      FormBuilderColorPickerField(
-        name: widget.viewAbstract.getTag(widget.field),
+      SizedBox(
+        height: 20,
+        child: FormBuilderColorPickerField(
+          name: widget.viewAbstract.getTag(widget.field),
+        ),
       ),
       getSpace()
     ]);

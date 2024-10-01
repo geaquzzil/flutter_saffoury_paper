@@ -79,6 +79,11 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
   void didUpdateWidget(covariant BaseEditWidget oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+    // if (_viewAbstract != widget.viewAbstract) {
+    //   _viewAbstract = widget.viewAbstract;
+    //   init(context);
+    // }
+
     debugPrint("didUpdateWidget baseEditNew");
   }
 

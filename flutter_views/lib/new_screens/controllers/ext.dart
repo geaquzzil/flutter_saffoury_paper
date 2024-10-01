@@ -79,7 +79,8 @@ InputDecoration getDecorationIconLabel(BuildContext context,
     {IconData? icon, required String label}) {
   return InputDecoration(
       // filled: true,
-      border: const OutlineInputBorder(),
+      border: const OutlineInputBorder(
+          gapPadding: 0, borderRadius: BorderRadius.all(Radius.circular(10.0))),
       icon: icon == null ? null : Icon(icon),
       labelText: label);
   // hintText: parent.getTextInputHint(context, field));

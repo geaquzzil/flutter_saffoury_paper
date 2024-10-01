@@ -3,20 +3,23 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
+import 'package:flutter_view_controller/new_screens/controllers/wrap_controller.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
+
 import '../../controllers/ext.dart';
 
 Widget wrapController(Widget controller,
     {bool? requiredSpace,
     bool? isExpansionTile,
     CurrentScreenSize? currentScreenSize}) {
+  return WrapController(size: currentScreenSize, child: controller);
   return Column(
     children: [
       Padding(
@@ -25,10 +28,13 @@ Widget wrapController(Widget controller,
             : EdgeInsets.symmetric(
                 // vertical: 0,
                 vertical: currentScreenSize == CurrentScreenSize.DESKTOP
-                    ? kDefaultPadding * .25
+                    ? kDefaultPadding * .1
                     : kDefaultPadding * .5,
               ),
-        child: controller,
+        child:
+            //TODO Windows Controllers
+
+            SizedBox(height: 40, child: controller),
       ),
       // if (currentScreenSize != CurrentScreenSize.DESKTOP)
       // if (requiredSpace ?? false) getSpace()
@@ -255,8 +261,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
 
   return wrapController(
       FormBuilderTypeAheadCustom<ViewAbstract>(
-        hideOnEmpty: true,
-        
+          hideOnEmpty: true,
           onTap: () => controller.selection = TextSelection(
               baseOffset: 0, extentOffset: controller.value.text.length),
           enabled: enabled,
@@ -319,7 +324,6 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
                 'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
           },
           hideOnLoading: true,
-
           loadingBuilder: (context) => const SizedBox(
               width: double.infinity,
               height: 200,
@@ -349,12 +353,12 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
             if (query.isEmpty) return [];
             if (query.trim().isEmpty) return [];
             if (autoCompleteBySearchQuery) {
-              return viewAbstract.search(5, 0, query,context: context)
+              return viewAbstract.search(5, 0, query, context: context)
                   as Future<List<ViewAbstract>>;
               // field: field, searchQuery: query);
             }
             return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                field: field, searchQuery: query,context: context);
+                field: field, searchQuery: query, context: context);
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
@@ -468,12 +472,12 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
             if (query.isEmpty) return [];
             if (query.trim().isEmpty) return [];
             if (autoCompleteBySearchQuery) {
-              return viewAbstract.search(5, 0, query,context: context)
+              return viewAbstract.search(5, 0, query, context: context)
                   as Future<List<ViewAbstract>>;
               // field: field, searchQuery: query);
             }
             return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                field: field, searchQuery: query,context: context);
+                field: field, searchQuery: query, context: context);
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
@@ -532,7 +536,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
             if (query.trim().isEmpty) return [];
 
             return viewAbstract.searchByFieldName(
-                field: field, searchQuery: query,context: context);
+                field: field, searchQuery: query, context: context);
           }),
       requiredSpace:
           viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0,
