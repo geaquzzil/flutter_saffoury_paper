@@ -62,10 +62,10 @@ part 'customer_dashboard.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CustomerDashboard extends UserLists<CustomerDashboard>
+    with ModifiableInterface<PrintCustomerDashboardSetting>
     implements
         DashableInterface,
-        PrintableDashboardInterface<PrintCustomerDashboardSetting>,
-        ModifiablePrintableInterface<PrintCustomerDashboardSetting> {
+        PrintableDashboardInterface<PrintCustomerDashboardSetting> {
   Customer? customers;
   double? previousBalance;
   //balance from to date
@@ -383,10 +383,10 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   String getModifiableMainGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.customerBalance;
 
-  @override
-  PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
-          BuildContext context) =>
-      this;
+  // @override
+  // PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
+  //         BuildContext context) =>
+  //     this;
 
   @override
   IconData getModifibleIconData() => Icons.dashboard;

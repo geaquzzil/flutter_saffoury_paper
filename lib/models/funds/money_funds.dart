@@ -36,8 +36,8 @@ import 'package:provider/provider.dart';
 import '../users/customers.dart';
 
 abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
+    with ModifiableInterface<PrintReceipt>
     implements
-        ModifiablePrintableInterface<PrintReceipt>,
         PrintableReceiptInterface<PrintReceipt>,
         WebCategoryGridableInterface<T>,
         SharableInterface {
@@ -153,15 +153,15 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   PrintReceipt getModifibleSettingObject(BuildContext context) =>
       PrintReceipt();
 
-  @override
-  PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
-    T c = getSelfNewInstance();
-    (c as MoneyFunds).customers = Customer()..name = "Test";
-    c.employees = Employee()..name = "Test";
-    c.value = 29099;
-    c.comments = "this is a comment";
-    return c;
-  }
+  // @override
+  // PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
+  //   T c = getSelfNewInstance();
+  //   (c as MoneyFunds).customers = Customer()..name = "Test";
+  //   c.employees = Employee()..name = "Test";
+  //   c.value = 29099;
+  //   c.comments = "this is a comment";
+  //   return c;
+  // }
 
   @override
   String getPrintableInvoiceTitle(BuildContext context, PrintReceipt? pca) =>

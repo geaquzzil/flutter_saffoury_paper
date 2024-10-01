@@ -8,21 +8,19 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:pdf/pdf.dart';
 
-abstract class ModifiableInterface<T extends ViewAbstract> {
+mixin ModifiableInterface<T extends ViewAbstract> {
   String getModifiableMainGroupName(BuildContext context);
   String getModifibleTitleName(BuildContext context);
   IconData getModifibleIconData();
   FutureOr<T> getModifibleSettingObject(BuildContext context);
-  Future<FutureOr<T>> getModifibleSettingObjcetSavedValue(
-      BuildContext context) async {
-    return Configurations.getReturnDefaultOnNull(
-        await getModifibleSettingObject(context));
+  Future<T> getModifibleSettingObjcetSavedValue(BuildContext context) async {
+    return onModifibleSettingLoaded(await Configurations.getReturnDefaultOnNull(
+        await getModifibleSettingObject(context)));
   }
-}
 
-abstract class ModifiablePrintableInterface<T extends ViewAbstract>
-    extends ModifiableInterface<T> {
-  PrintableMaster getModifiablePrintablePdfSetting(BuildContext context);
+  Future<T> onModifibleSettingLoaded(T loaded) async {
+    return   loaded;
+  }
 }
 
 class PrintPageSetting {

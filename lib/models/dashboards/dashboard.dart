@@ -57,10 +57,10 @@ part 'dashboard.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class Dashboard extends UserLists<Dashboard>
+    with ModifiableInterface<PrintDashboardSetting>
     implements
         DashableInterface,
-        PrintableDashboardInterface<PrintDashboardSetting>,
-        ModifiablePrintableInterface<PrintDashboardSetting> {
+        PrintableDashboardInterface<PrintDashboardSetting> {
   List<BalanceDue>? debitsDue;
   List<BalanceDue>? creditsDue;
   List<BalanceDue>? incomesDue;
@@ -780,10 +780,10 @@ class Dashboard extends UserLists<Dashboard>
   @override
   String getModifiableMainGroupName(BuildContext context) => "";
 
-  @override
-  PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
-          BuildContext context) =>
-      this;
+  // @override
+  // PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
+  //         BuildContext context) =>
+  //     this;
 
   @override
   IconData getModifibleIconData() => getMainIconData();

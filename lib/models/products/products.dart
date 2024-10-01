@@ -94,9 +94,9 @@ part 'products.g.dart';
 )
 @reflector
 class Product extends ViewAbstract<Product>
+    with ModifiableInterface<PrintProduct>
     implements
         CartableProductItemInterface,
-        ModifiablePrintableInterface<PrintProduct>,
         PrintableCustomInterface<PrintProduct>,
         PrintableSelfListInterface<PrintProductList>,
         PosableInterface,
@@ -1273,17 +1273,17 @@ class Product extends ViewAbstract<Product>
     return "PR-$iD-$year";
   }
 
-  @override
-  PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
-    Product p = Product();
-    p.products_types = ProductType()..name = "sappi";
-    p.sizes = ProductSize();
-    p.sizes?.length = 1000;
-    p.sizes?.width = 700;
+  // @override
+  // PrintableMaster getModifiablePrintablePdfSetting(BuildContext context) {
+  //   Product p = Product();
+  //   p.products_types = ProductType()..name = "sappi";
+  //   p.sizes = ProductSize();
+  //   p.sizes?.length = 1000;
+  //   p.sizes?.width = 700;
 
-    p.gsms = GSM()..gsm = 300;
-    return p;
-  }
+  //   p.gsms = GSM()..gsm = 300;
+  //   return p;
+  // }
 
   double findRemainingWeightCut(Warehouse warehouse) {
     return getQuantity(warehouse: warehouse) -

@@ -1,22 +1,22 @@
 // ignore_for_file: library_prefixes
 
+import 'package:flutter/material.dart' as mt;
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
-import 'package:flutter/material.dart' as mt;
 import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdW;
+
 import '../../prints/print_customer_guid.dart';
 import '../customers.dart';
 
 class CustomerClinetGuide
     extends ViewAbstractStandAloneCustomViewApi<CustomerClinetGuide>
-    implements
-        PrintableCustomInterface<PrintCustomerGuid>,
-        ModifiablePrintableInterface<PrintCustomerGuid> {
+    with ModifiableInterface<PrintCustomerGuid>
+    implements PrintableCustomInterface<PrintCustomerGuid> {
   Customer customer;
 
   CustomerClinetGuide(this.customer);
@@ -86,11 +86,11 @@ class CustomerClinetGuide
     throw UnimplementedError();
   }
 
-  @override
-  PrintableMaster getModifiablePrintablePdfSetting(mt.BuildContext context) {
-    // TODO: implement getModifiablePrintablePdfSetting
-    throw UnimplementedError();
-  }
+  // @override
+  // PrintableMaster getModifiablePrintablePdfSetting(mt.BuildContext context) {
+  //   // TODO: implement getModifiablePrintablePdfSetting
+  //   throw UnimplementedError();
+  // }
 
   @override
   mt.IconData getModifibleIconData() {

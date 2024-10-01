@@ -53,9 +53,8 @@ part 'cut_requests.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CutRequest extends ViewAbstract<CutRequest>
+    with ModifiableInterface<PrintCutRequest>
     implements
-        PrintableCustomFromPDFInterface<PrintCutRequest>,
-        ModifiablePrintableInterface<PrintCutRequest>,
         ListableInterface<SizesCutRequest>,
         WebCategoryGridableInterface<CutRequest>,
         SharableInterface {
@@ -421,39 +420,39 @@ class CutRequest extends ViewAbstract<CutRequest>
   String getModifiableMainGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.printerSetting;
 
-  @override
-  PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
-      BuildContext context) {
-    CutRequest o = CutRequest();
-    o.cut_status = CutStatus.COMPLETED;
-    ProductSize size = ProductSize();
-    size.width = 700;
-    size.length = 1000;
-    o.sizes_cut_requests = [];
-    o.sizes_cut_requests =
-        List.generate(5, (index) => SizesCutRequest()..sizes = size);
-    o.products = Product().getModifiablePrintablePdfSetting(context) as Product;
-    o.quantity = 231;
+  // @override
+  // PrintableMaster<PrintLocalSetting> getModifiablePrintablePdfSetting(
+  //     BuildContext context) {
+  //   CutRequest o = CutRequest();
+  //   o.cut_status = CutStatus.COMPLETED;
+  //   ProductSize size = ProductSize();
+  //   size.width = 700;
+  //   size.length = 1000;
+  //   o.sizes_cut_requests = [];
+  //   o.sizes_cut_requests =
+  //       List.generate(5, (index) => SizesCutRequest()..sizes = size);
+  //   o.products = Product().getModifiablePrintablePdfSetting(context) as Product;
+  //   o.quantity = 231;
 
-    debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
-    (o).customers = Customer()..name = "Customer name";
-    o.customers?.address = "Damascus - Syria";
-    o.customers?.phone = "099999999";
-    o.employees = Employee()..name = "Employee name";
-    o.cut_request_results ??= [];
-    o.cut_request_results!.add(CutRequestResult());
-    o.cut_request_results![0].products_inputs = ProductInput();
-    o.cut_request_results![0].products_inputs!.products_inputs_details =
-        List.generate(
-            2,
-            (index) => ProductInputDetails()
-              ..setProduct(
-                  context,
-                  Product().getModifiablePrintablePdfSetting(context)
-                      as Product));
+  //   debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
+  //   (o).customers = Customer()..name = "Customer name";
+  //   o.customers?.address = "Damascus - Syria";
+  //   o.customers?.phone = "099999999";
+  //   o.employees = Employee()..name = "Employee name";
+  //   o.cut_request_results ??= [];
+  //   o.cut_request_results!.add(CutRequestResult());
+  //   o.cut_request_results![0].products_inputs = ProductInput();
+  //   o.cut_request_results![0].products_inputs!.products_inputs_details =
+  //       List.generate(
+  //           2,
+  //           (index) => ProductInputDetails()
+  //             ..setProduct(
+  //                 context,
+  //                 Product().getModifiablePrintablePdfSetting(context)
+  //                     as Product));
 
-    return o;
-  }
+  //   return o;
+  // }
 
   String getRequestSizes(BuildContext context) {
     List<String>? requestSizes = sizes_cut_requests?.map((element) {

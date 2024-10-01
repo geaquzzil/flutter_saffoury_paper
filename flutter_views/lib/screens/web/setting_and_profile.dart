@@ -345,12 +345,12 @@ class _PrintSettingState extends BasePageState<PrintSetting>
           child: valueNotifier == null
               ? const Text("NON")
               : FutureOrBuilder<ViewAbstract>(
-                  future: valueNotifier.getModifibleSettingObject(context),
+                  future: valueNotifier
+                      .getModifibleSettingObjcetSavedValue(context),
                   builder: (c, snapshot) {
                     if (snapshot.hasData) {
                       return BaseEditWidget(
-                        viewAbstract: 
-                        snapshot.data!,
+                        viewAbstract: (snapshot.data!),
                         isTheFirst: true,
                         onValidate: (validateObj) {
                           debugPrint("validateObj $validateObj");

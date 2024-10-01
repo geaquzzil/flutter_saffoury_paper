@@ -56,9 +56,9 @@ import 'invoice_master_details.dart';
 import 'orders.dart';
 
 abstract class InvoiceMaster<T> extends ViewAbstract<T>
+    with ModifiableInterface<PrintInvoice>
     implements
         PrintableInvoiceInterface<PrintInvoice>,
-        ModifiablePrintableInterface<PrintInvoice>,
         ListableInterface<InvoiceMasterDetails>,
         WebCategoryGridableInterface<InvoiceMaster>,
         SharableInterface {
@@ -846,25 +846,25 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     return PrintInvoice()..invoice = this;
   }
 
-  @override
-  PrintableInvoiceInterface getModifiablePrintablePdfSetting(
-      BuildContext context) {
-    T o = getNewInstance();
-    debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
-    (o as InvoiceMaster).customers = Customer()..name = "Customer name";
-    o.customers?.address = "Damascus - Syria";
-    o.customers?.phone = "099999999";
-    o.cargo_transporters = CargoTransporter();
-    o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
-    o.cargo_transporters?.name = "Driver name";
-    o.cargo_transporters?.carNumber = "Driver car number";
-    o.employees = Employee()..name = "Employee name";
-    List l = o.getDetailListFromMasterSetNewOnList();
-    l.clear();
-    l.add(o.getDetailMasterNewInstance());
-    debugPrint("getModifiablePrintablePdfSetting $o");
-    return o;
-  }
+  // @override
+  // PrintableInvoiceInterface getModifiablePrintablePdfSetting(
+  //     BuildContext context) {
+  //   T o = getNewInstance();
+  //   debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
+  //   (o as InvoiceMaster).customers = Customer()..name = "Customer name";
+  //   o.customers?.address = "Damascus - Syria";
+  //   o.customers?.phone = "099999999";
+  //   o.cargo_transporters = CargoTransporter();
+  //   o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
+  //   o.cargo_transporters?.name = "Driver name";
+  //   o.cargo_transporters?.carNumber = "Driver car number";
+  //   o.employees = Employee()..name = "Employee name";
+  //   List l = o.getDetailListFromMasterSetNewOnList();
+  //   l.clear();
+  //   l.add(o.getDetailMasterNewInstance());
+  //   debugPrint("getModifiablePrintablePdfSetting $o");
+  //   return o;
+  // }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override

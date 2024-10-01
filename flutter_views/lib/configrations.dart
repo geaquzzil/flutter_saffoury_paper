@@ -93,13 +93,17 @@ class Configurations {
     String key = (obj.runtimeType.toString()) + (customKey ?? "");
     String? objectHistoryList = await getValueString(key);
     if (objectHistoryList == null) {
-      debugPrint("Configrations  cant get saved value for key =>$key");
+      debugPrint(
+          "Configrations  cant get saved value for key =>$key return defaults");
       return obj;
     }
-    debugPrint("Configrations getting saved value for key =>$key");
+
     Map<String, dynamic> map = {};
     map = jsonDecode(objectHistoryList) as Map<String, dynamic>;
-    return obj.fromJsonViewAbstract(map);
+    final value = obj.fromJsonViewAbstract(map);
+    debugPrint(
+        "Configrations getting saved value for key =>$key  value $value");
+    return value;
   }
 
   static Future<T?> get<T extends ViewAbstract>(T obj,

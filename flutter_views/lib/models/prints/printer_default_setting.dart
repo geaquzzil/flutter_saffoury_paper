@@ -174,11 +174,13 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
   }
 
   @override
-  String getModifibleTitleName(BuildContext context) =>
-      getMainHeaderLabelTextOnly(context);
+  Future<PrinterDefaultSetting> onModifibleSettingLoaded(
+      PrinterDefaultSetting loaded) async {
+    loaded.printers = await Printing.listPrinters();
+    return loaded;
+  }
 
   @override
-  Future<FutureOr<PrinterDefaultSetting>> getModifibleSettingObjcetSavedValue(
-          BuildContext context) =>
-      super.getModifibleSettingObjcetSavedValue(context);
+  String getModifibleTitleName(BuildContext context) =>
+      getMainHeaderLabelTextOnly(context);
 }

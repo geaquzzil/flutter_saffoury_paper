@@ -91,10 +91,9 @@ class _PdfSelfListPage<T extends PrintLocalSetting>
 
   Future<T?> getSetting() async {
     T? pls;
-    if (firstObj is ModifiablePrintableInterface) {
-      pls = await Configurations.get<T>(
-          await (firstObj as ModifiablePrintableInterface)
-              .getModifibleSettingObject(context) as T);
+    if (firstObj is ModifiableInterface) {
+      pls = await Configurations.get<T>(await (firstObj as ModifiableInterface)
+          .getModifibleSettingObject(context) as T);
       if (pls != null) {
         pls = pls.onSavedModiablePrintableLoaded(
             context, firstObj as ViewAbstract);

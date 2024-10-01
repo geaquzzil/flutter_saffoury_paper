@@ -120,8 +120,8 @@ Future<PrintLocalSetting?> getSettingLoadDefaultIfNullSelfList(
 
 Future<PrintLocalSetting?> getSettingLoadDefaultIfNull(
     BuildContext context, PrintableMaster firstObj) async {
-  if (firstObj is! ModifiablePrintableInterface) return null;
-  dynamic value = await (firstObj as ModifiablePrintableInterface)
+  if (firstObj is! ModifiableInterface) return null;
+  dynamic value = await (firstObj as ModifiableInterface)
       .getModifibleSettingObject(context);
 
   PrintLocalSetting pls = await Configurations.get(value) ?? value;
@@ -136,9 +136,9 @@ Future<PrintLocalSetting?> getSettingLoadDefaultIfNull(
 Future<T?> getSetting<T extends PrintLocalSetting>(
     BuildContext context, PrintableMaster firstObj) async {
   T? pls;
-  if (firstObj is ModifiablePrintableInterface) {
+  if (firstObj is ModifiableInterface) {
     pls = await Configurations.get<T>(
-      await (firstObj as ModifiablePrintableInterface)
+      await (firstObj as ModifiableInterface)
           .getModifibleSettingObject(context) as T,
     );
     if (pls != null) {

@@ -78,24 +78,24 @@ class Purchases extends InvoiceMaster<Purchases> {
           "purchases_refunds_count": 0,
         });
 
-  @override
-  PrintableInvoiceInterface getModifiablePrintablePdfSetting(
-      BuildContext context) {
-    Purchases o = Purchases();
-    debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
-    (o).customers = Customer()..name = "Customer name";
-    o.customers?.address = "Damascus - Syria";
-    o.customers?.phone = "099999999";
-    o.cargo_transporters = CargoTransporter();
-    o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
-    o.cargo_transporters?.name = "Driver name";
-    o.cargo_transporters?.carNumber = "Driver car number";
-    o.employees = Employee()..name = "Employee name";
-    o.purchases_details ??= [];
-    o.purchases_details?.add(PurchasesDetails());
-    debugPrint("getModifiablePrintablePdfSetting $o");
-    return o;
-  }
+  // @override
+  // PrintableInvoiceInterface getModifiablePrintablePdfSetting(
+  //     BuildContext context) {
+  //   Purchases o = Purchases();
+  //   debugPrint("getModifiablePrintablePdfSetting ${o.runtimeType}");
+  //   (o).customers = Customer()..name = "Customer name";
+  //   o.customers?.address = "Damascus - Syria";
+  //   o.customers?.phone = "099999999";
+  //   o.cargo_transporters = CargoTransporter();
+  //   o.cargo_transporters?.governorates = Governorate()..name = "Damascus";
+  //   o.cargo_transporters?.name = "Driver name";
+  //   o.cargo_transporters?.carNumber = "Driver car number";
+  //   o.employees = Employee()..name = "Employee name";
+  //   o.purchases_details ??= [];
+  //   o.purchases_details?.add(PurchasesDetails());
+  //   debugPrint("getModifiablePrintablePdfSetting $o");
+  //   return o;
+  // }
 }
 
 @JsonSerializable(explicitToJson: true)
